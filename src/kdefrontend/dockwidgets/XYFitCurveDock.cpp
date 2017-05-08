@@ -1063,11 +1063,11 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGeneral->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
 	// Parameters
-	str += "<b>" +i18n("Parameters:") + "</b>";
+	str += "<b>" + i18n("Parameters:") + "</b>";
 	uiGeneralTab.twParameters->setRowCount(fitResult.paramValues.size());
 	uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	QStringList headerLabels;
-	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %");
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
@@ -1076,15 +1076,34 @@ void XYFitCurveDock::showFitResult() {
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
-		QTableWidgetItem *newItem = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
-		uiGeneralTab.twParameters->setItem(i, 0, newItem);
-		newItem = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
-		uiGeneralTab.twParameters->setItem(i, 1, newItem);
+		QTableWidgetItem *item = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
+		uiGeneralTab.twParameters->setItem(i, 0, item);
+		item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
+		uiGeneralTab.twParameters->setItem(i, 1, item);
 		if (!fitData.paramFixed.at(i)) {
-			newItem = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i)));
-			uiGeneralTab.twParameters->setItem(i, 2, newItem);
-			newItem = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
-			uiGeneralTab.twParameters->setItem(i, 3, newItem);
+			item = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i), 'g', 6));
+			uiGeneralTab.twParameters->setItem(i, 2, item);
+			item = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
+			uiGeneralTab.twParameters->setItem(i, 3, item);
+			if (fitResult.tValues.size() > 0) {
+				item = new QTableWidgetItem(QString::number(fitResult.tValues.at(i), 'g', 3));
+				uiGeneralTab.twParameters->setItem(i, 4, item);
+			}
+			if (fitResult.pValues.size() > 0) {
+				item = new QTableWidgetItem(QString::number(fitResult.pValues.at(i), 'g', 3));
+				// color p values depending on value
+				if (fitResult.pValues.at(i) > 0.05)
+					item->setTextColor(Qt::red);
+				else if (fitResult.pValues.at(i) > 0.01)
+					item->setTextColor(Qt::darkGreen);
+				else if (fitResult.pValues.at(i) > 0.001)
+					item->setTextColor(Qt::darkCyan);
+				else if (fitResult.pValues.at(i) > 0.0001)
+					item->setTextColor(Qt::blue);
+				else
+					item->setTextColor(Qt::darkBlue);
+				uiGeneralTab.twParameters->setItem(i, 5, item);
+			}
 		}
 	}
 
@@ -1111,7 +1130,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
 
-	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.pvalue, 'g', 15));
+	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.pChiSquare, 'g', 15));
 
 	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
 	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";

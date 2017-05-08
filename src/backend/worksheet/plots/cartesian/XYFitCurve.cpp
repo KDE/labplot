@@ -1020,7 +1020,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f)/n;
-	fitResult.pvalue = gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof);
+	fitResult.pChiSquare = gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof);
 
 	//coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
@@ -1037,6 +1037,8 @@ void XYFitCurvePrivate::recalculate() {
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
+	fitResult.tValues.resize(np);
+	fitResult.pValues.resize(np);
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
@@ -1046,6 +1048,10 @@ void XYFitCurvePrivate::recalculate() {
 			DEBUG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
+		fitResult.tValues[i] = fitResult.paramValues[i]/fitResult.errorValues[i];
+		fitResult.pValues[i] = 2*gsl_cdf_tdist_Q(fabs(fitResult.tValues[i]), fitResult.dof);
+		if (fitResult.pValues[i] < 1.e-9)
+			fitResult.pValues[i] = 0;
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
@@ -1201,7 +1207,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
 	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
 	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
-	writer->writeAttribute( "pvalue", QString::number(d->fitResult.pvalue, 'g', 15) );
+	writer->writeAttribute( "pChiSquare", QString::number(d->fitResult.pChiSquare, 'g', 15) );
 	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared, 'g', 15) );
 	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj, 'g', 15) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
@@ -1214,6 +1220,16 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("errorValues");
 	foreach (const double value, d->fitResult.errorValues)
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
+	writer->writeEndElement();
+
+	writer->writeStartElement("tValues");
+	foreach (const double value, d->fitResult.tValues)
+		writer->writeTextElement("t", QString::number(value, 'g', 15));
+	writer->writeEndElement();
+
+	writer->writeStartElement("pValues");
+	foreach (const double value, d->fitResult.pValues)
+		writer->writeTextElement("p", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	//save calculated columns if available
@@ -1295,9 +1311,13 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			else
 				d->fitData.paramUpperLimits<<DBL_MAX;
 		} else if (reader->name() == "value") {
-			d->fitResult.paramValues<<reader->readElementText().toDouble();
+			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {
-			d->fitResult.errorValues<<reader->readElementText().toDouble();
+			d->fitResult.errorValues << reader->readElementText().toDouble();
+		} else if (reader->name() == "t") {
+			d->fitResult.tValues << reader->readElementText().toDouble();
+		} else if (reader->name() == "p") {
+			d->fitResult.pValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
@@ -1313,7 +1333,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("mse", fitResult.mse);
 			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
 			READ_DOUBLE_VALUE("mae", fitResult.mae);
-			READ_DOUBLE_VALUE("pvalue", fitResult.pvalue);
+			READ_DOUBLE_VALUE("pChiSquare", fitResult.pChiSquare);
 			READ_DOUBLE_VALUE("rsquared", fitResult.rsquared);
 			READ_DOUBLE_VALUE("rsquaredAdj", fitResult.rsquaredAdj);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
