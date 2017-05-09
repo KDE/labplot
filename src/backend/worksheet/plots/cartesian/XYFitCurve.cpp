@@ -1025,7 +1025,7 @@ void XYFitCurvePrivate::recalculate() {
 	double ybar = 0; //mean value of the y-data
 	for (size_t i = 0; i < n; ++i)
 		ybar += ydata[i];
-	ybar /= n;
+	ybar /= (double)n;
 	double sst = 0;
 	for (size_t i = 0; i < n; ++i)
 		sst += gsl_pow_2(ydata[i] - ybar);
