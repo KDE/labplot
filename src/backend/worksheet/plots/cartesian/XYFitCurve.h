@@ -87,6 +87,7 @@ class XYFitCurve : public XYCurve {
 			double dof; //degrees of freedom
 			// residuals: r_i = y_i - Y_i
 			double sse; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
+			double sst; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
 			double rms; // residual mean square / reduced chi^2 = SSE/dof
 			double rsd; // residual standard deviation = sqrt(SSE/dof)
 			double rsquared; // coefficient of determination (COD, R^2) = 1 - SSE/SST

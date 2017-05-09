@@ -1026,11 +1026,13 @@ void XYFitCurvePrivate::recalculate() {
 	double ybar = 0; //mean value of the y-data
 	for (size_t i = 0; i < n; ++i)
 		ybar += ydata[i];
-	ybar = ybar/n;
+	ybar /= n;
 	double sst = 0;
 	for (size_t i = 0; i < n; ++i)
-		sst += gsl_pow_2(ydata[i]-ybar);
-	fitResult.rsquared = 1. - fitResult.sse/sst;
+		sst += gsl_pow_2(ydata[i] - ybar);
+	fitResult.sst = sst;
+
+	fitResult.rsquared = 1. - fitResult.sse/fitResult.sst;
 	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
 	//parameter values
@@ -1043,7 +1045,7 @@ void XYFitCurvePrivate::recalculate() {
 		// use results as start values if desired
 		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
-			DEBUG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
+			DEBUG("saving parameter" << i << fitResult.paramValues[i] << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
@@ -1196,6 +1198,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
 	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
 	writer->writeAttribute( "sse", QString::number(d->fitResult.sse, 'g', 15) );
+	writer->writeAttribute( "sst", QString::number(d->fitResult.sst, 'g', 15) );
 	writer->writeAttribute( "rms", QString::number(d->fitResult.rms, 'g', 15) );
 	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd, 'g', 15) );
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
@@ -1308,6 +1311,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", fitResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("dof", fitResult.dof);
 			READ_DOUBLE_VALUE("sse", fitResult.sse);
+			READ_DOUBLE_VALUE("sst", fitResult.sst);
 			READ_DOUBLE_VALUE("rms", fitResult.rms);
 			READ_DOUBLE_VALUE("rsd", fitResult.rsd);
 			READ_DOUBLE_VALUE("mse", fitResult.mse);

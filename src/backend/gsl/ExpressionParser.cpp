@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2014-2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2014-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : C++ wrapper for the bison generated parser.
 
  ***************************************************************************/
