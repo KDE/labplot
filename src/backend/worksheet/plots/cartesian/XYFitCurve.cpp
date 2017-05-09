@@ -1020,7 +1020,6 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f)/n;
-	fitResult.pChiSquare = gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof);
 
 	//coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
@@ -1204,7 +1203,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
 	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
 	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
-	writer->writeAttribute( "pChiSquare", QString::number(d->fitResult.pChiSquare, 'g', 15) );
 	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared, 'g', 15) );
 	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj, 'g', 15) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
@@ -1317,7 +1315,6 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("mse", fitResult.mse);
 			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
 			READ_DOUBLE_VALUE("mae", fitResult.mae);
-			READ_DOUBLE_VALUE("pChiSquare", fitResult.pChiSquare);
 			READ_DOUBLE_VALUE("rsquared", fitResult.rsquared);
 			READ_DOUBLE_VALUE("rsquaredAdj", fitResult.rsquaredAdj);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);

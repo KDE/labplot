@@ -1142,7 +1142,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
 
-	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.pChiSquare, 'g', 15));
+	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof), 'g', 15));
 
 	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
 	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";
