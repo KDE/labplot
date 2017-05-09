@@ -1134,13 +1134,16 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 	}
 
-	//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquared) + "<br>";
+	int n = fitResult.dof + fitResult.paramValues.size();	// number of points
+	double rsquared = 1. - fitResult.sse/fitResult.sst;
+	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+	//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared) + "<br>";
 	uiGeneralTab.twGoodness->item(3, 1)->setText("R" + QString::fromUtf8("\u00b2"));
-	uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquared, 'g', 15));
+	uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquared, 'g', 15));
 	str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-		+ "): " + QString::number(fitResult.rsquaredAdj, 'g', 15);
+		+ "): " + QString::number(rsquaredAdj, 'g', 15);
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
-	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
+	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquaredAdj, 'g', 15));
 
 	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof), 'g', 15));
 

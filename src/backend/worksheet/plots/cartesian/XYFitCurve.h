@@ -77,7 +77,7 @@ class XYFitCurve : public XYCurve {
 
 		struct FitResult {
 			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-				dof(0), sse(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0), mse(0), rmse(0), mae(0) {};
+				dof(0), sse(0), rms(0), rsd(0), mse(0), rmse(0), mae(0) {};
 
 			bool available;
 			bool valid;
@@ -90,9 +90,6 @@ class XYFitCurve : public XYCurve {
 			double sst; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
 			double rms; // residual mean square / reduced chi^2 = SSE/dof
 			double rsd; // residual standard deviation = sqrt(SSE/dof)
-			double rsquared; // coefficient of determination (COD, R^2) = 1 - SSE/SST
-				// with the total sum of squares SST = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
-			double rsquaredAdj; // adjusted coefficient of determination (\hat R^2) = 1 - (1-R^2)*(n-1)/(n-p-1);
 			double mse; // mean squared error = SSE/n
 			double rmse; // root-mean squared error = \sqrt(mse)
 			double mae; // mean absolute error = \sum_i^n |r_i|

@@ -1031,9 +1031,6 @@ void XYFitCurvePrivate::recalculate() {
 		sst += gsl_pow_2(ydata[i] - ybar);
 	fitResult.sst = sst;
 
-	fitResult.rsquared = 1. - fitResult.sse/fitResult.sst;
-	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
-
 	//parameter values
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
@@ -1203,8 +1200,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
 	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
 	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
-	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared, 'g', 15) );
-	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj, 'g', 15) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
 	writer->writeStartElement("paramValues");
@@ -1315,8 +1310,6 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("mse", fitResult.mse);
 			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
 			READ_DOUBLE_VALUE("mae", fitResult.mae);
-			READ_DOUBLE_VALUE("rsquared", fitResult.rsquared);
-			READ_DOUBLE_VALUE("rsquaredAdj", fitResult.rsquaredAdj);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
