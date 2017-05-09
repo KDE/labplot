@@ -678,7 +678,7 @@ void MainWin::updateGUI() {
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 	} else {
-		//no cantor worksheet selected -> deactivate cantor worksheet related menu and toolbar
+		//no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
 		factory->container("cas_worksheet", this)->setEnabled(false);
 		factory->container("cas_worksheet_toolbar", this)->setVisible(false);
 	}

@@ -208,7 +208,7 @@ private:
 	Worksheet* activeWorksheet() const;
 	Datapicker* activeDatapicker() const;
 
-	//cantor
+	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock;
