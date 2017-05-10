@@ -48,6 +48,7 @@ extern "C" {
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
+#include <gsl/gsl_statistics_double.h>
 #include "backend/gsl/parser.h" 
 #include "backend/nsl/nsl_fit.h"
 #include "backend/nsl/nsl_sf_stats.h"
@@ -1034,15 +1035,9 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//coefficient of determination, R-squared
-	double ybar = 0; //mean value of the y-data
-	for (size_t i = 0; i < n; ++i)
-		ybar += ydata[i];
-	ybar = ybar/n;
-	double sstot = 0;
-	for (size_t i = 0; i < n; ++i)
-		sstot += gsl_pow_2(ydata[i]-ybar);
-	fitResult.rsquared = 1. - fitResult.sse/sstot;
-	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
+	double sst = gsl_stats_tss(ydata, 1, n);
+	fitResult.rsquared = 1. - fitResult.sse/sst;
+	fitResult.rsquaredAdj = 1. - fitResult.sse/sst * (n - 1.)/(fitResult.dof - 1.);
 
 	//parameter values
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
