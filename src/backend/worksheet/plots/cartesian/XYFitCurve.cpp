@@ -1040,7 +1040,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.rsquaredAdj = 1. - fitResult.sse/sst * (n - 1.)/(fitResult.dof - 1.);
 
 	//parameter values
-	const double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
+	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i = 0; i < np; i++) {
