@@ -946,7 +946,7 @@ void XYFitCurvePrivate::recalculate() {
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	for (unsigned int i = 0; i < np; i++)
-		DEBUG("fixed parameter"<<i<<fitData.paramFixed.data()[i]);
+		DEBUG("fixed parameter" << i << fitData.paramFixed.data()[i]);
 
 	//function to fit
 	gsl_multifit_function_fdf f;
