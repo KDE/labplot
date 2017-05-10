@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL statistics functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -62,5 +62,20 @@ double nsl_stats_quantile(double data[], size_t stride, size_t n, double p, nsl_
 double nsl_stats_quantile_sorted(const double sorted_data[], size_t stride, size_t n, double p, nsl_stats_quantile_type type);
 /* GSL legacy function */
 double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t stride, size_t n, double p);
+
+/* t distribution */
+double nsl_stats_tdist_t(double parameter, double error);
+/* p value */
+double nsl_stats_tdist_p(double t, double dof);
+/* margin (half of confidence interval) */
+double nsl_stats_tdist_margin(double alpha, double dof, double error);
+
+// chi^2 distribution
+double nsl_stats_chisq_p(double t, double dof);
+
+// F distribution
+double nsl_stats_fdist_F(double sst, double rms);
+// p value
+double nsl_stats_fdist_p(double F, size_t np, double dof);
 
 #endif /* NSL_STATS_H */

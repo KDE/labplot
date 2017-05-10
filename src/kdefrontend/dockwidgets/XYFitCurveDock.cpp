@@ -46,7 +46,7 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-#include <gsl/gsl_cdf.h>
+#include "backend/nsl/nsl_stats.h"
 }
 
 /*!
@@ -122,7 +122,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(3, 1)->setText("R" + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
-	uiGeneralTab.twGoodness->item(5, 1)->setText(" P > " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
+	uiGeneralTab.twGoodness->item(5, 1)->setText("P > " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -1095,14 +1095,12 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			double t = fitResult.paramValues.at(i)/fitResult.errorValues.at(i);
+			double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 			item = new QTableWidgetItem(QString::number(t, 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values
-			double p = 2. * gsl_cdf_tdist_Q(fabs(t), fitResult.dof);
-			if (p < 1.e-9)	// limit range
-				p = 0;
+			double p = nsl_stats_tdist_p(t, fitResult.dof);
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
 			if (p > 0.05)
@@ -1118,10 +1116,9 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
-			double alpha = 0.05;
-			t = gsl_cdf_tdist_Pinv(1. - alpha/2., fitResult.dof);
-			item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i) - t*fitResult.errorValues.at(i))
-				+ " .. " + QString::number(fitResult.paramValues.at(i) + t*fitResult.errorValues.at(i)));
+			double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
+			item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i) - margin)
+				+ " .. " + QString::number(fitResult.paramValues.at(i) + margin));
 			uiGeneralTab.twParameters->setItem(i, 6, item);
 		}
 	}
@@ -1149,15 +1146,11 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquaredAdj, 'g', 15));
 
 		// chi^2 and F test p-values
-		double p = gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof);
-		if (p < 1.e-9)
-			p = 0;
+		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
 		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(p, 'g', 3));
-		double F = fitResult.sst/fitResult.rms;
+		double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
 		uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(F, 'g', 3));
-		p = gsl_cdf_fdist_Q(F, np, fitResult.dof);
-		if (p < 1.e-9)
-			p = 0;
+		p = nsl_stats_fdist_p(F, np, fitResult.dof);
 		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(p, 'g', 3));
 	}
 
