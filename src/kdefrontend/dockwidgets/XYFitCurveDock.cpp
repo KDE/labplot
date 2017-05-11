@@ -1044,39 +1044,28 @@ void XYFitCurveDock::showFitResult() {
 
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 
-	// General (str contains summary info)
-	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
-	uiGeneralTab.twGeneral->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
+	// TODO: calculate in NSL and use here later
+	int np = fitResult.paramValues.size();
+	int n = fitResult.dof + np;	// number of points
+	double rsquared = 1. - fitResult.sse/fitResult.sst;
+	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+
+	// Summary
+	QString str = "<table border=1>";
+	str += "<tr> <th>" + i18n("status:") + "</th> <th>" + fitResult.status + "</th> </tr>";
+	str += "<tr> <th>" + i18n("degrees of freedom:") + "</th> <th>" + QString::number(fitResult.dof) + "</th> </tr>";
+	//str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
+	//if (fitResult.elapsedTime > 1000)
+	//	str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
+	// else
+		//str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+	str +=  "</table>";
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
-
-	//str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
-	uiGeneralTab.twGeneral->item(2, 1)->setText(QString::number(m_fitData.eps));
-	if (fitResult.elapsedTime > 1000) {
-		//str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
-		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime/1000) + " s");
-	} else {
-		//str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
-		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime) + " ms");
-	}
-
-	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
-	uiGeneralTab.twGeneral->item(4, 1)->setText(QString::number(fitResult.dof));
-	uiGeneralTab.twGeneral->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
-	uiGeneralTab.twGeneral->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
-
-	// Parameters
-	int np = fitResult.paramValues.size();
+	// TODO: switch to HTML table
 	str += "<b>" + i18n("Parameters:") + "</b>";
-	uiGeneralTab.twParameters->setRowCount(np);
-	//uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	QStringList headerLabels;
-	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|") << i18n("Conf. Interval");
-	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < np; i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
@@ -1084,6 +1073,52 @@ void XYFitCurveDock::showFitResult() {
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
+	}
+	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
+	//str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
+	if (fitResult.dof != 0) {
+		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
+		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
+		//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared) + "<br>";
+		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
+			+ "): " + QString::number(rsquaredAdj, 'g', 15);
+	}
+	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
+	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
+	//	+ "): " + QString::number(fitResult.rmse) + "<br>";
+	//str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
+	//str += "<br><br>";
+
+	// do not show all iterations
+// 	QStringList iterations = fitResult.solverOutput.split(';');
+// 	for (int i = 0; i<iterations.size(); ++i)
+// 		str += "<br>" + iterations.at(i);
+
+	uiGeneralTab.teResult->setText(str);
+
+
+	// General
+	uiGeneralTab.twGeneral->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
+
+	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
+	uiGeneralTab.twGeneral->item(2, 1)->setText(QString::number(m_fitData.eps));
+	if (fitResult.elapsedTime > 1000)
+		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime/1000) + " s");
+	else
+		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime) + " ms");
+
+	uiGeneralTab.twGeneral->item(4, 1)->setText(QString::number(fitResult.dof));
+	uiGeneralTab.twGeneral->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
+	uiGeneralTab.twGeneral->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
+
+	// Parameters
+	uiGeneralTab.twParameters->setRowCount(np);
+	//uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	QStringList headerLabels;
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|") << i18n("Conf. Interval");
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+	for (int i = 0; i < np; i++) {
 		QTableWidgetItem *item = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
 		item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
@@ -1124,25 +1159,14 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	// Goodness of fit
-	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
-	//str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
 	uiGeneralTab.twGoodness->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	uiGeneralTab.twGoodness->item(0, 2)->setText(QString::number(fitResult.sse));
 
 	if (fitResult.dof != 0) {
-		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
-		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 
-		// R^2 and adj. R^2
-		int n = fitResult.dof + np;	// number of points
-		double rsquared = 1. - fitResult.sse/fitResult.sst;
-		double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
-		//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared) + "<br>";
 		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquared, 'g', 15));
-		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ "): " + QString::number(rsquaredAdj, 'g', 15);
 		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquaredAdj, 'g', 15));
 
 		// chi^2 and F test p-values
@@ -1154,19 +1178,7 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(p, 'g', 3));
 	}
 
-	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
-	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
-	//	+ "): " + QString::number(fitResult.rmse) + "<br>";
-	//str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
 	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));
-// 	str += "<br><br>";
-
-	// do not show all iterations
-// 	QStringList iterations = fitResult.solverOutput.split(';');
-// 	for (int i = 0; i<iterations.size(); ++i)
-// 		str += "<br>" + iterations.at(i);
-
-	uiGeneralTab.teResult->setText(str);
 }
 
 //*************************************************************
