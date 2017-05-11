@@ -302,6 +302,15 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
+
+/*!
+ * return \c true if the data in the source columns (x, y) used in the analysis curves, \c false otherwise
+ */
+bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
+	Q_D(const XYCurve);
+	return d->sourceDataChangedSinceLastRecalc;
+}
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -319,8 +328,16 @@ void XYCurve::setDataSourceCurve(const XYCurve* curve) {
 	Q_D(XYCurve);
 	if (curve != d->dataSourceCurve) {
 		exec(new XYCurveSetDataSourceCurveCmd(d, curve, i18n("%1: data source curve changed")));
-		connect(curve, SIGNAL(xColumnChanged()), this, SIGNAL(xDataChanged()));
-		connect(curve, SIGNAL(yColumnChanged()), this, SIGNAL(yDataChanged()));
+		handleSourceDataChanged();
+
+		//handle the changes when different columns were provided for the source curve
+		connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+		connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+
+		//handle the changes when the data inside of the source curve columns 
+		connect(curve, SIGNAL(xDataChanged()), this, SLOT(handleSourceDataChanged()));
+		connect(curve, SIGNAL(yDataChanged()), this, SLOT(handleSourceDataChanged()));
+
 		//TODO: add disconnect in the undo-function
 	}
 }
@@ -810,6 +827,12 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void XYCurve::handleSourceDataChanged() {
+	Q_D(XYCurve);
+	d->sourceDataChangedSinceLastRecalc = true;
+	emit sourceDataChanged();
+}
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -826,7 +849,8 @@ void XYCurve::navigateTo() {
 //######################### Private implementation #############################
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false), q(owner) {
+	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false),
+	sourceDataChangedSinceLastRecalc(false), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 }

@@ -71,7 +71,6 @@ class XYDifferentiationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
 		const DifferentiationResult& differentiationResult() const;
-		bool isSourceDataChangedSinceLastDifferentiation() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYDifferentiationCurvePrivate Private;
@@ -82,9 +81,6 @@ class XYDifferentiationCurve: public XYCurve {
 	private:
 		Q_DECLARE_PRIVATE(XYDifferentiationCurve)
 		void init();
-
-	private slots:
-		void handleSourceDataChanged();
 
 	signals:
 		friend class XYDifferentiationCurveSetXDataColumnCmd;

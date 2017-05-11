@@ -77,6 +77,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString dataSourceCurvePath;
 		QString xColumnPath;
 		QString yColumnPath;
+		bool sourceDataChangedSinceLastRecalc;
 
 		//line
 		XYCurve::LineType lineType;

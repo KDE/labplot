@@ -131,6 +131,7 @@ class XYCurve: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
+		bool isSourceDataChangedSinceLastRecalc() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
@@ -138,6 +139,7 @@ class XYCurve: public WorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		void handleSourceDataChanged();
 
 	private slots:
 		void updateValues();
@@ -167,8 +169,10 @@ class XYCurve: public WorksheetElement {
 		QAction* navigateToAction;
 
 	signals:
+		void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+
 		//General-Tab
-		void dataChanged();
+		void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 		void xDataChanged();
 		void yDataChanged();
 		void visibilityChanged(bool);
