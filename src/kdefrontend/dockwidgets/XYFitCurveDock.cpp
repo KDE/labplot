@@ -1033,24 +1033,9 @@ void XYFitCurveDock::enableRecalculate() const {
 }
 
 /*!
- * show the result and details of fit
+ * show the fit result summary (with HTML tables)
  */
-void XYFitCurveDock::showFitResult() {
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
-	if (!fitResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-
-	// TODO: calculate in NSL and use here later
-	int np = fitResult.paramValues.size();
-	int n = fitResult.dof + np;	// number of points
-	double rsquared = 1. - fitResult.sse/fitResult.sst;
-	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
-
-	// Summary
+void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult) {
 	QString str = "<table border=1>";
 	str += "<tr> <th>" + i18n("status:") + "</th> <th>" + fitResult.status + "</th> </tr>";
 	str += "<tr> <th>" + i18n("degrees of freedom:") + "</th> <th>" + QString::number(fitResult.dof) + "</th> </tr>";
@@ -1064,8 +1049,66 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
-	// TODO: switch to HTML table
-	str += "<b>" + i18n("Parameters:") + "</b>";
+
+	// TODO: calculate in NSL
+	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
+	int np = fitResult.paramValues.size();
+	int n = fitResult.dof + np;	// number of points
+	double rsquared = 1. - fitResult.sse/fitResult.sst;
+	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+
+	str += "<br><br><b>" + i18n("Parameters:") + "</b>";
+	str += "<table border=1>";
+	str += "<tr> <th>" + i18n("Name") + "</th> <th>" + i18n("Value") +  "</th> <th>" + i18n("Error") +  "</th> <th>" + i18n("Error, %") +  "</th> </tr>";
+	for (int i = 0; i < np; i++) {
+		if (fitData.paramFixed.at(i))
+			str += "<tr> <th>" + fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i)) + "</th> </tr>";
+		else
+			str += "<tr> <th>" + fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i))
+				+ "</th> <th>" + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
+				+ "</th> <th>" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %" + "</th> </tr>";
+	}
+	str +=  "</table>";
+
+	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b>";
+	str += "<table border=1>";
+	if (fitResult.dof != 0) {
+		str += "<tr> <th>" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
+			+ "</th> <th>" + QString::number(fitResult.rms) + "</th> </tr>";
+		str += "<tr> <th>" + i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
+			+ ')' + "</th> <th>" + QString::number(rsquaredAdj, 'g', 15) + "</th> </tr>";
+	}
+	str +=  "</table>";
+
+	uiGeneralTab.teResult->setText(str);
+}
+
+/*!
+ * show the fit result log (plain text)
+ */
+void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
+	QString str;
+	str += i18n("status:") + ' ' + fitResult.status + "<br>";
+	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br>";
+	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
+	if (fitResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
+	else
+		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+	if (!fitResult.valid) {
+		uiGeneralTab.teLog->setText(str);
+		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+	}
+
+	// TODO: calculate in NSL
+	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
+	int np = fitResult.paramValues.size();
+	int n = fitResult.dof + np;	// number of points
+	double rsquared = 1. - fitResult.sse/fitResult.sst;
+	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+
+	// Parameter
+	str += "<br> <b>" + i18n("Parameters:") + "</b>";
 	for (int i = 0; i < np; i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
@@ -1074,28 +1117,58 @@ void XYFitCurveDock::showFitResult() {
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
 	}
+
+	// Goodness of fit
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
-	//str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
+	str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
 	if (fitResult.dof != 0) {
 		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
+		// TODO
 		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
-		//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared) + "<br>";
+		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared, 'g', 15) + "<br>";
 		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ "): " + QString::number(rsquaredAdj, 'g', 15);
+			+ "): " + QString::number(rsquaredAdj, 'g', 15) + "<br>";
 	}
+	// TODO
 	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
 	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
 	//	+ "): " + QString::number(fitResult.rmse) + "<br>";
-	//str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
-	//str += "<br><br>";
+	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br> <br>";
 
-	// do not show all iterations
-// 	QStringList iterations = fitResult.solverOutput.split(';');
-// 	for (int i = 0; i<iterations.size(); ++i)
-// 		str += "<br>" + iterations.at(i);
+	// show all iterations
+	str += "<b>" + i18n("Interations:") + "</b><br>";
+	for (int i = 0; i < np; ++i)
+		str += fitData.paramNamesUtf8.at(i) + ' ';
+	str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
 
-	uiGeneralTab.teResult->setText(str);
+	QStringList iterations = fitResult.solverOutput.split(';');
+	for (int i = 0; i < iterations.size(); ++i)
+		str += "<br>" + iterations.at(i);
 
+	uiGeneralTab.teLog->setText(str);
+}
+
+/*!
+ * show the result and details of fit
+ */
+void XYFitCurveDock::showFitResult() {
+	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	if (!fitResult.available) {
+		uiGeneralTab.teResult->clear();
+		uiGeneralTab.teLog->clear();
+		return;
+	}
+
+	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
+
+	// TODO: calculate in NSL and use here later
+	int np = fitResult.paramValues.size();
+	int n = fitResult.dof + np;	// number of points
+	double rsquared = 1. - fitResult.sse/fitResult.sst;
+	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+
+	showFitResultSummary(fitResult);
+	showFitResultLog(fitResult);
 
 	// General
 	uiGeneralTab.twGeneral->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
