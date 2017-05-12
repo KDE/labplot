@@ -1089,56 +1089,69 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	QString str;
 	str += i18n("status:") + ' ' + fitResult.status + "<br>";
-	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br>";
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
+	str += i18n("tolerance:") + ' ' + QString::number(m_fitData.eps) + "<br>";
 	if (fitResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br>";
+	str += i18n("number of parameter:") + ' ' + QString::number(fitResult.paramValues.size()) + "<br>";
+	str += i18n("X range:") + ' ' + QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) + "<br>";
+
 	if (!fitResult.valid) {
 		uiGeneralTab.teLog->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	// TODO: calculate in NSL
-	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 	int np = fitResult.paramValues.size();
 	int n = fitResult.dof + np;	// number of points
 	double rsquared = 1. - fitResult.sse/fitResult.sst;
 	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
 
 	// Parameter
-	str += "<br> <b>" + i18n("Parameters:") + "</b>";
+	str += "<br> <b>" + i18n("Parameters:") + "</b><br>";
 	for (int i = 0; i < np; i++) {
-		if (fitData.paramFixed.at(i))
-			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
-		else
-			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
+		if (m_fitData.paramFixed.at(i))
+			str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i)) + "<br>";
+		else {
+			str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
+				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)<br>";
+
+			double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
+			double p = nsl_stats_tdist_p(t, fitResult.dof);
+			double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
+			str += " (" + i18n("t statistic:") + ' ' + QString::number(t, 'g', 3) + ", " + i18n("p value:") + ' ' + QString::number(p, 'g', 3)
+				+ ", " + i18n("conf. interval:") + ' ' + QString::number(fitResult.paramValues.at(i) - margin)
+                                + " .. " + QString::number(fitResult.paramValues.at(i) + margin) + ")<br>";
+		}
 	}
 
 	// Goodness of fit
-	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
+	str += "<br><b>" + i18n("Goodness of fit:") + "</b><br>";
 	str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
 	if (fitResult.dof != 0) {
 		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
-		// TODO
-		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
+		str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + "<br>";
 		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared, 'g', 15) + "<br>";
 		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ "): " + QString::number(rsquaredAdj, 'g', 15) + "<br>";
+			+ "): " + QString::number(rsquaredAdj, 'g', 15) + "<br><br>";
+
+		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
+		str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(p, 'g', 3) + "<br>";
+		double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
+		str += i18n("F statistic") + ": " + QString::number(F, 'g', 3) + "<br>";
+		p = nsl_stats_fdist_p(F, np, fitResult.dof);
+		str += i18n("P > F") + ": " + QString::number(p, 'g', 3) + "<br>";
 	}
-	// TODO
-	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
-	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
-	//	+ "): " + QString::number(fitResult.rmse) + "<br>";
 	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br> <br>";
 
 	// show all iterations
 	str += "<b>" + i18n("Interations:") + "</b><br>";
 	for (int i = 0; i < np; ++i)
-		str += fitData.paramNamesUtf8.at(i) + ' ';
+		str += m_fitData.paramNamesUtf8.at(i) + ' ';
 	str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
 
 	QStringList iterations = fitResult.solverOutput.split(';');
@@ -1159,7 +1172,7 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
+	//const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 
 	// TODO: calculate in NSL and use here later
 	int np = fitResult.paramValues.size();
@@ -1192,11 +1205,11 @@ void XYFitCurveDock::showFitResult() {
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < np; i++) {
-		QTableWidgetItem *item = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
+		QTableWidgetItem *item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
 		item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
 		uiGeneralTab.twParameters->setItem(i, 1, item);
-		if (!fitData.paramFixed.at(i)) {
+		if (!m_fitData.paramFixed.at(i)) {
 			item = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i), 'g', 6));
 			uiGeneralTab.twParameters->setItem(i, 2, item);
 			item = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
