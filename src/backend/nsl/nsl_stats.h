@@ -63,6 +63,11 @@ double nsl_stats_quantile_sorted(const double sorted_data[], size_t stride, size
 /* GSL legacy function */
 double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t stride, size_t n, double p);
 
+/* R^2 */
+double nsl_stats_rsquare(double sse, double sst);
+/* adj. R^2 */
+double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof);
+
 /* t distribution */
 double nsl_stats_tdist_t(double parameter, double error);
 /* p value */
@@ -70,12 +75,12 @@ double nsl_stats_tdist_p(double t, double dof);
 /* margin (half of confidence interval) */
 double nsl_stats_tdist_margin(double alpha, double dof, double error);
 
-// chi^2 distribution
+/* chi^2 distribution */
 double nsl_stats_chisq_p(double t, double dof);
 
-// F distribution
+/* F distribution */
 double nsl_stats_fdist_F(double sst, double rms);
-// p value
+/* p value */
 double nsl_stats_fdist_p(double F, size_t np, double dof);
 
 #endif /* NSL_STATS_H */

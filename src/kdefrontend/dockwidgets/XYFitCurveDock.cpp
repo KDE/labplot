@@ -1050,21 +1050,18 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	// TODO: calculate in NSL
-	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 	int np = fitResult.paramValues.size();
-	int n = fitResult.dof + np;	// number of points
-	double rsquared = 1. - fitResult.sse/fitResult.sst;
-	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	str += "<br><br><b>" + i18n("Parameters:") + "</b>";
 	str += "<table border=1>";
 	str += "<tr> <th>" + i18n("Name") + "</th> <th>" + i18n("Value") +  "</th> <th>" + i18n("Error") +  "</th> <th>" + i18n("Error, %") +  "</th> </tr>";
 	for (int i = 0; i < np; i++) {
-		if (fitData.paramFixed.at(i))
-			str += "<tr> <th>" + fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i)) + "</th> </tr>";
+		if (m_fitData.paramFixed.at(i))
+			str += "<tr> <th>" + m_fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i)) + "</th> </tr>";
 		else
-			str += "<tr> <th>" + fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i))
+			str += "<tr> <th>" + m_fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i))
 				+ "</th> <th>" + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ "</th> <th>" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %" + "</th> </tr>";
 	}
@@ -1076,7 +1073,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 		str += "<tr> <th>" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
 			+ "</th> <th>" + QString::number(fitResult.rms) + "</th> </tr>";
 		str += "<tr> <th>" + i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ ')' + "</th> <th>" + QString::number(rsquaredAdj, 'g', 15) + "</th> </tr>";
+			+ ')' + "</th> <th>" + QString::number(rsquareAdj, 'g', 15) + "</th> </tr>";
 	}
 	str +=  "</table>";
 
@@ -1104,11 +1101,9 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	// TODO: calculate in NSL
 	int np = fitResult.paramValues.size();
-	int n = fitResult.dof + np;	// number of points
-	double rsquared = 1. - fitResult.sse/fitResult.sst;
-	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	// Parameter
 	str += "<br> <b>" + i18n("Parameters:") + "</b><br>";
@@ -1135,9 +1130,9 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	if (fitResult.dof != 0) {
 		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
 		str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + "<br>";
-		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquared, 'g', 15) + "<br>";
+		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquare, 'g', 15) + "<br>";
 		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ "): " + QString::number(rsquaredAdj, 'g', 15) + "<br><br>";
+			+ "): " + QString::number(rsquareAdj, 'g', 15) + "<br><br>";
 
 		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
 		str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(p, 'g', 3) + "<br>";
@@ -1174,11 +1169,9 @@ void XYFitCurveDock::showFitResult() {
 
 	//const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 
-	// TODO: calculate in NSL and use here later
 	int np = fitResult.paramValues.size();
-	int n = fitResult.dof + np;	// number of points
-	double rsquared = 1. - fitResult.sse/fitResult.sst;
-	double rsquaredAdj = 1. - fitResult.sse/fitResult.sst * (n - 1.)/(fitResult.dof - 1.);
+	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	showFitResultSummary(fitResult);
 	showFitResultLog(fitResult);
@@ -1252,8 +1245,8 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 
-		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquared, 'g', 15));
-		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquaredAdj, 'g', 15));
+		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquare, 'g', 15));
+		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquareAdj, 'g', 15));
 
 		// chi^2 and F test p-values
 		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);

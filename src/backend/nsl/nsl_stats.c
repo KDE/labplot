@@ -170,7 +170,17 @@ double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t st
         return nsl_stats_quantile_sorted(sorted_data, stride, n, p, nsl_stats_quantile_type7);
 }
 
-// t distribution
+/* R^2 and adj. R^2 */
+double nsl_stats_rsquare(double sse, double sst) {
+	return 1. - sse/sst;
+}
+
+double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof) {
+	size_t n = np + dof;
+	return 1. - (1. - rsquare) * (n - 1.)/(dof - 1.);
+}
+
+/* t distribution */
 double nsl_stats_tdist_t(double parameter, double error) {
 	return parameter/error;
 }
@@ -185,7 +195,7 @@ double nsl_stats_tdist_margin(double alpha, double dof, double error) {
 	return gsl_cdf_tdist_Pinv(1. - alpha/2., dof) * error;
 }
 
-// chi^2 distribution
+/* chi^2 distribution */
 double nsl_stats_chisq_p(double t, double dof) {
 	double p = gsl_cdf_chisq_Q(t, dof);
 	if (p < 1.e-9)
@@ -193,7 +203,7 @@ double nsl_stats_chisq_p(double t, double dof) {
 	return p;
 }
 
-// F distribution
+/* F distribution */
 double nsl_stats_fdist_F(double sst, double rms) {
 	return sst/rms;
 }
