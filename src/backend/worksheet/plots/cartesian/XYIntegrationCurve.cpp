@@ -102,11 +102,6 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 	return d->integrationResult;
 }
 
-bool XYIntegrationCurve::isSourceDataChangedSinceLastIntegration() const {
-	Q_D(const XYIntegrationCurve);
-	return d->sourceDataChangedSinceLastIntegration;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -115,7 +110,7 @@ void XYIntegrationCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYIntegrationCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYIntegrationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastIntegration();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -128,7 +123,7 @@ void XYIntegrationCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYIntegrationCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYIntegrationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastIntegration();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -143,21 +138,12 @@ void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::Integratio
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYIntegrationCurve::handleSourceDataChanged() {
-	Q_D(XYIntegrationCurve);
-	d->sourceDataChangedSinceLastIntegration = true;
-	emit sourceDataChangedSinceLastIntegration();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastIntegration(false),
 	q(owner)  {
 
 }
@@ -200,7 +186,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastIntegration = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -210,7 +196,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastIntegration = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -238,7 +224,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastIntegration = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -286,7 +272,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastIntegration = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

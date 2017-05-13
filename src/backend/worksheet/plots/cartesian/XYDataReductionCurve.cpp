@@ -98,11 +98,6 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 	return d->dataReductionResult;
 }
 
-bool XYDataReductionCurve::isSourceDataChangedSinceLastDataReduction() const {
-	Q_D(const XYDataReductionCurve);
-	return d->sourceDataChangedSinceLastDataReduction;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -111,7 +106,7 @@ void XYDataReductionCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYDataReductionCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYDataReductionCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastDataReduction();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -124,7 +119,7 @@ void XYDataReductionCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYDataReductionCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYDataReductionCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastDataReduction();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -139,21 +134,12 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYDataReductionCurve::handleSourceDataChanged() {
-	Q_D(XYDataReductionCurve);
-	d->sourceDataChangedSinceLastDataReduction = true;
-	emit sourceDataChangedSinceLastDataReduction();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastDataReduction(false),
 	q(owner)  {
 
 }
@@ -196,7 +182,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -206,7 +192,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -235,7 +221,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -329,7 +315,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastDataReduction = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

@@ -148,7 +148,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	this->showTransformResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last transform
-	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastTransform());
+	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 

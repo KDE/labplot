@@ -107,11 +107,6 @@ const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() c
 	return d->filterResult;
 }
 
-bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
-	Q_D(const XYFourierFilterCurve);
-	return d->sourceDataChangedSinceLastFilter;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -120,7 +115,7 @@ void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierFilterCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastFilter();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -133,7 +128,7 @@ void XYFourierFilterCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierFilterCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYFourierFilterCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastFilter();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -148,21 +143,12 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYFourierFilterCurve::handleSourceDataChanged() {
-	Q_D(XYFourierFilterCurve);
-	d->sourceDataChangedSinceLastFilter = true;
-	emit sourceDataChangedSinceLastFilter();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastFilter(false),
 	q(owner) {
 
 }
@@ -205,7 +191,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -215,7 +201,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.valid = false;
 		filterResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -243,7 +229,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -313,7 +299,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastFilter = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

@@ -78,7 +78,6 @@ class XYFourierFilterCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
 		const FilterResult& filterResult() const;
-		bool isSourceDataChangedSinceLastFilter() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYFourierFilterCurvePrivate Private;
@@ -90,9 +89,6 @@ class XYFourierFilterCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYFourierFilterCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYFourierFilterCurveSetXDataColumnCmd;
 		friend class XYFourierFilterCurveSetYDataColumnCmd;
@@ -101,7 +97,6 @@ class XYFourierFilterCurve: public XYCurve {
 
 		friend class XYFourierFilterCurveSetFilterDataCmd;
 		void filterDataChanged(const XYFourierFilterCurve::FilterData&);
-		void sourceDataChangedSinceLastFilter();
 };
 
 #endif

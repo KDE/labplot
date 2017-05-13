@@ -102,11 +102,6 @@ const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transfo
 	return d->transformResult;
 }
 
-bool XYFourierTransformCurve::isSourceDataChangedSinceLastTransform() const {
-	Q_D(const XYFourierTransformCurve);
-	return d->sourceDataChangedSinceLastTransform;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -115,7 +110,7 @@ void XYFourierTransformCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierTransformCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFourierTransformCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastTransform();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -128,7 +123,7 @@ void XYFourierTransformCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierTransformCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYFourierTransformCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastTransform();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -143,21 +138,12 @@ void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::Tr
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYFourierTransformCurve::handleSourceDataChanged() {
-	Q_D(XYFourierTransformCurve);
-	d->sourceDataChangedSinceLastTransform = true;
-	emit sourceDataChangedSinceLastTransform();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastTransform(false),
 	q(owner) {
 
 }
@@ -200,7 +186,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastTransform = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -210,7 +196,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.valid = false;
 		transformResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastTransform = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -238,7 +224,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastTransform = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -325,7 +311,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastTransform = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

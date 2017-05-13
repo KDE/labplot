@@ -72,7 +72,6 @@ class XYIntegrationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(IntegrationData, integrationData, IntegrationData)
 		const IntegrationResult& integrationResult() const;
-		bool isSourceDataChangedSinceLastIntegration() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYIntegrationCurvePrivate Private;
@@ -84,9 +83,6 @@ class XYIntegrationCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYIntegrationCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYIntegrationCurveSetXDataColumnCmd;
 		friend class XYIntegrationCurveSetYDataColumnCmd;
@@ -95,7 +91,6 @@ class XYIntegrationCurve: public XYCurve {
 
 		friend class XYIntegrationCurveSetIntegrationDataCmd;
 		void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
-		void sourceDataChangedSinceLastIntegration();
 };
 
 #endif

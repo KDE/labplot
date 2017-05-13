@@ -76,7 +76,6 @@ class XYFourierTransformCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
 		const TransformResult& transformResult() const;
-		bool isSourceDataChangedSinceLastTransform() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYFourierTransformCurvePrivate Private;
@@ -88,9 +87,6 @@ class XYFourierTransformCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYFourierTransformCurveSetXDataColumnCmd;
 		friend class XYFourierTransformCurveSetYDataColumnCmd;
@@ -99,7 +95,6 @@ class XYFourierTransformCurve: public XYCurve {
 
 		friend class XYFourierTransformCurveSetTransformDataCmd;
 		void transformDataChanged(const XYFourierTransformCurve::TransformData&);
-		void sourceDataChangedSinceLastTransform();
 };
 
 #endif

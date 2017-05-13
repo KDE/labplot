@@ -162,7 +162,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	this->showFilterResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last filter
-	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastFilter());
+	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 

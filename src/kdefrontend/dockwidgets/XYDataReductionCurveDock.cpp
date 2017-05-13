@@ -160,7 +160,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	this->showDataReductionResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last dataReduction
-	uiGeneralTab.pbRecalculate->setEnabled(m_dataReductionCurve->isSourceDataChangedSinceLastDataReduction());
+	uiGeneralTab.pbRecalculate->setEnabled(m_dataReductionCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 

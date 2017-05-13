@@ -175,7 +175,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	this->showSmoothResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last smooth
-	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastSmooth());
+	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 

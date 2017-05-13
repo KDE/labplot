@@ -57,8 +57,6 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastFilter; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
 		XYFourierFilterCurve* const q;
 
 //	private:

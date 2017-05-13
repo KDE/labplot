@@ -101,11 +101,6 @@ const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
 	return d->smoothResult;
 }
 
-bool XYSmoothCurve::isSourceDataChangedSinceLastSmooth() const {
-	Q_D(const XYSmoothCurve);
-	return d->sourceDataChangedSinceLastSmooth;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -114,7 +109,7 @@ void XYSmoothCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYSmoothCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYSmoothCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastSmooth();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -127,7 +122,7 @@ void XYSmoothCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYSmoothCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYSmoothCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastSmooth();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -142,21 +137,12 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYSmoothCurve::handleSourceDataChanged() {
-	Q_D(XYSmoothCurve);
-	d->sourceDataChangedSinceLastSmooth = true;
-	emit sourceDataChangedSinceLastSmooth();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastSmooth(false),
 	q(owner)  {
 
 }
@@ -199,7 +185,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastSmooth = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -209,7 +195,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastSmooth = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -238,7 +224,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastSmooth = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -297,7 +283,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastSmooth = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

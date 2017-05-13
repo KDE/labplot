@@ -78,7 +78,6 @@ class XYDataReductionCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
 		const DataReductionResult& dataReductionResult() const;
-		bool isSourceDataChangedSinceLastDataReduction() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYDataReductionCurvePrivate Private;
@@ -90,9 +89,6 @@ class XYDataReductionCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYDataReductionCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYDataReductionCurveSetXDataColumnCmd;
 		friend class XYDataReductionCurveSetYDataColumnCmd;
@@ -101,7 +97,6 @@ class XYDataReductionCurve: public XYCurve {
 
 		friend class XYDataReductionCurveSetDataReductionDataCmd;
 		void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
-		void sourceDataChangedSinceLastDataReduction();
 		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 
