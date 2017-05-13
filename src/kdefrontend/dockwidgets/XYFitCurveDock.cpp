@@ -1093,7 +1093,7 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	else
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br>";
-	str += i18n("number of parameter:") + ' ' + QString::number(fitResult.paramValues.size()) + "<br>";
+	str += i18n("number of parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + "<br>";
 	str += i18n("X range:") + ' ' + QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) + "<br>";
 
 	if (!fitResult.valid) {
@@ -1144,7 +1144,7 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br> <br>";
 
 	// show all iterations
-	str += "<b>" + i18n("Interations:") + "</b><br>";
+	str += "<b>" + i18n("Iterations:") + "</b><br>";
 	for (int i = 0; i < np; ++i)
 		str += m_fitData.paramNamesUtf8.at(i) + ' ';
 	str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
