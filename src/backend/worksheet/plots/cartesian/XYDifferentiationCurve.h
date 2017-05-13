@@ -90,7 +90,6 @@ class XYDifferentiationCurve: public XYCurve {
 
 		friend class XYDifferentiationCurveSetDifferentiationDataCmd;
 		void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
-		void sourceDataChangedSinceLastDifferentiation();
 };
 
 #endif

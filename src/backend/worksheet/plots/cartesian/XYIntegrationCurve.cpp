@@ -184,14 +184,27 @@ void XYIntegrationCurvePrivate::recalculate() {
 	// clear the previous result
 	integrationResult = XYIntegrationCurve::IntegrationResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Number of x and y data points must be equal.");
@@ -203,17 +216,26 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = integrationData.xRange.first();
-	const double xmax = integrationData.xRange.last();
-	for (int row=0; row < xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (integrationData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = integrationData.xRange.first();
+		xmax = integrationData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}

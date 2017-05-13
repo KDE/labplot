@@ -183,6 +183,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	// clear the previous result
 	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
 
+	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
 	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {

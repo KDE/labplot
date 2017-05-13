@@ -848,7 +848,22 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 
 XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 	XYIntegrationCurve* curve = new XYIntegrationCurve("Integration");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: integrate '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Integral of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add differentiation curve", name()));
+		this->addChild(curve);
+	}
+
+	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 
