@@ -60,7 +60,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	m_dateTimeMenu(new QMenu(this)),
 	m_teXEnabled(false) {
 
-// see legacy/LabelWidget.cpp
 	ui.setupUi(this);
 
 	QSplitter* splitter = new QSplitter(Qt::Vertical, this);
@@ -287,28 +286,20 @@ void LabelWidget::textChanged() {
 }
 
 void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
-	if (m_initializing)
+	if(ui.tbTexUsed->isChecked())
 		return;
 
 	// update button state
-	if(format.fontWeight() == QFont::Bold)
-		ui.tbFontBold->setChecked(true);
-	else
-		ui.tbFontBold->setChecked(false);
-	ui.tbFontItalic->setChecked(format.fontItalic());
-	ui.tbFontUnderline->setChecked(format.fontUnderline());
-	if(format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
-		ui.tbFontSuperScript->setChecked(true);
-	else
-		ui.tbFontSuperScript->setChecked(false);
-	if(format.verticalAlignment() == QTextCharFormat::AlignSubScript)
-		ui.tbFontSubScript->setChecked(true);
-	else
-		ui.tbFontSubScript->setChecked(false);
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
-	if(!ui.tbTexUsed->isChecked())
-		ui.kcbFontColor->setColor(format.foreground().color());
+	//font and colors
+	ui.kcbFontColor->setColor(format.foreground().color());
+	ui.kcbBackgroundColor->setColor(format.background().color());
 	ui.kfontRequester->setFont(format.font());
 }
 
@@ -345,6 +336,10 @@ void LabelWidget::teXUsedChanged(bool checked) {
 			ui.lFontSize->setVisible(true);
 			ui.sbFontSize->setVisible(true);
 		}
+
+		//update TeX colors
+		ui.kcbFontColor->setColor(m_label->teXFontColor());
+		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
 	} else {
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(0);
@@ -747,20 +742,6 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	if(m_label->text().teXUsed) {
-		ui.kcbFontColor->setColor(m_label->teXFontColor());
-		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
-	}
-
-	//Set text format
-	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-	ui.kfontRequester->setFont(format.font());
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
@@ -791,21 +772,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
-	ui.kfontRequester->setFont(group.readEntry("TeXFont", m_label->teXFont()));
-	if(m_label->text().teXUsed) {
-		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
-		ui.kcbFontColor->setColor(group.readEntry("TeXBackgroundColor", m_label->teXBackgroundColor()));
-	}
-
-	//Set text format
-	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-	ui.kfontRequester->setFont(format.font());
+	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
@@ -828,6 +795,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	//TeX
 	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
 	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
+	group.writeEntry("TeXBackgroundColor", ui.kcbBackgroundColor->color());
 	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry
