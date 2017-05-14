@@ -40,11 +40,20 @@ class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
+		enum WeightsType {
+			NoWeight,		// w = 1
+			Instrumental,		// w = 1/c^2	(default: Given errors)
+			Direct,			// w = c
+			Inverse,		// w = 1/c
+			Statistical,		// w = 1/y	(Poisson)
+			StatisticalFit,		// w = 1/Y	(Poisson)
+			Relative,		// w = 1/y^2	(Variance)
+			RelativeFit,		// w = 1/Y^2	(Variance)
+		};
 
 		struct FitData {
 			FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
-						weightsType(XYFitCurve::WeightsFromColumn),
+						weightsType(XYFitCurve::Instrumental),
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
@@ -109,10 +118,10 @@ class XYFitCurve : public XYCurve {
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
-		const QString& weightsColumnPath() const;
+		const QString& yErrorColumnPath() const;
 
 		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
 		const FitResult& fitResult() const;
@@ -134,10 +143,10 @@ class XYFitCurve : public XYCurve {
 	signals:
 		friend class XYFitCurveSetXDataColumnCmd;
 		friend class XYFitCurveSetYDataColumnCmd;
-		friend class XYFitCurveSetWeightsColumnCmd;
+		friend class XYFitCurveSetErrorColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
-		void weightsColumnChanged(const AbstractColumn*);
+		void yErrorColumnChanged(const AbstractColumn*);
 
 		friend class XYFitCurveSetFitDataCmd;
 		void fitDataChanged(const XYFitCurve::FitData&);

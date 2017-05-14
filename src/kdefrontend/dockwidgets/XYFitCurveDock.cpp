@@ -64,7 +64,7 @@ extern "C" {
 */
 
 XYFitCurveDock::XYFitCurveDock(QWidget *parent)
-	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbWeightsColumn(0), m_fitCurve(0) {
+	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbYErrorColumn(0), m_fitCurve(0) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -89,8 +89,8 @@ void XYFitCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 2);
 
-	cbWeightsColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
+	cbYErrorColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbYErrorColumn, 6, 4, 1, 2);
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -106,8 +106,8 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
 	uiGeneralTab.lFuncPic->setPalette(p);
 
-	uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
-	uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
+	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
+	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	uiGeneralTab.twGeneral->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -172,7 +172,7 @@ void XYFitCurveDock::initGeneralTab() {
 	Q_ASSERT(m_fitCurve);
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, m_fitCurve->weightsColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, m_fitCurve->yErrorColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
@@ -200,7 +200,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(yErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
 }
@@ -210,15 +210,15 @@ void XYFitCurveDock::setModel() {
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-	cbWeightsColumn->setTopLevelClasses(list);
+	cbYErrorColumn->setTopLevelClasses(list);
 
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbWeightsColumn->setModel(m_aspectTreeModel);
+	cbYErrorColumn->setModel(m_aspectTreeModel);
 
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
-	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
+	connect( cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)) );
 	XYCurveDock::setModel();
 }
 
@@ -330,7 +330,7 @@ void XYFitCurveDock::xRangeMaxChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
+void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -342,7 +342,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach (XYCurve* curve, m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
+		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
 void XYFitCurveDock::categoryChanged(int index) {
@@ -1289,9 +1289,9 @@ void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
+void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, column);
 	m_initializing = false;
 }
 

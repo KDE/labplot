@@ -103,8 +103,8 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 /********************** parameter derivatives ******************/
 
 /* basic */
-double nsl_fit_model_polynomial_param_deriv(double x, int j, double sigma) {
-	return pow(x, j)/sigma;	
+double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight) {
+	return weight*pow(x, j);	
 }
 double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double sigma) {
 	if (param == 0)

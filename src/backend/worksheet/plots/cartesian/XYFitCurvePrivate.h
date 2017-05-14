@@ -48,10 +48,10 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 
 		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
 		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
+		const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
 		QString xDataColumnPath;
 		QString yDataColumnPath;
-		QString weightsColumnPath;
+		QString yErrorColumnPath;
 
 		XYFitCurve::FitData fitData;
 		XYFitCurve::FitResult fitResult;
@@ -64,7 +64,7 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 		QVector<double>* yVector;
 		QVector<double>* residualsVector;
 
-		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
+		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or error) was changed, \c false otherwise
 
 		XYFitCurve* const q;
 

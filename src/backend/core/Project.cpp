@@ -337,7 +337,7 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (fitCurve) {
 						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
 					} else if (filterCurve) {
 						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
