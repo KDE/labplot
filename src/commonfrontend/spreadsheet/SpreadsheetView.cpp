@@ -660,12 +660,16 @@ int SpreadsheetView::lastSelectedColumn(bool full) {
   If \param full is \c true, this function only looks for fully selected rows.
   */
 int SpreadsheetView::firstSelectedRow(bool full) {
-	int rows = m_spreadsheet->rowCount();
-	for (int i=0; i<rows; i++) {
-		if (isRowSelected(i, full))
-			return i;
-	}
-	return -1;
+	QModelIndexList indexes;
+	if (!full)
+		indexes = m_tableView->selectionModel()->selectedIndexes();
+	else
+		indexes = m_tableView->selectionModel()->selectedRows();
+
+	if (!indexes.empty())
+		return indexes.first().row();
+	else
+		return -1;
 }
 
 /*!
@@ -673,11 +677,16 @@ int SpreadsheetView::firstSelectedRow(bool full) {
   If \param full is \c true, this function only looks for fully selected rows.
   */
 int SpreadsheetView::lastSelectedRow(bool full) {
-	int rows = m_spreadsheet->rowCount();
-	for (int i=rows-1; i>=0; i--)
-		if (isRowSelected(i, full)) return i;
+	QModelIndexList indexes;
+	if (!full)
+		indexes = m_tableView->selectionModel()->selectedIndexes();
+	else
+		indexes = m_tableView->selectionModel()->selectedRows();
 
-	return -2;
+	if (!indexes.empty())
+		return indexes.last().row();
+	else
+		return -2;
 }
 
 /*!
@@ -835,13 +844,13 @@ void SpreadsheetView::cutSelection() {
 }
 
 void SpreadsheetView::copySelection() {
-	int first_col = firstSelectedColumn(false);
+	int first_col = firstSelectedColumn();
 	if (first_col == -1) return;
-	int last_col = lastSelectedColumn(false);
+	int last_col = lastSelectedColumn();
 	if (last_col == -2) return;
-	int first_row = firstSelectedRow(false);
+	int first_row = firstSelectedRow();
 	if (first_row == -1)	return;
-	int last_row = lastSelectedRow(false);
+	int last_row = lastSelectedRow();
 	if (last_row == -2) return;
 	int cols = last_col - first_col +1;
 	int rows = last_row - first_row +1;
@@ -881,10 +890,10 @@ void SpreadsheetView::pasteIntoSelection() {
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	if (mime_data->hasFormat("text/plain")) {
-		int first_col = firstSelectedColumn(false);
-		int last_col = lastSelectedColumn(false);
-		int first_row = firstSelectedRow(false);
-		int last_row = lastSelectedRow(false);
+		int first_col = firstSelectedColumn();
+		int last_col = lastSelectedColumn();
+		int first_row = firstSelectedRow();
+		int last_row = lastSelectedRow();
 		int input_row_count = 0;
 		int input_col_count = 0;
 		int rows, cols;
