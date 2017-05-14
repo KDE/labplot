@@ -129,6 +129,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
 	        this, SLOT(charFormatChanged(QTextCharFormat)));
 	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
+	connect(ui.kcbBackgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged(QColor)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
@@ -385,6 +386,15 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	ui.teLabel->setTextColor(color);
 	foreach (TextLabel* label, m_labelsList)
 		label->setTeXFontColor(color);
+}
+
+void LabelWidget::backgroundColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	ui.teLabel->setTextBackgroundColor(color);
+	foreach (TextLabel* label, m_labelsList)
+		label->setTeXBackgroundColor(color);
 }
 
 void LabelWidget::fontSizeChanged(int value) {
@@ -737,8 +747,10 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	if(m_label->text().teXUsed)
+	if(m_label->text().teXUsed) {
 		ui.kcbFontColor->setColor(m_label->teXFontColor());
+		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
+	}
 
 	//Set text format
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
@@ -780,8 +792,10 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
 	ui.kfontRequester->setFont(group.readEntry("TeXFont", m_label->teXFont()));
-	if(m_label->text().teXUsed)
+	if(m_label->text().teXUsed) {
 		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
+		ui.kcbFontColor->setColor(group.readEntry("TeXBackgroundColor", m_label->teXBackgroundColor()));
+	}
 
 	//Set text format
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);

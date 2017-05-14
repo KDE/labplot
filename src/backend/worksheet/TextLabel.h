@@ -82,6 +82,7 @@ class TextLabel : public WorksheetElement {
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
+		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor);
 		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
@@ -122,6 +123,7 @@ class TextLabel : public WorksheetElement {
 		friend class TextLabelSetTextCmd;
 		friend class TextLabelSetTeXFontCmd;
 		friend class TextLabelSetTeXFontColorCmd;
+		friend class TextLabelSetTeXBackgroundColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
@@ -130,6 +132,7 @@ class TextLabel : public WorksheetElement {
 		void teXFontSizeChanged(const int);
 		void teXFontChanged(const QFont);
 		void teXFontColorChanged(const QColor);
+		void teXBackgroundColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);

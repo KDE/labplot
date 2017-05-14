@@ -90,6 +90,7 @@ void TextLabel::init() {
 	d->teXFont.setFamily(group.readEntry("TeXFontFamily", "Computer Modern"));
 	d->teXFont.setPointSize(group.readEntry("TeXFontSize", 12));
 	d->teXFontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
+	d->teXBackgroundColor = group.readEntry("TeXBackgroundColor", QColor(Qt::white));
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
 	d->staticText.setTextFormat(Qt::RichText);
@@ -182,6 +183,7 @@ QMenu* TextLabel::createContextMenu() {
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXBackgroundColor, teXBackgroundColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
@@ -204,10 +206,17 @@ void TextLabel::setTeXFont(const QFont& font) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
-void TextLabel::setTeXFontColor(const QColor fontColor) {
+void TextLabel::setTeXFontColor(const QColor color) {
 	Q_D(TextLabel);
-	if (fontColor != d->teXFontColor)
-		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, i18n("%1: set TeX font color")));
+	if (color != d->teXFontColor)
+		exec(new TextLabelSetTeXFontColorCmd(d, color, i18n("%1: set TeX font color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, teXBackgroundColor, updateText);
+void TextLabel::setTeXBackgroundColor(const QColor color) {
+	Q_D(TextLabel);
+	if (color != d->teXBackgroundColor)
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, i18n("%1: set TeX background color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
@@ -420,6 +429,7 @@ void TextLabelPrivate::updateText() {
 	if (textWrapper.teXUsed) {
 		TeXRenderer::Formatting format;
 		format.fontColor = teXFontColor;
+		format.backgroundColor = teXBackgroundColor;
 		format.fontSize = teXFont.pointSize();
 		format.fontFamily = teXFont.family();
 		format.dpi = teXImageResolution;
