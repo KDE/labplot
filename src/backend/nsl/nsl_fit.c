@@ -50,6 +50,8 @@ const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((
 	"a/2 * erf((x-mu)/s/sqrt(2))", "a * x^n/(s^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
 const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "logistic_function", "erf", "hill", "gompertz", "gd"};
 
+const char* nsl_fit_weight_type_name[] = {"No", "Instrumental", "Direct", "Inverse", "Statistical", "Statistical (Fit)", "Relative", "Relative (Fit)"};
+
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
 	and https://lmfit.github.io/lmfit-py/bounds.html

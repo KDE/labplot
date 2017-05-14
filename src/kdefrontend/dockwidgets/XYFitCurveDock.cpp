@@ -86,11 +86,19 @@ void XYFitCurveDock::setupGeneral() {
 	cbXDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 2);
 
+	//TODO: XError
+
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 1);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYErrorColumn, 6, 4, 1, 2);
+	gridLayout->addWidget(cbYErrorColumn, 5, 5, 1, 1);
+
+	//Weight
+	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbWeight->addItem(nsl_fit_weight_type_name[i]);
+	uiGeneralTab.lWeight->setEnabled(false);
+	uiGeneralTab.cbWeight->setEnabled(false);
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -129,22 +137,23 @@ void XYFitCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
+	connect(uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
+	connect(uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
+	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
+	connect(uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()));
+	connect(uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()));
+	connect(uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()));
 
-	connect( uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)) );
-	connect( uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)) );
-	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
-	connect( uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()) );
-	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged(int)));
+	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
+	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)));
+	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
+	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()));
+	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
+	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
+	connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
+	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
+	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
 }
 
 void XYFitCurveDock::initGeneralTab() {
@@ -187,6 +196,7 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
+	uiGeneralTab.cbWeight->setCurrentIndex(m_fitData.weightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	updateModelEquation();
 	this->showFitResult();
@@ -216,9 +226,9 @@ void XYFitCurveDock::setModel() {
 	cbYDataColumn->setModel(m_aspectTreeModel);
 	cbYErrorColumn->setModel(m_aspectTreeModel);
 
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
-	connect( cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)) );
+	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
+	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
+	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
 	XYCurveDock::setModel();
 }
 
@@ -343,6 +353,13 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
+}
+
+void XYFitCurveDock::weightChanged(int index) {
+	QDEBUG("weightChanged() weight =" << nsl_fit_weight_type_name[index]);
+
+	m_fitData.weightsType = (nsl_fit_weight_type)index;
+	enableRecalculate();
 }
 
 void XYFitCurveDock::categoryChanged(int index) {
@@ -1292,6 +1309,8 @@ void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, column);
+	uiGeneralTab.lWeight->setEnabled(true);
+	uiGeneralTab.cbWeight->setEnabled(true);
 	m_initializing = false;
 }
 

@@ -40,20 +40,9 @@ class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum WeightsType {
-			NoWeight,		// w = 1
-			Instrumental,		// w = 1/c^2	(default: Given errors)
-			Direct,			// w = c
-			Inverse,		// w = 1/c
-			Statistical,		// w = 1/y	(Poisson)
-			StatisticalFit,		// w = 1/Y	(Poisson)
-			Relative,		// w = 1/y^2	(Variance)
-			RelativeFit,		// w = 1/Y^2	(Variance)
-		};
-
 		struct FitData {
 			FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
-						weightsType(XYFitCurve::Instrumental),
+						weightsType(nsl_fit_weight_instrumental),
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
@@ -64,7 +53,7 @@ class XYFitCurve : public XYCurve {
 
 			nsl_fit_model_category modelCategory;
 			unsigned int modelType;
-			WeightsType weightsType;
+			nsl_fit_weight_type weightsType;
 			int degree;
 			QString model;
 			QStringList paramNames;

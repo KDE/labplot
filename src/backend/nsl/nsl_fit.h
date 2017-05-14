@@ -54,6 +54,18 @@ extern const char* nsl_fit_model_peak_equation[];
 extern const char* nsl_fit_model_growth_equation[];
 extern const char* nsl_fit_model_distribution_equation[];
 
+#define NSL_FIT_WEIGHT_TYPE_COUNT 8
+typedef enum {nsl_fit_weight_no,		/* w = 1 */
+              nsl_fit_weight_instrumental,	/* w = 1/c^2    (Gaussian, Given errors): default */
+              nsl_fit_weight_direct,		/* w = c */
+              nsl_fit_weight_inverse,		/* w = 1/c */
+              nsl_fit_weight_statistical,	/* w = 1/y      (Poisson) */
+              nsl_fit_weight_statistical_fit,	/* w = 1/Y      (Poisson) */
+              nsl_fit_weight_relative,		/* w = 1/y^2    (Variance) */
+              nsl_fit_weight_relative_fit,	/* w = 1/Y^2    (Variance) */
+} nsl_fit_weight_type;
+extern const char* nsl_fit_weight_type_name[];
+
 /* convert unbounded variable x to bounded variable where bounds are [min, max] */
 double nsl_fit_map_bound(double x, double min, double max);
 /* convert bounded variable x to unbounded variable where bounds are [min, max] */

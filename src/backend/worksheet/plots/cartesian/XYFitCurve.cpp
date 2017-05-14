@@ -906,26 +906,26 @@ void XYFitCurvePrivate::recalculate() {
 						ydataVector.append(yDataColumn->valueAt(row));
 
 						switch (fitData.weightsType) {
-						case XYFitCurve::NoWeight:
+						case nsl_fit_weight_no:
 							break;
-						case XYFitCurve::Instrumental:
+						case nsl_fit_weight_instrumental:
 							weightVector.append(1./yErrorColumn->valueAt(row)/yErrorColumn->valueAt(row));
 							break;
-						case XYFitCurve::Direct:
+						case nsl_fit_weight_direct:
 							weightVector.append(yErrorColumn->valueAt(row));
 							break;
-						case XYFitCurve::Inverse:
+						case nsl_fit_weight_inverse:
 							weightVector.append(1./yErrorColumn->valueAt(row));
 							break;
-						case XYFitCurve::Statistical:
+						case nsl_fit_weight_statistical:
 							weightVector.append(1./yDataColumn->valueAt(row));
 							break;
-						case XYFitCurve::Relative:
+						case nsl_fit_weight_relative:
 							weightVector.append(1./yDataColumn->valueAt(row)/yDataColumn->valueAt(row));
 							break;
-						case XYFitCurve::StatisticalFit:
-						case XYFitCurve::RelativeFit:
-							weightVector.append(1.);
+						case nsl_fit_weight_statistical_fit:
+						case nsl_fit_weight_relative_fit:
+							weightVector.append(1.);	// updated in before every iteration
 							break;
 						}
 					}
@@ -1000,10 +1000,10 @@ void XYFitCurvePrivate::recalculate() {
 		iter++;
 
 		// Update weight for Fit-Weights
-		if (fitData.weightsType == XYFitCurve::StatisticalFit) {
+		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
 			for(size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-		} else if (fitData.weightsType == XYFitCurve::RelativeFit) {
+		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
 			for(size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 		}
@@ -1157,19 +1157,19 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
-	writer->writeAttribute( "autoRange", QString::number(d->fitData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.first(), 'g', 15) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15) );
-	writer->writeAttribute( "modelCategory", QString::number(d->fitData.modelCategory) );
-	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
-	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
-	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
-	writer->writeAttribute( "model", d->fitData.model );
-	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
-	writer->writeAttribute( "eps", QString::number(d->fitData.eps, 'g', 15) );
-	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
-	writer->writeAttribute( "evaluateFullRange", QString::number(d->fitData.evaluateFullRange) );
-	writer->writeAttribute( "useResults", QString::number(d->fitData.useResults) );
+	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->fitData.xRange.first(), 'g', 15));
+	writer->writeAttribute("xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15));
+	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
+	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
+	writer->writeAttribute("weightsType", QString::number(d->fitData.weightsType));
+	writer->writeAttribute("degree", QString::number(d->fitData.degree));
+	writer->writeAttribute("model", d->fitData.model);
+	writer->writeAttribute("maxIterations", QString::number(d->fitData.maxIterations));
+	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
+	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
+	writer->writeAttribute("evaluateFullRange", QString::number(d->fitData.evaluateFullRange));
+	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
 
 	writer->writeStartElement("paramNames");
 	foreach (const QString &name, d->fitData.paramNames)
@@ -1278,7 +1278,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
-			READ_INT_VALUE("weightsType", fitData.weightsType, XYFitCurve::WeightsType);
+			READ_INT_VALUE("weightsType", fitData.weightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
