@@ -74,13 +74,13 @@ double nsl_fit_map_unbound(double x, double min, double max);
 /* model parameter derivatives */
 /* basic */
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight);
-double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double sigma);
-double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double sigma);
-double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double sigma);
-double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double sigma);
-double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double sigma);
-double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double sigma);
-double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma);
+double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double weight);
+double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double weight);
+double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double weight);
+double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double weight);
+double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double weight);
+double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double weight);
+double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double weight);
 /* peak */
 double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);

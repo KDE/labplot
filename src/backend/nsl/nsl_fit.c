@@ -108,69 +108,69 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight) {
 	return weight*pow(x, j);	
 }
-double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double weight) {
 	if (param == 0)
-		return pow(x, b)/sigma;
+		return weight*pow(x, b);
 	if (param == 1)
-		return a*pow(x, b)*log(x)/sigma;
+		return weight*a*pow(x, b)*log(x);
 	return 0;
 }
-double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double sigma) {
+double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double weight) {
 	if (param == 0)
-		return 1./sigma;
+		return weight;
 	if (param == 1)
-		return pow(x, c)/sigma;
+		return weight*pow(x, c);
 	if (param == 2)
-		return b*pow(x, c)*log(x)/sigma;
+		return weight*b*pow(x, c)*log(x);
 	return 0;
 }
-double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double weight) {
 	if (param == 0)
-		return exp(b*x)/sigma;
+		return weight*exp(b*x);
 	if (param == 1)
-		return a*x*exp(b*x)/sigma;
+		return weight*a*x*exp(b*x);
 	return 0;
 }
-double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double sigma) {
+double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double weight) {
 	if (param == 0)
-		return exp(b*x)/sigma;
+		return weight*exp(b*x);
 	if (param == 1)
-		return a*x*exp(b*x)/sigma;
+		return weight*a*x*exp(b*x);
 	if (param == 2)
-		return exp(d*x)/sigma;
+		return weight*exp(d*x);
 	if (param == 3)
-		return c*x*exp(d*x)/sigma;
+		return weight*c*x*exp(d*x);
 	return 0;
 }
-double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double sigma) {
+double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double weight) {
 	if (param == 0)
-		return exp(b*x)/sigma;
+		return weight*exp(b*x);
 	if (param == 1)
-		return a*x*exp(b*x)/sigma;
+		return weight*a*x*exp(b*x);
 	if (param == 2)
-		return exp(d*x)/sigma;
+		return weight*exp(d*x);
 	if (param == 3)
-		return c*x*exp(d*x)/sigma;
+		return weight*c*x*exp(d*x);
 	if (param == 4)
-		return exp(f*x)/sigma;
+		return weight*exp(f*x);
 	if (param == 5)
-		return e*x*exp(f*x)/sigma;
+		return weight*e*x*exp(f*x);
 	return 0;
 }
-double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double weight) {
 	if (param == 0)
-		return (1. - exp(b*x))/sigma;
+		return weight*(1. - exp(b*x));
 	if (param == 1)
-		return -a*x*exp(b*x)/sigma;
+		return -weight*a*x*exp(b*x);
 	if (param == 2)
-		return 1./sigma;
+		return weight;
 	return 0;
 }
-double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma) {
+double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double weight) {
 	if (param == 0)
-		return cos(degree*w*x)/sigma;
+		return weight*cos(degree*w*x);
 	if (param == 1)
-		return sin(degree*w*x)/sigma;
+		return weight*sin(degree*w*x);
 	return 0;
 }
 

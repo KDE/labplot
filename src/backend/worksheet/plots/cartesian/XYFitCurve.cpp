@@ -309,13 +309,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-					if (weightVector) sigma = 1./weightVector[i];
+					if (weightVector) weight = weightVector[i];
 
 					for (int j = 0; j < 2; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
 						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_power1_param_deriv(j, x, a, b, sigma));
+							gsl_matrix_set(J, i, j, nsl_fit_model_power1_param_deriv(j, x, a, b, weight));
 					}
 				}
 				} else if (degree == 2) {
@@ -323,13 +323,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-					if (weightVector) sigma = 1./weightVector[i];
+					if (weightVector) weight = weightVector[i];
 
 					for (int j = 0; j < 3; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
 						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_power2_param_deriv(j, x, b, c, sigma));
+							gsl_matrix_set(J, i, j, nsl_fit_model_power2_param_deriv(j, x, b, c, weight));
 					}
 				}
 			}
@@ -340,13 +340,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-					if (weightVector) sigma = 1./weightVector[i];
+					if (weightVector) weight = weightVector[i];
 
 					for (int j = 0; j < 2; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
 						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential1_param_deriv(j, x, a, b, sigma));
+							gsl_matrix_set(J, i, j, nsl_fit_model_exponential1_param_deriv(j, x, a, b, weight));
 					}
 				}
 			} else if (degree == 2) {
@@ -356,13 +356,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-					if (weightVector) sigma = 1./weightVector[i];
+					if (weightVector) weight = weightVector[i];
 	
 					for (int j = 0; j < 4; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
 						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential2_param_deriv(j, x, a, b, c, d, sigma));
+							gsl_matrix_set(J, i, j, nsl_fit_model_exponential2_param_deriv(j, x, a, b, c, d, weight));
 					}
 				}
 			} else if (degree == 3) {
@@ -374,13 +374,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double f = nsl_fit_map_bound(gsl_vector_get(paramValues, 5), min[5], max[5]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-					if (weightVector) sigma = 1./weightVector[i];
+					if (weightVector) weight = weightVector[i];
 
 					for (int j = 0; j < 6; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
 						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential3_param_deriv(j, x, a, b, c, d, e, f, sigma));
+							gsl_matrix_set(J, i, j, nsl_fit_model_exponential3_param_deriv(j, x, a, b, c, d, e, f, weight));
 					}
 				}
 			}
@@ -390,13 +390,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
-				if (weightVector) sigma = 1./weightVector[i];
+				if (weightVector) weight = weightVector[i];
 
 				for (int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
 					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_inverse_exponential_param_deriv(j, x, a, b, sigma));
+						gsl_matrix_set(J, i, j, nsl_fit_model_inverse_exponential_param_deriv(j, x, a, b, weight));
 				}
 			}
 			break;
@@ -414,17 +414,17 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
-				if (weightVector) sigma = 1./weightVector[i];
+				if (weightVector) weight = weightVector[i];
 				double wd = 0; //first derivative with respect to the w parameter
 				for (int j = 1; j < degree; ++j) {
 					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
 				}
 
-				gsl_matrix_set(J, i, 0, wd/sigma);
-				gsl_matrix_set(J, i, 1, 1./sigma);
+				gsl_matrix_set(J, i, 0, weight*wd);
+				gsl_matrix_set(J, i, 1, weight);
 				for (int j = 1; j <= degree; ++j) {
-					gsl_matrix_set(J, i, 2*j, nsl_fit_model_fourier_param_deriv(0, j, x, w, sigma));
-					gsl_matrix_set(J, i, 2*j+1, nsl_fit_model_fourier_param_deriv(1, j, x, w, sigma));
+					gsl_matrix_set(J, i, 2*j, nsl_fit_model_fourier_param_deriv(0, j, x, w, weight));
+					gsl_matrix_set(J, i, 2*j+1, nsl_fit_model_fourier_param_deriv(1, j, x, w, weight));
 				}
 
 				for (int j = 0; j <= 2*degree+1; j++)
