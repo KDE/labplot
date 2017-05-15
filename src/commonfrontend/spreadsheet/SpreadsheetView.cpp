@@ -608,18 +608,6 @@ QList<Column*> SpreadsheetView::selectedColumns(bool full) {
 }
 
 /*!
-  Returns the number of (at least partly) selected rows.
-  If \param full is \c true, this function only returns the number of fully selected rows.
-*/
-int SpreadsheetView::selectedRowCount(bool full) {
-	int count = 0;
-	int rows = m_spreadsheet->rowCount();
-	for (int i=0; i<rows; i++)
-		if (isRowSelected(i, full)) count++;
-	return count;
-}
-
-/*!
   Returns \c true if row \param row is selected; otherwise returns \c false
   If \param full is \c true, this function only returns \c true if the whole row is selected.
 */
@@ -958,8 +946,8 @@ void SpreadsheetView::pasteIntoSelection() {
 
 void SpreadsheetView::maskSelection() {
 	int first = firstSelectedRow();
-	int last = lastSelectedRow();
 	if ( first < 0 ) return;
+	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
@@ -975,8 +963,8 @@ void SpreadsheetView::maskSelection() {
 
 void SpreadsheetView::unmaskSelection() {
 	int first = firstSelectedRow();
-	int last = lastSelectedRow();
 	if ( first < 0 ) return;
+	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
@@ -990,14 +978,11 @@ void SpreadsheetView::unmaskSelection() {
 	RESET_CURSOR;
 }
 
-// void SpreadsheetView::recalculateSelectedCells() {
-// }
-
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
-	int last = lastSelectedRow();
 	if ( first < 0 ) return;
+	int last = lastSelectedRow();
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
@@ -1625,7 +1610,7 @@ void SpreadsheetView::addColumns() {
   Append as many rows as are selected.
 */
 void SpreadsheetView::addRows() {
-	m_spreadsheet->appendRows(selectedRowCount(false));
+	m_spreadsheet->appendRows( m_tableView->selectionModel()->selectedRows().size() );
 }
 
 /*!

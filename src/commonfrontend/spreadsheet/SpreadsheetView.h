@@ -63,7 +63,6 @@ class SpreadsheetView : public QWidget {
 		int selectedColumnCount(AbstractColumn::PlotDesignation);
 		bool isColumnSelected(int col, bool full = false);
 		QList<Column*> selectedColumns(bool full = false);
-		int selectedRowCount(bool full = false);
 		bool isRowSelected(int row, bool full = false);
 		int firstSelectedColumn(bool full = false);
 		int lastSelectedColumn(bool full = false);
