@@ -89,9 +89,6 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 	cbAddTo->setTopLevelClasses(list);
 	grid->addWidget(cbAddTo, 0, 1);
 
-	list.clear();
-	list << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setSelectableClasses(list);
 	cbAddTo->setModel(model);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
@@ -127,7 +124,6 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(modelIndexChanged()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-
 	DEBUG("ImportDialog::setModel() DONE");
 }
 
