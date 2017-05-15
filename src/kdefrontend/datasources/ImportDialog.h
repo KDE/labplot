@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : ImportDialog.h
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +26,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#ifndef IMPORTDIALOG_H
+#define IMPORTDIALOG_H
 
-#include "ImportDialog.h"
+#include <KDialog>
 
 class AbstractAspect;
 class MainWin;
-class ImportFileWidget;
-class FileDataSource;
 class TreeViewComboBox;
 
-class QStatusBar;
 class QMenu;
+class QAbstractItemModel;
+class QLabel;
+class QModelIndex;
+class QVBoxLayout;
+class QComboBox;
+class QGroupBox;
+class QToolButton;
+class QStatusBar;
 
-class ImportFileDialog : public ImportDialog {
+class ImportDialog : public KDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	explicit ImportDialog(MainWin*);
+	~ImportDialog();
 
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
+	virtual void importTo(QStatusBar*) const = 0;
+	void setCurrentIndex(const QModelIndex&);
+	virtual QString selectedObject() const = 0;
+	virtual void checkOkButton() = 0;
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
+protected:
+	void setModel(QAbstractItemModel*);
 
-private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
+	QVBoxLayout* vLayout;
+	TreeViewComboBox* cbAddTo;
+	QLabel* lPosition;
+	QComboBox* cbPosition;
+	MainWin* m_mainWin;
+	QGroupBox* frameAddTo;
+	QToolButton* tbNewDataContainer;
 	QMenu* m_newDataContainerMenu;
 
 private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
+	void modelIndexChanged();
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif //IMPORTDIALOG_H

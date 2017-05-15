@@ -1,13 +1,12 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : ImportSQLDatabaseWidget.cpp
     Project              : LabPlot
-    Description          : import data dialog
+    Description          : SQLDatabase
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
-
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -27,41 +26,64 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#ifndef IMPORTSQLDATABASEWIDGET_H
+#define IMPORTSQLDATABASEWIDGET_H
 
-#include "ImportDialog.h"
+#include <QSqlDatabase>
+#include "backend/datasources/filters/AbstractFileFilter.h"
+#include "ui_importsqldatabasewidget.h"
 
-class AbstractAspect;
-class MainWin;
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <repository.h>
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
+#endif
 
-class QStatusBar;
-class QMenu;
+class QStandardItemModel;
 
-class ImportFileDialog : public ImportDialog {
+class ImportSQLDatabaseWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	explicit ImportSQLDatabaseWidget(QWidget*);
+	~ImportSQLDatabaseWidget();
 
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
-
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
+	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+	QString selectedTable() const;
+	bool isValid() const;
+	bool isNumericData() const;
 
 private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
+	Ui::ImportSQLDatabaseWidget ui;
+	QList<QString> vendorList;
+	QList<QString> tableNamesList;
+	QSqlDatabase m_db;
+	QStandardItemModel* m_databaseTreeModel;
+	QString m_configPath;
+	bool m_initializing;
+	bool m_valid;
+	bool m_numeric;
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::Repository m_repository;
+#endif
+
+	void readConnections();
+	void updateStatus();
+	void setInvalid();
+	void setValid();
 
 private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+	void loadSettings();
+	void showDatabaseManager();
+	void connectionChanged();
+	void importFromChanged(int);
+	void refreshPreview();
+
+signals:
+	void completed(int);
+	void stateChanged();
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif // IMPORTSQLDATABASEWIDGET_H

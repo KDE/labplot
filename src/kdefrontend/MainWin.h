@@ -66,7 +66,6 @@ class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
-class ImportFileDialog;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
@@ -102,7 +101,6 @@ private:
 	Folder* m_currentFolder;
 	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
-	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
 	bool m_closing;
 	bool m_autoSaveActive;
@@ -114,7 +112,8 @@ private:
 	QAction* m_saveAsAction;
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
-	QAction* m_importAction;
+	QAction* m_importFileAction;
+	QAction* m_importSqlAction;
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
@@ -165,6 +164,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_importMenu;
 	QMenu* m_editMenu;
 
 	//Docks
@@ -244,6 +244,7 @@ private slots:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importSqlDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
@@ -263,7 +264,6 @@ private slots:
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
-	void newSqlDataSourceActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

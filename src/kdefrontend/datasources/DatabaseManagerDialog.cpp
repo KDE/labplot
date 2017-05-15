@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : DatabaseManagerDialog.cc
     Project              : LabPlot
-    Description          : import data dialog
+    Description          : dialog for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +26,54 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#include "DatabaseManagerDialog.h"
+#include "DatabaseManagerWidget.h"
 
-#include "ImportDialog.h"
+#include <KLocale>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
-class AbstractAspect;
-class MainWin;
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
+/*!
+	\class DatabaseManagerDialog
+	\brief dialog for managing database connections
 
-class QStatusBar;
-class QMenu;
+	\ingroup kdefrontend
+*/
+DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : KDialog(parent),
+	mainWidget(new DatabaseManagerWidget(this, conn)), m_changed(false) {
 
-class ImportFileDialog : public ImportDialog {
-	Q_OBJECT
+	setMainWidget(mainWidget);
 
-public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	setWindowIcon(QIcon::fromTheme("network-server-database"));
+	setWindowTitle(i18n("SQL Database Connections"));
 
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
+	setButtons(KDialog::Ok | KDialog::Cancel);
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
+	connect(mainWidget, SIGNAL(changed()), this, SLOT(changed()));
+	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
 
-private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
+	//restore saved settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+}
 
-private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
-};
+QString DatabaseManagerDialog::connection() const {
+	return mainWidget->connection();
+}
 
-#endif //IMPORTFILEDIALOG_H
+DatabaseManagerDialog::~DatabaseManagerDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
+void DatabaseManagerDialog::changed() {
+	setWindowTitle(i18n("SQL Database Connections  [Changed]"));
+	m_changed = true;
+}
+
+void DatabaseManagerDialog::save() {
+	//ok-button was clicked, save the connections if they were changed
+	if (m_changed)
+		mainWidget->saveConnections();
+}

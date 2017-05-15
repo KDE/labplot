@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : DatabaseManagerDialog.h
     Project              : LabPlot
-    Description          : import data dialog
+    Description          : dialog for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +26,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#ifndef DATABASEMANAGERDIALOG_H
+#define DATABASEMANAGERDIALOG_H
 
-#include "ImportDialog.h"
+#include <KDialog>
 
-class AbstractAspect;
-class MainWin;
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
+class DatabaseManagerWidget;
 
-class QStatusBar;
-class QMenu;
-
-class ImportFileDialog : public ImportDialog {
+class DatabaseManagerDialog : public KDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	explicit DatabaseManagerDialog(QWidget*, const QString&);
+	~DatabaseManagerDialog();
 
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
-
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
+	QString connection() const;
 
 private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
+	DatabaseManagerWidget* mainWidget;
+	bool m_changed;
 
 private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+	void changed();
+	void save();
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif

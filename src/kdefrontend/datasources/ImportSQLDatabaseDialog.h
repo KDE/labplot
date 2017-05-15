@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +27,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#ifndef IMPORTSQLDATABASEDIALOG_H
+#define IMPORTSQLDATABASEDIALOG_H
 
-#include "ImportDialog.h"
+#include "kdefrontend/datasources/ImportDialog.h"
 
-class AbstractAspect;
 class MainWin;
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
-
 class QStatusBar;
-class QMenu;
+class ImportSQLDatabaseWidget;
 
-class ImportFileDialog : public ImportDialog {
+class ImportSQLDatabaseDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	explicit ImportSQLDatabaseDialog(MainWin*);
+	~ImportSQLDatabaseDialog();
 
+	void importTo(QStatusBar*) const;
 	virtual QString selectedObject() const;
 	virtual void checkOkButton();
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
-
 private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
+	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
 
 private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+	void importWidgetStateChanged();
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif //IMPORTSQLDATABASEDIALOG_H

@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : DatabaseManagerWidget.h
     Project              : LabPlot
-    Description          : import data dialog
+    Description          : widget for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,42 +25,62 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef DATABASEMANAGERWIDGET_H
+#define DATABASEMANAGERWIDGET_H
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#include "ui_databasemanagerwidget.h"
 
-#include "ImportDialog.h"
-
-class AbstractAspect;
-class MainWin;
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
-
-class QStatusBar;
-class QMenu;
-
-class ImportFileDialog : public ImportDialog {
+class DatabaseManagerWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	explicit DatabaseManagerWidget(QWidget*, const QString&);
 
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
+	struct SQLConnection {
+		int port;
+		QString name;
+		QString driver;
+		QString hostName;
+		QString dbName;
+		QString userName;
+		QString password;
+	};
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void importTo(QStatusBar*) const;
+	QString connection() const;
+	void setCurrentConnection(const QString&);
+	void saveConnections();
+	static bool isFileDB(const QString&);
 
 private:
-	ImportFileWidget* importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
+	Ui::DatabaseManagerWidget ui;
+	QList<SQLConnection> m_connections;
+	bool m_initializing;
+	QString m_configPath;
+	QString m_initConnName;
+
+	QString uniqueName();
+	void loadConnection();
+	int defaultPort(const QString&) const;
+	void dataChanged();
 
 private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+	void loadConnections();
+	void addConnection();
+	void deleteConnection();
+	void testConnection();
+	void connectionChanged(int);
+
+	void nameChanged(const QString&);
+	void driverChanged();
+	void selectFile();
+	void hostChanged();
+	void portChanged();
+	void databaseNameChanged();
+	void userNameChanged();
+	void passwordChanged();
+
+signals:
+	void changed();
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif
