@@ -97,6 +97,7 @@ void XYFitCurveDock::setupGeneral() {
 	//Weight
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbWeight->addItem(nsl_fit_weight_type_name[i]);
+	uiGeneralTab.cbWeight->setCurrentIndex(nsl_fit_weight_instrumental);
 	uiGeneralTab.lWeight->setEnabled(false);
 	uiGeneralTab.cbWeight->setEnabled(false);
 
