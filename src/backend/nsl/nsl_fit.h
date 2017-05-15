@@ -82,33 +82,33 @@ double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, dou
 double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double weight);
 double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double weight);
 /* peak */
-double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
-double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double sigma);
+double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double weight);
+double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double weight);
 /* growth */
-double nsl_fit_model_atan_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double mu, double a, double sigma);
-double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, double a, double sigma);
-double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
-double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double mu, double a, double sigma);
+double nsl_fit_model_atan_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double mu, double a, double weight);
+double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, double a, double weight);
+double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double weight);
+double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double mu, double a, double weight);
 /* distributions */
-double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, double mu, double A, double a, double sigma);
-double nsl_fit_model_poisson_param_deriv(int param, double x, double l, double a, double sigma);
-double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double sigma);
-double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double sigma);
-double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double a, double sigma);
-double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double sigma);
-double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double sigma);
-double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double sigma);
+double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, double mu, double A, double a, double weight);
+double nsl_fit_model_poisson_param_deriv(int param, double x, double l, double a, double weight);
+double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double weight);
+double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double weight);
+double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double a, double weight);
+double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double weight);
+double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double weight);
+double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double weight);
 
-double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma);
-double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double sigma);
-double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double sigma);
+double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double weight);
+double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight);
+double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double weight);
+double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double weight);
 
 #endif /* NSL_FIT_H */
