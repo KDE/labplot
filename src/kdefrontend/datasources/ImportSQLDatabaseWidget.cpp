@@ -169,7 +169,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	}
 
 	if (!m_db.open()) {
-		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection setttings.", ui.cbConnection->currentText()),
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText()),
 								 i18n("Connection failed"));
 		setInvalid();
 		return;
