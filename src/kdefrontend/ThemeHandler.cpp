@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of themes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -86,8 +86,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full paths (path + file name)
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
-	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
 	foreach (const QString& dir, dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
 		while (it.hasNext())
@@ -122,9 +121,7 @@ void ThemeHandler::loadSelected(QString name) {
 }
 
 QStringList ThemeHandler::themes() {
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
-	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
-
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
 	QStringList pathList;
 	foreach (const QString& dir, dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
@@ -141,8 +138,7 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
-	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
 
 	QStringList themes;
 	foreach (const QString& dir, dirs) {
