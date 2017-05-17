@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,7 +36,7 @@ class CartesianPlot;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
-class CartesianPlotLegend: public WorksheetElement {
+class CartesianPlotLegend : public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -54,9 +54,10 @@ class CartesianPlotLegend: public WorksheetElement {
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual QGraphicsItem* graphicsItem() const;
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig& config);
 
 		virtual void setVisible(bool);
 		virtual bool isVisible() const;
@@ -99,7 +100,7 @@ class CartesianPlotLegend: public WorksheetElement {
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		CartesianPlotLegend(CartesianPlot*, const QString &name, CartesianPlotLegendPrivate* dd);
+		CartesianPlotLegend(CartesianPlot*, const QString& name, CartesianPlotLegendPrivate* dd);
 		CartesianPlotLegendPrivate* const d_ptr;
 
 	private:
