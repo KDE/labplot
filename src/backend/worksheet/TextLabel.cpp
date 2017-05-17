@@ -40,6 +40,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
+#include <QTextCharFormat>
+#include <QTextDocument>
+#include <QTextCursor>
 
 #include <QIcon>
 #include <KConfig>
@@ -816,12 +819,31 @@ bool TextLabel::load(XmlStreamReader* reader) {
 //#########################  Theme management ##################################
 //##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
+	Q_D(const TextLabel);
+
 	KConfigGroup group = config.group("Label");
-	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-	this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
+	const QColor fontColor = group.readEntry("FontColor", QColor(Qt::white));
+	const QColor backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
+
+	//replace colors in the html-formatted string
+	QTextDocument doc;
+	doc.setHtml(d->textWrapper.text);
+	QTextCharFormat fmt;
+	fmt.setForeground(QBrush(fontColor));
+	fmt.setBackground(QBrush(backgroundColor));
+	QTextCursor cursor(&doc);
+	cursor.select(QTextCursor::Document);
+	cursor.setCharFormat(fmt);
+
+	TextLabel::TextWrapper wrapper(doc.toHtml(), d->textWrapper.teXUsed);
+	this->setText(wrapper);
+	//replace colors in the TeX-string
+	this->setTeXFontColor(fontColor);
+	this->setTeXBackgroundColor(backgroundColor);
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Label");
-	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
+	//TODO
+// 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
 }
