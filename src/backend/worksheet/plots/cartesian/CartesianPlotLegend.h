@@ -71,26 +71,26 @@ class CartesianPlotLegend : public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
-        BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-        BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-        CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-        CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-        CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
+		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 
 		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 		BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
 		BASIC_D_ACCESSOR_DECL(float, borderOpacity, BorderOpacity)
 
-        BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-        BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
-        BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
+		BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 		typedef WorksheetElement BaseClass;
 		typedef CartesianPlotLegendPrivate Private;
