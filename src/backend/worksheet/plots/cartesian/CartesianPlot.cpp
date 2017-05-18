@@ -152,7 +152,7 @@ void CartesianPlot::initDefault(Type type) {
 		d->yMax = 1;
 
 		//Axes
-		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisBottom);
 		axis->setStart(0);
@@ -168,7 +168,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::DotLine);
 		axis->setMinorGridPen(pen);
 
-		axis = new Axis("x axis 2", Axis::AxisHorizontal);
+		axis = new Axis("x axis 2", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisTop);
 		axis->setStart(0);
@@ -180,7 +180,7 @@ void CartesianPlot::initDefault(Type type) {
 		axis->setLabelsPosition(Axis::NoLabels);
 		axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", Axis::AxisVertical);
+		axis = new Axis("y axis 1", this, Axis::AxisVertical);
 		addChild(axis);
 		axis->setPosition(Axis::AxisLeft);
 		axis->setStart(0);
@@ -196,7 +196,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::DotLine);
 		axis->setMinorGridPen(pen);
 
-		axis = new Axis("y axis 2", Axis::AxisVertical);
+		axis = new Axis("y axis 2", this, Axis::AxisVertical);
 		addChild(axis);
 		axis->setPosition(Axis::AxisRight);
 		axis->setStart(0);
@@ -218,7 +218,7 @@ void CartesianPlot::initDefault(Type type) {
 		d->yMin = 0;
 		d->yMax = 1;
 
-		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisBottom);
 		axis->setStart(0);
@@ -229,7 +229,7 @@ void CartesianPlot::initDefault(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::FilledArrowSmall);
 
-		axis = new Axis("y axis 1", Axis::AxisVertical);
+		axis = new Axis("y axis 1", this, Axis::AxisVertical);
 		addChild(axis);
 		axis->setPosition(Axis::AxisLeft);
 		axis->setStart(0);
@@ -256,7 +256,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::NoPen);
 		m_plotArea->setBorderPen(pen);
 
-		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCentered);
 		axis->setStart(-0.5);
@@ -268,7 +268,7 @@ void CartesianPlot::initDefault(Type type) {
 		axis->setArrowType(Axis::FilledArrowSmall);
 		axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", Axis::AxisVertical);
+		axis = new Axis("y axis 1", this, Axis::AxisVertical);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCentered);
 		axis->setStart(-0.5);
@@ -296,7 +296,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::NoPen);
 		m_plotArea->setBorderPen(pen);
 
-		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCustom);
 		axis->setOffset(0);
@@ -309,7 +309,7 @@ void CartesianPlot::initDefault(Type type) {
 		axis->setArrowType(Axis::FilledArrowSmall);
 		axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", Axis::AxisVertical);
+		axis = new Axis("y axis 1", this, Axis::AxisVertical);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCustom);
 		axis->setOffset(0);
@@ -772,7 +772,7 @@ void CartesianPlot::setThemeName(const QString& name) {
 //########################## Slots ###############################
 //################################################################
 void CartesianPlot::addHorizontalAxis() {
-	Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
+	Axis* axis = new Axis("x-axis", this, Axis::AxisHorizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(xMin());
@@ -783,7 +783,7 @@ void CartesianPlot::addHorizontalAxis() {
 }
 
 void CartesianPlot::addVerticalAxis() {
-	Axis* axis = new Axis("y-axis", Axis::AxisVertical);
+	Axis* axis = new Axis("y-axis", this, Axis::AxisVertical);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(yMin());
@@ -2212,7 +2212,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "plotArea") {
 			m_plotArea->load(reader);
 		} else if (reader->name() == "axis") {
-			Axis* axis = new Axis("");
+			Axis* axis = new Axis("", this);
 			if (!axis->load(reader)) {
 				delete axis;
 				return false;

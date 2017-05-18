@@ -34,6 +34,7 @@
 #include "backend/lib/macros.h"
 #include <QActionGroup>
 
+class CartesianPlot;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
@@ -59,7 +60,7 @@ class Axis: public WorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-		explicit Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
+		explicit Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation = AxisHorizontal);
 		virtual ~Axis();
 
 		virtual QIcon icon() const;

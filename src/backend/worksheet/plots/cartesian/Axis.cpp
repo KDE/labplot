@@ -111,13 +111,15 @@ class AxisGrid : public QGraphicsItem {
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString &name, const AxisOrientation &orientation)
+Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
 		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
+	d_ptr->m_plot = plot;
+	d_ptr->m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd)
+Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate* dd)
 		: WorksheetElement(name), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
@@ -904,15 +906,6 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	m_plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!m_plot)
-		return;
-
-	//TODO: add comment here for why we need this
-	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
-	if (!m_cSystem)
-		return;
-
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;
