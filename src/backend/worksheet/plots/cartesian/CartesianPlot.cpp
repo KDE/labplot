@@ -767,6 +767,7 @@ void CartesianPlot::setThemeName(const QString& name) {
 	if (name != d->themeName)
 		exec(new CartesianPlotSetThemeNameCmd(d, name, i18n("%1: set theme name")));
 }
+
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -943,6 +944,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = true;
+	}
+
+	//if a theme was selected, apply the theme settings for newly added children, too
+	if (!d->themeName.isEmpty()) {
+		const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
+		if (el) {
+			KConfig config(ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig);
+			const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+		}
 	}
 }
 
