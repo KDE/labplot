@@ -96,6 +96,18 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
 
+void ThemeHandler::setCurrentTheme(const QString& name) {
+	if (!name.isEmpty()) {
+		pbLoadTheme->setText(i18n("Apply theme [active '%1']").arg(name));
+		pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.").arg(name));
+	} else {
+		pbLoadTheme->setText(i18n("Apply theme"));
+		pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
+	}
+
+	m_currentTheme = name;
+}
+
 void ThemeHandler::loadSelected(QString name) {
 	QString themeFilePath;
 	foreach (const QString& filePath, m_themeList) {
@@ -108,6 +120,8 @@ void ThemeHandler::loadSelected(QString name) {
 	emit (loadThemeRequested(config));
 
 	emit info( i18n("Theme \"%1\" was loaded.", name) );
+
+	this->setCurrentTheme(name);
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
 	//TODO: activate this later

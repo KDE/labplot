@@ -141,12 +141,12 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	QFrame* frame = new QFrame(this);
 	QHBoxLayout* layout = new QHBoxLayout(frame);
 
-	ThemeHandler* themeHandler = new ThemeHandler(this);
-	layout->addWidget(themeHandler);
-	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
-	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	m_themeHandler = new ThemeHandler(this);
+	layout->addWidget(m_themeHandler);
+	connect(m_themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -188,6 +188,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	//show the properties of the first worksheet
 	this->load();
 	this->worksheetLayoutChanged(m_worksheet->layout());
+
+	m_themeHandler->setCurrentTheme(m_worksheet->theme());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	connect(m_worksheet, SIGNAL(pageRectChanged(QRectF)),this, SLOT(worksheetPageRectChanged(QRectF)));

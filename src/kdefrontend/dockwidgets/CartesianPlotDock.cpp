@@ -162,12 +162,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	QFrame* frame = new QFrame(this);
 	QHBoxLayout* layout = new QHBoxLayout(frame);
 
-	ThemeHandler* themeHandler = new ThemeHandler(this);
-	layout->addWidget(themeHandler);
-	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
-	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
-	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));
+	m_themeHandler = new ThemeHandler(this);
+	layout->addWidget(m_themeHandler);
+	connect(m_themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+	connect(m_themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
+	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	//connect(this, SIGNAL(saveThemeEnable(bool)), m_themeHandler, SLOT(saveThemeEnable(bool)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	layout->addWidget(templateHandler);
@@ -274,6 +274,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
+
+	m_themeHandler->setCurrentTheme(m_plot->theme());
 
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).

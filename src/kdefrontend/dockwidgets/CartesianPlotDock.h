@@ -38,6 +38,7 @@
 #include <KLocalizedString>
 
 class LabelWidget;
+class ThemeHandler;
 class KUrlCompletion;
 
 class CartesianPlotDock : public QWidget {
@@ -56,6 +57,7 @@ private:
 	LabelWidget* labelWidget;
 	bool m_initializing;
 	KUrlCompletion* m_completion;
+	ThemeHandler* m_themeHandler;
 
 	void loadConfig(KConfig&);
 

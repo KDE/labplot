@@ -94,7 +94,6 @@ class CartesianPlot:public AbstractPlot{
 		virtual bool load(XmlStreamReader*);
 		virtual void loadThemeConfig(const KConfig&);
 		void saveTheme(KConfig& config);
-		void setThemeName(const QString&);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
@@ -108,6 +107,8 @@ class CartesianPlot:public AbstractPlot{
 		BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks);
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks);
+
+		CLASS_D_ACCESSOR_DECL(QString, theme, Theme)
 
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;

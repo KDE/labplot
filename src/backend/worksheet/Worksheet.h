@@ -62,7 +62,7 @@ class Worksheet: public AbstractPart, public scripted {
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-		void loadTheme(KConfig& config);
+		void loadTheme(KConfig&);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
@@ -71,7 +71,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void setPrinting(bool) const;
 		void setThemeName(const QString&);
 
-		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
+		void setItemSelectedInView(const QGraphicsItem*, const bool);
 		void setSelectedInView(const bool);
 		void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 		void setIsClosing();
@@ -97,9 +97,11 @@ class Worksheet: public AbstractPart, public scripted {
 		BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
+		CLASS_D_ACCESSOR_DECL(QString, theme, Theme)
+
 		typedef WorksheetPrivate Private;
 
-public slots:
+	public slots:
 		void loadTheme(const QString&);
 
 	private:

@@ -575,6 +575,8 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
+
 /*!
 	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
 	in plot's coordinates
@@ -761,11 +763,11 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 }
 
 
-STD_SETTER_CMD_IMPL(CartesianPlot, SetThemeName, QString, themeName)
-void CartesianPlot::setThemeName(const QString& name) {
+STD_SETTER_CMD_IMPL(CartesianPlot, SetTheme, QString, theme)
+void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
-	if (name != d->themeName)
-		exec(new CartesianPlotSetThemeNameCmd(d, name, i18n("%1: set theme name")));
+	if (theme != d->theme)
+		exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: set theme")));
 }
 
 //################################################################
@@ -947,10 +949,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 
 	//if a theme was selected, apply the theme settings for newly added children, too
-	if (!d->themeName.isEmpty()) {
+	if (!d->theme.isEmpty()) {
 		const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
 		if (el) {
-			KConfig config(ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig);
+			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 			const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
 		}
 	}
@@ -1921,9 +1923,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//applied theme
-	if (!d->themeName.isEmpty()){
+	if (!d->theme.isEmpty()){
 		writer->writeStartElement( "theme" );
-		writer->writeAttribute("name", d->themeName);
+		writer->writeAttribute("name", d->theme);
 		writer->writeEndElement();
 	}
 
@@ -2004,7 +2006,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	QString tmpThemeName;
+	QString tmpTheme;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -2019,7 +2021,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				return false;
 		} else if (reader->name() == "theme") {
 			attribs = reader->attributes();
-			tmpThemeName = attribs.value("name").toString();
+			tmpTheme = attribs.value("name").toString();
 		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -2310,10 +2312,10 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 
 	//if a theme was used, assign the value to the private member at the very end of load()
 	//so we don't try to load the theme in applyThemeOnNewCurve() when adding curves on project load and calculate the palette
-	if (!tmpThemeName.isEmpty()){
-		KConfig config( ThemeHandler::themeFilePath(tmpThemeName), KConfig::SimpleConfig );
+	if (!tmpTheme.isEmpty()){
+		KConfig config( ThemeHandler::themeFilePath(tmpTheme), KConfig::SimpleConfig );
 		//TODO: check whether the theme config really exists
-		d->themeName = tmpThemeName;
+		d->theme = tmpTheme;
 		this->setColorPalette(config);
 	}
 
@@ -2332,7 +2334,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	QString str = config.name();
 	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
 	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
-	this->setThemeName(str);
+	this->setTheme(str);
 
 	//load the color palettes for the curves
 	this->setColorPalette(config);
@@ -2408,8 +2410,8 @@ const QList<QColor>& CartesianPlot::themeColorPalette() const {
 
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
 	Q_D(const CartesianPlot);
-	if (!d->themeName.isEmpty()) {
-		KConfig config( ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig );
+	if (!d->theme.isEmpty()) {
+		KConfig config( ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig );
 		curve->loadThemeConfig(config);
 	}
 }

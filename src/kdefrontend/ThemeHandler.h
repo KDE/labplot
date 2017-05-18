@@ -40,12 +40,14 @@ class ThemeHandler : public QWidget {
 
 	public:
 		explicit ThemeHandler(QWidget*);
+		void setCurrentTheme(const QString&);
 		static QStringList themes();
 		static const QString themeFilePath(const QString&);
 
 	private:
 		QList<QString> dirNames;
 		QStringList m_themeList;
+		QString m_currentTheme;
 		QString m_currentLocalTheme;
 
 		QPushButton* pbLoadTheme;
