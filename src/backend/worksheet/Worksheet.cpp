@@ -725,6 +725,13 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
+	//applied theme
+	if (!d->theme.isEmpty()){
+		writer->writeStartElement( "theme" );
+		writer->writeAttribute("name", d->theme);
+		writer->writeEndElement();
+	}
+
 	//geometry
 	writer->writeStartElement( "geometry" );
 	QRectF rect = d->m_scene->sceneRect();
@@ -796,7 +803,11 @@ bool Worksheet::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "theme") {
+			attribs = reader->attributes();
+			d->theme = attribs.value("name").toString();
 		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
