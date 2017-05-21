@@ -107,9 +107,11 @@ class XYFitCurve : public XYCurve {
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
+		const QString& xErrorColumnPath() const;
 		const QString& yErrorColumnPath() const;
 
 		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
@@ -132,9 +134,11 @@ class XYFitCurve : public XYCurve {
 	signals:
 		friend class XYFitCurveSetXDataColumnCmd;
 		friend class XYFitCurveSetYDataColumnCmd;
-		friend class XYFitCurveSetErrorColumnCmd;
+		friend class XYFitCurveSetXErrorColumnCmd;
+		friend class XYFitCurveSetYErrorColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
+		void xErrorColumnChanged(const AbstractColumn*);
 		void yErrorColumnChanged(const AbstractColumn*);
 
 		friend class XYFitCurveSetFitDataCmd;

@@ -52,6 +52,7 @@ private:
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbXErrorColumn;
 	TreeViewComboBox* cbYErrorColumn;
 
 	XYFitCurve* m_fitCurve;
@@ -72,6 +73,7 @@ private slots:
 	void modelChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
+	void xErrorColumnChanged(const QModelIndex&);
 	void yErrorColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
@@ -94,6 +96,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
+	void curveXErrorColumnChanged(const AbstractColumn*);
 	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();

@@ -84,9 +84,10 @@ void XYFitCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 1);
 
-	//TODO: XError
+	cbXErrorColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbXErrorColumn, 4, 5, 1, 1);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 1);
@@ -182,6 +183,7 @@ void XYFitCurveDock::initGeneralTab() {
 	Q_ASSERT(m_fitCurve);
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, m_fitCurve->xErrorColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, m_fitCurve->yErrorColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
@@ -211,6 +213,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(xErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
@@ -229,6 +232,7 @@ void XYFitCurveDock::setModel() {
 
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
 	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
+	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
 	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
 	XYCurveDock::setModel();
 }
@@ -339,6 +343,21 @@ void XYFitCurveDock::xRangeMaxChanged() {
 
 	m_fitData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach (XYCurve* curve, m_curvesList)
+		dynamic_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
@@ -1304,6 +1323,12 @@ void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	m_initializing = false;
+}
+
+void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, column);
 	m_initializing = false;
 }
 

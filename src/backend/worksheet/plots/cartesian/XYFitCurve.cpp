@@ -101,9 +101,11 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yDataColumn, yDataColumn)
+BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
 const QString& XYFitCurve::xDataColumnPath() const { Q_D(const XYFitCurve); return d->xDataColumnPath; }
 const QString& XYFitCurve::yDataColumnPath() const { Q_D(const XYFitCurve); return d->yDataColumnPath; }
+const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve);return d->xErrorColumnPath; }
 const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve);return d->yErrorColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
@@ -147,6 +149,19 @@ void XYFitCurve::setYDataColumn(const AbstractColumn* column) {
 	}
 }
 
+STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXErrorColumn, const AbstractColumn*, xErrorColumn)
+void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
+	Q_D(XYFitCurve);
+	if (column != d->xErrorColumn) {
+		exec(new XYFitCurveSetXErrorColumnCmd(d, column, i18n("%1: assign x-error")));
+		emit sourceDataChangedSinceLastFit();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
+}
+
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYErrorColumn, const AbstractColumn*, yErrorColumn)
 void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
@@ -179,7 +194,7 @@ void XYFitCurve::handleSourceDataChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), yErrorColumn(0),
+	xDataColumn(0), yDataColumn(0), xErrorColumn(0), yErrorColumn(0),
 	xColumn(0), yColumn(0), residualsColumn(0),
 	xVector(0), yVector(0), residualsVector(0),
 	sourceDataChangedSinceLastFit(false),
@@ -1014,7 +1029,7 @@ void XYFitCurvePrivate::recalculate() {
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
-	// unscale start values again
+	// unscale start values
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
@@ -1156,6 +1171,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
 	writer->writeAttribute("xRangeMin", QString::number(d->fitData.xRange.first(), 'g', 15));
@@ -1271,6 +1287,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			READ_COLUMN(xErrorColumn);
 			READ_COLUMN(yErrorColumn);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);

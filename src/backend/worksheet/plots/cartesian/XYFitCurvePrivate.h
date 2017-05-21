@@ -48,9 +48,11 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 
 		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
 		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
+		const AbstractColumn* xErrorColumn; //<! column storing the values for the x-error to be used in the fit
 		const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
 		QString xDataColumnPath;
 		QString yDataColumnPath;
+		QString xErrorColumnPath;
 		QString yErrorColumnPath;
 
 		XYFitCurve::FitData fitData;
