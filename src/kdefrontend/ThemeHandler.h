@@ -40,9 +40,11 @@ class ThemeHandler : public QWidget {
 
 	public:
 		explicit ThemeHandler(QWidget*);
-		void setCurrentTheme(const QString&);
 		static QStringList themes();
 		static const QString themeFilePath(const QString&);
+
+	public  slots:
+		void setCurrentTheme(const QString&);
 
 	private:
 		QList<QString> dirNames;
@@ -62,7 +64,7 @@ class ThemeHandler : public QWidget {
 // 		void publishThemes();
 
 	signals:
-		void loadThemeRequested(KConfig&);
+		void loadThemeRequested(const QString&);
 		void saveThemeRequested(KConfig&);
 		void info(const QString&);
 		void loadPreviewPanel(QStringList, QString);

@@ -488,7 +488,7 @@ void WorksheetView::initMenus() {
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
-	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(loadTheme(QString)));
+	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(setTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);

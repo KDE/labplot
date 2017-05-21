@@ -143,7 +143,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
-	connect(m_themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+	connect(m_themeHandler, SIGNAL(loadThemeRequested(QString)), this, SLOT(loadTheme(QString)));
 	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
@@ -213,6 +213,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	connect(m_worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
 	connect(m_worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
 	connect(m_worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
+
+	connect(m_worksheet,SIGNAL(themeChanged(QString)),m_themeHandler,SLOT(setCurrentTheme(QString)));
 
 	m_initializing = false;
 }
@@ -949,7 +951,7 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	config.sync();
 }
 
-void WorksheetDock::loadTheme(KConfig& config) {
+void WorksheetDock::loadTheme(const QString& theme) {
 	foreach(Worksheet* worksheet, m_worksheetList)
-		worksheet->loadTheme(config);
+		worksheet->setTheme(theme);
 }

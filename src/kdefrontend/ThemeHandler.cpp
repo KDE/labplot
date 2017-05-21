@@ -109,19 +109,13 @@ void ThemeHandler::setCurrentTheme(const QString& name) {
 }
 
 void ThemeHandler::loadSelected(QString name) {
-	QString themeFilePath;
-	foreach (const QString& filePath, m_themeList) {
-		if (filePath.indexOf(name) != -1) {
-			themeFilePath = filePath;
-			break;
-		}
-	}
-	KConfig config(themeFilePath, KConfig::SimpleConfig);
-	emit (loadThemeRequested(config));
-
-	emit info( i18n("Theme \"%1\" was loaded.", name) );
-
+	emit (loadThemeRequested(name));
 	this->setCurrentTheme(name);
+
+	if (!name.isEmpty())
+		emit info( i18n("Theme \"%1\" was loaded.", name) );
+	else
+		emit info( i18n("Theming deactivated.") );
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
 	//TODO: activate this later

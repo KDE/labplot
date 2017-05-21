@@ -587,10 +587,18 @@ void Worksheet::setPrinting(bool on) const {
 		elem->setPrinting(on);
 }
 
-STD_SETTER_CMD_IMPL(Worksheet, SetTheme, QString, theme)
+STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
-	if (theme != d->theme)
-		exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: set theme")));
+	if (theme != d->theme) {
+		if (!theme.isEmpty()) {
+			beginMacro( i18n("%1: load theme %2", name(), theme) );
+			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: set theme")));
+			loadTheme(theme);
+			endMacro();
+		} else {
+			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: disable theming")));
+		}
+	}
 }
 
 //##############################################################################
@@ -982,14 +990,6 @@ bool Worksheet::load(XmlStreamReader* reader) {
 //##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
 	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
-	loadTheme(config);
-}
-
-void Worksheet::loadTheme(KConfig& config) {
-	QString str = config.name();
-	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
-	this->setTheme(str);
 
 	//apply the same background color for Worksheet as for the CartesianPlot
 	const KConfigGroup group = config.group("CartesianPlot");
@@ -1005,6 +1005,4 @@ void Worksheet::loadTheme(KConfig& config) {
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach (WorksheetElement* child, childElements)
 		child->loadThemeConfig(config);
-
-	endMacro();
 }

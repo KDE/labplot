@@ -62,7 +62,6 @@ class Worksheet: public AbstractPart, public scripted {
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-		void loadTheme(KConfig&);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
@@ -97,16 +96,17 @@ class Worksheet: public AbstractPart, public scripted {
 		BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		CLASS_D_ACCESSOR_DECL(QString, theme, Theme)
+		QString theme() const;
 
 		typedef WorksheetPrivate Private;
 
 	public slots:
-		void loadTheme(const QString&);
+		void setTheme(const QString&);
 
 	private:
 		void init();
 		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
+		void loadTheme(const QString&);
 
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
@@ -145,6 +145,7 @@ class Worksheet: public AbstractPart, public scripted {
 		friend class WorksheetSetLayoutHorizontalSpacingCmd;
 		friend class WorksheetSetLayoutRowCountCmd;
 		friend class WorksheetSetLayoutColumnCountCmd;
+		friend class WorksheetSetThemeCmd;
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
@@ -164,6 +165,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void layoutHorizontalSpacingChanged(float);
 		void layoutRowCountChanged(int);
 		void layoutColumnCountChanged(int);
+		void themeChanged(const QString&);
 };
 
 #endif

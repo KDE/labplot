@@ -117,11 +117,10 @@ private slots:
 	void worksheetLayoutRowCountChanged(int);
 	void worksheetLayoutColumnCountChanged(int);
 
-	//save/load templates
+	//save/load templates and themes
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
-
-	void loadTheme(KConfig& config);
+	void loadTheme(const QString&);
 
 signals:
 	void info(const QString&);
