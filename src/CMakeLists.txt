@@ -275,7 +275,7 @@ bison_target(GslParser
 	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
 )
 set(GENERATED_SOURCES
-	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+	${BISON_GslParser_OUTPUTS}
 )
 
 add_subdirectory( pics )
