@@ -762,12 +762,19 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
-
-STD_SETTER_CMD_IMPL(CartesianPlot, SetTheme, QString, theme)
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
-	if (theme != d->theme)
-		exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: set theme")));
+	if (theme != d->theme) {
+		if (!theme.isEmpty()) {
+			beginMacro( i18n("%1: load theme %2", name(), theme) );
+			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: set theme")));
+			loadTheme(theme);
+			endMacro();
+		} else {
+			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: disable theming")));
+		}
+	}
 }
 
 //################################################################

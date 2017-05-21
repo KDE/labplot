@@ -160,7 +160,7 @@ private slots:
 	void saveConfigAsTemplate(KConfig&);
 
 	//save/load themes
-	void loadTheme(KConfig& config);
+	void loadTheme(const QString&);
 	void saveTheme(KConfig& config);
 
 	void load();

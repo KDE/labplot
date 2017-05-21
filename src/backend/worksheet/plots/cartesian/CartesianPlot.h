@@ -108,10 +108,13 @@ class CartesianPlot:public AbstractPlot{
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks);
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks);
 
-		CLASS_D_ACCESSOR_DECL(QString, theme, Theme)
+		QString theme() const;
 
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
+
+	public slots:
+		void setTheme(const QString&);
 
 	private:
 		void init();
@@ -237,6 +240,7 @@ class CartesianPlot:public AbstractPlot{
 		friend class CartesianPlotSetYRangeBreakingEnabledCmd;
 		friend class CartesianPlotSetXRangeBreaksCmd;
 		friend class CartesianPlotSetYRangeBreaksCmd;
+		friend class CartesianPlotSetThemeCmd;
 		void rectChanged(QRectF&);
 		void xAutoScaleChanged(bool);
 		void xMinChanged(float);
@@ -250,7 +254,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
-		void themeLoaded();
+		void themeChanged(const QString&);
 };
 
 #endif
