@@ -968,7 +968,7 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_instrumental:
 		if (yerror != 0)
 			for(size_t i = 0; i < n; i++)
-				weight[i] = 1./yerror[i]/yerror[i];
+				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
 	case nsl_fit_weight_direct:
 		if (yerror != 0)
@@ -986,7 +986,7 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_weight_relative:
 		for(size_t i = 0; i < n; i++)
-			weight[i] = 1./ydata[i]/ydata[i];
+			weight[i] = 1./gsl_pow_2(ydata[i]);
 		break;
 	case nsl_fit_weight_statistical_fit:
 	case nsl_fit_weight_relative_fit:
@@ -1051,7 +1051,7 @@ void XYFitCurvePrivate::recalculate() {
 						sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
 					else
 						sigma = dy * xerror[i];
-					weight[i] = 1./sigma/sigma;
+					weight[i] = 1./gsl_pow_2(sigma);
 				}
 				break;
 			//TODO: implement other weight types
