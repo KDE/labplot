@@ -64,7 +64,7 @@ extern "C" {
 */
 
 XYFitCurveDock::XYFitCurveDock(QWidget *parent)
-	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbYErrorColumn(0), m_fitCurve(0) {
+	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbXErrorColumn(0), cbYErrorColumn(0), m_fitCurve(0) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -224,10 +224,12 @@ void XYFitCurveDock::setModel() {
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
+	cbXErrorColumn->setTopLevelClasses(list);
 	cbYErrorColumn->setTopLevelClasses(list);
 
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
+	cbXErrorColumn->setModel(m_aspectTreeModel);
 	cbYErrorColumn->setModel(m_aspectTreeModel);
 
 	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
