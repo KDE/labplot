@@ -666,7 +666,7 @@
    <item row="4" column="0" colspan="3">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data</string>
+      <string>x-Data/Error</string>
      </property>
     </widget>
    </item>

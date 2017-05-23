@@ -902,47 +902,32 @@ void XYFitCurvePrivate::recalculate() {
 	//copy all valid data point for the fit to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	QVector<double> weightVector;
+	QVector<double> xerrorVector;
+	QVector<double> yerrorVector;
 	double xmin = fitData.xRange.first();
 	double xmax = fitData.xRange.last();
-	for (int row=0; row < xDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and weight, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
 			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				if (!yErrorColumn) {
+				if (!yErrorColumn && !xErrorColumn) {	// x-y
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
-				} else {
+				} else if (!xErrorColumn) {		// x-y-dy
 					if (!std::isnan(yErrorColumn->valueAt(row))) {
 						xdataVector.append(xDataColumn->valueAt(row));
 						ydataVector.append(yDataColumn->valueAt(row));
-
-						switch (fitData.weightsType) {
-						case nsl_fit_weight_no:
-							break;
-						case nsl_fit_weight_instrumental:
-							weightVector.append(1./yErrorColumn->valueAt(row)/yErrorColumn->valueAt(row));
-							break;
-						case nsl_fit_weight_direct:
-							weightVector.append(yErrorColumn->valueAt(row));
-							break;
-						case nsl_fit_weight_inverse:
-							weightVector.append(1./yErrorColumn->valueAt(row));
-							break;
-						case nsl_fit_weight_statistical:
-							weightVector.append(1./yDataColumn->valueAt(row));
-							break;
-						case nsl_fit_weight_relative:
-							weightVector.append(1./yDataColumn->valueAt(row)/yDataColumn->valueAt(row));
-							break;
-						case nsl_fit_weight_statistical_fit:
-						case nsl_fit_weight_relative_fit:
-							weightVector.append(1.);	// updated in before every iteration
-							break;
-						}
+						yerrorVector.append(yErrorColumn->valueAt(row));
+					}
+				} else {				// x-y-dx-dy
+					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
+						xdataVector.append(xDataColumn->valueAt(row));
+						ydataVector.append(yDataColumn->valueAt(row));
+						xerrorVector.append(xErrorColumn->valueAt(row));
+						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
 				}
 			}
@@ -971,9 +956,42 @@ void XYFitCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-	double* weight = 0;
-	if (!weightVector.isEmpty())
-		weight = weightVector.data();
+	double* xerror = xerrorVector.data();	// may be 0
+	double* yerror = yerrorVector.data();	// may be 0
+	double* weight = new double[n];
+
+	switch (fitData.weightsType) {
+	case nsl_fit_weight_no:
+		for(size_t i = 0; i < n; i++)
+			weight[i] = 1.;
+		break;
+	case nsl_fit_weight_instrumental:
+		if (yerror != 0)
+			for(size_t i = 0; i < n; i++)
+				weight[i] = 1./yerror[i]/yerror[i];
+		break;
+	case nsl_fit_weight_direct:
+		if (yerror != 0)
+			for(size_t i = 0; i < n; i++)
+				weight[i] = yerror[i];
+		break;
+	case nsl_fit_weight_inverse:
+		if (yerror != 0)
+			for(size_t i = 0; i < n; i++)
+				weight[i] = 1./yerror[i];
+		break;
+	case nsl_fit_weight_statistical:
+		for(size_t i = 0; i < n; i++)
+			weight[i] = 1./ydata[i];
+		break;
+	case nsl_fit_weight_relative:
+		for(size_t i = 0; i < n; i++)
+			weight[i] = 1./ydata[i]/ydata[i];
+		break;
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative_fit:
+		break;
+	}
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
@@ -1014,13 +1032,46 @@ void XYFitCurvePrivate::recalculate() {
 	do {
 		iter++;
 
-		// Update weight for Fit-Weights
-		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
-			for(size_t i = 0; i < n; i++)
-				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
-			for(size_t i = 0; i < n; i++)
-				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
+		if (xerror) {	// x-error present
+			switch (fitData.weightsType) {
+			case nsl_fit_weight_no:
+				break;
+			case nsl_fit_weight_instrumental:
+				for(size_t i = 0; i < n; i++) {
+					// y'(x)
+					size_t index = i;
+					if (index == n-1)
+						index = n-2;
+					double dy = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
+					dy /= (xdata[index+1] - xdata[index]);
+
+					double sigma;
+					if (yerror)
+						// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
+						sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
+					else
+						sigma = dy * xerror[i];
+					weight[i] = 1./sigma/sigma;
+				}
+				break;
+			//TODO: implement other weight types
+			case nsl_fit_weight_direct:
+			case nsl_fit_weight_inverse:
+			case nsl_fit_weight_statistical:
+			case nsl_fit_weight_relative:
+			case nsl_fit_weight_statistical_fit:
+			case nsl_fit_weight_relative_fit:
+				break;
+			}
+		} else {	// no x-error present
+			// update weights for Y-depending weights
+			if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
+				for(size_t i = 0; i < n; i++)
+					weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
+			} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
+				for(size_t i = 0; i < n; i++)
+					weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
+			}
 		}
 
 		status = gsl_multifit_fdfsolver_iterate(s);
@@ -1028,6 +1079,8 @@ void XYFitCurvePrivate::recalculate() {
 		if (status) break;
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
+
+	delete[] weight;
 
 	// unscale start values
 	for (unsigned int i = 0; i < np; i++)
