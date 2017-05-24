@@ -12,6 +12,9 @@ New features:
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
 
+Bug fixes:
+	* Bug 379877 - masked rows in spreadsheet not restored in project
+
 -----2.4-----
 New features:
 	* Support themes for plots

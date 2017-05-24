@@ -641,8 +641,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 	m_column_private->outputFilter()->save(writer);
 	writer->writeEndElement();
 
+	XmlWriteMask(writer);
+
 	//TODO: formula in cells is not implemented yet
-// 	XmlWriteMask(writer);
 // 	QList< Interval<int> > formulas = formulaIntervals();
 // 	foreach(const Interval<int>& interval, formulas) {
 // 		writer->writeStartElement("formula");
