@@ -1,11 +1,16 @@
 -----2.5-----
 New features:
-	* Apply themes to worksheet and to all its children
 	* Syntax highlighting for LaTeX in the text label
+	* Allow to set the background for LaTeX labels
 	* Improved data fitting
 		* Automatically guess parameter of custom models
 		* Better result presentation
 		* Added p-value for chi-square test in nonlinear fitting
+	* Improved theming
+		* Apply themes to worksheet and to all its children
+		* Respect theme settings also in plot legends and labels
+		* Application option to set the default theme for new worksheets
+		* Allow to disable theming in worksheets and plots after a theme was selected
 
 -----2.4-----
 New features:
