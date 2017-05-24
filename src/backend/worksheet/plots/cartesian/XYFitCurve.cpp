@@ -1024,54 +1024,20 @@ void XYFitCurvePrivate::recalculate() {
 	// initialize solver with function f and initial guess x
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
-	//iterate
-	int status;
-	int iter = 0;
+	// iterate
+	int status, iter = 0;
 	fitResult.solverOutput.clear();
 	writeSolverState(s);
 	do {
 		iter++;
 
-		if (xerror) {	// x-error present
-			switch (fitData.weightsType) {
-			case nsl_fit_weight_no:
-				break;
-			case nsl_fit_weight_instrumental:
-				for(size_t i = 0; i < n; i++) {
-					// y'(x)
-					size_t index = i;
-					if (index == n-1)
-						index = n-2;
-					double dy = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
-					dy /= (xdata[index+1] - xdata[index]);
-
-					double sigma;
-					if (yerror)
-						// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
-						sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
-					else
-						sigma = dy * xerror[i];
-					weight[i] = 1./gsl_pow_2(sigma);
-				}
-				break;
-			//TODO: implement other weight types
-			case nsl_fit_weight_direct:
-			case nsl_fit_weight_inverse:
-			case nsl_fit_weight_statistical:
-			case nsl_fit_weight_relative:
-			case nsl_fit_weight_statistical_fit:
-			case nsl_fit_weight_relative_fit:
-				break;
-			}
-		} else {	// no x-error present
-			// update weights for Y-depending weights
-			if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
-				for(size_t i = 0; i < n; i++)
-					weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-			} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
-				for(size_t i = 0; i < n; i++)
-					weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
-			}
+		// update weights for Y-depending weights
+		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
+			for(size_t i = 0; i < n; i++)
+				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
+		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
+			for(size_t i = 0; i < n; i++)
+				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 		}
 
 		status = gsl_multifit_fdfsolver_iterate(s);
@@ -1079,6 +1045,48 @@ void XYFitCurvePrivate::recalculate() {
 		if (status) break;
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
+
+	// second run for x-error fitting
+	if (xerror) {
+		switch (fitData.weightsType) {
+		case nsl_fit_weight_no:
+			break;
+		case nsl_fit_weight_instrumental:
+			for(size_t i = 0; i < n; i++) {
+				// y'(x)
+				size_t index = i;
+				if (index == n-1)
+					index = n-2;
+				double dy = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
+				dy /= (xdata[index+1] - xdata[index]);
+
+				double sigma;
+				if (yerror)
+					// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
+					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
+				else
+					sigma = dy * xerror[i];
+				weight[i] = 1./gsl_pow_2(sigma);
+			}
+			break;
+		//TODO: implement other weight types
+		case nsl_fit_weight_direct:
+		case nsl_fit_weight_inverse:
+		case nsl_fit_weight_statistical:
+		case nsl_fit_weight_relative:
+		case nsl_fit_weight_statistical_fit:
+		case nsl_fit_weight_relative_fit:
+			break;
+		}
+
+		do {
+			iter++;
+			status = gsl_multifit_fdfsolver_iterate(s);
+			writeSolverState(s);
+			if (status) break;
+			status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
+		} while (status == GSL_CONTINUE && iter < maxIters);
+	}
 
 	delete[] weight;
 
