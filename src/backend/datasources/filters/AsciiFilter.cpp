@@ -448,26 +448,28 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString & fileName, Abstra
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//TODO: generalize to different data types
-		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
+		const int rows = headerEnabled ? currentRow : currentRow+1;
+		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for (int n=startColumn; n <= endColumn; n++) {
 			Column* column = spreadsheet->column(columnOffset+n-startColumn);
 			column->setComment(comment);
-			column->setUndoAware(true);
-			if (mode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
+			if (mode == AbstractFileFilter::Replace)
 				column->setChanged();
-			}
 		}
+
+		//make the spreadsheet and all its children undo aware again
 		spreadsheet->setUndoAware(true);
-		return dataStrings;
-	}
-
-
-	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-	if (matrix) {
-		matrix->setSuppressDataChangedSignal(false);
-		matrix->setChanged();
-		matrix->setUndoAware(true);
+		for (int i=0; i<spreadsheet->childCount<Column>(); i++) {
+			spreadsheet->child<Column>(i)->setUndoAware(true);
+			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(false);
+		}
+	} else {
+		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+		if (matrix) {
+			matrix->setSuppressDataChangedSignal(false);
+			matrix->setChanged();
+			matrix->setUndoAware(true);
+		}
 	}
 
 	return dataStrings;

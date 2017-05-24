@@ -67,7 +67,7 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 
 	Column* newColumn = 0;
 	if (mode==AbstractFileFilter::Append) {
-		columnOffset=childCount<Column>();
+		columnOffset = childCount<Column>();
 		for ( int n=0; n<cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
@@ -92,18 +92,14 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 
 			//rename the columns, that are already available
 			for (int i=0; i<cols; i++) {
-				child<Column>(i)->setUndoAware(false);
 				child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				child<Column>(i)->setName(colNameList.at(i));
-				child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		} else {
 			//rename the columns, that are already available
 			for (int i=0; i<columns; i++) {
-				child<Column>(i)->setUndoAware(false);
 				child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				child<Column>(i)->setName(colNameList.at(i));
-				child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 
 			//create additional columns if needed
@@ -111,7 +107,6 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 				newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				addChildFast(newColumn);
-				child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		}
 	}
@@ -125,7 +120,6 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 	return columnOffset;
 }
 
-
 //TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead of this function.
 int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
                                int actualRows, int actualCols, QStringList colNameList) {
@@ -135,6 +129,13 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
 	if(spreadsheet) {
+		//make the available columns undo unaware before we resize and rename them below,
+		//the same will be done for new columns in this->resize().
+		for (int i=0; i<childCount<Column>(); i++) {
+			child<Column>(i)->setUndoAware(false);
+			child<Column>(i)->setSuppressDataChangedSignal(true);
+		}
+
 		columnOffset = this->resize(mode, colNameList, actualCols);
 
 		// resize the spreadsheet

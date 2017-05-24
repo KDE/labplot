@@ -631,23 +631,24 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setName(currentVarName);
-			column->setUndoAware(true);
-			if (mode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
+			if (mode == AbstractFileFilter::Replace)
 				column->setChanged();
-			}
 		}
+
+		//make the spreadsheet and all its children undo aware again
 		spreadsheet->setUndoAware(true);
-		return dataStrings;
+		for (int i=0; i<spreadsheet->childCount<Column>(); i++) {
+			spreadsheet->child<Column>(i)->setUndoAware(true);
+			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(false);
+		}
+	} else {
+		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+		if (matrix) {
+			matrix->setSuppressDataChangedSignal(false);
+			matrix->setChanged();
+			matrix->setUndoAware(true);
+		}
 	}
-
-	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-	if (matrix) {
-		matrix->setSuppressDataChangedSignal(false);
-		matrix->setChanged();
-		matrix->setUndoAware(true);
-	}
-
 
 #else
 	Q_UNUSED(fileName)
