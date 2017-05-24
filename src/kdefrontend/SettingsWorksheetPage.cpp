@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : SettingsWorksheetPage.cpp
     Project              : LabPlot
-    Description          : general settings page
+    Description          : settings page for Worksheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,13 +27,12 @@
  ***************************************************************************/
 
 #include "SettingsWorksheetPage.h"
-#include "MainWin.h"
 #include "tools/TeXRenderer.h"
+#include "kdefrontend/widgets/ThemesComboBox.h"
 
 #include <KLocale>
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <kfiledialog.h>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -42,6 +41,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	m_changed(false) {
 
 	ui.setupUi(this);
+
+	cbThemes = new ThemesComboBox();
+	ui.gridLayout->addWidget(cbThemes, 1, 4, 1, 1);
 
 	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(QSize(48,48)) );
 
@@ -58,6 +60,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
+	connect(cbThemes, SIGNAL(currentThemeChanged(QString)), this, SLOT(changed()) );
 	connect(ui.chkPresenterModeInteractive, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
@@ -67,7 +70,8 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 }
 
 void SettingsWorksheetPage::applySettings() {
-	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_Worksheet" );
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	group.writeEntry(QLatin1String("Theme"), cbThemes->currentText());
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
@@ -76,9 +80,9 @@ void SettingsWorksheetPage::applySettings() {
 void SettingsWorksheetPage::restoreDefaults() {
 	loadSettings();
 }
-
 void SettingsWorksheetPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
 

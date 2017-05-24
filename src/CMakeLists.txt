@@ -67,6 +67,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
 	${KDEFRONTEND_DIR}/widgets/FitOptionsWidget.cpp

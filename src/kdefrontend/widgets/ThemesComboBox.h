@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : SettingsWorksheetPage.h
+    File                 : ThemesComboBox.h
     Project              : LabPlot
-    Description          : settings page for Worksheet
+    Description          : Preview of all themes in a QComboBox
     --------------------------------------------------------------------
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,36 +26,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGSWORKSHEETPAGE_H
-#define SETTINGSWORKSHEETPAGE_H
+#ifndef THEMESCOMBOBOX_H
+#define THEMESCOMBOBOX_H
 
-#include "SettingsPage.h"
-#include "ui_settingsworksheetpage.h"
+#include <QComboBox>
 
-class ThemesComboBox;
+class QGroupBox;
+class ThemesWidget;
 
-class SettingsWorksheetPage : public SettingsPage {
+class ThemesComboBox : public QComboBox {
 	Q_OBJECT
 
-public:
-	explicit SettingsWorksheetPage(QWidget*);
+	public:
+		explicit ThemesComboBox(QWidget* parent = 0);
+		void setCurrentTheme(const QString&);
 
-	virtual void applySettings();
-	virtual void restoreDefaults();
+		virtual void showPopup();
+		virtual void hidePopup();
 
-private:
-	Ui::SettingsWorksheetPage ui;
-	ThemesComboBox* cbThemes;
-	bool m_changed;
+	private:
+		QGroupBox* m_groupBox;
+		ThemesWidget* m_view;
+		bool eventFilter(QObject*, QEvent*);
 
-	void loadSettings();
+	private slots:
+		void handleThemeChanged(const QString&);
 
-private slots:
-	void changed();
-	void checkTeX(int);
-
-signals:
-	void settingsChanged();
+	signals:
+		void currentThemeChanged(const QString&);
 };
 
 #endif

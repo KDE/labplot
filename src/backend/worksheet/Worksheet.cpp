@@ -107,6 +107,12 @@ void Worksheet::init() {
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
+
+	//default theme
+	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	d->theme = settings.readEntry(QLatin1String("Theme"), "");
+	if (!d->theme.isEmpty())
+		loadTheme(d->theme);
 }
 
 /*!
