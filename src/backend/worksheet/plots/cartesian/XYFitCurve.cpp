@@ -913,7 +913,7 @@ void XYFitCurvePrivate::recalculate() {
 
 			// only when inside given range
 			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				if (!yErrorColumn && !xErrorColumn) {	// x-y
+				if (!xErrorColumn && !yErrorColumn) {	// x-y
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
 				} else if (!xErrorColumn) {		// x-y-dy
@@ -1377,16 +1377,16 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// -DBL_MAX results in conversion error
-				d->fitData.paramLowerLimits<<x;
+				d->fitData.paramLowerLimits << x;
 			else
-				d->fitData.paramLowerLimits<<-DBL_MAX;
+				d->fitData.paramLowerLimits << -DBL_MAX;
 		} else if (reader->name() == "upperLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// DBL_MAX results in conversion error
-				d->fitData.paramUpperLimits<<x;
+				d->fitData.paramUpperLimits << x;
 			else
-				d->fitData.paramUpperLimits<<DBL_MAX;
+				d->fitData.paramUpperLimits << DBL_MAX;
 		} else if (reader->name() == "value") {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {

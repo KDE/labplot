@@ -890,6 +890,7 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
+
 XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);

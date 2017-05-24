@@ -87,12 +87,11 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent), m_column(0), m_initial
 void ColumnDock::setColumns(QList<Column*> list){
 	m_initializing=true;
 	m_columnsList = list;
-
-	m_column=list.first();
+	m_column = list.first();
 
 	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
-	foreach(Column* col, m_columnsList){
+	foreach (Column* col, m_columnsList) {
 		Spreadsheet* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (dynamic_cast<FileDataSource*>(s)) {
@@ -105,7 +104,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 		}
 	}
 
-	if (list.size()==1){
+	if (list.size() == 1) {
 		//names and comments of non-editable columns in a file data source can be changed.
 		if ( !nonEditable && dynamic_cast<FileDataSource*>(m_column->parentAspect())!=0 ) {
 			ui.leName->setEnabled(false);
@@ -117,7 +116,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 
 		ui.leName->setText(m_column->name());
 		ui.leComment->setText(m_column->comment());
-	}else{
+	} else {
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
@@ -182,7 +181,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode){
   ui.cbFormat->clear();
 
-  switch (columnMode){
+  switch (columnMode) {
 	case AbstractColumn::Numeric:
 	  ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 	  ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
