@@ -807,7 +807,7 @@ bool MainWin::newProject() {
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*,QMenu*)), this, SLOT(createFolderContextMenu(const Folder*,QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
-	m_undoViewEmptyLabel = i18n("Project %1 created", m_project->name());
+	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	setCaption(m_project->name());
 
 	return true;
@@ -882,7 +882,7 @@ void MainWin::openProject(const QString& filename) {
 	m_currentFileName = filename;
 	m_project->setFileName(filename);
 	m_project->undoStack()->clear();
-	m_undoViewEmptyLabel = i18n("Project %1 opened", m_project->name());
+	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
 	setCaption(m_project->name());
 	updateGUIOnProjectChanges();
