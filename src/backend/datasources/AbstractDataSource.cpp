@@ -85,29 +85,24 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
-			//there're more columns in the data source then required
-			//-> remove the superfluous columns
+			//there're more columns in the data source then required -> remove the superfluous columns
 			for(int i=0; i<columns-cols; i++)
 				removeChild(child<Column>(0));
-
-			//rename the columns, that are already available
-			for (int i=0; i<cols; i++) {
-				child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				child<Column>(i)->setName(colNameList.at(i));
-			}
 		} else {
-			//rename the columns, that are already available
-			for (int i=0; i<columns; i++) {
-				child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				child<Column>(i)->setName(colNameList.at(i));
-			}
-
 			//create additional columns if needed
 			for(int i=columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				addChildFast(newColumn);
 			}
+		}
+
+		//rename the columns that are already available and supress the dataChanged signal for them
+		for (int i=0; i<childCount<Column>(); i++) {
+			if (mode == AbstractFileFilter::Replace)
+				child<Column>(i)->setSuppressDataChangedSignal(true);
+			child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+			child<Column>(i)->setName(colNameList.at(i));
 		}
 	}
 
@@ -131,10 +126,8 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 	if(spreadsheet) {
 		//make the available columns undo unaware before we resize and rename them below,
 		//the same will be done for new columns in this->resize().
-		for (int i=0; i<childCount<Column>(); i++) {
+		for (int i=0; i<childCount<Column>(); i++)
 			child<Column>(i)->setUndoAware(false);
-			child<Column>(i)->setSuppressDataChangedSignal(true);
-		}
 
 		columnOffset = this->resize(mode, colNameList, actualCols);
 

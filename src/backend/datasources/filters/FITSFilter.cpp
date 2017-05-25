@@ -629,16 +629,16 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 					Column* column = spreadsheet->column(columnOffset+n);
 					column->setComment(columnUnits.at(n));
 					//TODO: column->setName(); ?
-					if (importMode==AbstractFileFilter::Replace)
+					if (importMode == AbstractFileFilter::Replace) {
+						column->setSuppressDataChangedSignal(false);
 						column->setChanged();
+					}
 				}
 
 				//make the spreadsheet and all its children undo aware again
 				spreadsheet->setUndoAware(true);
-				for (int i=0; i<spreadsheet->childCount<Column>(); i++) {
+				for (int i=0; i<spreadsheet->childCount<Column>(); i++)
 					spreadsheet->child<Column>(i)->setUndoAware(true);
-					spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(false);
-				}
 			} else {
 				Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
 				if (matrix) {
