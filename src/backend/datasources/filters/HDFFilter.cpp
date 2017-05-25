@@ -1632,16 +1632,16 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setName(currentDataSetName);
-			if (mode == AbstractFileFilter::Replace)
+			if (mode == AbstractFileFilter::Replace) {
+				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
+			}
 		}
 
 		//make the spreadsheet and all its children undo aware again
 		spreadsheet->setUndoAware(true);
-		for (int i=0; i<spreadsheet->childCount<Column>(); i++) {
+		for (int i=0; i<spreadsheet->childCount<Column>(); i++)
 			spreadsheet->child<Column>(i)->setUndoAware(true);
-			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(false);
-		}
 	} else {
 		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
 		if (matrix) {
