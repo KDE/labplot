@@ -842,7 +842,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//fit settings
-	const int maxIters = fitData.maxIterations;	//maximal number of iterations
+	const unsigned int maxIters = fitData.maxIterations;	//maximal number of iterations
 	const double delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
@@ -882,7 +882,7 @@ void XYFitCurvePrivate::recalculate() {
 	double xmin = fitData.xRange.first();
 	double xmax = fitData.xRange.last();
 	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x, y and weight, if given) are valid
+		//only copy those data where _all_ values (for x, y and errors, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
@@ -911,6 +911,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//number of data points to fit
 	const size_t n = xdataVector.size();
+	DEBUG("number of data points: " << n);
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -931,37 +932,39 @@ void XYFitCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-	double* xerror = xerrorVector.data();	// may be 0
-	double* yerror = yerrorVector.data();	// may be 0
+	double* xerror = xerrorVector.data();	// size may be 0
+	double* yerror = yerrorVector.data();	// size may be 0
+	DEBUG("x errors " << xerrorVector.size());
+	DEBUG("y errors " << yerrorVector.size());
 	double* weight = new double[n];
 
-	for(size_t i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
 	switch (fitData.weightsType) {
 	case nsl_fit_weight_no:
 		break;
 	case nsl_fit_weight_instrumental:
-		if (yerror != 0)
+		if (yerrorVector.size() > 0)
 			for(size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
 	case nsl_fit_weight_direct:
-		if (yerror != 0)
+		if (yerrorVector.size() > 0)
 			for(size_t i = 0; i < n; i++)
 				weight[i] = yerror[i];
 		break;
 	case nsl_fit_weight_inverse:
-		if (yerror != 0)
+		if (yerrorVector.size() > 0)
 			for(size_t i = 0; i < n; i++)
 				weight[i] = 1./yerror[i];
 		break;
 	case nsl_fit_weight_statistical:
-		for(size_t i = 0; i < n; i++)
+		for (size_t i = 0; i < n; i++)
 			weight[i] = 1./ydata[i];
 		break;
 	case nsl_fit_weight_relative:
-		for(size_t i = 0; i < n; i++)
+		for (size_t i = 0; i < n; i++)
 			weight[i] = 1./gsl_pow_2(ydata[i]);
 		break;
 	case nsl_fit_weight_statistical_fit:
@@ -972,7 +975,7 @@ void XYFitCurvePrivate::recalculate() {
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	for (unsigned int i = 0; i < np; i++)
-		DEBUG("fixed parameter" << i << fitData.paramFixed.data()[i]);
+		DEBUG("fixed parameter " << i << ' ' << fitData.paramFixed.data()[i]);
 
 	//function to fit
 	gsl_multifit_function_fdf f;
@@ -1001,7 +1004,8 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	// iterate
-	int status, iter = 0;
+	int status;
+	unsigned int iter = 0;
 	fitResult.solverOutput.clear();
 	writeSolverState(s);
 	do {
@@ -1009,10 +1013,10 @@ void XYFitCurvePrivate::recalculate() {
 
 		// update weights for Y-depending weights
 		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
-			for(size_t i = 0; i < n; i++)
+			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
 		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
-			for(size_t i = 0; i < n; i++)
+			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 		}
 
@@ -1023,12 +1027,13 @@ void XYFitCurvePrivate::recalculate() {
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	// second run for x-error fitting
-	if (xerror) {
+	if (xerrorVector.size() > 0) {
+		DEBUG("Rerun fit with x errors");
 		switch (fitData.weightsType) {
 		case nsl_fit_weight_no:
 			break;
 		case nsl_fit_weight_instrumental:
-			for(size_t i = 0; i < n; i++) {
+			for (size_t i = 0; i < n; i++) {
 				// y'(x)
 				size_t index = i;
 				if (index == n-1)
@@ -1037,7 +1042,7 @@ void XYFitCurvePrivate::recalculate() {
 				dy /= (xdata[index+1] - xdata[index]);
 
 				double sigma;
-				if (yerror)
+				if (yerrorVector.size() > 0)
 					// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
 					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
 				else
@@ -1112,7 +1117,7 @@ void XYFitCurvePrivate::recalculate() {
 		// use results as start values if desired
 		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
-			DEBUG("saving parameter" << i << fitResult.paramValues[i] << fitData.paramStartValues.data()[i]);
+			DEBUG("saving parameter " << i << ' ' << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
