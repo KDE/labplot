@@ -1029,36 +1029,58 @@ void XYFitCurvePrivate::recalculate() {
 	// second run for x-error fitting
 	if (xerrorVector.size() > 0) {
 		DEBUG("Rerun fit with x errors");
+
+		// y'(x)
+		double *yd = new double[n];
+		for (size_t i = 0; i < n; i++) {
+			size_t index = i;
+			if (index == n-1)
+				index = n-2;
+			yd[i] = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
+			yd[i] /= (xdata[index+1] - xdata[index]);
+		}
+
 		switch (fitData.weightsType) {
 		case nsl_fit_weight_no:
 			break;
 		case nsl_fit_weight_instrumental:
 			for (size_t i = 0; i < n; i++) {
-				// y'(x)
-				size_t index = i;
-				if (index == n-1)
-					index = n-2;
-				double dy = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
-				dy /= (xdata[index+1] - xdata[index]);
-
 				double sigma;
-				if (yerrorVector.size() > 0)
+				if (yerrorVector.size() > 0)	// x- and y-error
 					// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
-					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(dy * xerror[i]));
-				else
-					sigma = dy * xerror[i];
+					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(yd[i] * xerror[i]));
+				else	// only x-error
+					sigma = yd[i] * xerror[i];
 				weight[i] = 1./gsl_pow_2(sigma);
 			}
 			break;
-		//TODO: implement other weight types
+		// other weight types: y'(x) considered correctly?
 		case nsl_fit_weight_direct:
+			for (size_t i = 0; i < n; i++) {
+				weight[i] = xerror[i]/yd[i];
+				if (yerrorVector.size() > 0)
+					weight[i] += yerror[i];
+			}
+			break;
 		case nsl_fit_weight_inverse:
+			for (size_t i = 0; i < n; i++) {
+				weight[i] = yd[i]/xerror[i];
+				if (yerrorVector.size() > 0)
+					weight[i] += 1./yerror[i];
+			}
+			break;
 		case nsl_fit_weight_statistical:
 		case nsl_fit_weight_relative:
+			break;
 		case nsl_fit_weight_statistical_fit:
+			for (size_t i = 0; i < n; i++)
+				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
 		case nsl_fit_weight_relative_fit:
+			for (size_t i = 0; i < n; i++)
+				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 			break;
 		}
+		delete[] yd;
 
 		do {
 			iter++;
