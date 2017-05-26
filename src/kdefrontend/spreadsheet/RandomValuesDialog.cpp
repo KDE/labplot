@@ -146,11 +146,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
-	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
-		ui.lParameter2->setText(QString::fromUtf8("σ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("a =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
@@ -169,10 +168,9 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential_power:
-	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
 		ui.lParameter2->setText("a =");
 		ui.lParameter3->setText("b =");
 		ui.kleParameter1->setText("0.0");
@@ -192,8 +190,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
-	// TODO: use unicode string
-		ui.lParameter1->setText(QString::fromUtf8("σ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText("a =");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("0.0");
@@ -205,19 +202,17 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
-	// TODO: use unicode string
 		ui.lParameter1->setText("c =");
-		ui.lParameter2->setText(QString::fromUtf8("α ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_levy_skew_alpha_stable:
-	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("c ="));
-		ui.lParameter2->setText(QString::fromUtf8("α ="));
-		ui.lParameter3->setText(QString::fromUtf8("β ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
+		ui.lParameter3->setText(QString::fromUtf8("\u03b2 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
@@ -275,17 +270,15 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_fdist:
-	// TODO: use unicode string
-		ui.lParameter1->setText(QString::fromUtf8("ν1 ="));
-		ui.lParameter2->setText(QString::fromUtf8("ν2 ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bd\u2081 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bd\u2082 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_tdist:
-	// TODO: use unicode string
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("ν ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bd ="));
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_logistic:
