@@ -415,7 +415,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: implement following distribution models
-			if (i == nsl_sf_stats_exponential || i == nsl_sf_stats_exponential_power ||
+			if (i == nsl_sf_stats_exponential_power ||
 				i == nsl_sf_stats_rayleigh_tail || i == nsl_sf_stats_landau || i == nsl_sf_stats_levy_alpha_stable ||
 				i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_flat || i == nsl_sf_stats_fdist ||
 				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
@@ -785,7 +785,11 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "a";
 			break;
 		case nsl_sf_stats_exponential:
+			m_fitData.paramNames << "l" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			break;
 		case nsl_sf_stats_exponential_power:
+			//TODO
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:

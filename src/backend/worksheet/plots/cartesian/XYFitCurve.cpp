@@ -531,6 +531,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case nsl_fit_model_distribution:
 		switch ((nsl_sf_stats_distribution)modelType) {
 		case nsl_sf_stats_gaussian:
+		case nsl_sf_stats_exponential:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_lognormal:
@@ -550,6 +551,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						switch (modelType) {
 						case nsl_sf_stats_gaussian:
 							gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_param_deriv(j, x, s, mu, a, weight[i]));
+							break;
+						case nsl_sf_stats_exponential:
+							gsl_matrix_set(J, i, j, nsl_fit_model_exponential_param_deriv(j, x, s, mu, a, weight[i]));
 							break;
 						case nsl_sf_stats_laplace:
 							gsl_matrix_set(J, i, j, nsl_fit_model_laplace_param_deriv(j, x, s, mu, a, weight[i]));
@@ -727,7 +731,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		// TODO
-		case nsl_sf_stats_exponential:
 		case nsl_sf_stats_exponential_power:
 		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_landau:

@@ -317,6 +317,19 @@ double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, do
 		return A/norm/norm * efactor * exp(-a*a/(2.*s2));
 	return 0;
 }
+double nsl_fit_model_exponential_param_deriv(int param, double x, double l, double mu, double a, double weight) {
+	if (x < mu)
+		return 0;
+	double y = l*(x-mu), efactor = exp(-y);
+
+	if (param == 0)
+		return weight * a * (1. - y) * efactor;
+	if (param == 1)
+		return weight * a * gsl_pow_2(l) * efactor;
+	if (param == 2)
+		return weight * l * efactor;
+	return 0;
+}
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double weight) {
 	double a2 = a*a, a3 = a*a2, norm = weight*sqrt(2./M_PI)/a3, x2 = x*x, efactor = exp(-x2/2./a2);
 
