@@ -33,7 +33,6 @@
 #include <QStandardPaths>
 #include <KLocalizedString>
 #include <QDialogButtonBox>
-// #include <QPushButton>
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -147,6 +146,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
+	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
@@ -157,10 +157,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential:
-		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("λ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
 		ui.kleParameter1->setText("1.0");
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
@@ -169,6 +169,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential_power:
+	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
@@ -191,6 +192,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
+	// TODO: use unicode string
 		ui.lParameter1->setText(QString::fromUtf8("σ ="));
 		ui.lParameter2->setText("a =");
 		ui.kleParameter1->setText("1.0");
@@ -203,12 +205,14 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
+	// TODO: use unicode string
 		ui.lParameter1->setText("c =");
 		ui.lParameter2->setText(QString::fromUtf8("α ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_levy_skew_alpha_stable:
+	// TODO: use unicode string
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("c ="));
@@ -271,12 +275,14 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_fdist:
+	// TODO: use unicode string
 		ui.lParameter1->setText(QString::fromUtf8("ν1 ="));
 		ui.lParameter2->setText(QString::fromUtf8("ν2 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_tdist:
+	// TODO: use unicode string
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
 		ui.lParameter1->setText(QString::fromUtf8("ν ="));
@@ -374,8 +380,8 @@ void RandomValuesDialog::generate() {
 					"%1: fill columns with non-uniform random numbers",
 					m_spreadsheet->name(), m_columns.size()));
 
-	int index = ui.cbDistribution->currentIndex();
-	nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const int index = ui.cbDistribution->currentIndex();
+	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> new_data(rows);
@@ -403,11 +409,12 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_exponential: {
-		double mu = ui.kleParameter1->text().toDouble();
-		mu = 1./mu; //GSL uses the inverse for exp. distrib.
+		double l = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
+			//GSL uses the inverse for exp. distrib.
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_exponential(r, mu);
+				new_data[i] = gsl_ran_exponential(r, 1./l) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -502,7 +509,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_flat: {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
-		foreach(Column* col, m_columns) {
+		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_flat(r, a, b);
 			col->replaceValues(0, new_data);
@@ -512,7 +519,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_lognormal: {
 		double s = ui.kleParameter1->text().toDouble();
 		double mu = ui.kleParameter2->text().toDouble();
-		foreach(Column* col, m_columns) {
+		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_lognormal(r, mu, s);
 			col->replaceValues(0, new_data);
