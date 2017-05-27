@@ -957,7 +957,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 
 	//if a theme was selected, apply the theme settings for newly added children, too
-	if (!d->theme.isEmpty()) {
+	if (!d->theme.isEmpty() && !isLoading()) {
 		const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
 		if (el) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
