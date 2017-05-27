@@ -751,8 +751,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_landau: {
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, nsl_fit_model_landau_param_deriv(0, x, a, weight[i]));
+			}
+			break;
+		}
 		// TODO
-		case nsl_sf_stats_landau:
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_flat:

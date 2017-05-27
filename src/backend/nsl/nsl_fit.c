@@ -31,6 +31,7 @@
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
+#include <gsl/gsl_randist.h>
 
 const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak functions"), i18n("Growth (sigmoidal)"), i18n("Statistics (distributions)"),
 	i18n("Custom")};
@@ -423,6 +424,11 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 		return a/2.*norm/y/y * (3.*y - g) * efactor;
 	if (param == 2)
 		return norm * efactor;
+	return 0;
+}
+double nsl_fit_model_landau_param_deriv(int param, double x, double a, double weight) {
+	if (param == 0)
+		return weight * gsl_ran_landau_pdf(x);
 	return 0;
 }
 double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double weight) {

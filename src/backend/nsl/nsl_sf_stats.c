@@ -43,7 +43,7 @@ const char* nsl_sf_stats_distribution_pic_name[] = {
 const char* nsl_sf_stats_distribution_equation[] = {
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "2*A/sqrt(2*pi)/s/erfc(a/sqrt(2)/s) * exp(-((x-mu)/s)^2/2) * theta(x-mu-a)", "a*l*exp(-l*(x-mu))",
 	"a/(2*s) * exp(-fabs((x-mu)/s))", "a/(2*s*gamma(1+1/b))*exp(-fabs((x-mu)/s)^b)", "a/pi * g/(g^2 + (x-mu)^2)",
-	"a * x/s^2 * exp(-(x/s)^2/2)", "a*x/s^2 * exp((mu^2-x^2)/2/s^2)", "Landau",
+	"a * x/s^2 * exp(-(x/s)^2/2)", "a*x/s^2 * exp((mu^2-x^2)/2/s^2)", "a*landau(x)",
 	"Levy alpha-stable", "Levy-skew", "a/gamma(k)/t^k * x^(k-1)*exp(-x/t)",
 	"Flat", "a/sqrt(2*pi)/x/s * exp(-( (log(x)-mu)/s )^2/2)", "a * x^(n/2.-1.)/2^(n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"F", "t", "Beta",
