@@ -415,8 +415,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: implement following distribution models
-			if (i == nsl_sf_stats_levy_alpha_stable ||
-				i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_flat || i == nsl_sf_stats_fdist ||
+			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
+				i == nsl_sf_stats_fdist ||
 				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic || i == nsl_sf_stats_pareto) {
@@ -813,6 +813,7 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b8") << "k" << "A";
 			break;
 		case nsl_sf_stats_flat:
+			m_fitData.paramNames << "a" << "b" << "A";
 			break;
 		case nsl_sf_stats_chi_squared:
 			m_fitData.paramNames << "n" << "a";
@@ -886,9 +887,11 @@ void XYFitCurveDock::updateModelEquation() {
 		// model-dependent start values
 		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 			nsl_sf_stats_distribution type = (nsl_sf_stats_distribution)m_fitData.modelType;
+			if (type == nsl_sf_stats_flat)
+				m_fitData.paramStartValues[0] = -1.0;
 			if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
 				m_fitData.paramStartValues[1] = 0.0;
-			if (type == nsl_sf_stats_weibull)
+			else if (type == nsl_sf_stats_weibull)
 				m_fitData.paramStartValues[2] = 0.0;
 		}
 	}

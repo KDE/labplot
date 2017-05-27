@@ -395,6 +395,19 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, 
 		return factor * efactor;
 	return 0;
 }
+double nsl_fit_model_flat_param_deriv(int param, double x, double a, double b, double A, double weight) {
+	if (x < a || x > b)
+		return 0;
+
+	if (param == 0)
+		return weight * A/gsl_pow_2(a-b);
+	if (param == 1)
+		return - weight * A/gsl_pow_2(a-b);
+	if (param == 2)
+		return weight/(b-a);
+
+	return 0;
+}
 double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double a, double weight) {
 	double y=x/s, norm = weight*y/s, efactor = exp(-y*y/2.);
 
@@ -426,7 +439,7 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 		return norm * efactor;
 	return 0;
 }
-double nsl_fit_model_landau_param_deriv(int param, double x, double a, double weight) {
+double nsl_fit_model_landau_param_deriv(int param, double x, double weight) {
 	if (param == 0)
 		return weight * gsl_ran_landau_pdf(x);
 	return 0;
