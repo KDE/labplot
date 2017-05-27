@@ -415,7 +415,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: implement following distribution models
-			if (i == nsl_sf_stats_rayleigh_tail || i == nsl_sf_stats_landau || i == nsl_sf_stats_levy_alpha_stable ||
+			if (i == nsl_sf_stats_landau || i == nsl_sf_stats_levy_alpha_stable ||
 				i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_flat || i == nsl_sf_stats_fdist ||
 				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
@@ -773,6 +773,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// TODO: add missing GSL distributions (see nsl_sf_stats.c)
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
+		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
@@ -800,7 +801,6 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "s" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
 			break;
-		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_landau:
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:

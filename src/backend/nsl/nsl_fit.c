@@ -403,6 +403,17 @@ double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double 
 		return norm * efactor;
 	return 0;
 }
+double nsl_fit_model_rayleigh_tail_param_deriv(int param, double x, double s, double mu, double a, double weight) {
+	double norm = weight*x/(s*s), y = (mu*mu - x*x)/2./(s*s);
+
+	if (param == 0)
+		return -2. * a * norm/s * (1. + y) * exp(y);
+	if (param == 1)
+		return a * mu * norm/(s*s) * exp(y);
+	if (param == 2)
+		return norm * exp(y);
+	return 0;	
+}
 double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double weight) {
 	double y=x-mu, norm = weight*sqrt(g/(2.*M_PI))/pow(y, 1.5), efactor = exp(-g/2./y);
 

@@ -190,10 +190,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText("a =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_landau:
 		ui.lParameter1->hide();
@@ -453,10 +453,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_rayleigh_tail: {
-		double sigma = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter1->text().toDouble();
+		double sigma = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_rayleigh(r, sigma);
+				new_data[i] = gsl_ran_rayleigh_tail(r, mu, sigma);
 			col->replaceValues(0, new_data);
 		}
 		break;

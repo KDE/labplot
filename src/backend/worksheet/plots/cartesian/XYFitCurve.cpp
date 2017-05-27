@@ -534,6 +534,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_exponential:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_cauchy_lorentz:
+		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
@@ -560,6 +561,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							break;
 						case nsl_sf_stats_cauchy_lorentz:
 							gsl_matrix_set(J, i, j, nsl_fit_model_lorentz_param_deriv(j, x, s, mu, a, weight[i]));
+							break;
+						case nsl_sf_stats_rayleigh_tail:
+							gsl_matrix_set(J, i, j, nsl_fit_model_rayleigh_tail_param_deriv(j, x, s, mu, a, weight[i]));
 							break;
 						case nsl_sf_stats_lognormal:
 							if (x > 0)
@@ -748,7 +752,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		// TODO
-		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_landau:
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:
