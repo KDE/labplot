@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL (non)linear fit functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -330,6 +330,30 @@ double nsl_fit_model_exponential_param_deriv(int param, double x, double l, doub
 		return weight * l * efactor;
 	return 0;
 }
+double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double weight) {
+	double norm = weight/(2.*s), y = fabs((x-mu)/s), efactor = exp(-y);
+
+	if (param == 0)
+		return a/s*norm * (y-1.) * efactor;
+	if (param == 1)
+		return a/(s*s)*norm * (x-mu)/y * efactor;
+	if (param == 2)
+		return norm * efactor;
+	return 0;
+}
+double nsl_fit_model_exp_pow_param_deriv(int param, double x, double s, double mu, double b, double a, double weight) {
+	double norm = weight/2./s/gsl_sf_gamma(1.+1./b), y = (x-mu)/s, efactor = exp(-pow(fabs(y), b));
+
+	if (param == 0)
+		return norm * a/s * efactor * (b * y * pow(fabs(1./y), 1.-b) * GSL_SIGN(y) - 1.);
+	if (param == 1)
+		return norm * a*b/s * efactor * pow(fabs(y), b-1.) * GSL_SIGN(y);
+	if (param == 2)
+		return norm * a/b * gsl_sf_gamma(1.+1./b)/gsl_sf_gamma(1./b) * efactor * (gsl_sf_psi(1.+1./b) - gsl_pow_2(b) * pow(fabs(y), b) * log(fabs(y)));
+	if (param == 3)
+		return norm * efactor;
+	return 0;
+}
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double weight) {
 	double a2 = a*a, a3 = a*a2, norm = weight*sqrt(2./M_PI)/a3, x2 = x*x, efactor = exp(-x2/2./a2);
 
@@ -368,17 +392,6 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, 
 		return a * factor * (log(x/t) - gsl_sf_psi(k)) * efactor;
 	if (param == 2)
 		return factor * efactor;
-	return 0;
-}
-double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double weight) {
-	double norm = weight/(2.*s), y = fabs((x-mu)/s), efactor = exp(-y);
-
-	if (param == 0)
-		return a/s*norm * (y-1.) * efactor;
-	if (param == 1)
-		return a/(s*s)*norm * (x-mu)/y * efactor;
-	if (param == 2)
-		return norm * efactor;
 	return 0;
 }
 double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double a, double weight) {

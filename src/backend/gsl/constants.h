@@ -60,7 +60,7 @@ struct con _constants[] = {
 
 	/* Astronomy and Astrophysics */
 	{"au", GSL_CONST_MKSA_ASTRONOMICAL_UNIT},
-	{"gamma", GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT},
+	{"G", GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT},
 	{"ly", GSL_CONST_MKSA_LIGHT_YEAR},
 	{"pc", GSL_CONST_MKSA_PARSEC},
 	{"gg", GSL_CONST_MKSA_GRAV_ACCEL},

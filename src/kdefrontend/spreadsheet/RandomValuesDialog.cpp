@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -171,7 +171,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText("a =");
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("b =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");

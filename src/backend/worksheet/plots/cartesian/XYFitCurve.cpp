@@ -599,6 +599,23 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_exponential_power: {
+			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (int j = 0; j < 4; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_exp_pow_param_deriv(j, x, s, mu, b, a, weight[i]));
+				}
+			}
+			break;
+		}
 		case nsl_sf_stats_rayleigh: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -731,7 +748,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		// TODO
-		case nsl_sf_stats_exponential_power:
 		case nsl_sf_stats_rayleigh_tail:
 		case nsl_sf_stats_landau:
 		case nsl_sf_stats_levy_alpha_stable:
@@ -1289,20 +1305,20 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	//fit results (generated columns and goodness of the fit)
 	writer->writeStartElement("fitResult");
-	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->fitResult.valid) );
-	writer->writeAttribute( "status", d->fitResult.status );
-	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
-	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
-	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
-	writer->writeAttribute( "sse", QString::number(d->fitResult.sse, 'g', 15) );
-	writer->writeAttribute( "sst", QString::number(d->fitResult.sst, 'g', 15) );
-	writer->writeAttribute( "rms", QString::number(d->fitResult.rms, 'g', 15) );
-	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd, 'g', 15) );
-	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
-	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
-	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
-	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
+	writer->writeAttribute("available", QString::number(d->fitResult.available));
+	writer->writeAttribute("valid", QString::number(d->fitResult.valid));
+	writer->writeAttribute("status", d->fitResult.status);
+	writer->writeAttribute("iterations", QString::number(d->fitResult.iterations));
+	writer->writeAttribute("time", QString::number(d->fitResult.elapsedTime));
+	writer->writeAttribute("dof", QString::number(d->fitResult.dof));
+	writer->writeAttribute("sse", QString::number(d->fitResult.sse, 'g', 15));
+	writer->writeAttribute("sst", QString::number(d->fitResult.sst, 'g', 15));
+	writer->writeAttribute("rms", QString::number(d->fitResult.rms, 'g', 15));
+	writer->writeAttribute("rsd", QString::number(d->fitResult.rsd, 'g', 15));
+	writer->writeAttribute("mse", QString::number(d->fitResult.mse, 'g', 15));
+	writer->writeAttribute("rmse", QString::number(d->fitResult.rmse, 'g', 15));
+	writer->writeAttribute("mae", QString::number(d->fitResult.mae, 'g', 15));
+	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
 
 	writer->writeStartElement("paramValues");
 	foreach (const double &value, d->fitResult.paramValues)

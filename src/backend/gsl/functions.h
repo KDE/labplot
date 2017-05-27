@@ -203,27 +203,6 @@ struct func _functions[] = {
 	{"round", round},
 	{"trunc", trunc},
 #endif
-	/* TODO: use these if GSL is not available? */
-/*	{"cos", cos},
-	{"erf", erf},
-	{"erfc", erfc},
-	{"exp", exp},
-	{"expm1", expm1},
-	{"gamma", gamma},
-	{"hypot", hypot},
-	{"j0", j0},
-	{"j1", j1},
-	{"jn", my_jn},
-	{"lgamma", lgamma},
-	{"ln", log},	// german version natural log
-	{"log", log},
-	{"log1p", log1p},
-	{"sin", sin},
-	{"tgamma", tgamma},
-	{"y0", y0},
-	{"y1", y1},
-	{"yn", my_yn},
-*/
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
 	{"log1p", gsl_log1p},
 	{"ldexp", my_gsl_ldexp},
