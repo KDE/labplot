@@ -128,7 +128,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->item(0, 1)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
-		+ ", " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "/dof");
+		+ " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "/dof)");
 	uiGeneralTab.twGoodness->item(3, 1)->setText("R" + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
@@ -416,8 +416,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: implement following distribution models
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
-				i == nsl_sf_stats_fdist ||
-				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
+				i == nsl_sf_stats_fdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic || i == nsl_sf_stats_pareto) {
 					QStandardItem* item = model->item(i);
@@ -805,8 +804,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "a";
 			m_fitData.paramNamesUtf8 << "A";
 			break;
-		case nsl_sf_stats_levy_alpha_stable:
-		case nsl_sf_stats_levy_skew_alpha_stable:
+		case nsl_sf_stats_levy_alpha_stable:	// TODO
+		case nsl_sf_stats_levy_skew_alpha_stable:	// TODO
 			break;
 		case nsl_sf_stats_gamma:
 			m_fitData.paramNames << "t" << "k" << "a";
@@ -819,10 +818,14 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "n" << "a";
 			m_fitData.paramNamesUtf8 << "n" << "A";
 			break;
-		case nsl_sf_stats_fdist:
+		case nsl_sf_stats_fdist:	// TODO
+			break;
 		case nsl_sf_stats_tdist:
-		case nsl_sf_stats_beta:
-		case nsl_sf_stats_pareto:
+			m_fitData.paramNames << "n" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bd") << "A";
+			break;
+		case nsl_sf_stats_beta:		// TODO
+		case nsl_sf_stats_pareto:	// TODO
 			break;
 		case nsl_sf_stats_weibull:
 			m_fitData.paramNames << "k" << "l" << "mu" << "a";
@@ -832,19 +835,19 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "s" << "b" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
 			break;
-		case nsl_sf_stats_gumbel2:
+		case nsl_sf_stats_gumbel2:	// TODO
 			break;
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
 			break;
-		case nsl_sf_stats_bernoulli:
-		case nsl_sf_stats_binomial:
-		case nsl_sf_stats_negative_bionomial:
-		case nsl_sf_stats_pascal:
-		case nsl_sf_stats_geometric:
-		case nsl_sf_stats_hypergeometric:
-		case nsl_sf_stats_logarithmic:
+		case nsl_sf_stats_bernoulli:	// TODO
+		case nsl_sf_stats_binomial:	// TODO
+		case nsl_sf_stats_negative_bionomial:	// TODO
+		case nsl_sf_stats_pascal:	// TODO
+		case nsl_sf_stats_geometric:	// TODO
+		case nsl_sf_stats_hypergeometric:	// TODO
+		case nsl_sf_stats_logarithmic:	// TODO
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
 			m_fitData.paramNames << "s" << "a";
