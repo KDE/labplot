@@ -414,9 +414,9 @@ void XYFitCurveDock::categoryChanged(int index) {
         	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			//TODO: implement following distribution models
+			//TODO: not implemented yet:
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
-				i == nsl_sf_stats_fdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
+				i == nsl_sf_stats_fdist || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic || i == nsl_sf_stats_pareto) {
 					QStandardItem* item = model->item(i);
@@ -824,7 +824,9 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "n" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bd") << "A";
 			break;
-		case nsl_sf_stats_beta:		// TODO
+		case nsl_sf_stats_beta:
+			m_fitData.paramNames << "a" << "b" << "A";
+			break;
 		case nsl_sf_stats_pareto:	// TODO
 			break;
 		case nsl_sf_stats_weibull:

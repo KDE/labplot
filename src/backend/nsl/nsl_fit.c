@@ -462,6 +462,17 @@ double nsl_fit_model_students_t_param_deriv(int param, double x, double n, doubl
 
 	return 0;
 }
+double nsl_fit_model_beta_param_deriv(int param, double x, double a, double b, double A, double weight) {
+	double norm = weight * A * gsl_sf_gamma(a+b)/gsl_sf_gamma(a)/gsl_sf_gamma(b) * pow(x, a-1.) * pow(1.-x, b-1.);
+
+	if (param == 0)
+		return norm * (log(x) - gsl_sf_psi(a) + gsl_sf_psi(a+b));
+	if (param == 1)
+		return norm * (log(1.-x) - gsl_sf_psi(b) + gsl_sf_psi(a+b));
+	if (param == 2)
+		return weight * gsl_ran_beta_pdf(x, a, b);
+	return 0;
+}
 double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double weight) {
 	double y = (x-mu)/l, z = pow(y, k), efactor = exp(-z);
 

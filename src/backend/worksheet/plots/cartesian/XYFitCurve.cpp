@@ -697,6 +697,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_beta: {
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_beta_param_deriv(j, x, a, b, A, weight[i]));
+				}
+			}
+			break;
+		}
 		case nsl_sf_stats_weibull: {
 			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -793,11 +809,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		// TODO
+		// TODO: not implemented yet:
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_fdist:
-		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto:
 		case nsl_sf_stats_gumbel2:
 		case nsl_sf_stats_bernoulli:
