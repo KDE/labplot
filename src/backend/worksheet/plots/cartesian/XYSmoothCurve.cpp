@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a smooth
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+	Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -183,14 +184,27 @@ void XYSmoothCurvePrivate::recalculate() {
 	// clear the previous result
 	smoothResult = XYSmoothCurve::SmoothResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Number of x and y data points must be equal.");
@@ -202,17 +216,26 @@ void XYSmoothCurvePrivate::recalculate() {
 	//copy all valid data point for the smooth to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = smoothData.xRange.first();
-	const double xmax = smoothData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (smoothData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = smoothData.xRange.first();
+		xmax = smoothData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}

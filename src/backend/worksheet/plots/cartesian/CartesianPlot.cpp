@@ -900,8 +900,22 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 
 XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: smooth '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Smoothing of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add smoothing curve", name()));
+		this->addChild(curve);
+	}
+
 	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 
