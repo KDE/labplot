@@ -46,7 +46,7 @@ public:
 private:
 	virtual void initGeneralTab();
 	void showIntegrationResult();
-	void updateIntegrationSettings(const AbstractColumn*);
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve;

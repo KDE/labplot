@@ -47,7 +47,7 @@ public:
 private:
 	virtual void initGeneralTab();
 	void showDifferentiationResult();
-	void updateDifferentiationSettings(const AbstractColumn*);
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve;

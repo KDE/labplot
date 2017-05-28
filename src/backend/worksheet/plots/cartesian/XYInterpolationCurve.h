@@ -79,7 +79,6 @@ class XYInterpolationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
 		const InterpolationResult& interpolationResult() const;
-		bool isSourceDataChangedSinceLastInterpolation() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYInterpolationCurvePrivate Private;
@@ -91,9 +90,6 @@ class XYInterpolationCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYInterpolationCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYInterpolationCurveSetXDataColumnCmd;
 		friend class XYInterpolationCurveSetYDataColumnCmd;
@@ -102,7 +98,6 @@ class XYInterpolationCurve: public XYCurve {
 
 		friend class XYInterpolationCurveSetInterpolationDataCmd;
 		void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
-		void sourceDataChangedSinceLastInterpolation();
 };
 
 #endif

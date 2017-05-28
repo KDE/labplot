@@ -270,7 +270,7 @@ void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	}
 
 	// disable integration orders and accuracies that need more data points
-	this->updateIntegrationSettings(dataSourceCurve->xColumn());
+	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
@@ -297,14 +297,14 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		}
 
 		// disable integration methods that need more data points
-		this->updateIntegrationSettings(column);
+		this->updateSettings(column);
 	}
 }
 
 /*!
  * disable deriv orders and accuracies that need more data points
  */
-void XYIntegrationCurveDock::updateIntegrationSettings(const AbstractColumn* column) {
+void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
 

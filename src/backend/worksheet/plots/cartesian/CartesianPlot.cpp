@@ -879,8 +879,22 @@ XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 
 XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: interpolate '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Interpolation of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add interpolation curve", name()));
+		this->addChild(curve);
+	}
+
 	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 

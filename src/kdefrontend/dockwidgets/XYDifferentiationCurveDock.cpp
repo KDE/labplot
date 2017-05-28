@@ -266,7 +266,7 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 	}
 
 	// disable deriv orders and accuracies that need more data points
-	this->updateDifferentiationSettings(dataSourceCurve->xColumn());
+	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
@@ -284,21 +284,20 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	// disable deriv orders and accuracies that need more data points
-	this->updateDifferentiationSettings(column);
+	this->updateSettings(column);
 
 	if (m_initializing)
 		return;
 
 	foreach(XYCurve* curve, m_curvesList)
-		if (curve != 0)
-			dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 }
 
 
 /*!
  * disable deriv orders and accuracies that need more data points
  */
-void XYDifferentiationCurveDock::updateDifferentiationSettings(const AbstractColumn* column) {
+void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
 
