@@ -320,6 +320,15 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
+		//reset all applied formattings when switching from html to tex mode
+		QTextCursor cursor = ui.teLabel->textCursor();
+		int position = cursor.position();
+		ui.teLabel->selectAll();
+		QTextCharFormat format;
+		ui.teLabel->setCurrentCharFormat(format);
+		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
+		ui.teLabel->setTextCursor(cursor);
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(ui.teLabel->document());
 #endif
@@ -348,6 +357,10 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);
 		ui.sbFontSize->setVisible(false);
+
+		//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
+		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+		ui.teLabel->setStyleSheet("");
 	}
 
 	//no latex is available and the user switched to the text mode,
@@ -359,11 +372,6 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.tbTexUsed->setEnabled(true);
 		ui.tbTexUsed->setToolTip("");
 	}
-
-	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
-	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-	if (!checked)
-		ui.teLabel->setStyleSheet("");
 
 	if (m_initializing)
 		return;
@@ -642,7 +650,10 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
 	int position = cursor.position();
-	ui.teLabel->setText(text.text);
+	if (text.teXUsed)
+		ui.teLabel->setText(text.text);
+	else
+		ui.teLabel->setHtml(text.text);
 	cursor.movePosition(QTextCursor::Start);
 	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
 	ui.teLabel->setTextCursor(cursor);
@@ -732,16 +743,22 @@ void LabelWidget::load() {
 
 	ui.chbVisible->setChecked(m_label->isVisible());
 
-	//Text
-	ui.teLabel->setHtml(m_label->text().text);
-	ui.teLabel->selectAll();
-	ui.teLabel->setFocus();
-
-	//TeX
+	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
+	if (m_label->text().teXUsed)
+		ui.teLabel->setText(m_label->text().text);
+	else
+		ui.teLabel->setHtml(m_label->text().text);
+
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
+
+	//move the cursor to the end and set the focus to the text editor
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.movePosition(QTextCursor::End);
+	ui.teLabel->setTextCursor(cursor);
+	ui.teLabel->setFocus();
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
