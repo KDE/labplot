@@ -47,7 +47,7 @@ const char* nsl_sf_stats_distribution_equation[] = {
 	"Levy alpha-stable", "Levy-skew", "a/gamma(k)/t^k * x^(k-1)*exp(-x/t)",
 	"A/(b-a)*theta(b-x)*theta(x-a)", "a/sqrt(2*pi)/x/s * exp(-( (log(x)-mu)/s )^2/2)", "a * x^(n/2.-1.)/2^(n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"F", "a*gamma((n+1)/2)/sqrt(pi*n)/gamma(n/2) * (1+x^2/n)^(-(n+1)/2)", "gamma(a+b)/gamma(a)/gamma(b) * x^(a-1) * (1-x)^(b-1)",
-	"a/4/s * sech((x-mu)/2/s)**2", "Pareto", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
+	"a/4/s * sech((x-mu)/2/s)**2", "a/b * (b/x)^(a+1) * theta(x-b)", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
 	"a/s * exp(-(x-mu)/s - b*exp(-(x-mu)/s))", "Gumbel2", "a * l^x/gamma(x+1) * exp(-l)",
 	"Bernoulli", "Binomial", "Negative binomial",
 	"Pascal", "Geometric", "Hypergeometric",

@@ -471,6 +471,21 @@ double nsl_fit_model_beta_param_deriv(int param, double x, double a, double b, d
 		return norm * (log(1.-x) - gsl_sf_psi(b) + gsl_sf_psi(a+b));
 	if (param == 2)
 		return weight * gsl_ran_beta_pdf(x, a, b);
+
+	return 0;
+}
+double nsl_fit_model_pareto_param_deriv(int param, double x, double a, double b, double A, double weight) {
+	if (x < b)
+		return 0;
+
+	double norm = weight * A;
+	if (param == 0)
+		return norm * pow(b/x, a) * (1. + a * log(b/x))/x;
+	if (param == 1)
+		return norm * a*a * pow(b/x, a-1.)/x/x;
+	if (param == 2)
+		return weight * gsl_ran_pareto_pdf(x, a, b);
+
 	return 0;
 }
 double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double weight) {

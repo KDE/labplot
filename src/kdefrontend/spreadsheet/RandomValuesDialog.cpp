@@ -239,8 +239,6 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
 		break;
-	case nsl_sf_stats_beta:
-	case nsl_sf_stats_pareto:
 	case nsl_sf_stats_gumbel1:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
@@ -251,11 +249,18 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("0.0");
 		break;
+	case nsl_sf_stats_beta:
 	case nsl_sf_stats_gumbel2:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
+		break;
+	case nsl_sf_stats_pareto:
+		ui.lParameter1->setText("a =");
+		ui.lParameter2->setText("b =");
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_lognormal:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));

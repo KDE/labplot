@@ -418,7 +418,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
 				i == nsl_sf_stats_fdist || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
-				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic || i == nsl_sf_stats_pareto) {
+				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 			}
@@ -825,9 +825,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bd") << "A";
 			break;
 		case nsl_sf_stats_beta:
+		case nsl_sf_stats_pareto:
 			m_fitData.paramNames << "a" << "b" << "A";
-			break;
-		case nsl_sf_stats_pareto:	// TODO
 			break;
 		case nsl_sf_stats_weibull:
 			m_fitData.paramNames << "k" << "l" << "mu" << "a";
