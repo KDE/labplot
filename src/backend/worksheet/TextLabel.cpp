@@ -429,6 +429,9 @@ void TextLabelPrivate::updatePosition() {
 	updates the static text.
  */
 void TextLabelPrivate::updateText() {
+	if (suppressRetransform)
+		return;
+
 	if (textWrapper.teXUsed) {
 		TeXRenderer::Formatting format;
 		format.fontColor = teXFontColor;
@@ -819,27 +822,33 @@ bool TextLabel::load(XmlStreamReader* reader) {
 //#########################  Theme management ##################################
 //##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
-	Q_D(const TextLabel);
+	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
 	const QColor fontColor = group.readEntry("FontColor", QColor(Qt::white));
 	const QColor backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
 
-	//replace colors in the html-formatted string
-	QTextDocument doc;
-	doc.setHtml(d->textWrapper.text);
-	QTextCharFormat fmt;
-	fmt.setForeground(QBrush(fontColor));
-	fmt.setBackground(QBrush(backgroundColor));
-	QTextCursor cursor(&doc);
-	cursor.select(QTextCursor::Document);
-	cursor.setCharFormat(fmt);
+	d->suppressRetransform = true;
+	if (!d->textWrapper.teXUsed) {
+		//replace colors in the html-formatted string
+		QTextDocument doc;
+		doc.setHtml(d->textWrapper.text);
+		QTextCharFormat fmt;
+		fmt.setForeground(QBrush(fontColor));
+		fmt.setBackground(QBrush(backgroundColor));
+		QTextCursor cursor(&doc);
+		cursor.select(QTextCursor::Document);
+		cursor.setCharFormat(fmt);
 
-	TextLabel::TextWrapper wrapper(doc.toHtml(), d->textWrapper.teXUsed);
-	this->setText(wrapper);
-	//replace colors in the TeX-string
-	this->setTeXFontColor(fontColor);
-	this->setTeXBackgroundColor(backgroundColor);
+		TextLabel::TextWrapper wrapper(doc.toHtml(), d->textWrapper.teXUsed);
+		this->setText(wrapper);
+	} else {
+		//replace colors in the TeX-string
+		this->setTeXFontColor(fontColor);
+		this->setTeXBackgroundColor(backgroundColor);
+	}
+	d->suppressRetransform = false;
+	d->updateText();
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
