@@ -114,6 +114,7 @@ double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b,
 		return weight*pow(x, b);
 	if (param == 1)
 		return weight*a*pow(x, b)*log(x);
+
 	return 0;
 }
 double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double weight) {
@@ -123,6 +124,7 @@ double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c,
 		return weight*pow(x, c);
 	if (param == 2)
 		return weight*b*pow(x, c)*log(x);
+
 	return 0;
 }
 double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double weight) {
@@ -130,6 +132,7 @@ double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, dou
 		return weight*exp(b*x);
 	if (param == 1)
 		return weight*a*x*exp(b*x);
+
 	return 0;
 }
 double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double weight) {
@@ -141,6 +144,7 @@ double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, dou
 		return weight*exp(d*x);
 	if (param == 3)
 		return weight*c*x*exp(d*x);
+
 	return 0;
 }
 double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double weight) {
@@ -156,6 +160,7 @@ double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, dou
 		return weight*exp(f*x);
 	if (param == 5)
 		return weight*e*x*exp(f*x);
+
 	return 0;
 }
 double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double weight) {
@@ -165,6 +170,7 @@ double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double
 		return -weight*a*x*exp(b*x);
 	if (param == 2)
 		return weight;
+
 	return 0;
 }
 double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double weight) {
@@ -172,6 +178,7 @@ double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double
 		return weight*cos(degree*w*x);
 	if (param == 1)
 		return weight*sin(degree*w*x);
+
 	return 0;
 }
 
@@ -185,6 +192,7 @@ double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double 
 		return a * norm/s2 * (x-mu) * efactor;
 	if (param == 2)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double weight) {
@@ -196,6 +204,7 @@ double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t
 		return a * norm * 2.*s*(x-t)/(denom*denom);
 	if (param == 2)
 		return norm * s/denom;
+
 	return 0;
 }
 double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -207,6 +216,7 @@ double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, 
 		return a/s * norm * tanh(y)/cosh(y);
 	if (param == 2)
 		return norm/cosh(y);
+
 	return 0;
 }
 double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -218,6 +228,7 @@ double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double 
 		return a/s * norm * tanh(y)/cosh(y)/cosh(y);
 	if (param == 2)
 		return norm/cosh(y)/cosh(y);
+
 	return 0;
 }
 
@@ -230,6 +241,7 @@ double nsl_fit_model_atan_param_deriv(int param, double x, double s, double mu, 
 		return -a/s * norm * 1./(1+y*y);
 	if (param == 2)
 		return norm * atan(y);
+
 	return 0;
 }
 double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -240,6 +252,7 @@ double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, 
 		return -a/s * norm * 1./cosh(y)/cosh(y);
 	if (param == 2)
 		return norm * tanh(y);
+
 	return 0;
 }
 double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -250,6 +263,7 @@ double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s
 		return -a/s * norm * 1./pow(1.+y2, 1.5);
 	if (param == 2)
 		return norm * y/sqrt(1.+y2);
+
 	return 0;
 }
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double mu, double a, double weight) {
@@ -260,6 +274,7 @@ double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double m
 		return -a*k * norm * exp(-y)/gsl_pow_2(1. + exp(-y));
 	if (param == 2)
 		return norm/(1. + exp(-y));
+
 	return 0;
 }
 double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -270,6 +285,7 @@ double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, d
 		return -a/sqrt(2.*M_PI)/s * norm * exp(-y*y);
 	if (param == 2)
 		return norm/2. * gsl_sf_erf(y);
+
 	return 0;
 }
 double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, double a, double weight) {
@@ -280,6 +296,7 @@ double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, d
 		return a * norm * log(y)*pow(y, n)/gsl_pow_2(1.+pow(y, n));
 	if (param == 2)
 		return norm * pow(y, n)/(1.+pow(y, n));
+
 	return 0;
 }
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double weight) {
@@ -289,6 +306,7 @@ double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double 
 		return -weight*a*exp(-c*x-b*exp(-c*x));
 	if (param == 2)
 		return weight*a*b*x*exp(-c*x-b*exp(-c*x));
+
 	return 0;
 }
 double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -299,6 +317,7 @@ double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double
 		return -a/s * norm * 1./cosh(y);
 	if (param == 2)
 		return -asin(tanh(y));
+
 	return 0;
 }
 
@@ -316,6 +335,7 @@ double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, do
 		return norm * efactor;
 	if (param == 3)
 		return A/norm/norm * efactor * exp(-a*a/(2.*s2));
+
 	return 0;
 }
 double nsl_fit_model_exponential_param_deriv(int param, double x, double l, double mu, double a, double weight) {
@@ -329,6 +349,7 @@ double nsl_fit_model_exponential_param_deriv(int param, double x, double l, doub
 		return weight * a * gsl_pow_2(l) * efactor;
 	if (param == 2)
 		return weight * l * efactor;
+
 	return 0;
 }
 double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -340,6 +361,7 @@ double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double m
 		return a/(s*s)*norm * (x-mu)/y * efactor;
 	if (param == 2)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_exp_pow_param_deriv(int param, double x, double s, double mu, double b, double a, double weight) {
@@ -353,6 +375,7 @@ double nsl_fit_model_exp_pow_param_deriv(int param, double x, double s, double m
 		return norm * a/b * gsl_sf_gamma(1.+1./b)/gsl_sf_gamma(1./b) * efactor * (gsl_sf_psi(1.+1./b) - gsl_pow_2(b) * pow(fabs(y), b) * log(fabs(y)));
 	if (param == 3)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double weight) {
@@ -362,6 +385,7 @@ double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c
 		return c * norm * x2*(x2-3.*a2)/a3 * efactor;
 	if (param == 1)
 		return norm * x2 * efactor;
+
 	return 0;
 }
 double nsl_fit_model_poisson_param_deriv(int param, double x, double l, double a, double weight) {
@@ -371,6 +395,7 @@ double nsl_fit_model_poisson_param_deriv(int param, double x, double l, double a
 		return a/l * norm *(x-l)*exp(-l);
 	if (param == 1)
 		return norm * exp(-l);
+
 	return 0;
 }
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -382,6 +407,7 @@ double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double
 		return a * norm * y/(s*s) * efactor;
 	if (param == 2)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double weight) {
@@ -393,6 +419,7 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, 
 		return a * factor * (log(x/t) - gsl_sf_psi(k)) * efactor;
 	if (param == 2)
 		return factor * efactor;
+
 	return 0;
 }
 double nsl_fit_model_flat_param_deriv(int param, double x, double a, double b, double A, double weight) {
@@ -415,6 +442,7 @@ double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double 
 		return a*y/(s*s) * (y*y-2.)*efactor;
 	if (param == 1)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_rayleigh_tail_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -426,6 +454,7 @@ double nsl_fit_model_rayleigh_tail_param_deriv(int param, double x, double s, do
 		return a * mu * norm/(s*s) * exp(y);
 	if (param == 2)
 		return norm * exp(y);
+
 	return 0;	
 }
 double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double weight) {
@@ -437,11 +466,13 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 		return a/2.*norm/y/y * (3.*y - g) * efactor;
 	if (param == 2)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_landau_param_deriv(int param, double x, double weight) {
 	if (param == 0)
 		return weight * gsl_ran_landau_pdf(x);
+
 	return 0;
 }
 double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double weight) {
@@ -451,6 +482,7 @@ double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, doubl
 		return a/2. * norm * (log(x/2.) - gsl_sf_psi(y)) * efactor;
 	if (param == 1)
 		return norm * efactor;
+
 	return 0;
 }
 double nsl_fit_model_students_t_param_deriv(int param, double x, double n, double a, double weight) {
@@ -499,6 +531,7 @@ double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l
 		return weight*a*k/l/l * z/y/y*(k*z + 1. - k) * efactor;
 	if (param == 3)
 		return weight*k/l * z/y * efactor;
+
 	return 0;
 }
 double nsl_fit_model_frechet_param_deriv(int param, double x, double g, double mu, double s, double a, double weight) {
@@ -512,6 +545,7 @@ double nsl_fit_model_frechet_param_deriv(int param, double x, double g, double m
 		return a*weight * gsl_pow_2(g/s)*pow(y, -2.*g-1.) * (pow(y, g)-1.) * efactor;
 	if (param == 3)
 		return g*weight/s * pow(y, -g-1.) * efactor;
+
 	return 0;
 }
 double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double weight) {
@@ -525,6 +559,21 @@ double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b
 		return a/s * norm * (1. - b*exp(-y)) * efactor;
 	if (param == 3)
 		return norm * efactor;
+
+	return 0;
+}
+double nsl_fit_model_gumbel2_param_deriv(int param, double x, double a, double b, double mu, double A, double weight) {
+	double y = x - mu, norm = A * weight * exp(-b * pow(y, -a));
+
+	if (param == 0)
+		return norm * b * pow(y, -1. -2.*a) * (pow(y, a) -a*(pow(y, a)-b)*log(y));
+	if (param == 1)
+		return norm * a * pow(y, -1. -2.*a) * (pow(y, a) - b);
+	if (param == 2)
+		return norm * a * b * pow(y, -2.*(a + 1.)) * ((1. + a)*pow(y, a) - a*b);
+	if (param == 3)
+		return weight * gsl_ran_gumbel2_pdf(y, a, b);
+
 	return 0;
 }
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight) {
@@ -536,5 +585,6 @@ double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double
 		return a*M_PI/2./s * norm * tanh(y)/cosh(y);
 	if (param == 2)
 		return norm * 1./cosh(y);
+
 	return 0;
 }

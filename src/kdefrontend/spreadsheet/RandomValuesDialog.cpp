@@ -239,6 +239,12 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
 		break;
+	case nsl_sf_stats_beta:
+		ui.lParameter1->setText("a =");
+		ui.lParameter2->setText("b =");
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("1.0");
+		break;
 	case nsl_sf_stats_gumbel1:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
@@ -249,12 +255,15 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("0.0");
 		break;
-	case nsl_sf_stats_beta:
 	case nsl_sf_stats_gumbel2:
+		ui.lParameter3->show();
+		ui.kleParameter3->show();
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
+		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
+		ui.kleParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_pareto:
 		ui.lParameter1->setText("a =");
@@ -608,9 +617,10 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_gumbel2: {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
+		double mu = ui.kleParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_gumbel2(r, a, b);
+				new_data[i] = gsl_ran_gumbel2(r, a, b) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;

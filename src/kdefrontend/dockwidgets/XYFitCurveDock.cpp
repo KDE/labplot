@@ -416,7 +416,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: not implemented yet:
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
-				i == nsl_sf_stats_fdist || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
+				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli ||
 				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic) {
 					QStandardItem* item = model->item(i);
@@ -836,7 +836,9 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "s" << "b" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
 			break;
-		case nsl_sf_stats_gumbel2:	// TODO
+		case nsl_sf_stats_gumbel2:
+			m_fitData.paramNames << "a" << "b" << "mu" << "A";
+			m_fitData.paramNamesUtf8 << "a" << "b" << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
@@ -875,7 +877,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelCategory != nsl_fit_model_custom || 
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		DEBUG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
+		DEBUG(" number of start values" << m_fitData.paramNames.size() << ' ' << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
@@ -895,7 +897,7 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.paramStartValues[0] = -1.0;
 			if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
 				m_fitData.paramStartValues[1] = 0.0;
-			else if (type == nsl_sf_stats_weibull)
+			else if (type == nsl_sf_stats_weibull || type == nsl_sf_stats_gumbel2)
 				m_fitData.paramStartValues[2] = 0.0;
 		}
 	}

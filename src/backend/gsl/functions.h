@@ -576,7 +576,7 @@ struct func _functions[] = {
 	{"gumbel1Q", gsl_cdf_gumbel1_Q},
 	{"gumbel1Pinv", gsl_cdf_gumbel1_Pinv},
 	{"gumbel1Qinv", gsl_cdf_gumbel1_Qinv},
-	{"gumbel1", gsl_ran_gumbel1_pdf},
+	{"gumbel2", gsl_ran_gumbel2_pdf},
 	{"gumbel2P", gsl_cdf_gumbel2_P},
 	{"gumbel2Q", gsl_cdf_gumbel2_Q},
 	{"gumbel2Pinv", gsl_cdf_gumbel2_Pinv},

@@ -760,6 +760,23 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_gumbel2: {
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (int j = 0; j < 4; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_gumbel2_param_deriv(j, x, a, b, mu, A, weight[i]));
+				}
+			}
+			break;
+		}
 		case nsl_sf_stats_poisson: {
 			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -822,7 +839,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_fdist:
-		case nsl_sf_stats_gumbel2:
 		case nsl_sf_stats_bernoulli:
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_bionomial:
@@ -1223,7 +1239,7 @@ void XYFitCurvePrivate::recalculate() {
 		// use results as start values if desired
 		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
-			DEBUG("saving parameter " << i << ' ' << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
+			DEBUG("saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}

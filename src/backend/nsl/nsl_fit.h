@@ -113,6 +113,7 @@ double nsl_fit_model_beta_param_deriv(int param, double x, double a, double b, d
 double nsl_fit_model_pareto_param_deriv(int param, double x, double a, double b, double A, double weight);
 double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double weight);
 double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double weight);
+double nsl_fit_model_gumbel2_param_deriv(int param, double x, double a, double b, double mu, double A, double weight);
 
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double weight);
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight);
