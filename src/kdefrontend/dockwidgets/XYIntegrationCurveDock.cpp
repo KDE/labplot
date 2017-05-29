@@ -165,6 +165,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_integrationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_integrationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
 	connect(m_integrationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_integrationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_integrationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -187,9 +188,6 @@ void XYIntegrationCurveDock::setModel() {
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 
 	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);

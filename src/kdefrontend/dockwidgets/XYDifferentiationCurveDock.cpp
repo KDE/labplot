@@ -164,6 +164,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_differentiationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_differentiationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
 	connect(m_differentiationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_differentiationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_differentiationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));

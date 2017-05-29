@@ -196,6 +196,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_interpolationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_interpolationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
 	connect(m_interpolationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_interpolationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_interpolationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
