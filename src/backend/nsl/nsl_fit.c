@@ -576,6 +576,20 @@ double nsl_fit_model_gumbel2_param_deriv(int param, double x, double a, double b
 
 	return 0;
 }
+double nsl_fit_model_binomial_param_deriv(int param, double k, double p, double n, double A, double weight) {
+	if (k < 0 || k > n || n < 0 || p < 0 || p > 1.)
+		return 0;
+
+	double norm = weight * gsl_sf_gamma(n+1.)/gsl_sf_gamma(n-k+1.)/gsl_sf_gamma(k+1.);
+	if (param == 0)
+		return A * norm * pow(p, k-1.) * pow(1.-p, n-k-1.) * (k-n*p);
+	if (param == 1)
+		return A * norm * pow(p, k) * pow(1.-p, n-k) * (log(1.-p) + gsl_sf_psi(n+1.) - gsl_sf_psi(n-k+1.));
+	if (param == 2)
+		return norm * pow(p, k) * pow(1.-p, n-k);
+
+	return 0;
+}
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight) {
 	double norm = weight/2./s, y = M_PI/2.*(x-mu)/s;
 

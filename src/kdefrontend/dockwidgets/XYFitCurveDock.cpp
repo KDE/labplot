@@ -417,7 +417,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			//TODO: not implemented yet:
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
 				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli ||
-				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
+				i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
@@ -845,7 +845,11 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
 			break;
 		case nsl_sf_stats_bernoulli:	// TODO
-		case nsl_sf_stats_binomial:	// TODO
+			break;
+		case nsl_sf_stats_binomial:
+			m_fitData.paramNames << "p" << "n" << "a";
+			m_fitData.paramNamesUtf8 << "p" << "n" << "A";
+			break;
 		case nsl_sf_stats_negative_bionomial:	// TODO
 		case nsl_sf_stats_pascal:	// TODO
 		case nsl_sf_stats_geometric:	// TODO
