@@ -30,9 +30,11 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/column/columncommands.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 extern "C" {
 #include <gsl/gsl_sort.h>
@@ -42,18 +44,13 @@ extern "C" {
 #include <QFontMetrics>
 #include <QThreadPool>
 #include <QIcon>
-#include <KLocale>
+#include <QMenu>
 #include <QThreadPool>
 #ifndef NDEBUG
 #include <QDebug>
 #endif
 
-#include <KIcon>
 #include <KLocale>
-
-extern "C" {
-#include <gsl/gsl_sort.h>
-}
 
 /**
  * \class Column
@@ -127,6 +124,9 @@ void Column::init() {
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
 	m_suppressDataChangedSignal = false;
+
+	usedInActionGroup = new QActionGroup(this);
+	connect(usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
 }
 
 /**
@@ -135,6 +135,37 @@ void Column::init() {
 Column::~Column() {
 	delete m_string_io;
 	delete m_column_private;
+}
+
+QMenu* Column::createContextMenu() {
+	QMenu* menu = AbstractAspect::createContextMenu();
+	QAction* firstAction = menu->actions().at(1);
+
+	//"Used in" menu containing all curves where the column is used
+	QMenu* usedInMenu = new QMenu(i18n("Used in"));
+	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
+
+	//remove previously added actions
+	foreach(QAction* action, usedInActionGroup->actions())
+		usedInActionGroup->removeAction(action);
+
+	//add curves where the column is currently in use
+	QList<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
+	foreach (const XYCurve* curve, curves) {
+		if (curve->dataSourceType() == XYCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) ) {
+			QAction* action = new QAction(curve->icon(), curve->name(), usedInActionGroup);
+			action->setData(curve->path());
+			usedInMenu->addAction(action);
+		}
+	}
+	menu->insertMenu(firstAction, usedInMenu);
+	menu->insertSeparator(firstAction);
+
+	return menu;
+}
+
+void Column::navigateTo(QAction* action) {
+	project()->navigateTo(action->data().toString());
 }
 
 /*!

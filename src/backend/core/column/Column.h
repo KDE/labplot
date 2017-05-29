@@ -35,6 +35,7 @@
 
 class ColumnStringIO;
 class ColumnPrivate;
+class QActionGroup;
 
 class Column : public AbstractColumn {
 	Q_OBJECT
@@ -85,6 +86,7 @@ class Column : public AbstractColumn {
 		~Column();
 
 		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
 
 		bool isReadOnly() const;
 		AbstractColumn::ColumnMode columnMode() const;
@@ -148,6 +150,7 @@ class Column : public AbstractColumn {
 		ColumnPrivate* m_column_private;
 		ColumnStringIO* m_string_io;
 		bool m_suppressDataChangedSignal;
+		QActionGroup* usedInActionGroup;
 
 		friend class ColumnStringIO;
 
@@ -156,6 +159,7 @@ class Column : public AbstractColumn {
 		void widthChanged(const Column*);
 
 	private slots:
+		void navigateTo(QAction*);
 		void handleFormatChange();
 };
 
