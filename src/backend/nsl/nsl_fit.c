@@ -607,11 +607,19 @@ double nsl_fit_model_negative_binomial_param_deriv(int param, double k, double p
 double nsl_fit_model_pascal_param_deriv(int param, double k, double p, double n, double A, double weight) {
 	return nsl_fit_model_negative_binomial_param_deriv(param, k, p, (int)n, A, weight);
 }
-double nsl_fit_model_geometric_param_deriv(int param, double k, double p, double a, double weight) {
+double nsl_fit_model_geometric_param_deriv(int param, double k, double p, double A, double weight) {
 	if (param == 0)
-		return a * weight * pow(1.-p, k-2.) * (1.-k*p);
+		return A * weight * pow(1.-p, k-2.) * (1.-k*p);
 	if (param == 1)
 		return weight * gsl_ran_geometric_pdf(k, p);
+
+	return 0;
+}
+double nsl_fit_model_logarithmic_param_deriv(int param, double k, double p, double A, double weight) {
+	if (param == 0)
+		return A * weight * pow(1.-p, k-2.) * (1.-k*p);
+	if (param == 1)
+		return weight * gsl_ran_logarithmic_pdf(k, p);
 
 	return 0;
 }

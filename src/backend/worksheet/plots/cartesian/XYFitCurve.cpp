@@ -864,7 +864,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_sf_stats_geometric: {
+		case nsl_sf_stats_geometric:
+		case nsl_sf_stats_logarithmic: {
 			double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
@@ -873,8 +874,16 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_geometric_param_deriv(j, x, p, a, weight[i]));
+					else {
+						switch (modelType) {
+						case nsl_sf_stats_geometric:
+							gsl_matrix_set(J, i, j, nsl_fit_model_geometric_param_deriv(j, x, p, a, weight[i]));
+							break;
+						case nsl_sf_stats_logarithmic:
+							gsl_matrix_set(J, i, j, nsl_fit_model_logarithmic_param_deriv(j, x, p, a, weight[i]));
+							break;
+						}
+					}
 				}
 			}
 			break;
@@ -885,7 +894,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_fdist:
 		case nsl_sf_stats_bernoulli:
 		case nsl_sf_stats_hypergeometric:
-		case nsl_sf_stats_logarithmic:
 			break;
 		}
 		break;
