@@ -604,6 +604,9 @@ double nsl_fit_model_negative_binomial_param_deriv(int param, double k, double p
 
 	return 0;
 }
+double nsl_fit_model_pascal_param_deriv(int param, double k, double p, double n, double A, double weight) {
+	return nsl_fit_model_negative_binomial_param_deriv(param, k, p, (int)n, A, weight);
+}
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight) {
 	double norm = weight/2./s, y = M_PI/2.*(x-mu)/s;
 

@@ -836,7 +836,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_binomial:
-		case nsl_sf_stats_negative_binomial: {
+		case nsl_sf_stats_negative_binomial:
+		case nsl_sf_stats_pascal: {
 			double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double N = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -854,6 +855,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						case nsl_sf_stats_negative_binomial:
 							gsl_matrix_set(J, i, j, nsl_fit_model_negative_binomial_param_deriv(j, x, p, N, a, weight[i]));
 							break;
+						case nsl_sf_stats_pascal:
+							gsl_matrix_set(J, i, j, nsl_fit_model_pascal_param_deriv(j, x, p, N, a, weight[i]));
+							break;
 						}
 					}
 				}
@@ -865,7 +869,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_fdist:
 		case nsl_sf_stats_bernoulli:
-		case nsl_sf_stats_pascal:
 		case nsl_sf_stats_geometric:
 		case nsl_sf_stats_hypergeometric:
 		case nsl_sf_stats_logarithmic:

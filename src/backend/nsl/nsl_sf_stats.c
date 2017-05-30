@@ -49,8 +49,8 @@ const char* nsl_sf_stats_distribution_equation[] = {
 	"F", "a*gamma((n+1)/2)/sqrt(pi*n)/gamma(n/2) * (1+x^2/n)^(-(n+1)/2)", "gamma(a+b)/gamma(a)/gamma(b) * x^(a-1) * (1-x)^(b-1)",
 	"a/4/s * sech((x-mu)/2/s)**2", "a/b * (b/x)^(a+1) * theta(x-b)", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
 	"a/s * exp(-(x-mu)/s - b*exp(-(x-mu)/s))", "A*a*b * (x-mu)^(-a-1) * exp(-b*(x-mu)^(-a))", "a * l^x/gamma(x+1) * exp(-l)",
-	"Bernoulli", "a*gamma(n+1)/gamma(x+1)/gamma(n-x+1) * p^x * (1-p)^(n-x)", "gamma(n+x)/gamma(x+1)/gamma(n) * p^n * (1-p)^x",
-	"Pascal", "Geometric", "Hypergeometric",
+	"Bernoulli", "a * fact(n)/fact(x)/fact(n-x) * p^x * (1-p)^(n-x)", "a * gamma(n+x)/gamma(x+1)/gamma(n) * p^n * (1-p)^x",
+	"fact(n+x-1)/fact(x)/fact(n-1) * p^n * (1-p)^x", "Geometric", "Hypergeometric",
 	"Logarithmic", "a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)", "a/2/s * sech(pi/2*(x-mu)/s)",
 	"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))"};
 
