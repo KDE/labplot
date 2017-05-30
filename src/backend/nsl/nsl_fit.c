@@ -590,6 +590,20 @@ double nsl_fit_model_binomial_param_deriv(int param, double k, double p, double 
 
 	return 0;
 }
+double nsl_fit_model_negative_binomial_param_deriv(int param, double k, double p, double n, double A, double weight) {
+	if (k < 0 || k > n || n < 0 || p < 0 || p > 1.)
+		return 0;
+
+	double norm = A * weight * gsl_sf_gamma(n+k)/gsl_sf_gamma(k+1.)/gsl_sf_gamma(n);
+	if (param == 0)
+		return - norm * pow(p, n-1.) * pow(1.-p, k-1.) * (n*(p-1.) + k*p);
+	if (param == 1)
+		return norm * pow(p, n) * pow(1.-p, k) * (log(p) - gsl_sf_psi(n) + gsl_sf_psi(n+k));
+	if (param == 2)
+		return weight * gsl_ran_negative_binomial_pdf(k, p, n);
+
+	return 0;
+}
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double weight) {
 	double norm = weight/2./s, y = M_PI/2.*(x-mu)/s;
 

@@ -321,7 +321,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("0.5");
 		break;
 	case nsl_sf_stats_binomial:
-	case nsl_sf_stats_negative_bionomial:
+	case nsl_sf_stats_negative_binomial:
 	case nsl_sf_stats_pascal:
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
@@ -653,7 +653,7 @@ void RandomValuesDialog::generate() {
 		}
 		break;
 	}
-	case nsl_sf_stats_negative_bionomial: {
+	case nsl_sf_stats_negative_binomial: {
 		double p = ui.kleParameter1->text().toDouble();
 		double n = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {

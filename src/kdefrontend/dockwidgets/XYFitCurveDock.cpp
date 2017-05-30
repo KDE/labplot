@@ -417,7 +417,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			//TODO: not implemented yet:
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
 				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli ||
-				i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
+				i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
 				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
@@ -847,10 +847,10 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_sf_stats_bernoulli:	// TODO
 			break;
 		case nsl_sf_stats_binomial:
+		case nsl_sf_stats_negative_binomial:
 			m_fitData.paramNames << "p" << "n" << "a";
 			m_fitData.paramNamesUtf8 << "p" << "n" << "A";
 			break;
-		case nsl_sf_stats_negative_bionomial:	// TODO
 		case nsl_sf_stats_pascal:	// TODO
 		case nsl_sf_stats_geometric:	// TODO
 		case nsl_sf_stats_hypergeometric:	// TODO
@@ -899,10 +899,12 @@ void XYFitCurveDock::updateModelEquation() {
 			nsl_sf_stats_distribution type = (nsl_sf_stats_distribution)m_fitData.modelType;
 			if (type == nsl_sf_stats_flat)
 				m_fitData.paramStartValues[0] = -1.0;
-			if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
+			else if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
 				m_fitData.paramStartValues[1] = 0.0;
 			else if (type == nsl_sf_stats_weibull || type == nsl_sf_stats_gumbel2)
 				m_fitData.paramStartValues[2] = 0.0;
+			else if (type == nsl_sf_stats_binomial || type == nsl_sf_stats_negative_binomial)
+				m_fitData.paramStartValues[0] = 0.5;
 		}
 	}
 

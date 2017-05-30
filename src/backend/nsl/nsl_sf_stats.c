@@ -38,7 +38,7 @@ const char* nsl_sf_stats_distribution_name[] = {i18n("Gaussian (Normal)"), i18n(
 const char* nsl_sf_stats_distribution_pic_name[] = {
 	"gaussian", "gaussian_tail", "exponential", "laplace", "exponential_power", "cauchy_lorentz", "rayleigh", "rayleigh_tail", "landau",
 	"levy_alpha_stable", "levy_skew_alpha_stable","gamma", "flat", "lognormal", "chi_squared", "F", "students_t", "beta", "logistic",
-	"pareto", "weibull", "gumbel1", "gumbel2", "poisson", "bernoulli", "binomial", "binomial_negative", "pascal", "geometric",
+	"pareto", "weibull", "gumbel1", "gumbel2", "poisson", "bernoulli", "binomial", "negative_binomial", "pascal", "geometric",
 	"hypergeometric", "logarithmic", "maxwell_boltzmann", "sech", "levy", "frechet"};
 const char* nsl_sf_stats_distribution_equation[] = {
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "2*A/sqrt(2*pi)/s/erfc(a/sqrt(2)/s) * exp(-((x-mu)/s)^2/2) * theta(x-mu-a)", "a*l*exp(-l*(x-mu))",
@@ -49,7 +49,7 @@ const char* nsl_sf_stats_distribution_equation[] = {
 	"F", "a*gamma((n+1)/2)/sqrt(pi*n)/gamma(n/2) * (1+x^2/n)^(-(n+1)/2)", "gamma(a+b)/gamma(a)/gamma(b) * x^(a-1) * (1-x)^(b-1)",
 	"a/4/s * sech((x-mu)/2/s)**2", "a/b * (b/x)^(a+1) * theta(x-b)", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
 	"a/s * exp(-(x-mu)/s - b*exp(-(x-mu)/s))", "A*a*b * (x-mu)^(-a-1) * exp(-b*(x-mu)^(-a))", "a * l^x/gamma(x+1) * exp(-l)",
-	"Bernoulli", "a*gamma(n+1)/gamma(x+1)/gamma(n-x+1) * p^x * (1-p)^(n-x)", "Negative binomial",
+	"Bernoulli", "a*gamma(n+1)/gamma(x+1)/gamma(n-x+1) * p^x * (1-p)^(n-x)", "gamma(n+x)/gamma(x+1)/gamma(n) * p^n * (1-p)^x",
 	"Pascal", "Geometric", "Hypergeometric",
 	"Logarithmic", "a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)", "a/2/s * sech(pi/2*(x-mu)/s)",
 	"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))"};
