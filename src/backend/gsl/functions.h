@@ -86,8 +86,8 @@ double my_acoth(double x) { return gsl_atanh(1./x); }
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
 /* mathematical functions */
-double my_gsl_ldexp(double x, double expo) { return gsl_ldexp(x, (int)expo); }
-double my_gsl_powint(double x, double n) { return gsl_pow_int(x, (int)n); }
+double my_gsl_ldexp(double x, double expo) { return gsl_ldexp(x, round(expo)); }
+double my_gsl_powint(double x, double n) { return gsl_pow_int(x, round(n)); }
 /* Airy functions */
 double airy_Ai(double x) { return gsl_sf_airy_Ai(x, MODE); }
 double airy_Bi(double x) { return gsl_sf_airy_Bi(x, MODE); }
@@ -97,26 +97,26 @@ double airy_Aid(double x) { return gsl_sf_airy_Ai_deriv(x, MODE); }
 double airy_Bid(double x) { return gsl_sf_airy_Bi_deriv(x, MODE); }
 double airy_Aids(double x) { return gsl_sf_airy_Ai_deriv_scaled(x, MODE); }
 double airy_Bids(double x) { return gsl_sf_airy_Bi_deriv_scaled(x, MODE); }
-double airy_0_Ai(double s) { return gsl_sf_airy_zero_Ai((unsigned int)s); }
-double airy_0_Bi(double s) { return gsl_sf_airy_zero_Bi((unsigned int)s); }
-double airy_0_Aid(double s) { return gsl_sf_airy_zero_Ai_deriv((unsigned int)s); }
-double airy_0_Bid(double s) { return gsl_sf_airy_zero_Bi_deriv((unsigned int)s); }
+double airy_0_Ai(double s) { return gsl_sf_airy_zero_Ai(round(s)); }
+double airy_0_Bi(double s) { return gsl_sf_airy_zero_Bi(round(s)); }
+double airy_0_Aid(double s) { return gsl_sf_airy_zero_Ai_deriv(round(s)); }
+double airy_0_Bid(double s) { return gsl_sf_airy_zero_Bi_deriv(round(s)); }
 /* Bessel functions */
-double bessel_Jn(double n, double x) { return gsl_sf_bessel_Jn((int)n, x); }
-double bessel_Yn(double n, double x) { return gsl_sf_bessel_Yn((int)n, x); }
-double bessel_In(double n, double x) { return gsl_sf_bessel_In((int)n, x); }
-double bessel_Ins(double n, double x) { return gsl_sf_bessel_In_scaled((int)n, x); }
-double bessel_Kn(double n, double x) { return gsl_sf_bessel_Kn((int)n, x); }
-double bessel_Kns(double n, double x) { return gsl_sf_bessel_Kn_scaled((int)n, x); }
-double bessel_jl(double l, double x) { return gsl_sf_bessel_jl((int)l, x); }
-double bessel_yl(double l, double x) { return gsl_sf_bessel_yl((int)l, x); }
-double bessel_ils(double l, double x) { return gsl_sf_bessel_il_scaled((int)l, x); }
-double bessel_kls(double l, double x) { return gsl_sf_bessel_kl_scaled((int)l, x); }
-double bessel_0_J0(double s) { return gsl_sf_bessel_zero_J0((unsigned int)s); }
-double bessel_0_J1(double s) { return gsl_sf_bessel_zero_J1((unsigned int)s); }
-double bessel_0_Jnu(double nu, double s) { return gsl_sf_bessel_zero_Jnu(nu, (unsigned int)s); }
+double bessel_Jn(double n, double x) { return gsl_sf_bessel_Jn(round(n), x); }
+double bessel_Yn(double n, double x) { return gsl_sf_bessel_Yn(round(n), x); }
+double bessel_In(double n, double x) { return gsl_sf_bessel_In(round(n), x); }
+double bessel_Ins(double n, double x) { return gsl_sf_bessel_In_scaled(round(n), x); }
+double bessel_Kn(double n, double x) { return gsl_sf_bessel_Kn(round(n), x); }
+double bessel_Kns(double n, double x) { return gsl_sf_bessel_Kn_scaled(round(n), x); }
+double bessel_jl(double l, double x) { return gsl_sf_bessel_jl(round(l), x); }
+double bessel_yl(double l, double x) { return gsl_sf_bessel_yl(round(l), x); }
+double bessel_ils(double l, double x) { return gsl_sf_bessel_il_scaled(round(l), x); }
+double bessel_kls(double l, double x) { return gsl_sf_bessel_kl_scaled(round(l), x); }
+double bessel_0_J0(double s) { return gsl_sf_bessel_zero_J0(round(s)); }
+double bessel_0_J1(double s) { return gsl_sf_bessel_zero_J1(round(s)); }
+double bessel_0_Jnu(double nu, double s) { return gsl_sf_bessel_zero_Jnu(nu, round(s)); }
 
-double hydrogenicR(double n, double l, double z, double r) { return gsl_sf_hydrogenicR((int)n, (int)l, z, r); }
+double hydrogenicR(double n, double l, double z, double r) { return gsl_sf_hydrogenicR(round(n), round(l), z, r); }
 /* elliptic integrals */
 double ellint_Kc(double x) { return gsl_sf_ellint_Kcomp(x, MODE); }
 double ellint_Ec(double x) { return gsl_sf_ellint_Ecomp(x, MODE); }
@@ -136,50 +136,50 @@ double ellint_RD(double x, double y, double z) { return gsl_sf_ellint_RD(x, y, z
 double ellint_RF(double x, double y, double z) { return gsl_sf_ellint_RF(x, y, z, MODE); }
 double ellint_RJ(double x, double y, double z, double p) { return gsl_sf_ellint_RJ(x, y, z, p, MODE); }
 
-double exprel_n(double n, double x) { return gsl_sf_exprel_n((int)n, x); }
-double fermi_dirac_int(double j, double x) { return gsl_sf_fermi_dirac_int((int)j, x); }
+double exprel_n(double n, double x) { return gsl_sf_exprel_n(round(n), x); }
+double fermi_dirac_int(double j, double x) { return gsl_sf_fermi_dirac_int(round(j), x); }
 /* gamma */
-double fact(double n) { return gsl_sf_fact((unsigned int)n); }
-double doublefact(double n) { return gsl_sf_doublefact((unsigned int)n); }
-double lnfact(double n) { return gsl_sf_lnfact((unsigned int)n); }
-double lndoublefact(double n) { return gsl_sf_lndoublefact((unsigned int)n); }
-double choose(double n, double m) { return gsl_sf_choose((unsigned int)n, (unsigned int)m); }
-double lnchoose(double n, double m) { return gsl_sf_lnchoose((unsigned int)n, (unsigned int)m); }
-double taylorcoeff(double n, double x) { return gsl_sf_taylorcoeff((int)n, x); }
+double fact(double n) { return gsl_sf_fact(round(n)); }
+double doublefact(double n) { return gsl_sf_doublefact(round(n)); }
+double lnfact(double n) { return gsl_sf_lnfact(round(n)); }
+double lndoublefact(double n) { return gsl_sf_lndoublefact(round(n)); }
+double choose(double n, double m) { return gsl_sf_choose(round(n), round(m)); }
+double lnchoose(double n, double m) { return gsl_sf_lnchoose(round(n), round(m)); }
+double taylorcoeff(double n, double x) { return gsl_sf_taylorcoeff(round(n), x); }
 
-double gegenpoly_n(double n, double l, double x) { return gsl_sf_gegenpoly_n((int)n, l, x); }
-double hyperg_1F1i(double m, double n, double x) { return gsl_sf_hyperg_1F1_int((int)m, (int)n, x); }
-double hyperg_Ui(double m, double n, double x) { return gsl_sf_hyperg_U_int((int)m, (int)n, x); }
-double laguerre_n(double n, double a, double x) { return gsl_sf_laguerre_n((int)n, a, x); }
+double gegenpoly_n(double n, double l, double x) { return gsl_sf_gegenpoly_n(round(n), l, x); }
+double hyperg_1F1i(double m, double n, double x) { return gsl_sf_hyperg_1F1_int(round(m), round(n), x); }
+double hyperg_Ui(double m, double n, double x) { return gsl_sf_hyperg_U_int(round(m), round(n), x); }
+double laguerre_n(double n, double a, double x) { return gsl_sf_laguerre_n(round(n), a, x); }
 
-double legendre_Pl(double l, double x) { return gsl_sf_legendre_Pl((int)l, x); }
-double legendre_Ql(double l, double x) { return gsl_sf_legendre_Ql((int)l, x); }
-double legendre_Plm(double l, double m, double x) { return gsl_sf_legendre_Plm((int)l, (int)m, x); }
-double legendre_sphPlm(double l, double m, double x) { return gsl_sf_legendre_sphPlm((int)l, (int)m, x); }
-double conicalP_sphreg(double l, double L, double x) { return gsl_sf_conicalP_sph_reg((int)l, L, x); }
-double conicalP_cylreg(double m, double l, double x) { return gsl_sf_conicalP_sph_reg((int)m, l, x); }
-double legendre_H3d(double l,  double L, double e) { return gsl_sf_legendre_H3d((int)l, L, e); }
+double legendre_Pl(double l, double x) { return gsl_sf_legendre_Pl(round(l), x); }
+double legendre_Ql(double l, double x) { return gsl_sf_legendre_Ql(round(l), x); }
+double legendre_Plm(double l, double m, double x) { return gsl_sf_legendre_Plm(round(l), round(m), x); }
+double legendre_sphPlm(double l, double m, double x) { return gsl_sf_legendre_sphPlm(round(l), round(m), x); }
+double conicalP_sphreg(double l, double L, double x) { return gsl_sf_conicalP_sph_reg(round(l), L, x); }
+double conicalP_cylreg(double m, double l, double x) { return gsl_sf_conicalP_sph_reg(round(m), l, x); }
+double legendre_H3d(double l,  double L, double e) { return gsl_sf_legendre_H3d(round(l), L, e); }
 
-double powint(double x, double n) { return gsl_sf_pow_int(x, (int)n); }
-double psiint(double n) { return gsl_sf_psi_int((int)n); }
-double psi1int(double n) { return gsl_sf_psi_1_int((int)n); }
-double psin(double n,  double x) { return gsl_sf_psi_n((int)n, x); }
+double powint(double x, double n) { return gsl_sf_pow_int(x, round(n)); }
+double psiint(double n) { return gsl_sf_psi_int(round(n)); }
+double psi1int(double n) { return gsl_sf_psi_1_int(round(n)); }
+double psin(double n,  double x) { return gsl_sf_psi_n(round(n), x); }
 
-double zetaint(double n) { return gsl_sf_zeta_int((int)n); }
-double zetam1int(double n) { return gsl_sf_zetam1_int((int)n); }
-double etaint(double n) { return gsl_sf_eta_int((int)n); }
+double zetaint(double n) { return gsl_sf_zeta_int(round(n)); }
+double zetam1int(double n) { return gsl_sf_zetam1_int(round(n)); }
+double etaint(double n) { return gsl_sf_eta_int(round(n)); }
 
 /* random number distributions */
-double poisson(double k, double m) { return gsl_ran_poisson_pdf((unsigned int)k, m); }
-double bernoulli(double k, double p) { return gsl_ran_bernoulli_pdf((unsigned int)k, p); }
-double binomial(double k, double p, double n) { return gsl_ran_binomial_pdf((unsigned int)k, p, (unsigned int)n); }
-double negative_binomial(double k, double p, double n) { return gsl_ran_negative_binomial_pdf((unsigned int)k, p, n); }
-double pascal(double k, double p, double n) { return gsl_ran_pascal_pdf((unsigned int)k, p, (unsigned int)n); }
-double geometric(double k, double p) { return gsl_ran_geometric_pdf((unsigned int)k, p); }
+double poisson(double k, double m) { return gsl_ran_poisson_pdf(round(k), m); }
+double bernoulli(double k, double p) { return gsl_ran_bernoulli_pdf(round(k), p); }
+double binomial(double k, double p, double n) { return gsl_ran_binomial_pdf(round(k), p, round(n)); }
+double negative_binomial(double k, double p, double n) { return gsl_ran_negative_binomial_pdf(round(k), p, n); }
+double pascal(double k, double p, double n) { return gsl_ran_pascal_pdf(round(k), p, round(n)); }
+double geometric(double k, double p) { return gsl_ran_geometric_pdf(round(k), p); }
 double hypergeometric(double k, double n1, double n2, double t) {
-	return gsl_ran_hypergeometric_pdf((unsigned int)k, (unsigned int)n1, (unsigned int)n2, (unsigned int)t);
+	return gsl_ran_hypergeometric_pdf(round(k), round(n1), round(n2), round(t));
 }
-double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigned int)k, p); }
+double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf(round(k), p); }
 
 /* sync with ExpressionParser.cpp */
 struct func _functions[] = {
@@ -582,28 +582,28 @@ struct func _functions[] = {
 	{"gumbel2Pinv", gsl_cdf_gumbel2_Pinv},
 	{"gumbel2Qinv", gsl_cdf_gumbel2_Qinv},
 	/* Poisson Distribution */
-	{"poisson", gsl_ran_poisson_pdf},
+	{"poisson", poisson},
 	{"poissonP", gsl_cdf_poisson_P},
 	{"poissonQ", gsl_cdf_poisson_Q},
 	/* Bernoulli Distribution */
 	{"bernoulli", bernoulli},
 	/* Binomial Distribution */
-	{"binomial", gsl_ran_binomial_pdf},
+	{"binomial", binomial},
 	{"binomialP", gsl_cdf_binomial_P},
 	{"binomialQ", gsl_cdf_binomial_Q},
-	{"nbinomial", gsl_ran_negative_binomial_pdf},
-	{"nbinomialP", gsl_cdf_negative_binomial_P},
-	{"nbinomialQ", gsl_cdf_negative_binomial_Q},
+	{"negative_binomial", negative_binomial},
+	{"negative_binomialP", gsl_cdf_negative_binomial_P},
+	{"negative_binomialQ", gsl_cdf_negative_binomial_Q},
 	/* Pascal Distribution */
-	{"pascal", gsl_ran_pascal_pdf},
+	{"pascal", pascal},
 	{"pascalP", gsl_cdf_pascal_P},
 	{"pascalQ", gsl_cdf_pascal_Q},
 	/* Geometric Distribution */
-	{"geometric", gsl_ran_geometric_pdf},
+	{"geometric", geometric},
 	{"geometricP", gsl_cdf_geometric_P},
 	{"geometricQ", gsl_cdf_geometric_Q},
 	/* Hypergeometric Distribution */
-	{"hypergeometric", gsl_ran_hypergeometric_pdf},
+	{"hypergeometric", hypergeometric},
 	{"hypergeometricP", gsl_cdf_hypergeometric_P},
 	{"hypergeometricQ", gsl_cdf_hypergeometric_Q},
 	/* Logarithmic Distribution */

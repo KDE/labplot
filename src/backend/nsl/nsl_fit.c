@@ -579,14 +579,16 @@ double nsl_fit_model_gumbel2_param_deriv(int param, double x, double a, double b
 double nsl_fit_model_binomial_param_deriv(int param, double k, double p, double n, double A, double weight) {
 	if (k < 0 || k > n || n < 0 || p < 0 || p > 1.)
 		return 0;
+	k = round(k);
+	n = round(n);
 
-	double norm = weight * gsl_sf_gamma(n+1.)/gsl_sf_gamma(n-k+1.)/gsl_sf_gamma(k+1.);
+	double norm = weight * gsl_sf_fact(n)/gsl_sf_fact(n-k)/gsl_sf_fact(k);
 	if (param == 0)
 		return A * norm * pow(p, k-1.) * pow(1.-p, n-k-1.) * (k-n*p);
 	if (param == 1)
 		return A * norm * pow(p, k) * pow(1.-p, n-k) * (log(1.-p) + gsl_sf_psi(n+1.) - gsl_sf_psi(n-k+1.));
 	if (param == 2)
-		return norm * pow(p, k) * pow(1.-p, n-k);
+		return weight * gsl_ran_binomial_pdf(k, p, n);
 
 	return 0;
 }
@@ -605,7 +607,7 @@ double nsl_fit_model_negative_binomial_param_deriv(int param, double k, double p
 	return 0;
 }
 double nsl_fit_model_pascal_param_deriv(int param, double k, double p, double n, double A, double weight) {
-	return nsl_fit_model_negative_binomial_param_deriv(param, k, p, (int)n, A, weight);
+	return nsl_fit_model_negative_binomial_param_deriv(param, k, p, round(n), A, weight);
 }
 double nsl_fit_model_geometric_param_deriv(int param, double k, double p, double A, double weight) {
 	if (param == 0)
