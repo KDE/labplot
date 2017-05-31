@@ -416,7 +416,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: not implemented yet:
 			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
-				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli || i == nsl_sf_stats_hypergeometric) {
+				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 			}
@@ -855,7 +855,9 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "p" << "a";
 			m_fitData.paramNamesUtf8 << "p" << "A";
 			break;
-		case nsl_sf_stats_hypergeometric:	// TODO
+		case nsl_sf_stats_hypergeometric:
+			m_fitData.paramNames << "n1" << "n2" << "t" << "a";
+			m_fitData.paramNamesUtf8 << "n" + QString::fromUtf8("\u2081") << "n" + QString::fromUtf8("\u2082") << "t" << "A";
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
 			m_fitData.paramNames << "s" << "a";

@@ -617,6 +617,22 @@ double nsl_fit_model_geometric_param_deriv(int param, double k, double p, double
 
 	return 0;
 }
+double nsl_fit_model_hypergeometric_param_deriv(int param, double k, double n1, double n2, double t, double A, double weight) {
+	if (t > n1 + n2)
+		return 0;
+
+	double norm = weight * gsl_ran_hypergeometric_pdf(k, n1, n2, t);
+	if (param == 0)
+		return A * norm * (gsl_sf_psi(n1+1.) - gsl_sf_psi(n1-k+1.) - gsl_sf_psi(n1+n2+1.) + gsl_sf_psi(n1+n2-t+1.));
+	if (param == 1)
+		return A * norm * (gsl_sf_psi(n2+1.) - gsl_sf_psi(n2+k-t+1.) - gsl_sf_psi(n1+n2+1.) + gsl_sf_psi(n1+n2-t+1.));
+	if (param == 2)
+		return A * norm * (gsl_sf_psi(n2+k-t+1.) - gsl_sf_psi(n1+n2-t+1.) - gsl_sf_psi(t-k+1.) + gsl_sf_psi(t+1.));
+	if (param == 3)
+		return norm;
+
+	return 0;
+}
 double nsl_fit_model_logarithmic_param_deriv(int param, double k, double p, double A, double weight) {
 	if (param == 0)
 		return A * weight * pow(1.-p, k-2.) * (1.-k*p);
