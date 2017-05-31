@@ -697,6 +697,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_fdist: {
+			double n1 = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double n2 = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_fdist_param_deriv(j, x, n1, n2, a, weight[i]));
+				}
+			}
+			break;
+		}
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto: {
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
@@ -905,10 +921,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		// TODO: not implemented yet:
+		// unused distributions
 		case nsl_sf_stats_levy_alpha_stable:
 		case nsl_sf_stats_levy_skew_alpha_stable:
-		case nsl_sf_stats_fdist:
 		case nsl_sf_stats_bernoulli:
 			break;
 		}

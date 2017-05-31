@@ -44,8 +44,8 @@ double my_random() { return random(); }
 double my_drand() { return random()/(double)RAND_MAX; }
 /* math.h */
 #ifndef _WIN32
-double my_jn(double n, double x) { return jn((int)n, x); }
-double my_yn(double n,double x) { return yn((int)n, x); }
+double my_jn(double n, double x) { return jn(round(n), x); }
+double my_yn(double n,double x) { return yn(round(n), x); }
 double my_sgn(double x) { return copysign(1.0, x); }
 #else
 double my_sgn(double x) {

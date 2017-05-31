@@ -410,13 +410,12 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
 
-		// non-used items are disabled here
+		// not-used items are disabled here
         	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			//TODO: not implemented yet:
-			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable ||
-				i == nsl_sf_stats_fdist || i == nsl_sf_stats_bernoulli) {
+			// unused distributions
+			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 			}
@@ -767,7 +766,6 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch ((nsl_sf_stats_distribution)m_fitData.modelType) {
-		// TODO: add missing GSL distributions (see nsl_sf_stats.c)
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_rayleigh_tail:
@@ -802,8 +800,9 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "a";
 			m_fitData.paramNamesUtf8 << "A";
 			break;
-		case nsl_sf_stats_levy_alpha_stable:	// TODO
-		case nsl_sf_stats_levy_skew_alpha_stable:	// TODO
+		case nsl_sf_stats_levy_alpha_stable:	// unused distributions
+		case nsl_sf_stats_levy_skew_alpha_stable:
+		case nsl_sf_stats_bernoulli:
 			break;
 		case nsl_sf_stats_gamma:
 			m_fitData.paramNames << "t" << "k" << "a";
@@ -816,7 +815,10 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "n" << "a";
 			m_fitData.paramNamesUtf8 << "n" << "A";
 			break;
-		case nsl_sf_stats_fdist:	// TODO
+		case nsl_sf_stats_fdist:
+			m_fitData.paramNames << "n1" << "n2" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2081")
+				<< QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2082") << "A";
 			break;
 		case nsl_sf_stats_tdist:
 			m_fitData.paramNames << "n" << "a";
@@ -841,8 +843,6 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
-			break;
-		case nsl_sf_stats_bernoulli:	// TODO
 			break;
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_binomial:

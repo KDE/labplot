@@ -109,6 +109,7 @@ double nsl_fit_model_rayleigh_tail_param_deriv(int param, double x, double s, do
 double nsl_fit_model_landau_param_deriv(int param, double x, double weight);
 double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double weight);
 double nsl_fit_model_students_t_param_deriv(int param, double x, double n, double a, double weight);
+double nsl_fit_model_fdist_param_deriv(int param, double x, double n1, double n2, double a, double weight);
 double nsl_fit_model_beta_param_deriv(int param, double x, double a, double b, double A, double weight);
 double nsl_fit_model_pareto_param_deriv(int param, double x, double a, double b, double A, double weight);
 double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double weight);
