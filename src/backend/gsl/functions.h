@@ -4,7 +4,7 @@
     Description          : definition of functions
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -35,167 +35,22 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
-
-/********* redefine functions to use double parameter *********/
-
-/* stdlib.h */
-double my_rand() { return rand(); }
-double my_random() { return random(); }
-double my_drand() { return random()/(double)RAND_MAX; }
-/* math.h */
-#ifndef _WIN32
-double my_jn(double n, double x) { return jn(round(n), x); }
-double my_yn(double n,double x) { return yn(round(n), x); }
-double my_sgn(double x) { return copysign(1.0, x); }
-#else
-double my_sgn(double x) {
-	if (x > 0)
-		return 1;
-	else if (x < 0)
-		return -1;
-	else
-		return 0;
-}
-#endif
-double my_theta(double x) {
-	if (x >= 0)
-		return 1;
-	else
-		return 0;
-}
-
-/* missing trig. functions */
-double my_sec(double x) { return 1./cos(x); }
-double my_csc(double x) { return 1./sin(x); }
-double my_cot(double x) { return 1./tan(x); }
-double my_asec(double x) { return acos(1./x); }
-double my_acsc(double x) { return asin(1./x); }
-double my_acot(double x) {
-	if (x > 0)
-		return atan(1./x);
-	else
-		return atan(1./x) + M_PI;
-}
-double my_sech(double x) { return 1./cosh(x); }
-double my_csch(double x) { return 1./sinh(x); }
-double my_coth(double x) { return 1./tanh(x); }
-double my_asech(double x) { return gsl_acosh(1./x); }
-double my_acsch(double x) { return gsl_asinh(1./x); }
-double my_acoth(double x) { return gsl_atanh(1./x); }
-
-/* wrapper for GSL functions with integer parameters */
-#define MODE GSL_PREC_DOUBLE
-/* mathematical functions */
-double my_gsl_ldexp(double x, double expo) { return gsl_ldexp(x, round(expo)); }
-double my_gsl_powint(double x, double n) { return gsl_pow_int(x, round(n)); }
-/* Airy functions */
-double airy_Ai(double x) { return gsl_sf_airy_Ai(x, MODE); }
-double airy_Bi(double x) { return gsl_sf_airy_Bi(x, MODE); }
-double airy_Ais(double x) { return gsl_sf_airy_Ai_scaled(x, MODE); }
-double airy_Bis(double x) { return gsl_sf_airy_Bi_scaled(x, MODE); }
-double airy_Aid(double x) { return gsl_sf_airy_Ai_deriv(x, MODE); }
-double airy_Bid(double x) { return gsl_sf_airy_Bi_deriv(x, MODE); }
-double airy_Aids(double x) { return gsl_sf_airy_Ai_deriv_scaled(x, MODE); }
-double airy_Bids(double x) { return gsl_sf_airy_Bi_deriv_scaled(x, MODE); }
-double airy_0_Ai(double s) { return gsl_sf_airy_zero_Ai(round(s)); }
-double airy_0_Bi(double s) { return gsl_sf_airy_zero_Bi(round(s)); }
-double airy_0_Aid(double s) { return gsl_sf_airy_zero_Ai_deriv(round(s)); }
-double airy_0_Bid(double s) { return gsl_sf_airy_zero_Bi_deriv(round(s)); }
-/* Bessel functions */
-double bessel_Jn(double n, double x) { return gsl_sf_bessel_Jn(round(n), x); }
-double bessel_Yn(double n, double x) { return gsl_sf_bessel_Yn(round(n), x); }
-double bessel_In(double n, double x) { return gsl_sf_bessel_In(round(n), x); }
-double bessel_Ins(double n, double x) { return gsl_sf_bessel_In_scaled(round(n), x); }
-double bessel_Kn(double n, double x) { return gsl_sf_bessel_Kn(round(n), x); }
-double bessel_Kns(double n, double x) { return gsl_sf_bessel_Kn_scaled(round(n), x); }
-double bessel_jl(double l, double x) { return gsl_sf_bessel_jl(round(l), x); }
-double bessel_yl(double l, double x) { return gsl_sf_bessel_yl(round(l), x); }
-double bessel_ils(double l, double x) { return gsl_sf_bessel_il_scaled(round(l), x); }
-double bessel_kls(double l, double x) { return gsl_sf_bessel_kl_scaled(round(l), x); }
-double bessel_0_J0(double s) { return gsl_sf_bessel_zero_J0(round(s)); }
-double bessel_0_J1(double s) { return gsl_sf_bessel_zero_J1(round(s)); }
-double bessel_0_Jnu(double nu, double s) { return gsl_sf_bessel_zero_Jnu(nu, round(s)); }
-
-double hydrogenicR(double n, double l, double z, double r) { return gsl_sf_hydrogenicR(round(n), round(l), z, r); }
-/* elliptic integrals */
-double ellint_Kc(double x) { return gsl_sf_ellint_Kcomp(x, MODE); }
-double ellint_Ec(double x) { return gsl_sf_ellint_Ecomp(x, MODE); }
-double ellint_Pc(double x, double n) { return gsl_sf_ellint_Pcomp(x, n, MODE); }
-double ellint_F(double phi, double k) { return gsl_sf_ellint_F(phi, k, MODE); }
-double ellint_E(double phi, double k) { return gsl_sf_ellint_E(phi, k, MODE); }
-double ellint_P(double phi, double k, double n) { return gsl_sf_ellint_P(phi, k, n, MODE); }
-double ellint_D(double phi, double k) {
-#if GSL_MAJOR_VERSION >= 2
-	return gsl_sf_ellint_D(phi,k,MODE);
-#else
-	return gsl_sf_ellint_D(phi,k,0.0,MODE);
-#endif
-}
-double ellint_RC(double x, double y) { return gsl_sf_ellint_RC(x, y, MODE); }
-double ellint_RD(double x, double y, double z) { return gsl_sf_ellint_RD(x, y, z, MODE); }
-double ellint_RF(double x, double y, double z) { return gsl_sf_ellint_RF(x, y, z, MODE); }
-double ellint_RJ(double x, double y, double z, double p) { return gsl_sf_ellint_RJ(x, y, z, p, MODE); }
-
-double exprel_n(double n, double x) { return gsl_sf_exprel_n(round(n), x); }
-double fermi_dirac_int(double j, double x) { return gsl_sf_fermi_dirac_int(round(j), x); }
-/* gamma */
-double fact(double n) { return gsl_sf_fact(round(n)); }
-double doublefact(double n) { return gsl_sf_doublefact(round(n)); }
-double lnfact(double n) { return gsl_sf_lnfact(round(n)); }
-double lndoublefact(double n) { return gsl_sf_lndoublefact(round(n)); }
-double choose(double n, double m) { return gsl_sf_choose(round(n), round(m)); }
-double lnchoose(double n, double m) { return gsl_sf_lnchoose(round(n), round(m)); }
-double taylorcoeff(double n, double x) { return gsl_sf_taylorcoeff(round(n), x); }
-
-double gegenpoly_n(double n, double l, double x) { return gsl_sf_gegenpoly_n(round(n), l, x); }
-double hyperg_1F1i(double m, double n, double x) { return gsl_sf_hyperg_1F1_int(round(m), round(n), x); }
-double hyperg_Ui(double m, double n, double x) { return gsl_sf_hyperg_U_int(round(m), round(n), x); }
-double laguerre_n(double n, double a, double x) { return gsl_sf_laguerre_n(round(n), a, x); }
-
-double legendre_Pl(double l, double x) { return gsl_sf_legendre_Pl(round(l), x); }
-double legendre_Ql(double l, double x) { return gsl_sf_legendre_Ql(round(l), x); }
-double legendre_Plm(double l, double m, double x) { return gsl_sf_legendre_Plm(round(l), round(m), x); }
-double legendre_sphPlm(double l, double m, double x) { return gsl_sf_legendre_sphPlm(round(l), round(m), x); }
-double conicalP_sphreg(double l, double L, double x) { return gsl_sf_conicalP_sph_reg(round(l), L, x); }
-double conicalP_cylreg(double m, double l, double x) { return gsl_sf_conicalP_sph_reg(round(m), l, x); }
-double legendre_H3d(double l,  double L, double e) { return gsl_sf_legendre_H3d(round(l), L, e); }
-
-double powint(double x, double n) { return gsl_sf_pow_int(x, round(n)); }
-double psiint(double n) { return gsl_sf_psi_int(round(n)); }
-double psi1int(double n) { return gsl_sf_psi_1_int(round(n)); }
-double psin(double n,  double x) { return gsl_sf_psi_n(round(n), x); }
-
-double zetaint(double n) { return gsl_sf_zeta_int(round(n)); }
-double zetam1int(double n) { return gsl_sf_zetam1_int(round(n)); }
-double etaint(double n) { return gsl_sf_eta_int(round(n)); }
-
-/* random number distributions */
-double poisson(double k, double m) { return gsl_ran_poisson_pdf(round(k), m); }
-double bernoulli(double k, double p) { return gsl_ran_bernoulli_pdf(round(k), p); }
-double binomial(double k, double p, double n) { return gsl_ran_binomial_pdf(round(k), p, round(n)); }
-double negative_binomial(double k, double p, double n) { return gsl_ran_negative_binomial_pdf(round(k), p, n); }
-double pascal(double k, double p, double n) { return gsl_ran_pascal_pdf(round(k), p, round(n)); }
-double geometric(double k, double p) { return gsl_ran_geometric_pdf(round(k), p); }
-double hypergeometric(double k, double n1, double n2, double t) {
-	return gsl_ran_hypergeometric_pdf(round(k), round(n1), round(n2), round(t));
-}
-double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf(round(k), p); }
+#include "backend/nsl/nsl_sf_basic.h"
 
 /* sync with ExpressionParser.cpp */
 struct func _functions[] = {
-	/* Standard functions */
-	/* stdlib.h */
-	{"rand", my_rand},
-	{"random", my_random},
-	{"drand", my_drand},
+	/* standard functions */
+	{"rand", nsl_sf_rand},
+	{"random", nsl_sf_random},
+	{"drand", nsl_sf_drand},
 	/* math.h */
 	{"ceil", ceil},
 	{"fabs", fabs},
 	{"log10", log10},
 	{"pow", pow},
 	{"sqrt", sqrt},
-	{"sgn", my_sgn},
-	{"theta", my_theta},
+	{"sgn", nsl_sf_sgn},
+	{"theta", nsl_sf_theta},
 #ifndef _WIN32
 	{"cbrt", cbrt},
 	{"logb", logb},
@@ -205,8 +60,8 @@ struct func _functions[] = {
 #endif
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
 	{"log1p", gsl_log1p},
-	{"ldexp", my_gsl_ldexp},
-	{"powint", my_gsl_powint},
+	{"ldexp", nsl_sf_ldexp},
+	{"powint", nsl_sf_powint},
 	{"pow2", gsl_pow_2},
 	{"pow3", gsl_pow_3},
 	{"pow4", gsl_pow_4},
@@ -217,53 +72,53 @@ struct func _functions[] = {
 	{"pow9", gsl_pow_9},
 	/* GSL special functions: see http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html */
 	/* Airy Functions and Derivatives */
-	{"Ai", airy_Ai},
-	{"Bi", airy_Bi},
-	{"Ais", airy_Ais},
-	{"Bis", airy_Bis},
-	{"Aid", airy_Aid},
-	{"Bid", airy_Bid},
-	{"Aids", airy_Aids},
-	{"Bids", airy_Bids},
-	{"Ai0", airy_0_Ai},
-	{"Bi0", airy_0_Bi},
-	{"Aid0", airy_0_Aid},
-	{"Bid0", airy_0_Bid},
+	{"Ai", nsl_sf_airy_Ai},
+	{"Bi", nsl_sf_airy_Bi},
+	{"Ais", nsl_sf_airy_Ais},
+	{"Bis", nsl_sf_airy_Bis},
+	{"Aid", nsl_sf_airy_Aid},
+	{"Bid", nsl_sf_airy_Bid},
+	{"Aids", nsl_sf_airy_Aids},
+	{"Bids", nsl_sf_airy_Bids},
+	{"Ai0", nsl_sf_airy_0_Ai},
+	{"Bi0", nsl_sf_airy_0_Bi},
+	{"Aid0", nsl_sf_airy_0_Aid},
+	{"Bid0", nsl_sf_airy_0_Bid},
 	/* Bessel Functions */
 	{"J0", gsl_sf_bessel_J0},
 	{"J1", gsl_sf_bessel_J1},
-	{"Jn", bessel_Jn},
+	{"Jn", nsl_sf_bessel_Jn},
 	{"Y0", gsl_sf_bessel_Y0},
 	{"Y1", gsl_sf_bessel_Y1},
-	{"Yn", bessel_Yn},
+	{"Yn", nsl_sf_bessel_Yn},
 	{"I0", gsl_sf_bessel_I0},
 	{"I1", gsl_sf_bessel_I1},
-	{"In", bessel_In},
+	{"In", nsl_sf_bessel_In},
 	{"I0s", gsl_sf_bessel_I0_scaled},
 	{"I1s", gsl_sf_bessel_I1_scaled},
-	{"Ins", bessel_Ins},
+	{"Ins", nsl_sf_bessel_Ins},
 	{"K0", gsl_sf_bessel_K0},
 	{"K1", gsl_sf_bessel_K1},
-	{"Kn", bessel_Kn},
+	{"Kn", nsl_sf_bessel_Kn},
 	{"K0s", gsl_sf_bessel_K0_scaled},
 	{"K1s", gsl_sf_bessel_K1_scaled},
-	{"Kns", bessel_Kns},
+	{"Kns", nsl_sf_bessel_Kns},
 	{"j0", gsl_sf_bessel_j0},
 	{"j1", gsl_sf_bessel_j1},
 	{"j2", gsl_sf_bessel_j2},
-	{"jl", bessel_jl},
+	{"jl", nsl_sf_bessel_jl},
 	{"y0", gsl_sf_bessel_y0},
 	{"y1", gsl_sf_bessel_y1},
 	{"y2", gsl_sf_bessel_y2},
-	{"yl", bessel_yl},
+	{"yl", nsl_sf_bessel_yl},
 	{"i0s", gsl_sf_bessel_i0_scaled},
 	{"i1s", gsl_sf_bessel_i1_scaled},
 	{"i2s", gsl_sf_bessel_i2_scaled},
-	{"ils", bessel_ils},
+	{"ils", nsl_sf_bessel_ils},
 	{"k0s", gsl_sf_bessel_k0_scaled},
 	{"k1s", gsl_sf_bessel_k1_scaled},
 	{"k2s", gsl_sf_bessel_k2_scaled},
-	{"kls", bessel_kls},
+	{"kls", nsl_sf_bessel_kls},
 	{"Jnu", gsl_sf_bessel_Jnu},
 	{"Ynu", gsl_sf_bessel_Ynu},
 	{"Inu", gsl_sf_bessel_Inu},
@@ -271,14 +126,14 @@ struct func _functions[] = {
 	{"Knu", gsl_sf_bessel_Knu},
 	{"lnKnu", gsl_sf_bessel_lnKnu},
 	{"Knus", gsl_sf_bessel_Knu_scaled},
-	{"J0_0", bessel_0_J0},
-	{"J1_0", bessel_0_J1},
-	{"Jnu_0", bessel_0_Jnu},
+	{"J0_0", nsl_sf_bessel_0_J0},
+	{"J1_0", nsl_sf_bessel_0_J1},
+	{"Jnu_0", nsl_sf_bessel_0_Jnu},
 	/* Clausen functions */
 	{"clausen", gsl_sf_clausen},
 	/* Coulomb functions */
 	{"hydrogenicR_1", gsl_sf_hydrogenicR_1},
-	{"hydrogenicR", hydrogenicR},
+	{"hydrogenicR", nsl_sf_hydrogenicR},
 	{"dawson", gsl_sf_dawson},
 	/* Debye functions */
 	{"D1", gsl_sf_debye_1},
@@ -289,17 +144,17 @@ struct func _functions[] = {
 	{"D6", gsl_sf_debye_6},
 	{"Li2", gsl_sf_dilog},
 	/* Elliptic integrals */
-	{"Kc", ellint_Kc},
-	{"Ec", ellint_Ec},
-	{"Pc", ellint_Pc},
-	{"F", ellint_F},
-	{"E", ellint_E},
-	{"P", ellint_P},
-	{"D", ellint_D},
-	{"RC", ellint_RC},
-	{"RD", ellint_RD},
-	{"RF", ellint_RF},
-	{"RJ", ellint_RJ},
+	{"Kc", nsl_sf_ellint_Kc},
+	{"Ec", nsl_sf_ellint_Ec},
+	{"Pc", nsl_sf_ellint_Pc},
+	{"F", nsl_sf_ellint_F},
+	{"E", nsl_sf_ellint_E},
+	{"P", nsl_sf_ellint_P},
+	{"D", nsl_sf_ellint_D},
+	{"RC", nsl_sf_ellint_RC},
+	{"RD", nsl_sf_ellint_RD},
+	{"RF", nsl_sf_ellint_RF},
+	{"RJ", nsl_sf_ellint_RJ},
 	/* Error functions */
 	{"erf", gsl_sf_erf},
 	{"erfc", gsl_sf_erfc},
@@ -313,7 +168,7 @@ struct func _functions[] = {
 	{"expm1", gsl_expm1},
 	{"exprel", gsl_sf_exprel},
 	{"exprel2", gsl_sf_exprel_2},
-	{"expreln", exprel_n},
+	{"expreln", nsl_sf_exprel_n},
 	/* Exponential Integrals */
 	{"E1", gsl_sf_expint_E1},
 	{"E2", gsl_sf_expint_E2},
@@ -330,7 +185,7 @@ struct func _functions[] = {
 	{"F0", gsl_sf_fermi_dirac_0},
 	{"F1", gsl_sf_fermi_dirac_1},
 	{"F2", gsl_sf_fermi_dirac_2},
-	{"Fj", fermi_dirac_int},
+	{"Fj", nsl_sf_fermi_dirac_int},
 	{"Fmhalf", gsl_sf_fermi_dirac_mhalf},
 	{"Fhalf", gsl_sf_fermi_dirac_half},
 	{"F3half", gsl_sf_fermi_dirac_3half},
@@ -342,13 +197,13 @@ struct func _functions[] = {
 	{"lngamma", gsl_sf_lngamma},
 	{"gammastar", gsl_sf_gammastar},
 	{"gammainv", gsl_sf_gammainv},
-	{"fact", fact},
-	{"doublefact", doublefact},
-	{"lnfact", lnfact},
-	{"lndoublefact", lndoublefact},
-	{"choose", choose},
-	{"lnchoose", lnchoose},
-	{"taylor", taylorcoeff},
+	{"fact", nsl_sf_fact},
+	{"doublefact", nsl_sf_doublefact},
+	{"lnfact", nsl_sf_lnfact},
+	{"lndoublefact", nsl_sf_lndoublefact},
+	{"choose", nsl_sf_choose},
+	{"lnchoose", nsl_sf_lnchoose},
+	{"taylor", nsl_sf_taylorcoeff},
 	{"poch", gsl_sf_poch},
 	{"lnpoch", gsl_sf_lnpoch},
 	{"pochrel", gsl_sf_pochrel},
@@ -362,12 +217,12 @@ struct func _functions[] = {
 	{"C1", gsl_sf_gegenpoly_1},
 	{"C2", gsl_sf_gegenpoly_2},
 	{"C3", gsl_sf_gegenpoly_3},
-	{"Cn", gegenpoly_n},
+	{"Cn", nsl_sf_gegenpoly_n},
 	/* Hypergeometric Functions */
 	{"hyperg_0F1", gsl_sf_hyperg_0F1},
-	{"hyperg_1F1i", hyperg_1F1i},
+	{"hyperg_1F1i", nsl_sf_hyperg_1F1i},
 	{"hyperg_1F1", gsl_sf_hyperg_1F1},
-	{"hyperg_Ui", hyperg_Ui},
+	{"hyperg_Ui", nsl_sf_hyperg_Ui},
 	{"hyperg_U", gsl_sf_hyperg_U},
 	{"hyperg_2F1", gsl_sf_hyperg_2F1},
 	{"hyperg_2F1c", gsl_sf_hyperg_2F1_conj},
@@ -385,35 +240,35 @@ struct func _functions[] = {
 	{"P1", gsl_sf_legendre_P1},
 	{"P2", gsl_sf_legendre_P2},
 	{"P3", gsl_sf_legendre_P3},
-	{"Pl", legendre_Pl},
+	{"Pl", nsl_sf_legendre_Pl},
 	{"Q0", gsl_sf_legendre_Q0},
 	{"Q1", gsl_sf_legendre_Q1},
-	{"Ql", legendre_Ql},
-	{"Plm", legendre_Plm},
-	{"Pslm", legendre_sphPlm},
+	{"Ql", nsl_sf_legendre_Ql},
+	{"Plm", nsl_sf_legendre_Plm},
+	{"Pslm", nsl_sf_legendre_sphPlm},
 	{"Phalf", gsl_sf_conicalP_half},
 	{"Pmhalf", gsl_sf_conicalP_mhalf},
 	{"Pc0", gsl_sf_conicalP_0},
 	{"Pc1", gsl_sf_conicalP_1},
-	{"Psr", conicalP_sphreg},
-	{"Pcr", conicalP_cylreg},
+	{"Psr", nsl_sf_conicalP_sphreg},
+	{"Pcr", nsl_sf_conicalP_cylreg},
 	{"H3d0", gsl_sf_legendre_H3d_0},
 	{"H3d1", gsl_sf_legendre_H3d_1},
-	{"H3d", legendre_H3d},
+	{"H3d", nsl_sf_legendre_H3d},
 	/* Logarithm and Related Functions */
 	{"log", gsl_sf_log},
 	{"logabs", gsl_sf_log_abs},
 	{"logp", gsl_sf_log_1plusx},
 	{"logpm", gsl_sf_log_1plusx_mx},
 	/* Power Function */
-	{"gsl_powint", powint},
+	{"gsl_powint", nsl_sf_powint},
 	/* Psi (Digamma) Function */
-	{"psiint", psiint},
+	{"psiint", nsl_sf_psiint},
 	{"psi", gsl_sf_psi},
 	{"psi1piy", gsl_sf_psi_1piy},
-	{"psi1int", psi1int},
+	{"psi1int", nsl_sf_psi1int},
 	{"psi1", gsl_sf_psi_1},
-	{"psin", psin},
+	{"psin", nsl_sf_psin},
 	/* Synchrotron Functions */
 	{"synchrotron1", gsl_sf_synchrotron_1},
 	{"synchrotron2", gsl_sf_synchrotron_2},
@@ -436,18 +291,18 @@ struct func _functions[] = {
 	{"acosh", gsl_acosh},
 	{"asinh", gsl_asinh},
 	{"atanh", gsl_atanh},
-	{"sec", my_sec},
-	{"csc", my_csc},
-	{"cot", my_cot},
-	{"asec", my_asec},
-	{"acsc", my_acsc},
-	{"acot", my_acot},
-	{"sech", my_sech},
-	{"csch", my_csch},
-	{"coth", my_coth},
-	{"asech", my_asech},
-	{"acsch", my_acsch},
-	{"acoth", my_acoth},
+	{"sec", nsl_sf_sec},
+	{"csc", nsl_sf_csc},
+	{"cot", nsl_sf_cot},
+	{"asec", nsl_sf_asec},
+	{"acsc", nsl_sf_acsc},
+	{"acot", nsl_sf_acot},
+	{"sech", nsl_sf_sech},
+	{"csch", nsl_sf_csch},
+	{"coth", nsl_sf_coth},
+	{"asech", nsl_sf_asech},
+	{"acsch", nsl_sf_acsch},
+	{"acoth", nsl_sf_acoth},
 	{"sinc", gsl_sf_sinc},
 	{"logsinh", gsl_sf_lnsinh},
 	{"logcosh", gsl_sf_lncosh},
@@ -456,12 +311,12 @@ struct func _functions[] = {
 	{"anglesymm", gsl_sf_angle_restrict_symm},
 	{"anglepos", gsl_sf_angle_restrict_pos},
 	/* Zeta Functions */
-	{"zetaint", zetaint},
+	{"zetaint", nsl_sf_zetaint},
 	{"zeta", gsl_sf_zeta},
-	{"zetam1int", zetam1int},
+	{"zetam1int", nsl_sf_zetam1int},
 	{"zetam1", gsl_sf_zetam1},
 	{"hzeta", gsl_sf_hzeta},
-	{"etaint", etaint},
+	{"etaint", nsl_sf_etaint},
 	{"eta", gsl_sf_eta},
 
 	/* GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html */
@@ -582,32 +437,32 @@ struct func _functions[] = {
 	{"gumbel2Pinv", gsl_cdf_gumbel2_Pinv},
 	{"gumbel2Qinv", gsl_cdf_gumbel2_Qinv},
 	/* Poisson Distribution */
-	{"poisson", poisson},
+	{"poisson", nsl_sf_poisson},
 	{"poissonP", gsl_cdf_poisson_P},
 	{"poissonQ", gsl_cdf_poisson_Q},
 	/* Bernoulli Distribution */
-	{"bernoulli", bernoulli},
+	{"bernoulli", nsl_sf_bernoulli},
 	/* Binomial Distribution */
-	{"binomial", binomial},
+	{"binomial", nsl_sf_binomial},
 	{"binomialP", gsl_cdf_binomial_P},
 	{"binomialQ", gsl_cdf_binomial_Q},
-	{"negative_binomial", negative_binomial},
+	{"negative_binomial", nsl_sf_negative_binomial},
 	{"negative_binomialP", gsl_cdf_negative_binomial_P},
 	{"negative_binomialQ", gsl_cdf_negative_binomial_Q},
 	/* Pascal Distribution */
-	{"pascal", pascal},
+	{"pascal", nsl_sf_pascal},
 	{"pascalP", gsl_cdf_pascal_P},
 	{"pascalQ", gsl_cdf_pascal_Q},
 	/* Geometric Distribution */
-	{"geometric", geometric},
+	{"geometric", nsl_sf_geometric},
 	{"geometricP", gsl_cdf_geometric_P},
 	{"geometricQ", gsl_cdf_geometric_Q},
 	/* Hypergeometric Distribution */
-	{"hypergeometric", hypergeometric},
+	{"hypergeometric", nsl_sf_hypergeometric},
 	{"hypergeometricP", gsl_cdf_hypergeometric_P},
 	{"hypergeometricQ", gsl_cdf_hypergeometric_Q},
 	/* Logarithmic Distribution */
-	{"logarithmic", logarithmic},
+	{"logarithmic", nsl_sf_logarithmic},
 	{0, 0}
 };
 
