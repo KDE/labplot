@@ -311,7 +311,7 @@ IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
 ENDIF ()
 # ${OPJ_LIBRARY}
-target_link_libraries( labplot2 origin )
+target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
 
 ############## installation ################################
 

@@ -34,26 +34,26 @@ set (devel-headers
 	)
 
 # dynamic library
-add_library (origin SHARED ${sources})
-set_target_properties(origin PROPERTIES
-	VERSION ${LIBORIGIN_VERSION_MAJOR}.${LIBORIGIN_VERSION_MINOR}.${LIBORIGIN_VERSION_BUGFIX}
-	SOVERSION ${LIBORIGIN_VERSION_MAJOR} )
+#add_library (origin SHARED ${sources})
+#set_target_properties(origin PROPERTIES
+#	VERSION ${LIBORIGIN_VERSION_MAJOR}.${LIBORIGIN_VERSION_MINOR}.${LIBORIGIN_VERSION_BUGFIX}
+#	SOVERSION ${LIBORIGIN_VERSION_MAJOR} )
 
 # static library
 add_library (origin-static STATIC ${sources})
 set_target_properties(origin-static PROPERTIES OUTPUT_NAME "origin" POSITION_INDEPENDENT_CODE ON)
 
 # install libraries
-install(TARGETS origin origin-static DESTINATION lib)
+#install(TARGETS origin origin-static DESTINATION lib)
 
 # install headers
-install(FILES ${devel-headers} DESTINATION include/liborigin)
+#install(FILES ${devel-headers} DESTINATION include/liborigin)
 
 # command line util
-add_executable(opj2dat opj2dat.cpp)
-target_link_libraries (opj2dat origin-static)
+#add_executable(opj2dat opj2dat.cpp)
+#target_link_libraries (opj2dat origin-static)
 
-install(TARGETS opj2dat DESTINATION bin)
+#install(TARGETS opj2dat DESTINATION bin)
 
 # documentation
 install(FILES COPYING FORMAT README DESTINATION share/doc/liborigin)
