@@ -57,10 +57,10 @@ install(TARGETS opj2dat DESTINATION bin)
 
 # documentation
 install(FILES COPYING FORMAT README DESTINATION share/doc/liborigin)
-configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-	add_custom_target(doc ALL ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/liborigin)
-endif(DOXYGEN_FOUND)
+#configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+#find_package(Doxygen)
+#if(DOXYGEN_FOUND)
+#	add_custom_target(doc ALL ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+#	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/liborigin)
+#endif(DOXYGEN_FOUND)

@@ -62,6 +62,7 @@
 <Menu name="import"><text>Import</text>
 	<Action name="import_file" />
 	<Action name="import_sql" />
+	<Action name="import_opj" />
 </Menu>
 <Action name="export" />
 <Action name="project" />

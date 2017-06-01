@@ -314,6 +314,10 @@ void MainWin::initActions() {
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
+	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
+	actionCollection()->addAction("import_opj", m_importOpjAction);
+	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importOpjDialog()));
+
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
@@ -427,6 +431,7 @@ void MainWin::initMenus() {
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
 	m_importMenu ->addAction(m_importSqlAction);
+	m_importMenu ->addAction(m_importOpjAction);
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
@@ -512,6 +517,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importFileAction->setEnabled(!b);
 	m_importSqlAction->setEnabled(!b);
+	m_importOpjAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
 	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
@@ -1679,6 +1685,19 @@ void MainWin::importSqlDialog() {
 
 	delete dlg;
 	DEBUG("MainWin::importSqlDialog() DONE");
+}
+
+void MainWin::importOpjDialog() {
+	DEBUG("MainWin::importOpjDialog()");
+
+	//TODO
+
+	// select project file
+
+	// any options?
+	// show version and other infos?
+
+	DEBUG("MainWin::importOpjDialog() DONE");
 }
 
 /*!
