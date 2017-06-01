@@ -54,7 +54,7 @@ include(KDECompilerSettings)
 include(KDECMakeSettings)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fexceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -193,6 +193,7 @@ ENDIF ()
 
 #################################################
 
+add_subdirectory(liborigin)
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
