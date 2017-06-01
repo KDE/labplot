@@ -63,6 +63,8 @@
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
+#include <liborigin/OriginFile.h>
+
 #include <QMdiArea>
 #include <QMenu>
 #include <QDockWidget>
@@ -1690,12 +1692,28 @@ void MainWin::importSqlDialog() {
 void MainWin::importOpjDialog() {
 	DEBUG("MainWin::importOpjDialog()");
 
-	//TODO
-
 	// select project file
-
 	// any options?
 	// show version and other infos?
+        KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
+        QString dir = conf.readEntry("LastOpenDir", "");
+	QString filename = QFileDialog::getOpenFileName(this,i18n("Open Origin project"), dir,
+	               i18n("Origin Projects (*.opj *.OPJ)"));
+
+	if (!filename.isEmpty()) {
+		//TODO
+//		mw->setStatusBarText(QString("Import start ..."));
+		OriginFile opj((const char *)filename.toLocal8Bit());
+		int parse_error = opj.parse();
+//		mw->setStatusBarText(QString("... file parsed. Starting conversion to SciDAVis ..."));
+//		importTables(opj);
+//		importGraphs(opj);
+//		importNotes(opj);
+//		mw->setStatusBarText(QString());
+//		if(filename.endsWith(".opj", Qt::CaseInsensitive))
+//			createProjectTree(opj);
+//		mw->showResults(opj.resultsLogString().c_str(), mw->logWindow->isVisible());
+	}
 
 	DEBUG("MainWin::importOpjDialog() DONE");
 }
