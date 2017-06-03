@@ -42,7 +42,6 @@ extern "C" {
 
 #include <QFont>
 #include <QFontMetrics>
-#include <QThreadPool>
 #include <QIcon>
 #include <QMenu>
 #include <QThreadPool>
@@ -141,6 +140,9 @@ QMenu* Column::createContextMenu() {
 	QMenu* menu = AbstractAspect::createContextMenu();
 	QAction* firstAction = menu->actions().at(1);
 
+	//add actions available in SpreadsheetView
+	emit requestProjectContextMenu(menu);
+
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
@@ -158,6 +160,8 @@ QMenu* Column::createContextMenu() {
 			usedInMenu->addAction(action);
 		}
 	}
+
+	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, usedInMenu);
 	menu->insertSeparator(firstAction);
 

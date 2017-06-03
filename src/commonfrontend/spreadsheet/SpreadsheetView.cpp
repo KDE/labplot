@@ -31,6 +31,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
+#include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 
 #include "backend/core/column/Column.h"
@@ -40,7 +41,6 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 
-#include <QTableView>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QClipboard>
@@ -51,11 +51,11 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPrinter>
+#include <QTableView>
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
 
-#include <QAction>
 #include <KLocale>
 
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
@@ -159,6 +159,9 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+
+	foreach(Column* column, m_spreadsheet->children<Column>())
+		connect(column, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
 
 	//selection relevant connections
 	QItemSelectionModel* sel_model = m_tableView->selectionModel();
@@ -451,6 +454,50 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 }
 
+/*!
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
+ */
+void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
+	QAction* firstAction = menu->actions().at(1);
+	QMenu* submenu = new QMenu(i18n("Generate Data"), this);
+	submenu->insertAction(firstAction, action_fill_row_numbers);
+	submenu->insertAction(firstAction, action_fill_const);
+// 	submenu->insertAction(firstAction, action_fill_random);
+	submenu->insertAction(firstAction, action_fill_equidistant);
+	submenu->insertAction(firstAction, action_fill_random_nonuniform);
+	submenu->insertAction(firstAction, action_fill_function);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
+	menu->insertAction(firstAction, action_reverse_columns);
+	menu->insertAction(firstAction, action_drop_values);
+	menu->insertAction(firstAction, action_mask_values);
+// 	menu->insertAction(firstAction, action_join_columns);
+	menu->insertAction(firstAction, action_normalize_columns);
+
+	submenu = new QMenu(i18n("Sort"), this);
+	submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+	submenu->insertAction(firstAction, action_sort_asc_column);
+	submenu->insertAction(firstAction, action_sort_desc_column);
+	submenu->insertAction(firstAction, action_sort_columns);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
+	menu->insertAction(firstAction, action_statistics_columns);
+
+	action_sort_columns->setVisible(false);
+	action_sort_asc_column->setVisible(true);
+	action_sort_desc_column->setVisible(true);
+
+	//check whether we have non-numeric columns selected and deactivate actions for numeric columns
+	const Column* column = selectedColumns().first();
+	bool numeric = (column->columnMode() == AbstractColumn::Numeric);
+	action_fill_equidistant->setEnabled(numeric);
+	action_fill_random_nonuniform->setEnabled(numeric);
+	action_fill_function->setEnabled(numeric);
+	action_statistics_columns->setVisible(numeric);
+}
+
 //SLOTS
 void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	const Column* col = dynamic_cast<const Column*>(aspect);
@@ -462,6 +509,8 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 		m_tableView->resizeColumnToContents(index);
 	else
 		m_tableView->setColumnWidth(index, col->width());
+
+	connect(col, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
