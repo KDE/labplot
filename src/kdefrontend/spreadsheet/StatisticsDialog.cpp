@@ -36,7 +36,7 @@
 #include <KWindowConfig>
 
 #include <cmath>
-	#include <QDebug>
+
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
 
@@ -46,9 +46,11 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
 
+	QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
+
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Location measures")+
 	                     "</big><b></td>"
 	                     "</tr>"
@@ -97,7 +99,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+						 "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Dispersion measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
@@ -134,7 +136,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Shape measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
