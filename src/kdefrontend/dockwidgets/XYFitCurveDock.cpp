@@ -392,9 +392,8 @@ void XYFitCurveDock::autoRangeChanged() {
 	m_fitData.autoRange = autoRange;
 
 	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
 		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.lXRange2->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
@@ -410,9 +409,8 @@ void XYFitCurveDock::autoRangeChanged() {
 			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
 		}
 	} else {
-		uiGeneralTab.lMin->setEnabled(true);
 		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.lXRange2->setEnabled(true);
 		uiGeneralTab.sbMax->setEnabled(true);
 	}
 
