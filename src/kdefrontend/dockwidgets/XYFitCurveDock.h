@@ -48,8 +48,10 @@ private:
 	void showFitResultSummary(const XYFitCurve::FitResult& fitResult);
 	void showFitResultLog(const XYFitCurve::FitResult& fitResult);
 	void showFitResult();
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
+	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 	TreeViewComboBox* cbXErrorColumn;
@@ -68,6 +70,8 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void dataSourceTypeChanged(int);
+	void dataSourceCurveChanged(const QModelIndex&);
 	void weightChanged(int);
 	void categoryChanged(int);
 	void modelChanged(int);
@@ -94,6 +98,8 @@ private slots:
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveXErrorColumnChanged(const AbstractColumn*);

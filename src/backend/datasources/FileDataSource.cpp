@@ -28,6 +28,7 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/FITSFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/core/Project.h"
 

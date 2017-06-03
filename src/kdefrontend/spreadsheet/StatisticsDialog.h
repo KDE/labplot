@@ -39,18 +39,18 @@ class StatisticsDialog : public KDialog {
 
 public:
 	explicit StatisticsDialog(const QString&, QWidget *parent = 0);
-	void setColumns(const QList<Column*>& columns);
+	~StatisticsDialog();
+	void setColumns(const QList<Column*>&);
 
 private:
-	const QString isNanValue(const double value);
-	QSize sizeHint() const;
+	const QString isNanValue(const double);
 
 	QTabWidget* twStatistics;
 	QString m_htmlText;
 	QList<Column*> m_columns;
 
 private slots:
-	void currentTabChanged(int index);
+	void currentTabChanged(int);
 };
 
 #endif

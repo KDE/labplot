@@ -116,7 +116,6 @@ class XYFitCurve : public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
 		const FitResult& fitResult() const;
-		bool isSourceDataChangedSinceLastFit() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYFitCurvePrivate Private;
@@ -127,9 +126,6 @@ class XYFitCurve : public XYCurve {
 	private:
 		Q_DECLARE_PRIVATE(XYFitCurve)
 		void init();
-
-	private slots:
-		void handleSourceDataChanged();
 
 	signals:
 		friend class XYFitCurveSetXDataColumnCmd;
@@ -143,7 +139,6 @@ class XYFitCurve : public XYCurve {
 
 		friend class XYFitCurveSetFitDataCmd;
 		void fitDataChanged(const XYFitCurve::FitData&);
-		void sourceDataChangedSinceLastFit();
 };
 
 #endif

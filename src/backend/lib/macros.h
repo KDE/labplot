@@ -440,10 +440,9 @@ else \
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\
 if (!obj->col ##Path().isEmpty()) {													\
-	foreach (AbstractAspect* aspect, columns) {										\
-		if (aspect->path() == obj->col ##Path()) {									\
-			AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);			\
-			if (!column) continue;													\
+	foreach (Column* column, columns) {												\
+		if (!column) continue;														\
+		if (column->path() == obj->col ##Path()) {									\
  			obj->set## Col(column);													\
 			break;				 													\
 		}																			\

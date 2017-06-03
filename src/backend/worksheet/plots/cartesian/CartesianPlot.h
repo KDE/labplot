@@ -168,13 +168,22 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addIntegrationAction;
 		QAction* addInterpolationAction;
 		QAction* addSmoothAction;
-		QAction* addFitAction;
+		QAction* addFitAction1;
+		QAction* addFitAction2;
+		QAction* addFitAction3;
+		QAction* addFitAction4;
+		QAction* addFitAction5;
+		QAction* addFitAction6;
+		QAction* addFitAction7;
+		QAction* addFitAction8;
+		QAction* addFitAction9;
+		QAction* addFitAction10;
+		QAction* addFitAction11;
 		QAction* addFourierFilterAction;
 		QAction* addFourierTransformAction;
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
-		QMenu* dataManipulationMenu;
 		QMenu* dataAnalysisMenu;
 		QMenu* themeMenu;
 

@@ -4,7 +4,7 @@
     Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com))
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,6 +33,7 @@
 #include <QTextEdit>
 #include <QTabWidget>
 #include <KLocale>
+#include <KWindowConfig>
 
 #include <cmath>
 
@@ -45,9 +46,11 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
 
+	QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
+
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Location measures")+
 	                     "</big><b></td>"
 	                     "</tr>"
@@ -96,7 +99,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+						 "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Dispersion measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
@@ -133,7 +136,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Shape measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
@@ -158,8 +161,20 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "</table>");
 
-    connect(twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+	connect(twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
+
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
+	if (conf.exists())
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	else
+		resize(QSize(490, 520));
+}
+
+StatisticsDialog::~StatisticsDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void StatisticsDialog::setColumns(const QList<Column*>& columns) {
@@ -177,11 +192,7 @@ void StatisticsDialog::setColumns(const QList<Column*>& columns) {
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
-	return (std::isnan(value) ? i18n("The value couldn't be calculated.") : QString::number(value,'g', 10));
-}
-
-QSize StatisticsDialog::sizeHint() const {
-	return QSize(490, 520);
+	return (std::isnan(value) ? QLatin1String("-") : QString::number(value,'g', 10));
 }
 
 void StatisticsDialog::currentTabChanged(int index) {
@@ -190,8 +201,8 @@ void StatisticsDialog::currentTabChanged(int index) {
 	RESET_CURSOR;
 
 	QTextEdit* textEdit = static_cast<QTextEdit*>(twStatistics->currentWidget());
-	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum),
-	                  isNanValue(statistics.maximum),
+	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum==INFINITY ? NAN : statistics.minimum),
+	                  isNanValue(statistics.maximum==-INFINITY ? NAN : statistics.maximum),
 	                  isNanValue(statistics.arithmeticMean),
 	                  isNanValue(statistics.geometricMean),
 	                  isNanValue(statistics.harmonicMean),

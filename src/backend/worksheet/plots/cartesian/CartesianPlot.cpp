@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -393,7 +393,19 @@ void CartesianPlot::initActions() {
 	addIntegrationAction = new QAction(i18n("Integrate"), this);
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
-	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
+
+	addFitAction1 = new QAction(i18n("Linear"), this);
+	addFitAction2 = new QAction(i18n("Power"), this);
+	addFitAction3 = new QAction(i18n("Exponential (degree 1)"), this);
+	addFitAction4 = new QAction(i18n("Exponential (degree 2)"), this);
+	addFitAction5 = new QAction(i18n("Inverse exponential"), this);
+	addFitAction6 = new QAction(i18n("Gauss"), this);
+	addFitAction7 = new QAction(i18n("Cauchy-Lorentz"), this);
+	addFitAction8 = new QAction(i18n("Arc tangent"), this);
+	addFitAction9 = new QAction(i18n("Hyperbolic tangent"), this);
+	addFitAction10 = new QAction(i18n("Error function"), this);
+	addFitAction11 = new QAction(i18n("Custom"), this);
+
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
 	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
 
@@ -402,7 +414,17 @@ void CartesianPlot::initActions() {
 	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
 	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
 	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
-	connect(addFitAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction1, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction2, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction3, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction4, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction5, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction6, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction7, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction8, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction9, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction10, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFitAction11, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 
@@ -483,10 +505,28 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftDownYAction);
 
 	// Data manipulation menu
-	dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
 	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	dataManipulationMenu->addAction(addDataOperationAction);
 	dataManipulationMenu->addAction(addDataReductionAction);
+
+	// Data fit menu
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
+	dataFitMenu->addAction(addFitAction1);
+	dataFitMenu->addAction(addFitAction2);
+	dataFitMenu->addAction(addFitAction3);
+	dataFitMenu->addAction(addFitAction4);
+	dataFitMenu->addAction(addFitAction5);
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction6);
+	dataFitMenu->addAction(addFitAction7);
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction8);
+	dataFitMenu->addAction(addFitAction9);
+	dataFitMenu->addAction(addFitAction10);
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction11);
 
 	//analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
@@ -499,7 +539,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addSmoothAction);
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addFitAction);
+	dataAnalysisMenu->addMenu(dataFitMenu);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFourierTransformAction);
 
@@ -921,8 +961,75 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 
 XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: fit to '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Fit to '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+
+		//set the fit model category and type
+		const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+		if (action) {
+			XYFitCurve::FitData fitData = curve->fitData();
+			if (action == addFitAction1) {
+				//Linear
+				fitData.modelCategory = nsl_fit_model_basic;
+				fitData.modelType = nsl_fit_model_polynomial;
+			} else if (action == addFitAction2) {
+				//Power
+				fitData.modelCategory = nsl_fit_model_basic;
+				fitData.modelType = nsl_fit_model_power;
+			} else if (action == addFitAction3) {
+				//Exponential (degree 1)
+				fitData.modelCategory = nsl_fit_model_basic;
+				fitData.modelType = nsl_fit_model_exponential;
+			} else if (action == addFitAction4) {
+				//Exponential (degree 1)
+				fitData.modelCategory = nsl_fit_model_basic;
+				fitData.modelType = nsl_fit_model_exponential;
+				fitData.degree = 2;
+			} else if (action == addFitAction5) {
+				//Inverse exponential
+				fitData.modelCategory = nsl_fit_model_basic;
+				fitData.modelType = nsl_fit_model_inverse_exponential;
+			} else if (action == addFitAction6) {
+				//Gauss
+				fitData.modelCategory = nsl_fit_model_peak;
+				fitData.modelType = nsl_fit_model_gaussian;
+			} else if (action == addFitAction7) {
+				//Cauchy-Lorentz
+				fitData.modelCategory = nsl_fit_model_peak;
+				fitData.modelType = nsl_fit_model_lorentz;
+			} else if (action == addFitAction8) {
+				//Arc tangent
+				fitData.modelCategory = nsl_fit_model_growth;
+				fitData.modelType = nsl_fit_model_atan;
+			} else if (action == addFitAction9) {
+				//Hyperbolic tangent
+				fitData.modelCategory = nsl_fit_model_growth;
+				fitData.modelType = nsl_fit_model_tanh;
+			} else if (action == addFitAction10) {
+				//Error function
+				fitData.modelCategory = nsl_fit_model_growth;
+				fitData.modelType = nsl_fit_model_erf;
+			} else if (action == addFitAction11) {
+				//Custom
+				fitData.modelCategory = nsl_fit_model_custom;
+				fitData.modelType = nsl_fit_model_custom;
+			}
+			curve->setFitData(fitData);
+		}
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add fit curve", name()));
+		this->addChild(curve);
+	}
+
 	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 
