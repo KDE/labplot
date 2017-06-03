@@ -476,6 +476,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
 	m_initializing = true;
 	uiGeneralTab.cbModel->clear();
+	uiGeneralTab.cbModel->show();
+	uiGeneralTab.lModel->show();
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
@@ -508,6 +510,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 	}
 	case nsl_fit_model_custom:
 		uiGeneralTab.cbModel->addItem(i18n("Custom"));
+		uiGeneralTab.cbModel->hide();
+		uiGeneralTab.lModel->hide();
 	}
 
 	m_fitData.modelType = 0;
