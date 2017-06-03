@@ -2,7 +2,7 @@
     File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Copyright        : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
@@ -41,7 +41,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
-#include <QFileInfo>
+// #include <QFileInfo>
 #include <cfloat>	// DBL_MAX
 
 extern "C" {
@@ -63,8 +63,9 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent)
-	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbXErrorColumn(0), cbYErrorColumn(0), m_fitCurve(0) {
+XYFitCurveDock::XYFitCurveDock(QWidget *parent) : XYCurveDock(parent),
+	cbDataSourceCurve(0), cbXDataColumn(0), cbYDataColumn(0), cbXErrorColumn(0),
+	cbYErrorColumn(0), m_fitCurve(0) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -83,17 +84,23 @@ void XYFitCurveDock::setupGeneral() {
 		gridLayout->setVerticalSpacing(2);
 	}
 
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+
+	cbDataSourceCurve = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbDataSourceCurve, 6, 4, 1, 4);
+
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 1);
+	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 1);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXErrorColumn, 4, 5, 1, 1);
+	gridLayout->addWidget(cbXErrorColumn, 7, 5, 1, 4);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 1);
+	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 1);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYErrorColumn, 5, 5, 1, 1);
+	gridLayout->addWidget(cbYErrorColumn, 8, 5, 1, 4);
 
 	//Weight
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
@@ -142,6 +149,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
+	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 	connect(uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()));
 	connect(uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()));
 	connect(uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()));
@@ -156,6 +164,12 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
 	connect(uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()));
 	connect(uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()));
+
+	connect(cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)));
+	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
+	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
+	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
+	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
 }
 
 void XYFitCurveDock::initGeneralTab() {
@@ -181,6 +195,10 @@ void XYFitCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
+
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
+	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_fitCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, m_fitCurve->xErrorColumn());
@@ -205,37 +223,45 @@ void XYFitCurveDock::initGeneralTab() {
 	this->showFitResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
-	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastFit());
+	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	//Slots
 	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_fitCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_fitCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(xErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yErrorColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
-	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
+	connect(m_fitCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
 }
 
 void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
+	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	cbDataSourceCurve->setTopLevelClasses(list);
+
+	QList<const AbstractAspect*> hiddenAspects;
+	foreach (XYCurve* curve, m_curvesList)
+		hiddenAspects << curve;
+	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+
+	list.clear();
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbXErrorColumn->setTopLevelClasses(list);
 	cbYErrorColumn->setTopLevelClasses(list);
 
+	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 	cbXErrorColumn->setModel(m_aspectTreeModel);
 	cbYErrorColumn->setModel(m_aspectTreeModel);
 
-	connect(cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)));
-	connect(cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)));
-	connect(cbXErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorColumnChanged(QModelIndex)));
-	connect(cbYErrorColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorColumnChanged(QModelIndex)));
 	XYCurveDock::setModel();
 }
 
@@ -273,6 +299,52 @@ void XYFitCurveDock::commentChanged() {
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
+void XYFitCurveDock::dataSourceTypeChanged(int index) {
+	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
+	if (type == XYCurve::DataSourceSpreadsheet) {
+		uiGeneralTab.lDataSourceCurve->hide();
+		cbDataSourceCurve->hide();
+		uiGeneralTab.lXColumn->show();
+		cbXDataColumn->show();
+		uiGeneralTab.lYColumn->show();
+		cbYDataColumn->show();
+		cbXErrorColumn->show();
+		cbYErrorColumn->show();
+	} else {
+		uiGeneralTab.lDataSourceCurve->show();
+		cbDataSourceCurve->show();
+		uiGeneralTab.lXColumn->hide();
+		cbXDataColumn->hide();
+		uiGeneralTab.lYColumn->hide();
+		cbYDataColumn->hide();
+		cbXErrorColumn->hide();
+		cbYErrorColumn->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYFitCurve*>(curve)->setDataSourceType(type);
+}
+
+void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	XYCurve* dataSourceCurve = 0;
+	if (aspect) {
+		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+		Q_ASSERT(dataSourceCurve);
+	}
+
+	this->updateSettings(dataSourceCurve->xColumn());
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+}
+
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
@@ -284,14 +356,19 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
+	this->updateSettings(column);
+
 	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
+}
 
-	if (column != 0) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
+void XYFitCurveDock::updateSettings(const AbstractColumn* column) {
+	if (!column)
+		return;
+
+	if (uiGeneralTab.cbAutoRange->isChecked()) {
+		uiGeneralTab.sbMin->setValue(column->minimum());
+		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
 }
 
@@ -319,11 +396,18 @@ void XYFitCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
-		m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-		Q_ASSERT(m_fitCurve);
-		if (m_fitCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_fitCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_fitCurve->xDataColumn()->maximum());
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+			xDataColumn = m_fitCurve->xDataColumn();
+		else {
+			if (m_fitCurve->dataSourceCurve())
+				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+		}
+
+		if (xDataColumn) {
+			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -1091,11 +1175,16 @@ void XYFitCurveDock::enableRecalculate() const {
 		return;
 
 	//no fitting possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX != 0 && aspectY != 0);
+	bool hasSourceData = false;
+	if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectX!=0 && aspectY!=0);
+	} else {
+		 hasSourceData = (m_fitCurve->dataSourceCurve() != NULL);
+	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(data);
+	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!
@@ -1340,6 +1429,18 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
 		uiGeneralTab.leComment->setText(aspect->comment());
 	}
+	m_initializing = false;
+}
+
+void XYFitCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+	m_initializing = true;
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
+	m_initializing = true;
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
 	m_initializing = false;
 }
 

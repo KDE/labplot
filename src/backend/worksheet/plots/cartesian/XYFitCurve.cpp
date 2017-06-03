@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -115,10 +115,6 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	return d->fitResult;
 }
 
-bool XYFitCurve::isSourceDataChangedSinceLastFit() const {
-	Q_D(const XYFitCurve);
-	return d->sourceDataChangedSinceLastFit;
-}
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -128,7 +124,7 @@ void XYFitCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFitCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastFit();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -141,7 +137,7 @@ void XYFitCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYFitCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastFit();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -154,7 +150,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->xErrorColumn) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, i18n("%1: assign x-error")));
-		emit sourceDataChangedSinceLastFit();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -167,7 +163,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->yErrorColumn) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, i18n("%1: assign y-error")));
-		emit sourceDataChangedSinceLastFit();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -182,22 +178,12 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYFitCurve::handleSourceDataChanged() {
-	Q_D(XYFitCurve);
-	d->sourceDataChangedSinceLastFit = true;
-	emit sourceDataChangedSinceLastFit();
-}
-
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), xErrorColumn(0), yErrorColumn(0),
 	xColumn(0), yColumn(0), residualsColumn(0),
 	xVector(0), yVector(0), residualsVector(0),
-	sourceDataChangedSinceLastFit(false),
 	q(owner)  {
 
 }
@@ -1016,7 +1002,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1029,26 +1015,46 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastRecalc = false;
+		return;
+	}
+
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
+		emit (q->dataChanged());
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
+
 	if (yErrorColumn) {
 		if (yErrorColumn->rowCount() < xDataColumn->rowCount()) {
 			fitResult.available = true;
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
 			emit (q->dataChanged());
-			sourceDataChangedSinceLastFit = false;
+			sourceDataChangedSinceLastRecalc = false;
 			return;
 		}
 	}
@@ -1058,16 +1064,24 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
-	double xmin = fitData.xRange.first();
-	double xmax = fitData.xRange.last();
-	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x, y and errors, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+	double xmin;
+	double xmax;
+	if (fitData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = fitData.xRange.first();
+		xmax = fitData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+		//only copy those data where _all_ values (for x and y and errors, if given) are valid
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				if (!xErrorColumn && !yErrorColumn) {	// x-y
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				if (dataSourceType == XYCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn)) {	// x-y
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
 				} else if (!xErrorColumn) {		// x-y-dy
@@ -1096,7 +1110,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1105,7 +1119,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1370,7 +1384,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastFit = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 /*!

@@ -66,8 +66,6 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 		QVector<double>* yVector;
 		QVector<double>* residualsVector;
 
-		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or error) was changed, \c false otherwise
-
 		XYFitCurve* const q;
 
 	private:
