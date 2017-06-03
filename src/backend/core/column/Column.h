@@ -42,7 +42,7 @@ class Column : public AbstractColumn {
 
 	public:
 		struct ColumnStatistics {
-            ColumnStatistics() {
+			ColumnStatistics() {
 				minimum = NAN;
 				maximum = NAN;
 				arithmeticMean = NAN;
@@ -74,7 +74,7 @@ class Column : public AbstractColumn {
 			double skewness;
 			double kurtosis;
 			double entropy;
-        };
+		};
 
 		friend class ColumnPrivate;
 
