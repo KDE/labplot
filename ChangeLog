@@ -14,6 +14,7 @@ New features:
 		* Respect theme settings also in plot legends and labels
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
+	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project
