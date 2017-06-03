@@ -1000,12 +1000,6 @@ void XYFitCurvePrivate::recalculate() {
 	// clear the previous result
 	fitResult = XYFitCurve::FitResult();
 
-	if (!xDataColumn || !yDataColumn) {
-		emit (q->dataChanged());
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
 	//fit settings
 	const unsigned int maxIters = fitData.maxIterations;	//maximal number of iterations
 	const double delta = fitData.eps;		//fit tolerance
@@ -1082,18 +1076,18 @@ void XYFitCurvePrivate::recalculate() {
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 				if (dataSourceType == XYCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn)) {	// x-y
-					xdataVector.append(xDataColumn->valueAt(row));
-					ydataVector.append(yDataColumn->valueAt(row));
+					xdataVector.append(tmpXDataColumn->valueAt(row));
+					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn) {		// x-y-dy
 					if (!std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(xDataColumn->valueAt(row));
-						ydataVector.append(yDataColumn->valueAt(row));
+						xdataVector.append(tmpXDataColumn->valueAt(row));
+						ydataVector.append(tmpYDataColumn->valueAt(row));
 						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
 				} else {				// x-y-dx-dy
 					if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
-						xdataVector.append(xDataColumn->valueAt(row));
-						ydataVector.append(yDataColumn->valueAt(row));
+						xdataVector.append(tmpXDataColumn->valueAt(row));
+						ydataVector.append(tmpYDataColumn->valueAt(row));
 						xerrorVector.append(xErrorColumn->valueAt(row));
 						yerrorVector.append(yErrorColumn->valueAt(row));
 					}
@@ -1101,7 +1095,6 @@ void XYFitCurvePrivate::recalculate() {
 			}
 		}
 	}
-
 	//number of data points to fit
 	const size_t n = xdataVector.size();
 	DEBUG("number of data points: " << n);
@@ -1338,22 +1331,22 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
-	residualsVector->resize(xDataColumn->rowCount());
+	residualsVector->resize(tmpXDataColumn->rowCount());
 	if (fitData.evaluateFullRange) {	// evaluate full range of residuals
-		xVector->resize(xDataColumn->rowCount());
-		for (int i = 0; i < xDataColumn->rowCount(); i++)
-			(*xVector)[i] = xDataColumn->valueAt(i);
+		xVector->resize(tmpXDataColumn->rowCount());
+		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
+			(*xVector)[i] = tmpXDataColumn->valueAt(i);
 		ExpressionParser* parser = ExpressionParser::getInstance();
 		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
 							fitData.paramNames, fitResult.paramValues);
-		for (int i = 0; i < xDataColumn->rowCount(); i++)
-			(*residualsVector)[i] = yDataColumn->valueAt(i) - (*residualsVector)[i];
+		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
+			(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
 		if (!rc)
 			residualsVector->clear();
 	} else {	// only selected range
 		size_t j = 0;
-		for (int i = 0; i < xDataColumn->rowCount(); i++) {
-			if (xDataColumn->valueAt(i) >= xmin && xDataColumn->valueAt(i) <= xmax)
+		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
+			if (tmpXDataColumn->valueAt(i) >= xmin && tmpXDataColumn->valueAt(i) <= xmax)
 				residualsVector->data()[i] = - gsl_vector_get(s->f, j++);
 			else	// outside range
 				residualsVector->data()[i] = 0;
@@ -1368,8 +1361,8 @@ void XYFitCurvePrivate::recalculate() {
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	if (fitData.evaluateFullRange) { // evaluate fit on full data range if selected
-		xmin = xDataColumn->minimum();
-		xmax = xDataColumn->maximum();
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
 	}
 	xVector->resize(fitData.evaluatedPoints);
 	yVector->resize(fitData.evaluatedPoints);
