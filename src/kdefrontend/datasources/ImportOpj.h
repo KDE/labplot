@@ -38,9 +38,10 @@ class ImportOpj {
 
 public:
 	explicit ImportOpj(MainWin* parent, const QString& filename);
-	~ImportOpj();
-	bool importTables(const OriginFile &opj);
-	bool importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread);
+	~ImportOpj() {};
+	int importTables(const OriginFile &opj);
+	int  importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread);
+	int importMatrix(const OriginFile &opj, const Origin::Matrix &spread);
 
 private:
 	MainWin *mw;

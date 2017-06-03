@@ -58,26 +58,91 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 
 }
 
-ImportOpj::~ImportOpj() {
-}
-
-bool ImportOpj::importTables(const OriginFile &opj) {
+int ImportOpj::importTables(const OriginFile &opj) {
+	// spreadsheets 
         for (unsigned int s = 0; s < opj.spreadCount(); ++s) {
                 Origin::SpreadSheet spread = opj.spread(s);
                 int columnCount = spread.columns.size();
-                if(!columnCount) //remove tables without cols
+                if(!columnCount) // do not add spreads without cols
                         continue;
                 importSpreadsheet(opj, spread);
         }
 
-	return true;
+	// excels
+	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
+			Origin::Excel excelwb = opj.excel(e);
+			for (unsigned int s = 0; s < excelwb.sheets.size(); ++s) {
+				Origin::SpreadSheet spread = excelwb.sheets[s];
+				int columnCount = spread.columns.size();
+				if(!columnCount) // do not add spreads without cols
+					continue;
+				spread.name = excelwb.name;
+				// scidavis does not have windows with multiple sheets
+				if (s > 0)
+					spread.name.append("@").append(std::to_string(s+1));
+
+				spread.maxRows = excelwb.maxRows;
+				importSpreadsheet(opj, spread);
+			}
+	}
+
+	// TODO: matrices
+        for (unsigned int m = 0; m < opj.matrixCount(); ++m) {
+                Origin::Matrix matrix = opj.matrix(m);
+		// importMatrix(opj, matrix);
+                unsigned int layers = matrix.sheets.size();
+                for (unsigned int l = 0; l < layers; ++l) {
+                        Origin::MatrixSheet& layer = matrix.sheets[l];
+                        int columnCount = layer.columnCount;
+                        int rowCount = layer.rowCount;
+			//TODO
+                        //Matrix* Matrix = mw->newMatrix(matrix.name.c_str(), rowCount, columnCount);
+                        //if (!Matrix)
+                        //        return false;
+                        //Matrix->setWindowLabel(matrix.label.c_str());
+                        //Matrix->setFormula(layer.command.c_str());
+                        //Matrix->setColumnsWidth(layer.width * SciDAVis_scaling_factor);
+
+			QVector<qreal> values;
+			values.resize(rowCount*columnCount);
+			for (int i = 0; i < min((int)values.size(),(int)layer.data.size()); i++)
+				values[i]=layer.data[i];
+
+			//Matrix->setCells(values);
+			//Matrix->saveCellsToMemory();
+
+			QChar format;
+			int prec = 6;
+			switch (layer.valueTypeSpecification) {
+			case 0: //Decimal 1000
+				format='f';
+				prec = layer.decimalPlaces;
+				break;
+			case 1: //Scientific
+				format='e';
+				prec = layer.decimalPlaces;
+				break;
+			case 2: //Engineering
+			case 3: //Decimal 1,000
+				format='g';
+				prec = layer.significantDigits;
+				break;
+			}
+			//Matrix->setNumericFormat(format, prec);
+                        //Matrix->forgetSavedCells();
+                        //Matrix->showNormal();
+
+                }
+	}
+
+	return 0;
 }
 
-bool ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread) {
+int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread) {
 	int cols = spread.columns.size();
 	int rows = spread.maxRows;
 	if (!cols) // do not create spreadsheets without columns
-		return false;
+		return -1;
 
 	QLocale locale = mw->locale();
 	Spreadsheet* spreadsheet = new Spreadsheet(0, spread.name.c_str());
@@ -189,6 +254,11 @@ bool ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShe
 //		mw->hideWindow(spreadsheet);
 	mw->addAspectToProject(spreadsheet);
 
-	return true;
+	return 0;
 }
 
+int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix) {
+	//TODO
+
+	return 0;
+}
