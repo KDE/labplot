@@ -129,12 +129,16 @@ class SpreadsheetView : public QWidget {
 		QAction* action_remove_columns;
 		QAction* action_clear_columns;
 		QAction* action_add_columns;
-// 		QAction* action_set_as_x;
-// 		QAction* action_set_as_y;
-// 		QAction* action_set_as_z;
-// 		QAction* action_set_as_xerr;
-// 		QAction* action_set_as_yerr;
-// 		QAction* action_set_as_none;
+		QAction* action_set_as_none;
+		QAction* action_set_as_x;
+		QAction* action_set_as_y;
+		QAction* action_set_as_z;
+		QAction* action_set_as_xerr;
+		QAction* action_set_as_xerr_plus;
+		QAction* action_set_as_xerr_minus;
+		QAction* action_set_as_yerr;
+		QAction* action_set_as_yerr_plus;
+		QAction* action_set_as_yerr_minus;
 		QAction* action_reverse_columns;
 		QAction* action_drop_values;
 		QAction* action_mask_values;
@@ -152,6 +156,9 @@ class SpreadsheetView : public QWidget {
 		QAction* action_clear_rows;
 		QAction* action_add_rows;
 		QAction* action_statistics_rows;
+
+		//plotting and analysis related actions
+		QAction* action_plot_data;
 
 		//Menus
 		QMenu* m_selectionMenu;
@@ -182,6 +189,8 @@ class SpreadsheetView : public QWidget {
 		void unmaskSelection();
 // 		void recalculateSelectedCells();
 
+		void plotData();
+
 		void fillSelectedCellsWithRowNumbers();
 		void fillWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
@@ -210,13 +219,7 @@ class SpreadsheetView : public QWidget {
 		void sortColumnAscending();
 		void sortColumnDescending();
 
-// 		void setSelectionAs(AbstractColumn::PlotDesignation);
-// 		void setSelectedColumnsAsX();
-// 		void setSelectedColumnsAsY();
-// 		void setSelectedColumnsAsZ();
-// 		void setSelectedColumnsAsXError();
-// 		void setSelectedColumnsAsYError();
-// 		void setSelectedColumnsAsNone();
+		void setSelectionAs();
 
 		void activateFormulaMode(bool on);
 		bool formulaModeActive() const;

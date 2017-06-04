@@ -49,6 +49,7 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMimeData>
+#include <QObject>
 #include <QPainter>
 #include <QPrinter>
 #include <QTableView>
@@ -58,6 +59,7 @@
 
 #include <KLocale>
 
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
@@ -210,12 +212,37 @@ void SpreadsheetView::initActions() {
 	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Columns"), this);
 	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
-// 	action_set_as_x = new QAction(QIcon::fromTheme(""), i18n("X, Plot Designation"), this);
-// 	action_set_as_y = new QAction(QIcon::fromTheme(""), i18n("Y, Plot Designation"), this);
-// 	action_set_as_z = new QAction(QIcon::fromTheme(""), i18n("Z, Plot Designation"), this);
-// 	action_set_as_xerr = new QAction(QIcon::fromTheme(""), i18n("X Error, Plot Designation"), this);
-// 	action_set_as_yerr = new QAction(QIcon::fromTheme(""), i18n("Y Error, Plot Designation"), this);
-// 	action_set_as_none = new QAction(QIcon::fromTheme(""), i18n("None, Plot Designation"), this);
+
+	action_set_as_none = new QAction(i18n("None"), this);
+	action_set_as_none->setData(AbstractColumn::NoDesignation);
+
+	action_set_as_x = new QAction("X", this);
+	action_set_as_x->setData(AbstractColumn::X);
+
+	action_set_as_y = new QAction("Y", this);
+	action_set_as_y->setData(AbstractColumn::Y);
+
+	action_set_as_z = new QAction("Z", this);
+	action_set_as_z->setData(AbstractColumn::Z);
+
+	action_set_as_xerr = new QAction(i18n("X-error"), this);
+	action_set_as_xerr->setData(AbstractColumn::XError);
+
+	action_set_as_xerr_minus = new QAction(i18n("X-error minus"), this);
+	action_set_as_xerr_minus->setData(AbstractColumn::XErrorMinus);
+
+	action_set_as_xerr_plus = new QAction(i18n("X-error plus"), this);
+	action_set_as_xerr_plus->setData(AbstractColumn::XErrorPlus);
+
+	action_set_as_yerr = new QAction(i18n("Y-error"), this);
+	action_set_as_yerr->setData(AbstractColumn::YError);
+
+	action_set_as_yerr_minus = new QAction(i18n("Y-error minus"), this);
+	action_set_as_yerr_minus->setData(AbstractColumn::YErrorMinus);
+
+	action_set_as_yerr_plus = new QAction(i18n("Y-error plus"), this);
+	action_set_as_yerr_plus->setData(AbstractColumn::YErrorPlus);
+
 	action_reverse_columns = new QAction(QIcon::fromTheme(""), i18n("Reverse"), this);
 	action_drop_values = new QAction(QIcon::fromTheme(""), i18n("Drop Values"), this);
 	action_mask_values = new QAction(QIcon::fromTheme(""), i18n("Mask Values"), this);
@@ -233,13 +260,16 @@ void SpreadsheetView::initActions() {
 	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
 	action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
+
+	//plotting and analysis related actions
+	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 }
 
 void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 
-	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"), this);
+	QMenu* submenu = new QMenu(i18n("Fi&ll Selection with"), this);
 	submenu->addAction(action_fill_sel_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
@@ -265,18 +295,25 @@ void SpreadsheetView::initMenus() {
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
+	m_columnMenu->addAction(action_plot_data);
+	m_columnMenu->addSeparator();
 
-// 	submenu = new QMenu(i18n("S&et Column As"));
-// 	submenu->addAction(action_set_as_x);
-// 	submenu->addAction(action_set_as_y);
-// 	submenu->addAction(action_set_as_z);
-// 	submenu->addSeparator();
-// 	submenu->addAction(action_set_as_xerr);
-// 	submenu->addAction(action_set_as_yerr);
-// 	submenu->addSeparator();
-// 	submenu->addAction(action_set_as_none);
-// 	m_columnMenu->addMenu(submenu);
-// 	m_columnMenu->addSeparator();
+	submenu = new QMenu(i18n("Set Column As"));
+	submenu->addAction(action_set_as_x);
+	submenu->addAction(action_set_as_y);
+	submenu->addAction(action_set_as_z);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_xerr);
+	submenu->addAction(action_set_as_xerr_minus);
+	submenu->addAction(action_set_as_xerr_plus);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_yerr);
+	submenu->addAction(action_set_as_yerr_minus);
+	submenu->addAction(action_set_as_yerr_plus);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_none);
+	m_columnMenu->addMenu(submenu);
+	m_columnMenu->addSeparator();
 
 	submenu = new QMenu(i18n("Generate Data"), this);
 	submenu->addAction(action_fill_row_numbers);
@@ -316,7 +353,8 @@ void SpreadsheetView::initMenus() {
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
-// 	m_selectionMenu->setTitle(i18n("Fi&ll Selection with"));
+	m_spreadsheetMenu->addAction(action_plot_data);
+	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -378,12 +416,16 @@ void SpreadsheetView::connectActions() {
 	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
 	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
 	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
-// 	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
-// 	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
-// 	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
-// 	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
-// 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
-// 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
+	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_xerr_minus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_xerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_yerr_minus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
+	connect(action_set_as_yerr_plus, SIGNAL(triggered()), this, SLOT(setSelectionAs()));
 	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
 	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
 	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
@@ -402,6 +444,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
 	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+
+	connect(action_plot_data, SIGNAL(triggered()), this, SLOT(plotData()));
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -459,7 +503,25 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
  */
 void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 	QAction* firstAction = menu->actions().at(1);
-	QMenu* submenu = new QMenu(i18n("Generate Data"), this);
+
+	QMenu* submenu = new QMenu(i18n("Set Column As"));
+	submenu->addAction(action_set_as_x);
+	submenu->addAction(action_set_as_y);
+	submenu->addAction(action_set_as_z);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_xerr);
+	submenu->addAction(action_set_as_xerr_minus);
+	submenu->addAction(action_set_as_xerr_plus);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_yerr);
+	submenu->addAction(action_set_as_yerr_minus);
+	submenu->addAction(action_set_as_yerr_plus);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_none);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
+	submenu = new QMenu(i18n("Generate Data"), this);
 	submenu->insertAction(firstAction, action_fill_row_numbers);
 	submenu->insertAction(firstAction, action_fill_const);
 // 	submenu->insertAction(firstAction, action_fill_random);
@@ -1027,6 +1089,12 @@ void SpreadsheetView::unmaskSelection() {
 	RESET_CURSOR;
 }
 
+void SpreadsheetView::plotData() {
+	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->exec();
+}
+
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
@@ -1323,41 +1391,24 @@ void SpreadsheetView::clearSelectedColumns() {
 	RESET_CURSOR;
 }
 
-// void SpreadsheetView::setSelectionAs(AbstractColumn::PlotDesignation pd) {
-// 	WAIT_CURSOR;
-// 	m_spreadsheet->beginMacro(i18n("%1: set plot designation", m_spreadsheet->name()));
-//
-// 	QList< Column* > list = selectedColumns();
-// 	foreach(Column* ptr, list)
-// 		ptr->setPlotDesignation(pd);
-//
-// 	m_spreadsheet->endMacro();
-// 	RESET_CURSOR;
-// }
+void SpreadsheetView::setSelectionAs() {
+	QList<Column*> columns = selectedColumns();
+	if (!columns.size())
+		return;
 
-// void SpreadsheetView::setSelectedColumnsAsX() {
-// 	setSelectionAs(AbstractColumn::X);
-// }
-//
-// void SpreadsheetView::setSelectedColumnsAsY() {
-// 	setSelectionAs(AbstractColumn::Y);
-// }
-//
-// void SpreadsheetView::setSelectedColumnsAsZ() {
-// 	setSelectionAs(AbstractColumn::Z);
-// }
-//
-// void SpreadsheetView::setSelectedColumnsAsYError() {
-// 	setSelectionAs(AbstractColumn::yErr);
-// }
-//
-// void SpreadsheetView::setSelectedColumnsAsXError() {
-// 	setSelectionAs(AbstractColumn::xErr);
-// }
-//
-// void SpreadsheetView::setSelectedColumnsAsNone() {
-// 	setSelectionAs(AbstractColumn::noDesignation);
-// }
+	m_spreadsheet->beginMacro(i18n("%1: set plot designation", m_spreadsheet->name()));
+
+	QAction* action = dynamic_cast<QAction*>(QObject::sender());
+	if (!action)
+		return;
+
+	AbstractColumn::PlotDesignation pd = (AbstractColumn::PlotDesignation)action->data().toInt();
+	foreach(Column* column, columns)
+		column->setPlotDesignation(pd);
+
+	m_spreadsheet->endMacro();
+}
+
 
 void SpreadsheetView::reverseColumns() {
 	WAIT_CURSOR;

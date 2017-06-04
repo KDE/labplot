@@ -41,7 +41,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
-// #include <QFileInfo>
+
 #include <cfloat>	// DBL_MAX
 
 extern "C" {
