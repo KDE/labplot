@@ -4,7 +4,7 @@
     Description          : Import Origin project
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+	adapted from SciDAVis (importOPJ.cpp)
  ***************************************************************************/
 
 /***************************************************************************
@@ -106,6 +106,7 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount(cols);
 
+	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 	for (int j = 0; j < cols; ++j) {
 		Origin::SpreadColumn column = spread.columns[j];
 		Column *col = spreadsheet->column(j);
@@ -115,7 +116,7 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 		if (column.command.size() > 0)
 			col->setFormula(Interval<int>(0, rows), QString(column.command.c_str()));
 		col->setComment(QString(column.comment.c_str()));
-//		spreadsheet->setColumnWidth(j, (int)column.width*scaling_factor);
+		col->setWidth((int)column.width * scaling_factor);
 
 		switch(column.type){
 		case Origin::SpreadColumn::X:
@@ -139,14 +140,14 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 			col->setPlotDesignation(AbstractColumn::NoDesignation);
 		}
 
-		//TODO
+		QString format;
 		switch(column.valueType) {
 		case Origin::Numeric:
 		case Origin::TextNumeric: {
 			/*
 			A TextNumeric column in Origin is a column whose filled cells contain either a double or a string.
-			In SciDAVis there is no equivalent column type.
-			Set the SciDAVis column type as 'Numeric' or 'Text' depending on the type of first element in column.
+			Here there is no equivalent column type.
+			Set the column type as 'Numeric' or 'Text' depending on the type of first element in column.
 			TODO: Add a "per column" flag, settable at import dialog, to choose between both types.
 			 */
 			Origin::variant value;
@@ -158,30 +159,29 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 				if (value.type() == typeid(double)) {
 					datavalue = boost::get<double>(value);
 					if (datavalue == _ONAN) continue; // mark for empty cell
-						if (!setAsText) {
-							col->setValueAt(i, datavalue);
-						} else { // convert double to string for Text columns
-							col->setTextAt(i, locale.toString(datavalue, 'g', 16));
-						}
-					} else { // string
-						if (!setAsText && i==0) {
-							col->setColumnMode(AbstractColumn::Text);
-							setAsText = true;
-						}
-						col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+					if (!setAsText)
+						col->setValueAt(i, datavalue);
+					else	// convert double to string for Text columns
+						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
+				} else { // string
+					if (!setAsText && i == 0) {
+						col->setColumnMode(AbstractColumn::Text);
+						setAsText = true;
 					}
+					col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+				}
 			}
-			if(column.numericDisplayType != 0) {
+			if (column.numericDisplayType != 0) {
 				int f = 0;
 				switch(column.valueTypeSpecification) {
-				case 0: //Decimal 1000
+				case Origin::Decimal:
 					f=1;
 					break;
-				case 1: //Scientific
+				case Origin::Scientific:
 					f=2;
 					break;
-				case 2: //Engeneering
-				case 3: //Decimal 1,000
+				case Origin::Engineering:
+				case Origin::DecimalWithMarks:
 					break;
 				}
 
@@ -194,20 +194,163 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 			break;
 		}
 		case Origin::Text:
-		case Origin::Date:
-		case Origin::Time:
-		case Origin::Month:
-		case Origin::Day:
+			col->setColumnMode(AbstractColumn::Text);
+			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+				col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+			break;
+		case Origin::Time: {
+			switch(column.valueTypeSpecification + 128) {
+			case Origin::TIME_HH_MM:
+				format="hh:mm";
+				break;
+			case Origin::TIME_HH:
+				format="hh";
+				break;
+			case Origin::TIME_HH_MM_SS:
+				format="hh:mm:ss";
+				break;
+			case Origin::TIME_HH_MM_SS_ZZ:
+				format="hh:mm:ss.zzz";
+				break;
+			case Origin::TIME_HH_AP:
+				format="hh ap";
+				break;
+			case Origin::TIME_HH_MM_AP:
+				format="hh:mm ap";
+				break;
+			case Origin::TIME_MM_SS:
+				format="mm:ss";
+				break;
+			case Origin::TIME_MM_SS_ZZ:
+				format="mm:ss.zzz";
+				break;
+			case Origin::TIME_HHMM:
+				format="hhmm";
+				break;
+			case Origin::TIME_HHMMSS:
+				format="hhmmss";
+				break;
+			case Origin::TIME_HH_MM_SS_ZZZ:
+				format="hh:mm:ss.zzz";
+				break;
+			}
+
+			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+				col->setValueAt(i, boost::get<double>(column.data[i]));
+			col->setColumnMode(AbstractColumn::DateTime);
+			// TODO
+			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			//filter->setFormat(format);
+			break;
+		}
+		case Origin::Date: {
+			switch(column.valueTypeSpecification) {
+			case Origin::DATE_DD_MM_YYYY:
+				format="dd/MM/yyyy";
+				break;
+			case Origin::DATE_DD_MM_YYYY_HH_MM:
+				format="dd/MM/yyyy HH:mm";
+				break;
+			case Origin::DATE_DD_MM_YYYY_HH_MM_SS:
+				format="dd/MM/yyyy HH:mm:ss";
+				break;
+			case Origin::DATE_DDMMYYYY:
+			case Origin::DATE_DDMMYYYY_HH_MM:
+			case Origin::DATE_DDMMYYYY_HH_MM_SS:
+				format="dd.MM.yyyy";
+					break;
+			case Origin::DATE_MMM_D:
+				format="MMM d";
+				break;
+			case Origin::DATE_M_D:
+				format="M/d";
+				break;
+			case Origin::DATE_D:
+				format="d";
+				break;
+			case Origin::DATE_DDD:
+			case Origin::DATE_DAY_LETTER:
+				format="ddd";
+				break;
+			case Origin::DATE_YYYY:
+				format="yyyy";
+				break;
+			case Origin::DATE_YY:
+				format="yy";
+				break;
+			case Origin::DATE_YYMMDD:
+			case Origin::DATE_YYMMDD_HH_MM:
+			case Origin::DATE_YYMMDD_HH_MM_SS:
+			case Origin::DATE_YYMMDD_HHMM:
+			case Origin::DATE_YYMMDD_HHMMSS:
+				format="yyMMdd";
+				break;
+			case Origin::DATE_MMM:
+			case Origin::DATE_MONTH_LETTER:
+				format="MMM";
+				break;
+			case Origin::DATE_M_D_YYYY:
+				format="M-d-yyyy";
+				break;
+			default:
+				format="dd.MM.yyyy";
+			}
+
+			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+				col->setValueAt(i, boost::get<double>(column.data[i]));
+			col->setColumnMode(AbstractColumn::DateTime);
+			//TODO
+			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(scidavis_column->outputFilter());
+			//filter->setFormat(format);
+			break;
+		}
+		case Origin::Month: {
+			switch (column.valueTypeSpecification) {
+			case Origin::MONTH_MMM:
+				format = "MMM";
+				break;
+			case Origin::MONTH_MMMM:
+				format = "MMMM";
+				break;
+			case Origin::MONTH_LETTER:
+				format = "M";
+				break;
+			}
+
+			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+				col->setValueAt(i, boost::get<double>(column.data[i]));
+			col->setColumnMode(AbstractColumn::Month);
+			//TODO
+			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			//filter->setFormat(format);
+			break;
+		}
+		case Origin::Day: {
+			switch(column.valueTypeSpecification) {
+			case Origin::DAY_DDD:
+				format = "ddd";
+				break;
+			case Origin::DAY_DDDD:
+				format = "dddd";
+				break;
+			case Origin::DAY_LETTER:
+				format = "d";
+				break;
+			}
+
+			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+				col->setValueAt(i, boost::get<double>(column.data[i]));
+			col->setColumnMode(AbstractColumn::Day);
+			// TODO
+			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			//filter->setFormat(format);
+			break;
+		}
 		case Origin::ColumnHeading:
 		case Origin::TickIndexedDataset:
 		case Origin::Categorical:
-			//TODO
-			break;
-		default:
 			break;
 		}
-
-		//TODO
 	}
 
 
@@ -223,6 +366,7 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 	Q_UNUSED(opj);
 
 	unsigned int layers = matrix.sheets.size();
+	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 	for (unsigned int l = 0; l < layers; ++l) {
 		Origin::MatrixSheet layer = matrix.sheets[l];
 		int colCount = layer.columnCount;
@@ -234,7 +378,8 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 		if (!m)
 			return false;
 		m->setFormula(layer.command.c_str());
-		//Matrix->setColumnsWidth(layer.width * scaling_factor);
+		for (int j = 0; j < colCount; j++)
+			m->setColumnWidth(j, layer.width * scaling_factor);
 
 		for (int i = 0; i < rowCount; i++) {
 		for (int j = 0; j < colCount; j++) {
@@ -242,7 +387,7 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 		}
 		}
 
-		QChar format;
+		char format = 'g';
 		int prec = 6;
 		switch (layer.valueTypeSpecification) {
 		case 0: //Decimal 1000
@@ -260,9 +405,9 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 			break;
 		}
 
-		//TODO
+		//TODO: prec not support by Matrix
 		Q_UNUSED(prec);
-		//m->setNumericFormat(format, prec);
+		m->setNumericFormat(format);
 
 		mw->addAspectToProject(m);
 	}

@@ -43,6 +43,29 @@ using namespace std;
 namespace Origin
 {
 	enum ValueType {Numeric = 0, Text = 1, Time = 2, Date = 3,  Month = 4, Day = 5, ColumnHeading = 6, TickIndexedDataset = 7, TextNumeric = 9, Categorical = 10};
+	// Numeric Format:
+	// 1000 | 1E3 | 1k | 1,000
+	enum NumericFormat {Decimal = 0, Scientific = 1, Engineering = 2, DecimalWithMarks = 3};
+	// Time Format:
+	// hh:mm | hh | hh:mm:ss | hh:mm:ss.zz | hh ap | hh:mm ap | mm:ss
+	// mm:ss.zz | hhmm | hhmmss | hh:mm:ss.zzz
+	enum TimeFormat {TIME_HH_MM = 0, TIME_HH = 1, TIME_HH_MM_SS = 2, TIME_HH_MM_SS_ZZ = 3, TIME_HH_AP = 4, TIME_HH_MM_AP = 5, TIME_MM_SS = 6,
+		TIME_MM_SS_ZZ = 7, TIME_HHMM = 8, TIME_HHMMSS = 9, TIME_HH_MM_SS_ZZZ = 10};
+	// Date Format:
+	// dd/MM/yyyy | dd/MM/yyyy HH:mm | dd/MM/yyyy HH:mm:ss | dd.MM.yyyy | y. (year abbreviation) | MMM d
+	// M/d | d | ddd | First letter of day | yyyy | yy | dd.MM.yyyy hh:mm | dd.MM.yyyy hh:mm:ss
+	// yyMMdd | yyMMdd hh:mm | yyMMdd hh:mm:ss | yyMMdd hhmm | yyMMdd hhmmss | MMM
+	// First letter of month | Quartal | M-d-yyyy (Custom1) | hh:mm:ss.zzzz (Custom2)
+	enum DateFormat {DATE_DD_MM_YYYY = -128, DATE_DD_MM_YYYY_HH_MM = -119, DATE_DD_MM_YYYY_HH_MM_SS = -118, DATE_DDMMYYYY = 0, DATE_Y = 1, DATE_MMM_D = 2,
+		DATE_M_D = 3, DATE_D = 4, DATE_DDD = 5, DATE_DAY_LETTER = 6, DATE_YYYY = 7, DATE_YY = 8, DATE_DDMMYYYY_HH_MM = 9, DATE_DDMMYYYY_HH_MM_SS = 10,
+		DATE_YYMMDD = 11, DATE_YYMMDD_HH_MM = 12, DATE_YYMMDD_HH_MM_SS = 13, DATE_YYMMDD_HHMM = 14, DATE_YYMMDD_HHMMSS = 15, DATE_MMM = 16,
+		DATE_MONTH_LETTER = 17, DATE_Q = 18, DATE_M_D_YYYY = 19, DATE_HH_MM_SS_ZZZZ = 20};
+	// Month Format:
+	//  MMM | MMMM | First letter of month
+	enum MonthFormat {MONTH_MMM = 0, MONTH_MMMM = 1, MONTH_LETTER = 2};
+	// ddd | dddd | First letter of day
+	enum DayOfWeekFormat {DAY_DDD = 0, DAY_DDDD = 1, DAY_LETTER = 2};
+
 	enum NumericDisplayType {DefaultDecimalDigits = 0, DecimalPlaces = 1, SignificantDigits = 2};
 	enum Attach {Frame = 0, Page = 1, Scale = 2};
 	enum BorderType {BlackLine = 0, Shadow = 1, DarkMarble = 2, WhiteOut = 3, BlackOut = 4, None = -1};

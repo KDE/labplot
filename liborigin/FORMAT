@@ -3,7 +3,7 @@ Origin 7.5 column value display
 Numeric, Text&Numeric:
 	Decimal:1000            = 0
 	Scientific:1E3          = 1
-	Engeneering:1k          = 2
+	Engineering:1k          = 2
 	Decimal:1,000           = 3
 
 Time:

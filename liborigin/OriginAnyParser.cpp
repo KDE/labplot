@@ -1921,8 +1921,8 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 				case 0x09: // Text&Numeric - Dec1000
 				case 0x10: // Numeric	   - Scientific
 				case 0x19: // Text&Numeric - Scientific
-				case 0x20: // Numeric	   - Engeneering
-				case 0x29: // Text&Numeric - Engeneering
+				case 0x20: // Numeric	   - Engineering
+				case 0x29: // Text&Numeric - Engineering
 				case 0x30: // Numeric	   - Dec1,000
 				case 0x39: // Text&Numeric - Dec1,000
 					speadSheets[ispread].columns[col_index].valueType = (c1%0x10 == 0x9) ? TextNumeric : Numeric;
@@ -2038,8 +2038,8 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 				case 0x09: // Text&Numeric - Dec1000
 				case 0x10: // Numeric	   - Scientific
 				case 0x19: // Text&Numeric - Scientific
-				case 0x20: // Numeric	   - Engeneering
-				case 0x29: // Text&Numeric - Engeneering
+				case 0x20: // Numeric	   - Engineering
+				case 0x29: // Text&Numeric - Engineering
 				case 0x30: // Numeric	   - Dec1,000
 				case 0x39: // Text&Numeric - Dec1,000
 					excels[iexcel].sheets[isheet].columns[col_index].valueType = (c1%0x10 == 0x9) ? TextNumeric : Numeric;

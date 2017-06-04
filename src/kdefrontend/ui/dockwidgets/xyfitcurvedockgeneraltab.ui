@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="11" column="4" colspan="4">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="xRangeLayout">
      <item>
       <widget class="QDoubleSpinBox" name="sbMin">
        <property name="decimals">

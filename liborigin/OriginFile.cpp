@@ -2,7 +2,7 @@
     File                 : OriginFile.cpp
     --------------------------------------------------------------------
     Copyright            : (C) 2005-2008 Stefan Gerlach
-						   (C) 2007-2008 Alex Kargovsky, Ion Vasilief
+    Copyright            : (C) 2007-2008 Alex Kargovsky, Ion Vasilief
     Email (use @ for *)  : kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
     Description          : Origin file import class
 
