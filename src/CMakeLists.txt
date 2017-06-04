@@ -54,6 +54,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
@@ -122,6 +123,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui

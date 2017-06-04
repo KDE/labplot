@@ -58,6 +58,7 @@
 
 #include <KLocale>
 
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
@@ -233,13 +234,16 @@ void SpreadsheetView::initActions() {
 	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
 	action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
+
+	//plotting and analysis related actions
+	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 }
 
 void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 
-	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"), this);
+	QMenu* submenu = new QMenu(i18n("Fi&ll Selection with"), this);
 	submenu->addAction(action_fill_sel_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
@@ -265,7 +269,8 @@ void SpreadsheetView::initMenus() {
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
-
+	m_columnMenu->addAction(action_plot_data);
+	m_columnMenu->addSeparator();
 // 	submenu = new QMenu(i18n("S&et Column As"));
 // 	submenu->addAction(action_set_as_x);
 // 	submenu->addAction(action_set_as_y);
@@ -316,7 +321,8 @@ void SpreadsheetView::initMenus() {
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
-// 	m_selectionMenu->setTitle(i18n("Fi&ll Selection with"));
+	m_spreadsheetMenu->addAction(action_plot_data);
+	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -402,6 +408,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
 	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+
+	connect(action_plot_data, SIGNAL(triggered()), this, SLOT(plotData()));
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -1025,6 +1033,12 @@ void SpreadsheetView::unmaskSelection() {
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::plotData() {
+	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->exec();
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {

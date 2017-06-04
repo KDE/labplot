@@ -153,6 +153,9 @@ class SpreadsheetView : public QWidget {
 		QAction* action_add_rows;
 		QAction* action_statistics_rows;
 
+		//plotting and analysis related actions
+		QAction* action_plot_data;
+
 		//Menus
 		QMenu* m_selectionMenu;
 		QMenu* m_columnMenu;
@@ -181,6 +184,8 @@ class SpreadsheetView : public QWidget {
 		void maskSelection();
 		void unmaskSelection();
 // 		void recalculateSelectedCells();
+
+		void plotData();
 
 		void fillSelectedCellsWithRowNumbers();
 		void fillWithRowNumbers();
