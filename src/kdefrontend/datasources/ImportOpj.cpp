@@ -30,6 +30,7 @@
 #include "kdefrontend/MainWin.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 
 #include <liborigin/OriginFile.h>
 
@@ -47,7 +48,8 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
 	int status = opj.parse();
-	DEBUG("Parsing done. Starting conversion ...");
+	DEBUG("Parsing done with status " << status);
+	DEBUG("Starting conversion ...");
 
 	importTables(opj);
         //TODO  
@@ -60,13 +62,10 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 
 int ImportOpj::importTables(const OriginFile &opj) {
 	// spreadsheets 
-        for (unsigned int s = 0; s < opj.spreadCount(); ++s) {
-                Origin::SpreadSheet spread = opj.spread(s);
-                int columnCount = spread.columns.size();
-                if(!columnCount) // do not add spreads without cols
-                        continue;
-                importSpreadsheet(opj, spread);
-        }
+	for (unsigned int s = 0; s < opj.spreadCount(); ++s) {
+		Origin::SpreadSheet spread = opj.spread(s);
+		importSpreadsheet(opj, spread);
+	}
 
 	// excels
 	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
@@ -74,7 +73,7 @@ int ImportOpj::importTables(const OriginFile &opj) {
 			for (unsigned int s = 0; s < excelwb.sheets.size(); ++s) {
 				Origin::SpreadSheet spread = excelwb.sheets[s];
 				int columnCount = spread.columns.size();
-				if(!columnCount) // do not add spreads without cols
+				if(!columnCount) // do not add spread without cols
 					continue;
 				spread.name = excelwb.name;
 				// scidavis does not have windows with multiple sheets
@@ -86,62 +85,20 @@ int ImportOpj::importTables(const OriginFile &opj) {
 			}
 	}
 
-	// TODO: matrices
-        for (unsigned int m = 0; m < opj.matrixCount(); ++m) {
-                Origin::Matrix matrix = opj.matrix(m);
-		// importMatrix(opj, matrix);
-                unsigned int layers = matrix.sheets.size();
-                for (unsigned int l = 0; l < layers; ++l) {
-                        Origin::MatrixSheet& layer = matrix.sheets[l];
-                        int columnCount = layer.columnCount;
-                        int rowCount = layer.rowCount;
-			//TODO
-                        //Matrix* Matrix = mw->newMatrix(matrix.name.c_str(), rowCount, columnCount);
-                        //if (!Matrix)
-                        //        return false;
-                        //Matrix->setWindowLabel(matrix.label.c_str());
-                        //Matrix->setFormula(layer.command.c_str());
-                        //Matrix->setColumnsWidth(layer.width * SciDAVis_scaling_factor);
-
-			QVector<qreal> values;
-			values.resize(rowCount*columnCount);
-			for (int i = 0; i < min((int)values.size(),(int)layer.data.size()); i++)
-				values[i]=layer.data[i];
-
-			//Matrix->setCells(values);
-			//Matrix->saveCellsToMemory();
-
-			QChar format;
-			int prec = 6;
-			switch (layer.valueTypeSpecification) {
-			case 0: //Decimal 1000
-				format='f';
-				prec = layer.decimalPlaces;
-				break;
-			case 1: //Scientific
-				format='e';
-				prec = layer.decimalPlaces;
-				break;
-			case 2: //Engineering
-			case 3: //Decimal 1,000
-				format='g';
-				prec = layer.significantDigits;
-				break;
-			}
-			//Matrix->setNumericFormat(format, prec);
-                        //Matrix->forgetSavedCells();
-                        //Matrix->showNormal();
-
-                }
+	// matrices
+	for (unsigned int m = 0; m < opj.matrixCount(); ++m) {
+		Origin::Matrix matrix = opj.matrix(m);
+		importMatrix(opj, matrix);
 	}
 
 	return 0;
 }
 
 int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread) {
+	Q_UNUSED(opj);
 	int cols = spread.columns.size();
 	int rows = spread.maxRows;
-	if (!cols) // do not create spreadsheets without columns
+	if (!cols) // do not create spreadsheet without columns
 		return -1;
 
 	QLocale locale = mw->locale();
@@ -155,10 +112,10 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 
 		QString name(column.name.c_str());
 		col->setName(name.replace(QRegExp(".*_"),""));
-//		if (column.command.size() > 0)
-//			col->setFormula(Interval<int>(0,maxrows), QString(column.command.c_str()));
+		if (column.command.size() > 0)
+			col->setFormula(Interval<int>(0, rows), QString(column.command.c_str()));
 		col->setComment(QString(column.comment.c_str()));
-//		spreadsheet->setColumnWidth(j, (int)column.width*SciDAVis_scaling_factor);
+//		spreadsheet->setColumnWidth(j, (int)column.width*scaling_factor);
 
 		switch(column.type){
 		case Origin::SpreadColumn::X:
@@ -177,14 +134,15 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 			col->setPlotDesignation(AbstractColumn::yErr);
 			break;
 		case Origin::SpreadColumn::Label:
+		case Origin::SpreadColumn::NONE:
 		default:
 			col->setPlotDesignation(AbstractColumn::noDesignation);
 		}
 
 		//TODO
 		switch(column.valueType) {
-			case Origin::Numeric:
-			case Origin::TextNumeric: {
+		case Origin::Numeric:
+		case Origin::TextNumeric: {
 			/*
 			A TextNumeric column in Origin is a column whose filled cells contain either a double or a string.
 			In SciDAVis there is no equivalent column type.
@@ -213,8 +171,8 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 						col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
 					}
 			}
-			int f=0;
 			if(column.numericDisplayType != 0) {
+				int f = 0;
 				switch(column.valueTypeSpecification) {
 				case 0: //Decimal 1000
 					f=1;
@@ -224,10 +182,11 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 					break;
 				case 2: //Engeneering
 				case 3: //Decimal 1,000
-					f=0;
-				break;
+					break;
 				}
 
+				//TODO
+				Q_UNUSED(f);
 				//Double2StringFilter *filter = static_cast<Double2StringFilter*>(col->outputFilter());
 				//filter->setNumericFormat(f);
 				//filter->setNumDigits(column.decimalPlaces);
@@ -239,6 +198,9 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 		case Origin::Time:
 		case Origin::Month:
 		case Origin::Day:
+		case Origin::ColumnHeading:
+		case Origin::TickIndexedDataset:
+		case Origin::Categorical:
 			//TODO
 			break;
 		default:
@@ -258,7 +220,52 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 }
 
 int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix) {
-	//TODO
+	Q_UNUSED(opj);
+
+	unsigned int layers = matrix.sheets.size();
+	for (unsigned int l = 0; l < layers; ++l) {
+		Origin::MatrixSheet layer = matrix.sheets[l];
+		int colCount = layer.columnCount;
+		int rowCount = layer.rowCount;
+
+		Matrix* m = new Matrix(0, matrix.name.c_str());
+		m->setRowCount(rowCount);
+		m->setColumnCount(colCount);
+		if (!m)
+			return false;
+		m->setFormula(layer.command.c_str());
+		//Matrix->setColumnsWidth(layer.width * scaling_factor);
+
+		for (int i = 0; i < rowCount; i++) {
+		for (int j = 0; j < colCount; j++) {
+			m->setCell(i, j, layer.data[j + i*colCount]);
+		}
+		}
+
+		QChar format;
+		int prec = 6;
+		switch (layer.valueTypeSpecification) {
+		case 0: //Decimal 1000
+			format='f';
+			prec = layer.decimalPlaces;
+			break;
+		case 1: //Scientific
+			format='e';
+			prec = layer.decimalPlaces;
+			break;
+		case 2: //Engineering
+		case 3: //Decimal 1,000
+			format='g';
+			prec = layer.significantDigits;
+			break;
+		}
+
+		//TODO
+		Q_UNUSED(prec);
+		//m->setNumericFormat(format, prec);
+
+		mw->addAspectToProject(m);
+	}
 
 	return 0;
 }

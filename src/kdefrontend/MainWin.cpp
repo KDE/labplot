@@ -1137,7 +1137,7 @@ void MainWin::newMatrix() {
 	Matrix* matrix = new Matrix(0, i18n("Matrix"));
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
-	//add the new spreadsheet to the workbook
+	//add the new matrix to the workbook
 	Workbook* workbook = activeWorkbook();
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
@@ -1159,6 +1159,9 @@ void MainWin::newWorksheet() {
 	this->addAspectToProject(worksheet);
 }
 
+/*!
+	adds a new Note to the project.
+*/
 void MainWin::newNotes() {
 	Note* notes = new Note(i18n("Note"));
 	this->addAspectToProject(notes);

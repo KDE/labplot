@@ -41,7 +41,7 @@ public:
 	~ImportOpj() {};
 	int importTables(const OriginFile &opj);
 	int  importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread);
-	int importMatrix(const OriginFile &opj, const Origin::Matrix &spread);
+	int importMatrix(const OriginFile &opj, const Origin::Matrix &matrix);
 
 private:
 	MainWin *mw;
