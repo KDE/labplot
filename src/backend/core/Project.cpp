@@ -320,7 +320,6 @@ bool Project::load(XmlStreamReader* reader) {
 						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
 					} else if (differentiationCurve) {
-						RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 						RESTORE_COLUMN_POINTER(differentiationCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(differentiationCurve, yDataColumn, YDataColumn);
 					} else if (integrationCurve) {
@@ -352,6 +351,7 @@ bool Project::load(XmlStreamReader* reader) {
 						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
+					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 					curve->suppressRetransform(false);
 					curve->retransform();
 				}

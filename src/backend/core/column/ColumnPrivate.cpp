@@ -95,7 +95,7 @@
  * \brief Ctor
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
-	: statisticsAvailable(false), m_column_mode(mode), m_plot_designation(AbstractColumn::noDesignation), m_width(0), m_owner(owner) {
+	: statisticsAvailable(false), m_column_mode(mode), m_plot_designation(AbstractColumn::NoDesignation), m_width(0), m_owner(owner) {
 	Q_ASSERT(owner != 0); // a ColumnPrivate without owner is not allowed
 	// because the owner must become the parent aspect of the input and output filters
 	switch(mode) {
@@ -138,7 +138,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  * \brief Special ctor (to be called from Column only!)
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
-	: statisticsAvailable(false), m_column_mode(mode), m_data(data), m_plot_designation(AbstractColumn::noDesignation), m_width(0), m_owner(owner) {
+	: statisticsAvailable(false), m_column_mode(mode), m_data(data), m_plot_designation(AbstractColumn::NoDesignation), m_width(0), m_owner(owner) {
 
 	switch(mode) {
 	case AbstractColumn::Numeric:
