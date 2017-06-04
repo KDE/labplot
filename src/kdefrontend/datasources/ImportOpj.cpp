@@ -31,6 +31,7 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/note/Note.h"
 
 #include <liborigin/OriginFile.h>
 
@@ -54,7 +55,7 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 	importTables(opj);
         //TODO  
 //      importGraphs(opj);
-//      importNotes(opj);
+	importNotes(opj);
 //      if(filename.endsWith(".opj", Qt::CaseInsensitive))
 //              createProjectTree(opj);
 
@@ -412,5 +413,34 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 		mw->addAspectToProject(m);
 	}
 
+	return 0;
+}
+
+int ImportOpj::importNotes(const OriginFile &opj) {
+//	int visible_count = 0;
+	for(unsigned int n = 0; n < opj.noteCount(); ++n) {
+		Origin::Note _note = opj.note(n);
+		QString name = _note.name.c_str();
+		QRegExp rx("^@(\\S+)$");
+		if(rx.indexIn(name) == 0)
+			name = name.mid(2, name.length() - 3);
+		Note *note = new Note(name);
+		if(!note)
+			return -1;
+		//note->setWindowLabel(_note.label.c_str());
+		note->setNote(QString(_note.text.c_str()));
+
+		// TODO
+		//cascade the notes
+		//int dx = 20;
+		//int dy = note->parentWidget()->frameGeometry().height() - note->height();
+		//note->parentWidget()->move(QPoint(visible_count*dx+xoffset*OBJECTXOFFSET, visible_count*dy));
+
+		mw->addAspectToProject(note);
+
+//		visible_count++;
+	}
+//	if(visible_count > 0)
+//		xoffset++;
 	return 0;
 }
