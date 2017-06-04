@@ -128,15 +128,15 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 			col->setPlotDesignation(AbstractColumn::Z);
 			break;
 		case Origin::SpreadColumn::XErr:
-			col->setPlotDesignation(AbstractColumn::xErr);
+			col->setPlotDesignation(AbstractColumn::XError);
 			break;
 		case Origin::SpreadColumn::YErr:
-			col->setPlotDesignation(AbstractColumn::yErr);
+			col->setPlotDesignation(AbstractColumn::YError);
 			break;
 		case Origin::SpreadColumn::Label:
 		case Origin::SpreadColumn::NONE:
 		default:
-			col->setPlotDesignation(AbstractColumn::noDesignation);
+			col->setPlotDesignation(AbstractColumn::NoDesignation);
 		}
 
 		//TODO
