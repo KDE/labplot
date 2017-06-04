@@ -395,7 +395,39 @@ void SpreadsheetModel::updateHorizontalHeader() {
 				break;
 		}
 
-		m_horizontal_header_data.replace(i, col->name() + type);
+		QString designation;
+		switch(col->plotDesignation()) {
+			case AbstractColumn::NoDesignation:
+				break;
+			case AbstractColumn::X:
+				designation = QLatin1String(" [X]");
+				break;
+			case AbstractColumn::Y:
+				designation = QLatin1String(" [Y]");
+				break;
+			case AbstractColumn::Z:
+				designation = QLatin1String(" [Z]");
+				break;
+			case AbstractColumn::XError:
+				designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::XErrorPlus:
+				designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::XErrorMinus:
+				designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YError:
+				designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YErrorPlus:
+				designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YErrorMinus:
+				designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
+				break;
+		}
+		m_horizontal_header_data.replace(i, col->name() + type + designation);
 	}
 }
 

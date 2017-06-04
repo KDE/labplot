@@ -645,6 +645,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
 
+	writer->writeAttribute("designation", QString::number(plotDesignation()));
 	writer->writeAttribute("mode", QString::number(columnMode()));
 	writer->writeAttribute("width", QString::number(width()));
 
@@ -750,7 +751,13 @@ bool Column::load(XmlStreamReader* reader) {
 		QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 		QXmlStreamAttributes attribs = reader->attributes();
 
-		QString str = attribs.value("mode").toString();
+		QString str = attribs.value("designation").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'designation'"));
+		else
+			setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
+
+		str = attribs.value("mode").toString();
 		if(str.isEmpty())
 			reader->raiseWarning(attributeWarning.arg("'mode'"));
 		else
@@ -804,7 +811,7 @@ bool Column::load(XmlStreamReader* reader) {
 /**
  * \brief Read XML input filter element
  */
-bool Column::XmlReadInputFilter(XmlStreamReader * reader) {
+bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "input_filter");
 	if (!reader->skipToNextTag()) return false;
 	if (!m_column_private->inputFilter()->load(reader)) return false;
@@ -816,7 +823,7 @@ bool Column::XmlReadInputFilter(XmlStreamReader * reader) {
 /**
  * \brief Read XML output filter element
  */
-bool Column::XmlReadOutputFilter(XmlStreamReader * reader) {
+bool Column::XmlReadOutputFilter(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "output_filter");
 	if (!reader->skipToNextTag()) return false;
 	if (!m_column_private->outputFilter()->load(reader)) return false;
@@ -857,9 +864,8 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	return true;
 }
 
-
 //TODO: read cell formula, not implemented yet
-// bool Column::XmlReadFormula(XmlStreamReader * reader)
+// bool Column::XmlReadFormula(XmlStreamReader* reader)
 // {
 // 	Q_ASSERT(reader->isStartElement() && reader->name() == "formula");
 //
@@ -881,7 +887,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 /**
  * \brief Read XML row element
  */
-bool Column::XmlReadRow(XmlStreamReader * reader) {
+bool Column::XmlReadRow(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
 
 	QString str;

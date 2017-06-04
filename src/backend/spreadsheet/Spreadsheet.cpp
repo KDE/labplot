@@ -405,8 +405,8 @@ int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
 
-	if (column(col)->plotDesignation() == AbstractColumn::xErr ||
-			column(col)->plotDesignation() == AbstractColumn::yErr) {
+	if (column(col)->plotDesignation() == AbstractColumn::XError ||
+			column(col)->plotDesignation() == AbstractColumn::YError) {
 		// look to the left first
 		for(int i=col-1; i>=0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)

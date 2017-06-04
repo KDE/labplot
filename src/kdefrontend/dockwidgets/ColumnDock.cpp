@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -77,10 +77,6 @@ ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(0), m_initia
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
 	connect(ui.cbPlotDesignation, SIGNAL(currentIndexChanged(int)), this, SLOT(plotDesignationChanged(int)));
 
-	//TODO activate later
-	ui.lPlotDesignation->hide();
-	ui.cbPlotDesignation->hide();
-
 	retranslateUi();
 }
 
@@ -134,8 +130,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.cbFormat->setVisible(!nonEditable);
 	ui.lPrecision->setVisible(!nonEditable);
 	ui.sbPrecision->setVisible(!nonEditable);
-// 	ui.lPlotDesignation->setVisible(!nonEditable);
-// 	ui.cbPlotDesignation->setVisible(!nonEditable);
+	ui.lPlotDesignation->setVisible(!nonEditable);
+	ui.cbPlotDesignation->setVisible(!nonEditable);
 	if (nonEditable) {
 		m_initializing = false;
 		return;
@@ -147,7 +143,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	case AbstractColumn::Numeric: {
 			Double2StringFilter* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
-			//qDebug()<<"set columns, numeric format"<<filter->numericFormat();
 			ui.sbPrecision->setValue(filter->numDigits());
 			break;
 		}
@@ -241,7 +236,9 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		ui.cbFormat->setEditable( false );
 }
 
-// SLOTS
+//*************************************************************
+//******** SLOTs for changes triggered in ColumnDock **********
+//*************************************************************
 void ColumnDock::retranslateUi() {
 	m_initializing = true;
 
@@ -258,11 +255,14 @@ void ColumnDock::retranslateUi() {
 	ui.cbPlotDesignation->addItem(i18n("Y"));
 	ui.cbPlotDesignation->addItem(i18n("Z"));
 	ui.cbPlotDesignation->addItem(i18n("X-error"));
+	ui.cbPlotDesignation->addItem(i18n("X-error -"));
+	ui.cbPlotDesignation->addItem(i18n("X-error +"));
 	ui.cbPlotDesignation->addItem(i18n("Y-error"));
+	ui.cbPlotDesignation->addItem(i18n("Y-error -"));
+	ui.cbPlotDesignation->addItem(i18n("Y-error +"));
 
 	m_initializing = false;
 }
-
 
 void ColumnDock::nameChanged() {
 	if (m_initializing)
@@ -270,7 +270,6 @@ void ColumnDock::nameChanged() {
 
 	m_columnsList.first()->setName(ui.leName->text());
 }
-
 
 void ColumnDock::commentChanged() {
 	if (m_initializing)
@@ -380,7 +379,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in Column ***********
+//********* SLOTs for changes triggered in Column *************
 //*************************************************************
 void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_column != aspect)

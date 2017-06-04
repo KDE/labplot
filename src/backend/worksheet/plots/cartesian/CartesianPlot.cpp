@@ -980,7 +980,6 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 				fitData.modelType = nsl_fit_model_polynomial;
 				fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
 				fitData.paramNames << "c0" << "c1";
-// 				fitData.paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
 			} else if (action == addFitAction2) {
 				//Power
 				fitData.modelCategory = nsl_fit_model_basic;
