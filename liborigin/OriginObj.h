@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : OriginObj.h
     --------------------------------------------------------------------
-    Copyright            : (C) 2005-2007 Stefan Gerlach
+    Copyright            : (C) 2005-2007, 2017 Stefan Gerlach
                            (C) 2007-2008 Alex Kargovsky, Ion Vasilief
     Email (use @ for *)  : kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
     Description          : Origin internal object classes
@@ -69,13 +69,13 @@ namespace Origin
 	enum NumericDisplayType {DefaultDecimalDigits = 0, DecimalPlaces = 1, SignificantDigits = 2};
 	enum Attach {Frame = 0, Page = 1, Scale = 2};
 	enum BorderType {BlackLine = 0, Shadow = 1, DarkMarble = 2, WhiteOut = 3, BlackOut = 4, None = -1};
-	enum FillPattern {NoFill, BDiagDense, BDiagMedium, BDiagSparse, FDiagDense, FDiagMedium, FDiagSparse, 
-		DiagCrossDense, DiagCrossMedium, DiagCrossSparse, HorizontalDense, HorizontalMedium, HorizontalSparse, 
-		VerticalDense, VerticalMedium, VerticalSparse, CrossDense, CrossMedium, CrossSparse};
+	enum FillPattern {NoFill = 0, BDiagDense = 1, BDiagMedium = 2, BDiagSparse = 3, FDiagDense = 4, FDiagMedium = 5, FDiagSparse = 6,
+		DiagCrossDense = 7, DiagCrossMedium = 8, DiagCrossSparse = 9, HorizontalDense = 10, HorizontalMedium = 11, HorizontalSparse = 12,
+		VerticalDense = 13, VerticalMedium = 14, VerticalSparse = 15, CrossDense = 16, CrossMedium = 17, CrossSparse = 18};
 
 	struct Color
 	{
-		enum ColorType {None, Automatic, Regular, Custom, Increment, Indexing, RGB, Mapping};
+		enum ColorType {None = 0, Automatic = 1, Regular = 2, Custom = 3, Increment = 4, Indexing = 5, RGB = 6, Mapping = 7};
 		enum RegularColor {Black = 0, Red = 1, Green = 2, Blue = 3, Cyan = 4, Magenta = 5, Yellow = 6, DarkYellow = 7, Navy = 8,
 			Purple = 9, Wine = 10, Olive = 11, DarkCyan = 12, Royal=  13, Orange = 14, Violet = 15, Pink = 16, White = 17,
 			LightGray = 18, Gray = 19, LTYellow = 20, LTCyan = 21, LTMagenta = 22, DarkGray = 23/*, Custom = 255*/};
@@ -468,7 +468,8 @@ namespace Origin
 			XYZContour = 243, XYZTriangular = 245, LineSeries = 246, YErrorBar = 254, XYErrorBar = 255, GraphScatter3D = 0x8AF0,
 			GraphTrajectory3D = 0x8AF1, Polar = 0x00020000, SmithChart = 0x00040000, FillArea = 0x00800000};
 		enum LineStyle {Solid = 0, Dash = 1, Dot = 2, DashDot = 3, DashDotDot = 4, ShortDash = 5, ShortDot = 6, ShortDashDot = 7};
-		enum LineConnect {NoLine = 0, Straight = 1, TwoPointSegment = 2, ThreePointSegment = 3, BSpline = 8, Spline = 9, StepHorizontal = 11, StepVertical = 12, StepHCenter = 13, StepVCenter = 14, Bezier = 15};
+		enum LineConnect {NoLine = 0, Straight = 1, TwoPointSegment = 2, ThreePointSegment = 3, BSpline = 8, Spline = 9,
+			StepHorizontal = 11, StepVertical = 12, StepHCenter = 13, StepVCenter = 14, Bezier = 15};
 
 		bool hidden;
 		unsigned char type;

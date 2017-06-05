@@ -34,6 +34,8 @@
 #include "backend/note/Note.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/TextLabel.h"
 
 #include <liborigin/OriginFile.h>
 
@@ -461,10 +463,17 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 			CartesianPlot* plot = new CartesianPlot("");
 			if (!plot)
 				return -2;
-			// TODO
-			//if (!layer.legend.text.empty())
-			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())));
 
+			if (!layer.legend.text.empty()) {
+				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
+				TextLabel* title = new TextLabel(legend->name(), TextLabel::PlotLegendTitle);
+				title->setText(parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())));
+				//legend->title() = title;
+				legend->addChild(title);
+				plot->addChild(legend);
+			}
+
+			// TODO
 			//add texts
 			//for (unsigned int i = 0; i < layer.texts.size(); ++i)
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));
@@ -503,7 +512,47 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 					continue;
 				}
 
+/*				QString tableName;
+				switch(data[0].toAscii()) {
+				case 'T':
+				case 'E': {
+					tableName = data.right(data.length() - 2);
+					Table* table = mw->table(tableName);
+					if (!table)
+						break;
+					if(style == Graph::ErrorBars) {
+						int flags=_curve.symbolType;
+						graph->addErrorBars(QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()),
+							((flags&0x10)==0x10?0:1), ceil(_curve.lineWidth), ceil(_curve.symbolSize), QColor(Qt::black),
+							(flags&0x40)==0x40, (flags&2)==2, (flags&1)==1);
+					} else if(style == Graph::Histogram) {
+						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
+					} else {
+						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
+					}
+					break;
+				}
 				//TODO
+				}
+*/
+
+/*				CurveLayout cl = graph->initCurveLayout(style, layer.curves.size());
+				cl.sSize = ceil(_curve.symbolSize*0.5);
+				cl.penWidth = _curve.symbolThickness;
+				color = _curve.symbolColor.regular;
+				if((style == Graph::Scatter || style == Graph::LineSymbols) && color == 0xF7) // 0xF7 -Automatic color
+					color = auto_color++;
+				cl.symCol = color;
+				switch(_curve.symbolType & 0xFF) {
+				case 0: //NoSymbol
+					cl.sType = 0;
+					break;
+				//TODO
+				}
+*/
+
+				//TODO
+
 			}
 
 			worksheet->addChild(plot);
@@ -513,4 +562,23 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 	}
 
 	return 0;
+}
+
+QString ImportOpj::parseOriginText(const QString &str) {
+	QStringList lines = str.split("\n");
+	QString text = "";
+	for (int i = 0; i < lines.size(); ++i) {
+		if(i > 0)
+			text.append("\n");
+		text.append(parseOriginTags(lines[i]));
+	}
+
+	return text;
+}
+
+QString ImportOpj::parseOriginTags(const QString &str) {
+	QString line = str;
+	//TODO
+
+	return line;
 }

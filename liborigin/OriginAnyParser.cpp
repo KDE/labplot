@@ -2545,7 +2545,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 						axis.tickAxis[0].columnName = column.second;
 					}
 					break;
-				default: // Numeric Decimal 1.000
+				case TextNumeric: // Numeric Decimal 1.000
 					axis.tickAxis[0].valueType = Numeric;
 					axis.tickAxis[0].valueTypeSpecification = 0;
 					break;
@@ -2632,7 +2632,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 						axis.tickAxis[1].columnName = column.second;
 					}
 					break;
-				default: // Numeric Decimal 1.000
+				case TextNumeric: // Numeric Decimal 1.000
 					axis.tickAxis[1].valueType = Numeric;
 					axis.tickAxis[1].valueTypeSpecification = 0;
 				break;

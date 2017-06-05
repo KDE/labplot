@@ -506,7 +506,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
 	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth = title->graphicsItem()->boundingRect().width();
-		if (titleWidth>legendWidth)
+		if (titleWidth > legendWidth)
 			legendWidth = titleWidth;
 	}
 
