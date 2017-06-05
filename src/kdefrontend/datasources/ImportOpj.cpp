@@ -29,6 +29,7 @@
 #include "ImportOpj.h"
 #include "kdefrontend/MainWin.h"
 #include "backend/lib/macros.h"
+#include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
@@ -65,28 +66,21 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 }
 
 int ImportOpj::importTables(const OriginFile &opj) {
-	// spreadsheets 
+	// spreadsheets (origin workbook with single sheet)
 	for (unsigned int s = 0; s < opj.spreadCount(); ++s) {
 		Origin::SpreadSheet spread = opj.spread(s);
-		importSpreadsheet(opj, spread);
+		importSpreadsheet(0, opj, spread);
 	}
 
-	// excels
+	// excels (origin workbook with multiple sheets)
 	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
 			Origin::Excel excelwb = opj.excel(e);
+			Workbook *workbook = new Workbook(0, excelwb.name.c_str() + QString(" - ") + excelwb.label.c_str());
 			for (unsigned int s = 0; s < excelwb.sheets.size(); ++s) {
 				Origin::SpreadSheet spread = excelwb.sheets[s];
-				int columnCount = spread.columns.size();
-				if(!columnCount) // do not add spread without cols
-					continue;
-				spread.name = excelwb.name;
-				// scidavis does not have windows with multiple sheets
-				if (s > 0)
-					spread.name.append("@").append(std::to_string(s+1));
-
-				spread.maxRows = excelwb.maxRows;
-				importSpreadsheet(opj, spread);
+				importSpreadsheet(workbook, opj, spread);
 			}
+			mw->addAspectToProject(workbook);
 	}
 
 	// matrices
@@ -98,7 +92,7 @@ int ImportOpj::importTables(const OriginFile &opj) {
 	return 0;
 }
 
-int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread) {
+int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, const Origin::SpreadSheet &spread) {
 	Q_UNUSED(opj);
 	int cols = spread.columns.size();
 	int rows = spread.maxRows;
@@ -106,7 +100,11 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 		return -1;
 
 	QLocale locale = mw->locale();
-	Spreadsheet* spreadsheet = new Spreadsheet(0, spread.name.c_str());
+	Spreadsheet* spreadsheet;
+	if (workbook == 0)	// single sheet
+		spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
+	else			// multiple sheets (TODO: name of sheets are not set correctly: "Sheet1", "Sheet2", ...)
+		spreadsheet = new Spreadsheet(0, spread.name.c_str());
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount(cols);
 
@@ -361,7 +359,11 @@ int ImportOpj::importSpreadsheet(const OriginFile &opj, const Origin::SpreadShee
 
 //	if (spread.hidden || spread.loose)
 //		mw->hideWindow(spreadsheet);
-	mw->addAspectToProject(spreadsheet);
+
+	if (workbook == 0) // single sheet
+		mw->addAspectToProject(spreadsheet);
+	else	// multiple sheets
+		workbook->addChild(spreadsheet);
 
 	return 0;
 }
@@ -473,7 +475,7 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 				plot->addChild(legend);
 			}
 
-			// TODO
+			// TODO: we only support one legend
 			//add texts
 			//for (unsigned int i = 0; i < layer.texts.size(); ++i)
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));

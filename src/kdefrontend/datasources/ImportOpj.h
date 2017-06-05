@@ -32,6 +32,7 @@
 #include <liborigin/OriginFile.h>
 
 class MainWin;
+class Workbook;
 class QString;
 
 class ImportOpj {
@@ -42,7 +43,7 @@ public:
 
 private:
 	int importTables(const OriginFile &opj);
-	int importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread);
+	int importSpreadsheet(Workbook* workbook, const OriginFile &opj, const Origin::SpreadSheet &spread);
 	int importMatrix(const OriginFile &opj, const Origin::Matrix &matrix);
 	int importNotes(const OriginFile &opj);
 	int importGraphs(const OriginFile &opj);
