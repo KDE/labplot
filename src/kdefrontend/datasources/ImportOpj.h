@@ -43,6 +43,7 @@ public:
 	int  importSpreadsheet(const OriginFile &opj, const Origin::SpreadSheet &spread);
 	int importMatrix(const OriginFile &opj, const Origin::Matrix &matrix);
 	int importNotes(const OriginFile &opj);
+	int importGraphs(const OriginFile &opj);
 
 private:
 	MainWin *mw;

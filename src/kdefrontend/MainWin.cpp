@@ -1155,7 +1155,7 @@ void MainWin::newMatrix() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet= new Worksheet(0, i18n("Worksheet"));
+	Worksheet* worksheet = new Worksheet(0, i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 

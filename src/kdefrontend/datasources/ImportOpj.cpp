@@ -32,6 +32,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <liborigin/OriginFile.h>
 
@@ -53,8 +55,7 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 	DEBUG("Starting conversion ...");
 
 	importTables(opj);
-        //TODO  
-//      importGraphs(opj);
+	importGraphs(opj);
 	importNotes(opj);
 //      if(filename.endsWith(".opj", Qt::CaseInsensitive))
 //              createProjectTree(opj);
@@ -442,5 +443,74 @@ int ImportOpj::importNotes(const OriginFile &opj) {
 	}
 //	if(visible_count > 0)
 //		xoffset++;
+	return 0;
+}
+
+int ImportOpj::importGraphs(const OriginFile &opj) {
+	for(unsigned int g = 0; g < opj.graphCount(); ++g) {
+		Origin::Graph _graph = opj.graph(g);
+		Worksheet *worksheet = new Worksheet(0, _graph.name.c_str());
+		if (!worksheet)
+			return -1;
+
+//		worksheet->hide();//!hack used in order to avoid resize and repaint events
+		worksheet->setComment(_graph.label.c_str());
+		unsigned int layers = _graph.layers.size();
+		for (unsigned int l = 0; l < layers; ++l) {
+			Origin::GraphLayer& layer = _graph.layers[l];
+			CartesianPlot* plot = new CartesianPlot("");
+			if (!plot)
+				return -2;
+			// TODO
+			//if (!layer.legend.text.empty())
+			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())));
+
+			//add texts
+			//for (unsigned int i = 0; i < layer.texts.size(); ++i)
+			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));
+
+			int auto_color = 0;
+			int style = 0;
+			for (unsigned int c = 0; c < layer.curves.size(); ++c) {
+				Origin::GraphCurve& _curve = layer.curves[c];
+				QString data(_curve.dataName.c_str());
+				int color = 0;
+
+				switch(_curve.type) {
+				case Origin::GraphCurve::Line:
+//					style = Graph::Line;
+					break;
+				case Origin::GraphCurve::Scatter:
+//					style = Graph::Scatter;
+					break;
+				case Origin::GraphCurve::LineSymbol:
+//					style = Graph::LineSymbols;
+					break;
+				case Origin::GraphCurve::ErrorBar:
+				case Origin::GraphCurve::XErrorBar:
+//					style = Graph::ErrorBars;
+					break;
+				case Origin::GraphCurve::Column:
+//					style = Graph::VerticalBars;
+					break;
+				case Origin::GraphCurve::Bar:
+//					style = Graph::HorizontalBars;
+					break;
+				case Origin::GraphCurve::Histogram:
+//					style = Graph::Histogram;
+					break;
+				default:
+					continue;
+				}
+
+				//TODO
+			}
+
+			worksheet->addChild(plot);
+		}
+
+		mw->addAspectToProject(worksheet);
+	}
+
 	return 0;
 }

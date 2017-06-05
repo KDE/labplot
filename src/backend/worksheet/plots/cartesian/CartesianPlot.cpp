@@ -1620,7 +1620,8 @@ void CartesianPlotPrivate::retransform() {
 	//call retransform() for the title and the legend (if available)
 	//when a predefined position relative to the (Left, Centered etc.) is used,
 	//the actual position needs to be updated on plot's geometry changes.
-	q->title()->retransform();
+	if (q->title())
+		q->title()->retransform();
 	if (q->m_legend)
 		q->m_legend->retransform();
 
