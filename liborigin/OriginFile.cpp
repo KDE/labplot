@@ -72,40 +72,58 @@ OriginFile::OriginFile(const string& fileName)
 			fileVersion = 410;
 	} else if (buildVersion >= 110 && buildVersion <= 141) // 4.1
 		fileVersion = 410;
-	else if(buildVersion <= 210) // 5.0
+	else if (buildVersion <= 210) // 5.0
 		fileVersion = 500;
-	else if(buildVersion <= 2623) // 6.0
+	else if (buildVersion < 2624) // 6.0
 		fileVersion = 600;
-	else if(buildVersion <= 2627) // 6.0 SR1
+	else if (buildVersion < 2628) // 6.0 SR1
 		fileVersion = 601;
-	else if(buildVersion < 2635) // 6.0 SR4
+	else if (buildVersion < 2635) // 6.0 SR4
 		fileVersion = 604;
-	else if(buildVersion < 2656) // 6.1
+	else if (buildVersion < 2656) // 6.1
 		fileVersion = 610;
-	else if(buildVersion < 2659) // 7.0 SR0 (2656-2658)
+	else if (buildVersion < 2659) // 7.0 SR0 (2656-2658)
 		fileVersion = 700;
 	else if (buildVersion <2664) // 7.0 SR1 (2659-2663)
 		fileVersion = 701;
-	else if (buildVersion <2672) // 7.0 SR2 (2664-2671)
+	else if (buildVersion < 2672) // 7.0 SR2 (2664-2671)
 		fileVersion = 702;
-	else if (buildVersion <2673) // 7.0 SR3 (2672-2672)
+	else if (buildVersion < 2673) // 7.0 SR3 (2672-2672)
 		fileVersion = 703;
-	else if(buildVersion <2766) // 7.0 SR4 (2673-2765)
+	else if (buildVersion < 2766) // 7.0 SR4 (2673-2765)
 		fileVersion = 704;
-	else if (buildVersion <2878) // 7.5 (2766-2877)
+	else if (buildVersion < 2878) // 7.5 (2766-2877)
 		fileVersion = 750;
-	else if (buildVersion <2881) // 8.0 SR0 (2878-2880)
+	else if (buildVersion < 2881) // 8.0 SR0 (2878-2880)
 		fileVersion = 800;
-	else if (buildVersion <2892) // 8.0 SR1,SR2,SR3 (2878-2891)
+	else if (buildVersion < 2892) // 8.0 SR1,SR2,SR3 (2878-2891)
 		fileVersion = 801;
-	else if (buildVersion <2944) // 8.0 SR4, 8.1 SR1-SR4 (2891-2943)
+	else if (buildVersion < 2944) // 8.0 SR4, 8.1 SR1-SR4 (2891-2943)
 		fileVersion = 810;
+	else if (buildVersion < 2947) // 8.5 SR0, SR1 (2944-2946)
+		fileVersion = 850;
+	else if (buildVersion < 2962) // 8.5.1 SR0, SR1, SR2
+		fileVersion = 851;
+	else if (buildVersion < 2980) // 8.6 SR0, SR1, SR2, SR3
+		fileVersion = 860;
+	else if (buildVersion < 3025) // 9.0 SR0, SR1, SR2
+		fileVersion = 900;
+	else if (buildVersion < 3078) // 9.1 SR0, SR1, SR2, SR3
+		fileVersion = 910;
+	else if (buildVersion < 3117) // 2015 (9.2) SR0, SR1, SR2
+		fileVersion = 201500;
+	else if (buildVersion < 3169) // 2016 (9.3.0) SR0
+		fileVersion = 201600;
+	else if (buildVersion < 3172) // 2016.1, 2016.2 (9.3.1,9.3.2) SR1, SR2
+		fileVersion = 201610;
+	else if (buildVersion < 3225) // 2017.0 (9.4.0) SR0
+		fileVersion = 201700;
 	else {
-		fileVersion = 850; // 8.5 SR0 and newer (2944-)
-		LOG_PRINT(logfile, "Found project version 8.5 or newer\n")
+		fileVersion = 201710; // 2017 SR1 or newer
+		LOG_PRINT(logfile, "Found project version 2017.1 or newer\n")
 	}
 
-	if (fileVersion != 850) {
+	if (fileVersion != 201710) {
 		LOG_PRINT(logfile, "Found project version %.2f\n", fileVersion/100.0)
 	}
 	// Close logfile, will be reopened in parser routine.
