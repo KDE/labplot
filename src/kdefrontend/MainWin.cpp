@@ -520,7 +520,11 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importFileAction->setEnabled(!b);
 	m_importSqlAction->setEnabled(!b);
+#ifdef USE_LIBORIGIN
 	m_importOpjAction->setEnabled(!b);
+#else
+	m_importOpjAction->setEnabled(false);
+#endif
 	m_exportAction->setEnabled(!b);
 	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
