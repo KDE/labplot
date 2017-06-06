@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 add_compile_options(-std=c++11)
 
 # boost library headers
-find_package(Boost REQUIRED)
+#find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # library version
@@ -56,7 +56,7 @@ set_target_properties(origin-static PROPERTIES OUTPUT_NAME "origin" POSITION_IND
 #install(TARGETS opj2dat DESTINATION bin)
 
 # documentation
-install(FILES COPYING FORMAT README DESTINATION share/doc/liborigin)
+#install(FILES COPYING FORMAT README DESTINATION share/doc/liborigin)
 #configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 #find_package(Doxygen)
 #if(DOXYGEN_FOUND)

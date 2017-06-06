@@ -31,7 +31,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportOpj.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -83,6 +82,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 )
+IF (USE_LIBORIGIN)
+	LIST(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/ImportOpj.cpp)
+ENDIF ()
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
@@ -294,7 +296,7 @@ INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
-#KF5::NewStuff
+#TODO: KF5::NewStuff
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
 ENDIF ()
@@ -313,8 +315,9 @@ ENDIF ()
 IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
 ENDIF ()
-# ${OPJ_LIBRARY}
+IF (USE_LIBORIGIN)
 target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+ENDIF ()
 
 ############## installation ################################
 

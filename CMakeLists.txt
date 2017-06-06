@@ -74,6 +74,7 @@ option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
+option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -82,6 +83,16 @@ ENDIF ()
 
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
+
+### BOOST (optional) for liborigin ###############################
+FIND_PACKAGE(Boost)
+
+IF (Boost_FOUND AND ENABLE_LIBORIGIN)
+	SET (USE_LIBORIGIN TRUE)
+	MESSAGE (STATUS "liborigin support enabled")
+ELSE ()
+	MESSAGE (STATUS "liborigin support disabled")
+ENDIF ()
 
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
@@ -194,7 +205,9 @@ ENDIF ()
 
 #################################################
 
-add_subdirectory(liborigin)
+IF (USE_LIBORIGIN)
+	add_subdirectory(liborigin)
+ENDIF ()
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)

@@ -57,7 +57,9 @@
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
+#ifdef USE_LIBORIGIN
 #include "kdefrontend/datasources/ImportOpj.h"
+#endif
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -1701,10 +1703,12 @@ void MainWin::importOpjDialog() {
 	// TODO: any options?
 	// TODO: show selected project version and other infos?
 
+#ifdef USE_LIBORIGIN
 	if (!filename.isEmpty()) {
 		ImportOpj(this, filename);
 		statusBar()->showMessage(i18n("%1 imported", filename));
 	}
+#endif
 	
 	DEBUG("MainWin::importOpjDialog() DONE");
 }
