@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : OriginFile.cpp
     --------------------------------------------------------------------
-    Copyright            : (C) 2005-2008 Stefan Gerlach
+    Copyright            : (C) 2005-2008, 2017 Stefan Gerlach
     Copyright            : (C) 2007-2008 Alex Kargovsky, Ion Vasilief
     Email (use @ for *)  : kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
     Description          : Origin file import class
@@ -117,7 +117,7 @@ OriginFile::OriginFile(const string& fileName)
 	} else if (buildVersion < 3169) { // 2016 (9.3.0) SR0
 		fileVersion = 930;
 		newFileVersion = 20160;
-	} else if (buildVersion < 3172) { // 2016.1, 2016.2 (9.3.1, 9.3.2) SR1, SR2
+	} else if (buildVersion < 3172) { // 2016.1 (9.3.1), 2016.2 (9.3.2) SR1, SR2
 		fileVersion = 931;
 		newFileVersion = 20161;
 	} else if (buildVersion < 3225) { // 2017.0 (9.4.0) SR0
