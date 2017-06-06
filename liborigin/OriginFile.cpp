@@ -65,6 +65,7 @@ OriginFile::OriginFile(const string& fileName)
 	LOG_PRINT(logfile, "File: %s\n", fileName.c_str())
 
 	// translate version
+	unsigned int newFileVersion = 0;
 	if (majorVersion==3) {
 		if (buildVersion < 830)
 			fileVersion = 350;
@@ -110,22 +111,30 @@ OriginFile::OriginFile(const string& fileName)
 		fileVersion = 900;
 	else if (buildVersion < 3078) // 9.1 SR0, SR1, SR2, SR3
 		fileVersion = 910;
-	else if (buildVersion < 3117) // 2015 (9.2) SR0, SR1, SR2
-		fileVersion = 201500;
-	else if (buildVersion < 3169) // 2016 (9.3.0) SR0
-		fileVersion = 201600;
-	else if (buildVersion < 3172) // 2016.1, 2016.2 (9.3.1,9.3.2) SR1, SR2
-		fileVersion = 201610;
-	else if (buildVersion < 3225) // 2017.0 (9.4.0) SR0
-		fileVersion = 201700;
-	else {
-		fileVersion = 201710; // 2017 SR1 or newer
-		LOG_PRINT(logfile, "Found project version 2017.1 or newer\n")
+	else if (buildVersion < 3117) { // 2015 (9.2) SR0, SR1, SR2
+		fileVersion = 920;
+		newFileVersion = 20150;
+	} else if (buildVersion < 3169) { // 2016 (9.3.0) SR0
+		fileVersion = 930;
+		newFileVersion = 20160;
+	} else if (buildVersion < 3172) { // 2016.1, 2016.2 (9.3.1, 9.3.2) SR1, SR2
+		fileVersion = 931;
+		newFileVersion = 20161;
+	} else if (buildVersion < 3225) { // 2017.0 (9.4.0) SR0
+		fileVersion = 940;
+		newFileVersion = 20170;
+	} else {
+		// 2017.1 (9.4.1) SR1 or newer
+		fileVersion = 941;
+		newFileVersion = 20171;
+		LOG_PRINT(logfile, "Found project version 2017.1 (9.4.1) or newer\n")
 	}
 
-	if (fileVersion != 201710) {
+	if (fileVersion < 920)
 		LOG_PRINT(logfile, "Found project version %.2f\n", fileVersion/100.0)
-	}
+	else if (fileVersion < 20171)
+		LOG_PRINT(logfile, "Found project version %.1f (%.2f)\n", newFileVersion/10.0, fileVersion/100.0)
+
 	// Close logfile, will be reopened in parser routine.
 	// There are ways to keep logfile open and pass it to parser routine,
 	// but I choose to do the same as with 'file', close it and reopen in 'parse'
