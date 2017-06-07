@@ -37,6 +37,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 
 #include <liborigin/OriginFile.h>
 
@@ -105,7 +107,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 	Spreadsheet* spreadsheet;
 	if (workbook == 0)	// single sheet
 		spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
-	else			// multiple sheets (TODO: name of sheets are not set correctly: "Sheet1", "Sheet2", ...)
+	else			// multiple sheets (TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
 		spreadsheet = new Spreadsheet(0, spread.name.c_str());
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount(cols);
@@ -189,11 +191,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 					break;
 				}
 
-				//TODO
-				Q_UNUSED(f);
-				//Double2StringFilter *filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				//filter->setNumericFormat(f);
-				//filter->setNumDigits(column.decimalPlaces);
+				Double2StringFilter *filter = static_cast<Double2StringFilter*>(col->outputFilter());
+				filter->setNumericFormat(f);
+				filter->setNumDigits(column.decimalPlaces);
 			}
 			break;
 		}
@@ -242,9 +242,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, boost::get<double>(column.data[i]));
 			col->setColumnMode(AbstractColumn::DateTime);
-			// TODO
-			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-			//filter->setFormat(format);
+
+			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			filter->setFormat(format);
 			break;
 		}
 		case Origin::Date: {
@@ -303,9 +303,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, boost::get<double>(column.data[i]));
 			col->setColumnMode(AbstractColumn::DateTime);
-			//TODO
-			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(scidavis_column->outputFilter());
-			//filter->setFormat(format);
+
+			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			filter->setFormat(format);
 			break;
 		}
 		case Origin::Month: {
@@ -324,9 +324,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, boost::get<double>(column.data[i]));
 			col->setColumnMode(AbstractColumn::Month);
-			//TODO
-			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-			//filter->setFormat(format);
+
+			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			filter->setFormat(format);
 			break;
 		}
 		case Origin::Day: {
@@ -345,9 +345,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, boost::get<double>(column.data[i]));
 			col->setColumnMode(AbstractColumn::Day);
-			// TODO
-			//DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-			//filter->setFormat(format);
+
+			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			filter->setFormat(format);
 			break;
 		}
 		case Origin::ColumnHeading:
@@ -357,8 +357,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 		}
 	}
 
-
-
+	//TODO
 //	if (spread.hidden || spread.loose)
 //		mw->hideWindow(spreadsheet);
 
