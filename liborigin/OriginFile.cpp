@@ -174,12 +174,12 @@ Origin::SpreadColumn& OriginFile::dataset(vector<Origin::SpreadColumn>::size_typ
 
 vector<Origin::SpreadSheet>::size_type OriginFile::spreadCount() const
 {
-	return parser->speadSheets.size();
+	return parser->spreadSheets.size();
 }
 
 Origin::SpreadSheet& OriginFile::spread(vector<Origin::SpreadSheet>::size_type s) const
 {
-	return parser->speadSheets[s];
+	return parser->spreadSheets[s];
 }
 
 vector<Origin::Matrix>::size_type OriginFile::matrixCount() const

@@ -35,9 +35,9 @@ using namespace Origin;
 
 vector<Origin::SpreadSheet>::difference_type OriginParser::findSpreadByName(const string& name) const
 {
-	for (vector<SpreadSheet>::const_iterator it = speadSheets.begin(); it != speadSheets.end(); ++it)
+	for (vector<SpreadSheet>::const_iterator it = spreadSheets.begin(); it != spreadSheets.end(); ++it)
 	{
-		if (iequals(it->name, name, locale())) return it - speadSheets.begin();
+		if (iequals(it->name, name, locale())) return it - spreadSheets.begin();
 	}
 	return -1;
 }
@@ -53,9 +53,9 @@ vector<Origin::Excel>::difference_type OriginParser::findExcelByName(const strin
 
 vector<Origin::SpreadColumn>::difference_type OriginParser::findSpreadColumnByName(vector<Origin::SpreadSheet>::size_type spread, const string& name) const
 {
-	for (vector<SpreadColumn>::const_iterator it = speadSheets[spread].columns.begin(); it != speadSheets[spread].columns.end(); ++it)
+	for (vector<SpreadColumn>::const_iterator it = spreadSheets[spread].columns.begin(); it != spreadSheets[spread].columns.end(); ++it)
 	{
-		if (it->name == name) return it - speadSheets[spread].columns.begin();
+		if (it->name == name) return it - spreadSheets[spread].columns.begin();
 	}
 	return -1;
 }
@@ -89,7 +89,7 @@ vector<Origin::Function>::difference_type OriginParser::findFunctionByName(const
 
 pair<string, string> OriginParser::findDataByIndex(unsigned int index) const
 {
-	for(vector<SpreadSheet>::const_iterator it = speadSheets.begin(); it != speadSheets.end(); ++it)
+	for(vector<SpreadSheet>::const_iterator it = spreadSheets.begin(); it != spreadSheets.end(); ++it)
 	{
 		for(vector<SpreadColumn>::const_iterator it1 = it->columns.begin(); it1 != it->columns.end(); ++it1)
 		{
@@ -132,7 +132,7 @@ pair<string, string> OriginParser::findDataByIndex(unsigned int index) const
 
 pair<ProjectNode::NodeType, string> OriginParser::findObjectByIndex(unsigned int index) const
 {
-	for(vector<SpreadSheet>::const_iterator it = speadSheets.begin(); it != speadSheets.end(); ++it)
+	for(vector<SpreadSheet>::const_iterator it = spreadSheets.begin(); it != spreadSheets.end(); ++it)
 	{
 		if(it->objectID == (int)index)
 			return make_pair(ProjectNode::SpreadSheet, it->name);
@@ -166,9 +166,9 @@ pair<ProjectNode::NodeType, string> OriginParser::findObjectByIndex(unsigned int
 void OriginParser::convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type spread)
 {
 	//add new Excel sheet
-	excels.push_back(Excel(speadSheets[spread].name, speadSheets[spread].label, speadSheets[spread].maxRows, speadSheets[spread].hidden, speadSheets[spread].loose));
+	excels.push_back(Excel(spreadSheets[spread].name, spreadSheets[spread].label, spreadSheets[spread].maxRows, spreadSheets[spread].hidden, spreadSheets[spread].loose));
 
-	for(vector<SpreadColumn>::iterator it = speadSheets[spread].columns.begin(); it != speadSheets[spread].columns.end(); ++it)
+	for(vector<SpreadColumn>::iterator it = spreadSheets[spread].columns.begin(); it != spreadSheets[spread].columns.end(); ++it)
 	{
 		unsigned int index = 0;
 		int pos = it->name.find_last_of("@");
@@ -184,14 +184,14 @@ void OriginParser::convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type s
 		excels.back().sheets[index].columns.push_back(*it);
 	}
 
-	speadSheets.erase(speadSheets.begin() + spread);
+	spreadSheets.erase(spreadSheets.begin() + spread);
 }
 
 int OriginParser::findColumnByName(int spread, const string& name)
 {
-	unsigned int columns = speadSheets[spread].columns.size();
+	unsigned int columns = spreadSheets[spread].columns.size();
 	for (unsigned int i = 0; i < columns; i++){
-		string colName = speadSheets[spread].columns[i].name;
+		string colName = spreadSheets[spread].columns[i].name;
 		if (colName.size() >= 11)
 			colName.resize(11);
 

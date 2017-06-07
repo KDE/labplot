@@ -64,7 +64,7 @@ protected:
 
 public:
 	vector<Origin::SpreadColumn> datasets;
-	vector<Origin::SpreadSheet> speadSheets;
+	vector<Origin::SpreadSheet> spreadSheets;
 	vector<Origin::Matrix> matrixes;
 	vector<Origin::Excel> excels;
 	vector<Origin::Function> functions;

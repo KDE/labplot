@@ -70,13 +70,13 @@ bool OriginAnyParser::parse() {
 	curpos = file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, d_file_size)
 
-	for(unsigned int i = 0; i < speadSheets.size(); ++i){
+	for(unsigned int i = 0; i < spreadSheets.size(); ++i){
 #ifdef LVERSION	// LABPLOT wants all sheets converted and not loose order
-		if(speadSheets[i].sheets > 0){
+		if(spreadSheets[i].sheets > 0){
 #else
-		if(speadSheets[i].sheets > 1){
+		if(spreadSheets[i].sheets > 1){
 #endif
-			LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to EXCEL\n", speadSheets[i].name.c_str());
+			LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to EXCEL\n", spreadSheets[i].name.c_str());
 			convertSpreadToExcel(i);
 			--i;
 		}
@@ -344,7 +344,7 @@ bool OriginAnyParser::readWindowElement() {
 
 	if (ispread != -1) {
 		LOG_PRINT(logfile, "\n  Window is a Worksheet book\n")
-		getWindowProperties(speadSheets[ispread], wde_header, wde_header_size);
+		getWindowProperties(spreadSheets[ispread], wde_header, wde_header_size);
 	} else if (imatrix != -1) {
 		LOG_PRINT(logfile, "\n  Window is a Matrix book\n")
 		getWindowProperties(matrixes[imatrix], wde_header, wde_header_size);
@@ -1030,36 +1030,36 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 			getMatrixValues(col_data, col_data_size, data_type, data_type_u, valuesize, mIndex);
 		}
 	} else {
-		if(speadSheets.size() == 0 || findSpreadByName(name) == -1) {
+		if(spreadSheets.size() == 0 || findSpreadByName(name) == -1) {
 			LOG_PRINT(logfile, "\n  NEW SPREADSHEET\n");
 			current_col = 1;
-			speadSheets.push_back(SpreadSheet(name));
-			spread = speadSheets.size() - 1;
-			speadSheets.back().maxRows = 0;
+			spreadSheets.push_back(SpreadSheet(name));
+			spread = spreadSheets.size() - 1;
+			spreadSheets.back().maxRows = 0;
 			current_sheet = 0;
 		} else {
 			spread = findSpreadByName(name);
-			current_col = speadSheets[spread].columns.size();
+			current_col = spreadSheets[spread].columns.size();
 			if(!current_col)
 				current_col = 1;
 			++current_col;
 		}
-		speadSheets[spread].columns.push_back(SpreadColumn(column_name, dataIndex));
-		speadSheets[spread].columns.back().colIndex = ++col_index;
-		speadSheets[spread].columns.back().dataset_name = dataset_name;
+		spreadSheets[spread].columns.push_back(SpreadColumn(column_name, dataIndex));
+		spreadSheets[spread].columns.back().colIndex = ++col_index;
+		spreadSheets[spread].columns.back().dataset_name = dataset_name;
 
-		string::size_type sheetpos = speadSheets[spread].columns.back().name.find_last_of("@");
+		string::size_type sheetpos = spreadSheets[spread].columns.back().name.find_last_of("@");
 		if(sheetpos != string::npos){
 			unsigned int sheet = strtol(column_name.substr(sheetpos + 1).c_str(), 0, 10);
 			if( sheet > 1){
-				speadSheets[spread].columns.back().name = column_name;
+				spreadSheets[spread].columns.back().name = column_name;
 
 				if (current_sheet != (sheet - 1))
 					current_sheet = sheet - 1;
 
-				speadSheets[spread].columns.back().sheet = current_sheet;
-				if (speadSheets[spread].sheets < sheet)
-					speadSheets[spread].sheets = sheet;
+				spreadSheets[spread].columns.back().sheet = current_sheet;
+				if (spreadSheets[spread].sheets < sheet)
+					spreadSheets[spread].sheets = sheet;
 			}
 		}
 		++dataIndex;
@@ -1068,7 +1068,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 		unsigned int nr = col_data_size / valuesize;
 		LOG_PRINT(logfile, "n. of rows = %d\n\n", nr)
 
-		speadSheets[spread].maxRows<nr ? speadSheets[spread].maxRows=nr : 0;
+		spreadSheets[spread].maxRows<nr ? spreadSheets[spread].maxRows=nr : 0;
 		stmp.str(col_data);
 		for(unsigned int i = 0; i < nr; ++i)
 		{
@@ -1081,7 +1081,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				} else if (i == 5) {
 					LOG_PRINT(logfile, "... ")
 				}
-				speadSheets[spread].columns[(current_col-1)].data.push_back(value);
+				spreadSheets[spread].columns[(current_col-1)].data.push_back(value);
 			}
 			else if((data_type & 0x100) == 0x100) // Text&Numeric
 			{
@@ -1095,7 +1095,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 					} else if (i == 5) {
 						LOG_PRINT(logfile, "... ")
 					}
-					speadSheets[spread].columns[(current_col-1)].data.push_back(value);
+					spreadSheets[spread].columns[(current_col-1)].data.push_back(value);
 				}
 				else //text
 				{
@@ -1110,7 +1110,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 					} else if (i == 5) {
 						LOG_PRINT(logfile, "... ")
 					}
-					speadSheets[spread].columns[(current_col-1)].data.push_back(svaltmp);
+					spreadSheets[spread].columns[(current_col-1)].data.push_back(svaltmp);
 				}
 			}
 			else //text
@@ -1126,11 +1126,11 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				} else if (i == 5) {
 					LOG_PRINT(logfile, "... ")
 				}
-				speadSheets[spread].columns[(current_col-1)].data.push_back(svaltmp);
+				spreadSheets[spread].columns[(current_col-1)].data.push_back(svaltmp);
 			}
 		}
 		LOG_PRINT(logfile, "\n\n")
-		datasets.push_back(speadSheets[spread].columns.back());
+		datasets.push_back(spreadSheets[spread].columns.back());
 	}
 
 	return true;
@@ -1299,7 +1299,7 @@ void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_hea
 
 	if (ispread != -1) { // spreadsheet
 
-		speadSheets[ispread].loose = false;
+		spreadSheets[ispread].loose = false;
 
 	} else if (imatrix != -1) { // matrix
 
@@ -1446,8 +1446,8 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 		string sec_name = anhd.substr(0x46,41).c_str();
 		int col_index = findColumnByName(ispread, sec_name);
 		if (col_index != -1){ //check if it is a formula
-			speadSheets[ispread].columns[col_index].command = andt1.c_str();
-			LOG_PRINT(logfile, "				Column: %s has formula: %s\n", sec_name.c_str(), speadSheets[ispread].columns[col_index].command.c_str())
+			spreadSheets[ispread].columns[col_index].command = andt1.c_str();
+			LOG_PRINT(logfile, "				Column: %s has formula: %s\n", sec_name.c_str(), spreadSheets[ispread].columns[col_index].command.c_str())
 		}
 
 	} else if (imatrix != -1) {
@@ -1886,8 +1886,8 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 		}
 		int col_index = findColumnByName(ispread, name);
 		if (col_index != -1) {
-			if (speadSheets[ispread].columns[col_index].name != name)
-				speadSheets[ispread].columns[col_index].name = name;
+			if (spreadSheets[ispread].columns[col_index].name != name)
+				spreadSheets[ispread].columns[col_index].name = name;
 
 			SpreadColumn::ColumnType type;
 			switch(c){
@@ -1913,11 +1913,11 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 					type = SpreadColumn::NONE;
 					break;
 			}
-			speadSheets[ispread].columns[col_index].type = type;
+			spreadSheets[ispread].columns[col_index].type = type;
 
 			width /= 0xA;
 			if(width == 0) width = 8;
-			speadSheets[ispread].columns[col_index].width = width;
+			spreadSheets[ispread].columns[col_index].width = width;
 			unsigned char c1 = cvehd[0x1E];
 			unsigned char c2 = cvehd[0x1F];
 			switch (c1) {
@@ -1929,51 +1929,51 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 				case 0x29: // Text&Numeric - Engineering
 				case 0x30: // Numeric	   - Dec1,000
 				case 0x39: // Text&Numeric - Dec1,000
-					speadSheets[ispread].columns[col_index].valueType = (c1%0x10 == 0x9) ? TextNumeric : Numeric;
-					speadSheets[ispread].columns[col_index].valueTypeSpecification = c1 / 0x10;
+					spreadSheets[ispread].columns[col_index].valueType = (c1%0x10 == 0x9) ? TextNumeric : Numeric;
+					spreadSheets[ispread].columns[col_index].valueTypeSpecification = c1 / 0x10;
 					if (c2 >= 0x80) {
-						speadSheets[ispread].columns[col_index].significantDigits = c2 - 0x80;
-						speadSheets[ispread].columns[col_index].numericDisplayType = SignificantDigits;
+						spreadSheets[ispread].columns[col_index].significantDigits = c2 - 0x80;
+						spreadSheets[ispread].columns[col_index].numericDisplayType = SignificantDigits;
 					} else if (c2 > 0) {
-						speadSheets[ispread].columns[col_index].decimalPlaces = c2 - 0x03;
-						speadSheets[ispread].columns[col_index].numericDisplayType = DecimalPlaces;
+						spreadSheets[ispread].columns[col_index].decimalPlaces = c2 - 0x03;
+						spreadSheets[ispread].columns[col_index].numericDisplayType = DecimalPlaces;
 					}
 					break;
 				case 0x02: // Time
-					speadSheets[ispread].columns[col_index].valueType = Time;
-					speadSheets[ispread].columns[col_index].valueTypeSpecification = c2 - 0x80;
+					spreadSheets[ispread].columns[col_index].valueType = Time;
+					spreadSheets[ispread].columns[col_index].valueTypeSpecification = c2 - 0x80;
 					break;
 				case 0x03: // Date
 				case 0x33:
-					speadSheets[ispread].columns[col_index].valueType = Date;
-					speadSheets[ispread].columns[col_index].valueTypeSpecification= c2 - 0x80;
+					spreadSheets[ispread].columns[col_index].valueType = Date;
+					spreadSheets[ispread].columns[col_index].valueTypeSpecification= c2 - 0x80;
 					break;
 				case 0x31: // Text
-					speadSheets[ispread].columns[col_index].valueType = Text;
+					spreadSheets[ispread].columns[col_index].valueType = Text;
 					break;
 				case 0x4: // Month
 				case 0x34:
-					speadSheets[ispread].columns[col_index].valueType = Month;
-					speadSheets[ispread].columns[col_index].valueTypeSpecification = c2;
+					spreadSheets[ispread].columns[col_index].valueType = Month;
+					spreadSheets[ispread].columns[col_index].valueTypeSpecification = c2;
 					break;
 				case 0x5: // Day
 				case 0x35:
-					speadSheets[ispread].columns[col_index].valueType = Day;
-					speadSheets[ispread].columns[col_index].valueTypeSpecification = c2;
+					spreadSheets[ispread].columns[col_index].valueType = Day;
+					spreadSheets[ispread].columns[col_index].valueTypeSpecification = c2;
 					break;
 				default: // Text
-					speadSheets[ispread].columns[col_index].valueType = Text;
+					spreadSheets[ispread].columns[col_index].valueType = Text;
 					break;
 			}
 			if (cvedtsz > 0) {
-				speadSheets[ispread].columns[col_index].comment = cvedt.c_str();
+				spreadSheets[ispread].columns[col_index].comment = cvedt.c_str();
 			}
 			// TODO: check that spreadsheet columns are stored in proper order
-			// header.push_back(speadSheets[ispread].columns[col_index]);
+			// header.push_back(spreadSheets[ispread].columns[col_index]);
 		}
 		// TODO: check that spreadsheet columns are stored in proper order
 		// for (unsigned int i = 0; i < header.size(); i++)
-		// 	speadSheets[spread].columns[i] = header[i];
+		// 	spreadSheets[spread].columns[i] = header[i];
 
 	} else if (imatrix != -1) {
 
@@ -2918,7 +2918,7 @@ void OriginAnyParser::getProjectFolderProperties(tree<ProjectNode>::iterator cur
 }
 
 void OriginAnyParser::outputProjectTree() {
-	unsigned int windowsCount = speadSheets.size()+matrixes.size()+excels.size()+graphs.size()+notes.size();
+	unsigned int windowsCount = spreadSheets.size()+matrixes.size()+excels.size()+graphs.size()+notes.size();
 
 	cout << "Project has " << windowsCount << " windows." << endl;
 	cout << "Origin project Tree" << endl;
