@@ -89,6 +89,7 @@ FIND_PACKAGE(Boost)
 
 IF (Boost_FOUND AND ENABLE_LIBORIGIN)
 	SET (USE_LIBORIGIN TRUE)
+	add_definitions (-DHAVE_LIBORIGIN)
 	MESSAGE (STATUS "liborigin support enabled")
 ELSE ()
 	MESSAGE (STATUS "liborigin support disabled")

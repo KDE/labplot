@@ -132,7 +132,7 @@ OriginFile::OriginFile(const string& fileName)
 
 	if (fileVersion < 920)
 		LOG_PRINT(logfile, "Found project version %.2f\n", fileVersion/100.0)
-	else if (fileVersion < 20171)
+	else if (fileVersion < 941)
 		LOG_PRINT(logfile, "Found project version %.1f (%.2f)\n", newFileVersion/10.0, fileVersion/100.0)
 
 	// Close logfile, will be reopened in parser routine.

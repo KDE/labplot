@@ -28,7 +28,7 @@
 
 #include "OriginParser.h"
 #include <algorithm>
-#include <boost/algorithm/string.hpp> // for iequals
+#include <boost/algorithm/string/predicate.hpp> // for iequals
 
 using namespace boost::algorithm;
 using namespace Origin;

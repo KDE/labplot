@@ -71,7 +71,11 @@ bool OriginAnyParser::parse() {
 	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, d_file_size)
 
 	for(unsigned int i = 0; i < speadSheets.size(); ++i){
+#ifdef LVERSION	// LABPLOT wants all sheets converted and not loose order
+		if(speadSheets[i].sheets > 0){
+#else
 		if(speadSheets[i].sheets > 1){
+#endif
 			LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to EXCEL\n", speadSheets[i].name.c_str());
 			convertSpreadToExcel(i);
 			--i;

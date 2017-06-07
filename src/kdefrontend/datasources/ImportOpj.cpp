@@ -66,21 +66,23 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 }
 
 int ImportOpj::importTables(const OriginFile &opj) {
-	// spreadsheets (origin workbook with single sheet)
-	for (unsigned int s = 0; s < opj.spreadCount(); ++s) {
-		Origin::SpreadSheet spread = opj.spread(s);
-		importSpreadsheet(0, opj, spread);
-	}
-
-	// excels (origin workbook with multiple sheets)
+	// excels (origin workbook with one or more sheets)
 	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
 			Origin::Excel excelwb = opj.excel(e);
-			Workbook *workbook = new Workbook(0, excelwb.name.c_str() + QString(" - ") + excelwb.label.c_str());
-			for (unsigned int s = 0; s < excelwb.sheets.size(); ++s) {
-				Origin::SpreadSheet spread = excelwb.sheets[s];
-				importSpreadsheet(workbook, opj, spread);
+			if (excelwb.sheets.size() == 1) {	// single sheet -> spreadsheet
+				Origin::SpreadSheet spread = excelwb.sheets[0];
+				spread.name = excelwb.name;
+				spread.label = excelwb.label;
+				importSpreadsheet(0, opj, spread);
 			}
-			mw->addAspectToProject(workbook);
+			else {		// multiple sheets -> workbook
+				Workbook *workbook = new Workbook(0, excelwb.name.c_str() + QString(" - ") + excelwb.label.c_str());
+				for (unsigned int s = 0; s < excelwb.sheets.size(); ++s) {
+					Origin::SpreadSheet spread = excelwb.sheets[s];
+					importSpreadsheet(workbook, opj, spread);
+				}
+				mw->addAspectToProject(workbook);
+			}
 	}
 
 	// matrices

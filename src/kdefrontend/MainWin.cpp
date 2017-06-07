@@ -57,7 +57,7 @@
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
-#ifdef USE_LIBORIGIN
+#ifdef HAVE_LIBORIGIN
 #include "kdefrontend/datasources/ImportOpj.h"
 #endif
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -520,7 +520,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importFileAction->setEnabled(!b);
 	m_importSqlAction->setEnabled(!b);
-#ifdef USE_LIBORIGIN
+#ifdef HAVE_LIBORIGIN
 	m_importOpjAction->setEnabled(!b);
 #else
 	m_importOpjAction->setEnabled(false);
@@ -1707,7 +1707,7 @@ void MainWin::importOpjDialog() {
 	// TODO: any options?
 	// TODO: show selected project version and other infos?
 
-#ifdef USE_LIBORIGIN
+#ifdef HAVE_LIBORIGIN
 	if (!filename.isEmpty()) {
 		ImportOpj(this, filename);
 		statusBar()->showMessage(i18n("%1 imported", filename));
