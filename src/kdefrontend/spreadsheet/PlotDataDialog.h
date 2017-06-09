@@ -33,6 +33,7 @@
 #include <QDialog>
 
 class QComboBox;
+class AspectTreeModel;
 class Spreadsheet;
 class TreeViewComboBox;
 
@@ -45,15 +46,21 @@ class PlotDataDialog : public QDialog {
 
 	private:
 		Ui::PlotDataWidget ui;
+		QPushButton* okButton;
 		Spreadsheet* m_spreadsheet;
 		TreeViewComboBox* cbExistingPlots;
 		TreeViewComboBox* cbExistingWorksheets;
 		QList<QComboBox*> m_columnComboBoxes;
+		AspectTreeModel* m_plotsModel;
+		AspectTreeModel* m_worksheetsModel;
 
 		void processColumns();
 
 	private slots:
 		void plot();
+		void curvePlacementChanged();
+		void plotPlacementChanged();
+		void checkOkButton();
 };
 
 #endif
