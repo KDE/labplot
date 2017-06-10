@@ -77,9 +77,9 @@ XYFitCurveDock::XYFitCurveDock(QWidget *parent) : XYCurveDock(parent),
 void XYFitCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
+		gridLayout->setContentsMargins(2, 2, 2, 2);
 		gridLayout->setHorizontalSpacing(2);
 		gridLayout->setVerticalSpacing(2);
 	}
@@ -241,7 +241,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -596,7 +596,7 @@ void XYFitCurveDock::updateModelEquation() {
 	indices << QString::fromUtf8("\u2081") << QString::fromUtf8("\u2082") << QString::fromUtf8("\u2083") << QString::fromUtf8("\u2084") << QString::fromUtf8("\u2085")
 		<< QString::fromUtf8("\u2086") << QString::fromUtf8("\u2087") << QString::fromUtf8("\u2088") << QString::fromUtf8("\u2089");
 
-	switch(m_fitData.modelCategory) {
+	switch (m_fitData.modelCategory) {
         case nsl_fit_model_basic:
 		m_fitData.model = nsl_fit_model_basic_equation[m_fitData.modelType];
 		break;
@@ -620,7 +620,7 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.paramNamesUtf8.clear();
 	}
 
-	switch(m_fitData.modelCategory) {
+	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		switch (m_fitData.modelType) {
 		case nsl_fit_model_polynomial:
@@ -1061,7 +1061,7 @@ void XYFitCurveDock::showConstants() {
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbConstants->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.tbConstants->mapToGlobal(pos));
 }
 
@@ -1076,7 +1076,7 @@ void XYFitCurveDock::showFunctions() {
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
@@ -1146,15 +1146,15 @@ void XYFitCurveDock::showOptions() {
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 
-void XYFitCurveDock::insertFunction(const QString& str) {
+void XYFitCurveDock::insertFunction(const QString& str) const {
 	uiGeneralTab.teEquation->insertPlainText(str + "(x)");
 }
 
-void XYFitCurveDock::insertConstant(const QString& str) {
+void XYFitCurveDock::insertConstant(const QString& str) const {
 	uiGeneralTab.teEquation->insertPlainText(str);
 }
 
@@ -1181,7 +1181,7 @@ void XYFitCurveDock::enableRecalculate() const {
 	if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=0 && aspectY!=0);
+		hasSourceData = (aspectX != 0 && aspectY != 0);
 	} else {
 		 hasSourceData = (m_fitCurve->dataSourceCurve() != NULL);
 	}
