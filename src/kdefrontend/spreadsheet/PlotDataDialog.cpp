@@ -29,7 +29,11 @@
 #include "PlotDataDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -147,14 +151,14 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::processColumns() {
 	//columns to plot
 	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
-	QList<Column*> columns = view->selectedColumns();
+	m_columns = view->selectedColumns();
 
 	//use all spreadsheet columns if no columns are selected
-	if (columns.size()) {
-		columns = m_spreadsheet->children<Column>();
+	if (!m_columns.size()) {
+		m_columns = m_spreadsheet->children<Column>();
 		
 		//disable everything if the spreadsheet doesn't have any columns
-		if (!columns.size()) {
+		if (!m_columns.size()) {
 			ui.gbData->setEnabled(false);
 			ui.gbCurvePlacement->setEnabled(false);
 			ui.gbPlotPlacement->setEnabled(false);
@@ -166,9 +170,9 @@ void PlotDataDialog::processColumns() {
 	m_columnComboBoxes << ui.cbYColumn;
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
-	if (columns.size()>2) {
+	if (m_columns.size()>2) {
 		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui.gbData->layout());
-		for (int i = 2; i < columns.size(); ++i) {
+		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));
 			QComboBox* comboBox = new QComboBox();
 			gridLayout->addWidget(label, i+1, 0, 1, 1);
@@ -184,7 +188,7 @@ void PlotDataDialog::processColumns() {
 	//determine the column names and the name of the first column having "X" as the plot designation
 	QList<QString> columnNames;
 	QString xColumnName;
-	foreach(const Column* column, columns) {
+	foreach(const Column* column, m_columns) {
 		columnNames << column->name();
 		if (xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
 			xColumnName = column->name();
@@ -210,9 +214,94 @@ void PlotDataDialog::processColumns() {
 }
 
 void PlotDataDialog::plot() {
-	//TODO
+	if (ui.rbPlotPlacement1->isChecked()) {
+		//add curves to an existing plot
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
+		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(aspect);
+		plot->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+		addCurvesToPlot(plot);
+		plot->endMacro();
+	} else if (ui.rbPlotPlacement2->isChecked()) {
+		//add curves to a new plot in an existing worksheet
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
+		Worksheet* worksheet = dynamic_cast<Worksheet*>(aspect);
+		worksheet->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+
+		if (ui.rbCurvePlacement1->isChecked()) {
+			//all curves in one plot
+			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
+			plot->initDefault(CartesianPlot::FourAxes);
+			worksheet->addChild(plot);
+			addCurvesToPlot(plot);
+		} else {
+			//one plot per curve
+			addCurvesToPlots(worksheet);
+		}
+		worksheet->endMacro();
+	} else {
+		//add curves to a new plot(s) in a new worksheet
+		Project* project = m_spreadsheet->project();
+		project->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
+		project->addChild(worksheet);
+
+		if (ui.rbCurvePlacement1->isChecked()) {
+			//all curves in one plot
+			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
+			plot->initDefault(CartesianPlot::FourAxes);
+			worksheet->addChild(plot);
+			addCurvesToPlot(plot);
+		} else {
+			//one plot per curve
+			addCurvesToPlots(worksheet);
+		}
+		project->endMacro();
+	}
 }
 
+Column* PlotDataDialog::columnFromName(const QString& name) const {
+	foreach(Column* column, m_columns) {
+		if (column->name() == name)
+			return column;
+	}
+	return 0;
+}
+
+void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
+	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
+	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
+		QComboBox* comboBox = m_columnComboBoxes[i];
+		Column* yColumn = columnFromName(comboBox->currentText());
+		XYCurve* curve = new XYCurve(comboBox->currentText());
+		curve->setXColumn(xColumn);
+		curve->setYColumn(yColumn);
+		plot->addChild(curve);
+	}
+	plot->scaleAuto();
+}
+
+void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
+	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
+	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
+		QComboBox* comboBox = m_columnComboBoxes[i];
+		const QString& name = comboBox->currentText();
+		Column* yColumn = columnFromName(name);
+
+		XYCurve* curve = new XYCurve(name);
+		curve->setXColumn(xColumn);
+		curve->setYColumn(yColumn);
+
+		CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+		plot->initDefault(CartesianPlot::FourAxes);
+		plot->addChild(curve);
+		worksheet->addChild(plot);
+		plot->scaleAuto();
+	}
+}
+
+//################################################################
+//########################## Slots ###############################
+//################################################################
 void PlotDataDialog::curvePlacementChanged() {
 	if (ui.rbCurvePlacement1->isChecked()){
 		ui.rbPlotPlacement1->setEnabled(true);

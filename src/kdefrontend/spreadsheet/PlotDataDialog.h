@@ -34,8 +34,11 @@
 
 class QComboBox;
 class AspectTreeModel;
+class CartesianPlot;
+class Column;
 class Spreadsheet;
 class TreeViewComboBox;
+class Worksheet;
 
 class PlotDataDialog : public QDialog {
 	Q_OBJECT
@@ -50,11 +53,15 @@ class PlotDataDialog : public QDialog {
 		Spreadsheet* m_spreadsheet;
 		TreeViewComboBox* cbExistingPlots;
 		TreeViewComboBox* cbExistingWorksheets;
+		QList<Column*> m_columns;
 		QList<QComboBox*> m_columnComboBoxes;
 		AspectTreeModel* m_plotsModel;
 		AspectTreeModel* m_worksheetsModel;
 
 		void processColumns();
+		void addCurvesToPlot(CartesianPlot*) const;
+		void addCurvesToPlots(Worksheet*) const;
+		Column* columnFromName(const QString&) const;
 
 	private slots:
 		void plot();
