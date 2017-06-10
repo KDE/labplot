@@ -1164,7 +1164,7 @@ void XYFitCurveDock::recalculateClicked() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
 	this->showFitResult();
@@ -1207,9 +1207,9 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	int np = fitResult.paramValues.size();
-	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
+	const int np = fitResult.paramValues.size();
+	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	str += "<br><br><b>" + i18n("Parameters:") + "</b>";
 	str += "<table border=1>";
@@ -1258,9 +1258,9 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	int np = fitResult.paramValues.size();
-	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
+	const int np = fitResult.paramValues.size();
+	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	// Parameter
 	str += "<br> <b>" + i18n("Parameters:") + "</b><br>";
@@ -1272,9 +1272,9 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)<br>";
 
-			double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
-			double p = nsl_stats_tdist_p(t, fitResult.dof);
-			double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
+			const double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
+			const double p = nsl_stats_tdist_p(t, fitResult.dof);
+			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
 			str += " (" + i18n("t statistic:") + ' ' + QString::number(t, 'g', 3) + ", " + i18n("p value:") + ' ' + QString::number(p, 'g', 3)
 				+ ", " + i18n("conf. interval:") + ' ' + QString::number(fitResult.paramValues.at(i) - margin)
                                 + " .. " + QString::number(fitResult.paramValues.at(i) + margin) + ")<br>";
@@ -1293,7 +1293,7 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 
 		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
 		str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(p, 'g', 3) + "<br>";
-		double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
+		const double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
 		str += i18n("F statistic") + ": " + QString::number(F, 'g', 3) + "<br>";
 		p = nsl_stats_fdist_p(F, np, fitResult.dof);
 		str += i18n("P > F") + ": " + QString::number(p, 'g', 3) + "<br>";
@@ -1302,13 +1302,13 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 
 	// show all iterations
 	str += "<b>" + i18n("Iterations:") + "</b><br>";
-	for (int i = 0; i < np; ++i)
-		str += m_fitData.paramNamesUtf8.at(i) + ' ';
+	for (const auto &s: m_fitData.paramNamesUtf8)
+		str += s + ' ';
 	str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
 
-	QStringList iterations = fitResult.solverOutput.split(';');
-	for (int i = 0; i < iterations.size(); ++i)
-		str += "<br>" + iterations.at(i);
+	const QStringList iterations = fitResult.solverOutput.split(';');
+	for (const auto &s: iterations)
+		str += "<br>" + s;
 
 	uiGeneralTab.teLog->setText(str);
 }
@@ -1326,9 +1326,9 @@ void XYFitCurveDock::showFitResult() {
 
 	//const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 
-	int np = fitResult.paramValues.size();
-	double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
+	const int np = fitResult.paramValues.size();
+	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	showFitResultSummary(fitResult);
 	showFitResultLog(fitResult);
@@ -1366,12 +1366,12 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
+			const double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 			item = new QTableWidgetItem(QString::number(t, 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values
-			double p = nsl_stats_tdist_p(t, fitResult.dof);
+			const double p = nsl_stats_tdist_p(t, fitResult.dof);
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
 			if (p > 0.05)
@@ -1387,7 +1387,7 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
-			double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
+			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
 			item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i) - margin)
 				+ " .. " + QString::number(fitResult.paramValues.at(i) + margin));
 			uiGeneralTab.twParameters->setItem(i, 6, item);
