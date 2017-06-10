@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>238</height>
+    <width>244</width>
+    <height>298</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -44,16 +44,6 @@
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lRobust">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Robust fit</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="cbRobust"/>
       </item>
@@ -66,6 +56,33 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="leMaxIterations"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lRobust">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Robust fit</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="leEvaluatedPoints"/>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <widget class="QCheckBox" name="cbUseResults">
+        <property name="text">
+         <string>Use results as new start values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="cbEvaluateFullRange">
+        <property name="text">
+         <string>Evaluate full range</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lEps">
@@ -84,20 +101,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="leEvaluatedPoints"/>
-      </item>
       <item row="5" column="0" colspan="2">
-       <widget class="QCheckBox" name="cbUseResults">
+       <widget class="QCheckBox" name="cbUseDataErrors">
         <property name="text">
-         <string>Use results as new start values</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QCheckBox" name="cbEvaluateFullRange">
-        <property name="text">
-         <string>Evaluate full range</string>
+         <string>Use given data errors</string>
         </property>
        </widget>
       </item>

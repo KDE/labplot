@@ -1073,7 +1073,7 @@ void XYFitCurvePrivate::recalculate() {
 
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				if (dataSourceType == XYCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn)) {	// x-y
+				if (dataSourceType == XYCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn) {		// x-y-dy
@@ -1433,6 +1433,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
 	writer->writeAttribute("evaluateFullRange", QString::number(d->fitData.evaluateFullRange));
+	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
 
 	writer->writeStartElement("paramNames");
@@ -1551,6 +1552,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
 			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
+			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames << reader->readElementText();
