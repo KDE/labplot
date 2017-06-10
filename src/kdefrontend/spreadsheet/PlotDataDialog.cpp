@@ -198,14 +198,25 @@ void PlotDataDialog::processColumns() {
 	foreach(QComboBox* comboBox, m_columnComboBoxes)
 		comboBox->addItems(columnNames);
 
-	//show in the X-data combobox the first column having X as the plot designation
-	ui.cbXColumn->setCurrentIndex(ui.cbXColumn->findText(xColumnName));
-	
-	//for the remaining columns, show the names in the comboboxes for the Y-data
-	//TODO: handle columns with error-designations
-	int yColumnIndex = 1; //the index of the first Y-data comboBox in m_columnComboBoxes
-	foreach(const QString name, columnNames) {
-		if (name != xColumnName) {
+	if (!xColumnName.isEmpty()) {
+		//show in the X-data combobox the first column having X as the plot designation
+		ui.cbXColumn->setCurrentIndex(ui.cbXColumn->findText(xColumnName));
+
+		//for the remaining columns, show the names in the comboboxes for the Y-data
+		//TODO: handle columns with error-designations
+		int yColumnIndex = 1; //the index of the first Y-data comboBox in m_columnComboBoxes
+		foreach(const QString name, columnNames) {
+			if (name != xColumnName) {
+				QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
+				comboBox->setCurrentIndex(comboBox->findText(name));
+				yColumnIndex++;
+			}
+		}
+	} else {
+		//no column with "x plot designation" is selected, simply show all columns in the order they were selected.
+		//first selected column will serve as the x-column.
+		int yColumnIndex = 0;
+		foreach(const QString name, columnNames) {
 			QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
 			comboBox->setCurrentIndex(comboBox->findText(name));
 			yColumnIndex++;
