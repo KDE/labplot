@@ -245,7 +245,7 @@ void XYFitCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -300,7 +300,7 @@ void XYFitCurveDock::commentChanged() {
 }
 
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
-	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
+	const XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
 	if (type == XYCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
@@ -324,7 +324,7 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setDataSourceType(type);
 }
 
@@ -341,7 +341,7 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -358,7 +358,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	this->updateSettings(column);
 
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 }
 
@@ -383,12 +383,12 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 }
 
 void XYFitCurveDock::autoRangeChanged() {
-	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	const bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_fitData.autoRange = autoRange;
 
 	if (autoRange) {
@@ -416,14 +416,14 @@ void XYFitCurveDock::autoRangeChanged() {
 
 }
 void XYFitCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
+	const double xMin = uiGeneralTab.sbMin->value();
 
 	m_fitData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFitCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
+	const double xMax = uiGeneralTab.sbMax->value();
 
 	m_fitData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -440,7 +440,7 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
 }
 
@@ -455,7 +455,7 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
