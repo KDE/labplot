@@ -268,12 +268,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	size_t n = ((struct data*)params)->n;
+	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
-	int degree = ((struct data*)params)->degree;
+	const int degree = ((struct data*)params)->degree;
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
@@ -301,8 +301,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		case nsl_fit_model_power:	// Y(x) = a*x^b or Y(x) = a + b*x^c.
 			if (degree == 1) {
-				double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
 
@@ -314,8 +314,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					}
 				}
 				} else if (degree == 2) {
-				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
 
@@ -330,8 +330,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		case nsl_fit_model_exponential:	// Y(x) = a*exp(b*x) or Y(x) = a*exp(b*x) + c*exp(d*x) or Y(x) = a*exp(b*x) + c*exp(d*x) + e*exp(f*x)
 			if (degree == 1) {
-				double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
 
@@ -343,10 +343,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					}
 				}
 			} else if (degree == 2) {
-				double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+				const double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
 	
@@ -358,12 +358,12 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					}
 				}
 			} else if (degree == 3) {
-				double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-				double e = nsl_fit_map_bound(gsl_vector_get(paramValues, 4), min[4], max[4]);
-				double f = nsl_fit_map_bound(gsl_vector_get(paramValues, 5), min[5], max[5]);
+				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+				const double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+				const double e = nsl_fit_map_bound(gsl_vector_get(paramValues, 4), min[4], max[4]);
+				const double f = nsl_fit_map_bound(gsl_vector_get(paramValues, 5), min[5], max[5]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
 
@@ -377,8 +377,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		case nsl_fit_model_inverse_exponential: {	// Y(x) = a*(1-exp(b*x))+c
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -430,14 +430,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_lorentz:
 		case nsl_fit_model_sech:
 		case nsl_fit_model_logistic: {
-			double s, mu, a;
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
 				for (int j = 0; j < degree; ++j) {
-					s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
-					mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
-					a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
 				
 					switch (modelType) {
 					case nsl_fit_model_gaussian:
@@ -481,9 +480,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_hill:
 		case nsl_fit_model_gompertz:		// Y(x) = a*exp(-b*exp(-c*x));
 		case nsl_fit_model_gudermann: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -525,9 +524,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
 		case nsl_sf_stats_levy: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -573,10 +572,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_gaussian_tail: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -590,10 +589,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_exponential_power: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -607,8 +606,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_rayleigh: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -622,9 +621,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_gamma: {
-			double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -638,9 +637,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_flat: {
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -654,8 +653,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_chi_squared: {
-			double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -669,8 +668,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_tdist: {
-			double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -684,9 +683,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_fdist: {
-			double n1 = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double n2 = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double n1 = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double n2 = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -701,9 +700,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto: {
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -725,10 +724,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_weibull: {
-			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -746,10 +745,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_gumbel1: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -763,10 +762,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_gumbel2: {
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -780,8 +779,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_poisson: {
-			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -795,8 +794,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_maxwell_boltzmann: {	// Y(x) = a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -810,10 +809,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_frechet: {
-			double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -827,7 +826,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_landau: {
-			// double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			// const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 				if (fixed[0])
@@ -840,9 +839,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_binomial:
 		case nsl_sf_stats_pascal: {
-			double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double N = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double N = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -868,8 +867,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		case nsl_sf_stats_geometric:
 		case nsl_sf_stats_logarithmic: {
-			double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -891,10 +890,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_hypergeometric: {
-			double n1 = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double n2 = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			const double n1 = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double n2 = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -916,7 +915,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_custom:
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
-		char* func = funcba.data();
+		const char* func = funcba.data();
 		QByteArray nameba;
 		double value;
 		const unsigned int np = paramNames->size();
@@ -934,15 +933,15 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 
 				nameba = paramNames->at(j).toLocal8Bit();
-				char *name = nameba.data();
+				const char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_variable(name, value);
-				double f_p = parse(func);
+				const double f_p = parse(func);
 
-				double eps = 1.e-9*fabs(f_p);	// adapt step size to value
+				const double eps = 1.e-9 * fabs(f_p);	// adapt step size to value
 				value += eps;
 				assign_variable(name, value);
-				double f_pdp = parse(func);
+				const double f_pdp = parse(func);
 
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
@@ -1058,8 +1057,7 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
-	double xmin;
-	double xmax;
+	double xmin, xmax;
 	if (fitData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
@@ -1068,7 +1066,7 @@ void XYFitCurvePrivate::recalculate() {
 		xmax = fitData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y and errors, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -1390,7 +1388,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	double* min = fitData.paramLowerLimits.data();
 	double* max = fitData.paramUpperLimits.data();
 	for (int i = 0; i < fitData.paramNames.size(); ++i) {
-		double x = gsl_vector_get(s->x, i);
+		const double x = gsl_vector_get(s->x, i);
 		// map parameter if bounded
 		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
 	}
@@ -1493,7 +1491,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement("errorValues");
-	foreach (const double value, d->fitResult.errorValues)
+	foreach (const double &value, d->fitResult.errorValues)
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
@@ -1555,13 +1553,13 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
-			d->fitData.paramNames<<reader->readElementText();
+			d->fitData.paramNames << reader->readElementText();
 		} else if (reader->name() == "nameUtf8") {
-			d->fitData.paramNamesUtf8<<reader->readElementText();
+			d->fitData.paramNamesUtf8 << reader->readElementText();
 		} else if (reader->name() == "startValue") {
-			d->fitData.paramStartValues<<reader->readElementText().toDouble();
+			d->fitData.paramStartValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fixed") {
-			d->fitData.paramFixed<<(bool)reader->readElementText().toInt();
+			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
 		} else if (reader->name() == "lowerLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -1626,15 +1624,15 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 	// fixed and limits are not saved in project (old project)
 	if (d->fitData.paramFixed.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramFixed<<false;
+			d->fitData.paramFixed << false;
 	}
 	if (d->fitData.paramLowerLimits.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramLowerLimits<<-DBL_MAX;
+			d->fitData.paramLowerLimits << -DBL_MAX;
 	}
 	if (d->fitData.paramUpperLimits.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramUpperLimits<<DBL_MAX;
+			d->fitData.paramUpperLimits << DBL_MAX;
 	}
 
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
