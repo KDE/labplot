@@ -49,6 +49,7 @@ class Worksheet: public AbstractPart, public scripted {
 
 		enum Unit {Millimeter, Centimeter, Inch, Point};
 		enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
+
 		static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
@@ -97,6 +98,9 @@ class Worksheet: public AbstractPart, public scripted {
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 		QString theme() const;
+
+		void setSuppressLayoutUpdate(bool);
+		void updateLayout();
 
 		typedef WorksheetPrivate Private;
 

@@ -151,7 +151,7 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::processColumns() {
 	//columns to plot
 	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
-	m_columns = view->selectedColumns();
+	m_columns = view->selectedColumns(true);
 
 	//use all spreadsheet columns if no columns are selected
 	if (!m_columns.size()) {
@@ -268,6 +268,8 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 }
 
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
 	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
@@ -278,9 +280,14 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 		plot->addChild(curve);
 	}
 	plot->scaleAuto();
+	RESET_CURSOR;
 }
 
 void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	worksheet->setSuppressLayoutUpdate(true);
+
 	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
 	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
@@ -297,6 +304,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		worksheet->addChild(plot);
 		plot->scaleAuto();
 	}
+
+	worksheet->setSuppressLayoutUpdate(false);
+	worksheet->updateLayout();
+	RESET_CURSOR;
 }
 
 //################################################################
