@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "ColumnPrivate.h"
-#include "backend/core/AbstractSimpleFilter.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"

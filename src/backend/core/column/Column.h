@@ -106,7 +106,6 @@ class Column : public AbstractColumn {
 		QString formula() const;
 		const QStringList& formulaVariableNames() const;
 		const QStringList& formulaVariableColumnPathes() const;
-
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
 		void setFormula(Interval<int> i, QString formula);
@@ -168,24 +167,19 @@ class ColumnStringIO : public AbstractColumn {
 	Q_OBJECT
 
 	public:
-		ColumnStringIO(Column * owner) : AbstractColumn(""), m_owner(owner), m_setting(false) {}
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
-		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
-		virtual int rowCount() const { return m_owner->rowCount(); }
-		virtual QString textAt(int row) const;
-		virtual void setTextAt(int row, const QString &value);
-		virtual bool isValid(int row) const {
-			if (m_setting)
-				return true;
-			else
-				return m_owner->isValid(row);
-		}
-		virtual bool copy(const AbstractColumn *other);
-		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
-		virtual void replaceTexts(int start_row, const QStringList &texts);
+		ColumnStringIO(Column* owner);
+		virtual AbstractColumn::ColumnMode columnMode() const;
+		virtual AbstractColumn::PlotDesignation plotDesignation() const;
+		virtual int rowCount() const;
+		virtual QString textAt(int) const;
+		virtual void setTextAt(int, const QString&);
+		virtual bool isValid(int) const;
+		virtual bool copy(const AbstractColumn*);
+		virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
+		virtual void replaceTexts(int start_row, const QStringList& texts);
 
 	private:
-		Column * m_owner;
+		Column* m_owner;
 		bool m_setting;
 		QString m_to_set;
 };
