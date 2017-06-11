@@ -41,62 +41,14 @@
 #include "backend/core/datatypes/DayOfWeek2DoubleFilter.h"
 #include "backend/core/datatypes/Month2DoubleFilter.h"
 
-
-/**
- * \class ColumnPrivate
- * \brief Private data class of Column
- *
- * The writing interface defined here is only to be used by column commands and Column contructors.
- */
-
-/**
- * \var ColumnPrivate::m_column_mode
- * \brief The column mode
- *
- * The column mode specifies how to interpret
- * the values in the column additional to the data type.
- */
-
-/**
- * \var ColumnPrivate::m_data
- * \brief Pointer to the data vector
- *
- * This will point to a QVector<double>, QStringList or
- * QList<QDateTime> depending on the stored data type.
- */
-
-/**
- * \var ColumnPrivate::m_input_filter
- * \brief The input filter (for string -> data type conversion)
- */
-
-/**
- * \var ColumnPrivate::m_output_filter
- * \brief The output filter (for data type -> string conversion)
- */
-
-/**
- * \var ColumnPrivate::m_plot_designation
- * \brief The plot designation
- */
-
-/**
- * \var ColumnPrivate::m_width
- * \brief Width to be used by views
- */
-
-/**
- * \var ColumnPrivate::m_owner
- * \brief The owner column
- */
-
-/**
- * \brief Ctor
- */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
-	: statisticsAvailable(false), m_column_mode(mode), m_plot_designation(AbstractColumn::NoDesignation), m_width(0), m_owner(owner) {
-	Q_ASSERT(owner != 0); // a ColumnPrivate without owner is not allowed
-	// because the owner must become the parent aspect of the input and output filters
+	: statisticsAvailable(false),
+	m_column_mode(mode),
+	m_plot_designation(AbstractColumn::NoDesignation),
+	m_width(0),
+	m_owner(owner) {
+	Q_ASSERT(owner != 0);
+
 	switch(mode) {
 	case AbstractColumn::Numeric:
 		m_input_filter = new String2DoubleFilter();
@@ -137,7 +89,12 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  * \brief Special ctor (to be called from Column only!)
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
-	: statisticsAvailable(false), m_column_mode(mode), m_data(data), m_plot_designation(AbstractColumn::NoDesignation), m_width(0), m_owner(owner) {
+	: statisticsAvailable(false),
+	m_column_mode(mode),
+	m_data(data),
+	m_plot_designation(AbstractColumn::NoDesignation),
+	m_width(0),
+	m_owner(owner) {
 
 	switch(mode) {
 	case AbstractColumn::Numeric:
@@ -176,9 +133,6 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 	m_output_filter->setName("OutputFilter");
 }
 
-/**
- * \brief Dtor
- */
 ColumnPrivate::~ColumnPrivate() {
 	if (!m_data) return;
 
@@ -196,16 +150,9 @@ ColumnPrivate::~ColumnPrivate() {
 	case AbstractColumn::Day:
 		delete static_cast< QList<QDateTime>* >(m_data);
 		break;
-	} // switch(m_column_mode)
+	}
 }
 
-/**
- * \brief Return the column mode
- *
- * This function is most used by spreadsheets but can also be used
- * by plots. The column mode specifies how to interpret
- * the values in the column additional to the data type.
- */
 AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
 	return m_column_mode;
 }

@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,41 +30,45 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/lib/IntervalAttribute.h"
 #include "backend/core/column/Column.h"
 
-class AbstractSimpleFilter;
-
-class ColumnPrivate: QObject {
+class ColumnPrivate : QObject {
 	Q_OBJECT
 
 	public:
-		ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode);
+		ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 		~ColumnPrivate();
-		ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data);
+		ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
 
 		AbstractColumn::ColumnMode columnMode() const;
-		void setColumnMode(AbstractColumn::ColumnMode mode);
+		void setColumnMode(AbstractColumn::ColumnMode);
 
-		bool copy(const AbstractColumn * other);
-		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
-		bool copy(const ColumnPrivate * other);
-		bool copy(const ColumnPrivate * source, int source_start, int dest_start, int num_rows);
+		bool copy(const AbstractColumn*);
+		bool copy(const AbstractColumn*, int source_start, int dest_start, int num_rows);
+		bool copy(const ColumnPrivate*);
+		bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
+
 		int rowCount() const;
-		void resizeTo(int new_size);
+		void resizeTo(int);
+
 		void insertRows(int before, int count);
 		void removeRows(int first, int count);
 		QString name() const;
+
 		AbstractColumn::PlotDesignation plotDesignation() const;
 		void setPlotDesignation(AbstractColumn::PlotDesignation);
+
 		int width() const;
-		void setWidth(int value);
-		void *dataPointer() const;
+		void setWidth(int);
+
+		void*dataPointer() const;
+
 		AbstractSimpleFilter* inputFilter() const;
 		AbstractSimpleFilter* outputFilter() const;
-		void replaceModeData(AbstractColumn::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
-				AbstractSimpleFilter *out_filter);
-		void replaceData(void * data);
+
+		void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter *in, AbstractSimpleFilter *out);
+		void replaceData(void*);
+
 		IntervalAttribute<QString> formulaAttribute() const;
 		void replaceFormulas(IntervalAttribute<QString> formulas);
 
@@ -72,7 +76,6 @@ class ColumnPrivate: QObject {
 		const QStringList& formulaVariableNames() const;
 		const QStringList& formulaVariableColumnPathes() const;
 		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
-
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
 		void setFormula(Interval<int> i, QString formula);
@@ -82,6 +85,7 @@ class ColumnPrivate: QObject {
 		QString textAt(int row) const;
 		void setTextAt(int row, const QString& new_value);
 		void replaceTexts(int first, const QStringList& new_values);
+
 		QDate dateAt(int row) const;
 		void setDateAt(int row, const QDate& new_value);
 		QTime timeAt(int row) const;
@@ -89,6 +93,7 @@ class ColumnPrivate: QObject {
 		QDateTime dateTimeAt(int row) const;
 		void setDateTimeAt(int row, const QDateTime& new_value);
 		void replaceDateTimes(int first, const QList<QDateTime>& new_values);
+
 		double valueAt(int row) const;
 		void setValueAt(int row, double new_value);
 		void replaceValues(int first, const QVector<double>& new_values);
@@ -98,15 +103,15 @@ class ColumnPrivate: QObject {
 
 	private:
 		AbstractColumn::ColumnMode m_column_mode;
-		void* m_data;
-		AbstractSimpleFilter* m_input_filter;
-		AbstractSimpleFilter* m_output_filter;
+		void* m_data; //pointer to the data container (QVector<double>, QStringList or QList<QDateTime>)
+		AbstractSimpleFilter* m_input_filter; //input filter for string -> data type conversion
+		AbstractSimpleFilter* m_output_filter; //output filter for data type -> string conversion
 		QString m_formula;
 		QStringList m_formulaVariableNames;
 		QStringList m_formulaVariableColumnPathes;
 		IntervalAttribute<QString> m_formulas;
 		AbstractColumn::PlotDesignation m_plot_designation;
-		int m_width;
+		int m_width; //column width in the view
 		Column* m_owner;
 };
 
