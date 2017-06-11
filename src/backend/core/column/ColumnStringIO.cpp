@@ -60,7 +60,7 @@ bool ColumnStringIO::isValid(int row) const {
 void ColumnStringIO::setTextAt(int row, const QString &value) {
 	m_setting = true;
 	m_to_set = value;
-	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0), 0, row, 1);
+	m_owner->copy(m_owner->d->inputFilter()->output(0), 0, row, 1);
 	m_setting = false;
 	m_to_set.clear();
 	m_owner->setStatisticsAvailable(false);
@@ -70,22 +70,22 @@ QString ColumnStringIO::textAt(int row) const {
 	if (m_setting)
 		return m_to_set;
 	else
-		return m_owner->m_column_private->outputFilter()->output(0)->textAt(row);
+		return m_owner->d->outputFilter()->output(0)->textAt(row);
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *other) {
 	if (other->columnMode() != AbstractColumn::Text) return false;
-	m_owner->m_column_private->inputFilter()->input(0,other);
-	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0));
-	m_owner->m_column_private->inputFilter()->input(0,this);
+	m_owner->d->inputFilter()->input(0,other);
+	m_owner->copy(m_owner->d->inputFilter()->output(0));
+	m_owner->d->inputFilter()->input(0,this);
 	return true;
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows) {
 	if (source->columnMode() != AbstractColumn::Text) return false;
-	m_owner->m_column_private->inputFilter()->input(0,source);
-	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0), source_start, dest_start, num_rows);
-	m_owner->m_column_private->inputFilter()->input(0,this);
+	m_owner->d->inputFilter()->input(0,source);
+	m_owner->copy(m_owner->d->inputFilter()->output(0), source_start, dest_start, num_rows);
+	m_owner->d->inputFilter()->input(0,this);
 	return true;
 }
 

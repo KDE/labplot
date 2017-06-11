@@ -74,9 +74,7 @@ class Column : public AbstractColumn {
 			double skewness;
 			double kurtosis;
 			double entropy;
-        };
-
-		friend class ColumnPrivate;
+		};
 
 		explicit Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
 		Column(const QString& name, QVector<double> data);
@@ -88,45 +86,52 @@ class Column : public AbstractColumn {
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 
-		bool isReadOnly() const;
 		AbstractColumn::ColumnMode columnMode() const;
-		void setColumnMode(AbstractColumn::ColumnMode mode);
-		bool copy(const AbstractColumn * other);
-		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
-		int rowCount() const;
+		void setColumnMode(AbstractColumn::ColumnMode);
+
+		bool copy(const AbstractColumn*);
+		bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
+
 		AbstractColumn::PlotDesignation plotDesignation() const;
 		void setPlotDesignation(AbstractColumn::PlotDesignation pd);
+
+		bool isReadOnly() const;
+		int rowCount() const;
 		int width() const;
 		void setWidth(int value);
 		void clear();
-		AbstractSimpleFilter *outputFilter() const;
-		ColumnStringIO *asStringColumn() const;
+		AbstractSimpleFilter* outputFilter() const;
+		ColumnStringIO* asStringColumn() const;
 
 		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 		QString formula() const;
 		const QStringList& formulaVariableNames() const;
 		const QStringList& formulaVariableColumnPathes() const;
-		QString formula(int row) const;
+		QString formula(int) const;
 		QList< Interval<int> > formulaIntervals() const;
-		void setFormula(Interval<int> i, QString formula);
-		void setFormula(int row, QString formula);
+		void setFormula(Interval<int>, QString);
+		void setFormula(int, QString);
 		void clearFormulas();
 
 		const ColumnStatistics& statistics();
 		void* data() const;
-		QString textAt(int row) const;
-		void setTextAt(int row, const QString& new_value);
-		void replaceTexts(int first, const QStringList& new_values);
-		QDate dateAt(int row) const;
-		void setDateAt(int row, const QDate& new_value);
-		QTime timeAt(int row) const;
-		void setTimeAt(int row, const QTime& new_value);
-		QDateTime dateTimeAt(int row) const;
-		void setDateTimeAt(int row, const QDateTime& new_value);
-		void replaceDateTimes(int first, const QList<QDateTime>& new_values);
-		double valueAt(int row) const;
-		void setValueAt(int row, double new_value);
-		virtual void replaceValues(int first, const QVector<double>& new_values);
+
+		QString textAt(int) const;
+		void setTextAt(int, const QString&);
+		void replaceTexts(int, const QStringList&);
+
+		QDate dateAt(int) const;
+		void setDateAt(int, const QDate&);
+		QTime timeAt(int) const;
+		void setTimeAt(int, const QTime&);
+		QDateTime dateTimeAt(int) const;
+		void setDateTimeAt(int, const QDateTime&);
+		void replaceDateTimes(int, const QList<QDateTime>&);
+
+		double valueAt(int) const;
+		void setValueAt(int, double);
+		virtual void replaceValues(int, const QVector<double>&);
+
 		void setChanged();
 		void setSuppressDataChangedSignal(bool);
 
@@ -134,24 +139,27 @@ class Column : public AbstractColumn {
 		bool load(XmlStreamReader*);
 
 	private:
-		bool XmlReadInputFilter(XmlStreamReader * reader);
-		bool XmlReadOutputFilter(XmlStreamReader * reader);
-		bool XmlReadFormula(XmlStreamReader * reader);
-		bool XmlReadRow(XmlStreamReader * reader);
+		bool XmlReadInputFilter(XmlStreamReader*);
+		bool XmlReadOutputFilter(XmlStreamReader*);
+		bool XmlReadFormula(XmlStreamReader*);
+		bool XmlReadRow(XmlStreamReader*);
 
 		void handleRowInsertion(int before, int count);
 		void handleRowRemoval(int first, int count);
 
 		void calculateStatistics();
-		void setStatisticsAvailable(bool available);
+		void setStatisticsAvailable(bool);
 		bool statisticsAvailable() const;
 
-		ColumnPrivate* m_column_private;
-		ColumnStringIO* m_string_io;
 		bool m_suppressDataChangedSignal;
 		QActionGroup* usedInActionGroup;
 
 		friend class ColumnStringIO;
+
+		ColumnStringIO* m_string_io;
+
+		ColumnPrivate* d;
+		friend class ColumnPrivate;
 
 	signals:
 		void requestProjectContextMenu(QMenu*);
