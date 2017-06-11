@@ -163,8 +163,6 @@ class Column : public AbstractColumn {
 
 	signals:
 		void requestProjectContextMenu(QMenu*);
-		void widthAboutToChange(const Column*);
-		void widthChanged(const Column*);
 
 	private slots:
 		void navigateTo(QAction*);

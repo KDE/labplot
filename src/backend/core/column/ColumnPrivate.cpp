@@ -729,9 +729,7 @@ int ColumnPrivate::width() const {
  * \brief Set width
  */
 void ColumnPrivate::setWidth(int value) {
-	emit m_owner->widthAboutToChange(m_owner);
 	m_width = value;
-	emit m_owner->widthChanged(m_owner);
 }
 
 /**
