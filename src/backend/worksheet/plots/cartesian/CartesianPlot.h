@@ -48,7 +48,7 @@ class XYFourierFilterCurve;
 class KConfig;
 class XYFourierTransformCurve;
 
-class CartesianPlot:public AbstractPlot{
+class CartesianPlot:public AbstractPlot {
 	Q_OBJECT
 
 	public:
@@ -60,7 +60,7 @@ class CartesianPlot:public AbstractPlot{
 		enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
 		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
 		enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
+			ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
 			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
@@ -73,12 +73,12 @@ class CartesianPlot:public AbstractPlot{
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
 		struct RangeBreaks {
-			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
+			RangeBreaks() : lastChanged(-1) { RangeBreak b; list << b;};
 			QList<RangeBreak> list;
 			int lastChanged;
 		};
 
-		void initDefault(Type=FourAxes);
+		void initDefault(Type = FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		QMenu* analysisMenu() const;

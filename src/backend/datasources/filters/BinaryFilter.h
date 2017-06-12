@@ -27,16 +27,17 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
-#include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class BinaryFilterPrivate;
-class BinaryFilter : public AbstractFileFilter{
+class QStringList;
+
+class BinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
 
   public:
-	enum DataType{INT8,INT16,INT32,INT64,UINT8,UINT16,UINT32,UINT64,REAL32,REAL64};
-	enum ByteOrder{LittleEndian, BigEndian};
+	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
+	enum ByteOrder {LittleEndian, BigEndian};
 
 	BinaryFilter();
 	~BinaryFilter();
@@ -44,11 +45,11 @@ class BinaryFilter : public AbstractFileFilter{
 	static QStringList dataTypes();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
-	static long rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type);
+	static long rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType type);
 
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
+	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+	QList <QStringList> readData(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
@@ -78,6 +79,7 @@ class BinaryFilter : public AbstractFileFilter{
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+
   private:
 	BinaryFilterPrivate* const d;
 	friend class BinaryFilterPrivate;

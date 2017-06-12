@@ -31,7 +31,6 @@
 #define ABSTRACTCOLUMN_H
 
 #include "backend/core/AbstractAspect.h"
-#include <cmath>
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
@@ -110,23 +109,23 @@ class AbstractColumn : public AbstractAspect
 		virtual void replaceValues(int first, const QVector<double>& new_values);
 
 	signals:
-		void plotDesignationAboutToChange(const AbstractColumn * source);
-		void plotDesignationChanged(const AbstractColumn * source);
-		void modeAboutToChange(const AbstractColumn * source);
-		void modeChanged(const AbstractColumn * source);
-		void dataAboutToChange(const AbstractColumn * source);
-		void dataChanged(const AbstractColumn * source);
-		void rowsAboutToBeInserted(const AbstractColumn * source, int before, int count);
-		void rowsInserted(const AbstractColumn * source, int before, int count);
-		void rowsAboutToBeRemoved(const AbstractColumn * source, int first, int count);
-		void rowsRemoved(const AbstractColumn * source, int first, int count);
-		void maskingAboutToChange(const AbstractColumn * source);
-		void maskingChanged(const AbstractColumn * source);
-		void aboutToBeDestroyed(const AbstractColumn * source);
+		void plotDesignationAboutToChange(const AbstractColumn* source);
+		void plotDesignationChanged(const AbstractColumn* source);
+		void modeAboutToChange(const AbstractColumn* source);
+		void modeChanged(const AbstractColumn* source);
+		void dataAboutToChange(const AbstractColumn* source);
+		void dataChanged(const AbstractColumn* source);
+		void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+		void rowsInserted(const AbstractColumn* source, int before, int count);
+		void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+		void rowsRemoved(const AbstractColumn* source, int first, int count);
+		void maskingAboutToChange(const AbstractColumn* source);
+		void maskingChanged(const AbstractColumn* source);
+		void aboutToBeDestroyed(const AbstractColumn* source);
 
 	protected:
-		bool XmlReadMask(XmlStreamReader *reader);
-		void XmlWriteMask(QXmlStreamWriter *writer) const;
+		bool XmlReadMask(XmlStreamReader* reader);
+		void XmlWriteMask(QXmlStreamWriter* writer) const;
 
 		virtual void handleRowInsertion(int before, int count);
 		virtual void handleRowRemoval(int first, int count);

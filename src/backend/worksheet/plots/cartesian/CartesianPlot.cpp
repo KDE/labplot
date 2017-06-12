@@ -146,8 +146,7 @@ void CartesianPlot::initDefault(Type type) {
 	Q_D(CartesianPlot);
 
 	switch (type) {
-	case FourAxes:
-	{
+	case FourAxes: {
 		d->xMin = 0;
 		d->xMax = 1;
 		d->yMin = 0;
@@ -213,8 +212,7 @@ void CartesianPlot::initDefault(Type type) {
 
 		break;
 	}
-	case TwoAxes:
-	{
+	case TwoAxes: {
 		d->xMin = 0;
 		d->xMax = 1;
 		d->yMin = 0;
@@ -244,8 +242,7 @@ void CartesianPlot::initDefault(Type type) {
 
 		break;
 	}
-	case TwoAxesCentered:
-	{
+	case TwoAxesCentered: {
 		d->xMin = -0.5;
 		d->xMax = 0.5;
 		d->yMin = -0.5;
@@ -284,8 +281,7 @@ void CartesianPlot::initDefault(Type type) {
 
 		break;
 	}
-	case TwoAxesCenteredZero:
-	{
+	case TwoAxesCenteredZero: {
 		d->xMin = -0.5;
 		d->xMax = 0.5;
 		d->yMin = -0.5;
@@ -969,9 +965,9 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 		curve->setName( i18n("Fit to '%1'", curCurve->name()) );
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
-
+	
 		//set the fit model category and type
-		const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
 		if (action) {
 			XYFitCurve::FitData fitData = curve->fitData();
 			if (action == addFitAction1) {

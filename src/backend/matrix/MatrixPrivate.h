@@ -30,7 +30,7 @@
 #ifndef MATRIXPRIVATE_H
 #define MATRIXPRIVATE_H
 
-#include <QVector>
+template <class T> class QVector;
 
 class MatrixPrivate {
 	public:

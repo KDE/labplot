@@ -40,9 +40,9 @@ Very short classes can be bundled in one file which then is named using all lowe
         ...
     }
 @endcode
-- For pointers or references, use a single space before ‘*’ or ‘&’, but not after. Example:
+- For pointers or references, use a single space after ‘*’ or ‘&’. Example:
 @code
-    void doSomething(int *dataPointer, const QString &name);
+    void doSomething(int* dataPointer, const QString& name);
     ... = static_cast(...)
 @endcode
     “public” and namespace enclosures are indented. “case” of switch is not. Example:
@@ -87,7 +87,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 
 \section constructs Usage of specific constructs
 
-* Use C++ casting (static_cast, const_cast, qobject_cast) in C++ since they include checks
+* Use C++ casting (static_cast, const_cast, dynamic_cast) in C++ and qobject_cast or Qt classes since they include checks
 * In C++ use Qt container instead of STL container
 * In C++ use range-based loops instead of foreach/Q_FOREACH
 	https://www.kdab.com/goodbye-q_foreach/
@@ -97,7 +97,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 * Use NDEBUG for debugging code. This variable is defined in release mode, but not in debug mode. Example:
 @code
     #ifndef NDEBUG
-        qDebug()<<"i ="<<i;
+        qDebug() << "i =" << i;
     #endif
 @endcode
 * Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).

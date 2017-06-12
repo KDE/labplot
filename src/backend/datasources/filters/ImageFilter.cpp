@@ -31,7 +31,8 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
+//#include <QDebug>
+#include <QImage>
 #include <KLocale>
 
 #include <cmath>

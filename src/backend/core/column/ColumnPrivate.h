@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -61,7 +61,7 @@ class ColumnPrivate : QObject {
 		int width() const;
 		void setWidth(int);
 
-		void*dataPointer() const;
+		void* dataPointer() const;
 
 		AbstractSimpleFilter* inputFilter() const;
 		AbstractSimpleFilter* outputFilter() const;

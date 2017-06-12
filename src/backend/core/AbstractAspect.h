@@ -103,7 +103,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> QList<T*> children(const ChildIndexFlags& flags=0) const {
 			QList<T*> result;
-			foreach (AbstractAspect* child, children()) {
+			for (auto* child: children()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T* i = qobject_cast<T*>(child);
 					if (i)
@@ -118,7 +118,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> T* child(int index, const ChildIndexFlags& flags=0) const {
 			int i = 0;
-			foreach (AbstractAspect* child, children()) {
+			for (auto* child: children()) {
 				T* c = qobject_cast<T*>(child);
 				if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
 					return c;
@@ -127,17 +127,17 @@ class AbstractAspect : public QObject {
 		}
 
 		template <class T> T* child(const QString& name) const {
-			foreach (AbstractAspect* child, children()) {
-			T* c = qobject_cast<T*>(child);
-			if (c && child->name() == name)
-				return c;
+			for (auto* child: children()) {
+				T* c = qobject_cast<T*>(child);
+				if (c && child->name() == name)
+					return c;
 			}
 			return 0;
 		}
 
 		template <class T> int childCount(const ChildIndexFlags& flags=0) const {
 			int result = 0;
-			foreach(AbstractAspect* child, children()) {
+			for (auto* child: children()) {
 				T* i = qobject_cast<T*>(child);
 				if (i && (flags & IncludeHidden || !child->hidden()))
 					result++;
@@ -147,7 +147,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> int indexOfChild(const AbstractAspect* child, const ChildIndexFlags& flags=0) const {
 			int index = 0;
-			foreach(AbstractAspect* c, children()) {
+			for (auto* c:	 children()) {
 				if (child == c) return index;
 				T* i = qobject_cast<T*>(c);
 				if (i && (flags & IncludeHidden || !c->hidden()))
