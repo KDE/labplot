@@ -44,6 +44,7 @@
 
 #include <QProgressBar>
 #include <QStatusBar>
+#include <algorithm>
 
 /*!
     \class ImportOpj
@@ -453,16 +454,14 @@ int ImportOpj::importNotes(const OriginFile &opj) {
 
 int ImportOpj::importGraphs(const OriginFile &opj) {
 	for(unsigned int g = 0; g < opj.graphCount(); ++g) {
-		Origin::Graph _graph = opj.graph(g);
-		Worksheet *worksheet = new Worksheet(0, _graph.name.c_str());
+		Origin::Graph graph = opj.graph(g);
+		Worksheet *worksheet = new Worksheet(0, graph.name.c_str());
 		if (!worksheet)
 			return -1;
 
 //		worksheet->hide();//!hack used in order to avoid resize and repaint events
-		worksheet->setComment(_graph.label.c_str());
-		unsigned int layers = _graph.layers.size();
-		for (unsigned int l = 0; l < layers; ++l) {
-			Origin::GraphLayer& layer = _graph.layers[l];
+		worksheet->setComment(graph.label.c_str());
+		for (const auto& layer: graph.layers) {
 			CartesianPlot* plot = new CartesianPlot("");
 			if (!plot)
 				return -2;
@@ -470,6 +469,8 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 			if (!layer.legend.text.empty()) {
 				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
 				TextLabel* title = new TextLabel(legend->name(), TextLabel::PlotLegendTitle);
+				DEBUG("TEXT =" << layer.legend.text.c_str());
+				QDEBUG("PARSED TEXT =" << parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())));
 				title->setText(parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())));
 				//legend->title() = title;
 				legend->addChild(title);
@@ -478,17 +479,17 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 
 			// TODO: we only support one legend
 			//add texts
-			//for (unsigned int i = 0; i < layer.texts.size(); ++i)
+			for (const auto &s: layer.texts)
+				DEBUG("EXTRA TEXT =" << s.text.c_str());
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));
 
 			int auto_color = 0;
 			int style = 0;
-			for (unsigned int c = 0; c < layer.curves.size(); ++c) {
-				Origin::GraphCurve& _curve = layer.curves[c];
-				QString data(_curve.dataName.c_str());
+			for (const auto& curve: layer.curves) {
+				QString data(curve.dataName.c_str());
 				int color = 0;
 
-				switch(_curve.type) {
+				switch(curve.type) {
 				case Origin::GraphCurve::Line:
 //					style = Graph::Line;
 					break;
@@ -579,9 +580,123 @@ QString ImportOpj::parseOriginText(const QString &str) {
 	return text;
 }
 
+QString strreverse(const QString &str) {	//QString reversing
+	QByteArray ba = str.toLocal8Bit();
+	std::reverse(ba.begin(), ba.end());
+
+	return QString(ba);
+}
+
+// taken from SciDAVis
 QString ImportOpj::parseOriginTags(const QString &str) {
 	QString line = str;
-	//TODO
+
+	//replace \l(...) and %(...) tags
+	QRegExp rxline("\\\\\\s*l\\s*\\(\\s*\\d+\\s*\\)");
+	QRegExp rxcol("\\%\\(\\d+\\)");
+	int pos = rxline.indexIn(line);
+	while (pos > -1) {
+		QString value = rxline.cap(0);
+		int len=value.length();
+		value.replace(QRegExp(" "),"");
+		value="\\c{"+value.mid(3,value.length()-4)+"}";
+		line.replace(pos, len, value);
+		pos = rxline.indexIn(line);
+	}
+	//Lookbehind conditions are not supported - so need to reverse string
+	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
+	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
+	QString linerev = strreverse(line);
+	QString lBracket=strreverse("&lbracket;");
+	QString rBracket=strreverse("&rbracket;");
+	QString ltagBracket=strreverse("&ltagbracket;");
+	QString rtagBracket=strreverse("&rtagbracket;");
+	int pos1 = rx.indexIn(linerev);
+	int pos2 = rxfont.indexIn(linerev);
+
+	while (pos1>-1 || pos2>-1) {
+		if(pos1==pos2) {
+			QString value = rx.cap(0);
+			int len=value.length();
+			value=rBracket+value.mid(1,len-2)+lBracket;
+			linerev.replace(pos1, len, value);
+		}
+		else if ((pos1>pos2&&pos2!=-1)||pos1==-1) {
+			QString value = rxfont.cap(0);
+			int len=value.length();
+			value=rtagBracket+value.mid(1,len-2)+ltagBracket;
+			linerev.replace(pos2, len, value);
+		}
+		else if ((pos2>pos1&&pos1!=-1)||pos2==-1) {
+			QString value = rx.cap(0);
+			int len=value.length();
+			value=rtagBracket+value.mid(1,len-2)+ltagBracket;
+			linerev.replace(pos1, len, value);
+		}
+
+		pos1=rx.indexIn(linerev);
+		pos2=rxfont.indexIn(linerev);
+	}
+	linerev.replace(ltagBracket, "(");
+	linerev.replace(rtagBracket, ")");
+
+	line = strreverse(linerev);
+
+
+	//replace \b(...), \i(...), \u(...), \g(...), \+(...), \-(...), \f:font(...) tags
+	const QString rxstr[] = { "\\\\\\s*b\\s*\\(", "\\\\\\s*i\\s*\\(", "\\\\\\s*u\\s*\\(", "\\\\\\s*g\\s*\\(", "\\\\\\s*\\+\\s*\\(", "\\\\\\s*\\-\\s*\\(", "\\\\\\s*f\\:[^\\(]*\\("};
+
+	int postag[]={0,0,0,0,0,0,0};
+	QString ltag[]={"<b>","<i>","<u>","<font face=Symbol>","<sup>","<sub>","<font face=%1>"};
+	QString rtag[]={"</b>","</i>","</u>","</font>","</sup>","</sub>","</font>"};
+	QRegExp rxtags[7];
+	for(int i=0; i<7; ++i)
+		rxtags[i].setPattern(rxstr[i]+"[^\\(\\)]*\\)");
+
+	bool flag=true;
+	while(flag) {
+		for(int i=0; i<7; ++i) {
+			postag[i] = rxtags[i].indexIn(line);
+			while (postag[i] > -1) {
+				QString value = rxtags[i].cap(0);
+				int len=value.length();
+				int pos2=value.indexOf("(");
+				if(i<6)
+					value=ltag[i]+value.mid(pos2+1,len-pos2-2)+rtag[i];
+				else
+				{
+					int posfont=value.indexOf("f:");
+					value=ltag[i].arg(value.mid(posfont+2,pos2-posfont-2))+value.mid(pos2+1,len-pos2-2)+rtag[i];
+				}
+				line.replace(postag[i], len, value);
+				postag[i] = rxtags[i].indexIn(line);
+			}
+		}
+		flag=false;
+		for(int i=0; i<7; ++i) {
+			if(rxtags[i].indexIn(line)>-1) {
+				flag=true;
+				break;
+			}
+		}
+	}
+
+	//replace unclosed tags
+	for(int i=0; i<6; ++i)
+		line.replace(QRegExp(rxstr[i]), ltag[i]);
+	rxfont.setPattern(rxstr[6]);
+	pos = rxfont.indexIn(line);
+	while (pos > -1) {
+		QString value = rxfont.cap(0);
+		int len=value.length();
+		int posfont=value.indexOf("f:");
+		value=ltag[6].arg(value.mid(posfont+2,len-posfont-3));
+		line.replace(pos, len, value);
+		pos = rxfont.indexIn(line);
+	}
+
+	line.replace("&lbracket;", "(");
+	line.replace("&rbracket;", ")");
 
 	return line;
 }
