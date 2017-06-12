@@ -4,6 +4,7 @@
     Description          : widget for editing advanced fit options
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -52,6 +53,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
+	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 
 	//SLOTS
@@ -59,6 +61,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.leEvaluatedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.cbEvaluateFullRange, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
+	connect( ui.cbUseDataErrors, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
 	connect( ui.cbUseResults, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
@@ -69,6 +72,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->eps = ui.leEps->text().toFloat();
 	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
 	m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
+	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 
 	if (m_changed)

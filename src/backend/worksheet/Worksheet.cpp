@@ -381,6 +381,14 @@ void Worksheet::update() {
 	emit requestUpdate();
 }
 
+void Worksheet::setSuppressLayoutUpdate(bool value) {
+	d->suppressLayoutUpdate = value;
+}
+
+void Worksheet::updateLayout() {
+	d->updateLayout();
+}
+
 /* =============================== getter methods for general options ==================================== */
 BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
@@ -612,7 +620,8 @@ void Worksheet::setTheme(const QString& theme) {
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
 	m_scene(new QGraphicsScene()),
-	scaleContent(false) {
+	scaleContent(false),
+	suppressLayoutUpdate(false) {
 }
 
 QString WorksheetPrivate::name() const {
@@ -654,6 +663,9 @@ WorksheetPrivate::~WorksheetPrivate() {
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {
+	if (suppressLayoutUpdate)
+		return;
+
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout) {
 		foreach(WorksheetElementContainer* elem, list)

@@ -47,8 +47,9 @@ class XYFitCurve : public XYCurve {
 						maxIterations(500),
 						eps(1e-4),
 						evaluatedPoints(100),
-						useResults(true),
 						evaluateFullRange(true),
+						useDataErrors(true),
+						useResults(true),
 						autoRange(true), xRange(2) {};
 
 			nsl_fit_model_category modelCategory;
@@ -66,8 +67,9 @@ class XYFitCurve : public XYCurve {
 			int maxIterations;
 			double eps;
 			size_t evaluatedPoints;
-			bool useResults;		// use results as new start values
-			bool evaluateFullRange;		// evaluate fit function on full data range
+			bool evaluateFullRange;		// evaluate fit function on full data range (default)
+			bool useDataErrors;		// use given data errors when fitting (default)
+			bool useResults;		// use results as new start values (default)
 
 			bool autoRange;			// use all data?
 			QVector<double> xRange;		// x range for integration
