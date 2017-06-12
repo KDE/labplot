@@ -81,7 +81,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	cbExistingWorksheets = new TreeViewComboBox(ui.gbPlotPlacement);
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
-	
+
 	QList<const char*>  list;
 	list<<"Folder"<<"Worksheet"<<"CartesianPlot";
 	cbExistingPlots->setTopLevelClasses(list);
@@ -156,7 +156,7 @@ void PlotDataDialog::processColumns() {
 	//use all spreadsheet columns if no columns are selected
 	if (!m_columns.size()) {
 		m_columns = m_spreadsheet->children<Column>();
-		
+
 		//disable everything if the spreadsheet doesn't have any columns
 		if (!m_columns.size()) {
 			ui.gbData->setEnabled(false);
@@ -225,6 +225,7 @@ void PlotDataDialog::processColumns() {
 }
 
 void PlotDataDialog::plot() {
+	WAIT_CURSOR;
 	if (ui.rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
@@ -242,8 +243,8 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
-			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
+			worksheet->addChild(plot);
 		} else {
 			//one plot per curve
 			addCurvesToPlots(worksheet);
@@ -254,7 +255,6 @@ void PlotDataDialog::plot() {
 		Project* project = m_spreadsheet->project();
 		project->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
-		project->addChild(worksheet);
 
 		if (ui.rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
@@ -266,8 +266,11 @@ void PlotDataDialog::plot() {
 			//one plot per curve
 			addCurvesToPlots(worksheet);
 		}
+
+		project->addChild(worksheet);
 		project->endMacro();
 	}
+	RESET_CURSOR;
 }
 
 Column* PlotDataDialog::columnFromName(const QString& name) const {
@@ -279,7 +282,6 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 }
 
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
-	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
 	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
@@ -291,11 +293,9 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 		plot->addChild(curve);
 	}
 	plot->scaleAuto();
-	RESET_CURSOR;
 }
 
 void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
-	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
 
@@ -318,7 +318,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 
 	worksheet->setSuppressLayoutUpdate(false);
 	worksheet->updateLayout();
-	RESET_CURSOR;
 }
 
 //################################################################
