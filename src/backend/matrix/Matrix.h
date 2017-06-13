@@ -31,6 +31,7 @@
 
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
+#include <QVector>
 
 class MatrixPrivate;
 class MatrixModel;

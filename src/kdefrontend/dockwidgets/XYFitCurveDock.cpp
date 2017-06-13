@@ -43,6 +43,7 @@
 #include <QStandardItemModel>
 
 #include <cfloat>	// DBL_MAX
+#include <cmath>	// fabs()
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
