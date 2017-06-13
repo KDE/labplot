@@ -1047,7 +1047,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 	Q_UNUSED(before);
 	if (m_legend == child) {
 		addLegendAction->setEnabled(true);
-		m_legend = 0;
+		m_legend = nullptr;
 	} else {
 		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
 		if (curve)
@@ -1201,7 +1201,7 @@ void CartesianPlot::scaleAutoX() {
 	if (update) {
 		if (d->xMax == d->xMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->xMax!=0) {
+			if (d->xMax != 0) {
 				d->xMax = d->xMax*1.1;
 				d->xMin = d->xMin*0.9;
 			} else {
@@ -1259,7 +1259,7 @@ void CartesianPlot::scaleAutoY() {
 	if (update) {
 		if (d->yMax == d->yMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->yMax!=0) {
+			if (d->yMax != 0) {
 				d->yMax = d->yMax*1.1;
 				d->yMin = d->yMin*0.9;
 			} else {
@@ -1350,7 +1350,7 @@ void CartesianPlot::scaleAuto() {
 		if (updateX) {
 			if (d->xMax == d->xMin) {
 				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-				if (d->xMax!=0) {
+				if (d->xMax != 0) {
 					d->xMax = d->xMax*1.1;
 					d->xMin = d->xMin*0.9;
 				} else {
@@ -1366,7 +1366,7 @@ void CartesianPlot::scaleAuto() {
 		if (updateY) {
 			if (d->yMax == d->yMin) {
 				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-				if (d->yMax!=0) {
+				if (d->yMax != 0) {
 					d->yMax = d->yMax*1.1;
 					d->yMin = d->yMin*0.9;
 				} else {
@@ -1497,7 +1497,7 @@ void CartesianPlot::visibilityChanged() {
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
 	  curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
-	  suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
+	  suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(nullptr),
 	  mouseMode(CartesianPlot::SelectionMode) {
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
@@ -1580,7 +1580,7 @@ void CartesianPlotPrivate::retransformScales() {
 			logicalStart = logicalEndLast;
 			logicalEnd = curBreak.start;
 
-			if (sceneStart!=sceneEnd)
+			if (sceneStart != sceneEnd)
 				scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneEndLast = sceneEnd;
