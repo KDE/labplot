@@ -40,122 +40,123 @@ class MatrixView;
 class Matrix : public AbstractDataSource {
 	Q_OBJECT
 
-	public:
-		Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-		Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
-		~Matrix();
+public:
+	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
+	~Matrix();
 
-		enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
-		virtual bool exportView() const;
-		virtual bool printView();
-		virtual bool printPreview() const;
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
+	virtual QWidget* view() const;
 
-		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
-		BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
-		BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
-		BASIC_D_ACCESSOR_DECL(double, xEnd, XEnd)
-		BASIC_D_ACCESSOR_DECL(double, yStart, YStart)
-		BASIC_D_ACCESSOR_DECL(double, yEnd, YEnd)
-		BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
-		BASIC_D_ACCESSOR_DECL(int, precision, Precision)
-		BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
-		CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
+	virtual bool exportView() const;
+	virtual bool printView();
+	virtual bool printPreview() const;
 
-		QVector<QVector<double> >& data() const;
-		void setData(const QVector<QVector<double> >&);
-		void setSuppressDataChangedSignal(bool);
-		void setChanged();
+	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
+	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
+	BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
+	BASIC_D_ACCESSOR_DECL(double, xEnd, XEnd)
+	BASIC_D_ACCESSOR_DECL(double, yStart, YStart)
+	BASIC_D_ACCESSOR_DECL(double, yEnd, YEnd)
+	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
+	BASIC_D_ACCESSOR_DECL(int, precision, Precision)
+	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
+	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
-		int rowHeight(int row) const;
-		void setRowHeight(int row, int height);
-		int columnWidth(int col) const;
-		void setColumnWidth(int col, int width);
+	QVector<QVector<double> >& data() const;
+	void setData(const QVector<QVector<double> >&);
+	void setSuppressDataChangedSignal(bool);
+	void setChanged();
 
-		void setDimensions(int rows, int cols);
-		void setCoordinates(double x1, double x2, double y1, double y2);
+	int rowHeight(int row) const;
+	void setRowHeight(int row, int height);
+	int columnWidth(int col) const;
+	void setColumnWidth(int col, int width);
 
-		void insertColumns(int before, int count);
-		void appendColumns(int count);
-		void removeColumns(int first, int count);
-		void clearColumn(int);
+	void setDimensions(int rows, int cols);
+	void setCoordinates(double x1, double x2, double y1, double y2);
 
-		void insertRows(int before, int count);
-		void appendRows(int count);
-		void removeRows(int first, int count);
-		void clearRow(int);
+	void insertColumns(int before, int count);
+	void appendColumns(int count);
+	void removeColumns(int first, int count);
+	void clearColumn(int);
 
-		double cell(int row, int col) const;
-		QString text(int row, int col);
-		void setCell(int row, int col, double value);
-		void clearCell(int row, int col);
+	void insertRows(int before, int count);
+	void appendRows(int count);
+	void removeRows(int first, int count);
+	void clearRow(int);
 
-		QVector<double> columnCells(int col, int first_row, int last_row);
-		void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
-		QVector<double> rowCells(int row, int first_column, int last_column);
-		void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
+	double cell(int row, int col) const;
+	QString text(int row, int col);
+	void setCell(int row, int col, double value);
+	void clearCell(int row, int col);
 
-		void copy(Matrix* other);
+	QVector<double> columnCells(int col, int first_row, int last_row);
+	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
+	QVector<double> rowCells(int row, int first_column, int last_column);
+	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	void copy(Matrix* other);
 
-		typedef MatrixPrivate Private;
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
-	public slots:
-		void clear();
-		void transpose();
-		void mirrorVertically();
-		void mirrorHorizontally();
+	typedef MatrixPrivate Private;
 
-		void addColumns();
-		void addRows();
-		void duplicate();
+public slots:
+	void clear();
+	void transpose();
+	void mirrorVertically();
+	void mirrorHorizontally();
 
-	signals:
-		void requestProjectContextMenu(QMenu*);
-		void columnsAboutToBeInserted(int before, int count);
-		void columnsInserted(int first, int count);
-		void columnsAboutToBeRemoved(int first, int count);
-		void columnsRemoved(int first, int count);
-		void rowsAboutToBeInserted(int before, int count);
-		void rowsInserted(int first, int count);
-		void rowsAboutToBeRemoved(int first, int count);
-		void rowsRemoved(int first, int count);
-		void dataChanged(int top, int left, int bottom, int right);
-		void coordinatesChanged();
+	void addColumns();
+	void addRows();
+	void duplicate();
 
-		friend class MatrixInsertRowsCmd;
-		friend class MatrixRemoveRowsCmd;
-		friend class MatrixInsertColumnsCmd;
-		friend class MatrixRemoveColumnsCmd;
-		void rowCountChanged(int);
-		void columnCountChanged(int);
+signals:
+	void requestProjectContextMenu(QMenu*);
+	void columnsAboutToBeInserted(int before, int count);
+	void columnsInserted(int first, int count);
+	void columnsAboutToBeRemoved(int first, int count);
+	void columnsRemoved(int first, int count);
+	void rowsAboutToBeInserted(int before, int count);
+	void rowsInserted(int first, int count);
+	void rowsAboutToBeRemoved(int first, int count);
+	void rowsRemoved(int first, int count);
+	void dataChanged(int top, int left, int bottom, int right);
+	void coordinatesChanged();
 
-		friend class MatrixSetXStartCmd;
-		friend class MatrixSetXEndCmd;
-		friend class MatrixSetYStartCmd;
-		friend class MatrixSetYEndCmd;
-		void xStartChanged(double);
-		void xEndChanged(double);
-		void yStartChanged(double);
-		void yEndChanged(double);
+	friend class MatrixInsertRowsCmd;
+	friend class MatrixRemoveRowsCmd;
+	friend class MatrixInsertColumnsCmd;
+	friend class MatrixRemoveColumnsCmd;
+	void rowCountChanged(int);
+	void columnCountChanged(int);
 
-		friend class MatrixSetNumericFormatCmd;
-		friend class MatrixSetPrecisionCmd;
-		void numericFormatChanged(char);
-		void precisionChanged(int);
-		void headerFormatChanged(Matrix::HeaderFormat);
+	friend class MatrixSetXStartCmd;
+	friend class MatrixSetXEndCmd;
+	friend class MatrixSetYStartCmd;
+	friend class MatrixSetYEndCmd;
+	void xStartChanged(double);
+	void xEndChanged(double);
+	void yStartChanged(double);
+	void yEndChanged(double);
 
-	private:
-		void init();
+	friend class MatrixSetNumericFormatCmd;
+	friend class MatrixSetPrecisionCmd;
+	void numericFormatChanged(char);
+	void precisionChanged(int);
+	void headerFormatChanged(Matrix::HeaderFormat);
 
-		MatrixPrivate* const d;
-		friend class MatrixPrivate;
-		mutable MatrixModel* m_model;
+private:
+	void init();
+
+	MatrixPrivate* const d;
+	friend class MatrixPrivate;
+	mutable MatrixModel* m_model;
 };
 
 #endif
