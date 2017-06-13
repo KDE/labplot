@@ -31,9 +31,11 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/TextLabel.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -243,6 +245,17 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
+
+			//set the x-axis names
+			const QString& xColumnName = ui.cbXColumn->currentText();
+			QList<Axis*> axes = plot->children<Axis>();
+			for (auto axis : axes) {
+				if (axis->orientation() == Axis::AxisHorizontal) {
+					axis->title()->setText(xColumnName);
+					break;
+				}
+			}
+
 			addCurvesToPlot(plot);
 			worksheet->addChild(plot);
 		} else {
@@ -260,6 +273,17 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
+
+			//set the x-axis names
+			const QString& xColumnName = ui.cbXColumn->currentText();
+			QList<Axis*> axes = plot->children<Axis>();
+			for (auto axis : axes) {
+				if (axis->orientation() == Axis::AxisHorizontal) {
+					axis->title()->setText(xColumnName);
+					break;
+				}
+			}
+
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
 		} else {
@@ -299,7 +323,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
 
-	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
+	const QString& xColumnName = ui.cbXColumn->currentText();
+	Column* xColumn = columnFromName(xColumnName);
 	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
 		const QString& name = comboBox->currentText();
@@ -311,6 +336,21 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 
 		CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 		plot->initDefault(CartesianPlot::FourAxes);
+
+		//set the axis names
+		QList<Axis*> axes = plot->children<Axis>();
+		bool xSet = false;
+		bool ySet = false;
+		for (auto axis : axes) {
+			if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
+				axis->title()->setText(xColumnName);
+				xSet = true;
+			} else if (axis->orientation() == Axis::AxisVertical && !ySet) {
+				axis->title()->setText(name);
+				ySet = true;
+			}
+		}
+
 		plot->addChild(curve);
 		worksheet->addChild(plot);
 		plot->scaleAuto();
