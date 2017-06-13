@@ -44,7 +44,7 @@ AbstractDataSource::AbstractDataSource(AbstractScriptingEngine* engine, const QS
 
 void AbstractDataSource::clear() {
 	int columns = childCount<Column>();
-	for (int i=0; i<columns; i++) {
+	for (int i = 0; i < columns; i++) {
 		child<Column>(i)->setUndoAware(false);
 		child<Column>(i)->setSuppressDataChangedSignal(true);
 		child<Column>(i)->clear();
@@ -60,37 +60,37 @@ void AbstractDataSource::clear() {
 */
 int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
 	// name additional columns
-	for (int k=colNameList.size(); k<cols; k++ )
+	for (int k = colNameList.size(); k < cols; k++ )
 		colNameList.append( "Column " + QString::number(k+1) );
 
-	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
 	Column* newColumn = 0;
-	if (mode==AbstractFileFilter::Append) {
+	if (mode == AbstractFileFilter::Append) {
 		columnOffset = childCount<Column>();
-		for ( int n=0; n<cols; n++ ) {
+		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			addChildFast(newColumn);
 		}
-	} else if (mode==AbstractFileFilter::Prepend) {
+	} else if (mode == AbstractFileFilter::Prepend) {
 		Column* firstColumn = child<Column>(0);
-		for ( int n=0; n<cols; n++ ) {
+		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			insertChildBeforeFast(newColumn, firstColumn);
 		}
-	} else if (mode==AbstractFileFilter::Replace) {
+	} else if (mode == AbstractFileFilter::Replace) {
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
 			//there're more columns in the data source then required -> remove the superfluous columns
-			for(int i=0; i<columns-cols; i++)
+			for (int i = 0; i < columns-cols; i++)
 				removeChild(child<Column>(0));
 		} else {
 			//create additional columns if needed
-			for(int i=columns; i < cols; i++) {
+			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				addChildFast(newColumn);
@@ -98,7 +98,7 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 		}
 
 		//rename the columns that are already available and supress the dataChanged signal for them
-		for (int i=0; i<childCount<Column>(); i++) {
+		for (int i = 0; i < childCount<Column>(); i++) {
 			if (mode == AbstractFileFilter::Replace)
 				child<Column>(i)->setSuppressDataChangedSignal(true);
 			child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
