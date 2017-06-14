@@ -3,7 +3,7 @@ File		: AbstractDataSource.h
 Project		: LabPlot
 Description 	: Interface for data sources
 --------------------------------------------------------------------
-Copyright	: (C) 2009 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
@@ -41,9 +41,8 @@ public:
 	AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
 	virtual ~AbstractDataSource() {}
 	void clear();
-	int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
-	int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
-		int actualRows, int actualCols, QStringList colNameList = QStringList());
+	virtual int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+		int actualRows, int actualCols, QStringList colNameList = QStringList()) = 0;
 };
 
 #endif // ABSTRACTDATASOURCE_H

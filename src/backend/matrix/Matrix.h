@@ -3,7 +3,7 @@
     Project              : Matrix
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -30,6 +30,7 @@
 #define MATRIX_H
 
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 #include <QVector>
 
@@ -103,6 +104,9 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+
+	virtual int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+		int actualRows, int actualCols, QStringList colNameList = QStringList());
 
 	typedef MatrixPrivate Private;
 

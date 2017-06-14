@@ -30,6 +30,7 @@
 #define SPREADSHEET_H
 
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/column/Column.h"
 
 template <class t> class QList;
@@ -73,6 +74,11 @@ public:
 	// used from model to inform dock
 	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+
+	//data import
+	virtual int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+		int actualRows, int actualCols, QStringList colNameList = QStringList());
+	int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
 
 public slots:
 	void appendRows(int count);

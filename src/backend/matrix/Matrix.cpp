@@ -852,3 +852,36 @@ bool Matrix::load(XmlStreamReader* reader) {
 	return true;
 }
 
+//##############################################################################
+//########################  Data Import  #######################################
+//##############################################################################
+int Matrix::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+                               int actualRows, int actualCols, QStringList colNameList) {
+	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	int columnOffset = 0;
+	setUndoAware(false);
+
+	setSuppressDataChangedSignal(true);
+
+	// resize the matrix
+	if (mode == AbstractFileFilter::Replace) {
+		clear();
+		setDimensions(actualRows,actualCols);
+	} else {
+		if (rowCount() < actualRows)
+			setDimensions(actualRows,actualCols);
+		else
+			setDimensions(rowCount(),actualCols);
+	}
+
+	QVector<QVector<double> >& matrixColumns = data();
+	dataPointers.resize(actualCols);
+	for (int n = 0; n < actualCols; n++ ) {
+		QVector<double>* vector = &matrixColumns[n];
+		vector->reserve(actualRows);
+		vector->resize(actualRows);
+		dataPointers[n] = vector;
+	}
+
+	return columnOffset;
+}

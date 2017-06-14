@@ -772,3 +772,102 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 
 	return !reader->hasError();
 }
+
+
+//##############################################################################
+//########################  Data Import  #######################################
+//##############################################################################
+int Spreadsheet::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+                               int actualRows, int actualCols, QStringList colNameList) {
+	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	int columnOffset = 0;
+	setUndoAware(false);
+
+	//make the available columns undo unaware before we resize and rename them below,
+	//the same will be done for new columns in this->resize().
+	for (int i=0; i<childCount<Column>(); i++)
+		child<Column>(i)->setUndoAware(false);
+
+	columnOffset = this->resize(mode, colNameList, actualCols);
+
+	// resize the spreadsheet
+	if (mode == AbstractFileFilter::Replace) {
+		clear();
+		setRowCount(actualRows);
+	}  else {
+		if (rowCount() < actualRows)
+			setRowCount(actualRows);
+	}
+
+	dataPointers.resize(actualCols);
+	for (int n = 0; n < actualCols; n++) {
+		QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
+		vector->reserve(actualRows);
+		vector->resize(actualRows);
+		dataPointers[n] = vector;
+	}
+	QDEBUG("dataPointers =" << dataPointers);
+
+	return columnOffset;
+}
+
+/*!
+	resize data source to cols columns
+	returns column offset depending on import mode
+*/
+int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+	// name additional columns
+	for (int k = colNameList.size(); k < cols; k++ )
+		colNameList.append( "Column " + QString::number(k+1) );
+
+	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+
+	Column* newColumn = 0;
+	if (mode == AbstractFileFilter::Append) {
+		columnOffset = childCount<Column>();
+		for (int n = 0; n < cols; n++ ) {
+			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			addChildFast(newColumn);
+		}
+	} else if (mode == AbstractFileFilter::Prepend) {
+		Column* firstColumn = child<Column>(0);
+		for (int n = 0; n < cols; n++ ) {
+			newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			insertChildBeforeFast(newColumn, firstColumn);
+		}
+	} else if (mode == AbstractFileFilter::Replace) {
+		//replace completely the previous content of the data source with the content to be imported.
+		int columns = childCount<Column>();
+
+		if (columns > cols) {
+			//there're more columns in the data source then required -> remove the superfluous columns
+			for (int i = 0; i < columns-cols; i++)
+				removeChild(child<Column>(0));
+		} else {
+			//create additional columns if needed
+			for (int i = columns; i < cols; i++) {
+				newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
+				newColumn->setUndoAware(false);
+				addChildFast(newColumn);
+			}
+		}
+
+		//rename the columns that are already available and supress the dataChanged signal for them
+		for (int i = 0; i < childCount<Column>(); i++) {
+			if (mode == AbstractFileFilter::Replace)
+				child<Column>(i)->setSuppressDataChangedSignal(true);
+			child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+			child<Column>(i)->setName(colNameList.at(i));
+		}
+	}
+
+	if (newColumn) {
+		//notify the model about newly created objects, it's sufficient to do it once for the last child
+		emit aspectAboutToBeAdded(this, 0, newColumn);
+		emit aspectAdded(newColumn);
+	}
+
+	return columnOffset;
+}
