@@ -1647,7 +1647,7 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = logicalEndLast;
 		logicalEnd = yMax;
 
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
@@ -1659,17 +1659,17 @@ void CartesianPlotPrivate::retransformScales() {
 	float deltaYMin = 0;
 	float deltaYMax = 0;
 
-	if (xMin!=xMinPrev) {
+	if (xMin != xMinPrev) {
 		deltaXMin = xMin - xMinPrev;
 		emit plot->xMinChanged(xMin);
 	}
 
-	if (xMax!=xMaxPrev) {
+	if (xMax != xMaxPrev) {
 		deltaXMax = xMax - xMaxPrev;
 		emit plot->xMaxChanged(xMax);
 	}
 
-	if (yMin!=yMinPrev) {
+	if (yMin != yMinPrev) {
 		deltaYMin = yMin - yMinPrev;
 		emit plot->yMinChanged(yMin);
 	}
@@ -1685,8 +1685,7 @@ void CartesianPlotPrivate::retransformScales() {
 	yMaxPrev = yMax;
 
 	//adjust auto-scale axes
-	QList<Axis*> childElements = q->children<Axis>();
-	foreach (Axis* axis, childElements) {
+	for (auto* axis: q->children<Axis>()) {
 		if (!axis->autoScale())
 			continue;
 
@@ -1771,7 +1770,7 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 		else if (type == CartesianPlot::ScaleLog2)
 			base = 2.0;
 		else
-			base = 2.71828;
+			base = M_E;
 
 		return CartesianScale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, base);
 	}
@@ -1802,12 +1801,12 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 
-		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
+		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
 			m_selectionStart = event->pos();
-		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
+		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionStart.setX(event->pos().x());
 			m_selectionStart.setY(q->plotRect().height()/2);
-		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
+		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 			m_selectionStart.setX(-q->plotRect().width()/2);
 			m_selectionStart.setY(event->pos().y());
 		}
@@ -1831,16 +1830,16 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 		QString info;
 		QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart);
-		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
+		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
 			m_selectionEnd = event->pos();
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x()) + QString::fromUtf8(", Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
-		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
+		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionEnd.setX(event->pos().x());
 			m_selectionEnd.setY(-q->plotRect().height()/2);
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
-		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
+		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 			m_selectionEnd.setX(q->plotRect().width()/2);
 			m_selectionEnd.setY(event->pos().y());
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
@@ -1892,7 +1891,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 			xMax = logicalZoomStart.x();
 		}
 
-		if (m_selectionEnd.y()>m_selectionStart.y()) {
+		if (m_selectionEnd.y() > m_selectionStart.y()) {
 			yMin = logicalZoomEnd.y();
 			yMax = logicalZoomStart.y();
 		} else {
@@ -1910,8 +1909,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	//zoom the entire plot if no axes selected.
 	bool zoomX = false;
 	bool zoomY = false;
-	QList<Axis*> axes = q->children<Axis>();
-	foreach(Axis* axis, axes) {
+	for (auto* axis: q->children<Axis>()) {
 		if (!axis->graphicsItem()->isSelected())
 			continue;
 
@@ -2040,12 +2038,12 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("xRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
-		foreach(const RangeBreak& b, d->xRangeBreaks.list) {
+		for (const auto& rb: d->xRangeBreaks.list) {
 			writer->writeStartElement("xRangeBreak");
-			writer->writeAttribute("start", QString::number(b.start));
-			writer->writeAttribute("end", QString::number(b.end));
-			writer->writeAttribute("position", QString::number(b.position));
-			writer->writeAttribute("style", QString::number(b.style));
+			writer->writeAttribute("start", QString::number(rb.start));
+			writer->writeAttribute("end", QString::number(rb.end));
+			writer->writeAttribute("position", QString::number(rb.position));
+			writer->writeAttribute("style", QString::number(rb.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
@@ -2055,20 +2053,19 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->yRangeBreakingEnabled || !d->yRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("yRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
-		foreach(const RangeBreak& b, d->yRangeBreaks.list) {
+		for (const auto& rb: d->yRangeBreaks.list) {
 			writer->writeStartElement("yRangeBreak");
-			writer->writeAttribute("start", QString::number(b.start));
-			writer->writeAttribute("end", QString::number(b.end));
-			writer->writeAttribute("position", QString::number(b.position));
-			writer->writeAttribute("style", QString::number(b.style));
+			writer->writeAttribute("start", QString::number(rb.start));
+			writer->writeAttribute("end", QString::number(rb.end));
+			writer->writeAttribute("position", QString::number(rb.position));
+			writer->writeAttribute("style", QString::number(rb.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-	foreach(WorksheetElement *elem, childElements)
+	for (auto *elem: children<WorksheetElement>(IncludeHidden))
 		elem->save(writer);
 
 	writer->writeEndElement(); // close "cartesianPlot" section
@@ -2424,8 +2421,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	this->setColorPalette(config);
 
 	//load the theme for all the children
-	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
-	foreach (WorksheetElement* child, childElements)
+	for (auto* child: children<WorksheetElement>(AbstractAspect::IncludeHidden))
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);
@@ -2438,13 +2434,12 @@ void CartesianPlot::saveTheme(KConfig &config) {
 	const QList<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
 	const QList<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
 	const QList<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	const QList<XYCurve*>& xyCurveElements = children<XYCurve>(AbstractAspect::IncludeHidden);
 
 	axisElements.at(0)->saveThemeConfig(config);
 	plotAreaElements.at(0)->saveThemeConfig(config);
 	textLabelElements.at(0)->saveThemeConfig(config);
 
-	foreach(XYCurve *child, xyCurveElements)
+	for (auto *child: children<XYCurve>(AbstractAspect::IncludeHidden))
 		child->saveThemeConfig(config);
 }
 
