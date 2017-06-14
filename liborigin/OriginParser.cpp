@@ -1,8 +1,8 @@
 /***************************************************************************
     File                 : OriginParser.cpp
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Alex Kargovsky
-    Email (use @ for *)  : kargovsky*yumr.phys.msu.su
+    Copyright            : (C) 2008 Alex Kargovsky (kargovsky@yumr.phys.msu.su)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Origin file parser base class
 
  ***************************************************************************/
@@ -27,11 +27,17 @@
  ***************************************************************************/
 
 #include "OriginParser.h"
-#include <algorithm>
-#include <boost/algorithm/string/predicate.hpp> // for iequals
 
-using namespace boost::algorithm;
 using namespace Origin;
+
+bool OriginParser::iequals(const string& s1, const string& s2, const std::locale& loc) const {
+	bool equal = s1.size() == s2.size();
+	for (unsigned int n = 0; n < s1.size() && equal; ++n) {
+		if (std::toupper(s1[n], loc) != std::toupper(s2[n], loc) )
+			equal = false;
+	}
+	return equal;
+}
 
 vector<Origin::SpreadSheet>::difference_type OriginParser::findSpreadByName(const string& name) const
 {

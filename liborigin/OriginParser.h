@@ -1,8 +1,8 @@
 /***************************************************************************
     File                 : OriginParser.h
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Alex Kargovsky
-    Email (use @ for *)  : kargovsky*yumr.phys.msu.su
+    Copyright            : (C) 2008 Alex Kargovsky (kargovsky@yumr.phys.msu.su)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Origin file parser base class
 
  ***************************************************************************/
@@ -61,6 +61,8 @@ protected:
 	void convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type spread);
 
 	int findColumnByName(int spread, const string& name);
+private:
+	bool iequals(const string&, const string&, const std::locale& = std::locale()) const;
 
 public:
 	vector<Origin::SpreadColumn> datasets;
