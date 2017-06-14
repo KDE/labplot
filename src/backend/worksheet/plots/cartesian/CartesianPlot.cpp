@@ -855,8 +855,7 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
  * returns the first selected XYCurve in the plot
  */
 const XYCurve* CartesianPlot::currentCurve() const {
-	QList<const XYCurve*> children = this->children<const XYCurve>();
-	foreach(const XYCurve* curve, children) {
+	for (const auto* curve: this->children<const XYCurve>()) {
 		if (curve->graphicsItem()->isSelected())
 			return curve;
 	}
@@ -1002,7 +1001,7 @@ void CartesianPlot::addLegend() {
 }
 
 void CartesianPlot::addCustomPoint() {
-	CustomPoint* point= new CustomPoint(this, "custom point");
+	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
 }
 
@@ -1137,10 +1136,10 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 	QList<QGraphicsItem*> items = d->childItems();
 	if (d->mouseMode == CartesianPlot::SelectionMode) {
-		foreach(QGraphicsItem* item, items)
+		for (auto* item: items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
 	} else {
-		foreach(QGraphicsItem* item, items)
+		for (auto* item: items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
 	}
 
@@ -1166,8 +1165,7 @@ void CartesianPlot::scaleAutoX() {
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		QList<const XYCurve*> children = this->children<const XYCurve>();
-		foreach(const XYCurve* curve, children) {
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1224,8 +1222,7 @@ void CartesianPlot::scaleAutoY() {
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		QList<const XYCurve*> children = this->children<const XYCurve>();
-		foreach(const XYCurve* curve, children) {
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->yColumn())
@@ -1279,11 +1276,10 @@ void CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
-	QList<const XYCurve*> children = this->children<const XYCurve>();
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		foreach(const XYCurve* curve, children) {
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1306,7 +1302,7 @@ void CartesianPlot::scaleAuto() {
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		foreach(const XYCurve* curve, children) {
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1568,23 +1564,22 @@ void CartesianPlotPrivate::retransformScales() {
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = xMin;
-		for (int i = 0; i < xRangeBreaks.list.size(); ++i) {
-			const CartesianPlot::RangeBreak& curBreak = xRangeBreaks.list.at(i);
-			if (!curBreak.isValid())
+		for (const auto& rb: xRangeBreaks.list) {
+			if (!rb.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i != 0) sceneStart += breakGap;
-			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
+			if (&rb == &*std::begin(xRangeBreaks.list)) sceneStart += breakGap;
+			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
 			logicalStart = logicalEndLast;
-			logicalEnd = curBreak.start;
+			logicalEnd = rb.start;
 
 			if (sceneStart != sceneEnd)
 				scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneEndLast = sceneEnd;
-			logicalEndLast = curBreak.end;
+			logicalEndLast = rb.end;
 		}
 
 		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
@@ -1622,23 +1617,22 @@ void CartesianPlotPrivate::retransformScales() {
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = yMin;
-		for (int i=0; i < yRangeBreaks.list.size(); ++i) {
-			const CartesianPlot::RangeBreak& curBreak = yRangeBreaks.list.at(i);
-			if (!curBreak.isValid())
+		for (const auto& rb: yRangeBreaks.list) {
+			if (!rb.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i != 0) sceneStart-=breakGap;
-			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
+			if (&rb == &*std::begin(yRangeBreaks.list)) sceneStart -= breakGap;
+			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
 			logicalStart = logicalEndLast;
-			logicalEnd = curBreak.start;
+			logicalEnd = rb.start;
 
 			if (sceneStart != sceneEnd)
 				scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneEndLast = sceneEnd;
-			logicalEndLast = curBreak.end;
+			logicalEndLast = rb.end;
 		}
 
 		//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
@@ -1875,7 +1869,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-		if ( qAbs(m_selectionEnd.x()-m_selectionStart.x())<20 || qAbs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
+		if ( qAbs(m_selectionEnd.x()-m_selectionStart.x()) < 20 || qAbs(m_selectionEnd.y()-m_selectionStart.y()) < 20 ) {
 			m_selectionBandIsShown = false;
 			return;
 		}
@@ -1883,7 +1877,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		//determine the new plot ranges
 		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
 		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::SuppressPageClipping);
-		if (m_selectionEnd.x()>m_selectionStart.x()) {
+		if (m_selectionEnd.x() > m_selectionStart.x()) {
 			xMin = logicalZoomStart.x();
 			xMax = logicalZoomEnd.x();
 		} else {
@@ -2455,15 +2449,15 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
 
 	//generate 30 additional shades if the color palette contains more than one color
-	if(m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {
+	if (m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {
 		QColor c;
 
 		//3 factors to create shades from theme's palette
 		float fac[3] = {0.25,0.45,0.65};
 
 		//Generate 15 lighter shades
-		for(int i = 0; i < 5; i++) {
-			for(int j = 1; j < 4; j++) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 1; j < 4; j++) {
 				c.setRed( m_themeColorPalette.at(i).red()*(1-fac[j-1]) );
 				c.setGreen( m_themeColorPalette.at(i).green()*(1-fac[j-1]) );
 				c.setBlue( m_themeColorPalette.at(i).blue()*(1-fac[j-1]) );
@@ -2472,8 +2466,8 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		}
 
 		//Generate 15 darker shades
-		for(int i = 0; i < 5; i++) {
-			for(int j = 4; j < 7; j++) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 4; j < 7; j++) {
 				c.setRed( m_themeColorPalette.at(i).red()+((255-m_themeColorPalette.at(i).red())*fac[j-4]) );
 				c.setGreen( m_themeColorPalette.at(i).green()+((255-m_themeColorPalette.at(i).green())*fac[j-4]) );
 				c.setBlue( m_themeColorPalette.at(i).blue()+((255-m_themeColorPalette.at(i).blue())*fac[j-4]) );
