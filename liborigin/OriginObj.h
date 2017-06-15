@@ -34,7 +34,9 @@
 #include <cstring>
 #include <ctime>
 #include <vector>
-#include "boost/variant.hpp"
+#include <string>
+//#include "boost/variant.hpp"
+//#include "variant.h"
 
 using namespace std;
 
@@ -169,7 +171,38 @@ namespace Origin
 		{};
 	};
 
-	typedef boost::variant<double, string> variant;
+	// https://stackoverflow.com/questions/3521914/why-compiler-doesnt-allow-stdstring-inside-union
+	// see https://www.ojdip.net/2013/10/implementing-a-variant-type-in-cpp/
+	typedef struct TU {
+		enum vtype {TU_DOUBLE, TU_STRING};
+		vtype t;
+		union u {
+			double d;
+			std::string s;
+		};
+
+		TU(TU const&) {};
+
+/*		TU(const TU& tu) : t(tu.t) {
+			switch(t) {
+			case TU_DOUBLE:  u.d = tu.u.d;      break;
+			}
+		}
+*/
+/*		TU(vtype type) : t(type) {
+			switch(type) {
+			case TU_DOUBLE: new(&d) double(); break;
+			case TU_STRING: new(&s) string(); break;
+			}
+		}
+*/
+		~TU() {
+			if(t == TU_STRING)
+				s.~string();
+		}
+	} variant;
+//	typedef Variant<double, string> variant;
+//	typedef boost::variant<double, string> variant;
 
 	struct SpreadColumn
 	{

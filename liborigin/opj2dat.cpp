@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 						Origin::variant value=spread.columns[j].data[i];
 						double v=0.;
 						if (value.type() == typeid(double)) {
-							v = boost::get<double>(value);
+							v = std::get<double>(value);
 							if (v != _ONAN) {
 								outf << v << "; ";
 							} else {
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 							}
 						}
 						if (value.type() == typeid(string)) {
-							outf << boost::get<string>(value).c_str() << "; ";
+							outf << std::get<string>(value).c_str() << "; ";
 						}
 					} else {
 						outf << "; ";
