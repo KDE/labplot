@@ -174,30 +174,30 @@ namespace Origin
 	// https://stackoverflow.com/questions/3521914/why-compiler-doesnt-allow-stdstring-inside-union
 	// see https://www.ojdip.net/2013/10/implementing-a-variant-type-in-cpp/
 	typedef struct TU {
-		enum vtype {TU_DOUBLE, TU_STRING};
-		vtype t;
-		union u {
+		enum vtype {TU_DOUBLE, TU_STRING} type;
+		union {
 			double d;
 			std::string s;
 		};
 
-		TU(TU const&) {};
+//		TU(TU const&) {};
 
-/*		TU(const TU& tu) : t(tu.t) {
-			switch(t) {
-			case TU_DOUBLE:  u.d = tu.u.d;      break;
+		TU(const TU& tu) : type(tu.type) {
+			switch(type) {
+			case TU_DOUBLE: d = tu.d;	break;
+			case TU_STRING: s = tu.s;	break;
 			}
 		}
-*/
-/*		TU(vtype type) : t(type) {
-			switch(type) {
+
+		TU(vtype& t) : type(t) {
+			switch(t) {
 			case TU_DOUBLE: new(&d) double(); break;
 			case TU_STRING: new(&s) string(); break;
 			}
 		}
-*/
+
 		~TU() {
-			if(t == TU_STRING)
+			if(type == TU_STRING)
 				s.~string();
 		}
 	} variant;

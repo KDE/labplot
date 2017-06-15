@@ -1081,7 +1081,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				} else if (i == 5) {
 					LOG_PRINT(logfile, "... ")
 				}
-				spreadSheets[spread].columns[(current_col-1)].data.push_back(value);
+				spreadSheets[spread].columns[(current_col-1)].data.push_back((TU::d)value);
 			}
 			else if((data_type & 0x100) == 0x100) // Text&Numeric
 			{
