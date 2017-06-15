@@ -84,10 +84,8 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
-### BOOST (optional) for liborigin ###############################
-FIND_PACKAGE(Boost)
-
-IF (Boost_FOUND AND ENABLE_LIBORIGIN)
+### liborigin (own) ###############################
+IF (ENABLE_LIBORIGIN)
 	SET (USE_LIBORIGIN TRUE)
 	add_definitions (-DHAVE_LIBORIGIN)
 	MESSAGE (STATUS "liborigin support enabled")

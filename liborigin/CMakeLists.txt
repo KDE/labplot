@@ -1,12 +1,12 @@
 # CMakeLists.txt for liborigin
-cmake_minimum_required(VERSION 2.8)
+#cmake_minimum_required(VERSION 2.8)
 
 # c++11 standard
-add_compile_options(-std=c++11)
+#add_compile_options(-std=c++11)
 
 # boost library headers
 #find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+#include_directories(${Boost_INCLUDE_DIRS})
 
 # library version
 set(LIBORIGIN_VERSION_MAJOR 3)

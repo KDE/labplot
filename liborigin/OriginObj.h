@@ -35,8 +35,9 @@
 #include <ctime>
 #include <vector>
 #include <string>
-//#include "boost/variant.hpp"
-//#include "variant.h"
+#ifndef LVERSION	// LabPlot does not need boost
+#include "boost/variant.hpp"
+#endif
 
 using namespace std;
 

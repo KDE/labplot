@@ -151,11 +151,11 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 		switch(column.valueType) {
 		case Origin::Numeric:
 		case Origin::TextNumeric: {
-			/*
+			/* TODO: check this
 			A TextNumeric column in Origin is a column whose filled cells contain either a double or a string.
 			Here there is no equivalent column type.
 			Set the column type as 'Numeric' or 'Text' depending on the type of first element in column.
-			TODO: Add a "per column" flag, settable at import dialog, to choose between both types.
+			IDEA: Add a "per column" flag, settable at import dialog, to choose between both types.
 			 */
 			double datavalue;
 			bool setAsText = false;
