@@ -1570,7 +1570,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (&rb == &*std::begin(xRangeBreaks.list)) sceneStart += breakGap;
+			if (&rb == &xRangeBreaks.list.first()) sceneStart += breakGap;
 			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = rb.start;
@@ -1623,7 +1623,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (&rb == &*std::begin(yRangeBreaks.list)) sceneStart -= breakGap;
+			if (&rb == &yRangeBreaks.list.first()) sceneStart -= breakGap;
 			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = rb.start;
