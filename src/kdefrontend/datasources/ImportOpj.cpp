@@ -106,8 +106,8 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 
 	QLocale locale = mw->locale();
 	Spreadsheet* spreadsheet;
-	if (workbook == 0)	// single sheet
-		spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
+	if (workbook == 0 && spread.label.length() > 0)	// single sheet with label (long name)
+			spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
 	else			// multiple sheets (TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
 		spreadsheet = new Spreadsheet(0, spread.name.c_str());
 	spreadsheet->setRowCount(rows);
