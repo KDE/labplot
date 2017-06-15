@@ -33,13 +33,13 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
-#include <QList>
 #include <KConfig>
-#include <KLocalizedString>
 
+template <class T> class QList;
 class LabelWidget;
 class ThemeHandler;
 class KUrlCompletion;
+class KLocalizedString;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
@@ -161,7 +161,7 @@ private slots:
 
 	//save/load themes
 	void loadTheme(const QString&);
-	void saveTheme(KConfig& config);
+	void saveTheme(KConfig& config) const;
 
 	void load();
 

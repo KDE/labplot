@@ -29,12 +29,15 @@
 #ifndef ABSTRACTPLOTPRIVATE_H
 #define ABSTRACTPLOTPRIVATE_H
 
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
+
+
 class AbstractPlotPrivate:public WorksheetElementContainerPrivate {
 public:
 	explicit AbstractPlotPrivate(AbstractPlot* owner);
-	virtual ~AbstractPlotPrivate(){}
+	virtual ~AbstractPlotPrivate() {}
 	virtual QString name() const;
-	virtual void retransform(){}
+	virtual void retransform() {}
 
 	float horizontalPadding; //horiz. offset between the plot area and the area defining the coodinate system, in scene units
 	float verticalPadding; //vert. offset between the plot area and the area defining the coodinate system, in scene units

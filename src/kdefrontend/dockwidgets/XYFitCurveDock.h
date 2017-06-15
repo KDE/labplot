@@ -39,7 +39,7 @@ class XYFitCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYFitCurveDock(QWidget *parent);
+	explicit XYFitCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 

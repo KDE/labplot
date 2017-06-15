@@ -1656,9 +1656,6 @@ void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG("MainWin::importFileDialog()");
 	ImportFileDialog* dlg = new ImportFileDialog(this, false, fileName);
 
-	// explicitly do not delete on close (Windows does this!)
-	dlg->setAttribute(Qt::WA_DeleteOnClose, false);
-
 	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
 		dlg->setCurrentIndex( m_projectExplorer->currentIndex());

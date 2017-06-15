@@ -150,6 +150,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
+	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
 	${BACKEND_DIR}/core/AbstractScriptingEngine.cpp
 	${BACKEND_DIR}/core/AbstractScript.cpp

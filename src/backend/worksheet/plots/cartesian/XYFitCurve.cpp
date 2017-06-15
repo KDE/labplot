@@ -89,6 +89,94 @@ void XYFitCurve::recalculate() {
 	d->recalculate();
 }
 
+void XYFitCurve::initFitData(const QAction *action, QVector<QAction*> actionList) {
+	if (!action)
+		return;
+
+	Q_D(XYFitCurve);
+	XYFitCurve::FitData fitData = d->fitData;
+	if (action == actionList.at(0)) {
+		//Linear
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_polynomial;
+		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
+		fitData.paramNames << "c0" << "c1";
+	} else if (action == actionList.at(1)) {
+		//Power
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_power;
+		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
+		fitData.paramNames << "a" << "b";
+	} else if (action == actionList.at(2)) {
+		//Exponential (degree 1)
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_exponential;
+		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
+		fitData.paramNames << "a" << "b";
+	} else if (action == actionList.at(3)) {
+		//Exponential (degree 2)
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_exponential;
+		fitData.degree = 2;
+		fitData.model = "a1*exp(b1*x) + a2*exp(b2*x)";
+		fitData.paramNames << "a1" << "b1" << "a2" << "b2";
+	} else if (action == actionList.at(4)) {
+		//Inverse exponential
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_inverse_exponential;
+		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
+		fitData.paramNames << "a" << "b" << "c";
+	} else if (action == actionList.at(5)) {
+		//Gauss
+		fitData.modelCategory = nsl_fit_model_peak;
+		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
+		fitData.modelType = nsl_fit_model_gaussian;
+		fitData.paramNames << "s" << "mu" << "a";
+	} else if (action == actionList.at(6)) {
+		//Cauchy-Lorentz
+		fitData.modelCategory = nsl_fit_model_peak;
+		fitData.modelType = nsl_fit_model_lorentz;
+		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
+		fitData.paramNames << "g" << "mu" << "a";
+	} else if (action == actionList.at(7)) {
+		//Arc tangent
+		fitData.modelCategory = nsl_fit_model_growth;
+		fitData.modelType = nsl_fit_model_atan;
+		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
+		fitData.paramNames << "s" << "mu" << "a";
+	} else if (action == actionList.at(8)) {
+		//Hyperbolic tangent
+		fitData.modelCategory = nsl_fit_model_growth;
+		fitData.modelType = nsl_fit_model_tanh;
+		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
+		fitData.paramNames << "s" << "mu" << "a";
+	} else if (action == actionList.at(9)) {
+		//Error function
+		fitData.modelCategory = nsl_fit_model_growth;
+		fitData.modelType = nsl_fit_model_erf;
+		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
+		fitData.paramNames << "s" << "mu" << "a";
+	} else if (action == actionList.at(10)) {
+		//Custom
+		fitData.modelCategory = nsl_fit_model_custom;
+		fitData.modelType = nsl_fit_model_custom;
+	}
+
+	if (fitData.modelCategory != nsl_fit_model_custom) {
+		fitData.paramStartValues.resize(fitData.paramNames.size());
+		fitData.paramFixed.resize(fitData.paramNames.size());
+		fitData.paramLowerLimits.resize(fitData.paramNames.size());
+		fitData.paramUpperLimits.resize(fitData.paramNames.size());
+
+		for (int i = 0; i < fitData.paramNames.size(); ++i) {
+			fitData.paramStartValues[i] = 1.0;
+			fitData.paramFixed[i] = false;
+			fitData.paramLowerLimits[i] = -DBL_MAX;
+			fitData.paramUpperLimits[i] = DBL_MAX;
+		}
+	}
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

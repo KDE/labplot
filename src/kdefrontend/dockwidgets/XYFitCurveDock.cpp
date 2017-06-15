@@ -43,6 +43,7 @@
 #include <QStandardItemModel>
 
 #include <cfloat>	// DBL_MAX
+#include <cmath>	// fabs()
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -63,7 +64,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent) : XYCurveDock(parent),
+XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent),
 	cbDataSourceCurve(0), cbXDataColumn(0), cbYDataColumn(0), cbXErrorColumn(0),
 	cbYErrorColumn(0), m_fitCurve(0) {
 
@@ -272,13 +273,16 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
+
 	initGeneralTab();
 	initTabs();
+
 	m_initializing = false;
 }
 

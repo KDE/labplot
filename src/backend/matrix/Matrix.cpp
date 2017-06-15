@@ -57,7 +57,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -67,7 +67,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
 
 	if (!loading)
 		init();
@@ -103,7 +103,7 @@ void Matrix::init() {
   Returns an icon to be used for decorating my views.
   */
 QIcon Matrix::icon() const {
-    return QIcon::fromTheme("labplot-matrix");
+	return QIcon::fromTheme("labplot-matrix");
 }
 
 /*!
@@ -136,7 +136,7 @@ bool Matrix::exportView() const {
 	}
 
 	bool ret;
-	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const QString path = dlg->path();
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		WAIT_CURSOR;
@@ -852,3 +852,36 @@ bool Matrix::load(XmlStreamReader* reader) {
 	return true;
 }
 
+//##############################################################################
+//########################  Data Import  #######################################
+//##############################################################################
+int Matrix::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+                               int actualRows, int actualCols, QStringList colNameList) {
+	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	int columnOffset = 0;
+	setUndoAware(false);
+
+	setSuppressDataChangedSignal(true);
+
+	// resize the matrix
+	if (mode == AbstractFileFilter::Replace) {
+		clear();
+		setDimensions(actualRows,actualCols);
+	} else {
+		if (rowCount() < actualRows)
+			setDimensions(actualRows,actualCols);
+		else
+			setDimensions(rowCount(),actualCols);
+	}
+
+	QVector<QVector<double> >& matrixColumns = data();
+	dataPointers.resize(actualCols);
+	for (int n = 0; n < actualCols; n++ ) {
+		QVector<double>* vector = &matrixColumns[n];
+		vector->reserve(actualRows);
+		vector->resize(actualRows);
+		dataPointers[n] = vector;
+	}
+
+	return columnOffset;
+}

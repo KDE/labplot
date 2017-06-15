@@ -31,7 +31,6 @@
 #define ABSTRACTPLOT_H
 
 #include "backend/worksheet/WorksheetElementContainer.h"
-#include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/lib/macros.h"
 
 class AbstractCoordinateSystem;
@@ -39,7 +38,7 @@ class PlotArea;
 class TextLabel;
 class AbstractPlotPrivate;
 
-class AbstractPlot:public WorksheetElementContainer{
+class AbstractPlot:public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:
@@ -59,11 +58,11 @@ class AbstractPlot:public WorksheetElementContainer{
 		AbstractPlot(const QString &name, AbstractPlotPrivate *dd);
 		AbstractCoordinateSystem* m_coordinateSystem;
 		PlotArea* m_plotArea;
-		TextLabel *m_title;
+		TextLabel* m_title;
 
 	private:
 		void init();
-    	Q_DECLARE_PRIVATE(AbstractPlot)
+		Q_DECLARE_PRIVATE(AbstractPlot)
 };
 
 #endif
