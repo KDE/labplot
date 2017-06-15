@@ -1081,7 +1081,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				} else if (i == 5) {
 					LOG_PRINT(logfile, "... ")
 				}
-				spreadSheets[spread].columns[(current_col-1)].data.push_back((TU::d)value);
+				spreadSheets[spread].columns[(current_col-1)].data.push_back(value);
 			}
 			else if((data_type & 0x100) == 0x100) // Text&Numeric
 			{
@@ -1099,7 +1099,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				}
 				else //text
 				{
-					string svaltmp = col_data.substr(i*valuesize+2, valuesize-2).c_str();
+					string svaltmp = col_data.substr(i*valuesize+2, valuesize-2);
 					// TODO: check if this test is still needed
 					if(svaltmp.find(0x0E) != string::npos) { // try find non-printable symbol - garbage test
 						svaltmp = string();
@@ -1153,7 +1153,7 @@ void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_siz
 			for(unsigned int i = 0; i < size; ++i){
 				double value;
 				GET_DOUBLE(stmp, value)
-				matrixes[mIndex].sheets.back().data.push_back((double)value);
+				matrixes[mIndex].sheets.back().data.push_back(value);
 			}
 			break;
 		case 0x6003://float

@@ -157,25 +157,31 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			Set the column type as 'Numeric' or 'Text' depending on the type of first element in column.
 			TODO: Add a "per column" flag, settable at import dialog, to choose between both types.
 			 */
-			Origin::variant value;
 			double datavalue;
 			bool setAsText = false;
 			col->setColumnMode(AbstractColumn::Numeric);
+			//printf("column has %ld rows\n", column.data.size());
 			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i) {
-				value = column.data[i];
-				if (value.type() == typeid(double)) {
-					datavalue = boost::get<double>(value);
+				Origin::variant v(column.data.at(i));
+				//printf("i=%d type = %d\n", i, v.type);
+				if (v.type == Origin::Variant::V_DOUBLE) {
+					//printf("DOUBLE !\n");
+					datavalue = v.as_double;
+					//printf("datavalue = %g\n", datavalue);
 					if (datavalue == _ONAN) continue; // mark for empty cell
 					if (!setAsText)
 						col->setValueAt(i, datavalue);
 					else	// convert double to string for Text columns
 						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
-				} else { // string
+				} else if (v.type == Origin::Variant::V_STRING) { // string
+					//printf("STRING !\n");
 					if (!setAsText && i == 0) {
 						col->setColumnMode(AbstractColumn::Text);
 						setAsText = true;
 					}
-					col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+					col->setTextAt(i, (v.as_string).c_str());
+				} else {
+					printf("ERROR: data type = %d unknown!\n", v.type);
 				}
 			}
 			if (column.numericDisplayType != 0) {
@@ -201,7 +207,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 		case Origin::Text:
 			col->setColumnMode(AbstractColumn::Text);
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
-				col->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+				col->setTextAt(i, (column.data[i].as_string).c_str());
 			break;
 		case Origin::Time: {
 			switch(column.valueTypeSpecification + 128) {
@@ -241,7 +247,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			}
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
-				col->setValueAt(i, boost::get<double>(column.data[i]));
+				col->setValueAt(i, column.data[i].as_double);
 			col->setColumnMode(AbstractColumn::DateTime);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -302,7 +308,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			}
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
-				col->setValueAt(i, boost::get<double>(column.data[i]));
+				col->setValueAt(i, column.data[i].as_double);
 			col->setColumnMode(AbstractColumn::DateTime);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -323,7 +329,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			}
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
-				col->setValueAt(i, boost::get<double>(column.data[i]));
+				col->setValueAt(i, column.data[i].as_double);
 			col->setColumnMode(AbstractColumn::Month);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -344,7 +350,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 			}
 
 			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
-				col->setValueAt(i, boost::get<double>(column.data[i]));
+				col->setValueAt(i, column.data[i].as_double);
 			col->setColumnMode(AbstractColumn::Day);
 
 			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
