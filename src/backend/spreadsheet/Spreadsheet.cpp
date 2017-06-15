@@ -863,11 +863,5 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		}
 	}
 
-	if (newColumn) {
-		//notify the model about newly created objects, it's sufficient to do it once for the last child
-		emit aspectAboutToBeAdded(this, 0, newColumn);
-		emit aspectAdded(newColumn);
-	}
-
 	return columnOffset;
 }

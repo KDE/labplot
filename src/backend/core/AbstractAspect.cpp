@@ -385,7 +385,9 @@ void AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
+	emit aspectAboutToBeAdded(this, 0, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
+	emit aspectAdded(child);
 }
 
 /**
@@ -418,7 +420,10 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	int index = d->indexOfChild(before);
 	if (index == -1)
 		index = d->m_children.count();
+
+	emit aspectAboutToBeAdded(this, 0, child);
 	d->insertChild(index, child);
+	emit aspectAdded(child);
 }
 
 /**
@@ -799,7 +804,7 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
 	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0),
-	m_undoAware(true), m_isLoading(false) 
+	m_undoAware(true), m_isLoading(false)
 {
 	m_creation_time = QDateTime::currentDateTime();
 }
