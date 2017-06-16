@@ -4,7 +4,7 @@
     Project              : Matrix
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -27,6 +27,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #include "Matrix.h"
 #include "MatrixPrivate.h"
 #include "matrixcommands.h"
@@ -38,13 +39,12 @@
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
 #include <QHeaderView>
-#include <QLocale>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KLocale>
 #include <KConfigGroup>
+#include <KLocale>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -220,22 +220,22 @@ void Matrix::setRowCount(int count) {
 	if (count == d->rowCount)
 		return;
 
-	int diff = count - d->rowCount;
-	if(diff > 0)
-		exec(new MatrixInsertRowsCmd(d, rowCount(), diff));
-	else if(diff < 0)
-		exec(new MatrixRemoveRowsCmd(d, rowCount()+diff, -diff));
+	const int diff = count - d->rowCount;
+	if (diff > 0)
+		appendRows(diff);
+	else if (diff < 0)
+		removeRows(rowCount() + diff, -diff);
 }
 
 void Matrix::setColumnCount(int count) {
 	if (count == d->columnCount)
 		return;
 
-	int diff = count - columnCount();
-	if(diff > 0)
-		exec(new MatrixInsertColumnsCmd(d, columnCount(), diff));
-	else if(diff < 0)
-		exec(new MatrixRemoveColumnsCmd(d, columnCount()+diff, -diff));
+	const int diff = count - columnCount();
+	if (diff > 0)
+		appendColumns(diff);
+	else if (diff < 0)
+		removeColumns(columnCount() + diff, -diff);
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
@@ -289,9 +289,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 void Matrix::insertColumns(int before, int count) {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18np("%1: insert %2 column", "%1: insert %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, before, count));
-	endMacro();
 	RESET_CURSOR;
 }
 
@@ -302,9 +300,7 @@ void Matrix::appendColumns(int count) {
 void Matrix::removeColumns(int first, int count) {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove %2 column", "%1: remove %2 columns", name(), count));
 	exec(new MatrixRemoveColumnsCmd(d, first, count));
-	endMacro();
 	RESET_CURSOR;
 }
 
@@ -316,9 +312,7 @@ void Matrix::clearColumn(int c) {
 void Matrix::insertRows(int before, int count) {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18np("%1: insert %2 row", "%1: insert %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, before, count));
-	endMacro();
 	RESET_CURSOR;
 }
 
@@ -329,9 +323,7 @@ void Matrix::appendRows(int count) {
 void Matrix::removeRows(int first, int count) {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count));
 	exec(new MatrixRemoveRowsCmd(d, first, count));
-	endMacro();
 	RESET_CURSOR;
 }
 void Matrix::clearRow(int r) {
@@ -361,19 +353,24 @@ void Matrix::clearCell(int row, int col) {
 }
 
 void Matrix::setDimensions(int rows, int cols) {
-	if( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) ) return;
+	if( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) )
+		return;
+
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: set matrix size to %2x%3", name(), rows, cols));
+
 	int col_diff = cols - columnCount();
+	if (col_diff > 0)
+		insertColumns(columnCount(), col_diff);
+	else if (col_diff < 0)
+		removeColumns(columnCount() + col_diff, -col_diff);
+
 	int row_diff = rows - rowCount();
-	if(col_diff > 0)
-		exec(new MatrixInsertColumnsCmd(d, columnCount(), col_diff));
-	else if(col_diff < 0)
-		exec(new MatrixRemoveColumnsCmd(d, columnCount()+col_diff, -col_diff));
 	if(row_diff > 0)
-		exec(new MatrixInsertRowsCmd(d, rowCount(), row_diff));
-	else if(row_diff < 0)
-		exec(new MatrixRemoveRowsCmd(d, rowCount()+row_diff, -row_diff));
+		appendRows(row_diff);
+	else if (row_diff < 0)
+		removeRows(rowCount() + row_diff, -row_diff);
+
 	endMacro();
 	RESET_CURSOR;
 }
@@ -381,23 +378,30 @@ void Matrix::setDimensions(int rows, int cols) {
 void Matrix::copy(Matrix* other) {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: copy %2", name(), other->name()));
+
 	int rows = other->rowCount();
 	int columns = other->columnCount();
 	setDimensions(rows, columns);
+
 	for (int i=0; i<rows; i++)
 		setRowHeight(i, other->rowHeight(i));
+
 	for (int i=0; i<columns; i++)
 		setColumnWidth(i, other->columnWidth(i));
+
 	d->suppressDataChange = true;
 	for (int i=0; i<columns; i++)
 		setColumnCells(i, 0, rows-1, other->columnCells(i, 0, rows-1));
+
 	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
 	setNumericFormat(other->numericFormat());
 	setPrecision(other->precision());
 	d->formula = other->formula();
 	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
-	if (m_view) reinterpret_cast<MatrixView*>(m_view)->adjustHeaders();
+	if (m_view)
+		reinterpret_cast<MatrixView*>(m_view)->adjustHeaders();
+
 	endMacro();
 	RESET_CURSOR;
 }
@@ -521,7 +525,6 @@ void Matrix::mirrorVertically() {
 	RESET_CURSOR;
 }
 
-
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
@@ -546,7 +549,6 @@ void MatrixPrivate::insertColumns(int before, int count) {
 		matrixData.insert(before+i, QVector<double>(rowCount));
 		columnWidths.insert(before+i, 0);
 	}
-
 	columnCount += count;
 	emit q->columnsInserted(before, count);
 }
@@ -858,6 +860,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 int Matrix::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
                                int actualRows, int actualCols, QStringList colNameList) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	Q_UNUSED(colNameList);
 	int columnOffset = 0;
 	setUndoAware(false);
 
