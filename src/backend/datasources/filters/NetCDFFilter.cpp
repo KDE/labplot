@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : NetCDF I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -29,12 +30,8 @@ Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QFile>
-#include <QTextStream>
 #include <QDebug>
 #include <KLocale>
-#include <QIcon>
-#include <cmath>
 
 /*!
 	\class NetCDFFilter
@@ -545,7 +542,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			DEBUG("act rows/cols" << actualRows << actualCols);
 
 			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 
 			double* data = 0;
 			if (dataSource)
@@ -587,7 +584,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			DEBUG("lines:" << lines);
 
 			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 
 			double** data = (double**) malloc(rows * sizeof(double*));
 			data[0] = (double*)malloc( cols * rows * sizeof(double) );
@@ -636,20 +633,9 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 				column->setChanged();
 			}
 		}
-
-		//make the spreadsheet and all its children undo aware again
-		spreadsheet->setUndoAware(true);
-		for (int i=0; i<spreadsheet->childCount<Column>(); i++)
-			spreadsheet->child<Column>(i)->setUndoAware(true);
-	} else {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		if (matrix) {
-			matrix->setSuppressDataChangedSignal(false);
-			matrix->setChanged();
-			matrix->setUndoAware(true);
-		}
 	}
 
+	dataSource->finalizeImport();
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

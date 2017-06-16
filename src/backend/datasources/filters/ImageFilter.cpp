@@ -29,13 +29,8 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QFile>
-#include <QTextStream>
-//#include <QDebug>
 #include <QImage>
 #include <KLocale>
-
-#include <cmath>
 
  /*!
 	\class ImageFilter
@@ -187,7 +182,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	int columnOffset = 0;
 	QVector<QVector<double>*> dataPointers;
 	if (dataSource != 0)
-		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 	else {
 #ifdef QT_DEBUG
 		qDebug()<<"data source in image import not defined! Giving up.";
@@ -251,16 +246,9 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				column->setChanged();
 			}
 		}
-		spreadsheet->setUndoAware(true);
-		return;
 	}
 
-	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-	if (matrix) {
-		matrix->setSuppressDataChangedSignal(false);
-		matrix->setChanged();
-		matrix->setUndoAware(true);
-	}
+	dataSource->finalizeImport();
 }
 
 /*!

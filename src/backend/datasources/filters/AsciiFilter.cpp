@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -368,7 +368,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 
 	if (dataSource != NULL)
-		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
+		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	bool isNumber;
@@ -450,20 +450,9 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 				column->setChanged();
 			}
 		}
-
-		//make the spreadsheet and all its children undo aware again
-		spreadsheet->setUndoAware(true);
-		for (int i=0; i<spreadsheet->childCount<Column>(); i++)
-			spreadsheet->child<Column>(i)->setUndoAware(true);
-	} else {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		if (matrix) {
-			matrix->setSuppressDataChangedSignal(false);
-			matrix->setChanged();
-			matrix->setUndoAware(true);
-		}
 	}
 
+	dataSource->finalizeImport();
 	return dataStrings;
 }
 

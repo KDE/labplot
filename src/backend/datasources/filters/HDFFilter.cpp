@@ -36,11 +36,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QFile>
 #include <QDebug>
 #include <QTreeWidgetItem>
 #include <KLocale>
-#include <cmath>
 
 /*!
 	\class HDFFilter
@@ -1316,7 +1314,7 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 				<< ", rows:" << rows << " max:" << maxSize;
 #endif
 			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 
 			QStringList dataString;	// data saved in a list
 			switch (dclass) {
@@ -1434,7 +1432,7 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 					if (dataSource != NULL) {
 						// re-create data pointer
 						dataPointers.clear();
-						dataSource->create(dataPointers, mode, actualRows, members);
+						dataSource->prepareImport(dataPointers, mode, actualRows, members);
 					} else
 						dataStrings << readHDFCompound(dtype);
 					dataString = readHDFCompoundData1D(dataset, dtype, rows, lines, dataPointers);
@@ -1492,7 +1490,7 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 #endif
 
 			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 
 			// read data
 			switch (dclass) {
@@ -1637,20 +1635,9 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 				column->setChanged();
 			}
 		}
-
-		//make the spreadsheet and all its children undo aware again
-		spreadsheet->setUndoAware(true);
-		for (int i=0; i<spreadsheet->childCount<Column>(); i++)
-			spreadsheet->child<Column>(i)->setUndoAware(true);
-	} else {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		if (matrix) {
-			matrix->setSuppressDataChangedSignal(false);
-			matrix->setChanged();
-			matrix->setUndoAware(true);
-		}
 	}
 
+	dataSource->finalizeImport();
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

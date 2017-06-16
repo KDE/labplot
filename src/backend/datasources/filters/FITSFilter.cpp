@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : FITS I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -35,10 +36,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QDebug>
 #include <QMultiMap>
-#include <QString>
-#include <QHeaderView>
-#include <QTableWidgetItem>
-#include <QFile>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
@@ -365,7 +362,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 
 		if (!noDataSource) {
 			dataPointers.reserve(actualCols - j);
-			columnOffset = dataSource->create(dataPointers, importMode, lines - i, actualCols - j);
+			columnOffset = dataSource->prepareImport(dataPointers, importMode, lines - i, actualCols - j);
 		}
 		int ii = 0;
 		for (; i < lines; ++i) {
@@ -398,15 +395,8 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 					column->setChanged();
 				}
 			}
-			spreadsheet->setUndoAware(true);
 		}
-
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		if (matrix) {
-			matrix->setSuppressDataChangedSignal(false);
-			matrix->setChanged();
-			matrix->setUndoAware(true);
-		}
+		dataSource->finalizeImport();
 		fits_close_file(fitsFile, &status);
 
 		return dataStrings;
@@ -553,7 +543,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 				stringDataPointers.squeeze();
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());
-				columnOffset = dataSource->create(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
+				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
 			}
 			numericDataPointers.squeeze();
 		}
@@ -634,19 +624,8 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 						column->setChanged();
 					}
 				}
-
-				//make the spreadsheet and all its children undo aware again
-				spreadsheet->setUndoAware(true);
-				for (int i=0; i<spreadsheet->childCount<Column>(); i++)
-					spreadsheet->child<Column>(i)->setUndoAware(true);
-			} else {
-				Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-				if (matrix) {
-					matrix->setSuppressDataChangedSignal(false);
-					matrix->setChanged();
-					matrix->setUndoAware(true);
-				}
 			}
+			dataSource->finalizeImport();
 		}
 		fits_close_file(fitsFile, &status);
 		return dataStrings;
