@@ -65,7 +65,9 @@ set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
-#cmake_policy(SET CMP0063 NEW)
+IF (CMAKE_VERSION VERSION_EQUAL "3.3" OR CMAKE_VERSION VERSION_GREATER "3.3")
+	cmake_policy(SET CMP0063 NEW)
+ENDIF()
 
 ### Options ######################################
 option(ENABLE_CANTOR "Build with Cantor support" ON)
