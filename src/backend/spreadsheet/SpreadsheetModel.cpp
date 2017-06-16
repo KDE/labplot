@@ -34,7 +34,6 @@
 
 #include <QBrush>
 #include <QIcon>
-#include <QFontMetrics>
 
 #include <KLocale>
 
