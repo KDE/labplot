@@ -3,8 +3,7 @@ File                 : AsciiFilter.h
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2013 Alexander Semke
-Email (use @ for *)  : alexander.semke*web.de
+Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -32,10 +31,10 @@ Email (use @ for *)  : alexander.semke*web.de
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class AsciiFilterPrivate;
-class AsciiFilter : public AbstractFileFilter{
+class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT
 
-  public:
+public:
 	AsciiFilter();
 	~AsciiFilter();
 
@@ -47,9 +46,9 @@ class AsciiFilter : public AbstractFileFilter{
 	static size_t lineNumber(const QString & fileName);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource,
-			AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
 	QList<QStringList> readData(const QString & fileName, AbstractDataSource* dataSource,
-			AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines = -1);
+		AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
