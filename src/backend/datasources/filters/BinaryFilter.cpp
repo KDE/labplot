@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -269,7 +270,7 @@ QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, Abstr
 	QVector<QVector<double>*> dataPointers;
 	int columnOffset = 0;
 	if (dataSource != NULL)
-		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
 
 	// read data
 	for (int i = 0; i < qMin(actualRows, lines); i++) {
@@ -389,20 +390,9 @@ QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, Abstr
 				column->setChanged();
 			}
 		}
-
-		//make the spreadsheet and all its children undo aware again
-		spreadsheet->setUndoAware(true);
-		for (int i=0; i<spreadsheet->childCount<Column>(); i++)
-			spreadsheet->child<Column>(i)->setUndoAware(true);
-	} else {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		if (matrix) {
-			matrix->setSuppressDataChangedSignal(false);
-			matrix->setChanged();
-			matrix->setUndoAware(true);
-		}
 	}
 
+	dataSource->finalizeImport();
 	return dataStrings;
 }
 

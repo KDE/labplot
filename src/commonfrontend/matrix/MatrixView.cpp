@@ -37,7 +37,6 @@
 
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
-#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QStackedWidget>
 #include <QTableView>

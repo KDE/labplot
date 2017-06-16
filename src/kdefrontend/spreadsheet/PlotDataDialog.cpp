@@ -57,6 +57,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())) {
 
+	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18n("Plot spreadsheet data"));
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
@@ -183,6 +184,7 @@ void PlotDataDialog::processColumns() {
 		}
 	} else {
 		//two columns provided, only one curve is possible -> hide the curve placement options
+		ui.rbCurvePlacement1->setChecked(true);
 		ui.gbCurvePlacement->hide();
 		ui.gbPlotPlacement->setTitle(i18n("Add curve to"));
 	}

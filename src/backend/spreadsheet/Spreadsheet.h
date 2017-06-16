@@ -41,13 +41,13 @@ class Spreadsheet : public AbstractDataSource {
 public:
 	Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
-	virtual QWidget* view() const;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QWidget* view() const override;
 
-	virtual bool exportView() const;
-	virtual bool printView();
-	virtual bool printPreview() const;
+	virtual bool exportView() const override;
+	virtual bool printView() override;
+	virtual bool printPreview() const override;
 
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
@@ -66,8 +66,8 @@ public:
 
 	void copy(Spreadsheet* other);
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*) override;
 
 	void setColumnSelectedInView(int index, bool selected);
 
@@ -76,8 +76,9 @@ public:
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
 	//data import
-	virtual int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
-		int actualRows, int actualCols, QStringList colNameList = QStringList());
+	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+		int rows, int cols, QStringList colNameList = QStringList()) override;
+	virtual void finalizeImport() override;
 	int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
 
 public slots:
@@ -100,8 +101,8 @@ private:
 	void init();
 
 private slots:
-	virtual void childSelected(const AbstractAspect*);
-	virtual void childDeselected(const AbstractAspect*);
+	virtual void childSelected(const AbstractAspect*) override;
+	virtual void childDeselected(const AbstractAspect*) override;
 
 signals:
 	void requestProjectContextMenu(QMenu*);

@@ -40,9 +40,11 @@ class AbstractDataSource : public AbstractPart, public scripted {
 public:
 	AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
 	virtual ~AbstractDataSource() {}
+
 	void clear();
-	virtual int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
 		int actualRows, int actualCols, QStringList colNameList = QStringList()) = 0;
+	virtual void finalizeImport() = 0;
 };
 
 #endif // ABSTRACTDATASOURCE_H

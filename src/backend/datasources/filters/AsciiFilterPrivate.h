@@ -33,31 +33,31 @@ class AbstractDataSource;
 
 class AsciiFilterPrivate {
 
-	public:
-		explicit AsciiFilterPrivate(AsciiFilter*);
+public:
+	explicit AsciiFilterPrivate(AsciiFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+	QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString & fileName, AbstractDataSource* dataSource);
 
-		const AsciiFilter* q;
+	const AsciiFilter* q;
 
-		QString commentCharacter;
-		QString separatingCharacter;
-		bool autoModeEnabled;
-		bool headerEnabled;
-		QString vectorNames;
-		bool skipEmptyParts;
-		bool simplifyWhitespacesEnabled;
-		bool transposed;
+	QString commentCharacter;
+	QString separatingCharacter;
+	bool autoModeEnabled;
+	bool headerEnabled;
+	QString vectorNames;
+	bool skipEmptyParts;
+	bool simplifyWhitespacesEnabled;
+	bool transposed;
 
-		int startRow;
-		int endRow;
-		int startColumn;
-		int endColumn;
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
 
-	private:
-		void clearDataSource(AbstractDataSource*) const;
+private:
+	void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

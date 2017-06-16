@@ -34,7 +34,6 @@
 
 #include <QBrush>
 #include <QIcon>
-#include <QFontMetrics>
 
 #include <KLocale>
 
@@ -186,16 +185,32 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return false;
 
 	int row = index.row();
+	Column* column = m_spreadsheet->column(index.column());
+
+	//don't do anything if no new value was provided
+	if (column->columnMode() == AbstractColumn::Numeric) {
+		bool ok;
+		double new_value = value.toDouble(&ok);
+		if (ok) {
+			if (column->valueAt(row) == new_value )
+				return false;
+		} else {
+			//an empty (non-numeric value) was provided
+			if (isnan(column->valueAt(row)))
+				return false;
+		}
+	} else {
+		if (column->asStringColumn()->textAt(row) == value.toString())
+			return false;
+	}
 
 	switch(role) {
 		case Qt::EditRole: {
-			Column* col_ptr = m_spreadsheet->column(index.column());
-
 			// remark: the validity of the cell is determined by the input filter
 			if (m_formula_mode)
-				col_ptr->setFormula(row, value.toString());
+				column->setFormula(row, value.toString());
 			else
-				col_ptr->asStringColumn()->setTextAt(row, value.toString());
+				column->asStringColumn()->setTextAt(row, value.toString());
 
 			return true;
 		}

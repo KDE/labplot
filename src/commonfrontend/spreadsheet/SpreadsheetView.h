@@ -55,6 +55,8 @@ class SpreadsheetView : public QWidget {
 		explicit SpreadsheetView(Spreadsheet* spreadsheet);
 		virtual ~SpreadsheetView();
 
+		void resizeHeader();
+
 		void showComments(bool on = true);
 		bool areCommentsShown() const;
 

@@ -777,7 +777,7 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
                                int actualRows, int actualCols, QStringList colNameList) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	int columnOffset = 0;
@@ -864,4 +864,13 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	}
 
 	return columnOffset;
+}
+
+void Spreadsheet::finalizeImport() {
+	//make the spreadsheet and all its children undo aware again
+	setUndoAware(true);
+	for (int i=0; i<childCount<Column>(); i++)
+		child<Column>(i)->setUndoAware(true);
+
+	reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }

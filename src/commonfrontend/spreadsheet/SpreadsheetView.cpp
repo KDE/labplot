@@ -41,7 +41,6 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 
-#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QClipboard>
 #include <QInputDialog>
@@ -49,7 +48,6 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMimeData>
-#include <QObject>
 #include <QPainter>
 #include <QPrinter>
 #include <QTableView>
@@ -66,7 +64,6 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
-#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <algorithm> //for std::reverse
 
@@ -76,7 +73,7 @@
 
 	\ingroup commonfrontend
  */
-SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QWidget(),
+SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet) : QWidget(),
 	m_tableView(new QTableView(this)),
 	m_spreadsheet(spreadsheet),
 	m_model( new SpreadsheetModel(spreadsheet) ),
@@ -126,14 +123,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
-	//set the column sizes to the saved values or resize to content if no size was saved yet
-	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
-		Column* col = m_spreadsheet->child<Column>(i);
-		if (col->width() == 0)
-			m_tableView->resizeColumnToContents(i);
-		else
-			m_tableView->setColumnWidth(i, col->width());
-	}
+	resizeHeader();
 
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
@@ -176,6 +166,19 @@ void SpreadsheetView::init() {
 
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) );
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) );
+}
+
+/*!
+	set the column sizes to the saved values or resize to content if no size was saved yet
+*/
+void SpreadsheetView::resizeHeader() {
+	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
+		Column* col = m_spreadsheet->child<Column>(i);
+		if (col->width() == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, col->width());
+	}
 }
 
 void SpreadsheetView::initActions() {
@@ -843,8 +846,8 @@ void SpreadsheetView::getCurrentCell(int * row, int * col) {
 
 bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
-		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
-		QPoint global_pos = cm_event->globalPos();
+		QContextMenuEvent* cm_event = static_cast<QContextMenuEvent*>(event);
+		const QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()) {
 			bool onlyNumeric = true;
 			for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
@@ -856,7 +859,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_statistics_rows->setVisible(onlyNumeric);
 			m_rowMenu->exec(global_pos);
 		} else if (watched == m_horizontalHeader) {
-			int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
+			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
 				QItemSelectionModel *sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
@@ -877,7 +880,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			//check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
-			foreach(Column* col, selectedColumns()) {
+			for(const Column* col: selectedColumns()) {
 				if (col->columnMode() != AbstractColumn::Numeric) {
 					numeric = false;
 					break;
@@ -986,7 +989,7 @@ void SpreadsheetView::pasteIntoSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard", m_spreadsheet->name()));
-	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
+	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
 
 	if (mime_data->hasFormat("text/plain")) {
 		int first_col = firstSelectedColumn();
@@ -1091,7 +1094,6 @@ void SpreadsheetView::unmaskSelection() {
 
 void SpreadsheetView::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->exec();
 }
 
