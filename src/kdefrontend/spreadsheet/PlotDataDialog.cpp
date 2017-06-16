@@ -183,6 +183,7 @@ void PlotDataDialog::processColumns() {
 		}
 	} else {
 		//two columns provided, only one curve is possible -> hide the curve placement options
+		ui.rbCurvePlacement1->setChecked(true);
 		ui.gbCurvePlacement->hide();
 		ui.gbPlotPlacement->setTitle(i18n("Add curve to"));
 	}
