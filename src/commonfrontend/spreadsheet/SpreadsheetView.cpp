@@ -126,14 +126,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
-	//set the column sizes to the saved values or resize to content if no size was saved yet
-	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
-		Column* col = m_spreadsheet->child<Column>(i);
-		if (col->width() == 0)
-			m_tableView->resizeColumnToContents(i);
-		else
-			m_tableView->setColumnWidth(i, col->width());
-	}
+	resizeHeader();
 
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
@@ -176,6 +169,19 @@ void SpreadsheetView::init() {
 
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) );
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) );
+}
+
+/*!
+	set the column sizes to the saved values or resize to content if no size was saved yet
+*/
+void SpreadsheetView::resizeHeader() {
+	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
+		Column* col = m_spreadsheet->child<Column>(i);
+		if (col->width() == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, col->width());
+	}
 }
 
 void SpreadsheetView::initActions() {
