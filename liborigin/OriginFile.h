@@ -30,7 +30,11 @@
 #ifndef ORIGIN_FILE_H
 #define ORIGIN_FILE_H
 
+#ifdef LVERSION
+#include "liborigin/config.h"
+#else
 #include "config.h"
+#endif
 #include "OriginObj.h"
 #include "OriginParser.h"
 #include <memory>
