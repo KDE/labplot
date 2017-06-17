@@ -51,7 +51,6 @@
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
 
-
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
 	void set ## Method(const type value) { var = value; }

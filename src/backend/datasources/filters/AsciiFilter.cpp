@@ -265,50 +265,61 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
     Uses the settings defined in the data source (if given).
 */
 QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	DEBUG("AsciiFilterPrivate::readData(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
+		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", lines = " << lines);
 	QList<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
-		return dataStrings << (QStringList() << QString());
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG("Could not open file " << fileName.toStdString());
+		return dataStrings;
+	} else if (device.atEnd()) {
+		DEBUG("File " << fileName.toStdString() << " is empty! Giving up.");
+		if (mode == AbstractFileFilter::Replace) { // In replace-mode clear the data source
+			if (dataSource != nullptr)
+				dataSource->clear();
+		}
+		return dataStrings;
+	}
 
-	//TODO implement: ???
+	//TODO: implement ???
 	// if (transposed)
 	//...
 
-	//skip rows until start row
+	// Skip rows until start row
+	DEBUG("Skipping " << startRow - 1 << " lines");
 	for (int i = 0; i < startRow - 1; i++) {
-		//If the number of rows to skip is bigger then the actual number of the rows in the file, then quit the function.
+		device.readLine();
+
 		if (device.atEnd()) {
+			DEBUG("EOF reached");
 			if (mode == AbstractFileFilter::Replace) {
-				//In replace-mode clear the data source
-				if (dataSource != NULL)
+				if (dataSource != nullptr)
 					dataSource->clear();
 			}
-			return dataStrings << (QStringList() << QString());
+			return dataStrings;
 		}
-
-		if (i < startRow - 2)
-			device.readLine();
 	}
 
-	//parse the first line:
-	//use the first line to determine the number of columns,
-	//create the columns and use (if selected) the first row to name them
-	// TODO: also determine data type
+	// Parse the first line:
+	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 
 	QString line = device.readLine();
-	if (simplifyWhitespacesEnabled)
+	line.remove(QRegExp("[\\n\\t\\r]"));	// remove any newline
+	DEBUG("First line: \'" << line.toStdString() << '\'');
+	if (simplifyWhitespacesEnabled) {
 		line = line.simplified();
+		DEBUG("First line simplified: \'" << line.toStdString() << '\'');
+	}
 
-	// determine separator
+	// determine seperator and split first line
 	QString separator;
 	QStringList lineStringList;
 	if (separatingCharacter == "auto") {
+		DEBUG("automatic separator");
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		lineStringList = line.split(regExp, QString::SplitBehavior(skipEmptyParts));
+		lineStringList = line.split(regExp, QString::SkipEmptyParts);
 
-		//determine the separator
-		DEBUG("auto columns =" << lineStringList.size());
 		if (!lineStringList.isEmpty()) {
 			int length1 = lineStringList.at(0).length();
 			if (lineStringList.size() > 1) {
@@ -319,19 +330,17 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 				separator = ' ';
 			}
 		}
-	} else {
+	} else {	// use given separator
 		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
 		separator = separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
+		lineStringList = line.split(separator, QString::SkipEmptyParts);
 	}
- 	QDEBUG("separator: " << separator);
- 	DEBUG("headerEnabled =" << headerEnabled);
-
-	if (endColumn == -1)
-		endColumn = lineStringList.size(); //use the last available column index
+	DEBUG("separator: \'" << separator.toStdString() << '\'');
+	DEBUG("number of columns: " << lineStringList.size());
+	DEBUG("headerEnabled = " << headerEnabled);
 
 	QStringList vectorNameList;
-	if (headerEnabled) {
+	if (headerEnabled) {	// use frist line to name vectors
 		vectorNameList = lineStringList;
 	} else {
 		//create vector names out of the space separated vectorNames-string, if not empty
@@ -341,33 +350,40 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 
 	//qDebug()<<"	vector names ="<<vectorNameList;
 
-	int actualRows = AsciiFilter::lineNumber(fileName);	// data rows
-	int actualEndRow;
-	if (endRow == -1)
+	if (endColumn == -1)
+		endColumn = lineStringList.size(); // last column
+	int actualCols = endColumn - startColumn + 1;
+
+	int actualRows = AsciiFilter::lineNumber(fileName);
+	int actualEndRow = endRow;
+	if (endRow == -1 || endRow > actualRows)
 		actualEndRow = actualRows;
-	else if (endRow > actualRows - 1)
-		actualEndRow = actualRows-1;
-	else
-		actualEndRow = endRow;
-	int actualCols = endColumn - startColumn+1;
+
+	actualRows = actualEndRow - startRow + 1;
 
 	if (headerEnabled)
-		actualRows = actualEndRow-startRow;
-	else
-		actualRows = actualEndRow-startRow+1;
+		actualRows--;
+
 	if (lines == -1)
 		lines = actualRows;
 
-	DEBUG("start/end column: " << startColumn << endColumn);
-	DEBUG("start/end row: " << startRow << actualEndRow);
-	DEBUG("actual cols/rows: " << actualCols << actualRows);
-	DEBUG("lines:" << lines);
+	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
+	DEBUG("start/end row: " << startRow << ' ' << actualEndRow);
+	DEBUG("actual cols/rows: " << actualCols << ' ' << actualRows);
+	DEBUG("reading " << qMin(lines, actualRows)  << " lines");
+
+	if (actualRows == 0)
+		return dataStrings;
+
+/////////////////////////////////
+	//TODO: determine type of lineStringList[1];
 
 	int currentRow = 0; // indexes the position in the vector(column)
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	// TODO: support other data types
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 
-	if (dataSource != NULL)
+	if (dataSource != nullptr)
 		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
