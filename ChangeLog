@@ -5,19 +5,22 @@ New features:
 	* Improved data fitting
 		* Automatically guess parameter of custom models
 		* Better result presentation
-		* Support several weight types
-		* Consider given x- and y-error when fitting
+		* Support different weight types
+		* Consider given x- and y-error when fitting (can be switched off)
 		* Show t statistics, P > |t| and confidence interval
 		* Calculate p-value for chi-square and F test in nonlinear fitting
+		* added fit models for most statistical distributions
 	* Improved theming
 		* Apply themes to worksheet and to all its children
 		* Respect theme settings also in plot legends and labels
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
+	* Import Origin OPJ projects
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project
+	* Calculation of fit results corrected
 
 -----2.4-----
 New features:
