@@ -90,9 +90,9 @@ FIND_PACKAGE(GSL REQUIRED)
 IF (ENABLE_LIBORIGIN)
 	SET (USE_LIBORIGIN TRUE)
 	add_definitions (-DHAVE_LIBORIGIN)
-	MESSAGE (STATUS "liborigin support enabled")
+	MESSAGE (STATUS "Origin project import (through internal liborigin) enabled")
 ELSE ()
-	MESSAGE (STATUS "liborigin support disabled")
+	MESSAGE (STATUS "Origin project import (through internal liborigin) disabled")
 ENDIF ()
 
 ### Cantorlibs (optional) ###############################
