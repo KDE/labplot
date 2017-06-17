@@ -276,7 +276,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	} else if (device.atEnd()) {
 		DEBUG("File " << fileName.toStdString() << " is empty! Giving up.");
 		if (mode == AbstractFileFilter::Replace) { // In replace-mode clear the data source
-			if (dataSource != nullptr)
+			if (dataSource)
 				dataSource->clear();
 		}
 		return dataStrings;
@@ -294,7 +294,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 		if (device.atEnd()) {
 			DEBUG("EOF reached");
 			if (mode == AbstractFileFilter::Replace) {
-				if (dataSource != nullptr)
+				if (dataSource)
 					dataSource->clear();
 			}
 			return dataStrings;
@@ -303,28 +303,27 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
-
-	QString line = device.readLine();
-	line.remove(QRegExp("[\\n\\t\\r]"));	// remove any newline
-	DEBUG("First line: \'" << line.toStdString() << '\'');
+	QString firstLine = device.readLine();
+	firstLine.remove(QRegExp("[\\n\\t\\r]"));	// remove any newline
+	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
 	if (simplifyWhitespacesEnabled) {
-		line = line.simplified();
-		DEBUG("First line simplified: \'" << line.toStdString() << '\'');
+		firstLine = firstLine.simplified();
+		DEBUG("First line simplified: \'" << firstLine.toStdString() << '\'');
 	}
 
-	// determine seperator and split first line
+	// determine separator and split first line
 	QString separator;
-	QStringList lineStringList;
+	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		lineStringList = line.split(regExp, QString::SkipEmptyParts);
+		firstLineStringList = firstLine.split(regExp, QString::SkipEmptyParts);
 
-		if (!lineStringList.isEmpty()) {
-			int length1 = lineStringList.at(0).length();
-			if (lineStringList.size() > 1) {
-				int pos2 = line.indexOf(lineStringList.at(1), length1);
-				separator = line.mid(length1, pos2 - length1);
+		if (!firstLineStringList.isEmpty()) {
+			int length1 = firstLineStringList.at(0).length();
+			if (firstLineStringList.size() > 1) {
+				int pos2 = firstLine.indexOf(firstLineStringList.at(1), length1);
+				separator = firstLine.mid(length1, pos2 - length1);
 			} else {
 				//old: separator = line.right(line.length() - length1);
 				separator = ' ';
@@ -333,17 +332,17 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	} else {	// use given separator
 		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
 		separator = separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-		lineStringList = line.split(separator, QString::SkipEmptyParts);
+		firstLineStringList = firstLine.split(separator, QString::SkipEmptyParts);
 	}
 	DEBUG("separator: \'" << separator.toStdString() << '\'');
-	DEBUG("number of columns: " << lineStringList.size());
+	DEBUG("number of columns: " << firstLineStringList.size());
 	DEBUG("headerEnabled = " << headerEnabled);
 
 	QStringList vectorNameList;
-	if (headerEnabled) {	// use frist line to name vectors
-		vectorNameList = lineStringList;
+	if (headerEnabled) {	// use first line to name vectors
+		vectorNameList = firstLineStringList;
 	} else {
-		//create vector names out of the space separated vectorNames-string, if not empty
+		// create vector names out of the space separated vectorNames-string, if not empty
 		if (!vectorNames.isEmpty())
 			vectorNameList = vectorNames.split(' ');
 	}
@@ -351,7 +350,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	//qDebug()<<"	vector names ="<<vectorNameList;
 
 	if (endColumn == -1)
-		endColumn = lineStringList.size(); // last column
+		endColumn = firstLineStringList.size(); // last column
 	int actualCols = endColumn - startColumn + 1;
 
 	int actualRows = AsciiFilter::lineNumber(fileName);
@@ -378,27 +377,27 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 /////////////////////////////////
 	//TODO: determine type of lineStringList[1];
 
-	int currentRow = 0; // indexes the position in the vector(column)
-	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	int currentRow = 0;	// indexes the position in the vector(column)
+	int columnOffset = 0;	// indexes the "start column" in the spreadsheet/matrix. Starting from this column the data will be imported.
 	// TODO: support other data types
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 
-	if (dataSource != nullptr)
+	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
-	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
+	// Import the values in the first line, when they are not used as header (names of columns)
 	bool isNumber;
 	if (!headerEnabled) {
 		QStringList lineString;
 		for (int n = 0; n < actualCols; n++) {
-			if (n < lineStringList.size()) {
-				const double value = lineStringList.at(n).toDouble(&isNumber);
-				if (dataSource != NULL)
+			if (n < firstLineStringList.size()) {
+				const double value = firstLineStringList.at(n).toDouble(&isNumber);
+				if (dataSource)
 					isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
 				else
 					isNumber ? lineString << QString::number(value) : lineString << QLatin1String("NAN");
 			} else {
-				if (dataSource != NULL)
+				if (dataSource)
 					dataPointers[n]->operator[](0) = NAN;
 				else
 					lineString << QLatin1String("NAN");
@@ -408,10 +407,9 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 		currentRow++;
 	}
 
-	//Read the remainder of the file.
+	// Read the remainder of the file.
 	for (int i = currentRow; i < qMin(lines, actualRows); i++) {
-		line = device.readLine();
-
+		QString line = device.readLine();
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -424,19 +422,19 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 			continue;
 		}
 
-		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
+		QStringList lineStringList = line.split(separator, QString::SkipEmptyParts);
 
 		// TODO : read strings (comments) or datetime too
 		QStringList lineString;
 		for (int n = 0; n < actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
-				if (dataSource != NULL)
+				if (dataSource)
 					isNumber ? dataPointers[n]->operator[](currentRow) = value : dataPointers[n]->operator[](currentRow) = NAN;
 				else
 					isNumber ? lineString += QString::number(value) : lineString += QString("NAN");
 			} else {
-				if (dataSource != NULL)
+				if (dataSource)
 					dataPointers[n]->operator[](currentRow) = NAN;
 				else
 					lineString += QLatin1String("NAN");
@@ -445,7 +443,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 
 		dataStrings << lineString;
 		currentRow++;
-		emit q->completed(100*currentRow/actualRows);
+		emit q->completed(100 * currentRow/actualRows);
 	}
 
 	if (!dataSource)
@@ -456,10 +454,10 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//TODO: generalize to different data types
-		const int rows = headerEnabled ? currentRow : currentRow+1;
+		const int rows = headerEnabled ? currentRow : currentRow + 1;
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for (int n = startColumn; n <= endColumn; n++) {
-			Column* column = spreadsheet->column(columnOffset+n-startColumn);
+			Column* column = spreadsheet->column(columnOffset + n - startColumn);
 			column->setComment(comment);
 			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
