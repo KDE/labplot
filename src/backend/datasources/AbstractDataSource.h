@@ -32,7 +32,7 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <QStringList>
+class QStringList;
 
 class AbstractDataSource : public AbstractPart, public scripted {
 	Q_OBJECT

@@ -45,9 +45,9 @@ extern "C" {
 #include <QIcon>
 #include <QMenu>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
+//#ifndef NDEBUG
+//#include <QDebug>
+//#endif
 
 #include <KLocale>
 

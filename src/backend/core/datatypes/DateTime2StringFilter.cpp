@@ -35,21 +35,19 @@
 
 #include <KLocale>
 
-class DateTime2StringFilterSetFormatCmd : public QUndoCommand
-{
-	public:
-		DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
+class DateTime2StringFilterSetFormatCmd : public QUndoCommand {
+public:
+	DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
 
-		virtual void redo();
-		virtual void undo();
+	virtual void redo();
+	virtual void undo();
 
-	private:
-		DateTime2StringFilter* m_target;
-		QString m_other_format;
+private:
+	DateTime2StringFilter* m_target;
+	QString m_other_format;
 };
 
-void DateTime2StringFilter::setFormat(const QString& format)
-{
+void DateTime2StringFilter::setFormat(const QString& format) {
 	exec(new DateTime2StringFilterSetFormatCmd(static_cast<DateTime2StringFilter*>(this), format));
 }
 
@@ -88,26 +86,22 @@ DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2St
 		setText(i18n("set date-time format to %1", new_format));
 }
 
-void DateTime2StringFilterSetFormatCmd::redo()
-{
+void DateTime2StringFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
 	emit m_target->formatChanged();
 }
 
-void DateTime2StringFilterSetFormatCmd::undo()
-{
+void DateTime2StringFilterSetFormatCmd::undo() {
 	redo();
 }
 
-void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
-{
+void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
 	writer->writeAttribute("format", format());
 }
 
-bool DateTime2StringFilter::load(XmlStreamReader * reader)
-{
+bool DateTime2StringFilter::load(XmlStreamReader * reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 

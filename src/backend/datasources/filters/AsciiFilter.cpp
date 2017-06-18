@@ -375,8 +375,6 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 		return dataStrings;
 
 /////////////////////////////////
-	//TODO: determine type of lineStringList[1];
-
 	int currentRow = 0;	// indexes the position in the vector(column)
 	int columnOffset = 0;	// indexes the "start column" in the spreadsheet/matrix. Starting from this column the data will be imported.
 	// TODO: support other data types
@@ -407,7 +405,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 		currentRow++;
 	}
 
-	// Read the remainder of the file.
+	// Read the remainder of the file
 	for (int i = currentRow; i < qMin(lines, actualRows); i++) {
 		QString line = device.readLine();
 		if (simplifyWhitespacesEnabled)
@@ -449,12 +447,12 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	if (!dataSource)
 		return dataStrings;
 
-	//make everything undo/redo-able again
-	//set the comments for each of the columns
+	// set the comments for each of the columns
+	// TODO: make everything undo/redo-able again
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
-		//TODO: generalize to different data types
 		const int rows = headerEnabled ? currentRow : currentRow + 1;
+		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for (int n = startColumn; n <= endColumn; n++) {
 			Column* column = spreadsheet->column(columnOffset + n - startColumn);

@@ -779,13 +779,13 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
                                int actualRows, int actualCols, QStringList colNameList) {
-	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	DEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
 	//make the available columns undo unaware before we resize and rename them below,
 	//the same will be done for new columns in this->resize().
-	for (int i=0; i<childCount<Column>(); i++)
+	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(false);
 
 	columnOffset = this->resize(mode, colNameList, actualCols);
