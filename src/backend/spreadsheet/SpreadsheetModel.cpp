@@ -36,6 +36,7 @@
 #include <QIcon>
 
 #include <KLocale>
+#include <cmath>
 
 /*!
 	\class SpreadsheetModel
@@ -196,7 +197,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 				return false;
 		} else {
 			//an empty (non-numeric value) was provided
-			if (isnan(column->valueAt(row)))
+			if (std::isnan(column->valueAt(row)))
 				return false;
 		}
 	} else {
