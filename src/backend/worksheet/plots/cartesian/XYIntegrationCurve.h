@@ -73,7 +73,6 @@ class XYIntegrationCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(IntegrationData, integrationData, IntegrationData)
 		const IntegrationResult& integrationResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYIntegrationCurvePrivate Private;
 
 	protected:

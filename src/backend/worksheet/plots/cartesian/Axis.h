@@ -60,7 +60,7 @@ class Axis: public WorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-		explicit Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation = AxisHorizontal);
+		explicit Axis(const QString&, CartesianPlot*, const AxisOrientation& orientation = AxisHorizontal);
 		virtual ~Axis();
 
 		virtual QIcon icon() const;
@@ -69,10 +69,10 @@ class Axis: public WorksheetElement {
 		virtual QGraphicsItem* graphicsItem() const;
 		virtual void setZValue(qreal);
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig&);
+		virtual void saveThemeConfig(const KConfig&);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
@@ -136,7 +136,6 @@ class Axis: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef WorksheetElement BaseClass;
 		typedef AxisPrivate Private;
 
 	public slots:
@@ -144,9 +143,9 @@ class Axis: public WorksheetElement {
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		AxisPrivate * const d_ptr;
-		Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd);
-		TextLabel *m_title;
+		AxisPrivate* const d_ptr;
+		Axis(const QString&, const AxisOrientation&, AxisPrivate*);
+		TextLabel* m_title;
 
 	private:
     	Q_DECLARE_PRIVATE(Axis)

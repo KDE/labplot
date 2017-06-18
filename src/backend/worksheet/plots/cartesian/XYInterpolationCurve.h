@@ -42,7 +42,7 @@ class XYInterpolationCurve: public XYCurve {
 	public:
 		enum PointsMode {Auto, Multiple, Custom};
 		struct InterpolationData {
-			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
+			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference),
 				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
 				pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
 
@@ -80,7 +80,6 @@ class XYInterpolationCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
 		const InterpolationResult& interpolationResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYInterpolationCurvePrivate Private;
 
 	protected:

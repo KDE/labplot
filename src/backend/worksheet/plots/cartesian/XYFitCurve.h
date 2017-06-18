@@ -121,7 +121,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
 	const FitResult& fitResult() const;
 
-	typedef WorksheetElement BaseClass;
 	typedef XYFitCurvePrivate Private;
 
 protected:

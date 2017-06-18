@@ -4,7 +4,7 @@
     Description          : Base class for plots of different types
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -38,12 +38,14 @@ class PlotArea;
 class TextLabel;
 class AbstractPlotPrivate;
 
-class AbstractPlot:public WorksheetElementContainer {
+class AbstractPlot : public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:
 		explicit AbstractPlot(const QString &name);
 		virtual ~AbstractPlot(){}
+
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio) override;
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
 		TextLabel* title();
@@ -51,11 +53,10 @@ class AbstractPlot:public WorksheetElementContainer {
 		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
 		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
 
-		typedef AbstractPlot BaseClass;
 		typedef AbstractPlotPrivate Private;
 
 	protected:
-		AbstractPlot(const QString &name, AbstractPlotPrivate *dd);
+		AbstractPlot(const QString&, AbstractPlotPrivate*);
 		AbstractCoordinateSystem* m_coordinateSystem;
 		PlotArea* m_plotArea;
 		TextLabel* m_title;

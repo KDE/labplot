@@ -355,7 +355,6 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 	//TODO setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
 
 	retransform();
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
 /* ============================ getter methods ================= */
