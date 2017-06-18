@@ -92,7 +92,7 @@ class ColumnPrivate : QObject {
 		void setTimeAt(int row, const QTime& new_value);
 		QDateTime dateTimeAt(int row) const;
 		void setDateTimeAt(int row, const QDateTime& new_value);
-		void replaceDateTimes(int first, const QList<QDateTime>& new_values);
+		void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
 
 		double valueAt(int row) const;
 		void setValueAt(int row, double new_value);
@@ -103,7 +103,7 @@ class ColumnPrivate : QObject {
 
 	private:
 		AbstractColumn::ColumnMode m_column_mode;
-		void* m_data; //pointer to the data container (QVector<double>, QStringList or QList<QDateTime>)
+		void* m_data; //pointer to the data container (QVector<double>, QStringList or QVector<QDateTime>)
 		AbstractSimpleFilter* m_input_filter; //input filter for string -> data type conversion
 		AbstractSimpleFilter* m_output_filter; //output filter for data type -> string conversion
 		QString m_formula;

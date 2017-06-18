@@ -422,7 +422,7 @@ void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::replaceDateTimes(int first, const QList<QDateTime>& new_values) {
+void AbstractColumn::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 

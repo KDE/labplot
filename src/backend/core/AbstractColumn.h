@@ -134,7 +134,7 @@ public:
 	virtual void setTimeAt(int row, const QTime& new_value);
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
-	virtual void replaceDateTimes(int first, const QList<QDateTime>& new_values);
+	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
 	virtual double valueAt(int row) const;
 	virtual void setValueAt(int row, double new_value);
 	virtual void replaceValues(int first, const QVector<double>& new_values);

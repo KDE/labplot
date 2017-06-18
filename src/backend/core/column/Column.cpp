@@ -106,8 +106,8 @@ Column::Column(const QString& name, QStringList data)
  * \param name the column name (= aspect name)
  * \param data initial data vector
  */
-Column::Column(const QString& name, QList<QDateTime> data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::DateTime, new QList<QDateTime>(data)) ) {
+Column::Column(const QString& name, QVector<QDateTime> data)
+	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::DateTime, new QVector<QDateTime>(data)) ) {
 	init();
 }
 
@@ -405,7 +405,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values) {
+void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (!new_values.isEmpty()) {
 		setStatisticsAvailable(false);
 		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
@@ -544,9 +544,8 @@ void Column::calculateStatistics() {
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
 	double entropy = 0.0;
-	QList<int> frequencyOfValuesValues = frequencyOfValues.values();
-	for (int i = 0; i < frequencyOfValuesValues.size(); ++i) {
-		double frequencyNorm = static_cast<double>(frequencyOfValuesValues.at(i)) / notNanCount;
+	for (auto v: frequencyOfValues.values()) {
+		double frequencyNorm = static_cast<double>(v) / notNanCount;
 		entropy += (frequencyNorm * log2(frequencyNorm));
 	}
 

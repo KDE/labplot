@@ -63,19 +63,19 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 	case AbstractColumn::DateTime:
 		m_input_filter = new String2DateTimeFilter();
 		m_output_filter = new DateTime2StringFilter();
-		m_data = new QList<QDateTime>();
+		m_data = new QVector<QDateTime>();
 		break;
 	case AbstractColumn::Month:
 		m_input_filter = new String2MonthFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("MMMM");
-		m_data = new QList<QDateTime>();
+		m_data = new QVector<QDateTime>();
 		break;
 	case AbstractColumn::Day:
 		m_input_filter = new String2DayOfWeekFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("dddd");
-		m_data = new QList<QDateTime>();
+		m_data = new QVector<QDateTime>();
 		break;
 	}
 
@@ -148,7 +148,7 @@ ColumnPrivate::~ColumnPrivate() {
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		delete static_cast< QList<QDateTime>* >(m_data);
+		delete static_cast< QVector<QDateTime>* >(m_data);
 		break;
 	}
 }
@@ -197,19 +197,19 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2DateTimeFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Month:
 			filter = new Double2MonthFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Day:
 			filter = new Double2DayOfWeekFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		} // switch(mode)
 		break;
@@ -228,19 +228,19 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new String2DateTimeFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Month:
 			filter = new String2MonthFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		case AbstractColumn::Day:
 			filter = new String2DayOfWeekFilter();
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
-			m_data = new QList<QDateTime>();
+			m_data = new QVector<QDateTime>();
 			break;
 		} // switch(mode)
 		break;
@@ -256,7 +256,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		case AbstractColumn::Text:
 			filter = outputFilter();
 			filter_is_temporary = false;
-			temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)));
+			temp_col = new Column("temp_col", *(static_cast< QVector<QDateTime>* >(old_data)));
 			m_data = new QStringList();
 			break;
 		case AbstractColumn::Numeric:
@@ -267,7 +267,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			else
 				filter = new DateTime2DoubleFilter();
 			filter_is_temporary = true;
-			temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)));
+			temp_col = new Column("temp_col", *(static_cast< QVector<QDateTime>* >(old_data)));
 			m_data = new QVector<double>();
 			break;
 		case AbstractColumn::Month:
@@ -429,7 +429,7 @@ bool ColumnPrivate::copy(const AbstractColumn * other) {
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
 			for(int i=0; i<num_rows; i++)
-				static_cast< QList<QDateTime>* >(m_data)->replace(i, other->dateTimeAt(i));
+				static_cast< QVector<QDateTime>* >(m_data)->replace(i, other->dateTimeAt(i));
 			break;
 		}
 	}
@@ -474,7 +474,7 @@ bool ColumnPrivate::copy(const AbstractColumn * source, int source_start, int de
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
 		for(int i=0; i<num_rows; i++)
-			static_cast< QList<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
+			static_cast< QVector<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
 		break;
 	}
 
@@ -515,7 +515,7 @@ bool ColumnPrivate::copy(const ColumnPrivate * other) {
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
 			for(int i=0; i<num_rows; i++)
-				static_cast< QList<QDateTime>* >(m_data)->replace(i, other->dateTimeAt(i));
+				static_cast< QVector<QDateTime>* >(m_data)->replace(i, other->dateTimeAt(i));
 			break;
 		}
 	}
@@ -560,7 +560,7 @@ bool ColumnPrivate::copy(const ColumnPrivate * source, int source_start, int des
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
 		for(int i=0; i<num_rows; i++)
-			static_cast< QList<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
+			static_cast< QVector<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
 		break;
 	}
 
@@ -584,7 +584,7 @@ int ColumnPrivate::rowCount() const {
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		return static_cast< QList<QDateTime>* >(m_data)->size();
+		return static_cast< QVector<QDateTime>* >(m_data)->size();
 	case AbstractColumn::Text:
 		return static_cast< QStringList* >(m_data)->size();
 	}
@@ -618,10 +618,10 @@ void ColumnPrivate::resizeTo(int new_size) {
 			int new_rows = new_size - old_size;
 			if (new_rows > 0) {
 				for(int i=0; i<new_rows; i++)
-					static_cast< QList<QDateTime>* >(m_data)->append(QDateTime());
+					static_cast< QVector<QDateTime>* >(m_data)->append(QDateTime());
 			} else {
 				for(int i=0; i<-new_rows; i++)
-					static_cast< QList<QDateTime>* >(m_data)->removeLast();
+					static_cast< QVector<QDateTime>* >(m_data)->removeLast();
 			}
 			break;
 		}
@@ -656,7 +656,7 @@ void ColumnPrivate::insertRows(int before, int count) {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			for(int i=0; i<count; i++)
-				static_cast< QList<QDateTime>* >(m_data)->insert(before, QDateTime());
+				static_cast< QVector<QDateTime>* >(m_data)->insert(before, QDateTime());
 			break;
 		case AbstractColumn::Text:
 			for(int i=0; i<count; i++)
@@ -687,7 +687,7 @@ void ColumnPrivate::removeRows(int first, int count) {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			for(int i=0; i<corrected_count; i++)
-				static_cast< QList<QDateTime>* >(m_data)->removeAt(first);
+				static_cast< QVector<QDateTime>* >(m_data)->removeAt(first);
 			break;
 		case AbstractColumn::Text:
 			for(int i=0; i<corrected_count; i++)
@@ -873,7 +873,7 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
 		return QDateTime();
-	return static_cast< QList<QDateTime>* >(m_data)->value(row);
+	return static_cast< QVector<QDateTime>* >(m_data)->value(row);
 }
 
 /**
@@ -964,7 +964,7 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 	if (row >= rowCount())
 		resizeTo(row+1);
 
-	static_cast< QList<QDateTime>* >(m_data)->replace(row, new_value);
+	static_cast< QVector<QDateTime>* >(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
 }
@@ -974,7 +974,7 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void ColumnPrivate::replaceDateTimes(int first, const QList<QDateTime>& new_values) {
+void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	if (m_column_mode != AbstractColumn::DateTime &&
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
@@ -986,7 +986,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QList<QDateTime>& new_valu
 		resizeTo(first + num_rows);
 
 	for(int i=0; i<num_rows; i++)
-		static_cast< QList<QDateTime>* >(m_data)->replace(first+i, new_values.at(i));
+		static_cast< QVector<QDateTime>* >(m_data)->replace(first+i, new_values.at(i));
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		emit m_owner->dataChanged(m_owner);
