@@ -283,7 +283,7 @@ private:
 
 class ColumnReplaceDateTimesCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QList<QDateTime>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -291,8 +291,8 @@ public:
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QList<QDateTime> m_new_values;
-	QList<QDateTime> m_old_values;
+	QVector<QDateTime> m_new_values;
+	QVector<QDateTime> m_old_values;
 	bool m_copied;
 	int m_row_count;
 };

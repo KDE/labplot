@@ -133,7 +133,6 @@ class XYCurve: public WorksheetElement {
 		void suppressRetransform(bool);
 		bool isSourceDataChangedSinceLastRecalc() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
 
 	public slots:

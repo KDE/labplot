@@ -92,7 +92,6 @@ class CartesianPlotLegend : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		typedef WorksheetElement BaseClass;
 		typedef CartesianPlotLegendPrivate Private;
 
 	public slots:

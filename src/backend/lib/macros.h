@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #define MACROS_H
 
 #include <QApplication>
+#include <QMetaEnum>
 
 // C++ style warning (works on Windows)
 #include <iostream>
@@ -46,6 +47,9 @@
 #define QDEBUG(x) {}
 #define DEBUG(x) {}
 #endif
+
+#define ENUM_TO_STRING(class, enum, value) \
+    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \

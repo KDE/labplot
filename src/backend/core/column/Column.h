@@ -4,7 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -81,7 +81,7 @@ class Column : public AbstractColumn {
 		explicit Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
 		Column(const QString& name, QVector<double> data);
 		Column(const QString& name, QStringList data);
-		Column(const QString& name, QList<QDateTime> data);
+		Column(const QString& name, QVector<QDateTime> data);
 		void init();
 		~Column();
 
@@ -128,7 +128,7 @@ class Column : public AbstractColumn {
 		void setTimeAt(int, const QTime&);
 		QDateTime dateTimeAt(int) const;
 		void setDateTimeAt(int, const QDateTime&);
-		void replaceDateTimes(int, const QList<QDateTime>&);
+		void replaceDateTimes(int, const QVector<QDateTime>&);
 
 		double valueAt(int) const;
 		void setValueAt(int, double);

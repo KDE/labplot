@@ -1204,11 +1204,11 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
-				QList<QDateTime> results;
+				QVector<QDateTime> results;
 				QDate earliestDate(1,1,1);
 				QDate latestDate(2999,12,31);
 				QTime midnight(0,0,0,0);
-				for (int row=first; row<=last; row++)
+				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results << QDateTime(
 						            earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)),

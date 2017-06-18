@@ -31,71 +31,53 @@
 #define STRING2DAYOFWEEK_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
-#include <QDateTime>
-#include <cmath>
+
+class QDateTime;
 
 //! Conversion filter String -> QDateTime, interpreting the input as days of the week (either numeric or "Mon" etc).
-class String2DayOfWeekFilter : public AbstractSimpleFilter
-{
+class String2DayOfWeekFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual QDate dateAt(int row) const
-		{
+public:
+	virtual QDate dateAt(int row) const {
 			return dateTimeAt(row).date();
-		}
+	}
 
-		virtual QTime timeAt(int row) const
-		{
+	virtual QTime timeAt(int row) const{
 			return dateTimeAt(row).time();
+	}
+
+	virtual QDateTime dateTimeAt(int row) const {
+		if (!m_inputs.value(0)) return QDateTime();
+
+		QString input_value = m_inputs.value(0)->textAt(row);
+		if (input_value.isEmpty()) return QDateTime();
+		bool ok;
+		int day_value = input_value.toInt(&ok);
+		if(!ok) {
+			QDate temp = QDate::fromString(input_value, "ddd");
+			if(!temp.isValid())
+				temp = QDate::fromString(input_value, "dddd");
+			if(!temp.isValid())
+				return QDateTime();
+			else
+				day_value = temp.dayOfWeek();
 		}
 
-		virtual QDateTime dateTimeAt(int row) const
-		{
-			if (!m_inputs.value(0)) return QDateTime();
+		// Don't use Julian days here since support for years < 1 is bad
+		// Use 1900-01-01 instead (a Monday)
+		QDate result_date = QDate(1900,1,1).addDays(day_value - 1);
+		QTime result_time = QTime(0,0,0,0);
+		return QDateTime(result_date, result_time);
+	}
 
-			QString input_value = m_inputs.value(0)->textAt(row);
-			if (input_value.isEmpty()) return QDateTime();
-			bool ok;
-			int day_value = input_value.toInt(&ok);
-			if(!ok)
-			{
-#if QT_VERSION <= 0x040300
-				// workaround for Qt bug #171920
-				QDate temp = QDate(1900,1,1);
-				for(int i=1; i<=7; i++)
-					if( (input_value.toLower() == QDate::longDayName(i).toLower())
-							|| (input_value.toLower() == QDate::shortDayName(i).toLower()) )
-					{
-						temp = QDate(1900,1,i);
-						break;
-					}
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Day; }
 
-#else
-				QDate temp = QDate::fromString(input_value, "ddd");
-				if(!temp.isValid())
-					temp = QDate::fromString(input_value, "dddd");
-#endif
-				if(!temp.isValid())
-					return QDateTime();
-				else
-					day_value = temp.dayOfWeek();
-			}
-
-			// Don't use Julian days here since support for years < 1 is bad
-			// Use 1900-01-01 instead (a Monday)
-			QDate result_date = QDate(1900,1,1).addDays(day_value - 1);
-			QTime result_time = QTime(0,0,0,0);
-			return QDateTime(result_date, result_time);
-		}
-
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Day; }
-
-	protected:
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Text;
-		}
+protected:
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Text;
+	}
 };
 
 #endif // ifndef STRING2DAYOFWEEK_FILTER_H

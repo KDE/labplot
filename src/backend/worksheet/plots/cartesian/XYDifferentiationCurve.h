@@ -72,7 +72,6 @@ class XYDifferentiationCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
 		const DifferentiationResult& differentiationResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYDifferentiationCurvePrivate Private;
 
 	protected:

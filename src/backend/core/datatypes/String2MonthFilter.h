@@ -31,57 +31,52 @@
 #define STRING2MONTH_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
-#include <QDateTime>
-#include <cmath>
+
+class QDateTime;
 
 //! Conversion filter String -> QDateTime, interpreting the input as months of the year (either numeric or "Jan" etc).
-class String2MonthFilter : public AbstractSimpleFilter
-{
+class String2MonthFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual QDate dateAt(int row) const
-		{
-			return dateTimeAt(row).date();
+public:
+	virtual QDate dateAt(int row) const {
+		return dateTimeAt(row).date();
+	}
+
+	virtual QTime timeAt(int row) const {
+		return dateTimeAt(row).time();
+	}
+
+	virtual QDateTime dateTimeAt(int row) const {
+		if (!m_inputs.value(0)) return QDateTime();
+
+		QString input_value = m_inputs.value(0)->textAt(row);
+		bool ok;
+		int month_value = input_value.toInt(&ok);
+		if(!ok) {
+			QDate temp = QDate::fromString(input_value, "MMM");
+			if(!temp.isValid())
+				temp = QDate::fromString(input_value, "MMMM");
+			if(!temp.isValid())
+				return QDateTime();
+			else
+				month_value = temp.month();
 		}
 
-		virtual QTime timeAt(int row) const
-		{
-			return dateTimeAt(row).time();
-		}
+		// Don't use Julian days here since support for years < 1 is bad
+		// Use 1900-01-01 instead
+		QDate result_date = QDate(1900,1,1).addMonths(month_value - 1);
+		QTime result_time = QTime(0,0,0,0);
+		return QDateTime(result_date, result_time);
+	}
 
-		virtual QDateTime dateTimeAt(int row) const
-		{
-			if (!m_inputs.value(0)) return QDateTime();
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
 
-			QString input_value = m_inputs.value(0)->textAt(row);
-			bool ok;
-			int month_value = input_value.toInt(&ok);
-			if(!ok)
-			{
-				QDate temp = QDate::fromString(input_value, "MMM");
-				if(!temp.isValid())
-					temp = QDate::fromString(input_value, "MMMM");
-				if(!temp.isValid())
-					return QDateTime();
-				else
-					month_value = temp.month();
-			}
-
-			// Don't use Julian days here since support for years < 1 is bad
-			// Use 1900-01-01 instead
-			QDate result_date = QDate(1900,1,1).addMonths(month_value - 1);
-			QTime result_time = QTime(0,0,0,0);
-			return QDateTime(result_date, result_time);
-		}
-
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
-
-	protected:
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Text;
-		}
+protected:
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Text;
+	}
 };
 
 #endif // ifndef STRING2MONTH_FILTER_H

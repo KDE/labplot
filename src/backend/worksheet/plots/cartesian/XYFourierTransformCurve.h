@@ -41,7 +41,7 @@ class XYFourierTransformCurve: public XYCurve {
 
 	public:
 		struct TransformData {
-			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), 
+			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false),
 				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
 
 			nsl_dft_result_type type;
@@ -77,7 +77,6 @@ class XYFourierTransformCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
 		const TransformResult& transformResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYFourierTransformCurvePrivate Private;
 
 	protected:

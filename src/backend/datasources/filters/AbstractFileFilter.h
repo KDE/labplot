@@ -36,12 +36,13 @@ class QXmlStreamWriter;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
+	Q_ENUMS(ImportMode);
 
 	public:
         AbstractFileFilter() {}
 		virtual ~AbstractFileFilter() {}
 		enum ImportMode {Append, Prepend, Replace};
-		
+
 		virtual void read(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode = Replace) = 0;
 		virtual void write(const QString& fileName, AbstractDataSource* dataSource) = 0;
 

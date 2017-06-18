@@ -587,6 +587,11 @@ void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 	else if (op == ShiftDownY) shiftDownY();
 }
 
+void CartesianPlot::handlePageResize(double horizontalRatio, double verticalRatio) {
+	//TODO
+	AbstractPlot::handlePageResize(horizontalRatio, verticalRatio);
+}
+
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################

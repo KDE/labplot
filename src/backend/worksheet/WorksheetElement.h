@@ -36,6 +36,7 @@
 class QAction;
 class QGraphicsItem;
 class QPen;
+class QPainterPath;
 class KConfig;
 
 class WorksheetElement : public AbstractAspect {
@@ -57,10 +58,10 @@ class WorksheetElement : public AbstractAspect {
 		virtual void loadThemeConfig(const KConfig&);
 		virtual void saveThemeConfig(const KConfig&);
 		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	public slots:
 		virtual void retransform() = 0;
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	private:
 		QMenu* m_drawingOrderMenu;

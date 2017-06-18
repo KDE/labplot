@@ -13,6 +13,13 @@ set(LIBORIGIN_VERSION_MAJOR 3)
 set(LIBORIGIN_VERSION_MINOR 0)
 set(LIBORIGIN_VERSION_BUGFIX 0)
 
+# remove -fno-operator-names from CXXFLAGS (added by ECM >= 5.31.0)
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
+        CMAKE_C_COMPILER_ID MATCHES "Clang" OR
+        (CMAKE_C_COMPILER_ID STREQUAL "Intel" AND NOT WIN32))
+	string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
+
 # compile-time configuration variables to be linked in
 configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

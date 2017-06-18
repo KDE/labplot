@@ -109,7 +109,7 @@ void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
 	d->rect.setHeight(d->rect.height()*verticalRatio);
 
 	// TODO: scale line width
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+	WorksheetElement::handlePageResize(horizontalRatio, verticalRatio);
 }
 
 void PlotArea::retransform() {

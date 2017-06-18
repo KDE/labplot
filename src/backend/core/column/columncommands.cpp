@@ -118,7 +118,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				delete static_cast< QList<QDateTime>* >(m_new_data);
+				delete static_cast< QVector<QDateTime>* >(m_new_data);
 				break;
 			}
 	} else {
@@ -133,7 +133,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				delete static_cast< QList<QDateTime>* >(m_old_data);
+				delete static_cast< QVector<QDateTime>* >(m_old_data);
 				break;
 			}
 	}
@@ -565,7 +565,7 @@ ColumnClearCmd::~ColumnClearCmd() {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			delete static_cast< QList<QDateTime>* >(m_empty_data);
+			delete static_cast< QVector<QDateTime>* >(m_empty_data);
 			break;
 		}
 	} else {
@@ -580,7 +580,7 @@ ColumnClearCmd::~ColumnClearCmd() {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			delete static_cast< QList<QDateTime>* >(m_data);
+			delete static_cast< QVector<QDateTime>* >(m_data);
 			break;
 		}
 	}
@@ -603,9 +603,9 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			m_empty_data = new QList<QDateTime>();
+			m_empty_data = new QVector<QDateTime>();
 			for(int i=0; i<rowCount; i++)
-				static_cast< QList<QDateTime> *>(m_empty_data)->append(QDateTime());
+				static_cast< QVector<QDateTime> *>(m_empty_data)->append(QDateTime());
 			break;
 		case AbstractColumn::Text:
 			m_empty_data = new QStringList();
@@ -1089,7 +1089,7 @@ void ColumnReplaceValuesCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
+ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int first, const QVector<QDateTime>& new_values, QUndoCommand * parent )
 	: QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values) {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
@@ -1100,7 +1100,7 @@ ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int fi
  */
 void ColumnReplaceDateTimesCmd::redo() {
 	if(!m_copied) {
-		m_old_values = static_cast< QList<QDateTime>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
+		m_old_values = static_cast< QVector<QDateTime>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
 	}

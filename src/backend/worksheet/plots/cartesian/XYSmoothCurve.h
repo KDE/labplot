@@ -79,7 +79,6 @@ class XYSmoothCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
 		const SmoothResult& smoothResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYSmoothCurvePrivate Private;
 
 	protected:

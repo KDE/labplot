@@ -42,101 +42,132 @@ class QTime;
 template<class T> class QList;
 template<class T> class Interval;
 
-class AbstractColumn : public AbstractAspect
-{
+class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
 	Q_ENUMS(PlotDesignation)
 	Q_ENUMS(ColumnMode)
 
-	public:
-		enum PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
-		enum ColumnMode {
-			Numeric = 0,
-			Text = 1,
-			Month = 4,
-			Day = 5,
-			DateTime = 6
-			// 2 and 3 are skipped to avoid problems with old obsolete values
-		};
+public:
+	enum PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
+	enum ColumnMode {
+		// BASIC FORMATS
+		Numeric = 0,	// double
+		Text = 1,	// QString
+		// Time = 2 and Date = 3 are skipped to avoid problems with old obsolete values
+		Month = 4,	// month of year: numeric or "Jan", etc.
+		Day = 5,	// day of week: numeric or "Mon", etc.
+		DateTime = 6,	// any date-time format
+//		Bool = 7,	// bool
+		// FLOATING POINT
+		// 10 = Half precision
+//		Float = 11,	// float
+		// 12 = Long double
+		// 13 = Quad precision
+		// 14 = decimal 32
+		// 15 = decimal 64
+		// 16 = decimal 128
+		// COMPLEX
+		// 17 = complex<float>
+		// 18 = complex<double>
+		// 19 = complex<long double>
+		// INTEGER
+//		Int8 = 20,	// qint8 (char)
+//		UInt8 = 21,	// quint8 (unsigned char)
+//		Int16 = 22,	// qint16 (short)
+//		UInt16 = 23,	// quint16 (unsigned short)
+//		Int32 = 24,	// qint32 (int)
+//		UInt32 = 25,	// quint32 (unsigned int)
+//		Int64 = 26,	// qint64 (long)
+//		UInt64 = 27,	// quint64 (unsigned long)
+		// MISC
+		// 30 = QBrush
+		// QColor
+		// QFont
+		// QPoint
+		// QQuaternion
+		// QVector2D, QVector3D, QVector4D
+		// QMatrix
+		// etc.
+	};
 
-		explicit AbstractColumn(const QString& name);
-		virtual ~AbstractColumn();
+	explicit AbstractColumn(const QString& name);
+	virtual ~AbstractColumn();
 
-		virtual bool isReadOnly() const { return true; };
-		virtual ColumnMode columnMode() const = 0;
-		virtual void setColumnMode(AbstractColumn::ColumnMode);
-		virtual PlotDesignation plotDesignation() const = 0;
-		virtual void setPlotDesignation(AbstractColumn::PlotDesignation);
+	virtual bool isReadOnly() const { return true; };
+	virtual ColumnMode columnMode() const = 0;
+	virtual void setColumnMode(AbstractColumn::ColumnMode);
+	virtual PlotDesignation plotDesignation() const = 0;
+	virtual void setPlotDesignation(AbstractColumn::PlotDesignation);
 
-		virtual bool copy(const AbstractColumn *source);
-		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
+	virtual bool copy(const AbstractColumn *source);
+	virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
 
-		virtual int rowCount() const = 0;
-		void insertRows(int before, int count);
-		void removeRows(int first, int count);
-		virtual void clear();
+	virtual int rowCount() const = 0;
+	void insertRows(int before, int count);
+	void removeRows(int first, int count);
+	virtual void clear();
 
-		bool isValid(int row) const;
+	bool isValid(int row) const;
 
-		bool isMasked(int row) const;
-		bool isMasked(Interval<int> i) const;
-		QList< Interval<int> > maskedIntervals() const;
-		void clearMasks();
-		void setMasked(Interval<int> i, bool mask = true);
-		void setMasked(int row, bool mask = true);
+	bool isMasked(int row) const;
+	bool isMasked(Interval<int> i) const;
+	QList< Interval<int> > maskedIntervals() const;
+	void clearMasks();
+	void setMasked(Interval<int> i, bool mask = true);
+	void setMasked(int row, bool mask = true);
 
-		virtual QString formula(int row) const;
-		virtual QList< Interval<int> > formulaIntervals() const;
-		virtual void setFormula(Interval<int> i, QString formula);
-		virtual void setFormula(int row, QString formula);
-		virtual void clearFormulas();
+	virtual QString formula(int row) const;
+	virtual QList< Interval<int> > formulaIntervals() const;
+	virtual void setFormula(Interval<int> i, QString formula);
+	virtual void setFormula(int row, QString formula);
+	virtual void clearFormulas();
 
-		double minimum() const;
-		double maximum() const;
+	double minimum() const;
+	double maximum() const;
 
-		virtual QString textAt(int row) const;
-		virtual void setTextAt(int row, const QString& new_value);
-		virtual void replaceTexts(int first, const QStringList& new_values);
-		virtual QDate dateAt(int row) const;
-		virtual void setDateAt(int row, const QDate& new_value);
-		virtual QTime timeAt(int row) const;
-		virtual void setTimeAt(int row, const QTime& new_value);
-		virtual QDateTime dateTimeAt(int row) const;
-		virtual void setDateTimeAt(int row, const QDateTime& new_value);
-		virtual void replaceDateTimes(int first, const QList<QDateTime>& new_values);
-		virtual double valueAt(int row) const;
-		virtual void setValueAt(int row, double new_value);
-		virtual void replaceValues(int first, const QVector<double>& new_values);
+	virtual QString textAt(int row) const;
+	virtual void setTextAt(int row, const QString& new_value);
+	virtual void replaceTexts(int first, const QStringList& new_values);
+	virtual QDate dateAt(int row) const;
+	virtual void setDateAt(int row, const QDate& new_value);
+	virtual QTime timeAt(int row) const;
+	virtual void setTimeAt(int row, const QTime& new_value);
+	virtual QDateTime dateTimeAt(int row) const;
+	virtual void setDateTimeAt(int row, const QDateTime& new_value);
+	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
+	virtual double valueAt(int row) const;
+	virtual void setValueAt(int row, double new_value);
+	virtual void replaceValues(int first, const QVector<double>& new_values);
 
-	signals:
-		void plotDesignationAboutToChange(const AbstractColumn* source);
-		void plotDesignationChanged(const AbstractColumn* source);
-		void modeAboutToChange(const AbstractColumn* source);
-		void modeChanged(const AbstractColumn* source);
-		void dataAboutToChange(const AbstractColumn* source);
-		void dataChanged(const AbstractColumn* source);
-		void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
-		void rowsInserted(const AbstractColumn* source, int before, int count);
-		void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
-		void rowsRemoved(const AbstractColumn* source, int first, int count);
-		void maskingAboutToChange(const AbstractColumn* source);
-		void maskingChanged(const AbstractColumn* source);
-		void aboutToBeDestroyed(const AbstractColumn* source);
+signals:
+	void plotDesignationAboutToChange(const AbstractColumn* source);
+	void plotDesignationChanged(const AbstractColumn* source);
+	void modeAboutToChange(const AbstractColumn* source);
+	void modeChanged(const AbstractColumn* source);
+	void dataAboutToChange(const AbstractColumn* source);
+	void dataChanged(const AbstractColumn* source);
+	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+	void rowsInserted(const AbstractColumn* source, int before, int count);
+	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+	void rowsRemoved(const AbstractColumn* source, int first, int count);
+	void maskingAboutToChange(const AbstractColumn* source);
+	void maskingChanged(const AbstractColumn* source);
+	void aboutToBeDestroyed(const AbstractColumn* source);
 
-	protected:
-		bool XmlReadMask(XmlStreamReader* reader);
-		void XmlWriteMask(QXmlStreamWriter* writer) const;
+protected:
+	bool XmlReadMask(XmlStreamReader* reader);
+	void XmlWriteMask(QXmlStreamWriter* writer) const;
 
-		virtual void handleRowInsertion(int before, int count);
-		virtual void handleRowRemoval(int first, int count);
+	virtual void handleRowInsertion(int before, int count);
+	virtual void handleRowRemoval(int first, int count);
 
-	private:
-		AbstractColumnPrivate* m_abstract_column_private;
+private:
+	AbstractColumnPrivate* m_abstract_column_private;
 
-		friend class AbstractColumnRemoveRowsCmd;
-		friend class AbstractColumnInsertRowsCmd;
-		friend class AbstractColumnClearMasksCmd;
-		friend class AbstractColumnSetMaskedCmd;
+	friend class AbstractColumnRemoveRowsCmd;
+	friend class AbstractColumnInsertRowsCmd;
+	friend class AbstractColumnClearMasksCmd;
+	friend class AbstractColumnSetMaskedCmd;
 };
 
 #endif

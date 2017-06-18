@@ -193,17 +193,17 @@ void DatapickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
 	QString yLabel('y');
 
 	if (type == DatapickerImage::PolarInDegree) {
-		xLabel = "r";
-		yLabel = "y(deg)";
+		xLabel = QLatin1String("r");
+		yLabel = QLatin1String("y(deg)");
 	} else if (type == DatapickerImage::PolarInRadians) {
-		xLabel = "r";
-		yLabel = "y(rad)";
+		xLabel = QLatin1String("r");
+		yLabel = QLatin1String("y(rad)");
 	} else if (type == DatapickerImage::LogarithmicX) {
-		xLabel = "log(x)";
-		yLabel = "y";
+		xLabel = QLatin1String("log(x)");
+		yLabel = QLatin1String("y");
 	} else if (type == DatapickerImage::LogarithmicY) {
-		xLabel = "x";
-		yLabel = "log(y)";
+		xLabel = QLatin1String("x");
+		yLabel = QLatin1String("log(y)");
 	}
 
 	if (type == DatapickerImage::Ternary)
@@ -224,28 +224,28 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
 
 		if ( errors.x != NoError && !d->plusDeltaXColumn ) {
-			setPlusDeltaXColumn(appendColumn(i18n("+delta_x")));
+			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
 		} else if ( d->plusDeltaXColumn && errors.x == NoError ) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = 0;
 		}
 
 		if ( errors.x == AsymmetricError && !d->minusDeltaXColumn ) {
-			setMinusDeltaXColumn(appendColumn(i18n("-delta_x")));
+			setMinusDeltaXColumn(appendColumn(QLatin1String("-delta_x")));
 		} else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
 			d->minusDeltaXColumn->remove();
 			d->minusDeltaXColumn = 0;
 		}
 
 		if ( errors.y != NoError && !d->plusDeltaYColumn ) {
-			setPlusDeltaYColumn(appendColumn(i18n("+delta_y")));
+			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
 		} else if ( d->plusDeltaYColumn && errors.y == NoError ) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = 0;
 		}
 
 		if ( errors.y == AsymmetricError && !d->minusDeltaYColumn ) {
-			setMinusDeltaYColumn(appendColumn(i18n("-delta_y")));
+			setMinusDeltaYColumn(appendColumn(QLatin1String("-delta_y")));
 		} else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
 			d->minusDeltaYColumn->remove();
 			d->minusDeltaYColumn = 0;

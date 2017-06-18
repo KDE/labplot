@@ -74,7 +74,6 @@ class PlotArea : public WorksheetElement {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-		typedef WorksheetElement BaseClass;
 		typedef PlotAreaPrivate Private;
 
 	public slots:

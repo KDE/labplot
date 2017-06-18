@@ -4,7 +4,7 @@
     Description          : Base class for plots of different types
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -73,6 +73,12 @@ AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const{
 
 TextLabel* AbstractPlot::title(){
 	return m_title;
+}
+
+void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio) {
+	Q_D(AbstractPlot);
+	d->horizontalPadding *= horizontalRatio;
+	d->verticalPadding *= verticalRatio;
 }
 
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPadding)

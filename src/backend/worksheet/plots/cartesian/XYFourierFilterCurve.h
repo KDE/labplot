@@ -79,7 +79,6 @@ class XYFourierFilterCurve: public XYCurve {
 		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
 		const FilterResult& filterResult() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYFourierFilterCurvePrivate Private;
 
 	protected:
