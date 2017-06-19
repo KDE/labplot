@@ -39,7 +39,6 @@
 #include "backend/datasources/FileDataSource.h"
 
 
-class FileDataSource;
 class AbstractFileFilter;
 class QTableWidget;
 
@@ -61,6 +60,8 @@ public:
 	void hideDataSource() const;
 	void showAsciiHeaderOptions(bool);
 
+    void initializePortsAndBaudRates();
+
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
@@ -78,6 +79,8 @@ private slots:
 	void hdfTreeWidgetSelectionChanged();
 	void netcdfTreeWidgetSelectionChanged();
 	void fitsTreeWidgetSelectionChanged();
+
+    void liveDataSourceTypeChanged(int);
 
 	void saveFilter();
 	void manageFilters();

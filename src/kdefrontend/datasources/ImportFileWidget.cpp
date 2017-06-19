@@ -258,6 +258,33 @@ void ImportFileWidget::hideDataSource() const {
 	ui.kleSourceName->hide();
 	ui.chbWatchFile->hide();
 	ui.chbLinkFile->hide();
+
+    ui.lAvailableVectors->hide();
+    ui.lBaudRate->hide();
+    ui.lPort->hide();
+    ui.lSelectedVectors->hide();
+    ui.lUpdateFrequency->hide();
+    ui.lUpdateOn->hide();
+    ui.lSourceType->hide();
+    ui.lSocketServerName->hide();
+    ui.lXaxisVector->hide();
+
+    ui.bAddAllToSelectedVectors->hide();
+    ui.bAddSelectedToSelectedVectors->hide();
+    ui.bRemoveSelectedVector->hide();
+    ui.bRemoveAllVectors->hide();
+
+    ui.cbBaudRate->hide();
+    ui.cbPort->hide();
+    ui.cbUpdateOn->hide();
+    ui.cbXaxisVector->hide();
+    ui.cbSourceType->hide();
+
+    ui.lwAvailableVectors->hide();
+    ui.lwSelectedVectors->hide();
+
+    ui.leSocketServer->hide();
+    ui.sbUpdateFrequency->hide();
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -994,4 +1021,19 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 	RESET_CURSOR;
+}
+
+void ImportFileWidget::liveDataSourceTypeChanged(int idx) {
+    if (idx == 1) {
+    //local socket
+    } else if (idx == 2) {
+    //serial port
+    } else {
+    //file
+    }
+}
+
+void ImportFileWidget::initializePortsAndBaudRates() {
+    ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
+    ui.cbPort->addItems(FileDataSource::availablePorts());
 }

@@ -39,6 +39,11 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QMenu>
 #include <QFileSystemWatcher>
 
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QLocalSocket>
+#include <QSocketNotifier>
+
 #include <QIcon>
 #include <QAction>
 #include <KLocale>
@@ -81,6 +86,34 @@ QWidget *FileDataSource::view() const {
 	if (!m_view)
 		m_view = new SpreadsheetView(const_cast<FileDataSource*>(this));
 	return m_view;
+}
+#include <QDebug>
+QStringList FileDataSource::availablePorts() {
+    QStringList ports;
+    qDebug() << "portsbef" << QSerialPortInfo::availablePorts().size();
+
+    for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
+        ports.append(sp.portName());
+        qDebug() << "ports";
+
+        qDebug() << sp.description();
+        qDebug() << sp.manufacturer();
+        qDebug() << sp.portName();
+        qDebug() << sp.serialNumber();
+        qDebug() << sp.systemLocation();
+    }
+
+    return ports;
+}
+
+QStringList FileDataSource::supportedBaudRates() {
+    QStringList baudRates;
+
+    for(const qint32 baud : QSerialPortInfo::standardBaudRates()) {
+        baudRates.append(QString::number(baud));
+    }
+
+    return baudRates;
 }
 
 /*!

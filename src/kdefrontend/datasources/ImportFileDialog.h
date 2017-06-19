@@ -60,6 +60,7 @@ private:
 	QMenu* m_newDataContainerMenu;
 
 private slots:
+    void fileNameChanged();
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);
 };

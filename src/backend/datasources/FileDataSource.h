@@ -45,6 +45,9 @@ class FileDataSource : public Spreadsheet {
 
 		enum FileType{Ascii, Binary, Image, HDF, NETCDF, FITS};
 
+        static QStringList supportedBaudRates();
+        static QStringList availablePorts();
+
 		static QStringList fileTypes();
 		static QString fileInfoString(const QString&);
 
