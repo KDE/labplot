@@ -35,6 +35,7 @@
 class ColumnPrivate : QObject {
 	Q_OBJECT
 
+	//TODO: align
 	public:
 		ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 		~ColumnPrivate();

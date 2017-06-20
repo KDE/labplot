@@ -35,39 +35,41 @@ class AbstractDataSource;
 class FITSFilterPrivate {
 
 public:
-    explicit FITSFilterPrivate(FITSFilter*);
-    ~FITSFilterPrivate();
-    QList <QStringList> readCHDU(const QString & fileName, AbstractDataSource* dataSource,
-                     AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, bool*okToMatrix = 0, int lines= -1);
-    void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
+	explicit FITSFilterPrivate(FITSFilter*);
+	~FITSFilterPrivate();
+	QVector<QStringList> readCHDU(const QString& fileName, AbstractDataSource* = nullptr,
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, bool* okToMatrix = nullptr, int lines = -1);
+	void writeCHDU(const QString& fileName, AbstractDataSource*);
 
-    const FITSFilter* q;
-    QMultiMap<QString, QString> extensionNames(const QString &fileName);
-    void updateKeywords(const QString &fileName, const QList<FITSFilter::Keyword> &originals, const QVector<FITSFilter::Keyword> &updates);
-    void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
-    void addKeywordUnit(const QString& fileName, const QList<FITSFilter::Keyword> &keywords);
-    void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
-    void removeExtensions(const QStringList& extensions);
-    const QString valueOf(const QString &fileName, const char* key);
-    int imagesCount(const QString& fileName) ;
-    int tablesCount(const QString& fileName) ;
-    QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
-    void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
-                     bool readKeys = true,
-                     const QList<FITSFilter::Keyword> &keys = QList<FITSFilter::Keyword>());
-    void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
-    int startRow;
-    int endRow;
-    int startColumn;
-    int endColumn;
+	const FITSFilter* q;
+	QMultiMap<QString, QString> extensionNames(const QString &fileName);
+	void updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates);
+	void addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
+	void addKeywordUnit(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
+	void deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
+	void removeExtensions(const QStringList& extensions);
+	const QString valueOf(const QString& fileName, const char* key);
+	int imagesCount(const QString& fileName) ;
+	int tablesCount(const QString& fileName) ;
+	QList<FITSFilter::Keyword> chduKeywords(const QString& fileName);
+	void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
+			bool readKeys = true,
+			const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
+	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
-    bool commentsAsUnits;
-    int exportTo;
+	//TODO: m_*
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
+
+	bool commentsAsUnits;
+	int exportTo;
 private:
-    void printError(int status) const;
+	void printError(int status) const;
 
 #ifdef HAVE_FITS
-    fitsfile* fitsFile;
+	fitsfile* fitsFile;
 #endif
 
 };

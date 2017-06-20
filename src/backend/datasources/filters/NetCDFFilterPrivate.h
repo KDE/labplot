@@ -35,32 +35,34 @@ class AbstractDataSource;
 
 class NetCDFFilterPrivate {
 
-	public:
-		explicit NetCDFFilterPrivate(NetCDFFilter*);
+public:
+	explicit NetCDFFilterPrivate(NetCDFFilter*);
 
-		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
-		void read(const QString & fileName, AbstractDataSource* dataSource,
-					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
-		QList <QStringList> readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
+					    AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
-		const NetCDFFilter* q;
+	const NetCDFFilter* q;
 
-		QString currentVarName;
-		int startRow;
-		int endRow;
-		int startColumn;
-		int endColumn;
+	// TODO: rename m_*
+	QString currentVarName;
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
 
-	private:
-		int status;
+private:
+	int status;
 #ifdef HAVE_NETCDF
-		void handleError(int status, QString function);
-		QString translateDataType(nc_type type);
-		QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem=NULL);
-		void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
-		void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
+	void handleError(int status, QString function);
+	QString translateDataType(nc_type type);
+	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
+	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
+	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
 #endif
 };
 

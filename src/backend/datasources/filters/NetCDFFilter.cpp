@@ -63,15 +63,16 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QList <QStringList> NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
+						  AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void NetCDFFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
+QVector<QStringList> NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	return d->readDataFromFile(fileName, dataSource, mode, lines);
 }
 
 /*!
@@ -489,8 +490,8 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 /*!
     reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
 */
-QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QList<QStringList> dataStrings;
+QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
@@ -650,14 +651,16 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
     reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
+
 	if (currentVarName.isEmpty()) {
 		DEBUG(" No variable selected");
-		return;
+		return dataStrings;
 	}
 
-	QDEBUG(" current variable =" << currentVarName);
-	readCurrentVar(fileName, dataSource, mode);
+	DEBUG(" current variable =" << currentVarName.toStdString());
+	return readCurrentVar(fileName, dataSource, mode);
 }
 
 /*!

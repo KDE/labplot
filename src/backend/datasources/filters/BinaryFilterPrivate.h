@@ -31,28 +31,29 @@ class AbstractDataSource;
 
 class BinaryFilterPrivate {
 
-	public:
-		explicit BinaryFilterPrivate(BinaryFilter*);
+public:
+	explicit BinaryFilterPrivate(BinaryFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource,AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
-		const BinaryFilter* q;
+	const BinaryFilter* q;
 
-		int vectors;
-		BinaryFilter::DataType dataType;
-		BinaryFilter::ByteOrder byteOrder;
+	int vectors;
+	BinaryFilter::DataType dataType;
+	BinaryFilter::ByteOrder byteOrder;
 
-		int skipStartBytes;	// bytes to skip at start
-		int startRow;		// start row (value*vectors) to read
-		int endRow;		// end row to (value*vectors) read
-		int skipBytes;		// bytes to skip after each value
+	// TODO m_*
+	int skipStartBytes;	// bytes to skip at start
+	int startRow;		// start row (value*vectors) to read
+	int endRow;		// end row to (value*vectors) read
+	int skipBytes;		// bytes to skip after each value
 
-		bool autoModeEnabled;
+	bool autoModeEnabled;
 
-	private:
-		void clearDataSource(AbstractDataSource*) const;
+private:
+	void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

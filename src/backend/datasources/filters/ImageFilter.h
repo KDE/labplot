@@ -31,19 +31,21 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ImageFilterPrivate;
-class ImageFilter : public AbstractFileFilter{
+class ImageFilter : public AbstractFileFilter {
 	Q_OBJECT
+	Q_ENUMS(ImportFormat)
 
-  public:
-	enum ImportFormat{MATRIX,XYZ,XYRGB};
+public:
+	enum ImportFormat {MATRIX,XYZ,XYRGB};
 
 	ImageFilter();
 	~ImageFilter();
 
 	static QStringList importFormats();
 
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

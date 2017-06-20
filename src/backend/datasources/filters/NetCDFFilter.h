@@ -32,19 +32,20 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class NetCDFFilterPrivate;
-class NetCDFFilter : public AbstractFileFilter{
+class NetCDFFilter : public AbstractFileFilter {
 	Q_OBJECT
 
-  public:
-
+public:
 	NetCDFFilter();
 	~NetCDFFilter();
 
-	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
-	QList<QStringList> readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
+					    AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

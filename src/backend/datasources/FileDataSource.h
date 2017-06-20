@@ -30,74 +30,75 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
-#include <QString>
 
+class QString;
 class AbstractFileFilter;
 class QFileSystemWatcher;
 class QAction;
 
 class FileDataSource : public Spreadsheet {
 	Q_OBJECT
+	Q_ENUMS(FileType)
 
-	public:
-		FileDataSource(AbstractScriptingEngine* engine,  const QString& name, bool loading = false);
-		~FileDataSource();
+public:
+	enum FileType{Ascii, Binary, Image, HDF, NETCDF, FITS};
 
-		enum FileType{Ascii, Binary, Image, HDF, NETCDF, FITS};
+	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
+	~FileDataSource();
 
-		static QStringList fileTypes();
-		static QString fileInfoString(const QString&);
+	static QStringList fileTypes();
+	static QString fileInfoString(const QString&);
 
-		void setFileType(const FileType);
-		FileType fileType() const;
+	void setFileType(const FileType);
+	FileType fileType() const;
 
-		void setFileWatched(const bool);
-		bool isFileWatched() const;
+	void setFileWatched(const bool);
+	bool isFileWatched() const;
 
-		void setFileLinked(const bool);
-		bool isFileLinked() const;
+	void setFileLinked(const bool);
+	bool isFileLinked() const;
 
-		void setFileName(const QString&);
-		QString fileName() const;
+	void setFileName(const QString&);
+	QString fileName() const;
 
-		void setFilter(AbstractFileFilter*);
-		AbstractFileFilter* filter() const;
+	void setFilter(AbstractFileFilter*);
+	AbstractFileFilter* filter() const;
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
+	virtual QWidget* view() const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
-	private:
-		void initActions();
-		void watch();
+private:
+	void initActions();
+	void watch();
 
-		QString m_fileName;
-		FileType m_fileType;
-		bool m_fileWatched;
-		bool m_fileLinked;
-		AbstractFileFilter* m_filter;
-		QFileSystemWatcher* m_fileSystemWatcher;
+	QString m_fileName;
+	FileType m_fileType;
+	bool m_fileWatched;
+	bool m_fileLinked;
+	AbstractFileFilter* m_filter;
+	QFileSystemWatcher* m_fileSystemWatcher;
 
-		QAction* m_reloadAction;
-		QAction* m_toggleLinkAction;
-		QAction* m_toggleWatchAction;
-		QAction* m_showEditorAction;
-		QAction* m_showSpreadsheetAction;
+	QAction* m_reloadAction;
+	QAction* m_toggleLinkAction;
+	QAction* m_toggleWatchAction;
+	QAction* m_showEditorAction;
+	QAction* m_showSpreadsheetAction;
 
-	public slots:
-		void read();
+public slots:
+	void read();
 
-	private slots:
-		void fileChanged();
-		void watchToggled();
-		void linkToggled();
+private slots:
+	void fileChanged();
+	void watchToggled();
+	void linkToggled();
 
-	signals:
-		void dataChanged();
-		void dataUpdated();
+signals:
+	void dataChanged();
+	void dataUpdated();
 };
 
 #endif
