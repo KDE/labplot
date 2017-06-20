@@ -39,7 +39,6 @@
 #include "backend/datasources/FileDataSource.h"
 
 
-class FileDataSource;
 class AbstractFileFilter;
 class QTableWidget;
 

@@ -74,7 +74,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	}
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
-	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+    connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(fileNameChanged()));
 	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
@@ -226,6 +226,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	delete filter;
+}
+
+void ImportFileDialog::fileNameChanged() {
+    checkOkButton();
 }
 
 void ImportFileDialog::toggleOptions() {
