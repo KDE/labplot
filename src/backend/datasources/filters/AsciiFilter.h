@@ -30,7 +30,9 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 #include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
+class KFilterDev;
 class AsciiFilterPrivate;
+
 class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -42,8 +44,9 @@ public:
 	static QStringList commentCharacters();
 	static QStringList predefinedFilters();
 
-	static int columnNumber(const QString & fileName);
-	static size_t lineNumber(const QString & fileName);
+	static int columnNumber(const QString& fileName);
+	static size_t lineNumber(const QString& fileName);
+	static size_t lineNumber(KFilterDev&);
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);

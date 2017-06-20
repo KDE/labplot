@@ -146,6 +146,15 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 
 	return rows;
 }
+size_t AsciiFilter::lineNumber(KFilterDev &device) {
+	size_t rows = 0;
+	while (!device.atEnd()) {
+		device.readLine();
+		rows++;
+	}
+
+	return rows;
+}
 
 void AsciiFilter::setTransposed(const bool b) {
 	d->transposed = b;
@@ -260,66 +269,43 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endColumn(-1) {
 }
 
-//QList<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {}
-// special function for reading data from file
+int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
+	if (!device.open(QIODevice::ReadOnly))
+		return -1;
 
-/*!
-    reads the content of the file \c fileName to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
-    Uses the settings defined in the data source (if given).
-*/
-QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG("AsciiFilterPrivate::readData(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
-		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
-	QVector<QStringList> dataStrings;
-
-	// TODO: prepare import separate
-	// TODO: also support other devices (fileName -> URL?), add parameter for input device type?
-
-	//readDataFromFile(fileName, dataSource, mode, lines);
-	KFilterDev device(fileName);
-	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << fileName.toStdString());
-		return dataStrings;
-	} else if (device.atEnd()) {
-		DEBUG("File " << fileName.toStdString() << " is empty! Giving up.");
-		if (importMode == AbstractFileFilter::Replace) { // In replace-mode clear the data source
-			if (dataSource)
-				dataSource->clear();
-		}
-		return dataStrings;
-	}
+	if (device.atEnd()) // empty file
+		return 1;
 
 	//TODO: implement ???
-	// if (transposed)
-	//...
+	// if (transposed) ...
 
-	// Skip rows until start row
+	// Skip rows until start row (ignoring comment lines)
 	DEBUG("Skipping " << startRow - 1 << " lines");
 	for (int i = 0; i < startRow - 1; i++) {
-		device.readLine();
+		QString line = device.readLine();
 
-		if (device.atEnd()) {
-			DEBUG("EOF reached");
-			if (importMode == AbstractFileFilter::Replace) {
-				if (dataSource)
-					dataSource->clear();
-			}
-			return dataStrings;
-		}
+		if (device.atEnd())
+			return 1;
+		if (line.startsWith(commentCharacter))	// ignore commented lines
+			i--;
 	}
 
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
-	QString firstLine = device.readLine();
+	QString firstLine;
+	qint64 startPosition = device.pos();
+	do {
+		firstLine = device.readLine();
+		if (device.atEnd())
+			return 1;
+	} while (firstLine.startsWith(commentCharacter));
+
 	firstLine.remove(QRegExp("[\\n\\t\\r]"));	// remove any newline
-	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
-	if (simplifyWhitespacesEnabled) {
+	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
-		DEBUG("First line simplified: \'" << firstLine.toStdString() << '\'');
-	}
+	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
 
 	// determine separator and split first line
-	QString separator;
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
@@ -345,7 +331,6 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 	DEBUG("number of columns: " << firstLineStringList.size());
 	DEBUG("headerEnabled = " << headerEnabled);
 
-	QStringList vectorNameList;
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNameList = firstLineStringList;
 	} else {
@@ -353,14 +338,14 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		if (!vectorNames.isEmpty())
 			vectorNameList = vectorNames.split(' ');
 	}
-
 	//qDebug()<<"	vector names ="<<vectorNameList;
 
+	// set range to read
 	if (endColumn == -1)
 		endColumn = firstLineStringList.size(); // last column
-	int actualCols = endColumn - startColumn + 1;
+	actualCols = endColumn - startColumn + 1;
 
-	int actualRows = AsciiFilter::lineNumber(fileName);
+	actualRows = AsciiFilter::lineNumber(device);
 	int actualEndRow = endRow;
 	if (endRow == -1 || endRow > actualRows)
 		actualEndRow = actualRows;
@@ -369,51 +354,54 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 	if (headerEnabled)
 		actualRows--;
-
-	if (lines == -1)
-		lines = actualRows;
+	else {	// undo reading first line
+		if(!device.seek(startPosition)) {
+			DEBUG("Could not undo reading first line");
+			return -1;
+		}
+	}
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << startRow << ' ' << actualEndRow);
 	DEBUG("actual cols/rows: " << actualCols << ' ' << actualRows);
-	DEBUG("reading " << qMin(lines, actualRows)  << " lines");
 
 	if (actualRows == 0)
+		return 1;
+
+	return 0;
+}
+// special function for reading data from file
+
+/*!
+    reads the content of the file \c fileName to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
+    Uses the settings defined in the data source (if given).
+*/
+QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	DEBUG("AsciiFilterPrivate::readData(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
+		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	QVector<QStringList> dataStrings;
+
+	// TODO: also support other devices. Add parameter for input device type?
+	KFilterDev device(fileName);
+	int deviceError = prepareDeviceToRead(device);
+	if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
+		dataSource->clear();
+	if (deviceError)
 		return dataStrings;
 
-/////////////////////////////////
-	int currentRow = 0;	// indexes the position in the vector(column)
-	int columnOffset = 0;	// indexes the "start column" in the spreadsheet/matrix. Starting from this column the data will be imported.
 	// TODO: support other data types
+	int columnOffset = 0;	// indexes the "start column" in the spreadsheet/matrix. Data will be imported starting from this column.
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
-
 	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataPointers, importMode, actualRows, actualCols, vectorNameList);
 
-	// Import the values in the first line, when they are not used as header (names of columns)
-	bool isNumber;
-	if (!headerEnabled) {
-		QStringList lineString;
-		for (int n = 0; n < actualCols; n++) {
-			if (n < firstLineStringList.size()) {
-				const double value = firstLineStringList.at(n).toDouble(&isNumber);
-				if (dataSource)
-					isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
-				else
-					isNumber ? lineString << QString::number(value) : lineString << QLatin1String("NAN");
-			} else {
-				if (dataSource)
-					dataPointers[n]->operator[](0) = NAN;
-				else
-					lineString << QLatin1String("NAN");
-			}
-		}
-		dataStrings << lineString;
-		currentRow++;
-	}
+	// Read the data TODO: check
+	int currentRow = 0;	// indexes the position in the vector(column)
+	if (lines == -1)
+		lines = actualRows;
+	DEBUG("reading " << qMin(lines, actualRows)  << " lines");
 
-	// Read the remainder of the file
-	for (int i = currentRow; i < qMin(lines, actualRows); i++) {
+	for (int i = 0; i < qMin(lines, actualRows); i++) {
 		QString line = device.readLine();
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
@@ -422,6 +410,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		if (line.isEmpty())
 			continue;
 
+		// TODO: really?
 		if (line.startsWith(commentCharacter) == true) {
 			currentRow++;
 			continue;
@@ -431,6 +420,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 		// TODO : read strings (comments) or datetime too
 		QStringList lineString;
+		bool isNumber;
 		for (int n = 0; n < actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
