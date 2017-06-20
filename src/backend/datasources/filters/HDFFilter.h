@@ -41,8 +41,10 @@ public:
 	~HDFFilter();
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QList <QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+				  AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok,
+						AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);

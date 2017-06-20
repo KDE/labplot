@@ -39,13 +39,13 @@ class FITSFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-
 	FITSFilter();
 	~FITSFilter();
 
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
-	QList<QStringList> readChdu(const QString & fileName, bool *okToMatrix = 0, int lines = -1);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> readChdu(const QString& fileName, bool *okToMatrix = nullptr, int lines = -1);
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
 
@@ -81,14 +81,14 @@ public:
 	int imagesCount(const QString& fileName);
 	int tablesCount(const QString& fileName);
 	void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
-	void addNewKeyword(const QString& filename, const QList<Keyword> &keywords);
-	void addKeywordUnit(const QString& fileName, const QList<Keyword> &keywords);
+	void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
+	void addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords);
 	void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
 	void removeExtensions(const QStringList& extensions);
 	void parseHeader(const QString &fileName, QTableWidget* headerEditTable,
 	                 bool readKeys = true,
 	                 const QList<Keyword> &keys = QList<Keyword>());
-	void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
+	void parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary = false);
 	QList<Keyword> chduKeywords(const QString &fileName);
 
 	static QStringList standardKeywords();

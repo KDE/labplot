@@ -50,11 +50,11 @@ FITSFilter::~FITSFilter() {
 	delete d;
 }
 
-void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->readCHDU(fileName, dataSource, importMode);
+QVector<QStringList> FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	return d->readCHDU(fileName, dataSource, importMode);
 }
 
-QList<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
+QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
 	return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace, okToMatrix, lines);
 }
 
@@ -279,8 +279,8 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param dataSource the data source to be filled
  * \param importMode
  */
-QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, bool *okToMatrix, int lines) {
-	QList<QStringList> dataStrings;
+QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
+	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
@@ -288,14 +288,14 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 	if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		qDebug() << fileName;
 		printError(status);
-		return dataStrings << (QStringList() << QString());
+		return dataStrings;
 	}
 
 	int chduType;
 
 	if (fits_get_hdu_type(fitsFile, &chduType, &status)) {
 		printError(status);
-		return dataStrings << (QStringList() << QString());
+		return dataStrings;
 	}
 
 	long actualRows;
@@ -314,11 +314,11 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 		double* data;
 		if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
 			printError(status);
-			return dataStrings << (QStringList() << QString());
+			return dataStrings;
 		}
 
 		if (naxis == 0)
-			return dataStrings << (QStringList() << QString());
+			return dataStrings;
 		actualRows = naxes[1];
 		actualCols = naxes[0];
 		if (lines == -1)
@@ -333,7 +333,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 
 		if (!data) {
 			qDebug() << i18n("Not enough memory for data");
-			return dataStrings << (QStringList() << QString());
+			return dataStrings;
 		}
 
 		if (fits_read_img(fitsFile, TDOUBLE, 1, pixelCount, NULL, data, NULL, &status)) {

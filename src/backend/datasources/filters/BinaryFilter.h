@@ -34,6 +34,8 @@ class QStringList;
 
 class BinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
+	Q_ENUMS(DataType)
+	Q_ENUMS(ByteOrder)
 
   public:
 	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
@@ -45,11 +47,11 @@ class BinaryFilter : public AbstractFileFilter {
 	static QStringList dataTypes();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
-	static long rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType type);
+	static long rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
 
-	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-	QList <QStringList> readData(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource* dataSource);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

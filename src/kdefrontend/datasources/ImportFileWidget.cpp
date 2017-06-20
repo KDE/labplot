@@ -742,7 +742,7 @@ void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 		bool readFitsTableToMatrix;
-		QList<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
@@ -893,7 +893,7 @@ void ImportFileWidget::refreshPreview() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-	QList<QStringList> importedStrings;
+	QVector<QStringList> importedStrings;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
@@ -911,7 +911,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 
 			AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-			importedStrings = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = twPreview;
 			break;
 		}
@@ -919,7 +919,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-			importedStrings = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = twPreview;
 			break;
 		}

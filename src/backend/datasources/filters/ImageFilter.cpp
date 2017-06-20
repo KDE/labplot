@@ -55,8 +55,8 @@ QStringList ImageFilter::importFormats() {
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ImageFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
+QVector<QStringList> ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	return d->readDataFromFile(fileName, dataSource, importMode, lines);
 }
 
 /*!
@@ -128,20 +128,27 @@ int ImageFilter::endColumn() const{
 //#####################################################################
 
 ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
-	q(owner),importFormat(ImageFilter::MATRIX),startRow(1),endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),
+	importFormat(ImageFilter::MATRIX),
+	startRow(1),
+	endRow(-1),
+	startColumn(1),
+	endColumn(-1) {
 }
 
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
+
 	QImage image = QImage(fileName);
 	if (image.isNull() || image.format() == QImage::Format_Invalid) {
 #ifdef QT_DEBUG
 		qDebug()<<"failed to read image"<<fileName<<"or invalid image format";
 #endif
-		return;
+		return dataStrings;
 	}
 
 	int cols = image.width();
@@ -187,7 +194,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 #ifdef QT_DEBUG
 		qDebug()<<"data source in image import not defined! Giving up.";
 #endif
-		return;
+		return dataStrings;
 	}
 
 	// read data
@@ -237,11 +244,11 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-		for ( int n=0; n<actualCols; n++ ) {
+		for ( int n = 0; n < actualCols; n++ ) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
-			if (mode==AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -249,6 +256,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	dataSource->finalizeImport();
+	return dataStrings;
 }
 
 /*!

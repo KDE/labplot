@@ -63,21 +63,21 @@ void HDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
 /*!
   reads the content of the data set \c dataSet from file \c fileName.
 */
-QList<QStringList> HDFFilter::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode,  int lines) {
+QVector<QStringList> HDFFilter::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentDataSet(fileName, dataSource, ok, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void HDFFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
+QVector<QStringList> HDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	return d->readDataFromFile(fileName, dataSource, mode, lines);
 }
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
-void HDFFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
+void HDFFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 }
 
@@ -428,9 +428,9 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 }
 
 template <typename T>
-QList<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer) {
+QVector<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer) {
 	DEBUG("readHDFData2D() rows =" << rows << "cols =" << cols << "lines =" << lines);
-	QList<QStringList> dataStrings;
+	QVector<QStringList> dataStrings;
 
 	T** data = (T**) malloc(rows*sizeof(T*));
 	data[0] = (T*) malloc(cols*rows*sizeof(T));
@@ -459,14 +459,14 @@ QList<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, in
 	return dataStrings;
 }
 
-QList<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines) {
+QVector<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines) {
 	DEBUG("readHDFCompoundData2D() rows =" << rows << "cols =" << cols << "lines =" << lines);
 
 	int members = H5Tget_nmembers(tid);
 	handleError(members, "H5Tget_nmembers");
 	DEBUG("members =" << members);
 
-	QList<QStringList> dataStrings;
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < qMin(rows, lines); i++) {
 		QStringList lineStrings;
 		for (int j = 0; j < cols; j++)
@@ -488,7 +488,7 @@ QList<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t 
 		// dummy container for all data columns
 		// initially contains one pointer set to NULL
 		QVector< QVector<double>* > dummy(1, NULL);
-		QList<QStringList> mdataStrings;
+		QVector<QStringList> mdataStrings;
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE)) {
 				mdataStrings = readHDFData2D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
 		} else if (H5Tequal(mtype, H5T_NATIVE_CHAR)) {
@@ -1213,9 +1213,9 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 /*!
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
-QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
+QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
 	DEBUG("HDFFilter::readCurrentDataSet()");
-	QList<QStringList> dataStrings;
+	QVector<QStringList> dataStrings;
 
 	if (currentDataSetName.isEmpty()) {
 		//return QString("No data set selected").replace(' ',QChar::Nbsp);
@@ -1652,15 +1652,17 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+QVector<QStringList> HDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	DEBUG("HDFFilter::read()");
+	QVector<QStringList> dataStrings;
+
 	if (currentDataSetName.isEmpty()) {
 		qDebug() << i18n("No data set selected");
-		return;
+		return dataStrings;
 	}
 
 	bool ok = true;
-	readCurrentDataSet(fileName, dataSource, ok, mode);
+	return readCurrentDataSet(fileName, dataSource, ok, mode);
 }
 
 /*!

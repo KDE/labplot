@@ -52,16 +52,16 @@ BinaryFilter::~BinaryFilter() {
 /*!
   reads the content of the file \c fileName.
 */
-QList <QStringList> BinaryFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
-	return d->readData(fileName, dataSource, importMode, lines);
+QVector<QStringList> BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+	return d->readDataFromFile(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
-}
+//void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+//	d->read(fileName, dataSource, importMode);
+//}
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
@@ -210,8 +210,8 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QList<QStringList> dataStrings;
+QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
 	if (! device.open(QIODevice::ReadOnly))
@@ -397,9 +397,9 @@ QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, Abstr
 }
 
 
-void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	readData(fileName,dataSource,mode);
-}
+//void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+//	readData(fileName,dataSource,mode);
+//}
 
 /*!
     writes the content of \c dataSource to the file \c fileName.

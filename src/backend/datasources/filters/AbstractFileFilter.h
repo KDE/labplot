@@ -38,22 +38,24 @@ class AbstractFileFilter : public QObject {
 	Q_OBJECT
 	Q_ENUMS(ImportMode);
 
-	public:
-        AbstractFileFilter() {}
-		virtual ~AbstractFileFilter() {}
-		enum ImportMode {Append, Prepend, Replace};
+public:
+	enum ImportMode {Append, Prepend, Replace};
 
-		virtual void read(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode = Replace) = 0;
-		virtual void write(const QString& fileName, AbstractDataSource* dataSource) = 0;
+	AbstractFileFilter() {}
+	virtual ~AbstractFileFilter() {}
 
-		virtual void loadFilterSettings(const QString& filterName) = 0;
-		virtual void saveFilterSettings(const QString& filterName) const = 0;
+	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+						ImportMode = Replace, int lines = -1) = 0;
+	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
-		virtual void save(QXmlStreamWriter*) const = 0;
-		virtual bool load(XmlStreamReader*) = 0;
+	virtual void loadFilterSettings(const QString& filterName) = 0;
+	virtual void saveFilterSettings(const QString& filterName) const = 0;
 
-	signals:
-		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process		
+	virtual void save(QXmlStreamWriter*) const = 0;
+	virtual bool load(XmlStreamReader*) = 0;
+
+signals:
+	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 };
 
 #endif

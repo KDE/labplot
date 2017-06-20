@@ -56,7 +56,12 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 */
 
 FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: Spreadsheet(engine, name, loading),m_fileType(Ascii),m_fileWatched(false),m_fileLinked(false),m_filter(0),m_fileSystemWatcher(0) {
+	: Spreadsheet(engine, name, loading),
+	m_fileType(Ascii),
+	m_fileWatched(false),
+	m_fileLinked(false),
+	m_filter(0),
+	m_fileSystemWatcher(0) {
 	initActions();
 }
 
@@ -224,13 +229,10 @@ QMenu* FileDataSource::createContextMenu() {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void FileDataSource::read() {
-	if (m_fileName.isEmpty())
+	if (m_fileName.isEmpty() || m_filter == nullptr)
 		return;
 
-	if (m_filter==0)
-		return;
-
-	m_filter->read(m_fileName, this);
+	m_filter->readDataFromFile(m_fileName, this);
 	watch();
 }
 

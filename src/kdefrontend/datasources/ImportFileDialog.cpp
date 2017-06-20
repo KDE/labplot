@@ -64,7 +64,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	vLayout->addWidget(importFileWidget);
 
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
 	//hide the data-source related widgets
 	if (!fileDataSource) {
@@ -157,10 +157,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	if (aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
-		filter->read(fileName, matrix, mode);
+		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		filter->read(fileName, spreadsheet, mode);
+		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
@@ -203,22 +203,22 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
 
 				if (sheets[i+offset]->inherits("Matrix"))
-					filter->read(fileName, qobject_cast<Matrix*>(sheets[i+offset]), AbstractFileFilter::Replace);
+					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[i+offset]));
 				else if (sheets[i+offset]->inherits("Spreadsheet"))
-					filter->read(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]), AbstractFileFilter::Replace);
+					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]));
 			}
 		} else { // single import file types
 			// use active spreadsheet/matrix if present, else new spreadsheet
 			Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
 			Matrix* matrix = workbook->currentMatrix();
-			if (spreadsheet != NULL)
-				filter->read(fileName, spreadsheet, mode);
-			else if (matrix != NULL)
-				filter->read(fileName, matrix, mode);
+			if (spreadsheet)
+				filter->readDataFromFile(fileName, spreadsheet, mode);
+			else if (matrix)
+				filter->readDataFromFile(fileName, matrix, mode);
 			else {
 				spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 				workbook->addChild(spreadsheet);
-				filter->read(fileName, spreadsheet, mode);
+				filter->readDataFromFile(fileName, spreadsheet, mode);
 			}
 		}
 
@@ -231,7 +231,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 }
 
 void ImportFileDialog::fileNameChanged() {
-    checkOkButton();
+	checkOkButton();
 }
 
 void ImportFileDialog::toggleOptions() {

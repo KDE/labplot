@@ -54,16 +54,16 @@ AsciiFilter::~AsciiFilter() {
 /*!
   reads the content of the file \c fileName.
 */
-QList <QStringList> AsciiFilter::readData(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	return d->readData(fileName, dataSource, importMode, lines);
+QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	return d->readDataFromFile(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilter::read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
-}
+//void AsciiFilter::read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+//	d->read(fileName, dataSource, importMode);
+//}
 
 
 /*!
@@ -260,22 +260,29 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endColumn(-1) {
 }
 
+//QList<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {}
+// special function for reading data from file
+
 /*!
     reads the content of the file \c fileName to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
     Uses the settings defined in the data source (if given).
 */
-QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readData(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
-		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", lines = " << lines);
-	QList<QStringList> dataStrings;
+		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	QVector<QStringList> dataStrings;
 
+	// TODO: prepare import separate
+	// TODO: also support other devices (fileName -> URL?), add parameter for input device type?
+
+	//readDataFromFile(fileName, dataSource, mode, lines);
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG("Could not open file " << fileName.toStdString());
 		return dataStrings;
 	} else if (device.atEnd()) {
 		DEBUG("File " << fileName.toStdString() << " is empty! Giving up.");
-		if (mode == AbstractFileFilter::Replace) { // In replace-mode clear the data source
+		if (importMode == AbstractFileFilter::Replace) { // In replace-mode clear the data source
 			if (dataSource)
 				dataSource->clear();
 		}
@@ -293,7 +300,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 
 		if (device.atEnd()) {
 			DEBUG("EOF reached");
-			if (mode == AbstractFileFilter::Replace) {
+			if (importMode == AbstractFileFilter::Replace) {
 				if (dataSource)
 					dataSource->clear();
 			}
@@ -381,7 +388,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols, vectorNameList);
+		columnOffset = dataSource->prepareImport(dataPointers, importMode, actualRows, actualCols, vectorNameList);
 
 	// Import the values in the first line, when they are not used as header (names of columns)
 	bool isNumber;
@@ -457,7 +464,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 		for (int n = startColumn; n <= endColumn; n++) {
 			Column* column = spreadsheet->column(columnOffset + n - startColumn);
 			column->setComment(comment);
-			if (mode == AbstractFileFilter::Replace) {
+			if (importMode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -471,9 +478,9 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString& fileName, Abstrac
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	readData(fileName, dataSource, mode);
-}
+//void AsciiFilterPrivate::read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+//	readData(fileName, dataSource, mode);
+//}
 
 /*!
     writes the content of \c dataSource to the file \c fileName.

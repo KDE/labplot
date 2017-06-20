@@ -42,6 +42,7 @@ class QActionGroup;
 class Column : public AbstractColumn {
 	Q_OBJECT
 
+	// TODO: align
 	public:
 		struct ColumnStatistics {
 			ColumnStatistics() {
@@ -171,9 +172,11 @@ class Column : public AbstractColumn {
 		void handleFormatChange();
 };
 
+// TODO: extra header
 class ColumnStringIO : public AbstractColumn {
 	Q_OBJECT
 
+	//TODO: align
 	public:
 		ColumnStringIO(Column* owner);
 		virtual AbstractColumn::ColumnMode columnMode() const;
