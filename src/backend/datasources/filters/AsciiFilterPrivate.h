@@ -29,6 +29,7 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
+class KFilterDev;
 class AbstractDataSource;
 
 class AsciiFilterPrivate {
@@ -36,6 +37,7 @@ class AsciiFilterPrivate {
 public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
+	int prepareDeviceToRead(KFilterDev&);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
@@ -45,17 +47,21 @@ public:
 	// TODO: m_*
 	QString commentCharacter;
 	QString separatingCharacter;
+	QString separator;
 	bool autoModeEnabled;
 	bool headerEnabled;
 	QString vectorNames;
+	QStringList vectorNameList;
 	bool skipEmptyParts;
 	bool simplifyWhitespacesEnabled;
 	bool transposed;
 
 	int startRow;
 	int endRow;
+	int actualRows;
 	int startColumn;
 	int endColumn;
+	int actualCols;
 
 private:
 	void clearDataSource(AbstractDataSource*) const;
