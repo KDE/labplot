@@ -72,7 +72,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 		//TODO: disable for file data sources
 		importFileWidget->hideDataSource();
     } else {
-        importFileWidget->initializePortsAndBaudRates();
+        importFileWidget->initializeAndFillPortsAndBaudRates();
     }
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));

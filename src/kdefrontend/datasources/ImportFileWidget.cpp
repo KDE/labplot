@@ -179,9 +179,18 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
 	connect( fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
+    connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(liveDataSourceTypeChanged(int)));
+
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
+
+    ui.lBaudRate->hide();
+    ui.lPort->hide();
+    ui.lSocketServerName->hide();
+    ui.cbBaudRate->hide();
+    ui.cbPort->hide();
+    ui.leSocketServer->hide();
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
@@ -1026,14 +1035,45 @@ void ImportFileWidget::refreshPreview() {
 void ImportFileWidget::liveDataSourceTypeChanged(int idx) {
     if (idx == 1) {
     //local socket
+        ui.lBaudRate->hide();
+        ui.lPort->hide();
+
+        ui.cbBaudRate->hide();
+        ui.cbPort->hide();
+
+        ui.lSocketServerName->show();
+        ui.leSocketServer->show();
     } else if (idx == 2) {
     //serial port
+        ui.lSocketServerName->hide();
+        ui.leSocketServer->hide();
+
+        ui.lBaudRate->show();
+        ui.cbBaudRate->show();
+        ui.lPort->show();
+        ui.cbPort->show();
     } else {
     //file
+        ui.lBaudRate->hide();
+        ui.lPort->hide();
+        ui.lSocketServerName->hide();
+        ui.cbBaudRate->hide();
+        ui.cbPort->hide();
+        ui.leSocketServer->hide();
     }
 }
 
-void ImportFileWidget::initializePortsAndBaudRates() {
+void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
+
+    for (int i = 2; i < ui.swOptions->count(); ++i) {
+        ui.swOptions->removeWidget(ui.swOptions->widget(i));
+    }
+
+    const int size = ui.cbFileType->count();
+    for (int i = 2; i < size; ++i) {
+        ui.cbFileType->removeItem(2);
+    }
+
     ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
     ui.cbPort->addItems(FileDataSource::availablePorts());
 }

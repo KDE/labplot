@@ -60,7 +60,7 @@ public:
 	void hideDataSource() const;
 	void showAsciiHeaderOptions(bool);
 
-    void initializePortsAndBaudRates();
+    void initializeAndFillPortsAndBaudRates();
 
 private:
 	Ui::ImportFileWidget ui;
