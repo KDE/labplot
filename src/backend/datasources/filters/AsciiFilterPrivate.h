@@ -44,26 +44,24 @@ public:
 
 	const AsciiFilter* q;
 
-	// TODO: m_*
-	QString commentCharacter;
-	QString separatingCharacter;
-	QString separator;
-	bool autoModeEnabled;
-	bool headerEnabled;
-	QString vectorNames;
-	QStringList vectorNameList;
-	bool skipEmptyParts;
-	bool simplifyWhitespacesEnabled;
-	bool transposed;
-
-	int startRow;
-	int endRow;
-	int actualRows;
-	int startColumn;
-	int endColumn;
-	int actualCols;
-
+	QString m_commentCharacter;
+	QString m_separatingCharacter;
+	bool m_autoModeEnabled;
+	bool m_headerEnabled;
+	bool m_skipEmptyParts;
+	bool m_simplifyWhitespacesEnabled;
+	bool m_transposed;
+	int m_startRow;
+	int m_endRow;
+	int m_startColumn;
+	int m_endColumn;
+	QString m_vectorNames;
 private:
+	QString m_separator;
+	QStringList m_vectorNameList;
+	int m_actualRows;
+	int m_actualCols;
+
 	void clearDataSource(AbstractDataSource*) const;
 };
 
