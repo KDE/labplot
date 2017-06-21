@@ -389,45 +389,37 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 	if (deviceError)
 		return dataStrings;
 
+	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
 	// TODO: support other data types
-	int columnOffset = 0;	// indexes the "start column" in the spreadsheet/matrix. Data will be imported starting from this column.
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataPointers, importMode, actualRows, actualCols, vectorNameList);
 
-	// Read the data TODO: check
+	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
 	if (lines == -1)
 		lines = actualRows;
-	DEBUG("reading " << qMin(lines, actualRows)  << " lines");
 
+	DEBUG("reading " << qMin(lines, actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, actualRows); i++) {
 		QString line = device.readLine();
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
-		//skip empty lines
-		if (line.isEmpty())
+		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
-
-		// TODO: really?
-		if (line.startsWith(commentCharacter) == true) {
-			currentRow++;
-			continue;
-		}
 
 		QStringList lineStringList = line.split(separator, QString::SkipEmptyParts);
-
-		// TODO : read strings (comments) or datetime too
 		QStringList lineString;
-		bool isNumber;
 		for (int n = 0; n < actualCols; n++) {
 			if (n < lineStringList.size()) {
+				bool isNumber;
+				// TODO : read other data types (strings, datetime, etc.) too
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource)
-					isNumber ? dataPointers[n]->operator[](currentRow) = value : dataPointers[n]->operator[](currentRow) = NAN;
+					dataPointers[n]->operator[](currentRow) = (isNumber ? value : NAN);
 				else
-					isNumber ? lineString += QString::number(value) : lineString += QString("NAN");
+					lineString += (isNumber ? QString::number(value) : QString("NAN"));
 			} else {
 				if (dataSource)
 					dataPointers[n]->operator[](currentRow) = NAN;
@@ -444,11 +436,11 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 	if (!dataSource)
 		return dataStrings;
 
-	// set the comments for each of the columns
+	// set the comments for each of the columns if datasource is a spreadsheet
 	// TODO: make everything undo/redo-able again
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
-		const int rows = headerEnabled ? currentRow : currentRow + 1;
+		const int rows = (headerEnabled ? currentRow : currentRow + 1);
 		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for (int n = startColumn; n <= endColumn; n++) {
