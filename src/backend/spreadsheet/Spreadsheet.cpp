@@ -777,9 +777,10 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+// TODO: general data type
+int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList) {
-	DEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -788,10 +789,10 @@ int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, Abstract
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(false);
 
-	columnOffset = this->resize(mode, colNameList, actualCols);
+	columnOffset = this->resize(importMode, colNameList, actualCols);
 
 	// resize the spreadsheet
-	if (mode == AbstractFileFilter::Replace) {
+	if (importMode == AbstractFileFilter::Replace) {
 		clear();
 		setRowCount(actualRows);
 	}  else {

@@ -76,10 +76,10 @@ public:
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
 	//data import
-	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList = QStringList()) override;
 	virtual void finalizeImport() override;
-	int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
+	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
 public slots:
 	void appendRows(int count);
@@ -95,7 +95,7 @@ public slots:
 	void clearMasks();
 
 	void moveColumn(int from, int to);
-	void sortColumns(Column* leading, QList<Column*> cols, bool ascending);
+	void sortColumns(Column* leading, QList<Column*>, bool ascending);
 
 private:
 	void init();
