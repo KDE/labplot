@@ -29,6 +29,7 @@
 
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/column/columncommands.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -124,8 +125,8 @@ void Column::init() {
 	addChild(d->outputFilter());
 	m_suppressDataChangedSignal = false;
 
-	usedInActionGroup = new QActionGroup(this);
-	connect(usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
+	m_usedInActionGroup = new QActionGroup(this);
+	connect(m_usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
 }
 
 /**
@@ -148,14 +149,14 @@ QMenu* Column::createContextMenu() {
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
 
 	//remove previously added actions
-	foreach(QAction* action, usedInActionGroup->actions())
-		usedInActionGroup->removeAction(action);
+	for (auto* action: m_usedInActionGroup->actions())
+		m_usedInActionGroup->removeAction(action);
 
 	//add curves where the column is currently in use
 	QList<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
-	foreach (const XYCurve* curve, curves) {
+	for (const auto* curve: curves) {
 		if (curve->dataSourceType() == XYCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) ) {
-			QAction* action = new QAction(curve->icon(), curve->name(), usedInActionGroup);
+			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);
 		}

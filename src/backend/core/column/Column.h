@@ -42,157 +42,133 @@ class QActionGroup;
 class Column : public AbstractColumn {
 	Q_OBJECT
 
-	// TODO: align
-	public:
-		struct ColumnStatistics {
-			ColumnStatistics() {
-				minimum = NAN;
-				maximum = NAN;
-				arithmeticMean = NAN;
-				geometricMean = NAN;
-				harmonicMean = NAN;
-				contraharmonicMean = NAN;
-				median = NAN;
-				variance = NAN;
-				standardDeviation = NAN;
-				meanDeviation = NAN;
-				meanDeviationAroundMedian = NAN;
-				medianDeviation = NAN;
-				skewness = NAN;
-				kurtosis = NAN;
-				entropy = NAN;
-			}
-			double minimum;
-			double maximum;
-			double arithmeticMean;
-			double geometricMean;
-			double harmonicMean;
-			double contraharmonicMean;
-			double median;
-			double variance;
-			double standardDeviation;
-			double meanDeviation; // mean absolute deviation around mean
-			double meanDeviationAroundMedian; // mean absolute deviation around median
-			double medianDeviation; // median absolute deviation
-			double skewness;
-			double kurtosis;
-			double entropy;
-		};
+public:
+	struct ColumnStatistics {
+		ColumnStatistics() {
+			minimum = NAN;
+			maximum = NAN;
+			arithmeticMean = NAN;
+			geometricMean = NAN;
+			harmonicMean = NAN;
+			contraharmonicMean = NAN;
+			median = NAN;
+			variance = NAN;
+			standardDeviation = NAN;
+			meanDeviation = NAN;
+			meanDeviationAroundMedian = NAN;
+			medianDeviation = NAN;
+			skewness = NAN;
+			kurtosis = NAN;
+			entropy = NAN;
+		}
+		double minimum;
+		double maximum;
+		double arithmeticMean;
+		double geometricMean;
+		double harmonicMean;
+		double contraharmonicMean;
+		double median;
+		double variance;
+		double standardDeviation;
+		double meanDeviation; // mean absolute deviation around mean
+		double meanDeviationAroundMedian; // mean absolute deviation around median
+		double medianDeviation; // median absolute deviation
+		double skewness;
+		double kurtosis;
+		double entropy;
+	};
 
-		explicit Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
-		Column(const QString& name, QVector<double> data);
-		Column(const QString& name, QStringList data);
-		Column(const QString& name, QVector<QDateTime> data);
-		void init();
-		~Column();
+	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+	Column(const QString& name, QVector<double> data);
+	Column(const QString& name, QStringList data);
+	Column(const QString& name, QVector<QDateTime> data);
+	void init();
+	~Column();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
 
-		AbstractColumn::ColumnMode columnMode() const;
-		void setColumnMode(AbstractColumn::ColumnMode);
+	AbstractColumn::ColumnMode columnMode() const;
+	void setColumnMode(AbstractColumn::ColumnMode);
 
-		bool copy(const AbstractColumn*);
-		bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
+	bool copy(const AbstractColumn*);
+	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
 
-		AbstractColumn::PlotDesignation plotDesignation() const;
-		void setPlotDesignation(AbstractColumn::PlotDesignation pd);
+	AbstractColumn::PlotDesignation plotDesignation() const;
+	void setPlotDesignation(AbstractColumn::PlotDesignation);
 
-		bool isReadOnly() const;
-		int rowCount() const;
-		int width() const;
-		void setWidth(int value);
-		void clear();
-		AbstractSimpleFilter* outputFilter() const;
-		ColumnStringIO* asStringColumn() const;
+	bool isReadOnly() const;
+	int rowCount() const;
+	int width() const;
+	void setWidth(const int);
+	void clear();
+	AbstractSimpleFilter* outputFilter() const;
+	ColumnStringIO* asStringColumn() const;
 
-		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
-		QString formula() const;
-		const QStringList& formulaVariableNames() const;
-		const QStringList& formulaVariableColumnPathes() const;
-		QString formula(int) const;
-		QList< Interval<int> > formulaIntervals() const;
-		void setFormula(Interval<int>, QString);
-		void setFormula(int, QString);
-		void clearFormulas();
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	QString formula() const;
+	const QStringList& formulaVariableNames() const;
+	const QStringList& formulaVariableColumnPathes() const;
+	QString formula(const int) const;
+	QList< Interval<int> > formulaIntervals() const;
+	void setFormula(Interval<int>, QString);
+	void setFormula(int, QString);
+	void clearFormulas();
 
-		const ColumnStatistics& statistics();
-		void* data() const;
+	const ColumnStatistics& statistics();
+	void* data() const;
 
-		QString textAt(int) const;
-		void setTextAt(int, const QString&);
-		void replaceTexts(int, const QStringList&);
+	QString textAt(const int) const;
+	void setTextAt(const int, const QString&);
+	void replaceTexts(const int, const QStringList&);
 
-		QDate dateAt(int) const;
-		void setDateAt(int, const QDate&);
-		QTime timeAt(int) const;
-		void setTimeAt(int, const QTime&);
-		QDateTime dateTimeAt(int) const;
-		void setDateTimeAt(int, const QDateTime&);
-		void replaceDateTimes(int, const QVector<QDateTime>&);
+	QDate dateAt(const int) const;
+	void setDateAt(const int, const QDate&);
+	QTime timeAt(const int) const;
+	void setTimeAt(const int, const QTime&);
+	QDateTime dateTimeAt(const int) const;
+	void setDateTimeAt(const int, const QDateTime&);
+	void replaceDateTimes(const int, const QVector<QDateTime>&);
 
-		double valueAt(int) const;
-		void setValueAt(int, double);
-		virtual void replaceValues(int, const QVector<double>&);
+	double valueAt(const int) const;
+	void setValueAt(const int, const double);
+	virtual void replaceValues(const int, const QVector<double>&);
 
-		void setChanged();
-		void setSuppressDataChangedSignal(bool);
+	void setChanged();
+	void setSuppressDataChangedSignal(const bool);
 
-		void save(QXmlStreamWriter*) const;
-		bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const;
+	bool load(XmlStreamReader*);
 
-	private:
-		bool XmlReadInputFilter(XmlStreamReader*);
-		bool XmlReadOutputFilter(XmlStreamReader*);
-		bool XmlReadFormula(XmlStreamReader*);
-		bool XmlReadRow(XmlStreamReader*);
+private:
+	bool XmlReadInputFilter(XmlStreamReader*);
+	bool XmlReadOutputFilter(XmlStreamReader*);
+	bool XmlReadFormula(XmlStreamReader*);
+	bool XmlReadRow(XmlStreamReader*);
 
-		void handleRowInsertion(int before, int count);
-		void handleRowRemoval(int first, int count);
+	void handleRowInsertion(int before, int count);
+	void handleRowRemoval(int first, int count);
 
-		void calculateStatistics();
-		void setStatisticsAvailable(bool);
-		bool statisticsAvailable() const;
+	void calculateStatistics();
+	void setStatisticsAvailable(bool);
+	bool statisticsAvailable() const;
 
-		bool m_suppressDataChangedSignal;
-		QActionGroup* usedInActionGroup;
+	bool m_suppressDataChangedSignal;
+	QActionGroup* m_usedInActionGroup;
 
-		friend class ColumnStringIO;
+	friend class ColumnStringIO;
+	ColumnStringIO* m_string_io;
 
-		ColumnStringIO* m_string_io;
+	ColumnPrivate* d;
+	friend class ColumnPrivate;
 
-		ColumnPrivate* d;
-		friend class ColumnPrivate;
+signals:
+	void requestProjectContextMenu(QMenu*);
 
-	signals:
-		void requestProjectContextMenu(QMenu*);
-
-	private slots:
-		void navigateTo(QAction*);
-		void handleFormatChange();
+private slots:
+	void navigateTo(QAction*);
+	void handleFormatChange();
 };
 
-// TODO: extra header
-class ColumnStringIO : public AbstractColumn {
-	Q_OBJECT
-
-	//TODO: align
-	public:
-		ColumnStringIO(Column* owner);
-		virtual AbstractColumn::ColumnMode columnMode() const;
-		virtual AbstractColumn::PlotDesignation plotDesignation() const;
-		virtual int rowCount() const;
-		virtual QString textAt(int) const;
-		virtual void setTextAt(int, const QString&);
-		virtual bool isValid(int) const;
-		virtual bool copy(const AbstractColumn*);
-		virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
-		virtual void replaceTexts(int start_row, const QStringList& texts);
-
-	private:
-		Column* m_owner;
-		bool m_setting;
-		QString m_to_set;
-};
 
 #endif

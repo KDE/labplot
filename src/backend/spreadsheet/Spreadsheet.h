@@ -32,6 +32,7 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnStringIO.h"
 
 template <class t> class QList;
 

@@ -30,6 +30,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "FITSFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/matrix/MatrixModel.h"

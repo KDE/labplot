@@ -30,6 +30,7 @@
 #include "Spreadsheet.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
