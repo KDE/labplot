@@ -78,8 +78,16 @@ TextLabel* AbstractPlot::title(){
 void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	DEBUG("AbstractPlot::handleResize()");
 	Q_D(AbstractPlot);
-	d->horizontalPadding *= horizontalRatio;
-	d->verticalPadding *= verticalRatio;
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
+
+	d->horizontalPadding *= ratio;
+	d->verticalPadding *= ratio;
+
 	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 

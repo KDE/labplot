@@ -339,22 +339,21 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 	Q_D(Axis);
 	Q_UNUSED(pageResize);
 
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
+
 	QPen pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	pen.setWidthF(pen.widthF() * ratio);
 	d->linePen = pen;
 
-	if (d->orientation == Axis::AxisHorizontal) {
-		d->majorTicksLength *= verticalRatio; // ticks are perpendicular to axis line -> verticalRatio relevant
-		d->minorTicksLength *= verticalRatio;
-		d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * verticalRatio ); //TODO: take into account rotated labels
-		d->labelsOffset *= verticalRatio;
-	} else {
-		d->majorTicksLength *= horizontalRatio;
-		d->minorTicksLength *= horizontalRatio;
-		d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * horizontalRatio ); //TODO: take into account rotated labels
-		d->labelsOffset *= horizontalRatio;
-	}
-
+	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
+	d->minorTicksLength *= ratio;
+	d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * ratio ); //TODO: take into account rotated labels
+	d->labelsOffset *= ratio;
 	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 

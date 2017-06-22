@@ -159,12 +159,29 @@ void TextLabel::retransform() {
 }
 
 void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
+	DEBUG("TextLabel::handleResize()");
 	Q_UNUSED(pageResize);
-
 	Q_D(TextLabel);
-	//TODO
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
+
+	d->teXFont.setPointSizeF(d->teXFont.pointSizeF() * ratio);
+	d->updateText();
+
+	//TODO: doesn't seem to work
+	QTextDocument doc;
+	doc.setHtml(d->textWrapper.text);
+	QTextCursor cursor(&doc);
+	cursor.select(QTextCursor::Document);
+	QTextCharFormat fmt = cursor.charFormat();
+	QFont font = fmt.font();
+	font.setPointSizeF(font.pointSizeF() * ratio);
+	fmt.setFont(font);
+	cursor.setCharFormat(fmt);
 }
 
 /*!
