@@ -136,11 +136,10 @@ class Axis: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef AxisPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+		typedef AxisPrivate Private;
 
 	protected:
 		AxisPrivate* const d_ptr;

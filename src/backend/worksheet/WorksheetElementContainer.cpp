@@ -130,12 +130,20 @@ void WorksheetElementContainer::retransform() {
 	d->recalcShapeAndBoundingRect();
 }
 
-void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
+void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("WorksheetElementContainer::handleResize()");
 	Q_D(const WorksheetElementContainer);
-	QRectF rect(d->rect);
-	rect.setWidth(d->rect.width()*horizontalRatio);
-	rect.setHeight(d->rect.height()*verticalRatio);
-	setRect(rect);
+	if (pageResize) {
+		QRectF rect(d->rect);
+		rect.setWidth(d->rect.width()*horizontalRatio);
+		rect.setHeight(d->rect.height()*verticalRatio);
+		setRect(rect);
+	} else {
+		for(WorksheetElement* elem : children<WorksheetElement>(IncludeHidden))
+			elem->handleResize(horizontalRatio, verticalRatio);
+
+		retransform();
+	}
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) {
@@ -245,7 +253,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG("WorksheetElementContainerPrivate::paint()");
+// 	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -263,5 +271,5 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
 	}
-	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
+// 	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

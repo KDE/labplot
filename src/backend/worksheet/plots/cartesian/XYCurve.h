@@ -135,9 +135,10 @@ class XYCurve: public WorksheetElement {
 
 		typedef XYCurvePrivate Private;
 
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+	public slots:
 		void handleSourceDataChanged();
 
 	private slots:

@@ -37,15 +37,14 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-
-#include <QPainter>
-#include <QMenu>
-#include <QTextDocument>
-#include <QGraphicsSceneContextMenuEvent>
-
 #include "kdefrontend/GuiTools.h"
+
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QPainter>
+#include <QTextDocument>
+
 #include <KConfigGroup>
-#include <QIcon>
 #include <KLocale>
 
 #include <cfloat>
@@ -335,26 +334,28 @@ void Axis::retransform() {
 	d->retransform();
 }
 
-void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
+void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("Axis::handleResize()");
 	Q_D(Axis);
+	Q_UNUSED(pageResize);
 
 	QPen pen = d->linePen;
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setLinePen(pen);
+	d->linePen = pen;
 
 	if (d->orientation == Axis::AxisHorizontal) {
-		setMajorTicksLength(d->majorTicksLength * verticalRatio); // ticks are perpendicular to axis line -> verticalRatio relevant
-		setMinorTicksLength(d->minorTicksLength * verticalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio);
+		d->majorTicksLength *= verticalRatio; // ticks are perpendicular to axis line -> verticalRatio relevant
+		d->minorTicksLength *= verticalRatio;
+		d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * verticalRatio ); //TODO: take into account rotated labels
+		d->labelsOffset *= verticalRatio;
 	} else {
-		setMajorTicksLength(d->majorTicksLength * horizontalRatio);
-		setMinorTicksLength(d->minorTicksLength * horizontalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio); // this is not perfectly correct for rotated labels
-															// when the page aspect ratio changes, but should not matter
+		d->majorTicksLength *= horizontalRatio;
+		d->minorTicksLength *= horizontalRatio;
+		d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * horizontalRatio ); //TODO: take into account rotated labels
+		d->labelsOffset *= horizontalRatio;
 	}
-	//TODO setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
 
-	retransform();
+	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
 /* ============================ getter methods ================= */
@@ -905,6 +906,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
+	DEBUG("AxisPrivate::retransform()");
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;
@@ -1726,7 +1728,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG("AxisPrivate::paint()");
+// 	DEBUG("AxisPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1801,7 +1803,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(axisShape);
 	}
 
-	DEBUG("AxisPrivate::paint() DONE");
+// 	DEBUG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

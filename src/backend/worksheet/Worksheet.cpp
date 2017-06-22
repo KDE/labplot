@@ -644,12 +644,12 @@ void WorksheetPrivate::updatePageRect() {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
 				foreach(WorksheetElement* elem, childElements) {
 					elem->setUndoAware(false);
-					elem->handlePageResize(horizontalRatio, verticalRatio);
+					elem->handleResize(horizontalRatio, verticalRatio, true);
 					elem->setUndoAware(true);
 				}
 			} else {
 				foreach(WorksheetElement* elem, childElements)
-					elem->handlePageResize(horizontalRatio, verticalRatio);
+					elem->handleResize(horizontalRatio, verticalRatio, true);
 			}
 		}
 	}

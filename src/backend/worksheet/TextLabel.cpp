@@ -158,12 +158,13 @@ void TextLabel::retransform() {
 	d->retransform();
 }
 
-void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio) {
+void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
+	Q_UNUSED(pageResize);
 
 	Q_D(TextLabel);
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+	//TODO
 }
 
 /*!

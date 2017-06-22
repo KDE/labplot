@@ -92,11 +92,10 @@ class CartesianPlotLegend : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		typedef CartesianPlotLegendPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+		typedef CartesianPlotLegendPrivate Private;
 
 	protected:
 		CartesianPlotLegend(CartesianPlot*, const QString& name, CartesianPlotLegendPrivate* dd);

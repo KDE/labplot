@@ -74,11 +74,10 @@ class PlotArea : public WorksheetElement {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-		typedef PlotAreaPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+		typedef PlotAreaPrivate Private;
 
 	protected:
 		PlotArea(const QString& name, PlotAreaPrivate* dd);

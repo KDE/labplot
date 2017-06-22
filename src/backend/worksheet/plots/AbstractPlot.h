@@ -45,7 +45,7 @@ class AbstractPlot : public WorksheetElementContainer {
 		explicit AbstractPlot(const QString &name);
 		virtual ~AbstractPlot(){}
 
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio) override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
 		TextLabel* title();

@@ -28,7 +28,6 @@
 #ifndef CUSTOMPOINT_H
 #define CUSTOMPOINT_H
 
-#include <QObject>
 #include <QBrush>
 #include <QPen>
 
@@ -66,11 +65,10 @@ class CustomPoint : public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef CustomPointPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+		typedef CustomPointPrivate Private;
 
 	private slots:
 		void visibilityChanged();

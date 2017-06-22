@@ -79,7 +79,6 @@ class CartesianPlot:public AbstractPlot {
 		};
 
 		void initDefault(Type = FourAxes);
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio) override;
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		QMenu* analysisMenu() const;

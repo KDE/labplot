@@ -75,10 +75,12 @@ TextLabel* AbstractPlot::title(){
 	return m_title;
 }
 
-void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio) {
+void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("AbstractPlot::handleResize()");
 	Q_D(AbstractPlot);
 	d->horizontalPadding *= horizontalRatio;
 	d->verticalPadding *= verticalRatio;
+	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPadding)

@@ -30,9 +30,9 @@
 #include "backend/worksheet/plots/PlotAreaPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -102,14 +102,15 @@ bool PlotArea::isVisible() const {
 	return d->isVisible();
 }
 
-void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
+void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("PlotArea::handleResize()");
 	Q_D(PlotArea);
+	Q_UNUSED(pageResize);
 
 	d->rect.setWidth(d->rect.width()*horizontalRatio);
 	d->rect.setHeight(d->rect.height()*verticalRatio);
 
 	// TODO: scale line width
-	WorksheetElement::handlePageResize(horizontalRatio, verticalRatio);
 }
 
 void PlotArea::retransform() {
@@ -281,7 +282,7 @@ QPainterPath PlotAreaPrivate::shape() const {
 }
 
 void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	DEBUG("PlotAreaPrivate::paint()");
+// 	DEBUG("PlotAreaPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -387,7 +388,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		else
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
-	DEBUG("PlotAreaPrivate::paint() DONE");
+// 	DEBUG("PlotAreaPrivate::paint() DONE");
 }
 
 //##############################################################################
