@@ -736,7 +736,7 @@ void ColumnPrivate::setWidth(int value) {
 /**
  * \brief Return the data pointer
  */
-void *ColumnPrivate::dataPointer() const {
+void* ColumnPrivate::data() const {
 	return m_data;
 }
 

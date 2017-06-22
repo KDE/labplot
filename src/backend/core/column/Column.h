@@ -79,6 +79,7 @@ public:
 	};
 
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+	//TODO: initializer for all supported data types
 	Column(const QString& name, QVector<double> data);
 	Column(const QString& name, QStringList data);
 	Column(const QString& name, QVector<QDateTime> data);

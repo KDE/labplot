@@ -803,6 +803,7 @@ int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, Abstract
 
 	dataPointers.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
+		// TODO: support all data types
 		QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
 		vector->reserve(actualRows);
 		vector->resize(actualRows);

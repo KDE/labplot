@@ -46,9 +46,6 @@ extern "C" {
 #include <QIcon>
 #include <QMenu>
 #include <QThreadPool>
-//#ifndef NDEBUG
-//#include <QDebug>
-//#endif
 
 #include <KLocale>
 
@@ -455,6 +452,7 @@ void Column::calculateStatistics() {
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
+	// TODO: other data types
 	QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
 
 	int notNanCount = 0;
@@ -555,8 +553,10 @@ void Column::calculateStatistics() {
 }
 
 void* Column::data() const {
-	return d->dataPointer();
+	return d->data();
 }
+
+//TODO: support all data types
 /**
  * \brief Return the content of row 'row'.
  *
@@ -692,10 +692,10 @@ void Column::save(QXmlStreamWriter* writer) const {
 	int i;
 	switch(columnMode()) {
 	case AbstractColumn::Numeric: {
-			const char* data = reinterpret_cast<const char*>(
-			                       static_cast< QVector<double>* >(d->dataPointer())->constData());
+			//TODO: what happens here?
+			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
 			int size = d->rowCount()*sizeof(double);
-			writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
 			break;
 		}
 	case AbstractColumn::Text:

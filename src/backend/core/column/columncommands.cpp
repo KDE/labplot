@@ -146,7 +146,7 @@ void ColumnSetModeCmd::redo() {
 	if(!m_executed) {
 		// save old values
 		m_old_mode = m_col->columnMode();
-		m_old_data = m_col->dataPointer();
+		m_old_data = m_col->data();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
 
@@ -154,7 +154,7 @@ void ColumnSetModeCmd::redo() {
 		m_col->setColumnMode(m_mode);
 
 		// save new values
-		m_new_data = m_col->dataPointer();
+		m_new_data = m_col->data();
 		m_new_in_filter = m_col->inputFilter();
 		m_new_out_filter = m_col->outputFilter();
 		m_executed = true;
@@ -231,8 +231,8 @@ void ColumnFullCopyCmd::redo() {
 		m_col->copy(m_src);
 	} else {
 		// swap data of orig. column and backup
-		void * data_temp = m_col->dataPointer();
-		m_col->replaceData(m_backup->dataPointer());
+		void * data_temp = m_col->data();
+		m_col->replaceData(m_backup->data());
 		m_backup->replaceData(data_temp);
 	}
 }
@@ -242,8 +242,8 @@ void ColumnFullCopyCmd::redo() {
  */
 void ColumnFullCopyCmd::undo() {
 	// swap data of orig. column and backup
-	void * data_temp = m_col->dataPointer();
-	m_col->replaceData(m_backup->dataPointer());
+	void * data_temp = m_col->data();
+	m_col->replaceData(m_backup->data());
 	m_backup->replaceData(data_temp);
 }
 
@@ -351,7 +351,7 @@ void ColumnPartialCopyCmd::redo() {
 void ColumnPartialCopyCmd::undo() {
 	m_col->copy(m_col_backup, 0, m_dest_start, m_num_rows);
 	m_col->resizeTo(m_old_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -613,7 +613,7 @@ void ColumnClearCmd::redo() {
 				static_cast< QStringList *>(m_empty_data)->append(QString());
 			break;
 		}
-		m_data = m_col->dataPointer();
+		m_data = m_col->data();
 	}
 	m_col->replaceData(m_empty_data);
 	m_undone = false;
@@ -806,7 +806,7 @@ void ColumnSetTextCmd::redo() {
 void ColumnSetTextCmd::undo() {
 	m_col->setTextAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -862,7 +862,7 @@ void ColumnSetValueCmd::redo() {
 void ColumnSetValueCmd::undo() {
 	m_col->setValueAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -918,7 +918,7 @@ void ColumnSetDateTimeCmd::redo() {
 void ColumnSetDateTimeCmd::undo() {
 	m_col->setDateTimeAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -970,7 +970,7 @@ ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate * col, int first, con
  */
 void ColumnReplaceTextsCmd::redo() {
 	if(!m_copied) {
-		m_old_values = static_cast< QStringList* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
+		m_old_values = static_cast< QStringList* >(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
 	}
@@ -983,7 +983,7 @@ void ColumnReplaceTextsCmd::redo() {
 void ColumnReplaceTextsCmd::undo() {
 	m_col->replaceTexts(m_first, m_old_values);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -1035,7 +1035,7 @@ ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(ColumnPrivate * col, int first, c
  */
 void ColumnReplaceValuesCmd::redo() {
 	if(!m_copied) {
-		m_old_values = static_cast< QVector<double>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
+		m_old_values = static_cast< QVector<double>* >(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
 	}
@@ -1048,7 +1048,7 @@ void ColumnReplaceValuesCmd::redo() {
 void ColumnReplaceValuesCmd::undo() {
 	m_col->replaceValues(m_first, m_old_values);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 }
 
 /** ***************************************************************************
@@ -1100,7 +1100,7 @@ ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int fi
  */
 void ColumnReplaceDateTimesCmd::redo() {
 	if(!m_copied) {
-		m_old_values = static_cast< QVector<QDateTime>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
+		m_old_values = static_cast< QVector<QDateTime>* >(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
 	}
@@ -1112,7 +1112,7 @@ void ColumnReplaceDateTimesCmd::redo() {
  */
 void ColumnReplaceDateTimesCmd::undo() {
 	m_col->replaceDateTimes(m_first, m_old_values);
-	m_col->replaceData(m_col->dataPointer());
+	m_col->replaceData(m_col->data());
 	m_col->resizeTo(m_row_count);
 }
 
