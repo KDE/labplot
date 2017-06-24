@@ -996,8 +996,22 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Fourier filtering of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add Fourier filter curve", name()));
+		this->addChild(curve);
+	}
+
 	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 
