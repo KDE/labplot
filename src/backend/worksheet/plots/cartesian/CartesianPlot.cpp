@@ -405,7 +405,6 @@ void CartesianPlot::initActions() {
 	addFitAction.append(new QAction(i18n("Custom"), this));
 
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
-	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
 
 	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
 	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
@@ -415,7 +414,6 @@ void CartesianPlot::initActions() {
 	for (const auto& action: addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
-	connect(addFourierTransformAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
@@ -529,8 +527,6 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addMenu(dataFitMenu);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addFourierTransformAction);
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));

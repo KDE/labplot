@@ -169,7 +169,6 @@ class CartesianPlot:public AbstractPlot {
 		QAction* addSmoothAction;
 		QVector <QAction *> addFitAction;
 		QAction* addFourierFilterAction;
-		QAction* addFourierTransformAction;
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
