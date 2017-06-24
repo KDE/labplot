@@ -44,7 +44,7 @@ public:
 	static QStringList commentCharacters();
 	static QStringList predefinedFilters();
 
-	static int columnNumber(const QString& fileName);
+	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
 	static size_t lineNumber(KFilterDev&);	// calculate number of lines if device supports it
 

@@ -165,7 +165,7 @@ QIcon FileDataSource::icon() const {
 		icon = QIcon::fromTheme("application-octet-stream");
 	else if (m_fileType == FileDataSource::Image)
 		icon = QIcon::fromTheme("image-x-generic");
-	// TODO: HDF, NetCDF
+	// TODO: HDF, NetCDF, FITS, etc.
 
 	return icon;
 }
@@ -310,6 +310,7 @@ QString FileDataSource::fileInfoString(const QString &name) {
 		// port the old labplot1.6 code.
 		if( fileTypeString.contains("ASCII")) {
 			infoStrings << "<br/>";
+			//TODO: consider choosen separator
 			infoStrings << i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName));
 
 			infoStrings << i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));

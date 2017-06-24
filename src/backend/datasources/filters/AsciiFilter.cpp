@@ -116,18 +116,22 @@ QStringList AsciiFilter::commentCharacters() {
 /*!
     returns the number of columns in the file \c fileName.
 */
-int AsciiFilter::columnNumber(const QString& fileName) {
-	QString line;
-	QStringList lineStringList;
-
+int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of columns");
-		return 0;
+		return -1;
 	}
 
-	line = device.readLine();
-	lineStringList = line.split(QRegExp("\\s+")); //TODO
+	QString line = device.readLine();
+	line.remove(QRegExp("[\\n\\r]"));
+
+	QStringList lineStringList;
+	if (separator.length() > 0)
+		lineStringList = line.split(separator);
+	else
+		lineStringList = line.split(QRegExp("\\s+"));
+	DEBUG("number of columns : " << lineStringList.size());
 
 	return lineStringList.size();
 }
