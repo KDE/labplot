@@ -31,6 +31,7 @@
 #define COLUMNPRIVATE_H
 
 #include "backend/core/column/Column.h"
+class Column;
 
 class ColumnPrivate : QObject {
 	Q_OBJECT

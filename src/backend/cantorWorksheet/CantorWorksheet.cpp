@@ -29,6 +29,7 @@
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 

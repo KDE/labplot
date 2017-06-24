@@ -35,8 +35,8 @@
 
 #include <cmath>
 
-class ColumnStringIO;
 class ColumnPrivate;
+class ColumnStringIO;
 class QActionGroup;
 
 class Column : public AbstractColumn {
@@ -79,10 +79,13 @@ public:
 	};
 
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
-	//TODO: initializer for all supported data types
-	Column(const QString& name, QVector<double> data);
-	Column(const QString& name, QStringList data);
-	Column(const QString& name, QVector<QDateTime> data);
+	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
+	template <class T>
+	Column(const QString& name, QVector<T> data)
+		: AbstractColumn(name), d(new class ColumnPrivate(this, AbstractColumn::Numeric, new QVector<T>(data))) {
+		init();
+	};
+	Column(const QString& name, QStringList data); // overloaded contructor for QStringList
 	void init();
 	~Column();
 

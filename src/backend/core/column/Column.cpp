@@ -65,47 +65,13 @@ extern "C" {
  * have a view as they are intended to be displayed inside a spreadsheet.
  */
 
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param mode initial column mode
- */
 Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
-	: AbstractColumn(name), d( new ColumnPrivate(this, mode) ) {
+	: AbstractColumn(name), d(new ColumnPrivate(this, mode)) {
 	init();
 }
 
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
-Column::Column(const QString& name, QVector<double> data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<double>(data)) ) {
-	init();
-}
-
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
 Column::Column(const QString& name, QStringList data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::Text, new QStringList(data))) {
-	init();
-}
-
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
-Column::Column(const QString& name, QVector<QDateTime> data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::DateTime, new QVector<QDateTime>(data)) ) {
+	: AbstractColumn(name), d(new ColumnPrivate(this, AbstractColumn::Text, new QStringList(data))) {
 	init();
 }
 
@@ -452,7 +418,7 @@ void Column::calculateStatistics() {
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
-	// TODO: other data types
+	// TODO: other data types?
 	QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
 
 	int notNanCount = 0;
