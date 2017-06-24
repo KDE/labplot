@@ -46,7 +46,7 @@ public:
 
 	static int columnNumber(const QString& fileName);
 	static size_t lineNumber(const QString& fileName);
-	static size_t lineNumber(KFilterDev&);
+	static size_t lineNumber(KFilterDev&);	// calculate number of lines if device supports it
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);

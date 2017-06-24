@@ -35,6 +35,8 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QTextStream>
 #include <KLocale>
 #include <KFilterDev>
+#include <QElapsedTimer>
+#include <QProcess>
 
  /*!
 	\class AsciiFilter
@@ -119,8 +121,10 @@ int AsciiFilter::columnNumber(const QString& fileName) {
 	QStringList lineStringList;
 
 	KFilterDev device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of columns");
 		return 0;
+	}
 
 	line = device.readLine();
 	lineStringList = line.split(QRegExp("\\s+")); //TODO
@@ -128,33 +132,47 @@ int AsciiFilter::columnNumber(const QString& fileName) {
 	return lineStringList.size();
 }
 
-
-/*!
-  returns the number of lines in the file \c fileName.
-*/
 size_t AsciiFilter::lineNumber(const QString& fileName) {
-	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
-	KFilterDev device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
+// wc is much faster
+/*	KFilterDev device(fileName);
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of lines");
 		return 0;
+	}
 
 	size_t rows = 0;
 	while (!device.atEnd()) {
 		device.readLine();
 		rows++;
 	}
+*/
+	QElapsedTimer myTimer;
+	myTimer.start();
+	QProcess wc;
+	wc.start(QString("wc"), QStringList() << "-l" << fileName);
+	size_t lineCount = 0;
+	while (wc.waitForReadyRead())
+		lineCount = wc.readLine().split(' ')[0].toInt();
+	DEBUG(" Elapsed time counting lines : " << myTimer.elapsed() << " ms");
 
-	return rows;
+	return lineCount;
 }
+
+/*!
+  returns the number of lines in the device \c device or 0 if not available
+*/
 size_t AsciiFilter::lineNumber(KFilterDev &device) {
-	size_t rows = 0;
+	if (device.isSequential())
+		return 0;
+
+	size_t lineCount = 0;
 	device.seek(0);
 	while (!device.atEnd()) {
 		device.readLine();
-		rows++;
+		lineCount++;
 	}
 
-	return rows;
+	return lineCount;
 }
 
 void AsciiFilter::setTransposed(const bool b) {
