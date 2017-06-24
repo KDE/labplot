@@ -148,6 +148,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 }
 size_t AsciiFilter::lineNumber(KFilterDev &device) {
 	size_t rows = 0;
+	device.seek(0);
 	while (!device.atEnd()) {
 		device.readLine();
 		rows++;
@@ -294,13 +295,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
 	qint64 startPosition = device.pos();
-	do {
+	DEBUG(" device start position = " << startPosition);
+	do {	// skip comment lines
 		firstLine = device.readLine();
 		if (device.atEnd())
 			return 1;
 	} while (firstLine.startsWith(m_commentCharacter));
+	DEBUG(" device position after first line and comments = " << device.pos());
 
-	firstLine.remove(QRegExp("[\\n\\t\\r]"));	// remove any newline
+	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
 	if (m_simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
 	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
@@ -345,20 +348,27 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 		m_endColumn = firstLineStringList.size(); // last column
 	m_actualCols = m_endColumn - m_startColumn + 1;
 
+//TEST: readline-seek-readline fails
+/*	qint64 testpos = device.pos();
+	DEBUG("read data line @ pos " << testpos << " : " << device.readLine().toStdString());
+	device.seek(testpos);
+	testpos = device.pos();
+	DEBUG("read data line again @ pos " << testpos << "  = " << device.readLine().toStdString());
+*/
 	m_actualRows = AsciiFilter::lineNumber(device);
+	if (!device.seek(0)) {	// readLine() fails after seek(pos) if pos > 0! start form 0 again.
+		DEBUG("Could not undo reading first line");
+		return -1;
+	}
 	int actualEndRow = m_endRow;
 	if (m_endRow == -1 || m_endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
 	m_actualRows = actualEndRow - m_startRow + 1;
 
-	if (m_headerEnabled)
+	if (m_headerEnabled) {
 		m_actualRows--;
-	else {	// undo reading first line
-		if(!device.seek(startPosition)) {
-			DEBUG("Could not undo reading first line");
-			return -1;
-		}
+		device.readLine();
 	}
 
 	DEBUG("start/end column: " << m_startColumn << ' ' << m_endColumn);
@@ -383,7 +393,10 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 	// TODO: also support other devices. Add parameter for input device type?
 	KFilterDev device(fileName);
+	DEBUG("device is sequential = " << device.isSequential());
 	int deviceError = prepareDeviceToRead(device);
+	DEBUG("Device error = " << deviceError);
+
 	if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
 		dataSource->clear();
 	if (deviceError)
@@ -400,16 +413,19 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		lines = m_actualRows;
 
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
+	DEBUG("device position before reading = " << device.pos());
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
 		if (m_simplifyWhitespacesEnabled)
 			line = line.simplified();
+//		DEBUG("simplified line = " << line.toStdString());
 
 		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
 		QStringList lineString;
+//		QDEBUG("split line = " << lineStringList);
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
 				bool isNumber;
