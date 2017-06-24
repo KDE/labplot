@@ -35,6 +35,7 @@
 #include "backend/lib/macros.h"
 
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"

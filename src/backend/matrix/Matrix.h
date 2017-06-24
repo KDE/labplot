@@ -105,7 +105,7 @@ public:
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;
 
-	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList = QStringList()) override;
 	virtual void finalizeImport() override;
 

@@ -334,7 +334,7 @@ void XYCurve::setDataSourceCurve(const XYCurve* curve) {
 		connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 		connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 
-		//handle the changes when the data inside of the source curve columns 
+		//handle the changes when the data inside of the source curve columns
 		connect(curve, SIGNAL(xDataChanged()), this, SLOT(handleSourceDataChanged()));
 		connect(curve, SIGNAL(yDataChanged()), this, SLOT(handleSourceDataChanged()));
 
@@ -750,7 +750,8 @@ void XYCurve::updateErrorBars() {
 }
 
 //TODO
-void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
+void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(pageResize);
 	Q_D(const XYCurve);
 
 	setSymbolsSize(d->symbolsSize * horizontalRatio);
@@ -767,8 +768,6 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
 	QFont font=d->valuesFont;
 	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
 	setValuesFont(font);
-
-	retransform();
 }
 
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {

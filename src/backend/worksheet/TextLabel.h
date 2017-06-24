@@ -30,15 +30,16 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include <QObject>
-#include <QFont>
-#include <QBrush>
-#include <QPen>
 #include "backend/lib/macros.h"
 #include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+#include <QFont>
+#include <QBrush>
+#include <QPen>
+
 class TextLabelPrivate;
+
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
@@ -95,11 +96,10 @@ class TextLabel : public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef TextLabelPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize);
+
+		typedef TextLabelPrivate Private;
 
 	private slots:
 		void updateTeXImage();

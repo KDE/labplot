@@ -34,6 +34,7 @@
 #include "backend/matrix/matrixcommands.h"
 #include "backend/lib/macros.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
 
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"

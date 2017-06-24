@@ -175,13 +175,12 @@ void CartesianPlotLegend::retransform() {
 	d_ptr->retransform();
 }
 
-void CartesianPlotLegend::handlePageResize(double horizontalRatio, double verticalRatio) {
-	//TODO
+void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
+	Q_UNUSED(pageResize);
+	//TODO
 // 	Q_D(const CartesianPlotLegend);
-
-	retransform();
 }
 
 //##############################################################################

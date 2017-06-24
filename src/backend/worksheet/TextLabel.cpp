@@ -158,12 +158,30 @@ void TextLabel::retransform() {
 	d->retransform();
 }
 
-void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-
+void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("TextLabel::handleResize()");
+	Q_UNUSED(pageResize);
 	Q_D(TextLabel);
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
+
+	d->teXFont.setPointSizeF(d->teXFont.pointSizeF() * ratio);
+	d->updateText();
+
+	//TODO: doesn't seem to work
+	QTextDocument doc;
+	doc.setHtml(d->textWrapper.text);
+	QTextCursor cursor(&doc);
+	cursor.select(QTextCursor::Document);
+	QTextCharFormat fmt = cursor.charFormat();
+	QFont font = fmt.font();
+	font.setPointSizeF(font.pointSizeF() * ratio);
+	fmt.setFont(font);
+	cursor.setCharFormat(fmt);
 }
 
 /*!

@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : AsciiFilterPrivate.h
+    File                 : ColumnStringIO.h
     Project              : LabPlot
-    Description          : Private implementation class for AsciiFilter.
+    Description          : Aspect that manages a column string IO
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,43 +27,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ASCIIFILTERPRIVATE_H
-#define ASCIIFILTERPRIVATE_H
+#ifndef COLUMNSTRINGIO_H
+#define COLUMNSTRINGIO_H
 
-class KFilterDev;
-class AbstractDataSource;
 
-class AsciiFilterPrivate {
+class ColumnStringIO : public AbstractColumn {
+	Q_OBJECT
 
 public:
-	explicit AsciiFilterPrivate(AsciiFilter*);
+	ColumnStringIO(Column* owner);
+	virtual AbstractColumn::ColumnMode columnMode() const;
+	virtual AbstractColumn::PlotDesignation plotDesignation() const;
+	virtual int rowCount() const;
+	virtual QString textAt(int) const;
+	virtual void setTextAt(int, const QString&);
+	virtual bool isValid(int) const;
+	virtual bool copy(const AbstractColumn*);
+	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
+	virtual void replaceTexts(int start_row, const QStringList& texts);
 
-	int prepareDeviceToRead(KFilterDev&);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
-
-	const AsciiFilter* q;
-
-	QString m_commentCharacter;
-	QString m_separatingCharacter;
-	bool m_autoModeEnabled;
-	bool m_headerEnabled;
-	bool m_skipEmptyParts;
-	bool m_simplifyWhitespacesEnabled;
-	bool m_transposed;
-	int m_startRow;
-	int m_endRow;
-	int m_startColumn;
-	int m_endColumn;
-	QString m_vectorNames;
 private:
-	QString m_separator;
-	QStringList m_vectorNameList;
-	int m_actualRows;
-	int m_actualCols;
-
-	void clearDataSource(AbstractDataSource*) const;
+	Column* m_owner;
+	bool m_setting;
+	QString m_to_set;
 };
 
 #endif

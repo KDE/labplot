@@ -56,7 +56,7 @@ class WorksheetElementContainer : public WorksheetElement {
 
 	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio) override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 		void childHovered();
 		void childUnhovered();
 

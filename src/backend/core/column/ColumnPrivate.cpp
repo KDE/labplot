@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "ColumnPrivate.h"
+#include "ColumnStringIO.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -735,7 +736,7 @@ void ColumnPrivate::setWidth(int value) {
 /**
  * \brief Return the data pointer
  */
-void *ColumnPrivate::dataPointer() const {
+void* ColumnPrivate::data() const {
 	return m_data;
 }
 

@@ -221,7 +221,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				filter->readDataFromFile(fileName, spreadsheet, mode);
 			}
 		}
-
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000) );
 

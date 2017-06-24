@@ -29,6 +29,7 @@
 
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/column/columncommands.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -45,9 +46,6 @@ extern "C" {
 #include <QIcon>
 #include <QMenu>
 #include <QThreadPool>
-//#ifndef NDEBUG
-//#include <QDebug>
-//#endif
 
 #include <KLocale>
 
@@ -67,47 +65,13 @@ extern "C" {
  * have a view as they are intended to be displayed inside a spreadsheet.
  */
 
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param mode initial column mode
- */
 Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
-	: AbstractColumn(name), d( new ColumnPrivate(this, mode) ) {
+	: AbstractColumn(name), d(new ColumnPrivate(this, mode)) {
 	init();
 }
 
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
-Column::Column(const QString& name, QVector<double> data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<double>(data)) ) {
-	init();
-}
-
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
 Column::Column(const QString& name, QStringList data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::Text, new QStringList(data))) {
-	init();
-}
-
-/**
- * \brief Ctor
- *
- * \param name the column name (= aspect name)
- * \param data initial data vector
- */
-Column::Column(const QString& name, QVector<QDateTime> data)
-	: AbstractColumn(name), d( new ColumnPrivate(this, AbstractColumn::DateTime, new QVector<QDateTime>(data)) ) {
+	: AbstractColumn(name), d(new ColumnPrivate(this, AbstractColumn::Text, new QStringList(data))) {
 	init();
 }
 
@@ -124,8 +88,8 @@ void Column::init() {
 	addChild(d->outputFilter());
 	m_suppressDataChangedSignal = false;
 
-	usedInActionGroup = new QActionGroup(this);
-	connect(usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
+	m_usedInActionGroup = new QActionGroup(this);
+	connect(m_usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
 }
 
 /**
@@ -148,14 +112,14 @@ QMenu* Column::createContextMenu() {
 	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
 
 	//remove previously added actions
-	foreach(QAction* action, usedInActionGroup->actions())
-		usedInActionGroup->removeAction(action);
+	for (auto* action: m_usedInActionGroup->actions())
+		m_usedInActionGroup->removeAction(action);
 
 	//add curves where the column is currently in use
 	QList<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
-	foreach (const XYCurve* curve, curves) {
+	for (const auto* curve: curves) {
 		if (curve->dataSourceType() == XYCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) ) {
-			QAction* action = new QAction(curve->icon(), curve->name(), usedInActionGroup);
+			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);
 		}
@@ -186,15 +150,15 @@ void Column::setSuppressDataChangedSignal(bool b) {
  * necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
-	if(mode == columnMode()) return;
+	if (mode == columnMode()) return;
 	beginMacro(i18n("%1: change column type", name()));
-	AbstractSimpleFilter * old_input_filter = d->inputFilter();
-	AbstractSimpleFilter * old_output_filter = d->outputFilter();
+	auto* old_input_filter = d->inputFilter();
+	auto* old_output_filter = d->outputFilter();
 	exec(new ColumnSetModeCmd(d, mode));
 	if (d->inputFilter() != old_input_filter) {
 		removeChild(old_input_filter);
 		addChild(d->inputFilter());
-		d->inputFilter()->input(0,m_string_io);
+		d->inputFilter()->input(0, m_string_io);
 	}
 	if (d->outputFilter() != old_output_filter) {
 		removeChild(old_output_filter);
@@ -211,9 +175,9 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool Column::copy(const AbstractColumn * other) {
+bool Column::copy(const AbstractColumn* other) {
 	Q_CHECK_PTR(other);
-	if(other->columnMode() != columnMode()) return false;
+	if (other->columnMode() != columnMode()) return false;
 	exec(new ColumnFullCopyCmd(d, other));
 	return true;
 }
@@ -228,9 +192,9 @@ bool Column::copy(const AbstractColumn * other) {
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool Column::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows) {
+bool Column::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
 	Q_CHECK_PTR(source);
-	if(source->columnMode() != columnMode()) return false;
+	if (source->columnMode() != columnMode()) return false;
 	exec(new ColumnPartialCopyCmd(d, source, source_start, dest_start, num_rows));
 	return true;
 }
@@ -263,7 +227,7 @@ void Column::handleRowRemoval(int first, int count) {
  * \brief Set the column plot designation
  */
 void Column::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
-	if(pd != plotDesignation())
+	if (pd != plotDesignation())
 		exec(new ColumnSetPlotDesignationCmd(d, pd));
 }
 
@@ -385,7 +349,7 @@ void Column::setDateAt(int row, const QDate& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::setTimeAt(int row,const QTime& new_value) {
+void Column::setTimeAt(int row, const QTime& new_value) {
 	setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
@@ -454,6 +418,7 @@ void Column::calculateStatistics() {
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
+	// TODO: support other data types?
 	QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
 
 	int notNanCount = 0;
@@ -519,7 +484,7 @@ void Column::calculateStatistics() {
 		val = rowValues->value(row);
 		if ( std::isnan(val) || isMasked(row) )
 			continue;
-		columnSumVariance+= pow(val - statistics.arithmeticMean, 2.0);
+		columnSumVariance += pow(val - statistics.arithmeticMean, 2.0);
 
 		sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
 		sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
@@ -553,9 +518,13 @@ void Column::calculateStatistics() {
 	setStatisticsAvailable(true);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 void* Column::data() const {
-	return d->dataPointer();
+	return d->data();
 }
+
+//TODO: support all data types
 /**
  * \brief Return the content of row 'row'.
  *
@@ -654,13 +623,13 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement("text", formula());
 
 		writer->writeStartElement("variableNames");
-		for (int i=0; i<formulaVariableNames().size(); ++i)
-			writer->writeTextElement("name", formulaVariableNames().at(i));
+		for (auto name: formulaVariableNames())
+			writer->writeTextElement("name", name);
 		writer->writeEndElement();
 
 		writer->writeStartElement("columnPathes");
-		for (int i=0; i<formulaVariableColumnPathes().size(); ++i)
-			writer->writeTextElement("path", formulaVariableColumnPathes().at(i));
+		for (auto path: formulaVariableColumnPathes())
+			writer->writeTextElement("path", path);
 		writer->writeEndElement();
 
 		writer->writeEndElement();
@@ -691,14 +660,13 @@ void Column::save(QXmlStreamWriter* writer) const {
 	int i;
 	switch(columnMode()) {
 	case AbstractColumn::Numeric: {
-			const char* data = reinterpret_cast<const char*>(
-			                       static_cast< QVector<double>* >(d->dataPointer())->constData());
+			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
 			int size = d->rowCount()*sizeof(double);
-			writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
 			break;
 		}
 	case AbstractColumn::Text:
-		for(i=0; i<rowCount(); ++i) {
+		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
 			writer->writeAttribute("index", QString::number(i));
 			writer->writeCharacters(textAt(i));
@@ -709,7 +677,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		for(i=0; i<rowCount(); ++i) {
+		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
 			writer->writeAttribute("index", QString::number(i));
 			writer->writeCharacters(dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz"));
@@ -721,6 +689,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // "column"
 }
 
+//TODO: extra header
 class DecodeColumnTask : public QRunnable {
 public:
 	DecodeColumnTask(ColumnPrivate* priv, const QString& content) {
@@ -743,7 +712,7 @@ private:
  * \brief Load the column from XML
  */
 bool Column::load(XmlStreamReader* reader) {
-	if(reader->isStartElement() && reader->name() == "column") {
+	if (reader->isStartElement() && reader->name() == "column") {
 		if (!readBasicAttributes(reader))
 			return false;
 
@@ -751,19 +720,19 @@ bool Column::load(XmlStreamReader* reader) {
 		QXmlStreamAttributes attribs = reader->attributes();
 
 		QString str = attribs.value("designation").toString();
-		if(str.isEmpty())
+		if (str.isEmpty())
 			reader->raiseWarning(attributeWarning.arg("'designation'"));
 		else
 			setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
 
 		str = attribs.value("mode").toString();
-		if(str.isEmpty())
+		if (str.isEmpty())
 			reader->raiseWarning(attributeWarning.arg("'mode'"));
 		else
 			setColumnMode( AbstractColumn::ColumnMode(str.toInt()) );
 
 		str = attribs.value("width").toString();
-		if(str.isEmpty())
+		if (str.isEmpty())
 			reader->raiseWarning(attributeWarning.arg("'width'"));
 		else
 			setWidth(str.toInt());
@@ -778,21 +747,21 @@ bool Column::load(XmlStreamReader* reader) {
 				bool ret_val = true;
 				if (reader->name() == "comment")
 					ret_val = readCommentElement(reader);
-				else if(reader->name() == "input_filter")
+				else if (reader->name() == "input_filter")
 					ret_val = XmlReadInputFilter(reader);
-				else if(reader->name() == "output_filter")
+				else if (reader->name() == "output_filter")
 					ret_val = XmlReadOutputFilter(reader);
-				else if(reader->name() == "mask")
+				else if (reader->name() == "mask")
 					ret_val = XmlReadMask(reader);
-				else if(reader->name() == "formula")
+				else if (reader->name() == "formula")
 					ret_val = XmlReadFormula(reader);
-				else if(reader->name() == "row")
+				else if (reader->name() == "row")
 					ret_val = XmlReadRow(reader);
 				else { // unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
-				if(!ret_val)
+				if (!ret_val)
 					return false;
 			}
 			QString content = reader->text().toString().trimmed();
@@ -895,13 +864,13 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
-	if(!ok) {
+	if (!ok) {
 		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
 	}
 
 	str = reader->readElementText();
-	switch(columnMode()) {
+	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
 			double value = str.toDouble(&ok);
 			if(!ok) {
@@ -1007,8 +976,8 @@ QList< Interval<int> > Column::formulaIntervals() const {
 
 void Column::handleFormatChange() {
 	if (columnMode() == AbstractColumn::DateTime) {
-		String2DateTimeFilter* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
-		DateTime2StringFilter* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
+		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
+		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
 		input_filter->setFormat(output_filter->format());
 	}
 

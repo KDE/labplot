@@ -30,6 +30,7 @@
 #include "Spreadsheet.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
@@ -777,9 +778,9 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList) {
-	DEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -788,10 +789,10 @@ int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, Abstract
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(false);
 
-	columnOffset = this->resize(mode, colNameList, actualCols);
+	columnOffset = this->resize(importMode, colNameList, actualCols);
 
 	// resize the spreadsheet
-	if (mode == AbstractFileFilter::Replace) {
+	if (importMode == AbstractFileFilter::Replace) {
 		clear();
 		setRowCount(actualRows);
 	}  else {
@@ -799,14 +800,16 @@ int Spreadsheet::prepareImport(QVector<QVector<double>*>& dataPointers, Abstract
 			setRowCount(actualRows);
 	}
 
-	dataPointers.resize(actualCols);
+	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
+		// TODO: support all data types
+		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
 		vector->reserve(actualRows);
 		vector->resize(actualRows);
-		dataPointers[n] = vector;
+		dataContainer[n] = static_cast<void *>(vector);
 	}
-	QDEBUG("dataPointers =" << dataPointers);
+//	QDEBUG("dataPointers =" << dataPointers);
 
 	return columnOffset;
 }

@@ -159,24 +159,20 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		endColumn = cols;
 	if (endRow == -1)
 		endRow = rows;
-	int actualCols=0, actualRows=0;
+	int actualCols = 0, actualRows = 0;
 
 	switch (importFormat) {
-	case ImageFilter::MATRIX: {
+	case ImageFilter::MATRIX:
 		actualCols = endColumn-startColumn+1;
 		actualRows = endRow-startRow+1;
 		break;
-	}
-	case ImageFilter::XYZ: {
+	case ImageFilter::XYZ:
 		actualCols = 3;
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 		break;
-	}
-	case ImageFilter::XYRGB: {
+	case ImageFilter::XYRGB:
 		actualCols = 5;
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
-		break;
-	}
 	}
 
 #ifdef QT_DEBUG
@@ -187,9 +183,9 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 
 	//make sure we have enough columns in the data source.
 	int columnOffset = 0;
-	QVector<QVector<double>*> dataPointers;
+	QVector<void*> dataContainer;
 	if (dataSource != 0)
-		columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
+		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
 	else {
 #ifdef QT_DEBUG
 		qDebug()<<"data source in image import not defined! Giving up.";
@@ -200,23 +196,23 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	// read data
 	switch (importFormat) {
 	case ImageFilter::MATRIX: {
-		for (int i=0; i<actualRows; i++) {
-			for ( int j=0; j<actualCols; j++ ) {
-				double value=qGray(image.pixel(j+startColumn-1,i+startRow-1));
-				dataPointers[j]->operator[](i) = value;
+		for (int i = 0; i < actualRows; i++) {
+			for (int j = 0; j < actualCols; j++) {
+				double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
+				static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = value;
 			}
 			emit q->completed(100*i/actualRows);
 		}
 		break;
 	}
 	case ImageFilter::XYZ: {
-		int currentRow=0;
-		for (int i=startRow-1; i<endRow; i++) {
-			for ( int j=startColumn-1; j<endColumn; j++ ) {
+		int currentRow = 0;
+		for (int i = startRow-1; i < endRow; i++) {
+			for (int j = startColumn-1; j < endColumn; j++) {
 				QRgb color=image.pixel(j, i);
-				dataPointers[0]->operator[](currentRow) = i+1;
-				dataPointers[1]->operator[](currentRow) = j+1;
-				dataPointers[2]->operator[](currentRow) = qGray(color);
+				static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
+				static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
+				static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qGray(color);
 				currentRow++;
 			}
 			emit q->completed(100*i/actualRows);
@@ -224,15 +220,15 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		break;
 	}
 	case ImageFilter::XYRGB: {
-		int currentRow=0;
-		for (int i=startRow-1; i<endRow; i++) {
-			for ( int j=startColumn-1; j<endColumn; j++ ) {
-				QRgb color=image.pixel(j, i);
-				dataPointers[0]->operator[](currentRow) = i+1;
-				dataPointers[1]->operator[](currentRow) = j+1;
-				dataPointers[2]->operator[](currentRow) = qRed(color);
-				dataPointers[3]->operator[](currentRow) = qGreen(color);
-				dataPointers[4]->operator[](currentRow) = qBlue(color);
+		int currentRow = 0;
+		for (int i = startRow-1; i < endRow; i++) {
+			for ( int j = startColumn-1; j < endColumn; j++ ) {
+				QRgb color = image.pixel(j, i);
+				static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
+				static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
+				static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qRed(color);
+				static_cast<QVector<int>*>(dataContainer[3])->operator[](currentRow) = qGreen(color);
+				static_cast<QVector<int>*>(dataContainer[4])->operator[](currentRow) = qBlue(color);
 				currentRow++;
 			}
 			emit q->completed(100*i/actualRows);

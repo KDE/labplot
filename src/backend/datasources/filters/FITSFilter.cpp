@@ -30,6 +30,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "FITSFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/matrix/MatrixModel.h"
@@ -341,7 +342,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			return dataStrings << (QStringList() << QString("Error"));
 		}
 
-		QVector<QVector<double>*> dataPointers;
+		QVector<void*> dataPointers;
 
 		if (endRow != -1) {
 			if (!noDataSource)
@@ -374,7 +375,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				if (noDataSource)
 					line << QString::number(data[i*naxes[0] +j]);
 				else
-					dataPointers[jj++]->operator [](ii) = data[i* naxes[0] + j];
+					((double*)dataPointers[jj++])[ii] = data[i* naxes[0] + j];
 			}
 			dataStrings << line;
 			j = jstart;
@@ -451,7 +452,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		if (endRow != -1)
 			lines = endRow;
 		QVector<QStringList*> stringDataPointers;
-		QVector<QVector<double>*> numericDataPointers;
+		QVector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
 		int startCol = 0;
@@ -563,13 +564,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 		bool isMatrix = false;
 		if (dynamic_cast<Matrix*>(dataSource)) {
+			isMatrix = true;
 			coll = matrixNumericColumnIndices.first();
 			actualCols = matrixNumericColumnIndices.last();
 			if (importMode == AbstractFileFilter::Replace) {
-				for (int i = 0; i < numericDataPointers.size(); ++i)
-					numericDataPointers[i]->clear();
+				for (auto* col: numericDataPointers)
+					static_cast<QVector<double>*>(col)->clear();
 			}
-			isMatrix = true;
 		}
 
 		for (; row <= lines; ++row) {
@@ -588,16 +589,17 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 					const QString& str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
 						if (columnNumericTypes.at(col-1))
-							numericDataPointers[numericixd++]->push_back(0);
+							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(0);
 						else
 							stringDataPointers[stringidx++]->append(QLatin1String("NULL"));
 					} else {
 						if (columnNumericTypes.at(col-1))
-							numericDataPointers[numericixd++]->push_back(str.toDouble());
+							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(str.toDouble());
 						else {
 							if (!stringDataPointers.isEmpty())
 								stringDataPointers[stringidx++]->operator <<( str.simplified());
 						}
+
 					}
 				} else {
 					QString tmpColstr = QString::fromLatin1(array);

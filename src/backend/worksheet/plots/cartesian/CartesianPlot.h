@@ -79,7 +79,6 @@ class CartesianPlot:public AbstractPlot {
 		};
 
 		void initDefault(Type = FourAxes);
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio) override;
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		QMenu* analysisMenu() const;
@@ -170,7 +169,6 @@ class CartesianPlot:public AbstractPlot {
 		QAction* addSmoothAction;
 		QVector <QAction *> addFitAction;
 		QAction* addFourierFilterAction;
-		QAction* addFourierTransformAction;
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;

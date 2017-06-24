@@ -4,7 +4,7 @@
     Description          : String-IO interface of Column.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,6 +29,7 @@
 
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
+#include "backend/core/column/ColumnStringIO.h"
 
 /**
  * \class ColumnStringIO

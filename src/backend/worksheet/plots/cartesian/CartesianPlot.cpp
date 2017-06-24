@@ -405,7 +405,6 @@ void CartesianPlot::initActions() {
 	addFitAction.append(new QAction(i18n("Custom"), this));
 
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
-	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
 
 	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
 	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
@@ -415,7 +414,6 @@ void CartesianPlot::initActions() {
 	for (const auto& action: addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
-	connect(addFourierTransformAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
@@ -529,8 +527,6 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addMenu(dataFitMenu);
-	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addFourierTransformAction);
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
@@ -587,11 +583,6 @@ void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 	else if (op == ShiftDownY) shiftDownY();
 }
 
-void CartesianPlot::handlePageResize(double horizontalRatio, double verticalRatio) {
-	//TODO
-	AbstractPlot::handlePageResize(horizontalRatio, verticalRatio);
-}
-
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
@@ -637,11 +628,36 @@ CartesianPlot::MouseMode CartesianPlot::mouseMode() const {
 /*!
 	set the rectangular, defined in scene coordinates
  */
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransform)
+class CartesianPlotSetRectCmd : public QUndoCommand {
+public:
+	CartesianPlotSetRectCmd(CartesianPlotPrivate* private_obj, QRectF rect) : m_private(private_obj), m_rect(rect) {
+		setText(i18n("%1: change geometry rect", m_private->name()));
+	};
+
+	virtual void redo() {
+		QRectF tmp = m_private->rect;
+		const double horizontalRatio = m_rect.width() / m_private->rect.width();
+		const double verticalRatio = m_rect.height() / m_private->rect.height();
+		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
+		m_private->rect = m_rect;
+		m_rect = tmp;
+		m_private->retransform();
+		emit m_private->q->rectChanged(m_private->rect);
+	};
+
+	virtual void undo() {
+		redo();
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	QRectF m_rect;
+};
+
 void CartesianPlot::setRect(const QRectF& rect) {
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
-		exec(new CartesianPlotSetRectCmd(d, rect, i18n("%1: set geometry rect")));
+		exec(new CartesianPlotSetRectCmd(d, rect));
 }
 
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
@@ -1967,7 +1983,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG("CartesianPlotPrivate::paint()");
+// 	DEBUG("CartesianPlotPrivate::paint()");
 
 	if (!isVisible())
 		return;
@@ -1989,7 +2005,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
-	DEBUG("CartesianPlotPrivate::paint() DONE");
+// 	DEBUG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################
