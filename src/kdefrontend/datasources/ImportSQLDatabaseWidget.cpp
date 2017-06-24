@@ -85,7 +85,8 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	importFromChanged(ui.cbImportFrom->currentIndex());
 	QList<int> defaultSizes;
 	defaultSizes << 100 << 100;
-	ui.splitter->setSizes(config.readEntry("SplitterSizes", defaultSizes));
+	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));
+	ui.splitterPreview->setSizes(config.readEntry("SplitterPreviewSizes", defaultSizes));
 	//TODO
 
 
@@ -100,7 +101,8 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
-	config.writeEntry("SplitterSizes", ui.splitter->sizes());
+	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
+	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
 	//TODO
 }
 
@@ -298,12 +300,12 @@ void ImportSQLDatabaseWidget::importFromChanged(int index) {
 void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 // 	if (!m_db.isValid()) return;
 // 	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
-// 
+//
 // 	if (showPreview) {
 // 		ui.twPreviewTable->setColumnCount(0);
 // 		ui.twPreviewTable->setRowCount(ui.sbEndRow->value() - ui.sbStartRow->value() + 1);
 // 	}
-// 
+//
 // 	m_db.open();
 // 	if (m_db.isOpen()) {
 // 		for(int tableIndex = 0; tableIndex < m_databaseTreeModel->rowCount(); tableIndex++) {
@@ -322,7 +324,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 // 		}
 // 		m_db.close();
 // 	}
-// 
+//
 // 	updateStatus();
 }
 
