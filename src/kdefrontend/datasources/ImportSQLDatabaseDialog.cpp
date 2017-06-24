@@ -101,12 +101,25 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	if (aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		importSQLDatabaseWidget->read(matrix, mode);
-	}
-	else if (aspect->inherits("Spreadsheet")) {
+	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		importSQLDatabaseWidget->read(spreadsheet, mode);
+	} else if (aspect->inherits("Workbook")) {
+		// use active spreadsheet or matrix (only if numeric data is going to be improted) if present,
+		// create a new spreadsheet in the selected workbook otherwise
+		Workbook* workbook = qobject_cast<Workbook*>(aspect);
+		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
+		Matrix* matrix = workbook->currentMatrix();
+		if (spreadsheet)
+			importSQLDatabaseWidget->read(spreadsheet, mode);
+		else if (matrix && importSQLDatabaseWidget->isNumericData())
+			importSQLDatabaseWidget->read(matrix, mode);
+		else {
+			spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+			workbook->addChild(spreadsheet);
+			importSQLDatabaseWidget->read(spreadsheet, mode);
+		}
 	}
-	
 	statusBar->showMessage( i18n("Data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	RESET_CURSOR;
