@@ -292,34 +292,34 @@ QStringList HDFFilterPrivate::readHDFCompound(hid_t tid) {
 }
 
 template <typename T>
-QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer) {
+QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, void* dataContainer) {
 	DEBUG("readHDFData1D() rows =" << rows << "lines =" << lines);
 	QStringList dataString;
 
 	// we read all rows of data
-	T* data = (T*) malloc(rows*sizeof(T));
+	T* data = new T[rows];
 
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status, "H5Dread");
 	DEBUG(" startRow =" << startRow << "endRow =" << endRow);
-	DEBUG("dataPointer =" << dataPointer);
+//	DEBUG("dataContainer =" << dataContainer);
 	for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
-		if (dataPointer != NULL)	// read to data source
-			dataPointer->operator[](i-startRow+1) = data[i];
+		if (dataContainer)	// read to data source
+			static_cast<QVector<T>*>(dataContainer)->operator[](i-startRow+1) = data[i];
 		else				// for preview
 			dataString << QString::number(static_cast<double>(data[i]));
 	}
-	free(data);
+	delete[] data;
 
 	return dataString;
 }
 
-QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector< QVector<double>* >& dataPointer) {
+QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataContainer) {
 	int members = H5Tget_nmembers(tid);
 	handleError(members, "H5Tget_nmembers");
 
 	QStringList dataString;
-	if (dataPointer[0] == NULL) {
+	if (!dataContainer[0]) {
 		for (int i = 0; i < qMin(rows, lines); i++)
 			dataString <<  QLatin1String("(");
 	}
@@ -334,71 +334,67 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		status = H5Tinsert(ctype, H5Tget_member_name(tid, m), 0, mtype);
 		handleError(status, "H5Tinsert");
 
-		QVector<double>* dataP = NULL;
-		if (dataPointer[0] != NULL)
-			dataP = dataPointer[m];
-
 		QStringList mdataString;
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE)) {
-				mdataString = readHDFData1D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		} else if (H5Tequal(mtype, H5T_NATIVE_CHAR)) {
 			switch (sizeof(H5T_NATIVE_CHAR)) {
 			case 1:
-				mdataString = readHDFData1D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 2:
-				mdataString = readHDFData1D<qint16>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<qint16>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 4:
-				mdataString = readHDFData1D<qint32>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<qint32>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 8:
-				mdataString = readHDFData1D<qint64>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<qint64>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			}
 		} else if (H5Tequal(mtype, H5T_STD_U8LE) || H5Tequal(mtype, H5T_STD_U8BE)) {
-				mdataString = readHDFData1D<uint8_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<uint8_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		} else if (H5Tequal(mtype, H5T_NATIVE_UCHAR)) {
 			switch (sizeof(H5T_NATIVE_UCHAR)) {
 			case 1:
-				mdataString = readHDFData1D<uint8_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<uint8_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 2:
-				mdataString = readHDFData1D<uint16_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<uint16_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 4:
-				mdataString = readHDFData1D<uint32_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<uint32_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			case 8:
-				mdataString = readHDFData1D<uint64_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+				mdataString = readHDFData1D<uint64_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 				break;
 			}
 		} else if (H5Tequal(mtype, H5T_STD_I16LE) || H5Tequal(mtype, H5T_STD_I16BE) || H5Tequal(mtype, H5T_NATIVE_SHORT))
-			mdataString = readHDFData1D<short>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<short>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_STD_U16LE) || H5Tequal(mtype, H5T_STD_U16BE) || H5Tequal(mtype, H5T_NATIVE_SHORT))
-			mdataString = readHDFData1D<unsigned short>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<unsigned short>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_STD_I32LE) || H5Tequal(mtype, H5T_STD_I32BE) || H5Tequal(mtype, H5T_NATIVE_INT))
-			mdataString = readHDFData1D<int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_STD_U32LE) || H5Tequal(mtype, H5T_STD_U32BE) || H5Tequal(mtype, H5T_NATIVE_UINT))
-			mdataString = readHDFData1D<unsigned int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<unsigned int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_NATIVE_LONG))
-			mdataString = readHDFData1D<long>(dataset, ctype, rows, lines, dataP);
+			mdataString = readHDFData1D<long>(dataset, ctype, rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_NATIVE_ULONG))
-			mdataString = readHDFData1D<unsigned long>(dataset, ctype, rows, lines, dataP);
+			mdataString = readHDFData1D<unsigned long>(dataset, ctype, rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_STD_I64LE) || H5Tequal(mtype, H5T_STD_I64BE) || H5Tequal(mtype, H5T_NATIVE_LLONG))
-			mdataString = readHDFData1D<long long>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<long long>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_STD_U64LE) || H5Tequal(mtype, H5T_STD_U64BE) || H5Tequal(mtype, H5T_NATIVE_ULLONG))
-			mdataString = readHDFData1D<unsigned long long>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<unsigned long long>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_IEEE_F32LE) || H5Tequal(mtype, H5T_IEEE_F32BE))
-			mdataString = readHDFData1D<float>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<float>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_IEEE_F64LE) || H5Tequal(mtype, H5T_IEEE_F64BE))
-			mdataString = readHDFData1D<double>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
+			mdataString = readHDFData1D<double>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataContainer[m]);
 		else if (H5Tequal(mtype, H5T_NATIVE_LDOUBLE))
-			mdataString = readHDFData1D<long double>(dataset, ctype, rows, lines, dataP);
+			mdataString = readHDFData1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
-			if (dataP != NULL) {
+			if (dataContainer[m]) {
 				for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++)
-					dataP->operator[](i-startRow+1) = 0;
+					static_cast<QVector<double>*>(dataContainer[m])	->operator[](i-startRow+1) = 0;
 			} else {
 				for (int i = 0; i < qMin(rows, lines); i++)
 					mdataString << QLatin1String("_");
@@ -408,7 +404,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 			qDebug()<<"	not supported type of class" << translateHDFClass(mclass);
 		}
 
-		if (dataPointer[0] == NULL) {
+		if (!dataContainer[0]) {
 			for (int i = 0; i < qMin(rows, lines); i++) {
 				dataString[i] +=  mdataString[i];
 				if (m < members-1)
@@ -419,7 +415,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		H5Tclose(ctype);
 	}
 
-	if (dataPointer[0] == NULL) {
+	if (!dataContainer[0]) {
 		for (int i = 0; i < qMin(rows, lines); i++)
 			dataString[i] +=  QLatin1String(")");
 	}
@@ -428,7 +424,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 }
 
 template <typename T>
-QVector<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer) {
+QVector<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector<void*>& dataPointer) {
 	DEBUG("readHDFData2D() rows =" << rows << "cols =" << cols << "lines =" << lines);
 	QVector<QStringList> dataStrings;
 
@@ -444,11 +440,10 @@ QVector<QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, 
 		QStringList line;
 		line.reserve(cols);
 		for (int j = 0; j < cols; j++) {
-			if (dataPointer[0] != NULL)
-				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
-			else {
+			if (dataPointer[0])
+				static_cast<QVector<double>*>(dataPointer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
+			else
 				line << QString::number(static_cast<double>(data[i][j]));
-			}
 		}
 		dataStrings << line;
 	}
@@ -487,7 +482,7 @@ QVector<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_
 
 		// dummy container for all data columns
 		// initially contains one pointer set to NULL
-		QVector< QVector<double>* > dummy(1, NULL);
+		QVector<void*> dummy(1, nullptr);
 		QVector<QStringList> mdataStrings;
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE)) {
 				mdataStrings = readHDFData2D<qint8>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
@@ -1249,11 +1244,11 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 	int columnOffset = 0;			// offset to import data
 	int actualRows = 0, actualCols = 0;	// rows and cols to read
 
-	// dataPointers is used to store the data read from the dataSource
+	// dataContainer is used to store the data read from the dataSource
 	// it contains the pointers of all columns
-	// initially there is one pointer set to NULL
-	// check for dataPointers[0] != NULL to decide if dataSource can be used
-	QVector<QVector<double>*> dataPointers(1, NULL);
+	// initially there is one pointer set to nullptr
+	// check for dataContainer[0] != nullptr to decide if dataSource can be used
+	QVector<void*> dataContainer(1, nullptr);
 
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
 	switch (rank) {
@@ -1314,7 +1309,7 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 				<< ", rows:" << rows << " max:" << maxSize;
 #endif
 			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
 
 			QStringList dataString;	// data saved in a list
 			switch (dclass) {
@@ -1350,59 +1345,59 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 				}
 			case H5T_INTEGER: {
 					if (H5Tequal(dtype, H5T_STD_I8LE)) {
-						dataString = readHDFData1D<qint8>(dataset, H5T_STD_I8LE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<qint8>(dataset, H5T_STD_I8LE, rows, lines, dataContainer[0]);
 					} else if (H5Tequal(dtype, H5T_STD_I8BE)) {
-						dataString = readHDFData1D<qint8>(dataset, H5T_STD_I8BE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<qint8>(dataset, H5T_STD_I8BE, rows, lines, dataContainer[0]);
 					} else if (H5Tequal(dtype, H5T_NATIVE_CHAR)) {
 						switch (sizeof(H5T_NATIVE_CHAR)) {
 						case 1:
-							dataString = readHDFData1D<qint8>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<qint8>(dataset, H5T_NATIVE_CHAR, rows, lines, dataContainer[0]);
 							break;
 						case 2:
-							dataString = readHDFData1D<qint16>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<qint16>(dataset, H5T_NATIVE_CHAR, rows, lines, dataContainer[0]);
 							break;
 						case 4:
-							dataString = readHDFData1D<qint32>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<qint32>(dataset, H5T_NATIVE_CHAR, rows, lines, dataContainer[0]);
 							break;
 						case 8:
-							dataString = readHDFData1D<qint64>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<qint64>(dataset, H5T_NATIVE_CHAR, rows, lines, dataContainer[0]);
 							break;
 						}
 					} else if (H5Tequal(dtype, H5T_STD_U8LE)) {
-						dataString = readHDFData1D<uint8_t>(dataset, H5T_STD_U8LE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<uint8_t>(dataset, H5T_STD_U8LE, rows, lines, dataContainer[0]);
 					} else if (H5Tequal(dtype, H5T_STD_U8BE)) {
-						dataString = readHDFData1D<uint8_t>(dataset, H5T_STD_U8BE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<uint8_t>(dataset, H5T_STD_U8BE, rows, lines, dataContainer[0]);
 					} else if (H5Tequal(dtype, H5T_NATIVE_UCHAR)) {
 						switch (sizeof(H5T_NATIVE_UCHAR)) {
 						case 1:
-							dataString = readHDFData1D<uint8_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<uint8_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataContainer[0]);
 							break;
 						case 2:
-							dataString = readHDFData1D<uint16_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<uint16_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataContainer[0]);
 							break;
 						case 4:
-							dataString = readHDFData1D<uint32_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<uint32_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataContainer[0]);
 							break;
 						case 8:
-							dataString = readHDFData1D<uint64_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+							dataString = readHDFData1D<uint64_t>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataContainer[0]);
 							break;
 						}
 					} else if (H5Tequal(dtype, H5T_STD_I16LE) || H5Tequal(dtype, H5T_STD_I16BE) || H5Tequal(dtype, H5T_NATIVE_SHORT))
-						dataString = readHDFData1D<short>(dataset, H5T_NATIVE_SHORT, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<short>(dataset, H5T_NATIVE_SHORT, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_STD_U16LE) || H5Tequal(dtype, H5T_STD_U16BE) || H5Tequal(dtype, H5T_NATIVE_USHORT))
-						dataString = readHDFData1D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_STD_I32LE) || H5Tequal(dtype, H5T_STD_I32BE) || H5Tequal(dtype, H5T_NATIVE_INT))
-						dataString = readHDFData1D<int>(dataset, H5T_NATIVE_INT, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<int>(dataset, H5T_NATIVE_INT, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_STD_U32LE) || H5Tequal(dtype, H5T_STD_U32BE) || H5Tequal(dtype, H5T_NATIVE_UINT))
-						dataString = readHDFData1D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_NATIVE_LONG))
-						dataString = readHDFData1D<long>(dataset, H5T_NATIVE_LONG, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<long>(dataset, H5T_NATIVE_LONG, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_NATIVE_ULONG))
-						dataString = readHDFData1D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG))
-						dataString = readHDFData1D<long long>(dataset, H5T_NATIVE_LLONG, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<long long>(dataset, H5T_NATIVE_LLONG, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
-						dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataContainer[0]);
 					else {
 						ok = false;
 						dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
@@ -1414,11 +1409,11 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 				}
 			case H5T_FLOAT: {
 					if (H5Tequal(dtype, H5T_IEEE_F32LE) || H5Tequal(dtype, H5T_IEEE_F32BE))
-						dataString = readHDFData1D<float>(dataset, H5T_NATIVE_FLOAT, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<float>(dataset, H5T_NATIVE_FLOAT, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_IEEE_F64LE) || H5Tequal(dtype, H5T_IEEE_F64BE))
-						dataString = readHDFData1D<double>(dataset, H5T_NATIVE_DOUBLE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<double>(dataset, H5T_NATIVE_DOUBLE, rows, lines, dataContainer[0]);
 					else if (H5Tequal(dtype, H5T_NATIVE_LDOUBLE))
-						dataString = readHDFData1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataPointers[0]);
+						dataString = readHDFData1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataContainer[0]);
 					else {
 						ok = false;
 						dataString = (QStringList() << i18n("unsupported float type for rank 1"));
@@ -1431,11 +1426,11 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 					handleError(members, "H5Tget_nmembers");
 					if (dataSource != NULL) {
 						// re-create data pointer
-						dataPointers.clear();
-						dataSource->prepareImport(dataPointers, mode, actualRows, members);
+						dataContainer.clear();
+						dataSource->prepareImport(dataContainer, mode, actualRows, members);
 					} else
 						dataStrings << readHDFCompound(dtype);
-					dataString = readHDFCompoundData1D(dataset, dtype, rows, lines, dataPointers);
+					dataString = readHDFCompoundData1D(dataset, dtype, rows, lines, dataContainer);
 					break;
 				}
 			case H5T_TIME:
@@ -1490,65 +1485,65 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 #endif
 
 			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
 
 			// read data
 			switch (dclass) {
 			case H5T_INTEGER: {
 					if (H5Tequal(dtype, H5T_STD_I8LE)) {
-						dataStrings << readHDFData2D<qint8>(dataset, H5T_STD_I8LE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<qint8>(dataset, H5T_STD_I8LE, rows, cols, lines, dataContainer);
 					} else if (H5Tequal(dtype, H5T_STD_I8BE)) {
-						dataStrings << readHDFData2D<qint8>(dataset, H5T_STD_I8BE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<qint8>(dataset, H5T_STD_I8BE, rows, cols, lines, dataContainer);
 					} else if (H5Tequal(dtype, H5T_NATIVE_CHAR)) {
 						switch (sizeof(H5T_NATIVE_CHAR)) {
 						case 1:
-							dataStrings << readHDFData2D<qint8>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<qint8>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataContainer);
 							break;
 						case 2:
-							dataStrings << readHDFData2D<qint16>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<qint16>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataContainer);
 							break;
 						case 4:
-							dataStrings << readHDFData2D<qint32>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<qint32>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataContainer);
 							break;
 						case 8:
-							dataStrings << readHDFData2D<qint64>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<qint64>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataContainer);
 							break;
 						}
 					} else if (H5Tequal(dtype, H5T_STD_U8LE)) {
-						dataStrings << readHDFData2D<uint8_t>(dataset, H5T_STD_U8LE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<uint8_t>(dataset, H5T_STD_U8LE, rows, cols, lines, dataContainer);
 					} else if (H5Tequal(dtype, H5T_STD_U8BE)) {
-						dataStrings << readHDFData2D<uint8_t>(dataset, H5T_STD_U8BE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<uint8_t>(dataset, H5T_STD_U8BE, rows, cols, lines, dataContainer);
 					} else if (H5Tequal(dtype, H5T_NATIVE_UCHAR)) {
 						switch (sizeof(H5T_NATIVE_UCHAR)) {
 						case 1:
-							dataStrings << readHDFData2D<uint8_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<uint8_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataContainer);
 							break;
 						case 2:
-							dataStrings << readHDFData2D<uint16_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<uint16_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataContainer);
 							break;
 						case 4:
-							dataStrings << readHDFData2D<uint32_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<uint32_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataContainer);
 							break;
 						case 8:
-							dataStrings << readHDFData2D<uint64_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+							dataStrings << readHDFData2D<uint64_t>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataContainer);
 							break;
 						}
 					} else if (H5Tequal(dtype, H5T_STD_I16LE) || H5Tequal(dtype, H5T_STD_I16BE) || H5Tequal(dtype, H5T_NATIVE_SHORT))
-						dataStrings << readHDFData2D<short>(dataset, H5T_NATIVE_SHORT, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<short>(dataset, H5T_NATIVE_SHORT, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_STD_U16LE) || H5Tequal(dtype, H5T_STD_U16BE) || H5Tequal(dtype, H5T_NATIVE_USHORT))
-						dataStrings << readHDFData2D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_STD_I32LE) || H5Tequal(dtype, H5T_STD_I32BE) || H5Tequal(dtype, H5T_NATIVE_INT))
-						dataStrings << readHDFData2D<int>(dataset, H5T_NATIVE_INT, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<int>(dataset, H5T_NATIVE_INT, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_STD_U32LE) || H5Tequal(dtype, H5T_STD_U32BE) || H5Tequal(dtype, H5T_NATIVE_UINT))
-						dataStrings << readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_NATIVE_LONG))
-						dataStrings << readHDFData2D<long>(dataset, H5T_NATIVE_LONG, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<long>(dataset, H5T_NATIVE_LONG, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_NATIVE_ULONG))
-						dataStrings << readHDFData2D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG))
-						dataStrings << readHDFData2D<long long>(dataset, H5T_NATIVE_LLONG, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<long long>(dataset, H5T_NATIVE_LLONG, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
-						dataStrings << readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataContainer);
 					else {
 						ok=false;
 						dataStrings << (QStringList() << i18n("unsupported integer type for rank 2"));
@@ -1558,11 +1553,11 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 				}
 			case H5T_FLOAT: {
 					if (H5Tequal(dtype, H5T_IEEE_F32LE) || H5Tequal(dtype, H5T_IEEE_F32BE))
-						dataStrings << readHDFData2D<float>(dataset, H5T_NATIVE_FLOAT, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<float>(dataset, H5T_NATIVE_FLOAT, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_IEEE_F64LE) || H5Tequal(dtype, H5T_IEEE_F64BE))
-						dataStrings << readHDFData2D<double>(dataset, H5T_NATIVE_DOUBLE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<double>(dataset, H5T_NATIVE_DOUBLE, rows, cols, lines, dataContainer);
 					else if (H5Tequal(dtype, H5T_NATIVE_LDOUBLE))
-						dataStrings << readHDFData2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataPointers);
+						dataStrings << readHDFData2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataContainer);
 					else {
 						ok = false;
 						dataStrings << (QStringList() << i18n("unsupported float type for rank 2"));

@@ -67,10 +67,10 @@ private:
 	QString translateHDFClass(H5T_class_t);
 	QStringList readHDFCompound(hid_t tid);
 	template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines,
-							QVector<double> *dataPointer = nullptr);
-	QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector< QVector<double>* >& dataPointer);
+							void* dataPointer = nullptr);
+	QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataPointer);
 	template <typename T> QVector<QStringList> readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines,
-								 QVector< QVector<double>* >& dataPointer);
+								 QVector<void*>& dataPointer);
 	QVector<QStringList> readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 	QStringList readHDFAttr(hid_t aid);
 	QStringList scanHDFAttrs(hid_t oid);

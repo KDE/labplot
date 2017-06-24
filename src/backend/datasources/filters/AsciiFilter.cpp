@@ -390,10 +390,9 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		return dataStrings;
 
 	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
-	// TODO: support other data types
-	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
+	QVector<void*> dataContainer;	// pointers to the actual data containers
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataPointers, importMode, m_actualRows, m_actualCols, m_vectorNameList);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_vectorNameList);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -417,12 +416,13 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 				// TODO : read other data types (strings, datetime, etc.) too
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource)
-					dataPointers[n]->operator[](currentRow) = (isNumber ? value : NAN);
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 				else
 					lineString += (isNumber ? QString::number(value) : QString("NAN"));
 			} else {
+
 				if (dataSource)
-					dataPointers[n]->operator[](currentRow) = NAN;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = NAN;
 				else
 					lineString += QLatin1String("NAN");
 			}

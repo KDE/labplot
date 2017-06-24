@@ -857,7 +857,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Matrix::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
                                int actualRows, int actualCols, QStringList colNameList) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	Q_UNUSED(colNameList);
@@ -869,21 +869,22 @@ int Matrix::prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileF
 	// resize the matrix
 	if (mode == AbstractFileFilter::Replace) {
 		clear();
-		setDimensions(actualRows,actualCols);
+		setDimensions(actualRows, actualCols);
 	} else {
 		if (rowCount() < actualRows)
-			setDimensions(actualRows,actualCols);
+			setDimensions(actualRows, actualCols);
 		else
-			setDimensions(rowCount(),actualCols);
+			setDimensions(rowCount(), actualCols);
 	}
 
+	//TODO: support other numeric types (float, int, ...)
 	QVector<QVector<double> >& matrixColumns = data();
-	dataPointers.resize(actualCols);
-	for (int n = 0; n < actualCols; n++ ) {
+	dataContainer.resize(actualCols);
+	for (int n = 0; n < actualCols; n++) {
 		QVector<double>* vector = &matrixColumns[n];
 		vector->reserve(actualRows);
 		vector->resize(actualRows);
-		dataPointers[n] = vector;
+		dataContainer[n] = static_cast<void *>(vector);
 	}
 
 	return columnOffset;

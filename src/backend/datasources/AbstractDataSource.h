@@ -42,7 +42,7 @@ public:
 	virtual ~AbstractDataSource() {}
 
 	void clear();
-	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int actualRows, int actualCols, QStringList colNameList = QStringList()) = 0;
 	virtual void finalizeImport() = 0;
 };

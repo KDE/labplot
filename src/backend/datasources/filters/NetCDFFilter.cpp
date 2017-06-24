@@ -47,7 +47,7 @@ NetCDFFilter::~NetCDFFilter() {
 }
 
 /*!
-  parses the content of the file \c fileName.
+  parses the content of the file \c ileName.
 */
 void NetCDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
 	d->parse(fileName, rootItem);
@@ -521,7 +521,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
-	QVector<QVector<double>*> dataPointers;
+	QVector<void*> dataContainer;
 	switch (ndims) {
 	case 0:
 		dataStrings << (QStringList() << i18n("zero dimensions"));
@@ -542,14 +542,14 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			DEBUG("start/end row" << startRow << endRow);
 			DEBUG("act rows/cols" << actualRows << actualCols);
 
-			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
-
-			double* data = 0;
 			if (dataSource)
-				data = dataPointers[0]->data();
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+
+			double* data = nullptr;
+			if (dataSource)
+				data = static_cast<QVector<double>*>(dataContainer[0])->data();
 			else
-				data = (double *)malloc(actualRows * sizeof(double));
+				data = new double[actualRows];
 
 			size_t start = startRow-1, count = actualRows;
 			status = nc_get_vara_double(ncid, varid, &start, &count, data);
@@ -558,7 +558,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			if (!dataSource) {
 				for (int i = 0; i < qMin(actualRows, lines); i++)
 					dataStrings << (QStringList() << QString::number(data[i]));
-				free(data);
+				delete[] data;
 			}
 			break;
 		}
@@ -585,7 +585,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			DEBUG("lines:" << lines);
 
 			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataPointers, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
 
 			double** data = (double**) malloc(rows * sizeof(double*));
 			data[0] = (double*)malloc( cols * rows * sizeof(double) );
@@ -596,10 +596,10 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			for (int i = 0; i < qMin((int)rows, lines); i++) {
 				QStringList line;
 				for (unsigned int j = 0; j < cols; j++) {
-					if (!dataPointers.isEmpty())
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
+					if (dataContainer[0])
+						static_cast<QVector<double>*>(dataContainer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
 					else {
-						line << QString::number(static_cast<double>(data[i][j]));
+						line << QString::number(data[i][j]);
 					}
 				}
 				dataStrings << line;

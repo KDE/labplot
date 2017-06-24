@@ -77,7 +77,7 @@ public:
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
 	//data import
-	virtual int prepareImport(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode,
+	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList = QStringList()) override;
 	virtual void finalizeImport() override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
