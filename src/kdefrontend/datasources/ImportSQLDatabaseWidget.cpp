@@ -106,6 +106,10 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	//TODO
 }
 
+/*!
+ * in case the import from a table is selected, returns the currently selected database table.
+ * returns empty string otherwise.
+ */
 QString ImportSQLDatabaseWidget::selectedTable() const {
 	if (ui.cbImportFrom->currentIndex() == 0) {
 		if (ui.lwTables->currentItem())
@@ -162,7 +166,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	//open the selected connection
 	const QString driver = group.readEntry("Driver");
 	m_db = QSqlDatabase::addDatabase(driver);
-	m_db.setDatabaseName( group.readEntry("DatabaseName"));
+	m_db.setDatabaseName( group.readEntry("DatabaseName") );
 	if (!DatabaseManagerWidget::isFileDB(driver)) {
 		m_db.setHostName( group.readEntry("HostName") );
 		m_db.setPort( group.readEntry("Port", 0) );
@@ -177,6 +181,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		return;
 	}
 
+	//show all available database tables
 	if (m_db.tables().size()) {
 		ui.lwTables->addItems(m_db.tables());
 		ui.lwTables->setCurrentRow(0);
@@ -201,16 +206,17 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	if ( !customQuery ) {
 		//preview the content of the currently selected table
 		const QString driver = m_db.driverName();
+		const QString limit = QString::number(ui.sbPreviewLines->value());
 		if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  QString::number(ui.sbPreviewLines->value());
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
 		else if (driver == QLatin1String("QOCI"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") +  QString::number(ui.sbPreviewLines->value());
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
 		else if (driver == QLatin1String("QDB2"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") +  QString::number(ui.sbPreviewLines->value()) + QLatin1String(" ROWS ONLY");
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") + limit + QLatin1String(" ROWS ONLY");
 		else if (driver == QLatin1String("QIBASE"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") +  QString::number(ui.sbPreviewLines->value());
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") + limit;
 		else
-			query = QLatin1String("SELECT TOP ") + QString::number(ui.sbPreviewLines->value()) + QLatin1String(" * FROM ") + tableName;
+			query = QLatin1String("SELECT TOP ") + limit + QLatin1String(" * FROM ") + tableName;
 	} else {
 		//preview the result of a custom query
 		query = ui.teQuery->toPlainText();
@@ -229,37 +235,38 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		return;
 	}
 
-	//resize the table (number of columns equal to the number of fields in the result set)
-	int columnCount = q.record().count();
+	//resize the table to the number of columns (=number of fields in the result set)
+	const int columnCount = q.record().count();
 	ui.twPreview->setColumnCount(columnCount);
-	QStringList headerLabels;
-	for (int i = 0; i < columnCount; ++i)
-		headerLabels << q.record().fieldName(i);
 
+	//determine the data type (column modes) of the table columns.
+	//check whether we have numerical data only by checking the data types of the first record.
+	columnModes.clear();
+	QStringList headerLabels;
+	bool numeric = true;
+	for (int i = 0; i < columnCount; ++i) {
+		headerLabels << q.record().fieldName(i);
+		const QVariant value = q.record().value(i);
+		bool ok;
+		value.toDouble(&ok);
+		if (ok) {
+			headerLabels[i] = headerLabels[i] + "  {" + i18n("Numeric") + "}";
+			columnModes << AbstractColumn::Numeric;
+		} else {
+			numeric = false;
+			if (value.toDateTime().isValid()) {
+				headerLabels[i] = headerLabels[i] + "  {" + i18n("Date and Time") + "}";
+				columnModes << AbstractColumn::DateTime;
+			} else {
+				headerLabels[i] = headerLabels[i] + "  {" + i18n("Text") + "}";
+				columnModes << AbstractColumn::Text;
+			}
+		}
+	}
 
 	//preview the data
 	int row = 0;
-	bool numeric = true;
 	while(q.next()) {
-		//check whether we have numerical data only by checking the data types of the first record
-		if (row == 0) {
-			const QSqlRecord record = q.record();
-			for (int i = 0; i < record.count(); ++i ) {
-				const QVariant value = record.field(i).value();
-				bool ok;
-				value.toDouble(&ok);
-				if (ok) {
-					headerLabels[i] = headerLabels[i] + "  {" + i18n("Numeric") + "}";
-				} else {
-					numeric = false;
-					if (value.toDateTime().isValid())
-						headerLabels[i] = headerLabels[i] + "  {" + i18n("Date and Time") + "}";
-					else
-						headerLabels[i] = headerLabels[i] + "  {" + i18n("Text") + "}";
-				}
-			}
-		}
-
 		for(int col = 0; col < columnCount; ++col) {
 			ui.twPreview->setRowCount(row+1);
 			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
