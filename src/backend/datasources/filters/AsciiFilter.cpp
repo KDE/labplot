@@ -459,14 +459,14 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	if (m_endRow == -1 || m_endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
-	m_actualRows = actualEndRow - m_startRow + 1;
+	m_actualRows = actualEndRow + 1;
 
 	// reset to start of file
 	device.seek(0);
 
 	DEBUG("start/end column: " << m_startColumn << ' ' << m_endColumn);
 	DEBUG("start/end row: " << m_startRow << ' ' << actualEndRow);
-	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
+	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0)
 		return 1;
@@ -506,7 +506,6 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		lines = m_actualRows;
 
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
-	bool headerSkipped = m_headerEnabled ? false : true;
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
 		if (m_simplifyWhitespacesEnabled)
@@ -515,8 +514,8 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
 			continue;
-		if (!headerSkipped) {
-			headerSkipped = true;
+		if (m_startRow > 1) {	// skip start lines
+			m_startRow--;
 			i--;
 			continue;
 		}
