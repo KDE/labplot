@@ -151,28 +151,29 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 }
 
 size_t AsciiFilter::lineNumber(const QString& fileName) {
-// wc is much faster
-/*	KFilterDev device(fileName);
+	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of lines");
 		return 0;
 	}
 
-	size_t rows = 0;
+	size_t lineCount = 0;
 	while (!device.atEnd()) {
 		device.readLine();
-		rows++;
+		lineCount++;
 	}
-*/
-	QElapsedTimer myTimer;
+
+// wc is much faster but not portable
+/*	QElapsedTimer myTimer;
 	myTimer.start();
 	QProcess wc;
 	wc.start(QString("wc"), QStringList() << "-l" << fileName);
 	size_t lineCount = 0;
 	while (wc.waitForReadyRead())
 		lineCount = wc.readLine().split(' ')[0].toInt();
+	lineCount++;	// last line not counted
 	DEBUG(" Elapsed time counting lines : " << myTimer.elapsed() << " ms");
-
+*/
 	return lineCount;
 }
 
@@ -442,8 +443,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 		if (isNumber)
 			col++;
 		else {	// not number (or "DateTime" etc. selected?)
-			//TODO: consider checking for QTime, QDate and then QDateTime?
-			//TODO: format is just a test
+			//TODO: format is just a test: Get format from user (default = ?)
 			QDateTime valueDateTime = QDateTime::fromString(valueString, "h:m:s");
 			QDEBUG("date time =" << valueDateTime);
 			if (valueDateTime.isValid())
