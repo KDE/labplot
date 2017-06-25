@@ -29,8 +29,12 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
+#include "backend/core/AbstractColumn.h"
+#include <QVector>
+
 class KFilterDev;
 class AbstractDataSource;
+class AbstractColumn;
 
 class AsciiFilterPrivate {
 
@@ -39,13 +43,14 @@ public:
 
 	int prepareDeviceToRead(KFilterDev&);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	const AsciiFilter* q;
 
 	QString m_commentCharacter;
 	QString m_separatingCharacter;
+	AbstractColumn::ColumnMode m_dataType;
 	bool m_autoModeEnabled;
 	bool m_headerEnabled;
 	bool m_skipEmptyParts;
@@ -56,6 +61,8 @@ public:
 	int m_startColumn;
 	int m_endColumn;
 	QString m_vectorNames;
+	QVector<AbstractColumn::ColumnMode> m_columnModes;
+
 private:
 	QString m_separator;
 	QStringList m_vectorNameList;

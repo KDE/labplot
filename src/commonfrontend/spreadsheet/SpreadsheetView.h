@@ -78,9 +78,9 @@ class SpreadsheetView : public QWidget {
 		void getCurrentCell(int* row, int* col);
 
 		void exportToFile(const QString&, const bool, const QString&) const;
-        void exportToLaTeX(const QString&, const bool exportHeaders,
-							const bool gridLines, const bool captions, const bool latexHeaders,
-							const bool skipEmptyRows,const bool exportEntire) const;
+		void exportToLaTeX(const QString&, const bool exportHeaders,
+			const bool gridLines, const bool captions, const bool latexHeaders,
+			const bool skipEmptyRows,const bool exportEntire) const;
 		void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
 
 	private:

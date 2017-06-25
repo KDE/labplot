@@ -38,7 +38,6 @@
 #include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 
-
 class AbstractFileFilter;
 class QTableWidget;
 
