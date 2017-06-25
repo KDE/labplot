@@ -413,7 +413,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	testpos = device.pos();
 	DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
 */
-
 	// this also resets position to start of file
 	m_actualRows = AsciiFilter::lineNumber(device);
 
@@ -436,7 +435,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	m_columnModes.resize(m_actualCols);
-	QDEBUG("column modes = " << m_columnModes);
 	int col = 0;
 	for (const auto& valueString: firstLineStringList) {	// only parse columns available in first data line
 		bool isNumber;
@@ -457,6 +455,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	QDEBUG("column modes = " << m_columnModes);
 
 	int actualEndRow = m_endRow;
+	DEBUG("m_endRow = " << m_endRow);
 	if (m_endRow == -1 || m_endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
@@ -467,7 +466,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 
 	DEBUG("start/end column: " << m_startColumn << ' ' << m_endColumn);
 	DEBUG("start/end row: " << m_startRow << ' ' << actualEndRow);
-	DEBUG("actual cols/rows: " << m_actualCols << ' ' << m_actualRows);
+	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0)
 		return 1;
@@ -507,6 +506,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		lines = m_actualRows;
 
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
+	bool headerSkipped = m_headerEnabled ? false : true;
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
 		if (m_simplifyWhitespacesEnabled)
@@ -515,10 +515,15 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
 			continue;
+		if (!headerSkipped) {
+			headerSkipped = true;
+			i--;
+			continue;
+		}
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
 		QStringList lineString;
-		QDEBUG("split line = " << lineStringList);
+//		QDEBUG("split line = " << lineStringList);
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const QString valueString = lineStringList.at(n);
