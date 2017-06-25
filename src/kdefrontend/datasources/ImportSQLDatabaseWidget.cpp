@@ -42,7 +42,6 @@
 
 #include <QtSql>
 #include <QStandardItem>
-#include <QTreeView>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0), m_valid(false), m_numeric(false) {
 	ui.setupUi(this);
@@ -51,6 +50,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.cbImportFrom->addItem(i18n("Custom query"));
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
