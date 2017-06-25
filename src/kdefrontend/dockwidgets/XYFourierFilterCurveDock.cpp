@@ -278,7 +278,9 @@ void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 		Q_ASSERT(dataSourceCurve);
 	}
 
-// 	this->updateSettings(dataSourceCurve->xColumn());
+	// update range of cutoff spin boxes (like a unit change)
+	unitChanged();
+	unit2Changed();
 
 	if (m_initializing)
 		return;
@@ -438,12 +440,20 @@ void XYFourierFilterCurveDock::unitChanged() {
 	double oldValue = uiGeneralTab.sbCutoff->value();
 	m_filterData.unit = unit;
 
-	int n=100;
-	double f=1.0;	// sample frequency
-	if (m_filterCurve->xDataColumn() != NULL) {
-		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
-		f=(n-1)/range/2.;
+	int n = 100;
+	double f = 1.0; // sample frequency
+	const AbstractColumn* xDataColumn = nullptr;
+	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		xDataColumn = m_filterCurve->xDataColumn();
+	else {
+		if (m_filterCurve->dataSourceCurve())
+			xDataColumn = m_filterCurve->dataSourceCurve()->xColumn();
+	}
+
+	if (xDataColumn != nullptr) {
+		n = xDataColumn->rowCount();
+		double range = xDataColumn->maximum() - xDataColumn->minimum();
+		f = (n-1)/range/2.;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
@@ -509,12 +519,20 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	double oldValue = uiGeneralTab.sbCutoff2->value();
 	m_filterData.unit2 = unit;
 
-	int n=100;
-	double f=1.0;
-	if (m_filterCurve->xDataColumn() != NULL) {
-		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
-		f = (n-1)/2./range;
+	int n = 100;
+	double f = 1.0; // sample frequency
+	const AbstractColumn* xDataColumn = nullptr;
+	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		xDataColumn = m_filterCurve->xDataColumn();
+	else {
+		if (m_filterCurve->dataSourceCurve())
+			xDataColumn = m_filterCurve->dataSourceCurve()->xColumn();
+	}
+
+	if (xDataColumn != nullptr) {
+		n = xDataColumn->rowCount();
+		double range = xDataColumn->maximum() - xDataColumn->minimum();
+		f = (n-1)/range/2.;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
@@ -598,11 +616,16 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 		return;
 
 	//no filtering possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+	bool hasSourceData = false;
+	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectX!=0 && aspectY!=0);
+	} else {
+		 hasSourceData = (m_filterCurve->dataSourceCurve() != NULL);
+	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(data);
+	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!
