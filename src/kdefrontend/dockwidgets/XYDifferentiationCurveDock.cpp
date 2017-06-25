@@ -157,9 +157,6 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	this->showDifferentiationResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last differentiation
-	uiGeneralTab.pbRecalculate->setEnabled(m_differentiationCurve->isSourceDataChangedSinceLastRecalc());
-
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
@@ -537,6 +534,9 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last differentiation
+	uiGeneralTab.pbRecalculate->setEnabled(m_differentiationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

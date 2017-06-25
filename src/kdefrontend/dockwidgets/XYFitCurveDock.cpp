@@ -223,9 +223,6 @@ void XYFitCurveDock::initGeneralTab() {
 	updateModelEquation();
 	this->showFitResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last fit
-	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
-
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	//Slots
@@ -703,13 +700,13 @@ void XYFitCurveDock::updateModelEquation() {
 			case 2:
 				m_fitData.model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
 				m_fitData.model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
 					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
@@ -770,13 +767,13 @@ void XYFitCurveDock::updateModelEquation() {
 			case 2:
 				m_fitData.model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
 				m_fitData.model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
 					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
@@ -804,13 +801,13 @@ void XYFitCurveDock::updateModelEquation() {
 			case 2:
 				m_fitData.model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
 				m_fitData.model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
 					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
 					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
@@ -965,14 +962,14 @@ void XYFitCurveDock::updateModelEquation() {
 	vars << m_fitData.paramNames;
 
 	// use normal param names if no utf8 param names are defined
-	if (m_fitData.paramNamesUtf8.isEmpty()) 
+	if (m_fitData.paramNamesUtf8.isEmpty())
 		m_fitData.paramNamesUtf8 << m_fitData.paramNames;
 
 	//resize the vector for the start values and set the elements to 1.0
 	//in case a custom model is used, do nothing, we take over the previous values
 	//when initializing, don't do anything - we use start values already
 	//available - unless there're no values available
-	if (m_fitData.modelCategory != nsl_fit_model_custom || 
+	if (m_fitData.modelCategory != nsl_fit_model_custom ||
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
 		DEBUG(" number of start values" << m_fitData.paramNames.size() << ' ' << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
@@ -1419,6 +1416,9 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));
+
+	//enable the "recalculate"-button if the source data was changed since the last fit
+	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

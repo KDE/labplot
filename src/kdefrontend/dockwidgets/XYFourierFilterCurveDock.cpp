@@ -173,9 +173,6 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
 	this->showFilterResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last filter
-	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastRecalc());
-
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
@@ -654,6 +651,9 @@ void XYFourierFilterCurveDock::showFilterResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last filter
+	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

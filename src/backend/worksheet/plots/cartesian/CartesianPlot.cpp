@@ -894,6 +894,7 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->differentiationDataChanged(curve->differentiationData());
 	} else {
 		beginMacro(i18n("%1: add differentiation curve", name()));
 		this->addChild(curve);
@@ -915,6 +916,7 @@ XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->integrationDataChanged(curve->integrationData());
 	} else {
 		beginMacro(i18n("%1: add differentiation curve", name()));
 		this->addChild(curve);
@@ -936,6 +938,7 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->interpolationDataChanged(curve->interpolationData());
 	} else {
 		beginMacro(i18n("%1: add interpolation curve", name()));
 		this->addChild(curve);
@@ -957,6 +960,7 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->smoothDataChanged(curve->smoothData());
 	} else {
 		beginMacro(i18n("%1: add smoothing curve", name()));
 		this->addChild(curve);
@@ -983,6 +987,7 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->fitDataChanged(curve->fitData());
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
 		this->addChild(curve);
@@ -1003,7 +1008,8 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
-		curve->recalculate();
+// 		curve->recalculate();
+// 		emit curve->filterDataChanged(curve->filterData());
 	} else {
 		beginMacro(i18n("%1: add Fourier filter curve", name()));
 		this->addChild(curve);
