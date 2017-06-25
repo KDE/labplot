@@ -29,7 +29,6 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-#include "backend/core/AbstractColumn.h"
 #include <QVector>
 
 class KFilterDev;

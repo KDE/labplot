@@ -104,7 +104,7 @@ public:
 
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
-	void* m_data;	//pointer to the data container (QVector<double>, QStringList or QVector<QDateTime>)
+	void* m_data;	//pointer to the data container (QVector<T>)
 	AbstractSimpleFilter* m_input_filter;	//input filter for string -> data type conversion
 	AbstractSimpleFilter* m_output_filter;	//output filter for data type -> string conversion
 	QString m_formula;

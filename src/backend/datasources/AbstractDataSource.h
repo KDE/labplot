@@ -31,6 +31,8 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/core/AbstractColumn.h"
+#include <QVector>
 
 class QStringList;
 
@@ -43,7 +45,7 @@ public:
 
 	void clear();
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
-		int actualRows, int actualCols, QStringList colNameList = QStringList()) = 0;
+		int actualRows, int actualCols, QStringList colNameList = QStringList(), QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) = 0;
 	virtual void finalizeImport() = 0;
 };
 
