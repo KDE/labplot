@@ -534,27 +534,35 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime;
-						valueDateTime.fromString(valueString);
+						// TODO: format
+						const QDateTime valueDateTime = QDateTime::fromString(valueString);
 						if (valueDateTime.isValid())
 							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime;
+						else
+							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = QDateTime();
 						break;
 					}
-					case AbstractColumn::Text: {
+					case AbstractColumn::Text:
 						static_cast<QStringList*>(dataContainer[n])->operator[](currentRow) = valueString;
-						break;
-					}
 					}
 				} else {	// preview
-					//TODO: other types
-//					lineString += (isNumber ? QString::number(valueNumeric) : QString("NAN"));
+					//TODO: check for type?
+					lineString += valueString;
 				}
 			} else {	// missing columns in this line
-				// TODO: data types
-//				if (dataSource)
-//					static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = NAN;
-//				else
-//					lineString += QLatin1String("NAN");
+				if (dataSource) {
+					switch (m_columnModes[n]) {
+					case AbstractColumn::Numeric:
+						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = NAN;
+						break;
+					case AbstractColumn::DateTime:
+						static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = QDateTime();
+						break;
+					case AbstractColumn::Text:
+						static_cast<QStringList*>(dataContainer[n])->operator[](currentRow) = "NAN";
+					}
+				} else
+					lineString += QLatin1String("NAN");
 			}
 		}
 
