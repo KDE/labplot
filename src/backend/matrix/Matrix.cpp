@@ -858,7 +858,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 //########################  Data Import  #######################################
 //##############################################################################
 int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
-                               int actualRows, int actualCols, QStringList colNameList) {
+	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	Q_UNUSED(colNameList);
 	int columnOffset = 0;

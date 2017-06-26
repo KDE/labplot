@@ -894,6 +894,7 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->differentiationDataChanged(curve->differentiationData());
 	} else {
 		beginMacro(i18n("%1: add differentiation curve", name()));
 		this->addChild(curve);
@@ -915,6 +916,7 @@ XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->integrationDataChanged(curve->integrationData());
 	} else {
 		beginMacro(i18n("%1: add differentiation curve", name()));
 		this->addChild(curve);
@@ -936,6 +938,7 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->interpolationDataChanged(curve->interpolationData());
 	} else {
 		beginMacro(i18n("%1: add interpolation curve", name()));
 		this->addChild(curve);
@@ -957,6 +960,7 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->smoothDataChanged(curve->smoothData());
 	} else {
 		beginMacro(i18n("%1: add smoothing curve", name()));
 		this->addChild(curve);
@@ -983,6 +987,7 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 		this->addChild(curve);
 		curve->recalculate();
+		emit curve->fitDataChanged(curve->fitData());
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
 		this->addChild(curve);
@@ -996,8 +1001,23 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Fourier filtering of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+// 		curve->recalculate();
+// 		emit curve->filterDataChanged(curve->filterData());
+	} else {
+		beginMacro(i18n("%1: add Fourier filter curve", name()));
+		this->addChild(curve);
+	}
+
 	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 

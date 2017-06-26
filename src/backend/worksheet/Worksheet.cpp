@@ -267,7 +267,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 		d->updateLayout(false);
 }
 
-QGraphicsScene *Worksheet::scene() const {
+QGraphicsScene* Worksheet::scene() const {
 	return d->m_scene;
 }
 

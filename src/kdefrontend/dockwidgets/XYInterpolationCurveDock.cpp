@@ -56,7 +56,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent): 
+XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0), dataPoints(0) {
 
 	//hide the line connection type
@@ -188,9 +188,6 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbPointsMode->setCurrentIndex(m_interpolationData.pointsMode);
 
 	this->showInterpolationResult();
-
-	//enable the "recalculate"-button if the source data was changed since the last interpolation
-	uiGeneralTab.pbRecalculate->setEnabled(m_interpolationCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -336,7 +333,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 
 	unsigned int n=0;
 	for (int row=0; row < column->rowCount(); row++)
-		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
+		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 	dataPoints = n;
 	if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
@@ -670,6 +667,9 @@ void XYInterpolationCurveDock::showInterpolationResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last interpolation
+	uiGeneralTab.pbRecalculate->setEnabled(m_interpolationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

@@ -779,7 +779,7 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //########################  Data Import  #######################################
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
-                               int actualRows, int actualCols, QStringList colNameList) {
+	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
@@ -802,12 +802,31 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
-		// TODO: support all data types
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-		QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
-		vector->reserve(actualRows);
-		vector->resize(actualRows);
-		dataContainer[n] = static_cast<void *>(vector);
+		this->child<Column>(columnOffset+n)->setColumnMode(columnMode[n]);
+		switch (columnMode[n]) {
+		case AbstractColumn::Numeric: {
+			QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::Text: {
+			QVector<QString>* vector = static_cast<QVector<QString>*>(this->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::DateTime: {
+			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
 

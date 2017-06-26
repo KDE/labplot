@@ -70,8 +70,7 @@ void FileInfoDialog::setFiles(QStringList& files) {
 	QString fileName;
 	QString infoString;
 
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
+	for (auto fileName: files) {
 		if(fileName.isEmpty())
 			continue;
 

@@ -652,6 +652,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
     Uses the settings defined in the data source.
 */
 QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	Q_UNUSED(lines);
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {

@@ -90,6 +90,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 * Use C++ casting (static_cast, const_cast, dynamic_cast) in C++ and qobject_cast on Qt classes since they include checks
 	see https://en.wikibooks.org/wiki/C%2B%2B_Programming/Programming_Languages/C%2B%2B/Code/Statements/Variables/Type_Casting
 * In C++ use Qt container instead of STL container
+	https://marcmutz.wordpress.com/effective-qt/containers/
 * In C++ use range-based loops instead of foreach/Q_FOREACH
 	https://www.kdab.com/goodbye-q_foreach/
 * The keyword 'auto' can be used in range-based loops but should be avoided else to maintain readability

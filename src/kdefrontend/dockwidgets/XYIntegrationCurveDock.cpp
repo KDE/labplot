@@ -55,7 +55,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget *parent): 
+XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_integrationCurve(0) {
 
 	//hide the line connection type
@@ -157,9 +157,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
-
-	//enable the "recalculate"-button if the source data was changed since the last integration
-	uiGeneralTab.pbRecalculate->setEnabled(m_integrationCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -451,6 +448,9 @@ void XYIntegrationCurveDock::showIntegrationResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last integration
+	uiGeneralTab.pbRecalculate->setEnabled(m_integrationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

@@ -35,7 +35,7 @@ extern "C" {
 }
 
 class XYDifferentiationCurvePrivate;
-class XYDifferentiationCurve: public XYCurve {
+class XYDifferentiationCurve : public XYCurve {
 	Q_OBJECT
 
 	public:

@@ -52,6 +52,7 @@ FITSFilter::~FITSFilter() {
 }
 
 QVector<QStringList> FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	Q_UNUSED(lines);
 	return d->readCHDU(fileName, dataSource, importMode);
 }
 

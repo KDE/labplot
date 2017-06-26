@@ -295,11 +295,11 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 					lineString << QString::number(value);
 				break;
 			}
-/*TODO			case BinaryFilter::INT32: {
+			case BinaryFilter::INT32: {
 				qint32 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<qint32>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -308,7 +308,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				qint64 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<qint64>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -317,7 +317,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				quint8 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<quint8>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -326,7 +326,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				quint16 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<quint16>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -335,7 +335,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				quint32 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<quint32>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -344,7 +344,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				quint64 value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<quint64>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -353,7 +353,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				float value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<float>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -362,11 +362,11 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 				double value;
 				in >> value;
 				if (dataSource)
-					dataContainer[n]->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
-			}*/
+			}
 			}
 		}
 		dataStrings << lineString;

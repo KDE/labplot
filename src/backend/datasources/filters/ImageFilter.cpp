@@ -141,6 +141,7 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     Uses the settings defined in the data source.
 */
 QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	Q_UNUSED(lines);
 	QVector<QStringList> dataStrings;
 
 	QImage image = QImage(fileName);

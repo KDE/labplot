@@ -35,7 +35,7 @@ extern "C" {
 }
 
 class XYFourierFilterCurvePrivate;
-class XYFourierFilterCurve: public XYCurve {
+class XYFourierFilterCurve : public XYCurve {
 	Q_OBJECT
 
 	public:

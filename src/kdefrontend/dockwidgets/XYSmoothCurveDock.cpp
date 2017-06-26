@@ -56,7 +56,7 @@
   \ingroup kdefrontend
 */
 
-XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent): 
+XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_smoothCurve(0) {
 
 	//hide the line connection type
@@ -186,9 +186,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
 	valueChanged();
 	this->showSmoothResult();
-
-	//enable the "recalculate"-button if the source data was changed since the last smooth
-	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -325,7 +322,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 		unsigned int n=0;
 		for (int row=0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
+			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
 		// set maximum of sbPoints to number of columns
@@ -441,7 +438,7 @@ void XYSmoothCurveDock::typeChanged() {
 		uiGeneralTab.lOrder->hide();
 		uiGeneralTab.sbOrder->hide();
 	}
-	
+
 
 	enableRecalculate();
 }
@@ -556,6 +553,9 @@ void XYSmoothCurveDock::showSmoothResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last smooth
+	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************

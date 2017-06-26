@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +30,7 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 
 #include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/core/AbstractColumn.h"
 
 class KFilterDev;
 class AsciiFilterPrivate;
@@ -42,11 +44,12 @@ public:
 
 	static QStringList separatorCharacters();
 	static QStringList commentCharacters();
+	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 
-	static int columnNumber(const QString& fileName);
+	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
-	static size_t lineNumber(KFilterDev&);
+	static size_t lineNumber(KFilterDev&);	// calculate number of lines if device supports it
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
@@ -63,6 +66,11 @@ public:
 
 	void setSeparatingCharacter(const QString&);
 	QString separatingCharacter() const;
+
+	void setDataType(const AbstractColumn::ColumnMode&);
+	void setDataType(const QString&);	// convenience method
+	AbstractColumn::ColumnMode dataType() const;
+	QString dataTypeName() const;		// convenience method
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;

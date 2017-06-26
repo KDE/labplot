@@ -30,6 +30,7 @@
 #define IMPORTSQLDATABASEWIDGET_H
 
 #include <QSqlDatabase>
+#include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "ui_importsqldatabasewidget.h"
 
@@ -58,6 +59,7 @@ private:
 	Ui::ImportSQLDatabaseWidget ui;
 	QList<QString> vendorList;
 	QList<QString> tableNamesList;
+	QVector<AbstractColumn::ColumnMode> columnModes;
 	QSqlDatabase m_db;
 	QStandardItemModel* m_databaseTreeModel;
 	QString m_configPath;

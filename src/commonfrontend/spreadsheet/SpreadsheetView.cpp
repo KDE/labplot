@@ -1106,13 +1106,13 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
-	foreach(Column* col_ptr, selectedColumns()) {
+	for (auto* col_ptr: selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
 				QVector<double> results(last-first+1);
-				for (int row=first; row <= last; row++)
+				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results[row-first] = row+1;
 					else
@@ -1122,7 +1122,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 			}
 		case AbstractColumn::Text: {
 				QStringList results;
-				for (int row=first; row<=last; row++)
+				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results << QString::number(row+1);
 					else
@@ -1173,18 +1173,18 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
-	if ( first < 0 ) return;
+	if (first < 0) return;
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
-	foreach(Column* col_ptr, selectedColumns()) {
+	for (auto* col_ptr: selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
 				QVector<double> results(last-first+1);
-				for (int row=first; row<=last; row++)
+				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results[row-first] = double(qrand())/double(RAND_MAX);
 					else
@@ -1211,9 +1211,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				QTime midnight(0,0,0,0);
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
-						results << QDateTime(
-						            earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)),
-						            midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
 					else
 						results << col_ptr->dateTimeAt(row);
 				col_ptr->replaceDateTimes(first, results);

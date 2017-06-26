@@ -1648,6 +1648,7 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
     Uses the settings defined in the data source.
 */
 QVector<QStringList> HDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	Q_UNUSED(lines);
 	DEBUG("HDFFilter::read()");
 	QVector<QStringList> dataStrings;
 
