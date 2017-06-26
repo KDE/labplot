@@ -894,5 +894,6 @@ void Spreadsheet::finalizeImport() {
 	for (int i=0; i<childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
+	if (m_view)
+		reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }
