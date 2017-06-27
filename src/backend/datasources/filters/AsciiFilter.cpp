@@ -115,6 +115,20 @@ QStringList AsciiFilter::commentCharacters() {
 }
 
 /*!
+returns the list of all supported locales for numeric data
+*/
+QStringList AsciiFilter::numberFormats() {
+	return (QStringList() << i18n("System locale") << i18n("C format"));
+}
+
+/*!
+returns the list of all supported formats for date/datetime
+*/
+QStringList AsciiFilter::dateFormats() {
+	return (QStringList() << QLatin1String("YYYY-MM-DD|T|hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss"));
+}
+
+/*!
 returns the list of all predefined data types.
 */
 QStringList AsciiFilter::dataTypes() {

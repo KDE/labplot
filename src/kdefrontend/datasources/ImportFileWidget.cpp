@@ -74,6 +74,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	asciiOptionsWidget.cbNumbersFormat->addItems(AsciiFilter::numberFormats());
+	asciiOptionsWidget.cbDatesFormat->addItems(AsciiFilter::dateFormats());
 //	asciiOptionsWidget.cbDataType->addItems(AsciiFilter::dataTypes());
 	asciiOptionsWidget.cbDataType->hide();	//TODO: enable later
 	asciiOptionsWidget.lDataType->hide();	//TODO: enable later
