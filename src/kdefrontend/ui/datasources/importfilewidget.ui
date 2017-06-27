@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>797</width>
-    <height>1407</height>
+    <height>838</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -31,7 +31,7 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lFileName">
         <property name="text">
          <string>Name</string>
         </property>
@@ -144,7 +144,7 @@
        </widget>
       </item>
       <item row="8" column="2">
-       <widget class="KComboBox" name="cbFilter">
+       <widget class="KComboBox" name="cbFilter" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -218,7 +218,7 @@
        <widget class="QComboBox" name="cbSerialPort"/>
       </item>
       <item row="7" column="2" colspan="3">
-       <widget class="KComboBox" name="cbFileType">
+       <widget class="KComboBox" name="cbFileType" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -265,120 +265,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Update Options</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lUpdateOn">
-        <property name="text">
-         <string>Update on</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="cbUpdateOn">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text">
-          <string>Time interval</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>New data</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lUpdateFrequency">
-        <property name="text">
-         <string>Update frequency</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="sbUpdateFrequency">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>60000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Keep last N values</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="sbKeepValues">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>60000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="chbWatchFile">
-        <property name="toolTip">
-         <string>If this option is checked, the file will be automatically reloaded on changes.</string>
-        </property>
-        <property name="text">
-         <string>Watch the file</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QCheckBox" name="chbLinkFile">
-        <property name="toolTip">
-         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
-        </property>
-        <property name="text">
-         <string>Link the file</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="gbOptions">
      <property name="enabled">
       <bool>false</bool>
@@ -417,7 +303,9 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QStackedWidget" name="swOptions">
-            <widget class="QWidget" name="page"/>
+            <widget class="QWidget" name="page">
+             <zorder>groupBox_2</zorder>
+            </widget>
             <widget class="QWidget" name="page_2"/>
            </widget>
           </item>
@@ -661,18 +549,132 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Update Options</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lUpdateOn">
+        <property name="text">
+         <string>Update on</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cbUpdateOn">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Time interval</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>New data</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lUpdateFrequency">
+        <property name="text">
+         <string>Update frequency</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="sbUpdateFrequency">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Keep last N values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="sbKeepValues">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="chbWatchFile">
+        <property name="toolTip">
+         <string>If this option is checked, the file will be automatically reloaded on changes.</string>
+        </property>
+        <property name="text">
+         <string>Watch the file</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="chbLinkFile">
+        <property name="toolTip">
+         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
+        </property>
+        <property name="text">
+         <string>Link the file</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QWidget</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

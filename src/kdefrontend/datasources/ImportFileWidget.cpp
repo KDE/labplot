@@ -1058,6 +1058,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
     if ((type == SourceType::FileOrPipe) || (type == SourceType::LocalSocket)) {
         ui.lSourceName->show();
         ui.kleSourceName->show();
+        ui.lFileName->hide();
+        ui.kleFileName->hide();
+        ui.bFileInfo->hide();
+        ui.bOpen->hide();
 
         ui.cbBaudRate->hide();
         ui.lBaudRate->hide();
@@ -1079,6 +1083,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.cbSerialPort->hide();
         ui.lSourceName->hide();
         ui.kleSourceName->hide();
+        ui.lFileName->hide();
+        ui.kleFileName->hide();
+        ui.bFileInfo->hide();
+        ui.bOpen->hide();
 
     } else if (type == SourceType::SerialPort) {
         ui.lBaudRate->show();
@@ -1092,6 +1100,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.lPort->hide();
         ui.lSourceName->hide();
         ui.kleSourceName->hide();
+        ui.lFileName->hide();
+        ui.kleFileName->hide();
+        ui.bFileInfo->hide();
+        ui.bOpen->hide();
     }
 }
 
