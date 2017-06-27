@@ -62,6 +62,13 @@ public:
     void initializeAndFillPortsAndBaudRates();
 
 private:
+    enum SourceType {
+        FileOrPipe = 0,
+        NetworkSocket,
+        LocalSocket,
+        SerialPort
+    };
+
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
@@ -79,7 +86,7 @@ private slots:
 	void netcdfTreeWidgetSelectionChanged();
 	void fitsTreeWidgetSelectionChanged();
 
-    void liveDataSourceTypeChanged(int);
+    void sourceTypeChanged(int);
 
 	void saveFilter();
 	void manageFilters();

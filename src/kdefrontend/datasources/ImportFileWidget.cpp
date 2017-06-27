@@ -60,6 +60,31 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 */
 ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName) {
 	ui.setupUi(this);
+    ////////////////////
+    // hide these options until we have a decent layout for them
+    //because it won't fit on thescreen
+   /* ui.lSocketServerName->hide();
+    ui.leSocketServer->hide();
+
+    ui.lBaudRate->hide();
+    ui.cbBaudRate->hide();
+    ui.lPort->show();
+    ui.cbPort->show();
+
+    ui.lBaudRate->hide();
+    ui.lPort->hide();
+    ui.lSocketServerName->hide();
+    ui.leSocketServer->hide();
+
+    ui.bAddAllToSelectedVectors->hide();
+    ui.bAddSelectedToSelectedVectors->hide();
+    ui.bRemoveAllVectors->hide();
+    ui.bRemoveSelectedVector->hide();
+
+    ui.lwAvailableVectors->hide();
+    ui.lwSelectedVectors->hide();*/
+
+    /// /////////////
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFileName->setCompletionObject(comp);
@@ -183,18 +208,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
 	connect( fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
-    connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(liveDataSourceTypeChanged(int)));
+    connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
-
-    ui.lBaudRate->hide();
-    ui.lPort->hide();
-    ui.lSocketServerName->hide();
-    ui.cbBaudRate->hide();
-    ui.cbPort->hide();
-    ui.leSocketServer->hide();
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
@@ -274,32 +292,26 @@ void ImportFileWidget::hideDataSource() const {
 	ui.chbWatchFile->hide();
 	ui.chbLinkFile->hide();
 
-    ui.lAvailableVectors->hide();
-    ui.lBaudRate->hide();
-    ui.lPort->hide();
-    ui.lSelectedVectors->hide();
-    ui.lUpdateFrequency->hide();
-    ui.lUpdateOn->hide();
-    ui.lSourceType->hide();
-    ui.lSocketServerName->hide();
-    ui.lXaxisVector->hide();
-
-    ui.bAddAllToSelectedVectors->hide();
-    ui.bAddSelectedToSelectedVectors->hide();
-    ui.bRemoveSelectedVector->hide();
-    ui.bRemoveAllVectors->hide();
-
     ui.cbBaudRate->hide();
-    ui.cbPort->hide();
-    ui.cbUpdateOn->hide();
-    ui.cbXaxisVector->hide();
+    ui.lBaudRate->hide();
+
+    ui.lHost->hide();
+    ui.leHost->hide();
+
+    ui.lPort->hide();
+    ui.lePort->hide();
+
+    ui.cbSerialPort->hide();
+    ui.lSerialPort->hide();
+
+    ui.lSourceType->hide();
     ui.cbSourceType->hide();
 
-    ui.lwAvailableVectors->hide();
-    ui.lwSelectedVectors->hide();
+    ui.cbUpdateOn->hide();
+    ui.lUpdateOn->hide();
 
-    ui.leSocketServer->hide();
     ui.sbUpdateFrequency->hide();
+    ui.lUpdateFrequency->hide();
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -1040,34 +1052,46 @@ void ImportFileWidget::refreshPreview() {
 	RESET_CURSOR;
 }
 
-void ImportFileWidget::liveDataSourceTypeChanged(int idx) {
-    if (idx == 1) {
-    //local socket
-        ui.lBaudRate->hide();
-        ui.lPort->hide();
+void ImportFileWidget::sourceTypeChanged(int idx) {
+    SourceType type = static_cast<SourceType>(idx);
+
+    if ((type == SourceType::FileOrPipe) || (type == SourceType::LocalSocket)) {
+        ui.lSourceName->show();
+        ui.kleSourceName->show();
 
         ui.cbBaudRate->hide();
-        ui.cbPort->hide();
+        ui.lBaudRate->hide();
+        ui.lHost->hide();
+        ui.leHost->hide();
+        ui.lPort->hide();
+        ui.lePort->hide();
+        ui.cbSerialPort->hide();
+        ui.lSerialPort->hide();
+    } else if (type == SourceType::NetworkSocket) {
+        ui.lHost->show();
+        ui.leHost->show();
+        ui.lePort->show();
+        ui.lPort->show();
 
-        ui.lSocketServerName->show();
-        ui.leSocketServer->show();
-    } else if (idx == 2) {
-    //serial port
-        ui.lSocketServerName->hide();
-        ui.leSocketServer->hide();
+        ui.lBaudRate->hide();
+        ui.cbBaudRate->hide();
+        ui.lSerialPort->hide();
+        ui.cbSerialPort->hide();
+        ui.lSourceName->hide();
+        ui.kleSourceName->hide();
 
+    } else if (type == SourceType::SerialPort) {
         ui.lBaudRate->show();
         ui.cbBaudRate->show();
-        ui.lPort->show();
-        ui.cbPort->show();
-    } else {
-    //file
-        ui.lBaudRate->hide();
+        ui.lSerialPort->show();
+        ui.cbSerialPort->show();
+
+        ui.lHost->hide();
+        ui.leHost->hide();
+        ui.lePort->hide();
         ui.lPort->hide();
-        ui.lSocketServerName->hide();
-        ui.cbBaudRate->hide();
-        ui.cbPort->hide();
-        ui.leSocketServer->hide();
+        ui.lSourceName->hide();
+        ui.kleSourceName->hide();
     }
 }
 
@@ -1082,6 +1106,18 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
         ui.cbFileType->removeItem(2);
     }
 
+    ui.cbBaudRate->hide();
+    ui.lBaudRate->hide();
+
+    ui.lHost->hide();
+    ui.leHost->hide();
+
+    ui.lPort->hide();
+    ui.lePort->hide();
+
+    ui.cbSerialPort->hide();
+    ui.lSerialPort->hide();
+
     ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
-    ui.cbPort->addItems(FileDataSource::availablePorts());
+    ui.cbSerialPort->addItems(FileDataSource::availablePorts());
 }

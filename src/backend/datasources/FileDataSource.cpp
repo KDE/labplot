@@ -95,11 +95,10 @@ QWidget *FileDataSource::view() const {
 #include <QDebug>
 QStringList FileDataSource::availablePorts() {
     QStringList ports;
-    qDebug() << "portsbef" << QSerialPortInfo::availablePorts().size();
+    qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
     for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
         ports.append(sp.portName());
-        qDebug() << "ports";
 
         qDebug() << sp.description();
         qDebug() << sp.manufacturer();
