@@ -67,10 +67,7 @@ public:
 	void setSeparatingCharacter(const QString&);
 	QString separatingCharacter() const;
 
-	void setDataType(const AbstractColumn::ColumnMode&);
-	void setDataType(const QString&);	// convenience method
-	AbstractColumn::ColumnMode dataType() const;
-	QString dataTypeName() const;		// convenience method
+	QVector<AbstractColumn::ColumnMode> columnModes();
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;

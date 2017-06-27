@@ -49,7 +49,7 @@ public:
 
 	QString m_commentCharacter;
 	QString m_separatingCharacter;
-	AbstractColumn::ColumnMode m_dataType;
+//	AbstractColumn::ColumnMode m_dataType;
 	bool m_autoModeEnabled;
 	bool m_headerEnabled;
 	bool m_skipEmptyParts;

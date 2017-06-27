@@ -163,7 +163,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 		lineCount++;
 	}
 
-// wc is much faster but not portable
+//TODO: wc is much faster but not portable
 /*	QElapsedTimer myTimer;
 	myTimer.start();
 	QProcess wc;
@@ -221,9 +221,7 @@ QString AsciiFilter::separatingCharacter() const {
 	return d->m_separatingCharacter;
 }
 
-void AsciiFilter::setDataType(const AbstractColumn::ColumnMode& t) {
-	d->m_dataType = t;
-}
+/*
 void AsciiFilter::setDataType(const QString& typeName) {
 	if (typeName.isEmpty()) {
 		DEBUG("AsciiFilter::setDataType(typeName) : typeName empty!");
@@ -238,9 +236,6 @@ void AsciiFilter::setDataType(const QString& typeName) {
 	d->m_dataType = type;
 }
 
-AbstractColumn::ColumnMode AsciiFilter::dataType() const {
-	return d->m_dataType;
-}
 QString AsciiFilter::dataTypeName() const {
 	const QMetaObject& mo = AbstractColumn::staticMetaObject;
 	const QMetaEnum& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
@@ -248,6 +243,10 @@ QString AsciiFilter::dataTypeName() const {
 	QString typeName = me.valueToKey(d->m_dataType);
 	DEBUG("get data type name = " << typeName.toStdString());
 	return typeName;
+
+}*/
+QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
+	return d->m_columnModes;
 }
 
 void AsciiFilter::setAutoModeEnabled(const bool b) {
