@@ -56,7 +56,7 @@ public:
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
-	void hideDataSource() const;
+    void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 
     void initializeAndFillPortsAndBaudRates();
@@ -78,6 +78,7 @@ private:
 	Ui::FITSOptionsWidget fitsOptionsWidget;
 	QTableWidget* twPreview;
 	const QString& m_fileName;
+    bool m_fileDataSource;
 
 private slots:
 	void fileNameChanged(const QString&);

@@ -12,7 +12,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="gbDataSource">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -23,13 +23,6 @@
       <string>Data source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="lSourceType">
-        <property name="text">
-         <string>Source</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="lFileName">
         <property name="text">
@@ -37,13 +30,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="KLineEdit" name="kleFileName">
-        <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
-        </property>
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="lSourceType">
+        <property name="text">
+         <string>Source</string>
         </property>
        </widget>
       </item>
@@ -82,19 +72,15 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lHost">
-        <property name="text">
-         <string>Host</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lPort">
         <property name="text">
          <string>Port</string>
         </property>
        </widget>
+      </item>
+      <item row="5" column="2" colspan="3">
+       <widget class="QComboBox" name="cbBaudRate"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="lSerialPort">
@@ -109,9 +95,6 @@
          <string>Baud rate</string>
         </property>
        </widget>
-      </item>
-      <item row="5" column="2" colspan="3">
-       <widget class="QComboBox" name="cbBaudRate"/>
       </item>
       <item row="6" column="1">
        <spacer name="verticalSpacer_3">
@@ -201,16 +184,6 @@
         </property>
        </spacer>
       </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="QLabel" name="lSourceName">
-        <property name="text">
-         <string>Source name</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" colspan="3">
-       <widget class="QLineEdit" name="leHost"/>
-      </item>
       <item row="3" column="2" colspan="3">
        <widget class="QLineEdit" name="lePort"/>
       </item>
@@ -221,19 +194,6 @@
        <widget class="KComboBox" name="cbFileType" native="true">
         <property name="enabled">
          <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="2" colspan="3">
-       <widget class="KLineEdit" name="kleSourceName">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Specify the name for the data source. This name will be used in the project explorer upon importing.</string>
-        </property>
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -259,6 +219,26 @@
           <string>Serial port</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="KLineEdit" name="kleFileName">
+        <property name="toolTip">
+         <string>Specify the name of the file to import.</string>
+        </property>
+        <property name="showClearButton" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" colspan="3">
+       <widget class="QLineEdit" name="leHost"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lHost">
+        <property name="text">
+         <string>Host</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -303,9 +283,7 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QStackedWidget" name="swOptions">
-            <widget class="QWidget" name="page">
-             <zorder>groupBox_2</zorder>
-            </widget>
+            <widget class="QWidget" name="page"/>
             <widget class="QWidget" name="page_2"/>
            </widget>
           </item>
@@ -550,7 +528,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="gbUpdateOptions">
      <property name="title">
       <string>Update Options</string>
      </property>
@@ -609,7 +587,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lKeepLastValues">
         <property name="text">
          <string>Keep last N values</string>
         </property>

@@ -58,33 +58,9 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName) {
+ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName),
+    m_fileDataSource(true) {
 	ui.setupUi(this);
-    ////////////////////
-    // hide these options until we have a decent layout for them
-    //because it won't fit on thescreen
-   /* ui.lSocketServerName->hide();
-    ui.leSocketServer->hide();
-
-    ui.lBaudRate->hide();
-    ui.cbBaudRate->hide();
-    ui.lPort->show();
-    ui.cbPort->show();
-
-    ui.lBaudRate->hide();
-    ui.lPort->hide();
-    ui.lSocketServerName->hide();
-    ui.leSocketServer->hide();
-
-    ui.bAddAllToSelectedVectors->hide();
-    ui.bAddSelectedToSelectedVectors->hide();
-    ui.bRemoveAllVectors->hide();
-    ui.bRemoveSelectedVector->hide();
-
-    ui.lwAvailableVectors->hide();
-    ui.lwSelectedVectors->hide();*/
-
-    /// /////////////
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFileName->setCompletionObject(comp);
@@ -181,6 +157,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #endif
 
 	ui.gbOptions->hide();
+    ui.gbUpdateOptions->hide();
 
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 	ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
@@ -286,10 +263,12 @@ ImportFileWidget::~ImportFileWidget() {
 	// nothing
 }
 
-void ImportFileWidget::hideDataSource() const {
-	ui.lSourceName->hide();
-	ui.kleSourceName->hide();
-	ui.chbWatchFile->hide();
+void ImportFileWidget::hideDataSource() {
+
+    m_fileDataSource = false;
+    ui.gbUpdateOptions->hide();
+
+    ui.chbWatchFile->hide();
 	ui.chbLinkFile->hide();
 
     ui.cbBaudRate->hide();
@@ -322,6 +301,10 @@ void ImportFileWidget::showAsciiHeaderOptions(bool b) {
 
 void ImportFileWidget::showOptions(bool b) {
 	ui.gbOptions->setVisible(b);
+
+    if (m_fileDataSource)
+        ui.gbUpdateOptions->setVisible(b);
+
 	resize(layout()->minimumSize());
 }
 
@@ -344,7 +327,6 @@ QString ImportFileWidget::fileName() const {
 void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	//save the data source information
 	source->setFileName( ui.kleFileName->text() );
-	source->setName( ui.kleSourceName->text() );
 	source->setComment( ui.kleFileName->text() );
 	source->setFileWatched( ui.chbWatchFile->isChecked() );
 	source->setFileLinked( ui.chbLinkFile->isChecked() );
@@ -482,13 +464,6 @@ void ImportFileWidget::selectFile() {
 
 	ui.kleFileName->setText(path);
 
-	//use the file name as the name of the data source,
-	//if there is no data source name provided yet
-	if (ui.kleSourceName->text().isEmpty()) {
-		QString fileName = QFileInfo(path).fileName();
-		ui.kleSourceName->setText(fileName);
-	}
-
 	//TODO: decide whether the selection of several files should be possible
 // 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
 // 	if (! filelist.isEmpty() )
@@ -521,7 +496,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.cbFileType->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
 	ui.bManageFilters->setEnabled(fileExists);
-	ui.kleSourceName->setEnabled(fileExists);
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 	if (!fileExists) {
@@ -1056,12 +1030,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
     SourceType type = static_cast<SourceType>(idx);
 
     if ((type == SourceType::FileOrPipe) || (type == SourceType::LocalSocket)) {
-        ui.lSourceName->show();
-        ui.kleSourceName->show();
-        ui.lFileName->hide();
-        ui.kleFileName->hide();
-        ui.bFileInfo->hide();
-        ui.bOpen->hide();
+        ui.lFileName->show();
+        ui.kleFileName->show();
+        ui.bFileInfo->show();
+        ui.bOpen->show();
 
         ui.cbBaudRate->hide();
         ui.lBaudRate->hide();
@@ -1081,8 +1053,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.cbBaudRate->hide();
         ui.lSerialPort->hide();
         ui.cbSerialPort->hide();
-        ui.lSourceName->hide();
-        ui.kleSourceName->hide();
+
         ui.lFileName->hide();
         ui.kleFileName->hide();
         ui.bFileInfo->hide();
@@ -1098,8 +1069,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.leHost->hide();
         ui.lePort->hide();
         ui.lPort->hide();
-        ui.lSourceName->hide();
-        ui.kleSourceName->hide();
         ui.lFileName->hide();
         ui.kleFileName->hide();
         ui.bFileInfo->hide();
