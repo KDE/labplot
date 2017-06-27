@@ -28,10 +28,10 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef ASCIIFILTER_H
 #define ASCIIFILTER_H
 
-#include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
 
+class QStringList;
 class KFilterDev;
 class AsciiFilterPrivate;
 
@@ -44,6 +44,7 @@ public:
 
 	static QStringList separatorCharacters();
 	static QStringList commentCharacters();
+	static QStringList dateTimeFormats();
 	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 
@@ -58,31 +59,27 @@ public:
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
 
-	void setTransposed(const bool);
-	bool isTransposed() const;
-
 	void setCommentCharacter(const QString&);
 	QString commentCharacter() const;
-
 	void setSeparatingCharacter(const QString&);
 	QString separatingCharacter() const;
-
-	QVector<AbstractColumn::ColumnMode> columnModes();
+	void setDateTimeFormat(const QString&);
+	QString dateTimeFormat() const;
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
-
 	void setHeaderEnabled(const bool);
 	bool isHeaderEnabled() const;
+	void setSkipEmptyParts(const bool);
+	bool skipEmptyParts() const;
+	void setSimplifyWhitespacesEnabled(const bool);
+	bool simplifyWhitespacesEnabled() const;
+	void setTransposed(const bool);
+	bool isTransposed() const;
 
 	void setVectorNames(const QString);
 	QString vectorNames() const;
-
-	void setSkipEmptyParts(const bool);
-	bool skipEmptyParts() const;
-
-	void setSimplifyWhitespacesEnabled(const bool);
-	bool simplifyWhitespacesEnabled() const;
+	QVector<AbstractColumn::ColumnMode> columnModes();
 
 	void setStartRow(const int);
 	int startRow() const;

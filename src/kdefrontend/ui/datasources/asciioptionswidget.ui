@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
+    <width>333</width>
     <height>300</height>
    </rect>
   </property>
@@ -76,6 +76,12 @@
    </item>
    <item row="1" column="4">
     <widget class="KComboBox" name="cbSeparatingCharacter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -119,6 +125,12 @@
    </item>
    <item row="0" column="4">
     <widget class="KComboBox" name="cbCommentCharacter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -145,14 +157,24 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="lDataType">
+    <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>Data type</string>
+      <string>DateTime format</string>
      </property>
     </widget>
    </item>
    <item row="2" column="4">
-    <widget class="KComboBox" name="cbDataType"/>
+    <widget class="KComboBox" name="cbDateTimeFormat">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

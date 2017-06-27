@@ -49,18 +49,18 @@ public:
 
 	QString m_commentCharacter;
 	QString m_separatingCharacter;
-//	AbstractColumn::ColumnMode m_dataType;
+	QString m_dateTimeFormat;
 	bool m_autoModeEnabled;
 	bool m_headerEnabled;
 	bool m_skipEmptyParts;
 	bool m_simplifyWhitespacesEnabled;
 	bool m_transposed;
+	QString m_vectorNames;
+	QVector<AbstractColumn::ColumnMode> m_columnModes;
 	int m_startRow;
 	int m_endRow;
 	int m_startColumn;
 	int m_endColumn;
-	QString m_vectorNames;
-	QVector<AbstractColumn::ColumnMode> m_columnModes;
 
 private:
 	QString m_separator;

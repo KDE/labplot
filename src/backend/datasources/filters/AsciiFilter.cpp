@@ -115,6 +115,14 @@ QStringList AsciiFilter::commentCharacters() {
 }
 
 /*!
+returns the list of all predefined datetime formats.
+*/
+QStringList AsciiFilter::dateTimeFormats() {
+	// TODO
+	return (QStringList() << "hh:mm:ss");
+}
+
+/*!
 returns the list of all predefined data types.
 */
 QStringList AsciiFilter::dataTypes() {
@@ -200,7 +208,6 @@ size_t AsciiFilter::lineNumber(KFilterDev &device) {
 void AsciiFilter::setTransposed(const bool b) {
 	d->m_transposed = b;
 }
-
 bool AsciiFilter::isTransposed() const {
 	return d->m_transposed;
 }
@@ -208,7 +215,6 @@ bool AsciiFilter::isTransposed() const {
 void AsciiFilter::setCommentCharacter(const QString& s) {
 	d->m_commentCharacter = s;
 }
-
 QString AsciiFilter::commentCharacter() const {
 	return d->m_commentCharacter;
 }
@@ -216,9 +222,15 @@ QString AsciiFilter::commentCharacter() const {
 void AsciiFilter::setSeparatingCharacter(const QString& s) {
 	d->m_separatingCharacter = s;
 }
-
 QString AsciiFilter::separatingCharacter() const {
 	return d->m_separatingCharacter;
+}
+
+void AsciiFilter::setDateTimeFormat(const QString &f) {
+	d->m_dateTimeFormat = f;
+}
+QString AsciiFilter::dateTimeFormat() const {
+	return d->m_dateTimeFormat;
 }
 
 /*
@@ -235,24 +247,11 @@ void AsciiFilter::setDataType(const QString& typeName) {
 	DEBUG("set data type value = " << type << " from " << typeName.toStdString());
 	d->m_dataType = type;
 }
-
-QString AsciiFilter::dataTypeName() const {
-	const QMetaObject& mo = AbstractColumn::staticMetaObject;
-	const QMetaEnum& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
-
-	QString typeName = me.valueToKey(d->m_dataType);
-	DEBUG("get data type name = " << typeName.toStdString());
-	return typeName;
-
 }*/
-QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
-	return d->m_columnModes;
-}
 
 void AsciiFilter::setAutoModeEnabled(const bool b) {
 	d->m_autoModeEnabled = b;
 }
-
 bool AsciiFilter::isAutoModeEnabled() const {
 	return d->m_autoModeEnabled;
 }
@@ -260,23 +259,13 @@ bool AsciiFilter::isAutoModeEnabled() const {
 void AsciiFilter::setHeaderEnabled(const bool b) {
 	d->m_headerEnabled = b;
 }
-
 bool AsciiFilter::isHeaderEnabled() const {
 	return d->m_headerEnabled;
-}
-
-void AsciiFilter::setVectorNames(const QString s) {
-	d->m_vectorNames = s.simplified();
-}
-
-QString AsciiFilter::vectorNames() const {
-	return d->m_vectorNames;
 }
 
 void AsciiFilter::setSkipEmptyParts(const bool b) {
 	d->m_skipEmptyParts = b;
 }
-
 bool AsciiFilter::skipEmptyParts() const {
 	return d->m_skipEmptyParts;
 }
@@ -284,15 +273,24 @@ bool AsciiFilter::skipEmptyParts() const {
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b) {
 	d->m_simplifyWhitespacesEnabled = b;
 }
-
 bool AsciiFilter::simplifyWhitespacesEnabled() const {
 	return d->m_simplifyWhitespacesEnabled;
+}
+
+void AsciiFilter::setVectorNames(const QString s) {
+	d->m_vectorNames = s.simplified();
+}
+QString AsciiFilter::vectorNames() const {
+	return d->m_vectorNames;
+}
+
+QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
+	return d->m_columnModes;
 }
 
 void AsciiFilter::setStartRow(const int r) {
 	d->m_startRow = r;
 }
-
 int AsciiFilter::startRow() const {
 	return d->m_startRow;
 }
@@ -300,7 +298,6 @@ int AsciiFilter::startRow() const {
 void AsciiFilter::setEndRow(const int r) {
 	d->m_endRow = r;
 }
-
 int AsciiFilter::endRow() const {
 	return d->m_endRow;
 }
@@ -308,7 +305,6 @@ int AsciiFilter::endRow() const {
 void AsciiFilter::setStartColumn(const int c) {
 	d->m_startColumn = c;
 }
-
 int AsciiFilter::startColumn() const {
 	return d->m_startColumn;
 }
@@ -316,7 +312,6 @@ int AsciiFilter::startColumn() const {
 void AsciiFilter::setEndColumn(const int c) {
 	d->m_endColumn = c;
 }
-
 int AsciiFilter::endColumn() const {
 	return d->m_endColumn;
 }
@@ -442,8 +437,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 		if (isNumber)
 			col++;
 		else {	// not number (or "DateTime" etc. selected?)
-			//TODO: format is just a test: Get format from user (default = ?)
-			QDateTime valueDateTime = QDateTime::fromString(valueString, "h:m:s");
+			QDateTime valueDateTime = QDateTime::fromString(valueString, m_dateTimeFormat);
 			QDEBUG("date time =" << valueDateTime);
 			if (valueDateTime.isValid())
 				m_columnModes[col++] = AbstractColumn::DateTime;

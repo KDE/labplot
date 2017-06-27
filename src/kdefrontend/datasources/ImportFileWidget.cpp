@@ -74,9 +74,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
-//	asciiOptionsWidget.cbDataType->addItems(AsciiFilter::dataTypes());
-	asciiOptionsWidget.cbDataType->hide();	//TODO: enable later
-	asciiOptionsWidget.lDataType->hide();	//TODO: enable later
+	asciiOptionsWidget.cbDateTimeFormat->addItems(AsciiFilter::dateTimeFormats());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
@@ -199,7 +197,7 @@ void ImportFileWidget::loadSettings() {
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
-	//asciiOptionsWidget.cbDataType->setCurrentItem(conf.readEntry("DataType", "Numeric"));
+	asciiOptionsWidget.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
 	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
@@ -238,7 +236,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// ascii data
 	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
-//	conf.writeEntry("DataType", asciiOptionsWidget.cbDataType->currentText());
+	conf.writeEntry("DateTimeFormat", asciiOptionsWidget.cbDateTimeFormat->currentText());
 	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
@@ -330,8 +328,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(false);
 				filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 				filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-//				DEBUG("asciiOptionsWidget.cbDataType->currentText() = " << asciiOptionsWidget.cbDataType->currentText().toStdString());
-//				filter->setDataType(asciiOptionsWidget.cbDataType->currentText());
+				filter->setDateTimeFormat(asciiOptionsWidget.cbDateTimeFormat->currentText());
 				filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
 				filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
 				filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
