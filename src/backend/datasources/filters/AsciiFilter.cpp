@@ -115,11 +115,18 @@ QStringList AsciiFilter::commentCharacters() {
 }
 
 /*!
-returns the list of all predefined datetime formats.
+returns the list of all supported locales for numeric data
+*/
+QStringList AsciiFilter::numberFormats() {
+	return (QStringList() << i18n("System locale") << i18n("C format"));
+}
+
+/*!
+returns the list of all supported datetime formats
 */
 QStringList AsciiFilter::dateTimeFormats() {
-	// TODO
-	return (QStringList() << "hh:mm:ss");
+	// TODO: more formats
+	return (QStringList() << QLatin1String("hh:mm:ss") << QLatin1String("YYYY-MM-DD|T|hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss"));
 }
 
 /*!
