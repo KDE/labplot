@@ -135,75 +135,75 @@ void BinaryFilter::saveFilterSettings(const QString& filterName) const {
 ///////////////////////////////////////////////////////////////////////
 
 void BinaryFilter::setVectors(const int v) {
-	d->vectors = v;
+	d->m_vectors = v;
 }
 
 int BinaryFilter::vectors() const {
-	return d->vectors;
+	return d->m_vectors;
 }
 
 void BinaryFilter::setDataType(const BinaryFilter::DataType t) {
-	d->dataType = t;
+	d->m_dataType = t;
 }
 
 BinaryFilter::DataType BinaryFilter::dataType() const {
-	return d->dataType;
+	return d->m_dataType;
 }
 
 void BinaryFilter::setByteOrder(const BinaryFilter::ByteOrder b) {
-	d->byteOrder = b;
+	d->m_byteOrder = b;
 }
 
 BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
-	return d->byteOrder;
+	return d->m_byteOrder;
 }
 
 void BinaryFilter::setSkipStartBytes(const int s) {
-	d->skipStartBytes = s;
+	d->m_skipStartBytes = s;
 }
 
 int BinaryFilter::skipStartBytes() const {
-	return d->skipStartBytes;
+	return d->m_skipStartBytes;
 }
 
 void BinaryFilter::setStartRow(const int s) {
-	d->startRow = s;
+	d->m_startRow = s;
 }
 
 int BinaryFilter::startRow() const {
-	return d->startRow;
+	return d->m_startRow;
 }
 
 void BinaryFilter::setEndRow(const int e) {
-	d->endRow = e;
+	d->m_endRow = e;
 }
 
 int BinaryFilter::endRow() const {
-	return d->endRow;
+	return d->m_endRow;
 }
 
 void BinaryFilter::setSkipBytes(const int s) {
-	d->skipBytes = s;
+	d->m_skipBytes = s;
 }
 
 int BinaryFilter::skipBytes() const {
-	return d->skipBytes;
+	return d->m_skipBytes;
 }
 
 void BinaryFilter::setAutoModeEnabled(bool b) {
-	d->autoModeEnabled = b;
+	d->m_autoModeEnabled = b;
 }
 
 bool BinaryFilter::isAutoModeEnabled() const {
-	return d->autoModeEnabled;
+	return d->m_autoModeEnabled;
 }
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
-	q(owner), vectors(2), dataType(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian),
-	skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0), autoModeEnabled(true) {
+	q(owner), m_vectors(2), m_dataType(BinaryFilter::INT8), m_byteOrder(BinaryFilter::LittleEndian),
+	m_skipStartBytes(0), m_startRow(1), m_endRow(-1), m_skipBytes(0), m_autoModeEnabled(true) {
 }
 
 
@@ -218,7 +218,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 	if (! device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 
-	m_numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
+	m_numRows = BinaryFilter::rowNumber(fileName, m_vectors, m_dataType);
 
 	return readDataFromDevice(device, dataSource, importMode, lines);
 }
@@ -232,27 +232,27 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 	QDataStream in(&device);
 
 	//TODO: check
-	if (byteOrder == BinaryFilter::BigEndian)
+	if (m_byteOrder == BinaryFilter::BigEndian)
 		in.setByteOrder(QDataStream::BigEndian);
-	else if (byteOrder == BinaryFilter::LittleEndian)
+	else if (m_byteOrder == BinaryFilter::LittleEndian)
 		in.setByteOrder(QDataStream::LittleEndian);
 
 	// catch case that skipStartBytes or startRow is bigger than file
-	if (skipStartBytes >= BinaryFilter::dataSize(dataType) * vectors * m_numRows || startRow > m_numRows) {
+	if (m_skipStartBytes >= BinaryFilter::dataSize(m_dataType) * m_vectors * m_numRows || m_startRow > m_numRows) {
 		if (dataSource != NULL)
 			dataSource->clear();
 		return dataStrings << (QStringList() << i18n("data selection empty"));
 	}
 
 	// skip bytes at start
-	for (int i = 0; i < skipStartBytes; i++) {
+	for (int i = 0; i < m_skipStartBytes; i++) {
 		qint8 tmp;
 		in >> tmp;
 	}
 
 	// skip until start row
-	for (int i = 0; i < (startRow-1)*vectors; ++i) {
-		for (int j = 0; j < BinaryFilter::dataSize(dataType); ++j) {
+	for (int i = 0; i < (m_startRow-1) * m_vectors; ++i) {
+		for (int j = 0; j < BinaryFilter::dataSize(m_dataType); ++j) {
 			qint8 tmp;
 			in >> tmp;
 		}
@@ -260,21 +260,21 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 
 	// set range of rows
 	int actualRows;
-	if (endRow == -1)
-		actualRows = m_numRows - startRow + 1;
-	else if (endRow > m_numRows - startRow + 1)
+	if (m_endRow == -1)
+		actualRows = m_numRows - m_startRow + 1;
+	else if (m_endRow > m_numRows - m_startRow + 1)
 		actualRows = m_numRows;
 	else
-		actualRows = endRow - startRow + 1;
-	int actualCols = vectors;
+		actualRows = m_endRow - m_startRow + 1;
+	int actualCols = m_vectors;
 	if (lines == -1)
 		lines = actualRows;
 
 	//TODO: use DEBUG()
 #ifndef NDEBUG
 	qDebug()<<"	numRows ="<<m_numRows;
-	qDebug()<<"	startRow ="<<startRow;
-	qDebug()<<"	endRow ="<<endRow;
+// 	qDebug()<<"	startRow ="<<m_startRow;
+	qDebug()<<"	endRow ="<<m_endRow;
 	qDebug()<<"	actualRows ="<<actualRows;
 	qDebug()<<"	actualCols ="<<actualCols;
 	qDebug()<<"	lines ="<<lines;
@@ -290,7 +290,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 	for (int i = 0; i < qMin(actualRows, lines); i++) {
 		QStringList lineString;
 		for (int n = 0; n < actualCols; n++) {
-			switch (dataType) {
+			switch (m_dataType) {
 			case BinaryFilter::INT8: {
 				qint8 value;
 				in >> value;
@@ -428,14 +428,14 @@ void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* da
  */
 void BinaryFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("binaryFilter");
-	writer->writeAttribute("vectors", QString::number(d->vectors) );
-	writer->writeAttribute("dataType", QString::number(d->dataType) );
-	writer->writeAttribute("byteOrder", QString::number(d->byteOrder) );
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
-	writer->writeAttribute("startRow", QString::number(d->startRow) );
-	writer->writeAttribute("endRow", QString::number(d->endRow) );
-	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes) );
-	writer->writeAttribute("skipBytes", QString::number(d->skipBytes) );
+	writer->writeAttribute("vectors", QString::number(d->m_vectors) );
+	writer->writeAttribute("dataType", QString::number(d->m_dataType) );
+	writer->writeAttribute("byteOrder", QString::number(d->m_byteOrder) );
+	writer->writeAttribute("autoMode", QString::number(d->m_autoModeEnabled) );
+	writer->writeAttribute("startRow", QString::number(d->m_startRow) );
+	writer->writeAttribute("endRow", QString::number(d->m_endRow) );
+	writer->writeAttribute("skipStartBytes", QString::number(d->m_skipStartBytes) );
+	writer->writeAttribute("skipBytes", QString::number(d->m_skipBytes) );
 	writer->writeEndElement();
 }
 
@@ -456,49 +456,49 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'vectors'"));
 	else
-		d->vectors = str.toInt();
+		d->m_vectors = str.toInt();
 
 	str = attribs.value("dataType").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'dataType'"));
 	else
-		d->dataType = (BinaryFilter::DataType) str.toInt();
+		d->m_dataType = (BinaryFilter::DataType) str.toInt();
 
 	str = attribs.value("byteOrder").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'byteOrder'"));
 	else
-		d->byteOrder = (BinaryFilter::ByteOrder) str.toInt();
+		d->m_byteOrder = (BinaryFilter::ByteOrder) str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
-		d->autoModeEnabled = str.toInt();
+		d->m_autoModeEnabled = str.toInt();
 
 	str = attribs.value("startRow").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
 	else
-		d->startRow = str.toInt();
+		d->m_startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endRow'"));
 	else
-		d->endRow = str.toInt();
+		d->m_endRow = str.toInt();
 
 	str = attribs.value("skipStartBytes").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipStartBytes'"));
 	else
-		d->skipStartBytes = str.toInt();
+		d->m_skipStartBytes = str.toInt();
 
 	str = attribs.value("skipBytes").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
 	else
-		d->skipBytes = str.toInt();
+		d->m_skipBytes = str.toInt();
 
 	return true;
 }

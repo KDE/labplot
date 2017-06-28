@@ -42,18 +42,17 @@ public:
 
 	const BinaryFilter* q;
 
-	int vectors;
-	BinaryFilter::DataType dataType;
-	BinaryFilter::ByteOrder byteOrder;
+	int m_vectors;
+	BinaryFilter::DataType m_dataType;
+	BinaryFilter::ByteOrder m_byteOrder;
 
-	// TODO m_*
-	int skipStartBytes;	// bytes to skip at start
-	int startRow;		// start row (value*vectors) to read
-	int endRow;		// end row to (value*vectors) read
-	int skipBytes;		// bytes to skip after each value
-	int m_numRows;	// number of rows
+	int m_skipStartBytes;	// bytes to skip at start
+	int m_startRow;		// start row (value*vectors) to read
+	int m_endRow;		// end row to (value*vectors) read
+	int m_skipBytes;		// bytes to skip after each value
+	int m_numRows;		// number of rows
 
-	bool autoModeEnabled;
+	bool m_autoModeEnabled;
 
 private:
 	void clearDataSource(AbstractDataSource*) const;
