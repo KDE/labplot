@@ -28,6 +28,7 @@
 
 #include "ColumnPrivate.h"
 #include "ColumnStringIO.h"
+#include "Column.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"

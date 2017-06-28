@@ -33,10 +33,8 @@
 
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/core/column/ColumnPrivate.h"
 
-#include <cmath>
-
-class ColumnPrivate;
 class ColumnStringIO;
 class QActionGroup;
 
@@ -44,46 +42,11 @@ class Column : public AbstractColumn {
 	Q_OBJECT
 
 public:
-	struct ColumnStatistics {
-		ColumnStatistics() {
-			minimum = NAN;
-			maximum = NAN;
-			arithmeticMean = NAN;
-			geometricMean = NAN;
-			harmonicMean = NAN;
-			contraharmonicMean = NAN;
-			median = NAN;
-			variance = NAN;
-			standardDeviation = NAN;
-			meanDeviation = NAN;
-			meanDeviationAroundMedian = NAN;
-			medianDeviation = NAN;
-			skewness = NAN;
-			kurtosis = NAN;
-			entropy = NAN;
-		}
-		double minimum;
-		double maximum;
-		double arithmeticMean;
-		double geometricMean;
-		double harmonicMean;
-		double contraharmonicMean;
-		double median;
-		double variance;
-		double standardDeviation;
-		double meanDeviation; // mean absolute deviation around mean
-		double meanDeviationAroundMedian; // mean absolute deviation around median
-		double medianDeviation; // median absolute deviation
-		double skewness;
-		double kurtosis;
-		double entropy;
-	};
-
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
 	template <class T>
 	Column(const QString& name, QVector<T> data)
-		: AbstractColumn(name), d(new class ColumnPrivate(this, AbstractColumn::Numeric, new QVector<T>(data))) {
+		: AbstractColumn(name), d(new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<T>(data))) {
 		init();
 	};
 	Column(const QString& name, QStringList data); // overloaded contructor for QStringList
@@ -120,7 +83,7 @@ public:
 	void setFormula(int, QString);
 	void clearFormulas();
 
-	const ColumnStatistics& statistics();
+	const AbstractColumn::ColumnStatistics& statistics();
 	void* data() const;
 
 	QString textAt(const int) const;

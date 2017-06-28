@@ -30,7 +30,9 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/core/column/Column.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/IntervalAttribute.h"
+
 class Column;
 
 class ColumnPrivate : QObject {
@@ -99,7 +101,7 @@ public:
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
 
-	Column::ColumnStatistics statistics;
+	AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable;
 
 private:
