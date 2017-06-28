@@ -114,7 +114,7 @@ QStringList AsciiFilter::commentCharacters() {
 	return (QStringList() << "#" << "!" << "//" << "+" << "c" << ":" << ";");
 }
 
-/*!
+/*
 returns the list of all supported locales for numeric data
 */
 QStringList AsciiFilter::numberFormats() {
@@ -459,7 +459,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
 	if (m_endRow == -1 || m_endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
-	m_actualRows = actualEndRow + 1;
+	if (m_actualRows > actualEndRow)
+		m_actualRows = actualEndRow;
 
 	// reset to start of file
 	device.seek(0);
@@ -498,7 +499,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> dataContainer;	// pointers to the actual data containers
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_vectorNameList, m_columnModes);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - m_startRow + 1, m_actualCols, m_vectorNameList, m_columnModes);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -510,19 +511,18 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 		QString line = device.readLine();
 		if (m_simplifyWhitespacesEnabled)
 			line = line.simplified();
-//		DEBUG("simplified line = " << line.toStdString());
+		DEBUG("simplified line = " << line.toStdString());
 
 		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
 			continue;
 		if (m_startRow > 1) {	// skip start lines
 			m_startRow--;
-			i--;
 			continue;
 		}
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
 		QStringList lineString;
-//		QDEBUG("split line = " << lineStringList);
+		QDEBUG("split line = " << lineStringList);
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const QString valueString = lineStringList.at(n);

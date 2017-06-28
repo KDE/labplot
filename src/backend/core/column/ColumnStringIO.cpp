@@ -36,7 +36,6 @@
  * \brief String-IO interface of Column.
  */
 ColumnStringIO::ColumnStringIO(Column* owner) : AbstractColumn(""), m_owner(owner), m_setting(false) {
-
 }
 
 AbstractColumn::ColumnMode ColumnStringIO::columnMode() const {
@@ -54,8 +53,8 @@ int ColumnStringIO::rowCount() const {
 bool ColumnStringIO::isValid(int row) const {
 	if (m_setting)
 		return true;
-	else
-		return m_owner->isValid(row);
+
+	return m_owner->isValid(row);
 }
 
 void ColumnStringIO::setTextAt(int row, const QString &value) {
