@@ -500,7 +500,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 
 /*!
     reads the content of device \c device to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
-    Uses the settings defined in the data source (if given).s
+    Uses the settings defined in the data source (if given).
 */
 QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
@@ -519,7 +519,8 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> dataContainer;	// pointers to the actual data containers
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - m_startRow + 1, m_actualCols, m_vectorNameList, m_columnModes);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - m_startRow + 1,
+								     m_actualCols, m_vectorNameList, m_columnModes);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -531,7 +532,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 		QString line = device.readLine();
 		if (m_simplifyWhitespacesEnabled)
 			line = line.simplified();
-		DEBUG("simplified line = " << line.toStdString());
+//		DEBUG("simplified line = " << line.toStdString());
 
 		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
 			continue;
@@ -542,7 +543,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
 		QStringList lineString;
-		QDEBUG("split line = " << lineStringList);
+//		QDEBUG("split line = " << lineStringList);
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const QString valueString = lineStringList.at(n);
@@ -557,8 +558,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						// TODO: format
-						const QDateTime valueDateTime = QDateTime::fromString(valueString);
+						const QDateTime valueDateTime = QDateTime::fromString(valueString, m_dateTimeFormat);
 						if (valueDateTime.isValid())
 							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime;
 						else
@@ -569,7 +569,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						static_cast<QVector<QString>*>(dataContainer[n])->operator[](currentRow) = valueString;
 					}
 				} else {	// preview
-					//TODO: check for type?
+					//TODO: type dependent conversion
 					lineString += valueString;
 				}
 			} else {	// missing columns in this line
@@ -611,6 +611,12 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				break;
 			case AbstractColumn::Text:
 				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+				break;
+			case AbstractColumn::Month:
+				comment = i18np("month data, %1 element", "month data, %1 elements", rows);
+				break;
+			case AbstractColumn::Day:
+				comment = i18np("day data, %1 element", "day data, %1 elements", rows);
 				break;
 			case AbstractColumn::DateTime:
 				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);

@@ -4,7 +4,7 @@
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -210,4 +210,3 @@ private:
 };
 
 #endif
-
