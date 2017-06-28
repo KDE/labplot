@@ -55,6 +55,13 @@ AsciiFilter::~AsciiFilter() {
 }
 
 /*!
+  reads the content of the device \c device.
+*/
+QVector<QStringList> AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	return d->readDataFromDevice(device, dataSource, importMode, lines);
+}
+
+/*!
   reads the content of the file \c fileName.
 */
 QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
