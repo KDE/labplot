@@ -1121,7 +1121,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 				break;
 			}
 		case AbstractColumn::Text: {
-				QStringList results;
+				QVector<QString> results;
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results << QString::number(row+1);
@@ -1193,8 +1193,8 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				break;
 			}
 		case AbstractColumn::Text: {
-				QStringList results;
-				for (int row=first; row<=last; row++)
+				QVector<QString> results;
+				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 						results << QString::number(double(qrand())/double(RAND_MAX));
 					else
@@ -1291,8 +1291,8 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 					                                    i18n("Value"), QLineEdit::Normal, 0, &stringOk);
 				if (stringOk && !stringValue.isEmpty()) {
 					WAIT_CURSOR;
-					QStringList results;
-					for (int row=first; row<=last; row++) {
+					QVector<QString> results;
+					for (int row = first; row <= last; row++) {
 						if (isCellSelected(row, col))
 							results << stringValue;
 						else
@@ -1577,7 +1577,7 @@ void SpreadsheetView::removeSelectedRows() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	//TODO setSuppressDataChangedSignal
-	foreach (const Interval<int>& i, selectedRows().intervals())
+	for (const auto& i: selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1588,27 +1588,26 @@ void SpreadsheetView::clearSelectedRows() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
-	QList<Column*> list = selectedColumns();
-	foreach (Column* col_ptr, list) {
-		col_ptr->setSuppressDataChangedSignal(true);
+	for (auto* col: selectedColumns()) {
+		col->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
-			foreach (const Interval<int>& i, selectedRows().intervals())
-				col_ptr->setFormula(i, "");
+			for (const auto& i: selectedRows().intervals())
+				col->setFormula(i, "");
 		} else {
-			foreach (const Interval<int>& i, selectedRows().intervals()) {
-				if (i.end() == col_ptr->rowCount()-1)
-					col_ptr->removeRows(i.start(), i.size());
+			for (const auto& i: selectedRows().intervals()) {
+				if (i.end() == col->rowCount()-1)
+					col->removeRows(i.start(), i.size());
 				else {
-					QStringList empties;
+					QVector<QString> empties;
 					for (int j = 0; j < i.size(); j++)
 						empties << QString();
-					col_ptr->asStringColumn()->replaceTexts(i.start(), empties);
+					col->asStringColumn()->replaceTexts(i.start(), empties);
 				}
 			}
 		}
 
-		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1662,7 +1661,7 @@ void SpreadsheetView::goToCell() {
 void SpreadsheetView::sortDialog(QList<Column*> cols) {
 	if (cols.isEmpty()) return;
 
-	foreach(Column* col, cols)
+	for (auto* col: cols)
 		col->setSuppressDataChangedSignal(true);
 
 	SortDialog* dlg = new SortDialog();
@@ -1671,7 +1670,7 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 	dlg->setColumnsList(cols);
 	int rc = dlg->exec();
 
-	foreach (Column* col, cols) {
+	for (auto* col: cols) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
 			col->setChanged();
@@ -1680,10 +1679,10 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 
 void SpreadsheetView::sortColumnAscending() {
 	QList< Column* > cols = selectedColumns();
-	foreach(Column* col, cols)
+	for (auto* col: cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, true);
-	foreach(Column* col, cols) {
+	for (auto* col: cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
@@ -1691,10 +1690,10 @@ void SpreadsheetView::sortColumnAscending() {
 
 void SpreadsheetView::sortColumnDescending() {
 	QList< Column* > cols = selectedColumns();
-	foreach(Column* col, cols)
+	for (auto* col: cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, false);
-	foreach(Column* col, cols) {
+	for (auto* col: cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}

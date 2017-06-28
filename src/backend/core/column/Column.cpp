@@ -327,7 +327,7 @@ void Column::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void Column::replaceTexts(int first, const QStringList& new_values) {
+void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		setStatisticsAvailable(false);
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));

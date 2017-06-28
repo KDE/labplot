@@ -44,7 +44,7 @@ public:
 	virtual bool isValid(int) const;
 	virtual bool copy(const AbstractColumn*);
 	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
-	virtual void replaceTexts(int start_row, const QStringList& texts);
+	virtual void replaceTexts(int start_row, const QVector<QString>& texts);
 
 private:
 	Column* m_owner;

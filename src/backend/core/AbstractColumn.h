@@ -164,7 +164,7 @@ public:
 
 	virtual QString textAt(int row) const;
 	virtual void setTextAt(int row, const QString& new_value);
-	virtual void replaceTexts(int first, const QStringList& new_values);
+	virtual void replaceTexts(int first, const QVector<QString>& new_values);
 	virtual QDate dateAt(int row) const;
 	virtual void setDateAt(int row, const QDate& new_value);
 	virtual QTime timeAt(int row) const;

@@ -356,7 +356,7 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::replaceTexts(int first, const QStringList& new_values) {
+void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 

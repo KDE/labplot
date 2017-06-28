@@ -87,7 +87,7 @@ public:
 
 	QString textAt(int row) const;
 	void setTextAt(int row, const QString&);
-	void replaceTexts(int first, const QStringList&);
+	void replaceTexts(int first, const QVector<QString>&);
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, const QDate&);
