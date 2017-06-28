@@ -36,134 +36,135 @@ class CartesianPlot;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
-//TODO: align
 class CartesianPlotLegend : public WorksheetElement {
 	Q_OBJECT
+	Q_ENUMS(HorizontalPosition)
+	Q_ENUMS(VerticalPosition)
 
-	public:
-		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+public:
+	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
+	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 
-		struct PositionWrapper{
-			QPointF point;
-			HorizontalPosition horizontalPosition;
-			VerticalPosition verticalPosition;
-		};
+	struct PositionWrapper {
+		QPointF point;
+		HorizontalPosition horizontalPosition;
+		VerticalPosition verticalPosition;
+	};
 
-		CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
-		virtual ~CartesianPlotLegend();
+	CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
+	virtual ~CartesianPlotLegend();
 
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
-		virtual QGraphicsItem* graphicsItem() const override;
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*) override;
-		virtual void loadThemeConfig(const KConfig& config) override;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QGraphicsItem* graphicsItem() const override;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*) override;
+	virtual void loadThemeConfig(const KConfig& config) override;
 
-		virtual void setVisible(bool) override;
-		virtual bool isVisible() const override;
-		virtual void setPrinting(bool) override;
+	virtual void setVisible(bool) override;
+	virtual bool isVisible() const override;
+	virtual void setPrinting(bool) override;
 
-		TextLabel* title();
+	TextLabel* title();
 
-		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
-		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
-		BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
-		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
-		BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
+	CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
+	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
+	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
+	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
-		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
+	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 
-		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-		BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
-		BASIC_D_ACCESSOR_DECL(float, borderOpacity, BorderOpacity)
+	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+	BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
+	BASIC_D_ACCESSOR_DECL(float, borderOpacity, BorderOpacity)
 
-		BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-		BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-		BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-		BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-		BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
-		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
+	BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
+	BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
+	BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
+	BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
+	BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+	BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	virtual void retransform() override;
+	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-		typedef CartesianPlotLegendPrivate Private;
+	typedef CartesianPlotLegendPrivate Private;
 
-	protected:
-		CartesianPlotLegend(CartesianPlot*, const QString& name, CartesianPlotLegendPrivate* dd);
-		CartesianPlotLegendPrivate* const d_ptr;
+protected:
+	CartesianPlotLegend(CartesianPlot*, const QString& name, CartesianPlotLegendPrivate* dd);
+	CartesianPlotLegendPrivate* const d_ptr;
 
-	private:
+private:
     	Q_DECLARE_PRIVATE(CartesianPlotLegend)
-		void init();
-		void initActions();
+	void init();
+	void initActions();
 
-		CartesianPlot* m_plot;
-		QAction* visibilityAction;
+	CartesianPlot* m_plot;
+	QAction* visibilityAction;
 
-	private slots:
-		//SLOTs for changes triggered via QActions in the context menu
-		void visibilityChanged();
+private slots:
+	//SLOTs for changes triggered via QActions in the context menu
+	void visibilityChanged();
 
-	signals:
-		friend class CartesianPlotLegendSetLabelFontCmd;
-		friend class CartesianPlotLegendSetLabelColorCmd;
-		friend class CartesianPlotLegendSetLabelColumnMajorCmd;
-		friend class CartesianPlotLegendSetLineSymbolWidthCmd;
-		friend class CartesianPlotLegendSetPositionCmd;
-		friend class CartesianPlotLegendSetBackgroundTypeCmd;
-		friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
-		friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
-		friend class CartesianPlotLegendSetBackgroundBrushStyleCmd;
-		friend class CartesianPlotLegendSetBackgroundFirstColorCmd;
-		friend class CartesianPlotLegendSetBackgroundSecondColorCmd;
-		friend class CartesianPlotLegendSetBackgroundFileNameCmd;
-		friend class CartesianPlotLegendSetBackgroundOpacityCmd;
-		friend class CartesianPlotLegendSetBorderPenCmd;
-		friend class CartesianPlotLegendSetBorderCornerRadiusCmd;
-		friend class CartesianPlotLegendSetBorderOpacityCmd;
-		friend class CartesianPlotLegendSetLayoutTopMarginCmd;
-		friend class CartesianPlotLegendSetLayoutBottomMarginCmd;
-		friend class CartesianPlotLegendSetLayoutLeftMarginCmd;
-		friend class CartesianPlotLegendSetLayoutRightMarginCmd;
-		friend class CartesianPlotLegendSetLayoutVerticalSpacingCmd;
-		friend class CartesianPlotLegendSetLayoutHorizontalSpacingCmd;
-		friend class CartesianPlotLegendSetLayoutColumnCountCmd;
-		void labelFontChanged(QFont&);
-		void labelColorChanged(QColor&);
-		void labelColumnMajorChanged(bool);
-		void lineSymbolWidthChanged(float);
-		void positionChanged(const CartesianPlotLegend::PositionWrapper&);
-		void backgroundTypeChanged(PlotArea::BackgroundType);
-		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-		void backgroundBrushStyleChanged(Qt::BrushStyle);
-		void backgroundFirstColorChanged(QColor&);
-		void backgroundSecondColorChanged(QColor&);
-		void backgroundFileNameChanged(QString&);
-		void backgroundOpacityChanged(float);
-		void borderPenChanged(QPen&);
-		void borderCornerRadiusChanged(float);
-		void borderOpacityChanged(float);
-		void layoutTopMarginChanged(float);
-		void layoutBottomMarginChanged(float);
-		void layoutLeftMarginChanged(float);
-		void layoutRightMarginChanged(float);
-		void layoutVerticalSpacingChanged(float);
-		void layoutHorizontalSpacingChanged(float);
-		void layoutColumnCountChanged(int);
+signals:
+	friend class CartesianPlotLegendSetLabelFontCmd;
+	friend class CartesianPlotLegendSetLabelColorCmd;
+	friend class CartesianPlotLegendSetLabelColumnMajorCmd;
+	friend class CartesianPlotLegendSetLineSymbolWidthCmd;
+	friend class CartesianPlotLegendSetPositionCmd;
+	friend class CartesianPlotLegendSetBackgroundTypeCmd;
+	friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
+	friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
+	friend class CartesianPlotLegendSetBackgroundBrushStyleCmd;
+	friend class CartesianPlotLegendSetBackgroundFirstColorCmd;
+	friend class CartesianPlotLegendSetBackgroundSecondColorCmd;
+	friend class CartesianPlotLegendSetBackgroundFileNameCmd;
+	friend class CartesianPlotLegendSetBackgroundOpacityCmd;
+	friend class CartesianPlotLegendSetBorderPenCmd;
+	friend class CartesianPlotLegendSetBorderCornerRadiusCmd;
+	friend class CartesianPlotLegendSetBorderOpacityCmd;
+	friend class CartesianPlotLegendSetLayoutTopMarginCmd;
+	friend class CartesianPlotLegendSetLayoutBottomMarginCmd;
+	friend class CartesianPlotLegendSetLayoutLeftMarginCmd;
+	friend class CartesianPlotLegendSetLayoutRightMarginCmd;
+	friend class CartesianPlotLegendSetLayoutVerticalSpacingCmd;
+	friend class CartesianPlotLegendSetLayoutHorizontalSpacingCmd;
+	friend class CartesianPlotLegendSetLayoutColumnCountCmd;
+	void labelFontChanged(QFont&);
+	void labelColorChanged(QColor&);
+	void labelColumnMajorChanged(bool);
+	void lineSymbolWidthChanged(float);
+	void positionChanged(const CartesianPlotLegend::PositionWrapper&);
+	void backgroundTypeChanged(PlotArea::BackgroundType);
+	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void backgroundBrushStyleChanged(Qt::BrushStyle);
+	void backgroundFirstColorChanged(QColor&);
+	void backgroundSecondColorChanged(QColor&);
+	void backgroundFileNameChanged(QString&);
+	void backgroundOpacityChanged(float);
+	void borderPenChanged(QPen&);
+	void borderCornerRadiusChanged(float);
+	void borderOpacityChanged(float);
+	void layoutTopMarginChanged(float);
+	void layoutBottomMarginChanged(float);
+	void layoutLeftMarginChanged(float);
+	void layoutRightMarginChanged(float);
+	void layoutVerticalSpacingChanged(float);
+	void layoutHorizontalSpacingChanged(float);
+	void layoutColumnCountChanged(int);
 
-		void positionChanged(QPointF&);
-		void visibilityChanged(bool);
+	void positionChanged(QPointF&);
+	void visibilityChanged(bool);
 };
 
 #endif
