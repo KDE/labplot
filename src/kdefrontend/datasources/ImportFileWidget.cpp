@@ -75,9 +75,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
-//	asciiOptionsWidget.cbDataType->addItems(AsciiFilter::dataTypes());
-	asciiOptionsWidget.cbDataType->hide();	//TODO: enable later
-	asciiOptionsWidget.lDataType->hide();	//TODO: enable later
+	asciiOptionsWidget.cbNumbersFormat->addItems(AsciiFilter::numberFormats());
+	asciiOptionsWidget.cbDateTimeFormat->addItems(AsciiFilter::dateTimeFormats());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
@@ -127,7 +126,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// the table widget for preview
 	twPreview = new QTableWidget(ui.tePreview);
-	twPreview->horizontalHeader()->hide();
 	twPreview->verticalHeader()->hide();
 	twPreview->setEditTriggers(QTableWidget::NoEditTriggers);
 	QHBoxLayout* layout = new QHBoxLayout;
@@ -204,7 +202,7 @@ void ImportFileWidget::loadSettings() {
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
-	//asciiOptionsWidget.cbDataType->setCurrentItem(conf.readEntry("DataType", "Numeric"));
+	asciiOptionsWidget.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
 	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
@@ -243,7 +241,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// ascii data
 	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
-//	conf.writeEntry("DataType", asciiOptionsWidget.cbDataType->currentText());
+	conf.writeEntry("DateTimeFormat", asciiOptionsWidget.cbDateTimeFormat->currentText());
 	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
@@ -361,8 +359,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(false);
 				filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 				filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-//				DEBUG("asciiOptionsWidget.cbDataType->currentText() = " << asciiOptionsWidget.cbDataType->currentText().toStdString());
-//				filter->setDataType(asciiOptionsWidget.cbDataType->currentText());
+				filter->setDateTimeFormat(asciiOptionsWidget.cbDateTimeFormat->currentText());
 				filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
 				filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
 				filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
@@ -909,85 +906,86 @@ void ImportFileWidget::refreshPreview() {
 
 	bool ok = true;
 	QTableWidget *tmpTableWidget = 0;
+	QVector<AbstractColumn::ColumnMode> columnModes;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-			ui.tePreview->clear();
+		ui.tePreview->clear();
 
-			AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-			importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = twPreview;
-			break;
-		}
+		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
+		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = twPreview;
+		columnModes = filter->columnModes();
+		break;
+	}
 	case FileDataSource::Binary: {
-			ui.tePreview->clear();
+		ui.tePreview->clear();
 
-			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-			importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = twPreview;
-			break;
-		}
+		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
+		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = twPreview;
+		break;
+	}
 	case FileDataSource::Image: {
-			ui.tePreview->clear();
+		ui.tePreview->clear();
 
-			QImage image(fileName);
-			QTextCursor cursor = ui.tePreview->textCursor();
-			cursor.insertImage(image);
-			RESET_CURSOR;
-			return;
-		}
+		QImage image(fileName);
+		QTextCursor cursor = ui.tePreview->textCursor();
+		cursor.insertImage(image);
+		RESET_CURSOR;
+		return;
+	}
 	case FileDataSource::HDF: {
-			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			lines = hdfOptionsWidget.sbPreviewLines->value();
-			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = hdfOptionsWidget.twPreview;
-			break;
-		}
+		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+		lines = hdfOptionsWidget.sbPreviewLines->value();
+		importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = hdfOptionsWidget.twPreview;
+		break;
+	}
 	case FileDataSource::NETCDF: {
-			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-			lines = netcdfOptionsWidget.sbPreviewLines->value();
-			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = netcdfOptionsWidget.twPreview;
-			break;
-		}
+		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		lines = netcdfOptionsWidget.sbPreviewLines->value();
+		importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = netcdfOptionsWidget.twPreview;
+		break;
+	}
 	case FileDataSource::FITS: {
-			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-			lines = fitsOptionsWidget.sbPreviewLines->value();
-			if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-				const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
-				const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
-				QString itemText = item->text(currentColumn);
-				int extType = 0;
-				if (itemText.contains(QLatin1String("IMAGE #")) ||
-				        itemText.contains(QLatin1String("ASCII_TBL #")) ||
-				        itemText.contains(QLatin1String("BINARY_TBL #")))
-					extType = 1;
-				else if (!itemText.compare(i18n("Primary header")))
-					extType = 2;
-				if (extType == 0) {
-					if (item->parent() != 0) {
-						if (item->parent()->parent() != 0)
-							fileName = item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
-					}
-				} else if (extType == 1) {
-					if (item->parent() != 0) {
-						if (item->parent()->parent() != 0) {
-							bool ok;
-							int hduNum = itemText.right(1).toInt(&ok);
-							fileName = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
-						}
-					}
-				} else {
+		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
+		lines = fitsOptionsWidget.sbPreviewLines->value();
+		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
+			const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
+			const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
+			QString itemText = item->text(currentColumn);
+			int extType = 0;
+			if (itemText.contains(QLatin1String("IMAGE #")) ||
+				itemText.contains(QLatin1String("ASCII_TBL #")) ||
+				itemText.contains(QLatin1String("BINARY_TBL #")))
+				extType = 1;
+			else if (!itemText.compare(i18n("Primary header")))
+				extType = 2;
+			if (extType == 0) {
+				if (item->parent() != 0) {
 					if (item->parent()->parent() != 0)
-						fileName = item->parent()->parent()->text(currentColumn);
+						fileName = item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
 				}
+			} else if (extType == 1) {
+				if (item->parent() != 0) {
+					if (item->parent()->parent() != 0) {
+						int hduNum = itemText.right(1).toInt(&ok);
+						fileName = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
+					}
+				}
+			} else {
+				if (item->parent()->parent() != 0)
+					fileName = item->parent()->parent()->text(currentColumn);
 			}
-			bool readFitsTableToMatrix;
-			importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
-			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
-
-			tmpTableWidget = fitsOptionsWidget.twPreview;
-			break;
 		}
+		bool readFitsTableToMatrix;
+		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
+
+		tmpTableWidget = fitsOptionsWidget.twPreview;
+		break;
+	}
 	}
 
 	// fill the table widget
@@ -1007,6 +1005,7 @@ void ImportFileWidget::refreshPreview() {
 			const int rows = qMax(importedStrings.size(), 1);
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rows);	// new
+
 			for (int i = 0; i < rows; i++) {
 				QDEBUG(importedStrings[i]);
 
@@ -1019,6 +1018,10 @@ void ImportFileWidget::refreshPreview() {
 					tmpTableWidget->setItem(i, j, item);
 				}
 			}
+
+			// set header if columnMode available
+			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); i++)
+				tmpTableWidget->setHorizontalHeaderItem(i, new QTableWidgetItem(QString::number(i+1) + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}")));
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
