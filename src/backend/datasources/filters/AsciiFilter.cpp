@@ -196,7 +196,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
   returns the number of lines in the device \c device or 0 if not available.
   resets the position to 0!
 */
-size_t AsciiFilter::lineNumber(KFilterDev &device) {
+size_t AsciiFilter::lineNumber(QIODevice &device) {
 	// device.hasReadLine() always returns 0 for KFilterDev!
 	if (device.isSequential())
 		return 0;
@@ -340,7 +340,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_endColumn(-1) {
 }
 
-int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
+int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
 
@@ -481,12 +481,22 @@ int AsciiFilterPrivate::prepareDeviceToRead(KFilterDev& device) {
     Uses the settings defined in the data source (if given).
 */
 QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG("AsciiFilterPrivate::readData(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
+	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
+		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+
+	KFilterDev device(fileName);
+	return readDataFromDevice(device, dataSource, importMode, lines);
+}
+
+/*!
+    reads the content of device \c device to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
+    Uses the settings defined in the data source (if given).s
+*/
+QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
 		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 	QVector<QStringList> dataStrings;
 
-	// TODO: also support other devices. Add parameter for input device type?
-	KFilterDev device(fileName);
 	DEBUG("device is sequential = " << device.isSequential());
 	int deviceError = prepareDeviceToRead(device);
 	DEBUG("Device error = " << deviceError);

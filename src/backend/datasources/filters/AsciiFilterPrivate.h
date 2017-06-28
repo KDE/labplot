@@ -40,7 +40,9 @@ class AsciiFilterPrivate {
 public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
-	int prepareDeviceToRead(KFilterDev&);
+	int prepareDeviceToRead(QIODevice&);
+	QVector<QStringList> readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);

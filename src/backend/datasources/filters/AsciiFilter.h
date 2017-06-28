@@ -32,7 +32,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/AbstractColumn.h"
 
 class QStringList;
-class KFilterDev;
+class QIODevice;
 class AsciiFilterPrivate;
 
 class AsciiFilter : public AbstractFileFilter {
@@ -51,8 +51,12 @@ public:
 
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
-	static size_t lineNumber(KFilterDev&);	// calculate number of lines if device supports it
+	static size_t lineNumber(QIODevice&);	// calculate number of lines if device supports it
 
+	// read data from any device
+	QVector<QStringList> readDataFromDevice(const QIODevice& device, AbstractDataSource* = nullptr,
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	// overloaded function to read from file
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
