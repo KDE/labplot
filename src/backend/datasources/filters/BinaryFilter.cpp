@@ -211,35 +211,34 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     reads the content of the device \c device to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QVector<QStringList> dataStrings;
-
-	//TODO
-
-	return dataStrings;
-}
-/*!
-    reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
-    Uses the settings defined in the data source.
-*/
-QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
 	if (! device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 
+	m_numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
+
+	return readDataFromDevice(device, dataSource, importMode, lines);
+}
+/*!
+    reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
+    Uses the settings defined in the data source.
+*/
+QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	QVector<QStringList> dataStrings;
+
 	QDataStream in(&device);
 
+	//TODO: check
 	if (byteOrder == BinaryFilter::BigEndian)
 		in.setByteOrder(QDataStream::BigEndian);
 	else if (byteOrder == BinaryFilter::LittleEndian)
 		in.setByteOrder(QDataStream::LittleEndian);
 
-	int numRows=BinaryFilter::rowNumber(fileName,vectors,dataType);
-
 	// catch case that skipStartBytes or startRow is bigger than file
-	if (skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
+	if (skipStartBytes >= BinaryFilter::dataSize(dataType) * vectors * m_numRows || startRow > m_numRows) {
 		if (dataSource != NULL)
 			dataSource->clear();
 		return dataStrings << (QStringList() << i18n("data selection empty"));
@@ -262,16 +261,18 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 	// set range of rows
 	int actualRows;
 	if (endRow == -1)
-		actualRows = numRows-startRow+1;
-	else if (endRow > numRows-startRow+1)
-		actualRows = numRows;
+		actualRows = m_numRows - startRow + 1;
+	else if (endRow > m_numRows - startRow + 1)
+		actualRows = m_numRows;
 	else
-		actualRows = endRow-startRow+1;
+		actualRows = endRow - startRow + 1;
 	int actualCols = vectors;
 	if (lines == -1)
 		lines = actualRows;
+
+	//TODO: use DEBUG()
 #ifndef NDEBUG
-	qDebug()<<"	numRows ="<<numRows;
+	qDebug()<<"	numRows ="<<m_numRows;
 	qDebug()<<"	startRow ="<<startRow;
 	qDebug()<<"	endRow ="<<endRow;
 	qDebug()<<"	actualRows ="<<actualRows;
@@ -282,9 +283,10 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 	QVector<void*> dataContainer;
 	int columnOffset = 0;
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols);
 
 	// read data
+	//TODO: use ColumnMode ?
 	for (int i = 0; i < qMin(actualRows, lines); i++) {
 		QStringList lineString;
 		for (int n = 0; n < actualCols; n++) {
@@ -397,7 +399,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 		for (int n=0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
-			if (mode == AbstractFileFilter::Replace) {
+			if (importMode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -407,11 +409,6 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
 	dataSource->finalizeImport();
 	return dataStrings;
 }
-
-
-//void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-//	readData(fileName,dataSource,mode);
-//}
 
 /*!
     writes the content of \c dataSource to the file \c fileName.

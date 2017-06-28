@@ -51,6 +51,7 @@ public:
 	int startRow;		// start row (value*vectors) to read
 	int endRow;		// end row to (value*vectors) read
 	int skipBytes;		// bytes to skip after each value
+	int m_numRows;	// number of rows
 
 	bool autoModeEnabled;
 
