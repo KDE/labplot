@@ -599,10 +599,19 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		const int rows = (m_headerEnabled ? currentRow : currentRow + 1);
-		//TODO: support different data types
-		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for (int n = m_startColumn; n <= m_endColumn; n++) {
 			Column* column = spreadsheet->column(columnOffset + n - m_startColumn);
+			QString comment;
+			switch (m_columnModes[n - m_startColumn]) {
+			case AbstractColumn::Numeric:
+				comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+				break;
+			case AbstractColumn::Text:
+				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+				break;
+			case AbstractColumn::DateTime:
+				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
+			}
 			column->setComment(comment);
 			if (importMode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);

@@ -320,7 +320,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-			//TODO use auto_ptr
+			//TODO use unique_ptr
 			AsciiFilter* filter = new AsciiFilter();
 
 			if (ui.cbFilter->currentIndex() == 0)   //"automatic"
