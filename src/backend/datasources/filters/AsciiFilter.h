@@ -84,6 +84,7 @@ public:
 
 	void setVectorNames(const QString);
 	QString vectorNames() const;
+	QStringList vectorNameList() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 
 	void setStartRow(const int);

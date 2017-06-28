@@ -297,6 +297,9 @@ void AsciiFilter::setVectorNames(const QString s) {
 QString AsciiFilter::vectorNames() const {
 	return d->m_vectorNames;
 }
+QStringList AsciiFilter::vectorNameList() const {
+	return d->m_vectorNameList;
+}
 
 QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
 	return d->m_columnModes;
