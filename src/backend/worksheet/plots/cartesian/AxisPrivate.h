@@ -31,6 +31,7 @@
 
 #include <QGraphicsItem>
 #include <QPen>
+#include <QFont>
 #include "Axis.h"
 
 class QGraphicsSceneHoverEvent;
@@ -41,6 +42,7 @@ class AbstractCoordinateSystem;
 class CartesianCoordinateSystem;
 class TextLabel;
 
+//TODO: align
 class AxisPrivate: public QGraphicsItem {
 	public:
 		explicit AxisPrivate(Axis* owner);

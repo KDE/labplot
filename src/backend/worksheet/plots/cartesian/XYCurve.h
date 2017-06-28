@@ -40,6 +40,8 @@
 #include <QPen>
 
 class XYCurvePrivate;
+
+//TODO: align
 class XYCurve: public WorksheetElement {
 	Q_OBJECT
 
@@ -57,13 +59,13 @@ class XYCurve: public WorksheetElement {
 		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QGraphicsItem *graphicsItem() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
+		virtual void loadThemeConfig(const KConfig& config) override;
+		virtual void saveThemeConfig(const KConfig& config) override;
 
 		BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 		POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
@@ -127,15 +129,15 @@ class XYCurve: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool on);
+		virtual void setVisible(bool on) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool on) override;
 		void suppressRetransform(bool);
 		bool isSourceDataChangedSinceLastRecalc() const;
 
 		typedef XYCurvePrivate Private;
 
-		virtual void retransform();
+		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	public slots:

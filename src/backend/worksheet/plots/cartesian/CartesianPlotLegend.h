@@ -36,6 +36,7 @@ class CartesianPlot;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
+//TODO: align
 class CartesianPlotLegend : public WorksheetElement {
 	Q_OBJECT
 
@@ -44,24 +45,24 @@ class CartesianPlotLegend : public WorksheetElement {
 		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 
 		struct PositionWrapper{
-			QPointF 		   point;
+			QPointF point;
 			HorizontalPosition horizontalPosition;
-			VerticalPosition   verticalPosition;
+			VerticalPosition verticalPosition;
 		};
 
 		CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
 		virtual ~CartesianPlotLegend();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem* graphicsItem() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-		virtual void loadThemeConfig(const KConfig& config);
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QGraphicsItem* graphicsItem() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
+		virtual void loadThemeConfig(const KConfig& config) override;
 
-		virtual void setVisible(bool);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool);
+		virtual void setVisible(bool) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool) override;
 
 		TextLabel* title();
 
@@ -92,7 +93,7 @@ class CartesianPlotLegend : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		virtual void retransform();
+		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef CartesianPlotLegendPrivate Private;
