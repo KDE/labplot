@@ -3,7 +3,7 @@ File                 : BinaryFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for BinaryFilter.
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,8 +34,10 @@ class BinaryFilterPrivate {
 public:
 	explicit BinaryFilterPrivate(BinaryFilter*);
 
+	QVector<QStringList> readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	const BinaryFilter* q;

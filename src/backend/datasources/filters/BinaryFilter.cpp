@@ -57,11 +57,11 @@ QVector<QStringList> BinaryFilter::readDataFromFile(const QString& fileName, Abs
 }
 
 /*!
-  reads the content of the file \c fileName to the data source \c dataSource.
+  reads the content of the device \c device.
 */
-//void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-//	d->read(fileName, dataSource, importMode);
-//}
+QVector<QStringList> BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+	return d->readDataFromDevice(device, dataSource, importMode, lines);
+}
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
@@ -206,6 +206,18 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 	skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0), autoModeEnabled(true) {
 }
 
+
+/*!
+    reads the content of the device \c device to the data source \c dataSource or return as string for preview.
+    Uses the settings defined in the data source.
+*/
+QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
+
+	//TODO
+
+	return dataStrings;
+}
 /*!
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
