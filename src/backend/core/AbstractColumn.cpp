@@ -33,7 +33,9 @@
 #include "backend/lib/SignallingUndoCommand.h"
 
 #include <QDateTime>
+#include <QIcon>
 #include <KLocale>
+
 #include <cmath>
 
 /**
@@ -86,6 +88,24 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 AbstractColumn::~AbstractColumn() {
 	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
+}
+
+/**
+ * \brief Convenience method for mode-dependent icon
+ */
+QIcon AbstractColumn::iconForMode(ColumnMode mode) {
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		return QIcon::fromTheme("x-shape-text");
+	case AbstractColumn::Text:
+		return QIcon::fromTheme("draw-text");
+        case AbstractColumn::DateTime:
+        case AbstractColumn::Month:
+        case AbstractColumn::Day:
+                return QIcon::fromTheme("chronometer");
+	}
+
+	return QIcon::fromTheme("x-shape-text");
 }
 
 /**

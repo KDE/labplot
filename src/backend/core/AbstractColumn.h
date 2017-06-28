@@ -130,6 +130,8 @@ public:
 	explicit AbstractColumn(const QString& name);
 	virtual ~AbstractColumn();
 
+	static QIcon iconForMode(ColumnMode mode);
+
 	virtual bool isReadOnly() const { return true; };
 	virtual ColumnMode columnMode() const = 0;
 	virtual void setColumnMode(AbstractColumn::ColumnMode);

@@ -1006,19 +1006,7 @@ void ImportFileWidget::refreshPreview() {
 					columnName = vectorNameList[i];
 				auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}"));
 				item->setTextAlignment(Qt::AlignLeft);
-
-				switch (columnModes[i]) {	//TODO: same as Column::Icon()
-				case AbstractColumn::Numeric:
-					item->setIcon(QIcon::fromTheme("x-shape-text"));
-					break;
-				case AbstractColumn::Text:
-					item->setIcon(QIcon::fromTheme("draw-text"));
-					break;
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					item->setIcon(QIcon::fromTheme("chronometer"));
-				}
+				item->setIcon(AbstractColumn::iconForMode(columnModes[i]));
 
 				tmpTableWidget->setHorizontalHeaderItem(i, item);
 			}
