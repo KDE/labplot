@@ -110,30 +110,30 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 		if(m_new_data != m_old_data)
 			switch (m_mode) {
 			case AbstractColumn::Numeric:
-				delete static_cast< QVector<double>* >(m_new_data);
+				delete static_cast<QVector<double>*>(m_new_data);
 				break;
 			case AbstractColumn::Text:
-				delete static_cast< QStringList* >(m_new_data);
+				delete static_cast<QVector<QString>*>(m_new_data);
 				break;
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				delete static_cast< QVector<QDateTime>* >(m_new_data);
+				delete static_cast<QVector<QDateTime>*>(m_new_data);
 				break;
 			}
 	} else {
 		if(m_new_data != m_old_data)
 			switch (m_old_mode) {
 			case AbstractColumn::Numeric:
-				delete static_cast< QVector<double>* >(m_old_data);
+				delete static_cast<QVector<double>*>(m_old_data);
 				break;
 			case AbstractColumn::Text:
-				delete static_cast< QStringList* >(m_old_data);
+				delete static_cast<QVector<QString>*>(m_old_data);
 				break;
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				delete static_cast< QVector<QDateTime>* >(m_old_data);
+				delete static_cast<QVector<QDateTime>*>(m_old_data);
 				break;
 			}
 	}
@@ -557,30 +557,30 @@ ColumnClearCmd::~ColumnClearCmd() {
 		if (!m_empty_data) return;
 		switch(m_col->columnMode()) {
 		case AbstractColumn::Numeric:
-			delete static_cast< QVector<double>* >(m_empty_data);
+			delete static_cast<QVector<double>*>(m_empty_data);
 			break;
 		case AbstractColumn::Text:
-			delete static_cast< QStringList* >(m_empty_data);
+			delete static_cast<QVector<QString>*>(m_empty_data);
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			delete static_cast< QVector<QDateTime>* >(m_empty_data);
+			delete static_cast<QVector<QDateTime>*>(m_empty_data);
 			break;
 		}
 	} else {
 		if (!m_data) return;
 		switch(m_col->columnMode()) {
 		case AbstractColumn::Numeric:
-			delete static_cast< QVector<double>* >(m_data);
+			delete static_cast<QVector<double>*>(m_data);
 			break;
 		case AbstractColumn::Text:
-			delete static_cast< QStringList* >(m_data);
+			delete static_cast<QVector<QString>*>(m_data);
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			delete static_cast< QVector<QDateTime>* >(m_data);
+			delete static_cast<QVector<QDateTime>*>(m_data);
 			break;
 		}
 	}
@@ -596,7 +596,7 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::Numeric: {
 				QVector<double>* vec = new QVector<double>(rowCount);
 				m_empty_data = vec;
-				for (int i=0; i<rowCount; i++)
+				for (int i = 0; i < rowCount; i++)
 					vec->operator[](i) = NAN;
 				break;
 			}
@@ -604,13 +604,13 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			m_empty_data = new QVector<QDateTime>();
-			for(int i=0; i<rowCount; i++)
+			for (int i = 0; i < rowCount; i++)
 				static_cast< QVector<QDateTime> *>(m_empty_data)->append(QDateTime());
 			break;
 		case AbstractColumn::Text:
-			m_empty_data = new QStringList();
-			for(int i=0; i<rowCount; i++)
-				static_cast< QStringList *>(m_empty_data)->append(QString());
+			m_empty_data = new QVector<QString>();
+			for (int i = 0; i < rowCount; i++)
+				static_cast<QVector<QString>*>(m_empty_data)->append(QString());
 			break;
 		}
 		m_data = m_col->data();
@@ -959,9 +959,9 @@ void ColumnSetDateTimeCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate * col, int first, const QStringList& new_values, QUndoCommand * parent )
+ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand * parent )
 	: QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values) {
-	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() -1));
+	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
 	m_copied = false;
 }
 
@@ -970,7 +970,7 @@ ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate * col, int first, con
  */
 void ColumnReplaceTextsCmd::redo() {
 	if(!m_copied) {
-		m_old_values = static_cast< QStringList* >(m_col->data())->mid(m_first, m_new_values.count());
+		m_old_values = static_cast<QVector<QString>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
 		m_copied = true;
 	}

@@ -327,7 +327,7 @@ void Column::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void Column::replaceTexts(int first, const QStringList& new_values) {
+void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		setStatisticsAvailable(false);
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
@@ -588,17 +588,7 @@ void Column::setChanged() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	switch(columnMode()) {
-	case AbstractColumn::Numeric:
-		return QIcon::fromTheme("x-shape-text");
-	case AbstractColumn::Text:
-		return QIcon::fromTheme("draw-text");
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-		return QIcon::fromTheme("chronometer");
-	}
-	return QIcon::fromTheme("x-shape-text");
+	return iconForMode(columnMode());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

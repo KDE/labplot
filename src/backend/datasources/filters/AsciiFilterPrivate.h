@@ -40,7 +40,9 @@ class AsciiFilterPrivate {
 public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
-	int prepareDeviceToRead(KFilterDev&);
+	int prepareDeviceToRead(QIODevice&);
+	QVector<QStringList> readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
@@ -55,7 +57,8 @@ public:
 	bool m_skipEmptyParts;
 	bool m_simplifyWhitespacesEnabled;
 	bool m_transposed;
-	QString m_vectorNames;
+	QString m_vectorNames;	// do we need this?
+	QStringList m_vectorNameList;
 	QVector<AbstractColumn::ColumnMode> m_columnModes;
 	int m_startRow;
 	int m_endRow;
@@ -64,7 +67,6 @@ public:
 
 private:
 	QString m_separator;
-	QStringList m_vectorNameList;
 	int m_actualRows;
 	int m_actualCols;
 

@@ -251,7 +251,7 @@ private:
 
 class ColumnReplaceTextsCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QStringList& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -259,8 +259,8 @@ public:
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QStringList m_new_values;
-	QStringList m_old_values;
+	QVector<QString> m_new_values;
+	QVector<QString> m_old_values;
 	bool m_copied;
 	int m_row_count;
 };

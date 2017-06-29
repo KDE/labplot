@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,6 +32,7 @@
 #define ABSTRACTCOLUMN_H
 
 #include "backend/core/AbstractAspect.h"
+#include <cmath>	// NAN
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
@@ -90,8 +92,45 @@ public:
 		// etc.
 	};
 
+	struct ColumnStatistics {
+		ColumnStatistics() {
+			minimum = NAN;
+			maximum = NAN;
+			arithmeticMean = NAN;
+			geometricMean = NAN;
+			harmonicMean = NAN;
+			contraharmonicMean = NAN;
+			median = NAN;
+			variance = NAN;
+			standardDeviation = NAN;
+			meanDeviation = NAN;
+			meanDeviationAroundMedian = NAN;
+			medianDeviation = NAN;
+			skewness = NAN;
+			kurtosis = NAN;
+			entropy = NAN;
+		}
+		double minimum;
+		double maximum;
+		double arithmeticMean;
+		double geometricMean;
+		double harmonicMean;
+		double contraharmonicMean;
+		double median;
+		double variance;
+		double standardDeviation;
+		double meanDeviation; // mean absolute deviation around mean
+		double meanDeviationAroundMedian; // mean absolute deviation around median
+		double medianDeviation; // median absolute deviation
+		double skewness;
+		double kurtosis;
+		double entropy;
+	};
+
 	explicit AbstractColumn(const QString& name);
 	virtual ~AbstractColumn();
+
+	static QIcon iconForMode(ColumnMode mode);
 
 	virtual bool isReadOnly() const { return true; };
 	virtual ColumnMode columnMode() const = 0;
@@ -127,7 +166,7 @@ public:
 
 	virtual QString textAt(int row) const;
 	virtual void setTextAt(int row, const QString& new_value);
-	virtual void replaceTexts(int first, const QStringList& new_values);
+	virtual void replaceTexts(int first, const QVector<QString>& new_values);
 	virtual QDate dateAt(int row) const;
 	virtual void setDateAt(int row, const QDate& new_value);
 	virtual QTime timeAt(int row) const;
@@ -171,4 +210,3 @@ private:
 };
 
 #endif
-

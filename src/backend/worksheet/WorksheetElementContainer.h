@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : WorksheetElementContainer.h
     Project              : LabPlot
-	Description          : Worksheet element container - parent of multiple elements.
+    Description          : Worksheet element container - parent of multiple elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2012-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,6 +34,7 @@
 
 class WorksheetElementContainerPrivate;
 
+//TODO: align
 class WorksheetElementContainer : public WorksheetElement {
 	Q_OBJECT
 
@@ -41,12 +42,12 @@ class WorksheetElementContainer : public WorksheetElement {
 		explicit WorksheetElementContainer(const QString&);
 		virtual ~WorksheetElementContainer();
 
-		virtual QGraphicsItem* graphicsItem() const;
+		virtual QGraphicsItem* graphicsItem() const override;
 
-		virtual void setVisible(bool);
-		virtual bool isVisible() const;
-		virtual bool isFullyVisible() const;
-		virtual void setPrinting(bool);
+		virtual void setVisible(bool) override;
+		virtual bool isVisible() const override;
+		virtual bool isFullyVisible() const override;
+		virtual void setPrinting(bool) override;
 
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;
@@ -55,7 +56,7 @@ class WorksheetElementContainer : public WorksheetElement {
 		typedef WorksheetElementContainerPrivate Private;
 
 	public slots:
-		virtual void retransform();
+		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 		void childHovered();
 		void childUnhovered();
@@ -68,7 +69,7 @@ class WorksheetElementContainer : public WorksheetElement {
 		virtual void handleAspectAdded(const AbstractAspect*);
 
 	private:
-    	Q_DECLARE_PRIVATE(WorksheetElementContainer)
+		Q_DECLARE_PRIVATE(WorksheetElementContainer)
 
 	signals:
 		friend class WorksheetElementContainerSetVisibleCmd;

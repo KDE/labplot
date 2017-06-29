@@ -350,7 +350,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-			//TODO use auto_ptr
+			//TODO use unique_ptr
 			AsciiFilter* filter = new AsciiFilter();
 
 			if (ui.cbFilter->currentIndex() == 0)   //"automatic"
@@ -905,7 +905,8 @@ void ImportFileWidget::refreshPreview() {
 	int lines = ui.sbPreviewLines->value();
 
 	bool ok = true;
-	QTableWidget *tmpTableWidget = 0;
+	QTableWidget *tmpTableWidget = nullptr;
+	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -914,6 +915,7 @@ void ImportFileWidget::refreshPreview() {
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = twPreview;
+		vectorNameList = filter->vectorNameList();
 		columnModes = filter->columnModes();
 		break;
 	}
@@ -992,7 +994,7 @@ void ImportFileWidget::refreshPreview() {
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
 	if( !importedStrings.isEmpty() ) {
-		QDEBUG("importedStrings =" << importedStrings);	// new
+		QDEBUG("importedStrings =" << importedStrings);
 		if (!ok) {
 			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);
@@ -1004,7 +1006,7 @@ void ImportFileWidget::refreshPreview() {
 			//TODO: maxrows not used
 			const int rows = qMax(importedStrings.size(), 1);
 			const int maxColumns = 300;
-			tmpTableWidget->setRowCount(rows);	// new
+			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; i++) {
 				QDEBUG(importedStrings[i]);
@@ -1020,8 +1022,16 @@ void ImportFileWidget::refreshPreview() {
 			}
 
 			// set header if columnMode available
-			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); i++)
-				tmpTableWidget->setHorizontalHeaderItem(i, new QTableWidgetItem(QString::number(i+1) + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}")));
+			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); i++) {
+				QString columnName = QString::number(i+1);
+				if (i < vectorNameList.size())
+					columnName = vectorNameList[i];
+				auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}"));
+				item->setTextAlignment(Qt::AlignLeft);
+				item->setIcon(AbstractColumn::iconForMode(columnModes[i]));
+
+				tmpTableWidget->setHorizontalHeaderItem(i, item);
+			}
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);

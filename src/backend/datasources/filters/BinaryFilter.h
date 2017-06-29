@@ -3,7 +3,7 @@ File                 : BinaryFilter.h
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -31,6 +31,7 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 class BinaryFilterPrivate;
 class QStringList;
+class QIODevice;
 
 class BinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
@@ -38,6 +39,7 @@ class BinaryFilter : public AbstractFileFilter {
 	Q_ENUMS(ByteOrder)
 
   public:
+	//TODO; use ColumnMode?
 	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
 	enum ByteOrder {LittleEndian, BigEndian};
 
@@ -49,6 +51,9 @@ class BinaryFilter : public AbstractFileFilter {
 	static int dataSize(BinaryFilter::DataType);
 	static long rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
 
+	// read data from any device
+	QVector<QStringList> readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);

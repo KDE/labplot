@@ -30,7 +30,9 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/core/column/Column.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/IntervalAttribute.h"
+
 class Column;
 
 class ColumnPrivate : QObject {
@@ -85,7 +87,7 @@ public:
 
 	QString textAt(int row) const;
 	void setTextAt(int row, const QString&);
-	void replaceTexts(int first, const QStringList&);
+	void replaceTexts(int first, const QVector<QString>&);
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, const QDate&);
@@ -99,7 +101,7 @@ public:
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
 
-	Column::ColumnStatistics statistics;
+	AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable;
 
 private:

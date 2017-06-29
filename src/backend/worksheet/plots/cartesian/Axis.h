@@ -32,13 +32,14 @@
 
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
-#include <QActionGroup>
 
 class CartesianPlot;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
+class QActionGroup;
 
+//TODO: align
 class Axis: public WorksheetElement {
 	Q_OBJECT
 
@@ -63,16 +64,16 @@ class Axis: public WorksheetElement {
 		explicit Axis(const QString&, CartesianPlot*, const AxisOrientation& orientation = AxisHorizontal);
 		virtual ~Axis();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
 
-		virtual QGraphicsItem* graphicsItem() const;
-		virtual void setZValue(qreal);
+		virtual QGraphicsItem* graphicsItem() const override;
+		virtual void setZValue(qreal) override;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-		virtual void loadThemeConfig(const KConfig&);
-		virtual void saveThemeConfig(const KConfig&);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
+		virtual void loadThemeConfig(const KConfig&) override;
+		virtual void saveThemeConfig(const KConfig&) override;
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
@@ -132,11 +133,11 @@ class Axis: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
-		virtual void setVisible(bool);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool);
+		virtual void setVisible(bool) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool) override;
 
-		virtual void retransform();
+		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef AxisPrivate Private;

@@ -4,6 +4,7 @@
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,7 +34,9 @@
 #include "backend/lib/SignallingUndoCommand.h"
 
 #include <QDateTime>
+#include <QIcon>
 #include <KLocale>
+
 #include <cmath>
 
 /**
@@ -86,6 +89,24 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 AbstractColumn::~AbstractColumn() {
 	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
+}
+
+/**
+ * \brief Convenience method for mode-dependent icon
+ */
+QIcon AbstractColumn::iconForMode(ColumnMode mode) {
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		return QIcon::fromTheme("x-shape-text");
+	case AbstractColumn::Text:
+		return QIcon::fromTheme("draw-text");
+        case AbstractColumn::DateTime:
+        case AbstractColumn::Month:
+        case AbstractColumn::Day:
+                return QIcon::fromTheme("chronometer");
+	}
+
+	return QIcon::fromTheme("x-shape-text");
 }
 
 /**
@@ -356,7 +377,7 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::replaceTexts(int first, const QStringList& new_values) {
+void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 
