@@ -167,7 +167,7 @@ QStringList FITSFilter::units() {
  * \param column the column to be set
  */
 void FITSFilter::setStartColumn(const int column) {
-    d->m_startColumn = column;
+    d->startColumn = column;
 }
 
 /*!
@@ -175,7 +175,7 @@ void FITSFilter::setStartColumn(const int column) {
  * \return The startColumn
  */
 int FITSFilter::startColumn() const {
-    return d->m_startColumn;
+    return d->startColumn;
 }
 
 /*!
@@ -183,7 +183,7 @@ int FITSFilter::startColumn() const {
  * \param column the column to be set
  */
 void FITSFilter::setEndColumn(const int column) {
-    d->m_endColumn = column;
+    d->endColumn = column;
 }
 
 /*!
@@ -191,7 +191,7 @@ void FITSFilter::setEndColumn(const int column) {
  * \return The endColumn
  */
 int FITSFilter::endColumn() const {
-    return d->m_endColumn;
+    return d->endColumn;
 }
 
 /*!
@@ -199,7 +199,7 @@ int FITSFilter::endColumn() const {
  * \param row the row to be set
  */
 void FITSFilter::setStartRow(const int row) {
-    d->m_startRow = row;
+    d->startRow = row;
 }
 
 /*!
@@ -207,7 +207,7 @@ void FITSFilter::setStartRow(const int row) {
  * \return The startRow
  */
 int FITSFilter::startRow() const {
-    return d->m_startRow;
+    return d->startRow;
 }
 
 /*!
@@ -215,7 +215,7 @@ int FITSFilter::startRow() const {
  * \param row the row to be set
  */
 void FITSFilter::setEndRow(const int row) {
-    d->m_endRow = row;
+    d->endRow = row;
 }
 
 /*!
@@ -223,7 +223,7 @@ void FITSFilter::setEndRow(const int row) {
  * \return The endRow
  */
 int FITSFilter::endRow() const {
-    return d->m_endRow;
+    return d->endRow;
 }
 
 /*!
@@ -234,7 +234,7 @@ int FITSFilter::endRow() const {
  * \param commentsAsUnits
  */
 void FITSFilter::setCommentsAsUnits(const bool commentsAsUnits) {
-    d->m_commentsAsUnits = commentsAsUnits;
+    d->commentsAsUnits = commentsAsUnits;
 }
 
 /*!
@@ -245,7 +245,7 @@ void FITSFilter::setCommentsAsUnits(const bool commentsAsUnits) {
  * \param exportTo
  */
 void FITSFilter::setExportTo(const int exportTo) {
-    d->m_exportTo = exportTo;
+    d->exportTo = exportTo;
 }
 
 int FITSFilter::imagesCount(const QString &fileName) {
@@ -263,12 +263,12 @@ int FITSFilter::tablesCount(const QString &fileName) {
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
 	q(owner),
-    m_startRow(-1),
-    m_endRow(-1),
-    m_startColumn(-1),
-    m_endColumn(-1),
-    m_commentsAsUnits(false),
-    m_exportTo(0) {
+    startRow(-1),
+    endRow(-1),
+    startColumn(-1),
+    endColumn(-1),
+    commentsAsUnits(false),
+    exportTo(0) {
 #ifdef HAVE_FITS
     m_fitsFile = 0;
 #endif
@@ -345,21 +345,21 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		QVector<void*> dataPointers;
 
-        if (m_endRow != -1) {
+        if (endRow != -1) {
 			if (!noDataSource)
-                lines = m_endRow;
+                lines = endRow;
 		}
-        if (m_endColumn != -1)
-            actualCols = m_endColumn;
+        if (endColumn != -1)
+            actualCols = endColumn;
 		if (noDataSource)
 			dataStrings.reserve(lines);
 
 		int i = 0;
 		int j = 0;
-        if (m_startRow != 1)
-            i = m_startRow;
-        if (m_startColumn != 1)
-            j = m_startColumn;
+        if (startRow != 1)
+            i = startRow;
+        if (startColumn != 1)
+            j = startColumn;
 
 		const int jstart = j;
 
@@ -406,13 +406,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 	} else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
 
-        if (m_endColumn != -1)
-            actualCols = m_endColumn;
+        if (endColumn != -1)
+            actualCols = endColumn;
 		else
             fits_get_num_cols(m_fitsFile, &actualCols, &status);
 
-        if (m_endRow != -1)
-            actualRows = m_endRow;
+        if (endRow != -1)
+            actualRows = endRow;
 		else
             fits_get_num_rows(m_fitsFile, &actualRows, &status);
 
@@ -426,9 +426,9 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		char keyword[FLEN_KEYWORD];
 		char value[FLEN_VALUE];
 		int col = 1;
-        if (m_startColumn != 1) {
-            if (m_startColumn != 0)
-                col = m_startColumn;
+        if (startColumn != 1) {
+            if (startColumn != 0)
+                col = startColumn;
 		}
 		for (; col <=actualCols; ++col) {
 			status = 0;
@@ -450,25 +450,25 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		else if (lines > actualRows)
 			lines = actualRows;
 
-        if (m_endRow != -1)
-            lines = m_endColumn;
+        if (endRow != -1)
+            lines = endRow;
 		QVector<QStringList*> stringDataPointers;
 		QVector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
 		int startCol = 0;
-        if (m_startColumn != 1)
-            startCol = m_startColumn;
+        if (startColumn != 1)
+            startCol = startColumn;
 		int startRrow = 0;
-        if (m_startRow != 1)
-            startRrow = m_startRow;
+        if (startRow != 1)
+            startRrow = startRow;
 
 		columnNumericTypes.reserve(actualCols);
 		int datatype;
 		int c = 1;
-        if (m_startColumn != 1) {
-            if (m_startColumn != 0)
-                c = m_startColumn;
+        if (startColumn != 1) {
+            if (startColumn != 0)
+                c = startColumn;
 		}
 		QList<int> matrixNumericColumnIndices;
 		for (; c <= actualCols; ++c) {
@@ -553,15 +553,15 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		char* array = new char[1000];	//TODO: why 1000?
 		int row = 1;
-        if (m_startRow != 1) {
-            if (m_startRow != 0)
-                row = m_startRow;
+        if (startRow != 1) {
+            if (startRow != 0)
+                row = startRow;
 		}
 
 		int coll = 1;
-        if (m_startColumn != 1) {
-            if (m_startColumn != 0)
-                coll = m_startColumn;
+        if (startColumn != 1) {
+            if (startColumn != 0)
+                coll = startColumn;
 		}
 		bool isMatrix = false;
 		if (dynamic_cast<Matrix*>(dataSource)) {
@@ -677,7 +677,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
 	if (matrix) {
 		//FITS image
-        if (m_exportTo == 0) {
+        if (exportTo == 0) {
 			long naxes[2] = { matrix->columnCount(), matrix->rowCount() };
             if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
@@ -790,7 +790,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//FITS image
-        if (m_exportTo == 0) {
+        if (exportTo == 0) {
 			long naxes[2] = { spreadsheet->columnCount(), spreadsheet->rowCount() };
             if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
@@ -835,7 +835,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 				columnNames[i] = new char[column->name().size()];
 				strcpy(columnNames[i], column->name().toLatin1().data());
-                if (m_commentsAsUnits) {
+                if (commentsAsUnits) {
 					tunit[i] = new char[column->comment().size()];
 					strcpy(tunit[i], column->comment().toLatin1().constData());
 				} else {

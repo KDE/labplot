@@ -50,8 +50,8 @@ public slots:
 private:
     void resizeEvent(QResizeEvent *event);
     void drawBackground(QPainter*, const QRectF&);
-    QGraphicsRectItem* lowerSlider;
-    QGraphicsRectItem* upperSlider;
+    QGraphicsRectItem* m_lowerSlider;
+    QGraphicsRectItem* m_upperSlider;
     QGraphicsScene* m_scene;
     int m_range;
 };

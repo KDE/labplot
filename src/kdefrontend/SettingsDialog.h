@@ -47,8 +47,8 @@ class SettingsDialog : public KPageDialog {
 
 	private:
 		bool m_changed;
-		SettingsGeneralPage* generalPage;
-		SettingsWorksheetPage* worksheetPage;
+        SettingsGeneralPage* m_generalPage;
+        SettingsWorksheetPage* m_worksheetPage;
 
 		void applySettings();
 		void restoreDefaults();

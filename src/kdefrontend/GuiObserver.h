@@ -41,7 +41,7 @@ public:
 	explicit GuiObserver(MainWin*);
 
 private:
-	MainWin* mainWindow;
+    MainWin* m_mainWindow;
 	CartesianPlot* m_lastCartesianPlot;
 
 private slots:

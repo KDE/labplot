@@ -57,14 +57,13 @@ public:
 			const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
-	//TODO: m_*
-	int m_startRow;
-	int m_endRow;
-	int m_startColumn;
-	int m_endColumn;
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
 
-	bool m_commentsAsUnits;
-	int m_exportTo;
+	bool commentsAsUnits;
+	int exportTo;
 private:
 	void printError(int status) const;
 

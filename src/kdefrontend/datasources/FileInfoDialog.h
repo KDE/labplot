@@ -41,7 +41,7 @@ class FileInfoDialog: public QDialog {
 		void setFiles(QStringList&);
 
 	private:
-		QTextEdit textEditWidget;
+        QTextEdit m_textEditWidget;
 };
 
 #endif //IMPORTFILEDIALOG_H

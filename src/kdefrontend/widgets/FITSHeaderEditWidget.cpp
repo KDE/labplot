@@ -53,7 +53,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	connectActions();
 	initContextMenus();
 
-	connect(ui.bAddUnit, SIGNAL(clicked(bool)), action_addmodify_unit, SIGNAL(toggled(bool)));
+    connect(ui.bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(toggled(bool)));
 	connect(ui.bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
 
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
@@ -272,20 +272,20 @@ bool FITSHeaderEditWidget::save() {
  * \brief Initializes the context menu's actions.
  */
 void FITSHeaderEditWidget::initActions() {
-	action_add_keyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add new keyword"), this);
-	action_remove_keyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove keyword"), this);
-	action_remove_extension = new QAction(i18n("Delete"), this);
-	action_addmodify_unit = new QAction(i18n("Add unit"), this);
+    m_action_add_keyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add new keyword"), this);
+    m_action_remove_keyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove keyword"), this);
+    m_action_remove_extension = new QAction(i18n("Delete"), this);
+    m_action_addmodify_unit = new QAction(i18n("Add unit"), this);
 }
 
 /*!
  * \brief Connects signals of the actions to the appropriate slots.
  */
 void FITSHeaderEditWidget::connectActions() {
-	connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
-	connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
-	connect(action_remove_extension, SIGNAL(triggered()), this, SLOT(removeExtension()));
-	connect(action_addmodify_unit, SIGNAL(triggered()), this, SLOT(addModifyKeywordUnit()));
+    connect(m_action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
+    connect(m_action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
+    connect(m_action_remove_extension, SIGNAL(triggered()), this, SLOT(removeExtension()));
+    connect(m_action_addmodify_unit, SIGNAL(triggered()), this, SLOT(addModifyKeywordUnit()));
 }
 
 /*!
@@ -293,13 +293,13 @@ void FITSHeaderEditWidget::connectActions() {
  */
 void FITSHeaderEditWidget::initContextMenus() {
 	m_KeywordActionsMenu = new QMenu(this);
-	m_KeywordActionsMenu->addAction(action_add_keyword);
-	m_KeywordActionsMenu->addAction(action_remove_keyword);
+    m_KeywordActionsMenu->addAction(m_action_add_keyword);
+    m_KeywordActionsMenu->addAction(m_action_remove_keyword);
 	m_KeywordActionsMenu->addSeparator();
-	m_KeywordActionsMenu->addAction(action_addmodify_unit);
+    m_KeywordActionsMenu->addAction(m_action_addmodify_unit);
 
 	m_ExtensionActionsMenu = new QMenu(this);
-	m_ExtensionActionsMenu->addAction(action_remove_extension);
+    m_ExtensionActionsMenu->addAction(m_action_remove_extension);
 }
 
 /*!
