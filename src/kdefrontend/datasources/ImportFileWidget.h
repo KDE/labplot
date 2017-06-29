@@ -69,6 +69,11 @@ private:
         SerialPort
     };
 
+    enum UpdateType {
+        TimeInterval = 0,
+        NewData
+    };
+
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
@@ -86,7 +91,7 @@ private slots:
 	void hdfTreeWidgetSelectionChanged();
 	void netcdfTreeWidgetSelectionChanged();
 	void fitsTreeWidgetSelectionChanged();
-
+    void updateTypeChanged(int);
     void sourceTypeChanged(int);
 
 	void saveFilter();

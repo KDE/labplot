@@ -1039,6 +1039,18 @@ void ImportFileWidget::refreshPreview() {
 	RESET_CURSOR;
 }
 
+void ImportFileWidget::updateTypeChanged(int idx) {
+    UpdateType type = static_cast<UpdateType>(idx);
+
+    if (type == UpdateType::TimeInterval) {
+        ui.lUpdateFrequency->show();
+        ui.sbUpdateFrequency->show();
+    } else if (type == UpdateType::NewData) {
+        ui.lUpdateFrequency->hide();
+        ui.sbUpdateFrequency->hide();
+    }
+}
+
 void ImportFileWidget::sourceTypeChanged(int idx) {
     SourceType type = static_cast<SourceType>(idx);
 

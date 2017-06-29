@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>219</width>
-    <height>300</height>
+    <width>250</width>
+    <height>302</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,2">
      <item>
       <widget class="QLabel" name="lSampleRate">
        <property name="text">
@@ -47,7 +47,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,2">
      <item>
       <widget class="QLabel" name="lUpdateFrequency">
        <property name="text">
