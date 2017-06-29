@@ -58,18 +58,18 @@ public:
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
 	//TODO: m_*
-	int startRow;
-	int endRow;
-	int startColumn;
-	int endColumn;
+	int m_startRow;
+	int m_endRow;
+	int m_startColumn;
+	int m_endColumn;
 
-	bool commentsAsUnits;
-	int exportTo;
+	bool m_commentsAsUnits;
+	int m_exportTo;
 private:
 	void printError(int status) const;
 
 #ifdef HAVE_FITS
-	fitsfile* fitsFile;
+	fitsfile* m_fitsFile;
 #endif
 
 };
