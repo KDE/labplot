@@ -893,7 +893,7 @@ void ImportFileWidget::refreshPreview() {
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = twPreview;
-		vectorNameList = filter->vectorNameList();
+		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
 	}

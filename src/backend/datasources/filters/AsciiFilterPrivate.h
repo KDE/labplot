@@ -57,8 +57,7 @@ public:
 	bool skipEmptyParts;
 	bool simplifyWhitespacesEnabled;
 	bool transposed;
-	QString vectorNames;		// TODO: we need only one of them
-	QStringList vectorNameList;
+	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow;
 	int endRow;

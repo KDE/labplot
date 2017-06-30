@@ -292,13 +292,10 @@ bool AsciiFilter::simplifyWhitespacesEnabled() const {
 }
 
 void AsciiFilter::setVectorNames(const QString s) {
-	d->vectorNames = s.simplified();
+	d->vectorNames = s.simplified().split(' ');
 }
-/*QString AsciiFilter::vectorNames() const {
+QStringList AsciiFilter::vectorNames() const {
 	return d->vectorNames;
-}*/
-QStringList AsciiFilter::vectorNameList() const {
-	return d->vectorNameList;
 }
 
 QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
@@ -403,14 +400,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("headerEnabled = " << headerEnabled);
 
 	if (headerEnabled) {	// use first line to name vectors
-		vectorNameList = firstLineStringList;
+		vectorNames = firstLineStringList;
 		startRow++;
-	} else {
-		// create vector names out of the space separated vectorNames-string, if not empty
-		if (!vectorNames.isEmpty())
-			vectorNameList = vectorNames.split(' ');
 	}
-	QDEBUG("vector names =" << vectorNameList);
+	QDEBUG("vector names =" << vectorNames);
 
 	// set range to read
 	if (endColumn == -1)
@@ -520,7 +513,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	QVector<void*> dataContainer;	// pointers to the actual data containers
 	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1,
-								     m_actualCols, vectorNameList, columnModes);
+									m_actualCols, vectorNames, columnModes);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -661,7 +654,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
 	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
-	writer->writeAttribute( "vectorNames", d->vectorNames);
+	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
 	writer->writeAttribute( "transposed", QString::number(d->transposed) );
@@ -709,7 +702,7 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		d->headerEnabled = str.toInt();
 
 	str = attribs.value("vectorNames").toString();
-	d->vectorNames = str; //may be empty
+	d->vectorNames = str.split(' '); //may be empty
 
 	str = attribs.value("simplifyWhitespaces").toString();
 	if (str.isEmpty())
