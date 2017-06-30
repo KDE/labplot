@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of Axis.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -38,129 +38,129 @@ class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
 class CartesianPlot;
-class AbstractCoordinateSystem;
 class CartesianCoordinateSystem;
 class TextLabel;
 
-//TODO: align
 class AxisPrivate: public QGraphicsItem {
-	public:
-		explicit AxisPrivate(Axis* owner);
+public:
+	explicit AxisPrivate(Axis*, CartesianPlot*);
 
-		CartesianPlot* m_plot;
-		const CartesianCoordinateSystem* m_cSystem;
-		bool m_printing;
-		bool m_hovered;
-		bool m_suppressRecalc;
+	virtual QRectF boundingRect() const override;
+	virtual QPainterPath shape() const override;
 
-		//general
-		bool autoScale;
-		Axis::AxisOrientation orientation; //!< horizontal or vertical
-		Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
-		Axis::AxisScale scale;
-		float offset; //!< offset from zero in the direction perpendicular to the axis
-		float start; //!< start coordinate of the axis line
-		float end; //!< end coordinate of the axis line
-		qreal scalingFactor;
-		qreal zeroOffset;
+	QString name() const;
+	void retransform();
+	void retransformLine();
+	void retransformArrow();
+	void retransformTicks();
+	void retransformTickLabelPositions();
+	void retransformTickLabelStrings();
+	void retransformMinorGrid();
+	void retransformMajorGrid();
+	bool swapVisible(bool);
+	void recalcShapeAndBoundingRect();
+	void setPrinting(bool);
 
-		//line
-		QList<QLineF> lines;
-		QPen linePen;
-		qreal lineOpacity;
-		Axis::ArrowType arrowType;
-		Axis::ArrowPosition arrowPosition;
-		float arrowSize;
+	//general
+	bool autoScale;
+	Axis::AxisOrientation orientation; //!< horizontal or vertical
+	Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
+	Axis::AxisScale scale;
+	float offset; //!< offset from zero in the direction perpendicular to the axis
+	float start; //!< start coordinate of the axis line
+	float end; //!< end coordinate of the axis line
+	qreal scalingFactor;
+	qreal zeroOffset;
 
-		// Title
-		TextLabel* title;
-		float titleOffsetX; //distance to the axis line
-		float titleOffsetY; //distance to the axis line
+	//line
+	QList<QLineF> lines;
+	QPen linePen;
+	qreal lineOpacity;
+	Axis::ArrowType arrowType;
+	Axis::ArrowPosition arrowPosition;
+	float arrowSize;
 
-		// Ticks
-		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
-		Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
-		int majorTicksNumber; //!< number of major ticks
-		qreal majorTicksIncrement; //!< increment (step) for the major ticks
-		const AbstractColumn* majorTicksColumn; //!< column containing values for major ticks' positions
-		QString majorTicksColumnPath;
-		qreal majorTicksLength; //!< major tick length (in page units!)
-		QPen majorTicksPen;
-		qreal majorTicksOpacity;
+	// Title
+	TextLabel* title;
+	float titleOffsetX; //distance to the axis line
+	float titleOffsetY; //distance to the axis line
 
-		Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
-		Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
-		int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
-		qreal minorTicksIncrement; //!< increment (step) for the minor ticks
-		const AbstractColumn* minorTicksColumn; //!< column containing values for minor ticks' positions
-		QString minorTicksColumnPath;
-		qreal minorTicksLength; //!< minor tick length (in page units!)
-		QPen minorTicksPen;
-		qreal minorTicksOpacity;
+	// Ticks
+	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
+	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
+	int majorTicksNumber; //!< number of major ticks
+	qreal majorTicksIncrement; //!< increment (step) for the major ticks
+	const AbstractColumn* majorTicksColumn; //!< column containing values for major ticks' positions
+	QString majorTicksColumnPath;
+	qreal majorTicksLength; //!< major tick length (in page units!)
+	QPen majorTicksPen;
+	qreal majorTicksOpacity;
 
-		// Tick Label
-		Axis::LabelsFormat labelsFormat;
-		int labelsPrecision;
-		bool labelsAutoPrecision;
-		Axis::LabelsPosition labelsPosition;
-		qreal labelsRotationAngle;
-		QColor labelsColor;
-		QFont labelsFont;
-		float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
-		qreal labelsOpacity;
-		QString labelsPrefix;
-		QString labelsSuffix;
-		QList<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
-		QList<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
-		QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
-		QList<float> tickLabelValues; //!< major tick labels values
-		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
+	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
+	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
+	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
+	qreal minorTicksIncrement; //!< increment (step) for the minor ticks
+	const AbstractColumn* minorTicksColumn; //!< column containing values for minor ticks' positions
+	QString minorTicksColumnPath;
+	qreal minorTicksLength; //!< minor tick length (in page units!)
+	QPen minorTicksPen;
+	qreal minorTicksOpacity;
 
-		//Grid
-		AxisGrid* gridItem;
-		QPen majorGridPen;
-		qreal majorGridOpacity;
-		QPen minorGridPen;
-		qreal minorGridOpacity;
+	// Tick Label
+	Axis::LabelsFormat labelsFormat;
+	int labelsPrecision;
+	bool labelsAutoPrecision;
+	Axis::LabelsPosition labelsPosition;
+	qreal labelsRotationAngle;
+	QColor labelsColor;
+	QFont labelsFont;
+	float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
+	qreal labelsOpacity;
+	QString labelsPrefix;
+	QString labelsSuffix;
 
-		QPainterPath linePath;
-		QPainterPath arrowPath;
-		QPainterPath majorTicksPath;
-		QPainterPath minorTicksPath;
-		QPainterPath majorGridPath;
-		QPainterPath minorGridPath;
-		QRectF boundingRectangle;
-		QPainterPath axisShape;
+	//Grid
+	AxisGrid* gridItem;
+	QPen majorGridPen;
+	qreal majorGridOpacity;
+	QPen minorGridPen;
+	qreal minorGridOpacity;
 
-		QString name() const;
-		virtual QRectF boundingRect() const;
-		virtual QPainterPath shape() const;
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+	Axis* const q;
 
-		virtual void retransform();
-		void retransformLine();
-		void retransformArrow();
-		void addArrow(const QPointF& point, int direction);
-		void retransformTicks();
-		void retransformTickLabelPositions();
-		void retransformTickLabelStrings();
-		void retransformMinorGrid();
-		void retransformMajorGrid();
-		int upperLabelsPrecision(int precision);
-		int lowerLabelsPrecision(int precision);
-		double round(double value, int precision);
-		virtual void recalcShapeAndBoundingRect();
-		bool swapVisible(bool on);
+	QPainterPath linePath;
+	QPainterPath majorGridPath;
+	QPainterPath minorGridPath;
 
-		Axis* const q;
+private:
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
-	private:
-        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+	void addArrow(const QPointF& point, int direction);
+	int upperLabelsPrecision(int);
+	int lowerLabelsPrecision(int);
+	double round(double value, int precision);
+	bool transformAnchor(QPointF*);
 
-	protected:
-		bool transformAnchor(QPointF*);
+	QPainterPath arrowPath;
+	QPainterPath majorTicksPath;
+	QPainterPath minorTicksPath;
+	QRectF boundingRectangle;
+	QPainterPath axisShape;
+
+	QList<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
+	QList<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
+	QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+	QList<float> tickLabelValues; //!< major tick labels values
+	QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
+
+	CartesianPlot* m_plot;
+	const CartesianCoordinateSystem* m_cSystem;
+	bool m_hovered;
+	bool m_suppressRecalc;
+	bool m_printing;
 };
 
 #endif

@@ -208,7 +208,7 @@ bool XYCurve::isVisible() const {
 
 void XYCurve::setPrinting(bool on) {
 	Q_D(XYCurve);
-	d->m_printing = on;
+	d->setPrinting(on);
 }
 
 //##############################################################################
@@ -723,7 +723,7 @@ void XYCurve::setErrorBarsOpacity(qreal opacity) {
 
 void XYCurve::suppressRetransform(bool b) {
 	Q_D(XYCurve);
-	d->m_suppressRetransform = b;
+	d->suppressRetransform(b);
 }
 
 //##############################################################################
@@ -847,9 +847,16 @@ void XYCurve::navigateTo() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false),
-	sourceDataChangedSinceLastRecalc(false), q(owner) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) :
+	sourceDataChangedSinceLastRecalc(false),
+	q(owner),
+	m_hoverEffectImageIsDirty(false),
+	m_selectionEffectImageIsDirty(false),
+	m_hovered(false),
+	m_suppressRecalc(false),
+	m_suppressRetransform(false),
+	m_printing(false) {
+
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 }
@@ -2174,6 +2181,13 @@ void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		q->unhovered();
 		update();
 	}
+}
+
+void XYCurvePrivate::setPrinting(bool on) {
+	m_printing = on;
+}
+void XYCurvePrivate::suppressRetransform(bool on) {
+	m_suppressRetransform = on;
 }
 
 //##############################################################################
