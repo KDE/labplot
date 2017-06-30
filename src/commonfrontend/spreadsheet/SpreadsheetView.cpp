@@ -1432,7 +1432,6 @@ void SpreadsheetView::reverseColumns() {
 void SpreadsheetView::dropColumnValues() {
 	if (selectedColumnCount() < 1) return;
 	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1440,7 +1439,6 @@ void SpreadsheetView::dropColumnValues() {
 void SpreadsheetView::maskColumnValues() {
 	if (selectedColumnCount() < 1) return;
 	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet, true);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1494,8 +1492,7 @@ void SpreadsheetView::normalizeSelection() {
 }
 
 void SpreadsheetView::sortSelectedColumns() {
-	QList< Column* > cols = selectedColumns();
-	sortDialog(cols);
+    sortDialog(selectedColumns());
 }
 
 
@@ -1508,7 +1505,6 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
 	QList<Column*> list;
 
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	if (!forAll)
 		dlg->setColumns(selectedColumns());
 	else if (forAll) {
@@ -1538,7 +1534,6 @@ void SpreadsheetView::showRowStatistics() {
 		}
 	}
 	dlg->setColumns(list);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 
 	if (dlg->exec() == KDialog::Accepted) {
 		qDeleteAll(list);
@@ -1665,7 +1660,6 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 		col->setSuppressDataChangedSignal(true);
 
 	SortDialog* dlg = new SortDialog();
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
 	dlg->setColumnsList(cols);
 	int rc = dlg->exec();

@@ -55,11 +55,11 @@ class SortDialog : public QDialog{
 	private:
 		QList<Column*> m_columns_list;
 
-		QComboBox* cbOrdering;
-		QLabel* lblType;
-		QComboBox* cbType;
-		QLabel* lblColumns;
-		QComboBox* cbColumns;
+        QComboBox* m_cbOrdering;
+        QLabel* m_lType;
+        QComboBox* m_cbType;
+        QLabel* m_lColumns;
+        QComboBox* m_cbColumns;
 };
 
 #endif

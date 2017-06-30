@@ -40,11 +40,12 @@
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
 
-	twStatistics = new QTabWidget(this);
-	setMainWidget(twStatistics);
+    m_twStatistics = new QTabWidget(this);
+    setMainWidget(m_twStatistics);
 
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
+    setAttribute(Qt::WA_DeleteOnClose);
 
 	QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
 
@@ -161,7 +162,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "</table>");
 
-	connect(twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+    connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
 
 	//restore saved settings if available
@@ -186,7 +187,7 @@ void StatisticsDialog::setColumns(const QList<Column*>& columns) {
 	for (int i = 0; i < m_columns.size(); ++i) {
 		QTextEdit* textEdit = new QTextEdit;
 		textEdit->setReadOnly(true);
-		twStatistics->addTab(textEdit, m_columns[i]->name());
+        m_twStatistics->addTab(textEdit, m_columns[i]->name());
 	}
     currentTabChanged(0);
 }
@@ -200,7 +201,7 @@ void StatisticsDialog::currentTabChanged(int index) {
 	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
 	RESET_CURSOR;
 
-	QTextEdit* textEdit = static_cast<QTextEdit*>(twStatistics->currentWidget());
+    QTextEdit* textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
 	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum==INFINITY ? NAN : statistics.minimum),
 	                  isNanValue(statistics.maximum==-INFINITY ? NAN : statistics.maximum),
 	                  isNanValue(statistics.arithmeticMean),

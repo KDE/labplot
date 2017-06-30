@@ -46,14 +46,14 @@ class TemplateHandler : public QWidget {
 	private:
 		void retranslateUi();
 
-		ClassName className;
-		QList<QString> dirNames;
+        ClassName m_className;
+        QList<QString> m_dirNames;
 
-		QToolButton* tbLoad;
-		QToolButton* tbSave;
-		QToolButton* tbSaveDefault;
-		QToolButton* tbCopy;
-		QToolButton* tbPaste;
+        QToolButton* m_tbLoad;
+        QToolButton* m_tbSave;
+        QToolButton* m_tbSaveDefault;
+        QToolButton* m_tbCopy;
+        QToolButton* m_tbPaste;
 
 	private slots:
 		void loadMenu();

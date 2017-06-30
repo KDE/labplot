@@ -1107,7 +1107,7 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 		printError(status);
 		return;
 	}
-	foreach (const FITSFilter::Keyword& keyword, keywords) {
+    for (const FITSFilter::Keyword& keyword: keywords) {
 		status = 0;
 		if (!keyword.key.compare(QLatin1String("COMMENT"))) {
             if (fits_write_comment(m_fitsFile, keyword.value.toLatin1(), &status))
@@ -1320,7 +1320,7 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
 		return;
 	}
 
-	foreach (const FITSFilter::Keyword& keyword, keywords) {
+    for(const FITSFilter::Keyword& keyword : keywords) {
 		if (keyword.updates.unitUpdated) {
             if (fits_write_key_unit(m_fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().data(), &status)) {
 				printError(status);
@@ -1558,7 +1558,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	QString primaryHeaderNaxis = valueOf(fileName, "NAXIS");
 	const int naxis = primaryHeaderNaxis.toInt();
 	bool noImage = false;
-	foreach (const QString& ext, imageExtensions) {
+    for (const QString& ext : imageExtensions) {
 		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
 		if (ext == i18n("Primary header")) {
 			if (checkPrimary && naxis == 0)
@@ -1580,7 +1580,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 		QTreeWidgetItem* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Tables"));
 		tableExtensionItem->setFlags(tableExtensionItem->flags() & ~Qt::ItemIsSelectable );
 
-		foreach (const QString& ext, tableExtensions) {
+        for (const QString& ext : tableExtensions) {
 			QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
 			tableExtensionItem->addChild(treeItem);
 		}

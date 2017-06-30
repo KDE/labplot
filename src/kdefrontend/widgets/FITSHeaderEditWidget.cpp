@@ -127,7 +127,7 @@ void FITSHeaderEditWidget::fillTable() {
 			if (!keyword.comment.isEmpty())
 				keywords.operator [](i).comment = keyword.comment;
 		}
-		foreach (const FITSFilter::Keyword& key, m_extensionDatas[m_seletedExtension].updates.newKeywords)
+        for (const FITSFilter::Keyword& key : m_extensionDatas[m_seletedExtension].updates.newKeywords)
 			keywords.append(key);
 		m_fitsFilter->parseHeader(QString(), ui.twKeywordsTable, false, keywords);
 	}
@@ -208,7 +208,7 @@ void FITSHeaderEditWidget::openFile() {
 		}
 	}
 	if (!opened) {
-		foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems())
+        for (QTreeWidgetItem* item : ui.twExtensions->selectedItems())
 			item->setSelected(false);
 		m_fitsFilter->parseExtensions(fileName, ui.twExtensions);
 		ui.twExtensions->resizeColumnToContents(0);
@@ -235,7 +235,7 @@ void FITSHeaderEditWidget::openFile() {
  */
 bool FITSHeaderEditWidget::save() {
 	bool saved = false;
-	foreach (const QString& fileName, m_extensionDatas.keys()) {
+    for (const QString& fileName : m_extensionDatas.keys()) {
 		if (m_extensionDatas[fileName].updates.newKeywords.size() > 0) {
 			m_fitsFilter->addNewKeyword(fileName,m_extensionDatas[fileName].updates.newKeywords);
 			if (!saved)
@@ -247,7 +247,7 @@ bool FITSHeaderEditWidget::save() {
 				saved = true;
 		}
 		if (!saved) {
-			foreach (const FITSFilter::Keyword& key, m_extensionDatas[fileName].updates.updatedKeywords) {
+            for (const FITSFilter::Keyword& key : m_extensionDatas[fileName].updates.updatedKeywords) {
 				if (!key.isEmpty()) {
 					saved = true;
 					break;
@@ -313,21 +313,21 @@ void FITSHeaderEditWidget::addKeyword() {
 		FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
 		QList<FITSFilter::Keyword> currentKeywords = m_extensionDatas[m_seletedExtension].keywords;
 
-		foreach (const FITSFilter::Keyword& keyword, currentKeywords) {
+        for(const FITSFilter::Keyword& keyword : currentKeywords) {
 			if (keyword.operator==(newKeyWord)) {
 				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot add keyword"));
 				return;
 			}
 		}
 
-		foreach (const FITSFilter::Keyword& keyword, m_extensionDatas[m_seletedExtension].updates.newKeywords) {
+        for(const FITSFilter::Keyword& keyword : m_extensionDatas[m_seletedExtension].updates.newKeywords) {
 			if (keyword.operator==(newKeyWord)) {
 				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot add keyword"));
 				return;
 			}
 		}
 
-		foreach (const QString& keyword, mandatoryKeywords()) {
+        for(const QString& keyword : mandatoryKeywords()) {
 			if (!keyword.compare(newKeyWord.key)) {
 				KMessageBox::information(this, i18n("Cannot add mandatory keyword, they are already present"),
 				                         i18n("Cannot add keyword"));
@@ -377,7 +377,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 	               i18n("Confirm deletion"));
 	if (rc == KMessageBox::Yes) {
 		bool remove = true;
-		foreach (const QString& k, mandatoryKeywords()) {
+        for(const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {
 				remove = false;
 				break;
@@ -596,7 +596,7 @@ void FITSHeaderEditWidget::closeFile() {
 			fillTable();
 		}
 
-		foreach (const QString& key, m_extensionDatas.keys()) {
+        for(const QString& key : m_extensionDatas.keys()) {
 			if (key.startsWith(current->text(0)))
 				m_extensionDatas.remove(key);
 		}

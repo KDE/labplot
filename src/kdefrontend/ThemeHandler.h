@@ -47,13 +47,13 @@ class ThemeHandler : public QWidget {
 		void setCurrentTheme(const QString&);
 
 	private:
-		QList<QString> dirNames;
+        QList<QString> m_dirNames;
 		QStringList m_themeList;
 		QString m_currentTheme;
 		QString m_currentLocalTheme;
 
-		QPushButton* pbLoadTheme;
-		QPushButton* pbSaveTheme;
+        QPushButton* m_pbLoadTheme;
+        QPushButton* m_pbSaveTheme;
 // 		QPushButton* pbPublishTheme;
 
 	private slots:
