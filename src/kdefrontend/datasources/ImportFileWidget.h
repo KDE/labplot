@@ -62,17 +62,6 @@ public:
     void initializeAndFillPortsAndBaudRates();
 
 private:
-    enum SourceType {
-        FileOrPipe = 0,
-        NetworkSocket,
-        LocalSocket,
-        SerialPort
-    };
-
-    enum UpdateType {
-        TimeInterval = 0,
-        NewData
-    };
 
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;

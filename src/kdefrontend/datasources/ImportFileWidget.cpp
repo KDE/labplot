@@ -1040,21 +1040,21 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateTypeChanged(int idx) {
-    UpdateType type = static_cast<UpdateType>(idx);
+    FileDataSource::UpdateType type = static_cast<FileDataSource::UpdateType>(idx);
 
-    if (type == UpdateType::TimeInterval) {
+    if (type == FileDataSource::UpdateType::TimeInterval) {
         ui.lUpdateFrequency->show();
         ui.sbUpdateFrequency->show();
-    } else if (type == UpdateType::NewData) {
+    } else if (type == FileDataSource::UpdateType::NewData) {
         ui.lUpdateFrequency->hide();
         ui.sbUpdateFrequency->hide();
     }
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
-    SourceType type = static_cast<SourceType>(idx);
+    FileDataSource::SourceType type = static_cast<FileDataSource::SourceType>(idx);
 
-    if ((type == SourceType::FileOrPipe) || (type == SourceType::LocalSocket)) {
+    if ((type == FileDataSource::SourceType::FileOrPipe) || (type == FileDataSource::SourceType::LocalSocket)) {
         ui.lFileName->show();
         ui.kleFileName->show();
         ui.bFileInfo->show();
@@ -1068,7 +1068,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.lePort->hide();
         ui.cbSerialPort->hide();
         ui.lSerialPort->hide();
-    } else if (type == SourceType::NetworkSocket) {
+    } else if (type == FileDataSource::SourceType::NetworkSocket) {
         ui.lHost->show();
         ui.leHost->show();
         ui.lePort->show();
@@ -1084,7 +1084,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.bFileInfo->hide();
         ui.bOpen->hide();
 
-    } else if (type == SourceType::SerialPort) {
+    } else if (type == FileDataSource::SourceType::SerialPort) {
         ui.lBaudRate->show();
         ui.cbBaudRate->show();
         ui.lSerialPort->show();

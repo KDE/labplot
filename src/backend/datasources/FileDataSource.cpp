@@ -42,7 +42,6 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QLocalSocket>
-#include <QSocketNotifier>
 
 #include <QIcon>
 #include <QAction>
@@ -170,6 +169,90 @@ void FileDataSource::setFileWatched(const bool b) {
 
 bool FileDataSource::isFileWatched() const {
 	return m_fileWatched;
+}
+
+/*!
+ * \brief Sets the serial port's baud rate
+ * \param baudrate
+ */
+void FileDataSource::setBaudRate(const int baudrate) {
+    m_baudRate = baudrate;
+}
+
+int FileDataSource::baudRate() const {
+    return m_baudRate;
+}
+
+/*!
+ * \brief Sets the source's update frequency to frequency
+ * \param frequency
+ */
+void FileDataSource::setUpdateFrequency(const int frequency) {
+    m_updateFrequency = frequency;
+}
+
+int FileDataSource::updateFrequency() const {
+    return m_updateFrequency;
+}
+
+/*!
+ * \brief Sets the network socket's port to port
+ * \param port
+ */
+void FileDataSource::setPort(const int port) {
+    m_port = port;
+}
+
+int FileDataSource::port() const {
+    return m_port;
+}
+
+/*!
+ * \brief Sets the sample rate to samplerate
+ * \param samplerate
+ */
+void FileDataSource::setSampleRate(const int samplerate) {
+    m_sampleRate = samplerate;
+}
+
+int FileDataSource::sampleRate() const {
+    return m_sampleRate;
+}
+
+/*!
+ * \brief Sets the source's type to sourcetype
+ * \param sourcetype
+ */
+void FileDataSource::setSourceType(const SourceType sourcetype) {
+    m_sourceType = sourcetype;
+}
+
+FileDataSource::SourceType FileDataSource::sourceType() const {
+    return m_sourceType;
+}
+
+/*!
+ * \brief Sets the source's update type to updatetype
+ * \param updatetype
+ */
+void FileDataSource::setUpdateType(const UpdateType updatetype) {
+    m_updateType = updatetype;
+}
+
+FileDataSource::UpdateType FileDataSource::updateType() const {
+    return m_updateType;
+}
+
+/*!
+ * \brief Sets the network socket's host
+ * \param host
+ */
+void FileDataSource::setHost(const QString & host) {
+    m_host = host;
+}
+
+QString FileDataSource::host() const {
+    return m_host;
 }
 
 /*!

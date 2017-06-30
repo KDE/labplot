@@ -30,6 +30,9 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include <QSerialPort>
+#include <QSocketNotifier>
+#include <QLocalSocket>
 
 class QString;
 class AbstractFileFilter;
@@ -42,7 +45,17 @@ class FileDataSource : public Spreadsheet {
 
 public:
 	enum FileType {Ascii, Binary, Image, HDF, NETCDF, FITS};
+    enum SourceType {
+        FileOrPipe = 0,
+        NetworkSocket,
+        LocalSocket,
+        SerialPort
+    };
 
+    enum UpdateType {
+        TimeInterval = 0,
+        NewData
+    };
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
 
@@ -54,6 +67,27 @@ public:
 
 	void setFileType(const FileType);
 	FileType fileType() const;
+
+    UpdateType updateType() const;
+    void setUpdateType(const UpdateType);
+
+    SourceType sourceType() const;
+    void setSourceType(const SourceType);
+
+    int sampleRate() const;
+    void setSampleRate(const int);
+
+    int port() const;
+    void setPort(const int);
+
+    QString host() const;
+    void setHost(const QString&);
+
+    int baudRate() const;
+    void setBaudRate(const int);
+
+    void setUpdateFrequency(const int);
+    int updateFrequency() const;
 
 	void setFileWatched(const bool);
 	bool isFileWatched() const;
@@ -84,6 +118,17 @@ private:
 	bool m_fileLinked;
 	AbstractFileFilter* m_filter;
 	QFileSystemWatcher* m_fileSystemWatcher;
+
+    UpdateType m_updateType;
+    SourceType m_sourceType;
+    int m_sampleRate;
+    int m_updateFrequency;
+    int m_port;
+    int m_baudRate;
+    QString m_host;
+    QSerialPort m_serialPort;
+    QSocketNotifier* m_localSocketNotifier;
+    QLocalSocket m_localSocket;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
