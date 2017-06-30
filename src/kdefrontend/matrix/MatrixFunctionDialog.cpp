@@ -60,7 +60,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	QFrame* mainWidget = new QFrame(this);
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 

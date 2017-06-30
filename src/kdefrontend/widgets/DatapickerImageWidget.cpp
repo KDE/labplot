@@ -61,17 +61,17 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	lowerSlider = new QGraphicsRectItem(pageRect, 0);
-	lowerSlider->setPen(QPen(Qt::black, 0.5));
-	lowerSlider->setBrush(Qt::blue);
-	lowerSlider->setOpacity(0.2);
-	m_scene->addItem(lowerSlider);
+    m_lowerSlider = new QGraphicsRectItem(pageRect, 0);
+    m_lowerSlider->setPen(QPen(Qt::black, 0.5));
+    m_lowerSlider->setBrush(Qt::blue);
+    m_lowerSlider->setOpacity(0.2);
+    m_scene->addItem(m_lowerSlider);
 
-	upperSlider = new QGraphicsRectItem(pageRect, 0);
-	upperSlider->setPen(QPen(Qt::black, 0.5));
-	upperSlider->setBrush(Qt::blue);
-	upperSlider->setOpacity(0.2);
-	m_scene->addItem(upperSlider);
+    m_upperSlider = new QGraphicsRectItem(pageRect, 0);
+    m_upperSlider->setPen(QPen(Qt::black, 0.5));
+    m_upperSlider->setBrush(Qt::blue);
+    m_upperSlider->setOpacity(0.2);
+    m_scene->addItem(m_upperSlider);
 }
 
 void HistogramView::setScalePixmap(const QString& file) {
@@ -86,8 +86,8 @@ void HistogramView::setScalePixmap(const QString& file) {
 void HistogramView::setSpan(int l, int h) {
 	l = l*1000/m_range;
 	h = h*1000/m_range;
-	lowerSlider->setPos(QPointF(l - 1000, 0));
-	upperSlider->setPos(QPointF(h, 0));
+    m_lowerSlider->setPos(QPointF(l - 1000, 0));
+    m_upperSlider->setPos(QPointF(h, 0));
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 

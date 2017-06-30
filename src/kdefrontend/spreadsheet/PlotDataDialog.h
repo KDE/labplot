@@ -49,7 +49,7 @@ class PlotDataDialog : public QDialog {
 
 	private:
 		Ui::PlotDataWidget ui;
-		QPushButton* okButton;
+        QPushButton* m_okButton;
 		Spreadsheet* m_spreadsheet;
 		TreeViewComboBox* cbExistingPlots;
 		TreeViewComboBox* cbExistingWorksheets;

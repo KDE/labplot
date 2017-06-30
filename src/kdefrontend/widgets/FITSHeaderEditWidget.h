@@ -40,13 +40,13 @@ public:
 
 private:
 	Ui::FITSHeaderEditWidget ui;
-	QAction* action_remove_keyword;
-	QAction* action_add_keyword;
-	QAction* action_addmodify_unit;
-	QMenu* m_KeywordActionsMenu;
+    QAction* m_action_remove_keyword;
+    QAction* m_action_add_keyword;
+    QAction* m_action_addmodify_unit;
+    QAction* m_action_remove_extension;
 
+	QMenu* m_KeywordActionsMenu;
 	QMenu* m_ExtensionActionsMenu;
-	QAction* action_remove_extension;
 
 	struct HeaderUpdate {
 		QList<FITSFilter::Keyword> newKeywords;

@@ -60,14 +60,14 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	okButton->setDefault(true);
-	okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
-	okButton->setText(i18n("&Generate"));
+    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+    m_okButton->setDefault(true);
+    m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+    m_okButton->setText(i18n("&Generate"));
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
                 ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 
@@ -353,21 +353,21 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
-	okButton->setEnabled(true);
+    m_okButton->setEnabled(true);
 	return;
 }
 

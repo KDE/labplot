@@ -572,7 +572,6 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 
 void MatrixView::fillWithFunctionValues() {
 	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->exec();
 }
 
@@ -1439,7 +1438,6 @@ void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-		dlg->setAttribute(Qt::WA_DeleteOnClose);
 		QList<Column*> list;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
@@ -1459,8 +1457,7 @@ void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-		dlg->setAttribute(Qt::WA_DeleteOnClose);
-		QList<Column*> list;
+        QList<Column*> list;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
 				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();

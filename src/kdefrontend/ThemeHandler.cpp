@@ -65,9 +65,9 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
 
-	pbLoadTheme = new QPushButton(this);
-	horizontalLayout->addWidget(pbLoadTheme);
-	pbLoadTheme->setText(i18n("Apply theme"));
+    m_pbLoadTheme = new QPushButton(this);
+    horizontalLayout->addWidget(m_pbLoadTheme);
+    m_pbLoadTheme->setText(i18n("Apply theme"));
 
 // 	pbSaveTheme = new QPushButton(this);
 // 	horizontalLayout->addWidget(pbSaveTheme);
@@ -80,7 +80,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbPublishTheme->setEnabled(false);
 */
 
-	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
+    connect( m_pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 // 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
@@ -93,16 +93,16 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 			m_themeList.append(it.next());
 	}
 
-	pbLoadTheme->setEnabled(!m_themeList.isEmpty());
+    m_pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
-		pbLoadTheme->setText(i18n("Apply theme [active '%1']").arg(name));
-		pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.").arg(name));
+        m_pbLoadTheme->setText(i18n("Apply theme [active '%1']").arg(name));
+        m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.").arg(name));
 	} else {
-		pbLoadTheme->setText(i18n("Apply theme"));
-		pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
+        m_pbLoadTheme->setText(i18n("Apply theme"));
+        m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
 	}
 
 	m_currentTheme = name;
@@ -174,9 +174,9 @@ void ThemeHandler::showPanel() {
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+pbLoadTheme->width(),-menu.sizeHint().height());
+    QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-	menu.exec(pbLoadTheme->mapToGlobal(pos));
+    menu.exec(m_pbLoadTheme->mapToGlobal(pos));
 }
 
 void ThemeHandler::saveMenu() {
@@ -199,8 +199,8 @@ void ThemeHandler::saveMenu() {
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width() + pbSaveTheme->width(), -menu.sizeHint().height());
-	menu.exec(pbSaveTheme->mapToGlobal(pos));
+    QPoint pos(-menu.sizeHint().width() + m_pbSaveTheme->width(), -menu.sizeHint().height());
+    menu.exec(m_pbSaveTheme->mapToGlobal(pos));
 	leFilename->setFocus();
 }
 

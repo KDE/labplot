@@ -50,7 +50,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 	QFrame* mainWidget = new QFrame(this);
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbOperator->addItem(i18n("equal to"));
 	ui.cbOperator->addItem(i18n("between (including end points)"));
 	ui.cbOperator->addItem(i18n("between (excluding end points)"));

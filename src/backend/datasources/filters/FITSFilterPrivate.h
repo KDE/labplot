@@ -57,7 +57,6 @@ public:
 			const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
-	//TODO: m_*
 	int startRow;
 	int endRow;
 	int startColumn;
@@ -69,7 +68,7 @@ private:
 	void printError(int status) const;
 
 #ifdef HAVE_FITS
-	fitsfile* fitsFile;
+	fitsfile* m_fitsFile;
 #endif
 
 };
