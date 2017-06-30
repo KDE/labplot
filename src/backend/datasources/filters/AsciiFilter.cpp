@@ -26,10 +26,11 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/AsciiFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterPrivate.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QTextStream>
@@ -606,6 +607,9 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				break;
 			case AbstractColumn::DateTime:
 				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
+				// set same datetime format in column
+				DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				filter->setFormat(dateTimeFormat);
 			}
 			column->setComment(comment);
 			if (importMode == AbstractFileFilter::Replace) {
