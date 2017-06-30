@@ -220,31 +220,31 @@ size_t AsciiFilter::lineNumber(QIODevice &device) {
 }
 
 void AsciiFilter::setTransposed(const bool b) {
-	d->m_transposed = b;
+	d->transposed = b;
 }
 bool AsciiFilter::isTransposed() const {
-	return d->m_transposed;
+	return d->transposed;
 }
 
 void AsciiFilter::setCommentCharacter(const QString& s) {
-	d->m_commentCharacter = s;
+	d->commentCharacter = s;
 }
 QString AsciiFilter::commentCharacter() const {
-	return d->m_commentCharacter;
+	return d->commentCharacter;
 }
 
 void AsciiFilter::setSeparatingCharacter(const QString& s) {
-	d->m_separatingCharacter = s;
+	d->separatingCharacter = s;
 }
 QString AsciiFilter::separatingCharacter() const {
-	return d->m_separatingCharacter;
+	return d->separatingCharacter;
 }
 
 void AsciiFilter::setDateTimeFormat(const QString &f) {
-	d->m_dateTimeFormat = f;
+	d->dateTimeFormat = f;
 }
 QString AsciiFilter::dateTimeFormat() const {
-	return d->m_dateTimeFormat;
+	return d->dateTimeFormat;
 }
 
 /*
@@ -264,90 +264,90 @@ void AsciiFilter::setDataType(const QString& typeName) {
 }*/
 
 void AsciiFilter::setAutoModeEnabled(const bool b) {
-	d->m_autoModeEnabled = b;
+	d->autoModeEnabled = b;
 }
 bool AsciiFilter::isAutoModeEnabled() const {
-	return d->m_autoModeEnabled;
+	return d->autoModeEnabled;
 }
 
 void AsciiFilter::setHeaderEnabled(const bool b) {
-	d->m_headerEnabled = b;
+	d->headerEnabled = b;
 }
 bool AsciiFilter::isHeaderEnabled() const {
-	return d->m_headerEnabled;
+	return d->headerEnabled;
 }
 
 void AsciiFilter::setSkipEmptyParts(const bool b) {
-	d->m_skipEmptyParts = b;
+	d->skipEmptyParts = b;
 }
 bool AsciiFilter::skipEmptyParts() const {
-	return d->m_skipEmptyParts;
+	return d->skipEmptyParts;
 }
 
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b) {
-	d->m_simplifyWhitespacesEnabled = b;
+	d->simplifyWhitespacesEnabled = b;
 }
 bool AsciiFilter::simplifyWhitespacesEnabled() const {
-	return d->m_simplifyWhitespacesEnabled;
+	return d->simplifyWhitespacesEnabled;
 }
 
 void AsciiFilter::setVectorNames(const QString s) {
-	d->m_vectorNames = s.simplified();
+	d->vectorNames = s.simplified();
 }
-QString AsciiFilter::vectorNames() const {
-	return d->m_vectorNames;
-}
+/*QString AsciiFilter::vectorNames() const {
+	return d->vectorNames;
+}*/
 QStringList AsciiFilter::vectorNameList() const {
-	return d->m_vectorNameList;
+	return d->vectorNameList;
 }
 
 QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
-	return d->m_columnModes;
+	return d->columnModes;
 }
 
 void AsciiFilter::setStartRow(const int r) {
-	d->m_startRow = r;
+	d->startRow = r;
 }
 int AsciiFilter::startRow() const {
-	return d->m_startRow;
+	return d->startRow;
 }
 
 void AsciiFilter::setEndRow(const int r) {
-	d->m_endRow = r;
+	d->endRow = r;
 }
 int AsciiFilter::endRow() const {
-	return d->m_endRow;
+	return d->endRow;
 }
 
 void AsciiFilter::setStartColumn(const int c) {
-	d->m_startColumn = c;
+	d->startColumn = c;
 }
 int AsciiFilter::startColumn() const {
-	return d->m_startColumn;
+	return d->startColumn;
 }
 
 void AsciiFilter::setEndColumn(const int c) {
-	d->m_endColumn = c;
+	d->endColumn = c;
 }
 int AsciiFilter::endColumn() const {
-	return d->m_endColumn;
+	return d->endColumn;
 }
 
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
-	m_commentCharacter("#"),
-	m_separatingCharacter("auto"),
-	m_autoModeEnabled(true),
-	m_headerEnabled(true),
-	m_skipEmptyParts(false),
-	m_simplifyWhitespacesEnabled(true),
-	m_transposed(false),
-	m_startRow(1),
-	m_endRow(-1),
-	m_startColumn(1),
-	m_endColumn(-1) {
+	commentCharacter("#"),
+	separatingCharacter("auto"),
+	autoModeEnabled(true),
+	headerEnabled(true),
+	skipEmptyParts(false),
+	simplifyWhitespacesEnabled(true),
+	transposed(false),
+	startRow(1),
+	endRow(-1),
+	startColumn(1),
+	endColumn(-1) {
 }
 
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
@@ -368,17 +368,17 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = device.readLine();
 		if (device.atEnd())
 			return 1;
-	} while (firstLine.startsWith(m_commentCharacter));
+	} while (firstLine.startsWith(commentCharacter));
 	DEBUG(" device position after first line and comments = " << device.pos());
 
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
-	if (m_simplifyWhitespacesEnabled)
+	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
 	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
 
 	// determine separator and split first line
 	QStringList firstLineStringList;
-	if (m_separatingCharacter == "auto") {
+	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
 		firstLineStringList = firstLine.split(regExp, QString::SkipEmptyParts);
@@ -394,28 +394,28 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			}
 		}
 	} else {	// use given separator
-		m_separator = m_separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
+		m_separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	}
 	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
-	DEBUG("headerEnabled = " << m_headerEnabled);
+	DEBUG("headerEnabled = " << headerEnabled);
 
-	if (m_headerEnabled) {	// use first line to name vectors
-		m_vectorNameList = firstLineStringList;
-		m_startRow++;
+	if (headerEnabled) {	// use first line to name vectors
+		vectorNameList = firstLineStringList;
+		startRow++;
 	} else {
 		// create vector names out of the space separated vectorNames-string, if not empty
-		if (!m_vectorNames.isEmpty())
-			m_vectorNameList = m_vectorNames.split(' ');
+		if (!vectorNames.isEmpty())
+			vectorNameList = vectorNames.split(' ');
 	}
-	QDEBUG("vector names =" << m_vectorNameList);
+	QDEBUG("vector names =" << vectorNameList);
 
 	// set range to read
-	if (m_endColumn == -1)
-		m_endColumn = firstLineStringList.size(); // last column
-	m_actualCols = m_endColumn - m_startColumn + 1;
+	if (endColumn == -1)
+		endColumn = firstLineStringList.size(); // last column
+	m_actualCols = endColumn - startColumn + 1;
 
 //TEST: readline-seek-readline fails
 /*	qint64 testpos = device.pos();
@@ -429,24 +429,24 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	m_actualRows = AsciiFilter::lineNumber(device);
 
 	// Find first data line (ignoring comment lines)
-	DEBUG("Skipping " << m_startRow - 1 << " lines");
-	for (int i = 0; i < m_startRow - 1; i++) {
+	DEBUG("Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; i++) {
 		QString line = device.readLine();
 
 		if (device.atEnd())
 			return 1;
-		if (line.startsWith(m_commentCharacter))	// ignore commented lines
+		if (line.startsWith(commentCharacter))	// ignore commented lines
 			i--;
 	}
 
 	// parse first data line to determine data type for each column
 	firstLine = device.readLine();
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
-	if (m_simplifyWhitespacesEnabled)
+	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
-	m_columnModes.resize(m_actualCols);
+	columnModes.resize(m_actualCols);
 	int col = 0;
 	for (const auto& valueString: firstLineStringList) {	// only parse columns available in first data line
 		bool isNumber;
@@ -454,19 +454,19 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		if (isNumber)
 			col++;
 		else {	// not number (or "DateTime" etc. selected?)
-			QDateTime valueDateTime = QDateTime::fromString(valueString, m_dateTimeFormat);
+			QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 			QDEBUG("date time =" << valueDateTime);
 			if (valueDateTime.isValid())
-				m_columnModes[col++] = AbstractColumn::DateTime;
+				columnModes[col++] = AbstractColumn::DateTime;
 			else
-				m_columnModes[col++] = AbstractColumn::Text;
+				columnModes[col++] = AbstractColumn::Text;
 		}
 	}
-	QDEBUG("column modes = " << m_columnModes);
+	QDEBUG("column modes = " << columnModes);
 
-	int actualEndRow = m_endRow;
-	DEBUG("m_endRow = " << m_endRow);
-	if (m_endRow == -1 || m_endRow > m_actualRows)
+	int actualEndRow = endRow;
+	DEBUG("endRow = " << endRow);
+	if (endRow == -1 || endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
 	if (m_actualRows > actualEndRow)
@@ -475,8 +475,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// reset to start of file
 	device.seek(0);
 
-	DEBUG("start/end column: " << m_startColumn << ' ' << m_endColumn);
-	DEBUG("start/end row: " << m_startRow << ' ' << actualEndRow);
+	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
+	DEBUG("start/end row: " << startRow << ' ' << actualEndRow);
 	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0)
@@ -519,8 +519,8 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> dataContainer;	// pointers to the actual data containers
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - m_startRow + 1,
-								     m_actualCols, m_vectorNameList, m_columnModes);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1,
+								     m_actualCols, vectorNameList, columnModes);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -530,14 +530,14 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
-		if (m_simplifyWhitespacesEnabled)
+		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 //		DEBUG("simplified line = " << line.toStdString());
 
-		if (line.isEmpty() || line.startsWith(m_commentCharacter)) // skip empty or commented lines
+		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
-		if (m_startRow > 1) {	// skip start lines
-			m_startRow--;
+		if (startRow > 1) {	// skip start lines
+			startRow--;
 			continue;
 		}
 
@@ -550,7 +550,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 
 				// set value depending on data type
 				if (dataSource) {
-					switch (m_columnModes[n]) {
+					switch (columnModes[n]) {
 					case AbstractColumn::Numeric: {
 						bool isNumber;
 						const double value = valueString.toDouble(&isNumber);
@@ -558,7 +558,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(valueString, m_dateTimeFormat);
+						const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 						if (valueDateTime.isValid())
 							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime;
 						else
@@ -574,7 +574,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				}
 			} else {	// missing columns in this line
 				if (dataSource) {
-					switch (m_columnModes[n]) {
+					switch (columnModes[n]) {
 					case AbstractColumn::Numeric:
 						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = NAN;
 						break;
@@ -601,11 +601,11 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	// TODO: make everything undo/redo-able again
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
-		const int rows = (m_headerEnabled ? currentRow : currentRow + 1);
-		for (int n = m_startColumn; n <= m_endColumn; n++) {
-			Column* column = spreadsheet->column(columnOffset + n - m_startColumn);
+		const int rows = (headerEnabled ? currentRow : currentRow + 1);
+		for (int n = startColumn; n <= endColumn; n++) {
+			Column* column = spreadsheet->column(columnOffset + n - startColumn);
 			QString comment;
-			switch (m_columnModes[n - m_startColumn]) {
+			switch (columnModes[n - startColumn]) {
 			case AbstractColumn::Numeric:
 				comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 				break;
@@ -657,18 +657,18 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
  */
 void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "asciiFilter" );
-	writer->writeAttribute( "commentCharacter", d->m_commentCharacter );
-	writer->writeAttribute( "separatingCharacter", d->m_separatingCharacter );
-	writer->writeAttribute( "autoMode", QString::number(d->m_autoModeEnabled) );
-	writer->writeAttribute( "header", QString::number(d->m_headerEnabled) );
-	writer->writeAttribute( "vectorNames", d->m_vectorNames );
-	writer->writeAttribute( "skipEmptyParts", QString::number(d->m_skipEmptyParts) );
-	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->m_simplifyWhitespacesEnabled) );
-	writer->writeAttribute( "transposed", QString::number(d->m_transposed) );
-	writer->writeAttribute( "startRow", QString::number(d->m_startRow) );
-	writer->writeAttribute( "endRow", QString::number(d->m_endRow) );
-	writer->writeAttribute( "startColumn", QString::number(d->m_startColumn) );
-	writer->writeAttribute( "endColumn", QString::number(d->m_endColumn) );
+	writer->writeAttribute( "commentCharacter", d->commentCharacter );
+	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
+	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
+	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
+	writer->writeAttribute( "vectorNames", d->vectorNames);
+	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
+	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
+	writer->writeAttribute( "transposed", QString::number(d->transposed) );
+	writer->writeAttribute( "startRow", QString::number(d->startRow) );
+	writer->writeAttribute( "endRow", QString::number(d->endRow) );
+	writer->writeAttribute( "startColumn", QString::number(d->startColumn) );
+	writer->writeAttribute( "endColumn", QString::number(d->endColumn) );
 	writer->writeEndElement();
 }
 
@@ -688,70 +688,70 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
 	else
-		d->m_commentCharacter = str;
+		d->commentCharacter = str;
 
 	str = attribs.value("separatingCharacter").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
 	else
-		d->m_separatingCharacter = str;
+		d->separatingCharacter = str;
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
-		d->m_autoModeEnabled = str.toInt();
+		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("header").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'header'"));
 	else
-		d->m_headerEnabled = str.toInt();
+		d->headerEnabled = str.toInt();
 
 	str = attribs.value("vectorNames").toString();
-	d->m_vectorNames = str; //may be empty
+	d->vectorNames = str; //may be empty
 
 	str = attribs.value("simplifyWhitespaces").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
-		d->m_simplifyWhitespacesEnabled = str.toInt();
+		d->simplifyWhitespacesEnabled = str.toInt();
 
 	str = attribs.value("skipEmptyParts").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
 	else
-		d->m_skipEmptyParts = str.toInt();
+		d->skipEmptyParts = str.toInt();
 
 	str = attribs.value("transposed").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'transposed'"));
 	else
-		d->m_transposed = str.toInt();
+		d->transposed = str.toInt();
 
 	str = attribs.value("startRow").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
 	else
-		d->m_startRow = str.toInt();
+		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endRow'"));
 	else
-		d->m_endRow = str.toInt();
+		d->endRow = str.toInt();
 
 	str = attribs.value("startColumn").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
 	else
-		d->m_startColumn = str.toInt();
+		d->startColumn = str.toInt();
 
 	str = attribs.value("endColumn").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
 	else
-		d->m_endColumn = str.toInt();
+		d->endColumn = str.toInt();
 
 	return true;
 }

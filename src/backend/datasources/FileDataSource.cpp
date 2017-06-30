@@ -262,9 +262,7 @@ QString FileDataSource::fileInfoString(const QString &name) {
 		fileInfo.setFile(fileName);
 
 		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
-
 		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
-
 		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
 
 		infoStrings << i18n("Created: %1", fileInfo.created().toString());

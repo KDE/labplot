@@ -83,7 +83,7 @@ public:
 	bool isTransposed() const;
 
 	void setVectorNames(const QString);
-	QString vectorNames() const;
+//	QString vectorNames() const;
 	QStringList vectorNameList() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 

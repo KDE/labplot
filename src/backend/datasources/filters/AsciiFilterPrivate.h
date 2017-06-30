@@ -49,21 +49,21 @@ public:
 
 	const AsciiFilter* q;
 
-	QString m_commentCharacter;
-	QString m_separatingCharacter;
-	QString m_dateTimeFormat;
-	bool m_autoModeEnabled;
-	bool m_headerEnabled;
-	bool m_skipEmptyParts;
-	bool m_simplifyWhitespacesEnabled;
-	bool m_transposed;
-	QString m_vectorNames;	// do we need this?
-	QStringList m_vectorNameList;
-	QVector<AbstractColumn::ColumnMode> m_columnModes;
-	int m_startRow;
-	int m_endRow;
-	int m_startColumn;
-	int m_endColumn;
+	QString commentCharacter;
+	QString separatingCharacter;
+	QString dateTimeFormat;
+	bool autoModeEnabled;
+	bool headerEnabled;
+	bool skipEmptyParts;
+	bool simplifyWhitespacesEnabled;
+	bool transposed;
+	QString vectorNames;		// TODO: we need only one of them
+	QStringList vectorNameList;
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
 
 private:
 	QString m_separator;
