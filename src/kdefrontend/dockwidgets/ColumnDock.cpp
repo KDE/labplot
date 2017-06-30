@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
  ***************************************************************************/
@@ -50,26 +50,6 @@
 ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(0), m_initializing(false) {
 	ui.setupUi(this);
 
-	dateStrings<<"yyyy-MM-dd";
-	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy";
-	dateStrings<<"dd/MM/yy";
-	dateStrings<<"dd.MM.yyyy";
-	dateStrings<<"dd.MM.yy";
-	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM.";
-	dateStrings<<"yyyyMMdd";
-
-	timeStrings<<"hh";
-	timeStrings<<"hh ap";
-	timeStrings<<"hh:mm";
-	timeStrings<<"hh:mm ap";
-	timeStrings<<"hh:mm:ss";
-	timeStrings<<"hh:mm:ss.zzz";
-	timeStrings<<"hh:mm:ss:zzz";
-	timeStrings<<"mm:ss.zzz";
-	timeStrings<<"hhmmss";
-
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
@@ -81,13 +61,13 @@ ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(0), m_initia
 }
 
 void ColumnDock::setColumns(QList<Column*> list) {
-	m_initializing=true;
+	m_initializing = true;
 	m_columnsList = list;
 	m_column = list.first();
 
 	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
-	foreach (Column* col, m_columnsList) {
+	for (auto* col: m_columnsList) {
 		Spreadsheet* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (dynamic_cast<FileDataSource*>(s)) {
@@ -102,7 +82,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	if (list.size() == 1) {
 		//names and comments of non-editable columns in a file data source can be changed.
-		if ( !nonEditable && dynamic_cast<FileDataSource*>(m_column->parentAspect())!=0 ) {
+		if (!nonEditable && dynamic_cast<FileDataSource*>(m_column->parentAspect()) != 0) {
 			ui.leName->setEnabled(false);
 			ui.leComment->setEnabled(false);
 		} else {
@@ -198,19 +178,10 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		ui.cbFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
 		ui.cbFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 		break;
-	case AbstractColumn::DateTime: {
-			foreach(const QString& s, dateStrings)
+	case AbstractColumn::DateTime:
+			for (const auto& s: AbstractColumn::dateTimeFormats())
 				ui.cbFormat->addItem(s, QVariant(s));
-
-			foreach(const QString& s, timeStrings)
-				ui.cbFormat->addItem(s, QVariant(s));
-
-			foreach(const QString& s1, dateStrings) {
-				foreach(const QString& s2, timeStrings)
-					ui.cbFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
-			}
 			break;
-		}
 	}
 
 	if (columnMode == AbstractColumn::Numeric) {
@@ -295,7 +266,7 @@ void ColumnDock::typeChanged(int index) {
 	switch(columnMode) {
 	case AbstractColumn::Numeric: {
 			int digits = ui.sbPrecision->value();
-			foreach(Column* col, m_columnsList) {
+			for (auto* col: m_columnsList) {
 				col->beginMacro(i18n("%1: change column type", col->name()));
 				col->setColumnMode(columnMode);
 				Double2StringFilter* filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -306,16 +277,15 @@ void ColumnDock::typeChanged(int index) {
 			break;
 		}
 	case AbstractColumn::Text:
-		foreach(Column* col, m_columnsList)
+		for (auto* col: m_columnsList)
 			col->setColumnMode(columnMode);
 		break;
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
-			QString format;
-			foreach(Column* col, m_columnsList) {
+			for (auto* col: m_columnsList) {
 				col->beginMacro(i18n("%1: change column type", col->name()));
-				format = ui.cbFormat->currentText();
+				QString format = ui.cbFormat->currentText();
 				col->setColumnMode(columnMode);
 				DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				filter->setFormat(format);
@@ -338,7 +308,7 @@ void ColumnDock::formatChanged(int index) {
 
 	switch(mode) {
 	case AbstractColumn::Numeric: {
-			foreach(Column* col, m_columnsList) {
+			for (auto* col: m_columnsList) {
 				Double2StringFilter* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 				filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
 			}
@@ -350,7 +320,7 @@ void ColumnDock::formatChanged(int index) {
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
 			QString format = ui.cbFormat->itemData( ui.cbFormat->currentIndex() ).toString();
-			foreach(Column* col, m_columnsList) {
+			for (auto* col: m_columnsList) {
 				DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				filter->setFormat(format);
 			}
@@ -363,7 +333,7 @@ void ColumnDock::precisionChanged(int digits) {
 	if (m_initializing)
 		return;
 
-	foreach(Column* col, m_columnsList) {
+	for (auto* col: m_columnsList) {
 		Double2StringFilter * filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
 	}
@@ -374,7 +344,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 		return;
 
 	AbstractColumn::PlotDesignation pd=AbstractColumn::PlotDesignation(index);
-	foreach(Column* col, m_columnsList)
+	for (auto* col: m_columnsList)
 		col->setPlotDesignation(pd);
 }
 

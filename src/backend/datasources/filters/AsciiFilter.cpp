@@ -129,14 +129,6 @@ QStringList AsciiFilter::numberFormats() {
 }
 
 /*!
-returns the list of all supported datetime formats
-*/
-QStringList AsciiFilter::dateTimeFormats() {
-	// TODO: more formats
-	return (QStringList() << QLatin1String("hh:mm:ss") << QLatin1String("YYYY-MM-DD|T|hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss") << QLatin1String("DD/MM/YY| |hh:mm:ss"));
-}
-
-/*!
 returns the list of all predefined data types.
 */
 QStringList AsciiFilter::dataTypes() {
