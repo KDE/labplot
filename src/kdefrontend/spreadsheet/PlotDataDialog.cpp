@@ -65,10 +65,10 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	ui.setupUi(mainWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	okButton->setDefault(true);
-	okButton->setToolTip(i18n("Plot the selected data"));
-	okButton->setText(i18n("&Plot"));
+    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+    m_okButton->setDefault(true);
+    m_okButton->setToolTip(i18n("Plot the selected data"));
+    m_okButton->setText(i18n("&Plot"));
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);
@@ -406,5 +406,5 @@ void PlotDataDialog::checkOkButton() {
 		enable = true;
 	}
 
-	okButton->setEnabled(enable);
+    m_okButton->setEnabled(enable);
 }

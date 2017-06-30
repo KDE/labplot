@@ -48,7 +48,7 @@ class RandomValuesDialog : public QDialog{
 		Ui::RandomValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-		QPushButton *okButton;
+        QPushButton* m_okButton;
 //		QMap<int, QString> m_formulaPixs;
 
 	private slots:

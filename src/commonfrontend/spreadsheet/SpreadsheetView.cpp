@@ -1229,7 +1229,6 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 void SpreadsheetView::fillWithRandomValues() {
 	if (selectedColumnCount() < 1) return;
 	RandomValuesDialog* dlg = new RandomValuesDialog(m_spreadsheet);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1237,7 +1236,6 @@ void SpreadsheetView::fillWithRandomValues() {
 void SpreadsheetView::fillWithEquidistantValues() {
 	if (selectedColumnCount() < 1) return;
 	EquidistantValuesDialog* dlg = new EquidistantValuesDialog(m_spreadsheet);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
@@ -1245,7 +1243,6 @@ void SpreadsheetView::fillWithEquidistantValues() {
 void SpreadsheetView::fillWithFunctionValues() {
 	if (selectedColumnCount() < 1) return;
 	FunctionValuesDialog* dlg = new FunctionValuesDialog(m_spreadsheet);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }

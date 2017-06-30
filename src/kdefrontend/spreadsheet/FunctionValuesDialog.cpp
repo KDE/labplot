@@ -58,7 +58,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	QFrame* mainWidget = new QFrame(this);
 	ui.setupUi(mainWidget);
 	setMainWidget(mainWidget);
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 
 	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );

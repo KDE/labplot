@@ -572,7 +572,6 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 
 void MatrixView::fillWithFunctionValues() {
 	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->exec();
 }
 
