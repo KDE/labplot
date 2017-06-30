@@ -542,28 +542,29 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				const QString valueString = lineStringList.at(n);
 
 				// set value depending on data type
-				if (dataSource) {
-					switch (columnModes[n]) {
-					case AbstractColumn::Numeric: {
-						bool isNumber;
-						const double value = valueString.toDouble(&isNumber);
+				switch (columnModes[n]) {
+				case AbstractColumn::Numeric: {
+					bool isNumber;
+					const double value = valueString.toDouble(&isNumber);
+					if (dataSource)
 						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-						break;
-					}
-					case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-						if (valueDateTime.isValid())
-							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime;
-						else
-							static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = QDateTime();
-						break;
-					}
-					case AbstractColumn::Text:
+					else
+						lineString += QString::number(isNumber ? value : NAN);
+					break;
+				}
+				case AbstractColumn::DateTime: {
+					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+					if (dataSource)
+						static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+					else
+						lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+					break;
+				}
+				case AbstractColumn::Text:
+					if (dataSource)
 						static_cast<QVector<QString>*>(dataContainer[n])->operator[](currentRow) = valueString;
-					}
-				} else {	// preview
-					//TODO: type dependent conversion
-					lineString += valueString;
+					else
+						lineString += valueString;
 				}
 			} else {	// missing columns in this line
 				if (dataSource) {

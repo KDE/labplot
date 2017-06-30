@@ -4,6 +4,7 @@
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
