@@ -49,7 +49,6 @@ public:
 		: AbstractColumn(name), d(new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<T>(data))) {
 		init();
 	};
-	Column(const QString& name, QStringList data); // overloaded contructor for QStringList
 	void init();
 	~Column();
 
