@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Private members of CartesianPlot.
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
 
- ***************************************************************************/
+ *******************************************************7*******************/
 
 /***************************************************************************
  *                                                                         *
@@ -39,23 +39,9 @@ class CartesianPlotPrivate : public AbstractPlotPrivate {
 
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
-	CartesianPlot* const q;
 
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-	virtual void wheelEvent(QGraphicsSceneWheelEvent*);
-	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr);
-
-	virtual void retransform();
+	void retransform();
 	void retransformScales();
-	void checkXRange();
-	void checkYRange();
-	CartesianScale* createScale(CartesianPlot::Scale type,
-		double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd);
 
 	float xMin, xMax, yMin, yMax;
 	float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
@@ -72,13 +58,30 @@ public:
 	bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
 	double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
 
-	bool suppressRetransform;
+	CartesianPlot* const q;
+	CartesianPlot::MouseMode mouseMode;
+	CartesianCoordinateSystem* cSystem;
+
+private:
+	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+	virtual void wheelEvent(QGraphicsSceneWheelEvent*);
+	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr);
+
+	void checkXRange();
+	void checkYRange();
+	CartesianScale* createScale(CartesianPlot::Scale type,
+		double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd);
+
+	bool m_suppressRetransform;
 	bool m_printing;
 	bool m_selectionBandIsShown;
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
-	CartesianCoordinateSystem* cSystem;
-	CartesianPlot::MouseMode mouseMode;
 	QLineF m_selectionStartLine;
 };
 

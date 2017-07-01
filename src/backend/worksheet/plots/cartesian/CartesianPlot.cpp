@@ -1008,8 +1008,6 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
-// 		curve->recalculate();
-// 		emit curve->filterDataChanged(curve->filterData());
 	} else {
 		beginMacro(i18n("%1: add Fourier filter curve", name()));
 		this->addChild(curve);
@@ -1531,11 +1529,16 @@ void CartesianPlot::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
-	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
-	  curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
-	  suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(nullptr),
-	  mouseMode(CartesianPlot::SelectionMode) {
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPrivate(plot),
+	curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
+	curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
+	q(plot),
+	mouseMode(CartesianPlot::SelectionMode),
+	cSystem(nullptr),
+	m_suppressRetransform(false),
+	m_printing(false),
+	m_selectionBandIsShown(false) {
+
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
 
@@ -1548,7 +1551,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG("CartesianPlotPrivate::retransform()");
-	if (suppressRetransform)
+	if (m_suppressRetransform)
 		return;
 
 	prepareGeometryChange();
@@ -1904,9 +1907,9 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 
-		suppressRetransform = true;
+		m_suppressRetransform = true;
 		q->setRect(newRect);
-		suppressRetransform = false;
+		m_suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
