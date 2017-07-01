@@ -53,6 +53,7 @@ public:
 	QString commentCharacter;
 	QString separatingCharacter;
 	QString dateTimeFormat;
+	AbstractFileFilter::Locale locale;
 	bool autoModeEnabled;
 	bool headerEnabled;
 	bool skipEmptyParts;

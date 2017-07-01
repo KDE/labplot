@@ -28,6 +28,7 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 #ifndef ABSTRACTFILEFILTER_H
 #define ABSTRACTFILEFILTER_H
 
+#include "backend/core/AbstractColumn.h"
 #include <QObject>
 
 class AbstractDataSource;
@@ -40,9 +41,12 @@ class AbstractFileFilter : public QObject {
 
 public:
 	enum ImportMode {Append, Prepend, Replace};
+	enum Locale {LocaleSystem, LocaleC};
 
 	AbstractFileFilter() {}
 	virtual ~AbstractFileFilter() {}
+
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, Locale locale);
 
 	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;

@@ -240,6 +240,10 @@ QString AsciiFilter::dateTimeFormat() const {
 	return d->dateTimeFormat;
 }
 
+void AsciiFilter::setNumbersFormat(AbstractFileFilter::Locale locale) {
+	d->locale = locale;
+}
+
 /*
 void AsciiFilter::setDataType(const QString& typeName) {
 	if (typeName.isEmpty()) {
@@ -434,19 +438,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	columnModes.resize(m_actualCols);
 	int col = 0;
-	for (const auto& valueString: firstLineStringList) {	// only parse columns available in first data line
-		bool isNumber;
-		valueString.toDouble(&isNumber);
-		if (isNumber)
-			col++;
-		else {	// not number (or "DateTime" etc. selected?)
-			QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-			QDEBUG("date time =" << valueDateTime);
-			if (valueDateTime.isValid())
-				columnModes[col++] = AbstractColumn::DateTime;
-			else
-				columnModes[col++] = AbstractColumn::Text;
-		}
+	for (const auto& valueString: firstLineStringList) {// only parse columns available in first data line
+		if (col == m_actualCols)
+			break;
+		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, locale);
 	}
 	QDEBUG("column modes = " << columnModes);
 
@@ -513,6 +508,12 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	if (lines == -1)
 		lines = m_actualRows;
 
+	QLocale numberFormat;
+	if (locale == AbstractFileFilter::LocaleC)
+		numberFormat = QLocale(QLocale::C);
+	else
+		numberFormat = QLocale::system();
+
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
@@ -538,7 +539,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
-					const double value = valueString.toDouble(&isNumber);
+					const double value = numberFormat.toDouble(valueString, &isNumber);
 					if (dataSource)
 						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					else
