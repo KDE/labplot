@@ -4,7 +4,7 @@
     Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
     Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2009 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -36,7 +36,6 @@ class AsciiOptionsWidget : public QWidget {
 
 public:
 	explicit AsciiOptionsWidget(QWidget*);
-	~AsciiOptionsWidget();
 
 private:
 	Ui::AsciiOptionsWidget ui;

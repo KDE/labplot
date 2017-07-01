@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AsciiOptionsWidget.cpp
-    Project            : LabPlot
-    Description      : widget providing options for the import of ascii data
+    File                 : AsciiOptionsWidget.h
+    Project              : LabPlot
+    Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "AsciiOptionsWidget.h"
+#include <KLocale>
 
  /*!
 	\class AsciiOptionsWidget
@@ -34,10 +35,28 @@
 
 	\ingroup kdefrontend
  */
-
 AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
-  ui.setupUi(this);
-}
+	ui.setupUi(this);
 
-AsciiOptionsWidget::~AsciiOptionsWidget() {
+	QString text = i18n(
+		"<b> Number format: </b><br>"
+		"This option determines how the imported strings has to be converted to numbers. "
+		"For 'C Format', a period is used for the decimal point character and comma is used for the thousands group separater. <br>"
+		"Valid number represenatations are: <br>"
+		"<ul>"
+		"<li>1234.56</li>"
+		"<li>1,234.56</li>"
+		"<li>etc.</li>"
+		"</ul><br><br>"
+		"When using 'System locale', the system settings will be used."
+		"E.g., for the German local the valid number represenatations are: <br>"
+		"<ul>"
+		"<li>1234,56</li>"
+		"<li>1.234,56</li>"
+		"<li>etc.</li>"
+		"</ul><br><br>"
+	);
+
+	ui.lNumbersFormat->setToolTip(text);
+	ui.cbNumbersFormat->setToolTip(text);
 }
