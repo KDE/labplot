@@ -57,9 +57,12 @@ public:
 
 private:
 	Ui::ImportSQLDatabaseWidget ui;
-	QList<QString> vendorList;
-	QList<QString> tableNamesList;
-	QVector<AbstractColumn::ColumnMode> columnModes;
+	QList<QString> m_vendorList;
+	QList<QString> m_tableNamesList;
+	QStringList m_columnNames;
+	QVector<AbstractColumn::ColumnMode> m_columnModes;
+	int m_cols;
+	int m_rows;
 	QSqlDatabase m_db;
 	QStandardItemModel* m_databaseTreeModel;
 	QString m_configPath;

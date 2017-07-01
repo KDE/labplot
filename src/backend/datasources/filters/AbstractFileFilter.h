@@ -47,6 +47,7 @@ public:
 	virtual ~AbstractFileFilter() {}
 
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, Locale locale);
+	static QStringList numberFormats();
 
 	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;

@@ -28,6 +28,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QDateTime>
 #include <QLocale>
+#include <KLocale>
 
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, Locale locale) {
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
@@ -52,4 +53,11 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	}
 
 	return mode;
+}
+
+/*
+returns the list of all supported locales for numeric data
+*/
+QStringList AbstractFileFilter::numberFormats() {
+	return (QStringList() << i18n("System locale") << i18n("C format"));
 }

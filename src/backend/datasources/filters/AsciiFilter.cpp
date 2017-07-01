@@ -122,13 +122,6 @@ QStringList AsciiFilter::commentCharacters() {
 	return (QStringList() << "#" << "!" << "//" << "+" << "c" << ":" << ";");
 }
 
-/*
-returns the list of all supported locales for numeric data
-*/
-QStringList AsciiFilter::numberFormats() {
-	return (QStringList() << i18n("System locale") << i18n("C format"));
-}
-
 /*!
 returns the list of all predefined data types.
 */

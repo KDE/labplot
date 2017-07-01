@@ -44,7 +44,6 @@ public:
 
 	static QStringList separatorCharacters();
 	static QStringList commentCharacters();
-	static QStringList numberFormats();
 	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 

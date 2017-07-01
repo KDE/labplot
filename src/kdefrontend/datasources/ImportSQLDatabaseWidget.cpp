@@ -29,6 +29,8 @@
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
+#include "backend/datasources/AbstractDataSource.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KGlobal>
@@ -51,6 +53,9 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+	ui.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
@@ -83,6 +88,8 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
+	ui.cbNumbersFormat->setCurrentIndex(config.readEntry("NubmersFormat", (int)AbstractFileFilter::LocaleSystem));
+	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "hh:mm:ss"));
 	QList<int> defaultSizes;
 	defaultSizes << 100 << 100;
 	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));
@@ -101,6 +108,8 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
+	config.writeEntry("NumbersFormat", ui.cbNumbersFormat->currentText());
+	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
 	//TODO
@@ -236,38 +245,39 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	//resize the table to the number of columns (=number of fields in the result set)
-	const int columnCount = q.record().count();
-	ui.twPreview->setColumnCount(columnCount);
+	const int m_cols = q.record().count();
+	ui.twPreview->setColumnCount(m_cols);
 
-	//determine the data type (column modes) of the table columns.
+	//determine the names and the data type (column modes) of the table columns.
 	//check whether we have numerical data only by checking the data types of the first record.
-	columnModes.clear();
-	QStringList headerLabels;
+	m_columnNames.clear();
+	m_columnModes.clear();
 	bool numeric = true;
-	for (int i = 0; i < columnCount; ++i) {
-		headerLabels << q.record().fieldName(i);
-		const QVariant value = q.record().value(i);
-		bool ok;
-		value.toDouble(&ok);
-		if (ok) {
-			headerLabels[i] = headerLabels[i] + "  {" + i18n("Numeric") + "}";
-			columnModes << AbstractColumn::Numeric;
-		} else {
+	AbstractFileFilter::Locale numbersFormat = (AbstractFileFilter::Locale)ui.cbNumbersFormat->currentIndex();
+	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	q.next(); //go to the first record
+	for (int i = 0; i < m_cols; ++i) {
+		//name
+		m_columnNames << q.record().fieldName(i);
+
+		//value and type
+		const QString valueString = q.record().value(i).toString();
+		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numbersFormat);
+		m_columnModes << mode;
+		if (mode != AbstractColumn::Numeric)
 			numeric = false;
-			if (value.toDateTime().isValid()) {
-				headerLabels[i] = headerLabels[i] + "  {" + i18n("Date and Time") + "}";
-				columnModes << AbstractColumn::DateTime;
-			} else {
-				headerLabels[i] = headerLabels[i] + "  {" + i18n("Text") + "}";
-				columnModes << AbstractColumn::Text;
-			}
-		}
+
+		//header item
+		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
+		item->setTextAlignment(Qt::AlignLeft);
+		item->setIcon(AbstractColumn::iconForMode(mode));
+		ui.twPreview->setHorizontalHeaderItem(i, item);
 	}
 
 	//preview the data
 	int row = 0;
-	while(q.next()) {
-		for(int col = 0; col < columnCount; ++col) {
+	do {
+		for(int col = 0; col < m_cols; ++col) {
 			ui.twPreview->setRowCount(row+1);
 			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
 		}
@@ -276,9 +286,8 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		//in case a custom query is executed, check whether the row number limit is reached
 		if (customQuery && row >= ui.sbPreviewLines->value())
 			break;
-	}
+	} while (q.next());
 
-	ui.twPreview->setHorizontalHeaderLabels(headerLabels);
 	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
 	setValid();
@@ -305,6 +314,12 @@ void ImportSQLDatabaseWidget::importFromChanged(int index) {
 }
 
 void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
+	QVector<void*> dataContainer;	// pointers to the actual data containers
+	m_rows = 100;
+	if (dataSource)
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_rows, m_cols, m_columnNames, m_columnModes);
+
 // 	if (!m_db.isValid()) return;
 // 	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
 //
@@ -314,25 +329,25 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 // 	}
 //
 // 	m_db.open();
-// 	if (m_db.isOpen()) {
-// 		for(int tableIndex = 0; tableIndex < m_databaseTreeModel->rowCount(); tableIndex++) {
-// 			QString tableName = m_databaseTreeModel->item(tableIndex)->text();
-// 			QString columnNameList;
-// 			int columnCount = 0;
-// 			for(int columnIndex = 0; columnIndex < m_databaseTreeModel->item(tableIndex)->rowCount(); columnIndex++) {
-// 				QStandardItem* columnItem = m_databaseTreeModel->item(tableIndex)->child(columnIndex);
-// 				if (columnItem->checkState() == Qt::Checked) {
-// 					if (!columnNameList.isEmpty()) columnNameList += " , ";
-// 					columnNameList += columnItem->text();
-// 					columnCount++;
-// 				}
-// 			}
-// 			if (columnCount) previewColumn(columnNameList, tableName, columnCount, showPreview);
-// 		}
-// 		m_db.close();
-// 	}
+// 	if (!m_db.isOpen())
+// 		return;
 //
-// 	updateStatus();
+// 	for(int row = 0; row < m_databaseTreeModel->rowCount(); row++) {
+// 		QString tableName = m_databaseTreeModel->item(row)->text();
+// 		QString columnNameList;
+// 		int columnCount = 0;
+// 		for(int columnIndex = 0; columnIndex < m_databaseTreeModel->item(row)->rowCount(); columnIndex++) {
+// 			QStandardItem* columnItem = m_databaseTreeModel->item(row)->child(columnIndex);
+// 			if (columnItem->checkState() == Qt::Checked) {
+// 				if (!columnNameList.isEmpty()) columnNameList += " , ";
+// 				columnNameList += columnItem->text();
+// 				columnCount++;
+// 			}
+// 		}
+// // 		if (columnCount) previewColumn(columnNameList, tableName, columnCount, showPreview);
+// 		emit completed(100 * row/m_rows);
+// 	}
+// 	m_db.close();
 }
 
 void ImportSQLDatabaseWidget::updateStatus() {
