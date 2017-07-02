@@ -31,9 +31,9 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/ColumnStringIO.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
-
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -888,11 +888,45 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	return columnOffset;
 }
 
-void Spreadsheet::finalizeImport() {
+void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	//make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
 	for (int i=0; i<childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
+
+
+	// set the comments for each of the columns if datasource is a spreadsheet
+	const int rows = rowCount();
+	for (int n = startColumn; n <= endColumn; n++) {
+		Column* column = this->column(columnOffset + n - startColumn);
+		QString comment;
+
+		switch (column->columnMode()) {
+		case AbstractColumn::Numeric:
+			comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+			break;
+		case AbstractColumn::Text:
+			comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+			break;
+		case AbstractColumn::Month:
+			comment = i18np("month data, %1 element", "month data, %1 elements", rows);
+			break;
+		case AbstractColumn::Day:
+			comment = i18np("day data, %1 element", "day data, %1 elements", rows);
+			break;
+		case AbstractColumn::DateTime:
+			comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
+			// set same datetime format in column
+			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			filter->setFormat(dateTimeFormat);
+		}
+		column->setComment(comment);
+
+		if (importMode == AbstractFileFilter::Replace) {
+			column->setSuppressDataChangedSignal(false);
+			column->setChanged();
+		}
+	}
 
 	reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }

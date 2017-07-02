@@ -620,23 +620,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	if (!dataSource)
 		return dataStrings;
 
-	// make everything undo/redo-able again
-	// set column comments in spreadsheet
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (spreadsheet) {
-		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-		for (int n = 0; n < actualCols; n++) {
-			Column* column = spreadsheet->column(columnOffset+n);
-			column->setComment(comment);
-			column->setName(currentVarName);
-			if (mode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
-				column->setChanged();
-			}
-		}
-	}
-
-	dataSource->finalizeImport();
+	dataSource->finalizeImport(columnOffset, 1, actualCols, "", mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

@@ -384,22 +384,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		delete[] data;
-
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-		if (spreadsheet) {
-			const QString& comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-			for (int n = 0; n < actualCols; n++) {
-				Column* column = spreadsheet->column(columnOffset + n);
-				column->setComment(comment);
-				//TODO: column->setName(); ?
-				column->setUndoAware(true);
-				if (importMode == AbstractFileFilter::Replace) {
-					column->setSuppressDataChangedSignal(false);
-					column->setChanged();
-				}
-			}
-		}
-		dataSource->finalizeImport();
+		dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
         fits_close_file(m_fitsFile, &status);
 
 		return dataStrings;
@@ -616,21 +601,9 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		delete[] array;
 
-		if (!noDataSource) {
-			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-			if (spreadsheet) {
-				for ( int n = 0; n < actualCols - startRrow; ++n) {
-					Column* column = spreadsheet->column(columnOffset+n);
-					column->setComment(columnUnits.at(n));
-					//TODO: column->setName(); ?
-					if (importMode == AbstractFileFilter::Replace) {
-						column->setSuppressDataChangedSignal(false);
-						column->setChanged();
-					}
-				}
-			}
-			dataSource->finalizeImport();
-		}
+		if (!noDataSource)
+			dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
+
         fits_close_file(m_fitsFile, &status);
 		return dataStrings;
 	} else

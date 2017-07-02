@@ -904,7 +904,13 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	return columnOffset;
 }
 
-void Matrix::finalizeImport() {
+void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+	Q_UNUSED(columnOffset);
+	Q_UNUSED(startColumn);
+	Q_UNUSED(endColumn);
+	Q_UNUSED(dateTimeFormat);
+	Q_UNUSED(importMode);
+
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);

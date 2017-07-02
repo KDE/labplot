@@ -30,7 +30,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
-#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QTextStream>
@@ -586,42 +585,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	if (!dataSource)
 		return dataStrings;
 
-	// set the comments for each of the columns if datasource is a spreadsheet
-	// TODO: make everything undo/redo-able again
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (spreadsheet) {
-		const int rows = (headerEnabled ? currentRow : currentRow + 1);
-		for (int n = startColumn; n <= endColumn; n++) {
-			Column* column = spreadsheet->column(columnOffset + n - startColumn);
-			QString comment;
-			switch (columnModes[n - startColumn]) {
-			case AbstractColumn::Numeric:
-				comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-				break;
-			case AbstractColumn::Text:
-				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
-				break;
-			case AbstractColumn::Month:
-				comment = i18np("month data, %1 element", "month data, %1 elements", rows);
-				break;
-			case AbstractColumn::Day:
-				comment = i18np("day data, %1 element", "day data, %1 elements", rows);
-				break;
-			case AbstractColumn::DateTime:
-				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
-				// set same datetime format in column
-				DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-				filter->setFormat(dateTimeFormat);
-			}
-			column->setComment(comment);
-			if (importMode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
-				column->setChanged();
-			}
-		}
-	}
-
-	dataSource->finalizeImport();
+	dataSource->finalizeImport(columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
 	return dataStrings;
 }
 

@@ -110,8 +110,9 @@ public:
 	virtual bool load(XmlStreamReader*) override;
 
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
-		int rows, int cols, QStringList colNameList = QStringList(), QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) override;
-	virtual void finalizeImport() override;
+		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
+	virtual void finalizeImport(int columnOffset, int startColumn, int endColumn,
+		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
 	typedef MatrixPrivate Private;
 
