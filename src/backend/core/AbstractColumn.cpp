@@ -91,6 +91,51 @@ AbstractColumn::~AbstractColumn() {
 	delete m_abstract_column_private;
 }
 
+QStringList AbstractColumn::dateFormats() {
+	QStringList dates;
+	dates << "yyyy-MM-dd";
+	dates << "yyyy/MM/dd";
+	dates << "dd/MM/yyyy";
+	dates << "dd/MM/yy";
+	dates << "dd.MM.yyyy";
+	dates << "dd.MM.yy";
+	dates << "MM/yyyy";
+	dates << "dd.MM.";
+	dates << "yyyyMMdd";
+
+	return dates;
+}
+
+QStringList AbstractColumn::timeFormats() {
+	QStringList times;
+	times << "hh";
+	times << "hh ap";
+	times << "hh:mm";
+	times << "hh:mm ap";
+	times << "hh:mm:ss";
+	times << "hh:mm:ss.zzz";
+	times << "hh:mm:ss:zzz";
+	times << "mm:ss.zzz";
+	times << "hhmmss";
+
+	return times;
+}
+
+QStringList AbstractColumn::dateTimeFormats() {
+	QStringList dateTimes;
+	
+	// any combination of date and times
+	for (auto d: dateFormats())
+		dateTimes << d;
+	for (auto t: timeFormats())
+		dateTimes << t;
+	for (auto d: dateFormats())
+		for (auto t: timeFormats())
+			dateTimes << d + ' ' + t;
+
+	return dateTimes;
+}
+
 /**
  * \brief Convenience method for mode-dependent icon
  */

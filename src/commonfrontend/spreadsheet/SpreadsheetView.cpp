@@ -1948,7 +1948,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		const int firtsSelectedCol = const_cast<SpreadsheetView*>(this)->firstSelectedColumn();
 		bool rowsCalculated = false;
 		for (int col = firtsSelectedCol; col < firtsSelectedCol + cols; ++col) {
-			QStringList textData;
+			QVector<QString> textData;
 			for (int row = 0; row < m_spreadsheet->rowCount(); ++row) {
 				if (const_cast<SpreadsheetView*>(this)->isRowSelected(row)) {
 					textData << m_spreadsheet->column(col)->asStringColumn()->textAt(row);

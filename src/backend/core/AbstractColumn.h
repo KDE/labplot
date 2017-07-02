@@ -130,6 +130,9 @@ public:
 	explicit AbstractColumn(const QString& name);
 	virtual ~AbstractColumn();
 
+	static QStringList dateFormats();	// supported date formats
+	static QStringList timeFormats();	// supported time formats
+	static QStringList dateTimeFormats();	// supported datetime formats
 	static QIcon iconForMode(ColumnMode mode);
 
 	virtual bool isReadOnly() const { return true; };

@@ -111,9 +111,7 @@ class AxisGrid : public QGraphicsItem {
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
-	d_ptr->m_plot = plot;
-	d_ptr->m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -454,7 +452,7 @@ bool Axis::isVisible() const {
 
 void Axis::setPrinting(bool on) {
 	Q_D(Axis);
-	d->m_printing = on;
+	d->setPrinting(on);
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
@@ -871,8 +869,16 @@ void Axis::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	majorTicksColumn(0), minorTicksColumn(0), gridItem(new AxisGrid(this)), q(owner) {
+AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
+	majorTicksColumn(0),
+	minorTicksColumn(0),
+	gridItem(new AxisGrid(this)),
+	q(owner),
+	m_plot(plot),
+	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
+	m_hovered(false),
+	m_suppressRecalc(false),
+	m_printing(false) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -1823,6 +1829,10 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		q->unhovered();
 		update(axisShape.boundingRect());
 	}
+}
+
+void AxisPrivate::setPrinting(bool on) {
+	m_printing = on;
 }
 
 //##############################################################################

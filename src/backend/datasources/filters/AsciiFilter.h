@@ -44,8 +44,6 @@ public:
 
 	static QStringList separatorCharacters();
 	static QStringList commentCharacters();
-	static QStringList numberFormats();
-	static QStringList dateTimeFormats();
 	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 
@@ -70,6 +68,7 @@ public:
 	QString separatingCharacter() const;
 	void setDateTimeFormat(const QString&);
 	QString dateTimeFormat() const;
+	void setNumbersFormat(AbstractFileFilter::Locale);
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
@@ -83,8 +82,7 @@ public:
 	bool isTransposed() const;
 
 	void setVectorNames(const QString);
-	QString vectorNames() const;
-	QStringList vectorNameList() const;
+	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 
 	void setStartRow(const int);

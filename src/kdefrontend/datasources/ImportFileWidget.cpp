@@ -75,8 +75,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
-	asciiOptionsWidget.cbNumbersFormat->addItems(AsciiFilter::numberFormats());
-	asciiOptionsWidget.cbDateTimeFormat->addItems(AsciiFilter::dateTimeFormats());
+	asciiOptionsWidget.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
+	asciiOptionsWidget.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
@@ -175,7 +175,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
-//TODO connect( asciiOptionsWidget.cbDataType, SIGNAL(stateChanged(int)), SLOT(dataTypeChanged(int)) );
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
@@ -202,6 +201,7 @@ void ImportFileWidget::loadSettings() {
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
+	asciiOptionsWidget.cbNumbersFormat->setCurrentIndex(conf.readEntry("NubmersFormat", (int)AbstractFileFilter::LocaleSystem));
 	asciiOptionsWidget.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
 	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
@@ -241,6 +241,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// ascii data
 	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
+	conf.writeEntry("NumbersFormat", asciiOptionsWidget.cbNumbersFormat->currentText());
 	conf.writeEntry("DateTimeFormat", asciiOptionsWidget.cbDateTimeFormat->currentText());
 	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
@@ -359,6 +360,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(false);
 				filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 				filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
+				filter->setNumbersFormat( AbstractFileFilter::Locale(asciiOptionsWidget.cbNumbersFormat->currentIndex()) );
 				filter->setDateTimeFormat(asciiOptionsWidget.cbDateTimeFormat->currentText());
 				filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
 				filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
@@ -915,7 +917,7 @@ void ImportFileWidget::refreshPreview() {
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = twPreview;
-		vectorNameList = filter->vectorNameList();
+		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
 	}
