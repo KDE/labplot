@@ -183,7 +183,8 @@ void MatrixFunctionDialog::generate() {
 
 	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()));
 
-	QVector<QVector<double> > new_data = m_matrix->data();
+	//TODO: data types
+	QVector<QVector<double>>* new_data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
 	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
 	char* func = funcba.data();
@@ -231,7 +232,7 @@ void MatrixFunctionDialog::generate() {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); row++) {
 			vars[1].value = y;
-			new_data[col][row] = parse_with_vars(func, vars, 2);
+			(new_data->operator[](col))[row] = parse_with_vars(func, vars, 2);
 			y += yStep;
 		}
 		y = m_matrix->yStart();

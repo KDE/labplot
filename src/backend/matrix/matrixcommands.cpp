@@ -353,20 +353,20 @@ void MatrixMirrorVerticallyCmd::undo() {
 
 
 //replace values
-MatrixReplaceValuesCmd::MatrixReplaceValuesCmd(MatrixPrivate* private_obj, const QVector<QVector<double> >& new_values, QUndoCommand* parent)
+MatrixReplaceValuesCmd::MatrixReplaceValuesCmd(MatrixPrivate* private_obj, void* new_values, QUndoCommand* parent)
  : QUndoCommand(parent), m_private_obj(private_obj), m_new_values(new_values)
 {
 	setText(i18n("%1: replace values", m_private_obj->name()));
 }
 
 void MatrixReplaceValuesCmd::redo() {
-	m_old_values = m_private_obj->matrixData;
-	m_private_obj->matrixData = m_new_values;
+	m_old_values = m_private_obj->data;
+	m_private_obj->data = m_new_values;
 	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount -1, m_private_obj->columnCount-1);
 }
 
 void MatrixReplaceValuesCmd::undo() {
-	m_new_values = m_private_obj->matrixData;
-	m_private_obj->matrixData = m_old_values;
+	m_new_values = m_private_obj->data;
+	m_private_obj->data = m_old_values;
 	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount -1, m_private_obj->columnCount-1);
 }

@@ -199,8 +199,8 @@ BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
 CLASS_D_READER_IMPL(Matrix, QString, formula, formula)
 
-QVector<QVector<double> >& Matrix::data() const {
-	return d->matrixData;
+void* Matrix::data() const {
+	return d->data;
 }
 
 void Matrix::setSuppressDataChangedSignal(bool b) {
@@ -490,8 +490,8 @@ void Matrix::setRowCells(int row, int first_column, int last_column, const QVect
 	RESET_CURSOR;
 }
 
-void Matrix::setData(const QVector<QVector<double> >& data) {
-	if (!data.isEmpty())
+void Matrix::setData(void* data) {
+	if (!(static_cast<QVector<QVector<double>>*>(data))->isEmpty())
 		exec(new MatrixReplaceValuesCmd(d, data));
 }
 
@@ -530,6 +530,7 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
+	data = new QVector<QVector<double>>();
 
 }
 
@@ -545,8 +546,8 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before <= columnCount);
 
 	emit q->columnsAboutToBeInserted(before, count);
-	for(int i=0; i<count; i++) {
-		matrixData.insert(before+i, QVector<double>(rowCount));
+	for(int i = 0; i < count; i++) {
+		static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
 		columnWidths.insert(before+i, 0);
 	}
 	columnCount += count;
@@ -560,7 +561,7 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	emit q->columnsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= columnCount);
-	matrixData.remove(first, count);
+	(static_cast<QVector<QVector<double>>*>(data))->remove(first, count);
 	for (int i=0; i<count; i++)
 		columnWidths.remove(first);
 	columnCount -= count;
@@ -576,7 +577,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 	Q_ASSERT(before <= rowCount);
 	for(int col=0; col<columnCount; col++)
 		for(int i=0; i<count; i++)
-			matrixData[col].insert(before+i, 0.0);
+			(static_cast<QVector<QVector<double>>*>(data))->operator[](col).insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
 		rowHeights.insert(before+i, 0);
 
@@ -591,9 +592,9 @@ void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= rowCount);
-	for(int col=0; col<columnCount; col++)
-		matrixData[col].remove(first, count);
-	for (int i=0; i<count; i++)
+	for(int col = 0; col < columnCount; col++)
+		(static_cast<QVector<QVector<double>>*>(data))->operator[](col).remove(first, count);
+	for (int i = 0; i < count; i++)
 		rowHeights.remove(first);
 
 	rowCount -= count;
@@ -607,13 +608,13 @@ double MatrixPrivate::cell(int row, int col) const {
 // 	if(row < 0 || row >= rowCount() || col < 0 || col >= columnCount())
 // 		return 0.0;
 
-	return matrixData.at(col).at(row);
+	return (static_cast<QVector<QVector<double>>*>(data))->at(col).at(row);
 }
 
 void MatrixPrivate::setCell(int row, int col, double value) {
 	Q_ASSERT(row >= 0 && row < rowCount);
 	Q_ASSERT(col >= 0 && col < columnCount);
-	matrixData[col][row] = value;
+	static_cast<QVector<QVector<double>>*>(data)->operator[](col)[row] = value;
 	if (!suppressDataChange)
 		emit q->dataChanged(row, col, row, col);
 }
@@ -622,12 +623,12 @@ QVector<double> MatrixPrivate::columnCells(int col, int first_row, int last_row)
 	Q_ASSERT(first_row >= 0 && first_row < rowCount);
 	Q_ASSERT(last_row >= 0 && last_row < rowCount);
 
-	if(first_row == 0 && last_row == rowCount-1)
-		return matrixData.at(col);
+	if (first_row == 0 && last_row == rowCount-1)
+		return (static_cast<QVector<QVector<double>>*>(data))->at(col);
 
 	QVector<double> result;
-	for(int i=first_row; i<=last_row; i++)
-		result.append(matrixData.at(col).at(i));
+	for (int i = first_row; i <= last_row; i++)
+		result.append(static_cast<QVector<QVector<double>>*>(data)->at(col).at(i));
 	return result;
 }
 
@@ -636,16 +637,16 @@ void MatrixPrivate::setColumnCells(int col, int first_row, int last_row, const Q
 	Q_ASSERT(last_row >= 0 && last_row < rowCount);
 	Q_ASSERT(values.count() > last_row - first_row);
 
-	if(first_row == 0 && last_row == rowCount-1) {
-		matrixData[col] = values;
-		matrixData[col].resize(rowCount);  // values may be larger
+	if (first_row == 0 && last_row == rowCount-1) {
+		static_cast<QVector<QVector<double>>*>(data)->operator[](col) = values;
+		static_cast<QVector<QVector<double>>*>(data)->operator[](col).resize(rowCount);  // values may be larger
 		if (!suppressDataChange)
 			emit q->dataChanged(first_row, col, last_row, col);
 		return;
 	}
 
-	for(int i=first_row; i<=last_row; i++)
-		matrixData[col][i] = values.at(i-first_row);
+	for (int i = first_row; i <= last_row; i++)
+		static_cast<QVector<QVector<double>>*>(data)->operator[](col)[i] = values.at(i-first_row);
 	if (!suppressDataChange)
 		emit q->dataChanged(first_row, col, last_row, col);
 }
@@ -655,8 +656,8 @@ QVector<double> MatrixPrivate::rowCells(int row, int first_column, int last_colu
 	Q_ASSERT(last_column >= 0 && last_column < columnCount);
 
 	QVector<double> result;
-	for(int i=first_column; i<=last_column; i++)
-		result.append(matrixData.at(i).at(row));
+	for (int i = first_column; i <= last_column; i++)
+		result.append(static_cast<QVector<QVector<double>>*>(data)->operator[](i)[row]);
 	return result;
 }
 
@@ -665,15 +666,15 @@ void MatrixPrivate::setRowCells(int row, int first_column, int last_column, cons
 	Q_ASSERT(last_column >= 0 && last_column < columnCount);
 	Q_ASSERT(values.count() > last_column - first_column);
 
-	for(int i=first_column; i<=last_column; i++)
-		matrixData[i][row] = values.at(i-first_column);
+	for(int i = first_column; i <= last_column; i++)
+		static_cast<QVector<QVector<double>>*>(data)->operator[](i)[row] = values.at(i-first_column);
 	if (!suppressDataChange)
 		emit q->dataChanged(row, first_column, row, last_column);
 }
 
 //! Fill column with zeroes
 void MatrixPrivate::clearColumn(int col) {
-	matrixData[col].fill(0.0);
+	static_cast<QVector<QVector<double>>*>(data)->operator[](col).fill(0.0);
 	if (!suppressDataChange)
 		emit q->dataChanged(0, col, rowCount-1, col);
 }
@@ -719,13 +720,13 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("column_widths");
 	data = reinterpret_cast<const char*>(d->columnWidths.constData());
 	size = d->columnWidths.size()*sizeof(int);
-	writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+	writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
 	writer->writeEndElement();
 
 	//columns
 	size = d->rowCount*sizeof(double);
-	for (int i=0; i<d->columnCount; ++i) {
-		data = reinterpret_cast<const char*>(d->matrixData.at(i).constData());
+	for (int i = 0; i < d->columnCount; ++i) {
+		data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
 		writer->writeStartElement("column");
 		writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
 		writer->writeEndElement();
@@ -840,10 +841,11 @@ bool Matrix::load(XmlStreamReader* reader) {
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(double);
+			//TODO: consider data types
 			QVector<double> column;
 			column.resize(count);
 			memcpy(column.data(), bytes.data(), count*sizeof(double));
-			d->matrixData.append(column);
+			static_cast<QVector<QVector<double>>*>(d->data)->append(column);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -861,7 +863,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	Q_UNUSED(colNameList);
-	Q_UNUSED(columnMode);	// currently ignored since we only support "Numeric" (double)
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -879,13 +880,25 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	}
 
 	//TODO: support other numeric types when available (float, int, ...)
-	QVector<QVector<double> >& matrixColumns = data();
+	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
-		QVector<double>* vector = &matrixColumns[n];
-		vector->reserve(actualRows);
-		vector->resize(actualRows);
-		dataContainer[n] = static_cast<void *>(vector);
+		switch (columnMode[0]) {
+		case AbstractColumn::Numeric: {
+			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
+		//TODO: other types
+		}
+
+// old style:
+//		QVector<double>* vector = &matrixColumns[n];
+//		vector->reserve(actualRows);
+//		vector->resize(actualRows);
+//		dataContainer[n] = static_cast<void *>(vector);
 	}
 
 	return columnOffset;
