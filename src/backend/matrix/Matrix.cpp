@@ -861,6 +861,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	Q_UNUSED(colNameList);
+	Q_UNUSED(columnMode);	// currently ignored since we only support "Numeric" (double)
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -877,7 +878,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			setDimensions(rowCount(), actualCols);
 	}
 
-	//TODO: support other numeric types (float, int, ...)
+	//TODO: support other numeric types when available (float, int, ...)
 	QVector<QVector<double> >& matrixColumns = data();
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
