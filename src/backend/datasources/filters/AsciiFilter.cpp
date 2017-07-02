@@ -492,9 +492,17 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 
 	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> dataContainer;	// pointers to the actual data containers
-	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1,
-									m_actualCols, vectorNames, columnModes);
+	if (dataSource) {
+		if (dynamic_cast<Matrix*>(dataSource)) {
+			// avoid text data
+			for (auto& c: columnModes)
+				if (c == AbstractColumn::Text)
+					c = AbstractColumn::Numeric;
+		}
+
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1, m_actualCols, vectorNames, columnModes);
+
+	}
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
