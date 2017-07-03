@@ -500,7 +500,6 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 		}
 
 		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1, m_actualCols, vectorNames, columnModes);
-
 	}
 
 	// Read the data
