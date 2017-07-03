@@ -51,7 +51,7 @@
 	a MxN matrix with M rows, N columns). This data is typically
 	used to for 3D plots.
 
-	The values of the matrix are stored as double precision values. Each columng
+	The values of the matrix are stored as double precision values. Each column
 	of the matrix is stored in a QVector<double> objects.
 
 	\ingroup backend
@@ -287,7 +287,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 
 //columns
 void Matrix::insertColumns(int before, int count) {
-	if( count < 1 || before < 0 || before > columnCount()) return;
+	if (count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
 	exec(new MatrixInsertColumnsCmd(d, before, count));
 	RESET_CURSOR;
@@ -298,7 +298,7 @@ void Matrix::appendColumns(int count) {
 }
 
 void Matrix::removeColumns(int first, int count) {
-	if( count < 1 || first < 0 || first+count > columnCount()) return;
+	if (count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
 	exec(new MatrixRemoveColumnsCmd(d, first, count));
 	RESET_CURSOR;
@@ -310,7 +310,7 @@ void Matrix::clearColumn(int c) {
 
 //rows
 void Matrix::insertRows(int before, int count) {
-	if( count < 1 || before < 0 || before > rowCount()) return;
+	if (count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	exec(new MatrixInsertRowsCmd(d, before, count));
 	RESET_CURSOR;
@@ -321,13 +321,13 @@ void Matrix::appendRows(int count) {
 }
 
 void Matrix::removeRows(int first, int count) {
-	if( count < 1 || first < 0 || first+count > rowCount()) return;
+	if (count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	exec(new MatrixRemoveRowsCmd(d, first, count));
 	RESET_CURSOR;
 }
 void Matrix::clearRow(int r) {
-	for(int c=0; c<columnCount(); ++c)
+	for (int c = 0; c < columnCount(); ++c)
 		exec(new MatrixSetCellValueCmd(d, r, c, 0.0));
 }
 
