@@ -364,7 +364,7 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 			//preview the content of the currently selected table
 			const QString& driver = m_db.driverName();
 			const QString& limit = QString::number(ui.sbPreviewLines->value());
-			if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
+			if ( (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL3")) || (driver == QLatin1String("QPSQL")) || (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QMYSQL")) )
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
 			else if (driver == QLatin1String("QOCI"))
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
