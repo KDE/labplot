@@ -173,6 +173,10 @@ AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
 }
 
+Project* MainWin::project() const {
+	return m_project;
+}
+
 void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -1710,7 +1714,7 @@ void MainWin::importOpjDialog() {
 		statusBar()->showMessage(i18n("%1 imported", filename));
 	}
 #endif
-	
+
 	DEBUG("MainWin::importOpjDialog() DONE");
 }
 

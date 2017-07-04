@@ -55,11 +55,10 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 	vLayout->addWidget(importSQLDatabaseWidget);
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
-
-	setModel(parent->model());
-
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
+
+	setModel();
 
 	connect( importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(importWidgetStateChanged()) );
 

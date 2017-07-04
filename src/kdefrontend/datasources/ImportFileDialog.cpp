@@ -68,7 +68,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	//hide the data-source related widgets
 	if (!fileDataSource) {
-		setModel(parent->model());
+		setModel();
 		//TODO: disable for file data sources
 		importFileWidget->hideDataSource();
 	}

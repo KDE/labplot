@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #include <KDialog>
 
 class AbstractAspect;
+class AspectTreeModel;
 class MainWin;
 class TreeViewComboBox;
 
@@ -58,7 +59,7 @@ public:
 	virtual void checkOkButton() = 0;
 
 protected:
-	void setModel(QAbstractItemModel*);
+	void setModel();
 
 	QVBoxLayout* vLayout;
 	TreeViewComboBox* cbAddTo;
@@ -68,6 +69,7 @@ protected:
 	QGroupBox* frameAddTo;
 	QToolButton* tbNewDataContainer;
 	QMenu* m_newDataContainerMenu;
+	AspectTreeModel* m_aspectTreeModel;
 
 private slots:
 	void newDataContainerMenu();

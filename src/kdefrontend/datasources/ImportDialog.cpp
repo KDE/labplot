@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -29,6 +29,7 @@
 
 #include "ImportDialog.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
@@ -57,25 +58,35 @@
  */
 
 ImportDialog::ImportDialog(MainWin* parent) : KDialog(parent),
-	cbAddTo(0), cbPosition(0), m_mainWin(parent), m_newDataContainerMenu(0) {
+	cbAddTo(0), cbPosition(0), m_mainWin(parent), m_newDataContainerMenu(0),
+	m_aspectTreeModel(new AspectTreeModel(parent->project()) ) {
 
 	QWidget* mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
 	vLayout->setContentsMargins(0,0,0,0);
 	setMainWidget(mainWidget);
+
+	//menu for new data container
+	m_newDataContainerMenu = new QMenu(this);
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
+	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
+
+	//ok is only available if a valid container was selected
+	enableButtonOk(false);
 }
 
 ImportDialog::~ImportDialog() {
-	
+	if (m_aspectTreeModel)
+		delete m_aspectTreeModel;
 }
 
 /*!
-	creates widgets for the frame "Import-To" and sets the current model in the combobox to \c model.
+	creates widgets for the frame "Import-To" and sets the current model in the "Add to"-combobox.
  */
-void ImportDialog::setModel(QAbstractItemModel* model) {
-	DEBUG("ImportDialog::setModel() model ="<<model);
-
+void ImportDialog::setModel() {
 	//Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
@@ -84,12 +95,17 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	QList<const char *> list;
-	list << "Folder" << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setTopLevelClasses(list);
 	grid->addWidget(cbAddTo, 0, 1);
 
-	cbAddTo->setModel(model);
+	QList<const char*> list;
+	list << "Folder" << "Spreadsheet" << "Matrix"  << "Workbook";
+	cbAddTo->setTopLevelClasses(list);
+
+	list.clear();
+	list << "Spreadsheet" << "Matrix" << "Workbook";
+	m_aspectTreeModel->setSelectableAspects(list);
+
+	cbAddTo->setModel(m_aspectTreeModel);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
 	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
@@ -112,19 +128,8 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 
 	vLayout->addWidget(frameAddTo);
 
-	//menu for new data container
-	m_newDataContainerMenu = new QMenu(this);
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
-
-	//ok is only available if a valid container was selected
-	enableButtonOk(false);
-
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(modelIndexChanged()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
-	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-	DEBUG("ImportDialog::setModel() DONE");
+	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(modelIndexChanged()));
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
