@@ -35,14 +35,13 @@
 
 #include <cmath>
 extern "C" {
+#include <gsl/gsl_version.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include "backend/gsl/parser.h"
 }
-
-#include <cmath>
 
 ExpressionParser* ExpressionParser::instance = NULL;
 
@@ -76,6 +75,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Fermi-Dirac Function");
 	m_functionsGroups << i18n("Gamma and Beta Functions");
 	m_functionsGroups << i18n("Gegenbauer Functions");
+#if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
+	m_functionsGroups << i18n("Hermite Polynomials and Functions");
+#endif
 	m_functionsGroups << i18n("Hypergeometric Functions");
 	m_functionsGroups << i18n("Laguerre Functions");
 	m_functionsGroups << i18n("Lambert W Functions");
@@ -115,6 +117,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Hypergeometric Distribution");
 	m_functionsGroups << i18n("Logarithmic Distribution");
 
+	int index = 0;
+
 	// Standard mathematical functions
 	m_functionsNames << i18n("pseudo-random integer [0,RAND_MAX]");
 	m_functionsNames << i18n("nonlinear additive feedback rng [0,RAND_MAX]");
@@ -152,7 +156,7 @@ void ExpressionParser::initFunctions() {
 #else
 	for (int i = 0; i < 21; i++)
 #endif
-		m_functionsGroupIndex << 0;
+		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -168,8 +172,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("n-th zero of the Airy function derivative of the first kind");
 	m_functionsNames << i18n("n-th zero of the Airy function derivative of the second kind");
 
+	index++;
 	for (int i = 0; i < 12; i++)
-		m_functionsGroupIndex << 1;
+		m_functionsGroupIndex << index;
 
 	// Bessel Functions
 	m_functionsNames << i18n("Regular cylindrical Bessel function of zeroth order");
@@ -221,23 +226,27 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("n-th positive zero of the Bessel function J1");
 	m_functionsNames << i18n("n-th positive zero of the Bessel function Jnu");
 
+	index++;
 	for (int i = 0; i < 44; i++)
-		m_functionsGroupIndex << 2;
+		m_functionsGroupIndex << index;
 
 	// Clausen Functions
 	m_functionsNames << i18n("Clausen function");
-	m_functionsGroupIndex << 3;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Coulomb Functions
 	m_functionsNames << i18n("Lowest-order normalized hydrogenic bound state radial wavefunction");
 	m_functionsNames << i18n("n-th normalized hydrogenic bound state radial wavefunction");
 
+	index++;
 	for (int i = 0; i < 2; i++)
-		m_functionsGroupIndex << 4;
+		m_functionsGroupIndex << index;
 
 	// Dawson Function
 	m_functionsNames << i18n("Dawson integral");
-	m_functionsGroupIndex << 5;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Debye Functions
 	m_functionsNames << i18n("First-order Debye function");
@@ -247,12 +256,14 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Fifth-order Debye function");
 	m_functionsNames << i18n("Sixth-order Debye function");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 6;
+		m_functionsGroupIndex << index;
 
 	// Dilogarithm
         m_functionsNames << i18n("Dilogarithm for a real argument");
-	m_functionsGroupIndex << 7;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Elliptic Integrals
         m_functionsNames << i18n("Legendre form of complete elliptic integral K");
@@ -267,8 +278,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Carlson form of incomplete elliptic integral RF");
         m_functionsNames << i18n("Carlson form of incomplete elliptic integral RJ");
 
+	index++;
 	for (int i = 0; i < 11; i++)
-		m_functionsGroupIndex << 8;
+		m_functionsGroupIndex << index;
 
 	// Error Functions
         m_functionsNames << i18n("Error function");
@@ -278,8 +290,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Upper tail of the Gaussian probability function Q");
         m_functionsNames << i18n("Hazard function for the normal distribution Z/Q");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 9;
+		m_functionsGroupIndex << index;
 
 	// Exponential Functions
         m_functionsNames << i18n("Exponential function");
@@ -289,8 +302,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << QString("2(exp(x)-1-x)/x^2");
         m_functionsNames << i18n("n-relative exponential");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 10;
+		m_functionsGroupIndex << index;
 
 	// Exponential Integrals
         m_functionsNames << i18n("Exponential integral");
@@ -304,8 +318,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cosine integral");
         m_functionsNames << i18n("Arctangent integral");
 
+	index++;
 	for (int i = 0; i < 10; i++)
-		m_functionsGroupIndex << 11;
+		m_functionsGroupIndex << index;
 
 	// Fermi-Dirac Function
         m_functionsNames << i18n("Complete Fermi-Dirac integral with index -1");
@@ -318,8 +333,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Complete Fermi-Dirac integral with index 3/2");
         m_functionsNames << i18n("Incomplete Fermi-Dirac integral with index zero");
 
+	index++;
 	for (int i = 0; i < 9; i++)
-		m_functionsGroupIndex << 12;
+		m_functionsGroupIndex << index;
 
 	// Gamma and Beta Functions
         m_functionsNames << i18n("Gamma function");
@@ -347,8 +363,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Logarithm of the beta function");
         m_functionsNames << i18n("Normalized incomplete beta function");
 
+	index++;
 	for (int i = 0; i < 22; i++)
-		m_functionsGroupIndex << 13;
+		m_functionsGroupIndex << index;
 
 	// Gegenbauer Functions
         m_functionsNames << i18n("Gegenbauer polynomial C_1");
@@ -356,8 +373,23 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Gegenbauer polynomial C_3");
         m_functionsNames << i18n("Gegenbauer polynomial C_n");
 
+	index++;
 	for (int i = 0; i < 4; i++)
-		m_functionsGroupIndex << 14;
+		m_functionsGroupIndex << index;
+
+#if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
+	// Hermite Polynomials and Functions
+        m_functionsNames << i18n("Hermite polynomials physicists version");
+        m_functionsNames << i18n("Hermite polynomials probabilists version");
+        m_functionsNames << i18n("Hermite functions");
+        m_functionsNames << i18n("Derivatives of Hermite polynomials physicists version");
+        m_functionsNames << i18n("Derivatives of Hermite polynomials probabilists version");
+        m_functionsNames << i18n("Derivatives of Hermite functions");
+
+	index++;
+	for (int i = 0; i < 6; i++)
+		m_functionsGroupIndex << index;
+#endif
 
 	// Hypergeometric Functions
         m_functionsNames << i18n("Hypergeometric function 0F1");
@@ -371,23 +403,26 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Renormalized Gauss hypergeometric function 2F1 with complex parameters");
         m_functionsNames << i18n("Hypergeometric function 2F0");
 
+	index++;
 	for (int i = 0; i < 10; i++)
-		m_functionsGroupIndex << 15;
+		m_functionsGroupIndex << index;
 
 	// Laguerre Functions
         m_functionsNames << i18n("generalized Laguerre polynomials L_1");
         m_functionsNames << i18n("generalized Laguerre polynomials L_2");
         m_functionsNames << i18n("generalized Laguerre polynomials L_3");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 16;
+		m_functionsGroupIndex << index;
 
 	// Lambert W Functions
         m_functionsNames << i18n("Principal branch of the Lambert W function");
         m_functionsNames << i18n("Secondary real-valued branch of the Lambert W function");
 
+	index++;
 	for (int i = 0; i < 2; i++)
-		m_functionsGroupIndex << 17;
+		m_functionsGroupIndex << index;
 
 	// Legendre Functions and Spherical Harmonics
         m_functionsNames << i18n("Legendre polynomial P_1");
@@ -410,8 +445,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space");
         m_functionsNames << i18n("l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space");
 
+	index++;
 	for (int i = 0; i < 18; i++)
-		m_functionsGroupIndex << 18;
+		m_functionsGroupIndex << index;
 
 	// Logarithm and Related Functions
         m_functionsNames << i18n("Logarithm");
@@ -419,12 +455,14 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << QString("log(1+x)");
         m_functionsNames << QString("log(1+x) - x");
 
+	index++;
 	for (int i = 0; i < 4; i++)
-		m_functionsGroupIndex << 19;
+		m_functionsGroupIndex << index;
 
 	// Power Function
         m_functionsNames << i18n("x^n for integer n with an error estimate");
-	m_functionsGroupIndex << 20;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Psi (Digamma) Function
         m_functionsNames << i18n("Digamma function for positive integer n");
@@ -434,15 +472,17 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Trigamma function psi'");
         m_functionsNames << i18n("Polygamma function psi^(n)");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 21;
+		m_functionsGroupIndex << index;
 
 	// Synchrotron Functions
         m_functionsNames << i18n("First synchrotron function");
         m_functionsNames << i18n("Second synchrotron function");
 
+	index++;
 	for (int i = 0; i < 2; i++)
-		m_functionsGroupIndex << 22;
+		m_functionsGroupIndex << index;
 
 	// Transport Functions
         m_functionsNames << i18n("Transport function");
@@ -450,8 +490,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Transport function");
         m_functionsNames << i18n("Transport function");
 
+	index++;
 	for (int i = 0; i < 4; i++)
-		m_functionsGroupIndex << 23;
+		m_functionsGroupIndex << index;
 
 	// Trigonometric Functions
         m_functionsNames << i18n("Sine");
@@ -487,8 +528,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("restrict to [-pi,pi]");
         m_functionsNames << i18n("restrict to [0,2 pi]");
 
+	index++;
 	for (int i = 0; i < 32; i++)
-		m_functionsGroupIndex << 24;
+		m_functionsGroupIndex << index;
 
 	// Zeta Functions
         m_functionsNames << i18n("Riemann zeta function for integer n");
@@ -499,8 +541,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Eta function for integer n");
         m_functionsNames << i18n("Eta function");
 
+	index++;
 	for (int i = 0; i < 7; i++)
-		m_functionsGroupIndex << 25;
+		m_functionsGroupIndex << index;
 
 	// GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html
 	// Gaussian Distribution
@@ -519,8 +562,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Probability density for unit Gaussian tail distribution");
         m_functionsNames << i18n("Probability density for a bivariate Gaussian distribution");
 
+	index++;
 	for (int i = 0; i < 13; i++)
-		m_functionsGroupIndex << 26;
+		m_functionsGroupIndex << index;
 
 	// Exponential Distribution
         m_functionsNames << i18n("Probability density for an exponential distribution");
@@ -529,8 +573,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 27;
+		m_functionsGroupIndex << index;
 
 	// Laplace Distribution
         m_functionsNames << i18n("Probability density for a Laplace distribution");
@@ -539,16 +584,18 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 28;
+		m_functionsGroupIndex << index;
 
 	// Exponential Power Distribution
 	m_functionsNames << i18n("Probability density for an exponential power distribution");
         m_functionsNames << i18n("cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 29;
+		m_functionsGroupIndex << index;
 
 	// Cauchy Distribution
         m_functionsNames << i18n("Probability density for a Cauchy distribution");
@@ -557,8 +604,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 30;
+		m_functionsGroupIndex << index;
 
 	// Rayleigh Distribution
         m_functionsNames << i18n("Probability density for a Rayleigh distribution");
@@ -568,12 +616,14 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
         m_functionsNames << i18n("Probability density for a Rayleigh tail distribution");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 31;
+		m_functionsGroupIndex << index;
 
 	// Landau Distribution
         m_functionsNames << i18n("Probability density for a Landau distribution");
-	m_functionsGroupIndex << 32;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Gamma Distribution
         m_functionsNames << i18n("Probability density for a gamma distribution");
@@ -582,8 +632,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 33;
+		m_functionsGroupIndex << index;
 
 	// Flat (Uniform) Distribution
         m_functionsNames << i18n("Probability density for a uniform distribution");
@@ -592,8 +643,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 34;
+		m_functionsGroupIndex << index;
 
 	// Lognormal Distribution
         m_functionsNames << i18n("Probability density for a lognormal distribution");
@@ -602,8 +654,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 35;
+		m_functionsGroupIndex << index;
 
 	// Chi-squared Distribution
         m_functionsNames << i18n("Probability density for a chi squared distribution");
@@ -612,8 +665,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 36;
+		m_functionsGroupIndex << index;
 
 	// F-distribution
         m_functionsNames << i18n("Probability density for a F-distribution");
@@ -622,8 +676,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 37;
+		m_functionsGroupIndex << index;
 
 	// t-distribution
         m_functionsNames << i18n("Probability density for a t-distribution");
@@ -632,8 +687,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 38;
+		m_functionsGroupIndex << index;
 
 	// Beta Distribution
         m_functionsNames << i18n("Probability density for a beta distribution");
@@ -642,8 +698,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 39;
+		m_functionsGroupIndex << index;
 
 	// Logistic Distribution
         m_functionsNames << i18n("Probability density for a logistic distribution");
@@ -652,8 +709,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 40;
+		m_functionsGroupIndex << index;
 
 	// Pareto Distribution
         m_functionsNames << i18n("Probability density for a Pareto distribution");
@@ -662,8 +720,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 41;
+		m_functionsGroupIndex << index;
 
 	// Weibull Distribution
         m_functionsNames << i18n("Probability density for a Weibull distribution");
@@ -672,8 +731,9 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 5; i++)
-		m_functionsGroupIndex << 42;
+		m_functionsGroupIndex << index;
 
 	// Gumbel Distribution
         m_functionsNames << i18n("Probability density for a Type-1 Gumbel distribution");
@@ -687,20 +747,23 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 10; i++)
-		m_functionsGroupIndex << 43;
+		m_functionsGroupIndex << index;
 
 	// Poisson Distribution
         m_functionsNames << i18n("Probability density for a Poisson distribution");
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 44;
+		m_functionsGroupIndex << index;
 
 	// Bernoulli Distribution
         m_functionsNames << i18n("Probability density for a Bernoulli distribution");
-	m_functionsGroupIndex << 45;
+	index++;
+	m_functionsGroupIndex << index;
 
 	// Binomial Distribution
         m_functionsNames << i18n("Probability density for a binomial distribution");
@@ -710,36 +773,41 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 6; i++)
-		m_functionsGroupIndex << 46;
+		m_functionsGroupIndex << index;
 
 	// Pascal Distribution
         m_functionsNames << i18n("Probability density for a Pascal distribution");
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 47;
+		m_functionsGroupIndex << index;
 
 	// Geometric Distribution
         m_functionsNames << i18n("Probability density for a geometric distribution");
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 48;
+		m_functionsGroupIndex << index;
 
 	// Hypergeometric Distribution
         m_functionsNames << i18n("Probability density for a hypergeometric distribution");
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
+	index++;
 	for (int i = 0; i < 3; i++)
-		m_functionsGroupIndex << 49;
+		m_functionsGroupIndex << index;
 
 	// Logarithmic Distribution
         m_functionsNames << i18n("Probability density for a logarithmic distribution");
-	m_functionsGroupIndex << 50;
+	index++;
+	m_functionsGroupIndex << index;
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code

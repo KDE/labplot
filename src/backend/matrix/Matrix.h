@@ -3,8 +3,9 @@
     Project              : Matrix
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2015-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -39,13 +40,14 @@ class MatrixView;
 
 class Matrix : public AbstractDataSource {
 	Q_OBJECT
+	Q_ENUMS(HeaderFormat)
 
 public:
+	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
+
 	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
 	~Matrix();
-
-	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
 	virtual QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
@@ -66,8 +68,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
-	QVector<QVector<double> >& data() const;
-	void setData(const QVector<QVector<double> >&);
+//	QVector<QVector<double> >& data() const;
+//	void setData(const QVector<QVector<double> >&);
+	void* data() const;
+	void setData(void*);
+
 	void setSuppressDataChangedSignal(bool);
 	void setChanged();
 
@@ -105,8 +110,9 @@ public:
 	virtual bool load(XmlStreamReader*) override;
 
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
-		int rows, int cols, QStringList colNameList = QStringList(), QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) override;
-	virtual void finalizeImport() override;
+		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
+	virtual void finalizeImport(int columnOffset, int startColumn, int endColumn,
+		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
 	typedef MatrixPrivate Private;
 

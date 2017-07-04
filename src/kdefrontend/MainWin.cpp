@@ -120,6 +120,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	cartesianPlotDock(0),
 	cartesianPlotLegendDock(0),
 	columnDock(0),
+    m_liveDataDock(0),
 	matrixDock(0),
 	spreadsheetDock(0),
 	projectDock(0),

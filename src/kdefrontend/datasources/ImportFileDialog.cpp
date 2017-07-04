@@ -127,6 +127,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+    source->ready();
 }
 /*!
   triggers data import to the currently selected data container

@@ -136,28 +136,26 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		enableButtonOk(false);
-		return;
-	}
-
-	//don't allow to import into a workbook, the user has to create/select spreadsheet or matrix first
-	if(dynamic_cast<const Workbook*>(aspect)) {
-		enableButtonOk(false);
+		cbPosition->setEnabled(false);
 		return;
 	}
 
 	//check whether a valid connection and an object to import were selected
 	if (!importSQLDatabaseWidget->isValid()) {
 		enableButtonOk(false);
+		cbPosition->setEnabled(false);
 		return;
 	}
 
 	//for matrix containers allow to import only numerical data
 	if (dynamic_cast<const Matrix*>(aspect) && !importSQLDatabaseWidget->isNumericData()) {
 		enableButtonOk(false);
+		cbPosition->setEnabled(false);
 		return;
 	}
 
 	enableButtonOk(true);
+	cbPosition->setEnabled(true);
 }
 
 void ImportSQLDatabaseDialog::importWidgetStateChanged() {

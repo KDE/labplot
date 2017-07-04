@@ -27,11 +27,88 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "LiveDataDock.h"
 
 LiveDataDock::LiveDataDock(QWidget *parent) :
-    QWidget(parent)
-{
+    QWidget(parent), m_paused(false) {
     ui.setupUi(this);
+
+    connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
+    connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
+
 }
 
-LiveDataDock::~LiveDataDock()
-{
+LiveDataDock::~LiveDataDock() {
+}
+
+void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
+    m_liveDataSources = sources;
+    ui.sbSampleRate->setValue(m_liveDataSources.at(0)->sampleRate());
+    ui.sbUpdateFrequency->setValue(m_liveDataSources.at(0)->updateFrequency());
+    ui.cbUpdateType->setCurrentIndex(static_cast<int>(m_liveDataSources.at(0)->updateType()));
+}
+
+void LiveDataDock::sampleRateChanged(int sampleRate) {
+    for (auto* source : m_liveDataSources) {
+        source->setSampleRate(sampleRate);
+    }
+}
+
+void LiveDataDock::updateNow() {
+    for (auto* source : m_liveDataSources) {
+        source->updateNow();
+    }
+}
+
+void LiveDataDock::updateTypeChanged(int idx) {
+    FileDataSource::UpdateType type = static_cast<FileDataSource::UpdateType>(idx);
+
+    if (type == FileDataSource::UpdateType::TimeInterval) {
+        ui.lUpdateFrequency->show();
+        ui.sbUpdateFrequency->show();
+
+        for (auto* source: m_liveDataSources) {
+            source->setUpdateType(type);
+            source->setUpdateFrequency(ui.sbUpdateFrequency->value());
+        }
+
+    } else if (type == FileDataSource::UpdateType::NewData) {
+        ui.lUpdateFrequency->hide();
+        ui.sbUpdateFrequency->hide();
+
+        for (auto* source: m_liveDataSources) {
+            source->setUpdateType(type);
+        }
+    }
+}
+
+void LiveDataDock::updateFrequencyChanged(int updateFrequency) {
+    for (auto* source : m_liveDataSources) {
+        source->setUpdateFrequency(updateFrequency);
+    }
+}
+
+void LiveDataDock::stopReading() {
+    for (auto* source: m_liveDataSources) {
+        source->stopReading();
+    }
+}
+
+void LiveDataDock::pauseReading() {
+    for (auto* source: m_liveDataSources) {
+        source->pauseReading();
+    }
+}
+
+void LiveDataDock::continueReading() {
+    for (auto* source: m_liveDataSources) {
+        source->continueReading();
+    }
+}
+
+void LiveDataDock::pauseContinueReading() {
+    m_paused = !m_paused;
+
+    if (m_paused) {
+        pauseReading();
+    } else {
+        continueReading();
+    }
 }

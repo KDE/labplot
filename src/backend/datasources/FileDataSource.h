@@ -33,6 +33,7 @@
 #include <QSerialPort>
 #include <QSocketNotifier>
 #include <QLocalSocket>
+#include <QTimer>
 
 class QString;
 class AbstractFileFilter;
@@ -59,6 +60,8 @@ public:
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
 
+    void ready();
+
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
 
@@ -80,6 +83,9 @@ public:
     int port() const;
     void setPort(const int);
 
+    void setSerialPort(const QString& name);
+    QString serialPortName() const;
+
     QString host() const;
     void setHost(const QString&);
 
@@ -98,6 +104,11 @@ public:
 	void setFileName(const QString&);
 	QString fileName() const;
 
+    void updateNow();
+    void stopReading();
+    void pauseReading();
+    void continueReading();
+
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
 
@@ -113,22 +124,27 @@ private:
 	void watch();
 
 	QString m_fileName;
-	FileType m_fileType;
-	bool m_fileWatched;
-	bool m_fileLinked;
-	AbstractFileFilter* m_filter;
-	QFileSystemWatcher* m_fileSystemWatcher;
+    QString m_serialPortName;
+    QString m_host;
 
+	FileType m_fileType;
     UpdateType m_updateType;
     SourceType m_sourceType;
+	bool m_fileWatched;
+	bool m_fileLinked;
+    bool m_paused;
+
     int m_sampleRate;
     int m_updateFrequency;
     int m_port;
     int m_baudRate;
-    QString m_host;
+    AbstractFileFilter* m_filter;
+
+	QFileSystemWatcher* m_fileSystemWatcher;
     QSerialPort m_serialPort;
     QSocketNotifier* m_localSocketNotifier;
     QLocalSocket m_localSocket;
+    QTimer* m_updateTimer;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -143,7 +159,7 @@ private slots:
 	void fileChanged();
 	void watchToggled();
 	void linkToggled();
-
+    void addData();
 signals:
 	void dataChanged();
 	void dataUpdated();

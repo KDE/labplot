@@ -28,7 +28,10 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define LIVEDATADOCK_H
 
 #include <QWidget>
+
 #include "ui_livedatadock.h"
+#include "backend/datasources/FileDataSource.h"
+#include <QList>
 
 class LiveDataDock : public QWidget
 {
@@ -36,10 +39,31 @@ class LiveDataDock : public QWidget
 
 public:
     explicit LiveDataDock(QWidget *parent = 0);
+    void setLiveDataSources(const QList<FileDataSource*>& sources);
     ~LiveDataDock();
 
 private:
     Ui::LiveDataDock ui;
+    QList<FileDataSource*> m_liveDataSources;
+
+    bool m_paused;
+
+    void pauseReading();
+    void continueReading();
+private slots:
+
+    void updateTypeChanged(int);
+    void sampleRateChanged(int);
+    void updateFrequencyChanged(int);
+
+    void updateNow();
+    void stopReading();
+    void pauseContinueReading();
+public slots:
+
+signals:
+
+
 };
 
 #endif // LIVEDATADOCK_H

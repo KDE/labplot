@@ -320,7 +320,11 @@ IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
 ENDIF ()
 IF (USE_LIBORIGIN)
+IF (WIN32)
+target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/lib/liborigin.a )
+ELSE ()
 target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+ENDIF ()
 ENDIF ()
 
 ############## installation ################################

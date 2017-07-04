@@ -384,22 +384,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		delete[] data;
-
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-		if (spreadsheet) {
-			const QString& comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-			for (int n = 0; n < actualCols; n++) {
-				Column* column = spreadsheet->column(columnOffset + n);
-				column->setComment(comment);
-				//TODO: column->setName(); ?
-				column->setUndoAware(true);
-				if (importMode == AbstractFileFilter::Replace) {
-					column->setSuppressDataChangedSignal(false);
-					column->setChanged();
-				}
-			}
-		}
-		dataSource->finalizeImport();
+		dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
         fits_close_file(m_fitsFile, &status);
 
 		return dataStrings;
@@ -616,21 +601,9 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		delete[] array;
 
-		if (!noDataSource) {
-			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-			if (spreadsheet) {
-				for ( int n = 0; n < actualCols - startRrow; ++n) {
-					Column* column = spreadsheet->column(columnOffset+n);
-					column->setComment(columnUnits.at(n));
-					//TODO: column->setName(); ?
-					if (importMode == AbstractFileFilter::Replace) {
-						column->setSuppressDataChangedSignal(false);
-						column->setChanged();
-					}
-				}
-			}
-			dataSource->finalizeImport();
-		}
+		if (!noDataSource)
+			dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
+
         fits_close_file(m_fitsFile, &status);
 		return dataStrings;
 	} else
@@ -687,12 +660,11 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 			const long nelem = naxes[0] * naxes[1];
 			double* array = new double[nelem];
-			const QVector<QVector<double> >& data = matrix->data();
+			const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(matrix->data());
 
-			for (int row = 0; row < naxes[1]; ++row) {
-				for (int col = 0; col < naxes[0]; ++col)
-					array[row * naxes[0] + col] = data.at(col).at(row);
-			}
+			for (int col = 0; col < naxes[0]; ++col)
+				for (int row = 0; row < naxes[1]; ++row)
+					array[row * naxes[0] + col] = data->at(row).at(col);
 
             if (fits_write_img(m_fitsFile, TDOUBLE, 1, nelem, array, &status )) {
 				printError(status);
@@ -708,12 +680,12 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			char* columnNames[tfields];
 			char* tform[tfields];
 			char* tunit[tfields];
-			const QVector<QVector<double> >& matrixData = matrix->data();
+			const QVector<QVector<double>>* matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
 			for (int i = 0; i < tfields; ++i) {
-				column = matrixData.at(i);
+				column = matrixData->at(i);
 				const QString& columnName = matrixModel->headerData(i, Qt::Horizontal).toString();
 				columnNames[i] = new char[columnName.size()];
 				strcpy(columnNames[i], columnName.toLatin1().data());
@@ -763,7 +735,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
-				column = matrixData.at(col-1);
+				column = matrixData->at(col-1);
 				for (int r = 0; r < column.size(); ++r)
 					columnNumeric[r] = column.at(r);
 

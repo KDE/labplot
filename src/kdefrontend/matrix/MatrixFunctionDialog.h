@@ -36,20 +36,20 @@ class Matrix;
 class MatrixFunctionDialog : public KDialog {
 	Q_OBJECT
 
-	public:
-		explicit MatrixFunctionDialog(Matrix* m, QWidget* parent = 0, Qt::WFlags fl = 0);
+public:
+	explicit MatrixFunctionDialog(Matrix*, QWidget* parent = 0, Qt::WFlags = 0);
 
-	private:
-		Ui::MatrixFunctionWidget ui;
-		Matrix* m_matrix;
+private:
+	Ui::MatrixFunctionWidget ui;
+	Matrix* m_matrix;
 
-	private slots:
-		void generate();
-		void checkValues();
-		void showConstants();
-		void showFunctions();
-		void insertFunction(const QString&);
-		void insertConstant(const QString&);
+private slots:
+	void generate();
+	void checkValues();
+	void showConstants();
+	void showFunctions();
+	void insertFunction(const QString&);
+	void insertConstant(const QString&);
 };
 
 #endif

@@ -15,6 +15,7 @@ New features:
 		* Respect theme settings also in plot legends and labels
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
+	* Import from SQL databases (tables or custom queries)
 	* Import Origin OPJ projects
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu

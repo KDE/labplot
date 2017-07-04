@@ -218,6 +218,15 @@ struct func _functions[] = {
 	{"C2", gsl_sf_gegenpoly_2},
 	{"C3", gsl_sf_gegenpoly_3},
 	{"Cn", nsl_sf_gegenpoly_n},
+#if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
+	/* Hermite polynomials and functions */
+	{"Hen", nsl_sf_hermite_prob},
+	{"Hn", nsl_sf_hermite_phys},
+	{"Hfn", nsl_sf_hermite_func},
+	{"Hend", nsl_sf_hermite_prob_der},
+	{"Hnd", nsl_sf_hermite_phys_der},
+	{"Hfnd", nsl_sf_hermite_func_der},
+#endif
 	/* Hypergeometric Functions */
 	{"hyperg_0F1", gsl_sf_hyperg_0F1},
 	{"hyperg_1F1i", nsl_sf_hyperg_1F1i},

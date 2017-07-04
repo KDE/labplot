@@ -208,35 +208,9 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
-	QString tableName = ui.lwTables->currentItem()->text();
 
-	QString query;
-	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
-	if ( !customQuery ) {
-		//preview the content of the currently selected table
-		const QString driver = m_db.driverName();
-		const QString limit = QString::number(ui.sbPreviewLines->value());
-		if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
-		else if (driver == QLatin1String("QOCI"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
-		else if (driver == QLatin1String("QDB2"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") + limit + QLatin1String(" ROWS ONLY");
-		else if (driver == QLatin1String("QIBASE"))
-			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") + limit;
-		else
-			query = QLatin1String("SELECT TOP ") + limit + QLatin1String(" * FROM ") + tableName;
-	} else {
-		//preview the result of a custom query
-		query = ui.teQuery->toPlainText();
-		if ( query.trimmed().isEmpty() ) {
-			setInvalid();
-			RESET_CURSOR;
-			return;
-		}
-	}
-
-	QSqlQuery q(query);
+	//execute the current query (select on a table or a custom query)
+	QSqlQuery q(currentQuery(true));
 	if (!q.isActive()) {
 		setInvalid();
 		updateStatus();
@@ -245,7 +219,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	//resize the table to the number of columns (=number of fields in the result set)
-	const int m_cols = q.record().count();
+	m_cols = q.record().count();
 	ui.twPreview->setColumnCount(m_cols);
 
 	//determine the names and the data type (column modes) of the table columns.
@@ -275,6 +249,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	//preview the data
+	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 	int row = 0;
 	do {
 		for(int col = 0; col < m_cols; ++col) {
@@ -314,41 +289,100 @@ void ImportSQLDatabaseWidget::importFromChanged(int index) {
 }
 
 void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
-	QVector<void*> dataContainer;	// pointers to the actual data containers
-	m_rows = 100;
-	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_rows, m_cols, m_columnNames, m_columnModes);
+	if (!dataSource)
+		return;
 
-// 	if (!m_db.isValid()) return;
-// 	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
-//
-// 	if (showPreview) {
-// 		ui.twPreviewTable->setColumnCount(0);
-// 		ui.twPreviewTable->setRowCount(ui.sbEndRow->value() - ui.sbStartRow->value() + 1);
-// 	}
-//
-// 	m_db.open();
-// 	if (!m_db.isOpen())
-// 		return;
-//
-// 	for(int row = 0; row < m_databaseTreeModel->rowCount(); row++) {
-// 		QString tableName = m_databaseTreeModel->item(row)->text();
-// 		QString columnNameList;
-// 		int columnCount = 0;
-// 		for(int columnIndex = 0; columnIndex < m_databaseTreeModel->item(row)->rowCount(); columnIndex++) {
-// 			QStandardItem* columnItem = m_databaseTreeModel->item(row)->child(columnIndex);
-// 			if (columnItem->checkState() == Qt::Checked) {
-// 				if (!columnNameList.isEmpty()) columnNameList += " , ";
-// 				columnNameList += columnItem->text();
-// 				columnCount++;
-// 			}
-// 		}
-// // 		if (columnCount) previewColumn(columnNameList, tableName, columnCount, showPreview);
-// 		emit completed(100 * row/m_rows);
-// 	}
-// 	m_db.close();
+	WAIT_CURSOR;
+	//execute the current query (select on a table or a custom query)
+	QSqlQuery q(currentQuery());
+	if (!q.isActive()) {
+		setInvalid();
+		updateStatus();
+		RESET_CURSOR;
+		return;
+	}
+
+	//determine the number of rows/records to read
+	q.last();
+	const int rows = q.at()+1;
+	q.first();
+
+	// pointers to the actual data containers
+	//columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
+	QVector<void*> dataContainer;
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
+
+	//number and DateTime formatting
+	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	const AbstractFileFilter::Locale locale = (AbstractFileFilter::Locale)ui.cbNumbersFormat->currentIndex();
+	QLocale numberFormat;
+	if (locale == AbstractFileFilter::LocaleC)
+		numberFormat = QLocale(QLocale::C);
+	else
+		numberFormat = QLocale::system();
+
+	//read the data
+	int row = 0;
+	do {
+		for(int col = 0; col < m_cols; ++col) {
+			const QString valueString = q.record().value(col).toString();
+
+			// set value depending on data type
+			switch (m_columnModes[col]) {
+			case AbstractColumn::Numeric: {
+				bool isNumber;
+				const double value = numberFormat.toDouble(valueString, &isNumber);
+				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
+				break;
+			}
+			case AbstractColumn::DateTime: {
+				const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+				static_cast<QVector<QDateTime>*>(dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+				break;
+			}
+			case AbstractColumn::Text:
+				static_cast<QVector<QString>*>(dataContainer[col])->operator[](row) = valueString;
+			}
+		}
+
+		row++;
+		emit completed(100 * row/rows);
+	} while (q.next());
+
+	dataSource->finalizeImport(columnOffset, 1, m_cols, dateTimeFormat, importMode);
+	RESET_CURSOR;
 }
+
+QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
+	QString query;
+	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+	if ( !customQuery ) {
+		const QString& tableName = ui.lwTables->currentItem()->text();
+		if (!preview) {
+			query = QLatin1String("SELECT * FROM ") + tableName;
+		} else {
+			//preview the content of the currently selected table
+			const QString& driver = m_db.driverName();
+			const QString& limit = QString::number(ui.sbPreviewLines->value());
+			if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
+				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
+			else if (driver == QLatin1String("QOCI"))
+				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
+			else if (driver == QLatin1String("QDB2"))
+				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") + limit + QLatin1String(" ROWS ONLY");
+			else if (driver == QLatin1String("QIBASE"))
+				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") + limit;
+			else
+				query = QLatin1String("SELECT TOP ") + limit + QLatin1String(" * FROM ") + tableName;
+		}
+	} else {
+		//preview the result of a custom query
+		query = ui.teQuery->toPlainText();
+	}
+
+	return query;
+}
+
 
 void ImportSQLDatabaseWidget::updateStatus() {
 	QString msg = m_db.lastError().text().simplified();

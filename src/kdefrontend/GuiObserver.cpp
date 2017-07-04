@@ -31,6 +31,7 @@
 #include "kdefrontend/GuiObserver.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
@@ -54,6 +55,7 @@
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
@@ -500,7 +502,21 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->notesDock->setNotesList(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
-	} else {
+    } else if (className == "FileDataSource") {
+        m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
+
+        if (!m_mainWindow->m_liveDataDock) {
+            m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
+            m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
+        }
+
+        QList<FileDataSource*> list;
+        for (auto* aspect: selectedAspects)
+            list << qobject_cast<FileDataSource*>(aspect);
+        m_mainWindow->m_liveDataDock->setLiveDataSources(list);
+
+        m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
+    } else {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();

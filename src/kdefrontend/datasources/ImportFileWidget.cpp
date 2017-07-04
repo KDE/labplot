@@ -325,21 +325,37 @@ QString ImportFileWidget::fileName() const {
 */
 void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	//save the data source information
-	source->setFileName( ui.kleFileName->text() );
-	source->setComment( ui.kleFileName->text() );
-	source->setFileWatched( ui.chbWatchFile->isChecked() );
-	source->setFileLinked( ui.chbLinkFile->isChecked() );
+    FileDataSource::FileType fileType = static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
+    FileDataSource::UpdateType updateType = static_cast<FileDataSource::UpdateType>(ui.cbUpdateOn->currentIndex());
+    FileDataSource::SourceType sourceType = static_cast<FileDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
-	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	source->setFileType(fileType);
-	source->setFilter(this->currentFileFilter());
+	source->setComment( ui.kleFileName->text() );
+    source->setFileType(fileType);
+    source->setFilter(this->currentFileFilter());
+
+    source->setUpdateType(updateType);
+    source->setUpdateFrequency(ui.sbUpdateFrequency->value());
+    source->setSourceType(sourceType);
+    source->setSampleRate(ui.sbKeepValues->value());
+
+    if ((sourceType == FileDataSource::SourceType::FileOrPipe) || (sourceType == FileDataSource::SourceType::LocalSocket)) {
+        source->setFileName( ui.kleFileName->text() );
+        source->setFileWatched( ui.chbWatchFile->isChecked() );
+        source->setFileLinked( ui.chbLinkFile->isChecked() );
+    } else if (sourceType == FileDataSource::SourceType::NetworkSocket) {
+        source->setHost(ui.leHost->text());
+        source->setPort(ui.lePort->text().toInt());
+    } else if (sourceType == FileDataSource::SourceType::SerialPort) {
+        source->setBaudRate(ui.cbBaudRate->currentText().toInt());
+        source->setSerialPort(ui.cbSerialPort->currentText());
+    }
 }
 
 /*!
 	returns the currently used file type.
 */
 FileDataSource::FileType ImportFileWidget::currentFileType() const {
-	return (FileDataSource::FileType)ui.cbFileType->currentIndex();
+    return static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
 }
 
 /*!
@@ -347,7 +363,7 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	DEBUG("currentFileFilter()");
-	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+    FileDataSource::FileType fileType = static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -1128,4 +1144,6 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 
     ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
     ui.cbSerialPort->addItems(FileDataSource::availablePorts());
+
+    ui.tabDataPortion->hide();
 }

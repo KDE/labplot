@@ -48,130 +48,129 @@ class QTableView;
 class MatrixView : public QWidget {
     Q_OBJECT
 
-	public:
-		explicit MatrixView(Matrix*);
-		virtual ~MatrixView();
+public:
+	explicit MatrixView(Matrix*);
+	virtual ~MatrixView();
 
-		MatrixModel* model() const;
+	MatrixModel* model() const;
 
-		int selectedColumnCount(bool full = false) const;
-		bool isColumnSelected(int col, bool full = false) const;
-		int selectedRowCount(bool full = false) const;
-		bool isRowSelected(int row, bool full = false) const;
-		int firstSelectedColumn(bool full = false) const;
-		int lastSelectedColumn(bool full = false) const;
-		int firstSelectedRow(bool full = false) const;
-		int lastSelectedRow(bool full = false) const;
-		bool isCellSelected(int row, int col) const;
-		void setCellSelected(int row, int col);
-		void setCellsSelected(int first_row, int first_col, int last_row, int last_col);
-		void getCurrentCell(int* row, int* col) const;
+	int selectedColumnCount(bool full = false) const;
+	bool isColumnSelected(int col, bool full = false) const;
+	int selectedRowCount(bool full = false) const;
+	bool isRowSelected(int row, bool full = false) const;
+	int firstSelectedColumn(bool full = false) const;
+	int lastSelectedColumn(bool full = false) const;
+	int firstSelectedRow(bool full = false) const;
+	int lastSelectedRow(bool full = false) const;
+	bool isCellSelected(int row, int col) const;
+	void setCellSelected(int row, int col);
+	void setCellsSelected(int first_row, int first_col, int last_row, int last_col);
+	void getCurrentCell(int* row, int* col) const;
 
-		void resizeHeaders();
-		void adjustHeaders();
-		void exportToFile(const QString& path, const QString& separator) const;
-        void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
+	void resizeHeaders();
+	void adjustHeaders();
+	void exportToFile(const QString& path, const QString& separator) const;
+	void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
-        void exportToFits(const QString& fileName, const int exportTo) const;
-	public slots:
-		void createContextMenu(QMenu*) const;
-		void print(QPrinter*) const;
+	void exportToFits(const QString& fileName, const int exportTo) const;
+public slots:
+	void createContextMenu(QMenu*) const;
+	void print(QPrinter*) const;
 
-	private:
-		void init();
-		void initActions();
-		void initMenus();
-		void connectActions();
-		void goToCell(int row, int col);
-		void updateImage();
+private:
+	void init();
+	void initActions();
+	void initMenus();
+	void connectActions();
+	void goToCell(int row, int col);
+	void updateImage();
 
-		bool eventFilter(QObject*, QEvent*);
-		virtual void keyPressEvent(QKeyEvent*);
+	bool eventFilter(QObject*, QEvent*);
+	virtual void keyPressEvent(QKeyEvent*);
 
-		QStackedWidget* m_stackedWidget;
-		QTableView* m_tableView;
-		QLabel* m_imageLabel;
-		Matrix* m_matrix;
-		MatrixModel* m_model;
-		QImage m_image;
-		bool m_imageIsDirty;
+	QStackedWidget* m_stackedWidget;
+	QTableView* m_tableView;
+	QLabel* m_imageLabel;
+	Matrix* m_matrix;
+	MatrixModel* m_model;
+	QImage m_image;
+	bool m_imageIsDirty;
 
-		//Actions
-		QAction* action_cut_selection;
-		QAction* action_copy_selection;
-		QAction* action_paste_into_selection;
-		QAction* action_clear_selection;
+	//Actions
+	QAction* action_cut_selection;
+	QAction* action_copy_selection;
+	QAction* action_paste_into_selection;
+	QAction* action_clear_selection;
 
-		QAction* action_select_all;
-		QAction* action_clear_matrix;
-		QAction* action_go_to_cell;
-		QAction* action_set_formula;
-		QAction* action_recalculate;
-		QAction* action_duplicate;
-		QAction* action_transpose;
-		QAction* action_mirror_vertically;
-		QAction* action_mirror_horizontally;
+	QAction* action_select_all;
+	QAction* action_clear_matrix;
+	QAction* action_go_to_cell;
+	QAction* action_set_formula;
+	QAction* action_recalculate;
+	QAction* action_duplicate;
+	QAction* action_transpose;
+	QAction* action_mirror_vertically;
+	QAction* action_mirror_horizontally;
 
-		QAction* action_header_format_1;
-		QAction* action_header_format_2;
-		QAction* action_header_format_3;
+	QAction* action_header_format_1;
+	QAction* action_header_format_2;
+	QAction* action_header_format_3;
 
-		QAction* action_insert_columns;
-		QAction* action_remove_columns;
-		QAction* action_clear_columns;
-		QAction* action_add_columns;
-        QAction* action_statistics_columns;
+	QAction* action_insert_columns;
+	QAction* action_remove_columns;
+	QAction* action_clear_columns;
+	QAction* action_add_columns;
+	QAction* action_statistics_columns;
 
-		QAction* action_insert_rows;
-		QAction* action_remove_rows;
-		QAction* action_clear_rows;
-		QAction* action_add_rows;
-        QAction* action_statistics_rows;
+	QAction* action_insert_rows;
+	QAction* action_remove_rows;
+	QAction* action_clear_rows;
+	QAction* action_add_rows;
+	QAction* action_statistics_rows;
 
-		QAction* action_data_view;
-		QAction* action_image_view;
-		QAction* action_fill_function;
-		QAction* action_fill_const;
+	QAction* action_data_view;
+	QAction* action_image_view;
+	QAction* action_fill_function;
+	QAction* action_fill_const;
 
+	//Menus
+	QMenu* m_selectionMenu;
+	QMenu* m_columnMenu;
+	QMenu* m_rowMenu;
+	QMenu* m_matrixMenu;
+	QMenu* m_headerFormatMenu;
 
-		//Menus
-		QMenu* m_selectionMenu;
-		QMenu* m_columnMenu;
-		QMenu* m_rowMenu;
-		QMenu* m_matrixMenu;
-		QMenu* m_headerFormatMenu;
+private slots:
+	void goToCell();
+	void advanceCell();
+	void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
+	void handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize);
 
-	private slots:
-		void goToCell();
-		void advanceCell();
-		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
-		void handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize);
+	void switchView(QAction*);
+	void matrixDataChanged();
 
-		void switchView(QAction*);
-		void matrixDataChanged();
+	void fillWithFunctionValues();
+	void fillWithConstValues();
 
-		void fillWithFunctionValues();
-		void fillWithConstValues();
+	void cutSelection();
+	void copySelection();
+	void pasteIntoSelection();
+	void clearSelectedCells();
 
-		void cutSelection();
-		void copySelection();
-		void pasteIntoSelection();
-		void clearSelectedCells();
+	void headerFormatChanged(QAction*);
 
-		void headerFormatChanged(QAction*);
+	void addColumns();
+	void insertEmptyColumns();
+	void removeSelectedColumns();
+	void clearSelectedColumns();
+	void addRows();
+	void insertEmptyRows();
+	void removeSelectedRows();
+	void clearSelectedRows();
 
-		void addColumns();
-		void insertEmptyColumns();
-		void removeSelectedColumns();
-		void clearSelectedColumns();
-		void addRows();
-		void insertEmptyRows();
-		void removeSelectedRows();
-		void clearSelectedRows();
-
-        void showColumnStatistics();
-        void showRowStatistics();
+	void showColumnStatistics();
+	void showRowStatistics();
 };
 
 #endif

@@ -38,6 +38,7 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QMenu>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
@@ -46,6 +47,8 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QIcon>
 #include <QAction>
 #include <KLocale>
+
+#include <QDebug>
 
 /*!
   \class FileDataSource
@@ -60,8 +63,11 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	m_fileWatched(false),
 	m_fileLinked(false),
 	m_filter(0),
-	m_fileSystemWatcher(0) {
+    m_fileSystemWatcher(0),
+    m_updateTimer(new QTimer(this)),
+    m_paused(false) {
 	initActions();
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
 
 FileDataSource::~FileDataSource() {
@@ -70,6 +76,13 @@ FileDataSource::~FileDataSource() {
 
 	if (m_fileSystemWatcher)
 		delete m_fileSystemWatcher;
+
+    delete m_updateTimer;
+}
+
+void FileDataSource::ready() {
+    if (m_updateType == TimeInterval)
+        m_updateTimer->start(m_updateFrequency);
 }
 
 void FileDataSource::initActions() {
@@ -91,7 +104,10 @@ QWidget *FileDataSource::view() const {
 		m_view = new SpreadsheetView(const_cast<FileDataSource*>(this));
 	return m_view;
 }
-#include <QDebug>
+
+/*!
+ * \brief Returns a list with the names of the available ports
+ */
 QStringList FileDataSource::availablePorts() {
     QStringList ports;
     qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
@@ -109,14 +125,44 @@ QStringList FileDataSource::availablePorts() {
     return ports;
 }
 
+/*!
+ * \brief Returns a list with the supported baud rates
+ */
 QStringList FileDataSource::supportedBaudRates() {
     QStringList baudRates;
 
-    for(const qint32 baud : QSerialPortInfo::standardBaudRates()) {
+    for(const auto& baud : QSerialPortInfo::standardBaudRates()) {
         baudRates.append(QString::number(baud));
     }
-
     return baudRates;
+}
+
+/*!
+ * \brief Updates this data source at this moment
+ */
+void FileDataSource::updateNow() {
+    m_updateTimer->stop();
+    read();
+
+    //restart the timer after update
+    if (m_updateType == TimeInterval)
+        m_updateTimer->start(m_updateFrequency);
+}
+
+void FileDataSource::stopReading() {
+
+}
+
+void FileDataSource::continueReading() {
+    m_paused = false;
+    if (m_updateType == TimeInterval)
+        m_updateTimer->start(m_updateFrequency);
+}
+
+void FileDataSource::pauseReading() {
+    m_paused = true;
+    if (m_updateTimer->isActive())
+        m_updateTimer->stop();
 }
 
 /*!
@@ -208,6 +254,18 @@ int FileDataSource::port() const {
 }
 
 /*!
+ * \brief Sets the serial port's name to name
+ * \param name
+ */
+void FileDataSource::setSerialPort(const QString &name) {
+    m_serialPortName = name;
+}
+
+QString FileDataSource::serialPortName() const {
+    return m_serialPortName;
+}
+
+/*!
  * \brief Sets the sample rate to samplerate
  * \param samplerate
  */
@@ -236,6 +294,9 @@ FileDataSource::SourceType FileDataSource::sourceType() const {
  * \param updatetype
  */
 void FileDataSource::setUpdateType(const UpdateType updatetype) {
+    if (updatetype == NewData) {
+        m_updateTimer->stop();
+    }
     m_updateType = updatetype;
 }
 
@@ -318,6 +379,10 @@ void FileDataSource::read() {
 	watch();
 }
 
+void FileDataSource::addData() {
+
+}
+
 void FileDataSource::fileChanged() {
 	this->read();
 }
@@ -335,18 +400,20 @@ void FileDataSource::linkToggled() {
 
 //watch the file upon reading for changes if required
 void FileDataSource::watch() {
-	if (m_fileWatched) {
-		if (!m_fileSystemWatcher) {
-			m_fileSystemWatcher = new QFileSystemWatcher();
-			connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-		}
+    if (m_updateType == UpdateType::NewData) {
+        if (m_fileWatched) {
+            if (!m_fileSystemWatcher) {
+                m_fileSystemWatcher = new QFileSystemWatcher;
+                connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+            }
 
-		if ( !m_fileSystemWatcher->files().contains(m_fileName) )
-			m_fileSystemWatcher->addPath(m_fileName);
-	} else {
-		if (m_fileSystemWatcher)
-			m_fileSystemWatcher->removePath(m_fileName);
-	}
+            if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+                m_fileSystemWatcher->addPath(m_fileName);
+        } else {
+            if (m_fileSystemWatcher)
+                m_fileSystemWatcher->removePath(m_fileName);
+        }
+    }
 }
 
 /*!
