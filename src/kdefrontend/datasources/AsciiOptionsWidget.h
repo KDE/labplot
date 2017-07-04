@@ -32,12 +32,13 @@
 #include "ui_asciioptionswidget.h"
 
 class AsciiOptionsWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit AsciiOptionsWidget(QWidget*);
 
 private:
+	void loadSettings();
 	Ui::AsciiOptionsWidget ui;
 };
 
