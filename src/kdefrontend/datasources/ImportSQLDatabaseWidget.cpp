@@ -210,7 +210,10 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	ui.twPreview->clear();
 
 	//execute the current query (select on a table or a custom query)
-	QSqlQuery q(currentQuery(true));
+	QSqlQuery q;
+	q.prepare(currentQuery(true));
+	q.setForwardOnly(true);
+	q.exec();
 	if (!q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
@@ -296,8 +299,10 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	WAIT_CURSOR;
 	//execute the current query (select on a table or a custom query)
-	QSqlQuery q(currentQuery());
-	if (!q.isActive()) {
+	QSqlQuery q;
+// 	q.setForwardOnly(true); //TODO: crashes most probably because of q.last() and q.first() below
+	q.prepare(currentQuery());
+	if (!q.exec() || !q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to execute query"));
