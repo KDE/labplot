@@ -105,7 +105,6 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 	m_initializing = true;
 	ui.leName->setText(m_connections[index].name);
 	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(m_connections[index].driver));
-	ui.kleDatabase->setText(m_connections[index].dbName);
 
 	if (!isFileDB(m_connections[index].driver)) {
 		ui.leHost->setText(m_connections[index].hostName);
@@ -113,7 +112,12 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 		ui.leUserName->setText(m_connections[index].userName);
 		ui.lePassword->setText(m_connections[index].password);
 	}
+
 	m_initializing = false;
+
+	//set the database name after m_initializing=false in order to update
+	//the style sheet (database name valid or not) in databaseNameChanged()
+	ui.kleDatabase->setText(m_connections[index].dbName);
 }
 
 void DatabaseManagerWidget::nameChanged(const QString& name) {
@@ -192,22 +196,31 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	if (m_initializing)
 		return;
 
+	QString dbName = ui.kleDatabase->text().simplified();
 	if (isFileDB(ui.cbDriver->currentText())) {
-		QString fileName = ui.kleDatabase->text();
 #ifndef HAVE_WINDOWS
 		// make relative path
-		if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName;
+		if ( !dbName.isEmpty() && dbName.left(1) != QDir::separator())
+			dbName = QDir::homePath() + QDir::separator() + dbName;
 #endif
 
-		bool fileExists = QFile::exists(fileName);
-		if (fileExists)
+		if (!dbName.isEmpty()) {
+			bool fileExists = QFile::exists(dbName);
+			if (fileExists)
+				ui.kleDatabase->setStyleSheet("");
+			else
+				ui.kleDatabase->setStyleSheet("QLineEdit{background:red;}");
+		} else {
 			ui.kleDatabase->setStyleSheet("");
-		else
-			ui.kleDatabase->setStyleSheet("QLineEdit{background:red;}");
+		}
+	} else {
+		ui.kleDatabase->setStyleSheet("");
 	}
 
-	m_connections[ui.lwConnections->currentRow()].dbName = ui.kleDatabase->text();
+	//don't allow to try to connect if no database name was provided
+	ui.bTestConnection->setEnabled( !dbName.isEmpty() );
+
+	m_connections[ui.lwConnections->currentRow()].dbName = dbName;
 	emit changed();
 }
 
@@ -248,7 +261,6 @@ void DatabaseManagerWidget::addConnection() {
 
 	//we have now more then one connection, enable widgets
 	ui.tbDelete->setEnabled(true);
-	ui.bTestConnection->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.kleDatabase->setEnabled(true);
 	ui.cbDriver->setEnabled(true);
@@ -452,7 +464,7 @@ int DatabaseManagerWidget::defaultPort(const QString& driver) const {
 		return 50000;
 	else if (driver == "QIBASE")
 		return 3050;
-	else if (driver == "QMYSQL")
+	else if (driver == "QMYSQL3" || driver == "QMYSQL")
 		return 3306;
 	else if (driver == "QOCI")
 		return 1521;
