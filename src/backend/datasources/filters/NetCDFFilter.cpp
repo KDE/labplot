@@ -542,8 +542,15 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			DEBUG("start/end row" << startRow << endRow);
 			DEBUG("act rows/cols" << actualRows << actualCols);
 
+			//TODO: support other modes
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
+
+			//TODO: use given names?
+			QStringList vectorNames;
+
 			if (dataSource)
-				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 			double* data = nullptr;
 			if (dataSource)
@@ -584,8 +591,15 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			DEBUG("actual rows/cols:" << actualRows << actualCols);
 			DEBUG("lines:" << lines);
 
-			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+			//TODO: support other modes
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
+
+			//TODO: use given names?
+			QStringList vectorNames;
+
+			if (dataSource)
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 			double** data = (double**) malloc(rows * sizeof(double*));
 			data[0] = (double*)malloc( cols * rows * sizeof(double) );

@@ -1308,8 +1308,15 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 			qDebug() << translateHDFClass(dclass) << "(" << typeSize << ")" << translateHDFOrder(order)
 				<< ", rows:" << rows << " max:" << maxSize;
 #endif
-			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+			//TODO: support other modes
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
+
+			//TODO: use given names?
+			QStringList vectorNames;
+
+			if (dataSource)
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 			QStringList dataString;	// data saved in a list
 			switch (dclass) {
@@ -1424,10 +1431,10 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 			case H5T_COMPOUND: {
 					int members = H5Tget_nmembers(dtype);
 					handleError(members, "H5Tget_nmembers");
-					if (dataSource != NULL) {
+					if (dataSource) {
 						// re-create data pointer
 						dataContainer.clear();
-						dataSource->prepareImport(dataContainer, mode, actualRows, members);
+						dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes);
 					} else
 						dataStrings << readHDFCompound(dtype);
 					dataString = readHDFCompoundData1D(dataset, dtype, rows, lines, dataContainer);
@@ -1483,11 +1490,11 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 			qDebug()<<"actual rows/cols"<<actualRows<<actualCols;
 			qDebug()<<"lines"<<lines;
 #endif
-			//TODO
+			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
 
-			//TODO
+			//TODO: use given names?
 			QStringList vectorNames;
 
 			if (dataSource)
