@@ -3,7 +3,7 @@ File                 : HDFFilter.h
 Project              : LabPlot
 Description          : HDF I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +29,7 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
+#include <memory>
 
 class QTreeWidgetItem;
 class HDFFilterPrivate;
@@ -66,7 +67,7 @@ public:
 	virtual bool load(XmlStreamReader*);
 
 private:
-	HDFFilterPrivate* const d;
+	std::unique_ptr<HDFFilterPrivate> const d;
 	friend class HDFFilterPrivate;
 };
 
