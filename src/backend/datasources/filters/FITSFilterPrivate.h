@@ -74,7 +74,6 @@ private:
 #ifdef HAVE_FITS
 	fitsfile* m_fitsFile;
 #endif
-
 };
 
 #endif // FITSFILTERPRIVATE_H

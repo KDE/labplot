@@ -28,7 +28,6 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define IMAGEFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <memory>
 
 class ImageFilterPrivate;
 class QStringList;

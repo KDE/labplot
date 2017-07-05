@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -31,14 +31,20 @@
 
 #include "ui_asciioptionswidget.h"
 
+class AsciiFilter;
+
 class AsciiOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit AsciiOptionsWidget(QWidget*);
+	void showAsciiHeaderOptions(bool);
+	void headerChanged(int state);
+	void applyFilterSettings(AsciiFilter*) const;
+	void loadSettings() const;
+	void saveSettings();
 
 private:
-	void loadSettings();
 	Ui::AsciiOptionsWidget ui;
 };
 

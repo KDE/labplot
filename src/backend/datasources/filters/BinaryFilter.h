@@ -28,7 +28,6 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define BINARYFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <memory>
 
 class BinaryFilterPrivate;
 class QStringList;

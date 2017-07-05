@@ -34,7 +34,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTableWidget>
 #include <QTreeWidgetItem>
 #include <QXmlStreamReader>
-#include <memory>
 
 class FITSFilterPrivate;
 class FITSHeaderEditWidget;

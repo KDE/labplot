@@ -30,7 +30,6 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
-#include <memory>
 
 class QStringList;
 class QIODevice;

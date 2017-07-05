@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -26,8 +26,11 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "backend/datasources/filters/AbstractFileFilter.h"
+
 #include "AsciiOptionsWidget.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+
 #include <KLocale>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -40,6 +43,12 @@
  */
 AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
+
+	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
+	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	ui.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+	ui.chbTranspose->hide(); //TODO: enable later
 
 	QString text = i18n(
 		"<b> Number format: </b><br>"
@@ -62,10 +71,64 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.lNumbersFormat->setToolTip(text);
 	ui.cbNumbersFormat->setToolTip(text);
+
+	connect(ui.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)));
 }
 
-void AsciiOptionsWidget::loadSettings() {
+void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {
+	ui.chbHeader->setVisible(b);
+	ui.lVectorNames->setVisible(b);
+	ui.kleVectorNames->setVisible(b);
+}
+
+void AsciiOptionsWidget::headerChanged(int state) {
+	if (state == Qt::Checked) {
+		ui.kleVectorNames->setEnabled(false);
+		ui.lVectorNames->setEnabled(false);
+	} else {
+		ui.kleVectorNames->setEnabled(true);
+		ui.lVectorNames->setEnabled(true);
+	}
+}
+
+void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
+	Q_ASSERT(filter);
+
+	filter->setCommentCharacter( ui.cbCommentCharacter->currentText() );
+	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
+	filter->setNumbersFormat( AbstractFileFilter::Locale(ui.cbNumbersFormat->currentIndex()) );
+	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
+	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
+	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
+	filter->setTransposed( ui.chbTranspose->isChecked() );
+	filter->setVectorNames( ui.kleVectorNames->text() );
+	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
+}
+
+
+void AsciiOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 	
-	//TODO
+	//TODO: check if this works (character gets currentItem?)
+	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
+	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
+	ui.cbNumbersFormat->setCurrentIndex(conf.readEntry("NumbersFormat", (int)AbstractFileFilter::LocaleSystem));
+	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
+	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
+	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
+	ui.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
+	ui.kleVectorNames->setText(conf.readEntry("Names", ""));
+}
+
+void AsciiOptionsWidget::saveSettings() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+
+	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
+	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
+	conf.writeEntry("NumbersFormat", ui.cbNumbersFormat->currentText());
+	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
+	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
+	conf.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
+	conf.writeEntry("UseFirstRow", ui.chbHeader->isChecked());
+	conf.writeEntry("Names", ui.kleVectorNames->text());
 }

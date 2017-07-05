@@ -48,7 +48,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QImageReader>
-
 #include <KUrlCompletion>
 
 /*!
@@ -70,12 +69,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// file type specific option widgets
 	QWidget* asciiw = new QWidget(0);
-	asciiOptionsWidget.setupUi(asciiw);
-	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
-	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
-	asciiOptionsWidget.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
-	asciiOptionsWidget.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
-	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
+	asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
 	QWidget* binaryw = new QWidget(0);
@@ -171,7 +165,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
-	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
@@ -192,17 +185,7 @@ void ImportFileWidget::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 
 	//settings for data type specific widgets
-	// ascii data
-	//TODO	asciiOptionsWidget.loadSettings();
-	//TODO: check if this works (character gets currentItem?)
-	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
-	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
-	asciiOptionsWidget.cbNumbersFormat->setCurrentIndex(conf.readEntry("NumbersFormat", (int)AbstractFileFilter::LocaleSystem));
-	asciiOptionsWidget.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
-	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
-	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
-	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
-	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
+	asciiOptionsWidget->loadSettings();
 
 	// binary data
 	binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
@@ -234,15 +217,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
 	// data type specific settings
-	// ascii data
-	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
-	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
-	conf.writeEntry("NumbersFormat", asciiOptionsWidget.cbNumbersFormat->currentText());
-	conf.writeEntry("DateTimeFormat", asciiOptionsWidget.cbDateTimeFormat->currentText());
-	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
-	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
-	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
-	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
+	asciiOptionsWidget->saveSettings();
 
 	// binary data
 	conf.writeEntry("Vectors", binaryOptionsWidget.niVectors->value());
@@ -266,9 +241,7 @@ void ImportFileWidget::hideDataSource() const {
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
-	asciiOptionsWidget.chbHeader->setVisible(b);
-	asciiOptionsWidget.lVectorNames->setVisible(b);
-	asciiOptionsWidget.kleVectorNames->setVisible(b);
+	asciiOptionsWidget->showAsciiHeaderOptions(b);
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -321,24 +294,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-			//TODO use unique_ptr
+//TODO			std::unique_ptr<AsciiFilter> filter(new AsciiFilter());
 			AsciiFilter* filter = new AsciiFilter();
 
-			if (ui.cbFilter->currentIndex() == 0)   //"automatic"
+			if (ui.cbFilter->currentIndex() == 0) {   //"automatic"
 				filter->setAutoModeEnabled(true);
-			else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+			} else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 				filter->setAutoModeEnabled(false);
-				filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
-				filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-				filter->setNumbersFormat( AbstractFileFilter::Locale(asciiOptionsWidget.cbNumbersFormat->currentIndex()) );
-				filter->setDateTimeFormat(asciiOptionsWidget.cbDateTimeFormat->currentText());
-				filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
-				filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
-				filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
-				filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
-				filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-			} else
+				asciiOptionsWidget->applyFilterSettings(filter);
+			} else {
 				filter->loadFilterSettings( ui.cbFilter->currentText() );
+			}
 
 			//save the data portion to import
 			filter->setStartRow( ui.sbStartRow->value());
@@ -854,13 +820,7 @@ void ImportFileWidget::filterChanged(int index) {
   Disables it otherwise.
 */
 void ImportFileWidget::headerChanged(int state) {
-	if (state == Qt::Checked) {
-		asciiOptionsWidget.kleVectorNames->setEnabled(false);
-		asciiOptionsWidget.lVectorNames->setEnabled(false);
-	} else {
-		asciiOptionsWidget.kleVectorNames->setEnabled(true);
-		asciiOptionsWidget.lVectorNames->setEnabled(true);
-	}
+	asciiOptionsWidget->headerChanged(state);
 }
 
 void ImportFileWidget::refreshPreview() {

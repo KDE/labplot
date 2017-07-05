@@ -37,6 +37,7 @@
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
+#include <memory>
 
 class AbstractFileFilter;
 class QTableWidget;
@@ -61,7 +62,8 @@ public:
 
 private:
 	Ui::ImportFileWidget ui;
-	Ui::AsciiOptionsWidget asciiOptionsWidget;
+
+	std::unique_ptr<AsciiOptionsWidget> asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;

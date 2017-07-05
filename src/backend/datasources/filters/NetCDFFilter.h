@@ -30,7 +30,6 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
 #include <QTreeWidgetItem>
-#include <memory>
 
 class NetCDFFilterPrivate;
 class NetCDFFilter : public AbstractFileFilter {
