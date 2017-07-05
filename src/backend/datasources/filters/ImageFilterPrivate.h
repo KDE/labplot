@@ -40,7 +40,6 @@ public:
 
 	const ImageFilter* q;
 
-	//TODO: m_*
 	ImageFilter::ImportFormat importFormat;	// how to import the image
 	int startRow;		// start row
 	int endRow;		// end row

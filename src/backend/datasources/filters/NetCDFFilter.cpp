@@ -30,7 +30,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QDebug>
 #include <KLocale>
 
 /*!
@@ -39,12 +38,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
 */
-NetCDFFilter::NetCDFFilter():AbstractFileFilter(), d(new NetCDFFilterPrivate(this)) {
-}
+NetCDFFilter::NetCDFFilter():AbstractFileFilter(), d(new NetCDFFilterPrivate(this)) {}
 
-NetCDFFilter::~NetCDFFilter() {
-	delete d;
-}
+NetCDFFilter::~NetCDFFilter() {}
 
 /*!
   parses the content of the file \c ileName.

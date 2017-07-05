@@ -38,6 +38,7 @@ class QXmlStreamWriter;
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
 	Q_ENUMS(ImportMode);
+	Q_ENUMS(Locale);
 
 public:
 	enum ImportMode {Append, Prepend, Replace};

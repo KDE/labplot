@@ -28,6 +28,7 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define BINARYFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include <memory>
 
 class BinaryFilterPrivate;
 class QStringList;
@@ -88,7 +89,7 @@ class BinaryFilter : public AbstractFileFilter {
 	virtual bool load(XmlStreamReader*);
 
   private:
-	BinaryFilterPrivate* const d;
+	std::unique_ptr<BinaryFilterPrivate> const d;
 	friend class BinaryFilterPrivate;
 };
 

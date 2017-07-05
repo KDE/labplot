@@ -35,7 +35,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/matrix/MatrixModel.h"
 
-#include <QDebug>
 #include <QMultiMap>
 #include <QFile>
 
@@ -44,12 +43,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
  * \since 2.2.0
  * \ingroup datasources
  */
-FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {
-}
+FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {}
 
-FITSFilter::~FITSFilter() {
-	delete d;
-}
+FITSFilter::~FITSFilter() {}
 
 QVector<QStringList> FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	Q_UNUSED(lines);

@@ -46,13 +46,9 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 	\ingroup datasources
  */
 
-AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {
+AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {}
 
-}
-
-AsciiFilter::~AsciiFilter() {
-	delete d;
-}
+AsciiFilter::~AsciiFilter() {}
 
 /*!
   reads the content of the device \c device.

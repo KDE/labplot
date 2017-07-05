@@ -26,15 +26,19 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #ifndef FITSFILTER_H
 #define FITSFILTER_H
+
 #include "backend/datasources/filters/AbstractFileFilter.h"
+
 #include <QStringList>
 #include <KLocale>
 #include <QTableWidget>
 #include <QTreeWidgetItem>
 #include <QXmlStreamReader>
+#include <memory>
 
 class FITSFilterPrivate;
 class FITSHeaderEditWidget;
+
 class FITSFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -110,7 +114,7 @@ public:
 	void setCommentsAsUnits(const bool);
 	void setExportTo(const int);
 private:
-	FITSFilterPrivate* const d;
+	std::unique_ptr<FITSFilterPrivate> const d;
 	friend class FITSFilterPrivate;
 };
 #endif // FITSFILTER_H
