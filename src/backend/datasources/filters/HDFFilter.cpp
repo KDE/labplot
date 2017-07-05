@@ -1483,9 +1483,15 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 			qDebug()<<"actual rows/cols"<<actualRows<<actualCols;
 			qDebug()<<"lines"<<lines;
 #endif
+			//TODO
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
 
-			if (dataSource != NULL)
-				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
+			//TODO
+			QStringList vectorNames;
+
+			if (dataSource)
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 			// read data
 			switch (dclass) {
