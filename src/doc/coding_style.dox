@@ -40,12 +40,12 @@ Very short classes can be bundled in one file which then is named using all lowe
         ...
     }
 @endcode
-- For pointers or references, use a single space after ‘*’ or ‘&’. Example:
+- For pointers or references, use a single space after ‘*’ or ‘&’ (i.e. specifier is bound to the data type not the name). Example:
 @code
     void doSomething(int* dataPointer, const QString& name);
     ... = static_cast(...)
 @endcode
-    “public” and namespace enclosures are indented. “case” of switch is not. Example:
+    “public” and namespace enclosures are not indented. Example:
 @code
     class MyClass: public QObject {
     public:
@@ -82,6 +82,8 @@ Very short classes can be bundled in one file which then is named using all lowe
     var = (foo - 1) + (bar - 2) + (baz - 3)
     char *s = (char*) malloc(LENGTH * sizeof(char));
 @endcode
+- enum and structs should be defined first in a class
+- parameter names in a method definition should only be used to explains the usage of the parameter
 - Try to keep lines shorter than 100 characters, inserting line breaks as necessary and indent the following lines to improved readability.
 - In SIGNAL() and SLOT() macros, use as little whitespace as possible. This gives a little speed up since Qt does not have to normalize the signal/slot name.
 

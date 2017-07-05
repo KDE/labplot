@@ -45,7 +45,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <QDebug>
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QImageReader>
@@ -198,10 +197,11 @@ void ImportFileWidget::loadSettings() {
 
 	//settings for data type specific widgets
 	// ascii data
+	//TODO	asciiOptionsWidget.loadSettings();
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
-	asciiOptionsWidget.cbNumbersFormat->setCurrentIndex(conf.readEntry("NubmersFormat", (int)AbstractFileFilter::LocaleSystem));
+	asciiOptionsWidget.cbNumbersFormat->setCurrentIndex(conf.readEntry("NumbersFormat", (int)AbstractFileFilter::LocaleSystem));
 	asciiOptionsWidget.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
 	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));

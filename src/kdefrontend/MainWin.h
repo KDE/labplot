@@ -88,6 +88,7 @@ public:
 	~MainWin();
 
 	AspectTreeModel* model() const;
+	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
 private:
@@ -253,7 +254,7 @@ private slots:
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
-	
+
 	//Cantor
 	#ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);

@@ -212,9 +212,11 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	//execute the current query (select on a table or a custom query)
 	QSqlQuery q(currentQuery(true));
 	if (!q.isActive()) {
-		setInvalid();
-		updateStatus();
 		RESET_CURSOR;
+		if (!q.lastError().databaseText().isEmpty())
+			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to execute query"));
+
+		setInvalid();
 		return;
 	}
 
@@ -296,9 +298,11 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	//execute the current query (select on a table or a custom query)
 	QSqlQuery q(currentQuery());
 	if (!q.isActive()) {
-		setInvalid();
-		updateStatus();
 		RESET_CURSOR;
+		if (!q.lastError().databaseText().isEmpty())
+			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to execute query"));
+
+		setInvalid();
 		return;
 	}
 
@@ -364,7 +368,7 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 			//preview the content of the currently selected table
 			const QString& driver = m_db.driverName();
 			const QString& limit = QString::number(ui.sbPreviewLines->value());
-			if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
+			if ( (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL3")) || (driver == QLatin1String("QPSQL")) || (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QMYSQL")) )
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  limit;
 			else if (driver == QLatin1String("QOCI"))
 				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
@@ -381,13 +385,6 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	}
 
 	return query;
-}
-
-
-void ImportSQLDatabaseWidget::updateStatus() {
-	QString msg = m_db.lastError().text().simplified();
-	if (!msg.isEmpty())
-		KMessageBox::error(this, msg, i18n("Database Error"));
 }
 
 /*!

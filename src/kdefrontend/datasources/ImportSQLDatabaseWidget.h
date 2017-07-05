@@ -76,7 +76,6 @@ private:
 
 	void readConnections();
 	QString currentQuery(bool preview = false);
-	void updateStatus();
 	void setInvalid();
 	void setValid();
 
