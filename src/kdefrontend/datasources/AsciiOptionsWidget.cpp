@@ -30,6 +30,7 @@
 #include "AsciiOptionsWidget.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/lib/macros.h"
 
 #include <KLocale>
 #include <KSharedConfig>
@@ -42,7 +43,7 @@
 	\ingroup kdefrontend
  */
 AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
-	ui.setupUi(this);
+	ui.setupUi(parent);
 
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
@@ -76,12 +77,18 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 }
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {
+	DEBUG("AsciiOptionsWidget::showAsciiHeaderOptions(" << b << ")");
 	ui.chbHeader->setVisible(b);
 	ui.lVectorNames->setVisible(b);
 	ui.kleVectorNames->setVisible(b);
 }
 
+/*!
+  enables a text field for the vector names if the option "Use the first row..." was not selected.
+  Disables it otherwise.
+*/
 void AsciiOptionsWidget::headerChanged(int state) {
+	DEBUG("AsciiOptionsWidget::headerChanged(" << state << ")");
 	if (state == Qt::Checked) {
 		ui.kleVectorNames->setEnabled(false);
 		ui.lVectorNames->setEnabled(false);

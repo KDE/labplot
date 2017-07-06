@@ -68,7 +68,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.cbFilter->addItems( filterItems );
 
 	// file type specific option widgets
-	QWidget* asciiw = new QWidget(0);
+	QWidget* asciiw = new QWidget();
 	asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
@@ -813,14 +813,6 @@ void ImportFileWidget::filterChanged(int index) {
 		//load and show them in the GUI.
 		//TODO
 	}
-}
-
-/*!
-  enables a text field for the vector names if the option "Use the first row..." was not selected.
-  Disables it otherwise.
-*/
-void ImportFileWidget::headerChanged(int state) {
-	asciiOptionsWidget->headerChanged(state);
 }
 
 void ImportFileWidget::refreshPreview() {

@@ -39,10 +39,12 @@ class AsciiOptionsWidget : public QWidget {
 public:
 	explicit AsciiOptionsWidget(QWidget*);
 	void showAsciiHeaderOptions(bool);
-	void headerChanged(int state);
 	void applyFilterSettings(AsciiFilter*) const;
 	void loadSettings() const;
 	void saveSettings();
+
+public slots:
+	void headerChanged(int state);
 
 private:
 	Ui::AsciiOptionsWidget ui;

@@ -82,7 +82,6 @@ private slots:
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);
-	void headerChanged(int);
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
