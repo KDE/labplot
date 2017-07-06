@@ -97,7 +97,7 @@ public:
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
 
-  private:
+private:
 	std::unique_ptr<AsciiFilterPrivate> const d;
 	friend class AsciiFilterPrivate;
 };

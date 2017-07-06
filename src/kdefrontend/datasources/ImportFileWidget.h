@@ -65,7 +65,7 @@ private:
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
-	Ui::HDFOptionsWidget m_hdfOptionsWidget;
+	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
 	Ui::ImageOptionsWidget m_imageOptionsWidget;
 	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;
 	Ui::FITSOptionsWidget m_fitsOptionsWidget;
@@ -75,7 +75,6 @@ private:
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void hdfTreeWidgetSelectionChanged();
 	void netcdfTreeWidgetSelectionChanged();
 	void fitsTreeWidgetSelectionChanged();
 
@@ -90,6 +89,8 @@ private slots:
 signals:
 	void fileNameChanged();
 	void checkedFitsTableToMatrix(const bool enable);
+
+	friend class HDFOptionsWidget;	// to access refreshPreview()
 };
 
 #endif
