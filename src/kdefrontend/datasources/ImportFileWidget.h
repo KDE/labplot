@@ -64,7 +64,7 @@ private:
 	Ui::ImportFileWidget ui;
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
-	Ui::BinaryOptionsWidget m_binaryOptionsWidget;
+	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	Ui::HDFOptionsWidget m_hdfOptionsWidget;
 	Ui::ImageOptionsWidget m_imageOptionsWidget;
 	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;

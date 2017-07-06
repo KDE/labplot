@@ -72,10 +72,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
-	QWidget* binaryw = new QWidget(0);
-	m_binaryOptionsWidget.setupUi(binaryw);
-	m_binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
-	m_binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
+	QWidget* binaryw = new QWidget();
+	m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 	ui.swOptions->insertWidget(FileDataSource::Binary, binaryw);
 
 	QWidget* imagew = new QWidget(0);
@@ -186,13 +184,7 @@ void ImportFileWidget::loadSettings() {
 
 	//settings for data type specific widgets
 	m_asciiOptionsWidget->loadSettings();
-
-	// binary data
-	m_binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
-	m_binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
-	m_binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
-	m_binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
-	m_binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
+	m_binaryOptionsWidget->loadSettings();
 
 	// image data
 	m_imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
@@ -218,13 +210,7 @@ ImportFileWidget::~ImportFileWidget() {
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
-
-	// binary data
-	conf.writeEntry("Vectors", m_binaryOptionsWidget.niVectors->value());
-	conf.writeEntry("ByteOrder", m_binaryOptionsWidget.cbByteOrder->currentIndex());
-	conf.writeEntry("DataType", m_binaryOptionsWidget.cbDataType->currentIndex());
-	conf.writeEntry("SkipStartBytes", m_binaryOptionsWidget.sbSkipStartBytes->value());
-	conf.writeEntry("SkipBytes", m_binaryOptionsWidget.sbSkipBytes->value());
+	m_binaryOptionsWidget->saveSettings();
 
 	// image data
 	conf.writeEntry("ImportFormat", m_imageOptionsWidget.cbImportFormat->currentIndex());
@@ -320,8 +306,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(true);
 			else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
 				filter->setAutoModeEnabled(false);
-				filter->setVectors( m_binaryOptionsWidget.niVectors->value() );
-				filter->setDataType( (BinaryFilter::DataType) m_binaryOptionsWidget.cbDataType->currentIndex() );
+				m_binaryOptionsWidget->applyFilterSettings(filter);
 			} else {
 				//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
