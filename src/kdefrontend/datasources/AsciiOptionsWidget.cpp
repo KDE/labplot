@@ -60,14 +60,14 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 		"<li>1234.56</li>"
 		"<li>1,234.56</li>"
 		"<li>etc.</li>"
-		"</ul><br><br>"
+		"</ul><br>"
 		"When using 'System locale', the system settings will be used. "
 		"E.g., for the German local the valid number representations are: <br>"
 		"<ul>"
 		"<li>1234,56</li>"
 		"<li>1.234,56</li>"
 		"<li>etc.</li>"
-		"</ul><br><br>"
+		"</ul><br>"
 	);
 
 	ui.lNumbersFormat->setToolTip(text);

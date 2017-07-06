@@ -16,7 +16,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 - Class names start with a capital letter and use CamelCase, acronyms in class names are use like normal words. Example: MySuperHtmlToPdfConverter
 - Function/method names start with a lower case letter and use CamelCase Example: doSomethingImportant()
 - Variable/object names start with a lower case letter and use CamelCase, underscores are used for special prefixes only.
-- Only private class member variables are prefixed with “m_” to distinguish them easily
+- Only private class member variables are prefixed with “m_” to distinguish them easily. d-pointer and UI-widgets are called d and ui, respectively, i.e. without prefix.
 - Property access methods use Qt style: property() and setProperty(), except for boolean properties (isVisible(), hasChanged()). Accessor functions (getter/setter) can be done using macros.
 - Avoid abbreviations, except for local counters and temporaries whose purpose is obvious.
 

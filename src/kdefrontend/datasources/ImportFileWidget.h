@@ -63,13 +63,13 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 
-	std::unique_ptr<AsciiOptionsWidget> asciiOptionsWidget;
-	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	Ui::HDFOptionsWidget hdfOptionsWidget;
-	Ui::ImageOptionsWidget imageOptionsWidget;
-	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
-	Ui::FITSOptionsWidget fitsOptionsWidget;
-	QTableWidget* twPreview;
+	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
+	Ui::BinaryOptionsWidget m_binaryOptionsWidget;
+	Ui::HDFOptionsWidget m_hdfOptionsWidget;
+	Ui::ImageOptionsWidget m_imageOptionsWidget;
+	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;
+	Ui::FITSOptionsWidget m_fitsOptionsWidget;
+	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 
 private slots:

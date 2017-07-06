@@ -69,61 +69,61 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// file type specific option widgets
 	QWidget* asciiw = new QWidget();
-	asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
+	m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
 	QWidget* binaryw = new QWidget(0);
-	binaryOptionsWidget.setupUi(binaryw);
-	binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
-	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
+	m_binaryOptionsWidget.setupUi(binaryw);
+	m_binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
+	m_binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(FileDataSource::Binary, binaryw);
 
 	QWidget* imagew = new QWidget(0);
-	imageOptionsWidget.setupUi(imagew);
-	imageOptionsWidget.cbImportFormat->addItems(ImageFilter::importFormats());
+	m_imageOptionsWidget.setupUi(imagew);
+	m_imageOptionsWidget.cbImportFormat->addItems(ImageFilter::importFormats());
 	ui.swOptions->insertWidget(FileDataSource::Image, imagew);
 
 	QWidget* hdfw = new QWidget(0);
-	hdfOptionsWidget.setupUi(hdfw);
+	m_hdfOptionsWidget.setupUi(hdfw);
 	QStringList hdfheaders;
 	hdfheaders << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
-	hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
-	hdfOptionsWidget.twContent->setAlternatingRowColors(true);
+	m_hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
+	m_hdfOptionsWidget.twContent->setAlternatingRowColors(true);
 	// link and type column are hidden
-	hdfOptionsWidget.twContent->hideColumn(1);
-	hdfOptionsWidget.twContent->hideColumn(2);
-	hdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	hdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	m_hdfOptionsWidget.twContent->hideColumn(1);
+	m_hdfOptionsWidget.twContent->hideColumn(2);
+	m_hdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	m_hdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	QWidget* netcdfw = new QWidget(0);
-	netcdfOptionsWidget.setupUi(netcdfw);
+	m_netcdfOptionsWidget.setupUi(netcdfw);
 	QStringList headers;
 	headers << i18n("Name") << i18n("Type") << i18n("Properties") << i18n("Values");
-	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
+	m_netcdfOptionsWidget.twContent->setHeaderLabels(headers);
 	// type column is hidden
-	netcdfOptionsWidget.twContent->hideColumn(1);
-	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	netcdfOptionsWidget.twContent->setAlternatingRowColors(true);
-	netcdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	m_netcdfOptionsWidget.twContent->hideColumn(1);
+	m_netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	m_netcdfOptionsWidget.twContent->setAlternatingRowColors(true);
+	m_netcdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	QWidget* fitsw = new QWidget(0);
-	fitsOptionsWidget.setupUi(fitsw);
-	fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Content"));
-	fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
-	fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
-	fitsOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	m_fitsOptionsWidget.setupUi(fitsw);
+	m_fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Content"));
+	m_fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
+	m_fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
+	m_fitsOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
 
 	// the table widget for preview
-	twPreview = new QTableWidget(ui.tePreview);
-	twPreview->verticalHeader()->hide();
-	twPreview->setEditTriggers(QTableWidget::NoEditTriggers);
+	m_twPreview = new QTableWidget(ui.tePreview);
+	m_twPreview->verticalHeader()->hide();
+	m_twPreview->setEditTriggers(QTableWidget::NoEditTriggers);
 	QHBoxLayout* layout = new QHBoxLayout;
-	layout->addWidget(twPreview);
+	layout->addWidget(m_twPreview);
 	ui.tePreview->setLayout(layout);
-	twPreview->hide();
+	m_twPreview->hide();
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
@@ -153,8 +153,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
-	hdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
-	netcdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	m_hdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	m_netcdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -165,12 +165,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
-	connect( hdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
-	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-	connect( netcdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
-	connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-	connect( fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
-	connect( fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( m_hdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
+	connect( m_hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( m_netcdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
+	connect( m_netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( m_fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
+	connect( m_fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -185,17 +185,17 @@ void ImportFileWidget::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 
 	//settings for data type specific widgets
-	asciiOptionsWidget->loadSettings();
+	m_asciiOptionsWidget->loadSettings();
 
 	// binary data
-	binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
-	binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
-	binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
-	binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
-	binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
+	m_binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
+	m_binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
+	m_binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
+	m_binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
+	m_binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
 
 	// image data
-	imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
+	m_imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
@@ -217,17 +217,17 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
 	// data type specific settings
-	asciiOptionsWidget->saveSettings();
+	m_asciiOptionsWidget->saveSettings();
 
 	// binary data
-	conf.writeEntry("Vectors", binaryOptionsWidget.niVectors->value());
-	conf.writeEntry("ByteOrder", binaryOptionsWidget.cbByteOrder->currentIndex());
-	conf.writeEntry("DataType", binaryOptionsWidget.cbDataType->currentIndex());
-	conf.writeEntry("SkipStartBytes", binaryOptionsWidget.sbSkipStartBytes->value());
-	conf.writeEntry("SkipBytes", binaryOptionsWidget.sbSkipBytes->value());
+	conf.writeEntry("Vectors", m_binaryOptionsWidget.niVectors->value());
+	conf.writeEntry("ByteOrder", m_binaryOptionsWidget.cbByteOrder->currentIndex());
+	conf.writeEntry("DataType", m_binaryOptionsWidget.cbDataType->currentIndex());
+	conf.writeEntry("SkipStartBytes", m_binaryOptionsWidget.sbSkipStartBytes->value());
+	conf.writeEntry("SkipBytes", m_binaryOptionsWidget.sbSkipBytes->value());
 
 	// image data
-	conf.writeEntry("ImportFormat", imageOptionsWidget.cbImportFormat->currentIndex());
+	conf.writeEntry("ImportFormat", m_imageOptionsWidget.cbImportFormat->currentIndex());
 
 	//HDF/NetCDF data
 	// nothing
@@ -241,7 +241,7 @@ void ImportFileWidget::hideDataSource() const {
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
-	asciiOptionsWidget->showAsciiHeaderOptions(b);
+	m_asciiOptionsWidget->showAsciiHeaderOptions(b);
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -251,10 +251,10 @@ void ImportFileWidget::showOptions(bool b) {
 
 QString ImportFileWidget::fileName() const {
 	if (currentFileType() == FileDataSource::FITS) {
-		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != i18n("Primary header")) {
+		if (m_fitsOptionsWidget.twExtensions->currentItem() != 0) {
+			if (m_fitsOptionsWidget.twExtensions->currentItem()->text(0) != i18n("Primary header")) {
 				return ui.kleFileName->text() + QLatin1String("[") +
-				       fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
+					m_fitsOptionsWidget.twExtensions->currentItem()->text(m_fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
 			}
 		}
 
@@ -301,7 +301,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(true);
 			} else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 				filter->setAutoModeEnabled(false);
-				asciiOptionsWidget->applyFilterSettings(filter);
+				m_asciiOptionsWidget->applyFilterSettings(filter);
 			} else {
 				filter->loadFilterSettings( ui.cbFilter->currentText() );
 			}
@@ -320,8 +320,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setAutoModeEnabled(true);
 			else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
 				filter->setAutoModeEnabled(false);
-				filter->setVectors( binaryOptionsWidget.niVectors->value() );
-				filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
+				filter->setVectors( m_binaryOptionsWidget.niVectors->value() );
+				filter->setDataType( (BinaryFilter::DataType) m_binaryOptionsWidget.cbDataType->currentIndex() );
 			} else {
 				//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
@@ -335,7 +335,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case FileDataSource::Image: {
 			ImageFilter* filter = new ImageFilter();
 
-			filter->setImportFormat((ImageFilter::ImportFormat)imageOptionsWidget.cbImportFormat->currentIndex());
+			filter->setImportFormat((ImageFilter::ImportFormat)m_imageOptionsWidget.cbImportFormat->currentIndex());
 			filter->setStartRow( ui.sbStartRow->value() );
 			filter->setEndRow( ui.sbEndRow->value() );
 			filter->setStartColumn( ui.sbStartColumn->value() );
@@ -445,13 +445,13 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//file doesn't exist -> delete the content preview that is still potentially
 		//available from the previously selected file
 		ui.tePreview->clear();
-		twPreview->clear();
-		hdfOptionsWidget.twContent->clear();
-		hdfOptionsWidget.twPreview->clear();
-		netcdfOptionsWidget.twContent->clear();
-		netcdfOptionsWidget.twPreview->clear();
-		fitsOptionsWidget.twExtensions->clear();
-		fitsOptionsWidget.twPreview->clear();
+		m_twPreview->clear();
+		m_hdfOptionsWidget.twContent->clear();
+		m_hdfOptionsWidget.twPreview->clear();
+		m_netcdfOptionsWidget.twContent->clear();
+		m_netcdfOptionsWidget.twPreview->clear();
+		m_fitsOptionsWidget.twExtensions->clear();
+		m_fitsOptionsWidget.twPreview->clear();
 
 		emit fileNameChanged();
 		return;
@@ -481,38 +481,38 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 
 		// update HDF tree widget using current selected file
-		hdfOptionsWidget.twContent->clear();
+		m_hdfOptionsWidget.twContent->clear();
 
-		QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
+		QTreeWidgetItem *rootItem = m_hdfOptionsWidget.twContent->invisibleRootItem();
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		hdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
-		hdfOptionsWidget.twContent->expandAll();
-		hdfOptionsWidget.twContent->resizeColumnToContents(0);
-		hdfOptionsWidget.twContent->resizeColumnToContents(3);
+		m_hdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
+		m_hdfOptionsWidget.twContent->expandAll();
+		m_hdfOptionsWidget.twContent->resizeColumnToContents(0);
+		m_hdfOptionsWidget.twContent->resizeColumnToContents(3);
 	} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
 	           fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
 
 		// update NetCDF tree widget using current selected file
-		netcdfOptionsWidget.twContent->clear();
+		m_netcdfOptionsWidget.twContent->clear();
 
-		QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
+		QTreeWidgetItem *rootItem = m_netcdfOptionsWidget.twContent->invisibleRootItem();
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		netcdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
-		netcdfOptionsWidget.twContent->expandAll();
-		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
-		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
+		m_netcdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
+		m_netcdfOptionsWidget.twContent->expandAll();
+		m_netcdfOptionsWidget.twContent->resizeColumnToContents(0);
+		m_netcdfOptionsWidget.twContent->resizeColumnToContents(2);
 	} else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
 	           fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
 		ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
 #endif
-		fitsOptionsWidget.twExtensions->clear();
+		m_fitsOptionsWidget.twExtensions->clear();
 		QString fileName = ui.kleFileName->text();
 		FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
-		filter->parseExtensions(fileName, fitsOptionsWidget.twExtensions, true);
+		filter->parseExtensions(fileName, m_fitsOptionsWidget.twExtensions, true);
 	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 	else
@@ -600,8 +600,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		DEBUG("unknown file type");
 	}
 
-	hdfOptionsWidget.twContent->clear();
-	netcdfOptionsWidget.twContent->clear();
+	m_hdfOptionsWidget.twContent->clear();
+	m_netcdfOptionsWidget.twContent->clear();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
@@ -620,12 +620,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
 	DEBUG("hdfTreeWidgetItemSelected()");
-	QDEBUG("SELECTED ITEMS =" << hdfOptionsWidget.twContent->selectedItems());
+	QDEBUG("SELECTED ITEMS =" << m_hdfOptionsWidget.twContent->selectedItems());
 
-	if (hdfOptionsWidget.twContent->selectedItems().isEmpty())
+	if (m_hdfOptionsWidget.twContent->selectedItems().isEmpty())
 		return;
 
-	QTreeWidgetItem* item = hdfOptionsWidget.twContent->selectedItems().first();
+	QTreeWidgetItem* item = m_hdfOptionsWidget.twContent->selectedItems().first();
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
@@ -637,7 +637,7 @@ void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
 */
 const QStringList ImportFileWidget::selectedHDFNames() const {
 	QStringList names;
-	QList<QTreeWidgetItem*> items = hdfOptionsWidget.twContent->selectedItems();
+	QList<QTreeWidgetItem*> items = m_hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
 	foreach (QTreeWidgetItem* item, items)
@@ -649,13 +649,13 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 //TODO
 void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 	DEBUG("fitsTreeWidgetItemSelected()");
-	QDEBUG("SELECTED ITEMS =" << fitsOptionsWidget.twExtensions->selectedItems());
+	QDEBUG("SELECTED ITEMS =" << m_fitsOptionsWidget.twExtensions->selectedItems());
 
-	if (fitsOptionsWidget.twExtensions->selectedItems().isEmpty())
+	if (m_fitsOptionsWidget.twExtensions->selectedItems().isEmpty())
 		return;
 
-	QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->selectedItems().first();
-	int column = fitsOptionsWidget.twExtensions->currentColumn();
+	QTreeWidgetItem* item = m_fitsOptionsWidget.twExtensions->selectedItems().first();
+	int column = m_fitsOptionsWidget.twExtensions->currentColumn();
 
 	WAIT_CURSOR;
 	const QString& itemText = item->text(column);
@@ -692,25 +692,25 @@ void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
-		fitsOptionsWidget.twPreview->clear();
+		m_fitsOptionsWidget.twPreview->clear();
 
-		fitsOptionsWidget.twPreview->setRowCount(rows);
+		m_fitsOptionsWidget.twPreview->setRowCount(rows);
 		int colCount = 0;
 		const int maxColumns = 300;
 		for (int i = 0; i < rows; i++) {
 			QStringList lineString = importedStrings[i];
 			if (i == 0) {
 				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				fitsOptionsWidget.twPreview->setColumnCount(colCount);
+				m_fitsOptionsWidget.twPreview->setColumnCount(colCount);
 			}
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			for (int j = 0; j < colCount; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-				fitsOptionsWidget.twPreview->setItem(i, j, item);
+				m_fitsOptionsWidget.twPreview->setItem(i, j, item);
 			}
 		}
-		fitsOptionsWidget.twPreview->resizeColumnsToContents();
+		m_fitsOptionsWidget.twPreview->resizeColumnsToContents();
 	}
 	RESET_CURSOR;
 }
@@ -720,12 +720,12 @@ void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 */
 void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 	DEBUG("netcdfTreeWidgetItemSelected()");
-	QDEBUG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
+	QDEBUG("SELECTED ITEMS =" << m_netcdfOptionsWidget.twContent->selectedItems());
 
-	if (netcdfOptionsWidget.twContent->selectedItems().isEmpty())
+	if (m_netcdfOptionsWidget.twContent->selectedItems().isEmpty())
 		return;
 
-	QTreeWidgetItem* item = netcdfOptionsWidget.twContent->selectedItems().first();
+	QTreeWidgetItem* item = m_netcdfOptionsWidget.twContent->selectedItems().first();
 	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
 	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
@@ -741,18 +741,18 @@ void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 
 		QStringList lineStrings = importedText.split('\n');
 		int rows = lineStrings.size();
-		netcdfOptionsWidget.twPreview->setRowCount(rows);
-		netcdfOptionsWidget.twPreview->setColumnCount(0);
+		m_netcdfOptionsWidget.twPreview->setRowCount(rows);
+		m_netcdfOptionsWidget.twPreview->setColumnCount(0);
 		for (int i = 0; i < rows; i++) {
 			QStringList lineString = lineStrings[i].split(' ');
 			int cols = lineString.size();
-			if (netcdfOptionsWidget.twPreview->columnCount() < cols)
-				netcdfOptionsWidget.twPreview->setColumnCount(cols);
+			if (m_netcdfOptionsWidget.twPreview->columnCount() < cols)
+				m_netcdfOptionsWidget.twPreview->setColumnCount(cols);
 
 			for (int j = 0; j < cols; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
-				netcdfOptionsWidget.twPreview->setItem(i, j, item);
+				m_netcdfOptionsWidget.twPreview->setItem(i, j, item);
 			}
 		}
 	} else
@@ -764,7 +764,7 @@ void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 */
 const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
-	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
+	QList<QTreeWidgetItem *> items = m_netcdfOptionsWidget.twContent->selectedItems();
 
 	foreach (QTreeWidgetItem* item, items)
 		names << item->text(0);
@@ -775,7 +775,7 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	QStringList extensionNames;
 	//TODO
-	QList<QTreeWidgetItem* > items = fitsOptionsWidget.twExtensions->selectedItems();
+	QList<QTreeWidgetItem* > items = m_fitsOptionsWidget.twExtensions->selectedItems();
 	foreach (QTreeWidgetItem* item, items)
 		extensionNames << item->text(0);
 	return extensionNames;
@@ -830,9 +830,9 @@ void ImportFileWidget::refreshPreview() {
 
 	// generic table widget
 	if (fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
-		twPreview->show();
+		m_twPreview->show();
 	else
-		twPreview->hide();
+		m_twPreview->hide();
 
 	int lines = ui.sbPreviewLines->value();
 
@@ -846,7 +846,7 @@ void ImportFileWidget::refreshPreview() {
 
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = twPreview;
+		tmpTableWidget = m_twPreview;
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -856,7 +856,7 @@ void ImportFileWidget::refreshPreview() {
 
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = twPreview;
+		tmpTableWidget = m_twPreview;
 		break;
 	}
 	case FileDataSource::Image: {
@@ -870,24 +870,24 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-		lines = hdfOptionsWidget.sbPreviewLines->value();
+		lines = m_hdfOptionsWidget.sbPreviewLines->value();
 		importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = hdfOptionsWidget.twPreview;
+		tmpTableWidget = m_hdfOptionsWidget.twPreview;
 		break;
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-		lines = netcdfOptionsWidget.sbPreviewLines->value();
+		lines = m_netcdfOptionsWidget.sbPreviewLines->value();
 		importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = netcdfOptionsWidget.twPreview;
+		tmpTableWidget = m_netcdfOptionsWidget.twPreview;
 		break;
 	}
 	case FileDataSource::FITS: {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		lines = fitsOptionsWidget.sbPreviewLines->value();
-		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
-			const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
+		lines = m_fitsOptionsWidget.sbPreviewLines->value();
+		if (m_fitsOptionsWidget.twExtensions->currentItem() != 0) {
+			const QTreeWidgetItem* item = m_fitsOptionsWidget.twExtensions->currentItem();
+			const int currentColumn = m_fitsOptionsWidget.twExtensions->currentColumn();
 			QString itemText = item->text(currentColumn);
 			int extType = 0;
 			if (itemText.contains(QLatin1String("IMAGE #")) ||
@@ -917,7 +917,7 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
-		tmpTableWidget = fitsOptionsWidget.twPreview;
+		tmpTableWidget = m_fitsOptionsWidget.twPreview;
 		break;
 	}
 	}
