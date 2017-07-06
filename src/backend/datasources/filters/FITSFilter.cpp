@@ -37,6 +37,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 #include <QMultiMap>
 #include <QFile>
+#include <QDebug>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.

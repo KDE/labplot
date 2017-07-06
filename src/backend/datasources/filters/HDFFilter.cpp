@@ -36,8 +36,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QTreeWidgetItem>
 #include <KLocale>
+#include <QTreeWidgetItem>
+#include <QDebug>
 
 /*!
 	\class HDFFilter
