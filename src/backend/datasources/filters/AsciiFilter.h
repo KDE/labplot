@@ -98,7 +98,7 @@ public:
 	virtual bool load(XmlStreamReader*);
 
   private:
-	AsciiFilterPrivate* const d;
+	std::unique_ptr<AsciiFilterPrivate> const d;
 	friend class AsciiFilterPrivate;
 };
 

@@ -31,7 +31,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/core/column/Column.h"
 
 #include <QDataStream>
-#include <QDebug>
 #include <KLocale>
 #include <KFilterDev>
 #include <cmath>
@@ -42,12 +41,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
  */
-BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {
-}
+BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {}
 
-BinaryFilter::~BinaryFilter() {
-	delete d;
-}
+BinaryFilter::~BinaryFilter() {}
 
 /*!
   reads the content of the file \c fileName.

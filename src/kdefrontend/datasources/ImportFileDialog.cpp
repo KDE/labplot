@@ -59,11 +59,10 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : ImportDialog(parent),
-    m_importFileWidget(new ImportFileWidget(this, fileName)),
+	m_importFileWidget(new ImportFileWidget(this, fileName)),
 	m_showOptions(false) {
 
-    vLayout->addWidget(m_importFileWidget);
-
+	vLayout->addWidget(m_importFileWidget);
 	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
 	//hide the data-source related widgets
@@ -81,9 +80,11 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
     if (!fileDataSource) {
         setCaption(i18n("Import Data to Spreadsheet or Matrix"));
+        m_importFileWidget->hideDataSource();
     } else {
         setCaption(i18n("Add new live data source"));
     }
+
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
 	//restore saved settings
@@ -91,6 +92,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
     m_importFileWidget->showOptions(m_showOptions);
+
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -176,7 +178,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
             names = m_importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
             names = m_importFileWidget->selectedNetCDFNames();
-		//TODO
+
 		//multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
@@ -287,37 +289,37 @@ void ImportFileDialog::checkOkButton() {
 	}
 
     QString fileName = m_importFileWidget->fileName();
-    if (m_importFileWidget->currentFileType() != FileDataSource::FITS) {
-#ifndef HAVE_WINDOWS
-		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName;
-#endif
-	} else {	// FileDataSource::FITS
-		int extensionBraceletPos = -1;
-		if (!fileName.isEmpty()) {
-			if(fileName.right(1) == QLatin1String("]")) {
-				for (int i = fileName.size() - 1; i >= 5; --i) {
-					if (fileName.at(i) == QLatin1Char('[')) {
-						extensionBraceletPos = i;
-						break;
-					}
-				}
-			}
-		}
-#ifndef HAVE_WINDOWS
-		if (fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
-		else
-#endif
-			fileName = fileName.mid(0, extensionBraceletPos);
-	}
-	DEBUG(" fileName = " << fileName.toUtf8().constData());
+        if (m_importFileWidget->currentFileType() != FileDataSource::FITS) {
+    #ifndef HAVE_WINDOWS
+            if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
+                fileName = QDir::homePath() + QDir::separator() + fileName;
+    #endif
+        } else {	// FileDataSource::FITS
+            int extensionBraceletPos = -1;
+            if (!fileName.isEmpty()) {
+                if(fileName.right(1) == QLatin1String("]")) {
+                    for (int i = fileName.size() - 1; i >= 5; --i) {
+                        if (fileName.at(i) == QLatin1Char('[')) {
+                            extensionBraceletPos = i;
+                            break;
+                        }
+                    }
+                }
+            }
+    #ifndef HAVE_WINDOWS
+            if (fileName.left(1) != QDir::separator())
+                fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
+            else
+    #endif
+                fileName = fileName.mid(0, extensionBraceletPos);
+        }
+        DEBUG(" fileName = " << fileName.toUtf8().constData());
 
-	enableButtonOk( QFile::exists(fileName) ) ;
+    enableButtonOk( QFile::exists(fileName) ) ;
 }
 
 QString ImportFileDialog::selectedObject() const {
-    QString path = m_importFileWidget->fileName();
+	QString path = m_importFileWidget->fileName();
 	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 	return name;
 }

@@ -134,6 +134,9 @@ private:
 	bool m_fileLinked;
     bool m_paused;
 
+    bool m_firstRead;
+    bool m_newDataAvailable;
+
     int m_sampleRate;
     int m_updateFrequency;
     int m_port;
@@ -145,6 +148,8 @@ private:
     QSocketNotifier* m_localSocketNotifier;
     QLocalSocket m_localSocket;
     QTimer* m_updateTimer;
+
+    QList<Column*> m_columnDataBuffer;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;

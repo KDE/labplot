@@ -27,10 +27,11 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef IMAGEFILTER_H
 #define IMAGEFILTER_H
 
-#include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ImageFilterPrivate;
+class QStringList;
+
 class ImageFilter : public AbstractFileFilter {
 	Q_OBJECT
 	Q_ENUMS(ImportFormat)
@@ -64,8 +65,9 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
-  private:
-	ImageFilterPrivate* const d;
+
+private:
+	std::unique_ptr <ImageFilterPrivate> const d;
 	friend class ImageFilterPrivate;
 };
 

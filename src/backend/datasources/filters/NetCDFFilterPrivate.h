@@ -48,7 +48,6 @@ public:
 
 	const NetCDFFilter* q;
 
-	// TODO: rename m_*
 	QString currentVarName;
 	int startRow;
 	int endRow;

@@ -27,9 +27,9 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef NETCDFFILTER_H
 #define NETCDFFILTER_H
 
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
 #include <QTreeWidgetItem>
-#include "backend/datasources/filters/AbstractFileFilter.h"
 
 class NetCDFFilterPrivate;
 class NetCDFFilter : public AbstractFileFilter {
@@ -64,8 +64,9 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
-  private:
-	NetCDFFilterPrivate* const d;
+
+private:
+	std::unique_ptr<NetCDFFilterPrivate> const d;
 	friend class NetCDFFilterPrivate;
 };
 

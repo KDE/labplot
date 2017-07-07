@@ -37,6 +37,7 @@
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
+#include <memory>
 
 class AbstractFileFilter;
 class QTableWidget;
@@ -64,13 +65,14 @@ public:
 private:
 
 	Ui::ImportFileWidget ui;
-	Ui::AsciiOptionsWidget asciiOptionsWidget;
-	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	Ui::HDFOptionsWidget hdfOptionsWidget;
-	Ui::ImageOptionsWidget imageOptionsWidget;
-	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
-	Ui::FITSOptionsWidget fitsOptionsWidget;
-	QTableWidget* twPreview;
+
+	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
+	Ui::BinaryOptionsWidget m_binaryOptionsWidget;
+	Ui::HDFOptionsWidget m_hdfOptionsWidget;
+	Ui::ImageOptionsWidget m_imageOptionsWidget;
+	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;
+	Ui::FITSOptionsWidget m_fitsOptionsWidget;
+	QTableWidget* m_twPreview;
 	const QString& m_fileName;
     bool m_fileDataSource;
 
@@ -86,7 +88,6 @@ private slots:
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);
-	void headerChanged(int);
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();

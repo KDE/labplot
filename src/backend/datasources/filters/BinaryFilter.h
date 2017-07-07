@@ -88,7 +88,7 @@ class BinaryFilter : public AbstractFileFilter {
 	virtual bool load(XmlStreamReader*);
 
   private:
-	BinaryFilterPrivate* const d;
+	std::unique_ptr<BinaryFilterPrivate> const d;
 	friend class BinaryFilterPrivate;
 };
 

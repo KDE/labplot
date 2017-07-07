@@ -3,7 +3,7 @@ File                 : HDFFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for HDFFilter.
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -48,7 +48,6 @@ public:
 
 	const HDFFilter* q;
 
-	//TODO: m_*
 	QString currentDataSetName;
 	int startRow;
 	int endRow;
@@ -56,10 +55,11 @@ public:
 	int endColumn;
 
 private:
-	int status;
 	const static int MAXNAMELENGTH = 1024;
 	const static int MAXSTRINGLENGTH = 1024*1024;
-	QList<unsigned long> multiLinkList;	// used to find hard links
+	int m_status;
+	QList<unsigned long> m_multiLinkList;	// used to find hard links
+
 #ifdef HAVE_HDF5
 	void handleError(int err, QString function, QString arg=QString());
 	QString translateHDFOrder(H5T_order_t);

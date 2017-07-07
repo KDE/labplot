@@ -321,7 +321,7 @@ QString FileDataSource::host() const {
   or the whole content of the file (\c b=false).
 */
 void FileDataSource::setFileLinked(const bool b) {
-	m_fileLinked=b;
+    m_fileLinked = b;
 }
 
 /*!
@@ -380,6 +380,8 @@ void FileDataSource::read() {
 }
 
 void FileDataSource::addData() {
+
+
 
 }
 

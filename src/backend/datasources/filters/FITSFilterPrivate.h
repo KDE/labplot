@@ -1,6 +1,3 @@
-#ifndef FITSFILTERPRIVATE_H
-#define FITSFILTERPRIVATE_H
-
 /***************************************************************************
 File                 : FITSFilterPrivate.cpp
 Project              : LabPlot
@@ -27,9 +24,14 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
+
+#ifndef FITSFILTERPRIVATE_H
+#define FITSFILTERPRIVATE_H
+
 #ifdef HAVE_FITS
 #include "fitsio.h"
 #endif
+
 class AbstractDataSource;
 
 class FITSFilterPrivate {
@@ -37,11 +39,11 @@ class FITSFilterPrivate {
 public:
 	explicit FITSFilterPrivate(FITSFilter*);
 	~FITSFilterPrivate();
+
 	QVector<QStringList> readCHDU(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, bool* okToMatrix = nullptr, int lines = -1);
 	void writeCHDU(const QString& fileName, AbstractDataSource*);
 
-	const FITSFilter* q;
 	QMultiMap<QString, QString> extensionNames(const QString &fileName);
 	void updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates);
 	void addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
@@ -57,6 +59,8 @@ public:
 			const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
+	const FITSFilter* q;
+
 	int startRow;
 	int endRow;
 	int startColumn;
@@ -70,7 +74,6 @@ private:
 #ifdef HAVE_FITS
 	fitsfile* m_fitsFile;
 #endif
-
 };
 
 #endif // FITSFILTERPRIVATE_H

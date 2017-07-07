@@ -30,6 +30,7 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 
 #include "backend/core/AbstractColumn.h"
 #include <QObject>
+#include <memory>	// smart pointer
 
 class AbstractDataSource;
 class XmlStreamReader;
@@ -38,6 +39,7 @@ class QXmlStreamWriter;
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
 	Q_ENUMS(ImportMode);
+	Q_ENUMS(Locale);
 
 public:
 	enum ImportMode {Append, Prepend, Replace};
