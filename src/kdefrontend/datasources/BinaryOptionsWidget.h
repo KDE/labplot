@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : widget providing options for the import of binary data
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2009 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,13 +31,16 @@
 
 #include "ui_binaryoptionswidget.h"
 
+class BinaryFilter;
 
-class BinaryOptionsWidget : public QWidget{
+class BinaryOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
 	explicit BinaryOptionsWidget(QWidget*);
-	~BinaryOptionsWidget();
+	void applyFilterSettings(BinaryFilter*) const;
+	void loadSettings() const;
+	void saveSettings();
 
 private:
 	Ui::BinaryOptionsWidget ui;

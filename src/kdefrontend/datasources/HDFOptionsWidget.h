@@ -3,7 +3,7 @@ File                 : HDFOptionsWidget.h
 Project              : LabPlot
 Description          : widget providing options for the import of HDF data
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 **************************************************************************/
 
@@ -30,16 +30,26 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "ui_hdfoptionswidget.h"
 
+class HDFFilter;
+class ImportFileWidget;
 
-class HDFOptionsWidget : public QWidget{
+class HDFOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
-	explicit HDFOptionsWidget(QWidget*);
-	~HDFOptionsWidget();
+	explicit HDFOptionsWidget(QWidget*, ImportFileWidget*);
+	void clear();
+	void updateContent(HDFFilter*, QString fileName);
+	const QStringList selectedHDFNames() const;
+	int lines() const { return ui.sbPreviewLines->value(); }
+	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
 	Ui::HDFOptionsWidget ui;
+	ImportFileWidget* m_fileWidget;
+
+private slots:
+	void hdfTreeWidgetSelectionChanged();
 };
 
 #endif

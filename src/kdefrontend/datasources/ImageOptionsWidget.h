@@ -3,7 +3,7 @@ File                 : ImageOptionsWidget.h
 Project              : LabPlot
 Description          : widget providing options for the import of image data
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 **************************************************************************/
 
@@ -29,14 +29,18 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define IMAGEOPTIONSWIDGET_H
 
 #include "ui_imageoptionswidget.h"
+#include "backend/datasources/filters/ImageFilter.h"
 
-
-class ImageOptionsWidget : public QWidget{
+class ImageOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
 	explicit ImageOptionsWidget(QWidget*);
-	~ImageOptionsWidget();
+	void loadSettings() const;
+	void saveSettings();
+	ImageFilter::ImportFormat currentFormat() const {
+		return (ImageFilter::ImportFormat)ui.cbImportFormat->currentIndex();
+	}
 
 private:
 	Ui::ImageOptionsWidget ui;
