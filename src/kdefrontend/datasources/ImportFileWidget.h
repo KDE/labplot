@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -30,16 +30,18 @@
 #define IMPORTFILEWIDGET_H
 
 #include "ui_importfilewidget.h"
-#include "AsciiOptionsWidget.h"
-#include "BinaryOptionsWidget.h"
-#include "HDFOptionsWidget.h"
-#include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include <memory>
 
 class AbstractFileFilter;
+class AsciiOptionsWidget;
+class BinaryOptionsWidget;
+class HDFOptionsWidget;
+class ImageOptionsWidget;
+//class NetCDFOptionsWidget;
+//class FITSOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -66,7 +68,7 @@ private:
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
-	Ui::ImageOptionsWidget m_imageOptionsWidget;
+	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;
 	Ui::FITSOptionsWidget m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;

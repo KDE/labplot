@@ -35,6 +35,12 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "AsciiOptionsWidget.h"
+#include "BinaryOptionsWidget.h"
+#include "HDFOptionsWidget.h"
+#include "ImageOptionsWidget.h"
+#include "NetCDFOptionsWidget.h"
+#include "FITSOptionsWidget.h"
 
 #include <QTableWidget>
 #include <QInputDialog>
@@ -65,7 +71,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.cbFileType->addItems(FileDataSource::fileTypes());
 	QStringList filterItems;
 	filterItems << i18n("Automatic") << i18n("Custom");
-	ui.cbFilter->addItems( filterItems );
+	ui.cbFilter->addItems(filterItems);
 
 	// file type specific option widgets
 	QWidget* asciiw = new QWidget();
@@ -76,9 +82,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 	ui.swOptions->insertWidget(FileDataSource::Binary, binaryw);
 
-	QWidget* imagew = new QWidget(0);
-	m_imageOptionsWidget.setupUi(imagew);
-	m_imageOptionsWidget.cbImportFormat->addItems(ImageFilter::importFormats());
+	QWidget* imagew = new QWidget();
+	m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
 	ui.swOptions->insertWidget(FileDataSource::Image, imagew);
 
 	QWidget* hdfw = new QWidget();
@@ -173,9 +178,7 @@ void ImportFileWidget::loadSettings() {
 	//settings for data type specific widgets
 	m_asciiOptionsWidget->loadSettings();
 	m_binaryOptionsWidget->loadSettings();
-
-	// image data
-	m_imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
+	m_imageOptionsWidget->loadSettings();
 
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
@@ -199,12 +202,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
 	m_binaryOptionsWidget->saveSettings();
-
-	// image data
-	conf.writeEntry("ImportFormat", m_imageOptionsWidget.cbImportFormat->currentIndex());
-
-	//HDF/NetCDF data
-	// nothing
+	m_imageOptionsWidget->saveSettings();
 }
 
 void ImportFileWidget::hideDataSource() const {
@@ -308,7 +306,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case FileDataSource::Image: {
 			ImageFilter* filter = new ImageFilter();
 
-			filter->setImportFormat((ImageFilter::ImportFormat)m_imageOptionsWidget.cbImportFormat->currentIndex());
+			filter->setImportFormat(m_imageOptionsWidget->currentFormat());
 			filter->setStartRow( ui.sbStartRow->value() );
 			filter->setEndRow( ui.sbEndRow->value() );
 			filter->setStartColumn( ui.sbStartColumn->value() );
