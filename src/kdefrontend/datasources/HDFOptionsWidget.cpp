@@ -35,7 +35,6 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup kdefrontend
  */
-
 HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
