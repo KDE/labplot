@@ -30,7 +30,6 @@
 #define IMPORTFILEWIDGET_H
 
 #include "ui_importfilewidget.h"
-#include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include <memory>
 
@@ -40,7 +39,7 @@ class BinaryOptionsWidget;
 class HDFOptionsWidget;
 class ImageOptionsWidget;
 class NetCDFOptionsWidget;
-//class FITSOptionsWidget;
+class FITSOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -69,14 +68,13 @@ private:
 	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
-	Ui::FITSOptionsWidget m_fitsOptionsWidget;
+	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void fitsTreeWidgetSelectionChanged();
 
 	void saveFilter();
 	void manageFilters();

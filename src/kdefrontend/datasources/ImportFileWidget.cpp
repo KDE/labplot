@@ -94,12 +94,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
-	QWidget* fitsw = new QWidget(0);
-	m_fitsOptionsWidget.setupUi(fitsw);
-	m_fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Content"));
-	m_fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
-	m_fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
-	m_fitsOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	QWidget* fitsw = new QWidget();
+	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
 
 	// the table widget for preview
@@ -148,9 +144,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-
-	connect( m_fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
-	connect( m_fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -212,14 +205,11 @@ void ImportFileWidget::showOptions(bool b) {
 
 QString ImportFileWidget::fileName() const {
 	if (currentFileType() == FileDataSource::FITS) {
-		if (m_fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			if (m_fitsOptionsWidget.twExtensions->currentItem()->text(0) != i18n("Primary header")) {
-				return ui.kleFileName->text() + QLatin1String("[") +
-					m_fitsOptionsWidget.twExtensions->currentItem()->text(m_fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
-			}
-		}
-
+		QString extensionName = m_fitsOptionsWidget->currentExtensionName();
+		if (!extensionName.isEmpty())
+				return ui.kleFileName->text() + QLatin1String("[") + extensionName + QLatin1String("]");
 	}
+
 	return ui.kleFileName->text();
 }
 
@@ -408,8 +398,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		m_twPreview->clear();
 		m_hdfOptionsWidget->clear();
 		m_netcdfOptionsWidget->clear();
-		m_fitsOptionsWidget.twExtensions->clear();
-		m_fitsOptionsWidget.twPreview->clear();
+		m_fitsOptionsWidget->clear();
 
 		emit fileNameChanged();
 		return;
@@ -451,10 +440,9 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #ifdef HAVE_FITS
 		ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
 #endif
-		m_fitsOptionsWidget.twExtensions->clear();
-		QString fileName = ui.kleFileName->text();
-		FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
-		filter->parseExtensions(fileName, m_fitsOptionsWidget.twExtensions, true);
+
+		// update FITS tree widget using current selected file
+		m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
 	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 	else
@@ -557,74 +545,6 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	refreshPreview();
 }
 
-//TODO
-void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
-	DEBUG("fitsTreeWidgetItemSelected()");
-	QDEBUG("SELECTED ITEMS =" << m_fitsOptionsWidget.twExtensions->selectedItems());
-
-	if (m_fitsOptionsWidget.twExtensions->selectedItems().isEmpty())
-		return;
-
-	QTreeWidgetItem* item = m_fitsOptionsWidget.twExtensions->selectedItems().first();
-	int column = m_fitsOptionsWidget.twExtensions->currentColumn();
-
-	WAIT_CURSOR;
-	const QString& itemText = item->text(column);
-	QString selectedExtension;
-	int extType = 0;
-	if (itemText.contains(QLatin1String("IMAGE #")) ||
-	        itemText.contains(QLatin1String("ASCII_TBL #")) ||
-	        itemText.contains(QLatin1String("BINARY_TBL #")))
-		extType = 1;
-	else if (!itemText.compare(i18n("Primary header")))
-		extType = 2;
-	if (extType == 0) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0)
-				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + item->text(column) + QLatin1String("]");
-		}
-	} else if (extType == 1) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0) {
-				bool ok;
-				int hduNum = itemText.right(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
-			}
-		}
-	} else {
-		if (item->parent()->parent() != 0)
-			selectedExtension = item->parent()->parent()->text(column);
-	}
-
-	if (!selectedExtension.isEmpty()) {
-		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		bool readFitsTableToMatrix;
-		QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
-		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
-
-		const int rows = importedStrings.size();
-		m_fitsOptionsWidget.twPreview->clear();
-
-		m_fitsOptionsWidget.twPreview->setRowCount(rows);
-		int colCount = 0;
-		const int maxColumns = 300;
-		for (int i = 0; i < rows; i++) {
-			QStringList lineString = importedStrings[i];
-			if (i == 0) {
-				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				m_fitsOptionsWidget.twPreview->setColumnCount(colCount);
-			}
-			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-
-			for (int j = 0; j < colCount; j++) {
-				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-				m_fitsOptionsWidget.twPreview->setItem(i, j, item);
-			}
-		}
-		m_fitsOptionsWidget.twPreview->resizeColumnsToContents();
-	}
-	RESET_CURSOR;
-}
 
 const QStringList ImportFileWidget::selectedHDFNames() const {
 	return m_hdfOptionsWidget->selectedHDFNames();
@@ -635,11 +555,7 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 }
 
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
-	QStringList extensionNames;
-	//TODO
-	for (auto* item: m_fitsOptionsWidget.twExtensions->selectedItems())
-		extensionNames << item->text(0);
-	return extensionNames;
+	return m_fitsOptionsWidget->selectedFITSExtensions();
 }
 
 /*!
@@ -745,40 +661,17 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case FileDataSource::FITS: {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		lines = m_fitsOptionsWidget.sbPreviewLines->value();
-		if (m_fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			const QTreeWidgetItem* item = m_fitsOptionsWidget.twExtensions->currentItem();
-			const int currentColumn = m_fitsOptionsWidget.twExtensions->currentColumn();
-			QString itemText = item->text(currentColumn);
-			int extType = 0;
-			if (itemText.contains(QLatin1String("IMAGE #")) ||
-				itemText.contains(QLatin1String("ASCII_TBL #")) ||
-				itemText.contains(QLatin1String("BINARY_TBL #")))
-				extType = 1;
-			else if (!itemText.compare(i18n("Primary header")))
-				extType = 2;
-			if (extType == 0) {
-				if (item->parent() != 0) {
-					if (item->parent()->parent() != 0)
-						fileName = item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
-				}
-			} else if (extType == 1) {
-				if (item->parent() != 0) {
-					if (item->parent()->parent() != 0) {
-						int hduNum = itemText.right(1).toInt(&ok);
-						fileName = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
-					}
-				}
-			} else {
-				if (item->parent()->parent() != 0)
-					fileName = item->parent()->parent()->text(currentColumn);
-			}
-		}
+		lines = m_fitsOptionsWidget->lines();
+
+		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
+		if (!extensionName.isEmpty())
+			fileName = extensionName;
+
 		bool readFitsTableToMatrix;
 		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
-		tmpTableWidget = m_fitsOptionsWidget.twPreview;
+		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
 		break;
 	}
 	}
