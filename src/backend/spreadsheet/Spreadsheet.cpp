@@ -880,7 +880,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int i = 0; i < childCount<Column>(); i++) {
 			if (mode == AbstractFileFilter::Replace)
 				child<Column>(i)->setSuppressDataChangedSignal(true);
-			child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+
 			child<Column>(i)->setName(colNameList.at(i));
 		}
 	}
@@ -889,13 +889,6 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 }
 
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
-	//make the spreadsheet and all its children undo aware again
-	setUndoAware(true);
-	for (int i=0; i<childCount<Column>(); i++)
-		child<Column>(i)->setUndoAware(true);
-
-	if (m_view)
-		reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
@@ -929,4 +922,12 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 			column->setChanged();
 		}
 	}
+
+	//make the spreadsheet and all its children undo aware again
+	setUndoAware(true);
+	for (int i=0; i<childCount<Column>(); i++)
+		child<Column>(i)->setUndoAware(true);
+
+    if (m_view)
+        reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }

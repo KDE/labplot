@@ -35,7 +35,6 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup kdefrontend
  */
-
 HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
@@ -52,6 +51,7 @@ HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
+	//TODO: is this working?
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 }
 

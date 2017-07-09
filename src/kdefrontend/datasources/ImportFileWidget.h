@@ -30,8 +30,6 @@
 #define IMPORTFILEWIDGET_H
 
 #include "ui_importfilewidget.h"
-#include "NetCDFOptionsWidget.h"
-#include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include <memory>
 
@@ -40,8 +38,8 @@ class AsciiOptionsWidget;
 class BinaryOptionsWidget;
 class HDFOptionsWidget;
 class ImageOptionsWidget;
-//class NetCDFOptionsWidget;
-//class FITSOptionsWidget;
+class NetCDFOptionsWidget;
+class FITSOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -72,8 +70,8 @@ private:
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
-	Ui::NetCDFOptionsWidget m_netcdfOptionsWidget;
-	Ui::FITSOptionsWidget m_fitsOptionsWidget;
+	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
+	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
     bool m_fileDataSource;
@@ -81,8 +79,7 @@ private:
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void netcdfTreeWidgetSelectionChanged();
-	void fitsTreeWidgetSelectionChanged();
+
     void updateTypeChanged(int);
     void sourceTypeChanged(int);
 
@@ -99,6 +96,7 @@ signals:
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDFOptionsWidget;	// to access refreshPreview()
+	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 };
 
 #endif

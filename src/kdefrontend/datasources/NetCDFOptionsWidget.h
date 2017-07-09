@@ -3,7 +3,7 @@ File                 : NetCDFOptionsWidget.h
 Project              : LabPlot
 Description          : widget providing options for the import of NetCDF data
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 **************************************************************************/
 
@@ -30,16 +30,26 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "ui_netcdfoptionswidget.h"
 
+class NetCDFFilter;
+class ImportFileWidget;
 
-class NetCDFOptionsWidget : public QWidget{
-    Q_OBJECT
+class NetCDFOptionsWidget : public QWidget {
+	Q_OBJECT
 
 public:
-	explicit NetCDFOptionsWidget(QWidget*);
-	~NetCDFOptionsWidget();
+	explicit NetCDFOptionsWidget(QWidget*, ImportFileWidget*);
+	void clear();
+	void updateContent(NetCDFFilter*, const QString& fileName);
+	const QStringList selectedNetCDFNames() const;
+	int lines() const { return ui.sbPreviewLines->value(); }
+	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
 	Ui::NetCDFOptionsWidget ui;
+	ImportFileWidget* m_fileWidget;
+
+private slots:
+	void netcdfTreeWidgetSelectionChanged();
 };
 
 #endif

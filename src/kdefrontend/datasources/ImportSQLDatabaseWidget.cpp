@@ -210,6 +210,13 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	ui.twPreview->clear();
 
 	//execute the current query (select on a table or a custom query)
+	const QString& query = currentQuery(true);
+	if (query.isEmpty()) {
+		RESET_CURSOR;
+		setInvalid();
+		return;
+	}
+
 	QSqlQuery q;
 	q.prepare(currentQuery(true));
 	q.setForwardOnly(true);
@@ -386,7 +393,7 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 		}
 	} else {
 		//preview the result of a custom query
-		query = ui.teQuery->toPlainText();
+		query = ui.teQuery->toPlainText().simplified();
 	}
 
 	return query;
