@@ -285,8 +285,16 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 
 	QVector<void*> dataContainer;
 	int columnOffset = 0;
+
+	//TODO: support other modes
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	columnModes.resize(actualCols);
+
+	//TODO: use given names?
+	QStringList vectorNames;
+
 	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols);
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	// read data
 	//TODO: use ColumnMode ?
