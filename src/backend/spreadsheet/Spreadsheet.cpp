@@ -880,7 +880,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int i = 0; i < childCount<Column>(); i++) {
 			if (mode == AbstractFileFilter::Replace)
 				child<Column>(i)->setSuppressDataChangedSignal(true);
-// 			child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+
 			child<Column>(i)->setName(colNameList.at(i));
 		}
 	}
