@@ -45,7 +45,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
  */
-
 AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {}
 
 AsciiFilter::~AsciiFilter() {}
@@ -329,9 +328,14 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	startRow(1),
 	endRow(-1),
 	startColumn(1),
-	endColumn(-1) {
+	endColumn(-1),
+	m_prepared(false),
+	m_columnOffset(0) {
 }
 
+/*!
+ * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
+ */
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
@@ -474,40 +478,44 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileNam
 QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
 		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+
 	QVector<QStringList> dataStrings;
 
-	DEBUG("device is sequential = " << device.isSequential());
-	int deviceError = prepareDeviceToRead(device);
-	DEBUG("Device error = " << deviceError);
+	if (!m_prepared) {
+		DEBUG("device is sequential = " << device.isSequential());
+		const int deviceError = prepareDeviceToRead(device);
+		if (deviceError != 0)
+			DEBUG("Device error = " << deviceError);
 
-	if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
-		dataSource->clear();
-	if (deviceError)
-		return dataStrings;
+		if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
+			dataSource->clear();
+		if (deviceError)
+			return dataStrings;
 
-	int columnOffset = 0;	// indexes the "start column" in the datasource. Data will be imported starting from this column.
-	QVector<void*> dataContainer;	// pointers to the actual data containers
-	if (dataSource) {
-		if (dynamic_cast<Matrix*>(dataSource)) {
-			// avoid text data
-			for (auto& c: columnModes)
-				if (c == AbstractColumn::Text)
-					c = AbstractColumn::Numeric;
+		if (dataSource) {
+			if (dynamic_cast<Matrix*>(dataSource)) {
+				// avoid text data
+				for (auto& c: columnModes)
+					if (c == AbstractColumn::Text)
+						c = AbstractColumn::Numeric;
+			}
+
+			m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1, m_actualCols, vectorNames, columnModes);
 		}
 
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows - startRow + 1, m_actualCols, vectorNames, columnModes);
+		//number formatting
+		if (locale == AbstractFileFilter::LocaleC)
+			m_numberFormat = QLocale(QLocale::C);
+		else
+			m_numberFormat = QLocale::system();
+
+		m_prepared = true;
 	}
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
 	if (lines == -1)
 		lines = m_actualRows;
-
-	QLocale numberFormat;
-	if (locale == AbstractFileFilter::LocaleC)
-		numberFormat = QLocale(QLocale::C);
-	else
-		numberFormat = QLocale::system();
 
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
@@ -534,9 +542,9 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
-					const double value = numberFormat.toDouble(valueString, &isNumber);
+					const double value = m_numberFormat.toDouble(valueString, &isNumber);
 					if (dataSource)
-						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					else
 						lineString += QString::number(isNumber ? value : NAN);
 					break;
@@ -544,14 +552,14 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				case AbstractColumn::DateTime: {
 					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 					if (dataSource)
-						static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 					else
 						lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
 					break;
 				}
 				case AbstractColumn::Text:
 					if (dataSource)
-						static_cast<QVector<QString>*>(dataContainer[n])->operator[](currentRow) = valueString;
+						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 					else
 						lineString += valueString;
 				}
@@ -559,13 +567,13 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 				if (dataSource) {
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric:
-						static_cast<QVector<double>*>(dataContainer[n])->operator[](currentRow) = NAN;
+						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
 						break;
 					case AbstractColumn::DateTime:
-						static_cast<QVector<QDateTime>*>(dataContainer[n])->operator[](currentRow) = QDateTime();
+						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 						break;
 					case AbstractColumn::Text:
-						static_cast<QVector<QString>*>(dataContainer[n])->operator[](currentRow) = "NAN";
+						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
 					}
 				} else
 					lineString += QLatin1String("NAN");
@@ -580,16 +588,9 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 	if (!dataSource)
 		return dataStrings;
 
-	dataSource->finalizeImport(columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
 	return dataStrings;
 }
-
-/*!
-    reads the content of the file \c fileName to the data source \c dataSource.
-*/
-//void AsciiFilterPrivate::read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-//	readData(fileName, dataSource, mode);
-//}
 
 /*!
     writes the content of \c dataSource to the file \c fileName.
