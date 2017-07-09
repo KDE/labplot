@@ -46,7 +46,7 @@ ImageFilter::~ImageFilter() {}
 returns the list of all predefined import formats.
 */
 QStringList ImageFilter::importFormats() {
-	return (QStringList()<<i18n("Matrix (grayscale)")<<i18n("XYZ (grayscale)")<<i18n("XYRGB"));
+	return (QStringList() << i18n("Matrix (grayscale)") << i18n("XYZ (grayscale)") << i18n("XYRGB"));
 }
 
 /*!
@@ -173,21 +173,26 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 	}
 
-#ifdef QT_DEBUG
-	qDebug()<<"image format ="<<image.format();
-	qDebug()<<"image w/h ="<<cols<<rows;
-	qDebug()<<"actual rows/cols ="<<actualRows<<actualCols;
-#endif
+	DEBUG("image format =" << image.format());
+	DEBUG("image w/h =" << cols << rows);
+	DEBUG("actual rows/cols =" << actualRows << actualCols);
 
 	//make sure we have enough columns in the data source.
 	int columnOffset = 0;
 	QVector<void*> dataContainer;
-	if (dataSource != 0)
-		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols);
-	else {
-#ifdef QT_DEBUG
-		qDebug()<<"data source in image import not defined! Giving up.";
-#endif
+
+	//TODO: support other modes
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	columnModes.resize(actualCols);
+
+	//TODO: use given names?
+	QStringList vectorNames;
+
+	if (dataSource) {
+		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+	} else {
+		DEBUG("data source in image import not defined! Giving up.");
+
 		return dataStrings;
 	}
 
