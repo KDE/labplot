@@ -78,7 +78,7 @@ private:
 		double logicalStart, double logicalEnd);
 
 	bool m_suppressRetransform;
-	bool m_printing;
+//	bool m_printing;
 	bool m_selectionBandIsShown;
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;

@@ -217,8 +217,8 @@ namespace std
 		bool bigEndian;
 		void swap_bytes(unsigned char* data, int size)
 		{
-			register int i = 0;
-			register int j = size - 1;
+			int i = 0;
+			int j = size - 1;
 			while(i < j)
 			{
 				std::swap(data[i], data[j]);
