@@ -358,6 +358,13 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			}
 			case AbstractColumn::Text:
 				static_cast<QVector<QString>*>(dataContainer[col])->operator[](row) = valueString;
+				break;
+			case AbstractColumn::Month:
+				//TODO
+				break;
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 		}
 

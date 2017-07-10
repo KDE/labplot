@@ -826,6 +826,10 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 			dataContainer[n] = static_cast<void *>(vector);
 			break;
 		}
+		//TODO
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+			break;
 		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);

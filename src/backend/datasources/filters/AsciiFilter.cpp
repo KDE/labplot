@@ -550,6 +550,13 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 					else
 						lineString += valueString;
+					break;
+				case AbstractColumn::Month:
+					//TODO
+					break;
+				case AbstractColumn::Day:
+					//TODO
+					break;
 				}
 			} else {	// missing columns in this line
 				if (dataSource) {
@@ -562,6 +569,13 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						break;
 					case AbstractColumn::Text:
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+						break;
+					case AbstractColumn::Month:
+						//TODO
+						break;
+					case AbstractColumn::Day:
+						//TODO
+						break;
 					}
 				} else
 					lineString += QLatin1String("NAN");
