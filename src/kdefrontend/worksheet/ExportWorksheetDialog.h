@@ -50,9 +50,8 @@ class ExportWorksheetDialog : public KDialog {
 		int exportResolution() const;
 
 	private:
-		QWidget* mainWidget;
+        QWidget* m_mainWidget;
 		Ui::ExportWorksheetWidget ui;
-        KUrlCompletion* urlCompletion;
 		bool m_showOptions;
 
 	private slots:

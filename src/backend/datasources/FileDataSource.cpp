@@ -149,20 +149,40 @@ void FileDataSource::updateNow() {
         m_updateTimer->start(m_updateFrequency);
 }
 
+/*!
+ * \brief FileDataSource::stopReading
+ */
+//TODO: do we want this?
 void FileDataSource::stopReading() {
-
+    if (m_updateType == TimeInterval) {
+        m_updateTimer->stop();
+    } else if (m_updateType == NewData) {
+        disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+    }
 }
 
+/*!
+ * \brief Continue reading from the live data source after it was paused.
+ */
 void FileDataSource::continueReading() {
     m_paused = false;
     if (m_updateType == TimeInterval)
         m_updateTimer->start(m_updateFrequency);
+    else if (m_updateType == NewData) {
+        connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+    }
 }
 
+/*!
+ * \brief Pause the reading of the live data source.
+ */
 void FileDataSource::pauseReading() {
     m_paused = true;
-    if (m_updateTimer->isActive())
+    if (m_updateType == TimeInterval) {
         m_updateTimer->stop();
+    } else if (m_updateType == NewData) {
+        disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+    }
 }
 
 /*!
@@ -190,7 +210,7 @@ QString FileDataSource::fileName() const {
 }
 
 void FileDataSource::setFileType(const FileType type) {
-	m_fileType=type;
+    m_fileType = type;
 }
 
 FileDataSource::FileType FileDataSource::fileType() const {
@@ -198,7 +218,7 @@ FileDataSource::FileType FileDataSource::fileType() const {
 }
 
 void FileDataSource::setFilter(AbstractFileFilter* f) {
-	m_filter=f;
+    m_filter = f;
 }
 
 AbstractFileFilter* FileDataSource::filter() const {
@@ -210,7 +230,7 @@ AbstractFileFilter* FileDataSource::filter() const {
   In the first case the data source will be automatically updated on file changes.
 */
 void FileDataSource::setFileWatched(const bool b) {
-	m_fileWatched=b;
+    m_fileWatched = b;
 }
 
 bool FileDataSource::isFileWatched() const {
@@ -239,6 +259,18 @@ void FileDataSource::setUpdateFrequency(const int frequency) {
 
 int FileDataSource::updateFrequency() const {
     return m_updateFrequency;
+}
+
+/*!
+ * \brief Sets how many values we should store
+ * \param keepnvalues
+ */
+void FileDataSource::setKeepNvalues(const int keepnvalues) {
+    m_keepNvalues = keepnvalues;
+}
+
+int FileDataSource::keepNvalues() const {
+    return m_keepNvalues;
 }
 
 /*!
@@ -379,8 +411,11 @@ void FileDataSource::read() {
 	watch();
 }
 
+/*!
+ * \brief Read new data from a live data source
+ */
 void FileDataSource::addData() {
-
+// TODO tomorrow
 
 
 }

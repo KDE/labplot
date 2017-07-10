@@ -55,6 +55,7 @@ private slots:
     void updateTypeChanged(int);
     void sampleRateChanged(int);
     void updateFrequencyChanged(int);
+    void keepNvaluesChanged(int);
 
     void updateNow();
     void stopReading();

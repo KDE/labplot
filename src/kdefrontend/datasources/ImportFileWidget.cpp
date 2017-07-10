@@ -260,7 +260,8 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
     source->setUpdateType(updateType);
     source->setUpdateFrequency(ui.sbUpdateFrequency->value());
     source->setSourceType(sourceType);
-    source->setSampleRate(ui.sbKeepValues->value());
+    source->setSampleRate(ui.sbSampleRate->value());
+    source->setKeepNvalues(ui.sbKeepValues->value());
 
     if ((sourceType == FileDataSource::SourceType::FileOrPipe) || (sourceType == FileDataSource::SourceType::LocalSocket)) {
         source->setFileName( ui.kleFileName->text() );

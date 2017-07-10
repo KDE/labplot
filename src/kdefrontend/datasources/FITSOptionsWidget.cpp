@@ -106,9 +106,9 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	}
 
 	if (!selectedExtension.isEmpty()) {
-		FITSFilter* filter = (FITSFilter*)m_fileWidget->currentFileFilter();
+        FITSFilter* filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
-		QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+        const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
@@ -140,7 +140,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 */
 const QStringList FITSOptionsWidget::selectedFITSExtensions() const {
 	QStringList names;
-	for (auto* item: ui.twExtensions->selectedItems())
+    for (const auto* item: ui.twExtensions->selectedItems())
 		names << item->text(0);
 
 	return names;

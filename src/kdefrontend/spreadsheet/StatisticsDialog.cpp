@@ -47,7 +47,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	setButtons(KDialog::Ok);
     setAttribute(Qt::WA_DeleteOnClose);
 
-	QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
+    const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
 
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
@@ -201,9 +201,9 @@ void StatisticsDialog::currentTabChanged(int index) {
 	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
 	RESET_CURSOR;
 
-    QTextEdit* textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
-	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum==INFINITY ? NAN : statistics.minimum),
-	                  isNanValue(statistics.maximum==-INFINITY ? NAN : statistics.maximum),
+    QTextEdit* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
+    textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
+                      isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
 	                  isNanValue(statistics.arithmeticMean),
 	                  isNanValue(statistics.geometricMean),
 	                  isNanValue(statistics.harmonicMean),

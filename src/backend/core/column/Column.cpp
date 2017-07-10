@@ -506,7 +506,7 @@ void Column::calculateStatistics() {
 
 	double entropy = 0.0;
     for (const auto& v: frequencyOfValues.values()) {
-		double frequencyNorm = static_cast<double>(v) / notNanCount;
+        const double frequencyNorm = static_cast<double>(v) / notNanCount;
 		entropy += (frequencyNorm * log2(frequencyNorm));
 	}
 

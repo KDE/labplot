@@ -95,6 +95,9 @@ public:
     void setUpdateFrequency(const int);
     int updateFrequency() const;
 
+    void setKeepNvalues(const int);
+    int keepNvalues() const;
+
 	void setFileWatched(const bool);
 	bool isFileWatched() const;
 
@@ -138,6 +141,8 @@ private:
     bool m_newDataAvailable;
 
     int m_sampleRate;
+    int m_keepNvalues;
+
     int m_updateFrequency;
     int m_port;
     int m_baudRate;
