@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>289</width>
-    <height>177</height>
+    <height>202</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -43,11 +43,11 @@
      <property name="toolTip">
       <string>The number of vectors in the file</string>
      </property>
-     <property name="value">
-      <number>2</number>
-     </property>
      <property name="minimum">
       <number>1</number>
+     </property>
+     <property name="value">
+      <number>2</number>
      </property>
     </widget>
    </item>
@@ -65,7 +65,7 @@
     </spacer>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="lFormat">
+    <widget class="QLabel" name="lDataType">
      <property name="text">
       <string>Data type:</string>
      </property>

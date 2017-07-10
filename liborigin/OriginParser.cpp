@@ -27,6 +27,8 @@
  ***************************************************************************/
 
 #include "OriginParser.h"
+#include <cctype>
+#include <locale>
 
 using namespace Origin;
 

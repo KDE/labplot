@@ -199,13 +199,6 @@ size_t AsciiFilter::lineNumber(QIODevice &device) {
 	return lineCount;
 }
 
-void AsciiFilter::setTransposed(const bool b) {
-	d->transposed = b;
-}
-bool AsciiFilter::isTransposed() const {
-	return d->transposed;
-}
-
 void AsciiFilter::setCommentCharacter(const QString& s) {
 	d->commentCharacter = s;
 }
@@ -324,7 +317,6 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	headerEnabled(true),
 	skipEmptyParts(false),
 	simplifyWhitespacesEnabled(true),
-	transposed(false),
 	startRow(1),
 	endRow(-1),
 	startColumn(1),
@@ -342,10 +334,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	if (device.atEnd()) // empty file
 		return 1;
-
-
-	//TODO: implement ???
-	// if (transposed) ...
 
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
@@ -616,7 +604,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
-	writer->writeAttribute( "transposed", QString::number(d->transposed) );
 	writer->writeAttribute( "startRow", QString::number(d->startRow) );
 	writer->writeAttribute( "endRow", QString::number(d->endRow) );
 	writer->writeAttribute( "startColumn", QString::number(d->startColumn) );
@@ -674,12 +661,6 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
 	else
 		d->skipEmptyParts = str.toInt();
-
-	str = attribs.value("transposed").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'transposed'"));
-	else
-		d->transposed = str.toInt();
 
 	str = attribs.value("startRow").toString();
 	if (str.isEmpty())

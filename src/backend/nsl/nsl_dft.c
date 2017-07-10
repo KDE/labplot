@@ -50,6 +50,8 @@ int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sid
 }
 
 int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type) {
+	if (n < 2)	// we need at least 2 points
+		return 1;
 	size_t i;
 	double result[2*n];
 	size_t N=n/2;	/* number of resulting data points */

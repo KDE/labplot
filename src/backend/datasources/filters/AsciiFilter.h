@@ -78,8 +78,6 @@ public:
 	bool skipEmptyParts() const;
 	void setSimplifyWhitespacesEnabled(const bool);
 	bool simplifyWhitespacesEnabled() const;
-	void setTransposed(const bool);
-	bool isTransposed() const;
 
 	void setVectorNames(const QString);
 	QStringList vectorNames() const;

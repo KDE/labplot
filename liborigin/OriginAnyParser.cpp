@@ -902,7 +902,7 @@ void OriginAnyParser::readAttachmentList() {
 	att_header = string(12,0);
 	while (true) {
 		// check for eof
-		if ((file.tellg() == d_file_size) || (file.eof())) break;
+		if (((unsigned int)file.tellg() == d_file_size) || (file.eof())) break;
 		// cannot use readObjectAsString: there is no '\n' at end
 		file.read(reinterpret_cast<char*>(&att_header[0]), 12);
 

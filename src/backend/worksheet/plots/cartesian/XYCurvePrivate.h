@@ -130,7 +130,7 @@ public:
 	XYCurve* const q;
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;

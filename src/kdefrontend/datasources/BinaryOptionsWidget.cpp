@@ -44,6 +44,26 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.cbDataType->addItems(BinaryFilter::dataTypes());
 	ui.cbByteOrder->addItems(BinaryFilter::byteOrders());
+
+	const QString textDataTypeShort = i18n("This option determines the data type that the imported data while converting to numbers.");
+	const QString textDataType = textDataTypeShort;
+
+	ui.lDataType->setToolTip(textDataTypeShort);
+	ui.lDataType->setWhatsThis(textDataType);
+	ui.cbDataType->setToolTip(textDataTypeShort);
+	ui.cbDataType->setWhatsThis(textDataType);
+
+	const QString textByteOrderShort = i18n("This option determines the byte order of the imported data when converting to numbers.");
+	const QString textByteOrder = textByteOrderShort + "<br><br>" + i18n(
+	"<table>"
+	"<tr><td>little endian</td><td>typical byte order (endianness) on Intel x86 processors.</td></tr>"
+	"<tr><td>big endian</td><td>typical byte order on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr>"
+	"</table>");
+
+	ui.lByteOrder->setToolTip(textByteOrderShort);
+	ui.lByteOrder->setWhatsThis(textByteOrder);
+	ui.cbByteOrder->setToolTip(textByteOrderShort);
+	ui.cbByteOrder->setWhatsThis(textByteOrder);
 }
 
 void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {

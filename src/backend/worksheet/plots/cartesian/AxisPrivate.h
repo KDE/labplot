@@ -133,9 +133,9 @@ public:
 	QPainterPath minorGridPath;
 
 private:
-	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 	void addArrow(const QPointF& point, int direction);

@@ -58,7 +58,6 @@ public:
 	bool headerEnabled;
 	bool skipEmptyParts;
 	bool simplifyWhitespacesEnabled;
-	bool transposed;
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow;
