@@ -53,9 +53,45 @@ include(KDEInstallDirs)
 include(KDECompilerSettings)
 include(KDECMakeSettings)
 
+### compiler flags ######################################
+
+set (GENERIC_FLAGS "-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector")
+set (GENERIC_C_FLAGS "-std=c99 ${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fexceptions")
+set (GENERIC_CXX_FLAGS "-std=c++11 ${GENERIC_FLAGS} -fexceptions")
+
+if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+	message(STATUS "GNU C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} -Wextra")
+elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
+	message(STATUS "Clang C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} -Wextra")
+# " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
+elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	message(STATUS "MSVC C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
+else ()
+	message(STATUS "UNKNOWN C compiler, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} -Wextra")
+endif()
+
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+	message(STATUS "GNU C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} -Wextra")
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	message(STATUS "Clang C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} -Wextra")
+# " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
+	elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	message(STATUS "MSVC C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
+else ()
+	message(STATUS "UNKNOWN C++ compiler, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} -Wextra")
+endif ()
+
+##########################################################ESC[m
+
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
