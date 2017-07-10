@@ -81,26 +81,26 @@ double nsl_sf_poly_optimal_legendre_L(int n, double x) {
  * https://en.wikipedia.org/wiki/Bessel_polynomials
  * using recursion
 */
-double complex nsl_sf_poly_bessel_y(int n, double complex x) {
+COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
-	return (2*n - 1)*x*nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
+	return (2*n - 1) * x * nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
 }
 
 /*
  * https://en.wikipedia.org/wiki/Bessel_polynomials
  * using recursion
 */
-double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x) {
+COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
-	return (2*n - 1)*nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x*x*nsl_sf_poly_reversed_bessel_theta(n - 2, x);
+	return (2*n - 1) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
 }
 
 /***************** interpolating polynomials *************/
