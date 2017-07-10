@@ -3,7 +3,7 @@ File                 : HDFOptionsWidget.cpp
 Project              : LabPlot
 Description          : widget providing options for the import of HDF data
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -25,6 +25,9 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  *                                                                         *
  ***************************************************************************/
 #include "HDFOptionsWidget.h"
+#include "ImportFileWidget.h"
+#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/lib/macros.h"
 
  /*!
 	\class HDFOptionsWidget
@@ -32,10 +35,69 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup kdefrontend
  */
+HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+	ui.setupUi(parent);
 
-HDFOptionsWidget::HDFOptionsWidget(QWidget* parent) : QWidget(parent) {
-	ui.setupUi(this);
+	QStringList hdfheaders;
+	hdfheaders << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
+	ui.twContent->setHeaderLabels(hdfheaders);
+	ui.twContent->setAlternatingRowColors(true);
+	// link and type column are hidden
+	ui.twContent->hideColumn(1);
+	ui.twContent->hideColumn(2);
+	ui.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+
+	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
+	//TODO: is this working?
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 }
 
-HDFOptionsWidget::~HDFOptionsWidget() {
+void HDFOptionsWidget::clear() {
+	ui.twContent->clear();
+	ui.twPreview->clear();
+}
+
+void HDFOptionsWidget::updateContent(HDFFilter *filter, QString fileName) {
+	ui.twContent->clear();
+	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
+	filter->parse(fileName, rootItem);
+
+	ui.twContent->insertTopLevelItem(0, rootItem);
+	ui.twContent->expandAll();
+	ui.twContent->resizeColumnToContents(0);
+	ui.twContent->resizeColumnToContents(3);
+}
+
+/*!
+	updates the selected data set of a HDF file when a new tree widget item is selected
+*/
+void HDFOptionsWidget::hdfTreeWidgetSelectionChanged() {
+	DEBUG("hdfTreeWidgetSelectionChanged()");
+	auto items = ui.twContent->selectedItems();
+	QDEBUG("SELECTED ITEMS =" << items);
+
+	if (items.isEmpty())
+		return;
+
+	QTreeWidgetItem* item = items.first();
+	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
+		m_fileWidget->refreshPreview();
+	else
+		DEBUG("non data set selected in HDF tree widget");
+}
+
+/*!
+	return list of selected HDF item names
+*/
+const QStringList HDFOptionsWidget::selectedHDFNames() const {
+	QStringList names;
+
+	// the data link is saved in the second column
+	for (auto* item: ui.twContent->selectedItems())
+		names << item->text(1);
+
+	return names;
 }

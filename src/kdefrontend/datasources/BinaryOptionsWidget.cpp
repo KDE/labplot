@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : widget providing options for the import of binary data
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2009 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,6 +27,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "BinaryOptionsWidget.h"
+#include "backend/datasources/filters/BinaryFilter.h"
+
+#include <KSharedConfig>
+#include <KConfigGroup>
 
  /*!
 	\class BinaryOptionsWidget
@@ -36,8 +40,35 @@
  */
 
 BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
-  ui.setupUi(this);
+	ui.setupUi(parent);
+
+	ui.cbDataType->addItems(BinaryFilter::dataTypes());
+	ui.cbByteOrder->addItems(BinaryFilter::byteOrders());
 }
 
-BinaryOptionsWidget::~BinaryOptionsWidget() {
+void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
+	Q_ASSERT(filter);
+
+	filter->setVectors( ui.niVectors->value() );
+	filter->setDataType( (BinaryFilter::DataType) ui.cbDataType->currentIndex() );
+}
+
+void BinaryOptionsWidget::loadSettings() const {
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+
+	ui.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
+	ui.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
+	ui.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
+	ui.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
+	ui.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
+}
+
+void BinaryOptionsWidget::saveSettings() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+
+	conf.writeEntry("Vectors", ui.niVectors->value());
+	conf.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());
+	conf.writeEntry("DataType", ui.cbDataType->currentIndex());
+	conf.writeEntry("SkipStartBytes", ui.sbSkipStartBytes->value());
+	conf.writeEntry("SkipBytes", ui.sbSkipBytes->value());
 }

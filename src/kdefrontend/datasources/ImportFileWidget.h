@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -30,16 +30,16 @@
 #define IMPORTFILEWIDGET_H
 
 #include "ui_importfilewidget.h"
-#include "AsciiOptionsWidget.h"
-#include "BinaryOptionsWidget.h"
-#include "HDFOptionsWidget.h"
-#include "ImageOptionsWidget.h"
-#include "NetCDFOptionsWidget.h"
-#include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include <memory>
 
 class AbstractFileFilter;
+class AsciiOptionsWidget;
+class BinaryOptionsWidget;
+class HDFOptionsWidget;
+class ImageOptionsWidget;
+class NetCDFOptionsWidget;
+class FITSOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -63,26 +63,22 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 
-	std::unique_ptr<AsciiOptionsWidget> asciiOptionsWidget;
-	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	Ui::HDFOptionsWidget hdfOptionsWidget;
-	Ui::ImageOptionsWidget imageOptionsWidget;
-	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
-	Ui::FITSOptionsWidget fitsOptionsWidget;
-	QTableWidget* twPreview;
+	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
+	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
+	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
+	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
+	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
+	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
+	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void hdfTreeWidgetSelectionChanged();
-	void netcdfTreeWidgetSelectionChanged();
-	void fitsTreeWidgetSelectionChanged();
 
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);
-	void headerChanged(int);
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
@@ -91,6 +87,9 @@ private slots:
 signals:
 	void fileNameChanged();
 	void checkedFitsTableToMatrix(const bool enable);
+
+	friend class HDFOptionsWidget;	// to access refreshPreview()
+	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 };
 
 #endif

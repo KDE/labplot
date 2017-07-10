@@ -59,10 +59,10 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : ImportDialog(parent),
-	importFileWidget(new ImportFileWidget(this, fileName)),
+	m_importFileWidget(new ImportFileWidget(this, fileName)),
 	m_showOptions(false) {
 
-	vLayout->addWidget(importFileWidget);
+	vLayout->addWidget(m_importFileWidget);
 
 	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
@@ -70,12 +70,12 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	if (!fileDataSource) {
 		setModel();
 		//TODO: disable for file data sources
-		importFileWidget->hideDataSource();
+		m_importFileWidget->hideDataSource();
 	}
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
-	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(fileNameChanged()));
-	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
+	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(fileNameChanged()));
+	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
@@ -84,7 +84,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
-	importFileWidget->showOptions(m_showOptions);
+	m_importFileWidget->showOptions(m_showOptions);
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -103,7 +103,7 @@ ImportFileDialog::~ImportFileDialog() {
   triggers data import to the file data source \c source
 */
 void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar* statusBar) const {
-	importFileWidget->saveSettings(source);
+	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
@@ -136,8 +136,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	QString fileName = importFileWidget->fileName();
-	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
+	QString fileName = m_importFileWidget->fileName();
+	AbstractFileFilter* filter = m_importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	//show a progress bar in the status bar
@@ -164,11 +164,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
 		QStringList names;
-		FileDataSource::FileType fileType = importFileWidget->currentFileType();
+		FileDataSource::FileType fileType = m_importFileWidget->currentFileType();
 		if (fileType == FileDataSource::HDF)
-			names = importFileWidget->selectedHDFNames();
+			names = m_importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
-			names = importFileWidget->selectedNetCDFNames();
+			names = m_importFileWidget->selectedNetCDFNames();
 		//TODO
 		//multiple extensions selected
 
@@ -232,7 +232,7 @@ void ImportFileDialog::fileNameChanged() {
 }
 
 void ImportFileDialog::toggleOptions() {
-	importFileWidget->showOptions(!m_showOptions);
+	m_importFileWidget->showOptions(!m_showOptions);
 	m_showOptions = !m_showOptions;
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
@@ -275,12 +275,12 @@ void ImportFileDialog::checkOkButton() {
 			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
 			//to name the columns since the column names are fixed in a matrix
 			const Matrix* matrix = dynamic_cast<const Matrix*>(aspect);
-			importFileWidget->showAsciiHeaderOptions(matrix == NULL);
+			m_importFileWidget->showAsciiHeaderOptions(matrix == NULL);
 		}
 	}
 
-	QString fileName = importFileWidget->fileName();
-	if (importFileWidget->currentFileType() != FileDataSource::FITS) {
+	QString fileName = m_importFileWidget->fileName();
+	if (m_importFileWidget->currentFileType() != FileDataSource::FITS) {
 #ifndef HAVE_WINDOWS
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -310,7 +310,7 @@ void ImportFileDialog::checkOkButton() {
 }
 
 QString ImportFileDialog::selectedObject() const {
-	QString path = importFileWidget->fileName();
+	QString path = m_importFileWidget->fileName();
 	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 	return name;
 }
