@@ -150,7 +150,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 		break;
 	case nsl_dft_result_squareamplitude:
 		for (i = 0; i < N; i++) {
-			data[i] = (gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/gsl_pow_2(n);
+			data[i] = (gsl_pow_2(result[2*i]) + gsl_pow_2(result[2*i+1]))/gsl_pow_2((double)n);
 			if (i > 0)
 				data[i] *= 4.;
 		}

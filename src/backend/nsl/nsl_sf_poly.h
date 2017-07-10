@@ -32,9 +32,16 @@
 #include <stdlib.h>
 /* C++ including this header */
 #ifdef __cplusplus
-#define complex _Complex
+
+#ifdef _MSC_VER
+#define COMPLEX _Dcomplex
 #else
+#define COMPLEX double _Complex
+#endif
+
+#else	/* C */
 #include <complex.h>
+#define COMPLEX double complex
 #endif
 
 /* Chebychev T_n(x) */
@@ -46,9 +53,9 @@ double nsl_sf_poly_chebyshev_U(int n, double x);
 double nsl_sf_poly_optimal_legendre_L(int n, double x);
 
 /* Bessel polynomials y_n(x) */
-double complex nsl_sf_poly_bessel_y(int n, double complex x);
+COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x);
 /* reversed Bessel polynomials \theta_n(x) */
-double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x);
+COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x);
 
 /* interpolating polynomial (Lagrange) 
 	0 - zeroth order (1-point) integral (rectangle rule)
