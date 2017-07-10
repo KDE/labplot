@@ -34,17 +34,17 @@
 
 #ifndef NO_CODE_GENERATION_FOR_LOG
 #ifdef NDEBUG
-#define LOG_PRINT( logfile, args... ) { 	\
+#define LOG_PRINT( logfile, args, ... ) { 	\
 	fprintf(logfile, args);			\
 }
 #else
-#define LOG_PRINT( logfile, args... ) { 	\
+#define LOG_PRINT( logfile, args, ... ) { 	\
 	int ioret = fprintf(logfile, args);	\
 	assert(ioret > 0);			\
 }
 #endif
 #else // !NO_CODE_GENERATION_FOR_LOG
-#define LOG_PRINT( logfile, args... ) {};
+#define LOG_PRINT( logfile, args, ... ) {};
 #endif // NO_CODE_GENERATION_FOR_LOG
 
 class OriginParser
