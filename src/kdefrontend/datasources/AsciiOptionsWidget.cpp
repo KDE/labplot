@@ -49,7 +49,6 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	ui.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
-	ui.chbTranspose->hide(); //TODO: enable later
 
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
 	const QString textNumberFormat = textNumberFormatShort + "<br><br>" + i18n(
@@ -150,7 +149,6 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
-	filter->setTransposed( ui.chbTranspose->isChecked() );
 	filter->setVectorNames( ui.kleVectorNames->text() );
 	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
 }
