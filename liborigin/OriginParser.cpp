@@ -28,13 +28,14 @@
 
 #include "OriginParser.h"
 #include <cctype>
+#include <locale>
 
 using namespace Origin;
 
 bool OriginParser::iequals(const string& s1, const string& s2, const std::locale& loc) const {
 	bool equal = s1.size() == s2.size();
 	for (unsigned int n = 0; n < s1.size() && equal; ++n) {
-		if (toupper(s1[n], loc) != toupper(s2[n], loc) )
+		if (std::toupper(s1[n], loc) != std::toupper(s2[n], loc) )
 			equal = false;
 	}
 	return equal;
