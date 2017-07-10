@@ -40,8 +40,7 @@ FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect( ui.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
-	//TODO: is this working?
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), fileWidget, SLOT(refreshPreview()) );
 }
 
 void FITSOptionsWidget::clear() {

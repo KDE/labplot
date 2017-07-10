@@ -40,6 +40,13 @@ ImageOptionsWidget::ImageOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(parent);
 
 	ui.cbImportFormat->addItems(ImageFilter::importFormats());
+
+	const QString textImageFormatShort = i18n("This option determines how the image is converted when importing.");
+
+	ui.lImportFormat->setToolTip(textImageFormatShort);
+	ui.lImportFormat->setWhatsThis(textImageFormatShort);
+	ui.cbImportFormat->setToolTip(textImageFormatShort);
+	ui.cbImportFormat->setWhatsThis(textImageFormatShort);
 }
 
 void ImageOptionsWidget::loadSettings() const {

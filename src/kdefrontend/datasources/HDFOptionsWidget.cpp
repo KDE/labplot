@@ -51,8 +51,7 @@ HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
-	//TODO: is this working?
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), fileWidget, SLOT(refreshPreview()) );
 }
 
 void HDFOptionsWidget::clear() {
