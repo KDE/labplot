@@ -357,9 +357,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			}
 		}
 	} else {	// use given separator
-		//TODO: what are we doing here?
-		m_separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
-		//TODO: "SPACE" means ' '?
+		// replace symbolic "TAB" with '\t'
+		m_separator = separatingCharacter.replace(QLatin1String("TAB"), "\t", Qt::CaseInsensitive);
+		// replace symbolic "SPACE" with ' '
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	}
