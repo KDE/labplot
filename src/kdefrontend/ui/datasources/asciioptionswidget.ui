@@ -17,8 +17,55 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="2">
-    <widget class="QComboBox" name="cbNumbersFormat"/>
+   <item row="4" column="2">
+    <widget class="KComboBox" name="cbDateTimeFormat">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="KComboBox" name="cbSeparatingCharacter">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lVectorNames">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string>Vector names:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lSeparatingCharacter">
+     <property name="text">
+      <string>Separating character</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="KComboBox" name="cbCommentCharacter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label_7">
@@ -53,6 +100,19 @@
      </property>
     </spacer>
    </item>
+   <item row="3" column="2">
+    <widget class="QComboBox" name="cbNumbersFormat"/>
+   </item>
+   <item row="8" column="0" colspan="3">
+    <widget class="QCheckBox" name="chbHeader">
+     <property name="text">
+      <string>Use the first row to name the vectors</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="0">
     <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
@@ -60,20 +120,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="KComboBox" name="cbCommentCharacter">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="2">
+   <item row="10" column="2">
     <widget class="QLineEdit" name="kleVectorNames">
      <property name="enabled">
       <bool>true</bool>
@@ -131,63 +178,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="9" column="0" colspan="3">
-    <widget class="QCheckBox" name="chbHeader">
-     <property name="text">
-      <string>Use the first row to name the vectors</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="KComboBox" name="cbDateTimeFormat">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QCheckBox" name="chbTranspose">
-     <property name="toolTip">
-      <string>Interchanges the role of the rows and the columns. Treats the rows as data vectors, if selected.</string>
-     </property>
-     <property name="text">
-      <string>Transpose</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="lVectorNames">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Vector names:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="KComboBox" name="cbSeparatingCharacter">
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="lSeparatingCharacter">
-     <property name="text">
-      <string>Separating character</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
