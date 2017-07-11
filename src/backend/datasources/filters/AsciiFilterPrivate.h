@@ -42,11 +42,12 @@ public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
 	int prepareDeviceToRead(QIODevice&);
-	QVector<QStringList> readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	const AsciiFilter* q;
 

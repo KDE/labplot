@@ -52,12 +52,14 @@ public:
 	static size_t lineNumber(QIODevice&);	// calculate number of lines if device supports it
 
 	// read data from any device
-	QVector<QStringList> readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
+	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	// overloaded function to read from file
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
+
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
