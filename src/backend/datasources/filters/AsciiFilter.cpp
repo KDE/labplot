@@ -52,15 +52,20 @@ AsciiFilter::~AsciiFilter() {}
 /*!
   reads the content of the device \c device.
 */
-QVector<QStringList> AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	return d->readDataFromDevice(device, dataSource, importMode, lines);
+void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	return d->readDataFromFile(fileName, dataSource, importMode, lines);
+ QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	d->readDataFromFile(fileName, dataSource, importMode, lines);
+	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
+}
+
+QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
+	return d->preview(fileName, lines);
 }
 
 /*!
@@ -223,22 +228,6 @@ QString AsciiFilter::dateTimeFormat() const {
 void AsciiFilter::setNumbersFormat(AbstractFileFilter::Locale locale) {
 	d->locale = locale;
 }
-
-/*
-void AsciiFilter::setDataType(const QString& typeName) {
-	if (typeName.isEmpty()) {
-		DEBUG("AsciiFilter::setDataType(typeName) : typeName empty!");
-		return;
-	}
-
-	const QMetaObject& mo = AbstractColumn::staticMetaObject;
-	const QMetaEnum& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
-
-	AbstractColumn::ColumnMode type = static_cast<AbstractColumn::ColumnMode>(me.keyToValue(typeName.toLatin1()));
-	DEBUG("set data type value = " << type << " from " << typeName.toStdString());
-	d->m_dataType = type;
-}
-}*/
 
 void AsciiFilter::setAutoModeEnabled(const bool b) {
 	d->autoModeEnabled = b;
@@ -445,29 +434,24 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	return 0;
 }
-// special function for reading data from file
 
 /*!
-    reads the content of the file \c fileName to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
-    Uses the settings defined in the data source (if given).
+    reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-QVector<QStringList> AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
 		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 
 	KFilterDev device(fileName);
-	return readDataFromDevice(device, dataSource, importMode, lines);
+	readDataFromDevice(device, dataSource, importMode, lines);
 }
 
 /*!
-    reads the content of device \c device to the data source \c dataSource (if given) or return "lines" rows as string list for preview.
-    Uses the settings defined in the data source (if given).
+    reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
-QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
 		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
-
-	QVector<QStringList> dataStrings;
 
 	if (!m_prepared) {
 		DEBUG("device is sequential = " << device.isSequential());
@@ -478,7 +462,7 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 		if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
 			dataSource->clear();
 		if (deviceError)
-			return dataStrings;
+			return;
 
 		if (dataSource) {
 			if (dynamic_cast<Matrix*>(dataSource)) {
@@ -510,10 +494,10 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 		QString line = device.readLine();
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
-//		DEBUG("simplified line = " << line.toStdString());
 
 		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
+
 		if (startRow > 1) {	// skip start lines
 			startRow--;
 			continue;
@@ -521,35 +505,32 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
 		QStringList lineString;
-//		QDEBUG("split line = " << lineStringList);
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
-				const QString valueString = lineStringList.at(n);
+				const QString& valueString = lineStringList.at(n);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = m_numberFormat.toDouble(valueString, &isNumber);
-					if (dataSource)
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-					else
-						lineString += QString::number(isNumber ? value : NAN);
+					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					break;
 				}
 				case AbstractColumn::DateTime: {
 					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-					if (dataSource)
-						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-					else
-						lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 					break;
 				}
 				case AbstractColumn::Text:
-					if (dataSource)
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
-					else
-						lineString += valueString;
+					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
+					break;
+				case AbstractColumn::Month:
+					//TODO
+					break;
+				case AbstractColumn::Day:
+					//TODO
+					break;
 				}
 			} else {	// missing columns in this line
 				if (dataSource) {
@@ -562,21 +543,101 @@ QVector<QStringList> AsciiFilterPrivate::readDataFromDevice(QIODevice& device, A
 						break;
 					case AbstractColumn::Text:
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+						break;
+					case AbstractColumn::Month:
+						//TODO
+						break;
+					case AbstractColumn::Day:
+						//TODO
+						break;
 					}
 				} else
 					lineString += QLatin1String("NAN");
 			}
 		}
 
-		dataStrings << lineString;
 		currentRow++;
 		emit q->completed(100 * currentRow/m_actualRows);
 	}
 
-	if (!dataSource)
-		return dataStrings;
-
 	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+}
+
+
+/*!
+ * generates the preview for the file \c fileName reading the provided number of \c lines.
+ */
+QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
+	QVector<QStringList> dataStrings;
+
+	KFilterDev device(fileName);
+	const int deviceError = prepareDeviceToRead(device);
+	if (deviceError != 0) {
+		DEBUG("Device error = " << deviceError);
+		return dataStrings;
+	}
+
+	//number formatting
+	if (locale == AbstractFileFilter::LocaleC)
+		m_numberFormat = QLocale(QLocale::C);
+	else
+		m_numberFormat = QLocale::system();
+
+	// Read the data
+	if (lines == -1)
+		lines = m_actualRows;
+
+	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
+	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
+		QString line = device.readLine();
+		if (simplifyWhitespacesEnabled)
+			line = line.simplified();
+
+		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+			continue;
+
+		if (startRow > 1) {	// skip start lines
+			startRow--;
+			continue;
+		}
+
+		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+		QStringList lineString;
+		for (int n = 0; n < m_actualCols; n++) {
+			if (n < lineStringList.size()) {
+				const QString& valueString = lineStringList.at(n);
+
+				// set value depending on data type
+				switch (columnModes[n]) {
+				case AbstractColumn::Numeric: {
+					bool isNumber;
+					const double value = m_numberFormat.toDouble(valueString, &isNumber);
+					lineString += QString::number(isNumber ? value : NAN);
+					break;
+				}
+				case AbstractColumn::DateTime: {
+					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+					break;
+				}
+				case AbstractColumn::Text:
+					lineString += valueString;
+					break;
+				case AbstractColumn::Month:
+					//TODO
+					break;
+				case AbstractColumn::Day:
+					//TODO
+					break;
+				}
+			} else {	// missing columns in this line
+				lineString += QLatin1String("NAN");
+			}
+		}
+
+		dataStrings << lineString;
+	}
+
 	return dataStrings;
 }
 

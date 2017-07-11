@@ -661,7 +661,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
+		importedStrings = filter->preview(fileName, lines);
 		tmpTableWidget = m_twPreview;
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();

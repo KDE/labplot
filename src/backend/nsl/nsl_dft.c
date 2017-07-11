@@ -53,10 +53,10 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 	if (n < 2)	// we need at least 2 points
 		return 1;
 	size_t i;
-	double result[2*n];
-	size_t N=n/2;	/* number of resulting data points */
+	double* result = (double*)malloc(2*n*sizeof(double));
+	size_t N = n/2;	/* number of resulting data points */
 	if(two_sided)
-		N=n;
+		N = n;
 #ifdef HAVE_FFTW3
 	/* stride ignored */
 	(void)stride;
@@ -150,7 +150,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 		break;
 	case nsl_dft_result_squareamplitude:
 		for (i = 0; i < N; i++) {
-			data[i] = (gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/gsl_pow_2(n);
+			data[i] = (gsl_pow_2(result[2*i]) + gsl_pow_2(result[2*i+1]))/gsl_pow_2((double)n);
 			if (i > 0)
 				data[i] *= 4.;
 		}
@@ -158,6 +158,8 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 	case nsl_dft_result_raw:
 		break;
 	}
+
+	free(result);
 
 	return 0;
 }

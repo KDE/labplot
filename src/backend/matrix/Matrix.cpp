@@ -892,6 +892,11 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			break;
 		}
 		//TODO: other types
+		case AbstractColumn::Text:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+			break;
 		}
 
 // old style:

@@ -46,12 +46,11 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbByteOrder->addItems(BinaryFilter::byteOrders());
 
 	const QString textDataTypeShort = i18n("This option determines the data type that the imported data while converting to numbers.");
-	const QString textDataType = textDataTypeShort;
 
 	ui.lDataType->setToolTip(textDataTypeShort);
-	ui.lDataType->setWhatsThis(textDataType);
+	ui.lDataType->setWhatsThis(textDataTypeShort);
 	ui.cbDataType->setToolTip(textDataTypeShort);
-	ui.cbDataType->setWhatsThis(textDataType);
+	ui.cbDataType->setWhatsThis(textDataTypeShort);
 
 	const QString textByteOrderShort = i18n("This option determines the byte order of the imported data when converting to numbers.");
 	const QString textByteOrder = textByteOrderShort + "<br><br>" + i18n(
@@ -70,7 +69,7 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 	Q_ASSERT(filter);
 
 	filter->setVectors( ui.niVectors->value() );
-	filter->setDataType( (BinaryFilter::DataType) ui.cbDataType->currentIndex() );
+	filter->setDataType( (BinaryFilter::DataType)ui.cbDataType->currentIndex() );
 }
 
 void BinaryOptionsWidget::loadSettings() const {
