@@ -43,6 +43,7 @@ class AbstractFileFilter : public QObject {
 
 public:
 	enum ImportMode {Append, Prepend, Replace};
+	//TODO: use QLocale::Language?
 	enum Locale {LocaleSystem, LocaleC};
 
 	AbstractFileFilter() {}

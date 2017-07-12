@@ -38,7 +38,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	if (locale == LocaleC) {
 		QLocale l(QLocale::C);
 		l.toDouble(valueString, &isNumber);
-	} else {
+	} else {	//TODO: why German? Should be QLocale::system()
 		QLocale l(QLocale::German);
 		l.toDouble(valueString, &isNumber);
 	}
