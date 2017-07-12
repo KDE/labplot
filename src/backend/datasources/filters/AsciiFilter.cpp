@@ -408,7 +408,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	columnModes.resize(m_actualCols);
 	int col = 0;
-	for (const auto& valueString: firstLineStringList) {// only parse columns available in first data line
+	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
 		if (col == m_actualCols)
 			break;
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, locale);
@@ -466,8 +466,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (deviceError)
 			return;
 
+		// avoid text data in Matrix
 		if (dynamic_cast<Matrix*>(dataSource)) {
-			// avoid text data in Matrix
 			for (auto& c: columnModes)
 				if (c == AbstractColumn::Text)
 					c = AbstractColumn::Numeric;
@@ -512,16 +512,17 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				// set value depending on data type
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
-						bool isNumber;
-						const double value = m_numberFormat.toDouble(valueString, &isNumber);
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-						break;
-					}
+					bool isNumber;
+					const double value = m_numberFormat.toDouble(valueString, &isNumber);
+					DEBUG("string = " << valueString.toStdString() << ", value = " << value << ", isNumber = " << isNumber);
+					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+					break;
+				}
 				case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-						break;
-					}
+					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+					break;
+				}
 				case AbstractColumn::Text:
 					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 					break;
@@ -575,6 +576,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	//number formatting
+	DEBUG("locale = " << ENUM_TO_STRING(AbstractFileFilter, Locale, locale));
 	if (locale == AbstractFileFilter::LocaleC)
 		m_numberFormat = QLocale(QLocale::C);
 	else
@@ -607,16 +609,17 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				// set value depending on data type
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
-						bool isNumber;
-						const double value = m_numberFormat.toDouble(valueString, &isNumber);
-						lineString += QString::number(isNumber ? value : NAN);
-						break;
-					}
+					bool isNumber;
+					const double value = m_numberFormat.toDouble(valueString, &isNumber);
+					DEBUG("valueString = " << valueString.toStdString() << ", value = " << value << ", isNumber = " << isNumber);
+					lineString += QString::number(isNumber ? value : NAN);
+					break;
+				}
 				case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-						lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-						break;
-					}
+					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+					break;
+				}
 				case AbstractColumn::Text:
 					lineString += valueString;
 					break;
