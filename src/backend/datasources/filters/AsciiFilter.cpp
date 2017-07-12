@@ -357,7 +357,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			}
 		}
 	} else {	// use given separator
-		m_separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
+		// replace symbolic "TAB" with '\t'
+		m_separator = separatingCharacter.replace(QLatin1String("TAB"), "\t", Qt::CaseInsensitive);
+		// replace symbolic "SPACE" with ' '
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	}
@@ -367,9 +369,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
+		QDEBUG("vector names =" << vectorNames);
 		startRow++;
 	}
-	QDEBUG("vector names =" << vectorNames);
 
 	// set range to read
 	if (endColumn == -1)
@@ -379,7 +381,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 //TEST: readline-seek-readline fails
 /*	qint64 testpos = device.pos();
 	DEBUG("read data line @ pos " << testpos << " : " << device.readLine().toStdString());
-//	device.seek(0);
 	device.seek(testpos);
 	testpos = device.pos();
 	DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
@@ -452,6 +453,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
 		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	Q_ASSERT(dataSource != nullptr);
 
 	if (!m_prepared) {
 		DEBUG("device is sequential = " << device.isSequential());
@@ -464,16 +466,15 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (deviceError)
 			return;
 
-		if (dataSource) {
-			if (dynamic_cast<Matrix*>(dataSource)) {
-				// avoid text data
-				for (auto& c: columnModes)
-					if (c == AbstractColumn::Text)
-						c = AbstractColumn::Numeric;
-			}
-
-			m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1, m_actualCols, vectorNames, columnModes);
+		if (dynamic_cast<Matrix*>(dataSource)) {
+			// avoid text data in Matrix
+			for (auto& c: columnModes)
+				if (c == AbstractColumn::Text)
+					c = AbstractColumn::Numeric;
 		}
+
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
+							m_actualCols, vectorNames, columnModes);
 
 		//number formatting
 		if (locale == AbstractFileFilter::LocaleC)
