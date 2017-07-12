@@ -35,7 +35,8 @@
 
 #ifdef _MSC_VER
 #include <complex>
-#define COMPLEX _Dcomplex
+/* #define COMPLEX _Dcomplex */
+#define COMPLEX complex<double>
 #else
 #define COMPLEX double _Complex
 #endif
