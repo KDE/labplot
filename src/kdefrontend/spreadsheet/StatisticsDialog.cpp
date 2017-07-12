@@ -40,14 +40,14 @@
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
 
-    m_twStatistics = new QTabWidget(this);
-    setMainWidget(m_twStatistics);
+	m_twStatistics = new QTabWidget(this);
+	setMainWidget(m_twStatistics);
 
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 
-    const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
+	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
 
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
@@ -100,7 +100,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "<tr></tr>"
 	                     "<tr>"
-						 "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
+	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
 	                     + i18n("Dispersion measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
@@ -162,7 +162,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "</table>");
 
-    connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+	connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
 
 	//restore saved settings if available
@@ -187,9 +187,9 @@ void StatisticsDialog::setColumns(const QList<Column*>& columns) {
 	for (int i = 0; i < m_columns.size(); ++i) {
 		QTextEdit* textEdit = new QTextEdit;
 		textEdit->setReadOnly(true);
-        m_twStatistics->addTab(textEdit, m_columns[i]->name());
+		m_twStatistics->addTab(textEdit, m_columns[i]->name());
 	}
-    currentTabChanged(0);
+	currentTabChanged(0);
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
@@ -201,20 +201,20 @@ void StatisticsDialog::currentTabChanged(int index) {
 	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
 	RESET_CURSOR;
 
-    QTextEdit* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
-    textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
-                      isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
-	                  isNanValue(statistics.arithmeticMean),
-	                  isNanValue(statistics.geometricMean),
-	                  isNanValue(statistics.harmonicMean),
-	                  isNanValue(statistics.contraharmonicMean),
-	                  isNanValue(statistics.median),
-	                  isNanValue(statistics.variance),
-	                  isNanValue(statistics.standardDeviation)).
+	QTextEdit* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
+	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
+	                                 isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
+	                                 isNanValue(statistics.arithmeticMean),
+	                                 isNanValue(statistics.geometricMean),
+	                                 isNanValue(statistics.harmonicMean),
+	                                 isNanValue(statistics.contraharmonicMean),
+	                                 isNanValue(statistics.median),
+	                                 isNanValue(statistics.variance),
+	                                 isNanValue(statistics.standardDeviation)).
 	                  arg(isNanValue(statistics.meanDeviation),
-	                  isNanValue(statistics.meanDeviationAroundMedian),
-	                  isNanValue(statistics.medianDeviation),
-	                  isNanValue(statistics.skewness),
-	                  isNanValue(statistics.kurtosis),
-	                  isNanValue(statistics.entropy)));
+	                      isNanValue(statistics.meanDeviationAroundMedian),
+	                      isNanValue(statistics.medianDeviation),
+	                      isNanValue(statistics.skewness),
+	                      isNanValue(statistics.kurtosis),
+	                      isNanValue(statistics.entropy)));
 }

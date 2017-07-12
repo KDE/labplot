@@ -44,12 +44,12 @@
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
-    m_mainWidget = new QWidget(this);
-    ui.setupUi(m_mainWidget);
+	m_mainWidget = new QWidget(this);
+	ui.setupUi(m_mainWidget);
 
-    KUrlCompletion* urlCompletion = new KUrlCompletion;
+	KUrlCompletion* urlCompletion = new KUrlCompletion;
 	ui.kleFileName->setCompletionObject(urlCompletion);
-    ui.kleFileName->setAutoDeleteCompletionObject(true);
+	ui.kleFileName->setAutoDeleteCompletionObject(true);
 
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 
@@ -70,7 +70,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui.cbResolution->addItem("600");
 	ui.cbResolution->setValidator(new QIntValidator(ui.cbResolution));
 
-    setMainWidget(m_mainWidget);
+	setMainWidget(m_mainWidget);
 
 	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
@@ -115,7 +115,7 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 	this->formatChanged(ui.cbFormat->currentIndex());
 }
 
-QString ExportWorksheetDialog::path() const{
+QString ExportWorksheetDialog::path() const {
 	return ui.kleFileName->text();
 }
 
@@ -189,9 +189,9 @@ void ExportWorksheetDialog::toggleOptions() {
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
 	//resize the dialog
-    m_mainWidget->resize(layout()->minimumSize());
+	m_mainWidget->resize(layout()->minimumSize());
 	layout()->activate();
- 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
 
 /*!
@@ -199,15 +199,15 @@ void ExportWorksheetDialog::toggleOptions() {
 */
 void ExportWorksheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-    const QString dir = conf.readEntry("LastDir", "");
-    const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
-    if (!path.isEmpty()) {
+	const QString dir = conf.readEntry("LastDir", "");
+	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
+	if (!path.isEmpty()) {
 		ui.kleFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
-            const QString newDir = path.left(pos);
-            if (newDir != dir)
+			const QString newDir = path.left(pos);
+			if (newDir != dir)
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -218,25 +218,25 @@ void ExportWorksheetDialog::selectFile() {
  */
 void ExportWorksheetDialog::formatChanged(int index) {
 	//we have a separator in the format combobox at the 4th posiiton -> skip it
-    if (index > 3)
+	if (index > 3)
 		index --;
 
 	QStringList extensions;
 	extensions<<".pdf"<<".eps"<<".svg"<<".png";
 	QString path = ui.kleFileName->text();
 	int i = path.indexOf(".");
-    if (i == -1)
+	if (i == -1)
 		path = path + extensions.at(index);
 	else
-        path = path.left(i) + extensions.at(index);
+		path = path.left(i) + extensions.at(index);
 
 	ui.kleFileName->setText(path);
 
 	// show resolution option for png format
-    ui.lResolution->setVisible(index == 3);
-    ui.cbResolution->setVisible(index == 3);
+	ui.lResolution->setVisible(index == 3);
+	ui.cbResolution->setVisible(index == 3);
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-    enableButtonOk(!name.simplified().isEmpty());
+	enableButtonOk(!name.simplified().isEmpty());
 }

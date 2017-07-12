@@ -33,33 +33,32 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/FileDataSource.h"
 #include <QList>
 
-class LiveDataDock : public QWidget
-{
-    Q_OBJECT
+class LiveDataDock : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit LiveDataDock(QWidget *parent = 0);
-    void setLiveDataSources(const QList<FileDataSource*>& sources);
-    ~LiveDataDock();
+	explicit LiveDataDock(QWidget *parent = 0);
+	void setLiveDataSources(const QList<FileDataSource*>& sources);
+	~LiveDataDock();
 
 private:
-    Ui::LiveDataDock ui;
-    QList<FileDataSource*> m_liveDataSources;
+	Ui::LiveDataDock ui;
+	QList<FileDataSource*> m_liveDataSources;
 
-    bool m_paused;
+	bool m_paused;
 
-    void pauseReading();
-    void continueReading();
+	void pauseReading();
+	void continueReading();
 private slots:
 
-    void updateTypeChanged(int);
-    void sampleRateChanged(int);
-    void updateFrequencyChanged(int);
-    void keepNvaluesChanged(int);
+	void updateTypeChanged(int);
+	void sampleRateChanged(int);
+	void updateFrequencyChanged(int);
+	void keepNvaluesChanged(int);
 
-    void updateNow();
-    void stopReading();
-    void pauseContinueReading();
+	void updateNow();
+	void stopReading();
+	void pauseContinueReading();
 public slots:
 
 signals:

@@ -49,12 +49,12 @@ void FITSOptionsWidget::clear() {
 }
 
 QString FITSOptionsWidget::currentExtensionName() {
-		QString name;
+	QString name;
 
-		if (ui.twExtensions->currentItem() != 0 && ui.twExtensions->currentItem()->text(0) != i18n("Primary header"))
-				name = ui.twExtensions->currentItem()->text(ui.twExtensions->currentColumn());
+	if (ui.twExtensions->currentItem() != 0 && ui.twExtensions->currentItem()->text(0) != i18n("Primary header"))
+		name = ui.twExtensions->currentItem()->text(ui.twExtensions->currentColumn());
 
-		return name;
+	return name;
 }
 
 void FITSOptionsWidget::updateContent(FITSFilter *filter, const QString& fileName) {
@@ -81,8 +81,8 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	QString selectedExtension;
 	int extType = 0;
 	if (itemText.contains(QLatin1String("IMAGE #")) ||
-			itemText.contains(QLatin1String("ASCII_TBL #")) ||
-			itemText.contains(QLatin1String("BINARY_TBL #")))
+	        itemText.contains(QLatin1String("ASCII_TBL #")) ||
+	        itemText.contains(QLatin1String("BINARY_TBL #")))
 		extType = 1;
 	else if (!itemText.compare(i18n("Primary header")))
 		extType = 2;
@@ -105,9 +105,9 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	}
 
 	if (!selectedExtension.isEmpty()) {
-        FITSFilter* filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
+		FITSFilter* filter = dynamic_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
-        const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
@@ -139,7 +139,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 */
 const QStringList FITSOptionsWidget::selectedFITSExtensions() const {
 	QStringList names;
-    for (const auto* item: ui.twExtensions->selectedItems())
+	for (const auto* item: ui.twExtensions->selectedItems())
 		names << item->text(0);
 
 	return names;
@@ -152,8 +152,8 @@ const QString FITSOptionsWidget::extensionName(bool* ok) {
 		QString itemText = item->text(currentColumn);
 		int extType = 0;
 		if (itemText.contains(QLatin1String("IMAGE #")) ||
-				itemText.contains(QLatin1String("ASCII_TBL #")) ||
-				itemText.contains(QLatin1String("BINARY_TBL #")))
+		        itemText.contains(QLatin1String("ASCII_TBL #")) ||
+		        itemText.contains(QLatin1String("BINARY_TBL #")))
 			extType = 1;
 		else if (!itemText.compare(i18n("Primary header")))
 			extType = 2;

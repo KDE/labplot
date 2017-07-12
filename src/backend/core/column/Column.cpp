@@ -478,7 +478,7 @@ void Column::calculateStatistics() {
 	int idx = 0;
 	for(int row = 0; row < rowValues->size(); ++row) {
 		val = rowValues->value(row);
-        if (std::isnan(val) || isMasked(row) )
+		if (std::isnan(val) || isMasked(row) )
 			continue;
 		columnSumVariance += pow(val - statistics.arithmeticMean, 2.0);
 
@@ -505,8 +505,8 @@ void Column::calculateStatistics() {
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
 	double entropy = 0.0;
-    for (const auto& v: frequencyOfValues.values()) {
-        const double frequencyNorm = static_cast<double>(v) / notNanCount;
+	for (const auto& v: frequencyOfValues.values()) {
+		const double frequencyNorm = static_cast<double>(v) / notNanCount;
 		entropy += (frequencyNorm * log2(frequencyNorm));
 	}
 

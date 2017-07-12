@@ -29,8 +29,10 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/core/Project.h"
+
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <QFileInfo>
 #include <QDateTime>
@@ -38,11 +40,13 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QMenu>
 #include <QFileSystemWatcher>
+#include <QFile>
 #include <QTimer>
+#include <QMessageBox>
 
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
-#include <QLocalSocket>
+#include <QTcpSocket>
 
 #include <QIcon>
 #include <QAction>
@@ -59,15 +63,17 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
-	m_fileType(Ascii),
-	m_fileWatched(false),
-	m_fileLinked(false),
-	m_filter(0),
-    m_fileSystemWatcher(0),
-    m_updateTimer(new QTimer(this)),
-    m_paused(false) {
+	  m_fileType(Ascii),
+	  m_fileWatched(false),
+	  m_fileLinked(false),
+	  m_filter(0),
+	  m_fileSystemWatcher(0),
+	  m_updateTimer(new QTimer(this)),
+	  m_paused(false),
+	  m_prepared(false),
+	  m_newDataAvailable(false) {
 	initActions();
-    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
+	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
 
 FileDataSource::~FileDataSource() {
@@ -77,12 +83,27 @@ FileDataSource::~FileDataSource() {
 	if (m_fileSystemWatcher)
 		delete m_fileSystemWatcher;
 
-    delete m_updateTimer;
+	if (m_file)
+		delete m_file;
+
+	if (m_localSocket)
+		delete m_localSocket;
+
+	if (m_tcpSocket)
+		delete m_tcpSocket;
+
+	if (m_serialPort)
+		delete m_serialPort;
+
+	if (m_bufferSpreadsheet)
+		delete m_bufferSpreadsheet;
+
+	delete m_updateTimer;
 }
 
 void FileDataSource::ready() {
-    if (m_updateType == TimeInterval)
-        m_updateTimer->start(m_updateFrequency);
+	if (m_updateType == TimeInterval)
+		m_updateTimer->start(m_updateFrequency);
 }
 
 void FileDataSource::initActions() {
@@ -109,44 +130,43 @@ QWidget *FileDataSource::view() const {
  * \brief Returns a list with the names of the available ports
  */
 QStringList FileDataSource::availablePorts() {
-    QStringList ports;
-    qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
+	QStringList ports;
+	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
-    for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
-        ports.append(sp.portName());
+	for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
+		ports.append(sp.portName());
 
-        qDebug() << sp.description();
-        qDebug() << sp.manufacturer();
-        qDebug() << sp.portName();
-        qDebug() << sp.serialNumber();
-        qDebug() << sp.systemLocation();
-    }
+		qDebug() << sp.description();
+		qDebug() << sp.manufacturer();
+		qDebug() << sp.portName();
+		qDebug() << sp.serialNumber();
+		qDebug() << sp.systemLocation();
+	}
 
-    return ports;
+	return ports;
 }
 
 /*!
  * \brief Returns a list with the supported baud rates
  */
 QStringList FileDataSource::supportedBaudRates() {
-    QStringList baudRates;
+	QStringList baudRates;
 
-    for(const auto& baud : QSerialPortInfo::standardBaudRates()) {
-        baudRates.append(QString::number(baud));
-    }
-    return baudRates;
+	for(const auto& baud : QSerialPortInfo::standardBaudRates())
+		baudRates.append(QString::number(baud));
+	return baudRates;
 }
 
 /*!
  * \brief Updates this data source at this moment
  */
 void FileDataSource::updateNow() {
-    m_updateTimer->stop();
-    read();
+	m_updateTimer->stop();
+	read();
 
-    //restart the timer after update
-    if (m_updateType == TimeInterval)
-        m_updateTimer->start(m_updateFrequency);
+	//restart the timer after update
+	if (m_updateType == TimeInterval)
+		m_updateTimer->start(m_updateFrequency);
 }
 
 /*!
@@ -154,35 +174,32 @@ void FileDataSource::updateNow() {
  */
 //TODO: do we want this?
 void FileDataSource::stopReading() {
-    if (m_updateType == TimeInterval) {
-        m_updateTimer->stop();
-    } else if (m_updateType == NewData) {
-        disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-    }
+	if (m_updateType == TimeInterval)
+		m_updateTimer->stop();
+	else if (m_updateType == NewData)
+		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
 }
 
 /*!
  * \brief Continue reading from the live data source after it was paused.
  */
 void FileDataSource::continueReading() {
-    m_paused = false;
-    if (m_updateType == TimeInterval)
-        m_updateTimer->start(m_updateFrequency);
-    else if (m_updateType == NewData) {
-        connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-    }
+	m_paused = false;
+	if (m_updateType == TimeInterval)
+		m_updateTimer->start(m_updateFrequency);
+	else if (m_updateType == NewData)
+		connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
 }
 
 /*!
  * \brief Pause the reading of the live data source.
  */
 void FileDataSource::pauseReading() {
-    m_paused = true;
-    if (m_updateType == TimeInterval) {
-        m_updateTimer->stop();
-    } else if (m_updateType == NewData) {
-        disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-    }
+	m_paused = true;
+	if (m_updateType == TimeInterval)
+		m_updateTimer->stop();
+	else if (m_updateType == NewData)
+		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
 }
 
 /*!
@@ -210,7 +227,7 @@ QString FileDataSource::fileName() const {
 }
 
 void FileDataSource::setFileType(const FileType type) {
-    m_fileType = type;
+	m_fileType = type;
 }
 
 FileDataSource::FileType FileDataSource::fileType() const {
@@ -218,7 +235,7 @@ FileDataSource::FileType FileDataSource::fileType() const {
 }
 
 void FileDataSource::setFilter(AbstractFileFilter* f) {
-    m_filter = f;
+	m_filter = f;
 }
 
 AbstractFileFilter* FileDataSource::filter() const {
@@ -230,7 +247,7 @@ AbstractFileFilter* FileDataSource::filter() const {
   In the first case the data source will be automatically updated on file changes.
 */
 void FileDataSource::setFileWatched(const bool b) {
-    m_fileWatched = b;
+	m_fileWatched = b;
 }
 
 bool FileDataSource::isFileWatched() const {
@@ -242,11 +259,11 @@ bool FileDataSource::isFileWatched() const {
  * \param baudrate
  */
 void FileDataSource::setBaudRate(const int baudrate) {
-    m_baudRate = baudrate;
+	m_baudRate = baudrate;
 }
 
 int FileDataSource::baudRate() const {
-    return m_baudRate;
+	return m_baudRate;
 }
 
 /*!
@@ -254,11 +271,11 @@ int FileDataSource::baudRate() const {
  * \param frequency
  */
 void FileDataSource::setUpdateFrequency(const int frequency) {
-    m_updateFrequency = frequency;
+	m_updateFrequency = frequency;
 }
 
 int FileDataSource::updateFrequency() const {
-    return m_updateFrequency;
+	return m_updateFrequency;
 }
 
 /*!
@@ -266,11 +283,11 @@ int FileDataSource::updateFrequency() const {
  * \param keepnvalues
  */
 void FileDataSource::setKeepNvalues(const int keepnvalues) {
-    m_keepNvalues = keepnvalues;
+	m_keepNvalues = keepnvalues;
 }
 
 int FileDataSource::keepNvalues() const {
-    return m_keepNvalues;
+	return m_keepNvalues;
 }
 
 /*!
@@ -278,11 +295,11 @@ int FileDataSource::keepNvalues() const {
  * \param port
  */
 void FileDataSource::setPort(const int port) {
-    m_port = port;
+	m_port = port;
 }
 
 int FileDataSource::port() const {
-    return m_port;
+	return m_port;
 }
 
 /*!
@@ -290,11 +307,11 @@ int FileDataSource::port() const {
  * \param name
  */
 void FileDataSource::setSerialPort(const QString &name) {
-    m_serialPortName = name;
+	m_serialPortName = name;
 }
 
 QString FileDataSource::serialPortName() const {
-    return m_serialPortName;
+	return m_serialPortName;
 }
 
 /*!
@@ -302,11 +319,11 @@ QString FileDataSource::serialPortName() const {
  * \param samplerate
  */
 void FileDataSource::setSampleRate(const int samplerate) {
-    m_sampleRate = samplerate;
+	m_sampleRate = samplerate;
 }
 
 int FileDataSource::sampleRate() const {
-    return m_sampleRate;
+	return m_sampleRate;
 }
 
 /*!
@@ -314,11 +331,11 @@ int FileDataSource::sampleRate() const {
  * \param sourcetype
  */
 void FileDataSource::setSourceType(const SourceType sourcetype) {
-    m_sourceType = sourcetype;
+	m_sourceType = sourcetype;
 }
 
 FileDataSource::SourceType FileDataSource::sourceType() const {
-    return m_sourceType;
+	return m_sourceType;
 }
 
 /*!
@@ -326,14 +343,13 @@ FileDataSource::SourceType FileDataSource::sourceType() const {
  * \param updatetype
  */
 void FileDataSource::setUpdateType(const UpdateType updatetype) {
-    if (updatetype == NewData) {
-        m_updateTimer->stop();
-    }
-    m_updateType = updatetype;
+	if (updatetype == NewData)
+		m_updateTimer->stop();
+	m_updateType = updatetype;
 }
 
 FileDataSource::UpdateType FileDataSource::updateType() const {
-    return m_updateType;
+	return m_updateType;
 }
 
 /*!
@@ -341,11 +357,11 @@ FileDataSource::UpdateType FileDataSource::updateType() const {
  * \param host
  */
 void FileDataSource::setHost(const QString & host) {
-    m_host = host;
+	m_host = host;
 }
 
 QString FileDataSource::host() const {
-    return m_host;
+	return m_host;
 }
 
 /*!
@@ -353,7 +369,7 @@ QString FileDataSource::host() const {
   or the whole content of the file (\c b=false).
 */
 void FileDataSource::setFileLinked(const bool b) {
-    m_fileLinked = b;
+	m_fileLinked = b;
 }
 
 /*!
@@ -404,20 +420,149 @@ QMenu* FileDataSource::createContextMenu() {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void FileDataSource::read() {
-	if (m_fileName.isEmpty() || m_filter == nullptr)
+	if (m_filter == nullptr)
 		return;
 
-	m_filter->readDataFromFile(m_fileName, this);
+	if (!m_prepared) {
+		switch (m_sourceType) {
+		case FileOrPipe:
+			m_file = new QFile(m_fileName);
+			break;
+		case NetworkSocket:
+			m_tcpSocket = new QTcpSocket;
+
+			break;
+		case LocalSocket:
+			m_localSocket = new QLocalSocket;
+			m_localSocket->setServerName(m_fileName);
+
+            if (m_bufferSpreadsheet == nullptr)
+				m_bufferSpreadsheet = new Spreadsheet(0,"bufferSpreadsheet", true);
+
+			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyReadLocalSocket()));
+			break;
+		case SerialPort:
+			m_serialPort = new QSerialPort;
+			m_serialPort->setBaudRate(m_baudRate);
+			m_serialPort->setPortName(m_serialPortName);
+
+            if (m_bufferSpreadsheet == nullptr)
+				m_bufferSpreadsheet = new Spreadsheet(0,"bufferSpreadsheet", true);
+
+			connect(m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(serialPortError(QSerialPort::SerialPortError)));
+			connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyReadSerialPort()));
+			break;
+		}
+		m_prepared = true;
+	} else {
+		switch (m_sourceType) {
+		case FileOrPipe:
+			switch (m_fileType) {
+			case Ascii:
+				dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_file, this);
+				break;
+			case Binary:
+				dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_file, this);
+
+			default:
+				break;
+			}
+			break;
+		case NetworkSocket:
+			break;
+		case LocalSocket:
+			if (m_newDataAvailable) {
+				// copy data from buffer spreadsheet
+
+				for (int i = 0; i < columnCount(); ++i)
+					column(i)->copy(m_bufferSpreadsheet->column(i));
+				m_newDataAvailable = false;
+			}
+			break;
+		case SerialPort:
+			if (m_newDataAvailable) {
+				// copy data from buffer spreadsheet
+				for (int i = 0; i < columnCount(); ++i)
+					column(i)->copy(m_bufferSpreadsheet->column(i));
+				m_newDataAvailable = false;
+			}
+			break;
+		}
+	}
+
 	watch();
 }
 
-/*!
- * \brief Read new data from a live data source
- */
-void FileDataSource::addData() {
-// TODO tomorrow
+void FileDataSource::readyReadSerialPort() {
+	//TODO append/replace?
+	if (!m_newDataAvailable)
+		m_newDataAvailable = true;
+	switch (m_fileType) {
+	case Ascii:
+		dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_serialPort, m_bufferSpreadsheet);
+		break;
+	case Binary:
+		dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_serialPort, m_bufferSpreadsheet);
 
+	default:
+		break;
+	}
+}
 
+void FileDataSource::readyReadLocalSocket() {
+	if (!m_newDataAvailable)
+		m_newDataAvailable = true;
+	switch (m_fileType) {
+	case Ascii:
+		dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_localSocket, m_bufferSpreadsheet);
+		break;
+	case Binary:
+		dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_localSocket, m_bufferSpreadsheet);
+
+	default:
+		break;
+	}
+}
+
+void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
+	switch (socketError) {
+	case QLocalSocket::ServerNotFoundError:
+		QMessageBox::information(0, i18n("Local Socket Error"), i18n("The socket was not found. Please check the socket name."));
+		break;
+	case QLocalSocket::ConnectionRefusedError:
+        QMessageBox::information(0, i18n("LabPlot2"),
+                                 i18n("The connection was refused by the peer"));
+		break;
+	case QLocalSocket::PeerClosedError:
+		break;
+	default:
+        QMessageBox::information(0, i18n("LabPlot2"),
+                                 i18n("The following error occurred: %1.")
+		                         .arg(m_localSocket->errorString()));
+	}
+}
+
+void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
+	switch (serialPortError) {
+	case QSerialPort::DeviceNotFoundError:
+		break;
+	case QSerialPort::PermissionError:
+		break;
+	case QSerialPort::OpenError:
+		break;
+	case QSerialPort::NotOpenError:
+		break;
+	case QSerialPort::ReadError:
+		break;
+	case QSerialPort::ResourceError:
+		break;
+	case QSerialPort::TimeoutError:
+		break;
+
+	default:
+		break;
+	}
 }
 
 void FileDataSource::fileChanged() {
@@ -437,20 +582,20 @@ void FileDataSource::linkToggled() {
 
 //watch the file upon reading for changes if required
 void FileDataSource::watch() {
-    if (m_updateType == UpdateType::NewData) {
-        if (m_fileWatched) {
-            if (!m_fileSystemWatcher) {
-                m_fileSystemWatcher = new QFileSystemWatcher;
-                connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-            }
+	if (m_updateType == UpdateType::NewData) {
+		if (m_fileWatched) {
+			if (!m_fileSystemWatcher) {
+				m_fileSystemWatcher = new QFileSystemWatcher;
+				connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+			}
 
-            if ( !m_fileSystemWatcher->files().contains(m_fileName) )
-                m_fileSystemWatcher->addPath(m_fileName);
-        } else {
-            if (m_fileSystemWatcher)
-                m_fileSystemWatcher->removePath(m_fileName);
-        }
-    }
+			if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+				m_fileSystemWatcher->addPath(m_fileName);
+		} else {
+			if (m_fileSystemWatcher)
+				m_fileSystemWatcher->removePath(m_fileName);
+		}
+	}
 }
 
 /*!

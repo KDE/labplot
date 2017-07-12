@@ -30,8 +30,8 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+
 #include <QSerialPort>
-#include <QSocketNotifier>
 #include <QLocalSocket>
 #include <QTimer>
 
@@ -39,6 +39,8 @@ class QString;
 class AbstractFileFilter;
 class QFileSystemWatcher;
 class QAction;
+class QTcpSocket;
+class QFile;
 
 class FileDataSource : public Spreadsheet {
 	Q_OBJECT
@@ -46,21 +48,21 @@ class FileDataSource : public Spreadsheet {
 
 public:
 	enum FileType {Ascii, Binary, Image, HDF, NETCDF, FITS};
-    enum SourceType {
-        FileOrPipe = 0,
-        NetworkSocket,
-        LocalSocket,
-        SerialPort
-    };
+	enum SourceType {
+		FileOrPipe = 0,
+		NetworkSocket,
+		LocalSocket,
+		SerialPort
+	};
 
-    enum UpdateType {
-        TimeInterval = 0,
-        NewData
-    };
+	enum UpdateType {
+		TimeInterval = 0,
+		NewData
+	};
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
 
-    void ready();
+	void ready();
 
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
@@ -71,32 +73,32 @@ public:
 	void setFileType(const FileType);
 	FileType fileType() const;
 
-    UpdateType updateType() const;
-    void setUpdateType(const UpdateType);
+	UpdateType updateType() const;
+	void setUpdateType(const UpdateType);
 
-    SourceType sourceType() const;
-    void setSourceType(const SourceType);
+	SourceType sourceType() const;
+	void setSourceType(const SourceType);
 
-    int sampleRate() const;
-    void setSampleRate(const int);
+	int sampleRate() const;
+	void setSampleRate(const int);
 
-    int port() const;
-    void setPort(const int);
+	int port() const;
+	void setPort(const int);
 
-    void setSerialPort(const QString& name);
-    QString serialPortName() const;
+	void setSerialPort(const QString& name);
+	QString serialPortName() const;
 
-    QString host() const;
-    void setHost(const QString&);
+	QString host() const;
+	void setHost(const QString&);
 
-    int baudRate() const;
-    void setBaudRate(const int);
+	int baudRate() const;
+	void setBaudRate(const int);
 
-    void setUpdateFrequency(const int);
-    int updateFrequency() const;
+	void setUpdateFrequency(const int);
+	int updateFrequency() const;
 
-    void setKeepNvalues(const int);
-    int keepNvalues() const;
+	void setKeepNvalues(const int);
+	int keepNvalues() const;
 
 	void setFileWatched(const bool);
 	bool isFileWatched() const;
@@ -107,10 +109,13 @@ public:
 	void setFileName(const QString&);
 	QString fileName() const;
 
-    void updateNow();
-    void stopReading();
-    void pauseReading();
-    void continueReading();
+	void updateNow();
+	void stopReading();
+	void pauseReading();
+	void continueReading();
+
+	void readyReadLocalSocket();
+	void readyReadSerialPort();
 
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
@@ -127,34 +132,37 @@ private:
 	void watch();
 
 	QString m_fileName;
-    QString m_serialPortName;
-    QString m_host;
+	QString m_serialPortName;
+	QString m_host;
 
 	FileType m_fileType;
-    UpdateType m_updateType;
-    SourceType m_sourceType;
+	UpdateType m_updateType;
+	SourceType m_sourceType;
 	bool m_fileWatched;
 	bool m_fileLinked;
-    bool m_paused;
+	bool m_paused;
 
-    bool m_firstRead;
-    bool m_newDataAvailable;
+	bool m_firstRead;
+	bool m_newDataAvailable;
 
-    int m_sampleRate;
-    int m_keepNvalues;
+	int m_sampleRate;
+	int m_keepNvalues;
 
-    int m_updateFrequency;
-    int m_port;
-    int m_baudRate;
-    AbstractFileFilter* m_filter;
+	int m_updateFrequency;
+	int m_port;
+	int m_baudRate;
+	AbstractFileFilter* m_filter;
 
 	QFileSystemWatcher* m_fileSystemWatcher;
-    QSerialPort m_serialPort;
-    QSocketNotifier* m_localSocketNotifier;
-    QLocalSocket m_localSocket;
-    QTimer* m_updateTimer;
+	QSerialPort* m_serialPort;
+	QFile* m_file;
+	QLocalSocket* m_localSocket;
+	QTcpSocket* m_tcpSocket;
+	QTimer* m_updateTimer;
 
-    QList<Column*> m_columnDataBuffer;
+	bool m_prepared;
+	QList<Column*> m_columnDataBuffer;
+	Spreadsheet* m_bufferSpreadsheet;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -169,10 +177,13 @@ private slots:
 	void fileChanged();
 	void watchToggled();
 	void linkToggled();
-    void addData();
+
+	void localSocketError(QLocalSocket::LocalSocketError);
+	void serialPortError(QSerialPort::SerialPortError);
 signals:
 	void dataChanged();
 	void dataUpdated();
+
 };
 
 #endif
