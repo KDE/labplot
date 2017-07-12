@@ -39,12 +39,12 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QProcess>
 #include <QDateTime>
 
- /*!
-	\class AsciiFilter
-	\brief Manages the import/export of data organized as columns (vectors) from/to an ASCII-file.
+/*!
+\class AsciiFilter
+\brief Manages the import/export of data organized as columns (vectors) from/to an ASCII-file.
 
-	\ingroup datasources
- */
+\ingroup datasources
+*/
 AsciiFilter::AsciiFilter() : AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {}
 
 AsciiFilter::~AsciiFilter() {}
@@ -59,7 +59,7 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 /*!
   reads the content of the file \c fileName.
 */
- QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	d->readDataFromFile(fileName, dataSource, importMode, lines);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
@@ -80,7 +80,7 @@ QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
 writes the content of the data source \c dataSource to the file \c fileName.
 */
 void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
- 	d->write(fileName, dataSource);
+	d->write(fileName, dataSource);
 // 	emit()
 }
 
@@ -111,7 +111,7 @@ QStringList AsciiFilter::predefinedFilters() {
 */
 QStringList AsciiFilter::separatorCharacters() {
 	return (QStringList() << "auto" << "TAB" << "SPACE" << "," << ";" << ":"
-		<< ",TAB" << ";TAB" << ":TAB" << ",SPACE" << ";SPACE" << ":SPACE");
+	        << ",TAB" << ";TAB" << ":TAB" << ",SPACE" << ";SPACE" << ":SPACE");
 }
 
 /*!
@@ -171,16 +171,16 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 	}
 
 //TODO: wc is much faster but not portable
-/*	QElapsedTimer myTimer;
-	myTimer.start();
-	QProcess wc;
-	wc.start(QString("wc"), QStringList() << "-l" << fileName);
-	size_t lineCount = 0;
-	while (wc.waitForReadyRead())
-		lineCount = wc.readLine().split(' ')[0].toInt();
-	lineCount++;	// last line not counted
-	DEBUG(" Elapsed time counting lines : " << myTimer.elapsed() << " ms");
-*/
+	/*	QElapsedTimer myTimer;
+		myTimer.start();
+		QProcess wc;
+		wc.start(QString("wc"), QStringList() << "-l" << fileName);
+		size_t lineCount = 0;
+		while (wc.waitForReadyRead())
+			lineCount = wc.readLine().split(' ')[0].toInt();
+		lineCount++;	// last line not counted
+		DEBUG(" Elapsed time counting lines : " << myTimer.elapsed() << " ms");
+	*/
 	return lineCount;
 }
 
@@ -379,12 +379,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	m_actualCols = endColumn - startColumn + 1;
 
 //TEST: readline-seek-readline fails
-/*	qint64 testpos = device.pos();
-	DEBUG("read data line @ pos " << testpos << " : " << device.readLine().toStdString());
-	device.seek(testpos);
-	testpos = device.pos();
-	DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
-*/
+	/*	qint64 testpos = device.pos();
+		DEBUG("read data line @ pos " << testpos << " : " << device.readLine().toStdString());
+		device.seek(testpos);
+		testpos = device.pos();
+		DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
+	*/
 	// this also resets position to start of file
 	m_actualRows = AsciiFilter::lineNumber(device);
 
@@ -441,7 +441,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 */
 void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
-		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 
 	KFilterDev device(fileName);
 	readDataFromDevice(device, dataSource, importMode, lines);
@@ -452,7 +452,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 */
 void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
-		<< ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 	Q_ASSERT(dataSource != nullptr);
 
 	if (!m_prepared) {
@@ -474,7 +474,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
-							m_actualCols, vectorNames, columnModes);
+		                 m_actualCols, vectorNames, columnModes);
 
 		//number formatting
 		if (locale == AbstractFileFilter::LocaleC)
@@ -630,9 +630,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 					//TODO
 					break;
 				}
-			} else {	// missing columns in this line
+			} else 	// missing columns in this line
 				lineString += QLatin1String("NAN");
-			}
 		}
 
 		dataStrings << lineString;
