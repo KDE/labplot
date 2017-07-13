@@ -82,12 +82,27 @@ double nsl_sf_poly_optimal_legendre_L(int n, double x) {
  * using recursion
 */
 COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
+#ifdef _MSC_VER
+	if (n == 0) {
+		COMPLEX z = {1.0, 0.0};
+		return z;
+	} else if (n == 1) {
+		COMPLEX z = {real(x) + 1.0, imag(x)};
+		return z;
+	}
+	double factor = 2 * n - 1;
+	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
+	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	COMPLEX z = {factor * (real(x)*real(z1)-imag(x)*imag(z1)) + real(z2), factor * (real(x)*imag(z1) - imag(x)*real(z1)) + imag(z2)};
+	return z;
+#else
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
 	return (2*n - 1) * x * nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
+#endif
 }
 
 /*
@@ -95,12 +110,29 @@ COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
  * using recursion
 */
 COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
+#ifdef _MSC_VER
+	if (n == 0) {
+		COMPLEX z = {1.0, 0.0};
+		return z;
+	} else if (n == 1) {
+		COMPLEX z = {real(x) + 1.0, imag(x)};
+		return z;
+	}
+	double factor = 2 * n - 1;
+	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
+	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	double rex2 = real(x)*real(x) - imag(x)*imag(x);
+	double imx2 = 2.0*real(x)*imag(x);
+	COMPLEX z = {factor * real(z1) + rex2*real(z2) - imx2*imag(z2) , factor * imag(z1) + rex2*imag(z2) + imx2*real(z2)};
+	return z;
+#else
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
 	return (2*n - 1) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
+#endif
 }
 
 /***************** interpolating polynomials *************/
