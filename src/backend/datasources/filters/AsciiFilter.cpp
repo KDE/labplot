@@ -409,6 +409,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = firstLine.simplified();
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
+	QDEBUG("first data line : " << firstLineStringList);
 	columnModes.resize(m_actualCols);
 	int col = 0;
 	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
