@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -26,22 +27,18 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/lib/macros.h"
 #include <QDateTime>
 #include <QLocale>
 #include <KLocale>
 
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, Locale locale) {
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
 
 	//try to convert to a number first
 	bool isNumber;
-	if (locale == LocaleC) {
-		QLocale l(QLocale::C);
-		l.toDouble(valueString, &isNumber);
-	} else {	//TODO: why German? Should be QLocale::system()
-		QLocale l(QLocale::German);
-		l.toDouble(valueString, &isNumber);
-	}
+	QLocale locale(lang);
+	locale.toDouble(valueString, &isNumber);
 
 	//if not a number, check datetime and string
 	if (!isNumber) {
@@ -59,5 +56,9 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 returns the list of all supported locales for numeric data
 */
 QStringList AbstractFileFilter::numberFormats() {
-	return (QStringList() << i18n("System locale") << i18n("C format"));
+	QStringList formats;
+	for (int l = 0; l < ENUM_COUNT(QLocale, Language); l++)
+		formats << QLocale::languageToString((QLocale::Language)l);
+
+	return formats;
 }

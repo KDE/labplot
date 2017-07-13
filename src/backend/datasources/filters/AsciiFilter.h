@@ -70,7 +70,8 @@ public:
 	QString separatingCharacter() const;
 	void setDateTimeFormat(const QString&);
 	QString dateTimeFormat() const;
-	void setNumbersFormat(AbstractFileFilter::Locale);
+	void setNumberFormat(QLocale::Language);
+	QLocale::Language numberFormat();
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;

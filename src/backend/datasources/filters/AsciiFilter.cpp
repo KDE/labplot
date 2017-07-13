@@ -225,8 +225,11 @@ QString AsciiFilter::dateTimeFormat() const {
 	return d->dateTimeFormat;
 }
 
-void AsciiFilter::setNumbersFormat(AbstractFileFilter::Locale locale) {
-	d->locale = locale;
+void AsciiFilter::setNumberFormat(QLocale::Language lang) {
+	d->numberFormat = lang;
+}
+QLocale::Language AsciiFilter::numberFormat() {
+	return d->numberFormat;
 }
 
 void AsciiFilter::setAutoModeEnabled(const bool b) {
@@ -406,12 +409,13 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = firstLine.simplified();
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
+	QDEBUG("first data line : " << firstLineStringList);
 	columnModes.resize(m_actualCols);
 	int col = 0;
 	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
 		if (col == m_actualCols)
 			break;
-		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, locale);
+		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
 	QDEBUG("column modes = " << columnModes);
 
@@ -476,14 +480,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
 		                 m_actualCols, vectorNames, columnModes);
 
-		//number formatting
-		if (locale == AbstractFileFilter::LocaleC)
-			m_numberFormat = QLocale(QLocale::C);
-		else
-			m_numberFormat = QLocale::system();
-
 		m_prepared = true;
 	}
+
+	DEBUG("locale = " << QLocale::languageToString(numberFormat).toStdString());
+	QLocale locale(numberFormat);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -513,8 +514,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
-					const double value = m_numberFormat.toDouble(valueString, &isNumber);
-					DEBUG("string = " << valueString.toStdString() << ", value = " << value << ", isNumber = " << isNumber);
+					const double value = locale.toDouble(valueString, &isNumber);
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					break;
 				}
@@ -576,11 +576,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	//number formatting
-	DEBUG("locale = " << ENUM_TO_STRING(AbstractFileFilter, Locale, locale));
-	if (locale == AbstractFileFilter::LocaleC)
-		m_numberFormat = QLocale(QLocale::C);
-	else
-		m_numberFormat = QLocale::system();
+	DEBUG("locale = " << QLocale::languageToString(numberFormat).toStdString());
+	QLocale locale(numberFormat);
 
 	// Read the data
 	if (lines == -1)
@@ -610,8 +607,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
-					const double value = m_numberFormat.toDouble(valueString, &isNumber);
-					DEBUG("valueString = " << valueString.toStdString() << ", value = " << value << ", isNumber = " << isNumber);
+					const double value = locale.toDouble(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : NAN);
 					break;
 				}

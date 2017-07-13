@@ -74,7 +74,7 @@
        </spacer>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="lNumbersFormat">
+       <widget class="QLabel" name="lNumberFormat">
         <property name="text">
          <string>Number format</string>
         </property>
@@ -88,7 +88,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="cbNumbersFormat"/>
+       <widget class="QComboBox" name="cbNumberFormat"/>
       </item>
       <item row="4" column="1">
        <widget class="KComboBox" name="cbDateTimeFormat">

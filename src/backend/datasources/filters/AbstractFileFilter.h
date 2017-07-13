@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -30,6 +31,7 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 
 #include "backend/core/AbstractColumn.h"
 #include <QObject>
+#include <QLocale>
 #include <memory>	// smart pointer
 
 class AbstractDataSource;
@@ -39,17 +41,14 @@ class QXmlStreamWriter;
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
 	Q_ENUMS(ImportMode);
-	Q_ENUMS(Locale);
 
 public:
 	enum ImportMode {Append, Prepend, Replace};
-	//TODO: use QLocale::Language?
-	enum Locale {LocaleSystem, LocaleC};
 
 	AbstractFileFilter() {}
 	virtual ~AbstractFileFilter() {}
 
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, Locale locale);
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
 	static QStringList numberFormats();
 
 	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,

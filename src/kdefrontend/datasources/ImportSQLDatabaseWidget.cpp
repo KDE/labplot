@@ -54,7 +54,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -88,7 +88,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
-	ui.cbNumbersFormat->setCurrentIndex(config.readEntry("NubmersFormat", (int)AbstractFileFilter::LocaleSystem));
+	ui.cbNumberFormat->setCurrentIndex(config.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "hh:mm:ss"));
 	QList<int> defaultSizes;
 	defaultSizes << 100 << 100;
@@ -108,7 +108,7 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
-	config.writeEntry("NumbersFormat", ui.cbNumbersFormat->currentText());
+	config.writeEntry("NumberFormat", ui.cbNumberFormat->currentText());
 	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
@@ -239,7 +239,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	m_columnNames.clear();
 	m_columnModes.clear();
 	bool numeric = true;
-	AbstractFileFilter::Locale numbersFormat = (AbstractFileFilter::Locale)ui.cbNumbersFormat->currentIndex();
+	QLocale::Language numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 	q.next(); //go to the first record
 	for (int i = 0; i < m_cols; ++i) {
@@ -248,7 +248,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 		//value and type
 		const QString valueString = q.record().value(i).toString();
-		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numbersFormat);
+		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		m_columnModes << mode;
 		if (mode != AbstractColumn::Numeric)
 			numeric = false;
@@ -330,12 +330,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	//number and DateTime formatting
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
-	const AbstractFileFilter::Locale locale = (AbstractFileFilter::Locale)ui.cbNumbersFormat->currentIndex();
-	QLocale numberFormat;
-	if (locale == AbstractFileFilter::LocaleC)
-		numberFormat = QLocale(QLocale::C);
-	else
-		numberFormat = QLocale::system();
+	const QLocale numberFormat = QLocale((QLocale::Language)ui.cbNumberFormat->currentIndex());
 
 	//read the data
 	int row = 0;
