@@ -34,16 +34,20 @@
 #ifdef __cplusplus
 
 #ifdef _MSC_VER
-#include <complex>
-/* #define COMPLEX _Dcomplex */
-#define COMPLEX complex<double>
+#define COMPLEX _Dcomplex
 #else
 #define COMPLEX double _Complex
 #endif
 
 #else	/* C */
 #include <complex.h>
+
+#ifdef _MSC_VER
+#define COMPLEX _Dcomplex
+#else
 #define COMPLEX double complex
+#endif
+
 #endif
 
 /* Chebychev T_n(x) */
