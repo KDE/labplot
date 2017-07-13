@@ -54,7 +54,7 @@ public:
 	QString commentCharacter;
 	QString separatingCharacter;
 	QString dateTimeFormat;
-	AbstractFileFilter::Locale locale;
+	QLocale::Language numberFormat;
 	bool autoModeEnabled;
 	bool headerEnabled;
 	bool skipEmptyParts;
@@ -71,7 +71,6 @@ private:
 	int m_actualRows;
 	int m_actualCols;
 	int m_prepared;
-	QLocale m_numberFormat;
 	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers
 

@@ -50,6 +50,8 @@
 
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
+#define ENUM_COUNT(class, enum) \
+	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \

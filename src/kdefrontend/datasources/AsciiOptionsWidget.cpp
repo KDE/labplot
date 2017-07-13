@@ -47,7 +47,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
-	ui.cbNumbersFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
@@ -68,10 +68,10 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 		"</ul>"
 	);
 
-	ui.lNumbersFormat->setToolTip(textNumberFormatShort);
-	ui.lNumbersFormat->setWhatsThis(textNumberFormat);
-	ui.cbNumbersFormat->setToolTip(textNumberFormatShort);
-	ui.cbNumbersFormat->setWhatsThis(textNumberFormat);
+	ui.lNumberFormat->setToolTip(textNumberFormatShort);
+	ui.lNumberFormat->setWhatsThis(textNumberFormat);
+	ui.cbNumberFormat->setToolTip(textNumberFormatShort);
+	ui.cbNumberFormat->setWhatsThis(textNumberFormat);
 
 	const QString textDateTimeFormatShort = i18n("This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar and to time.");
 	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>" + i18n(
@@ -145,7 +145,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 
 	filter->setCommentCharacter( ui.cbCommentCharacter->currentText() );
 	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
-	filter->setNumbersFormat( AbstractFileFilter::Locale(ui.cbNumbersFormat->currentIndex()) );
+	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()) );
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
@@ -160,7 +160,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	//TODO: check if this works (character gets currentItem?)
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
-	ui.cbNumbersFormat->setCurrentIndex(conf.readEntry("NumbersFormat", (int)AbstractFileFilter::LocaleSystem));
+	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
 	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
@@ -173,7 +173,7 @@ void AsciiOptionsWidget::saveSettings() {
 
 	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
-	conf.writeEntry("NumbersFormat", ui.cbNumbersFormat->currentText());
+	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentText());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
