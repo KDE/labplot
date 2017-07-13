@@ -987,7 +987,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	const int count = symbolPointsLogical.count();
+	int count = symbolPointsLogical.count();
 //	DEBUG("count ="<<count<<", line type ="<<lineType);
 //	for(int i=0;i<qMin(10,count);i++)
 //		DEBUG(symbolPointsLogical.at(i));

@@ -228,7 +228,7 @@ QString AsciiFilter::dateTimeFormat() const {
 void AsciiFilter::setNumberFormat(QLocale::Language lang) {
 	d->numberFormat = lang;
 }
-QLocale::Language AsciiFilter::numberFormat() {
+QLocale::Language AsciiFilter::numberFormat() const {
 	return d->numberFormat;
 }
 

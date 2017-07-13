@@ -71,7 +71,7 @@ public:
 	void setDateTimeFormat(const QString&);
 	QString dateTimeFormat() const;
 	void setNumberFormat(QLocale::Language);
-	QLocale::Language numberFormat();
+	QLocale::Language numberFormat() const;
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
