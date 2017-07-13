@@ -34,6 +34,7 @@
 #ifdef __cplusplus
 
 #ifdef _MSC_VER
+#include <complex.h>
 #define COMPLEX _Dcomplex
 #else
 #define COMPLEX double _Complex
