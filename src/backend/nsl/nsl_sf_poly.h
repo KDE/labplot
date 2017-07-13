@@ -44,6 +44,7 @@
 
 #ifdef _MSC_VER
 #define COMPLEX _Dcomplex
+#define I imag(1.0)
 #else
 #define COMPLEX double complex
 #endif

@@ -42,7 +42,7 @@ const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"
 
 /* n - order, x = w/w0 */
 double nsl_filter_gain_bessel(int n, double x) {
-	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
+	return nsl_sf_poly_reversed_bessel_theta(n, (COMPLEX)0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
 }
 
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
