@@ -481,8 +481,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		case nsl_fit_model_fourier: {	// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
 			//parameters: w, a0, a1, b1, ... an, bn
-			double a[degree];
-			double b[degree];
+			double* a = new double[degree];
+			double* b = new double[degree];
 			double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			a[0] = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			b[0] = 0;
@@ -508,6 +508,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
 			}
+
+			delete[] a;
+			delete[] b;
+
 			break;
         	}
 		}

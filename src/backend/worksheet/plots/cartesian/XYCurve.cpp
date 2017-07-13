@@ -1095,7 +1095,8 @@ void XYCurvePrivate::updateLines() {
 		gsl_interp_accel *acc = gsl_interp_accel_alloc();
 		gsl_spline *spline = 0;
 
-		double x[count],  y[count];
+		double* x = new double[count];
+		double* y = new double[count];
 		for (int i = 0; i < count; i++) {
 			x[i] = symbolPointsLogical.at(i).x();
 			y[i] = symbolPointsLogical.at(i).y();
@@ -1159,6 +1160,8 @@ void XYCurvePrivate::updateLines() {
 		}
 		lines.append(QLineF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1], x[count-1], y[count-1]));
 
+		delete[] x;
+		delete[] y;
 		gsl_spline_free (spline);
 		gsl_interp_accel_free (acc);
 		break;
