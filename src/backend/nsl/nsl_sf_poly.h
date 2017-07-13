@@ -44,7 +44,6 @@
 
 #ifdef _MSC_VER
 #define COMPLEX _Dcomplex
-_Dcomplex I = {0.0,1.0};
 #else
 #define COMPLEX double complex
 #endif
