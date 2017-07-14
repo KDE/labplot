@@ -96,9 +96,6 @@ FileDataSource::~FileDataSource() {
 	if (m_serialPort)
 		delete m_serialPort;
 
-	if (m_bufferSpreadsheet)
-		delete m_bufferSpreadsheet;
-
 	delete m_updateTimer;
 }
 
