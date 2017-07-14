@@ -47,7 +47,7 @@ double nsl_filter_gain_bessel(int n, double x) {
 	COMPLEX z = {0.0, x};
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
-	return real(value)/norm;
+	return creal(value)/norm;
 #else
 	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
 #endif
