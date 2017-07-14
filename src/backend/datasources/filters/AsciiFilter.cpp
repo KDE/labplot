@@ -528,7 +528,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		//TODO: come up maybe with a solution with adding the index inside of the loop below,
 		//without conversion to string, prepending to the list and then conversion back to integer.
 		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i));
+			lineStringList.prepend(QString::number(i+1));
 
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
@@ -625,7 +625,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 		//prepend index if required
 		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i));
+			lineStringList.prepend(QString::number(i+1));
 
 		QStringList lineString;
 		for (int n = 0; n < m_actualCols; n++) {
