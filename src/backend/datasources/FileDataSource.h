@@ -114,9 +114,6 @@ public:
 	void pauseReading();
 	void continueReading();
 
-	void readyReadLocalSocket();
-	void readyReadSerialPort();
-
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
 
@@ -141,16 +138,17 @@ private:
 	bool m_fileWatched;
 	bool m_fileLinked;
 	bool m_paused;
-
-	bool m_firstRead;
 	bool m_newDataAvailable;
+    bool m_prepared;
 
 	int m_sampleRate;
 	int m_keepNvalues;
+    int m_updateFrequency;
+    int m_port;
+    int m_baudRate;
 
-	int m_updateFrequency;
-	int m_port;
-	int m_baudRate;
+    qint64 m_bytesRead;
+
 	AbstractFileFilter* m_filter;
 
 	QFileSystemWatcher* m_fileSystemWatcher;
@@ -159,10 +157,6 @@ private:
 	QLocalSocket* m_localSocket;
 	QTcpSocket* m_tcpSocket;
 	QTimer* m_updateTimer;
-
-	bool m_prepared;
-	QList<Column*> m_columnDataBuffer;
-	Spreadsheet* m_bufferSpreadsheet;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -177,6 +171,8 @@ private slots:
 	void fileChanged();
 	void watchToggled();
 	void linkToggled();
+
+    void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void serialPortError(QSerialPort::SerialPortError);

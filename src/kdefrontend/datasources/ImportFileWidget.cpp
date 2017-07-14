@@ -144,6 +144,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
+    connect( ui.cbUpdateOn, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 

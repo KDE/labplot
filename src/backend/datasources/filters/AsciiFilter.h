@@ -54,6 +54,9 @@ public:
 	// read data from any device
     void readDataFromDevice(QIODevice& device, AbstractDataSource*,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+
+    qint64 readFromLiveDevice(QIODevice& device, AbstractDataSource*,
+        qint64 from, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	// overloaded function to read from file
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);

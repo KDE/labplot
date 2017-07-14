@@ -32,7 +32,10 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 
 	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
 	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
-
+    connect(ui.sbUpdateFrequency, SIGNAL(valueChanged(int)), this, SLOT(updateFrequencyChanged(int)));
+    connect(ui.sbKeepNvalues, SIGNAL(valueChanged(int)), this, SLOT(keepNvaluesChanged(int)));
+    connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
+    connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
 }
 
 LiveDataDock::~LiveDataDock() {

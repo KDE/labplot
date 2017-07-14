@@ -71,7 +71,8 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_updateTimer(new QTimer(this)),
 	  m_paused(false),
 	  m_prepared(false),
-	  m_newDataAvailable(false) {
+      m_newDataAvailable(false),
+      m_bytesRead(0) {
 	initActions();
 	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
@@ -272,6 +273,7 @@ int FileDataSource::baudRate() const {
  */
 void FileDataSource::setUpdateFrequency(const int frequency) {
 	m_updateFrequency = frequency;
+    m_updateTimer->start(m_updateFrequency);
 }
 
 int FileDataSource::updateFrequency() const {
@@ -436,93 +438,97 @@ void FileDataSource::read() {
 			m_localSocket = new QLocalSocket;
 			m_localSocket->setServerName(m_fileName);
 
-            if (m_bufferSpreadsheet == nullptr)
-				m_bufferSpreadsheet = new Spreadsheet(0,"bufferSpreadsheet", true);
+            connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+            m_localSocket->connectToServer(QLocalSocket::ReadOnly);
+            connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 
-			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
-			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyReadLocalSocket()));
 			break;
 		case SerialPort:
 			m_serialPort = new QSerialPort;
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
 
-            if (m_bufferSpreadsheet == nullptr)
-				m_bufferSpreadsheet = new Spreadsheet(0,"bufferSpreadsheet", true);
-
 			connect(m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(serialPortError(QSerialPort::SerialPortError)));
-			connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyReadSerialPort()));
+            connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			break;
 		}
 		m_prepared = true;
-	} else {
-		switch (m_sourceType) {
-		case FileOrPipe:
-			switch (m_fileType) {
-			case Ascii:
-				dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_file, this);
-				break;
-			case Binary:
-				dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_file, this);
+    }
+    qint64 bytes;
 
-			default:
-				break;
-			}
-			break;
-		case NetworkSocket:
-			break;
-		case LocalSocket:
-			if (m_newDataAvailable) {
-				// copy data from buffer spreadsheet
+    switch (m_sourceType) {
+    case FileOrPipe:
+        switch (m_fileType) {
+        case Ascii:
+            qDebug() << "reading live ascii file.." ;
+            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Append);
+            m_bytesRead += bytes;
+            qDebug() << "read " << bytes << " bytes, in total: " << m_bytesRead;
 
-				for (int i = 0; i < columnCount(); ++i)
-					column(i)->copy(m_bufferSpreadsheet->column(i));
-				m_newDataAvailable = false;
-			}
-			break;
-		case SerialPort:
-			if (m_newDataAvailable) {
-				// copy data from buffer spreadsheet
-				for (int i = 0; i < columnCount(); ++i)
-					column(i)->copy(m_bufferSpreadsheet->column(i));
-				m_newDataAvailable = false;
-			}
-			break;
-		}
-	}
+            break;
+        case Binary:
+            //bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+            m_bytesRead += bytes;
+        default:
+            break;
+        }
+        break;
+    case NetworkSocket:
+        break;
+    case LocalSocket:
+        if (m_newDataAvailable) {
+            switch (m_fileType) {
+            case Ascii:
+                bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_localSocket, this, m_bytesRead);
+                m_bytesRead += bytes;
+                break;
+            case Binary:
+            //    bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_localSocket, this, m_bytesRead);
+                m_bytesRead += bytes;
+                break;
+            default:
+                break;
+            }
+            m_localSocket->abort();
+            m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
+            m_newDataAvailable = false;
+        }
+        break;
+    case SerialPort:
+        if (m_newDataAvailable) {
+            // copy data from buffer spreadsheet
+            switch (m_fileType) {
+            case Ascii:
+                bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_serialPort, this, m_bytesRead);
+                m_bytesRead += bytes;
+                break;
+            case Binary:
+           //     bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_serialPort, this, m_bytesRead);
+                m_bytesRead += bytes;
+                break;
+
+            default:
+                break;
+            }
+            m_newDataAvailable = false;
+        }
+        break;
+    }
+
 
 	watch();
 }
 
-void FileDataSource::readyReadSerialPort() {
-	//TODO append/replace?
+//for sockets, serial port, network..
+void FileDataSource::readyRead() {
 	if (!m_newDataAvailable)
 		m_newDataAvailable = true;
-	switch (m_fileType) {
-	case Ascii:
-		dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_serialPort, m_bufferSpreadsheet);
-		break;
-	case Binary:
-		dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_serialPort, m_bufferSpreadsheet);
 
-	default:
-		break;
-	}
-}
-
-void FileDataSource::readyReadLocalSocket() {
-	if (!m_newDataAvailable)
-		m_newDataAvailable = true;
-	switch (m_fileType) {
-	case Ascii:
-		dynamic_cast<AsciiFilter*>(m_filter)->readDataFromDevice(*m_localSocket, m_bufferSpreadsheet);
-		break;
-	case Binary:
-		dynamic_cast<BinaryFilter*>(m_filter)->readDataFromDevice(*m_localSocket, m_bufferSpreadsheet);
-
-	default:
-		break;
-	}
+    //just like for files: the file system watcher emits the signal and we read on new data
+    //here new data comes when this is called actually
+    if (m_updateType == NewData) {
+        read();
+    }
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {

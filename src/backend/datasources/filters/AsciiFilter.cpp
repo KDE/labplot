@@ -56,6 +56,10 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
+qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from, AbstractFileFilter::ImportMode importMode, int lines) {
+    return d->readFromLiveDevice(device, dataSource, from, importMode, lines);
+}
+
 /*!
   reads the content of the file \c fileName.
 */
@@ -449,6 +453,289 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 	KFilterDev device(fileName);
 	readDataFromDevice(device, dataSource, importMode, lines);
+}
+
+qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from, AbstractFileFilter::ImportMode importMode, int lines) {
+
+    Q_ASSERT(dataSource != nullptr);
+    FileDataSource* spreadsheet = dynamic_cast<FileDataSource*>(dataSource);
+
+    if (!m_prepared) {
+        DEBUG("device is sequential = " << device.isSequential());
+        const int deviceError = prepareDeviceToRead(device);
+        if (deviceError != 0)
+            DEBUG("Device error = " << deviceError);
+
+        if (deviceError)
+            return 0; //////////
+
+        /*if (dynamic_cast<Matrix*>(dataSource)) {
+            // avoid text data in Matrix
+            for (auto& c: columnModes)
+                if (c == AbstractColumn::Text)
+                    c = AbstractColumn::Numeric;
+        }*/
+ /////////////////////////// prepare import for spreadsheet
+      /*  m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
+                            m_actualCols, vectorNames, columnModes);
+*/
+        /*int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {*/
+        //DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
+        //int columnOffset = 0;
+        //setUndoAware(false);
+
+        //make the available columns undo unaware before we resize and rename them below,
+        //the same will be done for new columns in this->resize().
+        /*for (int i = 0; i < childCount<Column>(); i++)
+            child<Column>(i)->setUndoAware(false);*/
+        qDebug() << "fds resizing!";
+
+        // needed cheaper version, we don't need undo stack for these 3
+        spreadsheet->removeColumns(0, 2);
+
+        if (importMode == AbstractFileFilter::Replace)
+            spreadsheet->clear();
+        spreadsheet->resize(importMode, vectorNames, m_actualCols);
+
+
+        qDebug() << "fds resized to col: " << m_actualCols;
+
+        // resize the spreadsheet
+        //if (importMode == AbstractFileFilter::Replace) {
+        //    clear();
+        //    setRowCount(actualRows);
+        //}  else {
+
+        //}
+
+        qDebug() << "fds rowCount: " << spreadsheet->rowCount();
+        //also here we need a cheaper version of this
+        if (spreadsheet->rowCount() < m_actualRows)
+               spreadsheet->setRowCount(m_actualRows);
+        qDebug() << "fds rows resized to: " << m_actualRows;
+
+        m_dataContainer.resize(m_actualCols);
+
+        for (int n = 0; n < m_actualCols; n++) {
+            // data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+            spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
+            switch (columnModes[n]) {
+            case AbstractColumn::Numeric: {
+                QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+            case AbstractColumn::Text: {
+                QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+            case AbstractColumn::DateTime: {
+                QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+            //TODO
+            case AbstractColumn::Month:
+            case AbstractColumn::Day:
+                break;
+            }
+        }
+    //	QDEBUG("dataPointers =" << dataPointers);
+
+        /////////////////////////
+        //number formatting
+        /*if (locale == AbstractFileFilter::LocaleC)
+            m_numberFormat = QLocale(QLocale::C);
+        else
+            m_numberFormat = QLocale::system();
+*/
+        m_prepared = true;
+        qDebug() << "prepared!";
+    }
+
+    qint64 bytesread = 0;
+
+    // if there's data do be read
+    if (device.bytesAvailable() > 0) {
+
+        //move to the last read position, from == total bytes read
+        device.seek(from);
+
+        //count the new lines, increase actualrows on each
+        //now we read all the new lines, if we want to use sample rate
+        //then here we can do it, if we have actually sample rate number of lines :-?
+        while (!device.atEnd()) {
+            device.readLine();
+            m_actualRows++;
+        }
+
+        //back to the last read position before counting
+        device.seek(from);
+        const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
+
+        //new rows
+        if (spreadsheet->rowCount() < m_actualRows)
+            spreadsheet->setRowCount(m_actualRows);
+
+        qDebug() << "resized to m_actualRows!" << m_actualRows;
+
+        // if we have fixed size, we do this only once in preparation, here we can use
+        // m_prepared and we need something to decide whether it has a fixed size or increasing
+        for (int n = 0; n < m_actualCols; n++) {
+            // data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+            switch (columnModes[n]) {
+            case AbstractColumn::Numeric: {
+                QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+            case AbstractColumn::Text: {
+                QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+            case AbstractColumn::DateTime: {
+                QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
+                vector->reserve(m_actualRows);
+                vector->resize(m_actualRows);
+                m_dataContainer[n] = static_cast<void *>(vector);
+                break;
+            }
+                //TODO
+            case AbstractColumn::Month:
+            case AbstractColumn::Day:
+                break;
+            }
+        }
+        qDebug() << "datacontainer copied";
+
+        // from the last row we read the new data in the spreadsheet
+        int currentRow = spreadsheetRowCountBeforeResize;	// indexes the position in the vector(column)
+        if (lines == -1)
+            lines = m_actualRows;
+
+        qDebug() << "reading from line: "  << currentRow;
+
+        qDebug() <<"available bytes: " << device.bytesAvailable();
+        const int linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+
+        qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
+
+        for (int i = 0; i < /*qMin(lines, m_actualRows)*/linesToRead; ++i) {
+            QString line = device.readLine();
+            bytesread += line.size();
+
+            qDebug() << "line bytes: " << line.size() << " line: " << line;
+            qDebug() << "reading in row: " << currentRow;
+            if (simplifyWhitespacesEnabled)
+                line = line.simplified();
+
+            if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+                continue;
+
+            /*if (startRow > 1) {	// skip start lines
+            startRow--;
+            continue;
+        }*/
+            QLocale locale(numberFormat);
+
+            QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+            for (int n = 0; n < m_actualCols; n++) {
+                if (n < lineStringList.size()) {
+                    const QString& valueString = lineStringList.at(n);
+
+                    // set value depending on data type
+                    switch (columnModes[n]) {
+                    case AbstractColumn::Numeric: {
+                        bool isNumber;
+                        const double value = locale.toDouble(valueString, &isNumber);
+                        static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+                        break;
+                    }
+                    case AbstractColumn::DateTime: {
+                        const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+                        static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+                        break;
+                    }
+                    case AbstractColumn::Text:
+                        static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
+                        break;
+                    case AbstractColumn::Month:
+                        //TODO
+                        break;
+                    case AbstractColumn::Day:
+                        //TODO
+                        break;
+                    }
+                } else {	// missing columns in this line
+                    switch (columnModes[n]) {
+                    case AbstractColumn::Numeric:
+                        static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+                        break;
+                    case AbstractColumn::DateTime:
+                        static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
+                        break;
+                    case AbstractColumn::Text:
+                        static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+                        break;
+                    case AbstractColumn::Month:
+                        //TODO
+                        break;
+                    case AbstractColumn::Day:
+                        //TODO
+                        break;
+                    }
+
+                }
+            }
+
+            currentRow++;
+        }
+
+        //////////
+        //dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+
+        // set the comments for each of the columns if datasource is a spreadsheet
+        const int rows = spreadsheet->rowCount();
+        for (int n = 0; n < m_actualCols; ++n) {
+            Column* column = spreadsheet->column(n);
+            QString comment;
+
+            switch (column->columnMode()) {
+            case AbstractColumn::Numeric:
+                comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+                break;
+            case AbstractColumn::Text:
+                comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+                break;
+            }
+            column->setComment(comment);
+            // needed?
+            if (importMode == AbstractFileFilter::Replace) {
+                column->setSuppressDataChangedSignal(false);
+                column->setChanged();
+            }
+        }
+
+    //make the spreadsheet and all its children undo aware again
+    // do we need these?
+    spreadsheet->setUndoAware(true);
+    for (int  i= 0; i < spreadsheet->childCount<Column>(); ++i)
+        spreadsheet->child<Column>(i)->setUndoAware(true);
+    }
+    //////////////////
+    return bytesread;
 }
 
 /*!

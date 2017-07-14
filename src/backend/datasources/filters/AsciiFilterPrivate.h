@@ -44,6 +44,9 @@ public:
 	int prepareDeviceToRead(QIODevice&);
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+
+	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from,
+	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);

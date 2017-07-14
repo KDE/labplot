@@ -52,7 +52,7 @@ public:
 	static QStringList numberFormats();
 
 	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-		ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;
+        ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	virtual void loadFilterSettings(const QString& filterName) = 0;
