@@ -81,6 +81,7 @@ public:
 	bool skipEmptyParts() const;
 	void setSimplifyWhitespacesEnabled(const bool);
 	bool simplifyWhitespacesEnabled() const;
+	void setCreateIndexEnabled(const bool);
 
 	void setVectorNames(const QString);
 	QStringList vectorNames() const;

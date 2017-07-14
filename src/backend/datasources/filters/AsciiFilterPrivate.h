@@ -55,6 +55,7 @@ public:
 	QString separatingCharacter;
 	QString dateTimeFormat;
 	QLocale::Language numberFormat;
+	bool createIndexEnabled;
 	bool autoModeEnabled;
 	bool headerEnabled;
 	bool skipEmptyParts;
