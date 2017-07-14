@@ -147,6 +147,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
 	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()) );
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
+	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
 	filter->setVectorNames( ui.kleVectorNames->text() );
@@ -162,6 +163,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "hh:mm:ss"));
+	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
 	ui.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
@@ -175,6 +177,7 @@ void AsciiOptionsWidget::saveSettings() {
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
 	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentText());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
+	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", ui.chbHeader->isChecked());

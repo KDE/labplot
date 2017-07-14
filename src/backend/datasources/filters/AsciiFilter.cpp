@@ -232,7 +232,7 @@ QString AsciiFilter::dateTimeFormat() const {
 void AsciiFilter::setNumberFormat(QLocale::Language lang) {
 	d->numberFormat = lang;
 }
-QLocale::Language AsciiFilter::numberFormat() {
+QLocale::Language AsciiFilter::numberFormat() const {
 	return d->numberFormat;
 }
 
@@ -255,6 +255,10 @@ void AsciiFilter::setSkipEmptyParts(const bool b) {
 }
 bool AsciiFilter::skipEmptyParts() const {
 	return d->skipEmptyParts;
+}
+
+void AsciiFilter::setCreateIndexEnabled(bool b) {
+	d->createIndexEnabled = b;
 }
 
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b) {
@@ -309,6 +313,7 @@ int AsciiFilter::endColumn() const {
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	commentCharacter("#"),
 	separatingCharacter("auto"),
+	createIndexEnabled(false),
 	autoModeEnabled(true),
 	headerEnabled(true),
 	skipEmptyParts(false),
@@ -380,10 +385,16 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		startRow++;
 	}
 
+	if (createIndexEnabled)
+		vectorNames.prepend("index");
+
 	// set range to read
 	if (endColumn == -1)
 		endColumn = firstLineStringList.size(); // last column
 	m_actualCols = endColumn - startColumn + 1;
+
+	if (createIndexEnabled)
+		++m_actualCols;
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
@@ -413,9 +424,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = firstLine.simplified();
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
-	QDEBUG("first data line : " << firstLineStringList);
+	QDEBUG("first data line, parsed : " << firstLineStringList);
 	columnModes.resize(m_actualCols);
+
 	int col = 0;
+	if (createIndexEnabled) {
+		columnModes[0] = AbstractColumn::Numeric;
+		col = 1;
+	}
+
 	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
 		if (col == m_actualCols)
 			break;
@@ -793,6 +810,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+
+		//prepend the index if required
+		//TODO: come up maybe with a solution with adding the index inside of the loop below,
+		//without conversion to string, prepending to the list and then conversion back to integer.
+		if (createIndexEnabled)
+			lineStringList.prepend(QString::number(i));
+
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const QString& valueString = lineStringList.at(n);
@@ -885,6 +909,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		}
 
 		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+
+		//prepend index if required
+		if (createIndexEnabled)
+			lineStringList.prepend(QString::number(i));
+
 		QStringList lineString;
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
@@ -943,6 +972,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "commentCharacter", d->commentCharacter );
 	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
 	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
+	writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled) );
 	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
 	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
@@ -977,6 +1007,12 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
 	else
 		d->separatingCharacter = str;
+
+	str = attribs.value("createIndex").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
+	else
+		d->createIndexEnabled = str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())
