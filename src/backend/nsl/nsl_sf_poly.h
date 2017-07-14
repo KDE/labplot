@@ -30,22 +30,17 @@
 #define NSL_SF_POLY_H
 
 #include <stdlib.h>
+
+#ifdef _MSC_VER
+#include <complex.h>
+#define COMPLEX _Dcomplex
+#else
+
 /* C++ including this header */
 #ifdef __cplusplus
-
-#ifdef _MSC_VER
-#include <complex.h>
-#define COMPLEX _Dcomplex
-#else
 #define COMPLEX double _Complex
-#endif
-
 #else	/* C */
 #include <complex.h>
-
-#ifdef _MSC_VER
-#define COMPLEX _Dcomplex
-#else
 #define COMPLEX double complex
 #endif
 
