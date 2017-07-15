@@ -461,8 +461,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = " << dataSource
-	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
+	<< dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 
 	KFilterDev device(fileName);
 	readDataFromDevice(device, dataSource, importMode, lines);

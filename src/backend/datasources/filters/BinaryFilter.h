@@ -49,14 +49,15 @@ class BinaryFilter : public AbstractFileFilter {
 	static QStringList dataTypes();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
-	static long rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
+	static size_t rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
 
 	// read data from any device
-	QVector<QStringList> readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource*,
 					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

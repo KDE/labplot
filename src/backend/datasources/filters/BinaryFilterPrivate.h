@@ -34,11 +34,13 @@ class BinaryFilterPrivate {
 public:
 	explicit BinaryFilterPrivate(BinaryFilter*);
 
-	QVector<QStringList> readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
+	int prepareStreamToRead(QDataStream&);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	const BinaryFilter* q;
 
@@ -57,6 +59,9 @@ public:
 
 private:
 	void clearDataSource(AbstractDataSource*) const;
+
+	int m_actualRows;
+	int m_actualCols;
 };
 
 #endif

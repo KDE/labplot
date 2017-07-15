@@ -632,7 +632,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-		importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
+		importedStrings = filter->preview(fileName, lines);
 		tmpTableWidget = m_twPreview;
 		break;
 	}
