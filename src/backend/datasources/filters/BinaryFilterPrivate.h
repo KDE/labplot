@@ -27,7 +27,10 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef BINARYFILTERPRIVATE_H
 #define BINARYFILTERPRIVATE_H
 
+#include <QVector>
+
 class AbstractDataSource;
+class AbstractColumn;
 
 class BinaryFilterPrivate {
 
@@ -47,6 +50,7 @@ public:
 	int vectors;
 	BinaryFilter::DataType dataType;
 	BinaryFilter::ByteOrder byteOrder;
+	QVector<AbstractColumn::ColumnMode> columnModes;
 
 	int startRow;		// start row (value*vectors) to read
 	int endRow;			// end row to (value*vectors) read

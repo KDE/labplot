@@ -108,7 +108,7 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const int vectors, const
 	size_t rows = 0;
 	while (!device.atEnd()) {
 		// one row
-		for (int i = 0; i < vectors; ++i){
+		for (int i = 0; i < vectors; ++i) {
 			for (int j = 0; j < BinaryFilter::dataSize(type); ++j)
 				device.read(1);
 		}
@@ -219,7 +219,6 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 	autoModeEnabled(true) {
 }
 
-
 /*!
     reads the content of the device \c device to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
@@ -303,7 +302,6 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		return dataStrings << (QStringList() << i18n("data selection empty"));
 
 	//TODO: support other modes
-	QVector<AbstractColumn::ColumnMode> columnModes;
 	columnModes.resize(m_actualCols);
 
 	//TODO: use given names
@@ -419,7 +417,6 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	int columnOffset = 0;
 
 	//TODO: support other modes
-	QVector<AbstractColumn::ColumnMode> columnModes;
 	columnModes.resize(m_actualCols);
 
 	//TODO: use given names
@@ -442,11 +439,13 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	//TODO: use ColumnMode ?
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(m_actualRows, lines); i++) {
+		DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
 			static_cast<QVector<double>*>(dataContainer[0])->operator[](i) = i+1;
 
 		for (int n = startColumn; n < m_actualCols; n++) {
+			DEBUG("reading column " << n);
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 				qint8 value;

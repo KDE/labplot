@@ -861,7 +861,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 //##############################################################################
 int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
+	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols);
 	Q_UNUSED(colNameList);
 	int columnOffset = 0;
 	setUndoAware(false);
@@ -882,28 +882,21 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 	//TODO: support other numeric types when available (float, int, ...)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
 	dataContainer.resize(actualCols);
-	for (int n = 0; n < actualCols; n++) {
-		switch (columnMode[0]) {
-		case AbstractColumn::Numeric: {
+	switch (columnMode[0]) {	// only columnMode[0] is used
+	case AbstractColumn::Numeric:
+		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
-			break;
 		}
-		//TODO: other types
-		case AbstractColumn::Text:
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-			break;
-		}
-
-// old style:
-//		QVector<double>* vector = &matrixColumns[n];
-//		vector->reserve(actualRows);
-//		vector->resize(actualRows);
-//		dataContainer[n] = static_cast<void *>(vector);
+		break;
+	//TODO: other types
+	case AbstractColumn::Text:
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		break;
 	}
 
 	return columnOffset;
