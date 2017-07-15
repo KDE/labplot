@@ -186,6 +186,10 @@ int BinaryFilter::skipBytes() const {
 	return d->skipBytes;
 }
 
+void BinaryFilter::setCreateIndexEnabled(bool b) {
+	d->createIndexEnabled = b;
+}
+
 void BinaryFilter::setAutoModeEnabled(bool b) {
 	d->autoModeEnabled = b;
 }
@@ -202,10 +206,11 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 	vectors(2),
 	dataType(BinaryFilter::INT8),
 	byteOrder(BinaryFilter::LittleEndian),
-	skipStartBytes(0),
 	startRow(1),
 	endRow(-1),
+	skipStartBytes(0),
 	skipBytes(0),
+	createIndexEnabled(false),
 	autoModeEnabled(true) {
 }
 
@@ -230,6 +235,10 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromFile(const QString& fileNa
     Uses the settings defined in the data source.
 */
 QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+
+	//TODO: separate prepareImport
+	//TODO: separate preview and datasoure-import
+
 	QVector<QStringList> dataStrings;
 
 	QDataStream in(&device);
@@ -273,6 +282,9 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 	if (lines == -1)
 		lines = actualRows;
 
+	if (createIndexEnabled)
+		actualCols++;
+
 	//TODO: use DEBUG()
 #ifndef NDEBUG
 	qDebug()<<"	numRows ="<<numRows;
@@ -293,20 +305,38 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 	//TODO: use given names?
 	QStringList vectorNames;
 
+	if (createIndexEnabled)
+		vectorNames.prepend("index");
+
 	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+
+	// start column
+	int startColumn = 0;
+	if (createIndexEnabled)
+		startColumn++;
 
 	// read data
 	//TODO: use ColumnMode ?
 	for (int i = 0; i < qMin(actualRows, lines); i++) {
 		QStringList lineString;
-		for (int n = 0; n < actualCols; n++) {
+
+		//prepend the index if required
+		//TODO: come up maybe with a solution with adding the index inside of the loop below,
+		//without conversion to string, prepending to the list and then conversion back to integer.
+		if (createIndexEnabled) {
+			lineString.prepend(QString::number(i+1));
+			if (dataSource)
+				static_cast<QVector<double>*>(dataContainer[0])->operator[](i) = i+1;
+		}
+
+		for (int n = startColumn; n < actualCols; n++) {
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 				qint8 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<qint8>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -315,7 +345,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				qint16 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<qint16>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -324,7 +354,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				qint32 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<qint32>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -333,7 +363,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				qint64 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<qint64>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -342,7 +372,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				quint8 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<quint8>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -351,7 +381,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				quint16 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<quint16>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -360,7 +390,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				quint32 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<quint32>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -369,7 +399,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				quint64 value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<quint64>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -378,7 +408,7 @@ QVector<QStringList> BinaryFilterPrivate::readDataFromDevice(QIODevice& device, 
 				float value;
 				in >> value;
 				if (dataSource)
-					static_cast<QVector<float>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
 				else
 					lineString << QString::number(value);
 				break;
@@ -431,6 +461,7 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("endRow", QString::number(d->endRow) );
 	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes) );
 	writer->writeAttribute("skipBytes", QString::number(d->skipBytes) );
+	writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled) );
 	writer->writeEndElement();
 }
 
@@ -494,6 +525,12 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
 	else
 		d->skipBytes = str.toInt();
+
+	str = attribs.value("createIndex").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
+	else
+		d->createIndexEnabled = str.toInt();
 
 	return true;
 }

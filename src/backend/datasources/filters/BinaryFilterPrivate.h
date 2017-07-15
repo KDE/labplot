@@ -46,11 +46,12 @@ public:
 	BinaryFilter::DataType dataType;
 	BinaryFilter::ByteOrder byteOrder;
 
-	int skipStartBytes;	// bytes to skip at start
 	int startRow;		// start row (value*vectors) to read
-	int endRow;		// end row to (value*vectors) read
-	int skipBytes;		// bytes to skip after each value
+	int endRow;			// end row to (value*vectors) read
 	int numRows;		// number of rows
+	int skipStartBytes;	// bytes to skip at start
+	int skipBytes;		// bytes to skip after each value
+	bool createIndexEnabled;	// if create index column
 
 	bool autoModeEnabled;
 

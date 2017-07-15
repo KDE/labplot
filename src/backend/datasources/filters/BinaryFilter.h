@@ -66,20 +66,17 @@ class BinaryFilter : public AbstractFileFilter {
 
 	void setDataType(const BinaryFilter::DataType);
 	BinaryFilter::DataType dataType() const;
-
 	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
-
 	void setSkipStartBytes(const int);
 	int skipStartBytes() const;
-
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);
 	int endRow() const;
-
 	void setSkipBytes(const int);
 	int skipBytes() const;
+	void setCreateIndexEnabled(const bool);
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
