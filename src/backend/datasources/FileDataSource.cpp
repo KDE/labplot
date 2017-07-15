@@ -61,14 +61,17 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
   \ingroup datasources
 */
-
 FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
 	  m_fileType(Ascii),
 	  m_fileWatched(false),
 	  m_fileLinked(false),
-	  m_filter(0),
-	  m_fileSystemWatcher(0),
+	  m_filter(nullptr),
+	  m_fileSystemWatcher(nullptr),
+	  m_file(nullptr),
+	  m_localSocket(nullptr),
+	  m_tcpSocket(nullptr),
+	  m_serialPort(nullptr),
 	  m_updateTimer(new QTimer(this)),
 	  m_paused(false),
 	  m_prepared(false),
