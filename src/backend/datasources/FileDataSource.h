@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : File data source
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -60,11 +60,11 @@ public:
 		NewData
 	};
 
-    enum ReadingType {
-        ContinousFixed = 0,
-        FromEnd,
-        TillEnd
-    };
+	enum ReadingType {
+		ContinousFixed = 0,
+		FromEnd,
+		TillEnd
+	};
 
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
@@ -145,29 +145,29 @@ private:
 	FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
-    ReadingType m_readingType;
+	ReadingType m_readingType;
 
 	bool m_fileWatched;
 	bool m_fileLinked;
 	bool m_paused;
 	bool m_newDataAvailable;
-    bool m_prepared;
+	bool m_prepared;
 
 	int m_sampleRate;
 	int m_keepNvalues;
-    int m_updateInterval;
-    int m_port;
-    int m_baudRate;
+	int m_updateInterval;
+	int m_port;
+	int m_baudRate;
 
-    qint64 m_bytesRead;
+	qint64 m_bytesRead;
 
 	AbstractFileFilter* m_filter;
 
 	QFileSystemWatcher* m_fileSystemWatcher;
-	QSerialPort* m_serialPort;
 	QFile* m_file;
 	QLocalSocket* m_localSocket;
 	QTcpSocket* m_tcpSocket;
+	QSerialPort* m_serialPort;
 	QTimer* m_updateTimer;
 
 	QAction* m_reloadAction;
@@ -184,7 +184,7 @@ private slots:
 	void watchToggled();
 	void linkToggled();
 
-    void readyRead();
+	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void serialPortError(QSerialPort::SerialPortError);
