@@ -399,6 +399,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		testpos = device.pos();
 		DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
 	*/
+
 	// this also resets position to start of file
 	m_actualRows = AsciiFilter::lineNumber(device);
 
@@ -487,11 +488,12 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (deviceError)
 			return;
 
-		// avoid text data in Matrix
+		// matrix data has only one column mode (which is not text)
 		if (dynamic_cast<Matrix*>(dataSource)) {
+			auto mode = columnModes[0];
+			(mode == AbstractColumn::Text) ? mode = AbstractColumn::Numeric : 0;
 			for (auto& c: columnModes)
-				if (c == AbstractColumn::Text)
-					c = AbstractColumn::Numeric;
+				(c != mode) ? c = mode : 0;
 		}
 
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
