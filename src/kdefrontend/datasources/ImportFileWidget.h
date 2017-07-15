@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -57,10 +58,10 @@ public:
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
-    void hideDataSource();
+	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 
-    void initializeAndFillPortsAndBaudRates();
+	void initializeAndFillPortsAndBaudRates();
 
 private:
 
@@ -74,15 +75,15 @@ private:
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
-    bool m_fileDataSource;
+	bool m_fileDataSource;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 
-    void updateTypeChanged(int);
-    void sourceTypeChanged(int);
-    void readingTypeChanged(int);
+	void updateTypeChanged(int);
+	void sourceTypeChanged(int);
+	void readingTypeChanged(int);
 
 	void saveFilter();
 	void manageFilters();

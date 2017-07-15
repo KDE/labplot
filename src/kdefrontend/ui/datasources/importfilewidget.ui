@@ -124,7 +124,7 @@
        </widget>
       </item>
       <item row="8" column="2">
-       <widget class="KComboBox" name="cbFilter">
+       <widget class="KComboBox" name="cbFilter" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -235,7 +235,7 @@
        <widget class="QComboBox" name="cbBaudRate"/>
       </item>
       <item row="7" column="2">
-       <widget class="KComboBox" name="cbFileType">
+       <widget class="KComboBox" name="cbFileType" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -283,7 +283,9 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QStackedWidget" name="swOptions">
-            <widget class="QWidget" name="page"/>
+            <widget class="QWidget" name="page">
+             <zorder>gbUpdateOptions</zorder>
+            </widget>
             <widget class="QWidget" name="page_2"/>
            </widget>
           </item>
@@ -579,25 +581,6 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QSpinBox" name="sbKeepValues">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lReadType">
         <property name="text">
@@ -691,6 +674,9 @@
         </property>
        </widget>
       </item>
+      <item row="6" column="2">
+       <widget class="QLineEdit" name="leKeepLastValues"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -698,14 +684,14 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QWidget</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

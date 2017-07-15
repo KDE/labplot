@@ -4,6 +4,7 @@
     Description          : File data source
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -60,11 +61,11 @@ public:
 		NewData
 	};
 
-    enum ReadingType {
-        ContinousFixed = 0,
-        FromEnd,
-        TillEnd
-    };
+	enum ReadingType {
+		ContinousFixed = 0,
+		FromEnd,
+		TillEnd
+	};
 
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
@@ -86,8 +87,8 @@ public:
 	SourceType sourceType() const;
 	void setSourceType(const SourceType);
 
-    ReadingType readingType() const;
-    void setReadingType(const ReadingType);
+	ReadingType readingType() const;
+	void setReadingType(const ReadingType);
 
 	int sampleRate() const;
 	void setSampleRate(const int);
@@ -109,6 +110,9 @@ public:
 
 	void setKeepNvalues(const int);
 	int keepNvalues() const;
+
+	void setKeepLastValues(const bool);
+	bool keepLastValues() const;
 
 	void setFileWatched(const bool);
 	bool isFileWatched() const;
@@ -145,21 +149,22 @@ private:
 	FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
-    ReadingType m_readingType;
+	ReadingType m_readingType;
 
 	bool m_fileWatched;
 	bool m_fileLinked;
 	bool m_paused;
 	bool m_newDataAvailable;
-    bool m_prepared;
+	bool m_prepared;
+	bool m_keepLastValues;
 
 	int m_sampleRate;
 	int m_keepNvalues;
-    int m_updateInterval;
-    int m_port;
-    int m_baudRate;
+	int m_updateInterval;
+	int m_port;
+	int m_baudRate;
 
-    qint64 m_bytesRead;
+	qint64 m_bytesRead;
 
 	AbstractFileFilter* m_filter;
 
@@ -184,7 +189,7 @@ private slots:
 	void watchToggled();
 	void linkToggled();
 
-    void readyRead();
+	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void serialPortError(QSerialPort::SerialPortError);

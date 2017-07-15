@@ -5,6 +5,7 @@ Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 ***************************************************************************/
 
@@ -47,6 +48,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
+#include <QIntValidator>
 #include <KUrlCompletion>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -145,9 +147,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
-    connect( ui.cbUpdateOn, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-    connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
-    connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
+	connect( ui.cbUpdateOn, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
+	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
@@ -254,16 +256,26 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	FileDataSource::FileType fileType = static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
 	FileDataSource::UpdateType updateType = static_cast<FileDataSource::UpdateType>(ui.cbUpdateOn->currentIndex());
 	FileDataSource::SourceType sourceType = static_cast<FileDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	FileDataSource::ReadingType readingType = static_cast<FileDataSource::ReadingType>(ui.cbReadType->currentIndex());
 
 	source->setComment( ui.kleFileName->text() );
 	source->setFileType(fileType);
 	source->setFilter(this->currentFileFilter());
 
 	source->setUpdateType(updateType);
-	source->setUpdateInterval(ui.sbUpdateInterval->value());
 	source->setSourceType(sourceType);
-	source->setSampleRate(ui.sbSampleRate->value());
-	source->setKeepNvalues(ui.sbKeepValues->value());
+	source->setReadingType(readingType);
+
+	if (updateType == FileDataSource::UpdateType::TimeInterval)
+		source->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	if (!ui.leKeepLastValues->text().isEmpty()) {
+		source->setKeepLastValues(true);
+		source->setKeepNvalues(ui.leKeepLastValues->text().toInt());
+	}
+
+	if (readingType != FileDataSource::ReadingType::TillEnd)
+		source->setSampleRate(ui.sbSampleRate->value());
 
 	if ((sourceType == FileDataSource::SourceType::FileOrPipe) || (sourceType == FileDataSource::SourceType::LocalSocket)) {
 		source->setFileName( ui.kleFileName->text() );
@@ -862,5 +874,6 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 	ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
 	ui.cbSerialPort->addItems(FileDataSource::availablePorts());
 
-	ui.tabDataPortion->hide();
+	ui.leKeepLastValues->setValidator(new QIntValidator(2, 100000));
+	ui.tabWidget->removeTab(2);
 }

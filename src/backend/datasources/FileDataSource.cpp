@@ -4,6 +4,7 @@ Project		: LabPlot
 Description	: Represents file data source
 --------------------------------------------------------------------
 Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 ***************************************************************************/
 
@@ -250,6 +251,18 @@ void FileDataSource::setFileWatched(const bool b) {
 
 bool FileDataSource::isFileWatched() const {
 	return m_fileWatched;
+}
+
+/*!
+ * \brief Sets whether we'll keep the last values or append it to the previous ones
+ * \param keepLastValues
+ */
+void FileDataSource::setKeepLastValues(const bool keepLastValues) {
+	m_keepLastValues = keepLastValues;
+}
+
+bool FileDataSource::keepLastValues() const {
+	return m_keepLastValues;
 }
 
 /*!
