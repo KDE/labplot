@@ -71,8 +71,8 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_updateTimer(new QTimer(this)),
 	  m_paused(false),
 	  m_prepared(false),
-      m_newDataAvailable(false),
-      m_bytesRead(0) {
+	  m_newDataAvailable(false),
+	  m_bytesRead(0) {
 	initActions();
 	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
@@ -270,7 +270,7 @@ int FileDataSource::baudRate() const {
  */
 void FileDataSource::setUpdateFrequency(const int frequency) {
 	m_updateFrequency = frequency;
-    m_updateTimer->start(m_updateFrequency);
+	m_updateTimer->start(m_updateFrequency);
 }
 
 int FileDataSource::updateFrequency() const {
@@ -342,11 +342,11 @@ FileDataSource::SourceType FileDataSource::sourceType() const {
  * \param readingType
  */
 void FileDataSource::setReadingType(const ReadingType readingType) {
-    m_readingType = readingType;
+	m_readingType = readingType;
 }
 
 FileDataSource::ReadingType FileDataSource::readingType() const {
-    return m_readingType;
+	return m_readingType;
 }
 
 /*!
@@ -447,9 +447,9 @@ void FileDataSource::read() {
 			m_localSocket = new QLocalSocket;
 			m_localSocket->setServerName(m_fileName);
 
-            connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-            m_localSocket->connectToServer(QLocalSocket::ReadOnly);
-            connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+			m_localSocket->connectToServer(QLocalSocket::ReadOnly);
+			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 
 			break;
 		case SerialPort:
@@ -458,67 +458,67 @@ void FileDataSource::read() {
 			m_serialPort->setPortName(m_serialPortName);
 
 			connect(m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(serialPortError(QSerialPort::SerialPortError)));
-            connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyRead()));
+			connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			break;
 		}
 		m_prepared = true;
-    }
-    qint64 bytes;
+	}
+	qint64 bytes;
 
-    switch (m_sourceType) {
-    case FileOrPipe:
-        switch (m_fileType) {
-        case Ascii:
-            qDebug() << "reading live ascii file.." ;
-            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Replace);
-            m_bytesRead += bytes;
-            qDebug() << "read " << bytes << " bytes, in total: " << m_bytesRead;
+	switch (m_sourceType) {
+	case FileOrPipe:
+		switch (m_fileType) {
+		case Ascii:
+			qDebug() << "reading live ascii file.." ;
+			bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Replace);
+			m_bytesRead += bytes;
+			qDebug() << "read " << bytes << " bytes, in total: " << m_bytesRead;
 
-            break;
-        case Binary:
-            //bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
-            m_bytesRead += bytes;
-        default:
-            break;
-        }
-        break;
-    case NetworkSocket:
-        break;
-    case LocalSocket:
-        if (m_newDataAvailable) {
-            switch (m_fileType) {
-            case Ascii:
-                dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
-                break;
-            case Binary:
-            //  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
-                break;
-            default:
-                break;
-            }
-            m_localSocket->abort();
-            m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
-            m_newDataAvailable = false;
-        }
-        break;
-    case SerialPort:
-        if (m_newDataAvailable) {
-            // copy data from buffer spreadsheet
-            switch (m_fileType) {
-            case Ascii:
-                dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
-                break;
-            case Binary:
-           //   dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
-                break;
+			break;
+		case Binary:
+			//bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			m_bytesRead += bytes;
+		default:
+			break;
+		}
+		break;
+	case NetworkSocket:
+		break;
+	case LocalSocket:
+		if (m_newDataAvailable) {
+			switch (m_fileType) {
+			case Ascii:
+				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
+				break;
+			case Binary:
+				//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
+				break;
+			default:
+				break;
+			}
+			m_localSocket->abort();
+			m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
+			m_newDataAvailable = false;
+		}
+		break;
+	case SerialPort:
+		if (m_newDataAvailable) {
+			// copy data from buffer spreadsheet
+			switch (m_fileType) {
+			case Ascii:
+				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
+				break;
+			case Binary:
+				//   dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
+				break;
 
-            default:
-                break;
-            }
-            m_newDataAvailable = false;
-        }
-        break;
-    }
+			default:
+				break;
+			}
+			m_newDataAvailable = false;
+		}
+		break;
+	}
 
 
 	watch();
@@ -529,11 +529,10 @@ void FileDataSource::readyRead() {
 	if (!m_newDataAvailable)
 		m_newDataAvailable = true;
 
-    //just like for files: the file system watcher emits the signal and we read on new data
-    //here new data comes when this is called actually
-    if (m_updateType == NewData) {
-        read();
-    }
+	//just like for files: the file system watcher emits the signal and we read on new data
+	//here new data comes when this is called actually
+	if (m_updateType == NewData)
+		read();
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
@@ -542,14 +541,14 @@ void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 		QMessageBox::information(0, i18n("Local Socket Error"), i18n("The socket was not found. Please check the socket name."));
 		break;
 	case QLocalSocket::ConnectionRefusedError:
-        QMessageBox::information(0, i18n("LabPlot2"),
-                                 i18n("The connection was refused by the peer"));
+		QMessageBox::information(0, i18n("LabPlot2"),
+		                         i18n("The connection was refused by the peer"));
 		break;
 	case QLocalSocket::PeerClosedError:
 		break;
 	default:
-        QMessageBox::information(0, i18n("LabPlot2"),
-                                 i18n("The following error occurred: %1.")
+		QMessageBox::information(0, i18n("LabPlot2"),
+		                         i18n("The following error occurred: %1.")
 		                         .arg(m_localSocket->errorString()));
 	}
 }
@@ -707,43 +706,41 @@ void FileDataSource::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//general
-    writer->writeStartElement("general");
-    writer->writeAttribute("fileName", m_fileName);
-    writer->writeAttribute("fileType", QString::number(m_fileType));
-    writer->writeAttribute("fileWatched", QString::number(m_fileWatched));
-    writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
-    writer->writeAttribute("updateType", QString::number(m_updateType));
-    writer->writeAttribute("readingType", QString::number(m_readingType));
-    writer->writeAttribute("sourceType", QString::number(m_sourceType));
-    writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
+	writer->writeStartElement("general");
+	writer->writeAttribute("fileName", m_fileName);
+	writer->writeAttribute("fileType", QString::number(m_fileType));
+	writer->writeAttribute("fileWatched", QString::number(m_fileWatched));
+	writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
+	writer->writeAttribute("updateType", QString::number(m_updateType));
+	writer->writeAttribute("readingType", QString::number(m_readingType));
+	writer->writeAttribute("sourceType", QString::number(m_sourceType));
+	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
 
-    if (m_updateType == TimeInterval) {
-        writer->writeAttribute("updateFrequency", QString::number(m_updateFrequency));
-    }
+	if (m_updateType == TimeInterval)
+		writer->writeAttribute("updateFrequency", QString::number(m_updateFrequency));
 
-    if (m_readingType != TillEnd) {
-        writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
-    }
+	if (m_readingType != TillEnd)
+		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
 
-    switch (m_sourceType) {
-    case SerialPort:
-        writer->writeAttribute("baudRate", QString::number(m_baudRate));
-        writer->writeAttribute("serialPortName", m_serialPortName);
+	switch (m_sourceType) {
+	case SerialPort:
+		writer->writeAttribute("baudRate", QString::number(m_baudRate));
+		writer->writeAttribute("serialPortName", m_serialPortName);
 
-        break;
-    case NetworkSocket:
-        writer->writeAttribute("host", m_host);
-        writer->writeAttribute("port", QString::number(m_port));
-        break;
-    case FileOrPipe:
-        break;
-    case LocalSocket:
-        break;
-    default:
-        break;
-    }
+		break;
+	case NetworkSocket:
+		writer->writeAttribute("host", m_host);
+		writer->writeAttribute("port", QString::number(m_port));
+		break;
+	case FileOrPipe:
+		break;
+	case LocalSocket:
+		break;
+	default:
+		break;
+	}
 
-    writer->writeEndElement();
+	writer->writeEndElement();
 
 	//filter
 	m_filter->save(writer);
@@ -811,75 +808,75 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 			else
 				m_fileLinked = str.toInt();
 
-            str = attribs.value("updateType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'updateType'"));
-            else
-                m_updateType =  static_cast<UpdateType>(str.toInt());
+			str = attribs.value("updateType").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'updateType'"));
+			else
+				m_updateType =  static_cast<UpdateType>(str.toInt());
 
-            str = attribs.value("sourceType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'sourceType'"));
-            else
-                m_sourceType =  static_cast<SourceType>(str.toInt());
+			str = attribs.value("sourceType").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'sourceType'"));
+			else
+				m_sourceType =  static_cast<SourceType>(str.toInt());
 
-            str = attribs.value("readingType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'readingType'"));
-            else
-                m_readingType =  static_cast<ReadingType>(str.toInt());
+			str = attribs.value("readingType").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'readingType'"));
+			else
+				m_readingType =  static_cast<ReadingType>(str.toInt());
 
-            if (m_updateType == TimeInterval) {
-                str = attribs.value("updateFrequency").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'updateFrequency'"));
-                else
-                    m_updateFrequency = str.toInt();
-            }
+			if (m_updateType == TimeInterval) {
+				str = attribs.value("updateFrequency").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'updateFrequency'"));
+				else
+					m_updateFrequency = str.toInt();
+			}
 
-            if (m_readingType != TillEnd) {
-                str = attribs.value("sampleRate").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'sampleRate'"));
-                else
-                    m_sampleRate = str.toInt();
-            }
+			if (m_readingType != TillEnd) {
+				str = attribs.value("sampleRate").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'sampleRate'"));
+				else
+					m_sampleRate = str.toInt();
+			}
 
-            switch (m_sourceType) {
-            case SerialPort:
-                str = attribs.value("baudRate").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'baudRate'"));
-                else
-                    m_baudRate = str.toInt();
+			switch (m_sourceType) {
+			case SerialPort:
+				str = attribs.value("baudRate").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'baudRate'"));
+				else
+					m_baudRate = str.toInt();
 
-                str = attribs.value("serialPortName").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'serialPortName'"));
-                else
-                    m_serialPortName = str;
+				str = attribs.value("serialPortName").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'serialPortName'"));
+				else
+					m_serialPortName = str;
 
-                break;
-            case NetworkSocket:
-                str = attribs.value("host").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'host'"));
-                else
-                    m_host = str;
+				break;
+			case NetworkSocket:
+				str = attribs.value("host").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'host'"));
+				else
+					m_host = str;
 
-                str = attribs.value("port").toString();
-                if(str.isEmpty())
-                    reader->raiseWarning(attributeWarning.arg("'port'"));
-                else
-                    m_host = str;
-                break;
-            case FileOrPipe:
-                break;
-            case LocalSocket:
-                break;
-            default:
-                break;
-            }
+				str = attribs.value("port").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'port'"));
+				else
+					m_host = str;
+				break;
+			case FileOrPipe:
+				break;
+			case LocalSocket:
+				break;
+			default:
+				break;
+			}
 
 		} else if (reader->name() == "asciiFilter") {
 			m_filter = new AsciiFilter();

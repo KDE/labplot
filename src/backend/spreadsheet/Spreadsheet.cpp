@@ -809,21 +809,21 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 			QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void *>(vector);
+			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::Text: {
 			QVector<QString>* vector = static_cast<QVector<QString>*>(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void *>(vector);
+			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::DateTime: {
 			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void *>(vector);
+			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		//TODO

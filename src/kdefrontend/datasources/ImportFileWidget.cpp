@@ -670,7 +670,6 @@ void ImportFileWidget::refreshPreview() {
 		}
 	case FileDataSource::Binary: {
 			ui.tePreview->clear();
-
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 			importedStrings = filter->readDataFromFile(fileName, nullptr, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = m_twPreview;

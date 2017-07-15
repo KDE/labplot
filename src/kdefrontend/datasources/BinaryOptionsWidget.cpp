@@ -70,6 +70,7 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 
 	filter->setVectors( ui.niVectors->value() );
 	filter->setDataType( (BinaryFilter::DataType)ui.cbDataType->currentIndex() );
+	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
 }
 
 void BinaryOptionsWidget::loadSettings() const {
@@ -80,6 +81,7 @@ void BinaryOptionsWidget::loadSettings() const {
 	ui.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
 	ui.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
 	ui.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
+	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 }
 
 void BinaryOptionsWidget::saveSettings() {
@@ -90,4 +92,5 @@ void BinaryOptionsWidget::saveSettings() {
 	conf.writeEntry("DataType", ui.cbDataType->currentIndex());
 	conf.writeEntry("SkipStartBytes", ui.sbSkipStartBytes->value());
 	conf.writeEntry("SkipBytes", ui.sbSkipBytes->value());
+	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 }

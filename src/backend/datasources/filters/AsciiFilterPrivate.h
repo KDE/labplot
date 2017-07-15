@@ -43,13 +43,13 @@ public:
 
 	int prepareDeviceToRead(QIODevice&);
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*,
-	     AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
-	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1,
 	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*,
+	                               AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1,
+	                          AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
@@ -59,11 +59,11 @@ public:
 	QString separatingCharacter;
 	QString dateTimeFormat;
 	QLocale::Language numberFormat;
-	bool createIndexEnabled;
 	bool autoModeEnabled;
 	bool headerEnabled;
 	bool skipEmptyParts;
 	bool simplifyWhitespacesEnabled;
+	bool createIndexEnabled;
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow;
