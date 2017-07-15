@@ -129,6 +129,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
+	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 	ui.gbOptions->hide();
 	ui.gbUpdateOptions->hide();
 
@@ -194,7 +195,6 @@ ImportFileWidget::~ImportFileWidget() {
 }
 
 void ImportFileWidget::hideDataSource() {
-
 	m_fileDataSource = false;
 	ui.gbUpdateOptions->hide();
 
@@ -219,8 +219,8 @@ void ImportFileWidget::hideDataSource() {
 	ui.cbUpdateOn->hide();
 	ui.lUpdateOn->hide();
 
-	ui.sbUpdateFrequency->hide();
-	ui.lUpdateFrequency->hide();
+	ui.sbUpdateInterval->hide();
+	ui.lUpdateInterval->hide();
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -260,7 +260,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	source->setFilter(this->currentFileFilter());
 
 	source->setUpdateType(updateType);
-	source->setUpdateFrequency(ui.sbUpdateFrequency->value());
+	source->setUpdateInterval(ui.sbUpdateInterval->value());
 	source->setSourceType(sourceType);
 	source->setSampleRate(ui.sbSampleRate->value());
 	source->setKeepNvalues(ui.sbKeepValues->value());
@@ -768,24 +768,26 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 	FileDataSource::UpdateType type = static_cast<FileDataSource::UpdateType>(idx);
 
 	if (type == FileDataSource::UpdateType::TimeInterval) {
-		ui.lUpdateFrequency->show();
-		ui.sbUpdateFrequency->show();
+		ui.lUpdateInterval->show();
+		ui.sbUpdateInterval->show();
+		ui.lUpdateIntervalUnit->show();
 	} else if (type == FileDataSource::UpdateType::NewData) {
-		ui.lUpdateFrequency->hide();
-		ui.sbUpdateFrequency->hide();
+		ui.lUpdateInterval->hide();
+		ui.sbUpdateInterval->hide();
+		ui.lUpdateIntervalUnit->hide();
 	}
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
-    FileDataSource::ReadingType type = static_cast<FileDataSource::ReadingType>(idx);
+	FileDataSource::ReadingType type = static_cast<FileDataSource::ReadingType>(idx);
 
-    if (type == FileDataSource::ReadingType::TillEnd) {
-        ui.lSampleRate->hide();
-        ui.sbSampleRate->hide();
-    } else {
-        ui.lSampleRate->show();
-        ui.sbSampleRate->show();
-    }
+	if (type == FileDataSource::ReadingType::TillEnd) {
+		ui.lSampleRate->hide();
+		ui.sbSampleRate->hide();
+	} else {
+		ui.lSampleRate->show();
+		ui.sbSampleRate->show();
+	}
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
@@ -794,7 +796,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	if ((type == FileDataSource::SourceType::FileOrPipe) || (type == FileDataSource::SourceType::LocalSocket)) {
 		ui.lFileName->show();
 		ui.kleFileName->show();
-		ui.bFileInfo->show();
+		ui.bFileInfo->setVisible(type == FileDataSource::SourceType::FileOrPipe);
 		ui.bOpen->show();
 
 		ui.cbBaudRate->hide();
@@ -820,7 +822,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-
 	} else if (type == FileDataSource::SourceType::SerialPort) {
 		ui.lBaudRate->show();
 		ui.cbBaudRate->show();
@@ -839,7 +840,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 }
 
 void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
-
 	for (int i = 2; i < ui.swOptions->count(); ++i)
 		ui.swOptions->removeWidget(ui.swOptions->widget(i));
 

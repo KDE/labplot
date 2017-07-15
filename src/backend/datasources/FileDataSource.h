@@ -104,8 +104,8 @@ public:
 	int baudRate() const;
 	void setBaudRate(const int);
 
-	void setUpdateFrequency(const int);
-	int updateFrequency() const;
+	void setUpdateInterval(const int);
+	int updateInterval() const;
 
 	void setKeepNvalues(const int);
 	int keepNvalues() const;
@@ -155,7 +155,7 @@ private:
 
 	int m_sampleRate;
 	int m_keepNvalues;
-    int m_updateFrequency;
+    int m_updateInterval;
     int m_port;
     int m_baudRate;
 

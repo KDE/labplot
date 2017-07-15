@@ -101,7 +101,7 @@ FileDataSource::~FileDataSource() {
 
 void FileDataSource::ready() {
 	if (m_updateType == TimeInterval)
-		m_updateTimer->start(m_updateFrequency);
+		m_updateTimer->start(m_updateInterval);
 }
 
 void FileDataSource::initActions() {
@@ -164,7 +164,7 @@ void FileDataSource::updateNow() {
 
 	//restart the timer after update
 	if (m_updateType == TimeInterval)
-		m_updateTimer->start(m_updateFrequency);
+		m_updateTimer->start(m_updateInterval);
 }
 
 /*!
@@ -184,7 +184,7 @@ void FileDataSource::stopReading() {
 void FileDataSource::continueReading() {
 	m_paused = false;
 	if (m_updateType == TimeInterval)
-		m_updateTimer->start(m_updateFrequency);
+		m_updateTimer->start(m_updateInterval);
 	else if (m_updateType == NewData)
 		connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
 }
@@ -265,16 +265,16 @@ int FileDataSource::baudRate() const {
 }
 
 /*!
- * \brief Sets the source's update frequency to frequency
- * \param frequency
+ * \brief Sets the source's update interval to \c interval
+ * \param interval
  */
-void FileDataSource::setUpdateFrequency(const int frequency) {
-	m_updateFrequency = frequency;
-	m_updateTimer->start(m_updateFrequency);
+void FileDataSource::setUpdateInterval(const int interval) {
+	m_updateInterval = interval;
+	m_updateTimer->start(m_updateInterval);
 }
 
-int FileDataSource::updateFrequency() const {
-	return m_updateFrequency;
+int FileDataSource::updateInterval() const {
+	return m_updateInterval;
 }
 
 /*!
@@ -717,7 +717,7 @@ void FileDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
 
 	if (m_updateType == TimeInterval)
-		writer->writeAttribute("updateFrequency", QString::number(m_updateFrequency));
+		writer->writeAttribute("updateFrequency", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
 		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
@@ -831,7 +831,7 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 				if(str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'updateFrequency'"));
 				else
-					m_updateFrequency = str.toInt();
+					m_updateInterval = str.toInt();
 			}
 
 			if (m_readingType != TillEnd) {

@@ -32,7 +32,7 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 
 	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
 	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
-    connect(ui.sbUpdateFrequency, SIGNAL(valueChanged(int)), this, SLOT(updateFrequencyChanged(int)));
+    connect(ui.sbUpdateFrequency, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
     connect(ui.sbKeepNvalues, SIGNAL(valueChanged(int)), this, SLOT(keepNvaluesChanged(int)));
     connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
     connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
@@ -48,7 +48,7 @@ LiveDataDock::~LiveDataDock() {
 void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 	m_liveDataSources = sources;
 	ui.sbSampleRate->setValue(m_liveDataSources.at(0)->sampleRate());
-	ui.sbUpdateFrequency->setValue(m_liveDataSources.at(0)->updateFrequency());
+	ui.sbUpdateFrequency->setValue(m_liveDataSources.at(0)->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(m_liveDataSources.at(0)->updateType()));
 }
 
@@ -82,7 +82,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 		for (auto* source: m_liveDataSources) {
 			source->setUpdateType(type);
-			source->setUpdateFrequency(ui.sbUpdateFrequency->value());
+			source->setUpdateInterval(ui.sbUpdateFrequency->value());
 		}
 
 	} else if (type == FileDataSource::UpdateType::NewData) {
@@ -96,11 +96,11 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 /*!
  * \brief Modifies the update frequency of the live data sources
- * \param updateFrequency
+ * \param updateInterval
  */
-void LiveDataDock::updateFrequencyChanged(int updateFrequency) {
+void LiveDataDock::updateIntervalChanged(int updateInterval) {
 	for (auto* source : m_liveDataSources)
-		source->setUpdateFrequency(updateFrequency);
+		source->setUpdateInterval(updateInterval);
 }
 
 /*!
