@@ -56,6 +56,10 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
+void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource * dataSource, AbstractFileFilter::ImportMode) {
+    d->readFromLiveDevice(device, dataSource);
+}
+
 qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from, AbstractFileFilter::ImportMode importMode, int lines) {
     return d->readFromLiveDevice(device, dataSource, from, importMode, lines);
 }
@@ -487,12 +491,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
             return 0; //////////
 
  /////////////////////////// prepare import for spreadsheet
-      /*  m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
-                            m_actualCols, vectorNames, columnModes);
-*/
-        /*int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {*/
-        //DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
-        //int columnOffset = 0;
 
         spreadsheet->setUndoAware(false);
 
@@ -503,23 +501,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
         qDebug() << "fds resizing!";
 
-        // needed cheaper version, we don't need undo stack for these 3
         spreadsheet->removeColumns(0, 2);
 
         if (importMode == AbstractFileFilter::Replace)
             spreadsheet->clear();
         spreadsheet->resize(importMode, vectorNames, m_actualCols);
 
-
         qDebug() << "fds resized to col: " << m_actualCols;
-
-        // resize the spreadsheet
-        //if (importMode == AbstractFileFilter::Replace) {
-        //    clear();
-        //    setRowCount(actualRows);
-        //}  else {
-
-        //}
 
         qDebug() << "fds rowCount: " << spreadsheet->rowCount();
         //also here we need a cheaper version of this
@@ -571,12 +559,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
     if (device.bytesAvailable() > 0) {
 
         //move to the last read position, from == total bytes read
-        device.seek(from);
+        if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe) {
+            device.seek(from);
+        }
 
         //count the new lines, increase actualrows on each
         //now we read all the new lines, if we want to use sample rate
         //then here we can do it, if we have actually sample rate number of lines :-?
         int newLines = 0;
+
         while (!device.atEnd()) {
             device.readLine();
             m_actualRows++;
@@ -588,8 +579,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
             }
         }
 
-        //back to the last read position before counting
-        device.seek(from);
+        //back to the last read position before counting when reading from files
+        if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe) {
+            device.seek(from);
+        }
+
         const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
 
         //new rows
@@ -631,8 +625,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
         // from the last row we read the new data in the spreadsheet
         int currentRow = spreadsheetRowCountBeforeResize;	// indexes the position in the vector(column)
-        if (lines == -1)
-            lines = m_actualRows;
 
         qDebug() << "reading from line: "  << currentRow;
 
@@ -643,7 +635,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
         for (int i = 0; i < /*qMin(lines, m_actualRows)*/linesToRead; ++i) {
             QString line = device.readLine();
-            bytesread += line.size();
+            if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
+                bytesread += line.size();
 
             qDebug() << "line bytes: " << line.size() << " line: " << line;
             qDebug() << "reading in row: " << currentRow;
@@ -947,19 +940,20 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
   Saves as XML.
  */
 void AsciiFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement( "asciiFilter" );
-	writer->writeAttribute( "commentCharacter", d->commentCharacter );
-	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
-	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
-	writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled) );
-	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
+    writer->writeStartElement( "asciiFilter");
+    writer->writeAttribute( "commentCharacter", d->commentCharacter);
+    writer->writeAttribute( "separatingCharacter", d->separatingCharacter);
+    writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled));
+    writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled));
+    writer->writeAttribute( "header", QString::number(d->headerEnabled));
 	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
-	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
-	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
-	writer->writeAttribute( "startRow", QString::number(d->startRow) );
-	writer->writeAttribute( "endRow", QString::number(d->endRow) );
-	writer->writeAttribute( "startColumn", QString::number(d->startColumn) );
-	writer->writeAttribute( "endColumn", QString::number(d->endColumn) );
+    writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts));
+    writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled));
+    writer->writeAttribute( "startRow", QString::number(d->startRow));
+    writer->writeAttribute( "endRow", QString::number(d->endRow));
+    writer->writeAttribute( "startColumn", QString::number(d->startColumn));
+    writer->writeAttribute( "endColumn", QString::number(d->endColumn));
+
 	writer->writeEndElement();
 }
 
