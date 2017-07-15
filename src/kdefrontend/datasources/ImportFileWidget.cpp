@@ -145,7 +145,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
     connect( ui.cbUpdateOn, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
+    connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+    connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
@@ -774,6 +775,18 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 		ui.lUpdateFrequency->hide();
 		ui.sbUpdateFrequency->hide();
 	}
+}
+
+void ImportFileWidget::readingTypeChanged(int idx) {
+    FileDataSource::ReadingType type = static_cast<FileDataSource::ReadingType>(idx);
+
+    if (type == FileDataSource::ReadingType::TillEnd) {
+        ui.lSampleRate->hide();
+        ui.sbSampleRate->hide();
+    } else {
+        ui.lSampleRate->show();
+        ui.sbSampleRate->show();
+    }
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {

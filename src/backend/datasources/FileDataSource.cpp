@@ -338,6 +338,18 @@ FileDataSource::SourceType FileDataSource::sourceType() const {
 }
 
 /*!
+ * \brief Sets the source's reading type to readingType
+ * \param readingType
+ */
+void FileDataSource::setReadingType(const ReadingType readingType) {
+    m_readingType = readingType;
+}
+
+FileDataSource::ReadingType FileDataSource::readingType() const {
+    return m_readingType;
+}
+
+/*!
  * \brief Sets the source's update type to updatetype
  * \param updatetype
  */
@@ -458,7 +470,7 @@ void FileDataSource::read() {
         switch (m_fileType) {
         case Ascii:
             qDebug() << "reading live ascii file.." ;
-            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Append);
+            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Replace);
             m_bytesRead += bytes;
             qDebug() << "read " << bytes << " bytes, in total: " << m_bytesRead;
 

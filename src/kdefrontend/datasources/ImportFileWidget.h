@@ -82,6 +82,7 @@ private slots:
 
     void updateTypeChanged(int);
     void sourceTypeChanged(int);
+    void readingTypeChanged(int);
 
 	void saveFilter();
 	void manageFilters();

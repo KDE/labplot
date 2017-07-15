@@ -59,6 +59,13 @@ public:
 		TimeInterval = 0,
 		NewData
 	};
+
+    enum ReadingType {
+        ContinousFixed = 0,
+        FromEnd,
+        TillEnd
+    };
+
 	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~FileDataSource();
 
@@ -78,6 +85,9 @@ public:
 
 	SourceType sourceType() const;
 	void setSourceType(const SourceType);
+
+    ReadingType readingType() const;
+    void setReadingType(const ReadingType);
 
 	int sampleRate() const;
 	void setSampleRate(const int);
@@ -135,6 +145,8 @@ private:
 	FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
+    ReadingType m_readingType;
+
 	bool m_fileWatched;
 	bool m_fileLinked;
 	bool m_paused;

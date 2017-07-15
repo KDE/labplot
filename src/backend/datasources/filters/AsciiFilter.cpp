@@ -486,12 +486,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
         if (deviceError)
             return 0; //////////
 
-        /*if (dynamic_cast<Matrix*>(dataSource)) {
-            // avoid text data in Matrix
-            for (auto& c: columnModes)
-                if (c == AbstractColumn::Text)
-                    c = AbstractColumn::Numeric;
-        }*/
  /////////////////////////// prepare import for spreadsheet
       /*  m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
                             m_actualCols, vectorNames, columnModes);
@@ -499,12 +493,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
         /*int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {*/
         //DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
         //int columnOffset = 0;
-        //setUndoAware(false);
+
+        spreadsheet->setUndoAware(false);
 
         //make the available columns undo unaware before we resize and rename them below,
         //the same will be done for new columns in this->resize().
-        /*for (int i = 0; i < childCount<Column>(); i++)
-            child<Column>(i)->setUndoAware(false);*/
+        for (int i = 0; i < spreadsheet->childCount<Column>(); i++)
+            spreadsheet->child<Column>(i)->setUndoAware(false);
+
         qDebug() << "fds resizing!";
 
         // needed cheaper version, we don't need undo stack for these 3
@@ -564,15 +560,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
                 break;
             }
         }
-    //	QDEBUG("dataPointers =" << dataPointers);
 
-        /////////////////////////
-        //number formatting
-        /*if (locale == AbstractFileFilter::LocaleC)
-            m_numberFormat = QLocale(QLocale::C);
-        else
-            m_numberFormat = QLocale::system();
-*/
         m_prepared = true;
         qDebug() << "prepared!";
     }
@@ -588,9 +576,16 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
         //count the new lines, increase actualrows on each
         //now we read all the new lines, if we want to use sample rate
         //then here we can do it, if we have actually sample rate number of lines :-?
+        int newLines = 0;
         while (!device.atEnd()) {
             device.readLine();
             m_actualRows++;
+            if (spreadsheet->readingType() != FileDataSource::ReadingType::TillEnd) {
+                newLines++;
+                //for Continous reading and FromEnd we read sample rate number of lines if possible
+                if (newLines == spreadsheet->sampleRate())
+                    break;
+            }
         }
 
         //back to the last read position before counting
@@ -600,8 +595,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
         //new rows
         if (spreadsheet->rowCount() < m_actualRows)
             spreadsheet->setRowCount(m_actualRows);
-
-        qDebug() << "resized to m_actualRows!" << m_actualRows;
 
         // if we have fixed size, we do this only once in preparation, here we can use
         // m_prepared and we need something to decide whether it has a fixed size or increasing
@@ -635,7 +628,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
                 break;
             }
         }
-        qDebug() << "datacontainer copied";
 
         // from the last row we read the new data in the spreadsheet
         int currentRow = spreadsheetRowCountBeforeResize;	// indexes the position in the vector(column)
@@ -661,10 +653,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
             if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
                 continue;
 
-            /*if (startRow > 1) {	// skip start lines
-            startRow--;
-            continue;
-        }*/
             QLocale locale(numberFormat);
 
             QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
@@ -678,6 +666,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
                         bool isNumber;
                         const double value = locale.toDouble(valueString, &isNumber);
                         static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+                        qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
                         break;
                     }
                     case AbstractColumn::DateTime: {
@@ -713,16 +702,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
                         //TODO
                         break;
                     }
-
                 }
             }
-
             currentRow++;
         }
 
         //////////
-        //dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
-
         // set the comments for each of the columns if datasource is a spreadsheet
         const int rows = spreadsheet->rowCount();
         for (int n = 0; n < m_actualCols; ++n) {
@@ -738,18 +723,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
                 break;
             }
             column->setComment(comment);
-            // needed?
+
             if (importMode == AbstractFileFilter::Replace) {
                 column->setSuppressDataChangedSignal(false);
                 column->setChanged();
             }
         }
-
-    //make the spreadsheet and all its children undo aware again
-    // do we need these?
-    spreadsheet->setUndoAware(true);
-    for (int  i= 0; i < spreadsheet->childCount<Column>(); ++i)
-        spreadsheet->child<Column>(i)->setUndoAware(true);
     }
     //////////////////
     return bytesread;

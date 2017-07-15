@@ -142,8 +142,12 @@ void LiveDataDock::continueReading() {
 void LiveDataDock::pauseContinueReading() {
 	m_paused = !m_paused;
 
-	if (m_paused)
-		pauseReading();
-	else
-		continueReading();
+    if (m_paused) {
+        pauseReading();
+        ui.bPausePlayReading->setText("Continue reading");
+    }
+    else {
+        continueReading();
+        ui.bPausePlayReading->setText("Pause reading");
+    }
 }

@@ -283,9 +283,7 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QStackedWidget" name="swOptions">
-            <widget class="QWidget" name="page">
-             <zorder>gbUpdateOptions</zorder>
-            </widget>
+            <widget class="QWidget" name="page"/>
             <widget class="QWidget" name="page_2"/>
            </widget>
           </item>
@@ -535,43 +533,16 @@
       <string>Update Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="1" column="0">
-       <widget class="QLabel" name="lUpdateFrequency">
+      <item row="7" column="0" colspan="3">
+       <widget class="QCheckBox" name="chbWatchFile">
+        <property name="toolTip">
+         <string>If this option is checked, the file will be automatically reloaded on changes.</string>
+        </property>
         <property name="text">
-         <string>Update frequency</string>
+         <string>Watch the file</string>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QSpinBox" name="sbUpdateFrequency">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>60000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lUpdateOn">
-        <property name="text">
-         <string>Update on</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lSampleRate">
-        <property name="text">
-         <string>Sample rate</string>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -595,20 +566,39 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="QCheckBox" name="chbWatchFile">
+      <item row="4" column="2">
+       <widget class="QSpinBox" name="sbUpdateFrequency">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="3">
+       <widget class="QCheckBox" name="chbLinkFile">
         <property name="toolTip">
-         <string>If this option is checked, the file will be automatically reloaded on changes.</string>
+         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
         </property>
         <property name="text">
-         <string>Watch the file</string>
+         <string>Link the file</string>
         </property>
         <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="5" column="2">
        <widget class="QSpinBox" name="sbKeepValues">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -627,23 +617,38 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="1" column="0">
+       <widget class="QLabel" name="lReadType">
+        <property name="text">
+         <string>Read</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
        <widget class="QLabel" name="lKeepLastValues">
         <property name="text">
          <string>Keep last N values</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" colspan="3">
-       <widget class="QCheckBox" name="chbLinkFile">
-        <property name="toolTip">
-         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
-        </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lUpdateOn">
         <property name="text">
-         <string>Link the file</string>
+         <string>Update on</string>
         </property>
-        <property name="checked">
-         <bool>true</bool>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lUpdateFrequency">
+        <property name="text">
+         <string>Update frequency</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lSampleRate">
+        <property name="text">
+         <string>Sample rate</string>
         </property>
        </widget>
       </item>
@@ -658,6 +663,25 @@
         <property name="value">
          <number>5</number>
         </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="cbReadType">
+        <item>
+         <property name="text">
+          <string>Continously fixed</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>From end</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Till the end</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
