@@ -3,12 +3,8 @@
     Project              : LabPlot
     Description          : File data source
     --------------------------------------------------------------------
-<<<<<<< HEAD
     Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
-=======
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
->>>>>>> 00ae2b526b2050008fa9c1573e4fe7389cb198d5
 
  ***************************************************************************/
 
