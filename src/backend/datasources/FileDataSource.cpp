@@ -68,15 +68,16 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_fileLinked(false),
 	  m_filter(nullptr),
 	  m_fileSystemWatcher(nullptr),
+	  m_updateTimer(new QTimer(this)),
 	  m_file(nullptr),
 	  m_localSocket(nullptr),
 	  m_tcpSocket(nullptr),
 	  m_serialPort(nullptr),
-	  m_updateTimer(new QTimer(this)),
+	  m_device(nullptr),
 	  m_paused(false),
 	  m_prepared(false),
-	  m_newDataAvailable(false),
 	  m_bytesRead(0) {
+
 	initActions();
 	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
@@ -103,9 +104,14 @@ FileDataSource::~FileDataSource() {
 	delete m_updateTimer;
 }
 
+/*!
+ * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
+ */
 void FileDataSource::ready() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
+	else
+		watch();
 }
 
 void FileDataSource::initActions() {
@@ -179,7 +185,7 @@ void FileDataSource::stopReading() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
 	else if (m_updateType == NewData)
-		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
 }
 
 /*!
@@ -190,7 +196,7 @@ void FileDataSource::continueReading() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
 	else if (m_updateType == NewData)
-		connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+		connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
 }
 
 /*!
@@ -201,7 +207,7 @@ void FileDataSource::pauseReading() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
 	else if (m_updateType == NewData)
-		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
+		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
 }
 
 /*!
@@ -407,7 +413,6 @@ bool FileDataSource::isFileLinked() const {
 	return m_fileLinked;
 }
 
-
 QIcon FileDataSource::icon() const {
 	QIcon icon;
 	if (m_fileType == FileDataSource::Ascii)
@@ -446,39 +451,44 @@ QMenu* FileDataSource::createContextMenu() {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
+
+/*
+ * called periodically or on new data changes (file changed, new data in the socket, etc.)
+ */
 void FileDataSource::read() {
 	if (m_filter == nullptr)
 		return;
 
+	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
+			m_device = m_file;
 			break;
 		case NetworkSocket:
 			m_tcpSocket = new QTcpSocket;
-
+			m_device = m_tcpSocket;
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket;
 			m_localSocket->setServerName(m_fileName);
-
+			m_device = m_localSocket;
 			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-			m_localSocket->connectToServer(QLocalSocket::ReadOnly);
 			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
-
 			break;
 		case SerialPort:
 			m_serialPort = new QSerialPort;
+			m_device = m_serialPort;
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
-
 			connect(m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(serialPortError(QSerialPort::SerialPortError)));
 			connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			break;
 		}
 		m_prepared = true;
 	}
+
 	qint64 bytes;
 
 	switch (m_sourceType) {
@@ -499,56 +509,29 @@ void FileDataSource::read() {
 		}
 		break;
 	case NetworkSocket:
+		//TODO
 		break;
 	case LocalSocket:
-		if (m_newDataAvailable) {
-			switch (m_fileType) {
-			case Ascii:
-				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
-				break;
-			case Binary:
-				//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
-				break;
-			default:
-				break;
-			}
-			m_localSocket->abort();
-			m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
-			m_newDataAvailable = false;
-		}
+		m_localSocket->abort();
+		m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
 		break;
 	case SerialPort:
-		if (m_newDataAvailable) {
-			// copy data from buffer spreadsheet
-			switch (m_fileType) {
-			case Ascii:
-				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
-				break;
-			case Binary:
-				//   dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_serialPort, this);
-				break;
-
-			default:
-				break;
-			}
-			m_newDataAvailable = false;
-		}
+		//TODO
 		break;
 	}
-
-
-	watch();
 }
 
-//for sockets, serial port, network..
+/*!
+ * Slot for the signal that is emitted once every time new data is available for reading from the device.
+ * It will only be emitted again once new data is available, such as when a new payload of network data has arrived on the network socket,
+ * or when a new block of data has been appended to your device.
+ */
 void FileDataSource::readyRead() {
-	if (!m_newDataAvailable)
-		m_newDataAvailable = true;
+	if (m_fileType == Ascii)
+		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+// 	else if (m_fileType == Binary)
+		//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
 
-	//just like for files: the file system watcher emits the signal and we read on new data
-	//here new data comes when this is called actually
-	if (m_updateType == NewData)
-		read();
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
@@ -591,10 +574,6 @@ void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	}
 }
 
-void FileDataSource::fileChanged() {
-	this->read();
-}
-
 void FileDataSource::watchToggled() {
 	m_fileWatched = !m_fileWatched;
 	watch();
@@ -608,19 +587,17 @@ void FileDataSource::linkToggled() {
 
 //watch the file upon reading for changes if required
 void FileDataSource::watch() {
-	if (m_updateType == UpdateType::NewData) {
-		if (m_fileWatched) {
-			if (!m_fileSystemWatcher) {
-				m_fileSystemWatcher = new QFileSystemWatcher;
-				connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
-			}
-
-			if ( !m_fileSystemWatcher->files().contains(m_fileName) )
-				m_fileSystemWatcher->addPath(m_fileName);
-		} else {
-			if (m_fileSystemWatcher)
-				m_fileSystemWatcher->removePath(m_fileName);
+	if (m_fileWatched) {
+		if (!m_fileSystemWatcher) {
+			m_fileSystemWatcher = new QFileSystemWatcher;
+			connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
 		}
+
+		if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+			m_fileSystemWatcher->addPath(m_fileName);
+	} else {
+		if (m_fileSystemWatcher)
+			m_fileSystemWatcher->removePath(m_fileName);
 	}
 }
 

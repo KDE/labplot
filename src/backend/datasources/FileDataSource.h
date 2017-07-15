@@ -154,7 +154,6 @@ private:
 	bool m_fileWatched;
 	bool m_fileLinked;
 	bool m_paused;
-	bool m_newDataAvailable;
 	bool m_prepared;
 	bool m_keepLastValues;
 
@@ -168,12 +167,14 @@ private:
 
 	AbstractFileFilter* m_filter;
 
+	QTimer* m_updateTimer;
 	QFileSystemWatcher* m_fileSystemWatcher;
+
 	QFile* m_file;
 	QLocalSocket* m_localSocket;
 	QTcpSocket* m_tcpSocket;
 	QSerialPort* m_serialPort;
-	QTimer* m_updateTimer;
+	QIODevice* m_device;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -185,7 +186,6 @@ public slots:
 	void read();
 
 private slots:
-	void fileChanged();
 	void watchToggled();
 	void linkToggled();
 
@@ -193,6 +193,7 @@ private slots:
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void serialPortError(QSerialPort::SerialPortError);
+
 signals:
 	void dataChanged();
 	void dataUpdated();
