@@ -164,7 +164,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 void ImportFileWidget::loadSettings() {
 	//load last used settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+	QString confName;
+	if (m_fileDataSource)
+		confName = QLatin1String("LiveDataImport");
+	else
+		confName = QLatin1String("FileImport");
+	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	//settings for data type specific widgets
 	m_asciiOptionsWidget->loadSettings();
@@ -183,7 +188,12 @@ void ImportFileWidget::loadSettings() {
 
 ImportFileWidget::~ImportFileWidget() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+	QString confName;
+	if (m_fileDataSource)
+		confName = QLatin1String("LiveDataImport");
+	else
+		confName = QLatin1String("FileImport");
+	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	// general settings
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
