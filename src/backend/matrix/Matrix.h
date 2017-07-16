@@ -99,6 +99,7 @@ public:
 	void setCell(int row, int col, double value);
 	void clearCell(int row, int col);
 
+	//TODO: consider columnMode
 	QVector<double> columnCells(int col, int first_row, int last_row);
 	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
 	QVector<double> rowCells(int row, int first_column, int last_column);

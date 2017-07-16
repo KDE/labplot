@@ -370,6 +370,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addAction(action_add_column);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
+	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_statistics_all_columns);
 	action_statistics_all_columns->setVisible(true);
 
@@ -486,6 +487,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
+	menu->insertAction(firstAction, action_plot_data);
+	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
