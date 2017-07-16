@@ -192,6 +192,7 @@ private slots:
 	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);
+	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
 
 signals:

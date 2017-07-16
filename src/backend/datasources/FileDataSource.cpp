@@ -66,17 +66,17 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_fileType(Ascii),
 	  m_fileWatched(false),
 	  m_fileLinked(false),
+	  m_paused(false),
+	  m_prepared(false),
+	  m_bytesRead(0),
 	  m_filter(nullptr),
-	  m_fileSystemWatcher(nullptr),
 	  m_updateTimer(new QTimer(this)),
+	  m_fileSystemWatcher(nullptr),
 	  m_file(nullptr),
 	  m_localSocket(nullptr),
 	  m_tcpSocket(nullptr),
 	  m_serialPort(nullptr),
-	  m_device(nullptr),
-	  m_paused(false),
-	  m_prepared(false),
-	  m_bytesRead(0) {
+	  m_device(nullptr) {
 
 	initActions();
 	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
@@ -469,6 +469,8 @@ void FileDataSource::read() {
 		case NetworkSocket:
 			m_tcpSocket = new QTcpSocket;
 			m_device = m_tcpSocket;
+			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+// 			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket;
@@ -489,7 +491,7 @@ void FileDataSource::read() {
 		m_prepared = true;
 	}
 
-	qint64 bytes;
+	qint64 bytes = 0;
 
 	switch (m_sourceType) {
 	case FileOrPipe:
@@ -509,13 +511,17 @@ void FileDataSource::read() {
 		}
 		break;
 	case NetworkSocket:
-		//TODO
+		DEBUG("reading from a network socket");
+		m_tcpSocket->abort();
+		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 		break;
 	case LocalSocket:
+		DEBUG("reading from a local socket");
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
 		break;
 	case SerialPort:
+		DEBUG("reading from the serial port");
 		//TODO
 		break;
 	}
@@ -527,6 +533,7 @@ void FileDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void FileDataSource::readyRead() {
+	DEBUG("Got new data from the device");
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 // 	else if (m_fileType == Binary)
@@ -537,22 +544,45 @@ void FileDataSource::readyRead() {
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
 	switch (socketError) {
 	case QLocalSocket::ServerNotFoundError:
-		QMessageBox::information(0, i18n("Local Socket Error"), i18n("The socket was not found. Please check the socket name."));
+		QMessageBox::critical(0, i18n("Local Socket Error"),
+									i18n("The socket was not found. Please check the socket name."));
 		break;
 	case QLocalSocket::ConnectionRefusedError:
-		QMessageBox::information(0, i18n("LabPlot2"),
-		                         i18n("The connection was refused by the peer"));
+		QMessageBox::critical(0, i18n("Local Socket Error"),
+									i18n("The connection was refused by the peer"));
 		break;
 	case QLocalSocket::PeerClosedError:
+		QMessageBox::critical(0, i18n("Local Socket Error"),
+									i18n("The socket has closed the connection."));
 		break;
 	default:
-		QMessageBox::information(0, i18n("LabPlot2"),
-		                         i18n("The following error occurred: %1.")
-		                         .arg(m_localSocket->errorString()));
+		QMessageBox::critical(0, i18n("Local Socket Error"),
+									i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
+	}
+}
+
+void FileDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
+	switch (socketError) {
+	case QAbstractSocket::ConnectionRefusedError:
+		QMessageBox::critical(0, i18n("TCP Socket Error"),
+									i18n("The connection was refused by the peer. Make sure the server is running and check the host name and port settings."));
+		break;
+	case QAbstractSocket::RemoteHostClosedError:
+		QMessageBox::critical(0, i18n("TCP Socket Error"),
+									i18n("The remote host closed the connection."));
+		break;
+	case QAbstractSocket::HostNotFoundError:
+		QMessageBox::critical(0, i18n("TCP Socket Error"),
+									i18n("The host was not found. Please check the host name and port settings."));
+		break;
+	default:
+		QMessageBox::critical(0, i18n("TCP Socket Error"),
+									i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
 	}
 }
 
 void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
+	//TODO
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
 		break;
