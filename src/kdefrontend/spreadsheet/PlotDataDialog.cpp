@@ -174,7 +174,7 @@ void PlotDataDialog::processColumns() {
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
 	if (m_columns.size()>2) {
-		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui.gbData->layout());
+		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui.scrollAreaYColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));
 			QComboBox* comboBox = new QComboBox();
