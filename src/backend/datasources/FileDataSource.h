@@ -123,6 +123,9 @@ public:
 	void setFileName(const QString&);
 	QString fileName() const;
 
+	void setLocalSocketName(const QString&);
+	QString localSocketName() const;
+
 	void updateNow();
 	void stopReading();
 	void pauseReading();
@@ -144,6 +147,7 @@ private:
 
 	QString m_fileName;
 	QString m_serialPortName;
+	QString m_localSocketName;
 	QString m_host;
 
 	FileType m_fileType;

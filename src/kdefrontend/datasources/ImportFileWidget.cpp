@@ -287,16 +287,25 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	if (readingType != FileDataSource::ReadingType::TillEnd)
 		source->setSampleRate(ui.sbSampleRate->value());
 
-	if ((sourceType == FileDataSource::SourceType::FileOrPipe) || (sourceType == FileDataSource::SourceType::LocalSocket)) {
+	switch (sourceType) {
+	case FileDataSource::SourceType::FileOrPipe:
 		source->setFileName( ui.kleFileName->text() );
 		source->setFileWatched( ui.chbWatchFile->isChecked() );
 		source->setFileLinked( ui.chbLinkFile->isChecked() );
-	} else if (sourceType == FileDataSource::SourceType::NetworkSocket) {
+		break;
+	case FileDataSource::SourceType::LocalSocket:
+		source->setLocalSocketName(ui.leSocketName->text());
+		break;
+	case FileDataSource::SourceType::NetworkSocket:
 		source->setHost(ui.leHost->text());
 		source->setPort(ui.lePort->text().toInt());
-	} else if (sourceType == FileDataSource::SourceType::SerialPort) {
+		break;
+	case FileDataSource::SourceType::SerialPort:
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
+		break;
+	default:
+		break;
 	}
 }
 
@@ -815,10 +824,11 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	FileDataSource::SourceType type = static_cast<FileDataSource::SourceType>(idx);
 
-	if ((type == FileDataSource::SourceType::FileOrPipe) || (type == FileDataSource::SourceType::LocalSocket)) {
+	switch (type) {
+	case FileDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
 		ui.kleFileName->show();
-		ui.bFileInfo->setVisible(type == FileDataSource::SourceType::FileOrPipe);
+		ui.bFileInfo->show();
 		ui.bOpen->show();
 
 		ui.cbBaudRate->hide();
@@ -829,7 +839,25 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
-	} else if (type == FileDataSource::SourceType::NetworkSocket) {
+		break;
+	case FileDataSource::SourceType::LocalSocket:
+		ui.leSocketName->show();
+		ui.lSocketName->show();
+
+		ui.lFileName->hide();
+		ui.kleFileName->hide();
+		ui.bOpen->hide();
+		ui.bFileInfo->hide();
+		ui.cbBaudRate->hide();
+		ui.lBaudRate->hide();
+		ui.lHost->hide();
+		ui.leHost->hide();
+		ui.lPort->hide();
+		ui.lePort->hide();
+		ui.cbSerialPort->hide();
+		ui.lSerialPort->hide();
+		break;
+	case FileDataSource::SourceType::NetworkSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
@@ -839,12 +867,15 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->hide();
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
+		ui.lSocketName->hide();
+		ui.leSocketName->hide();
 
 		ui.lFileName->hide();
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-	} else if (type == FileDataSource::SourceType::SerialPort) {
+		break;
+	case FileDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
 		ui.cbBaudRate->show();
 		ui.lSerialPort->show();
@@ -858,6 +889,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.lSocketName->hide();
+		ui.leSocketName->hide();
+		break;
+	default:
+		break;
 	}
 }
 
@@ -880,6 +916,9 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 
 	ui.cbSerialPort->hide();
 	ui.lSerialPort->hide();
+
+	ui.lSocketName->hide();
+	ui.leSocketName->hide();;
 
 	ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
 	ui.cbSerialPort->addItems(FileDataSource::availablePorts());

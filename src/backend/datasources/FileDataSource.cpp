@@ -231,11 +231,23 @@ QStringList FileDataSource::fileTypes() {
 }
 
 void FileDataSource::setFileName(const QString& name) {
-	m_fileName=name;
+	m_fileName = name;
 }
 
 QString FileDataSource::fileName() const {
 	return m_fileName;
+}
+
+/*!
+ * \brief Sets the local socket's server name to name
+ * \param name
+ */
+void FileDataSource::setLocalSocketName(const QString & name) {
+	m_localSocketName = name;
+}
+
+QString FileDataSource::localSocketName() const {
+	return m_localSocketName;
 }
 
 void FileDataSource::setFileType(const FileType type) {
@@ -478,11 +490,11 @@ void FileDataSource::read() {
 			m_tcpSocket = new QTcpSocket;
 			m_device = m_tcpSocket;
 			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-// 			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+			connect(m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
 			break;
 		case LocalSocket:
-			m_localSocket = new QLocalSocket;
-			m_localSocket->setServerName(m_fileName);
+			m_localSocket = new QLocalSocket(this);
+			m_localSocket->setServerName(m_localSocketName);
 			m_device = m_localSocket;
 			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
@@ -505,10 +517,10 @@ void FileDataSource::read() {
 	case FileOrPipe:
 		switch (m_fileType) {
 		case Ascii:
-			qDebug() << "reading live ascii file.." ;
+			qDebug() << "Reading live ascii file.." ;
 			bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Replace);
 			m_bytesRead += bytes;
-			qDebug() << "read " << bytes << " bytes, in total: " << m_bytesRead;
+			qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
 
 			break;
 		case Binary:
@@ -526,7 +538,8 @@ void FileDataSource::read() {
 	case LocalSocket:
 		DEBUG("reading from a local socket");
 		m_localSocket->abort();
-		m_localSocket->connectToServer(m_fileName, QLocalSocket::ReadOnly);
+		qDebug() << m_localSocketName;
+		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
@@ -550,6 +563,9 @@ void FileDataSource::readyRead() {
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
+	disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+
 	switch (socketError) {
 	case QLocalSocket::ServerNotFoundError:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
