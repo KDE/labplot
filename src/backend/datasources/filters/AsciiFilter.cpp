@@ -381,16 +381,15 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		startRow++;
 	}
 
-	if (createIndexEnabled)
-		vectorNames.prepend("index");
-
 	// set range to read
 	if (endColumn == -1)
 		endColumn = firstLineStringList.size(); // last column
-	m_actualCols = endColumn - startColumn + 1;
 
-	if (createIndexEnabled)
-		++m_actualCols;
+	if (createIndexEnabled) {
+		vectorNames.prepend("index");
+		endColumn++;
+	}
+	m_actualCols = endColumn - startColumn + 1;
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
@@ -513,6 +512,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
+		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
@@ -612,6 +612,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
 		QString line = device.readLine();
+		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
