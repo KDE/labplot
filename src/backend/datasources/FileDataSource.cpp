@@ -545,7 +545,7 @@ void FileDataSource::readyRead() {
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 // 	else if (m_fileType == Binary)
-		//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
+	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
 
 }
 
@@ -553,19 +553,19 @@ void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 	switch (socketError) {
 	case QLocalSocket::ServerNotFoundError:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-									i18n("The socket was not found. Please check the socket name."));
+		                      i18n("The socket was not found. Please check the socket name."));
 		break;
 	case QLocalSocket::ConnectionRefusedError:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-									i18n("The connection was refused by the peer"));
+		                      i18n("The connection was refused by the peer"));
 		break;
 	case QLocalSocket::PeerClosedError:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-									i18n("The socket has closed the connection."));
+		                      i18n("The socket has closed the connection."));
 		break;
 	default:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-									i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
+		                      i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
 	}
 }
 
@@ -573,41 +573,55 @@ void FileDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	switch (socketError) {
 	case QAbstractSocket::ConnectionRefusedError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-									i18n("The connection was refused by the peer. Make sure the server is running and check the host name and port settings."));
+		                      i18n("The connection was refused by the peer. Make sure the server is running and check the host name and port settings."));
 		break;
 	case QAbstractSocket::RemoteHostClosedError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-									i18n("The remote host closed the connection."));
+		                      i18n("The remote host closed the connection."));
 		break;
 	case QAbstractSocket::HostNotFoundError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-									i18n("The host was not found. Please check the host name and port settings."));
+		                      i18n("The host was not found. Please check the host name and port settings."));
 		break;
 	default:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-									i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
+		                      i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
 	}
 }
 
 void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
-	//TODO
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("Failed to open the device."));
 		break;
 	case QSerialPort::PermissionError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("Failed to open the device. Please check your permissions on this device."));
 		break;
 	case QSerialPort::OpenError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("Device already opened."));
 		break;
 	case QSerialPort::NotOpenError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("The device is not opened."));
 		break;
 	case QSerialPort::ReadError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("Failed to read data."));
 		break;
 	case QSerialPort::ResourceError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("Failed to read data. The device is removed."));
 		break;
 	case QSerialPort::TimeoutError:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("The device timed out."));
 		break;
-
 	default:
+		QMessageBox::critical(0, i18n("Serial Port Error"),
+		                      i18n("The following error occurred: %1.").arg(m_serialPort->errorString()));
 		break;
 	}
 }
