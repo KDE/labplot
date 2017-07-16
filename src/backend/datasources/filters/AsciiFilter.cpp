@@ -512,9 +512,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
 		//also here we need a cheaper version of this
-		if (spreadsheet->rowCount() < m_actualRows)
-			spreadsheet->setRowCount(m_actualRows);
-		qDebug() << "fds rows resized to: " << m_actualRows;
+        if (spreadsheet->rowCount() < m_actualRows) {
+            if (!spreadsheet->keepLastValues()) {
+                spreadsheet->setRowCount(m_actualRows);
+            } else {
+                spreadsheet->setRowCount(spreadsheet->keepNvalues());
+                m_actualRows = spreadsheet->keepNvalues();
+            }
+        }
+        qDebug() << "fds rows resized to: " << m_actualRows;
 
 		m_dataContainer.resize(m_actualCols);
 
@@ -524,15 +530,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			switch (columnModes[n]) {
 			case AbstractColumn::Numeric: {
 					QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-					vector->reserve(m_actualRows);
-					vector->resize(m_actualRows);
+                    vector->reserve(m_actualRows);
+                    vector->resize(m_actualRows);
 					m_dataContainer[n] = static_cast<void *>(vector);
 					break;
 				}
 			case AbstractColumn::Text: {
 					QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-					vector->reserve(m_actualRows);
-					vector->resize(m_actualRows);
+                    vector->reserve(m_actualRows);
+                    vector->resize(m_actualRows);
 					m_dataContainer[n] = static_cast<void *>(vector);
 					break;
 				}
@@ -593,6 +599,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
         int currentRow;	// indexes the position in the vector(column)
 
         //new rows/resize columns if we don't have a fixed size
+        //TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
         if (!spreadsheet->keepLastValues()) {
             if (spreadsheet->rowCount() < m_actualRows)
                 spreadsheet->setRowCount(m_actualRows);
@@ -635,24 +642,30 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
             //here popping, setting currentRow
             currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 
-            for (int col = 0; col < m_actualCols; ++col) {
-                for (int row = 0; row < qMin(spreadsheet->sampleRate(), newLinesTillEnd); ++row) {
+            for (int row = 0; row < qMin(spreadsheet->sampleRate(), newLinesTillEnd); ++row) {
+                for (int col = 0; col < m_actualCols; ++col) {
                     switch (columnModes[col]) {
                     case AbstractColumn::Numeric: {
                         QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
                         vector->pop_front();
+                        vector->reserve(m_actualRows);
+                        vector->resize(m_actualRows);
                         m_dataContainer[col] = static_cast<void *>(vector);
                         break;
                     }
                     case AbstractColumn::Text: {
                         QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
                         vector->pop_front();
+                        vector->reserve(m_actualRows);
+                        vector->resize(m_actualRows);
                         m_dataContainer[col] = static_cast<void *>(vector);
                         break;
                     }
                     case AbstractColumn::DateTime: {
                         QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
                         vector->pop_front();
+                        vector->reserve(m_actualRows);
+                        vector->resize(m_actualRows);
                         m_dataContainer[col] = static_cast<void *>(vector);
                         break;
                     }
@@ -670,9 +683,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		qDebug() << "reading from line: "  << currentRow;
 
 		qDebug() <<"available bytes: " << device.bytesAvailable();
-        // TODO when fixed size
-		const int linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+        int linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 
+        if (spreadsheet->keepLastValues()) {
+            linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+        }
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 
 		for (int i = 0; i < /*qMin(lines, m_actualRows)*/linesToRead; ++i) {
