@@ -87,6 +87,7 @@ private:
 	QAction* m_toggleWatchAction;
 	QAction* m_showEditorAction;
 	QAction* m_showSpreadsheetAction;
+	QAction* m_plotDataAction;
 
 public slots:
 	void read();
@@ -95,6 +96,7 @@ private slots:
 	void fileChanged();
 	void watchToggled();
 	void linkToggled();
+	void plotData();
 
 signals:
 	void dataChanged();

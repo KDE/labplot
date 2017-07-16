@@ -31,6 +31,7 @@ Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/FITSFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/core/Project.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
 #include <QFileInfo>
 #include <QDateTime>
@@ -79,6 +80,9 @@ void FileDataSource::initActions() {
 	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
+
+	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+	connect(m_plotDataAction, SIGNAL(triggered()), this, SLOT(plotData()));
 }
 
 //TODO make the view customizable (show as a spreadsheet or as a pure text file in an editor)
@@ -180,14 +184,18 @@ QMenu* FileDataSource::createContextMenu() {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	if (!m_fileWatched)
-		menu->insertAction(firstAction, m_reloadAction);
+	menu->insertAction(firstAction, m_plotDataAction);
+	menu->insertSeparator(firstAction);
 
-	m_toggleWatchAction->setChecked(m_fileWatched);
-	menu->insertAction(firstAction, m_toggleWatchAction);
-
-	m_toggleLinkAction->setChecked(m_fileLinked);
-	menu->insertAction(firstAction, m_toggleLinkAction);
+	//TODO: doesnt' always make sense...
+// 	if (!m_fileWatched)
+// 		menu->insertAction(firstAction, m_reloadAction);
+//
+// 	m_toggleWatchAction->setChecked(m_fileWatched);
+// 	menu->insertAction(firstAction, m_toggleWatchAction);
+//
+// 	m_toggleLinkAction->setChecked(m_fileLinked);
+// 	menu->insertAction(firstAction, m_toggleLinkAction);
 
 	return menu;
 }
@@ -318,6 +326,11 @@ QString FileDataSource::fileInfoString(const QString &name) {
 		infoString += i18n("Could not open file %1 for reading.", fileName);
 
 	return infoString;
+}
+
+void FileDataSource::plotData() {
+	PlotDataDialog* dlg = new PlotDataDialog(this);
+	dlg->exec();
 }
 
 //##############################################################################
