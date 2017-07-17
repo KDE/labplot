@@ -865,6 +865,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
+        ui.leSocketName->hide();
+        ui.lSocketName->hide();
 		break;
 	case FileDataSource::SourceType::LocalSocket:
 		ui.leSocketName->show();
@@ -900,6 +902,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+        ui.leSocketName->hide();
+        ui.lSocketName->hide();
 		break;
 	case FileDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
