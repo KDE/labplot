@@ -32,10 +32,10 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 
 	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
 	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
-    connect(ui.sbUpdateFrequency, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
-    connect(ui.sbKeepNvalues, SIGNAL(valueChanged(int)), this, SLOT(keepNvaluesChanged(int)));
-    connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
-    connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
+	connect(ui.sbUpdateFrequency, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
+	connect(ui.leKeepNValues, SIGNAL(textChanged(QString)), this, SLOT(keepNvaluesChanged(QString)));
+	connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
+	connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -47,9 +47,18 @@ LiveDataDock::~LiveDataDock() {
  */
 void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 	m_liveDataSources = sources;
-	ui.sbSampleRate->setValue(m_liveDataSources.at(0)->sampleRate());
-	ui.sbUpdateFrequency->setValue(m_liveDataSources.at(0)->updateInterval());
-	ui.cbUpdateType->setCurrentIndex(static_cast<int>(m_liveDataSources.at(0)->updateType()));
+	const FileDataSource* const fds = sources.at(0);
+	ui.sbSampleRate->setValue(fds->sampleRate());
+	ui.sbUpdateFrequency->setValue(fds->updateInterval());
+	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
+
+	if(!fds->keepLastValues()) {
+		ui.leKeepNValues->hide();
+		ui.lKeepNvalues->hide();
+	} else {
+		ui.leKeepNValues->setValidator(new QIntValidator(2, 100000));
+		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
+	}
 }
 
 /*!
@@ -107,9 +116,9 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
  * \brief Modifies the number of samples to keep in each of the live data sources
  * \param keepNvalues
  */
-void LiveDataDock::keepNvaluesChanged(int keepNvalues) {
+void LiveDataDock::keepNvaluesChanged(QString keepNvalues) {
 	for (auto* source : m_liveDataSources)
-		source->setKeepNvalues(keepNvalues);
+		source->setKeepNvalues(keepNvalues.toInt());
 }
 
 /*!
@@ -142,12 +151,11 @@ void LiveDataDock::continueReading() {
 void LiveDataDock::pauseContinueReading() {
 	m_paused = !m_paused;
 
-    if (m_paused) {
-        pauseReading();
-        ui.bPausePlayReading->setText("Continue reading");
-    }
-    else {
-        continueReading();
-        ui.bPausePlayReading->setText("Pause reading");
-    }
+	if (m_paused) {
+		pauseReading();
+		ui.bPausePlayReading->setText("Continue reading");
+	} else {
+		continueReading();
+		ui.bPausePlayReading->setText("Pause reading");
+	}
 }

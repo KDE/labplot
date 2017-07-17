@@ -147,7 +147,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
-	connect( ui.cbUpdateOn, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
+	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
 	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
@@ -184,6 +184,18 @@ void ImportFileWidget::loadSettings() {
 		ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	else
 		ui.kleFileName->setText(m_fileName);
+
+	ui.leSocketName->setText(conf.readEntry("LastReadLocalSocket",""));
+	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
+	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
+	ui.cbReadType->setCurrentIndex(conf.readEntry("ReadType").toInt());
+	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
+	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
+	ui.leHost->setText(conf.readEntry("Host",""));
+	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
+	ui.lePort->setText(conf.readEntry("Port",""));
+	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
+	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -197,6 +209,20 @@ ImportFileWidget::~ImportFileWidget() {
 
 	// general settings
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
+
+	//live data related settings
+	conf.writeEntry("LastReadLocalSocket", ui.leSocketName->text());
+	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
+	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
+	conf.writeEntry("ReadType", ui.cbReadType->currentIndex());
+	conf.writeEntry("SampleRate", ui.sbSampleRate->value());
+	conf.writeEntry("KeepLastNValues", ui.leKeepLastValues->text());
+	conf.writeEntry("BaudRate", ui.cbBaudRate->currentIndex());
+	conf.writeEntry("SerialPort", ui.cbSerialPort->currentIndex());
+	conf.writeEntry("Host", ui.leHost->text());
+	conf.writeEntry("Port", ui.lePort->text());
+	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
@@ -210,7 +236,9 @@ void ImportFileWidget::hideDataSource() {
 	m_fileDataSource = false;
 	ui.gbUpdateOptions->hide();
 
-	ui.chbWatchFile->hide();
+	ui.leSocketName->hide();
+	ui.lSocketName->hide();
+
 	ui.chbLinkFile->hide();
 
 	ui.cbBaudRate->hide();
@@ -228,8 +256,8 @@ void ImportFileWidget::hideDataSource() {
 	ui.lSourceType->hide();
 	ui.cbSourceType->hide();
 
-	ui.cbUpdateOn->hide();
-	ui.lUpdateOn->hide();
+	ui.cbUpdateType->hide();
+	ui.lUpdateType->hide();
 
 	ui.sbUpdateInterval->hide();
 	ui.lUpdateInterval->hide();
@@ -264,7 +292,7 @@ QString ImportFileWidget::fileName() const {
 void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	//save the data source information
 	FileDataSource::FileType fileType = static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
-	FileDataSource::UpdateType updateType = static_cast<FileDataSource::UpdateType>(ui.cbUpdateOn->currentIndex());
+	FileDataSource::UpdateType updateType = static_cast<FileDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	FileDataSource::SourceType sourceType = static_cast<FileDataSource::SourceType>(ui.cbSourceType->currentIndex());
 	FileDataSource::ReadingType readingType = static_cast<FileDataSource::ReadingType>(ui.cbReadType->currentIndex());
 
@@ -290,7 +318,6 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	switch (sourceType) {
 	case FileDataSource::SourceType::FileOrPipe:
 		source->setFileName( ui.kleFileName->text() );
-		source->setFileWatched( ui.chbWatchFile->isChecked() );
 		source->setFileLinked( ui.chbLinkFile->isChecked() );
 		break;
 	case FileDataSource::SourceType::LocalSocket:
@@ -460,7 +487,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.cbFileType->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
 	ui.bManageFilters->setEnabled(fileExists);
-	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 	if (!fileExists) {
 		//file doesn't exist -> delete the content preview that is still potentially

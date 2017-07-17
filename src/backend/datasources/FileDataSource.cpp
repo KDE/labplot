@@ -494,10 +494,14 @@ void FileDataSource::read() {
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket(this);
-			m_localSocket->setServerName(m_localSocketName);
+			qDebug() << "socket state before preparing: " << m_localSocket->state();
+			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+			qDebug() << "socket state after preparing: " << m_localSocket->state();
+
 			m_device = m_localSocket;
 			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+
 			break;
 		case SerialPort:
 			m_serialPort = new QSerialPort;
@@ -537,9 +541,12 @@ void FileDataSource::read() {
 		break;
 	case LocalSocket:
 		DEBUG("reading from a local socket");
+		qDebug() << m_localSocket->state();
+
 		m_localSocket->abort();
-		qDebug() << m_localSocketName;
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+
+		qDebug() << m_localSocket->state();
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
@@ -558,13 +565,13 @@ void FileDataSource::readyRead() {
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 // 	else if (m_fileType == Binary)
-	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_localSocket, this);
+	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
-	disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
-	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+	/*disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));*/
 
 	switch (socketError) {
 	case QLocalSocket::ServerNotFoundError:

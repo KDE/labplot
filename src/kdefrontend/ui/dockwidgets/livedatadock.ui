@@ -14,111 +14,21 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,2">
+   <item row="2" column="2" colspan="3">
+    <widget class="QComboBox" name="cbUpdateType">
      <item>
-      <widget class="QLabel" name="lSampleRate">
-       <property name="text">
-        <string>Sample rate: </string>
-       </property>
-      </widget>
+      <property name="text">
+       <string>Time interval</string>
+      </property>
      </item>
      <item>
-      <widget class="QSpinBox" name="sbSampleRate">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>1000000</number>
-       </property>
-       <property name="value">
-        <number>200</number>
-       </property>
-      </widget>
+      <property name="text">
+       <string>New data</string>
+      </property>
      </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="3,2">
-     <item>
-      <widget class="QLabel" name="lKeepNvalues">
-       <property name="text">
-        <string>Keep N values</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="sbKeepNvalues">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>100000</number>
-       </property>
-       <property name="value">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,2">
-     <item>
-      <widget class="QLabel" name="lUpdateType">
-       <property name="text">
-        <string>Update type</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbUpdateType">
-       <item>
-        <property name="text">
-         <string>Time interval</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>New data</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,2">
-     <item>
-      <widget class="QLabel" name="lUpdateFrequency">
-       <property name="text">
-        <string>Update frequency:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="sbUpdateFrequency">
-       <property name="minimum">
-        <number>20</number>
-       </property>
-       <property name="maximum">
-        <number>3600000</number>
-       </property>
-       <property name="value">
-        <number>1000</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0">
-    <widget class="QPushButton" name="bUpdateNow">
-     <property name="text">
-      <string>Update now</string>
-     </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="5" column="0" rowspan="2" colspan="5">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -131,23 +41,83 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="bStopReading">
-       <property name="text">
-        <string>Stop reading</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bPausePlayReading">
-       <property name="text">
-        <string>Pause reading</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lSampleRate">
+     <property name="text">
+      <string>Sample rate: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lKeepNvalues">
+     <property name="text">
+      <string>Keep N values</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lUpdateType">
+     <property name="text">
+      <string>Update type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lUpdateFrequency">
+     <property name="text">
+      <string>Update frequency:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="5">
+    <widget class="QPushButton" name="bUpdateNow">
+     <property name="text">
+      <string>Update now</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="5">
+    <widget class="QPushButton" name="bStopReading">
+     <property name="text">
+      <string>Stop reading</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="5">
+    <widget class="QPushButton" name="bPausePlayReading">
+     <property name="text">
+      <string>Pause reading</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="3">
+    <widget class="QSpinBox" name="sbUpdateFrequency">
+     <property name="minimum">
+      <number>20</number>
+     </property>
+     <property name="maximum">
+      <number>3600000</number>
+     </property>
+     <property name="value">
+      <number>1000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="3">
+    <widget class="QLineEdit" name="leKeepNValues"/>
+   </item>
+   <item row="0" column="2" colspan="3">
+    <widget class="QSpinBox" name="sbSampleRate">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+     <property name="value">
+      <number>200</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
