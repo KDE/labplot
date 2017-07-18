@@ -194,8 +194,6 @@ private slots:
 	void linkToggled();
 	void plotData();
 
-	void showView();
-
 	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);

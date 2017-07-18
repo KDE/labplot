@@ -497,6 +497,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 	if (!m_prepared) {
 		DEBUG("device is sequential = " << device.isSequential());
 		const int deviceError = prepareDeviceToRead(device);
+
 		if (deviceError != 0)
 			DEBUG("Device error = " << deviceError);
 
@@ -521,17 +522,16 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		spreadsheet->resize(importMode, vectorNames, m_actualCols);
 
 		qDebug() << "fds resized to col: " << m_actualCols;
-
 		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
+		m_actualRows = 1;
 		//also here we need a cheaper version of this
-		if (spreadsheet->rowCount() < m_actualRows) {
-			if (!spreadsheet->keepLastValues())
-				spreadsheet->setRowCount(m_actualRows);
-			else {
-				spreadsheet->setRowCount(spreadsheet->keepNvalues());
-				m_actualRows = spreadsheet->keepNvalues();
-			}
+		if (!spreadsheet->keepLastValues())
+			spreadsheet->setRowCount(m_actualRows);
+		else {
+			spreadsheet->setRowCount(spreadsheet->keepNvalues());
+			m_actualRows = spreadsheet->keepNvalues();
 		}
+
 		if (device.isSequential())
 			m_actualRows = 1;
 		qDebug() << "fds rows resized to: " << m_actualRows;
@@ -570,6 +570,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 
+		if (!device.isSequential())
+			device.seek(device.size());
+
 		m_prepared = true;
 		qDebug() << "prepared!";
 	}
@@ -604,6 +607,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				newData.push_back(device.readLine());
 
 			newLinesTillEnd++;
+
 			if (spreadsheet->readingType() != FileDataSource::ReadingType::TillEnd) {
 				newLinesForSampleRateNotTillEnd++;
 				//for Continous reading and FromEnd we read sample rate number of lines if possible
@@ -612,12 +616,17 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 
-		if (!spreadsheet->keepLastValues())
-			m_actualRows += newData.size();
-
 		//we had less new lines than the sample rate specified
-		if (newData.size() < spreadsheet->sampleRate())
-			newData.squeeze();
+        if (spreadsheet->readingType() != FileDataSource::ReadingType::TillEnd) {
+            qDebug() << "Removed empty lines: " << newData.removeAll("");
+        }
+		//increase row count if we don't have a fixed size
+		if (!spreadsheet->keepLastValues()) {
+			if (spreadsheet->readingType() != FileDataSource::ReadingType::TillEnd)
+				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
+			else
+				m_actualRows += newData.size();
+		}
 
 		//back to the last read position before counting when reading from files
 		if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
@@ -668,7 +677,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		} else {
 			//when we have a fixed size we have to pop sampleRate number of lines if specified
 			//here popping, setting currentRow
-			currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+			currentRow = m_actualRows - 1 - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 
 			for (int row = 0; row < qMin(spreadsheet->sampleRate(), newLinesTillEnd); ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
@@ -717,8 +726,20 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 
+		if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd) {
+			if (newData.size() > spreadsheet->sampleRate())
+				newDataIdx = newData.size() - spreadsheet->sampleRate() - 1;
+			else
+				newDataIdx = 0;
+		}
+
 		for (int i = 0; i < /*qMin(lines, m_actualRows)*/linesToRead; ++i) {
-			QString line = newData.at(i);
+			QString line;
+			if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
+				line = newData.at(newDataIdx++);
+			else
+				line = newData.at(i);
+
 			if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
 				bytesread += line.size();
 

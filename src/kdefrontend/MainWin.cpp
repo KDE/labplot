@@ -1398,9 +1398,9 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		//for FileDataSource we currently don't show any view
-		if (dynamic_cast<const FileDataSource*>(part))
-			return;
+        //for FileDataSource we currently don't show any view
+        /*if (dynamic_cast<const FileDataSource*>(part))
+            return;*/
 
 		PartMdiView* win;
 

@@ -120,9 +120,6 @@ void FileDataSource::initActions() {
 	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-	m_showSpreadsheetAction = new QAction("ShowTest", this);
-	connect(m_showSpreadsheetAction, SIGNAL(triggered()), this, SLOT(showView()));
-
 	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
@@ -459,7 +456,6 @@ QMenu* FileDataSource::createContextMenu() {
 		firstAction = menu->actions().at(1);
 
 	menu->insertAction(firstAction, m_plotDataAction);
-	menu->insertAction(m_plotDataAction, m_showSpreadsheetAction);
 	menu->insertSeparator(firstAction);
 
 	//TODO: doesnt' always make sense...
@@ -776,10 +772,6 @@ QString FileDataSource::fileInfoString(const QString &name) {
 void FileDataSource::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(this);
 	dlg->exec();
-}
-
-void FileDataSource::showView() {
-	view()->show();
 }
 
 //##############################################################################
