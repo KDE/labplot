@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>423</width>
-    <height>234</height>
+    <height>252</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,7 +89,7 @@
    <item row="1" column="1" colspan="4">
     <widget class="QSpinBox" name="sbSampleRate">
      <property name="minimum">
-      <number>2</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>1000000</number>
@@ -127,7 +127,7 @@
      </item>
      <item>
       <property name="text">
-       <string>New data</string>
+       <string>On new data</string>
       </property>
      </item>
     </widget>

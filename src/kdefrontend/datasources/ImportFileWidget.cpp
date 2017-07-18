@@ -185,7 +185,6 @@ void ImportFileWidget::loadSettings() {
 	else
 		ui.kleFileName->setText(m_fileName);
 
-	ui.leSocketName->setText(conf.readEntry("LastReadLocalSocket",""));
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
 	ui.cbReadType->setCurrentIndex(conf.readEntry("ReadType").toInt());
@@ -211,7 +210,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 
 	//live data related settings
-	conf.writeEntry("LastReadLocalSocket", ui.leSocketName->text());
 	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
 	conf.writeEntry("ReadType", ui.cbReadType->currentIndex());
@@ -235,9 +233,6 @@ ImportFileWidget::~ImportFileWidget() {
 void ImportFileWidget::hideDataSource() {
 	m_fileDataSource = false;
 	ui.gbUpdateOptions->hide();
-
-	ui.leSocketName->hide();
-	ui.lSocketName->hide();
 
 	ui.chbLinkFile->hide();
 
@@ -290,7 +285,6 @@ QString ImportFileWidget::fileName() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(FileDataSource* source) const {
-	//save the data source information
 	FileDataSource::FileType fileType = static_cast<FileDataSource::FileType>(ui.cbFileType->currentIndex());
 	FileDataSource::UpdateType updateType = static_cast<FileDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	FileDataSource::SourceType sourceType = static_cast<FileDataSource::SourceType>(ui.cbSourceType->currentIndex());
@@ -300,17 +294,20 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	source->setFileType(fileType);
 	source->setFilter(this->currentFileFilter());
 
-	source->setUpdateType(updateType);
 	source->setSourceType(sourceType);
 	source->setReadingType(readingType);
 
 	if (updateType == FileDataSource::UpdateType::TimeInterval)
 		source->setUpdateInterval(ui.sbUpdateInterval->value());
+	else
+		source->setFileWatched(true);
 
 	if (!ui.leKeepLastValues->text().isEmpty()) {
 		source->setKeepLastValues(true);
 		source->setKeepNvalues(ui.leKeepLastValues->text().toInt());
 	}
+
+	source->setUpdateType(updateType);
 
 	if (readingType != FileDataSource::ReadingType::TillEnd)
 		source->setSampleRate(ui.sbSampleRate->value());
@@ -321,7 +318,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 		source->setFileLinked( ui.chbLinkFile->isChecked() );
 		break;
 	case FileDataSource::SourceType::LocalSocket:
-		source->setLocalSocketName(ui.leSocketName->text());
+		source->setLocalSocketName(ui.kleFileName->text());
 		break;
 	case FileDataSource::SourceType::NetworkSocket:
 		source->setHost(ui.leHost->text());
@@ -865,16 +862,12 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
-        ui.leSocketName->hide();
-        ui.lSocketName->hide();
 		break;
 	case FileDataSource::SourceType::LocalSocket:
-		ui.leSocketName->show();
-		ui.lSocketName->show();
+		ui.lFileName->show();
+		ui.kleFileName->show();
+		ui.bOpen->show();
 
-		ui.lFileName->hide();
-		ui.kleFileName->hide();
-		ui.bOpen->hide();
 		ui.bFileInfo->hide();
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
@@ -895,15 +888,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->hide();
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
-		ui.lSocketName->hide();
-		ui.leSocketName->hide();
 
 		ui.lFileName->hide();
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-        ui.leSocketName->hide();
-        ui.lSocketName->hide();
 		break;
 	case FileDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -919,8 +908,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.kleFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
-		ui.lSocketName->hide();
-		ui.leSocketName->hide();
 		break;
 	default:
 		break;
@@ -946,9 +933,6 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 
 	ui.cbSerialPort->hide();
 	ui.lSerialPort->hide();
-
-	ui.lSocketName->hide();
-	ui.leSocketName->hide();;
 
 	ui.cbBaudRate->addItems(FileDataSource::supportedBaudRates());
 	ui.cbSerialPort->addItems(FileDataSource::availablePorts());

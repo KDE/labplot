@@ -69,6 +69,7 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_fileLinked(false),
 	  m_paused(false),
 	  m_prepared(false),
+	  m_keepLastValues(false),
 	  m_bytesRead(0),
 	  m_filter(nullptr),
 	  m_updateTimer(new QTimer(this)),
@@ -119,9 +120,8 @@ void FileDataSource::initActions() {
 	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-	m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
-	m_toggleWatchAction->setCheckable(true);
-	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
+	m_showSpreadsheetAction = new QAction("ShowTest", this);
+	connect(m_showSpreadsheetAction, SIGNAL(triggered()), this, SLOT(showView()));
 
 	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
@@ -388,12 +388,18 @@ FileDataSource::ReadingType FileDataSource::readingType() const {
 }
 
 /*!
- * \brief Sets the source's update type to updatetype
+ * \brief Sets the source's update type to updatetype and handles this change
  * \param updatetype
  */
 void FileDataSource::setUpdateType(const UpdateType updatetype) {
-	if (updatetype == NewData)
+	if (updatetype == NewData) {
 		m_updateTimer->stop();
+		if (m_fileSystemWatcher == nullptr)
+			watch();
+		else
+			connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+	} else
+		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
 	m_updateType = updatetype;
 }
 
@@ -453,6 +459,7 @@ QMenu* FileDataSource::createContextMenu() {
 		firstAction = menu->actions().at(1);
 
 	menu->insertAction(firstAction, m_plotDataAction);
+	menu->insertAction(m_plotDataAction, m_showSpreadsheetAction);
 	menu->insertSeparator(firstAction);
 
 	//TODO: doesnt' always make sense...
@@ -567,6 +574,10 @@ void FileDataSource::readyRead() {
 // 	else if (m_fileType == Binary)
 	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
+	//since we won't have the timer to call read() where we create new connections
+	//for sequencial devices in read() we just request data/connect to servers
+	if (m_updateType == NewData)
+		read();
 }
 
 void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
@@ -767,6 +778,10 @@ void FileDataSource::plotData() {
 	dlg->exec();
 }
 
+void FileDataSource::showView() {
+	view()->show();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -790,7 +805,7 @@ void FileDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
 
 	if (m_updateType == TimeInterval)
-		writer->writeAttribute("updateFrequency", QString::number(m_updateInterval));
+		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
 		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
@@ -900,9 +915,9 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 				m_readingType =  static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == TimeInterval) {
-				str = attribs.value("updateFrequency").toString();
+				str = attribs.value("updateInterval").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'updateFrequency'"));
+					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
 				else
 					m_updateInterval = str.toInt();
 			}

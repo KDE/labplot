@@ -420,11 +420,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	for (int i = 0; i < startRow - 1; ++i) {
 		QString line = device.readLine();
 
-		if (device.atEnd())
+		if (device.atEnd()) {
 			if (device.isSequential())
 				break;
 			else
 				return 1;
+		}
 		if (line.startsWith(commentCharacter))	// ignore commented lines
 			i--;
 	}

@@ -32,7 +32,7 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 
 	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
 	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
-    connect(ui.sbUpdateInterval, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
+	connect(ui.sbUpdateInterval, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
 	connect(ui.leKeepNValues, SIGNAL(textChanged(QString)), this, SLOT(keepNvaluesChanged(QString)));
 	connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
 	connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
@@ -48,7 +48,7 @@ LiveDataDock::~LiveDataDock() {
 void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 	m_liveDataSources = sources;
 	const FileDataSource* const fds = sources.at(0);
-    ui.sbUpdateInterval->setValue(fds->updateInterval());
+	ui.sbUpdateInterval->setValue(fds->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
 
 	if (fds->updateType() == FileDataSource::UpdateType::NewData) {
@@ -96,20 +96,22 @@ void LiveDataDock::updateTypeChanged(int idx) {
 	FileDataSource::UpdateType type = static_cast<FileDataSource::UpdateType>(idx);
 
 	if (type == FileDataSource::UpdateType::TimeInterval) {
-        ui.lUpdateInterval->show();
-        ui.sbUpdateInterval->show();
+		ui.lUpdateInterval->show();
+		ui.sbUpdateInterval->show();
 
 		for (auto* source: m_liveDataSources) {
 			source->setUpdateType(type);
-            source->setUpdateInterval(ui.sbUpdateInterval->value());
+			source->setUpdateInterval(ui.sbUpdateInterval->value());
+			source->setFileWatched(false);
 		}
-
 	} else if (type == FileDataSource::UpdateType::NewData) {
-        ui.lUpdateInterval->hide();
-        ui.sbUpdateInterval->hide();
+		ui.lUpdateInterval->hide();
+		ui.sbUpdateInterval->hide();
 
-		for (auto* source: m_liveDataSources)
+		for (auto* source: m_liveDataSources) {
+			source->setFileWatched(true);
 			source->setUpdateType(type);
+		}
 	}
 }
 

@@ -182,7 +182,6 @@ private:
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
-	QAction* m_toggleWatchAction;
 	QAction* m_showEditorAction;
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
@@ -195,16 +194,13 @@ private slots:
 	void linkToggled();
 	void plotData();
 
+	void showView();
+
 	void readyRead();
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
-
-signals:
-	void dataChanged();
-	void dataUpdated();
-
 };
 
 #endif
