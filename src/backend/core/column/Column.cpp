@@ -147,10 +147,13 @@ void Column::setSuppressDataChangedSignal(bool b) {
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	if (mode == columnMode()) return;
+
 	beginMacro(i18n("%1: change column type", name()));
+
 	auto* old_input_filter = d->inputFilter();
 	auto* old_output_filter = d->outputFilter();
 	exec(new ColumnSetModeCmd(d, mode));
+
 	if (d->inputFilter() != old_input_filter) {
 		removeChild(old_input_filter);
 		addChild(d->inputFilter());
@@ -161,6 +164,7 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 		addChild(d->outputFilter());
 		d->outputFilter()->input(0, this);
 	}
+
 	endMacro();
 }
 
@@ -844,9 +848,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 bool Column::XmlReadRow(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
 
-	QString str;
-
-	QXmlStreamAttributes attribs = reader->attributes();
+//	QXmlStreamAttributes attribs = reader->attributes();
 
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
@@ -855,17 +857,17 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		return false;
 	}
 
-	str = reader->readElementText();
+	QString str = reader->readElementText();
 	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
-			double value = str.toDouble(&ok);
-			if(!ok) {
-				reader->raiseError(i18n("invalid row value"));
-				return false;
-			}
-			setValueAt(index, value);
-			break;
+		double value = str.toDouble(&ok);
+		if(!ok) {
+			reader->raiseError(i18n("invalid row value"));
+			return false;
 		}
+		setValueAt(index, value);
+		break;
+	}
 	case AbstractColumn::Text:
 		setTextAt(index, str);
 		break;

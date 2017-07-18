@@ -35,12 +35,15 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
 
+	//TODO: check for int first (when supported)
+	//local.toInt();	-> returns false for floating values
+
 	//try to convert to a number first
 	bool isNumber;
 	QLocale locale(lang);
 	locale.toDouble(valueString, &isNumber);
 
-	//if not a number, check datetime and string
+	//if not a number, check datetime. if that fails: string
 	if (!isNumber) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())

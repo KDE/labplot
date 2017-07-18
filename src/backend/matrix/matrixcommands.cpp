@@ -162,7 +162,7 @@ void MatrixClearColumnCmd::undo() {
 
 //set cell value
 MatrixSetCellValueCmd::MatrixSetCellValueCmd( MatrixPrivate * private_obj, int row, int col, double value, QUndoCommand * parent)
- : QUndoCommand( parent ), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value)
+ : QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value)
 {
 	// remark: don't use many QString::arg() calls in ctors of commands that might be called often,
 	// they use a lot of execution time
@@ -221,8 +221,8 @@ void MatrixSetFormulaCmd::undo() {
 	redo();
 }
 
-
 //set column cells
+//TODO: consider columnMode
 MatrixSetColumnCellsCmd::MatrixSetColumnCellsCmd( MatrixPrivate * private_obj, int col, int first_row,
 		int last_row, const QVector<double> & values, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_col(col), m_first_row(first_row),
@@ -236,11 +236,9 @@ void MatrixSetColumnCellsCmd::redo() {
 		m_old_values = m_private_obj->columnCells(m_col, m_first_row, m_last_row);
 	m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_values);
 }
-
 void MatrixSetColumnCellsCmd::undo() {
 	m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_old_values);
 }
-
 
 //set row cells
 MatrixSetRowCellsCmd::MatrixSetRowCellsCmd( MatrixPrivate * private_obj, int row, int first_column,

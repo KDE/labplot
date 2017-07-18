@@ -32,6 +32,7 @@
 #define MATRIXPRIVATE_H
 
 template <class T> class QVector;
+//class Matrix;
 
 class MatrixPrivate {
 public:
@@ -44,6 +45,7 @@ public:
 
 	QString name() const { return q->name(); }
 
+//	template<class T> T cell(int row, int col) const;
 	double cell(int row, int col) const;
 	void setCell(int row, int col, double value);
 	QVector<double> columnCells(int col, int first_row, int last_row);

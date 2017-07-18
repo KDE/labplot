@@ -327,12 +327,12 @@ void Matrix::removeRows(int first, int count) {
 	exec(new MatrixRemoveRowsCmd(d, first, count));
 	RESET_CURSOR;
 }
+
 void Matrix::clearRow(int r) {
 	for (int c = 0; c < columnCount(); ++c)
 		exec(new MatrixSetCellValueCmd(d, r, c, 0.0));
 }
 
-//cell
 double Matrix::cell(int row, int col) const {
 	return d->cell(row, col);
 }
