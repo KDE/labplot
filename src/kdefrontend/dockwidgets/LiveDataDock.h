@@ -52,6 +52,7 @@ private:
 private slots:
 
 	void updateTypeChanged(int);
+	void readingTypeChanged(int);
 	void sampleRateChanged(int);
 	void updateIntervalChanged(int);
 	void keepNvaluesChanged(QString);
