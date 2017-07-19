@@ -569,8 +569,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 
-		if (!device.isSequential())
-			device.seek(device.size());
+        if (!device.isSequential()) {
+            device.seek(device.size());
+            spreadsheet->setBytesRead(device.size());
+        }
+
 
 		m_prepared = true;
 		qDebug() << "prepared!";
@@ -826,7 +829,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		}
 	} else
 		qDebug() << "No new data available";
-	//////////////////
+    //////////////////
 	return bytesread;
 }
 

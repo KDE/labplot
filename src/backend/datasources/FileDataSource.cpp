@@ -332,6 +332,14 @@ void FileDataSource::setPort(const int port) {
 	m_port = port;
 }
 
+void FileDataSource::setBytesRead(const qint64 bytes) {
+    m_bytesRead = bytes;
+}
+
+int FileDataSource::bytesRead() const {
+    return m_bytesRead;
+}
+
 int FileDataSource::port() const {
 	return m_port;
 }

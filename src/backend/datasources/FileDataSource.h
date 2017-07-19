@@ -93,6 +93,9 @@ public:
 	int sampleRate() const;
 	void setSampleRate(const int);
 
+    void setBytesRead(const qint64 bytes);
+    int bytesRead() const;
+
 	int port() const;
 	void setPort(const int);
 
