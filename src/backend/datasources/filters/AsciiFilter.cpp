@@ -522,7 +522,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		qDebug() << "fds resized to col: " << m_actualCols;
 		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
-		m_actualRows = 1;
+        m_actualRows = 0;
+
 		//also here we need a cheaper version of this
 		if (!spreadsheet->keepLastValues())
 			spreadsheet->setRowCount(m_actualRows);
@@ -530,10 +531,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			spreadsheet->setRowCount(spreadsheet->keepNvalues());
 			m_actualRows = spreadsheet->keepNvalues();
 		}
-
-		if (device.isSequential())
-			m_actualRows = 1;
-		qDebug() << "fds rows resized to: " << m_actualRows;
 
 		m_dataContainer.resize(m_actualCols);
 
@@ -573,7 +570,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
             device.seek(device.size());
             spreadsheet->setBytesRead(device.size());
         }
-
 
 		m_prepared = true;
 		qDebug() << "prepared!";
