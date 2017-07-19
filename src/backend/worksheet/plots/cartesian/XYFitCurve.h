@@ -78,7 +78,7 @@ public:
 
 	struct FitResult {
 		FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-			dof(0), sse(0), rms(0), rsd(0), mse(0), rmse(0), mae(0) {};
+			dof(0), sse(0), sst(0), rms(0), rsd(0), mse(0), rmse(0), mae(0) {};
 
 		bool available;
 		bool valid;

@@ -92,7 +92,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return QVariant();
 
 	switch(role) {
-		case Qt::ToolTipRole: {
+		case Qt::ToolTipRole:
 			if(col_ptr->isValid(row)) {
 				if(col_ptr->isMasked(row))
 					return QVariant(i18n("%1, masked (ignored in all operations)").arg(col_ptr->asStringColumn()->textAt(row)));
@@ -104,8 +104,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				else
 					return QVariant(i18n("invalid cell (ignored in all operations)"));
 			}
-		}
-		case Qt::EditRole: {
+		case Qt::EditRole:
 			if(col_ptr->isValid(row))
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 
@@ -113,9 +112,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			//if(m_formula_mode)
 			//	return QVariant(col_ptr->formula(row));
 
-			return QVariant();
-		}
-		case Qt::DisplayRole: {
+			break;
+		case Qt::DisplayRole:
 			if(!col_ptr->isValid(row))
 				return QVariant("-");
 
@@ -124,11 +122,10 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
-		}
-		case Qt::ForegroundRole: {
+		case Qt::ForegroundRole:
 			if(!col_ptr->isValid(index.row()))
 				return QVariant(QBrush(Qt::red));
-		}
+			break;
 		case MaskingRole:
 			return QVariant(col_ptr->isMasked(row));
 		case FormulaRole:

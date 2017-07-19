@@ -1351,6 +1351,7 @@ void XYFitCurvePrivate::recalculate() {
 		case nsl_fit_weight_statistical_fit:
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
+			break;
 		case nsl_fit_weight_relative_fit:
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
