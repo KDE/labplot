@@ -104,7 +104,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				else
 					return QVariant(i18n("invalid cell (ignored in all operations)"));
 			}
-		case Qt::EditRole: {
+		case Qt::EditRole:
 			if(col_ptr->isValid(row))
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 
