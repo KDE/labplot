@@ -345,6 +345,10 @@ QString FileDataSource::serialPortName() const {
 	return m_serialPortName;
 }
 
+bool FileDataSource::isPaused() const {
+    return m_paused;
+}
+
 /*!
  * \brief Sets the sample rate to samplerate
  * \param samplerate

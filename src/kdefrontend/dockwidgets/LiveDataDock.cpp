@@ -57,6 +57,13 @@ void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 		ui.sbUpdateInterval->hide();
 	}
 
+    if (fds->isPaused()) {
+        ui.bPausePlayReading->setText("Continue reading");
+    } else {
+        ui.bPausePlayReading->setText("Pause reading");
+    }
+
+
 	if(!fds->keepLastValues()) {
 		ui.leKeepNValues->hide();
 		ui.lKeepNvalues->hide();

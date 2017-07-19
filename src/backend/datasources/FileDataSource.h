@@ -99,6 +99,8 @@ public:
 	int port() const;
 	void setPort(const int);
 
+    bool isPaused() const;
+
 	void setSerialPort(const QString& name);
 	QString serialPortName() const;
 
