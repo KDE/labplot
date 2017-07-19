@@ -36,6 +36,7 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 	connect(ui.leKeepNValues, SIGNAL(textChanged(QString)), this, SLOT(keepNvaluesChanged(QString)));
 	connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
 	connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
+    connect(ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 }
 
 LiveDataDock::~LiveDataDock() {

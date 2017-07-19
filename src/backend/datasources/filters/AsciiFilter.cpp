@@ -517,8 +517,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		spreadsheet->removeColumns(0, 2);
 
-		if (importMode == AbstractFileFilter::Replace)
-			spreadsheet->clear();
+        spreadsheet->clear();
 		spreadsheet->resize(importMode, vectorNames, m_actualCols);
 
 		qDebug() << "fds resized to col: " << m_actualCols;
@@ -733,7 +732,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				newDataIdx = 0;
 		}
 
-		for (int i = 0; i < /*qMin(lines, m_actualRows)*/linesToRead; ++i) {
+        for (int i = 0; i < linesToRead; ++i) {
 			QString line;
 			if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -754,7 +753,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			QLocale locale(numberFormat);
 
 			QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-			for (int n = 0; n < m_actualCols; n++) {
+            for (int n = 0; n < m_actualCols; ++n) {
 				if (n < lineStringList.size()) {
 					const QString& valueString = lineStringList.at(n);
 
@@ -822,10 +821,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 			column->setComment(comment);
 
-			if (importMode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
-				column->setChanged();
-			}
+            column->setSuppressDataChangedSignal(false);
+            column->setChanged();
 		}
 	} else
 		qDebug() << "No new data available";

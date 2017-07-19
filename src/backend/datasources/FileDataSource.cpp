@@ -525,7 +525,7 @@ void FileDataSource::read() {
 		switch (m_fileType) {
 		case Ascii:
 			qDebug() << "Reading live ascii file.." ;
-			bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead, AbstractFileFilter::Replace);
+            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
 			qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
 
