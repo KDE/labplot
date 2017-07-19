@@ -25,6 +25,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "LiveDataDock.h"
+#include <KLocale>
 
 LiveDataDock::LiveDataDock(QWidget *parent) :
 	QWidget(parent), m_paused(false) {
@@ -58,9 +59,9 @@ void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 	}
 
     if (fds->isPaused()) {
-        ui.bPausePlayReading->setText("Continue reading");
+        ui.bPausePlayReading->setText(i18n("Continue reading"));
     } else {
-        ui.bPausePlayReading->setText("Pause reading");
+        ui.bPausePlayReading->setText(i18n("Pause reading"));
     }
 
 
@@ -184,9 +185,9 @@ void LiveDataDock::pauseContinueReading() {
 
 	if (m_paused) {
 		pauseReading();
-		ui.bPausePlayReading->setText("Continue reading");
+        ui.bPausePlayReading->setText(i18n("Continue reading"));
 	} else {
 		continueReading();
-		ui.bPausePlayReading->setText("Pause reading");
+        ui.bPausePlayReading->setText(i18n("Pause reading"));
 	}
 }

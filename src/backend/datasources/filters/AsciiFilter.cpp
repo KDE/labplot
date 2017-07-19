@@ -675,7 +675,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		} else {
 			//when we have a fixed size we have to pop sampleRate number of lines if specified
 			//here popping, setting currentRow
-			currentRow = m_actualRows - 1 - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+            currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 
 			for (int row = 0; row < qMin(spreadsheet->sampleRate(), newLinesTillEnd); ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
@@ -730,7 +730,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			else
 				newDataIdx = 0;
 		}
-
+        static int indexColumnIdx = 0;
         for (int i = 0; i < linesToRead; ++i) {
 			QString line;
 			if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
@@ -752,6 +752,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			QLocale locale(numberFormat);
 
 			QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+
+            if (createIndexEnabled) {
+                if (spreadsheet->keepLastValues()) {
+                    lineStringList.prepend(QString::number(indexColumnIdx++));
+                } else {
+                    lineStringList.prepend(QString::number(currentRow));
+                }
+            }
 
             for (int n = 0; n < m_actualCols; ++n) {
 				if (n < lineStringList.size()) {
