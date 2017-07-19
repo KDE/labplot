@@ -14,14 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="0" colspan="5">
-    <widget class="QPushButton" name="bStopReading">
-     <property name="text">
-      <string>Stop reading</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="5">
+   <item row="5" column="0" colspan="3">
     <widget class="QPushButton" name="bUpdateNow">
      <property name="text">
       <string>Update now</string>
@@ -49,14 +42,14 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="5">
+   <item row="9" column="0" colspan="3">
     <widget class="QPushButton" name="bPausePlayReading">
      <property name="text">
       <string>Pause reading</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" rowspan="2" colspan="5">
+   <item row="6" column="0" rowspan="2" colspan="3">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -68,6 +61,9 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QLineEdit" name="leKeepNValues"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lSampleRate">
@@ -83,10 +79,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="4">
-    <widget class="QLineEdit" name="leKeepNValues"/>
-   </item>
-   <item row="1" column="1" colspan="4">
+   <item row="1" column="1" colspan="2">
     <widget class="QSpinBox" name="sbSampleRate">
      <property name="minimum">
       <number>1</number>
@@ -99,7 +92,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="4">
+   <item row="0" column="1" colspan="2">
     <widget class="QComboBox" name="cbReadingType">
      <item>
       <property name="text">
@@ -118,7 +111,7 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="1" colspan="4">
+   <item row="3" column="1" colspan="2">
     <widget class="QComboBox" name="cbUpdateType">
      <item>
       <property name="text">
@@ -132,7 +125,7 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="1" colspan="4">
+   <item row="4" column="1" colspan="2">
     <widget class="QSpinBox" name="sbUpdateInterval">
      <property name="minimum">
       <number>20</number>

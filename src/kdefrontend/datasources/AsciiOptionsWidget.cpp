@@ -175,7 +175,7 @@ void AsciiOptionsWidget::saveSettings() {
 
 	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
-	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentText());
+    conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());

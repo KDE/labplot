@@ -154,14 +154,6 @@ void LiveDataDock::keepNvaluesChanged(QString keepNvalues) {
 }
 
 /*!
- * \brief Stops the reading of the live data source
- */
-void LiveDataDock::stopReading() {
-	for (auto* source: m_liveDataSources)
-		source->stopReading();
-}
-
-/*!
  * \brief Pauses the reading of the live data source
  */
 void LiveDataDock::pauseReading() {

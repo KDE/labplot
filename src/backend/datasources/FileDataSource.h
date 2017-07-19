@@ -130,7 +130,6 @@ public:
 	QString localSocketName() const;
 
 	void updateNow();
-	void stopReading();
 	void pauseReading();
 	void continueReading();
 

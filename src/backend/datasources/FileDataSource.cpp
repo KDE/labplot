@@ -179,17 +179,6 @@ void FileDataSource::updateNow() {
 }
 
 /*!
- * \brief FileDataSource::stopReading
- */
-//TODO: do we want this?
-void FileDataSource::stopReading() {
-	if (m_updateType == TimeInterval)
-		m_updateTimer->stop();
-	else if (m_updateType == NewData)
-		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
-}
-
-/*!
  * \brief Continue reading from the live data source after it was paused.
  */
 void FileDataSource::continueReading() {

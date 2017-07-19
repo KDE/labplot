@@ -752,6 +752,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			QLocale locale(numberFormat);
 
 			QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+
             for (int n = 0; n < m_actualCols; ++n) {
 				if (n < lineStringList.size()) {
 					const QString& valueString = lineStringList.at(n);

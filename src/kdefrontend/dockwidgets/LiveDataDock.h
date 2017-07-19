@@ -58,7 +58,6 @@ private slots:
 	void keepNvaluesChanged(QString);
 
 	void updateNow();
-	void stopReading();
 	void pauseContinueReading();
 public slots:
 
