@@ -3,10 +3,10 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-
+    Copyright            : (C) 2012-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -353,8 +353,7 @@ void Spreadsheet::moveColumn(int from, int to)
 	endMacro();
 }
 
-void Spreadsheet::copy(Spreadsheet * other)
-{
+void Spreadsheet::copy(Spreadsheet* other) {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: copy %2", name(), other->name()));
 
@@ -430,38 +429,37 @@ int Spreadsheet::colY(int col) {
 /*! Sorts the given list of column.
   If 'leading' is a null pointer, each column is sorted separately.
 */
-void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
-{
+void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascending) {
 	if(cols.isEmpty()) return;
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// thefore we use our own compare functions
 	class CompareFunctions {
-		public:
-			static bool doubleLess(const QPair<double, int>& a, const QPair<double, int>& b)
-			{
-				return a.first < b.first;
-			}
-			static bool doubleGreater(const QPair<double, int>& a, const QPair<double, int>& b)
-			{
-				return a.first > b.first;
-			}
-			static bool QStringLess(const QPair<QString, int>& a, const QPair<QString, int>& b)
-			{
-				return a < b;
-			}
-			static bool QStringGreater(const QPair<QString, int>& a, const QPair<QString, int>& b)
-			{
-				return a > b;
-			}
-			static bool QDateTimeLess(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b)
-			{
-				return a < b;
-			}
-			static bool QDateTimeGreater(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b)
-			{
-				return a > b;
-			}
+	public:
+		static bool doubleLess(const QPair<double, int>& a, const QPair<double, int>& b) {
+			return a.first < b.first;
+		}
+		static bool doubleGreater(const QPair<double, int>& a, const QPair<double, int>& b) {
+			return a.first > b.first;
+		}
+		static bool integerLess(const QPair<int, int>& a, const QPair<int, int>& b) {
+			return a.first < b.first;
+		}
+		static bool integerGreater(const QPair<int, int>& a, const QPair<int, int>& b) {
+			return a.first > b.first;
+		}
+		static bool QStringLess(const QPair<QString, int>& a, const QPair<QString, int>& b) {
+			return a < b;
+		}
+		static bool QStringGreater(const QPair<QString, int>& a, const QPair<QString, int>& b) {
+			return a > b;
+		}
+		static bool QDateTimeLess(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b) {
+			return a < b;
+		}
+		static bool QDateTimeGreater(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b) {
+			return a > b;
+		}
 	};
 
 	WAIT_CURSOR;
@@ -470,188 +468,238 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	if(leading == 0) { // sort separately
 		for (auto* col: cols) {
 			switch (col->columnMode()) {
-				case AbstractColumn::Numeric:
-					{
-						int rows = col->rowCount();
-						QList< QPair<double, int> > map;
-
-						for(int j=0; j<rows; j++)
-							map.append(QPair<double, int>(col->valueAt(j), j));
-
-						if(ascending)
-							qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
-						else
-							qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
-
-						QListIterator< QPair<double, int> > it(map);
-						Column *temp_col = new Column("temp", col->columnMode());
-
-						int k=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, k, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							k++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
-						break;
-					}
-				case AbstractColumn::Text:
-					{
-						int rows = col->rowCount();
-						QList< QPair<QString, int> > map;
-
-						for(int j=0; j<rows; j++)
-							map.append(QPair<QString, int>(col->textAt(j), j));
-
-						if(ascending)
-							qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
-						else
-							qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
-
-						QListIterator< QPair<QString, int> > it(map);
-						Column *temp_col = new Column("temp", col->columnMode());
-
-						int k=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, k, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							k++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
-						break;
-					}
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					{
-						int rows = col->rowCount();
-						QList< QPair<QDateTime, int> > map;
-
-						for(int j=0; j<rows; j++)
-							map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
-
-						if(ascending)
-							qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
-						else
-							qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
-
-						QListIterator< QPair<QDateTime, int> > it(map);
-						Column *temp_col = new Column("temp", col->columnMode());
-
-						int k=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, k, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							k++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
-						break;
-					}
-			}
-		}
-	} else { // sort with leading column
-		switch (leading->columnMode()) {
-			case AbstractColumn::Numeric:
-				{
+				case AbstractColumn::Numeric: {
+					int rows = col->rowCount();
 					QList< QPair<double, int> > map;
-					int rows = leading->rowCount();
 
-					for(int i=0; i<rows; i++)
-						map.append(QPair<double, int>(leading->valueAt(i), i));
+					for(int j=0; j<rows; j++)
+						map.append(QPair<double, int>(col->valueAt(j), j));
 
 					if(ascending)
 						qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
-					QListIterator< QPair<double, int> > it(map);
 
-					foreach (Column *col, cols) {
-						Column *temp_col = new Column("temp", col->columnMode());
-						it.toFront();
-						int j=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, j, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							j++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
+					QListIterator< QPair<double, int> > it(map);
+					Column *temp_col = new Column("temp", col->columnMode());
+
+					int k=0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, k, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						k++;
 					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
 					break;
 				}
-			case AbstractColumn::Text:
-				{
-					QList< QPair<QString, int> > map;
-					int rows = leading->rowCount();
+				case AbstractColumn::Integer: {
+					int rows = col->rowCount();
+					QList< QPair<int, int> > map;
 
-					for(int i=0; i<rows; i++)
-						map.append(QPair<QString, int>(leading->textAt(i), i));
+					for (int j = 0; j < rows; j++)
+						map.append(QPair<int, int>(col->valueAt(j), j));
 
-					if(ascending)
+					if (ascending)
+						qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+					else
+						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+
+					QListIterator<QPair<int, int>> it(map);
+					Column* temp_col = new Column("temp", col->columnMode());
+
+					int k = 0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, k, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						k++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+					break;
+				}
+				case AbstractColumn::Text: {
+					int rows = col->rowCount();
+					QList<QPair<QString, int>> map;
+
+					for (int j = 0; j < rows; j++)
+						map.append(QPair<QString, int>(col->textAt(j), j));
+
+					if (ascending)
 						qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
-					QListIterator< QPair<QString, int> > it(map);
 
-					foreach (Column *col, cols) {
-						Column *temp_col = new Column("temp", col->columnMode());
-						it.toFront();
-						int j=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, j, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							j++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
+					QListIterator< QPair<QString, int> > it(map);
+					Column* temp_col = new Column("temp", col->columnMode());
+
+					int k = 0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, k, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						k++;
 					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
 					break;
 				}
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				{
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day: {
+					int rows = col->rowCount();
 					QList< QPair<QDateTime, int> > map;
-					int rows = leading->rowCount();
 
-					for(int i=0; i<rows; i++)
-						map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
+					for(int j=0; j<rows; j++)
+						map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
 
 					if(ascending)
 						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
-					QListIterator< QPair<QDateTime, int> > it(map);
 
-					foreach (Column *col, cols) {
-						Column *temp_col = new Column("temp", col->columnMode());
-						it.toFront();
-						int j=0;
-						// put the values in the right order into temp_col
-						while(it.hasNext()) {
-							temp_col->copy(col, it.peekNext().second, j, 1);
-							temp_col->setMasked(col->isMasked(it.next().second));
-							j++;
-						}
-						// copy the sorted column
-						col->copy(temp_col, 0, 0, rows);
-						delete temp_col;
+					QListIterator< QPair<QDateTime, int> > it(map);
+					Column *temp_col = new Column("temp", col->columnMode());
+
+					int k=0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, k, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						k++;
 					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
 					break;
 				}
+			}
+		}
+	} else { // sort with leading column
+		switch (leading->columnMode()) {
+			case AbstractColumn::Numeric: {
+				QList<QPair<double, int>> map;
+				int rows = leading->rowCount();
+
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<double, int>(leading->valueAt(i), i));
+
+				if (ascending)
+					qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+				else
+					qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+				QListIterator<QPair<double, int>> it(map);
+
+				for (auto* col: cols) {
+					Column *temp_col = new Column("temp", col->columnMode());
+					it.toFront();
+					int j = 0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, j, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						j++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+				}
+				break;
+			}
+			case AbstractColumn::Integer: {
+				QList<QPair<int, int>> map;
+				int rows = leading->rowCount();
+
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<int, int>(leading->valueAt(i), i));
+
+				if (ascending)
+					qStableSort(map.begin(), map.end(), CompareFunctions::integerLess);
+				else
+					qStableSort(map.begin(), map.end(), CompareFunctions::integerGreater);
+				QListIterator<QPair<int, int>> it(map);
+
+				for (auto* col: cols) {
+					Column *temp_col = new Column("temp", col->columnMode());
+					it.toFront();
+					int j = 0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, j, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						j++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+				}
+				break;
+			}
+			case AbstractColumn::Text: {
+				QList<QPair<QString, int>> map;
+				int rows = leading->rowCount();
+
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<QString, int>(leading->textAt(i), i));
+
+				if(ascending)
+					qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
+				else
+					qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+				QListIterator<QPair<QString, int>> it(map);
+
+				for (auto* col: cols) {
+					Column *temp_col = new Column("temp", col->columnMode());
+					it.toFront();
+					int j = 0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, j, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						j++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+				}
+				break;
+			}
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day: {
+				QList<QPair<QDateTime, int>> map;
+				int rows = leading->rowCount();
+
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
+
+				if (ascending)
+					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+				else
+					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+				QListIterator<QPair<QDateTime, int>> it(map);
+
+				for (auto* col: cols) {
+					Column *temp_col = new Column("temp", col->columnMode());
+					it.toFront();
+					int j=0;
+					// put the values in the right order into temp_col
+					while(it.hasNext()) {
+						temp_col->copy(col, it.peekNext().second, j, 1);
+						temp_col->setMasked(col->isMasked(it.next().second));
+						j++;
+					}
+					// copy the sorted column
+					col->copy(temp_col, 0, 0, rows);
+					delete temp_col;
+				}
+				break;
+			}
 		}
 	}
 	endMacro();
@@ -806,7 +854,14 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		this->child<Column>(columnOffset+n)->setColumnMode(columnMode[n]);
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
-			QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
+			QVector<double>* vector = static_cast<QVector<double>*>(this->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
+		case AbstractColumn::Integer: {
+			QVector<int>* vector = static_cast<QVector<int>*>(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
@@ -819,6 +874,8 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
 			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
@@ -826,10 +883,6 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
-		//TODO
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-			break;
 		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
@@ -903,6 +956,9 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		case AbstractColumn::Numeric:
 			comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 			break;
+		case AbstractColumn::Integer:
+			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
+			break;
 		case AbstractColumn::Text:
 			comment = i18np("text data, %1 element", "text data, %1 elements", rows);
 			break;
@@ -928,7 +984,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	//make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
-	for (int i=0; i<childCount<Column>(); i++)
+	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
 	if (m_view)

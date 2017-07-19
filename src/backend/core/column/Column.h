@@ -88,7 +88,6 @@ public:
 	QString textAt(const int) const;
 	void setTextAt(const int, const QString&);
 	void replaceTexts(const int, const QVector<QString>&);
-
 	QDate dateAt(const int) const;
 	void setDateAt(const int, const QDate&);
 	QTime timeAt(const int) const;
@@ -96,10 +95,12 @@ public:
 	QDateTime dateTimeAt(const int) const;
 	void setDateTimeAt(const int, const QDateTime&);
 	void replaceDateTimes(const int, const QVector<QDateTime>&);
-
 	double valueAt(const int) const;
 	void setValueAt(const int, const double);
 	virtual void replaceValues(const int, const QVector<double>&);
+	int integerAt(const int) const;
+	void setIntegerAt(const int, const int);
+	virtual void replaceInteger(const int, const QVector<int>&);
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);

@@ -92,7 +92,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet) : QWidget(),
 	if (!m_spreadsheet->isLoading()) {
 		int w = m_tableView->verticalHeader()->width();
 		int h = m_horizontalHeader->height();
-		for (int i=0; i<m_horizontalHeader->count(); ++i)
+		for (int i = 0; i < m_horizontalHeader->count(); ++i)
 			w += m_horizontalHeader->sectionSize(i);
 
 		if (m_tableView->verticalHeader()->count()>50)
@@ -153,7 +153,7 @@ void SpreadsheetView::init() {
 	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 
-	foreach(Column* column, m_spreadsheet->children<Column>())
+	for (auto* column: m_spreadsheet->children<Column>())
 		connect(column, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createColumnContextMenu(QMenu*)));
 
 	//selection relevant connections
@@ -173,7 +173,7 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
-	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
+	for (int i = 0; i < m_spreadsheet->children<Column>().size(); ++i) {
 		Column* col = m_spreadsheet->child<Column>(i);
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
@@ -964,9 +964,9 @@ void SpreadsheetView::copySelection() {
 	WAIT_CURSOR;
 	QString output_str;
 
-	for (int r=0; r<rows; r++) {
-		for (int c=0; c<cols; c++) {
-			Column *col_ptr = m_spreadsheet->column(first_col + c);
+	for (int r = 0; r < rows; r++) {
+		for (int c = 0; c < cols; c++) {
+			Column* col_ptr = m_spreadsheet->column(first_col + c);
 			if (isCellSelected(first_row + r, first_col + c)) {
 				if (formulaModeActive())
 					output_str += col_ptr->formula(first_row + r);
@@ -1114,25 +1114,35 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
-				QVector<double> results(last-first+1);
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results[row-first] = row+1;
-					else
-						results[row-first] = col_ptr->valueAt(row);
-				col_ptr->replaceValues(first, results);
-				break;
-			}
+			QVector<double> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = row + 1;
+				else
+					results[row-first] = col_ptr->valueAt(row);
+			col_ptr->replaceValues(first, results);
+			break;
+		}
+		case AbstractColumn::Integer: {
+			QVector<int> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = row + 1;
+				else
+					results[row-first] = col_ptr->integerAt(row);
+ 			col_ptr->replaceInteger(first, results);
+			break;
+		}
 		case AbstractColumn::Text: {
-				QVector<QString> results;
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results << QString::number(row+1);
-					else
-						results << col_ptr->textAt(row);
-				col_ptr->replaceTexts(first, results);
-				break;
-			}
+			QVector<QString> results;
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results << QString::number(row+1);
+				else
+					results << col_ptr->textAt(row);
+			col_ptr->replaceTexts(first, results);
+			break;
+		}
 		//TODO: handle other modes
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1157,14 +1167,26 @@ void SpreadsheetView::fillWithRowNumbers() {
 	                                selectedColumnCount()));
 
 	const int rows = m_spreadsheet->rowCount();
-	QVector<double> new_data(rows);
-	for (int i=0; i<rows; ++i)
-		new_data[i] = i+1;
 
-	foreach(Column* col, selectedColumns()) {
-		if (col->columnMode() != AbstractColumn::Numeric)
-			continue;
-		col->replaceValues(0, new_data);
+	QVector<double> double_data(rows);
+	QVector<int> int_data(rows);
+	for (int i = 0; i < rows; ++i)
+		double_data[i] = int_data[i] = i+1;
+
+	for (auto* col: selectedColumns()) {
+		switch (col->columnMode()) {
+		case AbstractColumn::Numeric:
+			col->replaceValues(0, double_data);
+			break;
+		case AbstractColumn::Integer:
+			col->replaceInteger(0, int_data);
+			break;
+		case AbstractColumn::Text:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Day:
+		case AbstractColumn::Month:
+			break;
+		}
 	}
 
 	m_spreadsheet->endMacro();
@@ -1186,40 +1208,50 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
-				QVector<double> results(last-first+1);
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results[row-first] = double(qrand())/double(RAND_MAX);
-					else
-						results[row-first] = col_ptr->valueAt(row);
-				col_ptr->replaceValues(first, results);
-				break;
-			}
+			QVector<double> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = double(qrand())/double(RAND_MAX);
+				else
+					results[row-first] = col_ptr->valueAt(row);
+			col_ptr->replaceValues(first, results);
+			break;
+		}
+		case AbstractColumn::Integer: {
+			QVector<int> results(last-first+1);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results[row-first] = qrand();
+				else
+					results[row-first] = col_ptr->integerAt(row);
+			col_ptr->replaceInteger(first, results);
+			break;
+		}
 		case AbstractColumn::Text: {
-				QVector<QString> results;
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results << QString::number(double(qrand())/double(RAND_MAX));
-					else
-						results << col_ptr->textAt(row);
-				col_ptr->replaceTexts(first, results);
-				break;
-			}
+			QVector<QString> results;
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results << QString::number(double(qrand())/double(RAND_MAX));
+				else
+					results << col_ptr->textAt(row);
+			col_ptr->replaceTexts(first, results);
+			break;
+		}
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
-				QVector<QDateTime> results;
-				QDate earliestDate(1,1,1);
-				QDate latestDate(2999,12,31);
-				QTime midnight(0,0,0,0);
-				for (int row = first; row <= last; row++)
-					if (isCellSelected(row, col))
-						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
-					else
-						results << col_ptr->dateTimeAt(row);
-				col_ptr->replaceDateTimes(first, results);
-				break;
-			}
+			QVector<QDateTime> results;
+			QDate earliestDate(1,1,1);
+			QDate latestDate(2999,12,31);
+			QTime midnight(0,0,0,0);
+			for (int row = first; row <= last; row++)
+				if (isCellSelected(row, col))
+					results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+				else
+					results << col_ptr->dateTimeAt(row);
+			col_ptr->replaceDateTimes(first, results);
+			break;
+		}
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1254,55 +1286,72 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
-	if ( first < 0 )
+	if (first < 0)
 		return;
 
 	bool doubleOk = false;
+	bool intOk = false;
 	bool stringOk = false;
 	double doubleValue = 0;
+	int intValue = 0;
 	QString stringValue;
 
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
-	foreach(Column* col_ptr, selectedColumns()) {
+	for (auto* col_ptr: selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
-		case AbstractColumn::Numeric: {
-				if (!doubleOk)
-					doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-					                                      i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
-				if (doubleOk) {
-					WAIT_CURSOR;
-					QVector<double> results(last-first+1);
-					for (int row=first; row<=last; row++) {
-						if (isCellSelected(row, col))
-							results[row-first] = doubleValue;
-						else
-							results[row-first] = col_ptr->valueAt(row);
-					}
-					col_ptr->replaceValues(first, results);
-					RESET_CURSOR;
+		case AbstractColumn::Numeric:
+			if (!doubleOk)
+				doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
+													i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+			if (doubleOk) {
+				WAIT_CURSOR;
+				QVector<double> results(last-first+1);
+				for (int row = first; row <= last; row++) {
+					if (isCellSelected(row, col))
+						results[row-first] = doubleValue;
+					else
+						results[row-first] = col_ptr->valueAt(row);
 				}
-				break;
+				col_ptr->replaceValues(first, results);
+				RESET_CURSOR;
 			}
-		case AbstractColumn::Text: {
-				if (!stringOk)
-					stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-					                                    i18n("Value"), QLineEdit::Normal, 0, &stringOk);
-				if (stringOk && !stringValue.isEmpty()) {
-					WAIT_CURSOR;
-					QVector<QString> results;
-					for (int row = first; row <= last; row++) {
-						if (isCellSelected(row, col))
-							results << stringValue;
-						else
-							results << col_ptr->textAt(row);
-					}
-					col_ptr->replaceTexts(first, results);
-					RESET_CURSOR;
+			break;
+		case AbstractColumn::Integer:
+			if (!intOk)
+				intValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"),
+													i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
+			if (intOk) {
+				WAIT_CURSOR;
+				QVector<int> results(last-first+1);
+				for (int row = first; row <= last; row++) {
+					if (isCellSelected(row, col))
+						results[row-first] = intValue;
+					else
+						results[row-first] = col_ptr->integerAt(row);
 				}
-				break;
+				col_ptr->replaceInteger(first, results);
+				RESET_CURSOR;
 			}
+			break;
+		case AbstractColumn::Text:
+			if (!stringOk)
+				stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
+												i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+			if (stringOk && !stringValue.isEmpty()) {
+				WAIT_CURSOR;
+				QVector<QString> results;
+				for (int row = first; row <= last; row++) {
+					if (isCellSelected(row, col))
+						results << stringValue;
+					else
+						results << col_ptr->textAt(row);
+				}
+				col_ptr->replaceTexts(first, results);
+				RESET_CURSOR;
+			}
+			break;
 		//TODO: handle other modes
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1339,9 +1388,9 @@ void SpreadsheetView::insertEmptyColumns() {
 		current = first+1;
 		while (current <= last && isColumnSelected(current)) current++;
 		count = current-first;
-		Column *first_col = m_spreadsheet->child<Column>(first);
-		for (int i=0; i < count; i++) {
-			Column * new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+		Column* first_col = m_spreadsheet->child<Column>(first);
+		for (int i = 0; i < count; i++) {
+			Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
 			new_col->setPlotDesignation(AbstractColumn::Y);
 			new_col->insertRows(0, rows);
 			m_spreadsheet->insertChildBefore(new_col, first_col);
@@ -1371,20 +1420,20 @@ void SpreadsheetView::clearSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
 
-	QList< Column* > list = selectedColumns();
-	if (formulaModeActive())	{
-		foreach(Column* ptr, list) {
-			ptr->setSuppressDataChangedSignal(true);
-			ptr->clearFormulas();
-			ptr->setSuppressDataChangedSignal(false);
-			ptr->setChanged();
+	QList<Column*> list = selectedColumns();
+	if (formulaModeActive()) {
+		for (auto* col: list) {
+			col->setSuppressDataChangedSignal(true);
+			col->clearFormulas();
+			col->setSuppressDataChangedSignal(false);
+			col->setChanged();
 		}
 	} else {
-		foreach(Column* ptr, list) {
-			ptr->setSuppressDataChangedSignal(true);
-			ptr->clear();
-			ptr->setSuppressDataChangedSignal(false);
-			ptr->setChanged();
+		for (auto* col: list) {
+			col->setSuppressDataChangedSignal(true);
+			col->clear();
+			col->setSuppressDataChangedSignal(false);
+			col->setChanged();
 		}
 	}
 
@@ -1404,8 +1453,8 @@ void SpreadsheetView::setSelectionAs() {
 		return;
 
 	AbstractColumn::PlotDesignation pd = (AbstractColumn::PlotDesignation)action->data().toInt();
-	foreach(Column* column, columns)
-		column->setPlotDesignation(pd);
+	for (auto* col: columns)
+		col->setPlotDesignation(pd);
 
 	m_spreadsheet->endMacro();
 }
@@ -1416,7 +1465,7 @@ void SpreadsheetView::reverseColumns() {
 	QList<Column*> cols = selectedColumns();
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
 	                                m_spreadsheet->name(), cols.size()));
-	foreach(Column* col, cols) {
+	for (auto* col: cols) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			continue;
 
@@ -1444,14 +1493,14 @@ void SpreadsheetView::maskColumnValues() {
 }
 
 void SpreadsheetView::joinColumns() {
-
+	//TODO
 }
 
 void SpreadsheetView::normalizeSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 	QList< Column* > cols = selectedColumns();
-	foreach(Column* col, cols)	{
+	for (auto* col: cols) {
 		if (col->columnMode() == AbstractColumn::Numeric) {
 			col->setSuppressDataChangedSignal(true);
 			double max = col->maximum();
@@ -1471,18 +1520,18 @@ void SpreadsheetView::normalizeSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize selection", m_spreadsheet->name()));
 	double max = 0.0;
-	for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
+	for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
 		if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
-			for (int row=0; row<m_spreadsheet->rowCount(); row++) {
+			for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
 				if (isCellSelected(row, col) && m_spreadsheet->column(col)->valueAt(row) > max)
 					max = m_spreadsheet->column(col)->valueAt(row);
 			}
 
 	if (max != 0.0) { // avoid division by zero
 		//TODO setSuppressDataChangedSignal
-		for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
+		for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
 			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
-				for (int row=0; row<m_spreadsheet->rowCount(); row++) {
+				for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
 					if (isCellSelected(row, col))
 						m_spreadsheet->column(col)->setValueAt(row, m_spreadsheet->column(col)->valueAt(row) / max);
 				}

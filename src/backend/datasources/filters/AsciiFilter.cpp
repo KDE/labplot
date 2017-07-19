@@ -425,7 +425,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	int col = 0;
 	if (createIndexEnabled) {
-		columnModes[0] = AbstractColumn::Numeric;
+		columnModes[0] = AbstractColumn::Integer;
 		col = 1;
 	}
 
@@ -544,6 +544,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					break;
 				}
+				case AbstractColumn::Integer: {
+					bool isNumber;
+					const int value = locale.toInt(valueString, &isNumber);
+					DEBUG("int value = " << value << " isNumber = " << isNumber);
+					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+					break;
+				}
 				case AbstractColumn::DateTime: {
 					const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
@@ -560,6 +567,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric:
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+					break;
+				case AbstractColumn::Integer:
+					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
 					break;
 				case AbstractColumn::DateTime:
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
@@ -633,6 +643,12 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
+					lineString += QString::number(isNumber ? value : NAN);
+					break;
+				}
+				case AbstractColumn::Integer: {
+					bool isNumber;
+					const int value = locale.toInt(valueString, &isNumber);
 					lineString += QString::number(isNumber ? value : NAN);
 					break;
 				}

@@ -385,13 +385,16 @@ void SpreadsheetModel::updateHorizontalHeader() {
 	while(m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	for (int i=0; i<column_count; i++) {
+	for (int i = 0; i < column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
 
 		QString type;
 		switch(col->columnMode()) {
 			case AbstractColumn::Numeric:
 				type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
+				break;
+			case AbstractColumn::Integer:
+				type = QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
 				break;
 			case AbstractColumn::Text:
 				type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');

@@ -43,6 +43,8 @@ public:
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
 	virtual double valueAt(int row) const {
+		DEBUG("String2Double::valueAt()");
+
 		if (!m_inputs.value(0)) return 0;
 
 		double result;

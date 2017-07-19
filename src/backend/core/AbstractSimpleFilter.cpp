@@ -215,6 +215,15 @@ double AbstractSimpleFilter::valueAt(int row) const {
 }
 
 /**
+ * \brief Return the integer value in row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+int AbstractSimpleFilter::integerAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->integerAt(row) : 0;
+}
+
+/**
  * \brief Number of output rows == number of input rows
  *
  * ... unless overridden in a subclass.
@@ -414,4 +423,8 @@ QDateTime SimpleFilterColumn::dateTimeAt(int row) const {
 
 double SimpleFilterColumn::valueAt(int row) const {
 	return m_owner->valueAt(row);
+}
+
+int SimpleFilterColumn::integerAt(int row) const {
+	return m_owner->integerAt(row);
 }

@@ -33,18 +33,21 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <KLocale>
 
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
-	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
-
-	//TODO: check for int first (when supported)
-	//local.toInt();	-> returns false for floating values
-
-	//try to convert to a number first
-	bool isNumber;
 	QLocale locale(lang);
-	locale.toDouble(valueString, &isNumber);
+
+	// check for int first
+	bool ok;
+	locale.toInt(valueString, &ok);
+	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
+	if (ok)
+		return AbstractColumn::Integer;
+
+	//try to convert to a double
+	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
+	locale.toDouble(valueString, &ok);
 
 	//if not a number, check datetime. if that fails: string
-	if (!isNumber) {
+	if (!ok) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())
 			mode = AbstractColumn::DateTime;

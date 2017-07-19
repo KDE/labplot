@@ -422,8 +422,10 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	//TODO: use given names
 	QStringList vectorNames;
 
-	if (createIndexEnabled)
+	if (createIndexEnabled) {
 		vectorNames.prepend("index");
+		columnModes[0] = AbstractColumn::Integer;
+	}
 
 	columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 
@@ -442,7 +444,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
-			static_cast<QVector<double>*>(dataContainer[0])->operator[](i) = i+1;
+			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i+1;
 
 		for (int n = startColumn; n < m_actualCols; n++) {
 			DEBUG("reading column " << n);

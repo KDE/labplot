@@ -146,6 +146,7 @@ void Column::setSuppressDataChangedSignal(bool b) {
  * necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
+	DEBUG("Column::setColumnMode()");
 	if (mode == columnMode()) return;
 
 	beginMacro(i18n("%1: change column type", name()));
@@ -318,6 +319,7 @@ void Column::clearFormulas() {
  * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value) {
+	DEBUG("Column::setTextAt()");
 	setStatisticsAvailable(false);
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
@@ -328,6 +330,7 @@ void Column::setTextAt(int row, const QString& new_value) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
+	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) { //TODO: do we really need this check?
 		setStatisticsAvailable(false);
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
@@ -382,6 +385,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, double new_value) {
+	DEBUG("Column::setValueAt()");
 	setStatisticsAvailable(false);
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
@@ -392,9 +396,34 @@ void Column::setValueAt(int row, double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
+	DEBUG("Column::replaceValues()");
 	if (!new_values.isEmpty()) {
 		setStatisticsAvailable(false);
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
+	}
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+void Column::setIntegerAt(int row, int new_value) {
+	DEBUG("Column::setIntegerAt()");
+	setStatisticsAvailable(false);
+	exec(new ColumnSetIntegerCmd(d, row, new_value));
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is Integer
+ */
+void Column::replaceInteger(int first, const QVector<int>& new_values) {
+	DEBUG("Column::replaceInteger()");
+	if (!new_values.isEmpty()) {
+		setStatisticsAvailable(false);
+ 		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
 	}
 }
 
@@ -568,6 +597,13 @@ double Column::valueAt(int row) const {
 	return d->valueAt(row);
 }
 
+/**
+ * \brief Return the int value in row 'row'
+ */
+int Column::integerAt(int row) const {
+	return d->integerAt(row);
+}
+
 /*
  * call this function if the data of the column was changed directly via the data()-pointer
  * and not via the setValueAt() in order to emit the dataChanged-signal.
@@ -650,11 +686,17 @@ void Column::save(QXmlStreamWriter* writer) const {
 	int i;
 	switch(columnMode()) {
 	case AbstractColumn::Numeric: {
-			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
-			int size = d->rowCount()*sizeof(double);
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
-			break;
-		}
+		const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
+		int size = d->rowCount() * sizeof(double);
+		writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+		break;
+	}
+	case AbstractColumn::Integer: {
+		const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
+		int size = d->rowCount() * sizeof(int);
+		writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+		break;
+	}
 	case AbstractColumn::Text:
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
@@ -663,7 +705,6 @@ void Column::save(QXmlStreamWriter* writer) const {
 			writer->writeEndElement();
 		}
 		break;
-
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
@@ -868,6 +909,15 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 		setValueAt(index, value);
 		break;
 	}
+	case AbstractColumn::Integer: {
+		int value = str.toInt(&ok);
+		if(!ok) {
+			reader->raiseError(i18n("invalid row value"));
+			return false;
+		}
+		setIntegerAt(index, value);
+		break;
+	}
 	case AbstractColumn::Text:
 		setTextAt(index, str);
 		break;
@@ -963,6 +1013,7 @@ QList< Interval<int> > Column::formulaIntervals() const {
 }
 
 void Column::handleFormatChange() {
+	DEBUG("Column::handleFormatChange()");
 	if (columnMode() == AbstractColumn::DateTime) {
 		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
 		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());

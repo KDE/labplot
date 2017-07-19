@@ -819,7 +819,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 								maxSize = QString::number(column->valueAt(row)).size();
 						}
 
-						Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+						Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 						bool decimals = false;
 						for (int ii = 0; ii < nrows; ++ii) {
 							bool ok;
@@ -848,25 +848,21 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						break;
 					}
 				case AbstractColumn::Text: {
-						int maxSize = -1;
-						for (int row = 0; row < nrows; ++row) {
-							if (column->textAt(row).size() > maxSize)
-								maxSize = column->textAt(row).size();
-						}
-						const QString& tformn = QLatin1String("A") + QString::number(maxSize);
-						tform[i] = new char[tformn.size()];
-						strcpy(tform[i], tformn.toLatin1().data());
-						break;
+					int maxSize = -1;
+					for (int row = 0; row < nrows; ++row) {
+						if (column->textAt(row).size() > maxSize)
+							maxSize = column->textAt(row).size();
 					}
-				case AbstractColumn::DateTime: {
-						break;
-					}
-				case AbstractColumn::Day: {
-						break;
-					}
-				case AbstractColumn::Month: {
-						break;
-					}
+					const QString& tformn = QLatin1String("A") + QString::number(maxSize);
+					tform[i] = new char[tformn.size()];
+					strcpy(tform[i], tformn.toLatin1().data());
+					break;
+				}
+				case AbstractColumn::Integer:	//TODO
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Day:
+				case AbstractColumn::Month:
+					break;
 				}
 			}
 			//TODO extension name containing[] ?
