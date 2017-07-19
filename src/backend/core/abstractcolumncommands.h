@@ -45,11 +45,9 @@ private:
 	AbstractColumnPrivate *m_col;
 	IntervalAttribute<bool> m_masking;
 	bool m_copied;
-
 };
 
-class AbstractColumnSetMaskedCmd : public QUndoCommand
-{
+class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
 	~AbstractColumnSetMaskedCmd();
@@ -63,11 +61,9 @@ private:
 	bool m_masked;
 	IntervalAttribute<bool> m_masking;
 	bool m_copied;
-
 };
 
-class AbstractColumnInsertRowsCmd : public QUndoCommand
-{
+class AbstractColumnInsertRowsCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnInsertRowsCmd(AbstractColumn * col, int before, int count, QUndoCommand * parent = 0 );
 	~AbstractColumnInsertRowsCmd();
@@ -81,8 +77,7 @@ protected:
 	int m_count;
 };
 
-class AbstractColumnRemoveRowsCmd : public QUndoCommand
-{
+class AbstractColumnRemoveRowsCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnRemoveRowsCmd(AbstractColumn * col, int first, int count, QUndoCommand * parent = 0 );
 	~AbstractColumnRemoveRowsCmd();

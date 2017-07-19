@@ -32,6 +32,7 @@
 
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+//#include "backend/matrix/MatrixPrivate.h"
 #include "backend/lib/macros.h"
 
 class MatrixPrivate;
@@ -68,8 +69,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
-//	QVector<QVector<double> >& data() const;
-//	void setData(const QVector<QVector<double> >&);
 	void* data() const;
 	void setData(void*);
 
@@ -94,6 +93,8 @@ public:
 	void removeRows(int first, int count);
 	void clearRow(int);
 
+
+	//TODO: consider columnMode
 	double cell(int row, int col) const;
 	QString text(int row, int col);
 	void setCell(int row, int col, double value);

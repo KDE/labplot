@@ -440,7 +440,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = firstLine.simplified();
 	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
 	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
-	QDEBUG("first data line, parsed : " << firstLineStringList);
+	QDEBUG("first data line, parsed: " << firstLineStringList);
 	columnModes.resize(m_actualCols);
 
 	int col = 0;
@@ -917,11 +917,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				case AbstractColumn::Text:
 					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 					break;
-				case AbstractColumn::Month:
-					//TODO
-					break;
+				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
-					//TODO
 					break;
 				}
 			} else {	// missing columns in this line
@@ -935,11 +932,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				case AbstractColumn::Text:
 					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
 					break;
-				case AbstractColumn::Month:
-					//TODO
-					break;
+				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
-					//TODO
 					break;
 				}
 			}
@@ -951,7 +945,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
 }
-
 
 /*!
  * generates the preview for the file \c fileName reading the provided number of \c lines.
@@ -1016,11 +1009,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				case AbstractColumn::Text:
 					lineString += valueString;
 					break;
-				case AbstractColumn::Month:
-					//TODO
-					break;
+				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
-					//TODO
 					break;
 				}
 			} else 	// missing columns in this line
@@ -1039,7 +1029,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO
+
+	//TODO: save data to ascii file
 }
 
 //##############################################################################

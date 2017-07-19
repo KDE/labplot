@@ -83,7 +83,6 @@
  */
 AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 	m_abstract_column_private( new AbstractColumnPrivate(this) ) {
-
 }
 
 AbstractColumn::~AbstractColumn() {
@@ -142,13 +141,13 @@ QStringList AbstractColumn::dateTimeFormats() {
 QIcon AbstractColumn::iconForMode(ColumnMode mode) {
 	switch (mode) {
 	case AbstractColumn::Numeric:
-		return QIcon::fromTheme("x-shape-text");
+		break;
 	case AbstractColumn::Text:
 		return QIcon::fromTheme("draw-text");
-        case AbstractColumn::DateTime:
-        case AbstractColumn::Month:
-        case AbstractColumn::Day:
-                return QIcon::fromTheme("chronometer");
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		return QIcon::fromTheme("chronometer");
 	}
 
 	return QIcon::fromTheme("x-shape-text");
@@ -271,14 +270,14 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-		case AbstractColumn::Numeric:
-			return !std::isnan(valueAt(row));
-		case AbstractColumn::Text:
-			return !textAt(row).isNull();
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-			return dateTimeAt(row).isValid();
+	case AbstractColumn::Numeric:
+		return !std::isnan(valueAt(row));
+	case AbstractColumn::Text:
+		return !textAt(row).isNull();
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		return dateTimeAt(row).isValid();
 	}
 
 	return false;
