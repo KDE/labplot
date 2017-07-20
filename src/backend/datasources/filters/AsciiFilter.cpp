@@ -565,11 +565,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 
-		/*if (!device.isSequential()) {
-		    device.seek(device.size());
-		    spreadsheet->setBytesRead(device.size());
-		}*/
-
 		qDebug() << "prepared!";
 	}
 
@@ -753,6 +748,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			else
 				newDataIdx = 0;
 		}
+        //TODO
 		static int indexColumnIdx = 0;
 		for (int i = 0; i < linesToRead; ++i) {
 			QString line;
