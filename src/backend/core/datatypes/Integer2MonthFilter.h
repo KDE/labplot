@@ -46,7 +46,6 @@ public:
 	virtual QDateTime dateTimeAt(int row) const {
 		if (!m_inputs.value(0)) return QDateTime();
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		if (std::isnan(inputValue)) return QDateTime();
 		// Don't use Julian days here since support for years < 1 is bad
 		// Use 1900-01-01 instead
 		QDate result_date = QDate(1900,1,1).addMonths(inputValue);

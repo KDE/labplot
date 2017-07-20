@@ -38,9 +38,9 @@ class DateTime2IntegerFilter : public AbstractSimpleFilter {
 public:
 	virtual int integerAt(int row) const {
 		DEBUG("integerAt()");
-		if (!m_inputs.value(0)) return NAN;
+		if (!m_inputs.value(0)) return 0;
 		QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-		if (!input_value.isValid()) return NAN;
+		if (!input_value.isValid()) return 0;
 		return int(input_value.date().toJulianDay());
 	}
 
