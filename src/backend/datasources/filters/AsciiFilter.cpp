@@ -56,12 +56,12 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
-void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource * dataSource, AbstractFileFilter::ImportMode) {
+void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource * dataSource) {
 	d->readFromLiveDevice(device, dataSource);
 }
 
-qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from, AbstractFileFilter::ImportMode importMode) {
-	return d->readFromLiveDevice(device, dataSource, from, importMode);
+qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
+    return d->readFromLiveDevice(device, dataSource, from);
 }
 
 /*!
@@ -489,7 +489,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	readDataFromDevice(device, dataSource, importMode, lines);
 }
 
-qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from, AbstractFileFilter::ImportMode importMode) {
+qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from) {
 
 	Q_ASSERT(dataSource != nullptr);
 	FileDataSource* spreadsheet = dynamic_cast<FileDataSource*>(dataSource);
@@ -518,7 +518,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		spreadsheet->removeColumns(0, 2);
 
 		spreadsheet->clear();
-		spreadsheet->resize(importMode, vectorNames, m_actualCols);
+        spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
 
 		qDebug() << "fds resized to col: " << m_actualCols;
 		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
