@@ -234,6 +234,21 @@ private:
 	int m_row_count;
 };
 
+class ColumnSetIntegerCmd : public QUndoCommand {
+public:
+	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = 0);
+
+	virtual void redo();
+	virtual void undo();
+
+private:
+	ColumnPrivate* m_col;
+	int m_row;
+	int m_new_value;
+	int m_old_value;
+	int m_row_count;
+};
+
 class ColumnSetDateTimeCmd : public QUndoCommand {
 public:
 	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = 0);
@@ -277,6 +292,22 @@ private:
 	int m_first;
 	QVector<double> m_new_values;
 	QVector<double> m_old_values;
+	bool m_copied;
+	int m_row_count;
+};
+
+class ColumnReplaceIntegersCmd : public QUndoCommand {
+public:
+	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = 0);
+
+	virtual void redo();
+	virtual void undo();
+
+private:
+	ColumnPrivate* m_col;
+	int m_first;
+	QVector<int> m_new_values;
+	QVector<int> m_old_values;
 	bool m_copied;
 	int m_row_count;
 };

@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : String2DoubleFilter.h
+    File                 : String2IntegerFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
-    Description          : Locale-aware conversion filter QString -> double.
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Description          : Locale-aware conversion filter QString -> int.
 
  ***************************************************************************/
 
@@ -26,33 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STRING2DOUBLE_FILTER_H
-#define STRING2DOUBLE_FILTER_H
+#ifndef STRING2INTEGER_FILTER_H
+#define STRING2INTEGER_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
-#include <cmath>
 
-//! Locale-aware conversion filter QString -> double.
-class String2DoubleFilter : public AbstractSimpleFilter {
+//! Locale-aware conversion filter QString -> int.
+class String2IntegerFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	String2DoubleFilter() : m_use_default_locale(true) {}
+	String2IntegerFilter() : m_use_default_locale(true) {}
 	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
-	virtual double valueAt(int row) const {
-		DEBUG("String2Double::valueAt()");
-
+	virtual int integerAt(int row) const {
+		DEBUG("String2Integer::integerAt()");
 		if (!m_inputs.value(0)) return 0;
 
-		double result;
+		int result;
 		bool valid;
+		QString textValue = m_inputs.value(0)->textAt(row);
+		DEBUG("	textValue = " << textValue.toStdString());
 		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
-			result = QLocale().toDouble(m_inputs.value(0)->textAt(row), &valid);
+			result = QLocale().toInt(textValue, &valid);
 		else
-			result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
+			result = m_numeric_locale.toInt(textValue, &valid);
+		DEBUG("	result = " << result << " valid = " << valid);
 
 		if (valid)
 			return result;
@@ -60,7 +60,7 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Integer; }
 
 protected:
 	//! Using typed ports: only string inputs are accepted.
@@ -73,4 +73,4 @@ private:
 	bool m_use_default_locale;
 };
 
-#endif // ifndef STRING2DOUBLE_FILTER_H
+#endif // ifndef STRING2INTEGER_FILTER_H

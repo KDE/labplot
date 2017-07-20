@@ -352,6 +352,12 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
+			case AbstractColumn::Integer: {
+				bool isNumber;
+				const int value = numberFormat.toInt(valueString, &isNumber);
+				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
+				break;
+			}
 			case AbstractColumn::DateTime: {
 				const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 				static_cast<QVector<QDateTime>*>(dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
@@ -360,11 +366,8 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			case AbstractColumn::Text:
 				static_cast<QVector<QString>*>(dataContainer[col])->operator[](row) = valueString;
 				break;
-			case AbstractColumn::Month:
-				//TODO
-				break;
+			case AbstractColumn::Month:	// never happens
 			case AbstractColumn::Day:
-				//TODO
 				break;
 			}
 		}

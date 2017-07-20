@@ -892,13 +892,20 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			setDimensions(rowCount(), actualCols);
 	}
 
-	//TODO: support other numeric types when available (float, int, ...)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
 	dataContainer.resize(actualCols);
 	switch (columnMode[0]) {	// only columnMode[0] is used
 	case AbstractColumn::Numeric:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+		}
+		break;
+	case AbstractColumn::Integer:
+		for (int n = 0; n < actualCols; n++) {
+			QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);

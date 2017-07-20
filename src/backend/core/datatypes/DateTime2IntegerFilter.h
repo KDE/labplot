@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : String2DoubleFilter.h
+    File                 : DateTime2IntegerFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
-    Description          : Locale-aware conversion filter QString -> double.
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Description          : Conversion filter QDateTime -> int (using Julian day).
 
  ***************************************************************************/
 
@@ -26,51 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STRING2DOUBLE_FILTER_H
-#define STRING2DOUBLE_FILTER_H
+#ifndef DATE_TIME2INTEGER_FILTER_H
+#define DATE_TIME2INTEGER_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
-#include <QLocale>
-#include <cmath>
+#include <QDateTime>
 
-//! Locale-aware conversion filter QString -> double.
-class String2DoubleFilter : public AbstractSimpleFilter {
+//! Conversion filter QDateTime -> int (using Julian day).
+class DateTime2IntegerFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	String2DoubleFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
-	void setNumericLocaleToDefault() { m_use_default_locale = true; }
-
-	virtual double valueAt(int row) const {
-		DEBUG("String2Double::valueAt()");
-
-		if (!m_inputs.value(0)) return 0;
-
-		double result;
-		bool valid;
-		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
-			result = QLocale().toDouble(m_inputs.value(0)->textAt(row), &valid);
-		else
-			result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
-
-		if (valid)
-			return result;
-		return NAN;
+	virtual int integerAt(int row) const {
+		DEBUG("integerAt()");
+		if (!m_inputs.value(0)) return NAN;
+		QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
+		if (!input_value.isValid()) return NAN;
+		return int(input_value.date().toJulianDay());
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Integer; }
 
 protected:
-	//! Using typed ports: only string inputs are accepted.
+	//! Using typed ports: only DateTime inputs are accepted.
 	virtual bool inputAcceptable(int, const AbstractColumn *source) {
-		return source->columnMode() == AbstractColumn::Text;
+		return source->columnMode() == AbstractColumn::DateTime;
 	}
-
-private:
-	QLocale m_numeric_locale;
-	bool m_use_default_locale;
 };
 
-#endif // ifndef STRING2DOUBLE_FILTER_H
+#endif // ifndef DATE_TIME2INTEGER_FILTER_H
+

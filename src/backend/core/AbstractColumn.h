@@ -77,7 +77,7 @@ public:
 //		UInt8 = 21,	// quint8 (unsigned char)
 //		Int16 = 22,	// qint16 (short)
 //		UInt16 = 23,	// quint16 (unsigned short)
-//		Int32 = 24,	// qint32 (int)
+		Integer = 24,	// qint32 (int)
 //		UInt32 = 25,	// quint32 (unsigned int)
 //		Int64 = 26,	// qint64 (long)
 //		UInt64 = 27,	// quint64 (unsigned long)
@@ -180,6 +180,9 @@ public:
 	virtual double valueAt(int row) const;
 	virtual void setValueAt(int row, double new_value);
 	virtual void replaceValues(int first, const QVector<double>& new_values);
+	virtual int integerAt(int row) const;
+	virtual void setIntegerAt(int row, int new_value);
+	virtual void replaceInteger(int first, const QVector<int>& new_values);
 
 signals:
 	void plotDesignationAboutToChange(const AbstractColumn* source);

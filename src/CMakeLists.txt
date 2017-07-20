@@ -161,19 +161,29 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
-	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
-	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Integer2DateTimeFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2MonthFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2StringFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/String2IntegerFilter.h
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
-	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
-	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DateTime2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Month2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2IntegerFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp

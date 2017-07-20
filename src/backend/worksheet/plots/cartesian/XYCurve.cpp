@@ -921,17 +921,17 @@ void XYCurvePrivate::retransform() {
 	for (int row = startRow; row <= endRow; row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
 				&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
-
 			switch (xColMode) {
 			case AbstractColumn::Numeric:
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:
-			//TODO
+			case AbstractColumn::Integer:
+				tempPoint.setX(xColumn->integerAt(row));
+				break;
+			case AbstractColumn::Text:	//TODO
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				//TODO
 				break;
 			}
 
@@ -939,12 +939,13 @@ void XYCurvePrivate::retransform() {
 			case AbstractColumn::Numeric:
 				tempPoint.setY(yColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:
-			//TODO
+			case AbstractColumn::Integer:
+				tempPoint.setY(yColumn->integerAt(row));
+				break;
+			case AbstractColumn::Text:	//TODO
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
-				//TODO
 				break;
 			}
 			symbolPointsLogical.append(tempPoint);
@@ -1347,7 +1348,7 @@ void XYCurvePrivate::updateValues() {
 			endRow = symbolPointsLogical.size();
 
 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-		for (int i=0; i<endRow; ++i) {
+		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
 
 			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
@@ -1356,6 +1357,9 @@ void XYCurvePrivate::updateValues() {
 			switch (xColMode) {
 			case AbstractColumn::Numeric:
 				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::Integer:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->integerAt(i)) + valuesSuffix;
 				break;
 			case AbstractColumn::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;

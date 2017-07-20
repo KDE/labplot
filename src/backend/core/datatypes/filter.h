@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                 : String2DoubleFilter.h
+    File                 : filter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
-    Description          : Locale-aware conversion filter QString -> double.
-
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Description          : Conversion filter header.
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,51 +24,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STRING2DOUBLE_FILTER_H
-#define STRING2DOUBLE_FILTER_H
+#ifndef FILTER_H
+#define FILTER_H
 
-#include "../AbstractSimpleFilter.h"
-#include <QLocale>
-#include <cmath>
+#include "backend/core/datatypes/SimpleCopyThroughFilter.h"
+#include "backend/core/datatypes/String2DoubleFilter.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/Double2IntegerFilter.h"
+#include "backend/core/datatypes/Double2DateTimeFilter.h"
+#include "backend/core/datatypes/Double2MonthFilter.h"
+#include "backend/core/datatypes/Double2DayOfWeekFilter.h"
+#include "backend/core/datatypes/Integer2DoubleFilter.h"
+#include "backend/core/datatypes/Integer2StringFilter.h"
+#include "backend/core/datatypes/Integer2DateTimeFilter.h"
+#include "backend/core/datatypes/Integer2MonthFilter.h"
+#include "backend/core/datatypes/Integer2DayOfWeekFilter.h"
+#include "backend/core/datatypes/String2IntegerFilter.h"
+#include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/datatypes/String2MonthFilter.h"
+#include "backend/core/datatypes/String2DayOfWeekFilter.h"
+#include "backend/core/datatypes/DateTime2DoubleFilter.h"
+#include "backend/core/datatypes/DateTime2IntegerFilter.h"
+#include "backend/core/datatypes/DayOfWeek2DoubleFilter.h"
+#include "backend/core/datatypes/DayOfWeek2IntegerFilter.h"
+#include "backend/core/datatypes/Month2DoubleFilter.h"
+#include "backend/core/datatypes/Month2IntegerFilter.h"
 
-//! Locale-aware conversion filter QString -> double.
-class String2DoubleFilter : public AbstractSimpleFilter {
-	Q_OBJECT
-
-public:
-	String2DoubleFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
-	void setNumericLocaleToDefault() { m_use_default_locale = true; }
-
-	virtual double valueAt(int row) const {
-		DEBUG("String2Double::valueAt()");
-
-		if (!m_inputs.value(0)) return 0;
-
-		double result;
-		bool valid;
-		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
-			result = QLocale().toDouble(m_inputs.value(0)->textAt(row), &valid);
-		else
-			result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
-
-		if (valid)
-			return result;
-		return NAN;
-	}
-
-	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
-
-protected:
-	//! Using typed ports: only string inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
-		return source->columnMode() == AbstractColumn::Text;
-	}
-
-private:
-	QLocale m_numeric_locale;
-	bool m_use_default_locale;
-};
-
-#endif // ifndef STRING2DOUBLE_FILTER_H
+#endif // ifndef FILTER_H

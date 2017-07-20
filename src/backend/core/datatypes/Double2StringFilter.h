@@ -71,6 +71,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 
 	public:
 		virtual QString textAt(int row) const {
+			DEBUG("Double2String::textAt()");
 			if (!m_inputs.value(0)) return QString();
 			if (m_inputs.value(0)->rowCount() <= row) return QString();
 			double inputValue = m_inputs.value(0)->valueAt(row);

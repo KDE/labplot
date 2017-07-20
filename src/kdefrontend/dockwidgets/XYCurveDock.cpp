@@ -4,7 +4,7 @@
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -670,6 +670,8 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
 		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 		break;
+	case AbstractColumn::Integer:
+		break;
 	case AbstractColumn::Text:
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
 		break;
@@ -686,14 +688,14 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime: {
-			foreach(const QString& s, dateStrings)
+			for (const auto& s: dateStrings)
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			foreach(const QString& s, timeStrings)
+			for (const auto& s: timeStrings)
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			foreach(const QString& s1, dateStrings) {
-				foreach(const QString& s2, timeStrings)
+			for (const auto& s1: dateStrings) {
+				for (const auto& s2: timeStrings)
 					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 			}
 			break;
@@ -746,20 +748,21 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		//show the actuall formating properties
 		switch (columnMode) {
 		case AbstractColumn::Numeric: {
-				Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
-				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
-				ui.sbValuesPrecision->setValue(filter->numDigits());
-				break;
-			}
+			Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
+			ui.sbValuesPrecision->setValue(filter->numDigits());
+			break;
+		}
+		case AbstractColumn::Integer:
 		case AbstractColumn::Text:
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
-				break;
-			}
+			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
+			break;
+		}
 		}
 	}
 }

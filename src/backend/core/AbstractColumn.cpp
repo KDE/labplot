@@ -141,6 +141,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 QIcon AbstractColumn::iconForMode(ColumnMode mode) {
 	switch (mode) {
 	case AbstractColumn::Numeric:
+	case AbstractColumn::Integer:
 		break;
 	case AbstractColumn::Text:
 		return QIcon::fromTheme("draw-text");
@@ -272,6 +273,8 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case AbstractColumn::Numeric:
 		return !std::isnan(valueAt(row));
+	case AbstractColumn::Integer:
+		return !std::isnan(integerAt(row));
 	case AbstractColumn::Text:
 		return !textAt(row).isNull();
 	case AbstractColumn::DateTime:
@@ -518,6 +521,36 @@ void AbstractColumn::setValueAt(int row, double new_value) {
 void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
+
+/**
+ * \brief Return the integer value in row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+int AbstractColumn::integerAt(int row) const {
+	Q_UNUSED(row);
+	return 42;
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+void AbstractColumn::setIntegerAt(int row, int new_value) {
+	Q_UNUSED(row) Q_UNUSED(new_value)
+};
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is Integer
+ */
+void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
+	Q_UNUSED(first) Q_UNUSED(new_values)
+}
+
+/********************************************************************************/
 
 double AbstractColumn::minimum() const{
 	double val;

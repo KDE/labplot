@@ -101,6 +101,10 @@ public:
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
 
+	int integerAt(int row) const;
+	void setIntegerAt(int row, int new_value);
+	void replaceInteger(int first, const QVector<int>&);
+
 	AbstractColumn::ColumnStatistics statistics;
 	bool statisticsAvailable;
 
