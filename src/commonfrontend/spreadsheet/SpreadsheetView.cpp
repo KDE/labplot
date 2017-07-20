@@ -95,7 +95,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet) : QWidget(),
 		for (int i = 0; i < m_horizontalHeader->count(); ++i)
 			w += m_horizontalHeader->sectionSize(i);
 
-		if (m_tableView->verticalHeader()->count()>50)
+		if (m_tableView->verticalHeader()->count() > 50 || m_tableView->verticalHeader()->count() < 10)
 			h += m_tableView->verticalHeader()->sectionSize(0)*50;
 		else
 			h += m_tableView->verticalHeader()->sectionSize(0)*m_tableView->verticalHeader()->count();
