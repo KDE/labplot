@@ -505,10 +505,8 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric: {
 		double* ptr = static_cast<QVector<double>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++) {
-			DEBUG("	value = " << other->valueAt(i));
+		for (int i = 0; i < num_rows; i++)
 			ptr[i] = other->valueAt(i);
-		}
 		break;
 	}
 	case AbstractColumn::Integer: {

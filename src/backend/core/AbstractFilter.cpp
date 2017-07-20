@@ -119,14 +119,11 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 	DEBUG("AbstractFilter::input()");
 
 	if (port < 0 || (inputCount() >= 0 && port >= inputCount())) return false;
-	DEBUG("	here");
 	if (source && !inputAcceptable(port, source)) return false;
-	DEBUG("	here");
 
 	if (port >= m_inputs.size()) m_inputs.resize(port+1);
 	const AbstractColumn* old_input = m_inputs.value(port);
 	if (source == old_input) return true;
-	DEBUG("	here");
 
 	if (old_input) {
 		disconnect(old_input, 0, this, 0);
