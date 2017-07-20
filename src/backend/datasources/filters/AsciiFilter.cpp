@@ -570,17 +570,22 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 	qint64 bytesread = 0;
 
-	FileDataSource::ReadingType readingType;
-
-	if (!m_prepared)
-		readingType = FileDataSource::ReadingType::TillEnd;
-	else
-		readingType = spreadsheet->readingType();
-
 	// if there's data do be read
 	if (device.bytesAvailable() > 0) {
 		qDebug() << "got new data";
 
+		FileDataSource::ReadingType readingType;
+
+		if (!m_prepared)
+			readingType = FileDataSource::ReadingType::TillEnd;
+		else {
+			//we have to read all the data when reading from end
+			//so we set readingType to TillEnd
+			if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
+				readingType = FileDataSource::ReadingType::TillEnd;
+			else
+				readingType = spreadsheet->readingType();
+		}
 
 		//move to the last read position, from == total bytes read
 		//since the other source types are sequencial we cannot seek on them
@@ -616,10 +621,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 
+		//now we reset the readingType
+		if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
+			readingType = spreadsheet->readingType();
+
 		//we had less new lines than the sample rate specified
 		if (readingType != FileDataSource::ReadingType::TillEnd)
 			qDebug() << "Removed empty lines: " << newData.removeAll("");
 		//increase row count if we don't have a fixed size
+		//but only after the preparation step
 		if (m_prepared) {
 			if (!spreadsheet->keepLastValues()) {
 				if (readingType != FileDataSource::ReadingType::TillEnd)
@@ -733,7 +743,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		int linesToRead;
 		if (!m_prepared)
-			linesToRead = newLinesTillEnd ;
+			linesToRead = newLinesTillEnd;
 		else
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 
@@ -741,14 +751,19 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			if (spreadsheet->keepLastValues())
 				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
+		newDataIdx = 0;
 
 		if (readingType == FileDataSource::ReadingType::FromEnd) {
-			if (newData.size() > spreadsheet->sampleRate())
-				newDataIdx = newData.size() - spreadsheet->sampleRate() - 1;
-			else
-				newDataIdx = 0;
+			if (m_prepared) {
+				if (newData.size() > spreadsheet->sampleRate())
+					newDataIdx = newData.size() - spreadsheet->sampleRate();
+				//since we skip a couple of lines, we need to count those bytes too
+				for (int i = 0; i < newDataIdx; ++i)
+					bytesread += newData.at(i).size();
+			}
 		}
-        //TODO
+		qDebug() << "newDataIdx: " << newDataIdx;
+		//TODO
 		static int indexColumnIdx = 0;
 		for (int i = 0; i < linesToRead; ++i) {
 			QString line;

@@ -37,7 +37,7 @@ LiveDataDock::LiveDataDock(QWidget *parent) :
 	connect(ui.leKeepNValues, SIGNAL(textChanged(QString)), this, SLOT(keepNvaluesChanged(QString)));
 	connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
 	connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-    connect(ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect(ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -52,17 +52,17 @@ void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 	const FileDataSource* const fds = sources.at(0);
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
+	ui.cbReadingType->setCurrentIndex(static_cast<int>(fds->readingType()));
 
 	if (fds->updateType() == FileDataSource::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
 
-    if (fds->isPaused()) {
-        ui.bPausePlayReading->setText(i18n("Continue reading"));
-    } else {
-        ui.bPausePlayReading->setText(i18n("Pause reading"));
-    }
+	if (fds->isPaused())
+		ui.bPausePlayReading->setText(i18n("Continue reading"));
+	else
+		ui.bPausePlayReading->setText(i18n("Pause reading"));
 
 
 	if(!fds->keepLastValues()) {
@@ -185,9 +185,9 @@ void LiveDataDock::pauseContinueReading() {
 
 	if (m_paused) {
 		pauseReading();
-        ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setText(i18n("Continue reading"));
 	} else {
 		continueReading();
-        ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setText(i18n("Pause reading"));
 	}
 }
