@@ -617,7 +617,7 @@ void ColumnClearCmd::redo() {
 			QVector<int>* vec = new QVector<int>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; i++)
-				vec->operator[](i) = NAN;
+				vec->operator[](i) = 0;
 			break;
 		}
 		case AbstractColumn::DateTime:
