@@ -34,7 +34,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 
 class AbstractFileFilter;
-template <class t> class QList;
+template <class T> class QList;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
