@@ -547,7 +547,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				case AbstractColumn::Integer: {
 					bool isNumber;
 					const int value = locale.toInt(valueString, &isNumber);
-					DEBUG("int value = " << value << " isNumber = " << isNumber);
 					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
 					break;
 				}
