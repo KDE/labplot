@@ -273,8 +273,8 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case AbstractColumn::Numeric:
 		return !std::isnan(valueAt(row));
-	case AbstractColumn::Integer:
-		return !std::isnan(integerAt(row));
+	case AbstractColumn::Integer:	// there is no invalid integer
+		return true;
 	case AbstractColumn::Text:
 		return !textAt(row).isNull();
 	case AbstractColumn::DateTime:

@@ -41,13 +41,11 @@ public:
 	virtual QDate dateAt(int row) const {
 		if (!m_inputs.value(0)) return QDate();
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		if (std::isnan(inputValue)) return QDate();
 		return QDate::fromJulianDay(inputValue);
 	}
 	virtual QTime timeAt(int row) const {
 		if (!m_inputs.value(0)) return QTime();
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		if (std::isnan(inputValue)) return QTime();
 		// we only want the digits behind the dot and
 		// convert them from fraction of day to milliseconds
 		return QTime(inputValue,0,0,0);

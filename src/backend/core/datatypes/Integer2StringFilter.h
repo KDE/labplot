@@ -29,7 +29,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
-#include <cmath>
 
 //! Locale-aware conversion filter int -> QString.
 class Integer2StringFilter : public AbstractSimpleFilter {
@@ -48,7 +47,6 @@ public:
 		if (m_inputs.value(0)->rowCount() <= row) return QString();
 
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		if (std::isnan(inputValue)) return QString();
 
 		return QLocale().toString(inputValue);
 	}
