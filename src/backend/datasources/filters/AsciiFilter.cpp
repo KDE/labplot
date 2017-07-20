@@ -959,7 +959,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
 					break;
 				case AbstractColumn::Integer:
-					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
 					break;
 				case AbstractColumn::DateTime:
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();

@@ -715,7 +715,7 @@ void ColumnPrivate::resizeTo(int new_size) {
 	}
 	case AbstractColumn::Integer: {
 		QVector<int>* numeric_data = static_cast<QVector<int>*>(m_data);
-		numeric_data->insert(numeric_data->end(), new_size-old_size, NAN);
+		numeric_data->insert(numeric_data->end(), new_size-old_size, 0);
 		break;
 	}
 	case AbstractColumn::DateTime:
@@ -759,7 +759,7 @@ void ColumnPrivate::insertRows(int before, int count) {
 			static_cast<QVector<double>*>(m_data)->insert(before, count, NAN);
 			break;
 		case AbstractColumn::Integer:
-			static_cast<QVector<int>*>(m_data)->insert(before, count, NAN);
+			static_cast<QVector<int>*>(m_data)->insert(before, count, 0);
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1000,8 +1000,8 @@ double ColumnPrivate::valueAt(int row) const {
  * \brief Return the int value in row 'row'
  */
 int ColumnPrivate::integerAt(int row) const {
-	if (m_column_mode != AbstractColumn::Integer) return NAN;
-	return static_cast<QVector<int>*>(m_data)->value(row, NAN);
+	if (m_column_mode != AbstractColumn::Integer) return 0;
+	return static_cast<QVector<int>*>(m_data)->value(row, 0);
 }
 
 /**

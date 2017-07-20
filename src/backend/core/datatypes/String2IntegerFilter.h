@@ -56,7 +56,7 @@ public:
 
 		if (valid)
 			return result;
-		return NAN;
+		return 0;
 	}
 
 	//! Return the data type of the column

@@ -39,9 +39,9 @@ class DayOfWeek2IntegerFilter : public AbstractSimpleFilter {
 public:
 	virtual int integerAt(int row) const {
 		DEBUG("integerAt()");
-		if (!m_inputs.value(0)) return NAN;
+		if (!m_inputs.value(0)) return 0;
 		QDate date = m_inputs.value(0)->dateAt(row);
-		if (!date.isValid()) return NAN;
+		if (!date.isValid()) return 0;
 		return int(date.dayOfWeek());
 	}
 

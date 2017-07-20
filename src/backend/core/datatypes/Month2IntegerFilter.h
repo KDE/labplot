@@ -30,7 +30,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDate>
-#include <cmath>
 
 /**
  * \brief Conversion filter QDateTime -> int, translating dates into months (January -> 1).
@@ -43,9 +42,9 @@ class Month2IntegerFilter : public AbstractSimpleFilter {
 public:
 	virtual int integerAt(int row) const {
 		DEBUG("integerAt()");
-		if (!m_inputs.value(0)) return NAN;
+		if (!m_inputs.value(0)) return 0;
 		QDate inputValue = m_inputs.value(0)->dateAt(row);
-		if (!inputValue.isValid()) return NAN;
+		if (!inputValue.isValid()) return 0;
 		return int(inputValue.month());
 	}
 
