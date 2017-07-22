@@ -950,12 +950,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 						break;
 					}
 				case AbstractColumn::Integer: {
-						bool isNumber;
-						const int value = locale.toInt(valueString, &isNumber);
-						DEBUG("int value = " << value << " isNumber = " << isNumber);
-						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-						break;
-					}
+					bool isNumber;
+					const int value = locale.toInt(valueString, &isNumber);
+					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+					break;
+				}
 				case AbstractColumn::DateTime: {
 						const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();

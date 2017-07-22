@@ -76,8 +76,8 @@ Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
  */
 void Column::init() {
 	m_string_io = new ColumnStringIO(this);
-	d->inputFilter()->input(0,m_string_io);
-	d->outputFilter()->input(0,this);
+	d->inputFilter()->input(0, m_string_io);
+	d->outputFilter()->input(0, this);
 	d->inputFilter()->setHidden(true);
 	d->outputFilter()->setHidden(true);
 	addChild(d->inputFilter());

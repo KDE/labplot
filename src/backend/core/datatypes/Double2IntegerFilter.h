@@ -40,16 +40,14 @@ public:
 	Double2IntegerFilter() {}
 
 	virtual int integerAt(int row) const {
-		DEBUG("Double2Integer::integerAt()");
 		if (!m_inputs.value(0)) return 0;
 
 		double value = m_inputs.value(0)->valueAt(row);
-		DEBUG("	value = " << value);
 
 		int result = 0;
 		if (!std::isnan(value))
 			result = (int)round(value);
-		DEBUG("	result = " << result);
+		//DEBUG("Double2Integer::integerAt() " << value << " -> " << result);
 
 		return result;
 	}

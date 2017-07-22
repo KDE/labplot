@@ -15,6 +15,10 @@ New features:
 		* Respect theme settings also in plot legends and labels
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
+	* Support different data types
+		* auto detect integer and datetime data in import
+		* support number locale and datetime formats
+		* improved data type support in spreadsheets
 	* Import from SQL databases (tables or custom queries)
 	* Import Origin OPJ projects
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column

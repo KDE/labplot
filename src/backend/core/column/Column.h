@@ -45,8 +45,8 @@ public:
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
 	template <typename T>
-	explicit Column(const QString& name, QVector<T> data)
-		: AbstractColumn(name), d(new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<T>(data))) {
+	explicit Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric)
+		: AbstractColumn(name), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
 		init();
 	};
 	void init();

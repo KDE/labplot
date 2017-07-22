@@ -3,7 +3,7 @@
     Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description          : Locale-aware conversion filter int -> double.
+    Description          : conversion filter int -> double.
 
  ***************************************************************************/
 
@@ -31,7 +31,7 @@
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
 
-//! Locale-aware conversion filter double -> int.
+//! conversion filter double -> int.
 class Integer2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
@@ -39,11 +39,11 @@ public:
 	Integer2DoubleFilter() {}
 
 	virtual double valueAt(int row) const {
-		DEBUG("valueAt()");
 		if (!m_inputs.value(0)) return 0;
 
-		double result;
-		result = (double)(m_inputs.value(0)->integerAt(row));
+		int value = m_inputs.value(0)->integerAt(row);
+		double result = (double)value;
+		//DEBUG("Integer2Double::integerAt() " << value << " -> " << result);
 
 		return result;
 	}
@@ -52,8 +52,9 @@ public:
 	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
 
 protected:
-	//! Using typed ports: only integer inputs are accepted.
+	//! Using typed ports: only integer inputs are accepted
 	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		DEBUG("inputAcceptable(): source type = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, source->columnMode()));
 		return source->columnMode() == AbstractColumn::Integer;
 	}
 };

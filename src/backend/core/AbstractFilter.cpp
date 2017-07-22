@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractFilter.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
@@ -30,6 +30,7 @@
 #include <KLocale>
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/lib/macros.h"
 
 /**
  * \class AbstractFilter
@@ -114,15 +115,17 @@ int AbstractFilter::highestConnectedInput() const {
  *
  * \sa inputAcceptable(), #m_inputs
  */
-bool AbstractFilter::input(int port, const AbstractColumn* source)
-{
-	if (port<0 || (inputCount()>=0 && port>=inputCount())) return false;
+bool AbstractFilter::input(int port, const AbstractColumn* source) {
+	DEBUG("AbstractFilter::input()");
+
+	if (port < 0 || (inputCount() >= 0 && port >= inputCount())) return false;
 	if (source && !inputAcceptable(port, source)) return false;
+
 	if (port >= m_inputs.size()) m_inputs.resize(port+1);
 	const AbstractColumn* old_input = m_inputs.value(port);
 	if (source == old_input) return true;
-	if (old_input) 
-	{
+
+	if (old_input) {
 		disconnect(old_input, 0, this, 0);
 		// replace input, notifying the filter implementation of the changes
 		inputDescriptionAboutToChange(old_input);
@@ -136,6 +139,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
 		inputAboutToBeDisconnected(old_input);
 	m_inputs[port] = source;
 	if (source) { // we have a new source
+		DEBUG("	new source");
 		if(old_input && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(source);
 		inputDataChanged(source);
@@ -178,15 +182,16 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
 		QObject::connect(source, SIGNAL(aboutToBeDestroyed(const AbstractColumn*)),
 				this, SLOT(inputAboutToBeDestroyed(const AbstractColumn*)));
 	} else { // source==0, that is, the input port has been disconnected
+		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
-		while ( m_inputs.at(num_connected_inputs-1) == 0 )
-		{
+		while (m_inputs.at(num_connected_inputs-1) == 0) {
 			num_connected_inputs--;
 			if(!num_connected_inputs) break;
 		}
 		m_inputs.resize(num_connected_inputs);
 	}
+
 	return true;
 }
 
@@ -196,11 +201,10 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
  *
  * Overloaded method provided for convenience.
  */
-bool AbstractFilter::input(const AbstractFilter* sources)
-{
+bool AbstractFilter::input(const AbstractFilter* sources) {
 	if (!sources) return false;
 	bool result = true;
-	for (int i=0; i<sources->outputCount(); i++)
+	for (int i = 0; i < sources->outputCount(); i++)
 		if (!input(i, sources->output(i)))
 			result = false;
 	return result;
