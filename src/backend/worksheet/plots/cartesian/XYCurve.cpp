@@ -45,11 +45,11 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-// #include <QElapsedTimer>
 
 #include <KConfigGroup>
 #include <KGlobal>
@@ -730,7 +730,6 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
-	DEBUG("XYCurve::retransform()");
 	Q_D(XYCurve);
 
 	WAIT_CURSOR;
@@ -892,10 +891,10 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	DEBUG("XYCurvePrivate::retransform()");
 	if (m_suppressRetransform)
 		return;
 
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -964,7 +963,10 @@ void XYCurvePrivate::retransform() {
 	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
+	{
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+	}
 
 	m_suppressRecalc = true;
 	updateLines();
@@ -980,6 +982,7 @@ void XYCurvePrivate::retransform() {
   Called each time when the type of this connection is changed.
 */
 void XYCurvePrivate::updateLines() {
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines()");
 	linePath = QPainterPath();
 	lines.clear();
 	if (lineType == XYCurve::NoLine) {
@@ -989,12 +992,8 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	int count = symbolPointsLogical.count();
-//	DEBUG("count ="<<count<<", line type ="<<lineType);
-//	for(int i=0;i<qMin(10,count);i++)
-//		DEBUG(symbolPointsLogical.at(i));
-
-	//nothing to do, if no data points available
 	if (count <= 1) {
+		//nothing to do, if no data points available
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1172,7 +1171,10 @@ void XYCurvePrivate::updateLines() {
 	//map the lines to scene coordinates
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	{
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map lines to scene coordinates");
 	lines = cSystem->mapLogicalToScene(lines);
+	}
 
 	//new line path
 	foreach (const QLineF& line, lines) {
@@ -1794,7 +1796,7 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect()");
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcShapeAndBoundingRect()");
 	if (m_suppressRecalc)
 		return;
 
@@ -1833,8 +1835,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	updatePixmap();
 }
 
-void XYCurvePrivate::draw(QPainter *painter) {
-	DEBUG("XYCurvePrivate::draw()");
+void XYCurvePrivate::draw(QPainter* painter) {
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::draw()");
 
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
@@ -1883,16 +1885,12 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		painter->setBrush(valuesColor);
 		drawValues(painter);
 	}
-
-	DEBUG("XYCurvePrivate::draw() DONE");
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG("XYCurvePrivate::updatePixmap()");
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updatePixmap()");
 	WAIT_CURSOR;
 
-// 	QTime timer;
-// 	timer.start();
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
@@ -1910,12 +1908,8 @@ void XYCurvePrivate::updatePixmap() {
 	painter.end();
 	m_pixmap = pixmap;
 
-	//QApplication::processEvents(QEventLoop::AllEvents, 0);
-
-// 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
 	update();
 	RESET_CURSOR;
-	DEBUG("XYCurvePrivate::updatePixmap() DONE");
 }
 
 //TODO: move this to a central place
@@ -1991,29 +1985,23 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	QDEBUG("XYCurvePrivate::paint() name =" << q->name());
-
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
 
-// 	QTime timer;
-// 	timer.start();
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
- 	DEBUG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
-	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
+	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) ) {
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::paint(), painter->drawPixmap()");
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
-	else
+	} else
 		draw(painter); //draw directly again (slow)
 
-// 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing) {
-// 		timer.start();
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			pix.fill(q->hoveredPen.color());
@@ -2024,12 +2012,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 		painter->setOpacity(q->hoveredOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
 		return;
 	}
 
 	if (isSelected() && !m_printing) {
-// 		timer.start();
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			pix.fill(q->selectedPen.color());
@@ -2040,7 +2026,6 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 		painter->setOpacity(q->selectedOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
 		return;
 	}
 }
