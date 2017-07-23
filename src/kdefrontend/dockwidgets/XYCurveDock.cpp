@@ -218,6 +218,7 @@ void XYCurveDock::setupGeneral() {
 
 
 void XYCurveDock::init() {
+//TODO: we already have a list
 	dateStrings<<"yyyy-MM-dd";
 	dateStrings<<"yyyy/MM/dd";
 	dateStrings<<"dd/MM/yyyy";

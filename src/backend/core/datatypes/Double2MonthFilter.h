@@ -46,6 +46,7 @@ public:
 		return dateTimeAt(row).time();
 	}
 	virtual QDateTime dateTimeAt(int row) const {
+		DEBUG("Double2MonthFilter::dateTimeAt() row = " << row);
 		if (!m_inputs.value(0)) return QDateTime();
 		double inputValue = m_inputs.value(0)->valueAt(row);
 		if (std::isnan(inputValue)) return QDateTime();
@@ -53,6 +54,7 @@ public:
 		// Use 1900-01-01 instead
 		QDate result_date = QDate(1900,1,1).addMonths(qRound(inputValue - 1.0));
 		QTime result_time = QTime(0,0,0,0);
+		QDEBUG("value = " << inputValue << " result = " << QDateTime(result_date, result_time));
 		return QDateTime(result_date, result_time);
 	}
 

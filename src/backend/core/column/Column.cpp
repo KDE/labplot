@@ -167,6 +167,7 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	}
 
 	endMacro();
+	DEBUG("Column::setColumnMode() DONE");
 }
 
 /**
@@ -1013,16 +1014,20 @@ QList< Interval<int> > Column::formulaIntervals() const {
 }
 
 void Column::handleFormatChange() {
-	DEBUG("Column::handleFormatChange()");
+	DEBUG("Column::handleFormatChange() mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
 	if (columnMode() == AbstractColumn::DateTime) {
 		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
 		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
+		DEBUG("change format " << input_filter->format().toStdString() << " to " << output_filter->format().toStdString());
 		input_filter->setFormat(output_filter->format());
 	}
+	DEBUG("Column::handleFormatChange() 1");
 
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this); // all cells must be repainted
+	DEBUG("Column::handleFormatChange() 2");
 
 	setStatisticsAvailable(false);
+	DEBUG("Column::handleFormatChange() DONE");
 }

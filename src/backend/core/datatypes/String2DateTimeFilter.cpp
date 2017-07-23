@@ -140,15 +140,15 @@ QTime String2DateTimeFilter::timeAt(int row) const {
 	return dateTimeAt(row).time();
 }
 
-bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn *source) {
+bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn* source) {
 	return source->columnMode() == AbstractColumn::Text;
 }
 
-void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
+void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("format", format());
 }
 
-bool String2DateTimeFilter::load(XmlStreamReader * reader) {
+bool String2DateTimeFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 
