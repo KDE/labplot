@@ -1425,7 +1425,8 @@ void XYCurvePrivate::updateValues() {
 void XYCurvePrivate::updateFilling() {
 	fillPolygons.clear();
 
-	if (fillingPosition==XYCurve::NoFilling) {
+	//don't try to calculate the filling polygons if no filling was enabled or the nubmer of visible points on the scene is too high
+	if (fillingPosition==XYCurve::NoFilling || symbolPointsScene.size()>1000) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
