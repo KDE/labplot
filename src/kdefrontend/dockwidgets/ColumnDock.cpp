@@ -130,6 +130,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	case AbstractColumn::Day:
 	case AbstractColumn::DateTime: {
 			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+			DEBUG("	set column format: " << filter->format().toStdString());
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
 		}
@@ -200,13 +201,15 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 	} else {
 		ui.lFormat->show();
 		ui.cbFormat->show();
-		ui.cbFormat->setCurrentIndex(0);
 	}
 
-	if (columnMode == AbstractColumn::DateTime)
+	if (columnMode == AbstractColumn::DateTime) {
 		ui.cbFormat->setEditable(true);
-	else
+		ui.cbFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
+	} else {
 		ui.cbFormat->setEditable(false);
+		ui.cbFormat->setCurrentIndex(0);
+	}
 }
 
 //*************************************************************

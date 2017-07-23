@@ -372,7 +372,7 @@ void XYCurveDock::init() {
 	trafo.scale(15, 15);
 
 	ui.cbSymbolStyle->addItem(i18n("none"));
-	for (int i=1; i<19; ++i) {
+	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
 		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -682,8 +682,6 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		}
 	}
 
-	ui.cbValuesFormat->setCurrentIndex(0);
-
 	if (columnMode == AbstractColumn::Numeric) {
 		ui.lValuesPrecision->show();
 		ui.sbValuesPrecision->show();
@@ -700,13 +698,15 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.lValuesFormatTop->show();
 		ui.lValuesFormat->show();
 		ui.cbValuesFormat->show();
-		ui.cbValuesFormat->setCurrentIndex(0);
 	}
 
-	if (columnMode == AbstractColumn::DateTime)
-		ui.cbValuesFormat->setEditable( true );
-	else
-		ui.cbValuesFormat->setEditable( false );
+	if (columnMode == AbstractColumn::DateTime) {
+		ui.cbValuesFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
+		ui.cbValuesFormat->setEditable(true);
+	} else {
+		ui.cbValuesFormat->setCurrentIndex(0);
+		ui.cbValuesFormat->setEditable(false);
+	}
 }
 
 /*!
@@ -740,6 +740,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
 			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			DEBUG("	column values format = " << filter->format().toStdString());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 			break;
 		}
