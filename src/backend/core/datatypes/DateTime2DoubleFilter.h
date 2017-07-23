@@ -40,10 +40,11 @@ class DateTime2DoubleFilter : public AbstractSimpleFilter {
 public:
 	virtual double valueAt(int row) const {
 		if (!m_inputs.value(0)) return NAN;
-		QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-		if (!input_value.isValid()) return NAN;
-		return double(input_value.date().toJulianDay()) +
-			double( -input_value.time().msecsTo(QTime(12,0,0,0)) ) / 86400000.0;
+		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
+		if (!inputDate.isValid()) return NAN;
+		QDateTime start(QDate(1900, 1, 1));
+		return double(start.daysTo(inputDate)) +
+			double( -inputDate.time().msecsTo(QTime(0,0,0,0)) ) / 86400000.0;
 	}
 
 	//! Return the data type of the column
@@ -51,7 +52,7 @@ public:
 
 protected:
 	//! Using typed ports: only DateTime inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	virtual bool inputAcceptable(int, const AbstractColumn* source) {
 		return source->columnMode() == AbstractColumn::DateTime;
 	}
 };
