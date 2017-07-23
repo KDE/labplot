@@ -185,7 +185,7 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 		return NULL;
 	if (logicalEnd < 0.0 || logicalEnd == 0.0)
 		return NULL;
-	
+
 	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
 	if (lDiff == 0.0)
 		return NULL;
@@ -237,10 +237,10 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 }
 
 /*!
-	Maps the points in logical coordinates from \c points and fills the \c restrictedPoints with the points in logical coordinates restricted to the current intervals.
+	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
 	\param logicalPoints List of points in logical coordinates
 	\param scenePoints List for the points in scene coordinates
-	\param restrictedLogicalPoints List for the logical coordinates restricted to the current region of the coordinate system
+	\param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
 	\param flags
  */
 void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints,
