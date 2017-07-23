@@ -30,6 +30,7 @@
 #include "kdefrontend/MainWin.h"
 #include "backend/lib/macros.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"

@@ -46,8 +46,10 @@ class Matrix : public AbstractDataSource {
 public:
 	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
-	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
+	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false,
+		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name,
+		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	~Matrix();
 
 	virtual QIcon icon() const override;
@@ -58,19 +60,20 @@ public:
 	virtual bool printView() override;
 	virtual bool printPreview() const override;
 
+	void* data() const;
+	void setData(void*);
+
+	BASIC_D_ACCESSOR_DECL(AbstractColumn::ColumnMode, mode, Mode)
 	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
+	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
+	BASIC_D_ACCESSOR_DECL(int, precision, Precision)
+	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
 	BASIC_D_ACCESSOR_DECL(double, xEnd, XEnd)
 	BASIC_D_ACCESSOR_DECL(double, yStart, YStart)
 	BASIC_D_ACCESSOR_DECL(double, yEnd, YEnd)
-	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
-	BASIC_D_ACCESSOR_DECL(int, precision, Precision)
-	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
-
-	void* data() const;
-	void setData(void*);
 
 	void setSuppressDataChangedSignal(bool);
 	void setChanged();
@@ -167,8 +170,9 @@ private:
 	void init();
 
 	MatrixPrivate* const d;
-	friend class MatrixPrivate;
 	mutable MatrixModel* m_model;
+
+	friend class MatrixPrivate;
 };
 
 #endif

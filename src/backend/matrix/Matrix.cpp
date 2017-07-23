@@ -57,8 +57,8 @@
 
 	\ingroup backend
 */
-Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
+Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -67,8 +67,8 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	init();
 }
 
-Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
+Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
 
 	if (!loading)
 		init();
@@ -189,8 +189,13 @@ bool Matrix::printPreview() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
+void* Matrix::data() const {
+	return d->data;
+}
+
+BASIC_D_READER_IMPL(Matrix, AbstractColumn::ColumnMode, mode, mode)
 BASIC_D_READER_IMPL(Matrix, int, rowCount, rowCount)
+BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
 BASIC_D_READER_IMPL(Matrix, double, xStart, xStart)
 BASIC_D_READER_IMPL(Matrix, double, xEnd, xEnd)
 BASIC_D_READER_IMPL(Matrix, double, yStart, yStart)
@@ -199,10 +204,6 @@ BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
 CLASS_D_READER_IMPL(Matrix, QString, formula, formula)
-
-void* Matrix::data() const {
-	return d->data;
-}
 
 void Matrix::setSuppressDataChangedSignal(bool b) {
 	if (m_model)
@@ -531,9 +532,18 @@ void Matrix::mirrorVertically() {
 //######################  Private implementation ###############################
 //##############################################################################
 
-MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
-	//TODO: consider columnMode
-	data = new QVector<QVector<double>>();
+MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode mode)
+		: q(owner), mode(mode), rowCount(0), columnCount(0), suppressDataChange(false) {
+
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		data = new QVector<QVector<double>>();
+		break;
+	case AbstractColumn::Integer:
+		data = new QVector<QVector<int>>();
+		break;
+	//TODO: other modes
+	}
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -547,12 +557,23 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= columnCount);
 
-	//TODO: consider columnMode
 	emit q->columnsAboutToBeInserted(before, count);
-	for(int i = 0; i < count; i++) {
-		static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
-		columnWidths.insert(before+i, 0);
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		for(int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
+	case AbstractColumn::Integer:
+		for(int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<int>>*>(data)->insert(before+i, QVector<int>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
+	//TODO: other modes
 	}
+	
 	columnCount += count;
 	emit q->columnsInserted(before, count);
 }
@@ -564,6 +585,7 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	emit q->columnsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= columnCount);
+
 	//TODO: consider columnMode
 	(static_cast<QVector<QVector<double>>*>(data))->remove(first, count);
 	for (int i=0; i<count; i++)
@@ -579,6 +601,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 	emit q->rowsAboutToBeInserted(before, count);
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= rowCount);
+
 	//TODO: consider columnMode
 	for(int col=0; col<columnCount; col++)
 		for(int i=0; i<count; i++)
@@ -597,6 +620,7 @@ void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= rowCount);
+
 	//TODO: consider columnMode
 	for(int col = 0; col < columnCount; col++)
 		(static_cast<QVector<QVector<double>>*>(data))->operator[](col).remove(first, count);
@@ -641,7 +665,7 @@ QVector<double> MatrixPrivate::columnCells(int col, int first_row, int last_row)
 	return result;
 }
 
-void MatrixPrivate::setColumnCells(int col, int first_row, int last_row, const QVector<double> & values) {
+void MatrixPrivate::setColumnCells(int col, int first_row, int last_row, const QVector<double>& values) {
 	Q_ASSERT(first_row >= 0 && first_row < rowCount);
 	Q_ASSERT(last_row >= 0 && last_row < rowCount);
 	Q_ASSERT(values.count() > last_row - first_row);

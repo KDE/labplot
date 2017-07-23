@@ -124,11 +124,8 @@ private:
 	bool m_suppressDataChangedSignal;
 	QActionGroup* m_usedInActionGroup;
 
-	friend class ColumnStringIO;
-	ColumnStringIO* m_string_io;
-
 	ColumnPrivate* d;
-	friend class ColumnPrivate;
+	ColumnStringIO* m_string_io;
 
 signals:
 	void requestProjectContextMenu(QMenu*);
@@ -136,6 +133,9 @@ signals:
 private slots:
 	void navigateTo(QAction*);
 	void handleFormatChange();
+
+	friend class ColumnPrivate;
+	friend class ColumnStringIO;
 };
 
 

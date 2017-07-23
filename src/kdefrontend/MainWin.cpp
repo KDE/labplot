@@ -65,6 +65,7 @@
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QMdiArea>
 #include <QMenu>

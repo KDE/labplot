@@ -30,7 +30,6 @@
 #define SPREADSHEET_H
 
 #include "backend/datasources/AbstractDataSource.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnStringIO.h"
 
 class AbstractFileFilter;

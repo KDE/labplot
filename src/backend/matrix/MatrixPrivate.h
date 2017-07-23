@@ -32,11 +32,10 @@
 #define MATRIXPRIVATE_H
 
 template <class T> class QVector;
-//class Matrix;
 
 class MatrixPrivate {
 public:
-	explicit MatrixPrivate(Matrix*);
+	explicit MatrixPrivate(Matrix*, AbstractColumn::ColumnMode);
 
 	void insertColumns(int before, int count);
 	void removeColumns(int first, int count);
@@ -45,13 +44,12 @@ public:
 
 	QString name() const { return q->name(); }
 
-//	template<class T> T cell(int row, int col) const;
 	double cell(int row, int col) const;
 	void setCell(int row, int col, double value);
 	QVector<double> columnCells(int col, int first_row, int last_row);
-	void setColumnCells(int col, int first_row, int last_row, const QVector<double> & values);
+	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
 	QVector<double> rowCells(int row, int first_column, int last_column);
-	void setRowCells(int row, int first_column, int last_column, const QVector<double> & values);
+	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 	void clearColumn(int col);
 
 	void setRowHeight(int row, int height) { rowHeights[row] = height; }
@@ -62,23 +60,25 @@ public:
 	void updateViewHeader();
 	void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
 
-	// TODO: anything private here?
 	Matrix* q;
-	int columnCount;
-	int rowCount;
 	void* data;
-	QVector<int> rowHeights;//!< Row widths
-	QVector<int> columnWidths;//!< Columns widths
-	int defaultRowHeight;
+	AbstractColumn::ColumnMode mode;	// mode (data type) of values
+
+	int rowCount;
+	int columnCount;
+	QVector<int> rowHeights;	//!< Row widths
+	QVector<int> columnWidths;	//!< Columns widths
 	Matrix::HeaderFormat headerFormat;
-	char numericFormat; //!< Format code for displaying numbers
-	int precision; //!< Number of significant digits
-	QString formula; //!<formula used to calculate the cells
-	double xStart;
-	double xEnd;
-	double yStart;
-	double yEnd;
+
+	char numericFormat;			//!< Format code for displaying numbers
+	int precision;				//!< Number of significant digits
+	double xStart, xEnd;
+	double yStart, yEnd;
+	QString formula;			//!<formula used to calculate the cells
 	bool suppressDataChange;
+
+private:
+	int defaultRowHeight;
 };
 
 #endif

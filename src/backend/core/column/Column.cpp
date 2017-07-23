@@ -88,9 +88,6 @@ void Column::init() {
 	connect(m_usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
 }
 
-/**
- * \brief Dtor
- */
 Column::~Column() {
 	delete m_string_io;
 	delete d;
