@@ -41,6 +41,7 @@ class AbstractFileFilter;
 class QFileSystemWatcher;
 class QAction;
 class QTcpSocket;
+class QUdpSocket;
 class QFile;
 
 class FileDataSource : public Spreadsheet {
@@ -51,7 +52,8 @@ public:
 	enum FileType {Ascii, Binary, Image, HDF, NETCDF, FITS};
 	enum SourceType {
 		FileOrPipe = 0,
-		NetworkSocket,
+		NetworkTcpSocket,
+		NetworkUdpSocket,
 		LocalSocket,
 		SerialPort
 	};
@@ -181,6 +183,7 @@ private:
 	QFile* m_file;
 	QLocalSocket* m_localSocket;
 	QTcpSocket* m_tcpSocket;
+	QUdpSocket* m_udpSocket;
 	QSerialPort* m_serialPort;
 	QIODevice* m_device;
 

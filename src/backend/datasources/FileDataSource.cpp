@@ -49,6 +49,7 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTcpSocket>
+#include <QUdpSocket>
 
 #include <QIcon>
 #include <QAction>
@@ -77,6 +78,7 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_file(nullptr),
 	  m_localSocket(nullptr),
 	  m_tcpSocket(nullptr),
+	  m_udpSocket(nullptr),
 	  m_serialPort(nullptr),
 	  m_device(nullptr) {
 
@@ -490,11 +492,17 @@ void FileDataSource::read() {
 			m_file = new QFile(m_fileName);
 			m_device = m_file;
 			break;
-		case NetworkSocket:
+		case NetworkTcpSocket:
 			m_tcpSocket = new QTcpSocket;
 			m_device = m_tcpSocket;
 			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
+			break;
+		case NetworkUdpSocket:
+			m_udpSocket = new QUdpSocket;
+			m_device = m_udpSocket;
+			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+			connect(m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket(this);
@@ -538,10 +546,15 @@ void FileDataSource::read() {
 			break;
 		}
 		break;
-	case NetworkSocket:
-		DEBUG("reading from a network socket");
+	case NetworkTcpSocket:
+		DEBUG("reading from a TCP socket");
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+		break;
+	case NetworkUdpSocket:
+		DEBUG("reading from a UDP socket");
+		m_udpSocket->abort();
+		m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 		break;
 	case LocalSocket:
 		DEBUG("reading from a local socket");
@@ -809,7 +822,8 @@ void FileDataSource::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("serialPortName", m_serialPortName);
 
 		break;
-	case NetworkSocket:
+	case NetworkTcpSocket:
+	case NetworkUdpSocket:
 		writer->writeAttribute("host", m_host);
 		writer->writeAttribute("port", QString::number(m_port));
 		break;
@@ -938,7 +952,8 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 					m_serialPortName = str;
 
 				break;
-			case NetworkSocket:
+			case NetworkTcpSocket:
+			case NetworkUdpSocket:
 				str = attribs.value("host").toString();
 				if(str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'host'"));

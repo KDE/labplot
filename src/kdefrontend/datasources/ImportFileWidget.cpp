@@ -320,7 +320,8 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 	case FileDataSource::SourceType::LocalSocket:
 		source->setLocalSocketName(ui.kleFileName->text());
 		break;
-	case FileDataSource::SourceType::NetworkSocket:
+	case FileDataSource::SourceType::NetworkTcpSocket:
+	case FileDataSource::SourceType::NetworkUdpSocket:
 		source->setHost(ui.leHost->text());
 		source->setPort(ui.lePort->text().toInt());
 		break;
@@ -878,7 +879,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 		break;
-	case FileDataSource::SourceType::NetworkSocket:
+	case FileDataSource::SourceType::NetworkTcpSocket:
+	case FileDataSource::SourceType::NetworkUdpSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
