@@ -37,11 +37,12 @@ class DateTime2IntegerFilter : public AbstractSimpleFilter {
 
 public:
 	virtual int integerAt(int row) const {
-		DEBUG("integerAt()");
+		//DEBUG("integerAt()");
 		if (!m_inputs.value(0)) return 0;
-		QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-		if (!input_value.isValid()) return 0;
-		return int(input_value.date().toJulianDay());
+		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
+		if (!inputDate.isValid()) return 0;
+		QDateTime start(QDate(1900, 1, 1));
+		return int(start.daysTo(inputDate));
 	}
 
 	//! Return the data type of the column
