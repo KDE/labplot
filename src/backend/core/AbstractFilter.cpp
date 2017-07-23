@@ -139,7 +139,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		inputAboutToBeDisconnected(old_input);
 	m_inputs[port] = source;
 	if (source) { // we have a new source
-		DEBUG("	new source");
+//		DEBUG("	new source");
 		if(old_input && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(source);
 		inputDataChanged(source);
@@ -182,7 +182,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		QObject::connect(source, SIGNAL(aboutToBeDestroyed(const AbstractColumn*)),
 				this, SLOT(inputAboutToBeDestroyed(const AbstractColumn*)));
 	} else { // source==0, that is, the input port has been disconnected
-		DEBUG("	no source");
+//		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
 		while (m_inputs.at(num_connected_inputs-1) == 0) {

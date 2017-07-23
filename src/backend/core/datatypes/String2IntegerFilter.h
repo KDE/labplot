@@ -41,18 +41,18 @@ public:
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
 	virtual int integerAt(int row) const {
-		DEBUG("String2Integer::integerAt()");
+		//DEBUG("String2Integer::integerAt()");
 		if (!m_inputs.value(0)) return 0;
 
 		int result;
 		bool valid;
 		QString textValue = m_inputs.value(0)->textAt(row);
-		DEBUG("	textValue = " << textValue.toStdString());
+		//DEBUG("	textValue = " << textValue.toStdString());
 		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
 			result = QLocale().toInt(textValue, &valid);
 		else
 			result = m_numeric_locale.toInt(textValue, &valid);
-		DEBUG("	result = " << result << " valid = " << valid);
+		//DEBUG("	result = " << result << " valid = " << valid);
 
 		if (valid)
 			return result;

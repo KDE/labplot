@@ -35,34 +35,34 @@
 #include <cmath>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as months of the year.
-class Double2MonthFilter : public AbstractSimpleFilter
-{
+class Double2MonthFilter : public AbstractSimpleFilter {
 	Q_OBJECT
-	public:
-		virtual QDate dateAt(int row) const {
-			return dateTimeAt(row).date();
-		}
-		virtual QTime timeAt(int row) const {
-			return dateTimeAt(row).time();
-		}
-		virtual QDateTime dateTimeAt(int row) const {
-			if (!m_inputs.value(0)) return QDateTime();
-			double inputValue = m_inputs.value(0)->valueAt(row);
-			if (std::isnan(inputValue)) return QDateTime();
-			// Don't use Julian days here since support for years < 1 is bad
-			// Use 1900-01-01 instead
-			QDate result_date = QDate(1900,1,1).addMonths(qRound(inputValue - 1.0));
-			QTime result_time = QTime(0,0,0,0);
-			return QDateTime(result_date, result_time);
-		}
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
+public:
+	virtual QDate dateAt(int row) const {
+		return dateTimeAt(row).date();
+	}
+	virtual QTime timeAt(int row) const {
+		return dateTimeAt(row).time();
+	}
+	virtual QDateTime dateTimeAt(int row) const {
+		if (!m_inputs.value(0)) return QDateTime();
+		double inputValue = m_inputs.value(0)->valueAt(row);
+		if (std::isnan(inputValue)) return QDateTime();
+		// Don't use Julian days here since support for years < 1 is bad
+		// Use 1900-01-01 instead
+		QDate result_date = QDate(1900,1,1).addMonths(qRound(inputValue - 1.0));
+		QTime result_time = QTime(0,0,0,0);
+		return QDateTime(result_date, result_time);
+	}
 
-	protected:
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Numeric;
-		}
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
+
+protected:
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Numeric;
+	}
 };
 
 #endif // ifndef DOUBLE2MONTH_FILTER_H

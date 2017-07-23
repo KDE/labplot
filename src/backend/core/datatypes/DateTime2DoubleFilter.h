@@ -34,27 +34,26 @@
 #include <cmath>
 
 //! Conversion filter QDateTime -> double (using Julian day).
-class DateTime2DoubleFilter : public AbstractSimpleFilter
-{
+class DateTime2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return NAN;
-			QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-			if (!input_value.isValid()) return NAN;
-			return double(input_value.date().toJulianDay()) +
-				double( -input_value.time().msecsTo(QTime(12,0,0,0)) ) / 86400000.0;
-		}
+public:
+	virtual double valueAt(int row) const {
+		if (!m_inputs.value(0)) return NAN;
+		QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
+		if (!input_value.isValid()) return NAN;
+		return double(input_value.date().toJulianDay()) +
+			double( -input_value.time().msecsTo(QTime(12,0,0,0)) ) / 86400000.0;
+	}
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
 
-	protected:
-		//! Using typed ports: only DateTime inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::DateTime;
-		}
+protected:
+	//! Using typed ports: only DateTime inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::DateTime;
+	}
 };
 
 #endif // ifndef DATE_TIME2DOUBLE_FILTER_H
