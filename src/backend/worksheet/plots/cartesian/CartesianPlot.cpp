@@ -2487,6 +2487,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 	KConfigGroup group = config.group("Theme");
 
 	//read the five colors defining the palette
+	m_themeColorPalette.clear();
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
