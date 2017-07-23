@@ -2,8 +2,9 @@
     File                 : String2DateTimeFilter.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter QString -> QDateTime.
 
  ***************************************************************************/
@@ -49,35 +50,6 @@ private:
 	QString m_other_format;
 };
 
-//TODO: see other formats list
-const char * String2DateTimeFilter::date_formats[] = {
-	"yyyy-M-d", // ISO 8601 w/ and w/o leading zeros
-	"yyyy/M/d",
-	"d/M/yyyy", // European style day/month order (this order seems to be used in more countries than the US style M/d/yyyy)
-	"d/M/yy",
-	"d-M-yyyy",
-	"d-M-yy",
-	"d.M.yyyy", // German style
-	"d.M.yy",
-	"M/yyyy",
-	"d.M.", // German form w/o year
-	"yyyyMMdd",
-	0
-};
-
-const char* String2DateTimeFilter::time_formats[] = {
-	"h",
-	"h ap",
-	"h:mm",
-	"h:mm ap",
-	"h:mm:ss",
-	"h:mm:ss.zzz",
-	"h:mm:ss:zzz",
-	"mm:ss.zzz",
-	"hmmss",
-	0
-};
-
 AbstractColumn::ColumnMode String2DateTimeFilter::columnMode() const {
 	return AbstractColumn::DateTime;
 }
@@ -112,14 +84,15 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 		time_string = date_string;
 
 	// try to find a valid date
-	for (const char **format = date_formats; *format != 0; format++) {
-		date_result = QDate::fromString(date_string, *format);
+	for (const auto& format: AbstractColumn::dateFormats()) {
+		date_result = QDate::fromString(date_string, format);
 		if (date_result.isValid())
 			break;
+
 	}
 	// try to find a valid time
-	for (const char **format = time_formats; *format != 0; format++) {
-		time_result = QTime::fromString(time_string, *format);
+	for (const auto& format: AbstractColumn::timeFormats()) {
+		time_result = QTime::fromString(time_string, format);
 		if (time_result.isValid())
 			break;
 	}

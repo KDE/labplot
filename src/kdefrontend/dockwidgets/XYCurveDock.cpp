@@ -218,27 +218,6 @@ void XYCurveDock::setupGeneral() {
 
 
 void XYCurveDock::init() {
-//TODO: we already have a list
-	dateStrings<<"yyyy-MM-dd";
-	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy";
-	dateStrings<<"dd/MM/yy";
-	dateStrings<<"dd.MM.yyyy";
-	dateStrings<<"dd.MM.yy";
-	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM.";
-	dateStrings<<"yyyyMMdd";
-
-	timeStrings<<"hh";
-	timeStrings<<"hh ap";
-	timeStrings<<"hh:mm";
-	timeStrings<<"hh:mm ap";
-	timeStrings<<"hh:mm:ss";
-	timeStrings<<"hh:mm:ss.zzz";
-	timeStrings<<"hh:mm:ss:zzz";
-	timeStrings<<"mm:ss.zzz";
-	timeStrings<<"hhmmss";
-
 	m_initializing = true;
 
 	//Line
@@ -689,14 +668,14 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime: {
-			for (const auto& s: dateStrings)
+			for (const auto& s: AbstractColumn::dateFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s: timeStrings)
+			for (const auto& s: AbstractColumn::timeFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s1: dateStrings) {
-				for (const auto& s2: timeStrings)
+			for (const auto& s1: AbstractColumn::dateFormats()) {
+				for (const auto& s2: AbstractColumn::timeFormats())
 					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 			}
 			break;

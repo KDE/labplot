@@ -56,10 +56,15 @@ public:
 	virtual void setupGeneral();
 
 private:
+	virtual void initGeneralTab();
+	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
+	void showValuesColumnFormat(const Column*);
+
+	void load();
+	void loadConfig(KConfig&);
+
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
 	KUrlCompletion* m_completion;
-	QStringList dateStrings;
-	QStringList timeStrings;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
@@ -69,23 +74,16 @@ private:
 	TreeViewComboBox* cbYErrorPlusColumn;
 	TreeViewComboBox* cbYErrorMinusColumn;
 
-	virtual void initGeneralTab();
-	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
-	void showValuesColumnFormat(const Column*);
-
-	void load();
-	void loadConfig(KConfig&);
-
 protected:
-	bool m_initializing;
-	Ui::XYCurveDock ui;
-	QList<XYCurve*> m_curvesList;
-	XYCurve* m_curve;
-	AspectTreeModel* m_aspectTreeModel;
-
 	void initTabs();
 	virtual void setModel();
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
+
+	Ui::XYCurveDock ui;
+	bool m_initializing;
+	QList<XYCurve*> m_curvesList;
+	XYCurve* m_curve;
+	AspectTreeModel* m_aspectTreeModel;
 
 private slots:
 	void init();
