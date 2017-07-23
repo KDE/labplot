@@ -77,13 +77,13 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-	  if (!layout)
-		continue;
+		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!layout)
+			continue;
 
-	  layout->setContentsMargins(2,2,2,2);
-	  layout->setHorizontalSpacing(2);
-	  layout->setVerticalSpacing(2);
+		layout->setContentsMargins(2,2,2,2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
 	}
 
 	//Slots
@@ -135,75 +135,77 @@ HistogramDock::~HistogramDock()
 
 }
 
-void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode){
-  ui.cbValuesFormat->clear();
+//TODO: very similiar to ColumnDock
+void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
+	ui.cbValuesFormat->clear();
 
-  switch (columnMode){
+	switch (columnMode) {
 	case AbstractColumn::Numeric:
-	  ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
-	  ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	  ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	  ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	  ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-	  break;
+		ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
+		ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+		ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+		break;
+	case AbstractColumn::Integer:
+		break;
 	case AbstractColumn::Text:
-	  ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
-	  break;
+		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
+		break;
 	case AbstractColumn::Month:
-	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
-	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
-	  ui.cbValuesFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
-	  ui.cbValuesFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
-	  break;
+		ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
+		ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
+		ui.cbValuesFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
+		break;
 	case AbstractColumn::Day:
-	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
-	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
-	  ui.cbValuesFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
-	  ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
-	  break;
-	case AbstractColumn::DateTime:{
-	  foreach(const QString& s, dateStrings)
-		ui.cbValuesFormat->addItem(s, QVariant(s));
+		ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
+		ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
+		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
+		break;
+	case AbstractColumn::DateTime:
+		for (const auto& s: AbstractColumn::dateFormats())
+			ui.cbValuesFormat->addItem(s, QVariant(s));
 
-	  foreach(const QString& s, timeStrings)
-		ui.cbValuesFormat->addItem(s, QVariant(s));
+		for (const auto& s: AbstractColumn::timeFormats())
+			ui.cbValuesFormat->addItem(s, QVariant(s));
 
-	  foreach(const QString& s1, dateStrings){
-		foreach(const QString& s2, timeStrings)
-		  ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
-	  }
-	  break;
+		for (const auto& s1: AbstractColumn::dateFormats())
+			for (const auto& s2: AbstractColumn::timeFormats())
+				ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
+		break;
 	}
-  }
 
-  ui.cbValuesFormat->setCurrentIndex(0);
-
-  if (columnMode == AbstractColumn::Numeric){
-	ui.lValuesPrecision->show();
-	ui.sbValuesPrecision->show();
-  }else{
-	ui.lValuesPrecision->hide();
-	ui.sbValuesPrecision->hide();
-  }
-
-  if (columnMode == AbstractColumn::Text){
-	ui.lValuesFormatTop->hide();
-	ui.lValuesFormat->hide();
-	ui.cbValuesFormat->hide();
-  }else{
-	ui.lValuesFormatTop->show();
-	ui.lValuesFormat->show();
-	ui.cbValuesFormat->show();
 	ui.cbValuesFormat->setCurrentIndex(0);
-  }
 
-  if (columnMode == AbstractColumn::DateTime){
-	ui.cbValuesFormat->setEditable( true );
-  }else{
-	ui.cbValuesFormat->setEditable( false );
-  }
+	if (columnMode == AbstractColumn::Numeric) {
+		ui.lValuesPrecision->show();
+		ui.sbValuesPrecision->show();
+	} else {
+		ui.lValuesPrecision->hide();
+		ui.sbValuesPrecision->hide();
+	}
+
+	if (columnMode == AbstractColumn::Text) {
+		ui.lValuesFormatTop->hide();
+		ui.lValuesFormat->hide();
+		ui.cbValuesFormat->hide();
+	} else {
+		ui.lValuesFormatTop->show();
+		ui.lValuesFormat->show();
+		ui.cbValuesFormat->show();
+		ui.cbValuesFormat->setCurrentIndex(0);
+	}
+
+	if (columnMode == AbstractColumn::DateTime) {
+		ui.cbValuesFormat->setEditable(true);
+	} else {
+		ui.cbValuesFormat->setEditable(false);
+	}
 }
 
+//TODO: very similiar to ColumnDock
 void HistogramDock::showValuesColumnFormat(const Column* column){
   if (!column){
 	// no valid column is available
@@ -224,6 +226,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
 		  break;
 		}
 		case AbstractColumn::Text:
+		case AbstractColumn::Integer:
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -235,13 +238,13 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
 	}
   }
 }
-void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
+void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
 	if (column)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
-void HistogramDock::retranslateUi(){
+void HistogramDock::retranslateUi() {
 	//TODO:
 // 	uiGeneralTab.lName->setText(i18n("Name"));
 // 	uiGeneralTab.lComment->setText(i18n("Comment"));
@@ -252,13 +255,13 @@ void HistogramDock::retranslateUi(){
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
 // "General"-tab
-void HistogramDock::nameChanged(){
+void HistogramDock::nameChanged() {
   if (m_initializing)
 	return;
 
   m_curve->setName(uiGeneralTab.leName->text());
 }
-void HistogramDock::commentChanged(){
+void HistogramDock::commentChanged() {
   if (m_initializing)
 	return;
 
@@ -269,37 +272,17 @@ void HistogramDock::visibilityChanged(bool state){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setVisible(state);
 }
 void HistogramDock::valuesColorChanged(const QColor& color){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setValuesColor(color);
 }
 void HistogramDock::init(){
-  	dateStrings<<"yyyy-MM-dd";
-	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy";
-	dateStrings<<"dd/MM/yy";
-	dateStrings<<"dd.MM.yyyy";
-	dateStrings<<"dd.MM.yy";
-	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM.";
-	dateStrings<<"yyyyMMdd";
-
-	timeStrings<<"hh";
-	timeStrings<<"hh ap";
-	timeStrings<<"hh:mm";
-	timeStrings<<"hh:mm ap";
-	timeStrings<<"hh:mm:ss";
-	timeStrings<<"hh:mm:ss.zzz";
-	timeStrings<<"hh:mm:ss:zzz";
-	timeStrings<<"mm:ss.zzz";
-	timeStrings<<"hhmmss";
-
 	//Values
 	ui.cbValuesType->addItem(i18n("no values"));
 	ui.cbValuesType->addItem("y");

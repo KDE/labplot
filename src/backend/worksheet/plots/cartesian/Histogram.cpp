@@ -547,6 +547,8 @@ void HistogramPrivate::retransform(){
 				case AbstractColumn::Numeric:
 					tempPoint.setX(xColumn->valueAt(row));
 					break;
+				case AbstractColumn::Integer:
+					//TODO
 				case AbstractColumn::Text:
 					//TODO
 				case AbstractColumn::DateTime:
@@ -806,6 +808,7 @@ void HistogramPrivate::updateValues() {
 					break;
 				case AbstractColumn::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				case AbstractColumn::Integer:
 				case AbstractColumn::DateTime:
 				case AbstractColumn::Month:
 				case AbstractColumn::Day:
