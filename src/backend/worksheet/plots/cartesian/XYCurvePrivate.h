@@ -128,6 +128,7 @@ public:
 	qreal errorBarsOpacity;
 
 	XYCurve* const q;
+	friend class XYCurve;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
