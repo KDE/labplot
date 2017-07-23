@@ -31,6 +31,8 @@
 
 #include <QGraphicsItem>
 #include <vector>
+#include <QFont>
+#include <QPen>
 
 extern "C" {
 #include <gsl/gsl_histogram.h>
