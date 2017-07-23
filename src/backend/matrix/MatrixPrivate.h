@@ -76,9 +76,6 @@ public:
 	double yStart, yEnd;
 	QString formula;			//!<formula used to calculate the cells
 	bool suppressDataChange;
-
-private:
-	int defaultRowHeight;
 };
 
 #endif

@@ -59,11 +59,11 @@ class Histogram: public WorksheetElement {
 		virtual ~Histogram();
 		//size_t bins;
 
-        virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QGraphicsItem *graphicsItem() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
 
 		CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
 
@@ -101,9 +101,9 @@ class Histogram: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 		BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool on);
+		virtual void setVisible(bool on) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool on) override;
 		void suppressRetransform(bool);
 		double getYMaximum() const;
 		void setHistrogramType(Histogram::HistogramType);
@@ -117,7 +117,7 @@ class Histogram: public WorksheetElement {
 		bool isSourceDataChangedSinceLastPlot() const;
 
 	public slots:
-		virtual void retransform();
+		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	private slots:
