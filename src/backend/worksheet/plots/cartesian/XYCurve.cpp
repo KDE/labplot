@@ -1796,10 +1796,10 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcShapeAndBoundingRect()");
 	if (m_suppressRecalc)
 		return;
 
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcShapeAndBoundingRect()");
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	if (lineType != XYCurve::NoLine) {
@@ -1888,6 +1888,9 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
+	if (m_suppressRecalc)
+		return;
+
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updatePixmap()");
 	WAIT_CURSOR;
 
@@ -2446,6 +2449,9 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	QPen p;
 
+	Q_D(XYCurve);
+	d->m_suppressRecalc = true;
+
 	//Line
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
 	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
@@ -2489,6 +2495,9 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+
+	d->m_suppressRecalc = false;
+	d->recalcShapeAndBoundingRect();
 }
 
 void XYCurve::saveThemeConfig(const KConfig& config) {
