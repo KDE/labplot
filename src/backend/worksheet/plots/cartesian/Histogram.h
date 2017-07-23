@@ -35,6 +35,7 @@
 #include "backend/lib/macros.h"
 
 class HistogramPrivate;
+
 class Histogram: public WorksheetElement {
 	Q_OBJECT
 
@@ -46,19 +47,18 @@ public:
 	enum HistogramType {Ordinary,Cummulative, AvgShift};
 
 	struct HistogramData {
-		HistogramData() : type(Ordinary),binsOption(Number), binValue(10){};
+		HistogramData() : type(Ordinary),binsOption(Number), binValue(10) {};
 
 		HistogramType type;
 		BinsOption binsOption;
 		int binValue;
 	};
 	explicit Histogram(const QString &name);
-	virtual ~Histogram();
 	//size_t bins;
 
 	virtual QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
-	virtual QGraphicsItem *graphicsItem() const override;
+	virtual QGraphicsItem* graphicsItem() const override;
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;
 

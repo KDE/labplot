@@ -26,6 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
+//TODO: a copy of XYCurve ???
+
 /*!
   \class Histogram
   \brief A 2D-curve, provides an interface for editing many properties of the curve.
@@ -60,28 +62,25 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+#include <cmath>
+#include <vector>
+extern "C" {
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
-#include <math.h>
-#include <vector>
+}
 
 Histogram::Histogram(const QString &name)
-		: WorksheetElement(name), d_ptr(new HistogramPrivate(this)){
+		: WorksheetElement(name), d_ptr(new HistogramPrivate(this)) {
 	init();
 }
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
-		: WorksheetElement(name), d_ptr(dd){
+		: WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
-Histogram::~Histogram() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void Histogram::init(){
+void Histogram::init() {
 	Q_D(Histogram);
 
 	KConfig config;
@@ -123,13 +122,13 @@ void Histogram::init(){
 	this->initActions();
 }
 
-void Histogram::initActions(){
+void Histogram::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-QMenu* Histogram::createContextMenu(){
+QMenu* Histogram::createContextMenu() {
 	QMenu *menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
@@ -140,21 +139,21 @@ QMenu* Histogram::createContextMenu(){
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon Histogram::icon() const{
+QIcon Histogram::icon() const {
 	return QIcon::fromTheme("labplot-xy-curve");
 }
 
-QGraphicsItem* Histogram::graphicsItem() const{
+QGraphicsItem* Histogram::graphicsItem() const {
 	return d_ptr;
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Histogram, SetVisible, bool, swapVisible)
-void Histogram::setVisible(bool on){
+void Histogram::setVisible(bool on) {
 	Q_D(Histogram);
 	exec(new HistogramSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
-bool Histogram::isVisible() const{
+bool Histogram::isVisible() const {
 	Q_D(const Histogram);
 	return d->isVisible();
 }
@@ -176,8 +175,7 @@ Histogram::HistogramType Histogram::getHistrogramType() {
 void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
 	d_ptr->histogramData.binsOption = binsOption;
 }
-void Histogram::setBinValue(int binValue)
-{
+void Histogram::setBinValue(int binValue) {
 	d_ptr->histogramData.binValue= binValue;
 }
 
@@ -469,28 +467,27 @@ QString HistogramPrivate::name() const {
 QRectF HistogramPrivate::boundingRect() const {
 	return boundingRectangle;
 }
+
 double HistogramPrivate::getYMaximum() {
-	if (histogram){
-		double yMaxRange=0.0;
+	if (histogram) {
+		double yMaxRange = 0.0;
 		switch(histogramType) {
-			case Histogram::Ordinary:
-			{
-				size_t maxYAddes= gsl_histogram_max_bin(histogram);
-				yMaxRange = gsl_histogram_get(histogram, maxYAddes);
-				break;
-			}
-			case Histogram::Cummulative:
-			{
-				yMaxRange = xColumn->rowCount();
-				break;
-			}
-			case Histogram::AvgShift:
-			{
-				//TODO
-			}
+		case Histogram::Ordinary: {
+			size_t maxYAddes = gsl_histogram_max_bin(histogram);
+			yMaxRange = gsl_histogram_get(histogram, maxYAddes);
+			break;
+		}
+		case Histogram::Cummulative: {
+			yMaxRange = xColumn->rowCount();
+			break;
+		}
+		case Histogram::AvgShift: {
+			//TODO
+		}
 		}
 		return yMaxRange;
 	}
+
 	return -INFINITY;
 }
 
@@ -501,11 +498,11 @@ QPainterPath HistogramPrivate::shape() const {
 	return curveShape;
 }
 
-void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
     q->createContextMenu()->exec(event->screenPos());
 }
 
-bool HistogramPrivate::swapVisible(bool on){
+bool HistogramPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
 	emit q->visibilityChanged(on);
@@ -516,7 +513,7 @@ bool HistogramPrivate::swapVisible(bool on){
   recalculates the position of the points to be drawn. Called when the data was changed.
   Triggers the update of lines, drop lines, symbols etc.
 */
-void HistogramPrivate::retransform(){
+void HistogramPrivate::retransform() {
 	if (m_suppressRetransform){
 		return;
 	}
@@ -525,7 +522,7 @@ void HistogramPrivate::retransform(){
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
 
-	if (NULL == xColumn){
+	if (NULL == xColumn) {
 		linePath = QPainterPath();
 		valuesPath = QPainterPath();
 //		dropLinePath = QPainterPath();
@@ -540,22 +537,21 @@ void HistogramPrivate::retransform(){
 	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++ ){
-		if ( xColumn->isValid(row) && !xColumn->isMasked(row) ) {
-
+	for (int row = startRow; row <= endRow; row++ ) {
+		if (xColumn->isValid(row) && !xColumn->isMasked(row)) {
 			switch(xColMode) {
-				case AbstractColumn::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));
-					break;
-				case AbstractColumn::Integer:
-					//TODO
-				case AbstractColumn::Text:
-					//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+			case AbstractColumn::Numeric:
+				tempPoint.setX(xColumn->valueAt(row));
+				break;
+			case AbstractColumn::Integer:
+				//TODO
+			case AbstractColumn::Text:
+				//TODO
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 
 			symbolPointsLogical.append(tempPoint);
@@ -571,7 +567,7 @@ void HistogramPrivate::retransform(){
 	if (!plot)
 		return;
 
-	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
@@ -725,7 +721,7 @@ void HistogramPrivate::updateLines(){
 	}
 
 	//calculate the lines connecting the data points
-		for (int i=0; i<count-1; i++){
+		for (int i = 0; i<count-1; i++) {
 		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
@@ -736,7 +732,7 @@ void HistogramPrivate::updateLines(){
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new line path
-	foreach (const QLineF& line, lines){
+	for (const auto& line: lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -758,33 +754,31 @@ void HistogramPrivate::updateValues() {
 	}
 
 	//determine the value string for all points that are currently visible in the plot
-	switch (valuesType){
-	  case Histogram::NoValues:
-	  case Histogram::ValuesY:{
-			switch(histogramType) {
-				case Histogram::Ordinary: {
-					for(size_t i=0; i<bins; ++i){
-						if (!visiblePoints[i]) continue;
-						valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix;
-						}
-				break;
-				}
-			case Histogram::Cummulative:
-			{
-				value=0;
-				for(size_t i=0; i<bins; ++i){
-					if (!visiblePoints[i]) continue;
-					value+=gsl_histogram_get(histogram,i);
-					valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
-					}
-			break;
+	switch (valuesType) {
+	case Histogram::NoValues:
+	case Histogram::ValuesY: {
+		switch(histogramType) {
+		case Histogram::Ordinary:
+			for(size_t i=0; i<bins; ++i){
+				if (!visiblePoints[i]) continue;
+				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
 			}
-			//TODO case Histogram::AvgShift:
+			break;
+		case Histogram::Cummulative: {
+			value = 0;
+			for(size_t i=0; i<bins; ++i){
+				if (!visiblePoints[i]) continue;
+				value += gsl_histogram_get(histogram, i);
+				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+			}
+			break;
+		}
+		//TODO case Histogram::AvgShift:
 		}
 		break;
-		}
-	  case Histogram::ValuesCustomColumn:{
-		if (!valuesColumn){
+	}
+	case Histogram::ValuesCustomColumn: {
+		if (!valuesColumn) {
 		  recalcShapeAndBoundingRect();
 		  return;
 		}
@@ -796,27 +790,27 @@ void HistogramPrivate::updateValues() {
 			endRow = symbolPointsLogical.size();
 
 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-		for (int i=0; i<endRow; ++i){
+		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints[i]) continue;
 
 			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
 				continue;
 
-			switch (xColMode){
-				case AbstractColumn::Numeric:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
-				case AbstractColumn::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::Integer:
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+			switch (xColMode) {
+			case AbstractColumn::Numeric:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::Text:
+				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+			case AbstractColumn::Integer:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 		}
-	  }
+	}
 	}
 
 	//Calculate the coordinates where to paint the value strings.
@@ -828,52 +822,48 @@ void HistogramPrivate::updateValues() {
 	double xAxisMin=xColumn->minimum();
 	double xAxisMax=xColumn->maximum();
 	double width = (xAxisMax-xAxisMin)/bins;
-	switch(valuesPosition){
-	  case Histogram::ValuesAbove:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2 +xAxisMin);
-		  tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
-		  valuesPoints.append(tempPoint);
-		  xAxisMin+= 9*width;
-		  }
-		  break;
-		}
-	  case Histogram::ValuesUnder:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2+xAxisMin );
-		  tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
-		  valuesPoints.append(tempPoint);
-		  xAxisMin+= 9*width;
+	switch(valuesPosition) {
+	case Histogram::ValuesAbove:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w=fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() -w/2 +xAxisMin);
+			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
+			valuesPoints.append(tempPoint);
+			xAxisMin+= 9*width;
 		}
 		break;
-	  }
-	  case Histogram::ValuesLeft:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 +xAxisMin);
-		  tempPoint.setY( symbolPointsScene.at(i).y());
-		  valuesPoints.append(tempPoint);
-		  xAxisMin+= 9*width;
+	case Histogram::ValuesUnder:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w=fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() -w/2+xAxisMin );
+			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
+			valuesPoints.append(tempPoint);
+			xAxisMin+= 9*width;
 		}
 		break;
-	  }
-	  case Histogram::ValuesRight:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
-		  tempPoint.setY( symbolPointsScene.at(i).y() );
-		  valuesPoints.append(tempPoint);
-		  xAxisMin+= 9*width;
+	case Histogram::ValuesLeft:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w=fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 +xAxisMin);
+			tempPoint.setY( symbolPointsScene.at(i).y());
+			valuesPoints.append(tempPoint);
+			xAxisMin+= 9*width;
 		}
 		break;
-	  }
+	case Histogram::ValuesRight:
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w=fm.width(valuesStrings.at(i));
+			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
+			tempPoint.setY( symbolPointsScene.at(i).y() );
+			valuesPoints.append(tempPoint);
+			xAxisMin+= 9*width;
+		}
+		break;
 	}
 
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++){
+	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 

@@ -44,11 +44,11 @@ class Column;
 class KUrlCompletion;
 
 class HistogramDock : public QWidget {
-    Q_OBJECT
-  
+	Q_OBJECT
+
 public:
-    explicit HistogramDock(QWidget*);
-    ~HistogramDock();
+	explicit HistogramDock(QWidget*);
+	~HistogramDock();
 	
 	void setCurves(QList<Histogram*>);
 	virtual void setupGeneral();
