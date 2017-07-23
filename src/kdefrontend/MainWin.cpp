@@ -1753,15 +1753,12 @@ void MainWin::newFileDataSourceActionTriggered() {
 }
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
-	QModelIndex index = m_projectExplorer->currentIndex();
-	if (!index.isValid())
+	const QModelIndex& index = m_projectExplorer->currentIndex();
+	if (index.isValid()) {
+		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
+		parent->folder()->addChild(aspect);
+	} else
 		m_project->addChild(aspect);
-	else {
-		AbstractAspect* parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		// every aspect contained in the project should have a folder
-		Q_ASSERT(parent_aspect->folder());
-		parent_aspect->folder()->addChild(aspect);
-	}
 }
 
 void MainWin::settingsDialog() {
