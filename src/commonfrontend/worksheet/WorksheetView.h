@@ -149,6 +149,8 @@ private:
 	QAction* addCartesianPlot3Action;
 	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
+	QAction* addHistogram;
+	QAction* addBarChartPlot;
 
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;

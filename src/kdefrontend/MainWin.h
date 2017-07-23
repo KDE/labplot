@@ -48,6 +48,8 @@ class GuiObserver;
 class AxisDock;
 class NoteDock;
 class CartesianPlotDock;
+class HistogramDock;
+class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
@@ -191,6 +193,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
+	HistogramDock* histogramDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;

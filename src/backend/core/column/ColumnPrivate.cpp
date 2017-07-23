@@ -374,6 +374,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		new_in_filter = new String2MonthFilter();
 		new_out_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat("MMMM");
+		DEBUG("	Month out_filter format: " << static_cast<DateTime2StringFilter*>(new_out_filter)->format().toStdString());
 		connect(static_cast<DateTime2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
 		        m_owner, SLOT(handleFormatChange()));
 		break;
@@ -398,10 +399,10 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	m_output_filter->setHidden(true);
 
 	if (temp_col) { // if temp_col == 0, only the input/output filters need to be changed
-		// copy the filtered, i.e. converted, column
-		DEBUG("temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
+		// copy the filtered, i.e. converted, column (mode is orig mode)
+		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
 		filter->input(0, temp_col);
-		DEBUG("filter->output size = " << filter->output(0)->rowCount());
+		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
 		copy(filter->output(0));
 		delete temp_col;
 	}
@@ -409,6 +410,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	if (filter_is_temporary) delete filter;
 
 	emit m_owner->modeChanged(m_owner);
+	DEBUG("ColumnPrivate::setColumnMode() DONE");
 }
 
 /**
@@ -496,7 +498,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	if (other->columnMode() != columnMode()) return false;
 	DEBUG("	mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
 	int num_rows = other->rowCount();
-	DEBUG("rows " << num_rows);
+	DEBUG("	rows " << num_rows);
 
 	emit m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
@@ -732,6 +734,17 @@ void ColumnPrivate::resizeTo(int new_size) {
 		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
 		break;
 	}
+	case AbstractColumn::Text: {
+		int new_rows = new_size - old_size;
+		if (new_rows > 0) {
+			for(int i = 0; i < new_rows; i++)
+				static_cast<QVector<QString>*>(m_data)->append(QString());
+		} else {
+			for(int i = 0; i < -new_rows; i++)
+				static_cast<QVector<QString>*>(m_data)->removeLast();
+		}
+		break;
+	}
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
@@ -742,17 +755,6 @@ void ColumnPrivate::resizeTo(int new_size) {
 		} else {
 			for(int i = 0; i < -new_rows; i++)
 				static_cast<QVector<QDateTime>*>(m_data)->removeLast();
-		}
-		break;
-	}
-	case AbstractColumn::Text: {
-		int new_rows = new_size - old_size;
-		if (new_rows > 0) {
-			for(int i = 0; i < new_rows; i++)
-				static_cast<QVector<QString>*>(m_data)->append(QString());
-		} else {
-			for(int i = 0; i < -new_rows; i++)
-				static_cast<QVector<QString>*>(m_data)->removeLast();
 		}
 		break;
 	}
@@ -977,6 +979,10 @@ QString ColumnPrivate::textAt(int row) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QDate ColumnPrivate::dateAt(int row) const {
+	if (m_column_mode != AbstractColumn::DateTime &&
+	        m_column_mode != AbstractColumn::Month &&
+	        m_column_mode != AbstractColumn::Day)
+		return QDate();
 	return dateTimeAt(row).date();
 }
 
@@ -986,6 +992,10 @@ QDate ColumnPrivate::dateAt(int row) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime ColumnPrivate::timeAt(int row) const {
+	if (m_column_mode != AbstractColumn::DateTime &&
+	        m_column_mode != AbstractColumn::Month &&
+	        m_column_mode != AbstractColumn::Day)
+		return QTime();
 	return dateTimeAt(row).time();
 }
 

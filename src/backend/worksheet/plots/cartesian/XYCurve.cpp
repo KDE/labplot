@@ -1428,7 +1428,8 @@ void XYCurvePrivate::updateValues() {
 void XYCurvePrivate::updateFilling() {
 	fillPolygons.clear();
 
-	if (fillingPosition==XYCurve::NoFilling) {
+	//don't try to calculate the filling polygons if no filling was enabled or the nubmer of visible points on the scene is too high
+	if (fillingPosition==XYCurve::NoFilling || symbolPointsScene.size()>1000) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1893,6 +1894,8 @@ void XYCurvePrivate::updatePixmap() {
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updatePixmap()");
 #endif
+    if (m_suppressRecalc)
+        return;
 	WAIT_CURSOR;
 
 	m_hoverEffectImageIsDirty = true;
@@ -2452,6 +2455,9 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	QPen p;
 
+	Q_D(XYCurve);
+	d->m_suppressRecalc = true;
+
 	//Line
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
 	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
@@ -2495,6 +2501,9 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+
+	d->m_suppressRecalc = false;
+	d->recalcShapeAndBoundingRect();
 }
 
 void XYCurve::saveThemeConfig(const KConfig& config) {

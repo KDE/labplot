@@ -31,6 +31,7 @@
 #include "CartesianPlotPrivate.h"
 #include "Axis.h"
 #include "XYCurve.h"
+#include "Histogram.h"
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
 #include "XYDifferentiationCurve.h"
@@ -350,6 +351,7 @@ void CartesianPlot::initDefault(Type type) {
 void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
+	addHistogramPlot = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("Histogram"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
 	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
@@ -370,6 +372,7 @@ void CartesianPlot::initActions() {
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addHistogramPlot,SIGNAL(triggered()), SLOT(addHistogram()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
 	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
@@ -453,6 +456,7 @@ void CartesianPlot::initActions() {
 void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addAction(addHistogramPlot);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);
@@ -950,6 +954,12 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	return curve;
 }
 
+Histogram* CartesianPlot::addHistogram(){
+	Histogram* curve= new Histogram("Histogram");
+	this->addChild(curve);
+	return curve;
+}
+
 XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
 	const XYCurve* curCurve = currentCurve();
@@ -1068,6 +1078,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = true;
+	} else {
+		const Histogram* histo = qobject_cast<const Histogram*>(child);
+		if (histo) {
+			connect(histo, SIGNAL(HistogramdataChanged()), this, SLOT(HistogramdataChanged()));
+			connect(histo, SIGNAL(xHistogramDataChanged()), this, SLOT(xHistogramDataChanged()));
+			connect(histo, SIGNAL(yHistogramDataChanged()), this, SLOT(yHistogramDataChanged()));
+			connect(histo, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
+		}
 	}
 
 	//if a theme was selected, apply the theme settings for newly added children, too
@@ -1117,7 +1135,19 @@ void CartesianPlot::dataChanged() {
 	else
 		curve->retransform();
 }
-
+void CartesianPlot::HistogramdataChanged(){
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
+	if (d->autoScaleX)
+		this->scaleAuto();
+	else if (d->autoScaleX)
+		this->scaleAutoX();
+	else
+		curve->retransform();
+}
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
@@ -1136,6 +1166,20 @@ void CartesianPlot::xDataChanged() {
 		curve->retransform();
 }
 
+void CartesianPlot::xHistogramDataChanged(){
+	if (project()->isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
+	if (d->autoScaleX) {
+		this->scaleAutoX();
+		this->scaleAutoY();
+	} else
+		curve->retransform();
+}
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
@@ -1146,6 +1190,19 @@ void CartesianPlot::yDataChanged() {
 
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesYMinMaxIsDirty = true;
+	if (d->autoScaleY)
+		this->scaleAutoY();
+	else
+		curve->retransform();
+}
+void CartesianPlot::yHistogramDataChanged(){
+	if (project()->isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
 	Q_ASSERT(curve);
 	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleY)
@@ -1199,7 +1256,6 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 void CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
-
 	//loop over all xy-curves and determine the maximum x-value
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
@@ -1220,7 +1276,21 @@ void CartesianPlot::scaleAutoX() {
 					d->curvesXMax = curve->xColumn()->maximum();
 			}
 		}
-
+		QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+		foreach(const Histogram* curve, childrenHistogram) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
+			if (curve->xColumn()->minimum() != INFINITY){
+				if (curve->xColumn()->minimum() < d->curvesXMin)
+					d->curvesXMin = curve->xColumn()->minimum();
+			}
+			if (curve->xColumn()->maximum() != -INFINITY){
+				if (curve->xColumn()->maximum() > d->curvesXMax)
+					d->curvesXMax = curve->xColumn()->maximum();
+			}
+		}
 		d->curvesXMinMaxIsDirty = false;
 	}
 
@@ -1277,8 +1347,17 @@ void CartesianPlot::scaleAutoY() {
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
 		}
-
 		d->curvesYMinMaxIsDirty = false;
+	}
+	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+	foreach(const Histogram* curve, childrenHistogram) {
+		if (!curve->isVisible())
+			continue;
+		d->curvesYMin = 0.0;
+		if (curve->getYMaximum() != -INFINITY) {
+			if ( curve->getYMaximum() > d->curvesYMax)
+				d->curvesYMax = curve->getYMaximum();
+		}
 	}
 
 	bool update = false;
@@ -1315,10 +1394,13 @@ void CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
+	QList<const XYCurve*> children = this->children<const XYCurve>();
+	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve: children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1333,15 +1415,30 @@ void CartesianPlot::scaleAuto() {
 				if (curve->xColumn()->maximum() > d->curvesXMax)
 					d->curvesXMax = curve->xColumn()->maximum();
 			}
-
-			d->curvesXMinMaxIsDirty = false;
 		}
+		foreach(const Histogram* curve, childrenHistogram) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
+
+			if (curve->xColumn()->minimum() != INFINITY){
+				if (curve->xColumn()->minimum() < d->curvesXMin)
+					d->curvesXMin = curve->xColumn()->minimum();
+			}
+
+			if (curve->xColumn()->maximum() != -INFINITY){
+				if (curve->xColumn()->maximum() > d->curvesXMax)
+					d->curvesXMax = curve->xColumn()->maximum();
+			}
+		}
+		d->curvesXMinMaxIsDirty = false;
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		for (const auto* curve: this->children<const XYCurve>()) {
+		for (const auto* curve: children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1356,6 +1453,17 @@ void CartesianPlot::scaleAuto() {
 				if (curve->yColumn()->maximum() > d->curvesYMax)
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
+		}
+	}
+
+	foreach(const Histogram* curve, childrenHistogram) {
+		if (!curve->isVisible())
+			continue;
+
+		d->curvesYMin = 0.0;
+		if (curve->getYMaximum() != -INFINITY){
+			if ( curve->getYMaximum() > d->curvesYMax)
+				d->curvesYMax = curve->getYMaximum();
 		}
 	}
 
@@ -1722,7 +1830,6 @@ void CartesianPlotPrivate::retransformScales() {
 	xMaxPrev = xMax;
 	yMinPrev = yMin;
 	yMaxPrev = yMax;
-
 	//adjust auto-scale axes
 	for (auto* axis: q->children<Axis>()) {
 		if (!axis->autoScale())
@@ -2399,7 +2506,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			XYSmoothCurve* curve = addSmoothCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
@@ -2417,6 +2524,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				return false;
 			} else {
 				addChild(point);
+			}
+		}else if(reader->name() == "Histogram"){
+			Histogram* curve = addHistogram();
+			if (!curve->load(reader)){
+				removeChild(curve);
+				return false;
 			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
@@ -2487,6 +2600,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 	KConfigGroup group = config.group("Theme");
 
 	//read the five colors defining the palette
+	m_themeColorPalette.clear();
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
 	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));

@@ -36,6 +36,7 @@
 //! Conversion filter double -> QDateTime, interpreting the input numbers as months of the year.
 class Integer2MonthFilter : public AbstractSimpleFilter {
 	Q_OBJECT
+
 public:
 	virtual QDate dateAt(int row) const {
 		return dateTimeAt(row).date();

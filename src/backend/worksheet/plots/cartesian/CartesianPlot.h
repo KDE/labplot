@@ -31,7 +31,8 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <cmath>
+#include <math.h>
+#include <backend/worksheet/plots/cartesian/Histogram.h>
 
 class QToolBar;
 class CartesianPlotPrivate;
@@ -132,6 +133,7 @@ class CartesianPlot:public AbstractPlot {
 		//"add new" actions
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
+		QAction* addHistogramPlot;
 		QAction* addDataReductionCurveAction;
 		QAction* addDifferentiationCurveAction;
 		QAction* addIntegrationCurveAction;
@@ -181,6 +183,7 @@ class CartesianPlot:public AbstractPlot {
 		void addHorizontalAxis();
 		void addVerticalAxis();
 		XYCurve* addCurve();
+		Histogram* addHistogram();
 		XYEquationCurve* addEquationCurve();
 		XYDataReductionCurve* addDataReductionCurve();
 		XYDifferentiationCurve* addDifferentiationCurve();
@@ -214,6 +217,9 @@ class CartesianPlot:public AbstractPlot {
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
+		void HistogramdataChanged();
+		void xHistogramDataChanged();
+		void yHistogramDataChanged();
 		void curveVisibilityChanged();
 
 		//SLOTs for changes triggered via QActions in the context menu

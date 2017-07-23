@@ -39,26 +39,25 @@
  *
  * \sa QDate::month()
  */
-class Month2DoubleFilter : public AbstractSimpleFilter
-{
+class Month2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return NAN;
-			QDate inputValue = m_inputs.value(0)->dateAt(row);
-			if (!inputValue.isValid()) return NAN;
-			return double(inputValue.month());
-		}
+public:
+	virtual double valueAt(int row) const {
+		if (!m_inputs.value(0)) return NAN;
+		QDate inputValue = m_inputs.value(0)->dateAt(row);
+		if (!inputValue.isValid()) return NAN;
+		return double(inputValue.month());
+	}
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
 
-	protected:
-		//! Using typed ports: only date-time inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Month;
-		}
+protected:
+	//! Using typed ports: only date-time inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Month;
+	}
 };
 
 #endif // ifndef MONTH2DOUBLE_FILTER_H

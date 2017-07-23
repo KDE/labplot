@@ -134,6 +134,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	xyFitCurveDock(0),
 	xyFourierFilterCurveDock(0),
 	xyFourierTransformCurveDock(0),
+	histogramDock(0),
 	worksheetDock(0),
 	textLabelDock(0),
 	customPointDock(0),
@@ -549,6 +550,8 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container("cas_worksheet", this)->setEnabled(false);
@@ -593,6 +596,8 @@ void MainWin::updateGUI() {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
@@ -1754,15 +1759,12 @@ void MainWin::newFileDataSourceActionTriggered() {
 }
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
-	QModelIndex index = m_projectExplorer->currentIndex();
-	if (!index.isValid())
+	const QModelIndex& index = m_projectExplorer->currentIndex();
+	if (index.isValid()) {
+		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
+		parent->folder()->addChild(aspect);
+	} else
 		m_project->addChild(aspect);
-	else {
-		AbstractAspect* parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		// every aspect contained in the project should have a folder
-		Q_ASSERT(parent_aspect->folder());
-		parent_aspect->folder()->addChild(aspect);
-	}
 }
 
 void MainWin::settingsDialog() {

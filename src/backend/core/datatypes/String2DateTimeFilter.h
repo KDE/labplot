@@ -2,7 +2,7 @@
     File                 : String2DateTimeFilter.h
     Project              : LabPlot
     --------------------------------------------------------------------
-	Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
     Description          : Conversion filter QString -> QDateTime.
 
@@ -40,50 +40,49 @@
  * tries to guess the format, using internal lists of common date and time formats (#date_formats
  * and #time_formats).
  */
-class String2DateTimeFilter : public AbstractSimpleFilter
-{
+class String2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		//! Standard constructor.
-		explicit String2DateTimeFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
-		//! Set the format string to be used for conversion.
-		void setFormat(const QString& format);
-		//! Return the format string
-		/**
-		 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
-		 * \sa QDate::toString()
-		 */
-		QString format() const { return m_format; }
+public:
+	//! Standard constructor.
+	explicit String2DateTimeFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
+	//! Set the format string to be used for conversion.
+	void setFormat(const QString& format);
+	//! Return the format string
+	/**
+	 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
+	 * \sa QDate::toString()
+	 */
+	QString format() const { return m_format; }
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const;
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const;
 
-		//! \name XML related functions
-		//@{
-		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
-		virtual bool load(XmlStreamReader * reader);
-		//@}
+	//! \name XML related functions
+	//@{
+	virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
+	virtual bool load(XmlStreamReader * reader);
+	//@}
 
-	signals:
-		void formatChanged();
+signals:
+	void formatChanged();
 
-	private:
-		friend class String2DateTimeFilterSetFormatCmd;
-		//! The format string.
-		QString m_format;
+private:
+	friend class String2DateTimeFilterSetFormatCmd;
+	//! The format string.
+	QString m_format;
 
-		static const char * date_formats[];
-		static const char * time_formats[];
+	static const char * date_formats[];
+	static const char * time_formats[];
 
-	public:
-		virtual QDateTime dateTimeAt(int row) const;
-		virtual QDate dateAt(int row) const;
-		virtual QTime timeAt(int row) const;
+public:
+	virtual QDateTime dateTimeAt(int row) const;
+	virtual QDate dateAt(int row) const;
+	virtual QTime timeAt(int row) const;
 
-	protected:
-		//! Using typed ports: only string inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source);
+protected:
+	//! Using typed ports: only string inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source);
 };
 
 #endif // ifndef STRING2DATE_TIME_FILTER_H

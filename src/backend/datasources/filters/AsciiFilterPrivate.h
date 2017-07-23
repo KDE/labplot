@@ -30,8 +30,6 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-#include <QVector>
-
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;

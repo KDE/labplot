@@ -40,6 +40,8 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/BarChartPlot.h"
 #include "backend/worksheet/TextLabel.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
@@ -60,6 +62,7 @@
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/HistogramDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
@@ -402,6 +405,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xySmoothCurveDock->setCurves(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xySmoothCurveDock);
+	} else if (className=="Histogram") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Histogram properties"));
+
+		if (!m_mainWindow->histogramDock) {
+			m_mainWindow->histogramDock = new HistogramDock(m_mainWindow->stackedWidget);
+			m_mainWindow->histogramDock->setupGeneral();
+			connect(m_mainWindow->histogramDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->histogramDock);
+		}
+
+		QList<Histogram*> list;
+		for (auto* aspect: selectedAspects)
+			list<<qobject_cast<Histogram *>(aspect);
+		m_mainWindow->histogramDock->setCurves(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->histogramDock);
 	} else if (className == "TextLabel") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Text Label"));
 

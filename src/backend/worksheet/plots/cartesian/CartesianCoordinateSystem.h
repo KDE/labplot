@@ -56,7 +56,9 @@ class CartesianScale {
 		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
 				double *a = NULL, double *b = NULL, double *c = NULL) const;
 
-		bool contains(double) const;
+		inline double start() const;
+		inline double end() const;
+		inline bool contains(double) const;
 		virtual bool map(double*) const = 0;
 		virtual bool inverseMap(double*) const = 0;
 		virtual int direction() const = 0;

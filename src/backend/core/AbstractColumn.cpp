@@ -552,7 +552,7 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 
 /********************************************************************************/
 
-double AbstractColumn::minimum() const{
+double AbstractColumn::minimum() const {
 	double val;
 	double min = INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
@@ -563,10 +563,11 @@ double AbstractColumn::minimum() const{
 		if (val < min)
 			min = val;
 	}
+
 	return min;
 }
 
-double AbstractColumn::maximum() const{
+double AbstractColumn::maximum() const {
 	double val;
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
@@ -577,6 +578,7 @@ double AbstractColumn::maximum() const{
 		if (val > max)
 			max = val;
 	}
+
 	return max;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -719,7 +721,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
-	foreach (const Interval<int>& interval, maskedIntervals()) {
+	for (const auto& interval: maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));

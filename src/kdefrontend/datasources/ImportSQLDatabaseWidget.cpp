@@ -89,7 +89,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 	ui.cbNumberFormat->setCurrentIndex(config.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
-	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "hh:mm:ss"));
+	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "yyyy-dd-MM hh:mm:ss:zzz"));
 	QList<int> defaultSizes;
 	defaultSizes << 100 << 100;
 	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));

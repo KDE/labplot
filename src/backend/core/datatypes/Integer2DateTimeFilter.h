@@ -41,17 +41,10 @@ public:
 	virtual QDate dateAt(int row) const {
 		if (!m_inputs.value(0)) return QDate();
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		return QDate::fromJulianDay(inputValue);
-	}
-	virtual QTime timeAt(int row) const {
-		if (!m_inputs.value(0)) return QTime();
-		int inputValue = m_inputs.value(0)->integerAt(row);
-		// we only want the digits behind the dot and
-		// convert them from fraction of day to milliseconds
-		return QTime(inputValue,0,0,0);
+		return QDate(1900, 1, 1 + inputValue);
 	}
 	virtual QDateTime dateTimeAt(int row) const {
-		return QDateTime(dateAt(row), timeAt(row));
+		return QDateTime(dateAt(row), QTime());
 	}
 
 	//! Return the data type of the column

@@ -218,26 +218,6 @@ void XYCurveDock::setupGeneral() {
 
 
 void XYCurveDock::init() {
-	dateStrings<<"yyyy-MM-dd";
-	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy";
-	dateStrings<<"dd/MM/yy";
-	dateStrings<<"dd.MM.yyyy";
-	dateStrings<<"dd.MM.yy";
-	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM.";
-	dateStrings<<"yyyyMMdd";
-
-	timeStrings<<"hh";
-	timeStrings<<"hh ap";
-	timeStrings<<"hh:mm";
-	timeStrings<<"hh:mm ap";
-	timeStrings<<"hh:mm:ss";
-	timeStrings<<"hh:mm:ss.zzz";
-	timeStrings<<"hh:mm:ss:zzz";
-	timeStrings<<"mm:ss.zzz";
-	timeStrings<<"hhmmss";
-
 	m_initializing = true;
 
 	//Line
@@ -392,7 +372,7 @@ void XYCurveDock::init() {
 	trafo.scale(15, 15);
 
 	ui.cbSymbolStyle->addItem(i18n("none"));
-	for (int i=1; i<19; ++i) {
+	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
 		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -688,21 +668,19 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime: {
-			for (const auto& s: dateStrings)
+			for (const auto& s: AbstractColumn::dateFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s: timeStrings)
+			for (const auto& s: AbstractColumn::timeFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			for (const auto& s1: dateStrings) {
-				for (const auto& s2: timeStrings)
+			for (const auto& s1: AbstractColumn::dateFormats()) {
+				for (const auto& s2: AbstractColumn::timeFormats())
 					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 			}
 			break;
 		}
 	}
-
-	ui.cbValuesFormat->setCurrentIndex(0);
 
 	if (columnMode == AbstractColumn::Numeric) {
 		ui.lValuesPrecision->show();
@@ -720,13 +698,15 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.lValuesFormatTop->show();
 		ui.lValuesFormat->show();
 		ui.cbValuesFormat->show();
-		ui.cbValuesFormat->setCurrentIndex(0);
 	}
 
-	if (columnMode == AbstractColumn::DateTime)
-		ui.cbValuesFormat->setEditable( true );
-	else
-		ui.cbValuesFormat->setEditable( false );
+	if (columnMode == AbstractColumn::DateTime) {
+		ui.cbValuesFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
+		ui.cbValuesFormat->setEditable(true);
+	} else {
+		ui.cbValuesFormat->setCurrentIndex(0);
+		ui.cbValuesFormat->setEditable(false);
+	}
 }
 
 /*!
@@ -760,6 +740,7 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
 			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			DEBUG("	column values format = " << filter->format().toStdString());
 			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 			break;
 		}

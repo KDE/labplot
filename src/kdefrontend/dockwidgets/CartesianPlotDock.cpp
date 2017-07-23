@@ -556,7 +556,7 @@ void CartesianPlotDock::removeXBreak() {
 	ui.cbXBreak->clear();
 	for (int i = 1; i <= breaks.list.size(); ++i)
 		ui.cbXBreak->addItem(QString::number(i));
-	
+
 	if (index < ui.cbXBreak->count()-1)
 		ui.cbXBreak->setCurrentIndex(index);
 	else
@@ -677,7 +677,7 @@ void CartesianPlotDock::removeYBreak() {
 	ui.cbYBreak->clear();
 	for (int i = 1; i <= breaks.list.size(); ++i)
 		ui.cbYBreak->addItem(QString::number(i));
-	
+
 	if (index < ui.cbYBreak->count()-1)
 		ui.cbYBreak->setCurrentIndex(index);
 	else

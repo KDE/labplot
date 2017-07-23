@@ -52,23 +52,13 @@ void DateTime2StringFilter::setFormat(const QString& format) {
 }
 
 QString DateTime2StringFilter::textAt(int row) const {
+	//DEBUG("DateTime2StringFilter::textAt()");
 	if (!m_inputs.value(0)) return QString();
-	QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-	if (!input_value.isValid()) return QString();
-#if QT_VERSION < 0x040302 // the bug seems to be fixed in Qt 4.3.2
-	// QDate::toString produces shortened year numbers for "yyyy"
-	// in violation of ISO 8601 and ambiguous with respect to "yy" format
-	QString format(m_format);
-	format.replace("yyyy","YYYYyyyyYYYY");
-	QString result = input_value.toString(format);
-	result.replace(QRegExp("YYYY(-)?(\\d\\d\\d\\d)YYYY"), "\\1\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d\\d\\d)YYYY"), "\\10\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d\\d)YYYY"), "\\100\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d)YYYY"), "\\1000\\2");
-	return result;
-#else
-	return input_value.toString(m_format);
-#endif
+	QDateTime inputValue = m_inputs.value(0)->dateTimeAt(row);
+	if (!inputValue.isValid()) return QString();
+
+	//QDEBUG("	: " << inputValue << " -> " << m_format << " -> " << inputValue.toString(m_format));
+	return inputValue.toString(m_format);
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
