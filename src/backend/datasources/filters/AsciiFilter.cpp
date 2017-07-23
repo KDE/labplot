@@ -31,6 +31,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
 #include <QTextStream>
 #include <KLocale>
@@ -579,6 +580,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 	// if there's data do be read
 	if (device.bytesAvailable() > 0) {
+#ifdef PERFTRACE_LIVE_IMPORT
+		PERFTRACE("AsciiLiveDataImportTotal: ");
+#endif
 		qDebug() << "got new data";
 
 		FileDataSource::ReadingType readingType;
@@ -598,6 +602,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		//since the other source types are sequencial we cannot seek on them
 		if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
 			device.seek(from);
+		qDebug() <<"available bytes: " << device.bytesAvailable();
 
 		//count the new lines, increase actualrows on each
 		//now we read all the new lines, if we want to use sample rate
@@ -610,24 +615,27 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			newData.resize(spreadsheet->sampleRate());
 		}
 		int newDataIdx = 0;
+		{
+#ifdef PERFTRACE_LIVE_IMPORT
+			PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
+#endif
+			while (!device.atEnd()) {
 
-		while (!device.atEnd()) {
+				if (readingType != FileDataSource::ReadingType::TillEnd)
+					newData[newDataIdx++] = device.readLine();
+				else
+					newData.push_back(device.readLine());
 
-			if (readingType != FileDataSource::ReadingType::TillEnd)
-				newData[newDataIdx++] = device.readLine();
-			else
-				newData.push_back(device.readLine());
+				newLinesTillEnd++;
 
-			newLinesTillEnd++;
-
-			if (readingType != FileDataSource::ReadingType::TillEnd) {
-				newLinesForSampleRateNotTillEnd++;
-				//for Continous reading and FromEnd we read sample rate number of lines if possible
-				if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
-					break;
+				if (readingType != FileDataSource::ReadingType::TillEnd) {
+					newLinesForSampleRateNotTillEnd++;
+					//for Continous reading and FromEnd we read sample rate number of lines if possible
+					if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
+						break;
+				}
 			}
 		}
-
 		//now we reset the readingType
 		if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
 			readingType = spreadsheet->readingType();
@@ -635,27 +643,57 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		//we had less new lines than the sample rate specified
 		if (readingType != FileDataSource::ReadingType::TillEnd)
 			qDebug() << "Removed empty lines: " << newData.removeAll("");
-		//increase row count if we don't have a fixed size
-		//but only after the preparation step
-		if (m_prepared) {
-			if (!spreadsheet->keepLastValues()) {
-				if (readingType != FileDataSource::ReadingType::TillEnd)
-					m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
-				else
-					m_actualRows += newData.size();
-			}
-		}
+
 
 		//back to the last read position before counting when reading from files
 		if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
 			device.seek(from);
 
 		const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
+
 		int currentRow;	// indexes the position in the vector(column)
+		int linesToRead;
+
+		if (!m_prepared)
+			linesToRead = newLinesTillEnd;
+
+		if (m_prepared) {
+			//increase row count if we don't have a fixed size
+			//but only after the preparation step
+			if (!spreadsheet->keepLastValues()) {
+				if (readingType != FileDataSource::ReadingType::TillEnd)
+					m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
+				else
+					m_actualRows += newData.size();
+			}
+
+			//fixed size
+			if (spreadsheet->keepLastValues()) {
+				if (readingType == FileDataSource::ReadingType::TillEnd) {
+					//we had more lines than the fixed size, so we read m_actualRows number of lines
+					if (newLinesTillEnd > m_actualRows) {
+						linesToRead = m_actualRows;
+						//TODO after reading we should skip the next data lines
+						//because it's TillEnd actually
+					} else
+						linesToRead = newLinesTillEnd;
+				} else {
+					//we read max sample rate number of lines when the reading mode
+					//is ContinouslyFixed or FromEnd
+					linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				}
+			} else {
+				//appending
+				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+			}
+		}
 
 		//new rows/resize columns if we don't have a fixed size
 		//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
 		if (!spreadsheet->keepLastValues()) {
+#ifdef PERFTRACE_LIVE_IMPORT
+			PERFTRACE("AsciiLiveDataImportResizing: ");
+#endif
 			if (spreadsheet->rowCount() < m_actualRows)
 				spreadsheet->setRowCount(m_actualRows);
 
@@ -710,10 +748,25 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			//here popping, setting currentRow
 			if (!m_prepared)
 				currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
-			else
-				currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
-			if (m_prepared)
-				for (int row = 0; row < qMin(spreadsheet->sampleRate(), newLinesTillEnd); ++row) {
+			else {
+				if (readingType == FileDataSource::ReadingType::TillEnd) {
+					if (newLinesTillEnd > m_actualRows)
+						currentRow = 0;
+					else
+						currentRow = m_actualRows - newLinesTillEnd;
+				} else {
+					//we read max sample rate number of lines when the reading mode
+					//is ContinouslyFixed or FromEnd
+					currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				}
+			}
+
+
+			if (m_prepared) {
+#ifdef PERFTRACE_LIVE_IMPORT
+				PERFTRACE("AsciiLiveDataImportPopping: ");
+#endif
+				for (int row = 0; row < linesToRead; ++row) {
 					for (int col = 0; col < m_actualCols; ++col) {
 						switch (columnModes[col]) {
 						case AbstractColumn::Numeric: {
@@ -755,23 +808,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 						}
 					}
 				}
+			}
 		}
 
 		// from the last row we read the new data in the spreadsheet
 
-		qDebug() << "reading from line: "  << currentRow;
+		qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
 
-		qDebug() <<"available bytes: " << device.bytesAvailable();
-
-		int linesToRead;
-		if (!m_prepared)
-			linesToRead = newLinesTillEnd;
-		else
-			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
-
-		if (m_prepared)
-			if (spreadsheet->keepLastValues())
-				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 		newDataIdx = 0;
 
@@ -787,117 +830,126 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		qDebug() << "newDataIdx: " << newDataIdx;
 		//TODO
 		static int indexColumnIdx = 0;
-		for (int i = 0; i < linesToRead; ++i) {
-			QString line;
-			if (readingType == FileDataSource::ReadingType::FromEnd)
-				line = newData.at(newDataIdx++);
-			else
-				line = newData.at(i);
-
-			if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
-				bytesread += line.size();
-
-			qDebug() << "line bytes: " << line.size() << " line: " << line;
-			qDebug() << "reading in row: " << currentRow;
-			if (simplifyWhitespacesEnabled)
-				line = line.simplified();
-
-			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
-				continue;
-
-			QLocale locale(numberFormat);
-
-			QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-
-			if (createIndexEnabled) {
-				if (spreadsheet->keepLastValues())
-					lineStringList.prepend(QString::number(indexColumnIdx++));
+		{
+#ifdef PERFTRACE_LIVE_IMPORT
+			PERFTRACE("AsciiLiveDataImportFillingContainers: ");
+#endif
+			for (int i = 0; i < linesToRead; ++i) {
+				QString line;
+				if (readingType == FileDataSource::ReadingType::FromEnd)
+					line = newData.at(newDataIdx++);
 				else
-					lineStringList.prepend(QString::number(currentRow));
+					line = newData.at(i);
 
-			}
+				if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
+					bytesread += line.size();
 
-			for (int n = 0; n < m_actualCols; ++n) {
-				if (n < lineStringList.size()) {
-					const QString& valueString = lineStringList.at(n);
+				qDebug() << "line bytes: " << line.size() << " line: " << line;
+				qDebug() << "reading in row: " << currentRow;
+				if (simplifyWhitespacesEnabled)
+					line = line.simplified();
 
-					// set value depending on data type
-					switch (columnModes[n]) {
-					case AbstractColumn::Numeric: {
-							bool isNumber;
-							const double value = locale.toDouble(valueString, &isNumber);
-							static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-							qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+				if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+					continue;
+
+				QLocale locale(numberFormat);
+
+				QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+
+				if (createIndexEnabled) {
+					if (spreadsheet->keepLastValues())
+						lineStringList.prepend(QString::number(indexColumnIdx++));
+					else
+						lineStringList.prepend(QString::number(currentRow));
+				}
+
+				for (int n = 0; n < m_actualCols; ++n) {
+					if (n < lineStringList.size()) {
+						const QString& valueString = lineStringList.at(n);
+
+						// set value depending on data type
+						switch (columnModes[n]) {
+						case AbstractColumn::Numeric: {
+								bool isNumber;
+								const double value = locale.toDouble(valueString, &isNumber);
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+								qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+								break;
+							}
+						case AbstractColumn::Integer: {
+								bool isNumber;
+								const int value = locale.toInt(valueString, &isNumber);
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
+								qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+
+								break;
+							}
+						case AbstractColumn::DateTime: {
+								const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+								break;
+							}
+						case AbstractColumn::Text:
+							static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
+							break;
+						case AbstractColumn::Month:
+							//TODO
+							break;
+						case AbstractColumn::Day:
+							//TODO
 							break;
 						}
-					case AbstractColumn::Integer: {
-							bool isNumber;
-							const int value = locale.toInt(valueString, &isNumber);
-							static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-							qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
-
+					} else {	// missing columns in this line
+						switch (columnModes[n]) {
+						case AbstractColumn::Numeric:
+							static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+							break;
+						case AbstractColumn::Integer:
+							static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
+							break;
+						case AbstractColumn::DateTime:
+							static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
+							break;
+						case AbstractColumn::Text:
+							static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+							break;
+						case AbstractColumn::Month:
+							//TODO
+							break;
+						case AbstractColumn::Day:
+							//TODO
 							break;
 						}
-					case AbstractColumn::DateTime: {
-							const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-							static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-							break;
-						}
-					case AbstractColumn::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
-						break;
-					case AbstractColumn::Month:
-						//TODO
-						break;
-					case AbstractColumn::Day:
-						//TODO
-						break;
-					}
-				} else {	// missing columns in this line
-					switch (columnModes[n]) {
-					case AbstractColumn::Numeric:
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
-						break;
-					case AbstractColumn::Integer:
-						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
-						break;
-					case AbstractColumn::DateTime:
-						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
-						break;
-					case AbstractColumn::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
-						break;
-					case AbstractColumn::Month:
-						//TODO
-						break;
-					case AbstractColumn::Day:
-						//TODO
-						break;
 					}
 				}
+				currentRow++;
 			}
-			currentRow++;
 		}
 
-		//////////
-		// set the comments for each of the columns if datasource is a spreadsheet
-		const int rows = spreadsheet->rowCount();
-		for (int n = 0; n < m_actualCols; ++n) {
-			Column* column = spreadsheet->column(n);
-			QString comment;
+		{
+#ifdef PERFTRACE_LIVE_IMPORT
+			PERFTRACE("AsciiLiveDataImportColumnComments: ");
+#endif
+			//////////
+			// set the comments for each of the columns if datasource is a spreadsheet
+			const int rows = spreadsheet->rowCount();
+			for (int n = 0; n < m_actualCols; ++n) {
+				Column* column = spreadsheet->column(n);
+				QString comment;
 
-			switch (column->columnMode()) {
-			case AbstractColumn::Numeric:
-				comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-				break;
-			case AbstractColumn::Text:
-				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
-				break;
+				switch (column->columnMode()) {
+				case AbstractColumn::Numeric:
+					comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+					break;
+				case AbstractColumn::Text:
+					comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+					break;
+				}
+				column->setComment(comment);
+
+				column->setSuppressDataChangedSignal(false);
+				column->setChanged();
 			}
-			column->setComment(comment);
-
-			column->setSuppressDataChangedSignal(false);
-			column->setChanged();
 		}
 	} else
 		qDebug() << "No new data available";

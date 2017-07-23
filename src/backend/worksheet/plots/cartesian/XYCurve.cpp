@@ -893,8 +893,9 @@ bool XYCurvePrivate::swapVisible(bool on) {
 void XYCurvePrivate::retransform() {
 	if (m_suppressRetransform)
 		return;
-
+#ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
+#endif
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -964,7 +965,9 @@ void XYCurvePrivate::retransform() {
 	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	{
+#ifdef PERFTRACE_CURVES
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map logical points to scene coordinates");
+#endif
 		cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 	}
 
@@ -982,7 +985,9 @@ void XYCurvePrivate::retransform() {
   Called each time when the type of this connection is changed.
 */
 void XYCurvePrivate::updateLines() {
+#ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines()");
+#endif
 	linePath = QPainterPath();
 	lines.clear();
 	if (lineType == XYCurve::NoLine) {
@@ -1168,7 +1173,9 @@ void XYCurvePrivate::updateLines() {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 	{
+#ifdef PERFTRACE_CURVES
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map lines to scene coordinates");
+#endif
 		lines = cSystem->mapLogicalToScene(lines);
 	}
 
@@ -1792,7 +1799,9 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+#ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcShapeAndBoundingRect()");
+#endif
 	if (m_suppressRecalc)
 		return;
 
@@ -1827,7 +1836,9 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter* painter) {
+#ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::draw()");
+#endif
 
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
@@ -1879,7 +1890,9 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
+#ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updatePixmap()");
+#endif
 	WAIT_CURSOR;
 
 	m_hoverEffectImageIsDirty = true;
@@ -1986,7 +1999,10 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) ) {
+#ifdef PERFTRACE_CURVES
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::paint(), painter->drawPixmap()");
+#endif
+
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	} else
 		draw(painter); //draw directly again (slow)
