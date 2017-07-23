@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -28,7 +29,10 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 #ifndef ABSTRACTFILEFILTER_H
 #define ABSTRACTFILEFILTER_H
 
+#include "backend/core/AbstractColumn.h"
 #include <QObject>
+#include <QLocale>
+#include <memory>	// smart pointer
 
 class AbstractDataSource;
 class XmlStreamReader;
@@ -36,23 +40,29 @@ class QXmlStreamWriter;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
+	Q_ENUMS(ImportMode);
 
-	public:
-        AbstractFileFilter() {}
-		virtual ~AbstractFileFilter() {}
-		enum ImportMode {Append, Prepend, Replace};
-		
-		virtual void read(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode = Replace) = 0;
-		virtual void write(const QString& fileName, AbstractDataSource* dataSource) = 0;
+public:
+	enum ImportMode {Append, Prepend, Replace};
 
-		virtual void loadFilterSettings(const QString& filterName) = 0;
-		virtual void saveFilterSettings(const QString& filterName) const = 0;
+	AbstractFileFilter() {}
+	virtual ~AbstractFileFilter() {}
 
-		virtual void save(QXmlStreamWriter*) const = 0;
-		virtual bool load(XmlStreamReader*) = 0;
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
+	static QStringList numberFormats();
 
-	signals:
-		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process		
+	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+		ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;
+	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
+
+	virtual void loadFilterSettings(const QString& filterName) = 0;
+	virtual void saveFilterSettings(const QString& filterName) const = 0;
+
+	virtual void save(QXmlStreamWriter*) const = 0;
+	virtual bool load(XmlStreamReader*) = 0;
+
+signals:
+	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 };
 
 #endif

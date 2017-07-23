@@ -152,9 +152,7 @@ int AbstractSimpleFilter::outputCount() const {
  * \brief Copy plot designation of input port 0.
  */
 AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
-	return m_inputs.value(0) ?
-		m_inputs.at(0)->plotDesignation() :
-		AbstractColumn::noDesignation;
+	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignation() : AbstractColumn::NoDesignation;
 }
 
 /**
@@ -214,6 +212,15 @@ QDateTime AbstractSimpleFilter::dateTimeAt(int row) const {
  */
 double AbstractSimpleFilter::valueAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->valueAt(row) : 0.0;
+}
+
+/**
+ * \brief Return the integer value in row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+int AbstractSimpleFilter::integerAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->integerAt(row) : 0;
 }
 
 /**
@@ -416,4 +423,8 @@ QDateTime SimpleFilterColumn::dateTimeAt(int row) const {
 
 double SimpleFilterColumn::valueAt(int row) const {
 	return m_owner->valueAt(row);
+}
+
+int SimpleFilterColumn::integerAt(int row) const {
+	return m_owner->integerAt(row);
 }

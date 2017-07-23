@@ -4,6 +4,7 @@
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,7 +34,9 @@
 #include "backend/lib/SignallingUndoCommand.h"
 
 #include <QDateTime>
+#include <QIcon>
 #include <KLocale>
+
 #include <cmath>
 
 /**
@@ -80,12 +83,75 @@
  */
 AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 	m_abstract_column_private( new AbstractColumnPrivate(this) ) {
-
 }
 
 AbstractColumn::~AbstractColumn() {
 	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
+}
+
+QStringList AbstractColumn::dateFormats() {
+	QStringList dates;
+	dates << "yyyy-MM-dd";
+	dates << "yyyy/MM/dd";
+	dates << "dd/MM/yyyy";
+	dates << "dd/MM/yy";
+	dates << "dd.MM.yyyy";
+	dates << "dd.MM.yy";
+	dates << "MM/yyyy";
+	dates << "dd.MM.";
+	dates << "yyyyMMdd";
+
+	return dates;
+}
+
+QStringList AbstractColumn::timeFormats() {
+	QStringList times;
+	times << "hh";
+	times << "hh ap";
+	times << "hh:mm";
+	times << "hh:mm ap";
+	times << "hh:mm:ss";
+	times << "hh:mm:ss.zzz";
+	times << "hh:mm:ss:zzz";
+	times << "mm:ss.zzz";
+	times << "hhmmss";
+
+	return times;
+}
+
+QStringList AbstractColumn::dateTimeFormats() {
+	QStringList dateTimes;
+	
+	// any combination of date and times
+	for (auto d: dateFormats())
+		dateTimes << d;
+	for (auto t: timeFormats())
+		dateTimes << t;
+	for (auto d: dateFormats())
+		for (auto t: timeFormats())
+			dateTimes << d + ' ' + t;
+
+	return dateTimes;
+}
+
+/**
+ * \brief Convenience method for mode-dependent icon
+ */
+QIcon AbstractColumn::iconForMode(ColumnMode mode) {
+	switch (mode) {
+	case AbstractColumn::Numeric:
+	case AbstractColumn::Integer:
+		break;
+	case AbstractColumn::Text:
+		return QIcon::fromTheme("draw-text");
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		return QIcon::fromTheme("chronometer");
+	}
+
+	return QIcon::fromTheme("x-shape-text");
 }
 
 /**
@@ -205,14 +271,16 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-		case AbstractColumn::Numeric:
-			return !std::isnan(valueAt(row));
-		case AbstractColumn::Text:
-			return !textAt(row).isNull();
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-			return dateTimeAt(row).isValid();
+	case AbstractColumn::Numeric:
+		return !std::isnan(valueAt(row));
+	case AbstractColumn::Integer:	// there is no invalid integer
+		return true;
+	case AbstractColumn::Text:
+		return !textAt(row).isNull();
+	case AbstractColumn::DateTime:
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		return dateTimeAt(row).isValid();
 	}
 
 	return false;
@@ -356,7 +424,7 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::replaceTexts(int first, const QStringList& new_values) {
+void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 
@@ -422,7 +490,7 @@ void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::replaceDateTimes(int first, const QList<QDateTime>& new_values) {
+void AbstractColumn::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 
@@ -454,7 +522,37 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
 
-double AbstractColumn::minimum() const{
+/**
+ * \brief Return the integer value in row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+int AbstractColumn::integerAt(int row) const {
+	Q_UNUSED(row);
+	return 42;
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is Integer
+ */
+void AbstractColumn::setIntegerAt(int row, int new_value) {
+	Q_UNUSED(row) Q_UNUSED(new_value)
+};
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is Integer
+ */
+void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
+	Q_UNUSED(first) Q_UNUSED(new_values)
+}
+
+/********************************************************************************/
+
+double AbstractColumn::minimum() const {
 	double val;
 	double min = INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
@@ -465,10 +563,11 @@ double AbstractColumn::minimum() const{
 		if (val < min)
 			min = val;
 	}
+
 	return min;
 }
 
-double AbstractColumn::maximum() const{
+double AbstractColumn::maximum() const {
 	double val;
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
@@ -479,6 +578,7 @@ double AbstractColumn::maximum() const{
 		if (val > max)
 			max = val;
 	}
+
 	return max;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,7 +721,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
-	foreach (const Interval<int>& interval, maskedIntervals()) {
+	for (const auto& interval: maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));

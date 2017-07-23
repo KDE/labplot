@@ -30,15 +30,16 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include <QObject>
-#include <QFont>
-#include <QBrush>
-#include <QPen>
 #include "backend/lib/macros.h"
 #include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+#include <QFont>
+#include <QBrush>
+#include <QPen>
+
 class TextLabelPrivate;
+
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
@@ -82,6 +83,7 @@ class TextLabel : public WorksheetElement {
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
+		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor);
 		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
@@ -94,11 +96,10 @@ class TextLabel : public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef TextLabelPrivate Private;
-
-	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize);
+
+		typedef TextLabelPrivate Private;
 
 	private slots:
 		void updateTeXImage();
@@ -122,6 +123,7 @@ class TextLabel : public WorksheetElement {
 		friend class TextLabelSetTextCmd;
 		friend class TextLabelSetTeXFontCmd;
 		friend class TextLabelSetTeXFontColorCmd;
+		friend class TextLabelSetTeXBackgroundColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
@@ -130,6 +132,7 @@ class TextLabel : public WorksheetElement {
 		void teXFontSizeChanged(const int);
 		void teXFontChanged(const QFont);
 		void teXFontColorChanged(const QColor);
+		void teXBackgroundColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);

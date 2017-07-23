@@ -40,13 +40,9 @@ class CartesianCoordinateSystemSetScalePropertiesCmd;
 
 class CartesianScale {
 	public:
-#if __cplusplus < 201103L
-		static const double LIMIT_MAX = 1e15;
-		static const double LIMIT_MIN = -1e15;
-#else
 		static constexpr double LIMIT_MAX = 1e15;
 		static constexpr double LIMIT_MIN = -1e15;
-#endif
+
 		virtual ~CartesianScale();
 
 		enum ScaleType {ScaleLinear, ScaleLog};
@@ -60,7 +56,9 @@ class CartesianScale {
 		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
 				double *a = NULL, double *b = NULL, double *c = NULL) const;
 
-		bool contains(double) const;
+		inline double start() const;
+		inline double end() const;
+		inline bool contains(double) const;
 		virtual bool map(double*) const = 0;
 		virtual bool inverseMap(double*) const = 0;
 		virtual int direction() const = 0;

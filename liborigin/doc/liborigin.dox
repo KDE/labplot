@@ -1,0 +1,59 @@
+/*!
+  \mainpage liborigin2
+
+  A library for reading <a href="http://www.originlab.com/">OriginLab</a> project files created with versions ranging from 6.0 to 8.1.
+  Any help from developers interested in working on the import of files created with other OriginLab versions is most welcome. 
+
+  \image html images/origin_import.png
+
+  \section license License
+
+  liborigin2 is distributed under the terms of the \ref gpllicense.
+
+  \section platforms Platforms
+
+  liborigin2 might be usable in all environments where you find a C/C++ compiler.
+  
+ \section dependencies Dependencies
+
+  liborigin2 depends on the following libraries:
+  <a href="http://www.boost.org/">BOOST C++ libraries (version >= 1.33.0)</a>, 
+  <a href="http://tree.phi-sci.com/">tree.hh</a> and
+ an old version of <a href="http://code.google.com/p/loglite/">loglite</a> (provided in the source archive).\n
+
+  \section downloads Downloads
+  <a href="http://prdownload.berlios.de/qtiplot/liborigin2-13092010.zip">liborigin2.zip</a>
+  
+  \section installonmainpage Installation
+ 
+  Have a look at the \ref projectfile project file in the source archive. It is prepared for building
+  dynamic libraries in Win32 and Unix/X11 environments. If you don't know what to do with it, read the \ref liborigin2install file and/or 
+  Trolltechs <a href="http://doc.trolltech.com/4.4/qmake-manual.html">qmake</a> manual. 
+
+  \section relatedprojects Related Projects
+
+  <a href="http://soft.proindependent.com/qtiplot.html">QtiPlot</a>, data analysis and scientific plotting tool.
+
+  \section credits Credits:
+  \par Authors: 
+    Ion Vasilief, Alex Kargovsky (not active anymore) 
+   \par Contributors: 
+    Stefan Gerlach
+  \par Contact:
+    <a href="http://soft.proindependent.com/contact.html">Ion Vasilief</a>
+*/
+
+/*!
+  \page gpllicense GPL License, Version 3
+  \include "copying"
+*/
+
+/*!
+  \page projectfile liborigin2.pro
+  \include "liborigin2.pro"
+*/
+
+/*!
+  \page liborigin2install README
+  \include "readme"
+*/

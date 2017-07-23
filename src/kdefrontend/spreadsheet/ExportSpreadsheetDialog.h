@@ -69,12 +69,11 @@ public:
 
 	Format format() const;
 private:
-	QWidget* mainWidget;
+    QWidget* m_mainWidget;
 	Ui::ExportSpreadsheetWidget ui;
 	bool m_showOptions;
 	bool m_matrixMode;
 	Format m_format;
-	KUrlCompletion *urlCompletion;
 
 private slots:
 	void setFormat(Format format);

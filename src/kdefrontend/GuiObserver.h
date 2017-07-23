@@ -42,7 +42,7 @@ public:
 	explicit GuiObserver(MainWin*);
 
 private:
-	MainWin* mainWindow;
+    MainWin* m_mainWindow;
 	CartesianPlot* m_lastCartesianPlot;
 	Histogram* m_lastHistogram;
 

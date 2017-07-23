@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of smooth curves
 
  ***************************************************************************/
@@ -55,7 +56,7 @@
   \ingroup kdefrontend
 */
 
-XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent): 
+XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_smoothCurve(0) {
 
 	//hide the line connection type
@@ -82,10 +83,15 @@ void XYSmoothCurveDock::setupGeneral() {
 		gridLayout->setVerticalSpacing(2);
 	}
 
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+
+	cbDataSourceCurve = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 3, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
 	for (int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
@@ -106,10 +112,10 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
 	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
@@ -118,8 +124,11 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged()) );
 	connect( uiGeneralTab.sbLeftValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
 	connect( uiGeneralTab.sbRightValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
-
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+
+	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
+	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
+	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
@@ -148,8 +157,12 @@ void XYSmoothCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
 	Q_ASSERT(m_smoothCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_smoothCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_smoothCurve->yDataColumn());
+
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_smoothCurve->dataSourceType());
+	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_smoothCurve->dataSourceCurve());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_smoothCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_smoothCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_smoothData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_smoothData.xRange.last());
@@ -174,33 +187,33 @@ void XYSmoothCurveDock::initGeneralTab() {
 	valueChanged();
 	this->showSmoothResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last smooth
-	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastSmooth());
-
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
 	connect(m_smoothCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_smoothCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_smoothCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_smoothCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_smoothCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_smoothCurve, SIGNAL(smoothDataChanged(XYSmoothCurve::SmoothData)), this, SLOT(curveSmoothDataChanged(XYSmoothCurve::SmoothData)));
-	connect(m_smoothCurve, SIGNAL(sourceDataChangedSinceLastSmooth()), this, SLOT(enableRecalculate()));
+	connect(m_smoothCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
 }
 
 void XYSmoothCurveDock::setModel() {
 	QList<const char*>  list;
+	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	cbDataSourceCurve->setTopLevelClasses(list);
+
+	QList<const AbstractAspect*> hiddenAspects;
+	foreach (XYCurve* curve, m_curvesList)
+		hiddenAspects << curve;
+	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+
+	list.clear();
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-
- 	list.clear();
-	list<<"Column";
-	cbXDataColumn->setSelectableClasses(list);
-	cbYDataColumn->setSelectableClasses(list);
-
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
@@ -249,6 +262,46 @@ void XYSmoothCurveDock::commentChanged() {
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
+void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
+	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
+	if (type == XYCurve::DataSourceSpreadsheet) {
+		uiGeneralTab.lDataSourceCurve->hide();
+		cbDataSourceCurve->hide();
+		uiGeneralTab.lXColumn->show();
+		cbXDataColumn->show();
+		uiGeneralTab.lYColumn->show();
+		cbYDataColumn->show();
+	} else {
+		uiGeneralTab.lDataSourceCurve->show();
+		cbDataSourceCurve->show();
+		uiGeneralTab.lXColumn->hide();
+		cbXDataColumn->hide();
+		uiGeneralTab.lYColumn->hide();
+		cbYDataColumn->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
+}
+
+void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	XYCurve* dataSourceCurve = 0;
+	if (aspect) {
+		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+		Q_ASSERT(dataSourceCurve);
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+}
+
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
@@ -269,7 +322,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 		unsigned int n=0;
 		for (int row=0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
+			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
 		// set maximum of sbPoints to number of columns
@@ -302,11 +355,18 @@ void XYSmoothCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
-		m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
-		Q_ASSERT(m_smoothCurve);
-		if (m_smoothCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_smoothCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_smoothCurve->xDataColumn()->maximum());
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_smoothCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+			xDataColumn = m_smoothCurve->xDataColumn();
+		else {
+			if (m_smoothCurve->dataSourceCurve())
+				xDataColumn = m_smoothCurve->dataSourceCurve()->xColumn();
+		}
+
+		if (xDataColumn) {
+			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -378,7 +438,7 @@ void XYSmoothCurveDock::typeChanged() {
 		uiGeneralTab.lOrder->hide();
 		uiGeneralTab.sbOrder->hide();
 	}
-	
+
 
 	enableRecalculate();
 }
@@ -455,11 +515,16 @@ void XYSmoothCurveDock::enableRecalculate() const {
 		return;
 
 	//no smoothing possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+	bool hasSourceData = false;
+	if (m_smoothCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectX!=0 && aspectY!=0);
+	} else {
+		 hasSourceData = (m_smoothCurve->dataSourceCurve() != NULL);
+	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(data);
+	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!
@@ -488,6 +553,9 @@ void XYSmoothCurveDock::showSmoothResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last smooth
+	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
@@ -507,15 +575,27 @@ void XYSmoothCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+void XYSmoothCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+	m_initializing = true;
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
+	m_initializing = true;
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	m_initializing = false;
+}
+
 void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 

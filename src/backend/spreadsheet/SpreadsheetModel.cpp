@@ -28,15 +28,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
 #include <QBrush>
 #include <QIcon>
-#include <QFontMetrics>
 
 #include <KLocale>
+#include <cmath>
 
 /*!
 	\class SpreadsheetModel
@@ -93,7 +92,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return QVariant();
 
 	switch(role) {
-		case Qt::ToolTipRole: {
+		case Qt::ToolTipRole:
 			if(col_ptr->isValid(row)) {
 				if(col_ptr->isMasked(row))
 					return QVariant(i18n("%1, masked (ignored in all operations)").arg(col_ptr->asStringColumn()->textAt(row)));
@@ -105,8 +104,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				else
 					return QVariant(i18n("invalid cell (ignored in all operations)"));
 			}
-		}
-		case Qt::EditRole: {
+		case Qt::EditRole:
 			if(col_ptr->isValid(row))
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 
@@ -114,9 +112,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			//if(m_formula_mode)
 			//	return QVariant(col_ptr->formula(row));
 
-			return QVariant();
-		}
-		case Qt::DisplayRole: {
+			break;
+		case Qt::DisplayRole:
 			if(!col_ptr->isValid(row))
 				return QVariant("-");
 
@@ -125,11 +122,10 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
-		}
-		case Qt::ForegroundRole: {
+		case Qt::ForegroundRole:
 			if(!col_ptr->isValid(index.row()))
 				return QVariant(QBrush(Qt::red));
-		}
+			break;
 		case MaskingRole:
 			return QVariant(col_ptr->isMasked(row));
 		case FormulaRole:
@@ -186,16 +182,32 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return false;
 
 	int row = index.row();
+	Column* column = m_spreadsheet->column(index.column());
+
+	//don't do anything if no new value was provided
+	if (column->columnMode() == AbstractColumn::Numeric) {
+		bool ok;
+		double new_value = value.toDouble(&ok);
+		if (ok) {
+			if (column->valueAt(row) == new_value )
+				return false;
+		} else {
+			//an empty (non-numeric value) was provided
+			if (std::isnan(column->valueAt(row)))
+				return false;
+		}
+	} else {
+		if (column->asStringColumn()->textAt(row) == value.toString())
+			return false;
+	}
 
 	switch(role) {
 		case Qt::EditRole: {
-			Column* col_ptr = m_spreadsheet->column(index.column());
-
 			// remark: the validity of the cell is determined by the input filter
 			if (m_formula_mode)
-				col_ptr->setFormula(row, value.toString());
+				column->setFormula(row, value.toString());
 			else
-				col_ptr->asStringColumn()->setTextAt(row, value.toString());
+				column->asStringColumn()->setTextAt(row, value.toString());
 
 			return true;
 		}
@@ -373,13 +385,16 @@ void SpreadsheetModel::updateHorizontalHeader() {
 	while(m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	for (int i=0; i<column_count; i++) {
+	for (int i = 0; i < column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
 
 		QString type;
 		switch(col->columnMode()) {
 			case AbstractColumn::Numeric:
 				type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
+				break;
+			case AbstractColumn::Integer:
+				type = QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
 				break;
 			case AbstractColumn::Text:
 				type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
@@ -395,7 +410,39 @@ void SpreadsheetModel::updateHorizontalHeader() {
 				break;
 		}
 
-		m_horizontal_header_data.replace(i, col->name() + type);
+		QString designation;
+		switch(col->plotDesignation()) {
+			case AbstractColumn::NoDesignation:
+				break;
+			case AbstractColumn::X:
+				designation = QLatin1String(" [X]");
+				break;
+			case AbstractColumn::Y:
+				designation = QLatin1String(" [Y]");
+				break;
+			case AbstractColumn::Z:
+				designation = QLatin1String(" [Z]");
+				break;
+			case AbstractColumn::XError:
+				designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::XErrorPlus:
+				designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::XErrorMinus:
+				designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YError:
+				designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YErrorPlus:
+				designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::YErrorMinus:
+				designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
+				break;
+		}
+		m_horizontal_header_data.replace(i, col->name() + type + designation);
 	}
 }
 

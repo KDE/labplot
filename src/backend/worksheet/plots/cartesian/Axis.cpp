@@ -37,15 +37,14 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-
-#include <QPainter>
-#include <QMenu>
-#include <QTextDocument>
-#include <QGraphicsSceneContextMenuEvent>
-
 #include "kdefrontend/GuiTools.h"
+
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QPainter>
+#include <QTextDocument>
+
 #include <KConfigGroup>
-#include <QIcon>
 #include <KLocale>
 
 #include <cfloat>
@@ -111,13 +110,13 @@ class AxisGrid : public QGraphicsItem {
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString &name, const AxisOrientation &orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
+Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd)
+Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate* dd)
 		: WorksheetElement(name), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
@@ -333,27 +332,27 @@ void Axis::retransform() {
 	d->retransform();
 }
 
-void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
+void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("Axis::handleResize()");
 	Q_D(Axis);
+	Q_UNUSED(pageResize);
+
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
 
 	QPen pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setLinePen(pen);
+	pen.setWidthF(pen.widthF() * ratio);
+	d->linePen = pen;
 
-	if (d->orientation == Axis::AxisHorizontal) {
-		setMajorTicksLength(d->majorTicksLength * verticalRatio); // ticks are perpendicular to axis line -> verticalRatio relevant
-		setMinorTicksLength(d->minorTicksLength * verticalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio);
-	} else {
-		setMajorTicksLength(d->majorTicksLength * horizontalRatio);
-		setMinorTicksLength(d->minorTicksLength * horizontalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio); // this is not perfectly correct for rotated labels
-															// when the page aspect ratio changes, but should not matter
-	}
-	//TODO setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
-
-	retransform();
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
+	d->minorTicksLength *= ratio;
+	d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * ratio ); //TODO: take into account rotated labels
+	d->labelsOffset *= ratio;
+	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
 /* ============================ getter methods ================= */
@@ -453,7 +452,7 @@ bool Axis::isVisible() const {
 
 void Axis::setPrinting(bool on) {
 	Q_D(Axis);
-	d->m_printing = on;
+	d->setPrinting(on);
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
@@ -870,8 +869,16 @@ void Axis::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	majorTicksColumn(0), minorTicksColumn(0), gridItem(new AxisGrid(this)), q(owner) {
+AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
+	majorTicksColumn(0),
+	minorTicksColumn(0),
+	gridItem(new AxisGrid(this)),
+	q(owner),
+	m_plot(plot),
+	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
+	m_hovered(false),
+	m_suppressRecalc(false),
+	m_printing(false) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -904,15 +911,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	m_plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!m_plot)
-		return;
-
-	//TODO: add comment here for why we need this
-	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
-	if (!m_cSystem)
-		return;
-
+	DEBUG("AxisPrivate::retransform()");
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;
@@ -1734,7 +1733,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG("AxisPrivate::paint()");
+// 	DEBUG("AxisPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1809,7 +1808,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(axisShape);
 	}
 
-	DEBUG("AxisPrivate::paint() DONE");
+// 	DEBUG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -1830,6 +1829,10 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		q->unhovered();
 		update(axisShape.boundingRect());
 	}
+}
+
+void AxisPrivate::setPrinting(bool on) {
+	m_printing = on;
 }
 
 //##############################################################################

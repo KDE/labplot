@@ -81,26 +81,58 @@ double nsl_sf_poly_optimal_legendre_L(int n, double x) {
  * https://en.wikipedia.org/wiki/Bessel_polynomials
  * using recursion
 */
-double complex nsl_sf_poly_bessel_y(int n, double complex x) {
+COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
+#ifdef _MSC_VER
+	if (n == 0) {
+		COMPLEX z = {1.0, 0.0};
+		return z;
+	} else if (n == 1) {
+		COMPLEX z = {creal(x) + 1.0, cimag(x)};
+		return z;
+	}
+	double factor = 2 * n - 1;
+	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
+	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	COMPLEX z = {factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2), factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2)};
+	return z;
+#else
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
-	return (2*n - 1)*x*nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
+	return (2*n - 1) * x * nsl_sf_poly_bessel_y(n - 1, x) + nsl_sf_poly_bessel_y(n - 2, x);
+#endif
 }
 
 /*
  * https://en.wikipedia.org/wiki/Bessel_polynomials
  * using recursion
 */
-double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x) {
+COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
+#ifdef _MSC_VER
+	if (n == 0) {
+		COMPLEX z = {1.0, 0.0};
+		return z;
+	} else if (n == 1) {
+		COMPLEX z = {creal(x) + 1.0, cimag(x)};
+		return z;
+	}
+	double factor = 2 * n - 1;
+	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
+	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
+	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
+	double imx2 = 2.0*creal(x)*cimag(x);
+	COMPLEX z = {factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2) , factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2)};
+	return z;
+#else
 	if (n == 0)
 		return 1.0;
 	else if (n == 1)
 		return 1.0 + x;
 
-	return (2*n - 1)*nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x*x*nsl_sf_poly_reversed_bessel_theta(n - 2, x);
+	return (2*n - 1) * nsl_sf_poly_reversed_bessel_theta(n - 1, x) + x * x * nsl_sf_poly_reversed_bessel_theta(n - 2, x);
+#endif
 }
 
 /***************** interpolating polynomials *************/

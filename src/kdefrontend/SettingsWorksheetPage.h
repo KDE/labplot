@@ -4,7 +4,7 @@
     Description          : settings page for Worksheet
     --------------------------------------------------------------------
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,6 +33,8 @@
 #include "SettingsPage.h"
 #include "ui_settingsworksheetpage.h"
 
+class ThemesComboBox;
+
 class SettingsWorksheetPage : public SettingsPage {
 	Q_OBJECT
 
@@ -44,6 +46,7 @@ public:
 
 private:
 	Ui::SettingsWorksheetPage ui;
+    ThemesComboBox* m_cbThemes;
 	bool m_changed;
 
 	void loadSettings();

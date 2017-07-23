@@ -21,11 +21,16 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -51,6 +56,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
@@ -64,6 +70,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
 	${KDEFRONTEND_DIR}/widgets/FitOptionsWidget.cpp
@@ -77,6 +84,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 )
+IF (USE_LIBORIGIN)
+	LIST(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/ImportOpj.cpp)
+ENDIF ()
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
@@ -89,9 +99,11 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
@@ -119,6 +131,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
@@ -142,6 +155,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
+	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
 	${BACKEND_DIR}/core/AbstractScriptingEngine.cpp
 	${BACKEND_DIR}/core/AbstractScript.cpp
@@ -150,19 +164,29 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
-	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
-	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Integer2DateTimeFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2MonthFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2StringFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/String2IntegerFilter.h
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
-	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
-	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DateTime2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Month2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2IntegerFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
@@ -176,7 +200,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -271,6 +294,14 @@ set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
 )
 
+bison_target(GslParser
+	${BACKEND_DIR}/gsl/parser.y
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+)
+set(GENERATED_SOURCES
+	${BISON_GslParser_OUTPUTS}
+)
+
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 add_subdirectory( pics/fit_models )
@@ -279,11 +310,14 @@ add_subdirectory( themes )
 
 ##############################################################################
 set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
-INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
-qt5_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
-add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
-target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
-#KF5::NewStuff
+INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
+add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
+target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
+#TODO: KF5::NewStuff
+IF (KF5SyntaxHighlighting_FOUND)
+	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
+ENDIF ()
 IF (CANTOR_LIBS_FOUND)
 	target_link_libraries( labplot2 ${CANTOR_LIBS} )
 ENDIF ()
@@ -299,13 +333,23 @@ ENDIF ()
 IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
 ENDIF ()
-# ${OPJ_LIBRARY}
+IF (USE_LIBORIGIN)
+IF (WIN32)
+	IF (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/lib/origin.lib )
+	ELSE ()
+	target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/lib/liborigin.a )
+	ENDIF ()
+ELSE ()
+target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+ENDIF ()
+ENDIF ()
 
 ############## installation ################################
 
 install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
-install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
+install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

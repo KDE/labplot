@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : Private members of Matrix.
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -30,51 +31,54 @@
 #ifndef MATRIXPRIVATE_H
 #define MATRIXPRIVATE_H
 
-#include <QVector>
+template <class T> class QVector;
+//class Matrix;
 
 class MatrixPrivate {
-	public:
-		explicit MatrixPrivate(Matrix*);
+public:
+	explicit MatrixPrivate(Matrix*);
 
-		void insertColumns(int before, int count);
-		void removeColumns(int first, int count);
-		void insertRows(int before, int count);
-		void removeRows(int first, int count);
+	void insertColumns(int before, int count);
+	void removeColumns(int first, int count);
+	void insertRows(int before, int count);
+	void removeRows(int first, int count);
 
-		QString name() const { return q->name(); }
+	QString name() const { return q->name(); }
 
-		double cell(int row, int col) const;
-		void setCell(int row, int col, double value);
-		QVector<double> columnCells(int col, int first_row, int last_row);
-		void setColumnCells(int col, int first_row, int last_row, const QVector<double> & values);
-		QVector<double> rowCells(int row, int first_column, int last_column);
-		void setRowCells(int row, int first_column, int last_column, const QVector<double> & values);
-		void clearColumn(int col);
+//	template<class T> T cell(int row, int col) const;
+	double cell(int row, int col) const;
+	void setCell(int row, int col, double value);
+	QVector<double> columnCells(int col, int first_row, int last_row);
+	void setColumnCells(int col, int first_row, int last_row, const QVector<double> & values);
+	QVector<double> rowCells(int row, int first_column, int last_column);
+	void setRowCells(int row, int first_column, int last_column, const QVector<double> & values);
+	void clearColumn(int col);
 
-		void setRowHeight(int row, int height) { rowHeights[row] = height; }
-		void setColumnWidth(int col, int width) { columnWidths[col] = width; }
-		int rowHeight(int row) const { return rowHeights.at(row); }
-		int columnWidth(int col) const { return columnWidths.at(col); }
+	void setRowHeight(int row, int height) { rowHeights[row] = height; }
+	void setColumnWidth(int col, int width) { columnWidths[col] = width; }
+	int rowHeight(int row) const { return rowHeights.at(row); }
+	int columnWidth(int col) const { return columnWidths.at(col); }
 
-		void updateViewHeader();
-		void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
+	void updateViewHeader();
+	void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
 
-		Matrix* q;
-		int columnCount;
-		int rowCount;
-		QVector< QVector<double> > matrixData;
-		QVector<int> rowHeights;//!< Row widths
-		QVector<int> columnWidths;//!< Columns widths
-		int defaultRowHeight;
-		Matrix::HeaderFormat headerFormat;
-		char numericFormat; //!< Format code for displaying numbers
-		int precision; //!< Number of significant digits
-		QString formula; //!<formula used to calculate the cells
-		double xStart;
-		double xEnd;
-		double yStart;
-		double yEnd;
-		bool suppressDataChange;
+	// TODO: anything private here?
+	Matrix* q;
+	int columnCount;
+	int rowCount;
+	void* data;
+	QVector<int> rowHeights;//!< Row widths
+	QVector<int> columnWidths;//!< Columns widths
+	int defaultRowHeight;
+	Matrix::HeaderFormat headerFormat;
+	char numericFormat; //!< Format code for displaying numbers
+	int precision; //!< Number of significant digits
+	QString formula; //!<formula used to calculate the cells
+	double xStart;
+	double xEnd;
+	double yStart;
+	double yEnd;
+	bool suppressDataChange;
 };
 
 #endif

@@ -61,20 +61,20 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadshee
 }
 
 /*!
-
+	set the current spreadsheet(s)
 */
-void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
+void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	m_initializing = true;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
 
-	if (list.size()==1){
+	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.leComment->setEnabled(true);
 
 		ui.leName->setText(m_spreadsheet->name());
 		ui.leComment->setText(m_spreadsheet->comment());
-	}else{
+	} else {
 		//disable the fields "Name" and "Comment" if there are more then one spreadsheet
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
@@ -99,42 +99,41 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 //*************************************************************
 //****** SLOTs for changes triggered in SpreadsheetDock *******
 //*************************************************************
-void SpreadsheetDock::nameChanged(){
+void SpreadsheetDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_spreadsheet->setName(ui.leName->text());
 }
 
-void SpreadsheetDock::commentChanged(){
+void SpreadsheetDock::commentChanged() {
 	if (m_initializing)
 		return;
 
 	m_spreadsheet->setComment(ui.leComment->text());
 }
 
-void SpreadsheetDock::rowCountChanged(int rows){
+void SpreadsheetDock::rowCountChanged(int rows) {
 	if (m_initializing)
 		return;
 
-	foreach(Spreadsheet* spreadsheet, m_spreadsheetList)
+	for (auto* spreadsheet: m_spreadsheetList)
 		spreadsheet->setRowCount(rows);
 }
 
-void SpreadsheetDock::columnCountChanged(int columns){
+void SpreadsheetDock::columnCountChanged(int columns) {
 	if (m_initializing)
 		return;
 
-	foreach(Spreadsheet* spreadsheet, m_spreadsheetList)
+	for (auto* spreadsheet: m_spreadsheetList)
 		spreadsheet->setColumnCount(columns);
 }
 
 /*!
   switches on/off  the comment header in the views of the selected spreadsheets.
 */
-void SpreadsheetDock::commentsShownChanged(int state){
-	Spreadsheet* spreadsheet;
-	foreach(spreadsheet, m_spreadsheetList)
+void SpreadsheetDock::commentsShownChanged(int state) {
+	for (auto* spreadsheet: m_spreadsheetList)
 		qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
@@ -179,7 +178,7 @@ void SpreadsheetDock::load() {
 	ui.sbColumnCount->setValue(m_spreadsheet->columnCount());
 	ui.sbRowCount->setValue(m_spreadsheet->rowCount());
 
-	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
+	SpreadsheetView* view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
 }
 
@@ -187,7 +186,7 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
@@ -206,13 +205,13 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 /*!
 	loads saved spreadsheet properties from \c config.
  */
-void SpreadsheetDock::loadConfig(KConfig& config){
+void SpreadsheetDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Spreadsheet" );
 
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
 	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
 
-	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
+	SpreadsheetView* view = qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 

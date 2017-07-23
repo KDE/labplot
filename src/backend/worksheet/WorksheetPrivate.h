@@ -62,6 +62,7 @@ class WorksheetPrivate{
 		float backgroundOpacity;
 
 		Worksheet::Layout layout;
+		bool suppressLayoutUpdate;
 		float layoutTopMargin;
 		float layoutBottomMargin;
 		float layoutLeftMargin;
@@ -70,6 +71,7 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
+		QString theme;
 };
 
 #endif

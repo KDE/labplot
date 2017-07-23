@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of XYCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
 	Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
@@ -34,132 +34,139 @@
 
 class CartesianPlot;
 
-class XYCurvePrivate: public QGraphicsItem {
-	public:
-		explicit XYCurvePrivate(XYCurve *owner);
+class XYCurvePrivate : public QGraphicsItem {
+public:
+	explicit XYCurvePrivate(XYCurve*);
 
-		QString name() const;
-		virtual QRectF boundingRect() const;
-		QPainterPath shape() const;
+	virtual QRectF boundingRect() const override;
+	QPainterPath shape() const override;
 
-		bool m_printing;
-		bool m_hovered;
-		bool m_suppressRecalc;
-		bool m_suppressRetransform;
-		QPixmap m_pixmap;
-		QImage m_hoverEffectImage;
-		QImage m_selectionEffectImage;
-		bool m_hoverEffectImageIsDirty;
-		bool m_selectionEffectImageIsDirty;
+	QString name() const;
+	void retransform();
+	void updateLines();
+	void updateDropLines();
+	void updateSymbols();
+	void updateValues();
+	void updateFilling();
+	void updateErrorBars();
+	bool swapVisible(bool);
+	void recalcShapeAndBoundingRect();
+	void updatePixmap();
+	void setPrinting(bool);
+	void suppressRetransform(bool);
 
-		void retransform();
-		void updateLines();
-		void updateDropLines();
-		void updateSymbols();
-		void updateValues();
-		void updateFilling();
-		void updateErrorBars();
-		bool swapVisible(bool on);
-		void recalcShapeAndBoundingRect();
-		void drawSymbols(QPainter*);
-		void drawValues(QPainter*);
-		void drawFilling(QPainter*);
-		void draw(QPainter*);
-		void updatePixmap();
+	//data source
+	XYCurve::DataSourceType dataSourceType;
+	const XYCurve* dataSourceCurve;
+	const AbstractColumn* xColumn;
+	const AbstractColumn* yColumn;
+	QString dataSourceCurvePath;
+	QString xColumnPath;
+	QString yColumnPath;
+	bool sourceDataChangedSinceLastRecalc;
 
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+	//line
+	XYCurve::LineType lineType;
+	bool lineSkipGaps;
+	int lineInterpolationPointsCount;
+	QPen linePen;
+	qreal lineOpacity;
 
-		//data columns
-		const AbstractColumn* xColumn;
-		const AbstractColumn* yColumn;
-		QString xColumnPath;
-		QString yColumnPath;
+	//drop lines
+	XYCurve::DropLineType dropLineType;
+	QPen dropLinePen;
+	qreal dropLineOpacity;
 
-		//line
-		XYCurve::LineType lineType;
-		bool lineSkipGaps;
-		int lineInterpolationPointsCount;
-		QPen linePen;
-		qreal lineOpacity;
+	//symbols
+	Symbol::Style symbolsStyle;
+	QBrush symbolsBrush;
+	QPen symbolsPen;
+	qreal symbolsOpacity;
+	qreal symbolsRotationAngle;
+	qreal symbolsSize;
 
-		//drop lines
-		XYCurve::DropLineType dropLineType;
-		QPen dropLinePen;
-		qreal dropLineOpacity;
+	//values
+	XYCurve::ValuesType valuesType;
+	const AbstractColumn* valuesColumn;
+	QString valuesColumnPath;
+	XYCurve::ValuesPosition valuesPosition;
+	qreal valuesDistance;
+	qreal valuesRotationAngle;
+	qreal valuesOpacity;
+	QString valuesPrefix;
+	QString valuesSuffix;
+	QFont valuesFont;
+	QColor valuesColor;
 
-		//symbols
-		Symbol::Style symbolsStyle;
-		QBrush symbolsBrush;
-		QPen symbolsPen;
-		qreal symbolsOpacity;
-		qreal symbolsRotationAngle;
-		qreal symbolsSize;
+	//filling
+	XYCurve::FillingPosition fillingPosition;
+	PlotArea::BackgroundType fillingType;
+	PlotArea::BackgroundColorStyle fillingColorStyle;
+	PlotArea::BackgroundImageStyle fillingImageStyle;
+	Qt::BrushStyle fillingBrushStyle;
+	QColor fillingFirstColor;
+	QColor fillingSecondColor;
+	QString fillingFileName;
+	qreal fillingOpacity;
 
-		//values
-		XYCurve::ValuesType valuesType;
-		const AbstractColumn* valuesColumn;
-		QString valuesColumnPath;
-		XYCurve::ValuesPosition valuesPosition;
-		qreal valuesDistance;
-		qreal valuesRotationAngle;
-		qreal valuesOpacity;
-		QString valuesPrefix;
-		QString valuesSuffix;
-		QFont valuesFont;
-		QColor valuesColor;
+	//error bars
+	XYCurve::ErrorType xErrorType;
+	const AbstractColumn* xErrorPlusColumn;
+	QString xErrorPlusColumnPath;
+	const AbstractColumn* xErrorMinusColumn;
+	QString xErrorMinusColumnPath;
 
-		//filling
-		XYCurve::FillingPosition fillingPosition;
-		PlotArea::BackgroundType fillingType;
-		PlotArea::BackgroundColorStyle fillingColorStyle;
-		PlotArea::BackgroundImageStyle fillingImageStyle;
-		Qt::BrushStyle fillingBrushStyle;
-		QColor fillingFirstColor;
-		QColor fillingSecondColor;
-		QString fillingFileName;
-		qreal fillingOpacity;
+	XYCurve::ErrorType yErrorType;
+	const AbstractColumn* yErrorPlusColumn;
+	QString yErrorPlusColumnPath;
+	const AbstractColumn* yErrorMinusColumn;
+	QString yErrorMinusColumnPath;
 
-		//error bars
-		XYCurve::ErrorType xErrorType;
-		const AbstractColumn* xErrorPlusColumn;
-		QString xErrorPlusColumnPath;
-		const AbstractColumn* xErrorMinusColumn;
-		QString xErrorMinusColumnPath;
+	XYCurve::ErrorBarsType errorBarsType;
+	double errorBarsCapSize;
+	QPen errorBarsPen;
+	qreal errorBarsOpacity;
 
-		XYCurve::ErrorType yErrorType;
-		const AbstractColumn* yErrorPlusColumn;
-		QString yErrorPlusColumnPath;
-		const AbstractColumn* yErrorMinusColumn;
-		QString yErrorMinusColumnPath;
+	XYCurve* const q;
+	friend class XYCurve;
 
-		XYCurve::ErrorBarsType errorBarsType;
-		double errorBarsCapSize;
-		QPen errorBarsPen;
-		qreal errorBarsOpacity;
+private:
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
-		QPainterPath linePath;
-		QPainterPath dropLinePath;
-		QPainterPath valuesPath;
-		QPainterPath errorBarsPath;
-		QPainterPath symbolsPath;
-		QRectF boundingRectangle;
-		QPainterPath curveShape;
-		QList<QLineF> lines;
-		QList<QPointF> symbolPointsLogical;	//points in logical coordinates
-		QList<QPointF> symbolPointsScene;	//points in scene coordinates
-		std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
-		QList<QPointF> valuesPoints;
-		std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
-											       //false otherwise (don't connect because of a gap (NAN) in-between)
-		QList<QString> valuesStrings;
-		QList<QPolygonF> fillPolygons;
+	void drawSymbols(QPainter*);
+	void drawValues(QPainter*);
+	void drawFilling(QPainter*);
+	void draw(QPainter*);
 
-		XYCurve* const q;
+	QPainterPath linePath;
+	QPainterPath dropLinePath;
+	QPainterPath valuesPath;
+	QPainterPath errorBarsPath;
+	QPainterPath symbolsPath;
+	QRectF boundingRectangle;
+	QPainterPath curveShape;
+	QList<QLineF> lines;
+	QList<QPointF> symbolPointsLogical;	//points in logical coordinates
+	QList<QPointF> symbolPointsScene;	//points in scene coordinates
+	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	QList<QPointF> valuesPoints;
+	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
+												//false otherwise (don't connect because of a gap (NAN) in-between)
+	QList<QString> valuesStrings;
+	QList<QPolygonF> fillPolygons;
 
-	private:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+	QPixmap m_pixmap;
+	QImage m_hoverEffectImage;
+	QImage m_selectionEffectImage;
+	bool m_hoverEffectImageIsDirty;
+	bool m_selectionEffectImageIsDirty;
+	bool m_hovered;
+	bool m_suppressRecalc;
+	bool m_suppressRetransform;
+	bool m_printing;
 };
 
 #endif

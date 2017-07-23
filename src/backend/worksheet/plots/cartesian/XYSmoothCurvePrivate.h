@@ -55,8 +55,6 @@ class XYSmoothCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastSmooth; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
 		XYSmoothCurve* const q;
 
 //	private:

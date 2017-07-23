@@ -55,8 +55,6 @@ class XYInterpolationCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastInterpolation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
 		XYInterpolationCurve* const q;
 };
 

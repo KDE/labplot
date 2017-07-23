@@ -43,13 +43,17 @@ class ThemeHandler : public QWidget {
 		static QStringList themes();
 		static const QString themeFilePath(const QString&);
 
+	public  slots:
+		void setCurrentTheme(const QString&);
+
 	private:
-		QList<QString> dirNames;
+        QList<QString> m_dirNames;
 		QStringList m_themeList;
+		QString m_currentTheme;
 		QString m_currentLocalTheme;
 
-		QPushButton* pbLoadTheme;
-		QPushButton* pbSaveTheme;
+        QPushButton* m_pbLoadTheme;
+        QPushButton* m_pbSaveTheme;
 // 		QPushButton* pbPublishTheme;
 
 	private slots:
@@ -60,7 +64,7 @@ class ThemeHandler : public QWidget {
 // 		void publishThemes();
 
 	signals:
-		void loadThemeRequested(KConfig&);
+		void loadThemeRequested(const QString&);
 		void saveThemeRequested(KConfig&);
 		void info(const QString&);
 		void loadPreviewPanel(QStringList, QString);

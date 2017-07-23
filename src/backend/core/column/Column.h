@@ -4,7 +4,8 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,157 +33,110 @@
 
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/core/column/ColumnPrivate.h"
 
 class ColumnStringIO;
-class ColumnPrivate;
+class QActionGroup;
 
 class Column : public AbstractColumn {
 	Q_OBJECT
 
-	public:
-		struct ColumnStatistics {
-            ColumnStatistics() {
-				minimum = NAN;
-				maximum = NAN;
-				arithmeticMean = NAN;
-				geometricMean = NAN;
-				harmonicMean = NAN;
-				contraharmonicMean = NAN;
-				median = NAN;
-				variance = NAN;
-				standardDeviation = NAN;
-				meanDeviation = NAN;
-				meanDeviationAroundMedian = NAN;
-				medianDeviation = NAN;
-				skewness = NAN;
-				kurtosis = NAN;
-				entropy = NAN;
-			}
-			double minimum;
-			double maximum;
-			double arithmeticMean;
-			double geometricMean;
-			double harmonicMean;
-			double contraharmonicMean;
-			double median;
-			double variance;
-			double standardDeviation;
-			double meanDeviation; // mean absolute deviation around mean
-			double meanDeviationAroundMedian; // mean absolute deviation around median
-			double medianDeviation; // median absolute deviation
-			double skewness;
-			double kurtosis;
-			double entropy;
-        };
+public:
+	explicit Column(const QString& name, AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
+	template <typename T>
+	explicit Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric)
+		: AbstractColumn(name), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
+		init();
+	};
+	void init();
+	~Column();
 
-		friend class ColumnPrivate;
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
 
-		explicit Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
-		Column(const QString& name, QVector<double> data);
-		Column(const QString& name, QStringList data);
-		Column(const QString& name, QList<QDateTime> data);
-		void init();
-		~Column();
+	AbstractColumn::ColumnMode columnMode() const;
+	void setColumnMode(AbstractColumn::ColumnMode);
 
-		virtual QIcon icon() const;
+	bool copy(const AbstractColumn*);
+	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
 
-		bool isReadOnly() const;
-		AbstractColumn::ColumnMode columnMode() const;
-		void setColumnMode(AbstractColumn::ColumnMode mode);
-		bool copy(const AbstractColumn * other);
-		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
-		int rowCount() const;
-		AbstractColumn::PlotDesignation plotDesignation() const;
-		void setPlotDesignation(AbstractColumn::PlotDesignation pd);
-		int width() const;
-		void setWidth(int value);
-		void clear();
-		AbstractSimpleFilter *outputFilter() const;
-		ColumnStringIO *asStringColumn() const;
+	AbstractColumn::PlotDesignation plotDesignation() const;
+	void setPlotDesignation(AbstractColumn::PlotDesignation);
 
-		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
-		QString formula() const;
-		const QStringList& formulaVariableNames() const;
-		const QStringList& formulaVariableColumnPathes() const;
+	bool isReadOnly() const;
+	int rowCount() const;
+	int width() const;
+	void setWidth(const int);
+	void clear();
+	AbstractSimpleFilter* outputFilter() const;
+	ColumnStringIO* asStringColumn() const;
 
-		QString formula(int row) const;
-		QList< Interval<int> > formulaIntervals() const;
-		void setFormula(Interval<int> i, QString formula);
-		void setFormula(int row, QString formula);
-		void clearFormulas();
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	QString formula() const;
+	const QStringList& formulaVariableNames() const;
+	const QStringList& formulaVariableColumnPathes() const;
+	QString formula(const int) const;
+	QList< Interval<int> > formulaIntervals() const;
+	void setFormula(Interval<int>, QString);
+	void setFormula(int, QString);
+	void clearFormulas();
 
-		const ColumnStatistics& statistics();
-		void* data() const;
-		QString textAt(int row) const;
-		void setTextAt(int row, const QString& new_value);
-		void replaceTexts(int first, const QStringList& new_values);
-		QDate dateAt(int row) const;
-		void setDateAt(int row, const QDate& new_value);
-		QTime timeAt(int row) const;
-		void setTimeAt(int row, const QTime& new_value);
-		QDateTime dateTimeAt(int row) const;
-		void setDateTimeAt(int row, const QDateTime& new_value);
-		void replaceDateTimes(int first, const QList<QDateTime>& new_values);
-		double valueAt(int row) const;
-		void setValueAt(int row, double new_value);
-		virtual void replaceValues(int first, const QVector<double>& new_values);
-		void setChanged();
-		void setSuppressDataChangedSignal(bool);
+	const AbstractColumn::ColumnStatistics& statistics();
+	void* data() const;
 
-		void save(QXmlStreamWriter*) const;
-		bool load(XmlStreamReader*);
+	QString textAt(const int) const;
+	void setTextAt(const int, const QString&);
+	void replaceTexts(const int, const QVector<QString>&);
+	QDate dateAt(const int) const;
+	void setDateAt(const int, const QDate&);
+	QTime timeAt(const int) const;
+	void setTimeAt(const int, const QTime&);
+	QDateTime dateTimeAt(const int) const;
+	void setDateTimeAt(const int, const QDateTime&);
+	void replaceDateTimes(const int, const QVector<QDateTime>&);
+	double valueAt(const int) const;
+	void setValueAt(const int, const double);
+	virtual void replaceValues(const int, const QVector<double>&);
+	int integerAt(const int) const;
+	void setIntegerAt(const int, const int);
+	virtual void replaceInteger(const int, const QVector<int>&);
 
-	private:
-		bool XmlReadInputFilter(XmlStreamReader * reader);
-		bool XmlReadOutputFilter(XmlStreamReader * reader);
-		bool XmlReadFormula(XmlStreamReader * reader);
-		bool XmlReadRow(XmlStreamReader * reader);
+	void setChanged();
+	void setSuppressDataChangedSignal(const bool);
 
-		void handleRowInsertion(int before, int count);
-		void handleRowRemoval(int first, int count);
+	void save(QXmlStreamWriter*) const;
+	bool load(XmlStreamReader*);
 
-		void calculateStatistics();
-		void setStatisticsAvailable(bool available);
-		bool statisticsAvailable() const;
+private:
+	bool XmlReadInputFilter(XmlStreamReader*);
+	bool XmlReadOutputFilter(XmlStreamReader*);
+	bool XmlReadFormula(XmlStreamReader*);
+	bool XmlReadRow(XmlStreamReader*);
 
-		ColumnPrivate* m_column_private;
-		ColumnStringIO* m_string_io;
-		bool m_suppressDataChangedSignal;
+	void handleRowInsertion(int before, int count);
+	void handleRowRemoval(int first, int count);
 
-		friend class ColumnStringIO;
+	void calculateStatistics();
+	void setStatisticsAvailable(bool);
+	bool statisticsAvailable() const;
 
-	signals:
-		void widthAboutToChange(const Column*);
-		void widthChanged(const Column*);
+	bool m_suppressDataChangedSignal;
+	QActionGroup* m_usedInActionGroup;
 
-	private slots:
-		void handleFormatChange();
+	friend class ColumnStringIO;
+	ColumnStringIO* m_string_io;
+
+	ColumnPrivate* d;
+	friend class ColumnPrivate;
+
+signals:
+	void requestProjectContextMenu(QMenu*);
+
+private slots:
+	void navigateTo(QAction*);
+	void handleFormatChange();
 };
 
-class ColumnStringIO : public AbstractColumn {
-	Q_OBJECT
-
-	public:
-		ColumnStringIO(Column * owner) : AbstractColumn(""), m_owner(owner), m_setting(false) {}
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
-		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
-		virtual int rowCount() const { return m_owner->rowCount(); }
-		virtual QString textAt(int row) const;
-		virtual void setTextAt(int row, const QString &value);
-		virtual bool isValid(int row) const {
-			if (m_setting)
-				return true;
-			else
-				return m_owner->isValid(row);
-		}
-		virtual bool copy(const AbstractColumn *other);
-		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
-		virtual void replaceTexts(int start_row, const QStringList &texts);
-
-	private:
-		Column * m_owner;
-		bool m_setting;
-		QString m_to_set;
-};
 
 #endif

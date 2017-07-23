@@ -2,8 +2,8 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
  ***************************************************************************/
@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "tools/TeXRenderer.h"
 
+#include <QMenu>
 #include <QWidgetAction>
 #include <QSplitter>
 
@@ -38,7 +39,11 @@
 #include <KSharedConfig>
 #include <KCharSelect>
 #include <KLocalizedString>
-#include <QMenu>
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
+#endif
 
 /*!
 	\class LabelWidget
@@ -55,7 +60,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	m_dateTimeMenu(new QMenu(this)),
 	m_teXEnabled(false) {
 
-// see legacy/LabelWidget.cpp
 	ui.setupUi(this);
 
 	QSplitter* splitter = new QSplitter(Qt::Vertical, this);
@@ -109,6 +113,14 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	//deactivate the latex button so the user cannot switch to this mode.
 	m_teXEnabled = TeXRenderer::enabled();
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
+	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
+	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
+								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
+#endif
+
 	//SLOTS
 	// text properties
 	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
@@ -116,6 +128,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
 	        this, SLOT(charFormatChanged(QTextCharFormat)));
 	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
+	connect(ui.kcbBackgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged(QColor)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
@@ -273,28 +286,20 @@ void LabelWidget::textChanged() {
 }
 
 void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
-	if (m_initializing)
+	if(ui.tbTexUsed->isChecked())
 		return;
 
 	// update button state
-	if(format.fontWeight() == QFont::Bold)
-		ui.tbFontBold->setChecked(true);
-	else
-		ui.tbFontBold->setChecked(false);
-	ui.tbFontItalic->setChecked(format.fontItalic());
-	ui.tbFontUnderline->setChecked(format.fontUnderline());
-	if(format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
-		ui.tbFontSuperScript->setChecked(true);
-	else
-		ui.tbFontSuperScript->setChecked(false);
-	if(format.verticalAlignment() == QTextCharFormat::AlignSubScript)
-		ui.tbFontSubScript->setChecked(true);
-	else
-		ui.tbFontSubScript->setChecked(false);
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
-	if(!ui.tbTexUsed->isChecked())
-		ui.kcbFontColor->setColor(format.foreground().color());
+	//font and colors
+	ui.kcbFontColor->setColor(format.foreground().color());
+	ui.kcbBackgroundColor->setColor(format.background().color());
 	ui.kfontRequester->setFont(format.font());
 }
 
@@ -315,6 +320,18 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
+		//reset all applied formattings when switching from html to tex mode
+		QTextCursor cursor = ui.teLabel->textCursor();
+		int position = cursor.position();
+		ui.teLabel->selectAll();
+		QTextCharFormat format;
+		ui.teLabel->setCurrentCharFormat(format);
+		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
+		ui.teLabel->setTextCursor(cursor);
+
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(ui.teLabel->document());
+#endif
 		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
 		QString engine = conf.readEntry("LaTeXEngine", "");
 		if (engine == "xelatex" || engine == "lualatex") {
@@ -328,11 +345,22 @@ void LabelWidget::teXUsedChanged(bool checked) {
 			ui.lFontSize->setVisible(true);
 			ui.sbFontSize->setVisible(true);
 		}
+
+		//update TeX colors
+		ui.kcbFontColor->setColor(m_label->teXFontColor());
+		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
 	} else {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(0);
+#endif
 		ui.lFontTeX->setVisible(false);
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);
 		ui.sbFontSize->setVisible(false);
+
+		//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
+		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+		ui.teLabel->setStyleSheet("");
 	}
 
 	//no latex is available and the user switched to the text mode,
@@ -344,11 +372,6 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.tbTexUsed->setEnabled(true);
 		ui.tbTexUsed->setToolTip("");
 	}
-
-	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
-	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-	if (!checked)
-		ui.teLabel->setStyleSheet("");
 
 	if (m_initializing)
 		return;
@@ -366,6 +389,15 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	ui.teLabel->setTextColor(color);
 	foreach (TextLabel* label, m_labelsList)
 		label->setTeXFontColor(color);
+}
+
+void LabelWidget::backgroundColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	ui.teLabel->setTextBackgroundColor(color);
+	foreach (TextLabel* label, m_labelsList)
+		label->setTeXBackgroundColor(color);
 }
 
 void LabelWidget::fontSizeChanged(int value) {
@@ -618,7 +650,10 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
 	int position = cursor.position();
-	ui.teLabel->setText(text.text);
+	if (text.teXUsed)
+		ui.teLabel->setText(text.text);
+	else
+		ui.teLabel->setHtml(text.text);
 	cursor.movePosition(QTextCursor::Start);
 	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
 	ui.teLabel->setTextCursor(cursor);
@@ -708,28 +743,22 @@ void LabelWidget::load() {
 
 	ui.chbVisible->setChecked(m_label->isVisible());
 
-	//Text
-	ui.teLabel->setHtml(m_label->text().text);
-	ui.teLabel->selectAll();
-	ui.teLabel->setFocus();
-
-	//TeX
+	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
+	if (m_label->text().teXUsed)
+		ui.teLabel->setText(m_label->text().text);
+	else
+		ui.teLabel->setHtml(m_label->text().text);
+
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	if(m_label->text().teXUsed)
-		ui.kcbFontColor->setColor(m_label->teXFontColor());
 
-	//Set text format
-	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-	ui.kfontRequester->setFont(format.font());
+	//move the cursor to the end and set the focus to the text editor
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.movePosition(QTextCursor::End);
+	ui.teLabel->setTextCursor(cursor);
+	ui.teLabel->setFocus();
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
@@ -760,19 +789,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
-	ui.kfontRequester->setFont(group.readEntry("TeXFont", m_label->teXFont()));
-	if(m_label->text().teXUsed)
-		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
-
-	//Set text format
-	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-	ui.kfontRequester->setFont(format.font());
+	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
@@ -795,6 +812,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	//TeX
 	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
 	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
+	group.writeEntry("TeXBackgroundColor", ui.kcbBackgroundColor->color());
 	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry

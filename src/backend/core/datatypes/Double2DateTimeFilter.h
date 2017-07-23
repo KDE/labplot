@@ -35,37 +35,37 @@
 #include <cmath>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as (fractional) Julian days.
-class Double2DateTimeFilter : public AbstractSimpleFilter
-{
+class Double2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual QDate dateAt(int row) const {
-			if (!m_inputs.value(0)) return QDate();
-			double inputValue = m_inputs.value(0)->valueAt(row);
-			if (std::isnan(inputValue)) return QDate();
-			return QDate::fromJulianDay(qRound(inputValue));
-		}
-		virtual QTime timeAt(int row) const {
-			if (!m_inputs.value(0)) return QTime();
-			double inputValue = m_inputs.value(0)->valueAt(row);
-			if (std::isnan(inputValue)) return QTime();
-			// we only want the digits behind the dot and
-			// convert them from fraction of day to milliseconds
-			return QTime(12,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 ));
-		}
-		virtual QDateTime dateTimeAt(int row) const {
-			return QDateTime(dateAt(row), timeAt(row));
-		}
+public:
+	virtual QDate dateAt(int row) const {
+		if (!m_inputs.value(0)) return QDate();
+		double inputValue = m_inputs.value(0)->valueAt(row);
+		if (std::isnan(inputValue)) return QDate();
+		//QDEBUG("	convert " << inputValue << " to " << QDate(1900, 1, int(inputValue)));
+		return QDate(1900, 1, 1 + int(inputValue));
+	}
+	virtual QTime timeAt(int row) const {
+		if (!m_inputs.value(0)) return QTime();
+		double inputValue = m_inputs.value(0)->valueAt(row);
+		if (std::isnan(inputValue)) return QTime();
+		// we only want the digits behind the dot and convert them from fraction of day to milliseconds
+		//QDEBUG("	convert " << inputValue << " to " << QTime(0,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 )));
+		return QTime(0,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 ));
+	}
+	virtual QDateTime dateTimeAt(int row) const {
+		return QDateTime(dateAt(row), timeAt(row));
+	}
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::DateTime; }
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::DateTime; }
 
-	protected:
-		//! Using typed ports: only double inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Numeric;
-		}
+protected:
+	//! Using typed ports: only double inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Numeric;
+	}
 };
 
 #endif // ifndef DOUBLE2DATE_TIME_FILTER_H

@@ -120,9 +120,10 @@ void CustomPoint::retransform() {
 	d->retransform();
 }
 
-void CustomPoint::handlePageResize(double horizontalRatio, double verticalRatio) {
+void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
+	Q_UNUSED(pageResize);
 }
 
 /* ============================ getter methods ================= */

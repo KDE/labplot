@@ -46,6 +46,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		TextLabel::TextWrapper textWrapper;
 		QFont teXFont;
 		QColor teXFontColor;
+		QColor teXBackgroundColor;
 		QImage teXImage;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
 		bool teXRenderSuccessful;

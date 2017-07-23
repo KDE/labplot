@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of differentiation curves
 
  ***************************************************************************/
@@ -35,19 +36,21 @@
 
 class TreeViewComboBox;
 
-class XYDifferentiationCurveDock: public XYCurveDock {
+class XYDifferentiationCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDifferentiationCurveDock(QWidget *parent);
+	explicit XYDifferentiationCurveDock(QWidget*);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	virtual void initGeneralTab();
 	void showDifferentiationResult();
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
+	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
@@ -62,6 +65,8 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void dataSourceTypeChanged(int);
+	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
@@ -70,19 +75,18 @@ private slots:
 	void derivOrderChanged();
 	void accOrderChanged();
 
-//	void showOptions();
 	void recalculateClicked();
-
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
+	//SLOTs for changes triggered in XYDifferentiationCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 	void dataChanged();
-
 };
 
 #endif

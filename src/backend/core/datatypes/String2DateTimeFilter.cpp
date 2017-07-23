@@ -2,8 +2,9 @@
     File                 : String2DateTimeFilter.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter QString -> QDateTime.
 
  ***************************************************************************/
@@ -36,53 +37,24 @@
 
 #include <KLocale>
 
-class String2DateTimeFilterSetFormatCmd : public QUndoCommand
-{
-	public:
-		String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format);
+class String2DateTimeFilterSetFormatCmd : public QUndoCommand {
 
-		virtual void redo();
-		virtual void undo();
+public:
+	String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format);
 
-	private:
-		String2DateTimeFilter* m_target;
-		QString m_other_format;
-};
+	virtual void redo();
+	virtual void undo();
 
-const char * String2DateTimeFilter::date_formats[] = {
-	"yyyy-M-d", // ISO 8601 w/ and w/o leading zeros
-	"yyyy/M/d",
-	"d/M/yyyy", // European style day/month order (this order seems to be used in more countries than the US style M/d/yyyy)
-	"d/M/yy",
-	"d-M-yyyy",
-	"d-M-yy",
-	"d.M.yyyy", // German style
-	"d.M.yy",
-	"M/yyyy",
-	"d.M.", // German form w/o year
-	"yyyyMMdd",
-	0
-};
-
-const char * String2DateTimeFilter::time_formats[] = {
-	"h",
-	"h ap",
-	"h:mm",
-	"h:mm ap",
-	"h:mm:ss",
-	"h:mm:ss.zzz",
-	"h:mm:ss:zzz",
-	"mm:ss.zzz",
-	"hmmss",
-	0
+private:
+	String2DateTimeFilter* m_target;
+	QString m_other_format;
 };
 
 AbstractColumn::ColumnMode String2DateTimeFilter::columnMode() const {
 	return AbstractColumn::DateTime;
 }
 
-QDateTime String2DateTimeFilter::dateTimeAt(int row) const
-{
+QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 	if (!m_inputs.value(0)) return QDateTime();
 	QString input_value = m_inputs.value(0)->textAt(row);
 	if (input_value.isEmpty()) return QDateTime();
@@ -112,14 +84,15 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 		time_string = date_string;
 
 	// try to find a valid date
-	for (const char **format = date_formats; *format != 0; format++) {
-		date_result = QDate::fromString(date_string, *format);
+	for (const auto& format: AbstractColumn::dateFormats()) {
+		date_result = QDate::fromString(date_string, format);
 		if (date_result.isValid())
 			break;
+
 	}
 	// try to find a valid time
-	for (const char **format = time_formats; *format != 0; format++) {
-		time_result = QTime::fromString(time_string, *format);
+	for (const auto& format: AbstractColumn::timeFormats()) {
+		time_result = QTime::fromString(time_string, format);
 		if (time_result.isValid())
 			break;
 	}
@@ -140,17 +113,15 @@ QTime String2DateTimeFilter::timeAt(int row) const {
 	return dateTimeAt(row).time();
 }
 
-bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn *source) {
+bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn* source) {
 	return source->columnMode() == AbstractColumn::Text;
 }
 
-void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
-{
+void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("format", format());
 }
 
-bool String2DateTimeFilter::load(XmlStreamReader * reader)
-{
+bool String2DateTimeFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 
@@ -162,30 +133,26 @@ bool String2DateTimeFilter::load(XmlStreamReader * reader)
 	return !reader->hasError();
 }
 
-void String2DateTimeFilter::setFormat(const QString& format)
-{
+void String2DateTimeFilter::setFormat(const QString& format) {
 	exec(new String2DateTimeFilterSetFormatCmd(this, format));
 }
 
 String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format)
-	: m_target(target), m_other_format(new_format)
-{
+	: m_target(target), m_other_format(new_format) {
 	if(m_target->parentAspect())
 		setText(i18n("%1: set date-time format to %2", m_target->parentAspect()->name(), new_format));
 	else
 		setText(i18n("set date-time format to %1", new_format));
 }
 
-void String2DateTimeFilterSetFormatCmd::redo()
-{
+void String2DateTimeFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
 	emit m_target->formatChanged();
 }
 
-void String2DateTimeFilterSetFormatCmd::undo()
-{
+void String2DateTimeFilterSetFormatCmd::undo() {
 	redo();
 }
 

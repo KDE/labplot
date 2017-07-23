@@ -3,7 +3,8 @@ File                 : AbstractFileFilter.h
 Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -26,3 +27,44 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/lib/macros.h"
+#include <QDateTime>
+#include <QLocale>
+#include <KLocale>
+
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
+	QLocale locale(lang);
+
+	// check for int first
+	bool ok;
+	locale.toInt(valueString, &ok);
+	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
+	if (ok)
+		return AbstractColumn::Integer;
+
+	//try to convert to a double
+	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
+	locale.toDouble(valueString, &ok);
+
+	//if not a number, check datetime. if that fails: string
+	if (!ok) {
+		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+		if (valueDateTime.isValid())
+			mode = AbstractColumn::DateTime;
+		else
+			mode = AbstractColumn::Text;
+	}
+
+	return mode;
+}
+
+/*
+returns the list of all supported locales for numeric data
+*/
+QStringList AbstractFileFilter::numberFormats() {
+	QStringList formats;
+	for (int l = 0; l < ENUM_COUNT(QLocale, Language); l++)
+		formats << QLocale::languageToString((QLocale::Language)l);
+
+	return formats;
+}

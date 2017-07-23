@@ -1,6 +1,7 @@
 project(labplot2)
 # minimum 3.2.0 for FindGSL.cmake
 cmake_minimum_required(VERSION 3.2.0)
+set(KF5_MIN_VERSION "5.16.0")
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
@@ -9,10 +10,11 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
 	Concurrent
 	Gui
 	PrintSupport
+	Sql
 	Svg
 	Widgets
 )
-find_package(KF5 REQUIRED COMPONENTS
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
 	Config
@@ -23,11 +25,27 @@ find_package(KF5 REQUIRED COMPONENTS
 	IconThemes
 	KDELibs4Support
 	KIO
-	NewStuff
 	TextWidgets
 	WidgetsAddons
 	XmlGui
+		OPTIONAL_COMPONENTS
+	NewStuff
+	SyntaxHighlighting
 )
+IF (KF5NewStuff_FOUND)
+        MESSAGE (STATUS "Found KF5 new stuff")
+	add_definitions (-DHAVE_KF5_NEW_STUFF)
+ELSE ()
+        MESSAGE (STATUS "KF5 new stuff not found")
+ENDIF ()
+IF (KF5SyntaxHighlighting_FOUND)
+        MESSAGE (STATUS "Found KF5 syntax highlighting")
+	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
+ELSE ()
+        MESSAGE (STATUS "KF5 syntax highlighting not found")
+ENDIF ()
+
+find_package(BISON REQUIRED)
 
 include(FeatureSummary)
 include(ECMInstallIcons)
@@ -35,8 +53,45 @@ include(KDEInstallDirs)
 include(KDECompilerSettings)
 include(KDECMakeSettings)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
+### compiler flags ######################################
+
+set (GENERIC_FLAGS "-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector")
+set (GENERIC_C_FLAGS "-std=c99 ${GENERIC_FLAGS} -fno-exceptions")
+# liborigin needs exceptions
+set (GENERIC_CXX_FLAGS "-std=c++11 ${GENERIC_FLAGS} -fexceptions")
+
+if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+	message(STATUS "GNU C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
+elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
+	message(STATUS "Clang C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS}")
+# " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
+elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	message(STATUS "MSVC C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall")
+else ()
+	message(STATUS "UNKNOWN C compiler, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
+endif()
+
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+	message(STATUS "GNU C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	message(STATUS "Clang C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
+# " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
+	elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	message(STATUS "MSVC C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall")
+else ()
+	message(STATUS "UNKNOWN C++ compiler, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
+endif ()
+
+##########################################################ESC[m
+
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -47,7 +102,9 @@ set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
-#cmake_policy(SET CMP0063 NEW)
+IF (CMAKE_VERSION VERSION_EQUAL "3.3" OR CMAKE_VERSION VERSION_GREATER "3.3")
+	cmake_policy(SET CMP0063 NEW)
+ENDIF()
 
 ### Options ######################################
 option(ENABLE_CANTOR "Build with Cantor support" ON)
@@ -55,6 +112,7 @@ option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
+option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -63,6 +121,15 @@ ENDIF ()
 
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
+
+### liborigin (own) ###############################
+IF (ENABLE_LIBORIGIN)
+	SET (USE_LIBORIGIN TRUE)
+	add_definitions (-DHAVE_LIBORIGIN)
+	MESSAGE (STATUS "Origin project import (through internal liborigin) enabled")
+ELSE ()
+	MESSAGE (STATUS "Origin project import (through internal liborigin) disabled")
+ENDIF ()
 
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
@@ -73,7 +140,7 @@ FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
 )
 IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
 	SET (CANTOR_LIBS_FOUND TRUE)
-ELSE()
+ELSE ()
 	SET (CANTOR_LIBS_FOUND FALSE)
 	SET (CANTOR_LIBS "")
 ENDIF()
@@ -175,9 +242,12 @@ ENDIF ()
 
 #################################################
 
+IF (USE_LIBORIGIN)
+	add_subdirectory(liborigin)
+ENDIF ()
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+feature_summary(WHAT ALL)

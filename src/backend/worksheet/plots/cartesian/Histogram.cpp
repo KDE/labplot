@@ -4,7 +4,7 @@
     Description          : Histogram
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-    
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -228,7 +228,7 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramData, Histogram::HistogramData, h
 void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) {
 	Q_D(Histogram);
 	if ((histogramData.binValue != d->histogramData.binValue)
-		|| (histogramData.binsOption != d->histogramData.binsOption) );
+		|| (histogramData.binsOption != d->histogramData.binsOption) )
 		exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
 }
 
@@ -413,7 +413,8 @@ void Histogram::handleSourceDataChanged() {
 	emit sourceDataChangedSinceLastPlot();
 }
 //TODO
-void Histogram::handlePageResize(double horizontalRatio, double verticalRatio){
+void Histogram::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(pageResize);
 	Q_D(const Histogram);
 
 	//setValuesDistance(d->distance*);
@@ -614,7 +615,7 @@ void HistogramPrivate::updateLines(){
 			break;
 		case Histogram::SturgisRule:
 			bins =(size_t) 1 + 3.33*log(histogramData.binValue);
-			break;	
+			break;
 	}
 
 	double width = (xAxisMax-xAxisMin)/bins;
@@ -660,7 +661,7 @@ void HistogramPrivate::updateLines(){
 
 			tempPoint.setX(xAxisMin+width);
 			tempPoint.setY(0.0);
-		
+
 			tempPoint1.setX(xAxisMin);
 			tempPoint1.setY(0.0);
 
@@ -673,7 +674,7 @@ void HistogramPrivate::updateLines(){
 		double point =0.0;
 		for (int row = startRow; row <= endRow; row++ ){
 			if ( xColumn->isValid(row) && !xColumn->isMasked(row))
-				{ 
+				{
 					gsl_histogram_increment(histogram,xColumn->valueAt(row));
 				}
 			}
@@ -711,7 +712,7 @@ void HistogramPrivate::updateLines(){
 
 				lines.append(QLineF(tempPoint, tempPoint1));
 				xAxisMin+= width;
-			}		
+			}
 			break;
 		}
 		case Histogram::AvgShift:
@@ -777,7 +778,7 @@ void HistogramPrivate::updateValues() {
 			break;
 			}
 			//TODO case Histogram::AvgShift:
-		} 
+		}
 		break;
 		}
 	  case Histogram::ValuesCustomColumn:{
@@ -1510,7 +1511,7 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "BinsOption", QString::number(d->histogramData.binsOption) );
 	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
 	writer->writeEndElement();
-	
+
 	if (d->xColumn) {
 		d->xColumn->save(writer);
 	}

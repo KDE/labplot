@@ -78,9 +78,7 @@ class XYSmoothCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
 		const SmoothResult& smoothResult() const;
-		bool isSourceDataChangedSinceLastSmooth() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYSmoothCurvePrivate Private;
 
 	protected:
@@ -90,9 +88,6 @@ class XYSmoothCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYSmoothCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYSmoothCurveSetXDataColumnCmd;
 		friend class XYSmoothCurveSetYDataColumnCmd;
@@ -101,7 +96,6 @@ class XYSmoothCurve: public XYCurve {
 
 		friend class XYSmoothCurveSetSmoothDataCmd;
 		void smoothDataChanged(const XYSmoothCurve::SmoothData&);
-		void sourceDataChangedSinceLastSmooth();
 };
 
 #endif

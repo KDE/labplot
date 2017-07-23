@@ -57,15 +57,15 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	buttonBox()->addButton(QDialogButtonBox::RestoreDefaults);
 	connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
-	generalPage = new SettingsGeneralPage(this);
-	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
+    m_generalPage = new SettingsGeneralPage(this);
+    KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
 	generalFrame->setIcon(QIcon::fromTheme("system-run"));
-	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+    connect(m_generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
-	worksheetPage = new SettingsWorksheetPage(this);
-	KPageWidgetItem* worksheetFrame = addPage(worksheetPage, i18n("Worksheet"));
+    m_worksheetPage = new SettingsWorksheetPage(this);
+    KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
 	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
-	connect(worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+    connect(m_worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 	const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
@@ -101,14 +101,14 @@ void SettingsDialog::changed() {
 
 void SettingsDialog::applySettings(){
 	m_changed = false;
-	generalPage->applySettings();
-	worksheetPage->applySettings();
+    m_generalPage->applySettings();
+    m_worksheetPage->applySettings();
 	KSharedConfig::openConfig()->sync();
 	emit settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
-	generalPage->restoreDefaults();
-	worksheetPage->restoreDefaults();
+    m_generalPage->restoreDefaults();
+    m_worksheetPage->restoreDefaults();
 }

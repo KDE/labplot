@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : View class for Matrix
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -34,10 +35,10 @@
 #include "backend/matrix/matrixcommands.h"
 #include "backend/lib/macros.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
 
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
-#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QStackedWidget>
 #include <QTableView>
@@ -572,7 +573,6 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 
 void MatrixView::fillWithFunctionValues() {
 	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
-	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->exec();
 }
 
@@ -582,10 +582,10 @@ void MatrixView::fillWithConstValues() {
 	                                       i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
-		QVector<QVector<double> > newData = m_matrix->data();
-		for (int col=0; col<m_matrix->columnCount(); ++col) {
-			for (int row=0; row<m_matrix->rowCount(); ++row)
-				newData[col][row] = value;
+		QVector<QVector<double>>* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+		for (int col = 0; col < m_matrix->columnCount(); ++col) {
+			for (int row = 0; row < m_matrix->rowCount(); ++row)
+				(newData->operator[](col))[row] = value;
 		}
 		m_matrix->setData(newData);
 		RESET_CURSOR;
@@ -724,7 +724,7 @@ void MatrixView::clearSelectedCells() {
 
 class UpdateImageTask : public QRunnable {
 public:
-	UpdateImageTask(int start, int end, QImage& image, const QVector<QVector<double> >& matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+	UpdateImageTask(int start, int end, QImage& image, const void* data, double scaleFactor, double min) : m_image(image), m_data(data) {
 		m_start = start;
 		m_end = end;
 		m_scaleFactor = scaleFactor;
@@ -732,23 +732,23 @@ public:
 	};
 
 	void run() {
-		for (int row=m_start; row<m_end; ++row) {
-			mutex.lock();
+		for (int row = m_start; row < m_end; ++row) {
+			m_mutex.lock();
 			QRgb* line = (QRgb*)m_image.scanLine(row);
-			mutex.unlock();
-			for (int col=0; col<m_image.width(); ++col) {
-				const int gray = (m_matrixData[col][row]-m_min)*m_scaleFactor;
+			m_mutex.unlock();
+			for (int col = 0; col < m_image.width(); ++col) {
+				const int gray = (static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row)-m_min)*m_scaleFactor;
 				line[col] = qRgb(gray, gray, gray);
 			}
 		}
 	}
 
 private:
-	QMutex mutex;
+	QMutex m_mutex;
 	int m_start;
 	int m_end;
 	QImage& m_image;
-	const QVector<QVector<double> >& m_matrixData;
+	const void* m_data;
 	double m_scaleFactor;
 	double m_min;
 };
@@ -760,15 +760,15 @@ void MatrixView::updateImage() {
 	//find min/max value
 // 	QTime timer;
 // 	timer.start();
-	double dmax= -DBL_MAX, dmin= DBL_MAX;
-	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	double dmax = -DBL_MAX, dmin = DBL_MAX;
+	const QVector<QVector<double>>* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	const int width = m_matrix->columnCount();
 	const int height = m_matrix->rowCount();
-	for (int col=0; col<width; ++col) {
-		for (int row=0; row<height; ++row) {
-			const double value = matrixData[col][row];
-			if (dmax<value) dmax=value;
-			if (dmin>value) dmin=value;
+	for (int col = 0; col < width; ++col) {
+		for (int row = 0; row < height; ++row) {
+			const double value = (data->operator[](col))[row];
+			if (dmax < value) dmax = value;
+			if (dmin > value) dmin = value;
 		}
 	}
 // 	qDebug()<<"min/max determined in " << (float)timer.elapsed()/1000 << "s";
@@ -778,11 +778,11 @@ void MatrixView::updateImage() {
 	const double scaleFactor = 255.0/(dmax-dmin);
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height())/pool->maxThreadCount());
-	for (int i=0; i<pool->maxThreadCount(); ++i) {
+	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
 		int end = (i+1)*range;
 		if (end>m_image.height()) end = m_image.height();
-		UpdateImageTask* task = new UpdateImageTask(start, end, m_image, matrixData, scaleFactor, dmin);
+		UpdateImageTask* task = new UpdateImageTask(start, end, m_image, data, scaleFactor, dmin);
 		pool->start(task);
 	}
 	pool->waitForDone();
@@ -947,7 +947,7 @@ void MatrixView::print(QPrinter* printer) const {
 
 	QHeaderView *hHeader = m_tableView->horizontalHeader();
 	QHeaderView *vHeader = m_tableView->verticalHeader();
-	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	QVector<QVector<double>>* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();
@@ -960,18 +960,18 @@ void MatrixView::print(QPrinter* printer) const {
 	int firstRowStringWidth = vertHeaderWidth;
 	bool tablesNeeded = false;
 	QVector<int> firstRowCeilSizes;
-	firstRowCeilSizes.reserve(matrixData[0].size());
-	firstRowCeilSizes.resize(matrixData[0].size());
+	firstRowCeilSizes.reserve(data[0].size());
+	firstRowCeilSizes.resize(data[0].size());
 	QRect br;
 
-	for (int i = 0; i < matrixData.size(); ++i) {
-		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[i][0]) + '\t');
+	for (int i = 0; i < data->size(); ++i) {
+		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(data->at(i)[0]) + '\t');
 		firstRowCeilSizes[i] = br.width() > m_tableView->columnWidth(i) ?
 		                       br.width() : m_tableView->columnWidth(i);
 	}
 	for (int col = 0; col < cols; ++col) {
 		headerStringWidth += m_tableView->columnWidth(col);
-		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[col][0]) + '\t');
+		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(data->at(col)[0]) + '\t');
 		firstRowStringWidth += br.width();
 		if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
 		        (firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
@@ -1049,7 +1049,7 @@ void MatrixView::print(QPrinter* printer) const {
 			}
 			for (; j< toJ; j++) {
 				int w = /*m_tableView->columnWidth(j)*/ firstRowCeilSizes[j];
-				cellText = QString::number(matrixData[j][i]) + '\t';
+				cellText = QString::number(data->at(j)[i]) + '\t';
 				tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 				br.setTopLeft(QPoint(right,height));
 				br.setWidth(w);
@@ -1085,10 +1085,10 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 	//export values
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
-	const QVector<QVector<double> >& matrixData = m_matrix->data();
-	for (int row=0; row<rows; ++row) {
+	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	for (int row = 0; row < rows; ++row) {
 		for (int col=0; col<cols; ++col) {
-			out << matrixData[col][row];
+			out << data->at(col)[row];
 			if (col!=cols-1)
 				out<<sep;
 		}
@@ -1439,12 +1439,11 @@ void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-		dlg->setAttribute(Qt::WA_DeleteOnClose);
 		QList<Column*> list;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
 				QString headerString = m_tableView->model()->headerData(col, Qt::Horizontal).toString();
-				list << new Column(headerString, m_matrix->data().at(col));
+				list << new Column(headerString, static_cast<QVector<QVector<double>>*>(m_matrix->data())->at(col));
 			}
 		}
 		dlg->setColumns(list);
@@ -1459,8 +1458,7 @@ void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-		dlg->setAttribute(Qt::WA_DeleteOnClose);
-		QList<Column*> list;
+        QList<Column*> list;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
 				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();

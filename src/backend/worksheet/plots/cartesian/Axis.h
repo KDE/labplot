@@ -32,12 +32,14 @@
 
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
-#include <QActionGroup>
 
+class CartesianPlot;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
+class QActionGroup;
 
+//TODO: align
 class Axis: public WorksheetElement {
 	Q_OBJECT
 
@@ -59,19 +61,19 @@ class Axis: public WorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-		explicit Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
+		explicit Axis(const QString&, CartesianPlot*, const AxisOrientation& orientation = AxisHorizontal);
 		virtual ~Axis();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
 
-		virtual QGraphicsItem* graphicsItem() const;
-		virtual void setZValue(qreal);
+		virtual QGraphicsItem* graphicsItem() const override;
+		virtual void setZValue(qreal) override;
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
+		virtual void loadThemeConfig(const KConfig&) override;
+		virtual void saveThemeConfig(const KConfig&) override;
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
@@ -131,21 +133,19 @@ class Axis: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
-		virtual void setVisible(bool);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool);
+		virtual void setVisible(bool) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool) override;
 
-		typedef WorksheetElement BaseClass;
+		virtual void retransform() override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
 		typedef AxisPrivate Private;
 
-	public slots:
-		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-
 	protected:
-		AxisPrivate * const d_ptr;
-		Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd);
-		TextLabel *m_title;
+		AxisPrivate* const d_ptr;
+		Axis(const QString&, const AxisOrientation&, AxisPrivate*);
+		TextLabel* m_title;
 
 	private:
     	Q_DECLARE_PRIVATE(Axis)

@@ -71,7 +71,7 @@ class Histogram: public WorksheetElement {
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 		QString& xColumnPath() const;
 		QString& yColumnPath() const;
-		
+
 		BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
 		BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
 		BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
@@ -118,8 +118,8 @@ class Histogram: public WorksheetElement {
 
 	public slots:
 		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-		
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
 	private slots:
 		void updateValues();
 		void xColumnAboutToBeRemoved(const AbstractAspect*);

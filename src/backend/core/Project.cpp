@@ -293,28 +293,26 @@ bool Project::load(XmlStreamReader* reader) {
 
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
-			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
-			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-			QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
+			QList<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
+			QList<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+			QList<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
 			if (!curves.isEmpty() || !axes.isEmpty()) {
-				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
+				QList<Column*> columns = children<Column>(AbstractAspect::Recursive);
 
 				//XY-curves
-				foreach (AbstractAspect* aspect, curves) {
-					XYCurve* curve = dynamic_cast<XYCurve*>(aspect);
+				foreach (XYCurve* curve, curves) {
 					if (!curve) continue;
-
 					curve->suppressRetransform(true);
 
-					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
-					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(aspect);
-					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(aspect);
-					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(aspect);
-					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
-					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
-					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
-					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
-					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(aspect);
+					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(curve);
+					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(curve);
+					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(curve);
+					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(curve);
+					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(curve);
+					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(curve);
+					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(curve);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
@@ -336,7 +334,8 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (fitCurve) {
 						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
 					} else if (filterCurve) {
 						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
@@ -352,29 +351,26 @@ bool Project::load(XmlStreamReader* reader) {
 						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
+					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 					curve->suppressRetransform(false);
 					curve->retransform();
 				}
 
 				//Axes
-				foreach (AbstractAspect* aspect, axes) {
-					Axis* axis = dynamic_cast<Axis*>(aspect);
+				foreach (Axis* axis, axes) {
 					if (!axis) continue;
-
 					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
 
-                foreach (AbstractAspect* aspect, dataPickerCurves) {
-                    DatapickerCurve* dataPickerCurve = dynamic_cast<DatapickerCurve*>(aspect);
-                    if (!dataPickerCurve) continue;
-
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
+				foreach (DatapickerCurve* dataPickerCurve, dataPickerCurves) {
+					if (!dataPickerCurve) continue;
+					RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
                 }
 			}
 		} else {// no project element

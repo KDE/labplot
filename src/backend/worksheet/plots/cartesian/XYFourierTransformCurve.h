@@ -41,7 +41,7 @@ class XYFourierTransformCurve: public XYCurve {
 
 	public:
 		struct TransformData {
-			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), 
+			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false),
 				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
 
 			nsl_dft_result_type type;
@@ -76,9 +76,7 @@ class XYFourierTransformCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
 		const TransformResult& transformResult() const;
-		bool isSourceDataChangedSinceLastTransform() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYFourierTransformCurvePrivate Private;
 
 	protected:
@@ -88,9 +86,6 @@ class XYFourierTransformCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYFourierTransformCurveSetXDataColumnCmd;
 		friend class XYFourierTransformCurveSetYDataColumnCmd;
@@ -99,7 +94,6 @@ class XYFourierTransformCurve: public XYCurve {
 
 		friend class XYFourierTransformCurveSetTransformDataCmd;
 		void transformDataChanged(const XYFourierTransformCurve::TransformData&);
-		void sourceDataChangedSinceLastTransform();
 };
 
 #endif

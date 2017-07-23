@@ -46,11 +46,11 @@
 
 FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
-	textEditWidget.setReadOnly(true);
-	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
+    m_textEditWidget.setReadOnly(true);
+    m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->addWidget(&textEditWidget);
+    layout->addWidget(&m_textEditWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -60,6 +60,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	setWindowIcon(QIcon::fromTheme("help-about"));
 	setWindowTitle(i18n("File info"));
+    setAttribute(Qt::WA_DeleteOnClose);
 
 	setLayout(layout);
 
@@ -67,11 +68,9 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 }
 
 void FileInfoDialog::setFiles(QStringList& files) {
-	QString fileName;
 	QString infoString;
 
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
+    for (const auto fileName: files) {
 		if(fileName.isEmpty())
 			continue;
 
@@ -81,5 +80,5 @@ void FileInfoDialog::setFiles(QStringList& files) {
 		infoString += FileDataSource::fileInfoString(fileName);
 	}
 
-	textEditWidget.document()->setHtml(infoString);
+    m_textEditWidget.document()->setHtml(infoString);
 }

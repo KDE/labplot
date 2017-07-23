@@ -35,12 +35,14 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QDir>
+#include <QGraphicsItem>
 
-#include "QIcon"
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -106,6 +108,12 @@ void Worksheet::init() {
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
+
+	//default theme
+	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	d->theme = settings.readEntry(QLatin1String("Theme"), "");
+	if (!d->theme.isEmpty())
+		loadTheme(d->theme);
 }
 
 /*!
@@ -151,8 +159,8 @@ QIcon Worksheet::icon() const {
 /**
  * Return a new context menu. The caller takes ownership of the menu.
  */
-QMenu *Worksheet::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
+QMenu* Worksheet::createContextMenu() {
+	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
@@ -163,9 +171,9 @@ QMenu *Worksheet::createContextMenu() {
  * This method may be called multiple times during the life time of an Aspect, or it might not get
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
-QWidget *Worksheet::view() const {
+QWidget* Worksheet::view() const {
 	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		m_view = new WorksheetView(const_cast<Worksheet*>(this));
 		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
@@ -213,21 +221,31 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (addedElement) {
-		if (aspect->parentAspect() == this) {
-			QGraphicsItem* item = addedElement->graphicsItem();
-			d->m_scene->addItem(item);
+	if (!addedElement)
+		return;
 
-			qreal zVal = 0;
-			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement* elem, childElements)
-				elem->graphicsItem()->setZValue(zVal++);
+	if (aspect->parentAspect() != this)
+		return;
 
-			if (!isLoading()) {
-				if (d->layout != Worksheet::NoLayout)
-					d->updateLayout(false);
-			}
-		}
+	//add the GraphicsItem of the added child to the scene
+	QGraphicsItem* item = addedElement->graphicsItem();
+	d->m_scene->addItem(item);
+
+	qreal zVal = 0;
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+	foreach(WorksheetElement* elem, childElements)
+		elem->graphicsItem()->setZValue(zVal++);
+
+	//if a theme was selected in the worksheet, apply this theme for newly added children
+	if (!d->theme.isEmpty() && !isLoading()) {
+		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
+	}
+
+	//recalculated the layout
+	if (!isLoading()) {
+		if (d->layout != Worksheet::NoLayout)
+			d->updateLayout(false);
 	}
 }
 
@@ -249,7 +267,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 		d->updateLayout(false);
 }
 
-QGraphicsScene *Worksheet::scene() const {
+QGraphicsScene* Worksheet::scene() const {
 	return d->m_scene;
 }
 
@@ -364,6 +382,14 @@ void Worksheet::update() {
 	emit requestUpdate();
 }
 
+void Worksheet::setSuppressLayoutUpdate(bool value) {
+	d->suppressLayoutUpdate = value;
+}
+
+void Worksheet::updateLayout() {
+	d->updateLayout();
+}
+
 /* =============================== getter methods for general options ==================================== */
 BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
@@ -389,6 +415,7 @@ BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpaci
 BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount)
 BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
+CLASS_D_READER_IMPL(Worksheet, QString, theme, theme)
 
 /* ============================ setter methods and undo commands for general options  ===================== */
 void Worksheet::setUseViewSize(bool useViewSize) {
@@ -575,13 +602,27 @@ void Worksheet::setPrinting(bool on) const {
 		elem->setPrinting(on);
 }
 
+STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
+void Worksheet::setTheme(const QString& theme) {
+	if (theme != d->theme) {
+		if (!theme.isEmpty()) {
+			beginMacro( i18n("%1: load theme %2", name(), theme) );
+			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: set theme")));
+			loadTheme(theme);
+			endMacro();
+		} else {
+			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: disable theming")));
+		}
+	}
+}
 
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
 	m_scene(new QGraphicsScene()),
-	scaleContent(false) {
+	scaleContent(false),
+	suppressLayoutUpdate(false) {
 }
 
 QString WorksheetPrivate::name() const {
@@ -603,12 +644,12 @@ void WorksheetPrivate::updatePageRect() {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
 				foreach(WorksheetElement* elem, childElements) {
 					elem->setUndoAware(false);
-					elem->handlePageResize(horizontalRatio, verticalRatio);
+					elem->handleResize(horizontalRatio, verticalRatio, true);
 					elem->setUndoAware(true);
 				}
 			} else {
 				foreach(WorksheetElement* elem, childElements)
-					elem->handlePageResize(horizontalRatio, verticalRatio);
+					elem->handleResize(horizontalRatio, verticalRatio, true);
 			}
 		}
 	}
@@ -623,6 +664,9 @@ WorksheetPrivate::~WorksheetPrivate() {
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {
+	if (suppressLayoutUpdate)
+		return;
+
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout) {
 		foreach(WorksheetElementContainer* elem, list)
@@ -700,6 +744,13 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
+	//applied theme
+	if (!d->theme.isEmpty()){
+		writer->writeStartElement( "theme" );
+		writer->writeAttribute("name", d->theme);
+		writer->writeEndElement();
+	}
+
 	//geometry
 	writer->writeStartElement( "geometry" );
 	QRectF rect = d->m_scene->sceneRect();
@@ -771,7 +822,11 @@ bool Worksheet::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "theme") {
+			attribs = reader->attributes();
+			d->theme = attribs.value("name").toString();
 		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -958,4 +1013,26 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	d->updateLayout();
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Worksheet::loadTheme(const QString& theme) {
+	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+
+	//apply the same background color for Worksheet as for the CartesianPlot
+	const KConfigGroup group = config.group("CartesianPlot");
+	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
+	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
+	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+
+	//load the theme for all the children
+	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	foreach (WorksheetElement* child, childElements)
+		child->loadThemeConfig(config);
 }

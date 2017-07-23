@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #define MACROS_H
 
 #include <QApplication>
+#include <QMetaEnum>
 
 // C++ style warning (works on Windows)
 #include <iostream>
@@ -46,6 +47,11 @@
 #define QDEBUG(x) {}
 #define DEBUG(x) {}
 #endif
+
+#define ENUM_TO_STRING(class, enum, value) \
+    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
+#define ENUM_COUNT(class, enum) \
+	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
@@ -440,11 +446,41 @@ else \
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\
 if (!obj->col ##Path().isEmpty()) {													\
-	foreach (AbstractAspect* aspect, columns) {										\
-		if (aspect->path() == obj->col ##Path()) {									\
-			AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);			\
-			if (!column) continue;													\
+	foreach (Column* column, columns) {												\
+		if (!column) continue;														\
+		if (column->path() == obj->col ##Path()) {									\
  			obj->set## Col(column);													\
+			break;				 													\
+		}																			\
+	}																				\
+}																					\
+} while(0)
+
+
+
+#define WRITE_PATH(obj, name) 														\
+do {																				\
+if (obj){																			\
+	writer->writeAttribute( #name, obj->path() );									\
+} else {																			\
+	writer->writeAttribute( #name, "" );											\
+}																					\
+} while(0)
+
+#define READ_PATH(name)																\
+do {																				\
+	str = attribs.value(#name).toString();											\
+	d->name ##Path = str;															\
+} while(0)
+
+#define RESTORE_POINTER(obj, name, Name, Type, list) 								\
+do {																				\
+if (!obj->name ##Path().isEmpty()) {												\
+	foreach (AbstractAspect* aspect, list) {										\
+		if (aspect->path() == obj->name ##Path()) {									\
+			Type * a = dynamic_cast<Type*>(aspect);									\
+			if (!a) continue;														\
+ 			obj->set## Name(a);														\
 			break;				 													\
 		}																			\
 	}																				\

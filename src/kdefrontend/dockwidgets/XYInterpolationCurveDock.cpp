@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 20016-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of interpolation curves
 
  ***************************************************************************/
@@ -55,7 +56,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent): 
+XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0), dataPoints(0) {
 
 	//hide the line connection type
@@ -79,10 +80,15 @@ void XYInterpolationCurveDock::setupGeneral() {
 		gridLayout->setVerticalSpacing(2);
 	}
 
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+
+	cbDataSourceCurve = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 3, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
 	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
@@ -111,10 +117,10 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged()) );
 	connect( uiGeneralTab.sbTension, SIGNAL(valueChanged(double)), this, SLOT(tensionChanged()) );
@@ -123,8 +129,11 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(double)), this, SLOT(numberOfPointsChanged()) );
 	connect( uiGeneralTab.cbPointsMode, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsModeChanged()) );
-
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+
+	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
+	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
+	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 }
 
 void XYInterpolationCurveDock::initGeneralTab() {
@@ -150,8 +159,12 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_interpolationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_interpolationCurve->yDataColumn());
+
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_interpolationCurve->dataSourceType());
+	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_interpolationCurve->dataSourceCurve());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_interpolationCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_interpolationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_interpolationData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.last());
@@ -176,33 +189,33 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	this->showInterpolationResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last interpolation
-	uiGeneralTab.pbRecalculate->setEnabled(m_interpolationCurve->isSourceDataChangedSinceLastInterpolation());
-
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
 	connect(m_interpolationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_interpolationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_interpolationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_interpolationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_interpolationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_interpolationCurve, SIGNAL(interpolationDataChanged(XYInterpolationCurve::InterpolationData)), this, SLOT(curveInterpolationDataChanged(XYInterpolationCurve::InterpolationData)));
-	connect(m_interpolationCurve, SIGNAL(sourceDataChangedSinceLastInterpolation()), this, SLOT(enableRecalculate()));
+	connect(m_interpolationCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
 }
 
 void XYInterpolationCurveDock::setModel() {
 	QList<const char*>  list;
+	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	cbDataSourceCurve->setTopLevelClasses(list);
+
+	QList<const AbstractAspect*> hiddenAspects;
+	foreach (XYCurve* curve, m_curvesList)
+		hiddenAspects << curve;
+	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+
+	list.clear();
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-
- 	list.clear();
-	list<<"Column";
-	cbXDataColumn->setSelectableClasses(list);
-	cbYDataColumn->setSelectableClasses(list);
-
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
@@ -248,6 +261,49 @@ void XYInterpolationCurveDock::commentChanged() {
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
+void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
+	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
+	if (type == XYCurve::DataSourceSpreadsheet) {
+		uiGeneralTab.lDataSourceCurve->hide();
+		cbDataSourceCurve->hide();
+		uiGeneralTab.lXColumn->show();
+		cbXDataColumn->show();
+		uiGeneralTab.lYColumn->show();
+		cbYDataColumn->show();
+	} else {
+		uiGeneralTab.lDataSourceCurve->show();
+		cbDataSourceCurve->show();
+		uiGeneralTab.lXColumn->hide();
+		cbXDataColumn->hide();
+		uiGeneralTab.lYColumn->hide();
+		cbYDataColumn->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
+}
+
+void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	XYCurve* dataSourceCurve = 0;
+	if (aspect) {
+		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+		Q_ASSERT(dataSourceCurve);
+	}
+
+	// disable types that need more data points
+	this->updateSettings(dataSourceCurve->xColumn());
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+}
+
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
@@ -256,82 +312,90 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
+	this->updateSettings(column);
+
+	if (m_initializing)
+		return;
+
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
+}
+
+void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
+	if (!column)
+		return;
 
 	// disable types that need more data points
-	if (column != 0) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
+	if (uiGeneralTab.cbAutoRange->isChecked()) {
+		uiGeneralTab.sbMin->setValue(column->minimum());
+		uiGeneralTab.sbMax->setValue(column->maximum());
+	}
 
-		unsigned int n=0;
-		for (int row=0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
-				n++;
-		dataPoints = n;
-		if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
-			pointsModeChanged();
+	unsigned int n=0;
+	for (int row=0; row < column->rowCount(); row++)
+		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
+			n++;
+	dataPoints = n;
+	if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
+		pointsModeChanged();
 
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-		QStandardItem* item = model->item(nsl_interp_type_polynomial);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	QStandardItem* item = model->item(nsl_interp_type_polynomial);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
+			uiGeneralTab.cbType->setCurrentIndex(0);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(nsl_interp_type_cspline);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	item = model->item(nsl_interp_type_cspline);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline)) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
+			uiGeneralTab.cbType->setCurrentIndex(0);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(nsl_interp_type_cspline_periodic);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	item = model->item(nsl_interp_type_cspline_periodic);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
+			uiGeneralTab.cbType->setCurrentIndex(0);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(nsl_interp_type_akima);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	item = model->item(nsl_interp_type_akima);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima)) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
+			uiGeneralTab.cbType->setCurrentIndex(0);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(nsl_interp_type_akima_periodic);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	item = model->item(nsl_interp_type_akima_periodic);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
+			uiGeneralTab.cbType->setCurrentIndex(0);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 #if GSL_MAJOR_VERSION >= 2
-		item = model->item(nsl_interp_type_steffen);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-#endif
-		// own types work with 2 or more data points
+	item = model->item(nsl_interp_type_steffen);
+	if (dataPoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
+			uiGeneralTab.cbType->setCurrentIndex(0);
 	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+#endif
+	// own types work with 2 or more data points
 }
 
 void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -358,11 +422,18 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
-		m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
-		Q_ASSERT(m_interpolationCurve);
-		if (m_interpolationCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_interpolationCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_interpolationCurve->xDataColumn()->maximum());
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_interpolationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+			xDataColumn = m_interpolationCurve->xDataColumn();
+		else {
+			if (m_interpolationCurve->dataSourceCurve())
+				xDataColumn = m_interpolationCurve->dataSourceCurve()->xColumn();
+		}
+
+		if (xDataColumn) {
+			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -557,12 +628,17 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no interpolationing possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+	//no interpolation possible without the x- and y-data
+	bool hasSourceData = false;
+	if (m_interpolationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		hasSourceData = (aspectX!=0 && aspectY!=0);
+	} else {
+		 hasSourceData = (m_interpolationCurve->dataSourceCurve() != NULL);
+	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(data);
+	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!
@@ -591,6 +667,9 @@ void XYInterpolationCurveDock::showInterpolationResult() {
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
+
+	//enable the "recalculate"-button if the source data was changed since the last interpolation
+	uiGeneralTab.pbRecalculate->setEnabled(m_interpolationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
@@ -610,15 +689,27 @@ void XYInterpolationCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 	m_initializing = false;
 }
 
+void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+	m_initializing = true;
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
+	m_initializing = true;
+	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	m_initializing = false;
+}
+
 void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 

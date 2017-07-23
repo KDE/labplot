@@ -137,8 +137,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	if (m_curve != 0)
 		m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
 	Q_ASSERT(m_dataReductionCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_dataReductionCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_dataReductionCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_dataReductionCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_dataReductionCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_dataReductionData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.last());
@@ -160,7 +160,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	this->showDataReductionResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last dataReduction
-	uiGeneralTab.pbRecalculate->setEnabled(m_dataReductionCurve->isSourceDataChangedSinceLastDataReduction());
+	uiGeneralTab.pbRecalculate->setEnabled(m_dataReductionCurve->isSourceDataChangedSinceLastRecalc());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -178,11 +178,6 @@ void XYDataReductionCurveDock::setModel() {
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-
- 	list.clear();
-	list<<"Column";
-	cbXDataColumn->setSelectableClasses(list);
-	cbYDataColumn->setSelectableClasses(list);
 
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
@@ -597,13 +592,13 @@ void XYDataReductionCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYDataReductionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 

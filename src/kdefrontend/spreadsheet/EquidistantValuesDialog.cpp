@@ -45,7 +45,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbType->addItem(i18n("Number"));
 	ui.cbType->addItem(i18n("Increment"));
 

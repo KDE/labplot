@@ -42,7 +42,7 @@ class XYDataReductionCurve: public XYCurve {
 		struct DataReductionData {
 			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker_variant), autoTolerance(true), tolerance(0.0),
 						autoTolerance2(true), tolerance2(0.0), autoRange(true), xRange(2) {};
-	
+
 			nsl_geom_linesim_type type;	// type of simplification
 			bool autoTolerance;		// automatic tolerance
 			double tolerance;		// tolerance
@@ -78,9 +78,7 @@ class XYDataReductionCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
 		const DataReductionResult& dataReductionResult() const;
-		bool isSourceDataChangedSinceLastDataReduction() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYDataReductionCurvePrivate Private;
 
 	protected:
@@ -90,9 +88,6 @@ class XYDataReductionCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYDataReductionCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYDataReductionCurveSetXDataColumnCmd;
 		friend class XYDataReductionCurveSetYDataColumnCmd;
@@ -101,7 +96,6 @@ class XYDataReductionCurve: public XYCurve {
 
 		friend class XYDataReductionCurveSetDataReductionDataCmd;
 		void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
-		void sourceDataChangedSinceLastDataReduction();
 		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 

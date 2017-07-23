@@ -49,7 +49,7 @@ class XYFourierFilterCurve;
 class KConfig;
 class XYFourierTransformCurve;
 
-class CartesianPlot:public AbstractPlot{
+class CartesianPlot:public AbstractPlot {
 	Q_OBJECT
 
 	public:
@@ -61,7 +61,7 @@ class CartesianPlot:public AbstractPlot{
 		enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
 		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
 		enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
+			ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
 			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
@@ -74,14 +74,15 @@ class CartesianPlot:public AbstractPlot{
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
 		struct RangeBreaks {
-			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
+			RangeBreaks() : lastChanged(-1) { RangeBreak b; list << b;};
 			QList<RangeBreak> list;
 			int lastChanged;
 		};
 
-		void initDefault(Type=FourAxes);
+		void initDefault(Type = FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
+		QMenu* analysisMenu() const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
 		void setMouseMode(const MouseMode);
@@ -92,6 +93,8 @@ class CartesianPlot:public AbstractPlot{
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig&);
+		void saveTheme(KConfig& config);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
@@ -106,8 +109,12 @@ class CartesianPlot:public AbstractPlot{
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks);
 		CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks);
 
-		typedef CartesianPlot BaseClass;
+		QString theme() const;
+
 		typedef CartesianPlotPrivate Private;
+
+	public slots:
+		void setTheme(const QString&);
 
 	private:
 		void init();
@@ -115,14 +122,15 @@ class CartesianPlot:public AbstractPlot{
 		void initMenus();
 		void setColorPalette(const KConfig&);
 		void applyThemeOnNewCurve(XYCurve* curve);
+		const XYCurve* currentCurve() const;
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
-		QString m_themeName;
 		QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;
 
+		//"add new" actions
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addHistogramPlot;
@@ -139,6 +147,7 @@ class CartesianPlot:public AbstractPlot{
  		QAction* addLegendAction;
 		QAction* addCustomPointAction;
 
+		//scaling, zooming, navigation actions
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
 		QAction* scaleAutoAction;
@@ -153,8 +162,19 @@ class CartesianPlot:public AbstractPlot{
 		QAction* shiftUpYAction;
 		QAction* shiftDownYAction;
 
+		//analysis menu actions
+		QAction* addDataOperationAction;
+		QAction* addDataReductionAction;
+		QAction* addDifferentiationAction;
+		QAction* addIntegrationAction;
+		QAction* addInterpolationAction;
+		QAction* addSmoothAction;
+		QVector <QAction *> addFitAction;
+		QAction* addFourierFilterAction;
+
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* dataAnalysisMenu;
 		QMenu* themeMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
@@ -188,8 +208,6 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
-		void loadTheme(KConfig& config);
-		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();
@@ -225,6 +243,7 @@ class CartesianPlot:public AbstractPlot{
 		friend class CartesianPlotSetYRangeBreakingEnabledCmd;
 		friend class CartesianPlotSetXRangeBreaksCmd;
 		friend class CartesianPlotSetYRangeBreaksCmd;
+		friend class CartesianPlotSetThemeCmd;
 		void rectChanged(QRectF&);
 		void xAutoScaleChanged(bool);
 		void xMinChanged(float);
@@ -238,7 +257,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
-		void themeLoaded();
+		void themeChanged(const QString&);
 };
 
 #endif

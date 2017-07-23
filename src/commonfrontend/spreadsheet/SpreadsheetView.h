@@ -30,11 +30,9 @@
 #define SPREADSHEETVIEW_H
 
 #include <QWidget>
-#include <QPrinter>
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
-#include "backend/datasources/filters/FITSFilter.h"
 
 class Column;
 class Spreadsheet;
@@ -44,17 +42,20 @@ class SpreadsheetHeaderView;
 class AbstractAspect;
 class QTableView;
 
+class QPrinter;
 class QMenu;
 class QToolBar;
 class QModelIndex;
 class QItemSelection;
 
 class SpreadsheetView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 	public:
 		explicit SpreadsheetView(Spreadsheet* spreadsheet);
 		virtual ~SpreadsheetView();
+
+		void resizeHeader();
 
 		void showComments(bool on = true);
 		bool areCommentsShown() const;
@@ -63,22 +64,25 @@ class SpreadsheetView : public QWidget {
 		int selectedColumnCount(AbstractColumn::PlotDesignation);
 		bool isColumnSelected(int col, bool full = false);
 		QList<Column*> selectedColumns(bool full = false);
-		int selectedRowCount(bool full = false);
-		bool isRowSelected(int row, bool full = false);
 		int firstSelectedColumn(bool full = false);
 		int lastSelectedColumn(bool full = false);
+
+		bool isRowSelected(int row, bool full = false);
 		int firstSelectedRow(bool full = false);
 		int lastSelectedRow(bool full = false);
 		IntervalAttribute<bool> selectedRows(bool full = false);
+
 		bool isCellSelected(int row, int col);
 		void setCellSelected(int row, int col, bool select = true);
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
 		void getCurrentCell(int* row, int* col);
+
 		void exportToFile(const QString&, const bool, const QString&) const;
-        void exportToLaTeX(const QString&, const bool exportHeaders,
-                           const bool gridLines, const bool captions, const bool latexHeaders,
-                           const bool skipEmptyRows,const bool exportEntire) const;
-        void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
+		void exportToLaTeX(const QString&, const bool exportHeaders,
+			const bool gridLines, const bool captions, const bool latexHeaders,
+			const bool skipEmptyRows,const bool exportEntire) const;
+		void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
+
 	private:
 	  	void init();
 		void initActions();
@@ -127,12 +131,16 @@ class SpreadsheetView : public QWidget {
 		QAction* action_remove_columns;
 		QAction* action_clear_columns;
 		QAction* action_add_columns;
-// 		QAction* action_set_as_x;
-// 		QAction* action_set_as_y;
-// 		QAction* action_set_as_z;
-// 		QAction* action_set_as_xerr;
-// 		QAction* action_set_as_yerr;
-// 		QAction* action_set_as_none;
+		QAction* action_set_as_none;
+		QAction* action_set_as_x;
+		QAction* action_set_as_y;
+		QAction* action_set_as_z;
+		QAction* action_set_as_xerr;
+		QAction* action_set_as_xerr_plus;
+		QAction* action_set_as_xerr_minus;
+		QAction* action_set_as_yerr;
+		QAction* action_set_as_yerr_plus;
+		QAction* action_set_as_yerr_minus;
 		QAction* action_reverse_columns;
 		QAction* action_drop_values;
 		QAction* action_mask_values;
@@ -151,6 +159,9 @@ class SpreadsheetView : public QWidget {
 		QAction* action_add_rows;
 		QAction* action_statistics_rows;
 
+		//plotting and analysis related actions
+		QAction* action_plot_data;
+
 		//Menus
 		QMenu* m_selectionMenu;
 		QMenu* m_columnMenu;
@@ -163,7 +174,7 @@ class SpreadsheetView : public QWidget {
 		void print(QPrinter*) const;
 
 	private slots:
-		void activateFormulaMode(bool on);
+		void createColumnContextMenu(QMenu*);
 		void goToCell(int row, int col);
 		void toggleComments();
 		void goToNextColumn();
@@ -179,6 +190,8 @@ class SpreadsheetView : public QWidget {
 		void maskSelection();
 		void unmaskSelection();
 // 		void recalculateSelectedCells();
+
+		void plotData();
 
 		void fillSelectedCellsWithRowNumbers();
 		void fillWithRowNumbers();
@@ -208,19 +221,14 @@ class SpreadsheetView : public QWidget {
 		void sortColumnAscending();
 		void sortColumnDescending();
 
-// 		void setSelectionAs(AbstractColumn::PlotDesignation);
-// 		void setSelectedColumnsAsX();
-// 		void setSelectedColumnsAsY();
-// 		void setSelectedColumnsAsZ();
-// 		void setSelectedColumnsAsXError();
-// 		void setSelectedColumnsAsYError();
-// 		void setSelectedColumnsAsNone();
+		void setSelectionAs();
+
+		void activateFormulaMode(bool on);
+		bool formulaModeActive() const;
 
 		void showColumnStatistics(bool forAll = false);
 		void showAllColumnsStatistics();
 		void showRowStatistics();
-
-		bool formulaModeActive() const;
 
 		void advanceCell();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
@@ -228,8 +236,8 @@ class SpreadsheetView : public QWidget {
 		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 		void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
-		void handleAspectAdded(const AbstractAspect* aspect);
-		void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
+		void handleAspectAdded(const AbstractAspect*);
+		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 		void selectColumn(int);

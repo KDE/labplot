@@ -112,6 +112,7 @@ private:
 	QMenu* m_magnificationMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
+	QMenu* m_themeMenu;
 	QMenu* m_viewMouseModeMenu;
 	QMenu* m_cartesianPlotMenu;
 	QMenu* m_cartesianPlotMouseModeMenu;

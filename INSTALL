@@ -1,7 +1,8 @@
 To compile LabPlot following packages are required:
-	* CMake version 2.8.12 or higher (3.2.0 or higher for the kf5 version)
+	* CMake version 3.2.0 or higher
 	* ECM (extra cmake modules)
-	* KDE Frameworks 5.12.0 or higher (including the devel-package)
+	* KDE Frameworks 5.16.0 or higher (including the devel-package),
+		optional 5.28.0 or higher for syntax highlighting
 	* Qt version 5.4.2 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
@@ -13,7 +14,7 @@ optional
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher (including the devel-package, cfitsio-devel or similar)
-	* Cantor (only for the kf5 version of LabPlot) version 16.04 or higher (including the devel package, cantor-devel or similar)
+	* Cantor version 16.04 or higher (including the devel package, cantor-devel or similar)
 
 
 ===============================================================================

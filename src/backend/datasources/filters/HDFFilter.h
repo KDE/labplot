@@ -3,7 +3,7 @@ File                 : HDFFilter.h
 Project              : LabPlot
 Description          : HDF I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -41,8 +41,10 @@ public:
 	~HDFFilter();
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QList <QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+				  AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok,
+						AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);
@@ -64,7 +66,7 @@ public:
 	virtual bool load(XmlStreamReader*);
 
 private:
-	HDFFilterPrivate* const d;
+	std::unique_ptr<HDFFilterPrivate> const d;
 	friend class HDFFilterPrivate;
 };
 

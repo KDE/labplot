@@ -2,7 +2,7 @@
     File                 : Workbook.h
     Project              : LabPlot
     Description          : Aspect providing a container for storing data
-						   in form of spreadsheets and matrices
+				in form of spreadsheets and matrices
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Alexander Semke(alexander.semke@web.de)
 
@@ -47,9 +47,9 @@ class Workbook : public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
 
 		Spreadsheet* currentSpreadsheet() const;
 		Matrix* currentMatrix() const;

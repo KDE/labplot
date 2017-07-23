@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 20016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -106,11 +107,6 @@ const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpola
 	return d->interpolationResult;
 }
 
-bool XYInterpolationCurve::isSourceDataChangedSinceLastInterpolation() const {
-	Q_D(const XYInterpolationCurve);
-	return d->sourceDataChangedSinceLastInterpolation;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -119,7 +115,7 @@ void XYInterpolationCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYInterpolationCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYInterpolationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastInterpolation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -132,7 +128,7 @@ void XYInterpolationCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYInterpolationCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYInterpolationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastInterpolation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -147,21 +143,12 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYInterpolationCurve::handleSourceDataChanged() {
-	Q_D(XYInterpolationCurve);
-	d->sourceDataChangedSinceLastInterpolation = true;
-	emit sourceDataChangedSinceLastInterpolation();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastInterpolation(false),
 	q(owner)  {
 
 }
@@ -202,36 +189,58 @@ void XYInterpolationCurvePrivate::recalculate() {
 	// clear the previous result
 	interpolationResult = XYInterpolationCurve::InterpolationResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = interpolationData.xRange.first();
-	const double xmax = interpolationData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (interpolationData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = interpolationData.xRange.first();
+		xmax = interpolationData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -243,7 +252,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -471,7 +480,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastInterpolation = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################

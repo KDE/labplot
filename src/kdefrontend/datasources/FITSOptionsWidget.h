@@ -3,7 +3,9 @@ File                 : FITSOptionsWidget.cpp
 Project              : LabPlot
 Description          : Widget providing options for the import of FITS data
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,18 +29,30 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef FITSOPTIONSWIDGET_H
 #define FITSOPTIONSWIDGET_H
 
-#include <QWidget>
 #include "ui_fitsoptionswidget.h"
 
-class FITSOptionsWidget : public QWidget{
-    Q_OBJECT
+class FITSFilter;
+class ImportFileWidget;
+
+class FITSOptionsWidget : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit FITSOptionsWidget(QWidget*);
-    ~FITSOptionsWidget();
+    explicit FITSOptionsWidget(QWidget*, ImportFileWidget*);
+	void clear();
+	QString currentExtensionName();
+	void updateContent(FITSFilter*, const QString& fileName);
+	const QStringList selectedFITSExtensions() const;
+	int lines() const { return ui.sbPreviewLines->value(); }
+	QTableWidget* previewWidget() const { return ui.twPreview; }
+	const QString extensionName(bool* ok);
 
 private:
     Ui::FITSOptionsWidget ui;
+	ImportFileWidget* m_fileWidget;
+
+private slots:
+	void fitsTreeWidgetSelectionChanged();
 };
 
 #endif // FITSOPTIONSWIDGET_H

@@ -3,7 +3,7 @@ File		: AbstractDataSource.h
 Project		: LabPlot
 Description 	: Interface for data sources
 --------------------------------------------------------------------
-Copyright	: (C) 2009 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
@@ -31,19 +31,23 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/core/AbstractColumn.h"
+#include <QVector>
 
-#include <QStringList>
+class QStringList;
 
-class AbstractDataSource : public AbstractPart, public scripted{
+class AbstractDataSource : public AbstractPart, public scripted {
 	Q_OBJECT
 
-	public:
-   		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
-        virtual ~AbstractDataSource() {}
-		void clear();
-		int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
-		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
-				   int actualRows, int actualCols, QStringList colNameList = QStringList());
+public:
+	AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
+	virtual ~AbstractDataSource() {}
+
+	void clear();
+	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+		int actualRows, int actualCols, QStringList colNameList = QStringList(), QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) = 0;
+	virtual void finalizeImport(int columnOffset = 0, int startColumn = 0, int endColumn = 0,
+		const QString& dateTimeFormat = QString(), AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace) = 0;
 };
 
-#endif // ifndef ABSTRACTDATASOURCE_H
+#endif // ABSTRACTDATASOURCE_H

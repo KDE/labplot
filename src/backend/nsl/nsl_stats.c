@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL statistics functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -29,6 +29,7 @@
 #include "nsl_stats.h"
 #include <math.h>
 #include <gsl/gsl_sort.h>
+#include <gsl/gsl_cdf.h>
 
 double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
 	size_t i;
@@ -169,3 +170,46 @@ double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t st
         return nsl_stats_quantile_sorted(sorted_data, stride, n, p, nsl_stats_quantile_type7);
 }
 
+/* R^2 and adj. R^2 */
+double nsl_stats_rsquare(double sse, double sst) {
+	return 1. - sse/sst;
+}
+
+double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof) {
+	size_t n = np + dof;
+	return 1. - (1. - rsquare) * (n - 1.)/(dof - 1.);
+}
+
+/* t distribution */
+double nsl_stats_tdist_t(double parameter, double error) {
+	return parameter/error;
+}
+
+double nsl_stats_tdist_p(double t, double dof) {
+	double p = 2. * gsl_cdf_tdist_Q(fabs(t), dof);
+	if (p < 1.e-9)
+		p = 0;
+	return p;
+}
+double nsl_stats_tdist_margin(double alpha, double dof, double error) {
+	return gsl_cdf_tdist_Pinv(1. - alpha/2., dof) * error;
+}
+
+/* chi^2 distribution */
+double nsl_stats_chisq_p(double t, double dof) {
+	double p = gsl_cdf_chisq_Q(t, dof);
+	if (p < 1.e-9)
+		p = 0;
+	return p;
+}
+
+/* F distribution */
+double nsl_stats_fdist_F(double sst, double rms) {
+	return sst/rms;
+}
+double nsl_stats_fdist_p(double F, size_t np, double dof) {
+	double p = gsl_cdf_fdist_Q(F, np, dof);
+	if (p < 1.e-9)
+		p = 0;
+	return p;
+}

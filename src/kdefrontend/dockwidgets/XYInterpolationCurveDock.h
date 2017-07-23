@@ -46,8 +46,10 @@ public:
 private:
 	virtual void initGeneralTab();
 	void showInterpolationResult();
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
+	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
@@ -63,6 +65,8 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void dataSourceTypeChanged(int);
+	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
@@ -77,14 +81,14 @@ private slots:
 	void numberOfPointsChanged();
 	void pointsModeChanged();
 
-//	void showOptions();
 	void recalculateClicked();
-
 	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData&);

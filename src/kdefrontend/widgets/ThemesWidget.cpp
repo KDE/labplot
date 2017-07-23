@@ -31,9 +31,10 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QListWidgetItem>
-#include <QStandardItemModel>
 #include <QFile>
+#include <QListWidgetItem>
+#include <QPainter>
+#include <QStandardItemModel>
 
 #include <KGlobal>
 #include <KStandardDirs>
@@ -62,11 +63,11 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	//show preview pixmaps
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes/screenshots/", QStandardPaths::LocateDirectory);
-	themeImgPathList.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory));
+	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty())
 		return;
-	QString themeImgPath = themeImgPathList.first();
+
+	const QString& themeImgPath = themeImgPathList.first();
 	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
@@ -82,6 +83,24 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 		mContentItemModel->appendRow(listItem);
 	}
 
+	//create and add the icon for "None"
+	QPixmap pm(size, size);
+	QColor color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::black : Qt::white;
+	QPen pen(color);
+	pen.setWidth(2);
+	QPainter pa;
+	pa.setPen(pen);
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.drawRect(5, 5, size-10, size-10);
+	pa.end();
+
+	QStandardItem* listItem = new QStandardItem();
+	listItem->setIcon(pm);
+	listItem->setText(i18n("None"));
+	listItem->setData("", Qt::UserRole);
+	mContentItemModel->appendRow(listItem);
+
 	//adding download themes option
 	//TODO: activate this later
 // 	QStandardItem* listItem = new QStandardItem();
@@ -93,15 +112,17 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setModel(mContentItemModel);
 
 	//SLOTS
-	connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked()));
+	connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked(QModelIndex)));
 }
 
-void ThemesWidget::applyClicked() {
-	QString themeName = currentIndex().data(Qt::UserRole).toString();
+void ThemesWidget::applyClicked(const QModelIndex& index) {
+	QString themeName = index.data(Qt::UserRole).toString();
+
 	//TODO: activate this later
 // 	if(themeName=="file_download_theme")
 // 		this->downloadThemes();
 // 	else
+
 	emit themeSelected(themeName);
 }
 

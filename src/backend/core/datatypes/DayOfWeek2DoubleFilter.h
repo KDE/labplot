@@ -35,26 +35,25 @@
 #include <cmath>
 
 //! Conversion filter QDateTime -> double, translating dates into days of the week (Monday -> 1).
-class DayOfWeek2DoubleFilter : public AbstractSimpleFilter
-{
+class DayOfWeek2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return NAN;
-			QDate date = m_inputs.value(0)->dateAt(row);
-			if (!date.isValid()) return NAN;
-			return double(date.dayOfWeek());
-		}
+public:
+	virtual double valueAt(int row) const {
+		if (!m_inputs.value(0)) return NAN;
+		QDate date = m_inputs.value(0)->dateAt(row);
+		if (!date.isValid()) return NAN;
+		return double(date.dayOfWeek());
+	}
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
 
-	protected:
-		//! Using typed ports: only date-time inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == AbstractColumn::Day;
-		}
+protected:
+	//! Using typed ports: only date-time inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+		return source->columnMode() == AbstractColumn::Day;
+	}
 };
 
 #endif // ifndef DAY_OF_WEEK2DOUBLE_FILTER_H

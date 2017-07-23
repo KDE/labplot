@@ -4,6 +4,7 @@
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -29,35 +30,50 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
+class KFilterDev;
 class AbstractDataSource;
+class AbstractColumn;
 
 class AsciiFilterPrivate {
 
-	public:
-		explicit AsciiFilterPrivate(AsciiFilter*);
+public:
+	explicit AsciiFilterPrivate(AsciiFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	int prepareDeviceToRead(QIODevice&);
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
-		const AsciiFilter* q;
+	const AsciiFilter* q;
 
-		QString commentCharacter;
-		QString separatingCharacter;
-		bool autoModeEnabled;
-		bool headerEnabled;
-		QString vectorNames;
-		bool skipEmptyParts;
-		bool simplifyWhitespacesEnabled;
-		bool transposed;
+	QString commentCharacter;
+	QString separatingCharacter;
+	QString dateTimeFormat;
+	QLocale::Language numberFormat;
+	bool autoModeEnabled;
+	bool headerEnabled;
+	bool skipEmptyParts;
+	bool simplifyWhitespacesEnabled;
+	bool createIndexEnabled;
+	QStringList vectorNames;
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	int startRow;
+	int endRow;
+	int startColumn;
+	int endColumn;
 
-		int startRow;
-		int endRow;
-		int startColumn;
-		int endColumn;
+private:
+	QString m_separator;
+	int m_actualRows;
+	int m_actualCols;
+	int m_prepared;
+	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
+	QVector<void*> m_dataContainer; // pointers to the actual data containers
 
-	private:
-		void clearDataSource(AbstractDataSource*) const;
+	void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

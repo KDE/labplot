@@ -28,8 +28,9 @@
  ***************************************************************************/
 
 #include "WorksheetDock.h"
-#include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/TemplateHandler.h"
 
 #include <QPrinter>
 #include <QFileDialog>
@@ -136,12 +137,22 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
+	//theme and template handlers
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
+
+	m_themeHandler = new ThemeHandler(this);
+	layout->addWidget(m_themeHandler);
+	connect(m_themeHandler, SIGNAL(loadThemeRequested(QString)), this, SLOT(loadTheme(QString)));
+	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
-	ui.verticalLayout->addWidget(templateHandler, 0, 0);
-	templateHandler->show();
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	this->retranslateUi();
 }
@@ -178,6 +189,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	this->load();
 	this->worksheetLayoutChanged(m_worksheet->layout());
 
+	m_themeHandler->setCurrentTheme(m_worksheet->theme());
+
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	connect(m_worksheet, SIGNAL(pageRectChanged(QRectF)),this, SLOT(worksheetPageRectChanged(QRectF)));
 	connect(m_worksheet,SIGNAL(scaleContentChanged(bool)),this,SLOT(worksheetScaleContentChanged(bool)));
@@ -200,6 +213,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	connect(m_worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
 	connect(m_worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
 	connect(m_worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
+
+	connect(m_worksheet,SIGNAL(themeChanged(QString)),m_themeHandler,SLOT(setCurrentTheme(QString)));
 
 	m_initializing = false;
 }
@@ -934,4 +949,9 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	config.sync();
+}
+
+void WorksheetDock::loadTheme(const QString& theme) {
+	foreach(Worksheet* worksheet, m_worksheetList)
+		worksheet->setTheme(theme);
 }

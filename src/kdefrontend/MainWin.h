@@ -68,7 +68,6 @@ class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
-class ImportFileDialog;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
@@ -90,6 +89,7 @@ public:
 	~MainWin();
 
 	AspectTreeModel* model() const;
+	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
 private:
@@ -104,7 +104,6 @@ private:
 	Folder* m_currentFolder;
 	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
-	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
 	bool m_closing;
 	bool m_autoSaveActive;
@@ -116,7 +115,9 @@ private:
 	QAction* m_saveAsAction;
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
-	QAction* m_importAction;
+	QAction* m_importFileAction;
+	QAction* m_importSqlAction;
+	QAction* m_importOpjAction;
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
@@ -167,6 +168,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_importMenu;
 	QMenu* m_editMenu;
 
 	//Docks
@@ -211,7 +213,7 @@ private:
 	Worksheet* activeWorksheet() const;
 	Datapicker* activeDatapicker() const;
 
-	//cantor
+	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock;
@@ -247,11 +249,13 @@ private slots:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importSqlDialog();
+	void importOpjDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
-	
+
 	//Cantor
 	#ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
@@ -266,7 +270,6 @@ private slots:
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
-	void newSqlDataSourceActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

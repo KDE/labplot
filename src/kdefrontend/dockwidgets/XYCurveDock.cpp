@@ -4,7 +4,7 @@
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -49,7 +49,7 @@
   \class XYCurveDock
   \brief  Provides a widget for editing the properties of the XYCurves (2D-curves) currently selected in the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
+  If more than one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of the curves  - these properties can only be changed if there is only one single curve.
 
   \ingroup kdefrontend
@@ -218,26 +218,6 @@ void XYCurveDock::setupGeneral() {
 
 
 void XYCurveDock::init() {
-	dateStrings<<"yyyy-MM-dd";
-	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy";
-	dateStrings<<"dd/MM/yy";
-	dateStrings<<"dd.MM.yyyy";
-	dateStrings<<"dd.MM.yy";
-	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM.";
-	dateStrings<<"yyyyMMdd";
-
-	timeStrings<<"hh";
-	timeStrings<<"hh ap";
-	timeStrings<<"hh:mm";
-	timeStrings<<"hh:mm ap";
-	timeStrings<<"hh:mm:ss";
-	timeStrings<<"hh:mm:ss.zzz";
-	timeStrings<<"hh:mm:ss:zzz";
-	timeStrings<<"mm:ss.zzz";
-	timeStrings<<"hhmmss";
-
 	m_initializing = true;
 
 	//Line
@@ -392,7 +372,7 @@ void XYCurveDock::init() {
 	trafo.scale(15, 15);
 
 	ui.cbSymbolStyle->addItem(i18n("none"));
-	for (int i=1; i<19; ++i) {
+	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
 		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -501,17 +481,8 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
 	list.clear();
-	list<<"Column";
+	list<<"Column"<<"XYCurve";
 	m_aspectTreeModel->setSelectableAspects(list);
-	if (cbXColumn) {
-		cbXColumn->setSelectableClasses(list);
-		cbYColumn->setSelectableClasses(list);
-	}
-	cbValuesColumn->setSelectableClasses(list);
-	cbXErrorMinusColumn->setSelectableClasses(list);
-	cbXErrorPlusColumn->setSelectableClasses(list);
-	cbYErrorMinusColumn->setSelectableClasses(list);
-	cbYErrorPlusColumn->setSelectableClasses(list);
 
 	if (cbXColumn) {
 		cbXColumn->setModel(m_aspectTreeModel);
@@ -540,7 +511,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the content in the tab "general"
+	//if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -552,8 +523,8 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.lYColumn->setEnabled(true);
 		cbYColumn->setEnabled(true);
 
-		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
-		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+		this->setModelIndexFromAspect(cbXColumn, m_curve->xColumn());
+		this->setModelIndexFromAspect(cbYColumn, m_curve->yColumn());
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
@@ -586,13 +557,13 @@ void XYCurveDock::initGeneralTab() {
 }
 
 void XYCurveDock::initTabs() {
-	//if there are more then one curve in the list, disable the tab "general"
+	//if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
-		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-		this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
-		this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
-		this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
-		this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
+		this->setModelIndexFromAspect(cbValuesColumn, m_curve->valuesColumn());
+		this->setModelIndexFromAspect(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
+		this->setModelIndexFromAspect(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
+		this->setModelIndexFromAspect(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
+		this->setModelIndexFromAspect(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
 	} else {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
@@ -679,6 +650,8 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
 		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 		break;
+	case AbstractColumn::Integer:
+		break;
 	case AbstractColumn::Text:
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
 		break;
@@ -695,21 +668,19 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime: {
-			foreach(const QString& s, dateStrings)
+			for (const auto& s: AbstractColumn::dateFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			foreach(const QString& s, timeStrings)
+			for (const auto& s: AbstractColumn::timeFormats())
 				ui.cbValuesFormat->addItem(s, QVariant(s));
 
-			foreach(const QString& s1, dateStrings) {
-				foreach(const QString& s2, timeStrings)
+			for (const auto& s1: AbstractColumn::dateFormats()) {
+				for (const auto& s2: AbstractColumn::timeFormats())
 					ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 			}
 			break;
 		}
 	}
-
-	ui.cbValuesFormat->setCurrentIndex(0);
 
 	if (columnMode == AbstractColumn::Numeric) {
 		ui.lValuesPrecision->show();
@@ -727,13 +698,15 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		ui.lValuesFormatTop->show();
 		ui.lValuesFormat->show();
 		ui.cbValuesFormat->show();
-		ui.cbValuesFormat->setCurrentIndex(0);
 	}
 
-	if (columnMode == AbstractColumn::DateTime)
-		ui.cbValuesFormat->setEditable( true );
-	else
-		ui.cbValuesFormat->setEditable( false );
+	if (columnMode == AbstractColumn::DateTime) {
+		ui.cbValuesFormat->setCurrentItem("yyyy-MM-dd hh:mm:ss.zzz");
+		ui.cbValuesFormat->setEditable(true);
+	} else {
+		ui.cbValuesFormat->setCurrentIndex(0);
+		ui.cbValuesFormat->setEditable(false);
+	}
 }
 
 /*!
@@ -755,27 +728,29 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 		//show the actuall formating properties
 		switch (columnMode) {
 		case AbstractColumn::Numeric: {
-				Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
-				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
-				ui.sbValuesPrecision->setValue(filter->numDigits());
-				break;
-			}
+			Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
+			ui.sbValuesPrecision->setValue(filter->numDigits());
+			break;
+		}
+		case AbstractColumn::Integer:
 		case AbstractColumn::Text:
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
-				break;
-			}
+			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+			DEBUG("	column values format = " << filter->format().toStdString());
+			ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
+			break;
+		}
 		}
 	}
 }
 
-void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
-	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
+	if (aspect)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
@@ -1737,13 +1712,13 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXColumn, column);
+	this->setModelIndexFromAspect(cbXColumn, column);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYColumn, column);
+	this->setModelIndexFromAspect(cbYColumn, column);
 	m_initializing = false;
 }
 
@@ -1846,7 +1821,7 @@ void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbValuesColumn, column);
+	this->setModelIndexFromAspect(cbValuesColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
@@ -1946,12 +1921,12 @@ void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXErrorPlusColumn, column);
+	this->setModelIndexFromAspect(cbXErrorPlusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXErrorMinusColumn, column);
+	this->setModelIndexFromAspect(cbXErrorMinusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
@@ -1961,13 +1936,13 @@ void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYErrorPlusColumn, column);
+	this->setModelIndexFromAspect(cbYErrorPlusColumn, column);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYErrorMinusColumn, column);
+	this->setModelIndexFromAspect(cbYErrorMinusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {

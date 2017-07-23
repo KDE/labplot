@@ -86,7 +86,7 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	  layout->setVerticalSpacing(2);
 	}
 
-	//Slots	
+	//Slots
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
 	connect( cbValuesColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(valuesColumnChanged(QModelIndex)) );
@@ -114,7 +114,7 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
 	connect( ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)) );
 
-	
+
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
 	ui.verticalLayout->addWidget(templateHandler);
@@ -356,13 +356,9 @@ void HistogramDock::setModel() {
  	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	if (cbXColumn) {
-		cbXColumn->setSelectableClasses(list);
-	}
-	cbValuesColumn->setSelectableClasses(list);
-	if (cbXColumn) {
+	if (cbXColumn)
 		cbXColumn->setModel(m_aspectTreeModel);
-	}
+
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
 void HistogramDock::setCurves(QList<Histogram*> list){
@@ -414,10 +410,10 @@ void HistogramDock::initGeneralTab(){
 
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
-	
+
 	uiGeneralTab.pbRecalculate->setEnabled(m_curve->isSourceDataChangedSinceLastPlot());
 	//Slots
-	
+
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(histogramDataChanged(Histogram::HistogramData)),
@@ -992,7 +988,7 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
 	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
-	
+
 }
 
 void HistogramDock::histogramTypeChanged(int index) {
@@ -1081,7 +1077,7 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
 	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
 	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);
-	
+
 	config.sync();
 }
 //*************************************************************

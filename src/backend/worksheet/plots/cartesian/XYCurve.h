@@ -40,6 +40,8 @@
 #include <QPen>
 
 class XYCurvePrivate;
+
+//TODO: align
 class XYCurve: public WorksheetElement {
 	Q_OBJECT
 
@@ -52,22 +54,26 @@ class XYCurve: public WorksheetElement {
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
+		enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
 		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QGraphicsItem *graphicsItem() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*) override;
+		virtual void loadThemeConfig(const KConfig& config) override;
+		virtual void saveThemeConfig(const KConfig& config) override;
 
+		BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
+		POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-		QString& xColumnPath() const;
-		QString& yColumnPath() const;
+		const QString& dataSourceCurvePath() const;
+		const QString& xColumnPath() const;
+		const QString& yColumnPath() const;
 
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 		BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
@@ -88,7 +94,7 @@ class XYCurve: public WorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-		QString& valuesColumnPath() const;
+		const QString& valuesColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -110,30 +116,32 @@ class XYCurve: public WorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-		QString& xErrorPlusColumnPath() const;
+		const QString& xErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-		QString& xErrorMinusColumnPath() const;
+		const QString& xErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-		QString& yErrorPlusColumnPath() const;
+		const QString& yErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-		QString& yErrorMinusColumnPath() const;
+		const QString& yErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool on);
+		virtual void setVisible(bool on) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool on) override;
 		void suppressRetransform(bool);
+		bool isSourceDataChangedSinceLastRecalc() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
 
+		virtual void retransform() override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
 	public slots:
-		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		void handleSourceDataChanged();
 
 	private slots:
 		void updateValues();
@@ -163,14 +171,20 @@ class XYCurve: public WorksheetElement {
 		QAction* navigateToAction;
 
 	signals:
+		void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+
 		//General-Tab
-		void dataChanged();
+		void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 		void xDataChanged();
 		void yDataChanged();
 		void visibilityChanged(bool);
 
+		friend class XYCurveSetDataSourceTypeCmd;
+		friend class XYCurveSetDataSourceCurveCmd;
 		friend class XYCurveSetXColumnCmd;
 		friend class XYCurveSetYColumnCmd;
+		void dataSourceTypeChanged(XYCurve::DataSourceType);
+		void dataSourceCurveChanged(const XYCurve*);
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 
