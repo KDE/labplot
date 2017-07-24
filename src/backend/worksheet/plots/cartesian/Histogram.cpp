@@ -477,7 +477,7 @@ double HistogramPrivate::getYMaximum() {
 			yMaxRange = gsl_histogram_get(histogram, maxYAddes);
 			break;
 		}
-		case Histogram::Cummulative: {
+		case Histogram::Cumulative: {
 			yMaxRange = xColumn->rowCount();
 			break;
 		}
@@ -668,7 +668,7 @@ void HistogramPrivate::updateLines(){
 			}
 		break;
 		}
-		case Histogram::Cummulative: {
+		case Histogram::Cumulative: {
 		double point =0.0;
 		for (int row = startRow; row <= endRow; row++ ){
 			if ( xColumn->isValid(row) && !xColumn->isMasked(row))
@@ -764,7 +764,7 @@ void HistogramPrivate::updateValues() {
 				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
 			}
 			break;
-		case Histogram::Cummulative: {
+		case Histogram::Cumulative: {
 			value = 0;
 			for(size_t i=0; i<bins; ++i){
 				if (!visiblePoints[i]) continue;

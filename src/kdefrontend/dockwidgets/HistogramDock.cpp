@@ -955,7 +955,7 @@ void HistogramDock::setupGeneral() {
 
 	//types options
 	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
-	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
+	uiGeneralTab.cbHistogramType->addItem(i18n("Cumulative Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
