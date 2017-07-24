@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : Commands used in Matrix (part of the undo/redo framework)
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -75,8 +76,9 @@ MatrixRemoveColumnsCmd::MatrixRemoveColumnsCmd( MatrixPrivate * private_obj, int
 void MatrixRemoveColumnsCmd::redo() {
 	if(m_backups.isEmpty()) {
 		int last_row = m_private_obj->rowCount-1;
-		for(int i=0; i<m_count; i++)
-			m_backups.append(m_private_obj->columnCells(m_first+i, 0, last_row));
+		//TODO: consider mode
+		for (int i = 0; i < m_count; i++)
+			m_backups.append(m_private_obj->columnCells<double>(m_first+i, 0, last_row));
 	}
 	m_private_obj->removeColumns(m_first, m_count);
 	emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
@@ -102,8 +104,9 @@ MatrixRemoveRowsCmd::MatrixRemoveRowsCmd( MatrixPrivate * private_obj, int first
 void MatrixRemoveRowsCmd::redo() {
 	if(m_backups.isEmpty()) {
 		int last_row = m_first+m_count-1;
-		for(int col=0; col<m_private_obj->columnCount; col++)
-			m_backups.append(m_private_obj->columnCells(col, m_first, last_row));
+		//TODO: consider mode
+		for(int col = 0; col < m_private_obj->columnCount; col++)
+			m_backups.append(m_private_obj->columnCells<double>(col, m_first, last_row));
 	}
 	m_private_obj->removeRows(m_first, m_count);
 	emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
@@ -119,7 +122,7 @@ void MatrixRemoveRowsCmd::undo() {
 
 
 // clear matrix
-MatrixClearCmd::MatrixClearCmd( MatrixPrivate * private_obj, QUndoCommand * parent)
+MatrixClearCmd::MatrixClearCmd(MatrixPrivate* private_obj, QUndoCommand* parent)
  : QUndoCommand( parent ), m_private_obj(private_obj)
 {
 	setText(i18n("%1: clear", m_private_obj->name()));
@@ -129,8 +132,9 @@ MatrixClearCmd::MatrixClearCmd( MatrixPrivate * private_obj, QUndoCommand * pare
 void MatrixClearCmd::redo() {
 	if(m_backups.isEmpty()) {
 		int last_row = m_private_obj->rowCount-1;
-		for(int i=0; i<m_private_obj->columnCount; i++)
-			m_backups.append(m_private_obj->columnCells(i, 0, last_row));
+		//TODO: mode
+		for (int i = 0; i < m_private_obj->columnCount; i++)
+			m_backups.append(m_private_obj->columnCells<double>(i, 0, last_row));
 	}
 	for(int i=0; i<m_private_obj->columnCount; i++)
 		m_private_obj->clearColumn(i);
@@ -138,7 +142,7 @@ void MatrixClearCmd::redo() {
 
 void MatrixClearCmd::undo() {
 	int last_row = m_private_obj->rowCount-1;
-	for(int i=0; i<m_private_obj->columnCount; i++)
+	for (int i = 0; i < m_private_obj->columnCount; i++)
 		m_private_obj->setColumnCells(i, 0, last_row, m_backups.at(i));
 }
 
@@ -151,8 +155,9 @@ MatrixClearColumnCmd::MatrixClearColumnCmd( MatrixPrivate * private_obj, int col
 }
 
 void MatrixClearColumnCmd::redo() {
+	//TODO: mode
 	if(m_backup.isEmpty())
-		m_backup = m_private_obj->columnCells(m_col, 0, m_private_obj->rowCount-1);
+		m_backup = m_private_obj->columnCells<double>(m_col, 0, m_private_obj->rowCount-1);
 	m_private_obj->clearColumn(m_col);
 }
 
@@ -161,16 +166,15 @@ void MatrixClearColumnCmd::undo() {
 }
 
 //set cell value
-MatrixSetCellValueCmd::MatrixSetCellValueCmd( MatrixPrivate * private_obj, int row, int col, double value, QUndoCommand * parent)
- : QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value)
-{
+MatrixSetCellValueCmd::MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, double value, QUndoCommand* parent)
+ : QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value) {
 	// remark: don't use many QString::arg() calls in ctors of commands that might be called often,
 	// they use a lot of execution time
 	setText(i18n("%1: set cell value", m_private_obj->name()));
 }
 
 void MatrixSetCellValueCmd::redo() {
-	m_old_value = m_private_obj->cell(m_row, m_col);
+	m_old_value = m_private_obj->cell<double>(m_row, m_col);
 	m_private_obj->setCell(m_row, m_col, m_value);
 }
 
@@ -179,9 +183,8 @@ void MatrixSetCellValueCmd::undo() {
 }
 
 //set coordinates
-MatrixSetCoordinatesCmd::MatrixSetCoordinatesCmd( MatrixPrivate * private_obj, double x1, double x2, double y1, double y2, QUndoCommand * parent)
- : QUndoCommand( parent ), m_private_obj(private_obj), m_new_x1(x1), m_new_x2(x2), m_new_y1(y1), m_new_y2(y2)
-{
+MatrixSetCoordinatesCmd::MatrixSetCoordinatesCmd(MatrixPrivate* private_obj, double x1, double x2, double y1, double y2, QUndoCommand* parent)
+ : QUndoCommand( parent ), m_private_obj(private_obj), m_new_x1(x1), m_new_x2(x2), m_new_y1(y1), m_new_y2(y2) {
 	setText(i18n("%1: set matrix coordinates", m_private_obj->name()));
 }
 
@@ -232,8 +235,9 @@ MatrixSetColumnCellsCmd::MatrixSetColumnCellsCmd( MatrixPrivate * private_obj, i
 }
 
 void MatrixSetColumnCellsCmd::redo() {
+	//TODO: mode
 	if (m_old_values.isEmpty())
-		m_old_values = m_private_obj->columnCells(m_col, m_first_row, m_last_row);
+		m_old_values = m_private_obj->columnCells<double>(m_col, m_first_row, m_last_row);
 	m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_values);
 }
 void MatrixSetColumnCellsCmd::undo() {
@@ -276,10 +280,10 @@ void MatrixTransposeCmd::redo() {
 		m_private_obj->insertColumns(cols, temp_size - cols);
 	else if (cols > rows)
 		m_private_obj->insertRows(rows, temp_size - rows);
-	for(int i = 1; i<temp_size; i++)
-	{
+	//TODO: mode
+	for (int i = 1; i < temp_size; i++) {
 		QVector<double> row = m_private_obj->rowCells(i, 0, i-1);
-		QVector<double> col = m_private_obj->columnCells(i, 0, i-1);
+		QVector<double> col = m_private_obj->columnCells<double>(i, 0, i-1);
 		m_private_obj->setRowCells(i, 0, i-1, col);
 		m_private_obj->setColumnCells(i, 0, i-1, row);
 	}
@@ -297,9 +301,8 @@ void MatrixTransposeCmd::undo() {
 
 
 //mirror horizontally
-MatrixMirrorHorizontallyCmd::MatrixMirrorHorizontallyCmd( MatrixPrivate * private_obj, QUndoCommand * parent)
- : QUndoCommand( parent ), m_private_obj(private_obj)
-{
+MatrixMirrorHorizontallyCmd::MatrixMirrorHorizontallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent)
+ : QUndoCommand( parent ), m_private_obj(private_obj) {
 	setText(i18n("%1: mirror horizontally", m_private_obj->name()));
 }
 
@@ -308,10 +311,10 @@ void MatrixMirrorHorizontallyCmd::redo() {
 	int cols = m_private_obj->columnCount;
 	int middle = cols/2;
 	m_private_obj->suppressDataChange = true;
-	for(int i = 0; i<middle; i++)
-	{
-		QVector<double> temp = m_private_obj->columnCells(i, 0, rows-1);
-		m_private_obj->setColumnCells(i, 0, rows-1, m_private_obj->columnCells(cols-i-1, 0, rows-1));
+	//TODO: mode
+	for (int i = 0; i<middle; i++) {
+		QVector<double> temp = m_private_obj->columnCells<double>(i, 0, rows-1);
+		m_private_obj->setColumnCells(i, 0, rows-1, m_private_obj->columnCells<double>(cols-i-1, 0, rows-1));
 		m_private_obj->setColumnCells(cols-i-1, 0, rows-1, temp);
 	}
 	m_private_obj->suppressDataChange = false;
@@ -324,9 +327,8 @@ void MatrixMirrorHorizontallyCmd::undo() {
 
 
 //mirror vertically
-MatrixMirrorVerticallyCmd::MatrixMirrorVerticallyCmd( MatrixPrivate * private_obj, QUndoCommand * parent)
- : QUndoCommand( parent ), m_private_obj(private_obj)
-{
+MatrixMirrorVerticallyCmd::MatrixMirrorVerticallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent)
+ : QUndoCommand( parent ), m_private_obj(private_obj) {
 	setText(i18n("%1: mirror vertically", m_private_obj->name()));
 }
 

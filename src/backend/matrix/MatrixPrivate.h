@@ -44,11 +44,33 @@ public:
 
 	QString name() const { return q->name(); }
 
-	double cell(int row, int col) const;
-	void setCell(int row, int col, double value);
-	QVector<double> columnCells(int col, int first_row, int last_row);
+	// get value of cell at row/col (must be defined in header)
+	template <typename T> T cell(int row, int col) const {
+		Q_ASSERT(row >= 0 && row < rowCount);
+		Q_ASSERT(col >= 0 && col < columnCount);
+		// 	if(row < 0 || row >= rowCount() || col < 0 || col >= columnCount())
+		// 		return 0.0;
+
+		return (static_cast<QVector<QVector<T>>*>(data))->at(col).at(row);
+	}
+
+	// Set value of cell at row/col (must be defined in header)
+	template <typename T> void setCell(int row, int col, T value) {
+		Q_ASSERT(row >= 0 && row < rowCount);
+		Q_ASSERT(col >= 0 && col < columnCount);
+
+		static_cast<QVector<QVector<T>>*>(data)->operator[](col)[row] = value;
+
+		if (!suppressDataChange)
+			emit q->dataChanged(row, col, row, col);
+	}
+
+	template <typename T> QVector<T> columnCells(int col, int first_row, int last_row);
+	//TODO: mode
 	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
+	//TODO: mode
 	QVector<double> rowCells(int row, int first_column, int last_column);
+	//TODO: mode
 	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 	void clearColumn(int col);
 
