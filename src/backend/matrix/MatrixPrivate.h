@@ -48,8 +48,6 @@ public:
 	template <typename T> T cell(int row, int col) const {
 		Q_ASSERT(row >= 0 && row < rowCount);
 		Q_ASSERT(col >= 0 && col < columnCount);
-		// 	if(row < 0 || row >= rowCount() || col < 0 || col >= columnCount())
-		// 		return 0.0;
 
 		return (static_cast<QVector<QVector<T>>*>(data))->at(col).at(row);
 	}
@@ -66,12 +64,37 @@ public:
 	}
 
 	template <typename T> QVector<T> columnCells(int col, int first_row, int last_row);
-	//TODO: mode
-	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
-	//TODO: mode
-	QVector<double> rowCells(int row, int first_column, int last_column);
-	//TODO: mode
-	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
+	template <typename T> QVector<T> rowCells(int row, int first_column, int last_column);
+	template <typename T> void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
+		Q_ASSERT(first_row >= 0 && first_row < rowCount);
+		Q_ASSERT(last_row >= 0 && last_row < rowCount);
+		Q_ASSERT(values.count() > last_row - first_row);
+
+		if (first_row == 0 && last_row == rowCount-1) {
+			static_cast<QVector<QVector<T>>*>(data)->operator[](col) = values;
+			static_cast<QVector<QVector<T>>*>(data)->operator[](col).resize(rowCount);  // values may be larger
+			if (!suppressDataChange)
+				emit q->dataChanged(first_row, col, last_row, col);
+			return;
+		}
+
+		for (int i = first_row; i <= last_row; i++)
+			static_cast<QVector<QVector<T>>*>(data)->operator[](col)[i] = values.at(i-first_row);
+
+		if (!suppressDataChange)
+			emit q->dataChanged(first_row, col, last_row, col);
+	}
+	template <typename T> void setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
+		Q_ASSERT(first_column >= 0 && first_column < columnCount);
+		Q_ASSERT(last_column >= 0 && last_column < columnCount);
+		Q_ASSERT(values.count() > last_column - first_column);
+
+		for (int i = first_column; i <= last_column; i++)
+			static_cast<QVector<QVector<T>>*>(data)->operator[](i)[row] = values.at(i-first_column);
+		if (!suppressDataChange)
+			emit q->dataChanged(row, first_column, row, last_column);
+	}
+
 	void clearColumn(int col);
 
 	void setRowHeight(int row, int height) { rowHeights[row] = height; }
