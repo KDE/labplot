@@ -96,18 +96,15 @@ public:
 	void removeRows(int first, int count);
 	void clearRow(int);
 
-
-	//TODO: consider columnMode
-	double cell(int row, int col) const;
-	QString text(int row, int col);
-	void setCell(int row, int col, double value);
+	template <typename T> T cell(int row, int col) const;
+	template <typename T> QString text(int row, int col);
+	template <typename T> void setCell(int row, int col, T value);
 	void clearCell(int row, int col);
 
-	//TODO: consider columnMode
-	QVector<double> columnCells(int col, int first_row, int last_row);
-	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
-	QVector<double> rowCells(int row, int first_column, int last_column);
-	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
+	template <typename T> QVector<T> columnCells(int col, int first_row, int last_row);
+	template <typename T> void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values);
+	template <typename T> QVector<T> rowCells(int row, int first_column, int last_column);
+	template <typename T> void setRowCells(int row, int first_column, int last_column, const QVector<T>& values);
 
 	void copy(Matrix* other);
 

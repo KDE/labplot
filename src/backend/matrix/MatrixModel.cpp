@@ -95,7 +95,8 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
 		case Qt::DisplayRole:
-			return QVariant(m_matrix->text(row, col));
+			//TODO: mode
+			return QVariant(m_matrix->text<double>(row, col));
 		case Qt::BackgroundRole:
 			//use bluish background color to distinguish Matrix from Spreadsheet
 			return QVariant(QBrush(QColor(192,255,255)));

@@ -621,8 +621,9 @@ void MatrixView::copySelection() {
 
 	for (int r=0; r < rows; r++) 	{
 		for (int c=0; c < cols; c++) {
+			//TODO: mode
 			if (isCellSelected(first_row + r, first_col + c))
-				output_str += QLocale().toString(m_matrix->cell(first_row + r, first_col + c),
+				output_str += QLocale().toString(m_matrix->cell<double>(first_row + r, first_col + c),
 				                                 m_matrix->numericFormat(), 16); // copy with max. precision
 			if (c < cols-1)
 				output_str += '\t';
@@ -1098,7 +1099,6 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 
 void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, const bool horizontalHeaders,
                                const bool latexHeaders, const bool gridLines, const bool entire, const bool captions) const {
-
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
@@ -1117,8 +1117,9 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		for (int row = 0; row < totalRowCount; ++row) {
 			toExport[row].reserve(cols);
 			toExport[row].resize(cols);
+			//TODO: mode
 			for (int col = 0; col < cols; ++col)
-				toExport[row][col] = m_matrix->text(row,col);
+				toExport[row][col] = m_matrix->text<double>(row,col);
 		}
 		firstSelectedCol = 0;
 		firstSelectedRowi = 0;
@@ -1143,8 +1144,9 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			toExport[r].reserve(lastSelectedCol - firstSelectedCol+1);
 			toExport[r].resize(lastSelectedCol - firstSelectedCol+1);
 			c = 0;
+			//TODO: mode
 			for (int col = firstSelectedCol; col <= lastSelectedCol; ++col,++c)
-				toExport[r][c] = m_matrix->text(row, col);
+				toExport[r][c] = m_matrix->text<double>(row, col);
 		}
 	}
 
@@ -1462,7 +1464,8 @@ void MatrixView::showRowStatistics() {
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
 				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();
-				list << new Column(headerString, m_matrix->rowCells(row, 0, m_matrix->columnCount()-1));
+				//TODO: mode
+				list << new Column(headerString, m_matrix->rowCells<double>(row, 0, m_matrix->columnCount()-1));
 			}
 		}
 		dlg->setColumns(list);
