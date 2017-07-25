@@ -730,31 +730,6 @@ void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsRemoved(first, count);
 }
 
-template <typename T>
-QVector<T> MatrixPrivate::columnCells(int col, int first_row, int last_row) {
-	Q_ASSERT(first_row >= 0 && first_row < rowCount);
-	Q_ASSERT(last_row >= 0 && last_row < rowCount);
-
-	if (first_row == 0 && last_row == rowCount-1)
-		return (static_cast<QVector<QVector<T>>*>(data))->at(col);
-
-	QVector<T> result;
-	for (int i = first_row; i <= last_row; i++)
-		result.append(static_cast<QVector<QVector<T>>*>(data)->at(col).at(i));
-	return result;
-}
-
-template <typename T>
-QVector<T> MatrixPrivate::rowCells(int row, int first_column, int last_column) {
-	Q_ASSERT(first_column >= 0 && first_column < columnCount);
-	Q_ASSERT(last_column >= 0 && last_column < columnCount);
-
-	QVector<T> result;
-	for (int i = first_column; i <= last_column; i++)
-		result.append(static_cast<QVector<QVector<T>>*>(data)->operator[](i)[row]);
-	return result;
-}
-
 //! Fill column with zeroes
 void MatrixPrivate::clearColumn(int col) {
 	switch (mode) {
