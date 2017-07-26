@@ -1164,6 +1164,8 @@ void CartesianPlot::xDataChanged() {
 		this->scaleAutoX();
 	else
 		curve->retransform();
+
+    emit xDataChangedSignal();
 }
 
 void CartesianPlot::xHistogramDataChanged(){

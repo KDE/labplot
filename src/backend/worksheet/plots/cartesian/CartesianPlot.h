@@ -264,6 +264,8 @@ signals:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void themeChanged(const QString&);
+    void xDataChangedSignal();
+
 };
 
 #endif

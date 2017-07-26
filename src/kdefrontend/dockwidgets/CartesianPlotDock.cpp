@@ -261,6 +261,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_plotList = list;
 
 	m_plot = list.first();
+    connect(m_plot, SIGNAL(xDataChangedSignal()), this, SLOT(plotXdataChanged()));
 
 	double min = INFINITY;
 
@@ -1310,6 +1311,14 @@ void CartesianPlotDock::rangeFirstNchanged(const QString & text) {
 void CartesianPlotDock::rangeLastNchanged(const QString & text) {
 	Q_UNUSED(text)
 	rangeButtonClicked(ui.rbRangesLastN);
+}
+
+void CartesianPlotDock::plotXdataChanged() {
+    if (ui.rbRangesFirstN->isChecked()) {
+        rangeButtonClicked(ui.rbRangesFirstN);
+    } else if (ui.rbRangesLastN->isChecked()) {
+        rangeButtonClicked(ui.rbRangesLastN);
+    }
 }
 
 //*************************************************************

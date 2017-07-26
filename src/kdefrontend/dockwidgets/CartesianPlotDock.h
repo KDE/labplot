@@ -159,6 +159,7 @@ private slots:
 	void rangeFirstNchanged(const QString&);
 	void rangeLastNchanged(const QString&);
 
+    void plotXdataChanged();
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
