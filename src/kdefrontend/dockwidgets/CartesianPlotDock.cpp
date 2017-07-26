@@ -1240,60 +1240,22 @@ void CartesianPlotDock::rangeButtonClicked(QAbstractButton * button) {
 		ui.leRangesFirstN->setEnabled(true);
 		ui.leRangesLastN->setEnabled(false);
 
-		double min = INFINITY;
-		double max = -INFINITY;
-
-		double val;
-		const int count = ui.leRangesFirstN->text().toInt();
-
-		for (auto* plot: m_plotList) {
-			for (const XYCurve* curve : plot->children<const XYCurve>()) {
-				if (curve->xColumn() != nullptr) {
-					val = curve->xColumn()->minimumFirst(count);
-					if (val < min)
-						min = val;
-					val = curve->xColumn()->maximumFirst(count);
-					if (val > max)
-						max = val;
-				}
-			}
-		}
-
-		for (auto* plot: m_plotList) {
-            plot->setXMinMax(min, max);
-		}
-
+        const int count = ui.leRangesFirstN->text().toInt();
+        for(auto* plot : m_plotList) {
+            plot->setRangeType(CartesianPlot::RangeType::RangeFirst);
+            plot->setRangeFirstValues(count);
+        }
 	} else if (button == ui.rbRangesLastN) {
 		ui.leRangesFirstN->setEnabled(false);
 		ui.leRangesLastN->setEnabled(true);
-
-		double min = INFINITY;
-		double max = -INFINITY;
-
-		double val;
-		const int count = ui.leRangesLastN->text().toInt();
-
-		for (auto* plot: m_plotList) {
-			for (const XYCurve* curve : plot->children<const XYCurve>()) {
-				if (curve->xColumn() != nullptr) {
-					val = curve->xColumn()->minimumLast(count);
-					if (val < min)
-						min = val;
-					val = curve->xColumn()->maximumLast(count);
-					if (val > max)
-						max = val;
-				}
-			}
-		}
-
-		for (auto* plot: m_plotList) {
-            plot->setXMinMax(min, max);
-		}
-
+        const int count = ui.leRangesLastN->text().toInt();
+        for(auto* plot : m_plotList) {
+            plot->setRangeType(CartesianPlot::RangeType::RangeLast);
+            plot->setRangeLastValues(count);
+        }
 	} else if (button == ui.rbRangesFree) {
 		ui.leRangesFirstN->setEnabled(false);
 		ui.leRangesLastN->setEnabled(false);
-
 	}
 }
 

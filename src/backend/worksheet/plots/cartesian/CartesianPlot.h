@@ -219,8 +219,6 @@ public slots:
 	void shiftUpY();
 	void shiftDownY();
 
-    void setXMinMax(const int xmin, const int xmax);
-
 private slots:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);

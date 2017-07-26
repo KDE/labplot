@@ -813,7 +813,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		// from the last row we read the new data in the spreadsheet
 
-		qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
+        qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
 
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 		newDataIdx = 0;
@@ -844,8 +844,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
 					bytesread += line.size();
 
-				qDebug() << "line bytes: " << line.size() << " line: " << line;
-				qDebug() << "reading in row: " << currentRow;
+                //qDebug() << "line bytes: " << line.size() << " line: " << line;
+                //qDebug() << "reading in row: " << currentRow;
 				if (simplifyWhitespacesEnabled)
 					line = line.simplified();
 
@@ -873,14 +873,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 								bool isNumber;
 								const double value = locale.toDouble(valueString, &isNumber);
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-								qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+                                //qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 								break;
 							}
 						case AbstractColumn::Integer: {
 								bool isNumber;
 								const int value = locale.toInt(valueString, &isNumber);
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-								qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+                                //qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
 
 								break;
 							}

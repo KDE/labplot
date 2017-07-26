@@ -670,21 +670,21 @@ void CartesianPlot::setRect(const QRectF& rect) {
 		exec(new CartesianPlotSetRectCmd(d, rect));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, retransformScales)
 void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, i18n("%1: set range type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, retransformScales)
 void CartesianPlot::setRangeLastValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeLastValues)
 		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, i18n("%1: set range")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, retransformScales)
 void CartesianPlot::setRangeFirstValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeFirstValues)
@@ -741,14 +741,14 @@ void CartesianPlot::setXMin(float xMin) {
 		exec(new CartesianPlotSetXMinCmd(d, xMin, i18n("%1: set min x")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, float, xMax, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, float, xMax, retransformScales)
 void CartesianPlot::setXMax(float xMax) {
 	Q_D(CartesianPlot);
 	if (xMax != d->xMax)
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, i18n("%1: set max x")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales)
 void CartesianPlot::setXScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
@@ -762,7 +762,7 @@ void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-range breaking enabled")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales)
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: x-range breaks changed")));
@@ -810,21 +810,21 @@ void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales)
 void CartesianPlot::setYMin(float yMin) {
 	Q_D(CartesianPlot);
 	if (yMin != d->yMin)
 		exec(new CartesianPlotSetYMinCmd(d, yMin, i18n("%1: set min y")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, float, yMax, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, float, yMax, retransformScales)
 void CartesianPlot::setYMax(float yMax) {
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
 		exec(new CartesianPlotSetYMaxCmd(d, yMax, i18n("%1: set max y")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales)
 void CartesianPlot::setYScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)
@@ -838,7 +838,7 @@ void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, i18n("%1: y-range breaking enabled")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales)
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
@@ -1187,13 +1187,14 @@ void CartesianPlot::xDataChanged() {
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
-	d->curvesXMinMaxIsDirty = true;
+    d->curvesXMinMaxIsDirty = true;
+    emit xDataChangedSignal();
+
 	if (d->autoScaleX)
 		this->scaleAutoX();
 	else
 		curve->retransform();
 
-    emit xDataChangedSignal();
 }
 
 void CartesianPlot::xHistogramDataChanged(){
@@ -1426,52 +1427,85 @@ void CartesianPlot::scaleAuto() {
 	//loop over all xy-curves and determine the maximum x-value
 	QList<const XYCurve*> children = this->children<const XYCurve>();
 	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+    double min = INFINITY;
+    double max = -INFINITY;
 
-// 	switch (d->rangeType) {
-// 	case CartesianPlot::RangeLast:
-// 	case CartesianPlot::RangeFirst:
-// 		//TODO:
-// 		break;
-// 	case CartesianPlot::RangeFree: {
-	if (d->curvesXMinMaxIsDirty) {
-		d->curvesXMin = INFINITY;
-		d->curvesXMax = -INFINITY;
-		for (const auto* curve: children) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->xColumn())
-				continue;
+    double val;
+    switch (d->rangeType) {
+    case CartesianPlot::RangeLast:
 
-			if (curve->xColumn()->minimum() != INFINITY) {
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
+        for (const XYCurve* curve : children) {
+            if (curve->xColumn() != nullptr) {
+                val = curve->xColumn()->minimumFirst(d->rangeLastValues);
+                if (val < min)
+                    min = val;
+                val = curve->xColumn()->maximumFirst(d->rangeLastValues);
+                if (val > max)
+                    max = val;
+            }
+        }
 
-			if (curve->xColumn()->maximum() != -INFINITY) {
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
-		}
-		foreach(const Histogram* curve, childrenHistogram) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->xColumn())
-				continue;
+        d->curvesXMin = min;
+        d->curvesXMax = max;
 
-			if (curve->xColumn()->minimum() != INFINITY){
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
+        break;
+    case CartesianPlot::RangeFirst:
 
-			if (curve->xColumn()->maximum() != -INFINITY){
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
-		}
-		d->curvesXMinMaxIsDirty = false;
-	}
-// 	}
-// 	}
+            for (const XYCurve* curve : children) {
+                if (curve->xColumn() != nullptr) {
+                    val = curve->xColumn()->minimumLast(d->rangeFirstValues);
+                    if (val < min)
+                        min = val;
+                    val = curve->xColumn()->maximumLast(d->rangeFirstValues);
+                    if (val > max)
+                        max = val;
+                }
+            }
+
+            d->curvesXMin = min;
+            d->curvesXMax = max;
+
+        break;
+    case CartesianPlot::RangeFree:
+        if (d->curvesXMinMaxIsDirty) {
+            d->curvesXMin = INFINITY;
+            d->curvesXMax = -INFINITY;
+            for (const auto* curve: children) {
+                if (!curve->isVisible())
+                    continue;
+                if (!curve->xColumn())
+                    continue;
+
+                if (curve->xColumn()->minimum() != INFINITY) {
+                    if (curve->xColumn()->minimum() < d->curvesXMin)
+                        d->curvesXMin = curve->xColumn()->minimum();
+                }
+
+                if (curve->xColumn()->maximum() != -INFINITY) {
+                    if (curve->xColumn()->maximum() > d->curvesXMax)
+                        d->curvesXMax = curve->xColumn()->maximum();
+                }
+            }
+            foreach(const Histogram* curve, childrenHistogram) {
+                if (!curve->isVisible())
+                    continue;
+                if (!curve->xColumn())
+                    continue;
+
+                if (curve->xColumn()->minimum() != INFINITY){
+                    if (curve->xColumn()->minimum() < d->curvesXMin)
+                        d->curvesXMin = curve->xColumn()->minimum();
+                }
+
+                if (curve->xColumn()->maximum() != -INFINITY){
+                    if (curve->xColumn()->maximum() > d->curvesXMax)
+                        d->curvesXMax = curve->xColumn()->maximum();
+                }
+            }
+            d->curvesXMinMaxIsDirty = false;
+        }
+        break;
+    }
 
 //TODO: this function seems to be broken. Maybe this was caused by the last merge from the histogram branch.
 	if (d->curvesYMinMaxIsDirty) {
@@ -1663,17 +1697,6 @@ void CartesianPlot::shiftDownY() {
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
 	d->retransformScales();
-}
-
-void CartesianPlot::setXMinMax(const int xmin, const int xmax) {
-    Q_D(CartesianPlot);
-
-    if ((xmin != d->xMin) || (xmax != d->xMax)) {
-        d->xMin = xmin;
-        d->xMax = xmax;
-
-        d->retransformScales();
-    }
 }
 
 //##############################################################################
