@@ -103,6 +103,9 @@ void CartesianPlot::init() {
 	d->cSystem = new CartesianCoordinateSystem(this);
 	m_coordinateSystem = d->cSystem;
 
+	d->rangeType = CartesianPlot::RangeFree;
+	d->rangeLastValues = 1000;
+	d->rangeFirstValues = 1000;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
@@ -154,7 +157,7 @@ void CartesianPlot::initDefault(Type type) {
 		d->yMax = 1;
 
 		//Axes
-		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisBottom);
 		axis->setStart(0);
@@ -219,7 +222,7 @@ void CartesianPlot::initDefault(Type type) {
 		d->yMin = 0;
 		d->yMax = 1;
 
-		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisBottom);
 		axis->setStart(0);
@@ -256,7 +259,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::NoPen);
 		m_plotArea->setBorderPen(pen);
 
-		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCentered);
 		axis->setStart(-0.5);
@@ -295,7 +298,7 @@ void CartesianPlot::initDefault(Type type) {
 		pen.setStyle(Qt::NoPen);
 		m_plotArea->setBorderPen(pen);
 
-		Axis *axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
 		addChild(axis);
 		axis->setPosition(Axis::AxisCustom);
 		axis->setOffset(0);
@@ -590,6 +593,9 @@ void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, rangeType)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
@@ -663,6 +669,28 @@ void CartesianPlot::setRect(const QRectF& rect) {
 	if (rect != d->rect)
 		exec(new CartesianPlotSetRectCmd(d, rect));
 }
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, retransformScales);
+void CartesianPlot::setRangeType(RangeType type) {
+	Q_D(CartesianPlot);
+	if (type != d->rangeType)
+		exec(new CartesianPlotSetRangeTypeCmd(d, type, i18n("%1: set range type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, retransformScales);
+void CartesianPlot::setRangeLastValues(int values) {
+	Q_D(CartesianPlot);
+	if (values != d->rangeLastValues)
+		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, i18n("%1: set range")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, retransformScales);
+void CartesianPlot::setRangeFirstValues(int values) {
+	Q_D(CartesianPlot);
+	if (values != d->rangeFirstValues)
+		exec(new CartesianPlotSetRangeFirstValuesCmd(d, values, i18n("%1: set range")));
+}
+
 
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
 public:
@@ -1399,6 +1427,12 @@ void CartesianPlot::scaleAuto() {
 	QList<const XYCurve*> children = this->children<const XYCurve>();
 	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
 
+// 	switch (d->rangeType) {
+// 	case CartesianPlot::RangeLast:
+// 	case CartesianPlot::RangeFirst:
+// 		//TODO:
+// 		break;
+// 	case CartesianPlot::RangeFree: {
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
@@ -1436,7 +1470,10 @@ void CartesianPlot::scaleAuto() {
 		}
 		d->curvesXMinMaxIsDirty = false;
 	}
+// 	}
+// 	}
 
+//TODO: this function seems to be broken. Maybe this was caused by the last merge from the histogram branch.
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;

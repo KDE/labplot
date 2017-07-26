@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -58,6 +58,7 @@ public:
 
 	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum RangeType {RangeFree, RangeLast, RangeFirst};
 	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
 	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
 	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
@@ -102,6 +103,9 @@ public:
 	virtual void loadThemeConfig(const KConfig&);
 	void saveTheme(KConfig& config);
 
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
+	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
+	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
 	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
@@ -238,6 +242,9 @@ protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
 signals:
+	friend class CartesianPlotSetCRangeTypeCmd;
+	friend class CartesianPlotSetCRangeLastValuesCmd;
+	friend class CartesianPlotSetCRangeFirstValuesCmd;
 	friend class CartesianPlotSetRectCmd;
 	friend class CartesianPlotSetAutoScaleXCmd;
 	friend class CartesianPlotSetXMinCmd;
@@ -252,6 +259,9 @@ signals:
 	friend class CartesianPlotSetXRangeBreaksCmd;
 	friend class CartesianPlotSetYRangeBreaksCmd;
 	friend class CartesianPlotSetThemeCmd;
+	void rangeTypeChanged(CartesianPlot::RangeType);
+	void rangeLastValuesChanged(int);
+	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
 	void xAutoScaleChanged(bool);
 	void xMinChanged(float);

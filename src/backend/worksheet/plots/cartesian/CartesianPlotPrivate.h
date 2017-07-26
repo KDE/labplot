@@ -43,6 +43,9 @@ public:
 	void retransform();
 	void retransformScales();
 
+	CartesianPlot::RangeType rangeType;
+	int rangeFirstValues;
+	int rangeLastValues;
 	float xMin, xMax, yMin, yMax;
 	float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 	bool autoScaleX, autoScaleY;

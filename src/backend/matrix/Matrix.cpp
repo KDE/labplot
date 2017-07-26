@@ -52,8 +52,8 @@
 	a MxN matrix with M rows, N columns). This data is typically
 	used to for 3D plots.
 
-	The values of the matrix are stored as double precision values. Each column
-	of the matrix is stored in a QVector<double> objects.
+	The values of the matrix are stored as generic values. Each column
+	of the matrix is stored in a QVector<T> objects.
 
 	\ingroup backend
 */
@@ -302,12 +302,44 @@ void Matrix::appendColumns(int count) {
 void Matrix::removeColumns(int first, int count) {
 	if (count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	exec(new MatrixRemoveColumnsCmd(d, first, count));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixRemoveColumnsCmd<double>(d, first, count));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixRemoveColumnsCmd<QString>(d, first, count));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixRemoveColumnsCmd<int>(d, first, count));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixRemoveColumnsCmd<QDateTime>(d, first, count));
+		break;
+	}
 	RESET_CURSOR;
 }
 
 void Matrix::clearColumn(int c) {
-	exec(new MatrixClearColumnCmd(d, c));
+	WAIT_CURSOR;
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixClearColumnCmd<double>(d, c));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixClearColumnCmd<QString>(d, c));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixClearColumnCmd<int>(d, c));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixClearColumnCmd<QDateTime>(d, c));
+		break;
+	}
+	RESET_CURSOR;
 }
 
 //rows
@@ -325,7 +357,22 @@ void Matrix::appendRows(int count) {
 void Matrix::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	exec(new MatrixRemoveRowsCmd(d, first, count));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixRemoveRowsCmd<double>(d, first, count));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixRemoveRowsCmd<QString>(d, first, count));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixRemoveRowsCmd<int>(d, first, count));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixRemoveRowsCmd<QDateTime>(d, first, count));
+		break;
+	}
 	RESET_CURSOR;
 }
 
@@ -554,7 +601,7 @@ template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_colum
 template <typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 	WAIT_CURSOR;
-	exec(new MatrixSetRowCellsCmd(d, row, first_column, last_column, values));
+	exec(new MatrixSetRowCellsCmd<T>(d, row, first_column, last_column, values));
 	RESET_CURSOR;
 }
 
@@ -589,30 +636,90 @@ void Matrix::setData(void* data) {
 //##############################################################################
 //#########################  Public slots  #####################################
 //##############################################################################
-//! Clear the whole matrix (i.e. set all cells to 0.0)
+//! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear", name()));
-	exec(new MatrixClearCmd(d));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixClearCmd<double>(d));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixClearCmd<QString>(d));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixClearCmd<int>(d));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixClearCmd<QDateTime>(d));
+		break;
+	}
 	endMacro();
 	RESET_CURSOR;
 }
 
 void Matrix::transpose() {
 	WAIT_CURSOR;
-	exec(new MatrixTransposeCmd(d));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixTransposeCmd<double>(d));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixTransposeCmd<QString>(d));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixTransposeCmd<int>(d));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixTransposeCmd<QDateTime>(d));
+		break;
+	}
 	RESET_CURSOR;
 }
 
 void Matrix::mirrorHorizontally() {
 	WAIT_CURSOR;
-	exec(new MatrixMirrorHorizontallyCmd(d));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixMirrorHorizontallyCmd<double>(d));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixMirrorHorizontallyCmd<QString>(d));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixMirrorHorizontallyCmd<int>(d));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixMirrorHorizontallyCmd<QDateTime>(d));
+		break;
+	}
 	RESET_CURSOR;
 }
 
 void Matrix::mirrorVertically() {
 	WAIT_CURSOR;
-	exec(new MatrixMirrorVerticallyCmd(d));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixMirrorVerticallyCmd<double>(d));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixMirrorVerticallyCmd<QString>(d));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixMirrorVerticallyCmd<int>(d));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixMirrorVerticallyCmd<QDateTime>(d));
+		break;
+	}
 	RESET_CURSOR;
 }
 
