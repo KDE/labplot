@@ -142,9 +142,7 @@ signals:
 	void coordinatesChanged();
 
 	friend class MatrixInsertRowsCmd;
-	friend class MatrixRemoveRowsCmd;
 	friend class MatrixInsertColumnsCmd;
-	friend class MatrixRemoveColumnsCmd;
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 
@@ -170,6 +168,8 @@ private:
 	mutable MatrixModel* m_model;
 
 	friend class MatrixPrivate;
+	template <typename T> friend class MatrixRemoveColumnsCmd;
+	template <typename T> friend class MatrixRemoveRowsCmd;
 };
 
 #endif
