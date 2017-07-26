@@ -1260,10 +1260,7 @@ void CartesianPlotDock::rangeButtonClicked(QAbstractButton * button) {
 		}
 
 		for (auto* plot: m_plotList) {
-			if (min != plot->xMin())
-				plot->setXMin(min);
-			if (max != plot->xMax())
-				plot->setXMax(max);
+            plot->setXMinMax(min, max);
 		}
 
 	} else if (button == ui.rbRangesLastN) {
@@ -1290,10 +1287,7 @@ void CartesianPlotDock::rangeButtonClicked(QAbstractButton * button) {
 		}
 
 		for (auto* plot: m_plotList) {
-			if (min != plot->xMin())
-				plot->setXMin(min);
-			if (max != plot->xMax())
-				plot->setXMax(max);
+            plot->setXMinMax(min, max);
 		}
 
 	} else if (button == ui.rbRangesFree) {

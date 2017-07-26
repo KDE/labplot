@@ -1628,6 +1628,17 @@ void CartesianPlot::shiftDownY() {
 	d->retransformScales();
 }
 
+void CartesianPlot::setXMinMax(const int xmin, const int xmax) {
+    Q_D(CartesianPlot);
+
+    if ((xmin != d->xMin) || (xmax != d->xMax)) {
+        d->xMin = xmin;
+        d->xMax = xmax;
+
+        d->retransformScales();
+    }
+}
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
