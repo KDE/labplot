@@ -32,7 +32,9 @@
 
 #include <QUndoCommand>
 #include <QVector>
+#include <KLocale>
 #include "Matrix.h"
+#include "MatrixPrivate.h"
 
 //! Insert columns
 class MatrixInsertColumnsCmd : public QUndoCommand {
@@ -47,7 +49,6 @@ private:
 	int m_count; //! The number of new columns
 };
 
-
 //! Insert rows
 class MatrixInsertRowsCmd : public QUndoCommand {
 public:
@@ -60,7 +61,6 @@ private:
 	int m_before; //! Row to insert before
 	int m_count; //! The number of new rows
 };
-
 
 //! Remove columns
 class MatrixRemoveColumnsCmd : public QUndoCommand {
@@ -77,7 +77,6 @@ private:
 	QVector< QVector<double> > m_backups; //! Backups of the removed columns
 };
 
-
 //! Remove rows
 class MatrixRemoveRowsCmd : public QUndoCommand {
 public:
@@ -92,7 +91,6 @@ private:
 	QVector< QVector<double> > m_backups; //! Backups of the removed rows
 };
 
-
 //! Clear matrix
 class MatrixClearCmd : public QUndoCommand {
 public:
@@ -104,7 +102,6 @@ private:
 	MatrixPrivate* m_private_obj;
 	QVector< QVector<double> > m_backups; //! Backups of the cleared cells
 };
-
 
 //! Clear matrix column
 class MatrixClearColumnCmd : public QUndoCommand {
@@ -119,22 +116,31 @@ private:
 	QVector<double> m_backup; //! Backup of the cleared column
 };
 
-
 // Set cell value
+template <typename T>
 class MatrixSetCellValueCmd : public QUndoCommand {
 public:
-	MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, double value, QUndoCommand* parent = 0);
-	virtual void redo();
-	virtual void undo();
+	MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, T value, QUndoCommand* parent = 0)
+			: QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value) {
+		// remark: don't use many QString::arg() calls in ctors of commands that might be called often,
+		// they use a lot of execution time
+		setText(i18n("%1: set cell value", m_private_obj->name()));
+	}
+	virtual void redo() {
+		m_old_value = m_private_obj->cell<T>(m_row, m_col);
+		m_private_obj->setCell(m_row, m_col, m_value);
+	}
+	virtual void undo() {
+		m_private_obj->setCell(m_row, m_col, m_old_value);
+	}
 
 private:
 	MatrixPrivate* m_private_obj;
 	int m_row; //! The index of the row
 	int m_col; //! The index of the column
-	double m_value; //! New cell value
-	double m_old_value; //! Backup of the changed value
+	T m_value; //! New cell value
+	T m_old_value; //! Backup of the changed value
 };
-
 
 // Set matrix coordinates
 class MatrixSetCoordinatesCmd : public QUndoCommand {
@@ -155,7 +161,6 @@ private:
 	double m_old_y2;
 };
 
-
 //! Set matrix formula
 class MatrixSetFormulaCmd : public QUndoCommand {
 public:
@@ -168,23 +173,32 @@ private:
 	QString m_other_formula;
 };
 
-
 // Set cell values for (a part of) a column at once
+template <typename T>
 class MatrixSetColumnCellsCmd : public QUndoCommand {
 public:
-	MatrixSetColumnCellsCmd(MatrixPrivate* private_obj, int col, int first_row, int last_row, const QVector<double>& values, QUndoCommand* parent = 0);
-	virtual void redo();
-	virtual void undo();
+	MatrixSetColumnCellsCmd(MatrixPrivate* private_obj, int col, int first_row, int last_row, const QVector<T>& values, QUndoCommand* parent = 0)
+			: QUndoCommand(parent), m_private_obj(private_obj), m_col(col), m_first_row(first_row), m_last_row(last_row), m_values(values) {
+		setText(i18n("%1: set cell values", m_private_obj->name()));
+	}
+
+	virtual void redo() {
+		if (m_old_values.isEmpty())
+			m_old_values = m_private_obj->columnCells<T>(m_col, m_first_row, m_last_row);
+		m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_values);
+	}
+	virtual void undo() {
+		m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_old_values);
+	}
 
 private:
 	MatrixPrivate* m_private_obj;
 	int m_col; //! The index of the column
 	int m_first_row; //! The index of the first row
 	int m_last_row; //! The index of the last row
-	QVector<double> m_values; //! New cell values
-	QVector<double> m_old_values; //! Backup of the changed values
+	QVector<T> m_values; //! New cell values
+	QVector<T> m_old_values; //! Backup of the changed values
 };
-
 
 //! Set cell values for (a part of) a row at once
 class MatrixSetRowCellsCmd : public QUndoCommand {
@@ -202,7 +216,6 @@ private:
 	QVector<double> m_old_values; //! Backup of the changed values
 };
 
-
 //! Transpose the matrix
 class MatrixTransposeCmd : public QUndoCommand {
 public:
@@ -213,7 +226,6 @@ public:
 private:
 	MatrixPrivate* m_private_obj;
 };
-
 
 //! Mirror the matrix horizontally
 class MatrixMirrorHorizontallyCmd : public QUndoCommand {
@@ -237,7 +249,6 @@ private:
 	MatrixPrivate* m_private_obj;
 };
 
-
 // Replace matrix values
 class MatrixReplaceValuesCmd : public QUndoCommand {
 public:
@@ -250,6 +261,5 @@ private:
 	void* m_old_values;
 	void* m_new_values;
 };
-
 
 #endif // MATRIX_COMMANDS_H

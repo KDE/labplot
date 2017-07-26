@@ -57,8 +57,8 @@
 
 	\ingroup backend
 */
-Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
+Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -67,8 +67,8 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	init();
 }
 
-Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(nullptr) {
+Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
 
 	if (!loading)
 		init();
@@ -189,8 +189,13 @@ bool Matrix::printPreview() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
+void* Matrix::data() const {
+	return d->data;
+}
+
+BASIC_D_READER_IMPL(Matrix, AbstractColumn::ColumnMode, mode, mode)
 BASIC_D_READER_IMPL(Matrix, int, rowCount, rowCount)
+BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
 BASIC_D_READER_IMPL(Matrix, double, xStart, xStart)
 BASIC_D_READER_IMPL(Matrix, double, xEnd, xEnd)
 BASIC_D_READER_IMPL(Matrix, double, yStart, yStart)
@@ -199,10 +204,6 @@ BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
 CLASS_D_READER_IMPL(Matrix, QString, formula, formula)
-
-void* Matrix::data() const {
-	return d->data;
-}
 
 void Matrix::setSuppressDataChangedSignal(bool b) {
 	if (m_model)
@@ -329,28 +330,68 @@ void Matrix::removeRows(int first, int count) {
 }
 
 void Matrix::clearRow(int r) {
-	for (int c = 0; c < columnCount(); ++c)
-		exec(new MatrixSetCellValueCmd(d, r, c, 0.0));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		for (int c = 0; c < columnCount(); ++c)
+			exec(new MatrixSetCellValueCmd<double>(d, r, c, 0.0));
+		break;
+	case AbstractColumn::Text:
+		for (int c = 0; c < columnCount(); ++c)
+			exec(new MatrixSetCellValueCmd<QString>(d, r, c, QString()));
+		break;
+	case AbstractColumn::Integer:
+		for (int c = 0; c < columnCount(); ++c)
+			exec(new MatrixSetCellValueCmd<int>(d, r, c, 0));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		for (int c = 0; c < columnCount(); ++c)
+			exec(new MatrixSetCellValueCmd<QDateTime>(d, r, c, QDateTime()));
+		break;
+	}
 }
 
-double Matrix::cell(int row, int col) const {
-	return d->cell(row, col);
+//! Return the value in the given cell (needs explicit instantiation)
+template <typename T>
+T Matrix::cell(int row, int col) const {
+	return d->cell<T>(row, col);
 }
+template double Matrix::cell<double>(int row, int col) const;
 
-//! Return the text displayed in the given cell
+//! Return the text displayed in the given cell (needs explicit instantiation)
+template <typename T>
 QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
+	return QLocale().toString(cell<double>(row,col), d->numericFormat, d->precision);
 }
+template QString Matrix::text<double>(int row, int col);
 
-//! Set the value of the cell
-void Matrix::setCell(int row, int col, double value) {
+//! Set the value of the cell (needs explicit instantiation)
+template <typename T>
+void Matrix::setCell(int row, int col, T value) {
 	if(row < 0 || row >= rowCount()) return;
 	if(col < 0 || col >= columnCount()) return;
-	exec(new MatrixSetCellValueCmd(d, row, col, value));
+	exec(new MatrixSetCellValueCmd<T>(d, row, col, value));
 }
+template void Matrix::setCell<double>(int row, int col, double value);
 
 void Matrix::clearCell(int row, int col) {
-	exec(new MatrixSetCellValueCmd(d, row, col, 0.0));
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		exec(new MatrixSetCellValueCmd<double>(d, row, col, 0.0));
+		break;
+	case AbstractColumn::Text:
+		exec(new MatrixSetCellValueCmd<QString>(d, row, col, QString()));
+		break;
+	case AbstractColumn::Integer:
+		exec(new MatrixSetCellValueCmd<int>(d, row, col, 0));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		exec(new MatrixSetCellValueCmd<QDateTime>(d, row, col, QDateTime()));
+		break;
+	}
 }
 
 void Matrix::setDimensions(int rows, int cols) {
@@ -391,9 +432,27 @@ void Matrix::copy(Matrix* other) {
 		setColumnWidth(i, other->columnWidth(i));
 
 	d->suppressDataChange = true;
-	for (int i=0; i<columns; i++)
-		setColumnCells(i, 0, rows-1, other->columnCells(i, 0, rows-1));
-
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		for (int i = 0; i < columns; i++)
+			setColumnCells(i, 0, rows-1, other->columnCells<double>(i, 0, rows-1));
+		break;
+	case AbstractColumn::Text:
+		for (int i = 0; i < columns; i++)
+			setColumnCells(i, 0, rows-1, other->columnCells<QString>(i, 0, rows-1));
+		break;
+	case AbstractColumn::Integer:
+		for (int i = 0; i < columns; i++)
+			setColumnCells(i, 0, rows-1, other->columnCells<int>(i, 0, rows-1));
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		for (int i = 0; i < columns; i++)
+			setColumnCells(i, 0, rows-1, other->columnCells<QDateTime>(i, 0, rows-1));
+		break;
+	}
+		
 	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
 	setNumericFormat(other->numericFormat());
 	setPrecision(other->precision());
@@ -467,33 +526,63 @@ int Matrix::columnWidth(int col) const {
 	return d->columnWidth(col);
 }
 
-//! Return the values in the given cells as double vector
-QVector<double> Matrix::columnCells(int col, int first_row, int last_row) {
-	return d->columnCells(col, first_row, last_row);
+//! Return the values in the given cells as vector
+template <typename T>
+QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
+	return d->columnCells<T>(col, first_row, last_row);
 }
 
 //! Set the values in the given cells from a double vector
-void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<double> & values) {
+template <typename T>
+void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
 	WAIT_CURSOR;
-	exec(new MatrixSetColumnCellsCmd(d, col, first_row, last_row, values));
+	exec(new MatrixSetColumnCellsCmd<T>(d, col, first_row, last_row, values));
 	RESET_CURSOR;
 }
 
-//! Return the values in the given cells as double vector
-QVector<double> Matrix::rowCells(int row, int first_column, int last_column) {
-	return d->rowCells(row, first_column, last_column);
+//! Return the values in the given cells as vector (needs explicit instantiation)
+template <typename T>
+QVector<T> Matrix::rowCells(int row, int first_column, int last_column) {
+	return d->rowCells<T>(row, first_column, last_column);
 }
+template QVector<double> Matrix::rowCells<double>(int row, int first_column, int last_column);
+template QVector<QString> Matrix::rowCells<QString>(int row, int first_column, int last_column);
+template QVector<int> Matrix::rowCells<int>(int row, int first_column, int last_column);
+template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_column, int last_column);
 
 //! Set the values in the given cells from a double vector
-void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<double> & values) {
+template <typename T>
+void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 	WAIT_CURSOR;
 	exec(new MatrixSetRowCellsCmd(d, row, first_column, last_column, values));
 	RESET_CURSOR;
 }
 
 void Matrix::setData(void* data) {
-	//TODO: consider columnMode
-	if (!(static_cast<QVector<QVector<double>>*>(data))->isEmpty())
+	bool isEmpty = false;
+
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		if (static_cast<QVector<QVector<double>>*>(data)->isEmpty())
+			isEmpty = true;
+		break;
+	case AbstractColumn::Text:
+		if (static_cast<QVector<QVector<QString>>*>(data)->isEmpty())
+			isEmpty = true;
+		break;
+	case AbstractColumn::Integer:
+		if (static_cast<QVector<QVector<int>>*>(data)->isEmpty())
+			isEmpty = true;
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		if (static_cast<QVector<QVector<QDateTime>>*>(data)->isEmpty())
+			isEmpty = true;
+		break;
+	}
+
+	if (!isEmpty)
 		exec(new MatrixReplaceValuesCmd(d, data));
 }
 
@@ -531,9 +620,25 @@ void Matrix::mirrorVertically() {
 //######################  Private implementation ###############################
 //##############################################################################
 
-MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
-	//TODO: consider columnMode
-	data = new QVector<QVector<double>>();
+MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode mode)
+		: q(owner), mode(mode), rowCount(0), columnCount(0), suppressDataChange(false) {
+
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		data = new QVector<QVector<double>>();
+		break;
+	case AbstractColumn::Text:
+		data = new QVector<QVector<QString>>();
+		break;
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+	case AbstractColumn::DateTime:
+		data = new QVector<QVector<QDateTime>>();
+		break;
+	case AbstractColumn::Integer:
+		data = new QVector<QVector<int>>();
+		break;
+	}
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -547,12 +652,36 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= columnCount);
 
-	//TODO: consider columnMode
 	emit q->columnsAboutToBeInserted(before, count);
-	for(int i = 0; i < count; i++) {
-		static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
-		columnWidths.insert(before+i, 0);
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		for (int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
+	case AbstractColumn::Text:
+		for (int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<QString>>*>(data)->insert(before+i, QVector<QString>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
+	case AbstractColumn::Integer:
+		for (int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<int>>*>(data)->insert(before+i, QVector<int>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		for (int i = 0; i < count; i++) {
+			static_cast<QVector<QVector<QDateTime>>*>(data)->insert(before+i, QVector<QDateTime>(rowCount));
+			columnWidths.insert(before+i, 0);
+		}
+		break;
 	}
+	
 	columnCount += count;
 	emit q->columnsInserted(before, count);
 }
@@ -563,10 +692,26 @@ void MatrixPrivate::insertColumns(int before, int count) {
 void MatrixPrivate::removeColumns(int first, int count) {
 	emit q->columnsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
-	Q_ASSERT(first+count <= columnCount);
-	//TODO: consider columnMode
-	(static_cast<QVector<QVector<double>>*>(data))->remove(first, count);
-	for (int i=0; i<count; i++)
+	Q_ASSERT(first + count <= columnCount);
+
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		(static_cast<QVector<QVector<double>>*>(data))->remove(first, count);
+		break;
+	case AbstractColumn::Text:
+		(static_cast<QVector<QVector<QString>>*>(data))->remove(first, count);
+		break;
+	case AbstractColumn::Integer:
+		(static_cast<QVector<QVector<int>>*>(data))->remove(first, count);
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		(static_cast<QVector<QVector<QDateTime>>*>(data))->remove(first, count);
+		break;
+	}
+
+	for (int i = 0; i < count; i++)
 		columnWidths.remove(first);
 	columnCount -= count;
 	emit q->columnsRemoved(first, count);
@@ -579,10 +724,31 @@ void MatrixPrivate::insertRows(int before, int count) {
 	emit q->rowsAboutToBeInserted(before, count);
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= rowCount);
-	//TODO: consider columnMode
-	for(int col=0; col<columnCount; col++)
-		for(int i=0; i<count; i++)
-			(static_cast<QVector<QVector<double>>*>(data))->operator[](col).insert(before+i, 0.0);
+
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		for (int col = 0; col < columnCount; col++)
+			for (int i = 0; i < count; i++)
+				(static_cast<QVector<QVector<double>>*>(data))->operator[](col).insert(before+i, 0.0);
+		break;
+	case AbstractColumn::Text:
+		for (int col = 0; col < columnCount; col++)
+			for (int i = 0; i < count; i++)
+				(static_cast<QVector<QVector<QString>>*>(data))->operator[](col).insert(before+i, QString());
+		break;
+	case AbstractColumn::Integer:
+		for (int col = 0; col < columnCount; col++)
+			for (int i = 0; i < count; i++)
+				(static_cast<QVector<QVector<int>>*>(data))->operator[](col).insert(before+i, 0);
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		for (int col = 0; col < columnCount; col++)
+			for (int i = 0; i < count; i++)
+				(static_cast<QVector<QVector<QDateTime>>*>(data))->operator[](col).insert(before+i, QDateTime());
+	}
+
 	for(int i=0; i<count; i++)
 		rowHeights.insert(before+i, 0);
 
@@ -597,9 +763,28 @@ void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= rowCount);
-	//TODO: consider columnMode
-	for(int col = 0; col < columnCount; col++)
-		(static_cast<QVector<QVector<double>>*>(data))->operator[](col).remove(first, count);
+
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		for (int col = 0; col < columnCount; col++)
+			(static_cast<QVector<QVector<double>>*>(data))->operator[](col).remove(first, count);
+		break;
+	case AbstractColumn::Text:
+		for (int col = 0; col < columnCount; col++)
+			(static_cast<QVector<QVector<QString>>*>(data))->operator[](col).remove(first, count);
+		break;
+	case AbstractColumn::Integer:
+		for (int col = 0; col < columnCount; col++)
+			(static_cast<QVector<QVector<int>>*>(data))->operator[](col).remove(first, count);
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		for (int col = 0; col < columnCount; col++)
+			(static_cast<QVector<QVector<QDateTime>>*>(data))->operator[](col).remove(first, count);
+		break;
+	}
+
 	for (int i = 0; i < count; i++)
 		rowHeights.remove(first);
 
@@ -607,87 +792,25 @@ void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsRemoved(first, count);
 }
 
-//! Return the value in the given cell
-double MatrixPrivate::cell(int row, int col) const {
-	Q_ASSERT(row >= 0 && row < rowCount);
-	Q_ASSERT(col >= 0 && col < columnCount);
-// 	if(row < 0 || row >= rowCount() || col < 0 || col >= columnCount())
-// 		return 0.0;
-
-	//TODO: consider columnMode
-	return (static_cast<QVector<QVector<double>>*>(data))->at(col).at(row);
-}
-
-void MatrixPrivate::setCell(int row, int col, double value) {
-	Q_ASSERT(row >= 0 && row < rowCount);
-	Q_ASSERT(col >= 0 && col < columnCount);
-	//TODO: consider columnMode
-	static_cast<QVector<QVector<double>>*>(data)->operator[](col)[row] = value;
-	if (!suppressDataChange)
-		emit q->dataChanged(row, col, row, col);
-}
-
-QVector<double> MatrixPrivate::columnCells(int col, int first_row, int last_row) {
-	Q_ASSERT(first_row >= 0 && first_row < rowCount);
-	Q_ASSERT(last_row >= 0 && last_row < rowCount);
-
-	//TODO: consider columnMode
-	if (first_row == 0 && last_row == rowCount-1)
-		return (static_cast<QVector<QVector<double>>*>(data))->at(col);
-
-	QVector<double> result;
-	for (int i = first_row; i <= last_row; i++)
-		result.append(static_cast<QVector<QVector<double>>*>(data)->at(col).at(i));
-	return result;
-}
-
-void MatrixPrivate::setColumnCells(int col, int first_row, int last_row, const QVector<double> & values) {
-	Q_ASSERT(first_row >= 0 && first_row < rowCount);
-	Q_ASSERT(last_row >= 0 && last_row < rowCount);
-	Q_ASSERT(values.count() > last_row - first_row);
-
-	//TODO: consider columnMode
-	if (first_row == 0 && last_row == rowCount-1) {
-		static_cast<QVector<QVector<double>>*>(data)->operator[](col) = values;
-		static_cast<QVector<QVector<double>>*>(data)->operator[](col).resize(rowCount);  // values may be larger
-		if (!suppressDataChange)
-			emit q->dataChanged(first_row, col, last_row, col);
-		return;
-	}
-
-	for (int i = first_row; i <= last_row; i++)
-		static_cast<QVector<QVector<double>>*>(data)->operator[](col)[i] = values.at(i-first_row);
-	if (!suppressDataChange)
-		emit q->dataChanged(first_row, col, last_row, col);
-}
-
-QVector<double> MatrixPrivate::rowCells(int row, int first_column, int last_column) {
-	Q_ASSERT(first_column >= 0 && first_column < columnCount);
-	Q_ASSERT(last_column >= 0 && last_column < columnCount);
-
-	//TODO: consider columnMode
-	QVector<double> result;
-	for (int i = first_column; i <= last_column; i++)
-		result.append(static_cast<QVector<QVector<double>>*>(data)->operator[](i)[row]);
-	return result;
-}
-
-void MatrixPrivate::setRowCells(int row, int first_column, int last_column, const QVector<double>& values) {
-	Q_ASSERT(first_column >= 0 && first_column < columnCount);
-	Q_ASSERT(last_column >= 0 && last_column < columnCount);
-	Q_ASSERT(values.count() > last_column - first_column);
-
-	//TODO: consider columnMode
-	for(int i = first_column; i <= last_column; i++)
-		static_cast<QVector<QVector<double>>*>(data)->operator[](i)[row] = values.at(i-first_column);
-	if (!suppressDataChange)
-		emit q->dataChanged(row, first_column, row, last_column);
-}
-
 //! Fill column with zeroes
 void MatrixPrivate::clearColumn(int col) {
-	//TODO: consider columnMode
-	static_cast<QVector<QVector<double>>*>(data)->operator[](col).fill(0.0);
+	switch (mode) {
+	case AbstractColumn::Numeric:
+		static_cast<QVector<QVector<double>>*>(data)->operator[](col).fill(0.0);
+		break;
+	case AbstractColumn::Text:
+		static_cast<QVector<QVector<QString>>*>(data)->operator[](col).fill(QString());
+		break;
+	case AbstractColumn::Integer:
+		static_cast<QVector<QVector<int>>*>(data)->operator[](col).fill(0);
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		static_cast<QVector<QVector<QDateTime>>*>(data)->operator[](col).fill(QDateTime());
+		break;
+	}
+
 	if (!suppressDataChange)
 		emit q->dataChanged(0, col, rowCount-1, col);
 }
@@ -707,6 +830,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 
 	//format
 	writer->writeStartElement("format");
+	writer->writeAttribute("mode", QString::number(d->mode));
 	writer->writeAttribute("headerFormat", QString::number(d->headerFormat));
 	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
 	writer->writeAttribute("precision", QString::number(d->precision));
@@ -725,7 +849,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	//vector with row heights
 	writer->writeStartElement("row_heights");
 	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
-	int size = d->rowHeights.size()*sizeof(int);
+	int size = d->rowHeights.size() * sizeof(int);
 	writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
 	writer->writeEndElement();
 
@@ -737,13 +861,45 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//columns
-	//TODO: consider columnMode
-	size = d->rowCount*sizeof(double);
-	for (int i = 0; i < d->columnCount; ++i) {
-		data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
-		writer->writeStartElement("column");
-		writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
-		writer->writeEndElement();
+	switch (d->mode) {
+	case AbstractColumn::Numeric:
+		size = d->rowCount*sizeof(double);
+		for (int i = 0; i < d->columnCount; ++i) {
+			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
+			writer->writeStartElement("column");
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeEndElement();
+		}
+		break;
+	case AbstractColumn::Text:
+		size = d->rowCount*sizeof(QString);
+		for (int i = 0; i < d->columnCount; ++i) {
+			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QString>>*>(d->data)->at(i).constData());
+			writer->writeStartElement("column");
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeEndElement();
+		}
+		break;
+	case AbstractColumn::Integer:
+		size = d->rowCount*sizeof(int);
+		for (int i = 0; i < d->columnCount; ++i) {
+			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<int>>*>(d->data)->at(i).constData());
+			writer->writeStartElement("column");
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeEndElement();
+		}
+		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
+	case AbstractColumn::DateTime:
+		size = d->rowCount*sizeof(QDateTime);
+		for (int i = 0; i < d->columnCount; ++i) {
+			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QDateTime>>*>(d->data)->at(i).constData());
+			writer->writeStartElement("column");
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeEndElement();
+		}
+		break;
 	}
 
 	writer->writeEndElement(); // "matrix"
@@ -777,6 +933,12 @@ bool Matrix::load(XmlStreamReader* reader) {
 			d->formula = reader->text().toString().trimmed();
 		} else if (reader->name() == "format") {
 			attribs = reader->attributes();
+
+			str = attribs.value("mode").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'mode'"));
+			else
+				d->mode = AbstractColumn::ColumnMode(str.toInt());
 
 			str = attribs.value("headerFormat").toString();
 			if(str.isEmpty())
@@ -853,12 +1015,43 @@ bool Matrix::load(XmlStreamReader* reader) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
-			//TODO: consider columnMode
-			int count = bytes.size()/sizeof(double);
-			QVector<double> column;
-			column.resize(count);
-			memcpy(column.data(), bytes.data(), count*sizeof(double));
-			static_cast<QVector<QVector<double>>*>(d->data)->append(column);
+
+			switch (d->mode) {
+			case AbstractColumn::Numeric: {
+				int count = bytes.size()/sizeof(double);
+				QVector<double> column;
+				column.resize(count);
+				memcpy(column.data(), bytes.data(), count*sizeof(double));
+				static_cast<QVector<QVector<double>>*>(d->data)->append(column);
+				break;
+			}
+			case AbstractColumn::Text: {
+				int count = bytes.size()/sizeof(QString);
+				QVector<QString> column;
+				column.resize(count);
+				memcpy(column.data(), bytes.data(), count*sizeof(QString));
+				static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
+				break;
+			}
+			case AbstractColumn::Integer: {
+				int count = bytes.size()/sizeof(int);
+				QVector<int> column;
+				column.resize(count);
+				memcpy(column.data(), bytes.data(), count*sizeof(int));
+				static_cast<QVector<QVector<int>>*>(d->data)->append(column);
+				break;
+			}
+			case AbstractColumn::Day:
+			case AbstractColumn::Month:
+			case AbstractColumn::DateTime: {
+				int count = bytes.size()/sizeof(QDateTime);
+				QVector<QDateTime> column;
+				column.resize(count);
+				memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
+				static_cast<QVector<QVector<QDateTime>>*>(d->data)->append(column);
+				break;
+			}
+			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -919,6 +1112,8 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			dataContainer[n] = static_cast<void*>(vector);
 		}
 		break;
+	case AbstractColumn::Day:
+	case AbstractColumn::Month:
 	case AbstractColumn::DateTime:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
@@ -926,12 +1121,6 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
-		break;
-	case AbstractColumn::Month:
-		//TODO
-		break;
-	case AbstractColumn::Day:
-		//TODO
 		break;
 	}
 

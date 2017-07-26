@@ -21,6 +21,7 @@ New features:
 		* improved data type support in spreadsheets
 	* Import from SQL databases (tables or custom queries)
 	* Import Origin OPJ projects
+	* support Hermite polynomials from GSL 2.4
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
 

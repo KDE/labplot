@@ -88,9 +88,6 @@ void Column::init() {
 	connect(m_usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
 }
 
-/**
- * \brief Dtor
- */
 Column::~Column() {
 	delete m_string_io;
 	delete d;
@@ -424,7 +421,7 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	DEBUG("Column::replaceInteger()");
 	if (!new_values.isEmpty()) {
 		setStatisticsAvailable(false);
- 		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
+		exec(new ColumnReplaceIntegersCmd(d, first, new_values));
 	}
 }
 
@@ -675,29 +672,29 @@ void Column::save(QXmlStreamWriter* writer) const {
 	XmlWriteMask(writer);
 
 	//TODO: formula in cells is not implemented yet
-// 	QList< Interval<int> > formulas = formulaIntervals();
-// 	foreach(const Interval<int>& interval, formulas) {
-// 		writer->writeStartElement("formula");
-// 		writer->writeAttribute("start_row", QString::number(interval.start()));
-// 		writer->writeAttribute("end_row", QString::number(interval.end()));
-// 		writer->writeCharacters(formula(interval.start()));
-// 		writer->writeEndElement();
-// 	}
+	// 	QList< Interval<int> > formulas = formulaIntervals();
+	// 	foreach(const Interval<int>& interval, formulas) {
+	// 		writer->writeStartElement("formula");
+	// 		writer->writeAttribute("start_row", QString::number(interval.start()));
+	// 		writer->writeAttribute("end_row", QString::number(interval.end()));
+	// 		writer->writeCharacters(formula(interval.start()));
+	// 		writer->writeEndElement();
+	// 	}
 
 	int i;
 	switch(columnMode()) {
 	case AbstractColumn::Numeric: {
-		const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
-		int size = d->rowCount() * sizeof(double);
-		writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
-		break;
-	}
+			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
+			int size = d->rowCount() * sizeof(double);
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			break;
+		}
 	case AbstractColumn::Integer: {
-		const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
-		int size = d->rowCount() * sizeof(int);
-		writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
-		break;
-	}
+			const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
+			int size = d->rowCount() * sizeof(int);
+			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			break;
+		}
 	case AbstractColumn::Text:
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement("row");
@@ -890,7 +887,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 bool Column::XmlReadRow(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
 
-//	QXmlStreamAttributes attribs = reader->attributes();
+	//	QXmlStreamAttributes attribs = reader->attributes();
 
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
@@ -902,23 +899,23 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	QString str = reader->readElementText();
 	switch (columnMode()) {
 	case AbstractColumn::Numeric: {
-		double value = str.toDouble(&ok);
-		if(!ok) {
-			reader->raiseError(i18n("invalid row value"));
-			return false;
+			double value = str.toDouble(&ok);
+			if(!ok) {
+				reader->raiseError(i18n("invalid row value"));
+				return false;
+			}
+			setValueAt(index, value);
+			break;
 		}
-		setValueAt(index, value);
-		break;
-	}
 	case AbstractColumn::Integer: {
-		int value = str.toInt(&ok);
-		if(!ok) {
-			reader->raiseError(i18n("invalid row value"));
-			return false;
+			int value = str.toInt(&ok);
+			if(!ok) {
+				reader->raiseError(i18n("invalid row value"));
+				return false;
+			}
+			setIntegerAt(index, value);
+			break;
 		}
-		setIntegerAt(index, value);
-		break;
-	}
 	case AbstractColumn::Text:
 		setTextAt(index, str);
 		break;
@@ -1030,4 +1027,203 @@ void Column::handleFormatChange() {
 
 	setStatisticsAvailable(false);
 	DEBUG("Column::handleFormatChange() DONE");
+}
+
+double Column::minimum() const {
+
+	double min = INFINITY;
+	if (statisticsAvailable())
+		min = const_cast<Column*>(this)->statistics().minimum;
+	else {
+		ColumnMode mode = columnMode();
+		double val = INFINITY;
+
+		for (int row = 0; row < rowCount(); row++) {
+			switch (mode) {
+			case Numeric:
+				val = static_cast<QVector<double>*>(data())->at(row);
+				break;
+			case Integer:
+				val = static_cast<QVector<int>*>(data())->at(row);
+				break;
+			case Text:
+			case DateTime:
+			case Day:
+			case Month:
+			default:
+				break;
+			}
+			if (std::isnan(val))
+				continue;
+
+			if (val < min)
+				min = val;
+		}
+	}
+	return min;
+}
+
+double Column::maximum() const {
+	double max = -INFINITY;
+
+	if (statisticsAvailable())
+		max = const_cast<Column*>(this)->statistics().maximum;
+	else {
+		ColumnMode mode = columnMode();
+		double val = -INFINITY;
+
+		for (int row = 0; row < rowCount(); row++) {
+			switch (mode) {
+			case Numeric:
+				val = static_cast<QVector<double>*>(data())->at(row);
+				break;
+			case Integer:
+				val = static_cast<QVector<int>*>(data())->at(row);
+				break;
+			case Text:
+			case DateTime:
+			case Day:
+			case Month:
+			default:
+				break;
+			}
+			if (std::isnan(val))
+				continue;
+
+			if (val > max)
+				max = val;
+		}
+	}
+	return max;
+}
+
+/*!
+ * \brief Returns the local minimum for the first \c count values in the column
+ * \param count
+ * \return the minimum for the first \c count values in the column
+ */
+double Column::minimumFirst(const int &count) const {
+	double min = INFINITY;
+	double val = INFINITY;
+	for (int row = 0; row < qMin(rowCount(), count); ++row) {
+		switch (columnMode()) {
+		case Numeric:
+			val = static_cast<QVector<double>*>(data())->at(row);
+			break;
+		case Integer:
+			val = static_cast<QVector<int>*>(data())->at(row);
+			break;
+		case DateTime:
+		case Day:
+		case Month:
+		case Text:
+		default:
+			break;
+		}
+		if (std::isnan(val))
+			continue;
+		if(val < min)
+			min = val;
+	}
+
+	return min;
+}
+
+/*!
+ * \brief Returns the local maximum for the first \c count values in the column
+ * \param count
+ * \return the maximum for the first \c count values in the column
+ */
+double Column::maximumFirst(const int &count) const {
+	double max = -INFINITY;
+	double val = -INFINITY;
+
+	for (int row = 0; row < qMin(rowCount(), count); ++row) {
+		switch (columnMode()) {
+		case Numeric:
+			val = static_cast<QVector<double>*>(data())->at(row);
+
+			break;
+		case Integer:
+			val = static_cast<QVector<int>*>(data())->at(row);
+			break;
+		case DateTime:
+		case Day:
+		case Month:
+		case Text:
+		default:
+			break;
+		}
+		if (std::isnan(val))
+			continue;
+		if(val > max)
+			max = val;
+	}
+
+	return max;
+}
+
+/*!
+ * \brief Returns the local minimum for the last \c count values in the column
+ * \param count
+ * \return the minimum for the last \c count values in the column
+ */
+double Column::minimumLast(const int &count) const {
+	double min = INFINITY;
+	double val = INFINITY;
+
+	for (int row = rowCount() - 1; row >= qMax(rowCount() - count, 0); --row) {
+		switch (columnMode()) {
+		case Numeric:
+			val = static_cast<QVector<double>*>(data())->at(row);
+			break;
+		case Integer:
+			val = static_cast<QVector<int>*>(data())->at(row);
+			break;
+		case DateTime:
+		case Day:
+		case Month:
+		case Text:
+		default:
+			break;
+		}
+		if (std::isnan(val))
+			continue;
+		if(val < min)
+			min = val;
+	}
+
+	return min;
+}
+
+/*!
+ * \brief Returns the local maximum for the last \c count values in the column
+ * \param count
+ * \return the maximum for the last \c count values in the column
+ */
+double Column::maximumLast(const int &count) const {
+	double max = -INFINITY;
+	double val = -INFINITY;
+
+	for (int row = rowCount() - 1; row >= qMax(rowCount() - count, 0); --row) {
+		switch (columnMode()) {
+		case Numeric:
+			val = static_cast<QVector<double>*>(data())->at(row);
+			break;
+		case Integer:
+			val = static_cast<QVector<int>*>(data())->at(row);
+			break;
+		case DateTime:
+		case Day:
+		case Month:
+		case Text:
+		default:
+			break;
+		}
+		if (std::isnan(val))
+			continue;
+		if(val > max)
+			max = val;
+	}
+	return max;
 }

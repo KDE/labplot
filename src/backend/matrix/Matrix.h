@@ -46,8 +46,10 @@ class Matrix : public AbstractDataSource {
 public:
 	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
-	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
+	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false,
+		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
+	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name,
+		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	~Matrix();
 
 	virtual QIcon icon() const override;
@@ -58,19 +60,20 @@ public:
 	virtual bool printView() override;
 	virtual bool printPreview() const override;
 
+	void* data() const;
+	void setData(void*);
+
+	BASIC_D_ACCESSOR_DECL(AbstractColumn::ColumnMode, mode, Mode)
 	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
+	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
+	BASIC_D_ACCESSOR_DECL(int, precision, Precision)
+	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
 	BASIC_D_ACCESSOR_DECL(double, xEnd, XEnd)
 	BASIC_D_ACCESSOR_DECL(double, yStart, YStart)
 	BASIC_D_ACCESSOR_DECL(double, yEnd, YEnd)
-	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
-	BASIC_D_ACCESSOR_DECL(int, precision, Precision)
-	BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
 	CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
-
-	void* data() const;
-	void setData(void*);
 
 	void setSuppressDataChangedSignal(bool);
 	void setChanged();
@@ -93,18 +96,15 @@ public:
 	void removeRows(int first, int count);
 	void clearRow(int);
 
-
-	//TODO: consider columnMode
-	double cell(int row, int col) const;
-	QString text(int row, int col);
-	void setCell(int row, int col, double value);
+	template <typename T> T cell(int row, int col) const;
+	template <typename T> QString text(int row, int col);
+	template <typename T> void setCell(int row, int col, T value);
 	void clearCell(int row, int col);
 
-	//TODO: consider columnMode
-	QVector<double> columnCells(int col, int first_row, int last_row);
-	void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
-	QVector<double> rowCells(int row, int first_column, int last_column);
-	void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
+	template <typename T> QVector<T> columnCells(int col, int first_row, int last_row);
+	template <typename T> void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values);
+	template <typename T> QVector<T> rowCells(int row, int first_column, int last_column);
+	template <typename T> void setRowCells(int row, int first_column, int last_column, const QVector<T>& values);
 
 	void copy(Matrix* other);
 
@@ -167,8 +167,9 @@ private:
 	void init();
 
 	MatrixPrivate* const d;
-	friend class MatrixPrivate;
 	mutable MatrixModel* m_model;
+
+	friend class MatrixPrivate;
 };
 
 #endif

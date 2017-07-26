@@ -102,6 +102,15 @@ public:
 	void setIntegerAt(const int, const int);
 	virtual void replaceInteger(const int, const QVector<int>&);
 
+	double maximum() const;
+	double minimum() const;
+
+	double minimumFirst(const int& count) const;
+	double maximumFirst(const int& count) const;
+
+	double minimumLast(const int& count) const;
+	double maximumLast(const int& count) const;
+
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
 
@@ -124,11 +133,8 @@ private:
 	bool m_suppressDataChangedSignal;
 	QActionGroup* m_usedInActionGroup;
 
-	friend class ColumnStringIO;
-	ColumnStringIO* m_string_io;
-
 	ColumnPrivate* d;
-	friend class ColumnPrivate;
+	ColumnStringIO* m_string_io;
 
 signals:
 	void requestProjectContextMenu(QMenu*);
@@ -136,6 +142,9 @@ signals:
 private slots:
 	void navigateTo(QAction*);
 	void handleFormatChange();
+
+	friend class ColumnPrivate;
+	friend class ColumnStringIO;
 };
 
 

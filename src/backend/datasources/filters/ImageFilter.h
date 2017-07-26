@@ -67,7 +67,7 @@ public:
 	virtual bool load(XmlStreamReader*);
 
 private:
-	std::unique_ptr <ImageFilterPrivate> const d;
+	std::unique_ptr<ImageFilterPrivate> const d;
 	friend class ImageFilterPrivate;
 };
 

@@ -29,6 +29,9 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/core/column/Column.h"
+
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -39,7 +42,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QButtonGroup>
 #include <KUrlCompletion>
+#include <QAbstractButton>
+#include <QIntValidator>
 
 #include <cmath>
 
@@ -54,7 +60,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	m_plot(0),
 	labelWidget(0),
 	m_initializing(false),
-	m_completion(new KUrlCompletion()) {
+	m_rangeButtonsGroup(new QButtonGroup) {
 
 	ui.setupUi(this);
 
@@ -71,7 +77,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	ui.kleBackgroundFileName->setCompletionObject(m_completion);
+	KUrlCompletion* completion = new KUrlCompletion;
+	ui.kleBackgroundFileName->setCompletionObject(completion);
+	ui.kleBackgroundFileName->setAutoDeleteCompletionObject(true);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -96,6 +104,17 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
 	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
 
+	//Range
+	m_rangeButtonsGroup->addButton(ui.rbRangesFirstN);
+	m_rangeButtonsGroup->addButton(ui.rbRangesLastN);
+	m_rangeButtonsGroup->addButton(ui.rbRangesFree);
+
+	ui.leRangesFirstN->setEnabled(ui.rbRangesFirstN->isChecked());
+	ui.leRangesLastN->setEnabled(ui.rbRangesLastN->isChecked());
+	connect(ui.leRangesFirstN, SIGNAL(textChanged(QString)), this, SLOT(rangeFirstNchanged(QString)));
+	connect(ui.leRangesLastN, SIGNAL(textChanged(QString)), this, SLOT(rangeLastNchanged(QString)));
+
+	connect(m_rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeButtonClicked(QAbstractButton*)));
 	//SIGNAL/SLOT
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -184,7 +203,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 }
 
 CartesianPlotDock::~CartesianPlotDock() {
-	delete m_completion;
 }
 
 void CartesianPlotDock::init() {
@@ -242,7 +260,29 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_initializing = true;
 	m_plotList = list;
 
-	m_plot=list.first();
+	m_plot = list.first();
+
+	QVector<int> ranges;
+
+	for (auto* plot: m_plotList) {
+		for (const XYCurve* curve : plot->children<const XYCurve>()) {
+			if (curve->xColumn() != nullptr)
+				ranges.push_back(curve->xColumn()->rowCount());
+		}
+	}
+
+	//if we had multiple curves with different number of samples
+	double min = ranges.at(0);
+	for (int i = 1; i < ranges.size(); ++i) {
+		if (ranges.at(i) < min)
+			min = ranges.at(i);
+	}
+
+	ui.leRangesFirstN->setText(QString::number(min));
+	ui.leRangesLastN->setText(QString::number(min));
+
+	ui.leRangesFirstN->setValidator(new QDoubleValidator(1, min, 2));
+	ui.leRangesLastN->setValidator(new QDoubleValidator(1, min, 2));
 
 	QList<TextLabel*> labels;
 	for (auto* plot: list)
@@ -323,6 +363,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
 	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
 
+
+
 	m_initializing = false;
 }
 
@@ -400,8 +442,8 @@ void CartesianPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-    for (auto* plot: m_plotList)
-            plot->setVisible(state);
+	for (auto* plot: m_plotList)
+		plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged() {
@@ -1020,11 +1062,10 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
@@ -1197,6 +1238,84 @@ void CartesianPlotDock::plotVerticalPaddingChanged(float value) {
 	m_initializing = false;
 }
 
+void CartesianPlotDock::rangeButtonClicked(QAbstractButton * button) {
+	if (button == ui.rbRangesFirstN) {
+		ui.leRangesFirstN->setEnabled(true);
+		ui.leRangesLastN->setEnabled(false);
+
+		double min;
+		double max;
+
+		double val;
+		const int count = ui.leRangesFirstN->text().toInt();
+
+		for (auto* plot: m_plotList) {
+			for (const XYCurve* curve : plot->children<const XYCurve>()) {
+				if (curve->xColumn() != nullptr) {
+					val = curve->xColumn()->minimumFirst(count);
+					if (val < min)
+						min = val;
+					val = curve->xColumn()->maximumFirst(count);
+					if (val > max)
+						max = val;
+				}
+			}
+		}
+
+		for (auto* plot: m_plotList) {
+			if (min != plot->xMin())
+				plot->setXMin(min);
+			if (max != plot->xMax())
+				plot->setXMax(max);
+		}
+
+	} else if (button == ui.rbRangesLastN) {
+		ui.leRangesFirstN->setEnabled(false);
+		ui.leRangesLastN->setEnabled(true);
+
+		double min = INFINITY;
+		double max = -INFINITY;
+
+		double val;
+		const int count = ui.leRangesLastN->text().toInt();
+
+		for (auto* plot: m_plotList) {
+			for (const XYCurve* curve : plot->children<const XYCurve>()) {
+				if (curve->xColumn() != nullptr) {
+					val = curve->xColumn()->minimumLast(count);
+					if (val < min)
+						min = val;
+					val = curve->xColumn()->maximumLast(count);
+					if (val > max)
+						max = val;
+				}
+			}
+		}
+
+		for (auto* plot: m_plotList) {
+			if (min != plot->xMin())
+				plot->setXMin(min);
+			if (max != plot->xMax())
+				plot->setXMax(max);
+		}
+
+	} else if (button == ui.rbRangesFree) {
+		ui.leRangesFirstN->setEnabled(false);
+		ui.leRangesLastN->setEnabled(false);
+
+	}
+}
+
+void CartesianPlotDock::rangeFirstNchanged(const QString & text) {
+	Q_UNUSED(text)
+	rangeButtonClicked(ui.rbRangesFirstN);
+}
+
+void CartesianPlotDock::rangeLastNchanged(const QString & text) {
+	Q_UNUSED(text)
+	rangeButtonClicked(ui.rbRangesLastN);
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -1249,9 +1368,8 @@ void CartesianPlotDock::load() {
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
 		for (int i = 1; i <= m_plot->xRangeBreaks().list.size(); ++i)
 			ui.cbXBreak->addItem(QString::number(i));
-	} else {
+	} else
 		ui.cbXBreak->addItem("1");
-	}
 	ui.cbXBreak->setCurrentIndex(0);
 
 	//y-range breaks, show the first break
@@ -1262,9 +1380,8 @@ void CartesianPlotDock::load() {
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
 		for (int i = 1; i <= m_plot->yRangeBreaks().list.size(); ++i)
 			ui.cbYBreak->addItem(QString::number(i));
-	} else {
+	} else
 		ui.cbYBreak->addItem("1");
-	}
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab
@@ -1331,6 +1448,11 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 
+	//Ranges
+	ui.rbRangesFirstN->setChecked(group.readEntry("RangeFirstN", false));
+	ui.rbRangesLastN->setChecked(group.readEntry("RangeLastN", false));
+	ui.rbRangesFree->setChecked(group.readEntry("RangeFree", true));
+
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 	m_initializing = false;
@@ -1368,6 +1490,11 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
 	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
+
+	//Ranges
+	group.writeEntry("RangeFirstN", ui.rbRangesFirstN->isChecked());
+	group.writeEntry("RangeLastN", ui.rbRangesLastN->isChecked());
+	group.writeEntry("RangeFree", ui.rbRangesFree->isChecked());
 
 	config.sync();
 }

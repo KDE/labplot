@@ -135,7 +135,9 @@ public:
 	static QStringList dateTimeFormats();	// supported datetime formats
 	static QIcon iconForMode(ColumnMode mode);
 
-	virtual bool isReadOnly() const { return true; };
+	virtual bool isReadOnly() const {
+		return true;
+	};
 	virtual ColumnMode columnMode() const = 0;
 	virtual void setColumnMode(AbstractColumn::ColumnMode);
 	virtual PlotDesignation plotDesignation() const = 0;
@@ -148,6 +150,15 @@ public:
 	void insertRows(int before, int count);
 	void removeRows(int first, int count);
 	virtual void clear();
+
+	virtual double maximum() const;
+	virtual double minimum() const;
+
+	virtual double minimumFirst(const int& count) const;
+	virtual double maximumFirst(const int& count) const;
+
+	virtual double minimumLast(const int& count) const;
+	virtual double maximumLast(const int& count) const;
 
 	bool isValid(int row) const;
 
@@ -163,9 +174,6 @@ public:
 	virtual void setFormula(Interval<int> i, QString formula);
 	virtual void setFormula(int row, QString formula);
 	virtual void clearFormulas();
-
-	double minimum() const;
-	double maximum() const;
 
 	virtual QString textAt(int row) const;
 	virtual void setTextAt(int row, const QString& new_value);

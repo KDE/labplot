@@ -30,6 +30,7 @@
 #ifndef COLUMNSTRINGIO_H
 #define COLUMNSTRINGIO_H
 
+#include "backend/core/column/Column.h"
 
 class ColumnStringIO : public AbstractColumn {
 	Q_OBJECT

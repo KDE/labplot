@@ -38,8 +38,8 @@
 template <class T> class QList;
 class LabelWidget;
 class ThemeHandler;
-class KUrlCompletion;
 class KLocalizedString;
+class QButtonGroup;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
@@ -56,8 +56,8 @@ private:
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
-	KUrlCompletion* m_completion;
 	ThemeHandler* m_themeHandler;
+	QButtonGroup* m_rangeButtonsGroup;
 
 	void loadConfig(KConfig&);
 
@@ -103,7 +103,7 @@ private slots:
 	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
-  	void backgroundTypeChanged(int);
+	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
 	void backgroundBrushStyleChanged(int);
@@ -112,7 +112,7 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void backgroundOpacityChanged(int);
-  	void borderStyleChanged(int);
+	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
@@ -154,6 +154,10 @@ private slots:
 	void plotBorderOpacityChanged(float);
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);
+
+	void rangeButtonClicked(QAbstractButton*);
+	void rangeFirstNchanged(const QString&);
+	void rangeLastNchanged(const QString&);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

@@ -122,7 +122,7 @@ QStringList AbstractColumn::timeFormats() {
 
 QStringList AbstractColumn::dateTimeFormats() {
 	QStringList dateTimes;
-	
+
 	// any combination of date and times
 	for (auto d: dateFormats())
 		dateTimes << d;
@@ -217,12 +217,12 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
 void AbstractColumn::insertRows(int before, int count) {
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
 	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
-				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
 
 	handleRowInsertion(before, count);
 
 	exec(new SignallingUndoCommand("post-signal", this, "rowsInserted", "rowsAboutToBeRemoved",
-				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
 	endMacro();
 }
 
@@ -236,12 +236,12 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
 void AbstractColumn::removeRows(int first, int count) {
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
 	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
-				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
 
 	handleRowRemoval(first, count);
 
 	exec(new SignallingUndoCommand("change signal", this, "rowsRemoved", "rowsAboutToBeInserted",
-				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
 	endMacro();
 }
 
@@ -317,7 +317,7 @@ QList< Interval<int> > AbstractColumn::maskedIntervals() const {
  */
 void AbstractColumn::clearMasks() {
 	exec(new AbstractColumnClearMasksCmd(m_abstract_column_private),
-			"maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 
 /**
@@ -328,7 +328,7 @@ void AbstractColumn::clearMasks() {
  */
 void AbstractColumn::setMasked(Interval<int> i, bool mask) {
 	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask),
-			"maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 
 /**
@@ -550,37 +550,29 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
 
-/********************************************************************************/
-
+/**********************************************************************/
 double AbstractColumn::minimum() const {
-	double val;
-	double min = INFINITY;
-	for (int row = 0; row < rowCount(); row++) {
-		val = valueAt(row);
-		if (std::isnan(val))
-			continue;
-
-		if (val < min)
-			min = val;
-	}
-
-	return min;
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum() const {
-	double val;
-	double max = -INFINITY;
-	for (int row = 0; row < rowCount(); row++) {
-		val = valueAt(row);
-		if (std::isnan(val))
-			continue;
-
-		if (val > max)
-			max = val;
-	}
-
-	return max;
+	return INFINITY;
 }
+
+double AbstractColumn::minimumFirst(const int& count) const {
+	return INFINITY;
+}
+double AbstractColumn::maximumFirst(const int& count) const {
+	return -INFINITY;
+}
+
+double AbstractColumn::minimumLast(const int& count) const {
+	return INFINITY;
+}
+double AbstractColumn::maximumLast(const int& count) const {
+	return -INFINITY;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////

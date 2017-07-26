@@ -680,6 +680,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			char* columnNames[tfields];
 			char* tform[tfields];
 			char* tunit[tfields];
+			//TODO: mode
 			const QVector<QVector<double>>* matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
@@ -694,8 +695,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				strcpy(tunit[i], "");
 				int maxSize = -1;
 				for (int row = 0; row < nrows; ++row) {
-					if (matrix->text(row, i).size() > maxSize)
-						maxSize = matrix->text(row, i).size();
+					if (matrix->text<double>(row, i).size() > maxSize)
+						maxSize = matrix->text<double>(row, i).size();
 				}
 				QString tformn;
 				if (precision > 0) {

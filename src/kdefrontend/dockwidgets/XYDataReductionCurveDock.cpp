@@ -123,7 +123,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -175,7 +175,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 void XYDataReductionCurveDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	    <<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -230,7 +230,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 	const AbstractColumn *xDataColumn = dynamic_cast<XYDataReductionCurve*>(m_curve)->xDataColumn();
 	const AbstractColumn *yDataColumn = dynamic_cast<XYDataReductionCurve*>(m_curve)->yDataColumn();
 	if(xDataColumn == 0 || yDataColumn == 0)
-			return;
+		return;
 
 	//copy all valid data points for calculating tolerance to temporary vectors
 	QVector<double> xdataVector;
@@ -240,18 +240,18 @@ void XYDataReductionCurveDock::updateTolerance() {
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-				// only when inside given range
-				if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-					xdataVector.append(xDataColumn->valueAt(row));
-					ydataVector.append(yDataColumn->valueAt(row));
-				}
+		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
-	if(xdataVector.size() > 1) {
+	if(xdataVector.size() > 1)
 		uiGeneralTab.cbType->setEnabled(true);
-	} else {
+	else {
 		uiGeneralTab.cbType->setEnabled(false);
 		return;
 	}
@@ -269,9 +269,9 @@ void XYDataReductionCurveDock::updateTolerance() {
 		m_dataReductionData.tolerance = 0.1*nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	else if (type == nsl_geom_linesim_type_douglas_peucker_variant)
 		m_dataReductionData.tolerance = xdataVector.size()/10.;	// reduction to 10%
-	else 
+	else
 		m_dataReductionData.tolerance = 2.*nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
-		//m_dataReductionData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	//m_dataReductionData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
 }
 
@@ -481,9 +481,8 @@ void XYDataReductionCurveDock::autoToleranceChanged() {
 	if (autoTolerance) {
 		uiGeneralTab.sbTolerance->setEnabled(false);
 		updateTolerance();
-	} else {
+	} else
 		uiGeneralTab.sbTolerance->setEnabled(true);
-	}
 }
 
 void XYDataReductionCurveDock::toleranceChanged() {
@@ -499,9 +498,8 @@ void XYDataReductionCurveDock::autoTolerance2Changed() {
 	if (autoTolerance2) {
 		uiGeneralTab.sbTolerance2->setEnabled(false);
 		updateTolerance2();
-	} else {
+	} else
 		uiGeneralTab.sbTolerance2->setEnabled(true);
-	}
 }
 
 void XYDataReductionCurveDock::tolerance2Changed() {
@@ -511,20 +509,20 @@ void XYDataReductionCurveDock::tolerance2Changed() {
 }
 
 void XYDataReductionCurveDock::recalculateClicked() {
-        //show a progress bar in the status bar
-        QProgressBar* progressBar = new QProgressBar();
-        progressBar->setMinimum(0);
-        progressBar->setMaximum(100);
+	//show a progress bar in the status bar
+	QProgressBar* progressBar = new QProgressBar();
+	progressBar->setMinimum(0);
+	progressBar->setMaximum(100);
 	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-        statusBar->clearMessage();
-        statusBar->addWidget(progressBar, 1);
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
-        QApplication::restoreOverrideCursor();
-        statusBar->removeWidget(progressBar);
+	QApplication::restoreOverrideCursor();
+	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
@@ -564,7 +562,7 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 	else
 		str += i18n("calculation time: %1 ms").arg(QString::number(dataReductionResult.elapsedTime)) + "<br>";
 
- 	str += "<br>";
+	str += "<br>";
 
 	str += i18n("number of points: %1").arg(QString::number(dataReductionResult.npoints)) + "<br>";
 	str += i18n("positional squared error: %1").arg(QString::number(dataReductionResult.posError)) + "<br>";
@@ -582,11 +580,10 @@ void XYDataReductionCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
