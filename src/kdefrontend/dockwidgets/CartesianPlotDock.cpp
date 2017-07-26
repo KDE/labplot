@@ -262,27 +262,23 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	m_plot = list.first();
 
-	QVector<int> ranges;
+	double min = INFINITY;
 
 	for (auto* plot: m_plotList) {
 		for (const XYCurve* curve : plot->children<const XYCurve>()) {
-			if (curve->xColumn() != nullptr)
-				ranges.push_back(curve->xColumn()->rowCount());
+			if (curve->xColumn() != nullptr) {
+				if (curve->xColumn()->rowCount() < min)
+					min = curve->xColumn()->rowCount();
+			}
 		}
 	}
 
-	//if we had multiple curves with different number of samples
-	double min = ranges.at(0);
-	for (int i = 1; i < ranges.size(); ++i) {
-		if (ranges.at(i) < min)
-			min = ranges.at(i);
-	}
-
+	min = (min == INFINITY ? 2 : min);
 	ui.leRangesFirstN->setText(QString::number(min));
 	ui.leRangesLastN->setText(QString::number(min));
 
-	ui.leRangesFirstN->setValidator(new QDoubleValidator(1, min, 2));
-	ui.leRangesLastN->setValidator(new QDoubleValidator(1, min, 2));
+	ui.leRangesFirstN->setValidator(new QDoubleValidator(2, min, 2));
+	ui.leRangesLastN->setValidator(new QDoubleValidator(2, min, 2));
 
 	QList<TextLabel*> labels;
 	for (auto* plot: list)
@@ -1243,8 +1239,8 @@ void CartesianPlotDock::rangeButtonClicked(QAbstractButton * button) {
 		ui.leRangesFirstN->setEnabled(true);
 		ui.leRangesLastN->setEnabled(false);
 
-		double min;
-		double max;
+		double min = INFINITY;
+		double max = -INFINITY;
 
 		double val;
 		const int count = ui.leRangesFirstN->text().toInt();
