@@ -1284,41 +1284,38 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 
 void CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
-	//loop over all xy-curves and determine the maximum x-value
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
+
+		//loop over all xy-curves and determine the maximum and minimum x-values
 		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() != INFINITY) {
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
+			if (curve->xColumn()->minimum() < d->curvesXMin)
+				d->curvesXMin = curve->xColumn()->minimum();
 
-			if (curve->xColumn()->maximum() != -INFINITY) {
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
+			if (curve->xColumn()->maximum() > d->curvesXMax)
+				d->curvesXMax = curve->xColumn()->maximum();
 		}
-		QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
-		foreach(const Histogram* curve, childrenHistogram) {
+
+		//loop over all histograms and determine the maximum and minimum x-values
+		for (const auto* curve: this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
 				continue;
-			if (curve->xColumn()->minimum() != INFINITY){
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
-			if (curve->xColumn()->maximum() != -INFINITY){
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
+
+			if (curve->xColumn()->minimum() < d->curvesXMin)
+				d->curvesXMin = curve->xColumn()->minimum();
+
+			if (curve->xColumn()->maximum() > d->curvesXMax)
+				d->curvesXMax = curve->xColumn()->maximum();
 		}
+
 		d->curvesXMinMaxIsDirty = false;
 	}
 
@@ -1355,38 +1352,39 @@ void CartesianPlot::scaleAutoX() {
 void CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
-	//loop over all xy-curves and determine the maximum y-value
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
+
+		//loop over all xy-curves and determine the maximum and minimum y-values
 		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->yColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() != INFINITY) {
-				if (curve->yColumn()->minimum() < d->curvesYMin)
-					d->curvesYMin = curve->yColumn()->minimum();
-			}
+			if (curve->yColumn()->minimum() < d->curvesYMin)
+				d->curvesYMin = curve->yColumn()->minimum();
 
-			if (curve->yColumn()->maximum() != -INFINITY) {
-				if (curve->yColumn()->maximum() > d->curvesYMax)
-					d->curvesYMax = curve->yColumn()->maximum();
-			}
+			if (curve->yColumn()->maximum() > d->curvesYMax)
+				d->curvesYMax = curve->yColumn()->maximum();
 		}
-		d->curvesYMinMaxIsDirty = false;
-	}
-	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
-	foreach(const Histogram* curve, childrenHistogram) {
-		if (!curve->isVisible())
-			continue;
-		d->curvesYMin = 0.0;
-		if (curve->getYMaximum() != -INFINITY) {
+
+		//loop over all histograms and determine the maximum y-value
+		for (const auto* curve: this->children<const Histogram>()) {
+			if (!curve->isVisible())
+				continue;
+
+			if (d->curvesYMin > 0.0)
+				d->curvesYMin = 0.0;
+
 			if ( curve->getYMaximum() > d->curvesYMax)
 				d->curvesYMax = curve->getYMaximum();
 		}
+
+		d->curvesYMinMaxIsDirty = false;
 	}
+
 
 	bool update = false;
 	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY) {
@@ -1421,84 +1419,79 @@ void CartesianPlot::scaleAutoY() {
 void CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
-	//loop over all xy-curves and determine the maximum x-value
-	QList<const XYCurve*> children = this->children<const XYCurve>();
-	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
 
+// 		//TODO:
 // 	switch (d->rangeType) {
 // 	case CartesianPlot::RangeLast:
 // 	case CartesianPlot::RangeFirst:
-// 		//TODO:
 // 		break;
 // 	case CartesianPlot::RangeFree: {
+
+	// 	}
+// 	}
+
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		for (const auto* curve: children) {
+
+		//loop over all xy-curves and determine the maximum and minimum x-values
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() != INFINITY) {
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
+			if (curve->xColumn()->minimum() < d->curvesXMin)
+				d->curvesXMin = curve->xColumn()->minimum();
 
-			if (curve->xColumn()->maximum() != -INFINITY) {
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
+			if (curve->xColumn()->maximum() > d->curvesXMax)
+				d->curvesXMax = curve->xColumn()->maximum();
 		}
-		foreach(const Histogram* curve, childrenHistogram) {
+
+		//loop over all histograms and determine the maximum and minimum x-values
+		for (const auto* curve: this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() != INFINITY){
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
+			if (curve->xColumn()->minimum() < d->curvesXMin)
+				d->curvesXMin = curve->xColumn()->minimum();
 
-			if (curve->xColumn()->maximum() != -INFINITY){
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
+			if (curve->xColumn()->maximum() > d->curvesXMax)
+				d->curvesXMax = curve->xColumn()->maximum();
 		}
+
 		d->curvesXMinMaxIsDirty = false;
 	}
-// 	}
-// 	}
 
-//TODO: this function seems to be broken. Maybe this was caused by the last merge from the histogram branch.
+
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		for (const auto* curve: children) {
+
+		//loop over all xy-curves and determine the maximum and minimum x-values
+		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() != INFINITY) {
-				if (curve->yColumn()->minimum() < d->curvesYMin)
-					d->curvesYMin = curve->yColumn()->minimum();
-			}
+			if (curve->yColumn()->minimum() < d->curvesYMin)
+				d->curvesYMin = curve->yColumn()->minimum();
 
-			if (curve->yColumn()->maximum() != -INFINITY) {
-				if (curve->yColumn()->maximum() > d->curvesYMax)
-					d->curvesYMax = curve->yColumn()->maximum();
-			}
+			if (curve->yColumn()->maximum() > d->curvesYMax)
+				d->curvesYMax = curve->yColumn()->maximum();
 		}
-	}
 
-	foreach(const Histogram* curve, childrenHistogram) {
-		if (!curve->isVisible())
-			continue;
+		//loop over all histograms and determine the maximum y-value
+		for (const auto* curve: this->children<const Histogram>()) {
+			if (!curve->isVisible())
+				continue;
 
-		d->curvesYMin = 0.0;
-		if (curve->getYMaximum() != -INFINITY){
+			if (d->curvesYMin > 0.0)
+				d->curvesYMin = 0.0;
+
 			if ( curve->getYMaximum() > d->curvesYMax)
 				d->curvesYMax = curve->getYMaximum();
 		}
