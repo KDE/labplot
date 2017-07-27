@@ -73,6 +73,7 @@
     <p xml:lang="tr">LabPlot, etkileşimlik grafik ve bilimsel verinin analizi için bir KDE uygulamasıdır.</p>
     <p xml:lang="uk">LabPlot — програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</p>
     <p xml:lang="x-test">xxLabPlot is a KDE-application for interactive graphing and analysis of scientific data.xx</p>
+    <p xml:lang="zh-CN">LabPlot 是对科学数据进行交互绘图和分析的 KDE 应用。</p>
     <p>
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
     </p>
