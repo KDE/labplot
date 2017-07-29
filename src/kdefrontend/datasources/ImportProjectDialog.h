@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ImportSQLDatabaseDialog.h
+    File                 : ImportProjectDialog.h
     Project              : LabPlot
-    Description          : import SQL database dialog
+    Description          : import project dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,31 +26,46 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTSQLDATABASEDIALOG_H
-#define IMPORTSQLDATABASEDIALOG_H
+#ifndef IMPORTPROJECTDIALOG_H
+#define IMPORTPROJECTDIALOG_H
 
-#include "kdefrontend/datasources/ImportDialog.h"
+#include <QDialog>
+#include "ui_importprojectwidget.h"
 
+class AspectTreeModel;
+class TreeViewComboBox;
 class MainWin;
+class QDialogButtonBox;
 class QStatusBar;
-class ImportSQLDatabaseWidget;
 
-class ImportSQLDatabaseDialog : public ImportDialog {
+class ImportProjectDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseDialog(MainWin*);
-	~ImportSQLDatabaseDialog();
+	enum ProjectType {ProjectLabPlot, ProjectOrigin};
 
+	explicit ImportProjectDialog(MainWin*, ProjectType);
+	~ImportProjectDialog();
+
+	void setCurrentFolder(const QString&);
 	void importTo(QStatusBar*) const;
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
 
 private:
-	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
+	Ui::ImportProjectWidget ui;
+	MainWin* m_mainWin;
+	ProjectType m_projectType;
+	AspectTreeModel* m_aspectTreeModel;
+	TreeViewComboBox* m_cbAddTo;
+	QPushButton* m_bNewFolder;
+	QDialogButtonBox* m_buttonBox;
+
+	void refreshPreview();
 
 private slots:
-	void importWidgetStateChanged();
+	void fileNameChanged(const QString&);
+	void selectionChanged();
+	void selectFile();
+	void newFolder();
 };
 
-#endif //IMPORTSQLDATABASEDIALOG_H
+#endif //IMPORTPROJECTDIALOG_H

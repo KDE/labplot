@@ -56,6 +56,7 @@
 #include "commonfrontend/note/NoteView.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #ifdef HAVE_LIBORIGIN
 #include "kdefrontend/datasources/ImportOpj.h"
@@ -323,9 +324,15 @@ void MainWin::initActions() {
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
+	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
+	connect(m_importLabPlotAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+
+#ifdef HAVE_LIBORIGIN
 	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
 	actionCollection()->addAction("import_opj", m_importOpjAction);
-	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importOpjDialog()));
+	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+#endif
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
@@ -440,7 +447,12 @@ void MainWin::initMenus() {
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
 	m_importMenu ->addAction(m_importSqlAction);
+	m_importMenu->addSeparator();
+	m_importMenu->addAction(m_importLabPlotAction);
+#ifdef HAVE_LIBORIGIN
 	m_importMenu ->addAction(m_importOpjAction);
+#endif
+
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
@@ -528,8 +540,6 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_importSqlAction->setEnabled(!b);
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction->setEnabled(!b);
-#else
-	m_importOpjAction->setEnabled(false);
 #endif
 	m_exportAction->setEnabled(!b);
 	m_newWorkbookAction->setEnabled(!b);
@@ -1704,24 +1714,29 @@ void MainWin::importSqlDialog() {
 	DEBUG("MainWin::importSqlDialog() DONE");
 }
 
-void MainWin::importOpjDialog() {
-	DEBUG("MainWin::importOpjDialog()");
+void MainWin::importProjectDialog() {
+	DEBUG("MainWin::importProjectDialog()");
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	QString dir = conf.readEntry("LastOpenDir", "");
-	QString filename = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
-	               i18n("Origin Projects (*.opj *.OPJ)"));
-	// TODO: any options?
-	// TODO: show selected project version and other infos?
+	ImportProjectDialog::ProjectType type;
+	if (QObject::sender() == m_importOpjAction)
+		type = ImportProjectDialog::ProjectOrigin;
+	else
+		type = ImportProjectDialog::ProjectLabPlot;
 
-#ifdef HAVE_LIBORIGIN
-	if (!filename.isEmpty()) {
-		ImportOpj(this, filename);
-		statusBar()->showMessage(i18n("%1 imported", filename));
+	ImportProjectDialog* dlg = new ImportProjectDialog(this, type);
+
+	// TODO: determine current folder
+	QString folderPath;
+	dlg->setCurrentFolder(folderPath);
+
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
+		m_project->setChanged(true);
 	}
-#endif
 
-	DEBUG("MainWin::importOpjDialog() DONE");
+	delete dlg;
+
+	DEBUG("MainWin::importProjectDialog() DONE");
 }
 
 /*!

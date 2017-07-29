@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : ImportSQLDatabaseDialog.cpp
     Project              : LabPlot
-    Description          : import file data dialog
+    Description          : import SQL dataase dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
     Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)

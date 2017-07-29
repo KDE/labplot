@@ -117,6 +117,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importSqlAction;
+	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
 	QAction* m_closeAction;
@@ -250,7 +251,7 @@ private slots:
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void importSqlDialog();
-	void importOpjDialog();
+	void importProjectDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
