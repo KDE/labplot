@@ -1725,9 +1725,8 @@ void MainWin::importProjectDialog() {
 
 	ImportProjectDialog* dlg = new ImportProjectDialog(this, type);
 
-	// TODO: determine current folder
-	QString folderPath;
-	dlg->setCurrentFolder(folderPath);
+	// set current folder
+	dlg->setCurrentFolder(m_currentFolder);
 
 	if (dlg->exec() == QDialog::Accepted) {
 		dlg->importTo(statusBar());

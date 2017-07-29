@@ -33,6 +33,7 @@
 #include "ui_importprojectwidget.h"
 
 class AspectTreeModel;
+class Folder;
 class TreeViewComboBox;
 class MainWin;
 class QDialogButtonBox;
@@ -47,7 +48,7 @@ public:
 	explicit ImportProjectDialog(MainWin*, ProjectType);
 	~ImportProjectDialog();
 
-	void setCurrentFolder(const QString&);
+	void setCurrentFolder(const Folder*);
 	void importTo(QStatusBar*) const;
 
 private:

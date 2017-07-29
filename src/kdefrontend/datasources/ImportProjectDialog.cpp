@@ -129,8 +129,8 @@ ImportProjectDialog::~ImportProjectDialog() {
 	conf.writeEntry(lastImportedFile, ui.leFileName->text());
 }
 
-void ImportProjectDialog::setCurrentFolder(const QString& folder) {
-	//TODO
+void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
+	m_cbAddTo->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(folder));
 }
 
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {

@@ -121,9 +121,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 
-	connect(ui.leRangeFirst, SIGNAL(textChanged(QString)), this, SLOT(rangeFirstChanged(QString)));
-	connect(ui.leRangeLast, SIGNAL(textChanged(QString)), this, SLOT(rangeLastChanged(QString)));
-	connect(rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()));
+	connect( ui.leRangeFirst, SIGNAL(textChanged(QString)), this, SLOT(rangeFirstChanged(QString)) );
+	connect( ui.leRangeLast, SIGNAL(textChanged(QString)), this, SLOT(rangeLastChanged(QString)) );
+	connect( rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()) );
 
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
 	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
