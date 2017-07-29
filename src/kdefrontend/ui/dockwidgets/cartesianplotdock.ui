@@ -141,14 +141,14 @@
         </widget>
        </item>
        <item row="10" column="0" colspan="3">
-        <widget class="QRadioButton" name="rbRangesLastN">
+        <widget class="QRadioButton" name="rbRangeLast">
          <property name="text">
-          <string>Show last</string>
+          <string>Show &amp;last</string>
          </property>
         </widget>
        </item>
        <item row="10" column="4">
-        <widget class="QLineEdit" name="leRangesLastN"/>
+        <widget class="QLineEdit" name="leRangeLast"/>
        </item>
        <item row="10" column="5">
         <widget class="QLabel" name="lShowLastNPoints">
@@ -158,14 +158,14 @@
         </widget>
        </item>
        <item row="11" column="0" colspan="3">
-        <widget class="QRadioButton" name="rbRangesFirstN">
+        <widget class="QRadioButton" name="rbRangeFirst">
          <property name="text">
           <string>Show f&amp;irst</string>
          </property>
         </widget>
        </item>
        <item row="11" column="4">
-        <widget class="QLineEdit" name="leRangesFirstN"/>
+        <widget class="QLineEdit" name="leRangeFirst"/>
        </item>
        <item row="11" column="5">
         <widget class="QLabel" name="lShowFirstNPoints">
@@ -175,7 +175,7 @@
         </widget>
        </item>
        <item row="12" column="0" colspan="3">
-        <widget class="QRadioButton" name="rbRangesFree">
+        <widget class="QRadioButton" name="rbRangeFree">
          <property name="text">
           <string>Free ranges</string>
          </property>

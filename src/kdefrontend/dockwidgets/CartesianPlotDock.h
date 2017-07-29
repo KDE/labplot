@@ -33,13 +33,13 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
+
 #include <KConfig>
 
 template <class T> class QList;
 class LabelWidget;
 class ThemeHandler;
 class KLocalizedString;
-class QButtonGroup;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
@@ -57,7 +57,6 @@ private:
 	LabelWidget* labelWidget;
 	bool m_initializing;
 	ThemeHandler* m_themeHandler;
-	QButtonGroup* m_rangeButtonsGroup;
 
 	void loadConfig(KConfig&);
 
@@ -72,6 +71,10 @@ private slots:
 	void visibilityChanged(bool);
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
+
+	void rangeTypeChanged();
+	void rangeFirstChanged(const QString&);
+	void rangeLastChanged(const QString&);
 
 	void autoScaleXChanged(int);
 	void xMinChanged();
@@ -124,6 +127,9 @@ private slots:
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotRectChanged(QRectF&);
+	void plotRangeTypeChanged(CartesianPlot::RangeType);
+	void plotRangeFirstValuesChanged(int);
+	void plotRangeLastValuesChanged(int);
 	void plotXAutoScaleChanged(bool);
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
@@ -154,10 +160,6 @@ private slots:
 	void plotBorderOpacityChanged(float);
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);
-
-	void rangeButtonClicked(QAbstractButton*);
-	void rangeFirstNchanged(const QString&);
-	void rangeLastNchanged(const QString&);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);
