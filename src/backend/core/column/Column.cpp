@@ -1018,212 +1018,138 @@ void Column::handleFormatChange() {
 		DEBUG("change format " << input_filter->format().toStdString() << " to " << output_filter->format().toStdString());
 		input_filter->setFormat(output_filter->format());
 	}
-	DEBUG("Column::handleFormatChange() 1");
 
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this); // all cells must be repainted
-	DEBUG("Column::handleFormatChange() 2");
 
 	setStatisticsAvailable(false);
 	DEBUG("Column::handleFormatChange() DONE");
 }
 
-double Column::minimum() const {
-
+/*!
+ * calculates the minimal value in the column.
+ * for \c count = 0, the minimum of all elements is returned.
+ * for \c count > 0, the minimum of the first \count elements is returned.
+ * for \c count = 0, the minimum of the last \count elements is returned.
+ */
+double Column::minimum(int count) const {
 	double min = INFINITY;
-	if (statisticsAvailable())
+	if (count == 0 && statisticsAvailable())
 		min = const_cast<Column*>(this)->statistics().minimum;
 	else {
 		ColumnMode mode = columnMode();
-		double val = INFINITY;
+		int start, end;
 
-		for (int row = 0; row < rowCount(); row++) {
-			switch (mode) {
-			case Numeric:
-				val = static_cast<QVector<double>*>(data())->at(row);
-				break;
-			case Integer:
-				val = static_cast<QVector<int>*>(data())->at(row);
-				break;
-			case Text:
-			case DateTime:
-			case Day:
-			case Month:
-			default:
-				break;
-			}
-			if (std::isnan(val))
-				continue;
-
-			if (val < min)
-				min = val;
+		if (count == 0) {
+			start = 0;
+			end = rowCount();
+		} else if (count > 0) {
+			start  = 0;
+			end = qMin(rowCount(), count);
+		} else {
+			start = qMax(rowCount() + count, 0);
+			end = rowCount();
 		}
+
+		switch (mode) {
+		case Numeric: {
+			QVector<double>* vec = static_cast<QVector<double>*>(data());
+			for (int row = start; row < end; ++row) {
+				const double val = vec->at(row);
+				if (std::isnan(val))
+					continue;
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
+		case Integer: {
+			QVector<int>* vec = static_cast<QVector<int>*>(data());
+			for (int row = start; row < end; ++row) {
+				const int val = vec->at(row);
+				if (std::isnan(val))
+					continue;
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
+		case Text:
+		case DateTime:
+		case Day:
+		case Month:
+		default:
+			break;
+		}
+
 	}
+
 	return min;
 }
 
-double Column::maximum() const {
+/*!
+ * calculates the maximal value in the column.
+ * for \c count = 0, the maximum of all elements is returned.
+ * for \c count > 0, the maximum of the first \count elements is returned.
+ * for \c count = 0, the maximum of the last \count elements is returned.
+ */
+double Column::maximum(int count) const {
 	double max = -INFINITY;
 
-	if (statisticsAvailable())
+	if (count == 0 && statisticsAvailable())
 		max = const_cast<Column*>(this)->statistics().maximum;
 	else {
 		ColumnMode mode = columnMode();
-		double val = -INFINITY;
+		int start, end;
 
-		for (int row = 0; row < rowCount(); row++) {
-			switch (mode) {
-			case Numeric:
-				val = static_cast<QVector<double>*>(data())->at(row);
-				break;
-			case Integer:
-				val = static_cast<QVector<int>*>(data())->at(row);
-				break;
-			case Text:
-			case DateTime:
-			case Day:
-			case Month:
-			default:
-				break;
+		if (count == 0) {
+			start = 0;
+			end = rowCount();
+		} else if (count > 0) {
+			start  = 0;
+			end = qMin(rowCount(), count);
+		} else {
+			start = qMax(rowCount() + count, 0);
+			end = rowCount();
+		}
+
+		switch (mode) {
+		case Numeric: {
+			QVector<double>* vec = static_cast<QVector<double>*>(data());
+			for (int row = start; row < end; ++row) {
+				const double val = vec->at(row);
+				if (std::isnan(val))
+					continue;
+
+				if (val > max)
+					max = val;
 			}
-			if (std::isnan(val))
-				continue;
-
-			if (val > max)
-				max = val;
+			break;
 		}
-	}
-	return max;
-}
+		case Integer: {
+			QVector<int>* vec = static_cast<QVector<int>*>(data());
+			for (int row = start; row < end; ++row) {
+				const int val = vec->at(row);
+				if (std::isnan(val))
+					continue;
 
-/*!
- * \brief Returns the local minimum for the first \c count values in the column
- * \param count
- * \return the minimum for the first \c count values in the column
- */
-double Column::minimumFirst(const int &count) const {
-	double min = INFINITY;
-	double val = INFINITY;
-	for (int row = 0; row < qMin(rowCount(), count); ++row) {
-		switch (columnMode()) {
-		case Numeric:
-			val = static_cast<QVector<double>*>(data())->at(row);
+				if (val > max)
+					max = val;
+			}
 			break;
-		case Integer:
-			val = static_cast<QVector<int>*>(data())->at(row);
-			break;
+		}
+		case Text:
 		case DateTime:
 		case Day:
 		case Month:
-		case Text:
 		default:
 			break;
 		}
-		if (std::isnan(val))
-			continue;
-		if(val < min)
-			min = val;
+
 	}
 
-	return min;
-}
-
-/*!
- * \brief Returns the local maximum for the first \c count values in the column
- * \param count
- * \return the maximum for the first \c count values in the column
- */
-double Column::maximumFirst(const int &count) const {
-	double max = -INFINITY;
-	double val = -INFINITY;
-
-	for (int row = 0; row < qMin(rowCount(), count); ++row) {
-		switch (columnMode()) {
-		case Numeric:
-			val = static_cast<QVector<double>*>(data())->at(row);
-
-			break;
-		case Integer:
-			val = static_cast<QVector<int>*>(data())->at(row);
-			break;
-		case DateTime:
-		case Day:
-		case Month:
-		case Text:
-		default:
-			break;
-		}
-		if (std::isnan(val))
-			continue;
-		if(val > max)
-			max = val;
-	}
-
-	return max;
-}
-
-/*!
- * \brief Returns the local minimum for the last \c count values in the column
- * \param count
- * \return the minimum for the last \c count values in the column
- */
-double Column::minimumLast(const int &count) const {
-	double min = INFINITY;
-	double val = INFINITY;
-
-	for (int row = rowCount() - 1; row >= qMax(rowCount() - count, 0); --row) {
-		switch (columnMode()) {
-		case Numeric:
-			val = static_cast<QVector<double>*>(data())->at(row);
-			break;
-		case Integer:
-			val = static_cast<QVector<int>*>(data())->at(row);
-			break;
-		case DateTime:
-		case Day:
-		case Month:
-		case Text:
-		default:
-			break;
-		}
-		if (std::isnan(val))
-			continue;
-		if(val < min)
-			min = val;
-	}
-
-	return min;
-}
-
-/*!
- * \brief Returns the local maximum for the last \c count values in the column
- * \param count
- * \return the maximum for the last \c count values in the column
- */
-double Column::maximumLast(const int &count) const {
-	double max = -INFINITY;
-	double val = -INFINITY;
-
-	for (int row = rowCount() - 1; row >= qMax(rowCount() - count, 0); --row) {
-		switch (columnMode()) {
-		case Numeric:
-			val = static_cast<QVector<double>*>(data())->at(row);
-			break;
-		case Integer:
-			val = static_cast<QVector<int>*>(data())->at(row);
-			break;
-		case DateTime:
-		case Day:
-		case Month:
-		case Text:
-		default:
-			break;
-		}
-		if (std::isnan(val))
-			continue;
-		if(val > max)
-			max = val;
-	}
 	return max;
 }

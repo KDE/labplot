@@ -551,26 +551,12 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 }
 
 /**********************************************************************/
-double AbstractColumn::minimum() const {
+double AbstractColumn::minimum(int count) const {
 	return -INFINITY;
 }
 
-double AbstractColumn::maximum() const {
+double AbstractColumn::maximum(int count) const {
 	return INFINITY;
-}
-
-double AbstractColumn::minimumFirst(const int& count) const {
-	return INFINITY;
-}
-double AbstractColumn::maximumFirst(const int& count) const {
-	return -INFINITY;
-}
-
-double AbstractColumn::minimumLast(const int& count) const {
-	return INFINITY;
-}
-double AbstractColumn::maximumLast(const int& count) const {
-	return -INFINITY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -24,6 +24,7 @@ New features:
 	* support Hermite polynomials from GSL 2.4
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
+	* "Show last N points" and "Show first N points" data ranges in cartesian plot
 
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project

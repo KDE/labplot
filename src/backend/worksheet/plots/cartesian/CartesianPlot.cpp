@@ -670,21 +670,21 @@ void CartesianPlot::setRect(const QRectF& rect) {
 		exec(new CartesianPlotSetRectCmd(d, rect));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, rangeChanged);
 void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, i18n("%1: set range type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
 void CartesianPlot::setRangeLastValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeLastValues)
 		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, i18n("%1: set range")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, rangeChanged);
 void CartesianPlot::setRangeFirstValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeFirstValues)
@@ -1163,6 +1163,7 @@ void CartesianPlot::dataChanged() {
 	else
 		curve->retransform();
 }
+
 void CartesianPlot::HistogramdataChanged(){
 	Q_D(CartesianPlot);
 	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
@@ -1285,6 +1286,19 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 void CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
+		int count = 0;
+		switch (d->rangeType) {
+		case CartesianPlot::RangeFree:
+			count = 0;
+			break;
+		case CartesianPlot::RangeLast:
+			count = -d->rangeLastValues;
+			break;
+		case CartesianPlot::RangeFirst:
+			count = d->rangeFirstValues;
+			break;
+		}
+
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
 
@@ -1296,10 +1310,10 @@ void CartesianPlot::scaleAutoX() {
 				continue;
 
 			if (curve->xColumn()->minimum() < d->curvesXMin)
-				d->curvesXMin = curve->xColumn()->minimum();
+				d->curvesXMin = curve->xColumn()->minimum(count);
 
 			if (curve->xColumn()->maximum() > d->curvesXMax)
-				d->curvesXMax = curve->xColumn()->maximum();
+				d->curvesXMax = curve->xColumn()->maximum(count);
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
@@ -1353,6 +1367,19 @@ void CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
+		int count = 0;
+		switch (d->rangeType) {
+		case CartesianPlot::RangeFree:
+			count = 0;
+			break;
+		case CartesianPlot::RangeLast:
+			count = -d->rangeLastValues;
+			break;
+		case CartesianPlot::RangeFirst:
+			count = d->rangeFirstValues;
+			break;
+		}
+
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
 
@@ -1364,10 +1391,10 @@ void CartesianPlot::scaleAutoY() {
 				continue;
 
 			if (curve->yColumn()->minimum() < d->curvesYMin)
-				d->curvesYMin = curve->yColumn()->minimum();
+				d->curvesYMin = curve->yColumn()->minimum(count);
 
 			if (curve->yColumn()->maximum() > d->curvesYMax)
-				d->curvesYMax = curve->yColumn()->maximum();
+				d->curvesYMax = curve->yColumn()->maximum(count);
 		}
 
 		//loop over all histograms and determine the maximum y-value
@@ -1419,16 +1446,18 @@ void CartesianPlot::scaleAutoY() {
 void CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
-
-// 		//TODO:
-// 	switch (d->rangeType) {
-// 	case CartesianPlot::RangeLast:
-// 	case CartesianPlot::RangeFirst:
-// 		break;
-// 	case CartesianPlot::RangeFree: {
-
-	// 	}
-// 	}
+	int count = 0;
+	switch (d->rangeType) {
+	case CartesianPlot::RangeFree:
+		count = 0;
+		break;
+	case CartesianPlot::RangeLast:
+		count = -d->rangeLastValues;
+		break;
+	case CartesianPlot::RangeFirst:
+		count = d->rangeFirstValues;
+		break;
+	}
 
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
@@ -1441,11 +1470,13 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() < d->curvesXMin)
-				d->curvesXMin = curve->xColumn()->minimum();
+			const double min = curve->xColumn()->minimum(count);
+			if (min < d->curvesXMin)
+				d->curvesXMin = min;
 
-			if (curve->xColumn()->maximum() > d->curvesXMax)
-				d->curvesXMax = curve->xColumn()->maximum();
+			double max = curve->xColumn()->maximum(count);
+			if (max > d->curvesXMax)
+				d->curvesXMax = max;
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
@@ -1455,11 +1486,13 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() < d->curvesXMin)
-				d->curvesXMin = curve->xColumn()->minimum();
+			const double min = curve->xColumn()->minimum();
+			if (min < d->curvesXMin)
+				d->curvesXMin = min;
 
-			if (curve->xColumn()->maximum() > d->curvesXMax)
-				d->curvesXMax = curve->xColumn()->maximum();
+			const double max = curve->xColumn()->maximum();
+			if (max > d->curvesXMax)
+				d->curvesXMax = max;
 		}
 
 		d->curvesXMinMaxIsDirty = false;
@@ -1477,11 +1510,13 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() < d->curvesYMin)
-				d->curvesYMin = curve->yColumn()->minimum();
+			const double min = curve->yColumn()->minimum(count);
+			if (min < d->curvesYMin)
+				d->curvesYMin = min;
 
-			if (curve->yColumn()->maximum() > d->curvesYMax)
-				d->curvesYMax = curve->yColumn()->maximum();
+			const double max = curve->yColumn()->maximum(count);
+			if (max > d->curvesYMax)
+				d->curvesYMax = max;
 		}
 
 		//loop over all histograms and determine the maximum y-value
@@ -1492,8 +1527,9 @@ void CartesianPlot::scaleAuto() {
 			if (d->curvesYMin > 0.0)
 				d->curvesYMin = 0.0;
 
-			if ( curve->getYMaximum() > d->curvesYMax)
-				d->curvesYMax = curve->getYMaximum();
+			const double max = curve->getYMaximum();
+			if (max > d->curvesYMax)
+				d->curvesYMax = max;
 		}
 	}
 
@@ -1901,6 +1937,17 @@ void CartesianPlotPrivate::retransformScales() {
 	}
 	// call retransform() on the parent to trigger the update of all axes and curves
 	q->retransform();
+}
+
+void CartesianPlotPrivate::rangeChanged() {
+	curvesXMinMaxIsDirty = true;
+	curvesYMinMaxIsDirty = true;
+	if (autoScaleX && autoScaleY)
+		q->scaleAuto();
+	else if (autoScaleX)
+		q->scaleAutoX();
+	else if (autoScaleY)
+		q->scaleAutoY();
 }
 
 /*!

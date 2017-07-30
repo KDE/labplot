@@ -151,14 +151,8 @@ public:
 	void removeRows(int first, int count);
 	virtual void clear();
 
-	virtual double maximum() const;
-	virtual double minimum() const;
-
-	virtual double minimumFirst(const int& count) const;
-	virtual double maximumFirst(const int& count) const;
-
-	virtual double minimumLast(const int& count) const;
-	virtual double maximumLast(const int& count) const;
+	virtual double maximum(int count = 0) const;
+	virtual double minimum(int count = 0) const;
 
 	bool isValid(int row) const;
 

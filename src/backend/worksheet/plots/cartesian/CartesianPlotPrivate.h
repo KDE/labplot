@@ -42,6 +42,7 @@ public:
 
 	void retransform();
 	void retransformScales();
+	void rangeChanged();
 
 	CartesianPlot::RangeType rangeType;
 	int rangeFirstValues;

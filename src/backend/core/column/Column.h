@@ -102,14 +102,8 @@ public:
 	void setIntegerAt(const int, const int);
 	virtual void replaceInteger(const int, const QVector<int>&);
 
-	double maximum() const;
-	double minimum() const;
-
-	double minimumFirst(const int& count) const;
-	double maximumFirst(const int& count) const;
-
-	double minimumLast(const int& count) const;
-	double maximumLast(const int& count) const;
+	virtual double maximum(int count = 0) const override;
+	virtual double minimum(int count = 0) const override;
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
