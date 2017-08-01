@@ -911,7 +911,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	DEBUG("AxisPrivate::retransform()");
+// 	DEBUG("AxisPrivate::retransform()");
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;
@@ -1334,7 +1334,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG("AxisPrivate::retransformTickLabelStrings()");
+// 	DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1350,7 +1350,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	}
-	DEBUG("labelsPrecision =" << labelsPrecision);
+// 	DEBUG("labelsPrecision =" << labelsPrecision);
 
 	tickLabelStrings.clear();
 	QString str;
@@ -1404,7 +1404,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+// 	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QList<float> tempValues;
@@ -1431,7 +1431,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
-	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
+// 	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QList<float> tempValues;

@@ -52,6 +52,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 
@@ -1755,7 +1756,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG("CartesianPlotPrivate::retransformScales()");
+	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
