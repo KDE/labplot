@@ -1311,11 +1311,13 @@ void CartesianPlot::scaleAutoX() {
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() < d->curvesXMin)
-				d->curvesXMin = curve->xColumn()->minimum(count);
+            const double min = curve->xColumn()->minimum(count);
+            if (min < d->curvesXMin)
+                d->curvesXMin = min;
 
-			if (curve->xColumn()->maximum() > d->curvesXMax)
-				d->curvesXMax = curve->xColumn()->maximum(count);
+            const double max = curve->xColumn()->maximum(count);
+            if (max > d->curvesXMax)
+                d->curvesXMax = max;
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
@@ -1325,11 +1327,13 @@ void CartesianPlot::scaleAutoX() {
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() < d->curvesXMin)
-				d->curvesXMin = curve->xColumn()->minimum();
+            const double min = curve->xColumn()->minimum(count);
+            if (min < d->curvesXMin)
+                d->curvesXMin = min;
 
-			if (curve->xColumn()->maximum() > d->curvesXMax)
-				d->curvesXMax = curve->xColumn()->maximum();
+            const double max = curve->xColumn()->maximum(count);
+            if (max > d->curvesXMax)
+                d->curvesXMax = max;
 		}
 
 		d->curvesXMinMaxIsDirty = false;
@@ -1392,11 +1396,13 @@ void CartesianPlot::scaleAutoY() {
 			if (!curve->yColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() < d->curvesYMin)
-				d->curvesYMin = curve->yColumn()->minimum(count);
+            const double min = curve->yColumn()->minimum(count);
+            if (min < d->curvesYMin)
+                d->curvesYMin = min;
 
-			if (curve->yColumn()->maximum() > d->curvesYMax)
-				d->curvesYMax = curve->yColumn()->maximum(count);
+            const double max = curve->yColumn()->maximum(count);
+            if (max > d->curvesYMax)
+                d->curvesYMax = max;
 		}
 
 		//loop over all histograms and determine the maximum y-value
@@ -1488,11 +1494,11 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-			const double min = curve->xColumn()->minimum();
+            const double min = curve->xColumn()->minimum(count);
 			if (min < d->curvesXMin)
 				d->curvesXMin = min;
 
-			const double max = curve->xColumn()->maximum();
+            const double max = curve->xColumn()->maximum(count);
 			if (max > d->curvesXMax)
 				d->curvesXMax = max;
 		}
@@ -1504,11 +1510,11 @@ void CartesianPlot::scaleAuto() {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
 
-		//loop over all xy-curves and determine the maximum and minimum x-values
+        //loop over all xy-curves and determine the maximum and minimum y-values
 		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
-			if (!curve->xColumn())
+            if (!curve->yColumn())
 				continue;
 
 			const double min = curve->yColumn()->minimum(count);
