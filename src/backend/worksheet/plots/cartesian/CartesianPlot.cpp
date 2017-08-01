@@ -1170,11 +1170,13 @@ void CartesianPlot::HistogramdataChanged(){
 	Q_ASSERT(curve);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-	if (d->autoScaleX)
-		this->scaleAuto();
-	else if (d->autoScaleX)
-		this->scaleAutoX();
-	else
+    if (d->autoScaleX && d->autoScaleY)
+        this->scaleAuto();
+    else if (d->autoScaleX)
+        this->scaleAutoY();
+    else if (d->autoScaleY)
+        this->scaleAutoY();
+    else
 		curve->retransform();
 }
 /*!
@@ -1194,7 +1196,6 @@ void CartesianPlot::xDataChanged() {
 		this->scaleAutoX();
 	else
 		curve->retransform();
-
 }
 
 void CartesianPlot::xHistogramDataChanged(){
@@ -1207,7 +1208,6 @@ void CartesianPlot::xHistogramDataChanged(){
 	d->curvesXMinMaxIsDirty = true;
 	if (d->autoScaleX) {
 		this->scaleAutoX();
-		this->scaleAutoY();
 	} else
 		curve->retransform();
 }
