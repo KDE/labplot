@@ -6,16 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>551</height>
+    <width>679</width>
+    <height>1219</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="gbDataSource">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -23,27 +20,24 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>File data source</string>
+      <string>Data source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+      <item row="1" column="0" colspan="2">
+       <widget class="QLabel" name="lFileName">
         <property name="text">
-         <string>File name</string>
+         <string>Name</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="KLineEdit" name="kleFileName">
-        <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
-        </property>
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="lSourceType">
+        <property name="text">
+         <string>Source</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="1" column="3">
        <widget class="QPushButton" name="bOpen">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -59,7 +53,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="1" column="4">
        <widget class="QPushButton" name="bFileInfo">
         <property name="enabled">
          <bool>false</bool>
@@ -78,28 +72,58 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="3" column="0">
+       <widget class="QLabel" name="lPort">
+        <property name="text">
+         <string>Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lSerialPort">
+        <property name="text">
+         <string>Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QLabel" name="lBaudRate">
+        <property name="text">
+         <string>Baud rate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>13</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="7" column="0">
        <widget class="QLabel" name="lFileType">
         <property name="text">
          <string>Type</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="KComboBox" name="cbFileType">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="lFilter">
         <property name="text">
          <string>Filter</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="8" column="2">
        <widget class="KComboBox" name="cbFilter">
         <property name="enabled">
          <bool>false</bool>
@@ -112,7 +136,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="8" column="3">
        <widget class="QPushButton" name="bSaveFilter">
         <property name="enabled">
          <bool>false</bool>
@@ -122,7 +146,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item row="8" column="4">
        <widget class="QPushButton" name="bManageFilters">
         <property name="enabled">
          <bool>false</bool>
@@ -141,7 +165,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="9" column="1">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -157,49 +181,68 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lSourceName">
-        <property name="text">
-         <string>Source name</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="KLineEdit" name="kleSourceName">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+      <item row="1" column="2">
+       <widget class="KLineEdit" name="kleFileName">
         <property name="toolTip">
-         <string>Specify the name for the data source. This name will be used in the project explorer upon importing.</string>
+         <string>Specify the name of the file to import.</string>
         </property>
         <property name="showClearButton" stdset="0">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" colspan="2">
-       <widget class="QCheckBox" name="chbWatchFile">
-        <property name="toolTip">
-         <string>If this option is checked, the file will be automatically reloaded on changes.</string>
-        </property>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lHost">
         <property name="text">
-         <string>Watch the file</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
+         <string>Host</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" colspan="2">
-       <widget class="QCheckBox" name="chbLinkFile">
-        <property name="toolTip">
-         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
-        </property>
-        <property name="text">
-         <string>Link the file</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="lePort"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QComboBox" name="cbSourceType">
+        <item>
+         <property name="text">
+          <string>File or named pipe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Network TCP socket</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Network UDP socket</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Local socket</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Serial port</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="leHost"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="QComboBox" name="cbSerialPort"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="QComboBox" name="cbBaudRate"/>
+      </item>
+      <item row="7" column="2">
+       <widget class="KComboBox" name="cbFileType">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -218,10 +261,19 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Options</string>
+      <string>Format Options</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -480,18 +532,156 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QGroupBox" name="gbUpdateOptions">
+     <property name="title">
+      <string>Update Options</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cbUpdateType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Periodically</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>On new data</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="2">
+       <widget class="QCheckBox" name="chbLinkFile">
+        <property name="toolTip">
+         <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
+        </property>
+        <property name="text">
+         <string>Link the file</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lReadType">
+        <property name="text">
+         <string>Read</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lKeepLastValues">
+        <property name="text">
+         <string>Keep last N values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lUpdateType">
+        <property name="text">
+         <string>Update</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lSampleRate">
+        <property name="text">
+         <string>Sample rate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="sbSampleRate">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cbReadType">
+        <item>
+         <property name="text">
+          <string>Continuously fixed</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>From end</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Till the end</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lUpdateInterval">
+        <property name="text">
+         <string>Update interval</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="leKeepLastValues"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="sbUpdateInterval">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="lUpdateIntervalUnit">
+        <property name="text">
+         <string>ms</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

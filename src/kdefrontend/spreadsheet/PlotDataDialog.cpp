@@ -65,10 +65,10 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	ui.setupUi(mainWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
-    m_okButton->setDefault(true);
-    m_okButton->setToolTip(i18n("Plot the selected data"));
-    m_okButton->setText(i18n("&Plot"));
+	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+	m_okButton->setDefault(true);
+	m_okButton->setToolTip(i18n("Plot the selected data"));
+	m_okButton->setText(i18n("&Plot"));
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);
@@ -125,9 +125,8 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 		plotPlacementChanged();
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	} else {
+	} else
 		resize( QSize(500,0).expandedTo(minimumSize()) );
-	}
 
 	this->processColumns();
 }
@@ -192,14 +191,14 @@ void PlotDataDialog::processColumns() {
 	//determine the column names and the name of the first column having "X" as the plot designation
 	QList<QString> columnNames;
 	QString xColumnName;
-	foreach(const Column* column, m_columns) {
+	for(const Column* column : m_columns) {
 		columnNames << column->name();
 		if (xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
 			xColumnName = column->name();
 	}
 
 	//show all selected/available column names in the data comboboxes
-	foreach(QComboBox* comboBox, m_columnComboBoxes)
+	for(QComboBox* const comboBox : m_columnComboBoxes)
 		comboBox->addItems(columnNames);
 
 	if (!xColumnName.isEmpty()) {
@@ -209,7 +208,7 @@ void PlotDataDialog::processColumns() {
 		//for the remaining columns, show the names in the comboboxes for the Y-data
 		//TODO: handle columns with error-designations
 		int yColumnIndex = 1; //the index of the first Y-data comboBox in m_columnComboBoxes
-		foreach(const QString name, columnNames) {
+		for(const QString& name : columnNames) {
 			if (name != xColumnName) {
 				QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
 				comboBox->setCurrentIndex(comboBox->findText(name));
@@ -220,7 +219,7 @@ void PlotDataDialog::processColumns() {
 		//no column with "x plot designation" is selected, simply show all columns in the order they were selected.
 		//first selected column will serve as the x-column.
 		int yColumnIndex = 0;
-		foreach(const QString name, columnNames) {
+		for(const QString& name : columnNames) {
 			QComboBox* comboBox = m_columnComboBoxes[yColumnIndex];
 			comboBox->setCurrentIndex(comboBox->findText(name));
 			yColumnIndex++;
@@ -300,7 +299,7 @@ void PlotDataDialog::plot() {
 }
 
 Column* PlotDataDialog::columnFromName(const QString& name) const {
-	foreach(Column* column, m_columns) {
+	for(auto* column : m_columns) {
 		if (column->name() == name)
 			return column;
 	}
@@ -310,7 +309,7 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
-	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
+	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
 		Column* yColumn = columnFromName(comboBox->currentText());
 		XYCurve* curve = new XYCurve(comboBox->currentText());
@@ -327,7 +326,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 
 	const QString& xColumnName = ui.cbXColumn->currentText();
 	Column* xColumn = columnFromName(xColumnName);
-	for (int i=1; i<m_columnComboBoxes.size(); ++i) {
+	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
 		const QString& name = comboBox->currentText();
 		Column* yColumn = columnFromName(name);
@@ -366,7 +365,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 //########################## Slots ###############################
 //################################################################
 void PlotDataDialog::curvePlacementChanged() {
-	if (ui.rbCurvePlacement1->isChecked()){
+	if (ui.rbCurvePlacement1->isChecked()) {
 		ui.rbPlotPlacement1->setEnabled(true);
 		ui.rbPlotPlacement2->setText(i18n("new plot in an existing worksheet"));
 		ui.rbPlotPlacement3->setText(i18n("new plot in a new worksheet"));
@@ -402,9 +401,8 @@ void PlotDataDialog::checkOkButton() {
 	} else if (ui.rbPlotPlacement2->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		enable = (aspect!=NULL);
-	} else {
+	} else
 		enable = true;
-	}
 
-    m_okButton->setEnabled(enable);
+	m_okButton->setEnabled(enable);
 }

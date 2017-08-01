@@ -50,9 +50,9 @@ private:
 	void startTimeline();
 
 protected:
-	void keyPressEvent(QKeyEvent*);
-	bool eventFilter(QObject*, QEvent*);
-	void focusOutEvent(QFocusEvent*);
+	void keyPressEvent(QKeyEvent*) override;
+	bool eventFilter(QObject*, QEvent*) override;
+	void focusOutEvent(QFocusEvent*) override;
 
 private slots:
 	void slideDown();

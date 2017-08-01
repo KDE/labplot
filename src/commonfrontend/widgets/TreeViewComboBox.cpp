@@ -238,7 +238,7 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 		if (aspect->inherits(classString)) {
 			if ( strcmp(classString, "Spreadsheet") == 0 ) {
 				if (aspect->inherits("FileDataSource"))
-					return false;
+                    return true; //here
 				else
 					return true;
 			} else {

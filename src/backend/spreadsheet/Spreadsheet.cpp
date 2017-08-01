@@ -946,6 +946,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 }
 
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
@@ -987,6 +988,6 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_view)
-		reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
+    if (m_view)
+        reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }

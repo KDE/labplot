@@ -53,6 +53,7 @@ class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
+class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
@@ -179,6 +180,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
+    LiveDataDock* m_liveDataDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;

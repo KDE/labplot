@@ -1,9 +1,9 @@
 /***************************************************************************
-File                 : SlidingPanel.h
+File                 : LiveDataDock.h
 Project              : LabPlot
-Description          : Sliding panel shown in the presenter widget
+Description          : Dock widget for live data properties
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -24,29 +24,46 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef SLIDINGPANEL_H
-#define SLIDINGPANEL_H
+#ifndef LIVEDATADOCK_H
+#define LIVEDATADOCK_H
 
-#include <QFrame>
+#include <QWidget>
 
-class QLabel;
-class QPushButton;
+#include "ui_livedatadock.h"
+#include "backend/datasources/FileDataSource.h"
+#include <QList>
 
-class SlidingPanel : public QFrame {
+class LiveDataDock : public QWidget {
 	Q_OBJECT
+
 public:
-	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
-	~SlidingPanel();
-	bool shouldHide();
-	QPushButton* quitButton() const;
+	explicit LiveDataDock(QWidget *parent = 0);
+	void setLiveDataSources(const QList<FileDataSource*>& sources);
+	~LiveDataDock();
+
 private:
+	Ui::LiveDataDock ui;
+	QList<FileDataSource*> m_liveDataSources;
 
-	QLabel* m_worksheetName;
-	QPushButton* m_quitPresentingMode;
-	virtual QSize sizeHint() const;
+	bool m_paused;
 
+	void pauseReading();
+	void continueReading();
+private slots:
+
+	void updateTypeChanged(int);
+	void readingTypeChanged(int);
+	void sampleRateChanged(int);
+	void updateIntervalChanged(int);
+	void keepNvaluesChanged(QString);
+
+	void updateNow();
+	void pauseContinueReading();
 public slots:
-	void movePanel(qreal);
+
+signals:
+
+
 };
 
-#endif // SLIDINGPANEL_H
+#endif // LIVEDATADOCK_H

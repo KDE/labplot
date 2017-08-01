@@ -122,6 +122,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	cartesianPlotDock(0),
 	cartesianPlotLegendDock(0),
 	columnDock(0),
+    m_liveDataDock(0),
 	matrixDock(0),
 	spreadsheetDock(0),
 	projectDock(0),
@@ -1413,9 +1414,9 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		//for FileDataSource we currently don't show any view
-		if (dynamic_cast<const FileDataSource*>(part))
-			return;
+        //for FileDataSource we currently don't show any view
+        /*if (dynamic_cast<const FileDataSource*>(part))
+            return;*/
 
 		PartMdiView* win;
 

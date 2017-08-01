@@ -30,23 +30,26 @@
 #include <chrono>
 
 class PerfTracer {
-	public:
-		PerfTracer(const char* m) {
-			msg = m;
-			start = std::chrono::high_resolution_clock::now();
-		};
-		~PerfTracer() {
-			auto end = std::chrono::high_resolution_clock::now();
-			auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-			std::cout << msg << ": " << diff << " ms" << std::endl;
-		}
+public:
+	PerfTracer(const char* m) {
+		msg = m;
+		start = std::chrono::high_resolution_clock::now();
+	};
+	~PerfTracer() {
+		auto end = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		std::cout << msg << ": " << diff << " ms" << std::endl;
+	}
 
-	private:
-		std::chrono::high_resolution_clock::time_point start;
-		std::string msg;
+private:
+	std::chrono::high_resolution_clock::time_point start;
+	std::string msg;
 };
 
 #define PERFTRACE_ENABLED 1
+
+//#define PERFTRACE_CURVES
+#define PERFTRACE_LIVE_IMPORT
 
 #ifdef PERFTRACE_ENABLED
 #define PERFTRACE(msg) PerfTracer tracer(msg)

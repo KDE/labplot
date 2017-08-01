@@ -55,6 +55,7 @@ public:
 	virtual void importTo(QStatusBar*) const;
 
 private:
+
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions;
 	QMenu* m_newDataContainerMenu;
