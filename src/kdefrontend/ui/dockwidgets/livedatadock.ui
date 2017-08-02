@@ -96,7 +96,7 @@
     <widget class="QComboBox" name="cbReadingType">
      <item>
       <property name="text">
-       <string>Continously fixed</string>
+       <string>Continuously fixed</string>
       </property>
      </item>
      <item>
