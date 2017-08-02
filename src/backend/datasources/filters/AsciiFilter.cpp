@@ -932,20 +932,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #endif
 			//////////
 			// set the comments for each of the columns if datasource is a spreadsheet
-			const int rows = spreadsheet->rowCount();
 			for (int n = 0; n < m_actualCols; ++n) {
 				Column* column = spreadsheet->column(n);
-				QString comment;
-
-				switch (column->columnMode()) {
-				case AbstractColumn::Numeric:
-					comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-					break;
-				case AbstractColumn::Text:
-					comment = i18np("text data, %1 element", "text data, %1 elements", rows);
-					break;
-				}
-				column->setComment(comment);
 
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();

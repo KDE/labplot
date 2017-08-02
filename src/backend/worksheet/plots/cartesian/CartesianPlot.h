@@ -31,12 +31,14 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+
 #include <math.h>
-#include <backend/worksheet/plots/cartesian/Histogram.h>
 
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
+class AbstractColumn;
 class XYCurve;
 class XYEquationCurve;
 class XYDataReductionCurve;
@@ -186,6 +188,8 @@ private:
 	QMenu* zoomMenu;
 	QMenu* dataAnalysisMenu;
 	QMenu* themeMenu;
+
+    QVector<const AbstractColumn*> m_connectedColumns;
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
