@@ -95,7 +95,7 @@ public:
 	void setMouseMode(const MouseMode);
 	MouseMode mouseMode() const;
 	void navigate(NavigationOperation);
-
+	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
 
 	virtual void save(QXmlStreamWriter*) const;
@@ -218,13 +218,13 @@ public slots:
 	void shiftRightX();
 	void shiftUpY();
 	void shiftDownY();
+	void dataChanged();
 
 private slots:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-	void dataChanged();
 	void xDataChanged();
 	void yDataChanged();
 	void HistogramdataChanged();
