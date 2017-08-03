@@ -33,7 +33,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -110,8 +110,7 @@ bool Folder::load(XmlStreamReader* reader) {
 				}
 			}
 		}
-	}
-	else // no folder element
+	} else // no folder element
 		reader->raiseError(i18n("no folder element found"));
 
 	return !reader->hasError();
@@ -156,38 +155,38 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
 		worksheet->setIsLoading(true);
-		if (!worksheet->load(reader)){
+		if (!worksheet->load(reader)) {
 			delete worksheet;
 			return false;
 		}
 		addChild(worksheet);
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
-	}else if (element_name == "cantorWorksheet"){
+	} else if (element_name == "cantorWorksheet") {
 		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
-		if (!cantorWorksheet->load(reader)){
+		if (!cantorWorksheet->load(reader)) {
 			delete cantorWorksheet;
 			return false;
 		}
 		addChild(cantorWorksheet);
 #endif
-	} else if (element_name == "fileDataSource") {
-		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
-		if (!fileDataSource->load(reader)){
-			delete fileDataSource;
+	} else if (element_name == "LiveDataSource") {
+		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
+		if (!liveDataSource->load(reader)) {
+			delete liveDataSource;
 			return false;
 		}
-		addChild(fileDataSource);
+		addChild(liveDataSource);
 	} else if (element_name == "datapicker") {
 		Datapicker* datapicker = new Datapicker(0, "", true);
-		if (!datapicker->load(reader)){
+		if (!datapicker->load(reader)) {
 			delete datapicker;
 			return false;
 		}
 		addChild(datapicker);
 	} else if (element_name == "note") {
 		Note* note = new Note("");
-		if (!note->load(reader)){
+		if (!note->load(reader)) {
 			delete note;
 			return false;
 		}

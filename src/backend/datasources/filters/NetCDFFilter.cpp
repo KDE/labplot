@@ -27,7 +27,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/NetCDFFilterPrivate.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 
 #include <KLocale>
@@ -61,7 +61,7 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
   reads the content of the current variable from file \c fileName.
 */
 QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
-						  AbstractFileFilter::ImportMode importMode, int lines) {
+        AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
@@ -609,9 +609,8 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 				for (unsigned int j = 0; j < cols; j++) {
 					if (dataContainer[0])
 						static_cast<QVector<double>*>(dataContainer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
-					else {
+					else
 						line << QString::number(data[i][j]);
-					}
 				}
 				dataStrings << line;
 				emit q->completed(100*i/actualRows);

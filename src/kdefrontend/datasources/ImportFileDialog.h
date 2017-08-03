@@ -35,7 +35,7 @@
 class AbstractAspect;
 class MainWin;
 class ImportFileWidget;
-class FileDataSource;
+class LiveDataSource;
 class TreeViewComboBox;
 
 class QStatusBar;
@@ -45,13 +45,13 @@ class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
+	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& fileName = QString());
 	~ImportFileDialog();
 
 	virtual QString selectedObject() const;
 	virtual void checkOkButton();
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
+	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
 	virtual void importTo(QStatusBar*) const;
 
 private:

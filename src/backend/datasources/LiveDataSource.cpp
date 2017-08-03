@@ -1,7 +1,7 @@
 /***************************************************************************
-File		: FileDataSource.cpp
+File		: LiveDataSource.cpp
 Project		: LabPlot
-Description	: Represents file data source
+Description	: Represents live data source
 --------------------------------------------------------------------
 Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
@@ -27,7 +27,7 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
@@ -58,12 +58,12 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDebug>
 
 /*!
-  \class FileDataSource
+  \class LiveDataSource
   \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
 
   \ingroup datasources
 */
-FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
+LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
 	  m_fileType(Ascii),
 	  m_fileWatched(false),
@@ -86,7 +86,7 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
 	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
 }
 
-FileDataSource::~FileDataSource() {
+LiveDataSource::~LiveDataSource() {
 	if (m_filter)
 		delete m_filter;
 
@@ -111,14 +111,14 @@ FileDataSource::~FileDataSource() {
 /*!
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
-void FileDataSource::ready() {
+void LiveDataSource::ready() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
 	else
 		watch();
 }
 
-void FileDataSource::initActions() {
+void LiveDataSource::initActions() {
 	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
@@ -131,16 +131,16 @@ void FileDataSource::initActions() {
 }
 
 //TODO make the view customizable (show as a spreadsheet or as a pure text file in an editor)
-QWidget *FileDataSource::view() const {
+QWidget *LiveDataSource::view() const {
 	if (!m_view)
-		m_view = new SpreadsheetView(const_cast<FileDataSource*>(this));
+		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this));
 	return m_view;
 }
 
 /*!
  * \brief Returns a list with the names of the available ports
  */
-QStringList FileDataSource::availablePorts() {
+QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
@@ -160,7 +160,7 @@ QStringList FileDataSource::availablePorts() {
 /*!
  * \brief Returns a list with the supported baud rates
  */
-QStringList FileDataSource::supportedBaudRates() {
+QStringList LiveDataSource::supportedBaudRates() {
 	QStringList baudRates;
 
 	for(const auto& baud : QSerialPortInfo::standardBaudRates())
@@ -171,7 +171,7 @@ QStringList FileDataSource::supportedBaudRates() {
 /*!
  * \brief Updates this data source at this moment
  */
-void FileDataSource::updateNow() {
+void LiveDataSource::updateNow() {
 	m_updateTimer->stop();
 	read();
 
@@ -183,7 +183,7 @@ void FileDataSource::updateNow() {
 /*!
  * \brief Continue reading from the live data source after it was paused.
  */
-void FileDataSource::continueReading() {
+void LiveDataSource::continueReading() {
 	m_paused = false;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
@@ -194,7 +194,7 @@ void FileDataSource::continueReading() {
 /*!
  * \brief Pause the reading of the live data source.
  */
-void FileDataSource::pauseReading() {
+void LiveDataSource::pauseReading() {
 	m_paused = true;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
@@ -205,8 +205,8 @@ void FileDataSource::pauseReading() {
 /*!
   returns the list with all supported data file formats.
 */
-QStringList FileDataSource::fileTypes() {
-// see FileDataSource::FileType
+QStringList LiveDataSource::fileTypes() {
+// see LiveDataSource::FileType
 	return (QStringList()<< i18n("ASCII data")
 	        << i18n("Binary data")
 	        << i18n("Image")
@@ -218,11 +218,11 @@ QStringList FileDataSource::fileTypes() {
 	       );
 }
 
-void FileDataSource::setFileName(const QString& name) {
+void LiveDataSource::setFileName(const QString& name) {
 	m_fileName = name;
 }
 
-QString FileDataSource::fileName() const {
+QString LiveDataSource::fileName() const {
 	return m_fileName;
 }
 
@@ -230,27 +230,27 @@ QString FileDataSource::fileName() const {
  * \brief Sets the local socket's server name to name
  * \param name
  */
-void FileDataSource::setLocalSocketName(const QString & name) {
+void LiveDataSource::setLocalSocketName(const QString & name) {
 	m_localSocketName = name;
 }
 
-QString FileDataSource::localSocketName() const {
+QString LiveDataSource::localSocketName() const {
 	return m_localSocketName;
 }
 
-void FileDataSource::setFileType(const FileType type) {
+void LiveDataSource::setFileType(const FileType type) {
 	m_fileType = type;
 }
 
-FileDataSource::FileType FileDataSource::fileType() const {
+LiveDataSource::FileType LiveDataSource::fileType() const {
 	return m_fileType;
 }
 
-void FileDataSource::setFilter(AbstractFileFilter* f) {
+void LiveDataSource::setFilter(AbstractFileFilter* f) {
 	m_filter = f;
 }
 
-AbstractFileFilter* FileDataSource::filter() const {
+AbstractFileFilter* LiveDataSource::filter() const {
 	return m_filter;
 }
 
@@ -258,11 +258,11 @@ AbstractFileFilter* FileDataSource::filter() const {
   sets whether the file should be watched or not.
   In the first case the data source will be automatically updated on file changes.
 */
-void FileDataSource::setFileWatched(const bool b) {
+void LiveDataSource::setFileWatched(const bool b) {
 	m_fileWatched = b;
 }
 
-bool FileDataSource::isFileWatched() const {
+bool LiveDataSource::isFileWatched() const {
 	return m_fileWatched;
 }
 
@@ -270,11 +270,11 @@ bool FileDataSource::isFileWatched() const {
  * \brief Sets whether we'll keep the last values or append it to the previous ones
  * \param keepLastValues
  */
-void FileDataSource::setKeepLastValues(const bool keepLastValues) {
+void LiveDataSource::setKeepLastValues(const bool keepLastValues) {
 	m_keepLastValues = keepLastValues;
 }
 
-bool FileDataSource::keepLastValues() const {
+bool LiveDataSource::keepLastValues() const {
 	return m_keepLastValues;
 }
 
@@ -282,11 +282,11 @@ bool FileDataSource::keepLastValues() const {
  * \brief Sets the serial port's baud rate
  * \param baudrate
  */
-void FileDataSource::setBaudRate(const int baudrate) {
+void LiveDataSource::setBaudRate(const int baudrate) {
 	m_baudRate = baudrate;
 }
 
-int FileDataSource::baudRate() const {
+int LiveDataSource::baudRate() const {
 	return m_baudRate;
 }
 
@@ -294,12 +294,12 @@ int FileDataSource::baudRate() const {
  * \brief Sets the source's update interval to \c interval
  * \param interval
  */
-void FileDataSource::setUpdateInterval(const int interval) {
+void LiveDataSource::setUpdateInterval(const int interval) {
 	m_updateInterval = interval;
 	m_updateTimer->start(m_updateInterval);
 }
 
-int FileDataSource::updateInterval() const {
+int LiveDataSource::updateInterval() const {
 	return m_updateInterval;
 }
 
@@ -307,11 +307,11 @@ int FileDataSource::updateInterval() const {
  * \brief Sets how many values we should store
  * \param keepnvalues
  */
-void FileDataSource::setKeepNvalues(const int keepnvalues) {
+void LiveDataSource::setKeepNvalues(const int keepnvalues) {
 	m_keepNvalues = keepnvalues;
 }
 
-int FileDataSource::keepNvalues() const {
+int LiveDataSource::keepNvalues() const {
 	return m_keepNvalues;
 }
 
@@ -319,19 +319,19 @@ int FileDataSource::keepNvalues() const {
  * \brief Sets the network socket's port to port
  * \param port
  */
-void FileDataSource::setPort(const int port) {
+void LiveDataSource::setPort(const int port) {
 	m_port = port;
 }
 
-void FileDataSource::setBytesRead(const qint64 bytes) {
-    m_bytesRead = bytes;
+void LiveDataSource::setBytesRead(const qint64 bytes) {
+	m_bytesRead = bytes;
 }
 
-int FileDataSource::bytesRead() const {
-    return m_bytesRead;
+int LiveDataSource::bytesRead() const {
+	return m_bytesRead;
 }
 
-int FileDataSource::port() const {
+int LiveDataSource::port() const {
 	return m_port;
 }
 
@@ -339,27 +339,27 @@ int FileDataSource::port() const {
  * \brief Sets the serial port's name to name
  * \param name
  */
-void FileDataSource::setSerialPort(const QString &name) {
+void LiveDataSource::setSerialPort(const QString &name) {
 	m_serialPortName = name;
 }
 
-QString FileDataSource::serialPortName() const {
+QString LiveDataSource::serialPortName() const {
 	return m_serialPortName;
 }
 
-bool FileDataSource::isPaused() const {
-    return m_paused;
+bool LiveDataSource::isPaused() const {
+	return m_paused;
 }
 
 /*!
  * \brief Sets the sample rate to samplerate
  * \param samplerate
  */
-void FileDataSource::setSampleRate(const int samplerate) {
+void LiveDataSource::setSampleRate(const int samplerate) {
 	m_sampleRate = samplerate;
 }
 
-int FileDataSource::sampleRate() const {
+int LiveDataSource::sampleRate() const {
 	return m_sampleRate;
 }
 
@@ -367,11 +367,11 @@ int FileDataSource::sampleRate() const {
  * \brief Sets the source's type to sourcetype
  * \param sourcetype
  */
-void FileDataSource::setSourceType(const SourceType sourcetype) {
+void LiveDataSource::setSourceType(const SourceType sourcetype) {
 	m_sourceType = sourcetype;
 }
 
-FileDataSource::SourceType FileDataSource::sourceType() const {
+LiveDataSource::SourceType LiveDataSource::sourceType() const {
 	return m_sourceType;
 }
 
@@ -379,11 +379,11 @@ FileDataSource::SourceType FileDataSource::sourceType() const {
  * \brief Sets the source's reading type to readingType
  * \param readingType
  */
-void FileDataSource::setReadingType(const ReadingType readingType) {
+void LiveDataSource::setReadingType(const ReadingType readingType) {
 	m_readingType = readingType;
 }
 
-FileDataSource::ReadingType FileDataSource::readingType() const {
+LiveDataSource::ReadingType LiveDataSource::readingType() const {
 	return m_readingType;
 }
 
@@ -391,7 +391,7 @@ FileDataSource::ReadingType FileDataSource::readingType() const {
  * \brief Sets the source's update type to updatetype and handles this change
  * \param updatetype
  */
-void FileDataSource::setUpdateType(const UpdateType updatetype) {
+void LiveDataSource::setUpdateType(const UpdateType updatetype) {
 	if (updatetype == NewData) {
 		m_updateTimer->stop();
 		if (m_fileSystemWatcher == nullptr)
@@ -403,7 +403,7 @@ void FileDataSource::setUpdateType(const UpdateType updatetype) {
 	m_updateType = updatetype;
 }
 
-FileDataSource::UpdateType FileDataSource::updateType() const {
+LiveDataSource::UpdateType LiveDataSource::updateType() const {
 	return m_updateType;
 }
 
@@ -411,11 +411,11 @@ FileDataSource::UpdateType FileDataSource::updateType() const {
  * \brief Sets the network socket's host
  * \param host
  */
-void FileDataSource::setHost(const QString & host) {
+void LiveDataSource::setHost(const QString & host) {
 	m_host = host;
 }
 
-QString FileDataSource::host() const {
+QString LiveDataSource::host() const {
 	return m_host;
 }
 
@@ -423,7 +423,7 @@ QString FileDataSource::host() const {
   sets whether only a link to the file is saved in the project file (\c b=true)
   or the whole content of the file (\c b=false).
 */
-void FileDataSource::setFileLinked(const bool b) {
+void LiveDataSource::setFileLinked(const bool b) {
 	m_fileLinked = b;
 }
 
@@ -431,24 +431,24 @@ void FileDataSource::setFileLinked(const bool b) {
   returns \c true if only a link to the file is saved in the project file.
   \c false otherwise.
 */
-bool FileDataSource::isFileLinked() const {
+bool LiveDataSource::isFileLinked() const {
 	return m_fileLinked;
 }
 
-QIcon FileDataSource::icon() const {
+QIcon LiveDataSource::icon() const {
 	QIcon icon;
-	if (m_fileType == FileDataSource::Ascii)
+	if (m_fileType == LiveDataSource::Ascii)
 		icon = QIcon::fromTheme("text-plain");
-	else if (m_fileType == FileDataSource::Binary)
+	else if (m_fileType == LiveDataSource::Binary)
 		icon = QIcon::fromTheme("application-octet-stream");
-	else if (m_fileType == FileDataSource::Image)
+	else if (m_fileType == LiveDataSource::Image)
 		icon = QIcon::fromTheme("image-x-generic");
 	// TODO: HDF, NetCDF, FITS, etc.
 
 	return icon;
 }
 
-QMenu* FileDataSource::createContextMenu() {
+QMenu* LiveDataSource::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 
 	QAction* firstAction = 0;
@@ -481,7 +481,7 @@ QMenu* FileDataSource::createContextMenu() {
 /*
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
-void FileDataSource::read() {
+void LiveDataSource::read() {
 	if (m_filter == nullptr)
 		return;
 
@@ -534,7 +534,7 @@ void FileDataSource::read() {
 		switch (m_fileType) {
 		case Ascii:
 			qDebug() << "Reading live ascii file.." ;
-            bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
 			qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
 
@@ -577,7 +577,7 @@ void FileDataSource::read() {
  * It will only be emitted again once new data is available, such as when a new payload of network data has arrived on the network socket,
  * or when a new block of data has been appended to your device.
  */
-void FileDataSource::readyRead() {
+void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
@@ -590,7 +590,7 @@ void FileDataSource::readyRead() {
 		read();
 }
 
-void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
+void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
 	/*disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));*/
 
@@ -613,7 +613,7 @@ void FileDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 	}
 }
 
-void FileDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
+void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	switch (socketError) {
 	case QAbstractSocket::ConnectionRefusedError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
@@ -633,7 +633,7 @@ void FileDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	}
 }
 
-void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
 		QMessageBox::critical(0, i18n("Serial Port Error"),
@@ -670,19 +670,19 @@ void FileDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	}
 }
 
-void FileDataSource::watchToggled() {
+void LiveDataSource::watchToggled() {
 	m_fileWatched = !m_fileWatched;
 	watch();
 	project()->setChanged(true);
 }
 
-void FileDataSource::linkToggled() {
+void LiveDataSource::linkToggled() {
 	m_fileLinked = !m_fileLinked;
 	project()->setChanged(true);
 }
 
 //watch the file upon reading for changes if required
-void FileDataSource::watch() {
+void LiveDataSource::watch() {
 	if (m_fileWatched) {
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
@@ -702,7 +702,7 @@ void FileDataSource::watch() {
     and some content specific information
     (number of columns and lines for ASCII, color-depth for images etc.).
  */
-QString FileDataSource::fileInfoString(const QString &name) {
+QString LiveDataSource::fileInfoString(const QString &name) {
 	QString infoString;
 	QFileInfo fileInfo;
 	QString fileTypeString;
@@ -783,7 +783,7 @@ QString FileDataSource::fileInfoString(const QString &name) {
 	return infoString;
 }
 
-void FileDataSource::plotData() {
+void LiveDataSource::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(this);
 	dlg->exec();
 }
@@ -794,8 +794,8 @@ void FileDataSource::plotData() {
 /*!
   Saves as XML.
  */
-void FileDataSource::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("fileDataSource");
+void LiveDataSource::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("liveDataSource");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -846,15 +846,15 @@ void FileDataSource::save(QXmlStreamWriter* writer) const {
 			col->save(writer);
 	}
 
-	writer->writeEndElement(); // "fileDataSource"
+	writer->writeEndElement(); // "liveDataSource"
 }
 
 /*!
   Loads from XML.
 */
-bool FileDataSource::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "fileDataSource") {
-		reader->raiseError(i18n("no fileDataSource element found"));
+bool LiveDataSource::load(XmlStreamReader* reader) {
+	if(!reader->isStartElement() || reader->name() != "liveDataSource") {
+		reader->raiseError(i18n("no liveDataSource element found"));
 		return false;
 	}
 
@@ -867,7 +867,7 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "fileDataSource")
+		if (reader->isEndElement() && reader->name() == "LiveDataSource")
 			break;
 
 		if (!reader->isStartElement())

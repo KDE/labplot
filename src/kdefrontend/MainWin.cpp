@@ -36,7 +36,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -103,49 +103,49 @@
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
 	: KXmlGuiWindow(parent),
-	m_currentSubWindow(0),
-	m_project(0),
-	m_aspectTreeModel(0),
-	m_projectExplorer(0),
-	m_projectExplorerDock(0),
-	m_propertiesDock(0),
-	m_currentAspect(0),
-	m_currentFolder(0),
-	m_suppressCurrentSubWindowChangedEvent(false),
-	m_closing(false),
-	m_autoSaveActive(false),
-	m_visibilityMenu(0),
-	m_newMenu(0),
-	m_editMenu(0),
-	axisDock(0),
-	notesDock(0),
-	cartesianPlotDock(0),
-	cartesianPlotLegendDock(0),
-	columnDock(0),
-    m_liveDataDock(0),
-	matrixDock(0),
-	spreadsheetDock(0),
-	projectDock(0),
-	xyCurveDock(0),
-	xyEquationCurveDock(0),
-	xyDataReductionCurveDock(0),
-	xyDifferentiationCurveDock(0),
-	xyIntegrationCurveDock(0),
-	xyInterpolationCurveDock(0),
-	xySmoothCurveDock(0),
-	xyFitCurveDock(0),
-	xyFourierFilterCurveDock(0),
-	xyFourierTransformCurveDock(0),
-	histogramDock(0),
-	worksheetDock(0),
-	textLabelDock(0),
-	customPointDock(0),
-	datapickerImageDock(0),
-	datapickerCurveDock(0),
+	  m_currentSubWindow(0),
+	  m_project(0),
+	  m_aspectTreeModel(0),
+	  m_projectExplorer(0),
+	  m_projectExplorerDock(0),
+	  m_propertiesDock(0),
+	  m_currentAspect(0),
+	  m_currentFolder(0),
+	  m_suppressCurrentSubWindowChangedEvent(false),
+	  m_closing(false),
+	  m_autoSaveActive(false),
+	  m_visibilityMenu(0),
+	  m_newMenu(0),
+	  m_editMenu(0),
+	  axisDock(0),
+	  notesDock(0),
+	  cartesianPlotDock(0),
+	  cartesianPlotLegendDock(0),
+	  columnDock(0),
+	  m_liveDataDock(0),
+	  matrixDock(0),
+	  spreadsheetDock(0),
+	  projectDock(0),
+	  xyCurveDock(0),
+	  xyEquationCurveDock(0),
+	  xyDataReductionCurveDock(0),
+	  xyDifferentiationCurveDock(0),
+	  xyIntegrationCurveDock(0),
+	  xyInterpolationCurveDock(0),
+	  xySmoothCurveDock(0),
+	  xyFitCurveDock(0),
+	  xyFourierFilterCurveDock(0),
+	  xyFourierTransformCurveDock(0),
+	  histogramDock(0),
+	  worksheetDock(0),
+	  textLabelDock(0),
+	  customPointDock(0),
+	  datapickerImageDock(0),
+	  datapickerCurveDock(0),
 #ifdef HAVE_CANTOR_LIBS
-	cantorWorksheetDock(0),
+	  cantorWorksheetDock(0),
 #endif
-	m_guiObserver(0) {
+	  m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -185,7 +185,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-		this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 #ifdef _WIN32
 	QIcon::setThemeName("hicolor");
 #endif
@@ -311,9 +311,9 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
-	m_newFileDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
-	actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
-	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
+	actionCollection()->addAction("new_file_datasource", m_newLiveDataSourceAction);
+	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
 
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
@@ -441,7 +441,7 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newNotesAction);
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
-	m_newMenu->addAction(m_newFileDataSourceAction);
+	m_newMenu->addAction(m_newLiveDataSourceAction);
 
 	//import menu
 	m_importMenu = new QMenu(this);
@@ -1007,7 +1007,7 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
-		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (fileName.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1310,14 +1310,14 @@ void MainWin::newCantorWorksheet(QAction* action) {
     returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
     Otherwise returns \a 0.
 */
-CantorWorksheet* MainWin::activeCantorWorksheet() const{
-    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-    if (!win)
-        return 0;
+CantorWorksheet* MainWin::activeCantorWorksheet() const {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
 
-    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    Q_ASSERT(part);
-    return dynamic_cast<CantorWorksheet*>(part);
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<CantorWorksheet*>(part);
 }
 #endif
 
@@ -1414,9 +1414,9 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-        //for FileDataSource we currently don't show any view
-        /*if (dynamic_cast<const FileDataSource*>(part))
-            return;*/
+		//for LiveDataSource we currently don't show any view
+		/*if (dynamic_cast<const LiveDataSource*>(part))
+		    return;*/
 
 		PartMdiView* win;
 
@@ -1763,11 +1763,11 @@ void MainWin::editFitsFileDialog() {
 /*!
   adds a new file data source to the current project.
 */
-void MainWin::newFileDataSourceActionTriggered() {
+void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
-		dlg->importToFileDataSource(dataSource, statusBar());
+		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1));
+		dlg->importToLiveDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
 	delete dlg;

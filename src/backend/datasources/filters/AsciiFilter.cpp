@@ -26,7 +26,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
@@ -496,7 +496,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from) {
 
 	Q_ASSERT(dataSource != nullptr);
-	FileDataSource* spreadsheet = dynamic_cast<FileDataSource*>(dataSource);
+	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (!m_prepared) {
 		DEBUG("device is sequential = " << device.isSequential());
@@ -588,22 +588,22 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #endif
 		qDebug() << "got new data";
 
-		FileDataSource::ReadingType readingType;
+		LiveDataSource::ReadingType readingType;
 
 		if (!m_prepared)
-			readingType = FileDataSource::ReadingType::TillEnd;
+			readingType = LiveDataSource::ReadingType::TillEnd;
 		else {
 			//we have to read all the data when reading from end
 			//so we set readingType to TillEnd
-			if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
-				readingType = FileDataSource::ReadingType::TillEnd;
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
+				readingType = LiveDataSource::ReadingType::TillEnd;
 			else
 				readingType = spreadsheet->readingType();
 		}
 
 		//move to the last read position, from == total bytes read
 		//since the other source types are sequencial we cannot seek on them
-		if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 			device.seek(from);
 		qDebug() <<"available bytes: " << device.bytesAvailable();
 
@@ -613,7 +613,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		int newLinesForSampleRateNotTillEnd = 0;
 		int newLinesTillEnd = 0;
 		QVector<QString> newData;
-		if (readingType != FileDataSource::ReadingType::TillEnd) {
+		if (readingType != LiveDataSource::ReadingType::TillEnd) {
 			newData.reserve(spreadsheet->sampleRate());
 			newData.resize(spreadsheet->sampleRate());
 		}
@@ -624,14 +624,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #endif
 			while (!device.atEnd()) {
 
-				if (readingType != FileDataSource::ReadingType::TillEnd)
+				if (readingType != LiveDataSource::ReadingType::TillEnd)
 					newData[newDataIdx++] = device.readLine();
 				else
 					newData.push_back(device.readLine());
 
 				newLinesTillEnd++;
 
-				if (readingType != FileDataSource::ReadingType::TillEnd) {
+				if (readingType != LiveDataSource::ReadingType::TillEnd) {
 					newLinesForSampleRateNotTillEnd++;
 					//for Continous reading and FromEnd we read sample rate number of lines if possible
 					if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
@@ -640,16 +640,16 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 		//now we reset the readingType
-		if (spreadsheet->readingType() == FileDataSource::ReadingType::FromEnd)
+		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
 			readingType = spreadsheet->readingType();
 
 		//we had less new lines than the sample rate specified
-		if (readingType != FileDataSource::ReadingType::TillEnd)
+		if (readingType != LiveDataSource::ReadingType::TillEnd)
 			qDebug() << "Removed empty lines: " << newData.removeAll("");
 
 
 		//back to the last read position before counting when reading from files
-		if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 			device.seek(from);
 
 		const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
@@ -664,7 +664,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			//increase row count if we don't have a fixed size
 			//but only after the preparation step
 			if (!spreadsheet->keepLastValues()) {
-				if (readingType != FileDataSource::ReadingType::TillEnd)
+				if (readingType != LiveDataSource::ReadingType::TillEnd)
 					m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
 				else
 					m_actualRows += newData.size();
@@ -672,7 +672,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 			//fixed size
 			if (spreadsheet->keepLastValues()) {
-				if (readingType == FileDataSource::ReadingType::TillEnd) {
+				if (readingType == LiveDataSource::ReadingType::TillEnd) {
 					//we had more lines than the fixed size, so we read m_actualRows number of lines
 					if (newLinesTillEnd > m_actualRows) {
 						linesToRead = m_actualRows;
@@ -752,7 +752,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			if (!m_prepared)
 				currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
 			else {
-				if (readingType == FileDataSource::ReadingType::TillEnd) {
+				if (readingType == LiveDataSource::ReadingType::TillEnd) {
 					if (newLinesTillEnd > m_actualRows)
 						currentRow = 0;
 					else
@@ -816,12 +816,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		// from the last row we read the new data in the spreadsheet
 
-        qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
+		qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
 
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 		newDataIdx = 0;
 
-		if (readingType == FileDataSource::ReadingType::FromEnd) {
+		if (readingType == LiveDataSource::ReadingType::FromEnd) {
 			if (m_prepared) {
 				if (newData.size() > spreadsheet->sampleRate())
 					newDataIdx = newData.size() - spreadsheet->sampleRate();
@@ -839,16 +839,16 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #endif
 			for (int i = 0; i < linesToRead; ++i) {
 				QString line;
-				if (readingType == FileDataSource::ReadingType::FromEnd)
+				if (readingType == LiveDataSource::ReadingType::FromEnd)
 					line = newData.at(newDataIdx++);
 				else
 					line = newData.at(i);
 
-				if (spreadsheet->sourceType() == FileDataSource::SourceType::FileOrPipe)
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 					bytesread += line.size();
 
-                //qDebug() << "line bytes: " << line.size() << " line: " << line;
-                //qDebug() << "reading in row: " << currentRow;
+				//qDebug() << "line bytes: " << line.size() << " line: " << line;
+				//qDebug() << "reading in row: " << currentRow;
 				if (simplifyWhitespacesEnabled)
 					line = line.simplified();
 
@@ -876,14 +876,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 								bool isNumber;
 								const double value = locale.toDouble(valueString, &isNumber);
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
-                                //qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+								//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 								break;
 							}
 						case AbstractColumn::Integer: {
 								bool isNumber;
 								const int value = locale.toInt(valueString, &isNumber);
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-                                //qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+								//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
 
 								break;
 							}

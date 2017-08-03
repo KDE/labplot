@@ -30,7 +30,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QWidget>
 
 #include "ui_livedatadock.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include <QList>
 
 class LiveDataDock : public QWidget {
@@ -38,12 +38,12 @@ class LiveDataDock : public QWidget {
 
 public:
 	explicit LiveDataDock(QWidget *parent = 0);
-	void setLiveDataSources(const QList<FileDataSource*>& sources);
+	void setLiveDataSources(const QList<LiveDataSource*>& sources);
 	~LiveDataDock();
 
 private:
 	Ui::LiveDataDock ui;
-	QList<FileDataSource*> m_liveDataSources;
+	QList<LiveDataSource*> m_liveDataSources;
 
 	bool m_paused;
 

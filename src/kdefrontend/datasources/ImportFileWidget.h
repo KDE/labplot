@@ -31,7 +31,7 @@
 #define IMPORTFILEWIDGET_H
 
 #include "ui_importfilewidget.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include <memory>
 
 class AbstractFileFilter;
@@ -51,8 +51,8 @@ public:
 	~ImportFileWidget();
 
 	void showOptions(bool);
-	void saveSettings(FileDataSource*) const;
-	FileDataSource::FileType currentFileType() const;
+	void saveSettings(LiveDataSource*) const;
+	LiveDataSource::FileType currentFileType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
 	const QStringList selectedHDFNames() const;
@@ -75,7 +75,7 @@ private:
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
-	bool m_fileDataSource;
+	bool m_liveDataSource;
 
 private slots:
 	void fileNameChanged(const QString&);

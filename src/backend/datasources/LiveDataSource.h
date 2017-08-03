@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : FileDataSource.h
+    File                 : LiveDataSource.h
     Project              : LabPlot
     Description          : File data source
     --------------------------------------------------------------------
@@ -26,8 +26,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef FILEDATASOURCE_H
-#define FILEDATASOURCE_H
+#ifndef LIVEDATASOURCE_H
+#define LIVEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
@@ -44,7 +44,7 @@ class QTcpSocket;
 class QUdpSocket;
 class QFile;
 
-class FileDataSource : public Spreadsheet {
+class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
 	Q_ENUMS(FileType)
 
@@ -69,8 +69,8 @@ public:
 		TillEnd
 	};
 
-	FileDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
-	~FileDataSource();
+	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
+	~LiveDataSource();
 
 	void ready();
 
@@ -95,13 +95,13 @@ public:
 	int sampleRate() const;
 	void setSampleRate(const int);
 
-    void setBytesRead(const qint64 bytes);
-    int bytesRead() const;
+	void setBytesRead(const qint64 bytes);
+	int bytesRead() const;
 
 	int port() const;
 	void setPort(const int);
 
-    bool isPaused() const;
+	bool isPaused() const;
 
 	void setSerialPort(const QString& name);
 	QString serialPortName() const;

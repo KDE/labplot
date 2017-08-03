@@ -128,7 +128,7 @@ private:
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
 	QAction* m_newNotesAction;
-	QAction* m_newFileDataSourceAction;
+	QAction* m_newLiveDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
@@ -180,7 +180,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
-    LiveDataDock* m_liveDataDock;
+	LiveDataDock* m_liveDataDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
@@ -260,9 +260,9 @@ private slots:
 	void projectChanged();
 
 	//Cantor
-	#ifdef HAVE_CANTOR_LIBS
+#ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
-	#endif
+#endif
 
 	void newFolder();
 	void newWorkbook();
@@ -272,7 +272,7 @@ private slots:
 	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
-	void newFileDataSourceActionTriggered();
+	void newLiveDataSourceActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

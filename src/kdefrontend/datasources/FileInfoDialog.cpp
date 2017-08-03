@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "FileInfoDialog.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 
 #include <KLocale>
 #include <QFileInfo>
@@ -37,20 +37,20 @@
 #include <QIcon>
 #include <QVBoxLayout>
 
- /*!
-	\class ImportWidget
-	\brief Provides a dialog containing the information about the files to be imported.
+/*!
+\class ImportWidget
+\brief Provides a dialog containing the information about the files to be imported.
 
-	\ingroup kdefrontend
- */
+\ingroup kdefrontend
+*/
 
 FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
-    m_textEditWidget.setReadOnly(true);
-    m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
+	m_textEditWidget.setReadOnly(true);
+	m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(&m_textEditWidget);
+	layout->addWidget(&m_textEditWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -60,7 +60,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	setWindowIcon(QIcon::fromTheme("help-about"));
 	setWindowTitle(i18n("File info"));
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 
 	setLayout(layout);
 
@@ -70,15 +70,15 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 void FileInfoDialog::setFiles(QStringList& files) {
 	QString infoString;
 
-    for (const auto fileName: files) {
+	for (const auto fileName: files) {
 		if(fileName.isEmpty())
 			continue;
 
 		if (!infoString.isEmpty())
 			infoString += "<br><br><br>";
 
-		infoString += FileDataSource::fileInfoString(fileName);
+		infoString += LiveDataSource::fileInfoString(fileName);
 	}
 
-    m_textEditWidget.document()->setHtml(infoString);
+	m_textEditWidget.document()->setHtml(infoString);
 }

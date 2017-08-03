@@ -47,14 +47,14 @@ LiveDataDock::~LiveDataDock() {
  * \brief Sets the live data sources of this dock widget
  * \param sources
  */
-void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
+void LiveDataDock::setLiveDataSources(const QList<LiveDataSource *> &sources) {
 	m_liveDataSources = sources;
-	const FileDataSource* const fds = sources.at(0);
+	const LiveDataSource* const fds = sources.at(0);
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(fds->readingType()));
 
-	if (fds->updateType() == FileDataSource::UpdateType::NewData) {
+	if (fds->updateType() == LiveDataSource::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
@@ -72,7 +72,7 @@ void LiveDataDock::setLiveDataSources(const QList<FileDataSource *> &sources) {
 		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
 	}
 
-	if (fds->readingType() == FileDataSource::ReadingType::TillEnd) {
+	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd) {
 		ui.lSampleRate->hide();
 		ui.sbSampleRate->hide();
 	} else
@@ -101,9 +101,9 @@ void LiveDataDock::updateNow() {
  * \param idx
  */
 void LiveDataDock::updateTypeChanged(int idx) {
-	FileDataSource::UpdateType type = static_cast<FileDataSource::UpdateType>(idx);
+	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
 
-	if (type == FileDataSource::UpdateType::TimeInterval) {
+	if (type == LiveDataSource::UpdateType::TimeInterval) {
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
 
@@ -112,7 +112,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			source->setUpdateInterval(ui.sbUpdateInterval->value());
 			source->setFileWatched(false);
 		}
-	} else if (type == FileDataSource::UpdateType::NewData) {
+	} else if (type == LiveDataSource::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 
@@ -128,9 +128,9 @@ void LiveDataDock::updateTypeChanged(int idx) {
  * \param idx
  */
 void LiveDataDock::readingTypeChanged(int idx) {
-	FileDataSource::ReadingType type = static_cast<FileDataSource::ReadingType>(idx);
+	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
-	if (type == FileDataSource::ReadingType::TillEnd) {
+	if (type == LiveDataSource::ReadingType::TillEnd) {
 		ui.lSampleRate->hide();
 		ui.sbSampleRate->hide();
 	} else {

@@ -27,7 +27,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/BinaryFilterPrivate.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
 
 #include <QDataStream>
@@ -35,12 +35,12 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <KFilterDev>
 #include <cmath>
 
- /*!
-	\class BinaryFilter
-	\brief Manages the import/export of data organized as columns (vectors) from/to a binary file.
+/*!
+\class BinaryFilter
+\brief Manages the import/export of data organized as columns (vectors) from/to a binary file.
 
-	\ingroup datasources
- */
+\ingroup datasources
+*/
 BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {}
 
 BinaryFilter::~BinaryFilter() {}
@@ -68,7 +68,7 @@ QVector<QStringList> BinaryFilter::preview(const QString& fileName, int lines) {
 writes the content of the data source \c dataSource to the file \c fileName.
 */
 void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
- 	d->write(fileName, dataSource);
+	d->write(fileName, dataSource);
 // 	emit()
 }
 
@@ -77,8 +77,8 @@ returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataTypes() {
 	return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
-  	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
-	<<"real32 (single precision floats)"<<"real64 (double precision floats)");
+	        <<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
+	        <<"real32 (single precision floats)"<<"real64 (double precision floats)");
 }
 
 /*!
@@ -155,7 +155,7 @@ void BinaryFilter::setByteOrder(const BinaryFilter::ByteOrder b) {
 	d->byteOrder = b;
 }
 
-BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
+BinaryFilter::ByteOrder BinaryFilter::byteOrder() const {
 	return d->byteOrder;
 }
 
@@ -326,65 +326,65 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		for (int n = 0; n < m_actualCols; n++) {
 			switch (dataType) {
 			case BinaryFilter::INT8: {
-				qint8 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					qint8 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::INT16: {
-				qint16 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					qint16 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::INT32: {
-				qint32 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					qint32 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::INT64: {
-				qint64 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					qint64 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::UINT8: {
-				quint8 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					quint8 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::UINT16: {
-				quint16 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					quint16 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::UINT32: {
-				quint32 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					quint32 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::UINT64: {
-				quint64 value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					quint64 value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::REAL32: {
-				float value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					float value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			case BinaryFilter::REAL64: {
-				double value;
-				in >> value;
-				lineString << QString::number(value);
-				break;
-			}
+					double value;
+					in >> value;
+					lineString << QString::number(value);
+					break;
+				}
 			}
 		}
 		dataStrings << lineString;
@@ -394,9 +394,9 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	return dataStrings;
 }
 
-	/*!
-    reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
-    Uses the settings defined in the data source.
+/*!
+reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
+Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("BinaryFilterPrivate::readDataFromDevice()");
@@ -450,65 +450,65 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			DEBUG("reading column " << n);
 			switch (dataType) {
 			case BinaryFilter::INT8: {
-				qint8 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					qint8 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::INT16: {
-				qint16 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					qint16 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::INT32: {
-				qint32 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					qint32 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::INT64: {
-				qint64 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					qint64 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::UINT8: {
-				quint8 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					quint8 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::UINT16: {
-				quint16 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					quint16 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::UINT32: {
-				quint32 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					quint32 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::UINT64: {
-				quint64 value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					quint64 value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::REAL32: {
-				float value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					float value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			case BinaryFilter::REAL64: {
-				double value;
-				in >> value;
-				static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
-				break;
-			}
+					double value;
+					in >> value;
+					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					break;
+				}
 			}
 		}
 		emit q->completed(100*i/m_actualRows);

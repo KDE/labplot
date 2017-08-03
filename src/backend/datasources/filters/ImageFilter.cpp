@@ -26,18 +26,18 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/ImageFilterPrivate.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 
 #include <QImage>
 #include <KLocale>
 
- /*!
-	\class ImageFilter
-	\brief Manages the import/export of data from/to an image file.
+/*!
+\class ImageFilter
+\brief Manages the import/export of data from/to an image file.
 
-	\ingroup datasources
- */
+\ingroup datasources
+*/
 ImageFilter::ImageFilter():AbstractFileFilter(), d(new ImageFilterPrivate(this)) {}
 
 ImageFilter::~ImageFilter() {}
@@ -60,7 +60,7 @@ QVector<QStringList> ImageFilter::readDataFromFile(const QString& fileName, Abst
 writes the content of the data source \c dataSource to the file \c fileName.
 */
 void ImageFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
- 	d->write(fileName, dataSource);
+	d->write(fileName, dataSource);
 // 	emit()
 }
 
@@ -75,7 +75,7 @@ void ImageFilter::loadFilterSettings(const QString& filterName) {
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void ImageFilter::saveFilterSettings(const QString& filterName) const{
+void ImageFilter::saveFilterSettings(const QString& filterName) const {
 	Q_UNUSED(filterName);
 }
 
@@ -92,7 +92,7 @@ void ImageFilter::setStartRow(const int s) {
 	d->startRow = s;
 }
 
-int ImageFilter::startRow() const{
+int ImageFilter::startRow() const {
 	return d->startRow;
 }
 
@@ -100,7 +100,7 @@ void ImageFilter::setEndRow(const int e) {
 	d->endRow = e;
 }
 
-int ImageFilter::endRow() const{
+int ImageFilter::endRow() const {
 	return d->endRow;
 }
 
@@ -108,7 +108,7 @@ void ImageFilter::setStartColumn(const int s) {
 	d->startColumn = s;
 }
 
-int ImageFilter::startColumn() const{
+int ImageFilter::startColumn() const {
 	return d->startColumn;
 }
 
@@ -116,7 +116,7 @@ void ImageFilter::setEndColumn(const int e) {
 	d->endColumn = e;
 }
 
-int ImageFilter::endColumn() const{
+int ImageFilter::endColumn() const {
 	return d->endColumn;
 }
 
@@ -188,9 +188,9 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	//TODO: use given names?
 	QStringList vectorNames;
 
-	if (dataSource) {
+	if (dataSource)
 		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
-	} else {
+	else {
 		DEBUG("data source in image import not defined! Giving up.");
 
 		return dataStrings;
@@ -199,45 +199,45 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	// read data
 	switch (importFormat) {
 	case ImageFilter::MATRIX: {
-		for (int i = 0; i < actualRows; i++) {
-			for (int j = 0; j < actualCols; j++) {
-				double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
-				static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = value;
+			for (int i = 0; i < actualRows; i++) {
+				for (int j = 0; j < actualCols; j++) {
+					double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
+					static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = value;
+				}
+				emit q->completed(100*i/actualRows);
 			}
-			emit q->completed(100*i/actualRows);
+			break;
 		}
-		break;
-	}
 	case ImageFilter::XYZ: {
-		int currentRow = 0;
-		for (int i = startRow-1; i < endRow; i++) {
-			for (int j = startColumn-1; j < endColumn; j++) {
-				QRgb color=image.pixel(j, i);
-				static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
-				static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
-				static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qGray(color);
-				currentRow++;
+			int currentRow = 0;
+			for (int i = startRow-1; i < endRow; i++) {
+				for (int j = startColumn-1; j < endColumn; j++) {
+					QRgb color=image.pixel(j, i);
+					static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
+					static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
+					static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qGray(color);
+					currentRow++;
+				}
+				emit q->completed(100*i/actualRows);
 			}
-			emit q->completed(100*i/actualRows);
+			break;
 		}
-		break;
-	}
 	case ImageFilter::XYRGB: {
-		int currentRow = 0;
-		for (int i = startRow-1; i < endRow; i++) {
-			for ( int j = startColumn-1; j < endColumn; j++ ) {
-				QRgb color = image.pixel(j, i);
-				static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
-				static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
-				static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qRed(color);
-				static_cast<QVector<int>*>(dataContainer[3])->operator[](currentRow) = qGreen(color);
-				static_cast<QVector<int>*>(dataContainer[4])->operator[](currentRow) = qBlue(color);
-				currentRow++;
+			int currentRow = 0;
+			for (int i = startRow-1; i < endRow; i++) {
+				for ( int j = startColumn-1; j < endColumn; j++ ) {
+					QRgb color = image.pixel(j, i);
+					static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
+					static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
+					static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qRed(color);
+					static_cast<QVector<int>*>(dataContainer[3])->operator[](currentRow) = qGreen(color);
+					static_cast<QVector<int>*>(dataContainer[4])->operator[](currentRow) = qBlue(color);
+					currentRow++;
+				}
+				emit q->completed(100*i/actualRows);
 			}
-			emit q->completed(100*i/actualRows);
+			break;
 		}
-		break;
-	}
 	}
 
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);

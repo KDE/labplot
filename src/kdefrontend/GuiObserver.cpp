@@ -31,7 +31,7 @@
 #include "kdefrontend/GuiObserver.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
@@ -100,10 +100,10 @@
 
 GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0) {
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)),
-		this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
+	        this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
 	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)),
-		this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );
-    m_mainWindow = mainWin;
+	        this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );
+	m_mainWindow = mainWin;
 }
 
 
@@ -488,9 +488,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->projectDock->setProject(m_mainWindow->m_project);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->projectDock);
-	} else if (className=="CantorWorksheet"){
-		#ifdef HAVE_CANTOR_LIBS
-		if (!m_mainWindow->cantorWorksheetDock){
+	} else if (className=="CantorWorksheet") {
+#ifdef HAVE_CANTOR_LIBS
+		if (!m_mainWindow->cantorWorksheetDock) {
 			m_mainWindow->cantorWorksheetDock = new CantorWorksheetDock(m_mainWindow->stackedWidget);
 			connect(m_mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->cantorWorksheetDock);
@@ -506,7 +506,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cantorWorksheetDock);
-		#endif
+#endif
 	} else if (className == "Notes") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes"));
 
@@ -521,21 +521,21 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->notesDock->setNotesList(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
-    } else if (className == "FileDataSource") {
-        m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
+	} else if (className == "LiveDataSource") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
 
-        if (!m_mainWindow->m_liveDataDock) {
-            m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
-            m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
-        }
+		if (!m_mainWindow->m_liveDataDock) {
+			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
+		}
 
-        QList<FileDataSource*> list;
-        for (auto* aspect: selectedAspects)
-            list << qobject_cast<FileDataSource*>(aspect);
-        m_mainWindow->m_liveDataDock->setLiveDataSources(list);
+		QList<LiveDataSource*> list;
+		for (auto* aspect: selectedAspects)
+			list << qobject_cast<LiveDataSource*>(aspect);
+		m_mainWindow->m_liveDataDock->setLiveDataSources(list);
 
-        m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-    } else {
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
+	} else {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
