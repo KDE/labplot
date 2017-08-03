@@ -589,6 +589,9 @@ void MainWin::updateGUIOnProjectChanges() {
  * depending on the currently active window (worksheet or spreadsheet).
  */
 void MainWin::updateGUI() {
+	if (m_project->isLoading())
+		return;
+
 	if (m_closing)
 		return;
 
