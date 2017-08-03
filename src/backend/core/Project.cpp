@@ -28,6 +28,7 @@
  ***************************************************************************/
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -128,7 +129,13 @@ Project::~Project() {
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	foreach(Worksheet* w, children<Worksheet>())
+    QList<LiveDataSource*> liveDataSources = children<LiveDataSource>();
+
+    for(auto* lds : liveDataSources) {
+        lds->pauseReading();
+    }
+
+    foreach(Worksheet* w, children<Worksheet>())
 		w->setIsClosing();
 
 	d->undo_stack.clear();
