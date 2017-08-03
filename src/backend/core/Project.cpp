@@ -78,26 +78,26 @@
  */
 
 class Project::Private {
-	public:
-		Private() :
-			mdiWindowVisibility(Project::folderOnly),
-			scriptingEngine(0),
-			version(LVERSION),
-			author(QString(qgetenv("USER"))),
-			modificationTime(QDateTime::currentDateTime()),
-			changed(false),
-			loading(false)
-			{}
+public:
+	Private() :
+		mdiWindowVisibility(Project::folderOnly),
+		scriptingEngine(0),
+		version(LVERSION),
+		author(QString(qgetenv("USER"))),
+		modificationTime(QDateTime::currentDateTime()),
+		changed(false),
+		loading(false) {
+	}
 
-		QUndoStack undo_stack;
-		MdiWindowVisibility mdiWindowVisibility;
-		AbstractScriptingEngine* scriptingEngine;
-		QString fileName;
-		QString version;
-		QString author;
-		QDateTime modificationTime;
-		bool changed;
-		bool loading;
+	QUndoStack undo_stack;
+	MdiWindowVisibility mdiWindowVisibility;
+	AbstractScriptingEngine* scriptingEngine;
+	QString fileName;
+	QString version;
+	QString author;
+	QDateTime modificationTime;
+	bool changed;
+	bool loading;
 };
 
 Project::Project() : Folder(i18n("Project")), d(new Private()) {
@@ -129,13 +129,12 @@ Project::~Project() {
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-    QList<LiveDataSource*> liveDataSources = children<LiveDataSource>();
+	QList<LiveDataSource*> liveDataSources = children<LiveDataSource>();
 
-    for(auto* lds : liveDataSources) {
-        lds->pauseReading();
-    }
+	for(auto* lds : liveDataSources)
+		lds->pauseReading();
 
-    foreach(Worksheet* w, children<Worksheet>())
+	foreach(Worksheet* w, children<Worksheet>())
 		w->setIsClosing();
 
 	d->undo_stack.clear();
@@ -378,14 +377,12 @@ bool Project::load(XmlStreamReader* reader) {
 					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
 					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
 					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-                }
+				}
 			}
-		} else {// no project element
+		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
-		}
-	} else {// no start document
+	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
-	}
 	d->loading = false;
 	emit loaded();
 	return !reader->hasError();
@@ -405,9 +402,8 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	if(str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
-	} else {
+	} else
 		d->modificationTime = modificationTime;
-	}
 
 	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
 	d->author = str;
