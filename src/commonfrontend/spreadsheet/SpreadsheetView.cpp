@@ -74,11 +74,12 @@
 
 	\ingroup commonfrontend
  */
-SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet) : QWidget(),
+SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWidget(),
 	m_tableView(new QTableView(this)),
 	m_spreadsheet(spreadsheet),
 	m_model( new SpreadsheetModel(spreadsheet) ),
-	m_suppressSelectionChangedEvent(false) {
+	m_suppressSelectionChangedEvent(false),
+	m_readOnly(readOnly) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
@@ -272,25 +273,31 @@ void SpreadsheetView::initActions() {
 void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
+	QMenu* submenu = nullptr;
 
-	QMenu* submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_sel_row_numbers);
-	submenu->addAction(action_fill_const);
-// 	submenu->addAction(action_fill_random);
-	m_selectionMenu ->addMenu(submenu);
-	m_selectionMenu ->addSeparator();
+	if (!m_readOnly) {
+		submenu= new QMenu(i18n("Fi&ll Selection with"), this);
+		submenu->addAction(action_fill_sel_row_numbers);
+		submenu->addAction(action_fill_const);
+		// 	submenu->addAction(action_fill_random);
+		m_selectionMenu->addMenu(submenu);
+		m_selectionMenu->addSeparator();
+	}
 
-	m_selectionMenu ->addAction(action_cut_selection);
-	m_selectionMenu ->addAction(action_copy_selection);
-	m_selectionMenu ->addAction(action_paste_into_selection);
-	m_selectionMenu ->addAction(action_clear_selection);
-	m_selectionMenu ->addSeparator();
-	m_selectionMenu ->addAction(action_mask_selection);
-	m_selectionMenu ->addAction(action_unmask_selection);
-	m_selectionMenu ->addSeparator();
-	m_selectionMenu ->addAction(action_normalize_selection);
+	if (!m_readOnly)
+		m_selectionMenu->addAction(action_cut_selection);
+	m_selectionMenu->addAction(action_copy_selection);
+	if (!m_readOnly) {
+		m_selectionMenu->addAction(action_paste_into_selection);
+		m_selectionMenu->addAction(action_clear_selection);
+		m_selectionMenu->addSeparator();
+		m_selectionMenu->addAction(action_mask_selection);
+		m_selectionMenu->addAction(action_unmask_selection);
+		m_selectionMenu->addSeparator();
+		m_selectionMenu->addAction(action_normalize_selection);
+	}
 	//TODO
-// 	m_selectionMenu ->addSeparator();
+	// 	m_selectionMenu ->addSeparator();
 // 	m_selectionMenu ->addAction(action_set_formula);
 // 	m_selectionMenu ->addAction(action_recalculate);
 
@@ -301,54 +308,55 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addAction(action_plot_data);
 	m_columnMenu->addSeparator();
+	if (!m_readOnly) {
+		submenu = new QMenu(i18n("Set Column As"));
+		submenu->addAction(action_set_as_x);
+		submenu->addAction(action_set_as_y);
+		submenu->addAction(action_set_as_z);
+		submenu->addSeparator();
+		submenu->addAction(action_set_as_xerr);
+		submenu->addAction(action_set_as_xerr_minus);
+		submenu->addAction(action_set_as_xerr_plus);
+		submenu->addSeparator();
+		submenu->addAction(action_set_as_yerr);
+		submenu->addAction(action_set_as_yerr_minus);
+		submenu->addAction(action_set_as_yerr_plus);
+		submenu->addSeparator();
+		submenu->addAction(action_set_as_none);
+		m_columnMenu->addMenu(submenu);
+		m_columnMenu->addSeparator();
 
-	submenu = new QMenu(i18n("Set Column As"));
-	submenu->addAction(action_set_as_x);
-	submenu->addAction(action_set_as_y);
-	submenu->addAction(action_set_as_z);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_xerr);
-	submenu->addAction(action_set_as_xerr_minus);
-	submenu->addAction(action_set_as_xerr_plus);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_yerr);
-	submenu->addAction(action_set_as_yerr_minus);
-	submenu->addAction(action_set_as_yerr_plus);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_none);
-	m_columnMenu->addMenu(submenu);
-	m_columnMenu->addSeparator();
 
-	submenu = new QMenu(i18n("Generate Data"), this);
-	submenu->addAction(action_fill_row_numbers);
-	submenu->addAction(action_fill_const);
-// 	submenu->addAction(action_fill_random);
-	submenu->addAction(action_fill_equidistant);
-	submenu->addAction(action_fill_random_nonuniform);
-	submenu->addAction(action_fill_function);
-	m_columnMenu->addMenu(submenu);
-	m_columnMenu->addSeparator();
+		submenu = new QMenu(i18n("Generate Data"), this);
+		submenu->addAction(action_fill_row_numbers);
+		submenu->addAction(action_fill_const);
+		// 	submenu->addAction(action_fill_random);
+		submenu->addAction(action_fill_equidistant);
+		submenu->addAction(action_fill_random_nonuniform);
+		submenu->addAction(action_fill_function);
+		m_columnMenu->addMenu(submenu);
+		m_columnMenu->addSeparator();
 
-	m_columnMenu->addAction(action_reverse_columns);
-	m_columnMenu->addAction(action_drop_values);
-	m_columnMenu->addAction(action_mask_values);
-// 	m_columnMenu->addAction(action_join_columns);
-	m_columnMenu->addAction(action_normalize_columns);
+		m_columnMenu->addAction(action_reverse_columns);
+		m_columnMenu->addAction(action_drop_values);
+		m_columnMenu->addAction(action_mask_values);
+		// 	m_columnMenu->addAction(action_join_columns);
+		m_columnMenu->addAction(action_normalize_columns);
 
-	submenu = new QMenu(i18n("Sort"), this);
-	submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
-	submenu->addAction(action_sort_asc_column);
-	submenu->addAction(action_sort_desc_column);
-	submenu->addAction(action_sort_columns);
-	m_columnMenu->addMenu(submenu);
-	m_columnMenu->addSeparator();
+		submenu = new QMenu(i18n("Sort"), this);
+		submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+		submenu->addAction(action_sort_asc_column);
+		submenu->addAction(action_sort_desc_column);
+		submenu->addAction(action_sort_columns);
+		m_columnMenu->addMenu(submenu);
+		m_columnMenu->addSeparator();
 
-	m_columnMenu->addAction(action_insert_columns);
-	m_columnMenu->addAction(action_remove_columns);
-	m_columnMenu->addAction(action_clear_columns);
-	m_columnMenu->addAction(action_add_columns);
-	m_columnMenu->addSeparator();
-
+		m_columnMenu->addAction(action_insert_columns);
+		m_columnMenu->addAction(action_remove_columns);
+		m_columnMenu->addAction(action_clear_columns);
+		m_columnMenu->addAction(action_add_columns);
+		m_columnMenu->addSeparator();
+	}
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
@@ -363,12 +371,15 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_select_all);
-	m_spreadsheetMenu->addAction(action_clear_spreadsheet);
-	m_spreadsheetMenu->addAction(action_clear_masks);
-	m_spreadsheetMenu->addAction(action_sort_spreadsheet);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_add_column);
-	m_spreadsheetMenu->addSeparator();
+	if (!m_readOnly) {
+		m_spreadsheetMenu->addAction(action_clear_spreadsheet);
+		m_spreadsheetMenu->addAction(action_clear_masks);
+		m_spreadsheetMenu->addAction(action_sort_spreadsheet);
+		m_spreadsheetMenu->addSeparator();
+
+		m_spreadsheetMenu->addAction(action_add_column);
+		m_spreadsheetMenu->addSeparator();
+	}
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_statistics_all_columns);
@@ -377,19 +388,22 @@ void SpreadsheetView::initMenus() {
 	//Row menu
 	m_rowMenu = new QMenu(this);
 
-	m_rowMenu->addAction(action_insert_rows);
-	m_rowMenu->addAction(action_remove_rows);
-	m_rowMenu->addAction(action_clear_rows);
-	m_rowMenu->addAction(action_add_rows);
-	m_rowMenu->addSeparator();
+	if (!m_readOnly) {
 
-	submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_sel_row_numbers);
-// 	submenu->addAction(action_fill_random);
-	submenu->addAction(action_fill_const);
-	m_rowMenu->addMenu(submenu);
+		m_rowMenu->addAction(action_insert_rows);
+		m_rowMenu->addAction(action_remove_rows);
+		m_rowMenu->addAction(action_clear_rows);
+		m_rowMenu->addAction(action_add_rows);
+		m_rowMenu->addSeparator();
 
-	m_rowMenu->addSeparator();
+		submenu = new QMenu(i18n("Fi&ll Selection with"), this);
+		submenu->addAction(action_fill_sel_row_numbers);
+		// 	submenu->addAction(action_fill_random);
+		submenu->addAction(action_fill_const);
+		m_rowMenu->addMenu(submenu);
+
+		m_rowMenu->addSeparator();
+	}
 	m_rowMenu->addAction(action_statistics_rows);
 	action_statistics_rows->setVisible(false);
 }
@@ -454,20 +468,25 @@ void SpreadsheetView::connectActions() {
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
-	toolBar->addAction(action_insert_rows);
-	toolBar->addAction(action_add_rows);
-	toolBar->addAction(action_remove_rows);
+	if (!m_readOnly) {
+		toolBar->addAction(action_insert_rows);
+		toolBar->addAction(action_add_rows);
+		toolBar->addAction(action_remove_rows);
+	}
 	toolBar->addAction(action_statistics_rows);
-
 	toolBar->addSeparator();
-	toolBar->addAction(action_insert_columns);
-	toolBar->addAction(action_add_column);
-	toolBar->addAction(action_remove_columns);
+	if (!m_readOnly) {
+		toolBar->addAction(action_insert_columns);
+		toolBar->addAction(action_add_column);
+		toolBar->addAction(action_remove_columns);
+	}
+
 	toolBar->addAction(action_statistics_columns);
-
-	toolBar->addSeparator();
-	toolBar->addAction(action_sort_asc_column);
-	toolBar->addAction(action_sort_desc_column);
+	if (!m_readOnly) {
+		toolBar->addSeparator();
+		toolBar->addAction(action_sort_asc_column);
+		toolBar->addAction(action_sort_desc_column);
+	}
 }
 
 /*!
@@ -493,12 +512,15 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_select_all);
-	menu->insertAction(firstAction, action_clear_spreadsheet);
-	menu->insertAction(firstAction, action_clear_masks);
-	menu->insertAction(firstAction, action_sort_spreadsheet);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_add_column);
-	menu->insertSeparator(firstAction);
+	if (!m_readOnly) {
+		menu->insertAction(firstAction, action_clear_spreadsheet);
+		menu->insertAction(firstAction, action_clear_masks);
+		menu->insertAction(firstAction, action_sort_spreadsheet);
+		menu->insertSeparator(firstAction);
+		menu->insertAction(firstAction, action_add_column);
+		menu->insertSeparator(firstAction);
+	}
+
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_all_columns);
@@ -526,37 +548,42 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 	submenu->addSeparator();
 	submenu->addAction(action_set_as_none);
 	menu->insertMenu(firstAction, submenu);
-	menu->insertSeparator(firstAction);
+	if (!m_readOnly) {
+		menu->insertSeparator(firstAction);
 
-	submenu = new QMenu(i18n("Generate Data"), this);
-	submenu->insertAction(firstAction, action_fill_row_numbers);
-	submenu->insertAction(firstAction, action_fill_const);
-// 	submenu->insertAction(firstAction, action_fill_random);
-	submenu->insertAction(firstAction, action_fill_equidistant);
-	submenu->insertAction(firstAction, action_fill_random_nonuniform);
-	submenu->insertAction(firstAction, action_fill_function);
-	menu->insertMenu(firstAction, submenu);
-	menu->insertSeparator(firstAction);
+		submenu = new QMenu(i18n("Generate Data"), this);
+		submenu->insertAction(firstAction, action_fill_row_numbers);
+		submenu->insertAction(firstAction, action_fill_const);
+		// 	submenu->insertAction(firstAction, action_fill_random);
+		submenu->insertAction(firstAction, action_fill_equidistant);
+		submenu->insertAction(firstAction, action_fill_random_nonuniform);
+		submenu->insertAction(firstAction, action_fill_function);
+		menu->insertMenu(firstAction, submenu);
+		menu->insertSeparator(firstAction);
 
-	menu->insertAction(firstAction, action_reverse_columns);
-	menu->insertAction(firstAction, action_drop_values);
-	menu->insertAction(firstAction, action_mask_values);
-// 	menu->insertAction(firstAction, action_join_columns);
-	menu->insertAction(firstAction, action_normalize_columns);
+		menu->insertAction(firstAction, action_reverse_columns);
+		menu->insertAction(firstAction, action_drop_values);
+		menu->insertAction(firstAction, action_mask_values);
+		// 	menu->insertAction(firstAction, action_join_columns);
+		menu->insertAction(firstAction, action_normalize_columns);
 
-	submenu = new QMenu(i18n("Sort"), this);
-	submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
-	submenu->insertAction(firstAction, action_sort_asc_column);
-	submenu->insertAction(firstAction, action_sort_desc_column);
-	submenu->insertAction(firstAction, action_sort_columns);
-	menu->insertMenu(firstAction, submenu);
-	menu->insertSeparator(firstAction);
-
+		submenu = new QMenu(i18n("Sort"), this);
+		submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+		submenu->insertAction(firstAction, action_sort_asc_column);
+		submenu->insertAction(firstAction, action_sort_desc_column);
+		submenu->insertAction(firstAction, action_sort_columns);
+		menu->insertMenu(firstAction, submenu);
+		menu->insertSeparator(firstAction);
+	} else {
+		action_sort_columns->setVisible(false);
+		action_sort_asc_column->setVisible(false);
+		action_sort_desc_column->setVisible(true);
+	}
 	menu->insertAction(firstAction, action_statistics_columns);
 
 	action_sort_columns->setVisible(false);
-	action_sort_asc_column->setVisible(true);
-	action_sort_desc_column->setVisible(true);
+	action_sort_asc_column->setVisible(false);
+	action_sort_desc_column->setVisible(false);
 
 	//check whether we have non-numeric columns selected and deactivate actions for numeric columns
 	const Column* column = selectedColumns().first();
@@ -1114,35 +1141,35 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
-			QVector<double> results(last-first+1);
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results[row-first] = row + 1;
-				else
-					results[row-first] = col_ptr->valueAt(row);
-			col_ptr->replaceValues(first, results);
-			break;
-		}
+				QVector<double> results(last-first+1);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results[row-first] = row + 1;
+					else
+						results[row-first] = col_ptr->valueAt(row);
+				col_ptr->replaceValues(first, results);
+				break;
+			}
 		case AbstractColumn::Integer: {
-			QVector<int> results(last-first+1);
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results[row-first] = row + 1;
-				else
-					results[row-first] = col_ptr->integerAt(row);
- 			col_ptr->replaceInteger(first, results);
-			break;
-		}
+				QVector<int> results(last-first+1);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results[row-first] = row + 1;
+					else
+						results[row-first] = col_ptr->integerAt(row);
+				col_ptr->replaceInteger(first, results);
+				break;
+			}
 		case AbstractColumn::Text: {
-			QVector<QString> results;
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results << QString::number(row+1);
-				else
-					results << col_ptr->textAt(row);
-			col_ptr->replaceTexts(first, results);
-			break;
-		}
+				QVector<QString> results;
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results << QString::number(row+1);
+					else
+						results << col_ptr->textAt(row);
+				col_ptr->replaceTexts(first, results);
+				break;
+			}
 		//TODO: handle other modes
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -1208,50 +1235,50 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::Numeric: {
-			QVector<double> results(last-first+1);
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results[row-first] = double(qrand())/double(RAND_MAX);
-				else
-					results[row-first] = col_ptr->valueAt(row);
-			col_ptr->replaceValues(first, results);
-			break;
-		}
+				QVector<double> results(last-first+1);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results[row-first] = double(qrand())/double(RAND_MAX);
+					else
+						results[row-first] = col_ptr->valueAt(row);
+				col_ptr->replaceValues(first, results);
+				break;
+			}
 		case AbstractColumn::Integer: {
-			QVector<int> results(last-first+1);
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results[row-first] = qrand();
-				else
-					results[row-first] = col_ptr->integerAt(row);
-			col_ptr->replaceInteger(first, results);
-			break;
-		}
+				QVector<int> results(last-first+1);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results[row-first] = qrand();
+					else
+						results[row-first] = col_ptr->integerAt(row);
+				col_ptr->replaceInteger(first, results);
+				break;
+			}
 		case AbstractColumn::Text: {
-			QVector<QString> results;
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results << QString::number(double(qrand())/double(RAND_MAX));
-				else
-					results << col_ptr->textAt(row);
-			col_ptr->replaceTexts(first, results);
-			break;
-		}
+				QVector<QString> results;
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results << QString::number(double(qrand())/double(RAND_MAX));
+					else
+						results << col_ptr->textAt(row);
+				col_ptr->replaceTexts(first, results);
+				break;
+			}
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
-			QVector<QDateTime> results;
-			QDate earliestDate(1,1,1);
-			QDate latestDate(2999,12,31);
-			QTime midnight(0,0,0,0);
-			for (int row = first; row <= last; row++)
-				if (isCellSelected(row, col))
-					results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
-				else
-					results << col_ptr->dateTimeAt(row);
-			col_ptr->replaceDateTimes(first, results);
-			break;
-		}
+				QVector<QDateTime> results;
+				QDate earliestDate(1,1,1);
+				QDate latestDate(2999,12,31);
+				QTime midnight(0,0,0,0);
+				for (int row = first; row <= last; row++)
+					if (isCellSelected(row, col))
+						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+					else
+						results << col_ptr->dateTimeAt(row);
+				col_ptr->replaceDateTimes(first, results);
+				break;
+			}
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1304,7 +1331,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Numeric:
 			if (!doubleOk)
 				doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-													i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+				                                      i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
 			if (doubleOk) {
 				WAIT_CURSOR;
 				QVector<double> results(last-first+1);
@@ -1321,7 +1348,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Integer:
 			if (!intOk)
 				intValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"),
-													i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
+				                                i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
 			if (intOk) {
 				WAIT_CURSOR;
 				QVector<int> results(last-first+1);
@@ -1338,7 +1365,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Text:
 			if (!stringOk)
 				stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-												i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+				                                    i18n("Value"), QLineEdit::Normal, 0, &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
 				WAIT_CURSOR;
 				QVector<QString> results;
@@ -1541,7 +1568,7 @@ void SpreadsheetView::normalizeSelection() {
 }
 
 void SpreadsheetView::sortSelectedColumns() {
-    sortDialog(selectedColumns());
+	sortDialog(selectedColumns());
 }
 
 

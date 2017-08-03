@@ -133,7 +133,7 @@ void LiveDataSource::initActions() {
 //TODO make the view customizable (show as a spreadsheet or as a pure text file in an editor)
 QWidget *LiveDataSource::view() const {
 	if (!m_view)
-		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this));
+		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
 	return m_view;
 }
 
