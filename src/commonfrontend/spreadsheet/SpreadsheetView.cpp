@@ -84,7 +84,8 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
-
+	if (m_readOnly)
+		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 	init();
 
 	//resize the view to show alls columns and the first 50 rows.
