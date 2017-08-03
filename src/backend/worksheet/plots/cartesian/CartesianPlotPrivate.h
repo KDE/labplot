@@ -65,6 +65,7 @@ public:
 	CartesianPlot* const q;
 	CartesianPlot::MouseMode mouseMode;
 	CartesianCoordinateSystem* cSystem;
+	bool suppressRetransform;
 
 private:
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -81,7 +82,6 @@ private:
 		double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
 
-	bool m_suppressRetransform;
 //	bool m_printing;
 	bool m_selectionBandIsShown;
 	QPointF m_selectionStart;

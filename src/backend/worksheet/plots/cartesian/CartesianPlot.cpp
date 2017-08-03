@@ -592,6 +592,11 @@ void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
 	else if (op == ShiftDownY) shiftDownY();
 }
 
+void CartesianPlot::setSuppressDataChangedSignal(bool value) {
+	Q_D(CartesianPlot);
+	d->suppressRetransform = value;
+}
+
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
@@ -1207,8 +1212,6 @@ void CartesianPlot::updateLegend() {
 */
 void CartesianPlot::dataChanged() {
 	Q_D(CartesianPlot);
-	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-	Q_ASSERT(curve);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleX && d->autoScaleY)
@@ -1217,24 +1220,29 @@ void CartesianPlot::dataChanged() {
 		this->scaleAutoX();
 	else if (d->autoScaleY)
 		this->scaleAutoY();
-	else
+	else {
+		//free ranges -> rentransform the curve that sent
+		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 
 void CartesianPlot::HistogramdataChanged(){
 	Q_D(CartesianPlot);
-	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-	Q_ASSERT(curve);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-    if (d->autoScaleX && d->autoScaleY)
-        this->scaleAuto();
-    else if (d->autoScaleX)
-        this->scaleAutoY();
-    else if (d->autoScaleY)
-        this->scaleAutoY();
-    else
+	if (d->autoScaleX && d->autoScaleY)
+		this->scaleAuto();
+	else if (d->autoScaleX)
+		this->scaleAutoY();
+	else if (d->autoScaleY)
+		this->scaleAutoY();
+	else {
+		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 /*!
 	called when in one of the curves the x-data was changed.
@@ -1245,14 +1253,17 @@ void CartesianPlot::xDataChanged() {
 		return;
 
 	Q_D(CartesianPlot);
-	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-	Q_ASSERT(curve);
-    d->curvesXMinMaxIsDirty = true;
+	if (d->suppressRetransform)
+		return;
 
+	d->curvesXMinMaxIsDirty = true;
 	if (d->autoScaleX)
 		this->scaleAutoX();
-	else
+	else {
+		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 
 void CartesianPlot::xHistogramDataChanged(){
@@ -1260,13 +1271,17 @@ void CartesianPlot::xHistogramDataChanged(){
 		return;
 
 	Q_D(CartesianPlot);
-	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-	Q_ASSERT(curve);
+	if (d->suppressRetransform)
+		return;
+
 	d->curvesXMinMaxIsDirty = true;
-	if (d->autoScaleX) {
+	if (d->autoScaleX)
 		this->scaleAutoX();
-	} else
+	else {
+		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 /*!
 	called when in one of the curves the x-data was changed.
@@ -1277,26 +1292,34 @@ void CartesianPlot::yDataChanged() {
 		return;
 
 	Q_D(CartesianPlot);
-	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-	Q_ASSERT(curve);
+	if (d->suppressRetransform)
+		return;
+
 	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleY)
 		this->scaleAutoY();
-	else
+	else {
+		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 void CartesianPlot::yHistogramDataChanged(){
 	if (project()->isLoading())
 		return;
 
 	Q_D(CartesianPlot);
-	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-	Q_ASSERT(curve);
+	if (d->suppressRetransform)
+		return;
+
 	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleY)
 		this->scaleAutoY();
-	else
+	else {
+		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+		Q_ASSERT(curve);
 		curve->retransform();
+	}
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -1773,7 +1796,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	q(plot),
 	mouseMode(CartesianPlot::SelectionMode),
 	cSystem(nullptr),
-	m_suppressRetransform(false),
+	suppressRetransform(false),
 //	m_printing(false),
 	m_selectionBandIsShown(false) {
 
@@ -1788,10 +1811,10 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-	DEBUG("CartesianPlotPrivate::retransform()");
-	if (m_suppressRetransform)
+	if (suppressRetransform)
 		return;
 
+	DEBUG("CartesianPlotPrivate::retransform()");
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
@@ -2155,9 +2178,9 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 
-		m_suppressRetransform = true;
+		suppressRetransform = true;
 		q->setRect(newRect);
-		m_suppressRetransform = false;
+		suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {

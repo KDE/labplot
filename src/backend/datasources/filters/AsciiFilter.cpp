@@ -28,8 +28,11 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
@@ -925,23 +928,39 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				currentRow++;
 			}
 		}
-
-		{
-#ifdef PERFTRACE_LIVE_IMPORT
-			PERFTRACE("AsciiLiveDataImportColumnComments: ");
-#endif
-			//////////
-			// set the comments for each of the columns if datasource is a spreadsheet
+		if (m_prepared) {
+			//notify all affected columns and plots about the changes
+			PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
+			const Project* project = spreadsheet->project();
+			QList<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+			QVector<CartesianPlot*> plots;
 			for (int n = 0; n < m_actualCols; ++n) {
 				Column* column = spreadsheet->column(n);
 
+				//determine the plots where the column is consumed
+				for (const auto* curve: curves) {
+					if (curve->xColumn() == column || curve->yColumn() == column) {
+						CartesianPlot* plot = dynamic_cast<CartesianPlot*>(curve->parentAspect());
+						if (plots.indexOf(plot) == -1) {
+							plots << plot;
+							plot->setSuppressDataChangedSignal(true);
+						}
+					}
+				}
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
+			}
+
+			//loop over all affected plots and retransform them
+			for (auto* plot: plots) {
+				//TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
+// 				plot->setSuppressDataChangedSignal(false);
+				plot->dataChanged();
 			}
 		}
 	} else
 		qDebug() << "No new data available";
-	//////////////////
+
 	m_prepared = true;
 
 	return bytesread;
