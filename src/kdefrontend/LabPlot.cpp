@@ -28,12 +28,14 @@
  ***************************************************************************/
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDir>
+#include <QFile>
+#include <QSplashScreen>
+#include <QStandardPaths>
+
 #include <KAboutData>
 #include <KLocalizedString>
-#include <QStandardPaths>
-#include <QSplashScreen>
 #include <KMessageBox>
-#include <QFile>
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
@@ -76,13 +78,17 @@ int main (int argc, char *argv[]) {
 		filename = args[0];
 
 	if(!filename.isEmpty() ) {
+		//determine the absolute file path in order to properly save it in MainWin in "Recent Files"
+		QDir dir;
+		filename = dir.absoluteFilePath(filename);
+
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
 					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
-				filename=""; //Wrong file -> clear the file name and continue
+				filename = ""; //Wrong file -> clear the file name and continue
 			}
 		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
 				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) || filename.contains(".lml.xz", Qt::CaseInsensitive) ) ) {
@@ -91,7 +97,7 @@ int main (int argc, char *argv[]) {
 					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
 			} else {
-				filename=""; //Wrong file -> clear the file name and continue
+				filename = ""; //Wrong file -> clear the file name and continue
 			}
 		}
 	}
