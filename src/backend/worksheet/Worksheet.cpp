@@ -808,6 +808,9 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	//clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
+	d->theme = "";
+
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
