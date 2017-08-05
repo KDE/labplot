@@ -57,14 +57,19 @@ int main (int argc, char *argv[]) {
 	QCommandLineParser parser;
 	parser.addHelpOption();
 	parser.addVersionOption();
+
 	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
 	parser.addOption(nosplashOption);
+
+	QCommandLineOption presenterOption("presenter", i18n("start in the presenter mode"));
+	parser.addOption(presenterOption);
 
 	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
 
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
+
 	const QStringList args = parser.positionalArguments();
 	QString filename;
 	if (args.count() > 0)
@@ -91,9 +96,9 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	QSplashScreen *splash=0;
-	if (!parser.isSet("no-splash")) {
-		QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
+	QSplashScreen* splash = nullptr;
+	if (!parser.isSet(nosplashOption)) {
+		const QString& file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}
@@ -105,8 +110,12 @@ int main (int argc, char *argv[]) {
 
 	MainWin* window = new MainWin(0, filename);
 	window->show();
+
 	if(splash)
 		splash->finish(window);
+
+	if (parser.isSet(presenterOption))
+		window->showPresenter();
 
 	return app.exec();
 }

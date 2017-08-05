@@ -155,7 +155,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 MainWin::~MainWin() {
 	//write settings
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
-// 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
 	//etc...
 
 	KSharedConfig::openConfig()->sync();
@@ -171,6 +170,22 @@ MainWin::~MainWin() {
 
 	if (m_guiObserver)
 		delete m_guiObserver;
+}
+
+void MainWin::showPresenter() {
+	Worksheet* w = activeWorksheet();
+	if (w) {
+		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+		view->presenterMode();
+	} else {
+		//currently active object is not a worksheet but we're asked to start in the presenter mode
+		//determine the first available worksheet and show it in the presenter mode
+		QList<Worksheet*> worksheets = m_project->children<Worksheet>();
+		if (worksheets.size()>0) {
+			WorksheetView* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
+			view->presenterMode();
+		}
+	}
 }
 
 AspectTreeModel* MainWin::model() const {

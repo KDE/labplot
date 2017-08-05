@@ -89,6 +89,7 @@ public:
 	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
 	~MainWin();
 
+	void showPresenter();
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);

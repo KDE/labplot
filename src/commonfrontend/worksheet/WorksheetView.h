@@ -228,6 +228,7 @@ public slots:
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
+	void presenterMode();
 
 private slots:
 	void addNew(QAction*);
@@ -250,8 +251,6 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
-
-	void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
