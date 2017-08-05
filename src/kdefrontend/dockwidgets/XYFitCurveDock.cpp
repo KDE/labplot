@@ -1203,6 +1203,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 	// else
 		//str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
 	str +=  "</table>";
+
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
@@ -1242,8 +1243,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
  * show the fit result log (plain text)
  */
 void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
-	QString str;
-	str += i18n("status:") + ' ' + fitResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
 	str += i18n("tolerance:") + ' ' + QString::number(m_fitData.eps) + "<br>";
 	if (fitResult.elapsedTime > 1000)
@@ -1325,8 +1325,6 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	//const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-
 	const int np = fitResult.paramValues.size();
 	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
 	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
@@ -1335,7 +1333,6 @@ void XYFitCurveDock::showFitResult() {
 	showFitResultLog(fitResult);
 
 	// General
-	uiGeneralTab.twGeneral->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
 
 	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
@@ -1351,23 +1348,27 @@ void XYFitCurveDock::showFitResult() {
 
 	// Parameters
 	uiGeneralTab.twParameters->setRowCount(np);
-	//uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	QStringList headerLabels;
-	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|") << i18n("Conf. Interval");
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+
 	for (int i = 0; i < np; i++) {
-		QTableWidgetItem *item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
+		const double paramValue = fitResult.paramValues.at(i);
+		const double errorValue = fitResult.errorValues.at(i);
+
+		QTableWidgetItem* item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
-		item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
+		item = new QTableWidgetItem(QString::number(paramValue));
 		uiGeneralTab.twParameters->setItem(i, 1, item);
+
 		if (!m_fitData.paramFixed.at(i)) {
-			item = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i), 'g', 6));
+			item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
 			uiGeneralTab.twParameters->setItem(i, 2, item);
-			item = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
+			item = new QTableWidgetItem(QString::number(100.*errorValue/fabs(paramValue), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			const double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
+			const double t = nsl_stats_tdist_t(paramValue, errorValue);
 			item = new QTableWidgetItem(QString::number(t, 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
@@ -1375,6 +1376,7 @@ void XYFitCurveDock::showFitResult() {
 			const double p = nsl_stats_tdist_p(t, fitResult.dof);
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
+			//TODO: these hard coded colors don't always look well on dark themes (blue on black, etc. is hard to read)
 			if (p > 0.05)
 				item->setTextColor(Qt::red);
 			else if (p > 0.01)
@@ -1388,9 +1390,8 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
-			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
-			item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i) - margin)
-				+ " .. " + QString::number(fitResult.paramValues.at(i) + margin));
+			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, errorValue);
+			item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
 			uiGeneralTab.twParameters->setItem(i, 6, item);
 		}
 	}
@@ -1416,6 +1417,14 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));
+
+	//resize the table headers to fit the new content
+	uiGeneralTab.twGeneral->resizeColumnsToContents();
+	uiGeneralTab.twParameters->resizeColumnsToContents();
+	//twGoodness doesn't have any header -> resize sections
+	uiGeneralTab.twGoodness->resizeColumnToContents(0);
+	uiGeneralTab.twGoodness->resizeColumnToContents(1);
+	uiGeneralTab.twGoodness->resizeColumnToContents(2);
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());

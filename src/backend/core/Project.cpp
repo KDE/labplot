@@ -126,14 +126,15 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 }
 
 Project::~Project() {
+	//if the project is being closed and the live data sources still continue reading the data,
+	//the dependend objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
+	//->stop reading the live data sources prior to deleting all objects.
+	for(auto* lds : children<LiveDataSource>())
+		lds->pauseReading();
+
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	QList<LiveDataSource*> liveDataSources = children<LiveDataSource>();
-
-	for(auto* lds : liveDataSources)
-		lds->pauseReading();
-
 	foreach(Worksheet* w, children<Worksheet>())
 		w->setIsClosing();
 
