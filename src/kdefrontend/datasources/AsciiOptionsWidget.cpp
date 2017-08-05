@@ -156,7 +156,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 
 
 void AsciiOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+    KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
 
 	//TODO: check if this works (character gets currentItem?)
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
@@ -171,7 +171,7 @@ void AsciiOptionsWidget::loadSettings() const {
 }
 
 void AsciiOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+    KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
 
 	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
