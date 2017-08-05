@@ -27,9 +27,11 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "LiveDataDock.h"
 #include <KLocale>
 
-LiveDataDock::LiveDataDock(QWidget *parent) :
+LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent), m_paused(false) {
 	ui.setupUi(this);
+
+	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
 	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
 	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
@@ -47,7 +49,7 @@ LiveDataDock::~LiveDataDock() {
  * \brief Sets the live data sources of this dock widget
  * \param sources
  */
-void LiveDataDock::setLiveDataSources(const QList<LiveDataSource *> &sources) {
+void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	m_liveDataSources = sources;
 	const LiveDataSource* const fds = sources.at(0);
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
@@ -59,10 +61,13 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource *> &sources) {
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (fds->isPaused())
+	if (fds->isPaused()) {
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
-	else
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
+	} else {
 		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+	}
 
 	if(!fds->keepLastValues()) {
 		ui.leKeepNValues->hide();
@@ -185,8 +190,10 @@ void LiveDataDock::pauseContinueReading() {
 	if (m_paused) {
 		pauseReading();
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
 		continueReading();
 		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }
