@@ -100,7 +100,6 @@
 
 \ingroup kdefrontend
 */
-
 MainWin::MainWin(QWidget *parent, const QString& filename)
 	: KXmlGuiWindow(parent),
 	  m_currentSubWindow(0),
@@ -175,7 +174,7 @@ MainWin::~MainWin() {
 void MainWin::showPresenter() {
 	Worksheet* w = activeWorksheet();
 	if (w) {
-		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+		WorksheetView* view = dynamic_cast<WorksheetView*>(w->view());
 		view->presenterMode();
 	} else {
 		//currently active object is not a worksheet but we're asked to start in the presenter mode
@@ -184,6 +183,9 @@ void MainWin::showPresenter() {
 		if (worksheets.size()>0) {
 			WorksheetView* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
 			view->presenterMode();
+		} else {
+			QMessageBox::information(this, i18n("Presenter Mode"),
+									 i18n("No worksheets are available in the project. The presenter mode won't be started."));
 		}
 	}
 }
