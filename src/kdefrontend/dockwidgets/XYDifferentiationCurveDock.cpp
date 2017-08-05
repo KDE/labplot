@@ -274,6 +274,9 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
 	if (aspect) {
@@ -291,6 +294,20 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 }
 
+void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
+}
 
 /*!
  * disable deriv orders and accuracies that need more data points
@@ -417,21 +434,6 @@ void XYDifferentiationCurveDock::xRangeMaxChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
-}
-
 void XYDifferentiationCurveDock::derivOrderChanged() {
 	const nsl_diff_deriv_order_type derivOrder = (nsl_diff_deriv_order_type)uiGeneralTab.cbDerivOrder->currentIndex();
 	m_differentiationData.derivOrder = derivOrder;
@@ -548,11 +550,10 @@ void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* a
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 

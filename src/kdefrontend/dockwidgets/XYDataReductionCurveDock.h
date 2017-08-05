@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of data reduction curves
 
  ***************************************************************************/
@@ -36,7 +37,7 @@
 class TreeViewComboBox;
 class QStatusBar;
 
-class XYDataReductionCurveDock: public XYCurveDock {
+class XYDataReductionCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
@@ -51,7 +52,8 @@ private:
 	void updateTolerance2();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
-	QStatusBar *statusBar;	// main status bar to display progress
+	QStatusBar* statusBar;	// main status bar to display progress
+	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
@@ -66,6 +68,8 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void dataSourceTypeChanged(int);
+	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
@@ -77,14 +81,14 @@ private slots:
 	void autoTolerance2Changed();
 	void tolerance2Changed();
 
-//	void showOptions();
 	void recalculateClicked();
-
 	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);

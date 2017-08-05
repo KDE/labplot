@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a data reduction
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -137,9 +138,9 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 //######################### Private implementation #############################
 //##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -151,7 +152,6 @@ XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() {
 
 // ...
 // see XYFitCurvePrivate
-
 void XYDataReductionCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -180,14 +180,27 @@ void XYDataReductionCurvePrivate::recalculate() {
 	// clear the previous result
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Number of x and y data points must be equal.");
@@ -199,17 +212,26 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = dataReductionData.xRange.first();
-	const double xmax = dataReductionData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (dataReductionData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = dataReductionData.xRange.first();
+		xmax = dataReductionData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -242,7 +264,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	emit q->completed(10);
 
 	size_t npoints = 0;
-	double calcTolerance = 0;		// calculated tolerance from Douglas-Peucker variant
+	double calcTolerance = 0;	// calculated tolerance from Douglas-Peucker variant
 	size_t *index = (size_t *) malloc(n*sizeof(size_t));
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker_variant:	// tol used as number of points
@@ -294,8 +316,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	emit q->completed(90);
-	double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
-	double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
+
+	const double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
+	const double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 
 	free(index);
 
@@ -316,6 +339,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//redraw the curve
 	emit (q->dataChanged());
 	sourceDataChangedSinceLastRecalc = false;
+
+	emit q->completed(100);
 }
 
 //##############################################################################

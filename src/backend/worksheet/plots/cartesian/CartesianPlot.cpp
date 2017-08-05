@@ -905,8 +905,8 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 	return curve;
 }
 
-XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
-	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
+Histogram* CartesianPlot::addHistogram(){
+	Histogram* curve= new Histogram("Histogram");
 	this->addChild(curve);
 	return curve;
 }
@@ -921,6 +921,28 @@ const XYCurve* CartesianPlot::currentCurve() const {
 	}
 
 	return 0;
+}
+
+XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
+	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: reduce '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Reducing of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+		emit curve->dataReductionDataChanged(curve->dataReductionData());
+	} else {
+		beginMacro(i18n("%1: add data reduction curve", name()));
+		this->addChild(curve);
+	}
+
+	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
+	return curve;
 }
 
 XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
@@ -986,12 +1008,6 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
-	return curve;
-}
-
-Histogram* CartesianPlot::addHistogram(){
-	Histogram* curve= new Histogram("Histogram");
-	this->addChild(curve);
 	return curve;
 }
 

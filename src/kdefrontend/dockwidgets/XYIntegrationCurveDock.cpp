@@ -275,6 +275,9 @@ void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
 	if (aspect) {
