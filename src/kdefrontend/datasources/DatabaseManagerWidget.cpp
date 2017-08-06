@@ -57,6 +57,7 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& con
 	ui.tbAdd->setIcon(QIcon::fromTheme("list-add"));
 	ui.tbDelete->setIcon(QIcon::fromTheme("list-remove"));
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.bTestConnection->setIcon(QIcon::fromTheme("network-connect"));
 
 	ui.tbAdd->setToolTip(i18n("Add new database connection"));
 	ui.tbDelete->setToolTip(i18n("Delete selected database connection"));
@@ -105,6 +106,7 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 	m_initializing = true;
 	ui.leName->setText(m_connections[index].name);
 	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(m_connections[index].driver));
+	ui.kleDatabase->setText(m_connections[index].dbName);
 
 	if (!isFileDB(m_connections[index].driver)) {
 		ui.leHost->setText(m_connections[index].hostName);
@@ -112,21 +114,16 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 		ui.leUserName->setText(m_connections[index].userName);
 		ui.lePassword->setText(m_connections[index].password);
 	}
-
 	m_initializing = false;
-
-	//set the database name after m_initializing=false in order to update
-	//the style sheet (database name valid or not) in databaseNameChanged()
-	ui.kleDatabase->setText(m_connections[index].dbName);
 }
 
 void DatabaseManagerWidget::nameChanged(const QString& name) {
-	if (m_initializing)
-		return;
-
 	//check uniqueness of the provided name
 	bool unique = true;
 	for(int i = 0; i < ui.lwConnections->count(); ++i) {
+		if (ui.lwConnections->currentRow() == i)
+			continue;
+
 		if (name == ui.lwConnections->item(i)->text()) {
 			unique = false;
 			break;
@@ -136,8 +133,11 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 	if (unique) {
 		ui.leName->setStyleSheet("");
 		ui.lwConnections->currentItem()->setText(name);
-		m_connections[ui.lwConnections->currentRow()].name = name;
-		emit changed();
+
+		if (!m_initializing) {
+			m_connections[ui.lwConnections->currentRow()].name = name;
+			emit changed();
+		}
 	} else
 		ui.leName->setStyleSheet("QLineEdit{background: red;}");
 }
@@ -317,10 +317,11 @@ void DatabaseManagerWidget::deleteConnection() {
 void DatabaseManagerWidget::loadConnections() {
 	QDEBUG("Loading connections from " << m_configPath);
 
-	KConfig config(m_configPath, KConfig::SimpleConfig);
 	m_initializing = true;
+
+	KConfig config(m_configPath, KConfig::SimpleConfig);
 	foreach(QString groupName, config.groupList()) {
-		KConfigGroup group = config.group(groupName);
+		const KConfigGroup& group = config.group(groupName);
 		SQLConnection conn;
 		conn.name = groupName;
 		conn.driver = group.readEntry("Driver","");
@@ -335,7 +336,6 @@ void DatabaseManagerWidget::loadConnections() {
 		m_connections.append(conn);
 		ui.lwConnections->addItem(conn.name);
 	}
-	m_initializing = false;
 
 	//show the first connection if available, create a new connection otherwise
 	if (m_connections.size()) {
@@ -352,9 +352,13 @@ void DatabaseManagerWidget::loadConnections() {
 		addConnection();
 	}
 
-	//initialize the widgets (enable/disable) on load appropriately
-	connectionChanged(ui.lwConnections->currentRow());
+	//show/hide the driver dependent options
 	driverChanged();
+
+	m_initializing = false;
+
+	//show the settings of the current connection
+	connectionChanged(ui.lwConnections->currentRow());
 }
 
 void DatabaseManagerWidget::saveConnections() {
