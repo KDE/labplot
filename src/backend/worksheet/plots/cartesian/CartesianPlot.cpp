@@ -2007,13 +2007,17 @@ void CartesianPlotPrivate::retransformScales() {
 		if (axis->orientation() == Axis::AxisHorizontal) {
 			if (deltaXMax != 0) {
 				axis->setUndoAware(false);
+				axis->setSuppressRetransform(true);
 				axis->setEnd(xMax);
 				axis->setUndoAware(true);
+				axis->setSuppressRetransform(false);
 			}
 			if (deltaXMin != 0) {
 				axis->setUndoAware(false);
+				axis->setSuppressRetransform(true);
 				axis->setStart(xMin);
 				axis->setUndoAware(true);
+				axis->setSuppressRetransform(false);
 			}
 			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0) {
@@ -2022,18 +2026,21 @@ void CartesianPlotPrivate::retransformScales() {
 		} else {
 			if (deltaYMax != 0) {
 				axis->setUndoAware(false);
+				axis->setSuppressRetransform(true);
 				axis->setEnd(yMax);
 				axis->setUndoAware(true);
+				axis->setSuppressRetransform(false);
 			}
 			if (deltaYMin != 0) {
 				axis->setUndoAware(false);
+				axis->setSuppressRetransform(true);
 				axis->setStart(yMin);
 				axis->setUndoAware(true);
+				axis->setSuppressRetransform(false);
 			}
 
 			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0) {
-
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}

@@ -37,6 +37,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+// #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <QGraphicsSceneContextMenuEvent>
@@ -330,6 +331,11 @@ void Axis::setZValue(qreal) {
 void Axis::retransform() {
 	Q_D(Axis);
 	d->retransform();
+}
+
+void Axis::setSuppressRetransform(bool value) {
+	Q_D(Axis);
+	d->suppressRetransform = value;
 }
 
 void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
@@ -874,6 +880,7 @@ AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
 	minorTicksColumn(0),
 	gridItem(new AxisGrid(this)),
 	q(owner),
+	suppressRetransform(false),
 	m_plot(plot),
 	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
 	m_hovered(false),
@@ -911,7 +918,10 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-// 	DEBUG("AxisPrivate::retransform()");
+	if (suppressRetransform)
+		return;
+
+// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;

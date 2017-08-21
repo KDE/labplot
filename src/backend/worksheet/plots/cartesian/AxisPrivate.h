@@ -131,6 +131,7 @@ public:
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
+	bool suppressRetransform;
 
 private:
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

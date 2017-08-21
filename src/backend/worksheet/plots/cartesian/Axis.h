@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
@@ -136,7 +136,7 @@ class Axis: public WorksheetElement {
 		virtual void setVisible(bool) override;
 		virtual bool isVisible() const override;
 		virtual void setPrinting(bool) override;
-
+		void setSuppressRetransform(bool);
 		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
