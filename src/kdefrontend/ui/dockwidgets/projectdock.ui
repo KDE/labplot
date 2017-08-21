@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>391</width>
-    <height>437</height>
+    <width>446</width>
+    <height>482</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,7 +29,16 @@
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item row="0" column="0">
@@ -74,7 +83,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lVersion_2">
         <property name="text">
-         <string>Labplot version</string>
+         <string>LabPlot version</string>
         </property>
        </widget>
       </item>
