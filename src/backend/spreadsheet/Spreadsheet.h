@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2010-2017 Alexander Semke(alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -83,11 +83,11 @@ public:
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
 public slots:
-	void appendRows(int count);
+	void appendRows(int);
 	void appendRow();
-	void appendColumns(int count);
+	void appendColumns(int);
 	void appendColumn();
-	void prependColumns(int count);
+	void prependColumns(int);
 
 	void setColumnCount(int);
 	void setRowCount(int);

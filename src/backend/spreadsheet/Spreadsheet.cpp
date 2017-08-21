@@ -34,11 +34,12 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
-
 #include <QIcon>
+
 #include <KConfigGroup>
 #include <KLocale>
 
@@ -74,11 +75,9 @@ Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, b
 	initializes the spreadsheet with the default number of columns and rows
 */
 void Spreadsheet::init() {
-	int columns, rows;
-	KConfig config;
-	KConfigGroup group = config.group( "Spreadsheet" );
-	columns = group.readEntry("ColumnCount", 2);
-	rows = group.readEntry("RowCount", 100);
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	const int columns = group.readEntry(QLatin1String("ColumnCount"), 2);
+	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
 	for (int i = 0; i < columns; i++) {
 		Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
@@ -95,9 +94,8 @@ void Spreadsheet::init() {
 QWidget* Spreadsheet::view() const {
 	if (!m_view) {
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
-		KConfig config;
-		KConfigGroup group = config.group( "Spreadsheet" );
-		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry("ShowComments", false));
+		KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry(QLatin1String("ShowComments"), false));
 	}
 
 	return m_view;
