@@ -502,25 +502,26 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		DEBUG("device is sequential = " << device.isSequential());
 		const int deviceError = prepareDeviceToRead(device);
 
-		if (deviceError != 0)
+		if (deviceError != 0) {
 			DEBUG("Device error = " << deviceError);
-
-		if (deviceError)
-			return 0; //////////
+			return 0;
+		}
 
 /////////////////////////// prepare import for spreadsheet
 
 		spreadsheet->setUndoAware(false);
 
-		//make the available columns undo unaware before we resize and rename them below,
-		//the same will be done for new columns in this->resize().
-		for (int i = 0; i < spreadsheet->childCount<Column>(); i++)
+		//columns in a file data source don't have any manual changes.
+		//make the available columns undo unaware and suppress the "data changed" signal.
+		//data changes will be propagated via an explicit Column::setChanged() call once new data was read.
+		for (int i = 0; i < spreadsheet->childCount<Column>(); i++) {
 			spreadsheet->child<Column>(i)->setUndoAware(false);
+			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
+		}
 
 		qDebug() << "fds resizing!";
 
 		spreadsheet->removeColumns(0, 2);
-
 		spreadsheet->clear();
 		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
 
@@ -815,12 +816,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		}
 
 		// from the last row we read the new data in the spreadsheet
-
 		qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
-
 		qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 		newDataIdx = 0;
-
 		if (readingType == LiveDataSource::ReadingType::FromEnd) {
 			if (m_prepared) {
 				if (newData.size() > spreadsheet->sampleRate())
@@ -928,6 +926,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				currentRow++;
 			}
 		}
+
 		if (m_prepared) {
 			//notify all affected columns and plots about the changes
 			PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
@@ -947,7 +946,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 						}
 					}
 				}
-				column->setSuppressDataChangedSignal(false);
+
 				column->setChanged();
 			}
 
@@ -959,7 +958,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 			}
 		}
 	} else
-		qDebug() << "No new data available";
+		DEBUG("No new data available");
 
 	m_prepared = true;
 
