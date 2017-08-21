@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -64,7 +64,7 @@
 */
 
 Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-  : AbstractDataSource(engine, name) {
+	: AbstractDataSource(engine, name) {
 
 	if (!loading)
 		init();
@@ -92,7 +92,7 @@ void Spreadsheet::init() {
   This method may be called multiple times during the life time of an Aspect, or it might not get
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
-QWidget *Spreadsheet::view() const {
+QWidget* Spreadsheet::view() const {
 	if (!m_view) {
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
 		KConfig config;
@@ -112,11 +112,10 @@ bool Spreadsheet::exportView() const {
 		if (column(i)->columnMode() != AbstractColumn::Numeric) {
 			dlg->setExportToImage(false);
 			break;
-        	}
+		}
 	}
-	if (const_cast<SpreadsheetView*>(reinterpret_cast<const SpreadsheetView*>(m_view))->selectedColumnCount() == 0) {
+	if (const_cast<SpreadsheetView*>(reinterpret_cast<const SpreadsheetView*>(m_view))->selectedColumnCount() == 0)
 		dlg->setExportSelection(false);
-	}
 	bool ret;
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
@@ -130,7 +129,7 @@ bool Spreadsheet::exportView() const {
 			const bool skipEmptyRows =dlg->skipEmptyRows();
 			const bool exportEntire = dlg->entireSpreadheet();
 			view->exportToLaTeX(path, exportHeader, gridLines, captions,
-				exportLatexHeader, skipEmptyRows, exportEntire);
+			                    exportLatexHeader, skipEmptyRows, exportEntire);
 		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
 			const int exportTo = dlg->exportToFits();
 			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
@@ -169,8 +168,7 @@ bool Spreadsheet::printPreview() const {
 /*!
   Returns the total number of rows in the spreadsheet.
  */
-int Spreadsheet::rowCount() const
-{
+int Spreadsheet::rowCount() const {
 	int col_rows, result = 0;
 	for (auto* col: children<Column>())
 		if ((col_rows = col->rowCount()) > result)
@@ -178,8 +176,7 @@ int Spreadsheet::rowCount() const
 	return result;
 }
 
-void Spreadsheet::removeRows(int first, int count)
-{
+void Spreadsheet::removeRows(int first, int count) {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
@@ -189,8 +186,7 @@ void Spreadsheet::removeRows(int first, int count)
 	RESET_CURSOR;
 }
 
-void Spreadsheet::insertRows(int before, int count)
-{
+void Spreadsheet::insertRows(int before, int count) {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
@@ -200,31 +196,30 @@ void Spreadsheet::insertRows(int before, int count)
 	RESET_CURSOR;
 }
 
-void Spreadsheet::appendRows(int count){
+void Spreadsheet::appendRows(int count) {
 	insertRows(rowCount(), count);
 }
 
-void Spreadsheet::appendRow(){
+void Spreadsheet::appendRow() {
 	insertRows(rowCount(), 1);
 }
 
-void Spreadsheet::appendColumns(int count){
+void Spreadsheet::appendColumns(int count) {
 	insertColumns(columnCount(), count);
 }
 
-void Spreadsheet::appendColumn(){
+void Spreadsheet::appendColumn() {
 	insertColumns(columnCount(), 1);
 }
 
-void Spreadsheet::prependColumns(int count){
+void Spreadsheet::prependColumns(int count) {
 	insertColumns(0, count);
 }
 
 /*!
   Sets the number of rows of the spreadsheet to \c new_size
 */
-void Spreadsheet::setRowCount(int new_size)
-{
+void Spreadsheet::setRowCount(int new_size) {
 	int current_size = rowCount();
 	if (new_size > current_size)
 		insertRows(current_size, new_size-current_size);
@@ -236,39 +231,37 @@ void Spreadsheet::setRowCount(int new_size)
   Returns the column with the number \c index.
   Shallow wrapper around \sa AbstractAspect::child() - see there for caveat.
 */
-Column* Spreadsheet::column(int index) const{
-  return child<Column>(index);
+Column* Spreadsheet::column(int index) const {
+	return child<Column>(index);
 }
 
 
 /*!
   Returns the column with the name \c name.
 */
-Column* Spreadsheet::column(const QString &name) const{
-  return child<Column>(name);
+Column* Spreadsheet::column(const QString &name) const {
+	return child<Column>(name);
 }
 
 /*!
   Returns the total number of columns in the spreadsheet.
 */
-int Spreadsheet::columnCount() const{
-  return childCount<Column>();
+int Spreadsheet::columnCount() const {
+	return childCount<Column>();
 }
 
 /*!
   Returns the number of columns matching the given designation.
  */
-int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const
-{
+int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	int count = 0;
 	for (auto* col: children<Column>())
-	    if (col->plotDesignation() == pd)
-		count++;
+		if (col->plotDesignation() == pd)
+			count++;
 	return count;
 }
 
-void Spreadsheet::removeColumns(int first, int count)
-{
+void Spreadsheet::removeColumns(int first, int count) {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count) );
@@ -278,8 +271,7 @@ void Spreadsheet::removeColumns(int first, int count)
 	RESET_CURSOR;
 }
 
-void Spreadsheet::insertColumns(int before, int count)
-{
+void Spreadsheet::insertColumns(int before, int count) {
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count) );
 	Column * before_col = column(before);
@@ -296,8 +288,7 @@ void Spreadsheet::insertColumns(int before, int count)
 /*!
   Sets the number of columns to \c new_size
 */
-void Spreadsheet::setColumnCount(int new_size)
-{
+void Spreadsheet::setColumnCount(int new_size) {
 	int old_size = columnCount();
 	if ( old_size == new_size || new_size < 0 )
 		return;
@@ -311,8 +302,7 @@ void Spreadsheet::setColumnCount(int new_size)
 /*!
   Clears the whole spreadsheet.
 */
-void Spreadsheet::clear()
-{
+void Spreadsheet::clear() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear", name()));
 	for (auto* col: children<Column>())
@@ -324,12 +314,11 @@ void Spreadsheet::clear()
 /*!
   Clears all mask in the spreadsheet.
 */
-void Spreadsheet::clearMasks()
-{
+void Spreadsheet::clearMasks() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear all masks", name()));
 	for (auto* col: children<Column>())
-	    col->clearMasks();
+		col->clearMasks();
 	endMacro();
 	RESET_CURSOR;
 }
@@ -337,15 +326,14 @@ void Spreadsheet::clearMasks()
 /*!
   Returns a new context menu. The caller takes ownership of the menu.
 */
-QMenu *Spreadsheet::createContextMenu(){
+QMenu *Spreadsheet::createContextMenu() {
 	QMenu *menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
 }
 
-void Spreadsheet::moveColumn(int from, int to)
-{
+void Spreadsheet::moveColumn(int from, int to) {
 	Column * col = child<Column>(from);
 	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from+1, to+1));
 	col->remove();
@@ -402,7 +390,7 @@ int Spreadsheet::colY(int col) {
 	int cols = columnCount();
 
 	if (column(col)->plotDesignation() == AbstractColumn::XError ||
-			column(col)->plotDesignation() == AbstractColumn::YError) {
+	        column(col)->plotDesignation() == AbstractColumn::YError) {
 		// look to the left first
 		for(int i=col-1; i>=0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::Y)
@@ -468,7 +456,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 	if(leading == 0) { // sort separately
 		for (auto* col: cols) {
 			switch (col->columnMode()) {
-				case AbstractColumn::Numeric: {
+			case AbstractColumn::Numeric: {
 					int rows = col->rowCount();
 					QList< QPair<double, int> > map;
 
@@ -495,7 +483,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 					delete temp_col;
 					break;
 				}
-				case AbstractColumn::Integer: {
+			case AbstractColumn::Integer: {
 					int rows = col->rowCount();
 					QList< QPair<int, int> > map;
 
@@ -522,7 +510,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 					delete temp_col;
 					break;
 				}
-				case AbstractColumn::Text: {
+			case AbstractColumn::Text: {
 					int rows = col->rowCount();
 					QList<QPair<QString, int>> map;
 
@@ -549,9 +537,9 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 					delete temp_col;
 					break;
 				}
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day: {
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day: {
 					int rows = col->rowCount();
 					QList< QPair<QDateTime, int> > map;
 
@@ -582,7 +570,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 		}
 	} else { // sort with leading column
 		switch (leading->columnMode()) {
-			case AbstractColumn::Numeric: {
+		case AbstractColumn::Numeric: {
 				QList<QPair<double, int>> map;
 				int rows = leading->rowCount();
 
@@ -611,7 +599,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 				}
 				break;
 			}
-			case AbstractColumn::Integer: {
+		case AbstractColumn::Integer: {
 				QList<QPair<int, int>> map;
 				int rows = leading->rowCount();
 
@@ -640,7 +628,7 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 				}
 				break;
 			}
-			case AbstractColumn::Text: {
+		case AbstractColumn::Text: {
 				QList<QPair<QString, int>> map;
 				int rows = leading->rowCount();
 
@@ -669,9 +657,9 @@ void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascendi
 				}
 				break;
 			}
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day: {
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day: {
 				QList<QPair<QDateTime, int>> map;
 				int rows = leading->rowCount();
 
@@ -755,15 +743,14 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
  * This function is called in \c SpreadsheetView upon selection changes.
  */
 void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
-  if (selected){
-	emit childAspectSelectedInView(child<Column>(index));
+	if (selected) {
+		emit childAspectSelectedInView(child<Column>(index));
 
-	//deselect the spreadsheet in the project explorer, if a child (column) was selected.
-	//prevents unwanted multiple selection with spreadsheet (if it was selected before).
-	emit childAspectDeselectedInView(this);
-  } else {
-	emit childAspectDeselectedInView(child<Column>(index));
-  }
+		//deselect the spreadsheet in the project explorer, if a child (column) was selected.
+		//prevents unwanted multiple selection with spreadsheet (if it was selected before).
+		emit childAspectDeselectedInView(this);
+	} else
+		emit childAspectDeselectedInView(child<Column>(index));
 }
 
 //##############################################################################
@@ -808,15 +795,13 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 						return false;
 					}
 					addChild(column);
-				}
-				else {	// unknown element
+				} else {	// unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 			}
 		}
-	}
-	else // no spreadsheet element
+	} else // no spreadsheet element
 		reader->raiseError(i18n("no spreadsheet element found"));
 
 	return !reader->hasError();
@@ -827,7 +812,7 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 //########################  Data Import  #######################################
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
-	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
+                               int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
@@ -854,35 +839,35 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		this->child<Column>(columnOffset+n)->setColumnMode(columnMode[n]);
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
-			QVector<double>* vector = static_cast<QVector<double>*>(this->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+				QVector<double>* vector = static_cast<QVector<double>*>(this->child<Column>(columnOffset+n)->data());
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
 		case AbstractColumn::Integer: {
-			QVector<int>* vector = static_cast<QVector<int>*>(this->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+				QVector<int>* vector = static_cast<QVector<int>*>(this->child<Column>(columnOffset+n)->data());
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
 		case AbstractColumn::Text: {
-			QVector<QString>* vector = static_cast<QVector<QString>*>(this->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+				QVector<QString>* vector = static_cast<QVector<QString>*>(this->child<Column>(columnOffset+n)->data());
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
 		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
@@ -988,6 +973,6 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-    if (m_view)
-        reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
+	if (m_view)
+		reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
 }
