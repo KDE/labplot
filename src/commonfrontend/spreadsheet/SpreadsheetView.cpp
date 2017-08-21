@@ -79,7 +79,9 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	m_spreadsheet(spreadsheet),
 	m_model( new SpreadsheetModel(spreadsheet) ),
 	m_suppressSelectionChangedEvent(false),
-	m_readOnly(readOnly) {
+	m_readOnly(readOnly),
+	m_columnGenerateDataMenu(nullptr),
+	m_columnSortMenu(nullptr) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
@@ -327,15 +329,13 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(submenu);
 		m_columnMenu->addSeparator();
 
-
-		submenu = new QMenu(i18n("Generate Data"), this);
-		submenu->addAction(action_fill_row_numbers);
-		submenu->addAction(action_fill_const);
-		// 	submenu->addAction(action_fill_random);
-		submenu->addAction(action_fill_equidistant);
-		submenu->addAction(action_fill_random_nonuniform);
-		submenu->addAction(action_fill_function);
-		m_columnMenu->addMenu(submenu);
+		m_columnGenerateDataMenu = new QMenu(i18n("Generate Data"), this);
+		m_columnGenerateDataMenu->addAction(action_fill_row_numbers);
+		m_columnGenerateDataMenu->addAction(action_fill_const);
+		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
+		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
+		m_columnGenerateDataMenu->addAction(action_fill_function);
+		m_columnMenu->addMenu(m_columnGenerateDataMenu);
 		m_columnMenu->addSeparator();
 
 		m_columnMenu->addAction(action_reverse_columns);
@@ -344,12 +344,12 @@ void SpreadsheetView::initMenus() {
 		// 	m_columnMenu->addAction(action_join_columns);
 		m_columnMenu->addAction(action_normalize_columns);
 
-		submenu = new QMenu(i18n("Sort"), this);
-		submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
-		submenu->addAction(action_sort_asc_column);
-		submenu->addAction(action_sort_desc_column);
-		submenu->addAction(action_sort_columns);
-		m_columnMenu->addMenu(submenu);
+		m_columnSortMenu = new QMenu(i18n("Sort"), this);
+		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+		m_columnSortMenu->addAction(action_sort_asc_column);
+		m_columnSortMenu->addAction(action_sort_desc_column);
+		m_columnSortMenu->addAction(action_sort_columns);
+		m_columnMenu->addMenu(m_columnSortMenu);
 		m_columnMenu->addSeparator();
 
 		m_columnMenu->addAction(action_insert_columns);
@@ -399,7 +399,6 @@ void SpreadsheetView::initMenus() {
 
 		submenu = new QMenu(i18n("Fi&ll Selection with"), this);
 		submenu->addAction(action_fill_sel_row_numbers);
-		// 	submenu->addAction(action_fill_random);
 		submenu->addAction(action_fill_const);
 		m_rowMenu->addMenu(submenu);
 
@@ -497,8 +496,10 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
  *   - as the "spreadsheet menu" in the main menu-bar (called form MainWin)
  *   - as a part of the spreadsheet context menu in project explorer
  */
-void SpreadsheetView::createContextMenu(QMenu* menu) const {
+void SpreadsheetView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
+
+	checkSpreadsheetMenu();
 
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
@@ -507,8 +508,10 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertAction(firstAction, action_plot_data);
-	menu->insertSeparator(firstAction);
+	if (m_spreadsheet->columnCount()>0 && m_spreadsheet->rowCount()>0) {
+		menu->insertAction(firstAction, action_plot_data);
+		menu->insertSeparator(firstAction);
+	}
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
@@ -891,13 +894,14 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_statistics_rows->setVisible(onlyNumeric);
 			m_rowMenu->exec(global_pos);
 		} else if (watched == m_horizontalHeader) {
+			checkColumnMenu();
 			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
-				QItemSelectionModel *sel_model = m_tableView->selectionModel();
+				QItemSelectionModel* sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
 				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()),
-				                                 m_model->index(m_model->rowCount()-1, col, QModelIndex())),
-				                  QItemSelectionModel::Select);
+												m_model->index(m_model->rowCount()-1, col, QModelIndex())),
+								QItemSelectionModel::Select);
 			}
 
 			if (selectedColumns().size()==1) {
@@ -924,13 +928,49 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_statistics_columns->setVisible(numeric);
 
 			m_columnMenu->exec(global_pos);
-		} else if (watched == this)
+		} else if (watched == this) {
+			checkSpreadsheetMenu();
 			m_spreadsheetMenu->exec(global_pos);
-		else
-			return QWidget::eventFilter(watched, event);
+		}
+
 		return true;
-	} else
-		return QWidget::eventFilter(watched, event);
+	}
+
+	return QWidget::eventFilter(watched, event);
+}
+
+/*!
+ * disables cell data relevant actions in the column menu if there're no cells available.
+ * called in eventFilter(), existence of at least one column can be assumed here.
+ */
+void SpreadsheetView::checkColumnMenu() {
+	const bool cellsAvail = m_spreadsheet->rowCount()>0;
+	action_plot_data->setEnabled(cellsAvail);
+	action_reverse_columns->setEnabled(cellsAvail);
+	action_drop_values->setEnabled(cellsAvail);
+	action_mask_values->setEnabled(cellsAvail);
+	action_normalize_columns->setEnabled(cellsAvail);
+	action_clear_columns->setEnabled(cellsAvail);
+	action_statistics_columns->setEnabled(cellsAvail);
+	if (m_columnGenerateDataMenu)
+		m_columnGenerateDataMenu->setEnabled(cellsAvail);
+	if (m_columnSortMenu)
+		m_columnSortMenu->setEnabled(cellsAvail);
+}
+
+/*!
+ * disables cell data relevant actions in the spreadsheet menu if there're no cells available
+ */
+void SpreadsheetView::checkSpreadsheetMenu() {
+	const bool cellsAvail = m_spreadsheet->columnCount()>0 && m_spreadsheet->rowCount()>0;
+	action_plot_data->setEnabled(cellsAvail);
+	m_selectionMenu->setEnabled(cellsAvail);
+	action_select_all->setEnabled(cellsAvail);
+	action_clear_spreadsheet->setEnabled(cellsAvail);
+	action_clear_masks->setEnabled(cellsAvail);
+	action_sort_spreadsheet->setEnabled(cellsAvail);
+	action_go_to_cell->setEnabled(cellsAvail);
+	action_statistics_all_columns->setEnabled(cellsAvail);
 }
 
 bool SpreadsheetView::formulaModeActive() const {

@@ -98,6 +98,8 @@ private:
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*);
 	void keyPressEvent(QKeyEvent*);
+	void checkColumnMenu();
+	void checkSpreadsheetMenu();
 
 	//selection related actions
 	QAction* action_cut_selection;
@@ -165,11 +167,13 @@ private:
 	//Menus
 	QMenu* m_selectionMenu;
 	QMenu* m_columnMenu;
+	QMenu* m_columnGenerateDataMenu;
+	QMenu* m_columnSortMenu;
 	QMenu* m_rowMenu;
 	QMenu* m_spreadsheetMenu;
 
 public slots:
-	void createContextMenu(QMenu*) const;
+	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 
