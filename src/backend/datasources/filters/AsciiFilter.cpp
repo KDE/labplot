@@ -496,13 +496,18 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from) {
-	if (!device.bytesAvailable() > 0) {
+	if (!(device.bytesAvailable() > 0)) {
 		DEBUG("No new data available");
 		return 0;
 	}
 
+
 	Q_ASSERT(dataSource != nullptr);
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+
+	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
+		if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
+			return 0;
 
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
@@ -527,7 +532,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		//also here we need a cheaper version of this
 		if (!spreadsheet->keepLastValues())
-			spreadsheet->setRowCount(m_actualRows);
+			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
 			spreadsheet->setRowCount(spreadsheet->keepNvalues());
 			m_actualRows = spreadsheet->keepNvalues();
@@ -616,6 +621,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
+
 		while (!device.atEnd()) {
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd)

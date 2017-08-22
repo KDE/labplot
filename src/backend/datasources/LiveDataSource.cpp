@@ -397,10 +397,10 @@ void LiveDataSource::setUpdateType(const UpdateType updatetype) {
 			watch();
 		else
 			connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
-    } else {
-        if (m_fileSystemWatcher)
-            disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
-    }
+	} else {
+		if (m_fileSystemWatcher)
+			disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+	}
 	m_updateType = updatetype;
 }
 
@@ -509,6 +509,8 @@ void LiveDataSource::read() {
 			m_localSocket = new QLocalSocket(this);
 			qDebug() << "socket state before preparing: " << m_localSocket->state();
 			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+			m_localSocket->waitForConnected(100);
+
 			qDebug() << "socket state after preparing: " << m_localSocket->state();
 
 			m_device = m_localSocket;
@@ -562,13 +564,14 @@ void LiveDataSource::read() {
 		qDebug() << m_localSocket->state();
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-        qDebug() << "Reconnected to server:" << m_localSocket->state();
+		m_localSocket->waitForConnected(100);
+		qDebug() << "Reconnected to server:" << m_localSocket->state();
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
-        m_serialPort->setBaudRate(m_baudRate);
-        m_serialPort->setPortName(m_serialPortName);
-        m_device = m_serialPort;
+		m_serialPort->setBaudRate(m_baudRate);
+		m_serialPort->setPortName(m_serialPortName);
+		m_device = m_serialPort;
 		//TODO
 		break;
 	}
@@ -596,7 +599,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 	/*disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));*/
 
-    /*switch (socketError) {
+	/*switch (socketError) {
 	case QLocalSocket::ServerNotFoundError:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
 		                      i18n("The socket was not found. Please check the socket name."));
@@ -612,7 +615,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 	default:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
 		                      i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
-    }*/
+	}*/
 }
 
 void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
