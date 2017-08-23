@@ -79,6 +79,7 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+	bool load(const QString&);
 
 public slots:
 	void descriptionChanged(const AbstractAspect*);

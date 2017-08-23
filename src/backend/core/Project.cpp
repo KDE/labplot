@@ -43,14 +43,17 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
-#include <QUndoStack>
-#include <QMenu>
 #include <QDateTime>
+#include <QFile>
+#include <QMenu>
 #include <QThreadPool>
+#include <QUndoStack>
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KFilterDev>
 #include <KLocale>
+#include <KMessageBox>
 
 /**
  * \class Project
@@ -248,6 +251,59 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 	writer->writeEndDocument();
 }
+
+bool Project::load(const QString& filename) {
+	QIODevice *file;
+	// first try gzip compression, because projects can be gzipped and end with .lml
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
+		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
+	else	// opens filename using file ending
+		file = new KFilterDev(filename);
+
+	if (file == 0)
+		file = new QFile(filename);
+
+	if (!file->open(QIODevice::ReadOnly)) {
+		KMessageBox::error(0, i18n("Sorry. Could not open file for reading."));
+		return false;
+	}
+
+	char c;
+	const bool rc = file->getChar(&c);
+	if (!rc) {
+		KMessageBox::error(0, i18n("The project file is empty."), i18n("Error opening project"));
+		file->close();
+		delete file;
+		return false;
+	}
+	file->seek(0);
+
+	//parse XML
+	XmlStreamReader reader(file);
+	if (this->load(&reader) == false) {
+		RESET_CURSOR;
+		QString msg_text = reader.errorString();
+		KMessageBox::error(0, msg_text, i18n("Error when opening the project"));
+		return false;
+	}
+
+	if (reader.hasWarnings()) {
+		QString msg = i18n("The following problems occurred when loading the project file:\n");
+		const QStringList& warnings = reader.warningStrings();
+		foreach (const QString& str, warnings)
+			msg += str + '\n';
+
+		qWarning() << msg;
+//TODO: show warnings in a kind of "log window" but not in message box
+// 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
+	}
+
+	file->close();
+	delete file;
+
+	return true;
+}
+
 
 /**
  * \brief Load from XML

@@ -62,7 +62,6 @@
 #include <QPainter>
 #include <QIcon>
 #include <QWidgetAction>
-#include <QDebug>
 
 #include <KConfigGroup>
 #include <KLocale>

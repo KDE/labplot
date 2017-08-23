@@ -27,9 +27,8 @@
  ***************************************************************************/
 #ifndef MAINWIN_H
 #define MAINWIN_H
+
 #include <KXmlGuiWindow>
-#include <KRecentFilesAction>
-#include "commonfrontend/core/PartMdiView.h"
 #include <QTimer>
 
 class AbstractAspect;
@@ -81,6 +80,10 @@ class QDockWidget;
 class QStackedWidget;
 class QDragEnterEvent;
 class QDropEvent;
+class QMdiArea;
+class QMdiSubWindow;
+class QToolButton;
+class KRecentFilesAction;
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -201,8 +204,6 @@ private:
 	CustomPointDock* customPointDock;
 	DatapickerImageWidget* datapickerImageDock;
 	DatapickerCurveWidget* datapickerCurveDock;
-
-	bool openXML(QIODevice*);
 
 	void initActions();
 	void initMenus();

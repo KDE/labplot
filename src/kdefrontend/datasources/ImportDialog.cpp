@@ -37,18 +37,20 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
-#include <KMessageBox>
-#include <KInputDialog>
+#include <QDir>
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QInputDialog>
+#include <QLabel>
+#include <QMenu>
 #include <QProgressBar>
 #include <QStatusBar>
-#include <QDir>
-#include <QInputDialog>
-#include <KMenu>
-#include <QGroupBox>
-#include <KLocale>
-#include <QGridLayout>
-#include <QLabel>
+#include <QToolButton>
 #include <QVBoxLayout>
+
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
 
 /*!
 	\class ImportDialog
@@ -109,6 +111,7 @@ void ImportDialog::setModel() {
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
 	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
+	tbNewDataContainer->setToolTip(i18n("Add new data container"));
 	grid->addWidget( tbNewDataContainer, 0, 2);
 
 	lPosition = new QLabel(i18n("Position"), frameAddTo);

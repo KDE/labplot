@@ -44,6 +44,7 @@
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
 
+#include "commonfrontend/core/PartMdiView.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -66,7 +67,6 @@
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
-#include "backend/lib/XmlStreamReader.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -78,7 +78,6 @@
 #include <QMimeData>
 #include <QElapsedTimer>
 #include <QHash>
-#include <QDebug>	// qWarning()
 
 #include <KActionCollection>
 #include <KFileDialog>
@@ -89,6 +88,7 @@
 #include <KStatusBar>
 #include <KLocalizedString>
 #include <KFilterDev>
+#include <KRecentFilesAction>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
@@ -891,45 +891,16 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	QIODevice *file;
-	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
-		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
-	else	// opens filename using file ending
-		file = new KFilterDev(filename);
-
-	if (file == 0)
-		file = new QFile(filename);
-
-	if (!file->open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Sorry. Could not open file for reading."));
+	if (!newProject())
 		return;
-	}
-
-	char c;
-	bool rc = file->getChar(&c);
-	if (!rc) {
-		KMessageBox::error(this, i18n("The project file is empty."), i18n("Error opening project"));
-		file->close();
-		delete file;
-		return;
-	}
-	file->seek(0);
-
-	if (!newProject()) {
-		file->close();
-		delete file;
-		return;
-	}
 
 	WAIT_CURSOR;
 	QElapsedTimer timer;
 	timer.start();
-	rc = openXML(file);
-	file->close();
-	delete file;
+	const bool rc = m_project->load(filename);
 	if (!rc) {
 		closeProject();
+		RESET_CURSOR;
 		return;
 	}
 
@@ -956,31 +927,6 @@ void MainWin::openRecentProject(const QUrl& url) {
 		this->openProject(url.toLocalFile());
 	else
 		this->openProject(url.path());
-}
-
-bool MainWin::openXML(QIODevice *file) {
-	XmlStreamReader reader(file);
-	if (m_project->load(&reader) == false) {
-		RESET_CURSOR;
-		QString msg_text = reader.errorString();
-		KMessageBox::error(this, msg_text, i18n("Error when opening the project"));
-		statusBar()->showMessage(msg_text);
-		return false;
-	}
-
-	if (reader.hasWarnings()) {
-		QString msg = i18n("The following problems occurred when loading the project file:\n");
-		const QStringList& warnings = reader.warningStrings();
-		foreach (const QString& str, warnings)
-			msg += str + '\n';
-
-		qWarning() << msg;
-//TODO: show warnings in a kind of "log window" but not in message box
-// 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
-// 		statusBar()->showMessage(msg);
-	}
-
-	return true;
 }
 
 /*!
@@ -1786,7 +1732,7 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1));
+		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1), false);
 		dlg->importToLiveDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
