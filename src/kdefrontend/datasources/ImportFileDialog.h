@@ -63,6 +63,7 @@ private:
 private slots:
 	void toggleOptions();
 	void fileNameChanged();
+    void checkOk();
 	void checkOnFitsTableToMatrix(const bool enable);
 };
 

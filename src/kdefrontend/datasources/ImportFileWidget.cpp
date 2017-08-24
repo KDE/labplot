@@ -152,6 +152,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
+    connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
+    connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
+
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -281,6 +284,18 @@ QString ImportFileWidget::fileName() const {
 	return ui.kleFileName->text();
 }
 
+QString ImportFileWidget::host() const {
+    return ui.leHost->text();
+}
+
+QString ImportFileWidget::port() const {
+    return ui.lePort->text();
+}
+
+int ImportFileWidget::serialPort() const {
+    return ui.cbSerialPort->currentIndex();
+}
+
 /*!
 	saves the settings to the data source \c source.
 */
@@ -339,6 +354,10 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 */
 LiveDataSource::FileType ImportFileWidget::currentFileType() const {
 	return static_cast<LiveDataSource::FileType>(ui.cbFileType->currentIndex());
+}
+
+LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
+    return static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 }
 
 /*!
@@ -914,6 +933,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	default:
 		break;
 	}
+
+    emit sourceTypeChanged();
 }
 
 void ImportFileWidget::initializeAndFillPortsAndBaudRates() {

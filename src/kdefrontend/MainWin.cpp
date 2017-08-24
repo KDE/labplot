@@ -328,8 +328,8 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
-	actionCollection()->addAction("new_file_datasource", m_newLiveDataSourceAction);
+    m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
+    actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
 
 	//Import/Export

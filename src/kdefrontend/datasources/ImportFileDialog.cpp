@@ -77,6 +77,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(fileNameChanged()));
 	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
+    connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOk()));
+    connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOk()));
+    connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOk()));
+
 	if (!liveDataSource) {
 		setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 		m_importFileWidget->hideDataSource();
@@ -90,7 +94,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	m_importFileWidget->showOptions(m_showOptions);
-
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -106,7 +109,7 @@ ImportFileDialog::~ImportFileDialog() {
 }
 
 /*!
-  triggers data import to the file data source \c source
+  triggers data import to the live data source \c source
 */
 void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
 	m_importFileWidget->saveSettings(source);
@@ -123,7 +126,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	QTime timer;
 	timer.start();
 	source->read();
-	statusBar->showMessage( i18n("File data source created in %1 seconds.", (float)timer.elapsed()/1000) );
+    statusBar->showMessage( i18n("Live data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
@@ -238,6 +241,10 @@ void ImportFileDialog::fileNameChanged() {
 	checkOkButton();
 }
 
+void ImportFileDialog::checkOk() {
+    checkOkButton();;
+}
+
 void ImportFileDialog::toggleOptions() {
 	m_importFileWidget->showOptions(!m_showOptions);
 	m_showOptions = !m_showOptions;
@@ -313,7 +320,27 @@ void ImportFileDialog::checkOkButton() {
 	}
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
-	enableButtonOk( QFile::exists(fileName) ) ;
+    bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
+
+    switch (m_importFileWidget->currentSourceType()) {
+    case LiveDataSource::SourceType::FileOrPipe:
+        enableButtonOk( QFile::exists(fileName) );
+        break;
+    case LiveDataSource::SourceType::LocalSocket:
+        enableButtonOk( QFile::exists(fileName) );
+        break;
+    case LiveDataSource::SourceType::NetworkTcpSocket:
+        enableButtonOk(enable);
+        break;
+    case LiveDataSource::SourceType::NetworkUdpSocket:
+        enableButtonOk(enable);
+        break;
+    case LiveDataSource::SourceType::SerialPort:
+        enableButtonOk(m_importFileWidget->serialPort() != -1);
+        break;
+    default:
+        break;
+    }
 }
 
 QString ImportFileDialog::selectedObject() const {
