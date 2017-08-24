@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : ImportProjectDialog.h
+    File                 : OriginProjectParser.h
     Project              : LabPlot
-    Description          : import project dialog
+    Description          : parser for Origin projects
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
@@ -25,50 +25,19 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef ORIGINPROJECTPARSER_H
+#define ORIGINPROJECTPARSER_H
 
-#ifndef IMPORTPROJECTDIALOG_H
-#define IMPORTPROJECTDIALOG_H
+#include "backend/datasources/projects/ProjectParser.h"
 
-#include <QDialog>
-#include "ui_importprojectwidget.h"
-
-class AspectTreeModel;
-class Folder;
-class ProjectParser;
-class TreeViewComboBox;
-class MainWin;
-class QDialogButtonBox;
-class QStatusBar;
-
-class ImportProjectDialog : public QDialog {
+class OriginProjectParser : public ProjectParser {
 	Q_OBJECT
 
 public:
-	enum ProjectType {ProjectLabPlot, ProjectOrigin};
+	OriginProjectParser();
 
-	explicit ImportProjectDialog(MainWin*, ProjectType);
-	~ImportProjectDialog();
-
-	void setCurrentFolder(const Folder*);
-	void importTo(QStatusBar*) const;
-
-private:
-	Ui::ImportProjectWidget ui;
-	MainWin* m_mainWin;
-	ProjectParser* m_projectParser;
-	ProjectType m_projectType;
-	AspectTreeModel* m_aspectTreeModel;
-	TreeViewComboBox* m_cbAddTo;
-	QPushButton* m_bNewFolder;
-	QDialogButtonBox* m_buttonBox;
-
-	void refreshPreview();
-
-private slots:
-	void fileNameChanged(const QString&);
-	void selectionChanged();
-	void selectFile();
-	void newFolder();
+	virtual QAbstractItemModel* model() override;
+	virtual void importTo(const QString& folder) override;
 };
 
-#endif //IMPORTPROJECTDIALOG_H
+#endif // ORIGINPROJECTPARSER_H

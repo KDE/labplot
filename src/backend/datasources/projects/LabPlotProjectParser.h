@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : ImportProjectDialog.h
+    File                 : LabPlotProjectParser.h
     Project              : LabPlot
-    Description          : import project dialog
+    Description          : parser for LabPlot projects
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
@@ -25,50 +25,25 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef LABPLOTPROJECTPARSER_H
+#define LABPLOTPROJECTPARSER_H
 
-#ifndef IMPORTPROJECTDIALOG_H
-#define IMPORTPROJECTDIALOG_H
+#include "backend/datasources/projects/ProjectParser.h"
 
-#include <QDialog>
-#include "ui_importprojectwidget.h"
+class Project;
 
-class AspectTreeModel;
-class Folder;
-class ProjectParser;
-class TreeViewComboBox;
-class MainWin;
-class QDialogButtonBox;
-class QStatusBar;
-
-class ImportProjectDialog : public QDialog {
+class LabPlotProjectParser : public ProjectParser {
 	Q_OBJECT
 
 public:
-	enum ProjectType {ProjectLabPlot, ProjectOrigin};
+	LabPlotProjectParser();
+	virtual ~LabPlotProjectParser() override;
 
-	explicit ImportProjectDialog(MainWin*, ProjectType);
-	~ImportProjectDialog();
-
-	void setCurrentFolder(const Folder*);
-	void importTo(QStatusBar*) const;
+	virtual QAbstractItemModel* model() override;
+	virtual void importTo(const QString& folder) override;
 
 private:
-	Ui::ImportProjectWidget ui;
-	MainWin* m_mainWin;
-	ProjectParser* m_projectParser;
-	ProjectType m_projectType;
-	AspectTreeModel* m_aspectTreeModel;
-	TreeViewComboBox* m_cbAddTo;
-	QPushButton* m_bNewFolder;
-	QDialogButtonBox* m_buttonBox;
-
-	void refreshPreview();
-
-private slots:
-	void fileNameChanged(const QString&);
-	void selectionChanged();
-	void selectFile();
-	void newFolder();
+	Project* m_project;
 };
 
-#endif //IMPORTPROJECTDIALOG_H
+#endif // LABPLOTPROJECTPARSER_H

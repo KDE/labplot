@@ -29,6 +29,8 @@
 #include "ImportProjectDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/datasources/projects/LabPlotProjectParser.h"
+#include "backend/datasources/projects/OriginProjectParser.h"
 #include "kdefrontend/MainWin.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -50,6 +52,7 @@
  */
 ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QDialog(parent),
 	m_mainWin(parent),
+	m_projectParser(nullptr),
 	m_projectType(type),
 	m_aspectTreeModel(new AspectTreeModel(parent->project()) ){
 
@@ -74,6 +77,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	m_bNewFolder = new QPushButton(ui.gbImportTo);
 	m_bNewFolder->setIcon(QIcon::fromTheme("list-add"));
+	m_bNewFolder->setToolTip(i18n("Add new folder"));
 	ui.gbImportTo->layout()->addWidget(m_bNewFolder);
 
 	//dialog buttons
@@ -92,10 +96,12 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	QString lastImportedFile;
 	switch (m_projectType) {
 	case (ProjectLabPlot):
+		m_projectParser = new LabPlotProjectParser();
 		title = i18n("Import LabPlot Project");
 		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
 		break;
 	case (ProjectOrigin):
+		m_projectParser = new OriginProjectParser();
 		title = i18n("Import Origin Project");
 		lastImportedFile = QLatin1String("LastImportedOriginProject");
 		break;
@@ -150,40 +156,28 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	//import the selected project objects into the specified folder
 	QTime timer;
 	timer.start();
-
-	//TODO ProjectParser* projectParser = nullptr;
-// 	switch (m_projectType) {
-// 	case (ProjectLabPlot)
-// 		projectParser = new LabPlotProjectParser()
-// 		break;
-// 	case (ProjectOrigin):
-// 		projectParser = new OriginProjectParser()
-// 		break;
-// 	}
-
-	//import the selected project objects into the specified folder
-	//connect(projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	//projectParser->importTo(folderPath);
+	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+	m_projectParser->importTo(folderPath);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 }
 
+/*!
+ * show the content of the project in the tree view
+ */
 void ImportProjectDialog::refreshPreview() {
 	QString project = ui.leFileName->text();
-
-	//show some general information about the project (version, creation time, author, etc.)
-	//TODO
-	QString info;// = projectParser->info(project);
-	ui.lProjectInfo->setText(info);
-
-	//show the content of the project
-	//TODO
+	m_projectParser->setProjectFileName(project);
+	ui.tvPreview->setModel(m_projectParser->model());
+	ui.tvPreview->header()->resizeSection(0,0);
+	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
+	ui.tvPreview->expandAll();
 }
-
 
 //##############################################################################
 //#################################  SLOTS  ####################################

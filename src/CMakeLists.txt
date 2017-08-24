@@ -203,7 +203,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
-
+	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
+	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
+	${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
