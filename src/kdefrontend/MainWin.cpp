@@ -185,7 +185,7 @@ void MainWin::showPresenter() {
 			view->presenterMode();
 		} else {
 			QMessageBox::information(this, i18n("Presenter Mode"),
-									 i18n("No worksheets are available in the project. The presenter mode won't be started."));
+			                         i18n("No worksheets are available in the project. The presenter mode won't be started."));
 		}
 	}
 }
@@ -328,8 +328,8 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
-    m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
-    actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
+	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
 
 	//Import/Export

@@ -53,7 +53,7 @@ public:
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
 	LiveDataSource::FileType currentFileType() const;
-    LiveDataSource::SourceType currentSourceType() const;
+	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
 	const QStringList selectedHDFNames() const;
@@ -62,9 +62,9 @@ public:
 	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 
-    QString host() const;
-    QString port() const;
-    int serialPort() const;
+	QString host() const;
+	QString port() const;
+	int serialPort() const;
 
 	void initializeAndFillPortsAndBaudRates();
 
@@ -100,9 +100,9 @@ private slots:
 
 signals:
 	void fileNameChanged();
-    void sourceTypeChanged();
-    void hostChanged();
-    void portChanged();
+	void sourceTypeChanged();
+	void hostChanged();
+	void portChanged();
 
 	void checkedFitsTableToMatrix(const bool enable);
 

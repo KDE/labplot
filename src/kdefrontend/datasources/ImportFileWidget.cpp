@@ -152,8 +152,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
-    connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
-    connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
+	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
+	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 
@@ -285,15 +285,15 @@ QString ImportFileWidget::fileName() const {
 }
 
 QString ImportFileWidget::host() const {
-    return ui.leHost->text();
+	return ui.leHost->text();
 }
 
 QString ImportFileWidget::port() const {
-    return ui.lePort->text();
+	return ui.lePort->text();
 }
 
 int ImportFileWidget::serialPort() const {
-    return ui.cbSerialPort->currentIndex();
+	return ui.cbSerialPort->currentIndex();
 }
 
 /*!
@@ -357,7 +357,7 @@ LiveDataSource::FileType ImportFileWidget::currentFileType() const {
 }
 
 LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
-    return static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	return static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 }
 
 /*!
@@ -934,7 +934,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		break;
 	}
 
-    emit sourceTypeChanged();
+	emit sourceTypeChanged();
 }
 
 void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
