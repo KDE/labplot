@@ -28,7 +28,6 @@
 
 #include "backend/datasources/projects/LabPlotProjectParser.h"
 #include "backend/core/Project.h"
-#include "backend/core/Folder.h"
 #include "backend/core/AspectTreeModel.h"
 
 /*!
@@ -58,6 +57,6 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 	return model;
 }
 
-void LabPlotProjectParser::importTo(const QString& folder) {
+void LabPlotProjectParser::importTo(Folder* folder) {
 
 }

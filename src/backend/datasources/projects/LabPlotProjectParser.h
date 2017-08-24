@@ -40,7 +40,7 @@ public:
 	virtual ~LabPlotProjectParser() override;
 
 	virtual QAbstractItemModel* model() override;
-	virtual void importTo(const QString& folder) override;
+	virtual void importTo(Folder*) override;
 
 private:
 	Project* m_project;

@@ -32,6 +32,7 @@
 
 class QAbstractItemModel;
 class QString;
+class Folder;
 
 class ProjectParser : public QObject {
 	Q_OBJECT
@@ -42,7 +43,7 @@ public:
 
 	void setProjectFileName(const QString&);
 	virtual QAbstractItemModel* model() = 0;
-	virtual void importTo(const QString& folder) = 0;
+	virtual void importTo(Folder*) = 0;
 
 protected:
 	QString m_projectFileName;

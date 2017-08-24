@@ -142,9 +142,6 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportProjectDialog::import()");
 
-	//TODO: determine the folder where the project objects have to be imported into
-	QString folderPath;
-
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
@@ -159,8 +156,9 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	//import the selected project objects into the specified folder
 	QTime timer;
 	timer.start();
+	Folder* folder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	m_projectParser->importTo(folderPath);
+	m_projectParser->importTo(folder);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();

@@ -37,7 +37,7 @@ public:
 	OriginProjectParser();
 
 	virtual QAbstractItemModel* model() override;
-	virtual void importTo(const QString& folder) override;
+	virtual void importTo(Folder*) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

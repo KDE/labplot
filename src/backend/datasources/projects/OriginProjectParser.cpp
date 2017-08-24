@@ -27,6 +27,7 @@
 ***************************************************************************/
 
 #include "backend/datasources/projects/OriginProjectParser.h"
+#include "backend/core/Folder.h"
 
 /*!
 \class OriginProjectParser
@@ -43,6 +44,6 @@ QAbstractItemModel* OriginProjectParser::model() {
 	return 0;
 }
 
-void OriginProjectParser::importTo(const QString& folder) {
+void OriginProjectParser::importTo(Folder* folder) {
 
 }
