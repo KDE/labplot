@@ -378,7 +378,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(curve);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
-						equationCurve->recalculate();
+						if (!preview)
+							equationCurve->recalculate();
 					} else if (dataReductionCurve) {
 						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
@@ -416,7 +417,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					}
 					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 					curve->suppressRetransform(false);
-					curve->retransform();
+					if (!preview)
+						curve->retransform();
 				}
 
 				//Axes
