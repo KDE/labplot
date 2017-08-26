@@ -51,10 +51,12 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 	if (m_project == nullptr)
 		m_project = new Project();
 
-	QAbstractItemModel* model = nullptr;
+	AspectTreeModel* model = nullptr;
 	bool rc = m_project->load(m_projectFileName, true);
-	if (rc)
+	if (rc) {
 		model = new AspectTreeModel(m_project);
+		model->setReadOnly(true);
+	}
 
 	RESET_CURSOR;
 	return model;

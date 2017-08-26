@@ -57,6 +57,7 @@ public:
 	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
 	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
+	void setReadOnly(bool);
 	void setFilterString(const QString&);
 	void setFilterCaseSensitivity(Qt::CaseSensitivity);
 	void setFilterMatchCompleteWord(bool);
@@ -75,6 +76,7 @@ private slots:
 
 private:
 	AbstractAspect* m_root;
+	bool m_readOnly;
 	bool m_folderSelectable;
 	QList<const char*> m_selectableAspects;
 	int m_defaultHeaderHeight;

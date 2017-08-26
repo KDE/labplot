@@ -73,6 +73,7 @@
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	: QAbstractItemModel(parent),
 	  m_root(root),
+	  m_readOnly(false),
 	  m_folderSelectable(true),
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
@@ -98,6 +99,10 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 */
 void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
 	m_selectableAspects=list;
+}
+
+void AspectTreeModel::setReadOnly(bool readOnly) {
+	m_readOnly = readOnly;
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const {
@@ -237,8 +242,10 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	}
 
 	//the columns "name" and "description" are editable
-	if (index.column() == 0 || index.column() == 3)
-		result |= Qt::ItemIsEditable;
+	if (!m_readOnly) {
+		if (index.column() == 0 || index.column() == 3)
+			result |= Qt::ItemIsEditable;
+	}
 
 	return result;
 }

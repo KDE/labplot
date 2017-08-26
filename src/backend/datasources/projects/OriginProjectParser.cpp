@@ -47,7 +47,7 @@ QAbstractItemModel* OriginProjectParser::model() {
 	if (m_project == nullptr)
 		m_project = new Project();
 
-	QAbstractItemModel* model = nullptr;
+	AspectTreeModel* model = nullptr;
 	OriginFile opj((const char*)m_projectFileName.toLocal8Bit());
 	//parse the OPJ file and create a Project object for the preview
 	bool rc = false;
@@ -56,8 +56,10 @@ QAbstractItemModel* OriginProjectParser::model() {
 
 	RESET_CURSOR;
 
-	if (rc)
+	if (rc) {
 		model = new AspectTreeModel(m_project);
+		model->setReadOnly(true);
+	}
 
 	return model;
 }
