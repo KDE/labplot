@@ -154,11 +154,12 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		m_treeView->clearSelection();
 
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	QMenu *menu = 0;
+	QMenu* menu = 0;
 	if (items.size()/4 == 1) {
-		QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
-		menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		menu = aspect->createContextMenu();
 	}
+
 	if (!menu) {
 		menu = new QMenu();
 		menu->addSeparator()->setText(i18n("Tree options"));

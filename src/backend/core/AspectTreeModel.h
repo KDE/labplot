@@ -31,7 +31,6 @@
 #define ASPECT_TREE_MODEL_H
 
 #include <QAbstractItemModel>
-#include <QItemSelection>
 
 class AbstractAspect;
 
@@ -39,11 +38,7 @@ class AspectTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 
 public:
-	explicit AspectTreeModel(AbstractAspect* root, QObject *parent=0);
-
-	enum CustomDataRole {
-		ContextMenuRole = Qt::UserRole,
-	};
+	explicit AspectTreeModel(AbstractAspect* root, QObject* parent=0);
 
 	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	QModelIndex parent(const QModelIndex &index) const;
@@ -63,15 +58,15 @@ public:
 	void setFilterMatchCompleteWord(bool);
 
 private slots:
-	void aspectDescriptionChanged(const AbstractAspect *aspect);
-	void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child);
-	void aspectAdded(const AbstractAspect *parent);
-	void aspectAboutToBeRemoved(const AbstractAspect *aspect);
+	void aspectDescriptionChanged(const AbstractAspect*);
+	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void aspectAdded(const AbstractAspect* parent);
+	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void aspectRemoved();
-	void aspectHiddenAboutToChange(const AbstractAspect * aspect);
-	void aspectHiddenChanged(const AbstractAspect *aspect);
-	void aspectSelectedInView(const AbstractAspect* aspect);
-	void aspectDeselectedInView(const AbstractAspect* aspect);
+	void aspectHiddenAboutToChange(const AbstractAspect*);
+	void aspectHiddenChanged(const AbstractAspect*);
+	void aspectSelectedInView(const AbstractAspect*);
+	void aspectDeselectedInView(const AbstractAspect*);
 	void renameRequested();
 
 private:
