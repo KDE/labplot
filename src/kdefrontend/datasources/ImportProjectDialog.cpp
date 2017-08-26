@@ -93,17 +93,14 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	QString title;
-	QString lastImportedFile;
 	switch (m_projectType) {
 	case (ProjectLabPlot):
 		m_projectParser = new LabPlotProjectParser();
 		title = i18n("Import LabPlot Project");
-		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
 		break;
 	case (ProjectOrigin):
 		m_projectParser = new OriginProjectParser();
 		title = i18n("Import Origin Project");
-		lastImportedFile = QLatin1String("LastImportedOriginProject");
 		break;
 	}
 
@@ -111,9 +108,25 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	setWindowTitle(title);
 	setWindowIcon(QIcon::fromTheme("document-import"));
 
+	QTimer::singleShot(0, this, &ImportProjectDialog::loadSettings);
+}
+
+void ImportProjectDialog::loadSettings() {
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+
+	QString lastImportedFile;
+	switch (m_projectType) {
+	case (ProjectLabPlot):
+		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
+		break;
+	case (ProjectOrigin):
+		lastImportedFile = QLatin1String("LastImportedOriginProject");
+		break;
+	}
+
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	ui.leFileName->setText(conf.readEntry(lastImportedFile, ""));
 }
 
@@ -193,7 +206,7 @@ void ImportProjectDialog::selectionChanged() {
 	opens a file dialog and lets the user select the project file.
 */
 void ImportProjectDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectWidget");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
 
 	QString title;
 	QString lastDir;

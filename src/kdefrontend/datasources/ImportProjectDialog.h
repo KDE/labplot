@@ -65,6 +65,7 @@ private:
 	void refreshPreview();
 
 private slots:
+	void loadSettings();
 	void fileNameChanged(const QString&);
 	void selectionChanged();
 	void selectFile();

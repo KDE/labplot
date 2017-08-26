@@ -47,13 +47,16 @@ LabPlotProjectParser::~LabPlotProjectParser() {
 }
 
 QAbstractItemModel* LabPlotProjectParser::model() {
+	WAIT_CURSOR;
 	if (m_project == nullptr)
 		m_project = new Project();
 
 	QAbstractItemModel* model = nullptr;
-	if (m_project->load(m_projectFileName, true) )
+	bool rc = m_project->load(m_projectFileName, true);
+	if (rc)
 		model = new AspectTreeModel(m_project);
 
+	RESET_CURSOR;
 	return model;
 }
 
