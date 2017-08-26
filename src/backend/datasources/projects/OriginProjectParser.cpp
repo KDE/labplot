@@ -39,7 +39,7 @@
 */
 
 OriginProjectParser::OriginProjectParser() : ProjectParser() {
-
+	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"Matrix"<<"Worksheet";
 }
 
 QAbstractItemModel* OriginProjectParser::model() {

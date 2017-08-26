@@ -185,9 +185,38 @@ void ImportProjectDialog::refreshPreview() {
 	QString project = ui.leFileName->text();
 	m_projectParser->setProjectFileName(project);
 	ui.tvPreview->setModel(m_projectParser->model());
+
+	//show top-level containers only
+	QModelIndex root = ui.tvPreview->model()->index(0,0);
+	showTopLevelOnly(root);
+
 	ui.tvPreview->header()->resizeSection(0,0);
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
 	ui.tvPreview->expandAll();
+}
+
+/*!
+	Hides the non-toplevel items of the model used in the tree view.
+*/
+void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
+	int rows = index.model()->rowCount(index);
+	for (int i = 0; i < rows; i++) {
+		QModelIndex child = index.child(i, 0);
+		showTopLevelOnly(child);
+		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
+		ui.tvPreview->setRowHidden(i, index, !isTopLevel(aspect));
+	}
+}
+
+/*!
+	checks whether \c aspect is one of the allowed top level types
+*/
+bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
+	foreach (const char* classString, m_projectParser->topLevelClasses()) {
+		if (aspect->inherits(classString))
+				return true;
+	}
+	return false;
 }
 
 //##############################################################################

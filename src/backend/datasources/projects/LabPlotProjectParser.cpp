@@ -38,7 +38,7 @@
 */
 
 LabPlotProjectParser::LabPlotProjectParser() : ProjectParser() {
-
+	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"Matrix"<<"Worksheet"<<"CantorWorksheet"<<"Datapicker"<<"LiveDataSource";
 }
 
 LabPlotProjectParser::~LabPlotProjectParser() {

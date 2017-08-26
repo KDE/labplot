@@ -32,6 +32,7 @@
 #include <QDialog>
 #include "ui_importprojectwidget.h"
 
+class AbstractAspect;
 class AspectTreeModel;
 class Folder;
 class ProjectParser;
@@ -63,6 +64,8 @@ private:
 	QDialogButtonBox* m_buttonBox;
 
 	void refreshPreview();
+	void showTopLevelOnly(const QModelIndex&);
+	bool isTopLevel(const AbstractAspect*) const;
 
 private slots:
 	void loadSettings();

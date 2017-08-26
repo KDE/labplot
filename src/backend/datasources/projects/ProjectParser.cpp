@@ -51,3 +51,7 @@ void ProjectParser::setProjectFileName(const QString& name) {
 const QString& ProjectParser::projectFileName() const {
 	return m_projectFileName;
 }
+
+QList<const char*> ProjectParser::topLevelClasses() const {
+	return m_topLevelClasses;
+}

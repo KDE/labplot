@@ -48,9 +48,12 @@ public:
 	virtual QAbstractItemModel* model() = 0;
 	virtual void importTo(Folder*) = 0;
 
+	QList<const char*> topLevelClasses() const ;
+
 protected:
 	QString m_projectFileName;
 	Project* m_project;
+	QList<const char*>  m_topLevelClasses;
 
 signals:
 	void completed(int);
