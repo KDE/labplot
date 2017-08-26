@@ -2302,9 +2302,6 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -2319,7 +2316,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("dataSourceType", dataSourceType, XYCurve::DataSourceType);
@@ -2332,7 +2329,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "lines") {
+		} else if (!preview && reader->name() == "lines") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", lineType, XYCurve::LineType);
@@ -2340,14 +2337,14 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);
-		} else if (reader->name() == "dropLines") {
+		} else if (!preview && reader->name() == "dropLines") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 			READ_QPEN(d->dropLinePen);
 			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
-		} else if (reader->name() == "symbols") {
+		} else if (!preview && reader->name() == "symbols") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
@@ -2357,7 +2354,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);
-		} else if (reader->name() == "values") {
+		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", valuesType, XYCurve::ValuesType);
@@ -2374,7 +2371,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-		} else if (reader->name() == "filling") {
+		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("position", fillingPosition, XYCurve::FillingPosition);
@@ -2421,7 +2418,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_STRING_VALUE("fileName", fillingFileName);
 			READ_DOUBLE_VALUE("opacity", fillingOpacity);
-		} else if (reader->name() == "errorBars") {
+		} else if (!preview && reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("xErrorType", xErrorType, XYCurve::ErrorType);

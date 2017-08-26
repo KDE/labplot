@@ -2432,10 +2432,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "theme") {
+		} else if (!preview && reader->name() == "theme") {
 			attribs = reader->attributes();
 			tmpTheme = attribs.value("name").toString();
-		} else if (reader->name() == "geometry") {
+		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
@@ -2467,7 +2467,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "coordinateSystem") {
+		} else if (!preview && reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
 
 			str = attribs.value("autoScaleX").toString();
@@ -2537,7 +2537,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
 			else
 				d->verticalPadding = str.toDouble();
-		} else if (reader->name() == "xRangeBreaks") {
+		} else if (!preview && reader->name() == "xRangeBreaks") {
 			//delete default rang break
 			d->xRangeBreaks.list.clear();
 
@@ -2547,7 +2547,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->xRangeBreakingEnabled = str.toInt();
-		} else if (reader->name() == "xRangeBreak") {
+		} else if (!preview && reader->name() == "xRangeBreak") {
 			attribs = reader->attributes();
 
 			RangeBreak b;
@@ -2576,7 +2576,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
 			d->xRangeBreaks.list << b;
-		} else if (reader->name() == "yRangeBreaks") {
+		} else if (!preview && reader->name() == "yRangeBreaks") {
 			//delete default rang break
 			d->yRangeBreaks.list.clear();
 
@@ -2586,7 +2586,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->yRangeBreakingEnabled = str.toInt();
-		} else if (reader->name() == "yRangeBreak") {
+		} else if (!preview && reader->name() == "yRangeBreak") {
 			attribs = reader->attributes();
 
 			RangeBreak b;
@@ -2722,6 +2722,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	d->retransform();//TODO: This is expensive. why do we need this on load?
 	if (m_title) {

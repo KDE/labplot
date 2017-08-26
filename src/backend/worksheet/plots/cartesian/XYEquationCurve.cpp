@@ -53,7 +53,6 @@ XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd
 	init();
 }
 
-
 XYEquationCurve::~XYEquationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
@@ -214,9 +213,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "equationData") {
+		} else if (!preview && reader->name() == "equationData") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);

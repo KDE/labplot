@@ -749,9 +749,6 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
@@ -800,10 +797,12 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 			if (!ret_val)
 				return false;
 		}
-		QString content = reader->text().toString().trimmed();
-		if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
-			DecodeColumnTask* task = new DecodeColumnTask(d, content);
-			QThreadPool::globalInstance()->start(task);
+		if (!preview) {
+			QString content = reader->text().toString().trimmed();
+			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
+				DecodeColumnTask* task = new DecodeColumnTask(d, content);
+				QThreadPool::globalInstance()->start(task);
+			}
 		}
 	}
 

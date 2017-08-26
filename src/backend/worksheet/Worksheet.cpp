@@ -808,9 +808,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	//clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme = "";
 
@@ -830,10 +827,10 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "theme") {
+		} else if (!preview && reader->name() == "theme") {
 			attribs = reader->attributes();
 			d->theme = attribs.value("name").toString();
-		} else if (reader->name() == "geometry") {
+		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
@@ -865,7 +862,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'useViewSize'"));
 			else
 				d->useViewSize = str.toInt();
-		} else if (reader->name() == "layout") {
+		} else if (!preview && reader->name() == "layout") {
 			attribs = reader->attributes();
 
 			str = attribs.value("layout").toString();
@@ -921,7 +918,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("rowCount"));
 			else
 				d->layoutRowCount = str.toInt();
-		} else if (reader->name() == "background") {
+		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
@@ -1015,8 +1012,10 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	d->m_scene->setSceneRect(rect);
-	d->updateLayout();
+	if (!preview) {
+		d->m_scene->setSceneRect(rect);
+		d->updateLayout();
+	}
 
 	return true;
 }
