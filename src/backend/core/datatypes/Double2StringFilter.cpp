@@ -5,7 +5,7 @@
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Locale-aware conversion filter double -> QString.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -63,12 +63,15 @@ void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const 
 	writer->writeAttribute("digits", QString::number(numDigits()));
 }
 
-bool Double2StringFilter::load(XmlStreamReader * reader) {
+bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
+
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString format_str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 	QString digits_str = attribs.value(reader->namespaceUri().toString(), "digits").toString();
 
-	if (AbstractSimpleFilter::load(reader)) {
+	if (AbstractSimpleFilter::load(reader, preview)) {
 		bool ok;
 		int digits = digits_str.toInt(&ok);
 		if ( (format_str.size() != 1) || !ok ) {
@@ -107,7 +110,7 @@ void Double2StringFilterSetFormatCmd::redo() {
 }
 
 void Double2StringFilterSetFormatCmd::undo() {
-	redo(); 
+	redo();
 }
 
 Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits)
@@ -126,6 +129,6 @@ void Double2StringFilterSetDigitsCmd::redo() {
 }
 
 void Double2StringFilterSetDigitsCmd::undo() {
-	redo(); 
+	redo();
 }
 

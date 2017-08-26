@@ -121,11 +121,14 @@ void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter* writer) const
 	writer->writeAttribute("format", format());
 }
 
-bool String2DateTimeFilter::load(XmlStreamReader* reader) {
+bool String2DateTimeFilter::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
+
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 
-	if (AbstractSimpleFilter::load(reader))
+	if (AbstractSimpleFilter::load(reader, preview))
 		setFormat(str);
 	else
 		return false;

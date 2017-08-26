@@ -799,7 +799,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool Worksheet::load(XmlStreamReader* reader) {
+bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "worksheet") {
 		reader->raiseError(i18n("no worksheet element found"));
 		return false;
@@ -807,6 +807,9 @@ bool Worksheet::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	//clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme = "";
@@ -992,7 +995,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 		} else if(reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
 			plot->setIsLoading(true);
-			if (!plot->load(reader)) {
+			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
 			} else {
@@ -1001,7 +1004,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
-			if (!label->load(reader)) {
+			if (!label->load(reader, preview)) {
 				delete label;
 				return false;
 			} else

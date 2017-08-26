@@ -371,7 +371,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
+bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyFourierFilterCurve") {
@@ -392,8 +392,10 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "filterData") {
 			attribs = reader->attributes();
 
@@ -410,9 +412,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
 			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
-
 		} else if (reader->name() == "filterResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", filterResult.available, int);
@@ -421,7 +421,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", filterResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

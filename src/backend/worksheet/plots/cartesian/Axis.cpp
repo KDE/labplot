@@ -1940,7 +1940,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool Axis::load(XmlStreamReader* reader) {
+bool Axis::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Axis);
 
 	if (!reader->isStartElement() || reader->name() != "axis") {
@@ -1950,6 +1950,9 @@ bool Axis::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -2040,7 +2043,7 @@ bool Axis::load(XmlStreamReader* reader) {
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
-			d->title->load(reader);
+			d->title->load(reader, preview);
 		} else if (reader->name() == "line") {
 			attribs = reader->attributes();
 

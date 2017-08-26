@@ -1513,7 +1513,7 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool Histogram::load(XmlStreamReader* reader){
+bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Histogram);
 
     if(!reader->isStartElement() || reader->name() != "Histogram"){
@@ -1523,6 +1523,9 @@ bool Histogram::load(XmlStreamReader* reader){
 
     if (!readBasicAttributes(reader))
         return false;
+
+	if (preview)
+		return true;
 
     QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
@@ -1688,7 +1691,7 @@ bool Histogram::load(XmlStreamReader* reader){
 
 		} else if(reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

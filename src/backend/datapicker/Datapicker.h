@@ -67,8 +67,8 @@ class Datapicker : public AbstractPart, public scripted {
 		QVector3D mapSceneToLogical(const QPointF&) const;
 		QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 	public slots:
 		virtual void childSelected(const AbstractAspect*);

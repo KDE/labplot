@@ -46,7 +46,8 @@ public:
 	virtual bool copy(const AbstractColumn*);
 	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
 	virtual void replaceTexts(int start_row, const QVector<QString>& texts);
-
+	virtual void save(QXmlStreamWriter*) const override {};
+	virtual bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:
 	Column* m_owner;
 	bool m_setting;

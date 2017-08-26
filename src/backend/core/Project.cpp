@@ -252,7 +252,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeEndDocument();
 }
 
-bool Project::load(const QString& filename) {
+bool Project::load(const QString& filename, bool preview) {
 	QIODevice *file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
@@ -280,7 +280,7 @@ bool Project::load(const QString& filename) {
 
 	//parse XML
 	XmlStreamReader reader(file);
-	if (this->load(&reader) == false) {
+	if (this->load(&reader, preview) == false) {
 		RESET_CURSOR;
 		QString msg_text = reader.errorString();
 		KMessageBox::error(0, msg_text, i18n("Error when opening the project"));
@@ -308,7 +308,7 @@ bool Project::load(const QString& filename) {
 /**
  * \brief Load from XML
  */
-bool Project::load(XmlStreamReader* reader) {
+bool Project::load(XmlStreamReader* reader, bool preview) {
 	d->loading = true;
 
 	while (!(reader->isStartDocument() || reader->atEnd()))
@@ -338,7 +338,7 @@ bool Project::load(XmlStreamReader* reader) {
 						if (!readCommentElement(reader))
 							return false;
 					} else if(reader->name() == "child_aspect") {
-						if (!readChildAspectElement(reader))
+						if (!readChildAspectElement(reader, preview))
 							return false;
 					} else if(reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
@@ -440,6 +440,7 @@ bool Project::load(XmlStreamReader* reader) {
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
+
 	d->loading = false;
 	emit loaded();
 	return !reader->hasError();

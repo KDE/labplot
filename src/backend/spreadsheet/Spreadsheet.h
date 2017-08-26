@@ -67,7 +67,7 @@ public:
 	void copy(Spreadsheet* other);
 
 	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*) override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	void setColumnSelectedInView(int index, bool selected);
 

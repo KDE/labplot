@@ -32,7 +32,6 @@
 
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-//#include "backend/matrix/MatrixPrivate.h"
 #include "backend/lib/macros.h"
 
 class MatrixPrivate;
@@ -109,7 +108,7 @@ public:
 	void copy(Matrix* other);
 
 	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*) override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;

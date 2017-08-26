@@ -740,67 +740,72 @@ private:
 /**
  * \brief Load the column from XML
  */
-bool Column::load(XmlStreamReader* reader) {
-	if (reader->isStartElement() && reader->name() == "column") {
-		if (!readBasicAttributes(reader))
-			return false;
-
-		QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-		QXmlStreamAttributes attribs = reader->attributes();
-
-		QString str = attribs.value("designation").toString();
-		if (str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'designation'"));
-		else
-			setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
-
-		str = attribs.value("mode").toString();
-		if (str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'mode'"));
-		else
-			setColumnMode( AbstractColumn::ColumnMode(str.toInt()) );
-
-		str = attribs.value("width").toString();
-		if (str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'width'"));
-		else
-			setWidth(str.toInt());
-
-		// read child elements
-		while (!reader->atEnd()) {
-			reader->readNext();
-
-			if (reader->isEndElement()) break;
-
-			if (reader->isStartElement()) {
-				bool ret_val = true;
-				if (reader->name() == "comment")
-					ret_val = readCommentElement(reader);
-				else if (reader->name() == "input_filter")
-					ret_val = XmlReadInputFilter(reader);
-				else if (reader->name() == "output_filter")
-					ret_val = XmlReadOutputFilter(reader);
-				else if (reader->name() == "mask")
-					ret_val = XmlReadMask(reader);
-				else if (reader->name() == "formula")
-					ret_val = XmlReadFormula(reader);
-				else if (reader->name() == "row")
-					ret_val = XmlReadRow(reader);
-				else { // unknown element
-					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-					if (!reader->skipToEndElement()) return false;
-				}
-				if (!ret_val)
-					return false;
-			}
-			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
-				DecodeColumnTask* task = new DecodeColumnTask(d, content);
-				QThreadPool::globalInstance()->start(task);
-			}
-		}
-	} else // no column element
+bool Column::load(XmlStreamReader* reader, bool preview) {
+	if (reader->isStartElement() && reader->name() != "column") {
 		reader->raiseError(i18n("no column element found"));
+		return false;
+	}
+
+	if (!readBasicAttributes(reader))
+		return false;
+
+	if (preview)
+		return true;
+
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs = reader->attributes();
+
+	QString str = attribs.value("designation").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'designation'"));
+	else
+		setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
+
+	str = attribs.value("mode").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'mode'"));
+	else
+		setColumnMode( AbstractColumn::ColumnMode(str.toInt()) );
+
+	str = attribs.value("width").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'width'"));
+	else
+		setWidth(str.toInt());
+
+	// read child elements
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement()) break;
+
+		if (reader->isStartElement()) {
+			bool ret_val = true;
+			if (reader->name() == "comment")
+				ret_val = readCommentElement(reader);
+			else if (reader->name() == "input_filter")
+				ret_val = XmlReadInputFilter(reader);
+			else if (reader->name() == "output_filter")
+				ret_val = XmlReadOutputFilter(reader);
+			else if (reader->name() == "mask")
+				ret_val = XmlReadMask(reader);
+			else if (reader->name() == "formula")
+				ret_val = XmlReadFormula(reader);
+			else if (reader->name() == "row")
+				ret_val = XmlReadRow(reader);
+			else { // unknown element
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				if (!reader->skipToEndElement()) return false;
+			}
+			if (!ret_val)
+				return false;
+		}
+		QString content = reader->text().toString().trimmed();
+		if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
+			DecodeColumnTask* task = new DecodeColumnTask(d, content);
+			QThreadPool::globalInstance()->start(task);
+		}
+	}
 
 	return !reader->error();
 }
@@ -811,7 +816,7 @@ bool Column::load(XmlStreamReader* reader) {
 bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "input_filter");
 	if (!reader->skipToNextTag()) return false;
-	if (!d->inputFilter()->load(reader)) return false;
+	if (!d->inputFilter()->load(reader, false)) return false;
 	if (!reader->skipToNextTag()) return false;
 	Q_ASSERT(reader->isEndElement() && reader->name() == "input_filter");
 	return true;
@@ -823,7 +828,7 @@ bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
 bool Column::XmlReadOutputFilter(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "output_filter");
 	if (!reader->skipToNextTag()) return false;
-	if (!d->outputFilter()->load(reader)) return false;
+	if (!d->outputFilter()->load(reader, false)) return false;
 	if (!reader->skipToNextTag()) return false;
 	Q_ASSERT(reader->isEndElement() && reader->name() == "output_filter");
 	return true;

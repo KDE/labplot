@@ -429,7 +429,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool PlotArea::load(XmlStreamReader* reader) {
+bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	Q_D(PlotArea);
 
 	if(!reader->isStartElement() || reader->name() != "plotArea") {
@@ -439,6 +439,9 @@ bool PlotArea::load(XmlStreamReader* reader) {
 
 	if ( !readBasicAttributes(reader) )
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

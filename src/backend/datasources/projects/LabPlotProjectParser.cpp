@@ -51,7 +51,7 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 		m_project = new Project();
 
 	QAbstractItemModel* model = nullptr;
-	if (m_project->load(m_projectFileName) )
+	if (m_project->load(m_projectFileName, true) )
 		model = new AspectTreeModel(m_project);
 
 	return model;

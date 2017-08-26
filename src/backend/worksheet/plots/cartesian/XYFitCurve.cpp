@@ -50,7 +50,7 @@ extern "C" {
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_statistics_double.h>
-#include "backend/gsl/parser.h" 
+#include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_fit.h"
 #include "backend/nsl/nsl_sf_stats.h"
 }
@@ -437,7 +437,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				const double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 				for (size_t i = 0; i < n; i++) {
 					x = xVector[i];
-	
+
 					for (int j = 0; j < 4; j++) {
 						if (fixed[j])
 							gsl_matrix_set(J, i, j, 0.);
@@ -529,7 +529,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
 					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
 					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
-				
+
 					switch (modelType) {
 					case nsl_fit_model_gaussian:
 						gsl_matrix_set(J, i, 3*j, nsl_fit_model_gaussian_param_deriv(0, x, s, mu, a, weight[i]));
@@ -565,7 +565,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case nsl_fit_model_growth:
 		switch ((nsl_fit_model_type_growth)modelType) {
 		case nsl_fit_model_atan:
-		case nsl_fit_model_tanh: 
+		case nsl_fit_model_tanh:
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_sigmoid: 		// Y(x) = a/(1+exp(-k*(x-mu)))
 		case nsl_fit_model_erf:
@@ -1255,7 +1255,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//function to fit
 	gsl_multifit_function_fdf f;
-	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, 
+	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames,
 				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
@@ -1601,7 +1601,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool XYFitCurve::load(XmlStreamReader* reader) {
+bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyFitCurve") {
@@ -1622,8 +1622,10 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "fitData") {
 			attribs = reader->attributes();
 
@@ -1692,7 +1694,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

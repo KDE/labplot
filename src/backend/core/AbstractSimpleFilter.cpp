@@ -90,7 +90,7 @@
  * Equivalently, you can write 1:1-filters for QString or QDateTime inputs by checking for
  * AbstractColumn::TypeQString or AbstractColumn::TypeQDateTime in line 6. You would then use
  * AbstractColumn::textAt(row) or AbstractColumn::dateTimeAt(row) in line 13 to access the input data.
- * For QString output, you need to implement AbstractColumn::textAt(row). 
+ * For QString output, you need to implement AbstractColumn::textAt(row).
  * For QDateTime output, you have to implement three methods:
  * \code
  * virtual QDateTime dateTimeAt(int row) const;
@@ -159,9 +159,9 @@ AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
  * \brief Return the column mode
  *
  * This function is most used by tables but can also be used
- * by plots. The column mode specifies how to interpret 
+ * by plots. The column mode specifies how to interpret
  * the values in the column additional to the data type.
- */ 
+ */
 AbstractColumn::ColumnMode AbstractSimpleFilter::columnMode() const {
 	// calling this function while m_input is empty is a sign of very bad code
 	// nevertheless it will return some rather meaningless value to
@@ -332,7 +332,7 @@ const AbstractColumn *AbstractSimpleFilter::output(int port) const
 /**
  * \brief Save to XML
  */
-void AbstractSimpleFilter::save(QXmlStreamWriter * writer) const 
+void AbstractSimpleFilter::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartElement("simple_filter");
 	writeBasicAttributes(writer);
@@ -356,9 +356,10 @@ void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool AbstractSimpleFilter::load(XmlStreamReader * reader)
-{
-	if(reader->isStartElement() && reader->name() == "simple_filter") 
+bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
+	Q_UNUSED(preview); //TODO
+
+	if(reader->isStartElement() && reader->name() == "simple_filter")
 	{
 		if (!readBasicAttributes(reader)) return false;
 
@@ -371,13 +372,13 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 		}
 
 		// read child elements
-		while (!reader->atEnd()) 
+		while (!reader->atEnd())
 		{
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) 
+			if (reader->isStartElement())
 			{
 				if (reader->name() == "comment")
 				{
@@ -388,7 +389,7 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
-			} 
+			}
 		}
 	}
 	else

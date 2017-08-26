@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,7 +32,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class XYEquationCurvePrivate;
-class XYEquationCurve: public XYCurve {
+class XYEquationCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
@@ -53,9 +53,9 @@ class XYEquationCurve: public XYCurve {
 		virtual ~XYEquationCurve();
 
 		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual QIcon icon() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
 

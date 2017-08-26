@@ -73,7 +73,7 @@ class PlotArea : public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
 		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*) override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		virtual void retransform() override;
 		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

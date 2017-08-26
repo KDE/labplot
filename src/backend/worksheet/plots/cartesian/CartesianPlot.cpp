@@ -2405,7 +2405,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 
 
 //! Load from XML
-bool CartesianPlot::load(XmlStreamReader* reader) {
+bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CartesianPlot);
 
 	if (!reader->isStartElement() || reader->name() != "cartesianPlot") {
@@ -2617,7 +2617,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			d->yRangeBreaks.list << b;
 		} else if (reader->name() == "textLabel") {
 			m_title = new TextLabel("");
-			if (!m_title->load(reader)) {
+			if (!m_title->load(reader, preview)) {
 				delete m_title;
 				m_title=0;
 				return false;
@@ -2625,10 +2625,10 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				addChild(m_title);
 			}
 		} else if (reader->name() == "plotArea") {
-			m_plotArea->load(reader);
+			m_plotArea->load(reader, preview);
 		} else if (reader->name() == "axis") {
 			Axis* axis = new Axis("", this);
-			if (!axis->load(reader)) {
+			if (!axis->load(reader, preview)) {
 				delete axis;
 				return false;
 			} else {
@@ -2636,67 +2636,67 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyCurve") {
 			XYCurve* curve = addCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyEquationCurve") {
 			XYEquationCurve* curve = addEquationCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
 			XYDataReductionCurve* curve = addDataReductionCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
 			XYDifferentiationCurve* curve = addDifferentiationCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyIntegrationCurve") {
 			XYIntegrationCurve* curve = addIntegrationCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyInterpolationCurve") {
 			XYInterpolationCurve* curve = addInterpolationCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			XYFourierTransformCurve* curve = addFourierTransformCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xySmoothCurve") {
 			XYSmoothCurve* curve = addSmoothCurve();
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
-			if (!m_legend->load(reader)) {
+			if (!m_legend->load(reader, preview)) {
 				delete m_legend;
 				return false;
 			} else {
@@ -2705,7 +2705,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "customPoint") {
 			CustomPoint* point = new CustomPoint(this, "");
-			if (!point->load(reader)) {
+			if (!point->load(reader, preview)) {
 				delete point;
 				return false;
 			} else {
@@ -2713,7 +2713,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		}else if(reader->name() == "Histogram"){
 			Histogram* curve = addHistogram();
-			if (!curve->load(reader)){
+			if (!curve->load(reader, preview)){
 				removeChild(curve);
 				return false;
 			}

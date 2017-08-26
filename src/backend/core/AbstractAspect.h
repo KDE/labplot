@@ -167,8 +167,8 @@ public:
 	void endMacro();
 
 	//save/load
-	virtual void save(QXmlStreamWriter*) const {}
-	virtual bool load(XmlStreamReader*) { return false; }
+	virtual void save(QXmlStreamWriter*) const = 0;
+	virtual bool load(XmlStreamReader*, bool preview) = 0;
 
 protected:
 	void info(const QString& text) { emit statusInfo(text); }

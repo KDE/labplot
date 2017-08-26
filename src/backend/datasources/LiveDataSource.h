@@ -144,8 +144,8 @@ public:
 	virtual QMenu* createContextMenu();
 	virtual QWidget* view() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 private:
 	void initActions();

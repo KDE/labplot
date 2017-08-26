@@ -141,9 +141,9 @@ void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::Integratio
 //######################### Private implementation #############################
 //##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -340,7 +340,7 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYIntegrationCurve::load(XmlStreamReader* reader) {
+bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYIntegrationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyIntegrationCurve") {
@@ -361,8 +361,10 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "integrationData") {
 			attribs = reader->attributes();
 
@@ -375,7 +377,6 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);
 		} else if (reader->name() == "integrationResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", integrationResult.available, int);
@@ -385,7 +386,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("value", integrationResult.value);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

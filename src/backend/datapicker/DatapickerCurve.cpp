@@ -515,7 +515,7 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool DatapickerCurve::load(XmlStreamReader* reader) {
+bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerCurve);
 
 	if(!reader->isStartElement() || reader->name() != "datapickerCurve") {
@@ -525,6 +525,9 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -612,7 +615,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "datapickerPoint") {
 			DatapickerPoint* curvePoint = new DatapickerPoint("");
 			curvePoint->setHidden(true);
-			if (!curvePoint->load(reader)) {
+			if (!curvePoint->load(reader, preview)) {
 				delete curvePoint;
 				return false;
 			} else {
@@ -621,7 +624,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "spreadsheet") {
 			Spreadsheet* datasheet = new Spreadsheet(0, "spreadsheet", true);
-			if (!datasheet->load(reader)) {
+			if (!datasheet->load(reader, preview)) {
 				delete datasheet;
 				return false;
 			} else {

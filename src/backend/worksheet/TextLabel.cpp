@@ -707,9 +707,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool TextLabel::load(XmlStreamReader* reader) {
-	Q_D(TextLabel);
-
+bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "textLabel") {
 		reader->raiseError(i18n("no textLabel element found"));
 		return false;
@@ -718,6 +716,10 @@ bool TextLabel::load(XmlStreamReader* reader) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	if (preview)
+		return true;
+
+	Q_D(TextLabel);
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;

@@ -391,7 +391,7 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYDataReductionCurve::load(XmlStreamReader* reader) {
+bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyDataReductionCurve") {
@@ -412,8 +412,10 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "dataReductionData") {
 			attribs = reader->attributes();
 
@@ -429,7 +431,6 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("autoTolerance2", dataReductionData.autoTolerance2, int);
 			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
 		} else if (reader->name() == "dataReductionResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", dataReductionResult.available, int);
@@ -441,7 +442,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

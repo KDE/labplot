@@ -63,7 +63,7 @@ class XYCurve: public WorksheetElement {
 		virtual QMenu* createContextMenu() override;
 		virtual QGraphicsItem *graphicsItem() const override;
 		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*) override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 		virtual void loadThemeConfig(const KConfig& config) override;
 		virtual void saveThemeConfig(const KConfig& config) override;
 

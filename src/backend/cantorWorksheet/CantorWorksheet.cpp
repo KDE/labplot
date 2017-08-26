@@ -239,14 +239,14 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//save columns(variables)
-	foreach (Column * col, children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // close "cantorWorksheet" section
 }
 
 //! Load from XML
-bool CantorWorksheet::load(XmlStreamReader* reader){
+bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "cantorWorksheet"){
 		reader->raiseError(i18n("no Cantor worksheet element found"));
 		return false;
@@ -254,6 +254,9 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -294,7 +297,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 		} else if(reader->name() == "column") {
 			Column* column = new Column("");
 			column->setUndoAware(false);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

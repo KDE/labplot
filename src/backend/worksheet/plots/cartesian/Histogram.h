@@ -60,7 +60,7 @@ public:
 	virtual QMenu* createContextMenu() override;
 	virtual QGraphicsItem* graphicsItem() const override;
 	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*) override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
 

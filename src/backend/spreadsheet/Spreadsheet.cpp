@@ -772,7 +772,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool Spreadsheet::load(XmlStreamReader * reader) {
+bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if(reader->isStartElement() && reader->name() == "spreadsheet") {
 		if (!readBasicAttributes(reader)) return false;
 
@@ -787,7 +787,7 @@ bool Spreadsheet::load(XmlStreamReader * reader) {
 					if (!readCommentElement(reader)) return false;
 				} else if(reader->name() == "column") {
 					Column* column = new Column("");
-					if (!column->load(reader)) {
+					if (!column->load(reader, preview)) {
 						delete column;
 						setColumnCount(0);
 						return false;

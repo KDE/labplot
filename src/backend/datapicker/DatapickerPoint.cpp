@@ -462,7 +462,7 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool DatapickerPoint::load(XmlStreamReader* reader) {
+bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerPoint);
 
 	if(!reader->isStartElement() || reader->name() != "datapickerPoint") {
@@ -472,6 +472,9 @@ bool DatapickerPoint::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

@@ -141,9 +141,9 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 //######################### Private implementation #############################
 //##############################################################################
 XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -357,7 +357,7 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYSmoothCurve::load(XmlStreamReader* reader) {
+bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYSmoothCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
@@ -378,8 +378,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "smoothData") {
 			attribs = reader->attributes();
 
@@ -398,7 +400,6 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
 		} else if (reader->name() == "smoothResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", smoothResult.available, int);
@@ -407,7 +408,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

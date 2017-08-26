@@ -187,7 +187,7 @@ void Workbook::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool Workbook::load(XmlStreamReader* reader){
+bool Workbook::load(XmlStreamReader* reader, bool preview){
     if(!reader->isStartElement() || reader->name() != "workbook"){
         reader->raiseError(i18n("no workbook element found"));
         return false;
@@ -206,18 +206,18 @@ bool Workbook::load(XmlStreamReader* reader){
 
 		if(reader->name() == "spreadsheet"){
             Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
-            if (!spreadsheet->load(reader)){
+            if (!spreadsheet->load(reader, preview)) {
                 delete spreadsheet;
                 return false;
-            }else{
+            } else {
                 addChild(spreadsheet);
             }
 		} else if (reader->name() == "matrix"){
             Matrix* matrix = new Matrix(0, i18n("matrix"), true);
-            if (!matrix->load(reader)){
+            if (!matrix->load(reader, preview)) {
                 delete matrix;
                 return false;
-            }else{
+            } else {
                 addChild(matrix);
             }
         }else{ // unknown element

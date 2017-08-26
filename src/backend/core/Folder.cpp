@@ -86,7 +86,7 @@ void Folder::save(QXmlStreamWriter* writer) const {
 /**
  * \brief Load from XML
  */
-bool Folder::load(XmlStreamReader* reader) {
+bool Folder::load(XmlStreamReader* reader, bool preview) {
 	if(reader->isStartElement() && reader->name() == "folder") {
 		if (!readBasicAttributes(reader))
 			return false;
@@ -102,7 +102,7 @@ bool Folder::load(XmlStreamReader* reader) {
 					if (!readCommentElement(reader))
 						return false;
 				} else if(reader->name() == "child_aspect") {
-					if (!readChildAspectElement(reader))
+					if (!readChildAspectElement(reader, preview))
 						return false;
 				} else {// unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
@@ -119,35 +119,35 @@ bool Folder::load(XmlStreamReader* reader) {
 /**
  * \brief Read child aspect from XML
  */
-bool Folder::readChildAspectElement(XmlStreamReader* reader) {
+bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	if (!reader->skipToNextTag()) return false;
 	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
 
 	QString element_name = reader->name().toString();
 	if (element_name == "folder") {
 		Folder* folder = new Folder("");
-		if (!folder->load(reader)) {
+		if (!folder->load(reader, preview)) {
 			delete folder;
 			return false;
 		}
 		addChild(folder);
 	} else if (element_name == "workbook") {
 		Workbook* workbook = new Workbook(0, "");
-		if (!workbook->load(reader)) {
+		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
 		addChild(workbook);
 	} else if (element_name == "spreadsheet") {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
-		if (!spreadsheet->load(reader)) {
+		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChild(spreadsheet);
 	} else if (element_name == "matrix") {
 		Matrix* matrix = new Matrix(0, "", true);
-		if (!matrix->load(reader)) {
+		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
@@ -155,7 +155,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
 		worksheet->setIsLoading(true);
-		if (!worksheet->load(reader)) {
+		if (!worksheet->load(reader, preview)) {
 			delete worksheet;
 			return false;
 		}
@@ -163,8 +163,8 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
 	} else if (element_name == "cantorWorksheet") {
-		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
-		if (!cantorWorksheet->load(reader)) {
+		CantorWorksheet* cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
+		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
 			return false;
 		}
@@ -172,21 +172,21 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 #endif
 	} else if (element_name == "LiveDataSource") {
 		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
-		if (!liveDataSource->load(reader)) {
+		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;
 		}
 		addChild(liveDataSource);
 	} else if (element_name == "datapicker") {
 		Datapicker* datapicker = new Datapicker(0, "", true);
-		if (!datapicker->load(reader)) {
+		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
 		addChild(datapicker);
 	} else if (element_name == "note") {
 		Note* note = new Note("");
-		if (!note->load(reader)) {
+		if (!note->load(reader, preview)) {
 			delete note;
 			return false;
 		}

@@ -105,9 +105,9 @@ public:
 
 	void recalculate();
 	void initFitData(const QAction*, QVector<QAction*>);	// init fit data for selected action from available list of actions
-	virtual QIcon icon() const;
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual QIcon icon() const override;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)

@@ -857,7 +857,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool LiveDataSource::load(XmlStreamReader* reader) {
+bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "liveDataSource") {
 		reader->raiseError(i18n("no liveDataSource element found"));
 		return false;
@@ -985,7 +985,7 @@ bool LiveDataSource::load(XmlStreamReader* reader) {
 				return false;
 		} else if(reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Text);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				setColumnCount(0);
 				return false;

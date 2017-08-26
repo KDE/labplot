@@ -57,9 +57,9 @@ public:
 	virtual int rowCount() const;
 	virtual QList<Interval<int>> dependentRows(Interval<int> inputRange) const;
 
-	virtual void save(QXmlStreamWriter* writer) const;
-	virtual bool load(XmlStreamReader* reader);
-	virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	virtual void writeExtraAttributes(QXmlStreamWriter*) const;
 
 signals:
 	void formatChanged();
@@ -77,7 +77,7 @@ protected:
 	virtual void inputRowsInserted(const AbstractColumn * source, int before, int count);
 	virtual void inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count);
 	virtual void inputRowsRemoved(const AbstractColumn * source, int first, int count);
-		
+
 	SimpleFilterColumn* m_output_column;
 };
 
@@ -96,7 +96,8 @@ public:
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual double valueAt(int row) const;
 	virtual int integerAt(int row) const;
-
+	virtual void save(QXmlStreamWriter*) const override {};
+	virtual bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:
 	AbstractSimpleFilter* m_owner;
 

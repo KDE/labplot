@@ -68,8 +68,8 @@ class XYSmoothCurve: public XYCurve {
 
 		void recalculate();
 		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)

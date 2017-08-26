@@ -354,7 +354,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool Datapicker::load(XmlStreamReader* reader) {
+bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "datapicker") {
 		reader->raiseError(i18n("no datapicker element found"));
 		return false;
@@ -373,7 +373,7 @@ bool Datapicker::load(XmlStreamReader* reader) {
 
 		if (reader->name() == "datapickerImage") {
 			DatapickerImage* plot = new DatapickerImage(0, i18n("Plot"), true);
-			if (!plot->load(reader)) {
+			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
 			} else {
@@ -383,7 +383,7 @@ bool Datapicker::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "datapickerCurve") {
 			DatapickerCurve* curve = new DatapickerCurve("");
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				delete curve;
 				return false;
 			} else {

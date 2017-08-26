@@ -77,8 +77,8 @@ public:
     void setPrinting(bool);
 	void initErrorBar(const DatapickerCurve::Errors&);
 
-	virtual void save(QXmlStreamWriter *) const;
-	virtual bool load(XmlStreamReader *);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
     CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)

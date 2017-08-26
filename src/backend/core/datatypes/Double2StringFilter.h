@@ -62,8 +62,8 @@ private:
 
 	//! \name XML related functions
 	//@{
-	virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
-	virtual bool load(XmlStreamReader * reader);
+	virtual void writeExtraAttributes(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 	//@}
 
 public:

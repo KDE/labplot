@@ -142,16 +142,19 @@ void Note::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // close "note" section
 }
 
-bool Note::load(XmlStreamReader* reader) {
+bool Note::load(XmlStreamReader* reader, bool preview) {
 	if (!reader->isStartElement() || reader->name() != "note") {
 		reader->raiseError(i18n("no note element found"));
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	if (!readBasicAttributes(reader))
 		return false;
 
+	if (preview)
+		return true;
+
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -176,6 +179,6 @@ bool Note::load(XmlStreamReader* reader) {
 			m_note = attribs.value("text").toString();
 		}
 	}
-	
+
 	return true;
 }

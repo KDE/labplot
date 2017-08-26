@@ -410,7 +410,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool CustomPoint::load(XmlStreamReader* reader) {
+bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CustomPoint);
 
 	if (!reader->isStartElement() || reader->name() != "customPoint") {
@@ -420,6 +420,9 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

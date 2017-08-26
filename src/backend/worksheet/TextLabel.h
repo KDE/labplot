@@ -76,8 +76,8 @@ class TextLabel : public WorksheetElement {
 		virtual QGraphicsItem* graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 		virtual void loadThemeConfig(const KConfig& config);
 		virtual void saveThemeConfig(const KConfig& config);
 

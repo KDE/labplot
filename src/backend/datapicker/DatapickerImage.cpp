@@ -542,7 +542,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool DatapickerImage::load(XmlStreamReader* reader) {
+bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "datapickerImage") {
 		reader->raiseError(i18n("no image element found"));
 		return false;
@@ -550,6 +550,9 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -807,7 +810,7 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 		} else if(reader->name() == "datapickerPoint") {
 			DatapickerPoint* datapickerPoint = new DatapickerPoint("");
 			datapickerPoint->setHidden(true);
-			if (!datapickerPoint->load(reader)) {
+			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;
 				return false;
 			} else {

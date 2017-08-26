@@ -78,8 +78,8 @@ public:
 	void navigateTo(const QString& path);
 
 	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
-	bool load(const QString&);
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	bool load(const QString&, bool preview = false);
 
 public slots:
 	void descriptionChanged(const AbstractAspect*);

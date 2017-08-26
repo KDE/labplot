@@ -108,8 +108,8 @@ public:
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
 
-	void save(QXmlStreamWriter*) const;
-	bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);

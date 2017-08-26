@@ -61,8 +61,8 @@ class Note : public AbstractPart {
 		void setTextFont(const QFont&);
 		const QFont& textFont() const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 	signals:
 		void backgroundColorChanged(QColor);

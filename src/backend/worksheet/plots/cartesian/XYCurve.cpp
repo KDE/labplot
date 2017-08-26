@@ -1004,6 +1004,10 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	//calculate the lines connecting the data points
+	{
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
+#endif
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
 	switch (lineType) {
@@ -1168,21 +1172,27 @@ void XYCurvePrivate::updateLines() {
 			break;
 		}
 	}
+	}
 
 	//map the lines to scene coordinates
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 	{
 #ifdef PERFTRACE_CURVES
-		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform(), map lines to scene coordinates");
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), map lines to scene coordinates");
 #endif
 		lines = cSystem->mapLogicalToScene(lines);
 	}
 
+	{
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
+#endif
 	//new line path
 	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
+	}
 	}
 
 	updateFilling();
@@ -1800,11 +1810,12 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+	if (m_suppressRecalc)
+		return;
+
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcShapeAndBoundingRect()");
 #endif
-	if (m_suppressRecalc)
-		return;
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
@@ -1891,9 +1902,6 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
-#ifdef PERFTRACE_CURVES
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updatePixmap()");
-#endif
     if (m_suppressRecalc)
         return;
 	WAIT_CURSOR;
@@ -2001,13 +2009,9 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) ) {
-#ifdef PERFTRACE_CURVES
-		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::paint(), painter->drawPixmap()");
-#endif
-
+	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
-	} else
+	else
 		draw(painter); //draw directly again (slow)
 
 
@@ -2287,7 +2291,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool XYCurve::load(XmlStreamReader* reader) {
+bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyCurve") {
@@ -2297,6 +2301,9 @@ bool XYCurve::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

@@ -343,7 +343,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
+bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDifferentiationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyDifferentiationCurve") {
@@ -364,8 +364,10 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "differentiationData") {
 			attribs = reader->attributes();
 
@@ -387,7 +389,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

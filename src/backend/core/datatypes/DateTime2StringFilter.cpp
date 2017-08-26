@@ -91,11 +91,14 @@ void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) cons
 	writer->writeAttribute("format", format());
 }
 
-bool DateTime2StringFilter::load(XmlStreamReader * reader) {
+bool DateTime2StringFilter::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
+
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 
-	if (AbstractSimpleFilter::load(reader))
+	if (AbstractSimpleFilter::load(reader, preview))
 		setFormat(str);
 	else
 		return false;

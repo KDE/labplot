@@ -141,9 +141,9 @@ void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::Tr
 //######################### Private implementation #############################
 //##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner) {
 
 }
@@ -358,7 +358,7 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
+bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyFourierTransformCurve") {
@@ -379,8 +379,10 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "transformData") {
 			attribs = reader->attributes();
 
@@ -396,7 +398,6 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("xScale", transformData.xScale, nsl_dft_xscale);
 			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
 		} else if (reader->name() == "transformResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", transformResult.available, int);
@@ -405,7 +406,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", transformResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

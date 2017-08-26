@@ -87,8 +87,8 @@ public:
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaYColumn, MinusDeltaYColumn)
 	QString& minusDeltaYColumnPath() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	typedef DatapickerCurvePrivate Private;
 

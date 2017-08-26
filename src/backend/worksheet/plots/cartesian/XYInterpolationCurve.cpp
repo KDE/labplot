@@ -146,9 +146,9 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 //######################### Private implementation #############################
 //##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -415,18 +415,18 @@ void XYInterpolationCurvePrivate::recalculate() {
 				if (a==0)
 					m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
-					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) 
+					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1])
 						+ (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 				m1 *= (1.-tension);
 				if (b==n-1)
 					m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
-					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) 
+					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a])
 						+ (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
 				m2 *= (1.-tension);
-				
+
 				break;
-			}	
+			}
 
 			// Hermite polynomial
 			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
@@ -531,7 +531,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYInterpolationCurve::load(XmlStreamReader* reader) {
+bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
@@ -552,8 +552,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "interpolationData") {
 			attribs = reader->attributes();
 
@@ -572,7 +574,6 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (reader->name() == "interpolationResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", interpolationResult.available, int);
@@ -581,7 +582,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

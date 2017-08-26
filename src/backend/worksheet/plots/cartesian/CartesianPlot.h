@@ -100,9 +100,9 @@ public:
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
-	virtual void loadThemeConfig(const KConfig&);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	virtual void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)

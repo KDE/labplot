@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -191,7 +191,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYEquationCurve::load(XmlStreamReader* reader) {
+bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyEquationCurve") {
@@ -212,8 +212,10 @@ bool XYEquationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "equationData") {
 			attribs = reader->attributes();
 

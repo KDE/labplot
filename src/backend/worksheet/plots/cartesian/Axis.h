@@ -71,7 +71,7 @@ class Axis: public WorksheetElement {
 		virtual void setZValue(qreal) override;
 
 		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*) override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 		virtual void loadThemeConfig(const KConfig&) override;
 		virtual void saveThemeConfig(const KConfig&) override;
 

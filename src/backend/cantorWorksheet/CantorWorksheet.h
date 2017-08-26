@@ -59,8 +59,8 @@ public:
 	virtual bool printView();
 	virtual bool printPreview() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	QString backendName();
 	KParts::ReadWritePart* part();

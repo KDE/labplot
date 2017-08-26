@@ -55,8 +55,8 @@ class Workbook : public AbstractPart, public scripted {
 		Matrix* currentMatrix() const;
 		void setChildSelectedInView(int index, bool selected);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 	public slots:
 		virtual void childSelected(const AbstractAspect*);

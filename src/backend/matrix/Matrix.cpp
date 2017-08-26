@@ -499,7 +499,7 @@ void Matrix::copy(Matrix* other) {
 			setColumnCells(i, 0, rows-1, other->columnCells<QDateTime>(i, 0, rows-1));
 		break;
 	}
-		
+
 	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
 	setNumericFormat(other->numericFormat());
 	setPrecision(other->precision());
@@ -788,7 +788,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 		}
 		break;
 	}
-	
+
 	columnCount += count;
 	emit q->columnsInserted(before, count);
 }
@@ -1012,13 +1012,17 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // "matrix"
 }
 
-bool Matrix::load(XmlStreamReader* reader) {
+bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "matrix") {
 		reader->raiseError(i18n("no matrix element found"));
 		return false;
 	}
 
-	if (!readBasicAttributes(reader)) return false;
+	if (!readBasicAttributes(reader))
+		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

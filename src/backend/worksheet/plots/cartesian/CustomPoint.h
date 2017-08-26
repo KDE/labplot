@@ -50,7 +50,7 @@ class CustomPoint : public WorksheetElement {
 		virtual QGraphicsItem* graphicsItem() const override;
 
 		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*) override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 		BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)

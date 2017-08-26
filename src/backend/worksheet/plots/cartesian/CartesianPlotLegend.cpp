@@ -917,7 +917,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool CartesianPlotLegend::load(XmlStreamReader* reader) {
+bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CartesianPlotLegend);
 
 	if (!reader->isStartElement() || reader->name() != "cartesianPlotLegend") {
@@ -927,6 +927,9 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -992,7 +995,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 			else
 				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
 		} else if (reader->name() == "textLabel") {
-			if (!d->title->load(reader)) {
+			if (!d->title->load(reader, preview)) {
 				delete d->title;
 				d->title=0;
 				return false;
