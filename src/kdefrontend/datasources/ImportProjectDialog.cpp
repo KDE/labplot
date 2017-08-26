@@ -198,19 +198,21 @@ void ImportProjectDialog::selectFile() {
 	QString title;
 	QString lastDir;
 	QString supportedFormats;
+	QString lastDirConfEntryName;
 	switch (m_projectType) {
 	case (ProjectLabPlot):
 		title = i18n("Open LabPlot Project");
-		lastDir = conf.readEntry(QLatin1String("LastImportLabPlotProjectDir"), "");
+		lastDirConfEntryName = QLatin1String("LastImportLabPlotProjectDir");
 		supportedFormats = i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)");
 		break;
 	case (ProjectOrigin):
 		title = i18n("Open Origin Project");
-		lastDir = conf.readEntry(QLatin1String("LastImportOriginPlojecttDir"), "");
+		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
 		supportedFormats = i18n("Origin Projects (*.opj *.OPJ)");
 		break;
 	}
 
+	lastDir = conf.readEntry(lastDirConfEntryName, "");
 	QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
@@ -219,7 +221,7 @@ void ImportProjectDialog::selectFile() {
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != lastDir)
-			conf.writeEntry(lastDir, newDir);
+			conf.writeEntry(lastDirConfEntryName, newDir);
 	}
 
 	ui.leFileName->setText(path);
