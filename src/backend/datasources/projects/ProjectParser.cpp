@@ -26,6 +26,7 @@
 *                                                                         *
 ***************************************************************************/
 #include "ProjectParser.h"
+#include "backend/core/Project.h"
 
 /*!
 \class ProjectParser
@@ -33,13 +34,20 @@
 
 \ingroup datasources
 */
-
-ProjectParser::ProjectParser() : QObject() {
+ProjectParser::ProjectParser() : QObject(), m_project(nullptr) {
 
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
+
+	//delete the previous project object
+	if (m_project != nullptr) {
+		delete m_project;
+		m_project = nullptr;
+	}
 }
 
-
+const QString& ProjectParser::projectFileName() const {
+	return m_projectFileName;
+}

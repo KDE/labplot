@@ -30,8 +30,6 @@
 
 #include "backend/datasources/projects/ProjectParser.h"
 
-class Project;
-
 class LabPlotProjectParser : public ProjectParser {
 	Q_OBJECT
 
@@ -41,9 +39,6 @@ public:
 
 	virtual QAbstractItemModel* model() override;
 	virtual void importTo(Folder*) override;
-
-private:
-	Project* m_project;
 };
 
 #endif // LABPLOTPROJECTPARSER_H

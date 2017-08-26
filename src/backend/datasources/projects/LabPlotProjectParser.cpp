@@ -37,7 +37,7 @@
 \ingroup datasources
 */
 
-LabPlotProjectParser::LabPlotProjectParser() : ProjectParser(), m_project(nullptr) {
+LabPlotProjectParser::LabPlotProjectParser() : ProjectParser() {
 
 }
 

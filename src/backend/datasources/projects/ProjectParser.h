@@ -33,6 +33,7 @@
 class QAbstractItemModel;
 class QString;
 class Folder;
+class Project;
 
 class ProjectParser : public QObject {
 	Q_OBJECT
@@ -42,11 +43,14 @@ public:
 	virtual ~ProjectParser() {};
 
 	void setProjectFileName(const QString&);
+	const QString& projectFileName() const;
+
 	virtual QAbstractItemModel* model() = 0;
 	virtual void importTo(Folder*) = 0;
 
 protected:
 	QString m_projectFileName;
+	Project* m_project;
 
 signals:
 	void completed(int);
