@@ -71,12 +71,12 @@ extern "C" {
 }
 
 Histogram::Histogram(const QString &name)
-		: WorksheetElement(name), d_ptr(new HistogramPrivate(this)) {
+	: WorksheetElement(name), d_ptr(new HistogramPrivate(this)) {
 	init();
 }
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
-		: WorksheetElement(name), d_ptr(dd) {
+	: WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
@@ -183,14 +183,18 @@ void Histogram::setBinValue(int binValue) {
 //##########################  getter methods  ##################################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
-QString& Histogram::xColumnPath() const { return d_ptr->xColumnPath; }
+QString& Histogram::xColumnPath() const {
+	return d_ptr->xColumnPath;
+}
 CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramData, histogramData, histogramData)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn *, valuesColumn, valuesColumn)
-QString& Histogram::valuesColumnPath() const { return d_ptr->valuesColumnPath; }
+QString& Histogram::valuesColumnPath() const {
+	return d_ptr->valuesColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -226,7 +230,7 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramData, Histogram::HistogramData, h
 void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) {
 	Q_D(Histogram);
 	if ((histogramData.binValue != d->histogramData.binValue)
-		|| (histogramData.binsOption != d->histogramData.binsOption) )
+	        || (histogramData.binsOption != d->histogramData.binsOption) )
 		exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
 }
 
@@ -245,7 +249,7 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
+			        this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -272,7 +276,7 @@ void Histogram::setValuesColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
+			        this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -473,17 +477,17 @@ double HistogramPrivate::getYMaximum() {
 		double yMaxRange = 0.0;
 		switch(histogramType) {
 		case Histogram::Ordinary: {
-			size_t maxYAddes = gsl_histogram_max_bin(histogram);
-			yMaxRange = gsl_histogram_get(histogram, maxYAddes);
-			break;
-		}
+				size_t maxYAddes = gsl_histogram_max_bin(histogram);
+				yMaxRange = gsl_histogram_get(histogram, maxYAddes);
+				break;
+			}
 		case Histogram::Cumulative: {
-			yMaxRange = xColumn->rowCount();
-			break;
-		}
+				yMaxRange = xColumn->rowCount();
+				break;
+			}
 		case Histogram::AvgShift: {
-			//TODO
-		}
+				//TODO
+			}
 		}
 		return yMaxRange;
 	}
@@ -499,7 +503,7 @@ QPainterPath HistogramPrivate::shape() const {
 }
 
 void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-    q->createContextMenu()->exec(event->screenPos());
+	q->createContextMenu()->exec(event->screenPos());
 }
 
 bool HistogramPrivate::swapVisible(bool on) {
@@ -514,9 +518,8 @@ bool HistogramPrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
-	if (m_suppressRetransform){
+	if (m_suppressRetransform)
 		return;
-	}
 	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
@@ -544,9 +547,9 @@ void HistogramPrivate::retransform() {
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
 			case AbstractColumn::Integer:
-				//TODO
+			//TODO
 			case AbstractColumn::Text:
-				//TODO
+			//TODO
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
@@ -582,14 +585,14 @@ void HistogramPrivate::retransform() {
   recalculates the painter path for the lines connecting the data points.
   Called each time when the type of this connection is changed.
 */
-void HistogramPrivate::updateLines(){
+void HistogramPrivate::updateLines() {
 	linePath = QPainterPath();
 	lines.clear();
 
 	const int count=symbolPointsLogical.count();
 
 	//nothing to do, if no data points available
-	if (count<=1){
+	if (count<=1) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -600,20 +603,20 @@ void HistogramPrivate::updateLines(){
 	double xAxisMin= xColumn->minimum();
 	double xAxisMax= xColumn->maximum();
 	switch (histogramData.binsOption) {
-		case Histogram::Number:
-			bins = (size_t)histogramData.binValue;
-			break;
-		case Histogram::SquareRoot:
-			bins = (size_t)sqrt(histogramData.binValue);
-		case Histogram::RiceRule:
-			bins = (size_t)2*cbrt(histogramData.binValue);
-			break;
-		case Histogram::Width:
-			bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binValue;
-			break;
-		case Histogram::SturgisRule:
-			bins =(size_t) 1 + 3.33*log(histogramData.binValue);
-			break;
+	case Histogram::Number:
+		bins = (size_t)histogramData.binValue;
+		break;
+	case Histogram::SquareRoot:
+		bins = (size_t)sqrt(histogramData.binValue);
+	case Histogram::RiceRule:
+		bins = (size_t)2*cbrt(histogramData.binValue);
+		break;
+	case Histogram::Width:
+		bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binValue;
+		break;
+	case Histogram::SturgisRule:
+		bins =(size_t) 1 + 3.33*log(histogramData.binValue);
+		break;
 	}
 
 	double width = (xAxisMax-xAxisMin)/bins;
@@ -627,56 +630,54 @@ void HistogramPrivate::updateLines(){
 	*/
 	switch(histogramType) {
 		qDebug() << "histogramType switch case " << histogramType;
-		case Histogram::Ordinary: {
-		for (int row = startRow; row <= endRow; row++ ){
-			if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-				gsl_histogram_increment(histogram,xColumn->valueAt(row));
-		}
-		for(size_t i=0;i < bins; ++i) {
-			tempPoint.setX(xAxisMin);
-			tempPoint.setY(0.0);
-
-			tempPoint1.setX(xAxisMin);
-			tempPoint1.setY(gsl_histogram_get(histogram,i));
-
-			lines.append(QLineF(tempPoint, tempPoint1));
-
-			tempPoint.setX(xAxisMin);
-			tempPoint.setY(gsl_histogram_get(histogram,i));
-
-			tempPoint1.setX(xAxisMin+width);
-			tempPoint1.setY(gsl_histogram_get(histogram,i));
-
-			lines.append(QLineF(tempPoint,tempPoint1));
-
-			tempPoint.setX(xAxisMin+width);
-			tempPoint.setY(gsl_histogram_get(histogram,i));
-
-			tempPoint1.setX(xAxisMin+width);
-			tempPoint1.setY(0.0);
-
-			lines.append(QLineF(tempPoint, tempPoint1));
-
-			tempPoint.setX(xAxisMin+width);
-			tempPoint.setY(0.0);
-
-			tempPoint1.setX(xAxisMin);
-			tempPoint1.setY(0.0);
-
-			lines.append(QLineF(tempPoint, tempPoint1));
-			xAxisMin+= width;
-			}
-		break;
-		}
-		case Histogram::Cumulative: {
-		double point =0.0;
-		for (int row = startRow; row <= endRow; row++ ){
-			if ( xColumn->isValid(row) && !xColumn->isMasked(row))
-				{
+	case Histogram::Ordinary: {
+			for (int row = startRow; row <= endRow; row++ ) {
+				if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
 					gsl_histogram_increment(histogram,xColumn->valueAt(row));
-				}
 			}
-			for(size_t i=0;i < bins; ++i) {
+			for(size_t i=0; i < bins; ++i) {
+				tempPoint.setX(xAxisMin);
+				tempPoint.setY(0.0);
+
+				tempPoint1.setX(xAxisMin);
+				tempPoint1.setY(gsl_histogram_get(histogram,i));
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+
+				tempPoint.setX(xAxisMin);
+				tempPoint.setY(gsl_histogram_get(histogram,i));
+
+				tempPoint1.setX(xAxisMin+width);
+				tempPoint1.setY(gsl_histogram_get(histogram,i));
+
+				lines.append(QLineF(tempPoint,tempPoint1));
+
+				tempPoint.setX(xAxisMin+width);
+				tempPoint.setY(gsl_histogram_get(histogram,i));
+
+				tempPoint1.setX(xAxisMin+width);
+				tempPoint1.setY(0.0);
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+
+				tempPoint.setX(xAxisMin+width);
+				tempPoint.setY(0.0);
+
+				tempPoint1.setX(xAxisMin);
+				tempPoint1.setY(0.0);
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+				xAxisMin+= width;
+			}
+			break;
+		}
+	case Histogram::Cumulative: {
+			double point =0.0;
+			for (int row = startRow; row <= endRow; row++ ) {
+				if ( xColumn->isValid(row) && !xColumn->isMasked(row))
+					gsl_histogram_increment(histogram,xColumn->valueAt(row));
+			}
+			for(size_t i=0; i < bins; ++i) {
 				point+= gsl_histogram_get(histogram,i);
 				tempPoint.setX(xAxisMin);
 				tempPoint.setY(0.0);
@@ -713,18 +714,17 @@ void HistogramPrivate::updateLines(){
 			}
 			break;
 		}
-		case Histogram::AvgShift:
-		{
+	case Histogram::AvgShift: {
 			//TODO
 			break;
 		}
 	}
 
 	//calculate the lines connecting the data points
-		for (int i = 0; i<count-1; i++) {
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
-		}
+	for (int i = 0; i<count-1; i++) {
+		if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+		lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+	}
 
 	//map the lines to scene coordinates
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
@@ -744,11 +744,11 @@ void HistogramPrivate::updateLines(){
   recreates the value strings to be shown and recalculates their draw position.
 */
 void HistogramPrivate::updateValues() {
-  	valuesPath = QPainterPath();
+	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == Histogram::NoValues){
+	if (valuesType == Histogram::NoValues) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -757,60 +757,60 @@ void HistogramPrivate::updateValues() {
 	switch (valuesType) {
 	case Histogram::NoValues:
 	case Histogram::ValuesY: {
-		switch(histogramType) {
-		case Histogram::Ordinary:
-			for(size_t i=0; i<bins; ++i){
-				if (!visiblePoints[i]) continue;
-				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
-			}
-			break;
-		case Histogram::Cumulative: {
-			value = 0;
-			for(size_t i=0; i<bins; ++i){
-				if (!visiblePoints[i]) continue;
-				value += gsl_histogram_get(histogram, i);
-				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+			switch(histogramType) {
+			case Histogram::Ordinary:
+				for(size_t i=0; i<bins; ++i) {
+					if (!visiblePoints[i]) continue;
+					valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
+				}
+				break;
+			case Histogram::Cumulative: {
+					value = 0;
+					for(size_t i=0; i<bins; ++i) {
+						if (!visiblePoints[i]) continue;
+						value += gsl_histogram_get(histogram, i);
+						valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+					}
+					break;
+				}
+				//TODO case Histogram::AvgShift:
 			}
 			break;
 		}
-		//TODO case Histogram::AvgShift:
-		}
-		break;
-	}
 	case Histogram::ValuesCustomColumn: {
-		if (!valuesColumn) {
-		  recalcShapeAndBoundingRect();
-		  return;
-		}
+			if (!valuesColumn) {
+				recalcShapeAndBoundingRect();
+				return;
+			}
 
-		int endRow;
-		if (symbolPointsLogical.size()>valuesColumn->rowCount())
-			endRow =  valuesColumn->rowCount();
-		else
-			endRow = symbolPointsLogical.size();
+			int endRow;
+			if (symbolPointsLogical.size()>valuesColumn->rowCount())
+				endRow =  valuesColumn->rowCount();
+			else
+				endRow = symbolPointsLogical.size();
 
-		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-		for (int i = 0; i < endRow; ++i) {
-			if (!visiblePoints[i]) continue;
+			AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+			for (int i = 0; i < endRow; ++i) {
+				if (!visiblePoints[i]) continue;
 
-			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
-				continue;
+				if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
+					continue;
 
-			switch (xColMode) {
-			case AbstractColumn::Numeric:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-				break;
-			case AbstractColumn::Text:
-				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-			case AbstractColumn::Integer:
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				//TODO
-				break;
+				switch (xColMode) {
+				case AbstractColumn::Numeric:
+					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+					break;
+				case AbstractColumn::Text:
+					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				case AbstractColumn::Integer:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
+					//TODO
+					break;
+				}
 			}
 		}
-	}
 	}
 
 	//Calculate the coordinates where to paint the value strings.
@@ -892,12 +892,11 @@ void HistogramPrivate::updateFilling() {
 
 	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
-	if (lines.size()) {
+	if (lines.size())
 		fillLines = lines;
-	} else {
-		for (int i=0; i<symbolPointsLogical.count()-1; i++){
-		  fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
-		}
+	else {
+		for (int i=0; i<symbolPointsLogical.count()-1; i++)
+			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		fillLines = cSystem->mapLogicalToScene(fillLines);
 	}
 
@@ -1010,7 +1009,7 @@ void HistogramPrivate::updateFilling() {
 		}
 
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-	}else if (fillingPosition == Histogram::FillingLeft) {
+	} else if (fillingPosition == Histogram::FillingLeft) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
 
 		//start point
@@ -1122,9 +1121,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	curveShape = QPainterPath();
 	curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 
-	if (valuesType != Histogram::NoValues){
+	if (valuesType != Histogram::NoValues)
 		curveShape.addPath(valuesPath);
-	}
 	boundingRectangle = curveShape.boundingRect();
 
 	foreach(const QPolygonF& pol, fillPolygons)
@@ -1153,7 +1151,7 @@ void HistogramPrivate::draw(QPainter *painter) {
 	}
 
 	//draw values
-	if (valuesType != Histogram::NoValues){
+	if (valuesType != Histogram::NoValues) {
 		painter->setOpacity(valuesOpacity);
 		painter->setPen(valuesColor);
 		painter->setBrush(Qt::SolidPattern);
@@ -1189,81 +1187,80 @@ void HistogramPrivate::updatePixmap() {
 
 
 //TODO: move this to a central place
-QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false)
-{
-    int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
-    int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
+QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false) {
+	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
+	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
 
-    QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-    int r1 = rect.top();
-    int r2 = rect.bottom();
-    int c1 = rect.left();
-    int c2 = rect.right();
+	QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+	int r1 = rect.top();
+	int r2 = rect.bottom();
+	int c1 = rect.left();
+	int c2 = rect.right();
 
-    int bpl = result.bytesPerLine();
-    int rgba[4];
-    unsigned char* p;
+	int bpl = result.bytesPerLine();
+	int rgba[4];
+	unsigned char* p;
 
-    int i1 = 0;
-    int i2 = 3;
+	int i1 = 0;
+	int i2 = 3;
 
-    if (alphaOnly)
-        i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
+	if (alphaOnly)
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
 
-    for (int col = c1; col <= c2; col++) {
-        p = result.scanLine(r1) + col * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int col = c1; col <= c2; col++) {
+		p = result.scanLine(r1) + col * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p += bpl;
-        for (int j = r1; j < r2; j++, p += bpl)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p += bpl;
+		for (int j = r1; j < r2; j++, p += bpl)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int row = r1; row <= r2; row++) {
-        p = result.scanLine(row) + c1 * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int row = r1; row <= r2; row++) {
+		p = result.scanLine(row) + c1 * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p += 4;
-        for (int j = c1; j < c2; j++, p += 4)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p += 4;
+		for (int j = c1; j < c2; j++, p += 4)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int col = c1; col <= c2; col++) {
-        p = result.scanLine(r2) + col * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int col = c1; col <= c2; col++) {
+		p = result.scanLine(r2) + col * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p -= bpl;
-        for (int j = r1; j < r2; j++, p -= bpl)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p -= bpl;
+		for (int j = r1; j < r2; j++, p -= bpl)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int row = r1; row <= r2; row++) {
-        p = result.scanLine(row) + c2 * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int row = r1; row <= r2; row++) {
+		p = result.scanLine(row) + c2 * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p -= 4;
-        for (int j = c1; j < c2; j++, p -= 4)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p -= 4;
+		for (int j = c1; j < c2; j++, p -= 4)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    return result;
+	return result;
 }
 
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
-void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget){
+void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 //  qDebug()<<"HistogramPrivate::paint, " + q->name();
-    Q_UNUSED(option);
+	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
@@ -1280,7 +1277,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 // 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 // 		timer.start();
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
@@ -1296,7 +1293,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		return;
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 // 		timer.start();
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
@@ -1321,7 +1318,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 void HistogramPrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++){
+	for (int i=0; i<valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 
@@ -1337,41 +1334,41 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 void HistogramPrivate::drawFilling(QPainter* painter) {
 	foreach(const QPolygonF& pol, fillPolygons) {
 		QRectF rect = pol.boundingRect();
-		if (fillingType == PlotArea::Color){
-			switch (fillingColorStyle){
-				case PlotArea::SingleColor:{
+		if (fillingType == PlotArea::Color) {
+			switch (fillingColorStyle) {
+			case PlotArea::SingleColor: {
 					painter->setBrush(QBrush(fillingFirstColor));
 					break;
 				}
-				case PlotArea::HorizontalLinearGradient:{
+			case PlotArea::HorizontalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-				case PlotArea::VerticalLinearGradient:{
+			case PlotArea::VerticalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-				case PlotArea::TopLeftDiagonalLinearGradient:{
+			case PlotArea::TopLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-				case PlotArea::BottomLeftDiagonalLinearGradient:{
+			case PlotArea::BottomLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-				case PlotArea::RadialGradient:{
+			case PlotArea::RadialGradient: {
 					QRadialGradient radialGrad(rect.center(), rect.width()/2);
 					radialGrad.setColorAt(0, fillingFirstColor);
 					radialGrad.setColorAt(1, fillingSecondColor);
@@ -1379,26 +1376,26 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 					break;
 				}
 			}
-		}else if (fillingType == PlotArea::Image){
+		} else if (fillingType == PlotArea::Image) {
 			if ( !fillingFileName.trimmed().isEmpty() ) {
 				QPixmap pix(fillingFileName);
-				switch (fillingImageStyle){
-					case PlotArea::ScaledCropped:
-						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::Scaled:
-						pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::ScaledAspectRatio:
-						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::Centered:{
+				switch (fillingImageStyle) {
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					break;
+				case PlotArea::Centered: {
 						QPixmap backpix(rect.size().toSize());
 						backpix.fill();
 						QPainter p(&backpix);
@@ -1408,17 +1405,16 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 						painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
 						break;
 					}
-					case PlotArea::Tiled:
-						painter->setBrush(QBrush(pix));
-						break;
-					case PlotArea::CenterTiled:
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				case PlotArea::Tiled:
+					painter->setBrush(QBrush(pix));
+					break;
+				case PlotArea::CenterTiled:
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				}
 			}
-		} else if (fillingType == PlotArea::Pattern){
+		} else if (fillingType == PlotArea::Pattern)
 			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
-		}
 
 		painter->drawPolygon(pol);
 	}
@@ -1448,12 +1444,12 @@ void HistogramPrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void Histogram::save(QXmlStreamWriter* writer) const{
+void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
 
-    writer->writeStartElement( "Histogram" );
-    writeBasicAttributes( writer );
-    writeCommentElement( writer );
+	writer->writeStartElement( "Histogram" );
+	writeBasicAttributes( writer );
+	writeCommentElement( writer );
 
 	//general
 	writer->writeStartElement( "general" );
@@ -1462,7 +1458,7 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//Line
-    writer->writeStartElement( "lines" );
+	writer->writeStartElement( "lines" );
 	WRITE_QPEN(d->linePen);
 	writer->writeEndElement();
 
@@ -1484,17 +1480,17 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	//Filling
 	writer->writeStartElement( "filling" );
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
-    writer->writeAttribute( "type", QString::number(d->fillingType) );
-    writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
-    writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
-    writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
-    writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
-    writer->writeAttribute( "firstColor_b", QString::number(d->fillingFirstColor.blue()) );
-    writer->writeAttribute( "secondColor_r", QString::number(d->fillingSecondColor.red()) );
-    writer->writeAttribute( "secondColor_g", QString::number(d->fillingSecondColor.green()) );
-    writer->writeAttribute( "secondColor_b", QString::number(d->fillingSecondColor.blue()) );
-    writer->writeAttribute( "fileName", d->fillingFileName );
+	writer->writeAttribute( "type", QString::number(d->fillingType) );
+	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
+	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
+	writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
+	writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
+	writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
+	writer->writeAttribute( "firstColor_b", QString::number(d->fillingFirstColor.blue()) );
+	writer->writeAttribute( "secondColor_r", QString::number(d->fillingSecondColor.red()) );
+	writer->writeAttribute( "secondColor_g", QString::number(d->fillingSecondColor.green()) );
+	writer->writeAttribute( "secondColor_b", QString::number(d->fillingSecondColor.blue()) );
+	writer->writeAttribute( "fileName", d->fillingFileName );
 	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
 
@@ -1505,9 +1501,8 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
 	writer->writeEndElement();
 
-	if (d->xColumn) {
+	if (d->xColumn)
 		d->xColumn->save(writer);
-	}
 
 	writer->writeEndElement(); //close "Histogram" section
 }
@@ -1516,42 +1511,42 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Histogram);
 
-    if(!reader->isStartElement() || reader->name() != "Histogram"){
-        reader->raiseError(i18n("no histogram element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "Histogram") {
+		reader->raiseError(i18n("no histogram element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
 	if (preview)
 		return true;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "Histogram")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "Histogram")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader)) return false;
-		}else if (reader->name() == "general"){
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
+		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xColumn);
 
 			str = attribs.value("visible").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
-		}else if (reader->name() == "typeChanged") {
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
+		} else if (reader->name() == "typeChanged") {
 			attribs = reader->attributes();
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
@@ -1564,40 +1559,40 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("binValue").toString();
 			d->histogramData.binValue = str.toInt();
-		}else if (reader->name() == "values"){
+		} else if (reader->name() == "values") {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->valuesType = (Histogram::ValuesType)str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->valuesType = (Histogram::ValuesType)str.toInt();
 
 			READ_COLUMN(valuesColumn);
 
 			str = attribs.value("position").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'position'"));
-            else
-                d->valuesPosition = (Histogram::ValuesPosition)str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				d->valuesPosition = (Histogram::ValuesPosition)str.toInt();
 
 			str = attribs.value("distance").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'distance'"));
-            else
-                d->valuesDistance = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'distance'"));
+			else
+				d->valuesDistance = str.toDouble();
 
 			str = attribs.value("rotation").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rotation'"));
-            else
-                d->valuesRotationAngle = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+			else
+				d->valuesRotationAngle = str.toDouble();
 
 			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->valuesOpacity = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->valuesOpacity = str.toDouble();
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
@@ -1607,87 +1602,87 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_QFONT(d->valuesFont);
 
 			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->valuesOpacity = str.toDouble();
-		}else if (reader->name() == "filling"){
-            attribs = reader->attributes();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->valuesOpacity = str.toDouble();
+		} else if (reader->name() == "filling") {
+			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("position"));
-            else
-                d->fillingPosition = Histogram::FillingPosition(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("position"));
+			else
+				d->fillingPosition = Histogram::FillingPosition(str.toInt());
 
-            str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("type"));
-            else
-                d->fillingType = PlotArea::BackgroundType(str.toInt());
+			str = attribs.value("type").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("type"));
+			else
+				d->fillingType = PlotArea::BackgroundType(str.toInt());
 
-            str = attribs.value("colorStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("colorStyle"));
-            else
-                d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+			str = attribs.value("colorStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+			else
+				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
-            str = attribs.value("imageStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("imageStyle"));
-            else
-                d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+			str = attribs.value("imageStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+			else
+				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
-            str = attribs.value("brushStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("brushStyle"));
-            else
-                d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
+			str = attribs.value("brushStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+			else
+				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
 
-            str = attribs.value("firstColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
-            else
-                d->fillingFirstColor.setRed(str.toInt());
+			str = attribs.value("firstColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+			else
+				d->fillingFirstColor.setRed(str.toInt());
 
-            str = attribs.value("firstColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
-            else
-                d->fillingFirstColor.setGreen(str.toInt());
+			str = attribs.value("firstColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+			else
+				d->fillingFirstColor.setGreen(str.toInt());
 
-            str = attribs.value("firstColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
-            else
-                d->fillingFirstColor.setBlue(str.toInt());
+			str = attribs.value("firstColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+			else
+				d->fillingFirstColor.setBlue(str.toInt());
 
-            str = attribs.value("secondColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
-            else
-                d->fillingSecondColor.setRed(str.toInt());
+			str = attribs.value("secondColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+			else
+				d->fillingSecondColor.setRed(str.toInt());
 
-            str = attribs.value("secondColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
-            else
-                d->fillingSecondColor.setGreen(str.toInt());
+			str = attribs.value("secondColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+			else
+				d->fillingSecondColor.setGreen(str.toInt());
 
-            str = attribs.value("secondColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
-            else
-                d->fillingSecondColor.setBlue(str.toInt());
+			str = attribs.value("secondColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+			else
+				d->fillingSecondColor.setBlue(str.toInt());
 
-            str = attribs.value("fileName").toString();
-            d->fillingFileName = str;
+			str = attribs.value("fileName").toString();
+			d->fillingFileName = str;
 
-            str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("opacity"));
-            else
-                d->fillingOpacity = str.toDouble();
+			str = attribs.value("opacity").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("opacity"));
+			else
+				d->fillingOpacity = str.toDouble();
 
 		} else if(reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
