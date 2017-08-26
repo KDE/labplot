@@ -27,7 +27,9 @@
 ***************************************************************************/
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "backend/core/Folder.h"
+#include "backend/core/Project.h"
+#include "backend/core/AspectTreeModel.h"
+#include <liborigin/OriginFile.h>
 
 /*!
 \class OriginProjectParser
@@ -41,7 +43,23 @@ OriginProjectParser::OriginProjectParser() : ProjectParser() {
 }
 
 QAbstractItemModel* OriginProjectParser::model() {
-	return 0;
+	WAIT_CURSOR;
+	if (m_project == nullptr)
+		m_project = new Project();
+
+	QAbstractItemModel* model = nullptr;
+	OriginFile opj((const char*)m_projectFileName.toLocal8Bit());
+	//parse the OPJ file and create a Project object for the preview
+	bool rc = false;
+	//m_project->setName();
+	//TODO
+
+	RESET_CURSOR;
+
+	if (rc)
+		model = new AspectTreeModel(m_project);
+
+	return model;
 }
 
 void OriginProjectParser::importTo(Folder* folder) {
