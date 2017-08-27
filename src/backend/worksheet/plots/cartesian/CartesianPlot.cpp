@@ -134,7 +134,7 @@ void CartesianPlot::init() {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -152,181 +152,181 @@ void CartesianPlot::initDefault(Type type) {
 
 	switch (type) {
 	case FourAxes: {
-		d->xMin = 0;
-		d->xMax = 1;
-		d->yMin = 0;
-		d->yMax = 1;
+			d->xMin = 0;
+			d->xMax = 1;
+			d->yMin = 0;
+			d->yMax = 1;
 
-		//Axes
-		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
-		addChild(axis);
-		axis->setPosition(Axis::AxisBottom);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksNumber(1);
-		QPen pen = axis->majorGridPen();
-		pen.setStyle(Qt::SolidLine);
-		axis->setMajorGridPen(pen);
-		pen = axis->minorGridPen();
-		pen.setStyle(Qt::DotLine);
-		axis->setMinorGridPen(pen);
+			//Axes
+			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisBottom);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			QPen pen = axis->majorGridPen();
+			pen.setStyle(Qt::SolidLine);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::DotLine);
+			axis->setMinorGridPen(pen);
 
-		axis = new Axis("x axis 2", this, Axis::AxisHorizontal);
-		addChild(axis);
-		axis->setPosition(Axis::AxisTop);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksNumber(1);
-		axis->setLabelsPosition(Axis::NoLabels);
-		axis->title()->setText(QString());
+			axis = new Axis("x axis 2", this, Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisTop);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", this, Axis::AxisVertical);
-		addChild(axis);
-		axis->setPosition(Axis::AxisLeft);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksNumber(1);
-		pen = axis->majorGridPen();
-		pen.setStyle(Qt::SolidLine);
-		axis->setMajorGridPen(pen);
-		pen = axis->minorGridPen();
-		pen.setStyle(Qt::DotLine);
-		axis->setMinorGridPen(pen);
+			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisLeft);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			pen = axis->majorGridPen();
+			pen.setStyle(Qt::SolidLine);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::DotLine);
+			axis->setMinorGridPen(pen);
 
-		axis = new Axis("y axis 2", this, Axis::AxisVertical);
-		addChild(axis);
-		axis->setPosition(Axis::AxisRight);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setOffset(1);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksNumber(1);
-		axis->setLabelsPosition(Axis::NoLabels);
-		axis->title()->setText(QString());
+			axis = new Axis("y axis 2", this, Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisRight);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setOffset(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
 
-		break;
-	}
+			break;
+		}
 	case TwoAxes: {
-		d->xMin = 0;
-		d->xMax = 1;
-		d->yMin = 0;
-		d->yMax = 1;
+			d->xMin = 0;
+			d->xMax = 1;
+			d->yMin = 0;
+			d->yMax = 1;
 
-		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
-		addChild(axis);
-		axis->setPosition(Axis::AxisBottom);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
+			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisBottom);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 
-		axis = new Axis("y axis 1", this, Axis::AxisVertical);
-		addChild(axis);
-		axis->setPosition(Axis::AxisLeft);
-		axis->setStart(0);
-		axis->setEnd(1);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
+			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisLeft);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 
-		break;
-	}
+			break;
+		}
 	case TwoAxesCentered: {
-		d->xMin = -0.5;
-		d->xMax = 0.5;
-		d->yMin = -0.5;
-		d->yMax = 0.5;
+			d->xMin = -0.5;
+			d->xMax = 0.5;
+			d->yMin = -0.5;
+			d->yMax = 0.5;
 
-		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
-		QPen pen = m_plotArea->borderPen();
-		pen.setStyle(Qt::NoPen);
-		m_plotArea->setBorderPen(pen);
+			QPen pen = m_plotArea->borderPen();
+			pen.setStyle(Qt::NoPen);
+			m_plotArea->setBorderPen(pen);
 
-		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
-		addChild(axis);
-		axis->setPosition(Axis::AxisCentered);
-		axis->setStart(-0.5);
-		axis->setEnd(0.5);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
-		axis->title()->setText(QString());
+			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCentered);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", this, Axis::AxisVertical);
-		addChild(axis);
-		axis->setPosition(Axis::AxisCentered);
-		axis->setStart(-0.5);
-		axis->setEnd(0.5);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
-		axis->title()->setText(QString());
+			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCentered);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->title()->setText(QString());
 
-		break;
-	}
+			break;
+		}
 	case TwoAxesCenteredZero: {
-		d->xMin = -0.5;
-		d->xMax = 0.5;
-		d->yMin = -0.5;
-		d->yMax = 0.5;
+			d->xMin = -0.5;
+			d->xMax = 0.5;
+			d->yMin = -0.5;
+			d->yMax = 0.5;
 
-		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
-		QPen pen = m_plotArea->borderPen();
-		pen.setStyle(Qt::NoPen);
-		m_plotArea->setBorderPen(pen);
+			QPen pen = m_plotArea->borderPen();
+			pen.setStyle(Qt::NoPen);
+			m_plotArea->setBorderPen(pen);
 
-		Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
-		addChild(axis);
-		axis->setPosition(Axis::AxisCustom);
-		axis->setOffset(0);
-		axis->setStart(-0.5);
-		axis->setEnd(0.5);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
-		axis->title()->setText(QString());
+			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCustom);
+			axis->setOffset(0);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->title()->setText(QString());
 
-		axis = new Axis("y axis 1", this, Axis::AxisVertical);
-		addChild(axis);
-		axis->setPosition(Axis::AxisCustom);
-		axis->setOffset(0);
-		axis->setStart(-0.5);
-		axis->setEnd(0.5);
-		axis->setMajorTicksDirection(Axis::ticksBoth);
-		axis->setMajorTicksNumber(6);
-		axis->setMinorTicksDirection(Axis::ticksBoth);
-		axis->setMinorTicksNumber(1);
-		axis->setArrowType(Axis::FilledArrowSmall);
-		axis->title()->setText(QString());
+			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCustom);
+			axis->setOffset(0);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->title()->setText(QString());
 
-		break;
-	}
+			break;
+		}
 	}
 
 	d->xMinPrev = d->xMin;
@@ -859,9 +859,8 @@ void CartesianPlot::setTheme(const QString& theme) {
 			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: set theme")));
 			loadTheme(theme);
 			endMacro();
-		} else {
+		} else
 			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: disable theming")));
-		}
 	}
 }
 
@@ -904,7 +903,7 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 	return curve;
 }
 
-Histogram* CartesianPlot::addHistogram(){
+Histogram* CartesianPlot::addHistogram() {
 	Histogram* curve= new Histogram("Histogram");
 	this->addChild(curve);
 	return curve;
@@ -1109,32 +1108,30 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const XYCurve* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 
-        const AbstractColumn* curveXcolumn = curve->xColumn();
-        const AbstractColumn* curveYcolumn = curve->yColumn();
+		const AbstractColumn* curveXcolumn = curve->xColumn();
+		const AbstractColumn* curveYcolumn = curve->yColumn();
 
-        bool pushXcolumn = true;
-        bool pushYcolumn = true;
-        for (auto* column : m_connectedColumns) {
-            if (column == curveXcolumn) {
-                pushXcolumn = false;
-            }
+		bool pushXcolumn = true;
+		bool pushYcolumn = true;
+		for (auto* column : m_connectedColumns) {
+			if (column == curveXcolumn)
+				pushXcolumn = false;
 
-            if (column == curveYcolumn) {
-                pushYcolumn = false;
-            }
-        }
+			if (column == curveYcolumn)
+				pushYcolumn = false;
+		}
 
-        if (pushXcolumn) {
-            m_connectedColumns.push_back(curveXcolumn);
-            connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-        }
+		if (pushXcolumn) {
+			m_connectedColumns.push_back(curveXcolumn);
+			connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+		}
 
-        if (pushYcolumn) {
-            m_connectedColumns.push_back(curveYcolumn);
-            connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-        }
-        //TODO
-        connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
+		if (pushYcolumn) {
+			m_connectedColumns.push_back(curveYcolumn);
+			connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+		}
+		//TODO
+		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 
 		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
 
@@ -1181,38 +1178,38 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 		m_legend = nullptr;
 	} else {
 		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
-        if (curve) {
-            bool xColReconnected = false;
-            bool yColReconnected = false;
-            for(const AbstractColumn* c : m_connectedColumns) {
-                if (!xColReconnected) {
-                    if (curve->xColumn() == c) {
-                        for (const XYCurve* ccurve : this->children<const XYCurve>()) {
-                            if (ccurve->xColumn() == c) {
-                                connect(ccurve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-                                break;
-                            }
-                        }
-                        xColReconnected = true;
-                    }
-                }
-                if (!yColReconnected) {
-                    if (curve->yColumn() == c) {
-                        for (const XYCurve* ccurve : this->children<const XYCurve>()) {
-                            if (ccurve->yColumn() == c) {
-                                connect(ccurve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-                                break;
-                            }
-                        }
-                        yColReconnected = true;
-                    }
-                }
+		if (curve) {
+			bool xColReconnected = false;
+			bool yColReconnected = false;
+			for(const AbstractColumn* c : m_connectedColumns) {
+				if (!xColReconnected) {
+					if (curve->xColumn() == c) {
+						for (const XYCurve* ccurve : this->children<const XYCurve>()) {
+							if (ccurve->xColumn() == c) {
+								connect(ccurve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+								break;
+							}
+						}
+						xColReconnected = true;
+					}
+				}
+				if (!yColReconnected) {
+					if (curve->yColumn() == c) {
+						for (const XYCurve* ccurve : this->children<const XYCurve>()) {
+							if (ccurve->yColumn() == c) {
+								connect(ccurve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+								break;
+							}
+						}
+						yColReconnected = true;
+					}
+				}
 
-                if (xColReconnected && yColReconnected)
-                    break;
-            }
-            updateLegend();
-        }
+				if (xColReconnected && yColReconnected)
+					break;
+			}
+			updateLegend();
+		}
 	}
 }
 
@@ -1250,7 +1247,7 @@ void CartesianPlot::dataChanged() {
 	}
 }
 
-void CartesianPlot::HistogramdataChanged(){
+void CartesianPlot::HistogramdataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -1296,7 +1293,7 @@ void CartesianPlot::xDataChanged() {
 	}
 }
 
-void CartesianPlot::xHistogramDataChanged(){
+void CartesianPlot::xHistogramDataChanged() {
 	if (project()->isLoading())
 		return;
 
@@ -1334,7 +1331,7 @@ void CartesianPlot::yDataChanged() {
 		curve->retransform();
 	}
 }
-void CartesianPlot::yHistogramDataChanged(){
+void CartesianPlot::yHistogramDataChanged() {
 	if (project()->isLoading())
 		return;
 
@@ -1389,9 +1386,8 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			else
 				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-		} else { //zoom m_selection
+		} else   //zoom m_selection
 			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-		}
 	}
 }
 
@@ -1421,13 +1417,13 @@ void CartesianPlot::scaleAutoX() {
 			if (!curve->xColumn())
 				continue;
 
-            const double min = curve->xColumn()->minimum(count);
-            if (min < d->curvesXMin)
-                d->curvesXMin = min;
+			const double min = curve->xColumn()->minimum(count);
+			if (min < d->curvesXMin)
+				d->curvesXMin = min;
 
-            const double max = curve->xColumn()->maximum(count);
-            if (max > d->curvesXMax)
-                d->curvesXMax = max;
+			const double max = curve->xColumn()->maximum(count);
+			if (max > d->curvesXMax)
+				d->curvesXMax = max;
 		}
 
 		//loop over all histograms and determine the maximum and minimum x-values
@@ -1437,13 +1433,13 @@ void CartesianPlot::scaleAutoX() {
 			if (!curve->xColumn())
 				continue;
 
-            const double min = curve->xColumn()->minimum(count);
-            if (min < d->curvesXMin)
-                d->curvesXMin = min;
+			const double min = curve->xColumn()->minimum(count);
+			if (min < d->curvesXMin)
+				d->curvesXMin = min;
 
-            const double max = curve->xColumn()->maximum(count);
-            if (max > d->curvesXMax)
-                d->curvesXMax = max;
+			const double max = curve->xColumn()->maximum(count);
+			if (max > d->curvesXMax)
+				d->curvesXMax = max;
 		}
 
 		d->curvesXMinMaxIsDirty = false;
@@ -1506,13 +1502,13 @@ void CartesianPlot::scaleAutoY() {
 			if (!curve->yColumn())
 				continue;
 
-            const double min = curve->yColumn()->minimum(count);
-            if (min < d->curvesYMin)
-                d->curvesYMin = min;
+			const double min = curve->yColumn()->minimum(count);
+			if (min < d->curvesYMin)
+				d->curvesYMin = min;
 
-            const double max = curve->yColumn()->maximum(count);
-            if (max > d->curvesYMax)
-                d->curvesYMax = max;
+			const double max = curve->yColumn()->maximum(count);
+			if (max > d->curvesYMax)
+				d->curvesYMax = max;
 		}
 
 		//loop over all histograms and determine the maximum y-value
@@ -1604,11 +1600,11 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-            const double min = curve->xColumn()->minimum(count);
+			const double min = curve->xColumn()->minimum(count);
 			if (min < d->curvesXMin)
 				d->curvesXMin = min;
 
-            const double max = curve->xColumn()->maximum(count);
+			const double max = curve->xColumn()->maximum(count);
 			if (max > d->curvesXMax)
 				d->curvesXMax = max;
 		}
@@ -1620,11 +1616,11 @@ void CartesianPlot::scaleAuto() {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
 
-        //loop over all xy-curves and determine the maximum and minimum y-values
+		//loop over all xy-curves and determine the maximum and minimum y-values
 		for (const auto* curve: this->children<const XYCurve>()) {
 			if (!curve->isVisible())
 				continue;
-            if (!curve->yColumn())
+			if (!curve->yColumn())
 				continue;
 
 			const double min = curve->yColumn()->minimum(count);
@@ -2108,9 +2104,9 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	Interval<double> interval (-1E15, 1E15);
 // 	Interval<double> interval (logicalStart, logicalEnd);
-	if (type == CartesianPlot::ScaleLinear) {
+	if (type == CartesianPlot::ScaleLinear)
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
-	} else {
+	else {
 		float base;
 		if (type == CartesianPlot::ScaleLog10)
 			base = 10.0;
@@ -2148,9 +2144,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 
-		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
+		if (mouseMode == CartesianPlot::ZoomSelectionMode)
 			m_selectionStart = event->pos();
-		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
+		else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionStart.setX(event->pos().x());
 			m_selectionStart.setY(q->plotRect().height()/2);
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
@@ -2160,15 +2156,14 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
-	} else {
+	} else
 		QGraphicsItem::mousePressEvent(event);
-	}
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (mouseMode == CartesianPlot::SelectionMode) {
+	if (mouseMode == CartesianPlot::SelectionMode)
 		QGraphicsItem::mouseMoveEvent(event);
-	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
+	else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		QGraphicsItem::mouseMoveEvent(event);
 		if ( !boundingRect().contains(event->pos()) ) {
 			q->info("");
@@ -2290,9 +2285,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QString info;
 	if (q->plotRect().contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
-		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
+		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown)
 			info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
-		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
+		else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
 			QPointF p1(logicalPoint.x(), yMin);
 			QPointF p2(logicalPoint.x(), yMax);
 			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
@@ -2321,9 +2316,8 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ((mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-			&& (!m_selectionBandIsShown)) {
+	        && (!m_selectionBandIsShown))
 		painter->drawLine(m_selectionStartLine);
-	}
 
 	if (m_selectionBandIsShown) {
 		painter->save();
@@ -2352,7 +2346,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//applied theme
-	if (!d->theme.isEmpty()){
+	if (!d->theme.isEmpty()) {
 		writer->writeStartElement( "theme" );
 		writer->writeAttribute("name", d->theme);
 		writer->writeEndElement();
@@ -2498,33 +2492,33 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				d->autoScaleY = bool(str.toInt());
 
 			str = attribs.value("xMin").toString();
-			if (str.isEmpty()) {
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'xMin'"));
-			} else {
+			else {
 				d->xMin = str.toDouble();
 				d->xMinPrev = d->xMin;
 			}
 
 			str = attribs.value("xMax").toString();
-			if (str.isEmpty()) {
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'xMax'"));
-			} else {
+			else {
 				d->xMax = str.toDouble();
 				d->xMaxPrev = d->xMax;
 			}
 
 			str = attribs.value("yMin").toString();
-			if (str.isEmpty()) {
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'yMin'"));
-			} else {
+			else {
 				d->yMin = str.toDouble();
 				d->yMinPrev = d->yMin;
 			}
 
 			str = attribs.value("yMax").toString();
-			if (str.isEmpty()) {
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'yMax'"));
-			} else {
+			else {
 				d->yMax = str.toDouble();
 				d->yMaxPrev = d->yMax;
 			}
@@ -2636,19 +2630,17 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete m_title;
 				m_title=0;
 				return false;
-			} else {
+			} else
 				addChild(m_title);
-			}
-		} else if (reader->name() == "plotArea") {
+		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
-		} else if (reader->name() == "axis") {
+		else if (reader->name() == "axis") {
 			Axis* axis = new Axis("", this);
 			if (!axis->load(reader, preview)) {
 				delete axis;
 				return false;
-			} else {
+			} else
 				addChild(axis);
-			}
 		} else if (reader->name() == "xyCurve") {
 			XYCurve* curve = addCurve();
 			if (!curve->load(reader, preview)) {
@@ -2723,12 +2715,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!point->load(reader, preview)) {
 				delete point;
 				return false;
-			} else {
+			} else
 				addChild(point);
-			}
-		}else if(reader->name() == "Histogram"){
+		} else if(reader->name() == "Histogram") {
 			Histogram* curve = addHistogram();
-			if (!curve->load(reader, preview)){
+			if (!curve->load(reader, preview)) {
 				removeChild(curve);
 				return false;
 			}
@@ -2749,7 +2740,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 	//if a theme was used, assign the value to the private member at the very end of load()
 	//so we don't try to load the theme in applyThemeOnNewCurve() when adding curves on project load and calculate the palette
-	if (!tmpTheme.isEmpty()){
+	if (!tmpTheme.isEmpty()) {
 		KConfig config( ThemeHandler::themeFilePath(tmpTheme), KConfig::SimpleConfig );
 		//TODO: check whether the theme config really exists
 		d->theme = tmpTheme;
