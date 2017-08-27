@@ -71,7 +71,7 @@ protected:
 	AspectTreeModel* m_aspectTreeModel;
 
 protected slots:
-    virtual void checkOkButton() = 0;
+	virtual void checkOkButton() = 0;
 
 private slots:
 	void newDataContainerMenu();

@@ -41,7 +41,7 @@ class TreeViewComboBox;
 class Worksheet;
 
 class PlotDataDialog : public QDialog {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
@@ -63,7 +63,7 @@ private:
 	void addCurvesToPlots(Worksheet*) const;
 	Column* columnFromName(const QString&) const;
 protected  slots:
-    virtual void checkOkButton();
+	virtual void checkOkButton();
 private slots:
 	void plot();
 	void curvePlacementChanged();

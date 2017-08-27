@@ -49,7 +49,7 @@ public:
 private:
 	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
 protected  slots:
-    virtual void checkOkButton();
+	virtual void checkOkButton();
 private slots:
 	void loadSettings();
 };

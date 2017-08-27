@@ -60,14 +60,14 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	setModel();
 
-    connect(importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(checkOkButton()));
+	connect(importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(checkOkButton()));
 
 	QTimer::singleShot(0, this, &ImportSQLDatabaseDialog::loadSettings);
 }
 
 void ImportSQLDatabaseDialog::loadSettings() {
 	//restore saved settings
-	 QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }

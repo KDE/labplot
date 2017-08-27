@@ -59,7 +59,7 @@ private:
 	bool m_showOptions;
 	QMenu* m_newDataContainerMenu;
 protected  slots:
-    virtual void checkOkButton();
+	virtual void checkOkButton();
 private slots:
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);

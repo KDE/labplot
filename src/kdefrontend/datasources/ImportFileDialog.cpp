@@ -77,10 +77,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
-    connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-    connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
-    connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
-    connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
 
 	if (!liveDataSource) {
 		setCaption(i18n("Import Data to Spreadsheet or Matrix"));
