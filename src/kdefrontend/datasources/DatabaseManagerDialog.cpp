@@ -29,6 +29,7 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
+#include <QTimer>
 #include <KLocale>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -52,7 +53,12 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	connect(mainWidget, SIGNAL(changed()), this, SLOT(changed()));
 	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
 
+	QTimer::singleShot(0, this, &DatabaseManagerDialog::loadSettings);
+}
+
+void DatabaseManagerDialog::loadSettings() {
 	//restore saved settings
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }

@@ -49,6 +49,7 @@ private:
 private slots:
 	void changed();
 	void save();
+	void loadSettings();
 };
 
 #endif

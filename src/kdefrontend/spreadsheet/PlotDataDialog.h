@@ -41,33 +41,34 @@ class TreeViewComboBox;
 class Worksheet;
 
 class PlotDataDialog : public QDialog {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
-		~PlotDataDialog();
+public:
+	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
+	~PlotDataDialog();
 
-	private:
-		Ui::PlotDataWidget ui;
-        QPushButton* m_okButton;
-		Spreadsheet* m_spreadsheet;
-		TreeViewComboBox* cbExistingPlots;
-		TreeViewComboBox* cbExistingWorksheets;
-		QList<Column*> m_columns;
-		QList<QComboBox*> m_columnComboBoxes;
-		AspectTreeModel* m_plotsModel;
-		AspectTreeModel* m_worksheetsModel;
+private:
+	Ui::PlotDataWidget ui;
+	QPushButton* m_okButton;
+	Spreadsheet* m_spreadsheet;
+	TreeViewComboBox* cbExistingPlots;
+	TreeViewComboBox* cbExistingWorksheets;
+	QList<Column*> m_columns;
+	QList<QComboBox*> m_columnComboBoxes;
+	AspectTreeModel* m_plotsModel;
+	AspectTreeModel* m_worksheetsModel;
 
-		void processColumns();
-		void addCurvesToPlot(CartesianPlot*) const;
-		void addCurvesToPlots(Worksheet*) const;
-		Column* columnFromName(const QString&) const;
+	void processColumns();
+	void addCurvesToPlot(CartesianPlot*) const;
+	void addCurvesToPlots(Worksheet*) const;
+	Column* columnFromName(const QString&) const;
 
-	private slots:
-		void plot();
-		void curvePlacementChanged();
-		void plotPlacementChanged();
-		void checkOkButton();
+private slots:
+	void plot();
+	void curvePlacementChanged();
+	void plotPlacementChanged();
+	void checkOkButton();
+	void loadSettings();
 };
 
 #endif

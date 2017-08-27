@@ -51,6 +51,7 @@ private:
 
 private slots:
 	void currentTabChanged(int);
+	void loadSettings();
 };
 
 #endif

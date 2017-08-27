@@ -304,7 +304,6 @@ bool Project::load(const QString& filename, bool preview) {
 	return true;
 }
 
-
 /**
  * \brief Load from XML
  */

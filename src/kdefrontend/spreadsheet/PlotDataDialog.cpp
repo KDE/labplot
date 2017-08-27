@@ -41,6 +41,7 @@
 
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QTimer>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -113,7 +114,12 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	connect(cbExistingPlots, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 	connect(cbExistingWorksheets, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 
+	QTimer::singleShot(0, this, &PlotDataDialog::loadSettings);
+}
+
+void PlotDataDialog::loadSettings() {
 	//restore saved settings if available
+	 QApplication::processEvents(QEventLoop::AllEvents, 0);
 	const KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	if (conf.exists()) {
 		int index = conf.readEntry("CurvePlacement", 0);

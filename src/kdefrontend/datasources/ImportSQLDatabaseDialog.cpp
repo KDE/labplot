@@ -62,7 +62,12 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	connect( importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(importWidgetStateChanged()) );
 
+	QTimer::singleShot(0, this, &ImportSQLDatabaseDialog::loadSettings);
+}
+
+void ImportSQLDatabaseDialog::loadSettings() {
 	//restore saved settings
+	 QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }

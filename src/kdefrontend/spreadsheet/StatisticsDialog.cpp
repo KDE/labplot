@@ -31,6 +31,7 @@
 #include "backend/core/column/Column.h"
 
 #include <QTextEdit>
+#include <QTimer>
 #include <QTabWidget>
 #include <KLocale>
 #include <KWindowConfig>
@@ -165,7 +166,12 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
 
+	QTimer::singleShot(0, this, &StatisticsDialog::loadSettings);
+}
+
+void StatisticsDialog::loadSettings() {
 	//restore saved settings if available
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
 	if (conf.exists())
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);

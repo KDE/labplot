@@ -52,6 +52,7 @@ private:
 
 private slots:
 	void importWidgetStateChanged();
+	void loadSettings();
 };
 
 #endif //IMPORTSQLDATABASEDIALOG_H
