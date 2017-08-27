@@ -494,7 +494,6 @@ void MainWin::initMenus() {
 	}
 	m_newMenu->addMenu(m_newCantorWorksheetMenu);
 #else
-	delete this->guiFactory()->container("new_cas_worksheet", this);
 	delete this->guiFactory()->container("cas_worksheet", this);
 	delete this->guiFactory()->container("new_casWorksheet", this);
 	delete this->guiFactory()->container("cas_worksheet_toolbar", this);
