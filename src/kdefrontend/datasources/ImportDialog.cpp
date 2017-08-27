@@ -168,6 +168,9 @@ void ImportDialog::newDataContainer(QAction* action) {
 		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
+
+		//select "Replace" since this is the most common case when importing into a newly created container
+		cbPosition->setCurrentIndex(2);
 	}
 
 	delete dlg;
