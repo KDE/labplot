@@ -4,7 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -115,12 +115,15 @@ void WorksheetElement::setZValue(qreal value) {
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
 QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
+	if (path == QPainterPath())
+		return path;
+
+// 	PERFTRACE("WorksheetElement::shapeFromPath()");
+
 	// TODO: We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
 	// if we pass a value of 0.0 to QPainterPathStroker::setWidth()
 	const qreal penWidthZero = qreal(0.00000001);
 
-	if (path == QPainterPath())
-		return path;
 	QPainterPathStroker ps;
 	ps.setCapStyle(pen.capStyle());
 	if (pen.widthF() <= 0.0)
@@ -129,6 +132,7 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
 		ps.setWidth(pen.widthF());
 	ps.setJoinStyle(pen.joinStyle());
 	ps.setMiterLimit(pen.miterLimit());
+
 	QPainterPath p = ps.createStroke(path);
 	p.addPath(path);
 
