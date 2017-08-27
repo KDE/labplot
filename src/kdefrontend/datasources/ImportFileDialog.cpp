@@ -75,12 +75,12 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
-	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(fileNameChanged()));
 	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
-	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOk()));
-	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOk()));
-	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOk()));
+    connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+    connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
+    connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
+    connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
 
 	if (!liveDataSource) {
 		setCaption(i18n("Import Data to Spreadsheet or Matrix"));
@@ -241,14 +241,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	delete filter;
-}
-
-void ImportFileDialog::fileNameChanged() {
-	checkOkButton();
-}
-
-void ImportFileDialog::checkOk() {
-	checkOkButton();;
 }
 
 void ImportFileDialog::toggleOptions() {

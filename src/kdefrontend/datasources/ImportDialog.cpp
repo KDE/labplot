@@ -132,7 +132,7 @@ void ImportDialog::setModel() {
 	vLayout->addWidget(frameAddTo);
 
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(modelIndexChanged()));
+    connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
@@ -175,8 +175,4 @@ void ImportDialog::newDataContainer(QAction* action) {
 
 void ImportDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
-}
-
-void ImportDialog::modelIndexChanged() {
-	checkOkButton();
 }

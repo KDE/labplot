@@ -62,12 +62,12 @@ private:
 	void addCurvesToPlot(CartesianPlot*) const;
 	void addCurvesToPlots(Worksheet*) const;
 	Column* columnFromName(const QString&) const;
-
+protected  slots:
+    virtual void checkOkButton();
 private slots:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
-	void checkOkButton();
 	void loadSettings();
 };
 

@@ -60,7 +60,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	setModel();
 
-	connect( importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(importWidgetStateChanged()) );
+    connect(importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(checkOkButton()));
 
 	QTimer::singleShot(0, this, &ImportSQLDatabaseDialog::loadSettings);
 }
@@ -160,8 +160,4 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 
 	enableButtonOk(true);
 	cbPosition->setEnabled(true);
-}
-
-void ImportSQLDatabaseDialog::importWidgetStateChanged() {
-	checkOkButton();
 }

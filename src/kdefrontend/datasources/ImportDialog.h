@@ -56,7 +56,6 @@ public:
 	virtual void importTo(QStatusBar*) const = 0;
 	void setCurrentIndex(const QModelIndex&);
 	virtual QString selectedObject() const = 0;
-	virtual void checkOkButton() = 0;
 
 protected:
 	void setModel();
@@ -71,10 +70,12 @@ protected:
 	QMenu* m_newDataContainerMenu;
 	AspectTreeModel* m_aspectTreeModel;
 
+protected slots:
+    virtual void checkOkButton() = 0;
+
 private slots:
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
-	void modelIndexChanged();
 };
 
 #endif //IMPORTDIALOG_H

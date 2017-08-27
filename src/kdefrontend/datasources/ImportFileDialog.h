@@ -49,7 +49,6 @@ public:
 	~ImportFileDialog();
 
 	virtual QString selectedObject() const;
-	virtual void checkOkButton();
 
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
 	virtual void importTo(QStatusBar*) const;
@@ -59,11 +58,10 @@ private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions;
 	QMenu* m_newDataContainerMenu;
-
+protected  slots:
+    virtual void checkOkButton();
 private slots:
 	void toggleOptions();
-	void fileNameChanged();
-	void checkOk();
 	void checkOnFitsTableToMatrix(const bool enable);
 	void loadSettings();
 };

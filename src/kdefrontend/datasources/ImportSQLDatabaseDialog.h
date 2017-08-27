@@ -45,13 +45,12 @@ public:
 
 	void importTo(QStatusBar*) const;
 	virtual QString selectedObject() const;
-	virtual void checkOkButton();
 
 private:
 	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
-
+protected  slots:
+    virtual void checkOkButton();
 private slots:
-	void importWidgetStateChanged();
 	void loadSettings();
 };
 
