@@ -518,49 +518,51 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		return;
 	}
 
-	QString fileInfo;
+	if (currentSourceType() == LiveDataSource::FileOrPipe) {
+		QString fileInfo;
 #ifndef HAVE_WINDOWS
-	//check, if we can guess the file type by content
-	QProcess *proc = new QProcess(this);
-	QStringList args;
-	args << "-b" << ui.kleFileName->text();
-	proc->start("file", args);
-	if (proc->waitForReadyRead(1000) == false) {
-		QDEBUG("ERROR: reading file type of file" << fileName);
-		return;
-	}
-	fileInfo = proc->readLine();
+		//check, if we can guess the file type by content
+		QProcess* proc = new QProcess(this);
+		QStringList args;
+		args << "-b" << ui.kleFileName->text();
+		proc->start("file", args);
+		if (proc->waitForReadyRead(1000) == false) {
+			QDEBUG("ERROR: reading file type of file" << fileName);
+			return;
+		}
+		fileInfo = proc->readLine();
 #endif
 
-	QByteArray imageFormat = QImageReader::imageFormat(fileName);
-	if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
-	        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
-		//probably ascii data
-		ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
-	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
-	           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
-		ui.cbFileType->setCurrentIndex(LiveDataSource::HDF);
+		QByteArray imageFormat = QImageReader::imageFormat(fileName);
+		if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
+				fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
+			//probably ascii data
+			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
+		} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
+			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF);
 
-		// update HDF tree widget using current selected file
-		m_hdfOptionsWidget->updateContent((HDFFilter*)this->currentFileFilter(), fileName);
-	} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
-	           fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
-		ui.cbFileType->setCurrentIndex(LiveDataSource::NETCDF);
+			// update HDF tree widget using current selected file
+			m_hdfOptionsWidget->updateContent((HDFFilter*)this->currentFileFilter(), fileName);
+		} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
+			ui.cbFileType->setCurrentIndex(LiveDataSource::NETCDF);
 
-		// update NetCDF tree widget using current selected file
-		m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
-	} else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
-	           fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
+			// update NetCDF tree widget using current selected file
+			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
+		} else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
-		ui.cbFileType->setCurrentIndex(LiveDataSource::FITS);
+			ui.cbFileType->setCurrentIndex(LiveDataSource::FITS);
 #endif
 
-		// update FITS tree widget using current selected file
-		m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
-	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
-		ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
-	else
-		ui.cbFileType->setCurrentIndex(LiveDataSource::Binary);
+			// update FITS tree widget using current selected file
+			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
+		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
+			ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
+		else
+			ui.cbFileType->setCurrentIndex(LiveDataSource::Binary);
+	}
 
 	refreshPreview();
 	emit fileNameChanged();
