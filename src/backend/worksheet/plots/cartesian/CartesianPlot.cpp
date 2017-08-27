@@ -1238,8 +1238,15 @@ void CartesianPlot::dataChanged() {
 	else {
 		//free ranges -> rentransform the curve that sent
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		Q_ASSERT(curve);
-		curve->retransform();
+		if (curve)
+			curve->retransform();
+		else {
+			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+			//-> retransform all available curves since we don't know which curves are affected.
+			//TODO: this logic can be very expensive
+			for (auto curve : children<XYCurve>())
+				curve->retransform();
+		}
 	}
 }
 
@@ -1255,10 +1262,18 @@ void CartesianPlot::HistogramdataChanged(){
 		this->scaleAutoY();
 	else {
 		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-		Q_ASSERT(curve);
-		curve->retransform();
+		if (curve)
+			curve->retransform();
+		else {
+			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+			//-> retransform all available curves since we don't know which curves are affected.
+			//TODO: this logic can be very expensive
+			for (auto curve : children<Histogram>())
+				curve->retransform();
+		}
 	}
 }
+
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
