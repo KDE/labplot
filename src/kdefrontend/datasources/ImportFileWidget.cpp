@@ -179,6 +179,9 @@ void ImportFileWidget::loadSettings() {
 	m_binaryOptionsWidget->loadSettings();
 	m_imageOptionsWidget->loadSettings();
 
+	//read the source type first since settings in fileNameChanged() depend on this
+	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
+
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
@@ -188,7 +191,7 @@ void ImportFileWidget::loadSettings() {
 	else
 		ui.kleFileName->setText(m_fileName);
 
-	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
+	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
 	ui.cbReadType->setCurrentIndex(conf.readEntry("ReadType").toInt());
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
@@ -210,6 +213,8 @@ ImportFileWidget::~ImportFileWidget() {
 	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	// general settings
+	conf.writeEntry("Type", ui.cbFileType->currentIndex());
+	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 
 	//live data related settings
@@ -223,9 +228,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
-
-	conf.writeEntry("Type", ui.cbFileType->currentIndex());
-	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
