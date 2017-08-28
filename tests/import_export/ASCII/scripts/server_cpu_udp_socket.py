@@ -8,19 +8,12 @@ PORT = 1027
 ADDR = (HOST,PORT)
 serv = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-BUFSIZE = 4096
-
-
 serv.bind(ADDR)
-serv.listen(1)
 
 print 'listening ...'
 
 while True:
-  conn, addr = serv.accept()
-  print 'client connected ... ', addr
-  cpu_percent = str(psutil.cpu_percent())
-  conn.send(cpu_percent)
+  cpu_percent = str(psutil.cpu_percent(interval=0.5))
+  serv.sendto(cpu_percent, ADDR)
   print 'written ' + cpu_percent
-  conn.close()
-  print 'client disconnected'
+  
