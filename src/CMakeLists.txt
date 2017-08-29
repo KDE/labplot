@@ -328,15 +328,19 @@ ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 
 add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
-#TODO: KF5::NewStuff
-qt5_use_modules(labplot2 SerialPort)
 
 ##add_executable( firstTest ${TEST_SOURCES} ${BACKEND_SOURCES})
 add_test(firstTestName firstTest)
 
+IF (Qt5SerialPort_FOUND)
+	target_link_libraries( labplot2 Qt5::SerialPort )
+ENDIF ()
+
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
 ENDIF ()
+#TODO: KF5::NewStuff
+
 IF (CANTOR_LIBS_FOUND)
 	target_link_libraries( labplot2 ${CANTOR_LIBS} )
 ENDIF ()

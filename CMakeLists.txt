@@ -7,7 +7,7 @@ enable_testing(true)
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
 	PrintSupport
@@ -15,7 +15,9 @@ find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
 	Svg
 	Widgets
 	Test
+	SerialPort
 )
+#find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE OPTIONAL_COMPONENTS)
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
@@ -31,10 +33,15 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
-		OPTIONAL_COMPONENTS
+OPTIONAL_COMPONENTS
 	NewStuff
 	SyntaxHighlighting
 )
+IF (Qt5SerialPort_FOUND)
+        MESSAGE (STATUS "Found Qt5 SerialPort")
+ELSE ()
+        MESSAGE (STATUS "Qt5 SerialPort not found")
+ENDIF ()
 IF (KF5NewStuff_FOUND)
         MESSAGE (STATUS "Found KF5 new stuff")
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
