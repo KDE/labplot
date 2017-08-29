@@ -48,13 +48,13 @@ class Datapicker : public AbstractPart, public scripted {
 		explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
 		virtual ~Datapicker();
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QWidget* view() const override;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+        virtual bool exportView() const override;
+        virtual bool printView() override;
+        virtual bool printPreview() const override;
 
 		DatapickerCurve* activeCurve();
 		Spreadsheet* currentSpreadsheet() const;
@@ -71,7 +71,7 @@ class Datapicker : public AbstractPart, public scripted {
 		virtual bool load(XmlStreamReader*, bool preview) override;
 
 	public slots:
-		virtual void childSelected(const AbstractAspect*);
+		virtual void childSelected(const AbstractAspect*) override;
 
 	private:
 		DatapickerCurve* m_activeCurve;
@@ -82,7 +82,7 @@ class Datapicker : public AbstractPart, public scripted {
 		void handleChildAspectAdded(const AbstractAspect*);
 
 	private slots:
-		virtual void childDeselected(const AbstractAspect*);
+		virtual void childDeselected(const AbstractAspect*) override;
 		void handleAspectAdded(const AbstractAspect*);
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 

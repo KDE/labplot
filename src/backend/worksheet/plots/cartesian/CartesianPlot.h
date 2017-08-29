@@ -89,10 +89,10 @@ public:
 	};
 
 	void initDefault(Type = FourAxes);
-	QIcon icon() const;
-	QMenu* createContextMenu();
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 	QMenu* analysisMenu() const;
-	void setRect(const QRectF&);
+	void setRect(const QRectF&) override;
 	QRectF plotRect();
 	void setMouseMode(const MouseMode);
 	MouseMode mouseMode() const;
