@@ -540,24 +540,24 @@ void HistogramDock::valuesTypeChanged(int index){
   if (m_initializing)
 	return;
 
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesType(valuesType);
+	for (auto* curve: m_curvesList)
+		curve->setValuesType(valuesType);
 }
 
 /*!
   called when the custom column for the values was changed.
 */
 void HistogramDock::valuesColumnChanged(const QModelIndex& index){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  Column* column= static_cast<Column*>(index.internalPointer());
-  this->showValuesColumnFormat(column);
+	Column* column = static_cast<Column*>(index.internalPointer());
+	this->showValuesColumnFormat(column);
 
-  foreach(Histogram* curve, m_curvesList){
+	for (auto* curve: m_curvesList) {
 	//TODO save also the format of the currently selected column for the values (precision etc.)
-	curve->setValuesColumn(column);
-  }
+		curve->setValuesColumn(column);
+	}
 }
 void HistogramDock::curveVisibilityChanged(bool on) {
 	m_initializing = true;
@@ -567,27 +567,27 @@ void HistogramDock::curveVisibilityChanged(bool on) {
 
 
 void HistogramDock::valuesPositionChanged(int index){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesPosition(Histogram::ValuesPosition(index));
+	foreach(Histogram* curve, m_curvesList)
+		curve->setValuesPosition(Histogram::ValuesPosition(index));
 }
 
 void HistogramDock::valuesDistanceChanged(double  value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+	for (auto* curve: m_curvesList)
+		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
 void HistogramDock::valuesRotationChanged(int value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesRotationAngle(value);
+	for (auto* curve: m_curvesList)
+		curve->setValuesRotationAngle(value);
 }
 
 void HistogramDock::valuesOpacityChanged(int value){
@@ -595,26 +595,26 @@ void HistogramDock::valuesOpacityChanged(int value){
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setValuesOpacity(opacity);
 }
 
 void HistogramDock::valuesPrefixChanged(){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  QString prefix = ui.leValuesPrefix->text();
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesPrefix(prefix);
+	QString prefix = ui.leValuesPrefix->text();
+	for (auto* curve: m_curvesList)
+		curve->setValuesPrefix(prefix);
 }
 
 void HistogramDock::valuesSuffixChanged(){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  QString suffix = ui.leValuesSuffix->text();
-  foreach(Histogram* curve, m_curvesList)
-	curve->setValuesSuffix(suffix);
+	QString suffix = ui.leValuesSuffix->text();
+	for (auto* curve: m_curvesList)
+		curve->setValuesSuffix(suffix);
 }
 
 void HistogramDock::valuesFontChanged(const QFont& font){
@@ -623,7 +623,7 @@ void HistogramDock::valuesFontChanged(const QFont& font){
 
 	QFont valuesFont = font;
 	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
 
@@ -728,7 +728,7 @@ void HistogramDock::fillingPositionChanged(int index){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingPosition(fillingPosition);
 }
 
@@ -797,7 +797,7 @@ void HistogramDock::fillingTypeChanged(int index){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingType(type);
 }
 
@@ -808,7 +808,7 @@ void HistogramDock::fillingColorStyleChanged(int index){
 		ui.lFillingFirstColor->setText(i18n("Color"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	}else{
+	} else {
 		ui.lFillingFirstColor->setText(i18n("First Color"));
 		ui.lFillingSecondColor->show();
 		ui.kcbFillingSecondColor->show();
@@ -819,7 +819,7 @@ void HistogramDock::fillingColorStyleChanged(int index){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingColorStyle(style);
 }
 
@@ -828,7 +828,7 @@ void HistogramDock::fillingImageStyleChanged(int index){
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingImageStyle(style);
 }
 
@@ -837,7 +837,7 @@ void HistogramDock::fillingBrushStyleChanged(int index){
 		return;
 
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingBrushStyle(style);
 }
 
@@ -845,7 +845,7 @@ void HistogramDock::fillingFirstColorChanged(const QColor& c){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingFirstColor(c);
 }
 
@@ -853,7 +853,7 @@ void HistogramDock::fillingSecondColorChanged(const QColor& c){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingSecondColor(c);
 }
 
@@ -863,20 +863,20 @@ void HistogramDock::fillingSecondColorChanged(const QColor& c){
 void HistogramDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistogramDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+	if (path.isEmpty())
+        	return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir!=dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-    ui.kleFillingFileName->setText( path );
+	ui.kleFillingFileName->setText( path );
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingFileName(path);
 }
 
@@ -885,7 +885,7 @@ void HistogramDock::fileNameChanged(){
 		return;
 
 	QString fileName = ui.kleFillingFileName->text();
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingFileName(fileName);
 }
 
@@ -894,7 +894,7 @@ void HistogramDock::fillingOpacityChanged(int value){
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve: m_curvesList)
 		curve->setFillingOpacity(opacity);
 }
 void HistogramDock::loadConfig(KConfig& config) {
@@ -991,15 +991,15 @@ void HistogramDock::binsOptionChanged(int index){
 	enableRecalculate();
 }
 void HistogramDock::lineColorChanged(const QColor& color){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	QPen pen;
-	foreach(Histogram* curve, m_curvesList){
-	pen=curve->linePen();
-	pen.setColor(color);
-	curve->setLinePen(pen);
-  }
+	for (auto* curve: m_curvesList) {
+		pen = curve->linePen();
+		pen.setColor(color);
+		curve->setLinePen(pen);
+  	}
 }
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
 
