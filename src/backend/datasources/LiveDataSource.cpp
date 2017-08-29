@@ -495,9 +495,9 @@ void LiveDataSource::read() {
 			break;
 		case NetworkTcpSocket:
             m_tcpSocket = new QTcpSocket(this);
-			m_device = m_tcpSocket;
             m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-            m_tcpSocket->waitForConnected(1000);
+            m_device = m_tcpSocket;
+
             qDebug() << "socket state before preparing: " << m_tcpSocket->state();
 			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
@@ -509,7 +509,6 @@ void LiveDataSource::read() {
 			m_device = m_udpSocket;
             m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
             qDebug() << "socket state before preparing: " << m_udpSocket->state();
-            m_udpSocket->waitForConnected(1000);
 
 			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
@@ -560,12 +559,10 @@ void LiveDataSource::read() {
 		break;
 	case NetworkTcpSocket:
 		DEBUG("reading from a TCP socket");
-        qDebug() << "reading from a TCP socket: " << m_tcpSocket->state();
-
+        qDebug() << "reading from a TCP socket before abort: " << m_tcpSocket->state();
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-        m_tcpSocket->waitForConnected(100);
-        qDebug() << "reading from a TCP socket: " << m_tcpSocket->state();
+        qDebug() << "reading from a TCP socket after reconnect: " << m_tcpSocket->state();
 
 		break;
 	case NetworkUdpSocket:
@@ -575,12 +572,11 @@ void LiveDataSource::read() {
 		break;
 	case LocalSocket:
 		DEBUG("reading from a local socket");
-		qDebug() << m_localSocket->state();
-		m_localSocket->abort();
+        qDebug() << "reading from a local socket before abort: " << m_localSocket->state();
+        m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-        //m_localSocket->waitForConnected(100);
-		qDebug() << "Reconnected to server:" << m_localSocket->state();
-		break;
+        qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
+        break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);

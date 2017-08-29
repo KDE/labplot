@@ -341,9 +341,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
 
-	if (device.atEnd()) // empty file
+    if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
-
 	DEBUG("device is sequential = " << device.isSequential());
 
 	// Parse the first line:
@@ -359,6 +358,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		}
 
 	} while (firstLine.startsWith(commentCharacter));
+
 	DEBUG(" device position after first line and comments = " << device.pos());
 	QString firstLineOriginal = firstLine;
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
@@ -401,9 +401,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	// set range to read
-	if (endColumn == -1)
-		endColumn = firstLineStringList.size(); // last column
-
+    if (endColumn == -1) {
+        if (headerEnabled)
+            endColumn = firstLineStringList.size(); // last column
+        else
+            endColumn = vectorNames.size(); //number of vector names provided in the import dialog
+    }
 	if (createIndexEnabled) {
 		vectorNames.prepend("index");
 		endColumn++;
@@ -623,12 +626,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 #endif
 
 		while (!device.atEnd()) {
-
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				newData[newDataIdx++] = device.readLine();
+                newData[newDataIdx++] = device.readLine();
 			else
-				newData.push_back(device.readLine());
-
+                newData.push_back(device.readLine());
 			newLinesTillEnd++;
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
