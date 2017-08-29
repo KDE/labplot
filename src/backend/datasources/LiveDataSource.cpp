@@ -494,27 +494,27 @@ void LiveDataSource::read() {
 			m_device = m_file;
 			break;
 		case NetworkTcpSocket:
-            m_tcpSocket = new QTcpSocket(this);
-            m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-            m_device = m_tcpSocket;
+			m_tcpSocket = new QTcpSocket(this);
+			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+			m_device = m_tcpSocket;
 
-            qDebug() << "socket state before preparing: " << m_tcpSocket->state();
+			qDebug() << "socket state before preparing: " << m_tcpSocket->state();
 			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
-            qDebug() << "socket state after preparing: " << m_tcpSocket->state();
+			qDebug() << "socket state after preparing: " << m_tcpSocket->state();
 
-            break;
+			break;
 		case NetworkUdpSocket:
-            m_udpSocket = new QUdpSocket(this);
+			m_udpSocket = new QUdpSocket(this);
+			m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+			qDebug() << "socket state before preparing: " << m_udpSocket->state();
 			m_device = m_udpSocket;
-            m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-            qDebug() << "socket state before preparing: " << m_udpSocket->state();
-
+			m_udpSocket->waitForConnected(1000);
 			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
-            qDebug() << "socket state after preparing: " << m_udpSocket->state();
+			qDebug() << "socket state after preparing: " << m_udpSocket->state();
 
-            break;
+			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket(this);
 			qDebug() << "socket state before preparing: " << m_localSocket->state();
@@ -559,10 +559,10 @@ void LiveDataSource::read() {
 		break;
 	case NetworkTcpSocket:
 		DEBUG("reading from a TCP socket");
-        qDebug() << "reading from a TCP socket before abort: " << m_tcpSocket->state();
+		qDebug() << "reading from a TCP socket before abort: " << m_tcpSocket->state();
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-        qDebug() << "reading from a TCP socket after reconnect: " << m_tcpSocket->state();
+		qDebug() << "reading from a TCP socket after reconnect: " << m_tcpSocket->state();
 
 		break;
 	case NetworkUdpSocket:
@@ -572,11 +572,11 @@ void LiveDataSource::read() {
 		break;
 	case LocalSocket:
 		DEBUG("reading from a local socket");
-        qDebug() << "reading from a local socket before abort: " << m_localSocket->state();
-        m_localSocket->abort();
+		qDebug() << "reading from a local socket before abort: " << m_localSocket->state();
+		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-        qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
-        break;
+		qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
+		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);
@@ -629,7 +629,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 }
 
 void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
-    /*switch (socketError) {
+	/*switch (socketError) {
 	case QAbstractSocket::ConnectionRefusedError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
 		                      i18n("The connection was refused by the peer. Make sure the server is running and check the host name and port settings."));
@@ -645,7 +645,7 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	default:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
 		                      i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
-    }*/
+	}*/
 }
 
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {

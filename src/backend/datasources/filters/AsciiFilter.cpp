@@ -341,7 +341,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
 
-    if (device.atEnd() && !device.isSequential()) // empty file
+	if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
 	DEBUG("device is sequential = " << device.isSequential());
 
@@ -401,12 +401,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	// set range to read
-    if (endColumn == -1) {
-        if (headerEnabled)
-            endColumn = firstLineStringList.size(); // last column
-        else
-            endColumn = vectorNames.size(); //number of vector names provided in the import dialog
-    }
+	if (endColumn == -1) {
+		if (headerEnabled)
+			endColumn = firstLineStringList.size(); // last column
+		else
+			endColumn = vectorNames.size(); //number of vector names provided in the import dialog
+	}
 	if (createIndexEnabled) {
 		vectorNames.prepend("index");
 		endColumn++;
@@ -627,9 +627,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 
 		while (!device.atEnd()) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-                newData[newDataIdx++] = device.readLine();
+				newData[newDataIdx++] = device.readLine();
 			else
-                newData.push_back(device.readLine());
+				newData.push_back(device.readLine());
 			newLinesTillEnd++;
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
