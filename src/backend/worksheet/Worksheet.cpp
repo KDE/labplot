@@ -996,7 +996,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				delete plot;
 				return false;
 			} else {
-				addChild(plot);
+				addChildFast(plot);
 				plot->setIsLoading(false);
 			}
 		} else if(reader->name() == "textLabel") {
@@ -1005,7 +1005,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				delete label;
 				return false;
 			} else
-				addChild(label);
+				addChildFast(label);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

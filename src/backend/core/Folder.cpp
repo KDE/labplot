@@ -130,28 +130,28 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			delete folder;
 			return false;
 		}
-		addChild(folder);
+		addChildFast(folder);
 	} else if (element_name == "workbook") {
 		Workbook* workbook = new Workbook(0, "");
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
-		addChild(workbook);
+		addChildFast(workbook);
 	} else if (element_name == "spreadsheet") {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
-		addChild(spreadsheet);
+		addChildFast(spreadsheet);
 	} else if (element_name == "matrix") {
 		Matrix* matrix = new Matrix(0, "", true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
-		addChild(matrix);
+		addChildFast(matrix);
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
 		worksheet->setIsLoading(true);
@@ -159,7 +159,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			delete worksheet;
 			return false;
 		}
-		addChild(worksheet);
+		addChildFast(worksheet);
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
 	} else if (element_name == "cantorWorksheet") {
@@ -168,7 +168,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			delete cantorWorksheet;
 			return false;
 		}
-		addChild(cantorWorksheet);
+		addChildFast(cantorWorksheet);
 #endif
 	} else if (element_name == "LiveDataSource") {
 		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
@@ -176,21 +176,21 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			delete liveDataSource;
 			return false;
 		}
-		addChild(liveDataSource);
+		addChildFast(liveDataSource);
 	} else if (element_name == "datapicker") {
 		Datapicker* datapicker = new Datapicker(0, "", true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
-		addChild(datapicker);
+		addChildFast(datapicker);
 	} else if (element_name == "note") {
 		Note* note = new Note("");
 		if (!note->load(reader, preview)) {
 			delete note;
 			return false;
 		}
-		addChild(note);
+		addChildFast(note);
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

@@ -62,10 +62,10 @@ void XYEquationCurve::init() {
 	Q_D(XYEquationCurve);
 
 	d->xColumn->setHidden(true);
-	addChild(d->xColumn);
+	addChildFast(d->xColumn);
 
 	d->yColumn->setHidden(true);
-	addChild(d->yColumn);
+	addChildFast(d->yColumn);
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::Line;

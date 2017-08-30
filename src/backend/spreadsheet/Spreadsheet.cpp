@@ -792,7 +792,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 						setColumnCount(0);
 						return false;
 					}
-					addChild(column);
+					addChildFast(column);
 				} else {	// unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;

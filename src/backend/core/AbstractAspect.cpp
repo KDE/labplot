@@ -582,14 +582,14 @@ void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
  * \return false on error
  */
 bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
-	QXmlStreamAttributes attribs = reader->attributes();
+	const QXmlStreamAttributes& attribs = reader->attributes();
 
 	// name
 	QString str = attribs.value("name").toString();
 	if(str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
 
-	setName(str);
+	d->m_name = str;
 
 	// creation time
 	str = attribs.value("creation_time").toString();

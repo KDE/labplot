@@ -539,7 +539,6 @@ void CartesianPlot::initMenus() {
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
-	// TODO: SLOT: loadTheme(KConfig config)
 	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
@@ -891,21 +890,21 @@ void CartesianPlot::addVerticalAxis() {
 
 XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
-	this->addChild(curve);
+	isLoading() ? addChildFast(curve) : addChild(curve);
 	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
-	this->addChild(curve);
+	isLoading() ? addChildFast(curve) : addChild(curve);
 	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 Histogram* CartesianPlot::addHistogram() {
 	Histogram* curve= new Histogram("Histogram");
-	this->addChild(curve);
+	isLoading() ? addChildFast(curve) : addChild(curve);
 	return curve;
 }
 
@@ -2631,7 +2630,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				m_title=0;
 				return false;
 			} else
-				addChild(m_title);
+				addChildFast(m_title);
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
@@ -2640,7 +2639,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete axis;
 				return false;
 			} else
-				addChild(axis);
+				addChildFast(axis);
 		} else if (reader->name() == "xyCurve") {
 			XYCurve* curve = addCurve();
 			if (!curve->load(reader, preview)) {
@@ -2707,7 +2706,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete m_legend;
 				return false;
 			} else {
-				addChild(m_legend);
+				addChildFast(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
 			}
 		} else if (reader->name() == "customPoint") {
@@ -2716,7 +2715,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete point;
 				return false;
 			} else
-				addChild(point);
+				addChildFast(point);
 		} else if(reader->name() == "Histogram") {
 			Histogram* curve = addHistogram();
 			if (!curve->load(reader, preview)) {
