@@ -47,6 +47,9 @@
 #include <KLocalizedString>
 
 #include <QProgressBar>
+#include <QTcpSocket>
+#include <QLocalSocket>
+#include <QUdpSocket>
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
@@ -292,30 +295,11 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	if (m_importFileWidget->currentFileType() != LiveDataSource::FITS) {
 #ifndef HAVE_WINDOWS
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
-	} else {	// LiveDataSource::FITS
-		int extensionBraceletPos = -1;
-		if (!fileName.isEmpty()) {
-			if(fileName.right(1) == QLatin1String("]")) {
-				for (int i = fileName.size() - 1; i >= 5; --i) {
-					if (fileName.at(i) == QLatin1Char('[')) {
-						extensionBraceletPos = i;
-						break;
-					}
-				}
-			}
-		}
-#ifndef HAVE_WINDOWS
-		if (fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
-		else
-#endif
-			fileName = fileName.mid(0, extensionBraceletPos);
-	}
+
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
 	bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
@@ -325,16 +309,79 @@ void ImportFileDialog::checkOkButton() {
 		enableButtonOk( QFile::exists(fileName) );
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
-		enableButtonOk( QFile::exists(fileName) );
+
+        if (QFile::exists(fileName)) {
+            QLocalSocket* socket = new QLocalSocket(this);
+            socket->connectToServer(fileName, QLocalSocket::ReadOnly);
+            bool localSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(localSocketConnected);
+
+            if (socket->state() == QLocalSocket::ConnectedState) {
+                socket->disconnectFromServer();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+
+        } else {
+            enableButtonOk(false);
+        }
+
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-		enableButtonOk(enable);
+	case LiveDataSource::SourceType::NetworkTcpSocket:  
+        if (enable) {
+            QTcpSocket* socket = new QTcpSocket(this);
+            socket = new QTcpSocket(this);
+            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
+            bool tcpSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(tcpSocketConnected);
+
+            if (socket->state() == QTcpSocket::ConnectedState) {
+                socket->disconnectFromHost();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+        } else {
+            enableButtonOk(false);
+        }
 		break;
 	case LiveDataSource::SourceType::NetworkUdpSocket:
-		enableButtonOk(enable);
-		break;
+        if (enable) {
+            QUdpSocket* socket = new QUdpSocket(this);
+            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
+            bool udpSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(udpSocketConnected);
+
+            if (socket->state() == QUdpSocket::ConnectedState) {
+                socket->disconnectFromHost();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+        } else {
+            enableButtonOk(false);
+        }
+
+        break;
 	case LiveDataSource::SourceType::SerialPort:
-		enableButtonOk(m_importFileWidget->serialPort() != -1);
+        if (!m_importFileWidget->serialPort().isEmpty()) {
+            QSerialPort* serialPort = new QSerialPort(this);
+
+            serialPort->setBaudRate(m_importFileWidget->baudRate());
+            serialPort->setPortName(m_importFileWidget->serialPort());
+
+            bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
+            enableButtonOk(serialPortOpened);
+        } else {
+            enableButtonOk(false);
+        }
 		break;
 	default:
 		break;

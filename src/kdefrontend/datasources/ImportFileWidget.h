@@ -64,8 +64,8 @@ public:
 
 	QString host() const;
 	QString port() const;
-	int serialPort() const;
-
+    QString serialPort() const;
+    int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 
 private:

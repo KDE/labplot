@@ -506,10 +506,12 @@ void LiveDataSource::read() {
 			break;
 		case NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
-			m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+
+            m_udpSocket->bind(QHostAddress(m_host), m_port);
 			qDebug() << "socket state before preparing: " << m_udpSocket->state();
+            m_udpSocket->connectToHost(m_host, m_port);
+
 			m_device = m_udpSocket;
-			m_udpSocket->waitForConnected(1000);
 			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 			connect(m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
 			qDebug() << "socket state after preparing: " << m_udpSocket->state();
@@ -567,8 +569,13 @@ void LiveDataSource::read() {
 		break;
 	case NetworkUdpSocket:
 		DEBUG("reading from a UDP socket");
+        qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
 		m_udpSocket->abort();
-		m_udpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+        m_udpSocket->bind(QHostAddress(m_host), m_port);
+        m_udpSocket->connectToHost(m_host, m_port);
+
+        qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
+
 		break;
 	case LocalSocket:
 		DEBUG("reading from a local socket");
@@ -594,6 +601,8 @@ void LiveDataSource::read() {
  */
 void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
+    qDebug()<< "Got new data from the device";
+
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 // 	else if (m_fileType == Binary)

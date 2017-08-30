@@ -294,8 +294,12 @@ QString ImportFileWidget::port() const {
 	return ui.lePort->text();
 }
 
-int ImportFileWidget::serialPort() const {
-	return ui.cbSerialPort->currentIndex();
+QString ImportFileWidget::serialPort() const {
+    return ui.cbSerialPort->currentText();
+}
+
+int ImportFileWidget::baudRate() const {
+    return ui.cbBaudRate->currentText().toInt();
 }
 
 /*!
