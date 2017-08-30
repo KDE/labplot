@@ -140,9 +140,9 @@ public:
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
-	virtual QWidget* view() const;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QWidget* view() const override;
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;

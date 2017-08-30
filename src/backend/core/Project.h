@@ -53,14 +53,14 @@ public:
 	virtual const Project* project() const {
 		return this;
 	}
-	virtual Project* project() {
+	virtual Project* project() override {
 		return this;
 	}
-	virtual QUndoStack* undoStack() const;
-	virtual QString path() const {
+	virtual QUndoStack* undoStack() const override;
+	virtual QString path() const override {
 		return name();
 	}
-	virtual QMenu* createContextMenu();
+	virtual QMenu* createContextMenu() override;
 	virtual QMenu* createFolderContextMenu(const Folder*);
 
 	AbstractScriptingEngine* scriptingEngine() const;
@@ -77,7 +77,7 @@ public:
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
-	virtual void save(QXmlStreamWriter*) const;
+	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 

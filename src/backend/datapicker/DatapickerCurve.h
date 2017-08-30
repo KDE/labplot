@@ -53,8 +53,8 @@ public:
 		ErrorType y;
 	};
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 	void setPrinting(bool);
 	void setSelectedInView(const bool);
 	void addDatasheet(const DatapickerImage::GraphType&);

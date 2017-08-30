@@ -70,8 +70,8 @@ public:
 	explicit DatapickerPoint(const QString& name );
 	~DatapickerPoint();
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
     QGraphicsItem *graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
     void setPrinting(bool);

@@ -37,8 +37,8 @@ Q_OBJECT
 public:
 	explicit Folder(const QString& name);
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;

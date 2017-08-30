@@ -37,15 +37,15 @@ class ColumnStringIO : public AbstractColumn {
 
 public:
 	ColumnStringIO(Column* owner);
-	virtual AbstractColumn::ColumnMode columnMode() const;
-	virtual AbstractColumn::PlotDesignation plotDesignation() const;
-	virtual int rowCount() const;
-	virtual QString textAt(int) const;
-	virtual void setTextAt(int, const QString&);
+	virtual AbstractColumn::ColumnMode columnMode() const override;
+	virtual AbstractColumn::PlotDesignation plotDesignation() const override;
+	virtual int rowCount() const override;
+	virtual QString textAt(int) const override;
+	virtual void setTextAt(int, const QString&) override;
 	virtual bool isValid(int) const;
-	virtual bool copy(const AbstractColumn*);
-	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
-	virtual void replaceTexts(int start_row, const QVector<QString>& texts);
+	virtual bool copy(const AbstractColumn*) override;
+	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
+	virtual void replaceTexts(int start_row, const QVector<QString>& texts) override;
 	virtual void save(QXmlStreamWriter*) const override {};
 	virtual bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:

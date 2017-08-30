@@ -56,7 +56,7 @@ public:
 	QString format() const { return m_format; }
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const;
+	virtual AbstractColumn::ColumnMode columnMode() const override;
 
 	//! \name XML related functions
 	//@{
@@ -76,13 +76,13 @@ private:
 	static const char * time_formats[];
 
 public:
-	virtual QDateTime dateTimeAt(int row) const;
-	virtual QDate dateAt(int row) const;
-	virtual QTime timeAt(int row) const;
+	virtual QDateTime dateTimeAt(int row) const override;
+	virtual QDate dateAt(int row) const override;
+	virtual QTime timeAt(int row) const override;
 
 protected:
 	//! Using typed ports: only string inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source);
+	virtual bool inputAcceptable(int, const AbstractColumn *source) override;
 };
 
 #endif // ifndef STRING2DATE_TIME_FILTER_H

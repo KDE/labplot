@@ -52,23 +52,23 @@ public:
 	void init();
 	~Column();
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 
-	AbstractColumn::ColumnMode columnMode() const;
-	void setColumnMode(AbstractColumn::ColumnMode);
+	AbstractColumn::ColumnMode columnMode() const override;
+	void setColumnMode(AbstractColumn::ColumnMode) override;
 
-	bool copy(const AbstractColumn*);
-	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
+	bool copy(const AbstractColumn*) override;
+	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 
-	AbstractColumn::PlotDesignation plotDesignation() const;
-	void setPlotDesignation(AbstractColumn::PlotDesignation);
+	AbstractColumn::PlotDesignation plotDesignation() const override;
+	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
-	bool isReadOnly() const;
-	int rowCount() const;
+	bool isReadOnly() const override;
+	int rowCount() const override;
 	int width() const;
 	void setWidth(const int);
-	void clear();
+	void clear() override;
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
@@ -76,31 +76,31 @@ public:
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
 	const QStringList& formulaVariableColumnPathes() const;
-	QString formula(const int) const;
-	QList< Interval<int> > formulaIntervals() const;
-	void setFormula(Interval<int>, QString);
-	void setFormula(int, QString);
-	void clearFormulas();
+	QString formula(const int) const  override;
+	QList< Interval<int> > formulaIntervals() const override;
+	void setFormula(Interval<int>, QString) override;
+	void setFormula(int, QString) override;
+	void clearFormulas() override;
 
 	const AbstractColumn::ColumnStatistics& statistics();
 	void* data() const;
 
-	QString textAt(const int) const;
-	void setTextAt(const int, const QString&);
-	void replaceTexts(const int, const QVector<QString>&);
-	QDate dateAt(const int) const;
-	void setDateAt(const int, const QDate&);
-	QTime timeAt(const int) const;
-	void setTimeAt(const int, const QTime&);
-	QDateTime dateTimeAt(const int) const;
-	void setDateTimeAt(const int, const QDateTime&);
-	void replaceDateTimes(const int, const QVector<QDateTime>&);
-	double valueAt(const int) const;
-	void setValueAt(const int, const double);
-	virtual void replaceValues(const int, const QVector<double>&);
-	int integerAt(const int) const;
-	void setIntegerAt(const int, const int);
-	virtual void replaceInteger(const int, const QVector<int>&);
+	QString textAt(const int) const override;
+	void setTextAt(const int, const QString&) override;
+	void replaceTexts(const int, const QVector<QString>&) override;
+	QDate dateAt(const int) const override;
+	void setDateAt(const int, const QDate&) override;
+	QTime timeAt(const int) const override;
+	void setTimeAt(const int, const QTime&) override;
+	QDateTime dateTimeAt(const int) const override;
+	void setDateTimeAt(const int, const QDateTime&) override;
+	void replaceDateTimes(const int, const QVector<QDateTime>&) override;
+	double valueAt(const int) const override;
+	void setValueAt(const int, const double) override;
+	virtual void replaceValues(const int, const QVector<double>&) override;
+	int integerAt(const int) const override;
+	void setIntegerAt(const int, const int) override;
+	virtual void replaceInteger(const int, const QVector<int>&) override;
 
 	virtual double maximum(int count = 0) const override;
 	virtual double minimum(int count = 0) const override;
@@ -117,8 +117,8 @@ private:
 	bool XmlReadFormula(XmlStreamReader*);
 	bool XmlReadRow(XmlStreamReader*);
 
-	void handleRowInsertion(int before, int count);
-	void handleRowRemoval(int first, int count);
+	void handleRowInsertion(int before, int count) override;
+	void handleRowRemoval(int first, int count) override;
 
 	void calculateStatistics();
 	void setStatisticsAvailable(bool);

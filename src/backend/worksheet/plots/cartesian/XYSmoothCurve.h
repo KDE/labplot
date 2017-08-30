@@ -67,7 +67,7 @@ class XYSmoothCurve: public XYCurve {
 		virtual ~XYSmoothCurve();
 
 		void recalculate();
-		virtual QIcon icon() const;
+		virtual QIcon icon() const override;
 		virtual void save(QXmlStreamWriter*) const override;
 		virtual bool load(XmlStreamReader*, bool preview) override;
 
