@@ -890,21 +890,21 @@ void CartesianPlot::addVerticalAxis() {
 
 XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
-	isLoading() ? addChildFast(curve) : addChild(curve);
+	addChild(curve);
 	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
-	isLoading() ? addChildFast(curve) : addChild(curve);
+	addChild(curve);
 	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 Histogram* CartesianPlot::addHistogram() {
 	Histogram* curve= new Histogram("Histogram");
-	isLoading() ? addChildFast(curve) : addChild(curve);
+	addChild(curve);
 	return curve;
 }
 
@@ -2625,100 +2625,125 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			d->yRangeBreaks.list << b;
 		} else if (reader->name() == "textLabel") {
 			m_title = new TextLabel("");
-			if (!m_title->load(reader, preview)) {
+			if (m_title->load(reader, preview))
+				addChildFast(m_title);
+			else {
 				delete m_title;
 				m_title=0;
 				return false;
-			} else
-				addChildFast(m_title);
+			}
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
 			Axis* axis = new Axis("", this);
-			if (!axis->load(reader, preview)) {
+			if (axis->load(reader, preview))
+				addChildFast(axis);
+			else {
 				delete axis;
 				return false;
-			} else
-				addChildFast(axis);
+			}
 		} else if (reader->name() == "xyCurve") {
-			XYCurve* curve = addCurve();
-			if (!curve->load(reader, preview)) {
+			XYCurve* curve = new XYCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyEquationCurve") {
-			XYEquationCurve* curve = addEquationCurve();
-			if (!curve->load(reader, preview)) {
+			XYEquationCurve* curve = new XYEquationCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
-			XYDataReductionCurve* curve = addDataReductionCurve();
-			if (!curve->load(reader, preview)) {
+			XYDataReductionCurve* curve = new XYDataReductionCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
-			XYDifferentiationCurve* curve = addDifferentiationCurve();
-			if (!curve->load(reader, preview)) {
+			XYDifferentiationCurve* curve = new XYDifferentiationCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyIntegrationCurve") {
-			XYIntegrationCurve* curve = addIntegrationCurve();
-			if (!curve->load(reader, preview)) {
+			XYIntegrationCurve* curve = new XYIntegrationCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = addInterpolationCurve();
-			if (!curve->load(reader, preview)) {
+			XYInterpolationCurve* curve = new XYInterpolationCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFitCurve") {
-			XYFitCurve* curve = addFitCurve();
-			if (!curve->load(reader, preview)) {
+			XYFitCurve* curve = new XYFitCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
-			XYFourierFilterCurve* curve = addFourierFilterCurve();
-			if (!curve->load(reader, preview)) {
+			XYFourierFilterCurve* curve = new XYFourierFilterCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
-			XYFourierTransformCurve* curve = addFourierTransformCurve();
-			if (!curve->load(reader, preview)) {
+			XYFourierTransformCurve* curve = new XYFourierTransformCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "xySmoothCurve") {
-			XYSmoothCurve* curve = addSmoothCurve();
-			if (!curve->load(reader, preview)) {
+			XYSmoothCurve* curve = new XYSmoothCurve("");
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
-			if (!m_legend->load(reader, preview)) {
-				delete m_legend;
-				return false;
-			} else {
+			if (m_legend->load(reader, preview)) {
 				addChildFast(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
+			} else {
+				delete m_legend;
+				return false;
 			}
 		} else if (reader->name() == "customPoint") {
 			CustomPoint* point = new CustomPoint(this, "");
-			if (!point->load(reader, preview)) {
+			if (point->load(reader, preview))
+				addChildFast(point);
+			else {
 				delete point;
 				return false;
-			} else
-				addChildFast(point);
+			}
 		} else if(reader->name() == "Histogram") {
 			Histogram* curve = addHistogram();
-			if (!curve->load(reader, preview)) {
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
 				removeChild(curve);
 				return false;
 			}
