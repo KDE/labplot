@@ -395,7 +395,7 @@ void DatapickerCurveWidget::visibilityChanged(bool state) {
 }
 
 void DatapickerCurveWidget::updateSymbolWidgets() {
-	QList<DatapickerPoint*> pointsList = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	const QVector<DatapickerPoint*> pointsList = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 	if (pointsList.isEmpty()) {
 		ui.cbXErrorType->setEnabled(true);
 		ui.cbYErrorType->setEnabled(true);
@@ -502,7 +502,7 @@ void DatapickerCurveWidget::load() {
 
 	m_initializing = true;
 	ui.cbXErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().x);
-	ui.cbYErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().y);	
+	ui.cbYErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().y);
 	ui.cbStyle->setCurrentIndex( (int)m_curve->pointStyle() - 1 );
 	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointSize(), Worksheet::Point) );
 	ui.sbRotation->setValue( m_curve->pointRotationAngle() );

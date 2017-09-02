@@ -179,7 +179,7 @@ void MainWin::showPresenter() {
 	} else {
 		//currently active object is not a worksheet but we're asked to start in the presenter mode
 		//determine the first available worksheet and show it in the presenter mode
-		QList<Worksheet*> worksheets = m_project->children<Worksheet>();
+		QVector<Worksheet*> worksheets = m_project->children<Worksheet>();
 		if (worksheets.size()>0) {
 			WorksheetView* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
 			view->presenterMode();

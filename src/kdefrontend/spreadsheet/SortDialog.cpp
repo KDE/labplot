@@ -62,7 +62,7 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
     m_cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
     m_cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
     layout->addWidget(m_cbOrdering, 0, 1 );
-	
+
     m_lType = new QLabel(i18n("Sort columns"));
     layout->addWidget( m_lType, 1, 0 );
     m_cbType = new QComboBox();
@@ -98,22 +98,22 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 void SortDialog::sort(){
 	Column* leading;
     if(m_cbType->currentIndex() == Together)
-        leading = m_columns_list.at(m_cbColumns->currentIndex());
+        leading = m_columns.at(m_cbColumns->currentIndex());
 	else
 		leading = 0;
-	
-    emit sort(leading, m_columns_list, m_cbOrdering->currentIndex() == Ascending );
+
+    emit sort(leading, m_columns, m_cbOrdering->currentIndex() == Ascending );
 }
 
-void SortDialog::setColumnsList(QList<Column*> list){
-	m_columns_list = list;
+void SortDialog::setColumns(QVector<Column*> columns){
+	m_columns = columns;
 
-	for(int i=0; i<list.size(); i++)
-        m_cbColumns->addItem( list.at(i)->name() );
+	for(int i=0; i<m_columns.size(); i++)
+        m_cbColumns->addItem( m_columns.at(i)->name() );
 
     m_cbColumns->setCurrentIndex(0);
-	
-	if (list.size() == 1){
+
+	if (m_columns.size() == 1){
         m_lType->hide();
         m_cbType->hide();
         m_lColumns->hide();

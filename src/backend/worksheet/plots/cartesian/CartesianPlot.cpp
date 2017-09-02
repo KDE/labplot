@@ -2815,9 +2815,9 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void CartesianPlot::saveTheme(KConfig &config) {
-	const QList<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
-	const QList<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
-	const QList<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QVector<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
+	const QVector<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
+	const QVector<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 
 	axisElements.at(0)->saveThemeConfig(config);
 	plotAreaElements.at(0)->saveThemeConfig(config);

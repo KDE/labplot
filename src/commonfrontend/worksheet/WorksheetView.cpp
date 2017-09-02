@@ -850,15 +850,13 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 
 	//to select curves having overlapping bounding boxes we need to check whether the cursor
 	//is inside of item's shapes and not inside of the bounding boxes (Qt's default behaviour).
-	QList<QGraphicsItem*> itemsList = items(event->pos());
-	foreach(QGraphicsItem* item, itemsList) {
+	for (auto* item : items(event->pos())) {
 		if (!dynamic_cast<XYCurvePrivate*>(item))
 			continue;
 
 		if ( item->shape().contains(item->mapFromScene(mapToScene(event->pos()))) ) {
 			//deselect currently selected items
-			QList<QGraphicsItem*> selectedItems = scene()->selectedItems();
-			foreach(QGraphicsItem* selectedItem, selectedItems)
+			for (auto* selectedItem : scene()->selectedItems())
 				selectedItem->setSelected(false);
 
 			//select the item under the cursor and update the current selection
@@ -1136,12 +1134,11 @@ void WorksheetView::addNew(QAction* action) {
 void WorksheetView::selectAllElements() {
 	//deselect all previously selected items since there can be some non top-level items belong them
 	m_suppressSelectionChangedEvent = true;
-	foreach (QGraphicsItem* item, m_selectedItems)
+	for (auto* item : m_selectedItems)
 		m_worksheet->setItemSelectedInView(item, false);
 
 	//select top-level items
-	QList<QGraphicsItem*> items = scene()->items();
-	foreach (QGraphicsItem* item, items) {
+	for (auto* item : scene()->items()) {
 		if (!item->parentItem())
 			item->setSelected(true);
 	}
@@ -1165,7 +1162,7 @@ void WorksheetView::deleteElement() {
 
 	m_suppressSelectionChangedEvent = true;
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));
-	foreach (QGraphicsItem* item, m_selectedItems)
+	for (auto* item : m_selectedItems)
 		m_worksheet->deleteAspectFromGraphicsItem(item);
 	m_worksheet->endMacro();
 	m_suppressSelectionChangedEvent = false;
@@ -1341,7 +1338,7 @@ void WorksheetView::selectionChanged() {
 	//check, whether the previously selected items were deselected now.
 	//Forward the deselection prior to the selection of new items
 	//in order to avoid the unwanted multiple selection in project explorer
-	foreach ( QGraphicsItem* item, m_selectedItems ) {
+	for (auto* item : m_selectedItems ) {
 		if ( items.indexOf(item) == -1 ) {
 			if (item->isVisible())
 				m_worksheet->setItemSelectedInView(item, false);
@@ -1362,7 +1359,7 @@ void WorksheetView::selectionChanged() {
 			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
 		}
 	} else {
-		foreach (const QGraphicsItem* item, items)
+		for (const auto* item : items)
 			m_worksheet->setItemSelectedInView(item, true);
 
 		//items selected -> deselect the worksheet in the project explorer
@@ -1382,7 +1379,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	bool plot = false;
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
 		//check whether we have cartesian plots selected
-		foreach (QGraphicsItem* item, m_selectedItems) {
+		for (auto* item : m_selectedItems) {
 			//TODO: or if a children of a plot is selected
 			if (item->data(0).toInt() == WorksheetElement::NameCartesianPlot) {
 				plot = true;
@@ -1449,7 +1446,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		sourceRect = scene()->itemsBoundingRect();
 	else if (area == WorksheetView::ExportSelection) {
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
-		foreach (QGraphicsItem* item, m_selectedItems)
+		for (const auto* item : m_selectedItems)
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 	} else
 		sourceRect = scene()->sceneRect();
@@ -1518,7 +1515,7 @@ void WorksheetView::exportToClipboard() {
 		sourceRect = scene()->itemsBoundingRect();
 	else {
 		//export selection
-		foreach (QGraphicsItem* item, m_selectedItems)
+		for (const auto* item : m_selectedItems)
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 	}
 
@@ -1632,17 +1629,15 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 	else if (action == cartesianPlotZoomYSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
 
-	foreach (CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
+	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 }
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
-	QList<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
-	QDEBUG("WorksheetView::cartesianPlotAddNew() plots =" << plots << "mode =" << m_cartesianPlotActionMode);
+	QVector<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		DEBUG("ApplyActionToSelection");
 		int selectedPlots = 0;
-		foreach (CartesianPlot* plot, plots) {
+		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				++selectedPlots;
 		}
@@ -1650,7 +1645,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 		if  (selectedPlots > 1)
 			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), selectedPlots));
 
-		foreach (CartesianPlot* plot, plots) {
+		for (auto* plot : plots) {
 			//TODO: or if any children of a plot is selected
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				this->cartesianPlotAdd(plot, action);
@@ -1659,11 +1654,10 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 		if (selectedPlots > 1)
 			m_worksheet->endMacro();
 	} else {
-		DEBUG("not ApplyActionToSelection");
 		if  (plots.size() > 1)
 			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
 
-		foreach (CartesianPlot* plot, plots)
+		for (auto* plot : plots)
 			this->cartesianPlotAdd(plot, action);
 
 		if  (plots.size() > 1)
@@ -1723,12 +1717,12 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach (CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
+		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(op);
 		}
 	} else {
-		foreach (CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
+		for (auto* plot : m_worksheet->children<CartesianPlot>() )
 			plot->navigate(op);
 	}
 }

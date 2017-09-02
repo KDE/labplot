@@ -415,7 +415,7 @@ int Spreadsheet::colY(int col) {
 /*! Sorts the given list of column.
   If 'leading' is a null pointer, each column is sorted separately.
 */
-void Spreadsheet::sortColumns(Column* leading, QList<Column*> cols, bool ascending) {
+void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascending) {
 	if(cols.isEmpty()) return;
 
 	// the normal QPair comparison does not work properly with descending sorting

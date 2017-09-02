@@ -53,8 +53,8 @@ private:
 	Spreadsheet* m_spreadsheet;
 	TreeViewComboBox* cbExistingPlots;
 	TreeViewComboBox* cbExistingWorksheets;
-	QList<Column*> m_columns;
-	QList<QComboBox*> m_columnComboBoxes;
+	QVector<Column*> m_columns;
+	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 
@@ -62,8 +62,10 @@ private:
 	void addCurvesToPlot(CartesianPlot*) const;
 	void addCurvesToPlots(Worksheet*) const;
 	Column* columnFromName(const QString&) const;
+
 protected  slots:
 	virtual void checkOkButton();
+
 private slots:
 	void plot();
 	void curvePlacementChanged();

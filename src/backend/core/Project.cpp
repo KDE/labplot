@@ -31,6 +31,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
@@ -132,13 +133,13 @@ Project::~Project() {
 	//if the project is being closed and the live data sources still continue reading the data,
 	//the dependend objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
 	//->stop reading the live data sources prior to deleting all objects.
-	for(auto* lds : children<LiveDataSource>())
+	for (auto* lds : children<LiveDataSource>())
 		lds->pauseReading();
 
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	foreach(Worksheet* w, children<Worksheet>())
+	for (auto* w : children<Worksheet>())
 		w->setIsClosing();
 
 	d->undo_stack.clear();
@@ -238,7 +239,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//save all children
-	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
+	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement();
@@ -355,14 +356,14 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
-			QList<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
-			QList<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
-			QList<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
+			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
 			if (!curves.isEmpty() || !axes.isEmpty()) {
-				QList<Column*> columns = children<Column>(AbstractAspect::Recursive);
+				QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
 
 				//XY-curves
-				foreach (XYCurve* curve, curves) {
+				for (auto* curve : curves) {
 					if (!curve) continue;
 					curve->suppressRetransform(true);
 
@@ -421,13 +422,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				}
 
 				//Axes
-				foreach (Axis* axis, axes) {
+				for (auto* axis : axes) {
 					if (!axis) continue;
 					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
 
-				foreach (DatapickerCurve* dataPickerCurve, dataPickerCurves) {
+				for (auto* dataPickerCurve : dataPickerCurves) {
 					if (!dataPickerCurve) continue;
 					RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
 					RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
@@ -437,6 +438,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 				}
 			}
+
+
+
 		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document
@@ -444,6 +448,10 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 	d->loading = false;
 	emit loaded();
+// 			for (auto* plot : children<CartesianPlot>(AbstractAspect::Recursive)) {
+// 				qDebug()<<"retransforming " << plot->name();
+// 				plot->retransform();
+// 			}
 	return !reader->hasError();
 }
 

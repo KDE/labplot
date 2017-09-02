@@ -930,7 +930,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		//notify all affected columns and plots about the changes
 		PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
 		const Project* project = spreadsheet->project();
-		QList<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
 		QVector<CartesianPlot*> plots;
 		for (int n = 0; n < m_actualCols; ++n) {
 			Column* column = spreadsheet->column(n);

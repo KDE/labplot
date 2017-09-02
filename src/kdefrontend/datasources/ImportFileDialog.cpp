@@ -180,7 +180,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
-		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
+		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
 		QStringList names;
 		LiveDataSource::FileType fileType = m_importFileWidget->currentFileType();
@@ -330,7 +330,7 @@ void ImportFileDialog::checkOkButton() {
         }
 
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:  
+	case LiveDataSource::SourceType::NetworkTcpSocket:
         if (enable) {
             QTcpSocket* socket = new QTcpSocket(this);
             socket = new QTcpSocket(this);

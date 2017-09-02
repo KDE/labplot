@@ -184,7 +184,7 @@ StatisticsDialog::~StatisticsDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void StatisticsDialog::setColumns(const QList<Column*>& columns) {
+void StatisticsDialog::setColumns(const QVector<Column*>& columns) {
 	if (!columns.size())
 		return;
 

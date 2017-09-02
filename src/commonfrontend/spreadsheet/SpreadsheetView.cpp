@@ -747,13 +747,13 @@ bool SpreadsheetView::isColumnSelected(int col, bool full) {
   Returns all selected columns.
   If \param full is true, this function only returns a column if the whole column is selected.
   */
-QList<Column*> SpreadsheetView::selectedColumns(bool full) {
-	QList<Column*> list;
+QVector<Column*> SpreadsheetView::selectedColumns(bool full) {
+	QVector<Column*> columns;
 	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
-		if (isColumnSelected(i, full)) list << m_spreadsheet->column(i);
+		if (isColumnSelected(i, full)) columns << m_spreadsheet->column(i);
 
-	return list;
+	return columns;
 }
 
 /*!
@@ -1137,11 +1137,10 @@ void SpreadsheetView::maskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
-	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list) {
-		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+	for (auto* column : selectedColumns()) {
+		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) col_ptr->setMasked(row);
+			if (isCellSelected(row, col)) column->setMasked(row);
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1154,11 +1153,10 @@ void SpreadsheetView::unmaskSelection() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
-	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list)	{
-		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+	for (auto* column : selectedColumns()) {
+		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);
+			if (isCellSelected(row, col)) column->setMasked(row, false);
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1476,9 +1474,8 @@ void SpreadsheetView::removeSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected columns", m_spreadsheet->name()));
 
-	QList< Column* > list = selectedColumns();
-	foreach(Column* ptr, list)
-		m_spreadsheet->removeChild(ptr);
+	for (auto* column : selectedColumns())
+		m_spreadsheet->removeChild(column);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1488,16 +1485,15 @@ void SpreadsheetView::clearSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
 
-	QList<Column*> list = selectedColumns();
 	if (formulaModeActive()) {
-		for (auto* col: list) {
+		for (auto* col: selectedColumns()) {
 			col->setSuppressDataChangedSignal(true);
 			col->clearFormulas();
 			col->setSuppressDataChangedSignal(false);
 			col->setChanged();
 		}
 	} else {
-		for (auto* col: list) {
+		for (auto* col: selectedColumns()) {
 			col->setSuppressDataChangedSignal(true);
 			col->clear();
 			col->setSuppressDataChangedSignal(false);
@@ -1510,7 +1506,7 @@ void SpreadsheetView::clearSelectedColumns() {
 }
 
 void SpreadsheetView::setSelectionAs() {
-	QList<Column*> columns = selectedColumns();
+	QVector<Column*> columns = selectedColumns();
 	if (!columns.size())
 		return;
 
@@ -1527,10 +1523,9 @@ void SpreadsheetView::setSelectionAs() {
 	m_spreadsheet->endMacro();
 }
 
-
 void SpreadsheetView::reverseColumns() {
 	WAIT_CURSOR;
-	QList<Column*> cols = selectedColumns();
+	QVector<Column*> cols = selectedColumns();
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
 	                                m_spreadsheet->name(), cols.size()));
 	for (auto* col: cols) {
@@ -1567,8 +1562,7 @@ void SpreadsheetView::joinColumns() {
 void SpreadsheetView::normalizeSelectedColumns() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
-	QList< Column* > cols = selectedColumns();
-	for (auto* col: cols) {
+	for (auto* col : selectedColumns()) {
 		if (col->columnMode() == AbstractColumn::Numeric) {
 			col->setSuppressDataChangedSignal(true);
 			double max = col->maximum();
@@ -1620,20 +1614,20 @@ void SpreadsheetView::showAllColumnsStatistics() {
 void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(m_spreadsheet->name() + " column statistics");
 	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-	QList<Column*> list;
+	QVector<Column*> columns;
 
 	if (!forAll)
 		dlg->setColumns(selectedColumns());
 	else if (forAll) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
-				list << m_spreadsheet->column(col);
+				columns << m_spreadsheet->column(col);
 		}
-		dlg->setColumns(list);
+		dlg->setColumns(columns);
 	}
 	if (dlg->exec() == KDialog::Accepted) {
 		if (forAll)
-			list.clear();
+			columns.clear();
 	}
 }
 
@@ -1641,20 +1635,20 @@ void SpreadsheetView::showRowStatistics() {
 	QString dlgTitle(m_spreadsheet->name() + " row statistics");
 	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
 
-	QList<Column*> list;
+	QVector<Column*> columns;
 	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
 		if (isRowSelected(i)) {
 			QVector<double> rowValues;
 			for (int j = 0; j < m_spreadsheet->columnCount(); ++j)
 				rowValues << m_spreadsheet->column(j)->valueAt(i);
-			list << new Column(QString::number(i+1), rowValues);
+			columns << new Column(QString::number(i+1), rowValues);
 		}
 	}
-	dlg->setColumns(list);
+	dlg->setColumns(columns);
 
 	if (dlg->exec() == KDialog::Accepted) {
-		qDeleteAll(list);
-		list.clear();
+		qDeleteAll(columns);
+		columns.clear();
 	}
 }
 
@@ -1732,24 +1726,23 @@ void SpreadsheetView::clearSelectedCells() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
-	QList<Column*> list = selectedColumns();
-	foreach (Column* col_ptr, list) {
-		col_ptr->setSuppressDataChangedSignal(true);
+	for (auto* column : selectedColumns()) {
+		column->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
-			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+			int col = m_spreadsheet->indexOfChild<Column>(column);
 			for (int row = last; row >= first; row--)
 				if (isCellSelected(row, col))
-					col_ptr->setFormula(row, "");
+					column->setFormula(row, "");
 		} else {
-			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+			int col = m_spreadsheet->indexOfChild<Column>(column);
 			for (int row = last; row >= first; row--)
 				if (isCellSelected(row, col)) {
-					if (row < col_ptr->rowCount())
-						col_ptr->asStringColumn()->setTextAt(row, QString());
+					if (row < column->rowCount())
+						column->asStringColumn()->setTextAt(row, QString());
 				}
 		}
-		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1770,7 +1763,7 @@ void SpreadsheetView::goToCell() {
 }
 
 //! Open the sort dialog for the given columns
-void SpreadsheetView::sortDialog(QList<Column*> cols) {
+void SpreadsheetView::sortDialog(QVector<Column*> cols) {
 	if (cols.isEmpty()) return;
 
 	for (auto* col: cols)
@@ -1778,7 +1771,7 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 
 	SortDialog* dlg = new SortDialog();
 	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
-	dlg->setColumnsList(cols);
+	dlg->setColumns(cols);
 	int rc = dlg->exec();
 
 	for (auto* col: cols) {
@@ -1789,8 +1782,8 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 }
 
 void SpreadsheetView::sortColumnAscending() {
-	QList< Column* > cols = selectedColumns();
-	for (auto* col: cols)
+	QVector<Column*> cols = selectedColumns();
+	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, true);
 	for (auto* col: cols) {
@@ -1800,8 +1793,8 @@ void SpreadsheetView::sortColumnAscending() {
 }
 
 void SpreadsheetView::sortColumnDescending() {
-	QList< Column* > cols = selectedColumns();
-	for (auto* col: cols)
+	QVector<Column*> cols = selectedColumns();
+	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
 	m_spreadsheet->sortColumns(cols.first(), cols, false);
 	for (auto* col: cols) {

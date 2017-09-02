@@ -232,9 +232,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	qreal zVal = 0;
-	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-	foreach(WorksheetElement* elem, childElements)
-		elem->graphicsItem()->setZValue(zVal++);
+	for (auto* child : children<WorksheetElement>(IncludeHidden))
+		child->graphicsItem()->setZValue(zVal++);
 
 	//if a theme was selected in the worksheet, apply this theme for newly added children
 	if (!d->theme.isEmpty() && !isLoading()) {
@@ -306,7 +305,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	//determine the corresponding aspect
 	const AbstractAspect* aspect = 0;
-	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ) {
+	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -330,7 +329,7 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspe
 	if ( aspect->graphicsItem() == item )
 		return const_cast<WorksheetElement*>(aspect);
 	else {
-		foreach( const WorksheetElement* child, aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ) {
+		for (const auto* child : aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ) {
 			WorksheetElement* a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;
@@ -356,7 +355,7 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 	Q_ASSERT(item);
 	//determine the corresponding aspect
 	AbstractAspect* aspect = 0;
-	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ) {
+	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -597,9 +596,9 @@ void Worksheet::setPageRect(const QRectF& rect) {
 }
 
 void Worksheet::setPrinting(bool on) const {
-	QList<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	foreach(WorksheetElement* elem, childElements)
-		elem->setPrinting(on);
+	QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	for (auto* child : childElements)
+		child->setPrinting(on);
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
@@ -639,17 +638,17 @@ void WorksheetPrivate::updatePageRect() {
 		if (scaleContent) {
 			qreal horizontalRatio = pageRect.width() / oldRect.width();
 			qreal verticalRatio = pageRect.height() / oldRect.height();
-			QList<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::IncludeHidden);
+			QVector<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::IncludeHidden);
 			if (useViewSize) {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
-				foreach(WorksheetElement* elem, childElements) {
+				for (auto* elem : childElements) {
 					elem->setUndoAware(false);
 					elem->handleResize(horizontalRatio, verticalRatio, true);
 					elem->setUndoAware(true);
 				}
 			} else {
-				foreach(WorksheetElement* elem, childElements)
-					elem->handleResize(horizontalRatio, verticalRatio, true);
+				for (auto* child : childElements)
+					child->handleResize(horizontalRatio, verticalRatio, true);
 			}
 		}
 	}
@@ -667,10 +666,11 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	if (suppressLayoutUpdate)
 		return;
 
-	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
+	QVector<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout) {
-		foreach(WorksheetElementContainer* elem, list)
+		for(auto* elem : list)
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+
 		return;
 	}
 
@@ -791,9 +791,8 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-	foreach(WorksheetElement *elem, childElements)
-		elem->save(writer);
+	for (auto* child : children<WorksheetElement>(IncludeHidden))
+		child->save(writer);
 
 	writer->writeEndElement(); // close "worksheet" section
 }
@@ -1037,7 +1036,7 @@ void Worksheet::loadTheme(const QString& theme) {
 	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
 
 	//load the theme for all the children
-	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
-	foreach (WorksheetElement* child, childElements)
+	const QVector<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	for (auto* child : childElements)
 		child->loadThemeConfig(config);
 }

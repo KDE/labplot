@@ -31,7 +31,7 @@
 #define ABSTRACT_ASPECT_H
 
 #include <QObject>
-#include <QList>
+#include <QVector>
 
 class AbstractAspectPrivate;
 class Project;
@@ -83,7 +83,7 @@ public:
 	bool isDescendantOf(AbstractAspect* other);
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
-	QList<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
+	QVector<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
@@ -101,8 +101,8 @@ public:
 		return nullptr;
 	}
 
-	template <class T> QList<T*> children(const ChildIndexFlags& flags = 0) const {
-		QList<T*> result;
+	template <class T> QVector<T*> children(const ChildIndexFlags& flags = 0) const {
+		QVector<T*> result;
 		for (auto* child: children()) {
 			if (flags & IncludeHidden || !child->hidden()) {
 				T* i = qobject_cast<T*>(child);
@@ -183,7 +183,7 @@ private:
 	AbstractAspectPrivate* d;
 
 	QString uniqueNameFor(const QString&) const;
-	const QList<AbstractAspect*> children() const;
+	const QVector<AbstractAspect*> children() const;
 	void connectChild(AbstractAspect*);
 
 public slots:

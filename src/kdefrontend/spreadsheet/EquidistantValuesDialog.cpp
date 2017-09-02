@@ -80,8 +80,8 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	resize( QSize(300,0).expandedTo(minimumSize()) );
 }
 
-void EquidistantValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void EquidistantValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 	ui.kleNumber->setText( QString::number(m_columns.first()->rowCount()) );
 }
 

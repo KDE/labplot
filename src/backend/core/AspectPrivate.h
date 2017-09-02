@@ -45,7 +45,7 @@ class AbstractAspectPrivate {
 		int removeChild(AbstractAspect*);
 
 	public:
-		QList<AbstractAspect*> m_children;
+		QVector<AbstractAspect*> m_children;
 		QString m_name;
 		QString m_comment;
 		QDateTime m_creation_time;

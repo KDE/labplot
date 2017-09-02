@@ -80,8 +80,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 	operatorChanged(0);
 }
 
-void DropValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void DropValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 }
 
 void DropValuesDialog::operatorChanged(int index) const {

@@ -570,8 +570,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		shift.setY(1);
 
 	m_image->beginMacro(i18n("%1: change position of selected DatapickerPoints.", m_image->name()));
-	QList<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach (DatapickerPoint* point, axisPoints) {
+	const QVector<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : axisPoints) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
 
@@ -589,8 +589,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		m_image->setUndoAware(true);
 	}
 
-	foreach (DatapickerCurve* curve, m_image->parentAspect()->children<DatapickerCurve>()) {
-		foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
+	for (auto* curve : m_image->parentAspect()->children<DatapickerCurve>()) {
+		for (auto* point : curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 

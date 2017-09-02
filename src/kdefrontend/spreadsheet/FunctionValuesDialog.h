@@ -44,11 +44,11 @@ class FunctionValuesDialog : public KDialog {
 	public:
 		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
 		~FunctionValuesDialog();
-		void setColumns(QList<Column*>);
+		void setColumns(QVector<Column*>);
 
 	private:
 		Ui::FunctionValuesWidget ui;
-		QList<Column*> m_columns;
+		QVector<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
 #if __cplusplus < 201103L
 		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;

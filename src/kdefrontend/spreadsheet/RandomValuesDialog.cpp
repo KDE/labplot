@@ -122,8 +122,8 @@ RandomValuesDialog::~RandomValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void RandomValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void RandomValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 }
 
 void RandomValuesDialog::distributionChanged(int index) {

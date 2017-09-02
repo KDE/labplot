@@ -89,10 +89,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 	}
 
 	//change the visibility of all children
-	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (WorksheetElement *elem, childList) {
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (auto* elem : childList)
 		elem->setVisible(on);
-	}
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
@@ -107,8 +106,8 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (const WorksheetElement* elem, childList) {
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (const auto* elem : childList) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -124,9 +123,9 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
-	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (WorksheetElement* elem, childList)
-		elem->retransform();
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (auto* child : childList)
+		child->retransform();
 
 	d->recalcShapeAndBoundingRect();
 }
@@ -140,7 +139,7 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 		rect.setHeight(d->rect.height()*verticalRatio);
 		setRect(rect);
 	} else {
-		for(WorksheetElement* elem : children<WorksheetElement>(IncludeHidden))
+		for (auto* elem : children<WorksheetElement>(IncludeHidden))
 			elem->handleResize(horizontalRatio, verticalRatio);
 
 		retransform();
@@ -157,9 +156,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
-		QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-		foreach(WorksheetElement* elem, childElements)
-			elem->setZValue(zVal++);
+		for (auto* child : children<WorksheetElement>(IncludeHidden))
+			child->setZValue(zVal++);
 	}
 
 	if (!isLoading())
@@ -236,7 +234,7 @@ void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
 	containerShape = QPainterPath();
-	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach (const WorksheetElement* elem, childList)
 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 

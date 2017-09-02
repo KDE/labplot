@@ -2280,8 +2280,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
 	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
-	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	foreach(TextLabel *child, childElements)
+	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	for (auto* child : childElements)
 		child->loadThemeConfig(config);
 }
 
@@ -2320,6 +2320,6 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
-	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	childElements.at(0)->saveThemeConfig(config);
 }

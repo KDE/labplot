@@ -63,7 +63,7 @@ public:
 	int selectedColumnCount(bool full = false);
 	int selectedColumnCount(AbstractColumn::PlotDesignation);
 	bool isColumnSelected(int col, bool full = false);
-	QList<Column*> selectedColumns(bool full = false);
+	QVector<Column*> selectedColumns(bool full = false);
 	int firstSelectedColumn(bool full = false);
 	int lastSelectedColumn(bool full = false);
 
@@ -185,7 +185,7 @@ private slots:
 	void goToPreviousColumn();
 	void goToCell();
 	void sortSpreadsheet();
-	void sortDialog(QList<Column*>);
+	void sortDialog(QVector<Column*>);
 
 	void cutSelection();
 	void copySelection();

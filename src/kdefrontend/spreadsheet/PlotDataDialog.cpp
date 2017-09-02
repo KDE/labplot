@@ -255,8 +255,7 @@ void PlotDataDialog::plot() {
 
 			//set the x-axis names
 			const QString& xColumnName = ui.cbXColumn->currentText();
-			QList<Axis*> axes = plot->children<Axis>();
-			for (auto axis : axes) {
+			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
@@ -283,8 +282,7 @@ void PlotDataDialog::plot() {
 
 			//set the x-axis names
 			const QString& xColumnName = ui.cbXColumn->currentText();
-			QList<Axis*> axes = plot->children<Axis>();
-			for (auto axis : axes) {
+			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
@@ -345,10 +343,9 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		plot->initDefault(CartesianPlot::FourAxes);
 
 		//set the axis names
-		QList<Axis*> axes = plot->children<Axis>();
 		bool xSet = false;
 		bool ySet = false;
-		for (auto axis : axes) {
+		for (auto axis : plot->children<Axis>()) {
 			if (axis->orientation() == Axis::AxisHorizontal && !xSet) {
 				axis->title()->setText(xColumnName);
 				xSet = true;

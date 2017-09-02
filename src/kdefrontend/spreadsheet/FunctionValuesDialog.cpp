@@ -103,8 +103,8 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void FunctionValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 	ui.teEquation->setPlainText(m_columns.first()->formula());
 
 	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
@@ -117,7 +117,7 @@ void FunctionValuesDialog::setColumns(QList<Column*> list) {
 		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
 
 		//add all available variables and select the corresponding columns
-		const QList<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));

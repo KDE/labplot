@@ -109,7 +109,7 @@ QMenu* Column::createContextMenu() {
 		m_usedInActionGroup->removeAction(action);
 
 	//add curves where the column is currently in use
-	QList<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
+	QVector<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
 	for (const auto* curve: curves) {
 		if (curve->dataSourceType() == XYCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) ) {
 			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);

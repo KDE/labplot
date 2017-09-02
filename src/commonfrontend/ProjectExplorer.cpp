@@ -570,7 +570,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		expanded.push_back(-1);
 
 	int row = 0;
-	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
 	foreach(const AbstractAspect* aspect, aspects) {
 		QModelIndex index = model->modelIndexOfAspect(aspect);
 
@@ -631,7 +631,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
 	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;

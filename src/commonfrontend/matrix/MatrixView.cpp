@@ -1441,17 +1441,17 @@ void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-		QList<Column*> list;
+		QVector<Column*> columns;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
 				QString headerString = m_tableView->model()->headerData(col, Qt::Horizontal).toString();
-				list << new Column(headerString, static_cast<QVector<QVector<double>>*>(m_matrix->data())->at(col));
+				columns << new Column(headerString, static_cast<QVector<QVector<double>>*>(m_matrix->data())->at(col));
 			}
 		}
-		dlg->setColumns(list);
+		dlg->setColumns(columns);
 		if (dlg->exec() == KDialog::Accepted) {
-			qDeleteAll(list);
-			list.clear();
+			qDeleteAll(columns);
+			columns.clear();
 		}
 	}
 }
@@ -1460,18 +1460,18 @@ void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-        QList<Column*> list;
+        QVector<Column*> columns;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
 				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();
 				//TODO: mode
-				list << new Column(headerString, m_matrix->rowCells<double>(row, 0, m_matrix->columnCount()-1));
+				columns << new Column(headerString, m_matrix->rowCells<double>(row, 0, m_matrix->columnCount()-1));
 			}
 		}
-		dlg->setColumns(list);
+		dlg->setColumns(columns);
 		if (dlg->exec() == KDialog::Accepted) {
-			qDeleteAll(list);
-			list.clear();
+			qDeleteAll(columns);
+			columns.clear();
 		}
 	}
 }

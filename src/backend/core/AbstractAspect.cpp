@@ -99,7 +99,7 @@
  */
 
 /**
- * \fn template < class T > QList<T*> AbstractAspect::children(const ChildIndexFlags &flags=0) const
+ * \fn template < class T > QVector<T*> AbstractAspect::children(const ChildIndexFlags &flags=0) const
  * \brief Return list of children inheriting from class T.
  *
  * Use AbstractAspect for T in order to get all children.
@@ -446,8 +446,8 @@ void AbstractAspect::removeChild(AbstractAspect* child) {
 void AbstractAspect::removeAllChildren() {
 	beginMacro(i18n("%1: remove all children", name()));
 
-	QList<AbstractAspect*> children_list = children();
-	QList<AbstractAspect*>::const_iterator i = children_list.constBegin();
+	QVector<AbstractAspect*> children_list = children();
+	QVector<AbstractAspect*>::const_iterator i = children_list.constBegin();
 	AbstractAspect *current = 0, *nextSibling = 0;
 	if (i != children_list.constEnd()) {
 		current = *i;
@@ -496,9 +496,9 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	endMacro();
 }
 
-QList<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
-	QList<AbstractAspect*> result;
-	foreach (AbstractAspect * child, children()) {
+QVector<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
+	QVector<AbstractAspect*> result;
+	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {
 			if ( child->inherits(className) || !(flags & Compress)) {
 				result << child;
@@ -511,7 +511,7 @@ QList<AbstractAspect*> AbstractAspect::children(const char* className, const Chi
 	return result;
 }
 
-const QList<AbstractAspect*> AbstractAspect::children() const {
+const QVector<AbstractAspect*> AbstractAspect::children() const {
 	return d->m_children;
 }
 
@@ -750,9 +750,8 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
  * \brief Make the specified name unique among my children by incrementing a trailing number.
  */
 QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
-// 	return d->uniqueNameFor(current_name);
 	QStringList child_names;
-	foreach(AbstractAspect * child, children())
+	for (auto* child : children())
 		child_names << child->name();
 
 	if (!child_names.contains(current_name))
@@ -810,7 +809,7 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	foreach(AbstractAspect* child, m_children)
+	for(auto* child : m_children)
 		delete child;
 }
 

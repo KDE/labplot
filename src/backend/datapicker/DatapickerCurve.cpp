@@ -376,7 +376,7 @@ void DatapickerCurve::setPointVisibility(bool on) {
 }
 
 void DatapickerCurve::setPrinting(bool on) {
-	foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(IncludeHidden))
 		point->setPrinting(on);
 }
 
@@ -396,7 +396,7 @@ void DatapickerCurve::setSelectedInView(const bool b) {
 void DatapickerCurve::updateDatasheet() {
 	beginMacro(i18n("%1: update datasheet", name()));
 
-	foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(IncludeHidden))
 		updateData(point);
 
 	endMacro();
@@ -459,8 +459,8 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
-	QList<DatapickerPoint *> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach(DatapickerPoint *point, childrenPoints)
+	QVector<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : childrenPoints)
 		point->retransform();
 }
 
@@ -507,8 +507,7 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	QList<AbstractAspect *> childrenAspect = children<AbstractAspect>(IncludeHidden);
-	foreach(AbstractAspect *child, childrenAspect)
+	for (auto* child : children<AbstractAspect>(IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close section
