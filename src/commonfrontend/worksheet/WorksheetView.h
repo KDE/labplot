@@ -104,7 +104,8 @@ private:
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
 	bool m_isClosing;
-	bool m_isBeingPresented;
+	bool m_menusInitialized;
+
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
@@ -119,7 +120,6 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
-	// Data manipulation menu
 	QMenu* m_dataManipulationMenu;
 
 	QToolButton* tbNewCartesianPlot;
@@ -222,8 +222,8 @@ private:
 	QAction* addFourierTransformAction;
 
 public slots:
-	void createContextMenu(QMenu*) const;
-	void createAnalysisMenu(QMenu*) const;
+	void createContextMenu(QMenu*);
+	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);

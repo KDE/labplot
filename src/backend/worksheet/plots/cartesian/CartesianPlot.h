@@ -91,7 +91,7 @@ public:
 	void initDefault(Type = FourAxes);
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QMenu* analysisMenu() const;
+	QMenu* analysisMenu();
 	void setRect(const QRectF&) override;
 	QRectF plotRect();
 	void setMouseMode(const MouseMode);
@@ -139,6 +139,8 @@ private:
 	CartesianPlotLegend* m_legend;
 	float m_zoomFactor;
 	QList<QColor> m_themeColorPalette;
+	bool m_menusInitialized;
+	QVector<const AbstractColumn*> m_connectedColumns;
 
 	QAction* visibilityAction;
 
@@ -188,8 +190,6 @@ private:
 	QMenu* zoomMenu;
 	QMenu* dataAnalysisMenu;
 	QMenu* themeMenu;
-
-    QVector<const AbstractColumn*> m_connectedColumns;
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 

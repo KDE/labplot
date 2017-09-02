@@ -75,20 +75,26 @@
  *
  */
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
-	m_legend(0), m_zoomFactor(1.2) {
+	m_legend(0), m_zoomFactor(1.2), m_menusInitialized(false),
+	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
 	init();
 }
 
 CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
-	m_legend(0), m_zoomFactor(1.2) {
+	m_legend(0), m_zoomFactor(1.2),
+	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
 	init();
 }
 
 CartesianPlot::~CartesianPlot() {
+	if (m_menusInitialized) {
+		delete addNewMenu;
+		delete zoomMenu;
+		delete themeMenu;
+	}
+
 	delete m_coordinateSystem;
-	delete addNewMenu;
-	delete zoomMenu;
-	delete themeMenu;
+
 	//don't need to delete objects added with addChild()
 
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -123,14 +129,11 @@ void CartesianPlot::init() {
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 
 	m_plotArea = new PlotArea(name() + " plot area");
-	addChild(m_plotArea);
+	addChildFast(m_plotArea);
 
 	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-
-	initActions();
-	initMenus();
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
@@ -458,6 +461,8 @@ void CartesianPlot::initActions() {
 }
 
 void CartesianPlot::initMenus() {
+	initActions();
+
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramPlot);
@@ -545,9 +550,14 @@ void CartesianPlot::initMenus() {
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
 	themeMenu->addAction(widgetAction);
+
+	m_menusInitialized = true;
 }
 
 QMenu* CartesianPlot::createContextMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1);
 
@@ -563,7 +573,10 @@ QMenu* CartesianPlot::createContextMenu() {
 	return menu;
 }
 
-QMenu* CartesianPlot::analysisMenu() const {
+QMenu* CartesianPlot::analysisMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
 	return dataAnalysisMenu;
 }
 

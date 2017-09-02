@@ -81,6 +81,21 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	m_isClosing(false),
+	m_menusInitialized(false),
+	m_addNewMenu(nullptr),
+	m_addNewCartesianPlotMenu(nullptr),
+	m_zoomMenu(nullptr),
+	m_magnificationMenu(nullptr),
+	m_layoutMenu(nullptr),
+	m_gridMenu(nullptr),
+	m_themeMenu(nullptr),
+	m_viewMouseModeMenu(nullptr),
+	m_cartesianPlotMenu(nullptr),
+	m_cartesianPlotMouseModeMenu(nullptr),
+	m_cartesianPlotAddNewMenu(nullptr),
+	m_cartesianPlotZoomMenu(nullptr),
+	m_cartesianPlotActionModeMenu(nullptr),
+	m_dataManipulationMenu(nullptr),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
 	tbMagnification(0) {
@@ -105,16 +120,6 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	setCacheMode(QGraphicsView::CacheBackground);
 
 	m_gridSettings.style = WorksheetView::NoGrid;
-
-	initActions();
-	initMenus();
-	selectionModeAction->setChecked(true);
-	handleCartesianPlotActions();
-
-	changeZoom(zoomOriginAction);
-	currentZoomAction = zoomInViewAction;
-
-	currentMagnificationAction = noMagnificationAction;
 
 	//signal/slot connections
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -362,9 +367,17 @@ void WorksheetView::initActions() {
 
 	connect(cartesianPlotNavigationGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotNavigationChanged(QAction*)));
 
+	//set some default values
+	selectionModeAction->setChecked(true);
+	handleCartesianPlotActions();
+	changeZoom(zoomOriginAction);
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
 }
 
 void WorksheetView::initMenus() {
+	initActions();
+
 	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"), this);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
@@ -375,7 +388,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
-	
+
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
 	m_viewMouseModeMenu->addAction(selectionModeAction);
@@ -494,6 +507,8 @@ void WorksheetView::initMenus() {
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
 	m_themeMenu->addAction(widgetAction);
+
+	m_menusInitialized = true;
 }
 
 /*!
@@ -503,8 +518,11 @@ void WorksheetView::initMenus() {
  *   - as the "worksheet menu" in the main menu-bar (called form MainWin)
  *   - as a part of the worksheet context menu in project explorer
  */
-void WorksheetView::createContextMenu(QMenu* menu) const {
+void WorksheetView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
+
+	if (!m_menusInitialized)
+		initMenus();
 
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
@@ -528,8 +546,11 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 }
 
-void WorksheetView::createAnalysisMenu(QMenu* menu) const {
+void WorksheetView::createAnalysisMenu(QMenu* menu) {
 	Q_ASSERT(menu);
+
+	if (!m_menusInitialized)
+		initMenus();
 
 	// Data manipulation menu
 	menu->insertMenu(0, m_dataManipulationMenu);
@@ -1080,7 +1101,7 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
-	} 
+	}
 	if (!aspect)
 		return;
 
@@ -1355,6 +1376,9 @@ void WorksheetView::selectionChanged() {
 
 //check whether we have cartesian plots selected and activate/deactivate
 void WorksheetView::handleCartesianPlotActions() {
+	if (!m_menusInitialized)
+		return;
+
 	bool plot = false;
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
 		//check whether we have cartesian plots selected
