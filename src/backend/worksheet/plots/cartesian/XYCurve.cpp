@@ -896,7 +896,6 @@ void XYCurvePrivate::retransform() {
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
 #endif
-	print_callstack(10);
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
