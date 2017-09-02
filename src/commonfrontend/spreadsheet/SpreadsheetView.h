@@ -161,8 +161,17 @@ private:
 	QAction* action_add_rows;
 	QAction* action_statistics_rows;
 
-	//plotting and analysis related actions
+
+	//analysis and plot data menu actions
 	QAction* action_plot_data;
+	QAction* addDataOperationAction;
+	QAction* addDataReductionAction;
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
+	QVector <QAction*> addFitAction;
+	QAction* addFourierFilterAction;
 
 	//Menus
 	QMenu* m_selectionMenu;

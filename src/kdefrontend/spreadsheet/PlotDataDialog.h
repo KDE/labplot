@@ -44,8 +44,15 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
+	enum AnalysisAction {DataReduction,
+							Differentiation, Integration, Interpolation, Smoothing,
+							FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
+							FourierFilter};
+
 	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
 	~PlotDataDialog();
+
+	void setAnalysisAction(AnalysisAction);
 
 private:
 	Ui::PlotDataWidget ui;
@@ -57,6 +64,8 @@ private:
 	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
+	AnalysisAction m_analysisAction;
+	bool m_analysisMode;
 
 	void processColumns();
 	void addCurvesToPlot(CartesianPlot*) const;

@@ -56,7 +56,8 @@
 PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
-	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())) {
+	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
+	m_analysisMode(false) {
 
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18n("Plot spreadsheet data"));
@@ -154,6 +155,11 @@ PlotDataDialog::~PlotDataDialog() {
 
 	delete m_plotsModel;
 	delete m_worksheetsModel;
+}
+
+void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
+	m_analysisAction = action;
+	m_analysisMode = true;
 }
 
 void PlotDataDialog::processColumns() {

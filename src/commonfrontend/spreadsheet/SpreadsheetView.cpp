@@ -269,8 +269,77 @@ void SpreadsheetView::initActions() {
 	action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
 
-	//plotting and analysis related actions
+	//plot data action
 	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+
+	//Analyze and plot menu actions
+	addDataOperationAction = new QAction(i18n("Data operation"), this);
+	addDataReductionAction = new QAction(i18n("Reduce data"), this);
+	addDataReductionAction->setData(PlotDataDialog::DataReduction);
+	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
+	addDifferentiationAction->setData(PlotDataDialog::Differentiation);
+	addIntegrationAction = new QAction(i18n("Integrate"), this);
+	addIntegrationAction->setData(PlotDataDialog::Integration);
+	addInterpolationAction = new QAction(i18n("Interpolate"), this);
+	addInterpolationAction->setData(PlotDataDialog::Interpolation);
+	addSmoothAction = new QAction(i18n("Smooth"), this);
+	addSmoothAction->setData(PlotDataDialog::Smoothing);
+
+	QAction* fitAction = new QAction(i18n("Linear"), this);
+	fitAction->setData(PlotDataDialog::FitLinear);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Power"), this);
+	fitAction->setData(PlotDataDialog::FitPower);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
+	fitAction->setData(PlotDataDialog::FitExp1);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
+	fitAction->setData(PlotDataDialog::FitExp2);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Inverse exponential"), this);
+	fitAction->setData(PlotDataDialog::FitInvExp);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Gauss"), this);
+	fitAction->setData(PlotDataDialog::FitGauss);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
+	fitAction->setData(PlotDataDialog::FitCauchyLorentz);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Arc Tangent"), this);
+	fitAction->setData(PlotDataDialog::FitTan);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Hyperbolic tangent"), this);
+	fitAction->setData(PlotDataDialog::FitTanh);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Error function"), this);
+	fitAction->setData(PlotDataDialog::FitErrFunc);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Custom"), this);
+	fitAction->setData(PlotDataDialog::FitCustom);
+	addFitAction.append(fitAction);
+
+	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
+	addFourierFilterAction->setData(PlotDataDialog::FourierFilter);
+
+	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addSmoothAction, SIGNAL(triggered()), SLOT(plotData()));
+	for (const auto& action: addFitAction)
+		connect(action, SIGNAL(triggered()), SLOT(plotData()));
+	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(plotData()));
 }
 
 void SpreadsheetView::initMenus() {
@@ -310,6 +379,45 @@ void SpreadsheetView::initMenus() {
 	// Column menu
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addAction(action_plot_data);
+
+	// Data manipulation sub-menu
+	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+	dataManipulationMenu->addAction(addDataOperationAction);
+	dataManipulationMenu->addAction(addDataReductionAction);
+
+	// Data fit sub-menu
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
+	dataFitMenu->addAction(addFitAction.at(0));
+	dataFitMenu->addAction(addFitAction.at(1));
+	dataFitMenu->addAction(addFitAction.at(2));
+	dataFitMenu->addAction(addFitAction.at(3));
+	dataFitMenu->addAction(addFitAction.at(4));
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction.at(5));
+	dataFitMenu->addAction(addFitAction.at(6));
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction.at(7));
+	dataFitMenu->addAction(addFitAction.at(8));
+	dataFitMenu->addAction(addFitAction.at(9));
+	dataFitMenu->addSeparator();
+	dataFitMenu->addAction(addFitAction.at(10));
+
+	//analyze and plot data menu
+	QMenu* analyzePlotMenu = new QMenu(i18n("Analyze and plot data"));
+	analyzePlotMenu->insertMenu(0, dataManipulationMenu);
+	analyzePlotMenu->addSeparator();
+	analyzePlotMenu->addAction(addDifferentiationAction);
+	analyzePlotMenu->addAction(addIntegrationAction);
+	analyzePlotMenu->addSeparator();
+	analyzePlotMenu->addAction(addInterpolationAction);
+	analyzePlotMenu->addAction(addSmoothAction);
+	analyzePlotMenu->addAction(addFourierFilterAction);
+	analyzePlotMenu->addSeparator();
+	analyzePlotMenu->addMenu(dataFitMenu);
+	m_columnMenu->addMenu(analyzePlotMenu);
+
 	m_columnMenu->addSeparator();
 	if (!m_readOnly) {
 		submenu = new QMenu(i18n("Set Column As"));
@@ -367,6 +475,7 @@ void SpreadsheetView::initMenus() {
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
 	m_spreadsheetMenu->addAction(action_plot_data);
+	m_spreadsheetMenu->addMenu(analyzePlotMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addAction(action_toggle_comments);
@@ -1164,6 +1273,11 @@ void SpreadsheetView::unmaskSelection() {
 
 void SpreadsheetView::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(m_spreadsheet);
+	const QObject* sender = QObject::sender();
+	if (sender != action_plot_data) {
+		PlotDataDialog::AnalysisAction action = (PlotDataDialog::AnalysisAction)dynamic_cast<const QAction*>(sender)->data().toInt();
+		dlg->setAnalysisAction(action);
+	}
 	dlg->exec();
 }
 
