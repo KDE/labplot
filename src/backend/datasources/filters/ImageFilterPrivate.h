@@ -35,7 +35,7 @@ public:
 	explicit ImageFilterPrivate(ImageFilter*);
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-				AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	const ImageFilter* q;
@@ -45,9 +45,6 @@ public:
 	int endRow;		// end row
 	int startColumn;	// start column
 	int endColumn;		// end column
-
-private:
-	void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

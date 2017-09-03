@@ -931,7 +931,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 			props << QLatin1String(": FLETCHER32");  /* Error Detection Code */
 			break;
 		case H5Z_FILTER_SZIP: {
-				//unsigned int szip_options_mask=cd_values[0];;
+				//unsigned int szip_options_mask=cd_values[0];
 				unsigned int szip_pixels_per_block=cd_values[1];
 
 				props << QLatin1String(": SZIP COMPRESSION - PIXELS_PER_BLOCK ") << QString::number(szip_pixels_per_block);

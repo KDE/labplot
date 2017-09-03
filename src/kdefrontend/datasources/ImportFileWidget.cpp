@@ -298,11 +298,11 @@ QString ImportFileWidget::port() const {
 }
 
 QString ImportFileWidget::serialPort() const {
-    return ui.cbSerialPort->currentText();
+	return ui.cbSerialPort->currentText();
 }
 
 int ImportFileWidget::baudRate() const {
-    return ui.cbBaudRate->currentText().toInt();
+	return ui.cbBaudRate->currentText().toInt();
 }
 
 /*!
@@ -544,23 +544,23 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 		QByteArray imageFormat = QImageReader::imageFormat(fileName);
 		if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
-				fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
+		        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
 			//probably ascii data
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
 		} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
-				fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
+		           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF);
 
 			// update HDF tree widget using current selected file
 			m_hdfOptionsWidget->updateContent((HDFFilter*)this->currentFileFilter(), fileName);
 		} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
-				fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
+		           fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::NETCDF);
 
 			// update NetCDF tree widget using current selected file
 			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
 		} else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
-				fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
+		           fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
 			ui.cbFileType->setCurrentIndex(LiveDataSource::FITS);
 #endif
@@ -742,93 +742,90 @@ void ImportFileWidget::refreshPreview() {
 	QTableWidget *tmpTableWidget = nullptr;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-    switch (fileType) {
+	switch (fileType) {
 	case LiveDataSource::Ascii: {
 			ui.tePreview->clear();
 
-            AsciiFilter *filter = static_cast<AsciiFilter*>(this->currentFileFilter());
+			AsciiFilter *filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
-            switch (currentSourceType()) {
-            case LiveDataSource::SourceType::FileOrPipe: {
-                importedStrings = filter->preview(fileName, lines);;
-                break;
-            }
-            case LiveDataSource::SourceType::LocalSocket: {
+			switch (currentSourceType()) {
+			case LiveDataSource::SourceType::FileOrPipe: {
+					importedStrings = filter->preview(fileName, lines);
+					break;
+				}
+			case LiveDataSource::SourceType::LocalSocket: {
 
-                QLocalSocket* lsocket = new QLocalSocket(this);
-                lsocket->connectToServer(fileName, QLocalSocket::ReadOnly);
-                bool localSocketConnected = lsocket->waitForConnected(2000);
+					QLocalSocket* lsocket = new QLocalSocket(this);
+					lsocket->connectToServer(fileName, QLocalSocket::ReadOnly);
+					bool localSocketConnected = lsocket->waitForConnected(2000);
 
-                if (localSocketConnected) {
-                    qDebug() << "localPreviewConnected";
-                    bool canread = lsocket->waitForReadyRead(500);
-                    if (canread)
-                        importedStrings = filter->preview(*lsocket);
-                }
-                if (lsocket->state() == QLocalSocket::ConnectedState) {
-                    lsocket->disconnectFromServer();
-                    connect(lsocket, SIGNAL(disconnected()), lsocket, SLOT(deleteLater()));
-                } else {
-                    delete lsocket;
-                }
+					if (localSocketConnected) {
+						qDebug() << "localPreviewConnected";
+						bool canread = lsocket->waitForReadyRead(500);
+						if (canread)
+							importedStrings = filter->preview(*lsocket);
+					}
+					if (lsocket->state() == QLocalSocket::ConnectedState) {
+						lsocket->disconnectFromServer();
+						connect(lsocket, SIGNAL(disconnected()), lsocket, SLOT(deleteLater()));
+					} else
+						delete lsocket;
 
-                break;
-            }
-            case LiveDataSource::SourceType::NetworkTcpSocket: {
-                QTcpSocket* tsocket = new QTcpSocket(this);
-                tsocket->connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-                bool tcpSocketConnected = tsocket->waitForConnected(2000);
+					break;
+				}
+			case LiveDataSource::SourceType::NetworkTcpSocket: {
+					QTcpSocket* tsocket = new QTcpSocket(this);
+					tsocket->connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
+					bool tcpSocketConnected = tsocket->waitForConnected(2000);
 
-                if (tcpSocketConnected) {
-                    bool canread = tsocket->waitForReadyRead(500);
-                    qDebug() << "tcpPreviewconnected";
-                    if (canread)
-                        importedStrings = filter->preview(*tsocket);
-                }
+					if (tcpSocketConnected) {
+						bool canread = tsocket->waitForReadyRead(500);
+						qDebug() << "tcpPreviewconnected";
+						if (canread)
+							importedStrings = filter->preview(*tsocket);
+					}
 
-                if (tsocket->state() == QTcpSocket::ConnectedState) {
-                    tsocket->disconnectFromHost();
-                    connect(tsocket, SIGNAL(disconnected()), tsocket, SLOT(deleteLater()));
-                } else {
-                    delete tsocket;
-                }
+					if (tsocket->state() == QTcpSocket::ConnectedState) {
+						tsocket->disconnectFromHost();
+						connect(tsocket, SIGNAL(disconnected()), tsocket, SLOT(deleteLater()));
+					} else
+						delete tsocket;
 
-                break;
-            }
-            case LiveDataSource::SourceType::NetworkUdpSocket: {
-                QUdpSocket* usocket = new QUdpSocket(this);
-                usocket->connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
-                bool udpSocketConnected = usocket->waitForConnected(2000);
+					break;
+				}
+			case LiveDataSource::SourceType::NetworkUdpSocket: {
+					QUdpSocket* usocket = new QUdpSocket(this);
+					usocket->connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
+					bool udpSocketConnected = usocket->waitForConnected(2000);
 
-                if (udpSocketConnected) {
-                    bool canread = usocket->waitForReadyRead(500);
-                    qDebug() << "tcpPreviewconnected";
-                    if (canread)
-                        importedStrings = filter->preview(*usocket);
-                }
+					if (udpSocketConnected) {
+						bool canread = usocket->waitForReadyRead(500);
+						qDebug() << "tcpPreviewconnected";
+						if (canread)
+							importedStrings = filter->preview(*usocket);
+					}
 
-                if (usocket->state() == QUdpSocket::ConnectedState) {
-                    usocket->disconnectFromHost();
-                    connect(usocket, SIGNAL(disconnected()), usocket, SLOT(deleteLater()));
-                } else {
-                    delete usocket;
-                }
+					if (usocket->state() == QUdpSocket::ConnectedState) {
+						usocket->disconnectFromHost();
+						connect(usocket, SIGNAL(disconnected()), usocket, SLOT(deleteLater()));
+					} else
+						delete usocket;
 
-                break;
-            }
-            case LiveDataSource::SourceType::SerialPort: {
-                QSerialPort* sPort = new QSerialPort(this);
+					break;
+				}
+			case LiveDataSource::SourceType::SerialPort: {
+					QSerialPort* sPort = new QSerialPort(this);
 
-                sPort->setBaudRate(baudRate());
-                sPort->setPortName(serialPort());
+					sPort->setBaudRate(baudRate());
+					sPort->setPortName(serialPort());
 
-                bool serialPortOpened = sPort->open(QIODevice::ReadOnly);
-                if (serialPortOpened) {
+					bool serialPortOpened = sPort->open(QIODevice::ReadOnly);
+					if (serialPortOpened) {
 
-                }
-                break;
-            }
-            }
+					}
+					break;
+				}
+			}
 
 			tmpTableWidget = m_twPreview;
 			vectorNameList = filter->vectorNames();

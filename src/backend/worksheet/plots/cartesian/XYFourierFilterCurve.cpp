@@ -57,12 +57,12 @@ extern "C" {
 #include <QThreadPool>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
+	: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
 	init();
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-		: XYCurve(name, dd) {
+	: XYCurve(name, dd) {
 	init();
 }
 
@@ -97,8 +97,14 @@ QIcon XYFourierFilterCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYFourierFilterCurve::xDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->xDataColumnPath; }
-const QString& XYFourierFilterCurve::yDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->yDataColumnPath; }
+const QString& XYFourierFilterCurve::xDataColumnPath() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->xDataColumnPath;
+}
+const QString& XYFourierFilterCurve::yDataColumnPath() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->yDataColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
@@ -235,7 +241,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
+		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
@@ -317,7 +323,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
-	filterResult.status = QString(gsl_strerror(status));;
+	filterResult.status = QString(gsl_strerror(status));
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
@@ -329,7 +335,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
+void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierFilterCurve);
 
 	writer->writeStartElement("xyFourierFilterCurve");
@@ -450,9 +456,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
-	} else {
+	} else
 		qWarning()<<"	d->xColumn == NULL!";
-	}
 
 	return true;
 }

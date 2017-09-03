@@ -52,12 +52,12 @@ extern "C" {
 #include <QThreadPool>
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
-		: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {
+	: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {
 	init();
 }
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd)
-		: XYCurve(name, dd) {
+	: XYCurve(name, dd) {
 	init();
 }
 
@@ -92,8 +92,14 @@ QIcon XYFourierTransformCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYFourierTransformCurve::xDataColumnPath() const { Q_D(const XYFourierTransformCurve); return d->xDataColumnPath; }
-const QString& XYFourierTransformCurve::yDataColumnPath() const { Q_D(const XYFourierTransformCurve); return d->yDataColumnPath; }
+const QString& XYFourierTransformCurve::xDataColumnPath() const {
+	Q_D(const XYFourierTransformCurve);
+	return d->xDataColumnPath;
+}
+const QString& XYFourierTransformCurve::yDataColumnPath() const {
+	Q_D(const XYFourierTransformCurve);
+	return d->yDataColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
@@ -208,7 +214,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 			// only when inside given range
 			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
@@ -276,13 +282,13 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		}
 		break;
 	case nsl_dft_xscale_period: {
-		double f0 = (n-1)/(xmax-xmin)/n;
-		for (unsigned int i=0; i < N; i++) {
-			double f = (n-1)*i/(xmax-xmin)/n;
-			xdata[i] = 1/(f+f0);
+			double f0 = (n-1)/(xmax-xmin)/n;
+			for (unsigned int i=0; i < N; i++) {
+				double f = (n-1)*i/(xmax-xmin)/n;
+				xdata[i] = 1/(f+f0);
+			}
+			break;
 		}
-		break;
-	}
 	}
 #ifndef NDEBUG
 	out = qDebug();
@@ -306,7 +312,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	//write the result
 	transformResult.available = true;
 	transformResult.valid = true;
-	transformResult.status = QString(gsl_strerror(status));;
+	transformResult.status = QString(gsl_strerror(status));
 	transformResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
@@ -318,7 +324,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
+void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierTransformCurve);
 
 	writer->writeStartElement("xyFourierTransformCurve");
@@ -435,9 +441,8 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
-	} else {
+	} else
 		qWarning()<<"	d->xColumn == NULL!";
-	}
 
 	return true;
 }

@@ -76,8 +76,6 @@ private:
 	int m_prepared;
 	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers
-
-	void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif
