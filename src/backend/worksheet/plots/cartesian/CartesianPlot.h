@@ -140,7 +140,6 @@ private:
 	float m_zoomFactor;
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized;
-	QVector<const AbstractColumn*> m_connectedColumns;
 
 	QAction* visibilityAction;
 

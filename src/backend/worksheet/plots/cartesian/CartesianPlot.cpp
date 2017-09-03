@@ -1119,32 +1119,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 	const XYCurve* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
-
-		const AbstractColumn* curveXcolumn = curve->xColumn();
-		const AbstractColumn* curveYcolumn = curve->yColumn();
-
-		bool pushXcolumn = true;
-		bool pushYcolumn = true;
-		for (auto* column : m_connectedColumns) {
-			if (column == curveXcolumn)
-				pushXcolumn = false;
-
-			if (column == curveYcolumn)
-				pushYcolumn = false;
-		}
-
-		if (pushXcolumn) {
-			m_connectedColumns.push_back(curveXcolumn);
-			connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-		}
-
-		if (pushYcolumn) {
-			m_connectedColumns.push_back(curveYcolumn);
-			connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-		}
-		//TODO
 		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-
+		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
 
 		//update the legend on changes of the name, line and symbol styles
@@ -1190,38 +1167,8 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 		m_legend = nullptr;
 	} else {
 		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
-		if (curve) {
-			bool xColReconnected = false;
-			bool yColReconnected = false;
-			for(const AbstractColumn* c : m_connectedColumns) {
-				if (!xColReconnected) {
-					if (curve->xColumn() == c) {
-						for (const XYCurve* ccurve : this->children<const XYCurve>()) {
-							if (ccurve->xColumn() == c) {
-								connect(ccurve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-								break;
-							}
-						}
-						xColReconnected = true;
-					}
-				}
-				if (!yColReconnected) {
-					if (curve->yColumn() == c) {
-						for (const XYCurve* ccurve : this->children<const XYCurve>()) {
-							if (ccurve->yColumn() == c) {
-								connect(ccurve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-								break;
-							}
-						}
-						yColReconnected = true;
-					}
-				}
-
-				if (xColReconnected && yColReconnected)
-					break;
-			}
+		if (curve)
 			updateLegend();
-		}
 	}
 }
 
