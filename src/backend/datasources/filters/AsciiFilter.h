@@ -34,7 +34,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
-
+class QAbstractSocket;
 class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -63,6 +63,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
+    QVector<QStringList> preview(QIODevice& device);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

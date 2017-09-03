@@ -49,6 +49,7 @@ public:
 	                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
+	QVector<QStringList> preview(QIODevice& device);
 
 	const AsciiFilter* q;
 

@@ -324,7 +324,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui.lSeparator->hide();
 
 		ui.chkCaptions->show();
-		ui.chkGridLines->show();;
+        ui.chkGridLines->show();
 		ui.lExportArea->show();
 		ui.lGridLines->show();
 		ui.lCaptions->show();

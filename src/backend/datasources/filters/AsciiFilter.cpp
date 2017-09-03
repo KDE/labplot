@@ -80,6 +80,10 @@ QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
 	return d->preview(fileName, lines);
 }
 
+QVector<QStringList> AsciiFilter::preview(QIODevice &device) {
+    return d->preview(device);
+}
+
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
@@ -692,6 +696,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 		}
 	}
 
+    if (m_prepared && (linesToRead == 0))
+        return 0;
+
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
 	if (!spreadsheet->keepLastValues()) {
@@ -1081,6 +1088,114 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+}
+
+QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
+
+    QVector<QStringList> dataStrings;
+
+    if (!(device.bytesAvailable() > 0)) {
+        DEBUG("No new data available");
+        return dataStrings;
+    }
+
+    if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
+        return dataStrings;
+
+#ifdef PERFTRACE_LIVE_IMPORT
+    PERFTRACE("AsciiLiveDataImportTotal: ");
+#endif
+
+    int linesToRead = 0;
+    QVector<QString> newData;
+
+    while (!device.atEnd()) {
+        newData.push_back(device.readLine());
+        linesToRead++;
+    }
+
+    if (linesToRead == 0) return dataStrings;
+
+    int col = 0;
+    int colMax = newData.at(0).size();
+    if (createIndexEnabled)
+        colMax++;
+    columnModes.resize(colMax);
+    if (createIndexEnabled) {
+        columnModes[0] = AbstractColumn::ColumnMode::Integer;
+        col = 1;
+        vectorNames.prepend("index");
+    }
+
+    if (headerEnabled) {
+        int i = 0;
+        if (createIndexEnabled) {
+            i = 1;
+        }
+        for (; i < vectorNames.size(); ++i) {
+            vectorNames[i] = "Column " + QString::number(i);
+        }
+    }
+
+    for (const auto& valueString: newData.at(0).split(' ', QString::SkipEmptyParts)) {
+        if (col == colMax)
+            break;
+        columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+    }
+
+    for (int i = 0; i < linesToRead; ++i) {
+        QString line = newData.at(i);
+
+        if (simplifyWhitespacesEnabled)
+            line = line.simplified();
+
+        if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+            continue;
+
+        QLocale locale(numberFormat);
+
+        QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
+        if (createIndexEnabled) {
+            lineStringList.prepend(QString::number(i));
+        }
+
+        QStringList lineString;
+        for (int n = 0; n < lineStringList.size(); n++) {
+            if (n < lineStringList.size()) {
+                const QString& valueString = lineStringList.at(n);
+
+                switch (columnModes[n]) {
+                case AbstractColumn::Numeric: {
+                        bool isNumber;
+                        const double value = locale.toDouble(valueString, &isNumber);
+                        lineString += QString::number(isNumber ? value : NAN);
+                        break;
+                    }
+                case AbstractColumn::Integer: {
+                        bool isNumber;
+                        const int value = locale.toInt(valueString, &isNumber);
+                        lineString += QString::number(isNumber ? value : NAN);
+                        break;
+                    }
+                case AbstractColumn::DateTime: {
+                        const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+                        lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+                        break;
+                    }
+                case AbstractColumn::Text:
+                    lineString += valueString;
+                    break;
+                case AbstractColumn::Month:	// never happens
+                case AbstractColumn::Day:
+                    break;
+                }
+            } else 	// missing columns in this line
+                lineString += QLatin1String("NAN");
+        }
+        dataStrings << lineString;
+    }
+
+    return dataStrings;
 }
 
 /*!

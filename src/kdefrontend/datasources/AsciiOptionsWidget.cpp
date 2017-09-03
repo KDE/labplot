@@ -145,13 +145,13 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 
 	filter->setCommentCharacter( ui.cbCommentCharacter->currentText() );
 	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
-	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()) );
+    filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()) );
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
-	filter->setVectorNames( ui.kleVectorNames->text() );
-	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
+    filter->setVectorNames( ui.kleVectorNames->text() );
+    filter->setHeaderEnabled( ui.chbHeader->isChecked() );
 }
 
 
