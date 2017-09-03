@@ -374,6 +374,9 @@ void CartesianPlot::initActions() {
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
+	if (children<CartesianPlotLegend>().size()>0)
+		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
+
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
@@ -1107,7 +1110,8 @@ void CartesianPlot::addLegend() {
 	m_legend->retransform();
 
 	//only one legend is allowed -> disable the action
-	addLegendAction->setEnabled(false);
+	if (m_menusInitialized)
+		addLegendAction->setEnabled(false);
 }
 
 void CartesianPlot::addCustomPoint() {
@@ -1163,7 +1167,8 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 	Q_UNUSED(parent);
 	Q_UNUSED(before);
 	if (m_legend == child) {
-		addLegendAction->setEnabled(true);
+		if (m_menusInitialized)
+			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
 		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
@@ -2684,10 +2689,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
-			if (m_legend->load(reader, preview)) {
+			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
-				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
-			} else {
+			else {
 				delete m_legend;
 				return false;
 			}
