@@ -938,7 +938,7 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: reduce '%2'", name(), curCurve->name()) );
-		curve->setName( i18n("Reducing of '%1'", curCurve->name()) );
+		curve->setName( i18n("Reduction of '%1'", curCurve->name()) );
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);

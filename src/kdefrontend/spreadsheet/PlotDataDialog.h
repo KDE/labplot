@@ -70,6 +70,7 @@ private:
 	void processColumns();
 	void addCurvesToPlot(CartesianPlot*) const;
 	void addCurvesToPlots(Worksheet*) const;
+	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
 	Column* columnFromName(const QString&) const;
 
 protected  slots:

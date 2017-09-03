@@ -33,6 +33,14 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
@@ -321,11 +329,9 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
 	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
-		Column* yColumn = columnFromName(comboBox->currentText());
-		XYCurve* curve = new XYCurve(comboBox->currentText());
-		curve->setXColumn(xColumn);
-		curve->setYColumn(yColumn);
-		plot->addChild(curve);
+		const QString& name = comboBox->currentText();
+		Column* yColumn = columnFromName(name);
+		addCurve(name, xColumn, yColumn, plot);
 	}
 	plot->scaleAuto();
 }
@@ -340,10 +346,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		QComboBox* comboBox = m_columnComboBoxes[i];
 		const QString& name = comboBox->currentText();
 		Column* yColumn = columnFromName(name);
-
-		XYCurve* curve = new XYCurve(name);
-		curve->setXColumn(xColumn);
-		curve->setYColumn(yColumn);
 
 		CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 		plot->initDefault(CartesianPlot::FourAxes);
@@ -361,13 +363,103 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 			}
 		}
 
-		plot->addChild(curve);
+		addCurve(name, xColumn, yColumn, plot);
 		worksheet->addChild(plot);
 		plot->scaleAuto();
 	}
 
 	worksheet->setSuppressLayoutUpdate(false);
 	worksheet->updateLayout();
+}
+/*!
+ * helper function that does the actual creation of the curve and adding it as child to the \c plot.
+ */
+void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) const {
+	if (!m_analysisMode) {
+		XYCurve* curve = new XYCurve(name);
+		curve->setXColumn(xColumn);
+		curve->setYColumn(yColumn);
+		plot->addChild(curve);
+	} else {
+		bool createDataCurve = true;
+		if (createDataCurve) {
+			XYCurve* curve = new XYCurve(name);
+			curve->setXColumn(xColumn);
+			curve->setYColumn(yColumn);
+			plot->addChild(curve);
+		}
+
+		//TODO: introduce a base class for all analysis curves and refactor this part
+		switch (m_analysisAction) {
+			case DataReduction: {
+				XYDataReductionCurve* analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+			case Differentiation: {
+				XYDifferentiationCurve* analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+			case Integration: {
+				XYIntegrationCurve* analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+			case Interpolation: {
+				XYInterpolationCurve* analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+			case Smoothing: {
+				XYSmoothCurve* analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+			case FitLinear:
+			case FitPower:
+			case FitExp1:
+			case FitExp2:
+			case FitInvExp:
+			case FitGauss:
+			case FitCauchyLorentz:
+			case FitTan:
+			case FitTanh:
+			case FitErrFunc:
+			case FitCustom: {
+				XYFitCurve* analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				//TODO: initFitModel();
+				plot->addChild(analysisCurve);
+				analysisCurve->recalculate();
+				break;
+			}
+			case FourierFilter: {
+				XYFourierFilterCurve* analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
+				analysisCurve->setXDataColumn(xColumn);
+				analysisCurve->setYDataColumn(yColumn);
+				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
+				break;
+			}
+		}
+	}
 }
 
 //################################################################
