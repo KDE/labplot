@@ -417,8 +417,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					}
 					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 					curve->suppressRetransform(false);
-					if (!preview)
-						curve->retransform();
 				}
 
 				//Axes
@@ -438,20 +436,18 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 				}
 			}
-
-
-
 		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
+	if (!preview) {
+		for (auto* plot : children<AbstractPlot>(AbstractAspect::Recursive))
+			plot->retransform();
+	}
+
 	d->loading = false;
 	emit loaded();
-// 			for (auto* plot : children<CartesianPlot>(AbstractAspect::Recursive)) {
-// 				qDebug()<<"retransforming " << plot->name();
-// 				plot->retransform();
-// 			}
 	return !reader->hasError();
 }
 

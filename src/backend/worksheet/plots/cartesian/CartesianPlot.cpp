@@ -450,8 +450,6 @@ void CartesianPlot::initActions() {
 	fitAction->setData(PlotDataDialog::FitCustom);
 	addFitAction.append(fitAction);
 
-
-
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
 
 	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
@@ -2055,8 +2053,10 @@ void CartesianPlotPrivate::retransformScales() {
 // 			}
 		}
 	}
-	// call retransform() on the parent to trigger the update of all axes and curves
-	q->retransform();
+	// call retransform() on the parent to trigger the update of all axes and curvesю
+	//no need to do this on load since all plots are retransformed again after the project is loaded.
+	if (!q->isLoading())
+		q->retransform();
 }
 
 void CartesianPlotPrivate::rangeChanged() {
@@ -2756,7 +2756,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
-	d->retransform();//TODO: This is expensive. why do we need this on load?
+	d->retransform();
+
 	if (m_title) {
 		m_title->setHidden(true);
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
