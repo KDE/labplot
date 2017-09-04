@@ -53,6 +53,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 
@@ -405,17 +406,51 @@ void CartesianPlot::initActions() {
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
 
-	addFitAction.append(new QAction(i18n("Linear"), this));
-	addFitAction.append(new QAction(i18n("Power"), this));
-	addFitAction.append(new QAction(i18n("Exponential (degree 1)"), this));
-	addFitAction.append(new QAction(i18n("Exponential (degree 2)"), this));
-	addFitAction.append(new QAction(i18n("Inverse exponential"), this));
-	addFitAction.append(new QAction(i18n("Gauss"), this));
-	addFitAction.append(new QAction(i18n("Cauchy-Lorentz"), this));
-	addFitAction.append(new QAction(i18n("Arc Tangent"), this));
-	addFitAction.append(new QAction(i18n("Hyperbolic tangent"), this));
-	addFitAction.append(new QAction(i18n("Error function"), this));
-	addFitAction.append(new QAction(i18n("Custom"), this));
+	QAction* fitAction = new QAction(i18n("Linear"), this);
+	fitAction->setData(PlotDataDialog::FitLinear);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Power"), this);
+	fitAction->setData(PlotDataDialog::FitPower);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
+	fitAction->setData(PlotDataDialog::FitExp1);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
+	fitAction->setData(PlotDataDialog::FitExp2);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Inverse exponential"), this);
+	fitAction->setData(PlotDataDialog::FitInvExp);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Gauss"), this);
+	fitAction->setData(PlotDataDialog::FitGauss);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
+	fitAction->setData(PlotDataDialog::FitCauchyLorentz);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Arc Tangent"), this);
+	fitAction->setData(PlotDataDialog::FitTan);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Hyperbolic tangent"), this);
+	fitAction->setData(PlotDataDialog::FitTanh);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Error function"), this);
+	fitAction->setData(PlotDataDialog::FitErrFunc);
+	addFitAction.append(fitAction);
+
+	fitAction = new QAction(i18n("Custom"), this);
+	fitAction->setData(PlotDataDialog::FitCustom);
+	addFitAction.append(fitAction);
+
+
 
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
 
@@ -1057,7 +1092,8 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 		//set the fit model category and type
 		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
-		curve->initFitData(action, addFitAction);
+		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
+		curve->initFitData(type);
 
 		this->addChild(curve);
 		curve->recalculate();

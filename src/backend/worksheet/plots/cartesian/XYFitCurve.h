@@ -31,6 +31,8 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
+
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
 }
@@ -104,7 +106,7 @@ public:
 	virtual ~XYFitCurve();
 
 	void recalculate();
-	void initFitData(const QAction*, QVector<QAction*>);	// init fit data for selected action from available list of actions
+	void initFitData(PlotDataDialog::AnalysisAction);
 	virtual QIcon icon() const override;
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;

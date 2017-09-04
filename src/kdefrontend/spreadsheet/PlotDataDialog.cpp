@@ -276,8 +276,8 @@ void PlotDataDialog::plot() {
 				}
 			}
 
-			addCurvesToPlot(plot);
 			worksheet->addChild(plot);
+			addCurvesToPlot(plot);
 		} else {
 			//one plot per curve
 			addCurvesToPlots(worksheet);
@@ -288,6 +288,7 @@ void PlotDataDialog::plot() {
 		Project* project = m_spreadsheet->project();
 		project->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
+		project->addChild(worksheet);
 
 		if (ui.rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
@@ -310,7 +311,6 @@ void PlotDataDialog::plot() {
 			addCurvesToPlots(worksheet);
 		}
 
-		project->addChild(worksheet);
 		project->endMacro();
 	}
 	RESET_CURSOR;
@@ -363,8 +363,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 			}
 		}
 
-		addCurve(name, xColumn, yColumn, plot);
 		worksheet->addChild(plot);
+		addCurve(name, xColumn, yColumn, plot);
 		plot->scaleAuto();
 	}
 
@@ -445,7 +445,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 				XYFitCurve* analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
 				analysisCurve->setXDataColumn(xColumn);
 				analysisCurve->setYDataColumn(yColumn);
-				//TODO: initFitModel();
+				analysisCurve->initFitData(m_analysisAction);
 				plot->addChild(analysisCurve);
 				analysisCurve->recalculate();
 				break;
@@ -454,8 +454,8 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 				XYFourierFilterCurve* analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 				analysisCurve->setXDataColumn(xColumn);
 				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
 				plot->addChild(analysisCurve);
+				analysisCurve->recalculate();
 				break;
 			}
 		}
