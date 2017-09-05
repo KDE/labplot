@@ -886,7 +886,7 @@ void HistogramPrivate::updateFilling() {
 		return;
 	}
 
-	QList<QLineF> fillLines;
+	QVector<QLineF> fillLines;
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 

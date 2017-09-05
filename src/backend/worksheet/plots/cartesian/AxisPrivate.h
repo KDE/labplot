@@ -73,7 +73,7 @@ public:
 	qreal zeroOffset;
 
 	//line
-	QList<QLineF> lines;
+	QVector<QLineF> lines;
 	QPen linePen;
 	qreal lineOpacity;
 	Axis::ArrowType arrowType;
@@ -151,11 +151,11 @@ private:
 	QRectF boundingRectangle;
 	QPainterPath axisShape;
 
-	QList<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
-	QList<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
-	QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
-	QList<float> tickLabelValues; //!< major tick labels values
-	QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
+	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
+	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
+	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+	QVector<float> tickLabelValues; //!< major tick labels values
+	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 	CartesianPlot* m_plot;
 	const CartesianCoordinateSystem* m_cSystem;

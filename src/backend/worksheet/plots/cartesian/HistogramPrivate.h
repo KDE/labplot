@@ -4,7 +4,7 @@
     Description          : Private members of Histogram
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-    
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -81,7 +81,7 @@ class HistogramPrivate : public QGraphicsItem {
 
 		void recalculate();
 		Histogram::HistogramData histogramData;
-		
+
 		//line
 		bool lineSkipGaps;
 		int lineInterpolationPointsCount;
@@ -118,15 +118,15 @@ class HistogramPrivate : public QGraphicsItem {
 		QPainterPath valuesPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
-		QList<QLineF> lines;
-		QList<QPointF> symbolPointsLogical;	//points in logical coordinates
-		QList<QPointF> symbolPointsScene;	//points in scene coordinates
+		QVector<QLineF> lines;
+		QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
+		QVector<QPointF> symbolPointsScene;	//points in scene coordinates
 		std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
-		QList<QPointF> valuesPoints;
+		QVector<QPointF> valuesPoints;
 		std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
 											       //false otherwise (don't connect because of a gap (NAN) in-between)
-		QList<QString> valuesStrings;
-		QList<QPolygonF> fillPolygons;
+		QVector<QString> valuesStrings;
+		QVector<QPolygonF> fillPolygons;
 
 		//cached values of minimum and maximum for all visible curves
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;

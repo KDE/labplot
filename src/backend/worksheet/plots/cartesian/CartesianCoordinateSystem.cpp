@@ -147,8 +147,8 @@ public:
 
 	CartesianCoordinateSystem* const q;
 	CartesianPlot* plot;
-	QList<CartesianScale*> xScales;
-	QList<CartesianScale*> yScales;
+	QVector<CartesianScale*> xScales;
+	QVector<CartesianScale*> yScales;
 };
 
 /**
@@ -212,9 +212,9 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 //##############################################################################
 //######################### logical to scene mappers ###########################
 //##############################################################################
-QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
+QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, const MappingFlags &flags) const {
 	const QRectF pageRect = d->plot->plotRect();
-	QList<QPointF> result;
+	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	foreach (const CartesianScale* xScale, d->xScales) {
@@ -256,12 +256,12 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 	\param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
 	\param flags
  */
-void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints,
-												  QList<QPointF>& scenePoints,
+void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
+												  QVector<QPointF>& scenePoints,
 												  std::vector<bool>& visiblePoints,
 												  const MappingFlags& flags) const{
 	const QRectF pageRect = d->plot->plotRect();
-	QList<QPointF> result;
+	QVector<QPointF> result;
 	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	foreach (const CartesianScale* xScale, d->xScales) {
@@ -299,7 +299,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 
 QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint, const MappingFlags& flags) const{
 	const QRectF pageRect = d->plot->plotRect();
-	QList<QPointF> result;
+	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	double x = logicalPoint.x();
@@ -332,9 +332,9 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	return QPointF();
 }
 
-QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
+QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, const MappingFlags &flags) const{
 	QRectF pageRect = d->plot->plotRect();
-	QList<QLineF> result;
+	QVector<QLineF> result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
 
 	double xGapBefore = NAN;
@@ -342,7 +342,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 	double yGapBefore = NAN;
 	double yGapAfter = NAN;
 
- 	QListIterator<CartesianScale *> xIterator(d->xScales);
+ 	QVectorIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
 		const CartesianScale* xScale = xIterator.next();
 		if (!xScale) continue;
@@ -367,7 +367,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 		} else
 			xGapAfter = NAN;
 
-		QListIterator<CartesianScale*> yIterator(d->yScales);
+		QVectorIterator<CartesianScale*> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
 			const CartesianScale* yScale = yIterator.next();
 			if (!yScale) continue;
@@ -489,9 +489,9 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 //##############################################################################
 //######################### scene to logical mappers ###########################
 //##############################################################################
-QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
+QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF> &points, const MappingFlags &flags) const{
 	QRectF pageRect = d->plot->plotRect();
-	QList<QPointF> result;
+	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	foreach(const QPointF& point, points) {
@@ -603,7 +603,7 @@ int CartesianCoordinateSystem::yDirection() const{
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setXScales(const QList<CartesianScale *> &scales) {
+bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale *> &scales) {
 	while (!d->xScales.isEmpty())
 		delete d->xScales.takeFirst();
 
@@ -611,11 +611,11 @@ bool CartesianCoordinateSystem::setXScales(const QList<CartesianScale *> &scales
 	return true; // TODO: check scales validity
 }
 
-QList<CartesianScale*> CartesianCoordinateSystem::xScales() const {
+QVector<CartesianScale*> CartesianCoordinateSystem::xScales() const {
 	return d->xScales; // TODO: should rather return a copy of the scales here
 }
 
-bool CartesianCoordinateSystem::setYScales(const QList<CartesianScale*> &scales) {
+bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*> &scales) {
 	while (!d->yScales.isEmpty())
 		delete d->yScales.takeFirst();
 
@@ -623,7 +623,7 @@ bool CartesianCoordinateSystem::setYScales(const QList<CartesianScale*> &scales)
 	return true; // TODO: check scales validity
 }
 
-QList<CartesianScale*> CartesianCoordinateSystem::yScales() const {
+QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 

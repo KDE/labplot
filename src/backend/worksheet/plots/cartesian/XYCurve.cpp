@@ -1212,7 +1212,7 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	QList<QLineF> lines;
+	QVector<QLineF> lines;
 	float xMin = 0;
 	float yMin = 0;
 
@@ -1444,7 +1444,7 @@ void XYCurvePrivate::updateFilling() {
 		return;
 	}
 
-	QList<QLineF> fillLines;
+	QVector<QLineF> fillLines;
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
@@ -1676,7 +1676,7 @@ void XYCurvePrivate::updateErrorBars() {
 		return;
 	}
 
-	QList<QLineF> lines;
+	QVector<QLineF> lines;
 	float errorPlus, errorMinus;
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();

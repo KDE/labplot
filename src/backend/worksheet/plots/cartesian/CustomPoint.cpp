@@ -243,7 +243,7 @@ void CustomPointPrivate::retransform() {
 
 	//calculate the point in the scene coordinates
 	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QList<QPointF> list, listScene;
+	QVector<QPointF> list, listScene;
 	list<<position;
 	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
 	if (!listScene.isEmpty()) {

@@ -1862,7 +1862,7 @@ void CartesianPlotPrivate::retransformScales() {
 	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
-	QList<CartesianScale*> scales;
+	QVector<CartesianScale*> scales;
 
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect = mapRectFromScene(rect);
