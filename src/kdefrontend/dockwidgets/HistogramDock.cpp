@@ -490,55 +490,54 @@ void HistogramDock::curveValuesColorChanged(QColor color) {
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
-void HistogramDock::valuesTypeChanged(int index){
-  Histogram::ValuesType valuesType = Histogram::ValuesType(index);
+void HistogramDock::valuesTypeChanged(int index) {
+	Histogram::ValuesType valuesType = Histogram::ValuesType(index);
 
-  if (valuesType==Histogram::NoValues){
-	//no values are to paint -> deactivate all the pertinent widgets
-	ui.cbValuesPosition->setEnabled(false);
-	ui.lValuesColumn->hide();
-	cbValuesColumn->hide();
-	ui.sbValuesDistance->setEnabled(false);
-	ui.sbValuesRotation->setEnabled(false);
-	ui.sbValuesOpacity->setEnabled(false);
-	ui.cbValuesFormat->setEnabled(false);
-	ui.cbValuesFormat->setEnabled(false);
-	ui.sbValuesPrecision->setEnabled(false);
-	ui.leValuesPrefix->setEnabled(false);
-	ui.leValuesSuffix->setEnabled(false);
-	ui.kfrValuesFont->setEnabled(false);
-	ui.kcbValuesColor->setEnabled(false);
-  }else{
-	ui.cbValuesPosition->setEnabled(true);
-	ui.sbValuesDistance->setEnabled(true);
-	ui.sbValuesRotation->setEnabled(true);
-	ui.sbValuesOpacity->setEnabled(true);
-	ui.cbValuesFormat->setEnabled(true);
-	ui.sbValuesPrecision->setEnabled(true);
-	ui.leValuesPrefix->setEnabled(true);
-	ui.leValuesSuffix->setEnabled(true);
-	ui.kfrValuesFont->setEnabled(true);
-	ui.kcbValuesColor->setEnabled(true);
+	if (valuesType == Histogram::NoValues){
+		//no values are to paint -> deactivate all the pertinent widgets
+		ui.cbValuesPosition->setEnabled(false);
+		ui.lValuesColumn->hide();
+		cbValuesColumn->hide();
+		ui.sbValuesDistance->setEnabled(false);
+		ui.sbValuesRotation->setEnabled(false);
+		ui.sbValuesOpacity->setEnabled(false);
+		ui.cbValuesFormat->setEnabled(false);
+		ui.cbValuesFormat->setEnabled(false);
+		ui.sbValuesPrecision->setEnabled(false);
+		ui.leValuesPrefix->setEnabled(false);
+		ui.leValuesSuffix->setEnabled(false);
+		ui.kfrValuesFont->setEnabled(false);
+		ui.kcbValuesColor->setEnabled(false);
+	} else {
+		ui.cbValuesPosition->setEnabled(true);
+		ui.sbValuesDistance->setEnabled(true);
+		ui.sbValuesRotation->setEnabled(true);
+		ui.sbValuesOpacity->setEnabled(true);
+		ui.cbValuesFormat->setEnabled(true);
+		ui.sbValuesPrecision->setEnabled(true);
+		ui.leValuesPrefix->setEnabled(true);
+		ui.leValuesSuffix->setEnabled(true);
+		ui.kfrValuesFont->setEnabled(true);
+		ui.kcbValuesColor->setEnabled(true);
 
-	const Column* column;
-	if (valuesType==Histogram::ValuesCustomColumn){
-	  ui.lValuesColumn->show();
-	  cbValuesColumn->show();
+		const Column* column;
+		if (valuesType == Histogram::ValuesCustomColumn) {
+			ui.lValuesColumn->show();
+			cbValuesColumn->show();
 
-	  column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
-	}else{
-	  ui.lValuesColumn->hide();
-	  cbValuesColumn->hide();
-		column = static_cast<const Column*>(m_curve->xColumn());
-		qDebug() <<"column va;" ;
+			column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+		} else {
+			ui.lValuesColumn->hide();
+			cbValuesColumn->hide();
+			column = static_cast<const Column*>(m_curve->xColumn());
+			qDebug() <<"column va;" ;
 
+		}
+		this->showValuesColumnFormat(column);
 	}
-	this->showValuesColumnFormat(column);
-  }
 
-
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	for (auto* curve: m_curvesList)
 		curve->setValuesType(valuesType);
