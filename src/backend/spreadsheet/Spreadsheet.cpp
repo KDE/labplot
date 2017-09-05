@@ -835,6 +835,16 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		this->child<Column>(columnOffset+n)->setColumnMode(columnMode[n]);
+
+		//in the most cases the first imported column is meant to be used as x-data.
+		//Other columns provide mostly y-data or errors.
+		//TODO: this has to be configurable for the user in the import widget,
+		//it should be possible to specify x-error plot designation, etc.
+		if (n == 0)
+			this->child<Column>(columnOffset)->setPlotDesignation(AbstractColumn::X);
+		else
+			this->child<Column>(columnOffset)->setPlotDesignation(AbstractColumn::Y);
+
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>*>(this->child<Column>(columnOffset+n)->data());
@@ -869,6 +879,8 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
+
+
 
 	return columnOffset;
 }
