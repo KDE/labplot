@@ -1570,8 +1570,10 @@ void MainWin::dropEvent(QDropEvent* event) {
 	if (!m_project)
 		newProject();
 
-	QUrl url = event->mimeData()->urls().at(0);
-	importFileDialog(url.toLocalFile());
+	if (event->mimeData() && !event->mimeData()->urls().isEmpty()) {
+		QUrl url = event->mimeData()->urls().at(0);
+		importFileDialog(url.toLocalFile());
+	}
 }
 
 void MainWin::handleSettingsChanges() {
