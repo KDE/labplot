@@ -360,7 +360,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			else
 				return 1;
 		}
-
 	} while (firstLine.startsWith(commentCharacter));
 
 	DEBUG(" device position after first line and comments = " << device.pos());
@@ -439,15 +438,19 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			else
 				return 1;
 		}
-		if (line.startsWith(commentCharacter))	// ignore commented lines
+		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
 			i--;
 	}
 
 	// parse first data line to determine data type for each column
 	if (device.isSequential())
 		firstLine = firstLineOriginal;
-	else
-		firstLine = device.readLine();
+	else {
+		do {	// skip comment lines in data lines
+			firstLine = device.readLine();
+		} while (firstLine.startsWith(commentCharacter));
+	}
+
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
 	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
