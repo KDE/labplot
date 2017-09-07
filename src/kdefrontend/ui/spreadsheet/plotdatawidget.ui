@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>807</width>
-    <height>499</height>
+    <height>710</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="gbData">
      <property name="title">
       <string>Data</string>
@@ -77,7 +77,7 @@
            <x>0</x>
            <y>0</y>
            <width>779</width>
-           <height>80</height>
+           <height>112</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -133,7 +133,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QGroupBox" name="gbCurvePlacement">
      <property name="title">
       <string>Curve Placement</string>
@@ -159,12 +159,22 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QGroupBox" name="gbPlotPlacement">
      <property name="title">
       <string>Add curves to</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="rbPlotPlacement1">
+        <property name="text">
+         <string>e&amp;xisting plot</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement2">
         <property name="text">
@@ -179,10 +189,26 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement1">
+      <item row="3" column="0">
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>38</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="chkCreateDataCurve">
         <property name="text">
-         <string>e&amp;xisting plot</string>
+         <string>Create curve for original data</string>
         </property>
         <property name="checked">
          <bool>true</bool>

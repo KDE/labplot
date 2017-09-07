@@ -111,6 +111,9 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
+	//hide the check box for creation of original data, only shown if analysis curves are to be created
+	ui.chkCreateDataCurve->setVisible(false);
+
 	//SIGNALs/SLOTs
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(plot()));
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -168,6 +171,7 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
+	ui.chkCreateDataCurve->setVisible(true);
 }
 
 void PlotDataDialog::processColumns() {
@@ -381,7 +385,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		curve->setYColumn(yColumn);
 		plot->addChild(curve);
 	} else {
-		bool createDataCurve = true;
+		bool createDataCurve = ui.chkCreateDataCurve->isChecked();
 		if (createDataCurve) {
 			XYCurve* curve = new XYCurve(name);
 			curve->setXColumn(xColumn);
