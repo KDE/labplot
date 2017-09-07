@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectTreeModel.h"
 
@@ -244,6 +245,11 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 		if (index.column() == 0 || index.column() == 3)
 			result |= Qt::ItemIsEditable;
 	}
+
+	//allow to drag and drop columns for the faster creation of curves in the plots.
+	//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
+	if (dynamic_cast<const AbstractColumn*>(aspect))
+		result = result |Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
 	return result;
 }

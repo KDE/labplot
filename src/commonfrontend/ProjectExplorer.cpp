@@ -95,6 +95,9 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	m_treeView->setUniformRowHeights(true);
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
+	m_treeView->setDragEnabled(true);
+	m_treeView->setAcceptDrops(false);
+	m_treeView->setDropIndicatorShown(false);
 
 	layout->addWidget(m_treeView);
 
