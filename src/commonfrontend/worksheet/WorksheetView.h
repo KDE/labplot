@@ -77,18 +77,18 @@ private:
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
 	void drawBackgroundItems(QPainter*, const QRectF&);
-	bool isPlotAtPos(const QPointF&) const;
+	bool isPlotAtPos(const QPoint&) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
 	//events
-	void resizeEvent(QResizeEvent*);
-	void contextMenuEvent(QContextMenuEvent*);
-	void wheelEvent(QWheelEvent*);
-	void mousePressEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
-	void keyPressEvent(QKeyEvent*);
+	virtual void resizeEvent(QResizeEvent*) override;
+	virtual void contextMenuEvent(QContextMenuEvent*) override;
+	virtual void wheelEvent(QWheelEvent*) override;
+	virtual void mousePressEvent(QMouseEvent*) override;
+	virtual void mouseReleaseEvent(QMouseEvent*) override;
+	virtual void mouseMoveEvent(QMouseEvent*) override;
+	virtual void keyPressEvent(QKeyEvent*) override;
 	virtual void dragEnterEvent(QDragEnterEvent*) override;
 	virtual void dragMoveEvent(QDragMoveEvent*) override;
 	virtual void dropEvent(QDropEvent*) override;
