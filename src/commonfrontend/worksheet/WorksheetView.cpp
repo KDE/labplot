@@ -116,7 +116,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 
 	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
 	viewport()->setAttribute( Qt::WA_NoSystemBackground );
-// 	setAcceptDrops( true );
+	setAcceptDrops(true);
 	setCacheMode(QGraphicsView::CacheBackground);
 
 	m_gridSettings.style = WorksheetView::NoGrid;
@@ -813,6 +813,15 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
+bool WorksheetView::isPlotAtPos(const QPointF& pos) {
+	QGraphicsItem* item = itemAt(pos);
+	if (item) {
+		plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+		if (!plot && item->parentItem())
+			plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+	}
+}
+
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
@@ -894,16 +903,8 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::SelectionMode ) {
 		//check whether there is a cartesian plot under the cursor
-		bool plot = false;
-		QGraphicsItem* item = itemAt(event->pos());
-		if (item) {
-			plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
-			if (!plot && item->parentItem())
-				plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
-		}
-
-		//set the cursor appearance according to the current mouse mode for the cartesian plots
-		if (plot) {
+		//and set the cursor appearance according to the current mouse mode for the cartesian plots
+		if ( isPlotAtPos(event->pos()) ) {
 			if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode)
 				setCursor(Qt::CrossCursor);
 			else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode)
@@ -974,6 +975,26 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 		//propagate the event to the scene and graphics items
 		QGraphicsView::contextMenuEvent(e);
 	}
+}
+
+void WorksheetView::keyPressEvent(QKeyEvent* event) {
+	if (event->matches(QKeySequence::Copy))
+		//add here copying of objects
+		exportToClipboard();
+}
+
+void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
+	event->setAccepted(true);
+}
+
+void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
+	// only accept drop events if we have a plot under the cursor where we can drop columns onto
+	bool plot = isPlotAtPos(event->pos());
+	event->setAccepted(plot);
+}
+
+void WorksheetView::dropEvent(QDropEvent* event) {
+
 }
 
 //##############################################################################
@@ -1769,8 +1790,3 @@ void WorksheetView::presenterMode() {
 	presenterWidget->showFullScreen();
 }
 
-void WorksheetView::keyPressEvent(QKeyEvent *event) {
-	if (event->matches(QKeySequence::Copy))
-		//add here copying of objects
-		exportToClipboard();
-}

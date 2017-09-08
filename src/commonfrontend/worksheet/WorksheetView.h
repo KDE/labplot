@@ -66,6 +66,7 @@ public:
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
+
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
@@ -76,6 +77,7 @@ private:
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
 	void drawBackgroundItems(QPainter*, const QRectF&);
+	bool isPlotAtPos(const QPointF&) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
@@ -87,6 +89,9 @@ private:
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
 	void keyPressEvent(QKeyEvent*);
+	virtual void dragEnterEvent(QDragEnterEvent*) override;
+	virtual void dragMoveEvent(QDragMoveEvent*) override;
+	virtual void dropEvent(QDropEvent*) override;
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;
