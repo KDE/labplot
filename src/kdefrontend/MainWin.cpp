@@ -1572,8 +1572,19 @@ void MainWin::dropEvent(QDropEvent* event) {
 
 	if (event->mimeData() && !event->mimeData()->urls().isEmpty()) {
 		QUrl url = event->mimeData()->urls().at(0);
-		importFileDialog(url.toLocalFile());
-	}
+		const QString& f = url.toLocalFile();
+
+		//TODO: add later the handling of Origin files here
+		if ( f.endsWith(QLatin1String(".lml")) ||  f.endsWith(QLatin1String(".lml.gz")) || f.endsWith(QLatin1String(".lml.bz2"))
+			|| f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
+			|| f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
+			openProject(f);
+		else
+			importFileDialog(f);
+
+		event->accept();
+	} else
+		event->ignore();
 }
 
 void MainWin::handleSettingsChanges() {

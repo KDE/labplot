@@ -31,6 +31,7 @@ New features:
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project
 	* Calculation of fit results corrected
+	* When a LabPlot project is being droped in the main window, load the project directly instead of showing the import file dialog
 
 -----2.4-----
 New features:
