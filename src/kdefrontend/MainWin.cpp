@@ -869,19 +869,21 @@ bool MainWin::newProject() {
 
 void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	QString dir = conf.readEntry("LastOpenDir", "");
-	QString path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
+	const QString& dir = conf.readEntry("LastOpenDir", "");
+	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
 	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
-	if (!path.isEmpty()) {
-		this->openProject(path);
+	if (path.isEmpty())// "Cancel" was clicked
+		return;
 
-		int pos = path.lastIndexOf(QDir::separator());
-		if (pos != -1) {
-			QString newDir = path.left(pos);
-			if (newDir != dir)
-				conf.writeEntry("LastOpenDir", newDir);
-		}
+	this->openProject(path);
+
+	//save new "last open directory"
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		const QString& newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastOpenDir", newDir);
 	}
 }
 
@@ -971,17 +973,25 @@ bool MainWin::saveProject() {
 
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	QString dir = conf.readEntry("LastOpenDir", "");
-	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
+	const QString& dir = conf.readEntry("LastOpenDir", "");
+	QString path  = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
 	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
-	if (fileName.isEmpty())// "Cancel" was clicked
+	if (path.isEmpty())// "Cancel" was clicked
 		return false;
 
-	if (fileName.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
-		fileName.append(QLatin1String(".lml"));
+	if (path.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
+		path.append(QLatin1String(".lml"));
 
-	return save(fileName);
+	//save new "last open directory"
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		const QString& newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastOpenDir", newDir);
+	}
+
+	return save(path);
 }
 
 /*!
