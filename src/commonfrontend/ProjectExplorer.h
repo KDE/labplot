@@ -34,6 +34,8 @@ class AbstractAspect;
 class AspectTreeModel;
 class Project;
 class XmlStreamReader;
+
+class QDrag;
 class QFrame;
 class QLabel;
 class QLineEdit;
@@ -46,71 +48,73 @@ class QItemSelection;
 class QMenu;
 
 class ProjectExplorer : public QWidget {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit ProjectExplorer(QWidget* parent = 0);
+public:
+	explicit ProjectExplorer(QWidget* parent = 0);
 
-		void setCurrentAspect(const AbstractAspect*);
-		void setModel(AspectTreeModel*);
-		void setProject(Project*);
-		QModelIndex currentIndex() const;
+	void setCurrentAspect(const AbstractAspect*);
+	void setModel(AspectTreeModel*);
+	void setProject(Project*);
+	QModelIndex currentIndex() const;
 
-	private:
-		void createActions();
-	  	void contextMenuEvent(QContextMenuEvent*);
-		bool eventFilter(QObject*, QEvent*);
-		void collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded);
-		bool filter(const QModelIndex&, const QString&);
-		int m_columnToHide;
-		QTreeView* m_treeView;
-		Project* m_project;
+private:
+	void createActions();
+	void contextMenuEvent(QContextMenuEvent*);
+	bool eventFilter(QObject*, QEvent*);
+	void collapseParents(const QModelIndex&, const QList<QModelIndex>& expanded);
+	bool filter(const QModelIndex&, const QString&);
+	int m_columnToHide;
+	QTreeView* m_treeView;
+	Project* m_project;
+	QPoint m_dragStartPos;
+	bool m_dragStarted;
+	QDrag* m_drag;
 
-		QAction* caseSensitiveAction;
-		QAction* matchCompleteWordAction;
-		QAction* expandTreeAction;
-		QAction* expandSelectedTreeAction;
-		QAction* collapseTreeAction;
-		QAction* collapseSelectedTreeAction;
-		QAction* deleteSelectedTreeAction;
-		QAction* toggleFilterAction;
-		QAction* showAllColumnsAction;
-		QList<QAction*> list_showColumnActions;
-		QSignalMapper* showColumnsSignalMapper;
+	QAction* caseSensitiveAction;
+	QAction* matchCompleteWordAction;
+	QAction* expandTreeAction;
+	QAction* expandSelectedTreeAction;
+	QAction* collapseTreeAction;
+	QAction* collapseSelectedTreeAction;
+	QAction* deleteSelectedTreeAction;
+	QAction* toggleFilterAction;
+	QAction* showAllColumnsAction;
+	QList<QAction*> list_showColumnActions;
+	QSignalMapper* showColumnsSignalMapper;
 
-		QFrame* frameFilter;
-		QLabel* lFilter;
-		QLineEdit* leFilter;
-		QPushButton* bClearFilter;
-		QPushButton* bFilterOptions;
+	QFrame* m_frameFilter;
+	QLineEdit* m_leFilter;
+	QPushButton* bClearFilter;
+	QPushButton* bFilterOptions;
 
-	private slots:
-		void aspectAdded(const AbstractAspect*);
-		void toggleColumn(int);
-		void showAllColumns();
-		void filterTextChanged(const QString&);
-		void toggleFilterCaseSensitivity();
-		void toggleFilterMatchCompleteWord();
-		void toggleFilterWidgets();
-		void toggleFilterOptionsMenu(bool);
-		void resizeHeader();
-		void expandSelected();
-		void collapseSelected();
-		void deleteSelected();
+private slots:
+	void aspectAdded(const AbstractAspect*);
+	void toggleColumn(int);
+	void showAllColumns();
+	void filterTextChanged(const QString&);
+	void toggleFilterCaseSensitivity();
+	void toggleFilterMatchCompleteWord();
+	void toggleFilterWidgets();
+	void toggleFilterOptionsMenu(bool);
+	void resizeHeader();
+	void expandSelected();
+	void collapseSelected();
+	void deleteSelected();
 
-		void navigateTo(const QString& path);
-		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
-		void selectIndex(const QModelIndex&);
-		void deselectIndex(const QModelIndex&);
-		void selectionChanged(const QItemSelection&, const QItemSelection&);
+	void navigateTo(const QString& path);
+	void currentChanged(const QModelIndex& current, const QModelIndex& previous);
+	void selectIndex(const QModelIndex&);
+	void deselectIndex(const QModelIndex&);
+	void selectionChanged(const QItemSelection&, const QItemSelection&);
 
-		void save(QXmlStreamWriter*) const;
-		bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const;
+	bool load(XmlStreamReader*);
 
-	signals:
-		void currentAspectChanged(AbstractAspect*);
-		void selectedAspectsChanged(QList<AbstractAspect*>&);
-		void hiddenAspectSelected(const AbstractAspect*);
+signals:
+	void currentAspectChanged(AbstractAspect*);
+	void selectedAspectsChanged(QList<AbstractAspect*>&);
+	void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif // ifndef PROJECT_EXPLORER_H
