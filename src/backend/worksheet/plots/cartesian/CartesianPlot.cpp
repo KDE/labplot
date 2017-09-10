@@ -940,14 +940,12 @@ void CartesianPlot::addVerticalAxis() {
 XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
 	addChild(curve);
-	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	addChild(curve);
-	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
@@ -985,7 +983,6 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1007,7 +1004,6 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1029,7 +1025,6 @@ XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1051,7 +1046,6 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1073,7 +1067,6 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1101,7 +1094,6 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1121,7 +1113,6 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 		this->addChild(curve);
 	}
 
-	this->applyThemeOnNewCurve(curve);
 	endMacro();
 
 	return curve;
@@ -1130,7 +1121,6 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
-	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
@@ -2764,7 +2754,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	//if a theme was used, assign the value to the private member at the very end of load()
-	//so we don't try to load the theme in applyThemeOnNewCurve() when adding curves on project load and calculate the palette
+	//so we don't try to load the theme in when adding children on project load and calculate the palette
 	if (!tmpTheme.isEmpty()) {
 		KConfig config( ThemeHandler::themeFilePath(tmpTheme), KConfig::SimpleConfig );
 		//TODO: check whether the theme config really exists
@@ -2858,12 +2848,4 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 
 const QList<QColor>& CartesianPlot::themeColorPalette() const {
 	return m_themeColorPalette;
-}
-
-void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
-	Q_D(const CartesianPlot);
-	if (!d->theme.isEmpty()) {
-		KConfig config( ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig );
-		curve->loadThemeConfig(config);
-	}
 }

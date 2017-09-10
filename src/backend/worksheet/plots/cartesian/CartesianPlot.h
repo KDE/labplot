@@ -133,7 +133,6 @@ private:
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);
-	void applyThemeOnNewCurve(XYCurve* curve);
 	const XYCurve* currentCurve() const;
 
 	CartesianPlotLegend* m_legend;
