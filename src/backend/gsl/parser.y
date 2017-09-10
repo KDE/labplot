@@ -32,6 +32,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
+#ifdef __FREEBSD__
+#include <xlocale.h>
+#endif
 #include "parser.h"
 #include "constants.h"
 #include "functions.h"
