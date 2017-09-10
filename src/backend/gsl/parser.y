@@ -32,7 +32,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
-#ifdef __FREEBSD__
+#ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
 #include "parser.h"

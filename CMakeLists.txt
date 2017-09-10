@@ -251,6 +251,14 @@ ENDIF ()
 ENDIF ()
 
 #################################################
+FIND_PATH (XLOCALE_INCLUDE_DIR xlocale.h
+	/usr/include/
+	/usr/local/include/
+)
+IF (XLOCALE_INCLUDE_DIR)
+	add_definitions (-DHAVE_XLOCALE)
+	include_directories (${XLOCALE_INCLUDE_DIR})
+ENDIF()
 
 IF (USE_LIBORIGIN)
 	add_subdirectory(liborigin)
