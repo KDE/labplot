@@ -28,18 +28,19 @@
  ***************************************************************************/
 
 #include "TemplateHandler.h"
+
+#include <QFileInfo>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
 #include <QSpacerItem>
 #include <QToolButton>
-#include <QLabel>
-#include <QFileInfo>
 #include <QWidgetAction>
 
+#include <KConfig>
 #include <KIconLoader>
 #include <KLocalizedString>
-#include <KLineEdit>
-#include <QMenu>
-#include <KConfig>
 
  /*!
   \class TemplateHandler
@@ -167,7 +168,7 @@ void TemplateHandler::saveMenu() {
 	QLabel* label = new QLabel(i18n("new:"), frame);
 	layout->addWidget(label);
 
-	KLineEdit* leFilename = new KLineEdit("", frame);
+	QLineEdit* leFilename = new QLineEdit("", frame);
 	layout->addWidget(leFilename);
 	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
 	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));

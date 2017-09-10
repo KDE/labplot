@@ -31,19 +31,19 @@
 #include "widgets/ThemesWidget.h"
 
 #include <QDir>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QLabel>
-#include <QMenu>
-#include <QFileInfo>
-#include <QWidgetAction>
 #include <QDirIterator>
+#include <QFileInfo>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
+#include <QPushButton>
+#include <QWidgetAction>
 
-#include <KGlobal>
-#include <KLocale>
-#include <KLineEdit>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
 
 #include <KMessageBox>
 // #include <KNS3/UploadDialog>
@@ -191,7 +191,7 @@ void ThemeHandler::saveMenu() {
 	QLabel* label = new QLabel(i18n("Enter name:"), frame);
 	layout->addWidget(label);
 
-	KLineEdit* leFilename = new KLineEdit("", frame);
+	QLineEdit* leFilename = new QLineEdit("", frame);
 	layout->addWidget(leFilename);
 	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
 	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
@@ -227,7 +227,7 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
 // 			i18n("Publish Theme"));
 // 	if (ret != KMessageBox::Yes)
 // 		return;
-// 
+//
 // 	// creating upload dialog
 // 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
 // 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
