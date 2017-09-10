@@ -338,7 +338,23 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_columnOffset(0) {
 }
 
-/*!
+QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
+	QString line;
+	do {	// skip comment lines in data lines
+		line = device.readLine();
+	} while (line.startsWith(commentCharacter));
+
+	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
+	if (simplifyWhitespacesEnabled)
+		line = line.simplified();
+	DEBUG("data line : \'" << line.toStdString() << '\'');
+	QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+	QDEBUG("data line, parsed: " << lineStringList);
+
+	return lineStringList;
+}
+
+		/*!
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
@@ -349,6 +365,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		return 1;
 	DEBUG("device is sequential = " << device.isSequential());
 
+/////////////////////////////////////////////////////////////////
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
@@ -363,7 +380,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	} while (firstLine.startsWith(commentCharacter));
 
 	DEBUG(" device position after first line and comments = " << device.pos());
-	QString firstLineOriginal = firstLine;
 	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
 	if (simplifyWhitespacesEnabled)
 		firstLine = firstLine.simplified();
@@ -424,8 +440,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
 	*/
 
-	// this also resets position to start of file
+	// ATTENTION: This resets the position to start of file
 	m_actualRows = AsciiFilter::lineNumber(device);
+/////////////////////////////////////////////////////////////////
 
 	// Find first data line (ignoring comment lines)
 	DEBUG("Skipping " << startRow - 1 << " lines");
@@ -443,35 +460,47 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	// parse first data line to determine data type for each column
-	if (device.isSequential())
-		firstLine = firstLineOriginal;
-	else {
-		do {	// skip comment lines in data lines
-			firstLine = device.readLine();
-		} while (firstLine.startsWith(commentCharacter));
-	}
+	if (!device.isSequential())
+		firstLineStringList = getLineString(device);
 
-	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
-	if (simplifyWhitespacesEnabled)
-		firstLine = firstLine.simplified();
-	DEBUG("first data line : \'" << firstLine.toStdString() << '\'');
-	firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
-	QDEBUG("first data line, parsed: " << firstLineStringList);
 	columnModes.resize(m_actualCols);
-
 	int col = 0;
 	if (createIndexEnabled) {
 		columnModes[0] = AbstractColumn::Integer;
 		col = 1;
 	}
 
-	//TODO: consider parsing more lines to better determine data types
-	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
+	for (const auto& valueString: firstLineStringList) { // parse columns available in first data line
 		if (col == m_actualCols)
 			break;
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
+	// parsing more lines to better determine data types
+	for (int i = 0; i < 3; i++) {	//TODO: parameter
+		firstLineStringList = getLineString(device);
+
+		if (createIndexEnabled)
+			col = 1;
+		else
+			col = 0;
+		for (const auto& valueString: firstLineStringList) {
+			if (col == m_actualCols)
+				break;
+			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+			if (mode != columnModes[col]) {
+				// TODO: how to handle differences?
+				if (mode == AbstractColumn::Numeric && columnModes[col] == AbstractColumn::Integer)
+					columnModes[col] = AbstractColumn::Numeric;
+			}
+			col++;
+		}
+	}
 	QDEBUG("column modes = " << columnModes);
+
+	// reset to start of file
+	if (!device.isSequential())
+		device.seek(0);
+/////////////////////////////////////////////////////////////////
 
 	int actualEndRow = endRow;
 	DEBUG("endRow = " << endRow);
@@ -481,9 +510,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (m_actualRows > actualEndRow)
 		m_actualRows = actualEndRow;
 
-	// reset to start of file
-	if (!device.isSequential())
-		device.seek(0);
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << startRow << ' ' << actualEndRow);

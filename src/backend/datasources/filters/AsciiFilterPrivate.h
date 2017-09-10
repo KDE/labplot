@@ -39,6 +39,7 @@ class AsciiFilterPrivate {
 public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
+	QStringList getLineString(QIODevice&);
 	int prepareDeviceToRead(QIODevice&);
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
