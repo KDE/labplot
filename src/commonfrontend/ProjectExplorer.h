@@ -35,7 +35,6 @@ class AspectTreeModel;
 class Project;
 class XmlStreamReader;
 
-class QDrag;
 class QFrame;
 class QLabel;
 class QLineEdit;
@@ -69,7 +68,6 @@ private:
 	Project* m_project;
 	QPoint m_dragStartPos;
 	bool m_dragStarted;
-	QDrag* m_drag;
 
 	QAction* caseSensitiveAction;
 	QAction* matchCompleteWordAction;

@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
@@ -825,6 +826,33 @@ bool WorksheetView::isPlotAtPos(const QPoint& pos) const {
 	return plot;
 }
 
+CartesianPlot* WorksheetView::plotAt(const QPoint& pos) const {
+	QGraphicsItem* item = itemAt(pos);
+	if (!item)
+		return nullptr;
+
+	QGraphicsItem* plotItem = nullptr;
+	if (item->data(0).toInt() == WorksheetElement::NameCartesianPlot)
+		plotItem = item;
+	else {
+		if (item->parentItem() && item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot)
+			plotItem = item->parentItem();
+	}
+
+	if (plotItem == nullptr)
+		return nullptr;
+
+	CartesianPlot* plot = nullptr;
+	for (auto* p : m_worksheet->children<CartesianPlot>()) {
+		if (p->graphicsItem() == plotItem) {
+			plot = p;
+			break;
+		}
+	}
+
+	return plot;
+}
+
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
@@ -997,7 +1025,63 @@ void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
+	const QMimeData* mimeData = event->mimeData();
+	if (!mimeData)
+		return;
 
+	//deserialize the mime data to the vector of aspect pointers
+	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+	QVector<quintptr> vec;
+	QDataStream stream(&data, QIODevice::ReadOnly);
+	stream >> vec;
+	QVector<AbstractColumn*> columns;
+	for (auto i : vec) {
+		AbstractAspect* aspect = (AbstractAspect*)i;
+		AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+		if (column)
+			columns << column;
+	}
+
+	//return if there are no columns being dropped.
+	//TODO: extend this later when we allow to drag&drop plots, etc.
+	if (columns.isEmpty())
+		return;
+
+	//determine the plot under the cursor
+	CartesianPlot* plot = plotAt(event->pos());
+	if (plot == nullptr)
+		return;
+
+	//determine the first column with "x plot designation" as the x-data column for all curves to be created
+	const AbstractColumn* xColumn = nullptr;
+	for (const auto* column : columns) {
+		if (column->plotDesignation() == AbstractColumn::X) {
+			xColumn = column;
+			break;
+		}
+	}
+
+	//if no column with "x plot designation" is available, use the x-data column of the first curve in the plot,
+	if (xColumn == nullptr) {
+		QVector<XYCurve*> curves = plot->children<XYCurve>();
+		if (!curves.isEmpty())
+			xColumn = curves.at(0)->xColumn();
+	}
+
+	//use the first dropped column if no column with "x plot designation" nor curves are available
+	if (xColumn == nullptr)
+		xColumn = columns.at(0);
+
+	//create curves
+	for (const auto* column : columns) {
+		if (column == xColumn)
+			continue;
+
+		XYCurve* curve = new XYCurve(column->name());
+		curve->setXColumn(xColumn);
+		curve->setYColumn(column);
+		plot->addChild(curve);
+	}
 }
 
 //##############################################################################

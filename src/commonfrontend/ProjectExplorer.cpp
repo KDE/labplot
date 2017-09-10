@@ -67,7 +67,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
 	m_treeView(new QTreeView(parent)),
 	m_project(nullptr),
 	m_dragStarted(false),
-	m_drag(nullptr),
 	m_frameFilter(new QFrame(this))  {
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
@@ -290,20 +289,17 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 
 				m_dragStarted = true;
-				if (m_drag != nullptr)
-					delete m_drag;
-
-				m_drag = new QDrag(this);
+				QDrag* drag = new QDrag(this);
 				QMimeData* mimeData = new QMimeData;
 
 				//determine the selected objects and serialize the pointers to QMimeData
-				QVector<AbstractAspect*> vec;
+				QVector<quintptr> vec;
 				QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 				//there are four model indices in each row -> divide by 4 to obtain the number of selected rows (=aspects)
 				for (int i = 0; i < items.size()/4; ++i) {
 					const QModelIndex& index = items.at(i*4);
 					AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-					vec << aspect;
+					vec << (quintptr)aspect;
 				}
 
 				QByteArray data;
@@ -311,8 +307,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				stream << vec;
 
 				mimeData->setData("labplot-dnd", data);
-				m_drag->setMimeData(mimeData);
-				m_drag->exec();
+				drag->setMimeData(mimeData);
+				drag->exec();
 			}
 		}
 	}
