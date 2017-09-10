@@ -2418,7 +2418,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	QString tmpTheme;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -2433,7 +2432,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == "theme") {
 			attribs = reader->attributes();
-			tmpTheme = attribs.value("name").toString();
+			d->theme = attribs.value("name").toString();
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -2753,12 +2752,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
 	}
 
-	//if a theme was used, assign the value to the private member at the very end of load()
-	//so we don't try to load the theme in when adding children on project load and calculate the palette
-	if (!tmpTheme.isEmpty()) {
-		KConfig config( ThemeHandler::themeFilePath(tmpTheme), KConfig::SimpleConfig );
+	//if a theme was used, initialize the color palette
+	if (!d->theme.isEmpty()) {
 		//TODO: check whether the theme config really exists
-		d->theme = tmpTheme;
+		KConfig config( ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig );
 		this->setColorPalette(config);
 	}
 
