@@ -373,7 +373,7 @@ void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIn
 void ProjectExplorer::toggleColumn(int index) {
 	//determine the total number of checked column actions
 	int checked = 0;
-	foreach(QAction* action, list_showColumnActions) {
+	for (const auto* action : list_showColumnActions) {
 		if (action->isChecked())
 			checked++;
 	}
@@ -383,7 +383,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 
-		foreach(QAction* action, list_showColumnActions)
+		for (auto* action : list_showColumnActions)
 			action->setEnabled(true);
 
 		//deactivate the "show all column"-action, if all actions are checked
@@ -416,7 +416,7 @@ void ProjectExplorer::showAllColumns() {
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	foreach(QAction* action, list_showColumnActions) {
+	for (auto* action : list_showColumnActions) {
 		action->setEnabled(true);
 		action->setChecked(true);
 	}
@@ -550,7 +550,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach (const QModelIndex& index, items) {
+	for (const QModelIndex& index : items) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
@@ -560,13 +560,13 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 void ProjectExplorer::expandSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items)
+	for (const auto& index : items)
 		m_treeView->setExpanded(index, true);
 }
 
 void ProjectExplorer::collapseSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items)
+	for (const auto& index : items)
 		m_treeView->setExpanded(index, false);
 }
 
@@ -612,8 +612,8 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 	int row = 0;
 	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
-	foreach(const AbstractAspect* aspect, aspects) {
-		QModelIndex index = model->modelIndexOfAspect(aspect);
+	for (const auto* aspect : aspects) {
+		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
 		const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part && part->hasMdiSubWindow()) {
@@ -781,12 +781,12 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		}
 	}
 
-	foreach (const QModelIndex& index, expanded) {
+	for (const auto& index : expanded) {
 		m_treeView->setExpanded(index, true);
 		collapseParents(index, expanded);//collapse all parent indices if they are not expanded
 	}
 
-	foreach (const QModelIndex& index, selected)
+	for (const auto& index : selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	m_treeView->setCurrentIndex(currentIndex);
