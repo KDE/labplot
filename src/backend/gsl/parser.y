@@ -32,9 +32,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
-#ifndef HAVE_WINDOWS
-#include <xlocale.h>
-#endif
 #include "parser.h"
 #include "constants.h"
 #include "functions.h"

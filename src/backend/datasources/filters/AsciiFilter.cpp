@@ -465,6 +465,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		col = 1;
 	}
 
+	//TODO: consider parsing more lines to better determine data types
 	for (const auto& valueString: firstLineStringList) { // only parse columns available in first data line
 		if (col == m_actualCols)
 			break;
