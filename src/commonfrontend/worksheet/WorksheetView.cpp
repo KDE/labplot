@@ -1015,6 +1015,18 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 }
 
 void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
+	//ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
+	const QMimeData* mimeData = event->mimeData();
+	if (!mimeData) {
+		event->ignore();
+		return;
+	}
+
+	if (mimeData->formats().at(0) != QLatin1String("labplot-dnd")) {
+		event->ignore();
+		return;
+	}
+
 	event->setAccepted(true);
 }
 
