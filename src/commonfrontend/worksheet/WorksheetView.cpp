@@ -1082,6 +1082,9 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 		curve->setYColumn(column);
 		plot->addChild(curve);
 	}
+
+	if (!columns.isEmpty())
+		plot->dataChanged();
 }
 
 //##############################################################################
