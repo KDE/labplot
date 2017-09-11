@@ -476,7 +476,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
 	// parsing more lines to better determine data types
-	for (int i = 0; i < 3; i++) {	//TODO: parameter
+	for (unsigned int i = 0; i < m_dataTypeLines; i++) {
 		firstLineStringList = getLineString(device);
 
 		if (createIndexEnabled)
@@ -487,11 +487,14 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			if (col == m_actualCols)
 				break;
 			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
-			if (mode != columnModes[col]) {
-				// TODO: how to handle differences?
-				if (mode == AbstractColumn::Numeric && columnModes[col] == AbstractColumn::Integer)
-					columnModes[col] = AbstractColumn::Numeric;
-			}
+
+			// numeric: integer -> numeric
+			if (mode == AbstractColumn::Numeric && columnModes[col] == AbstractColumn::Integer)
+				columnModes[col] = mode;
+			// text: non text -> text
+			if (mode == AbstractColumn::Text && columnModes[col] != AbstractColumn::Text)
+				columnModes[col] = mode;
+
 			col++;
 		}
 	}
