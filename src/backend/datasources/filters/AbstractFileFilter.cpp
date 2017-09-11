@@ -39,7 +39,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	bool ok;
 	locale.toInt(valueString, &ok);
 	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
-	if (ok)
+	if (ok || !QString::compare(valueString, "NA", Qt::CaseInsensitive))
 		return AbstractColumn::Integer;
 
 	//try to convert to a double
@@ -47,7 +47,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	locale.toDouble(valueString, &ok);
 
 	//if not a number, check datetime. if that fails: string
-	if (!ok) {
+	if (!ok && QString::compare(valueString, "NAN", Qt::CaseInsensitive)) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())
 			mode = AbstractColumn::DateTime;
