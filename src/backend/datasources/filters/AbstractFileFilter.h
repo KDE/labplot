@@ -48,6 +48,7 @@ public:
 	AbstractFileFilter() {}
 	virtual ~AbstractFileFilter() {}
 
+	static bool isNan(QString);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
 	static QStringList numberFormats();
 

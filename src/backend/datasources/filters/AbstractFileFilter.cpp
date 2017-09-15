@@ -32,14 +32,23 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QLocale>
 #include <KLocale>
 
+bool AbstractFileFilter::isNan(QString s) {
+	QStringList nanStrings;
+	nanStrings << "NA" << "NAN" << "N/A" << "-NA" << "-NAN" << "NULL";
+	if (nanStrings.contains(s, Qt::CaseInsensitive))
+		return true;
+
+	return false;
+}
+
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
 	QLocale locale(lang);
 
-	// check for int first
+	// check if integer first
 	bool ok;
 	locale.toInt(valueString, &ok);
 	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
-	if (ok || !QString::compare(valueString, "NA", Qt::CaseInsensitive))
+	if (ok || isNan(valueString))
 		return AbstractColumn::Integer;
 
 	//try to convert to a double
@@ -47,7 +56,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	locale.toDouble(valueString, &ok);
 
 	//if not a number, check datetime. if that fails: string
-	if (!ok && QString::compare(valueString, "NAN", Qt::CaseInsensitive)) {
+	if (!ok) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())
 			mode = AbstractColumn::DateTime;
