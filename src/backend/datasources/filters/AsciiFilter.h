@@ -87,6 +87,8 @@ public:
 	bool simplifyWhitespacesEnabled() const;
 	void setNaNValueToZero(const bool);
 	bool NaNValueToZeroEnabled() const;
+	void setRemoveQuotesEnabled(const bool);
+	bool removeQuotesEnabled() const;
 	void setCreateIndexEnabled(const bool);
 
 	void setVectorNames(const QString);

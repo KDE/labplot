@@ -150,6 +150,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setNaNValueToZero( ui.chbConvertNaNToZero->isChecked() );
+	filter->setRemoveQuotesEnabled( ui.chbRemoveQuotes->isChecked() );
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
 	filter->setVectorNames( ui.kleVectorNames->text() );
 	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
@@ -167,6 +168,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
 	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));
+	ui.chbRemoveQuotes->setChecked(conf.readEntry("RemoveQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
 	ui.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
 	ui.kleVectorNames->setText(conf.readEntry("Names", ""));
@@ -182,6 +184,7 @@ void AsciiOptionsWidget::saveSettings() {
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
+	conf.writeEntry("RemoveQuotes", ui.chbRemoveQuotes->isChecked());
 	conf.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", ui.chbHeader->isChecked());
 	conf.writeEntry("Names", ui.kleVectorNames->text());

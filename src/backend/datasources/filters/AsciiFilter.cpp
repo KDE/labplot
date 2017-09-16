@@ -292,6 +292,13 @@ bool AsciiFilter::NaNValueToZeroEnabled() const {
 	return false;
 }
 
+void AsciiFilter::setRemoveQuotesEnabled(bool b) {
+	d->removeQuotesEnabled = b;
+}
+bool AsciiFilter::removeQuotesEnabled() const {
+	return d->removeQuotesEnabled;
+}
+
 void AsciiFilter::setVectorNames(const QString s) {
 	d->vectorNames = s.simplified().split(' ');
 }
@@ -342,6 +349,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	skipEmptyParts(false),
 	simplifyWhitespacesEnabled(true),
 	nanValue(NAN),
+	removeQuotesEnabled(false),
 	createIndexEnabled(false),
 	startRow(1),
 	endRow(-1),
@@ -362,6 +370,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 		line = line.simplified();
 	DEBUG("data line : \'" << line.toStdString() << '\'');
 	QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+	//TODO: remove quotes here?
 	QDEBUG("data line, parsed: " << lineStringList);
 
 	return lineStringList;
@@ -453,7 +462,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		DEBUG("read data line again @ pos " << testpos << "  : " << device.readLine().toStdString());
 	*/
 
-	// ATTENTION: This resets the position to start of file
+	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = AsciiFilter::lineNumber(device);
 /////////////////////////////////////////////////////////////////
 
@@ -1350,6 +1359,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts));
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled));
 	writer->writeAttribute( "nanValue", QString::number(d->nanValue));
+	writer->writeAttribute( "removeQuotes", QString::number(d->removeQuotesEnabled));
 	writer->writeAttribute( "startRow", QString::number(d->startRow));
 	writer->writeAttribute( "endRow", QString::number(d->endRow));
 	writer->writeAttribute( "startColumn", QString::number(d->startColumn));
@@ -1414,6 +1424,12 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'nanValue'"));
 	else
 		d->nanValue = str.toDouble();
+
+	str = attribs.value("removeQuotes").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'removeQuotes'"));
+	else
+		d->removeQuotesEnabled = str.toInt();
 
 	str = attribs.value("skipEmptyParts").toString();
 	if (str.isEmpty())

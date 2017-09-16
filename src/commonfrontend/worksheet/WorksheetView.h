@@ -74,8 +74,8 @@ private:
 	void initActions();
 	void initMenus();
 	void processResize();
-	void drawForeground(QPainter*, const QRectF&);
-	void drawBackground(QPainter*, const QRectF&);
+	void drawForeground(QPainter*, const QRectF&) override;
+	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
 	bool isPlotAtPos(const QPoint&) const;
 	CartesianPlot* plotAt(const QPoint&) const;
