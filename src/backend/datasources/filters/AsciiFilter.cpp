@@ -280,6 +280,18 @@ bool AsciiFilter::simplifyWhitespacesEnabled() const {
 	return d->simplifyWhitespacesEnabled;
 }
 
+void AsciiFilter::setNaNValueToZero(bool b) {
+	if (b)
+		d->nanValue = 0;
+	else
+		d->nanValue = NAN;
+}
+bool AsciiFilter::NaNValueToZeroEnabled() const {
+	if (d->nanValue == 0)
+		return true;
+	return false;
+}
+
 void AsciiFilter::setVectorNames(const QString s) {
 	d->vectorNames = s.simplified().split(' ');
 }
@@ -329,6 +341,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	headerEnabled(true),
 	skipEmptyParts(false),
 	simplifyWhitespacesEnabled(true),
+	nanValue(NAN),
 	createIndexEnabled(false),
 	startRow(1),
 	endRow(-1),
@@ -535,7 +548,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	readDataFromDevice(device, dataSource, importMode, lines);
 }
 
-qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSource * dataSource,  qint64 from) {
+qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
 	if (!(device.bytesAvailable() > 0)) {
 		DEBUG("No new data available");
 		return 0;
@@ -912,7 +925,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 					case AbstractColumn::Numeric: {
 							bool isNumber;
 							const double value = locale.toDouble(valueString, &isNumber);
-							static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+							static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
 							//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 							break;
 						}
@@ -942,7 +955,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 				} else {	// missing columns in this line
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric:
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
 						break;
 					case AbstractColumn::Integer:
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
@@ -951,7 +964,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice & device, AbstractDataSo
 						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 						break;
 					case AbstractColumn::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "";
 						break;
 					case AbstractColumn::Month:
 						//TODO
@@ -1074,13 +1087,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				case AbstractColumn::Numeric: {
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
 						break;
 					}
 				case AbstractColumn::Integer: {
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
-						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : NAN);
+						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
 						break;
 					}
 				case AbstractColumn::DateTime: {
@@ -1098,7 +1111,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			} else {	// missing columns in this line
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric:
-					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = NAN;
+					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
 					break;
 				case AbstractColumn::Integer:
 					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
@@ -1107,7 +1120,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
 					break;
 				case AbstractColumn::Text:
-					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "NAN";
+					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = "";
 					break;
 				case AbstractColumn::Month:	// never happens
 				case AbstractColumn::Day:
@@ -1124,7 +1137,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 }
 
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
-
 	QVector<QStringList> dataStrings;
 
 	if (!(device.bytesAvailable() > 0)) {
@@ -1198,13 +1210,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 				case AbstractColumn::Numeric: {
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
-						lineString += QString::number(isNumber ? value : NAN);
+						lineString += QString::number(isNumber ? value : nanValue);
 						break;
 					}
 				case AbstractColumn::Integer: {
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
-						lineString += QString::number(isNumber ? value : NAN);
+						lineString += QString::number(isNumber ? value : 0);
 						break;
 					}
 				case AbstractColumn::DateTime: {
@@ -1220,7 +1232,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 					break;
 				}
 			} else 	// missing columns in this line
-				lineString += QLatin1String("NAN");
+				lineString += QLatin1String("");
 		}
 		dataStrings << lineString;
 	}
@@ -1280,13 +1292,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				case AbstractColumn::Numeric: {
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
-						lineString += QString::number(isNumber ? value : NAN);
+						lineString += QString::number(isNumber ? value : nanValue);
 						break;
 					}
 				case AbstractColumn::Integer: {
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
-						lineString += QString::number(isNumber ? value : NAN);
+						lineString += QString::number(isNumber ? value : 0);
 						break;
 					}
 				case AbstractColumn::DateTime: {
@@ -1302,7 +1314,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 					break;
 				}
 			} else 	// missing columns in this line
-				lineString += QLatin1String("NAN");
+				lineString += QLatin1String("");
 		}
 
 		dataStrings << lineString;
@@ -1337,6 +1349,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts));
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled));
+	writer->writeAttribute( "nanValue", QString::number(d->nanValue));
 	writer->writeAttribute( "startRow", QString::number(d->startRow));
 	writer->writeAttribute( "endRow", QString::number(d->endRow));
 	writer->writeAttribute( "startColumn", QString::number(d->startColumn));
@@ -1395,6 +1408,12 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
+
+	str = attribs.value("nanValue").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'nanValue'"));
+	else
+		d->nanValue = str.toDouble();
 
 	str = attribs.value("skipEmptyParts").toString();
 	if (str.isEmpty())

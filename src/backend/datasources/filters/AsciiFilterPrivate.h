@@ -62,6 +62,7 @@ public:
 	bool headerEnabled;
 	bool skipEmptyParts;
 	bool simplifyWhitespacesEnabled;
+	double nanValue;
 	bool createIndexEnabled;
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
