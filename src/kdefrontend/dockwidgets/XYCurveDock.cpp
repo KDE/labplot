@@ -1434,6 +1434,10 @@ void XYCurveDock::fillingFirstColorChanged(const QColor& c) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setFillingFirstColor(c);
+
+	m_initializing = true;
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, c);
+	m_initializing = false;
 }
 
 void XYCurveDock::fillingSecondColorChanged(const QColor& c) {
@@ -1898,6 +1902,7 @@ void XYCurveDock::curveFillingBrushStyleChanged(Qt::BrushStyle style) {
 void XYCurveDock::curveFillingFirstColorChanged(QColor& color) {
 	m_initializing = true;
 	ui.kcbFillingFirstColor->setColor(color);
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, color);
 	m_initializing = false;
 }
 void XYCurveDock::curveFillingSecondColorChanged(QColor& color) {
@@ -2146,6 +2151,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, ui.kcbFillingFirstColor->color());
 	m_initializing=false;
 }
 
