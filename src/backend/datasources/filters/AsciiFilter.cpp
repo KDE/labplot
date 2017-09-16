@@ -563,7 +563,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		return 0;
 	}
 
-
 	Q_ASSERT(dataSource != nullptr);
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
@@ -927,7 +926,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			for (int n = 0; n < m_actualCols; ++n) {
 				if (n < lineStringList.size()) {
-					const QString& valueString = lineStringList.at(n);
+					QString valueString = lineStringList.at(n);
 
 					// set value depending on data type
 					switch (columnModes[n]) {
@@ -952,6 +951,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 							break;
 						}
 					case AbstractColumn::Text:
+						if (removeQuotesEnabled)
+							valueString.remove(QRegExp("[\"\']"));
 						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 						break;
 					case AbstractColumn::Month:
@@ -1089,7 +1090,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
-				const QString& valueString = lineStringList.at(n);
+				QString valueString = lineStringList.at(n);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1111,6 +1112,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 						break;
 					}
 				case AbstractColumn::Text:
+					if (removeQuotesEnabled)
+						valueString.remove(QRegExp("[\"\']"));
 					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -1213,7 +1216,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		QStringList lineString;
 		for (int n = 0; n < lineStringList.size(); n++) {
 			if (n < lineStringList.size()) {
-				const QString& valueString = lineStringList.at(n);
+				QString valueString = lineStringList.at(n);
 
 				switch (columnModes[n]) {
 				case AbstractColumn::Numeric: {
@@ -1234,6 +1237,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 						break;
 					}
 				case AbstractColumn::Text:
+					if (removeQuotesEnabled)
+						valueString.remove(QRegExp("[\"\']"));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
@@ -1294,7 +1299,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		QStringList lineString;
 		for (int n = 0; n < m_actualCols; n++) {
 			if (n < lineStringList.size()) {
-				const QString& valueString = lineStringList.at(n);
+				QString valueString = lineStringList.at(n);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1316,6 +1321,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 						break;
 					}
 				case AbstractColumn::Text:
+					if (removeQuotesEnabled)
+						valueString.remove(QRegExp("[\"\']"));
 					lineString += valueString;
 					break;
 				case AbstractColumn::Month:	// never happens
