@@ -5,7 +5,7 @@
     Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          :  constains several static functions which are used on frequently throughout the kde frontend.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -40,7 +40,7 @@ class QAction;
 
 class GuiTools{
   public:
-	
+
 	static void updateBrushStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);

@@ -241,13 +241,15 @@ void XYCurveDock::init() {
 	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
 
 	QPen pen(Qt::SolidPattern, 0);
+	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
 	pa.setPen( pen );
 
 	//no line
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.end();
@@ -256,8 +258,8 @@ void XYCurveDock::init() {
 	//line
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.drawLine(3,3,17,17);
@@ -266,8 +268,8 @@ void XYCurveDock::init() {
 
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.drawLine(3,3,17,3);
@@ -277,8 +279,8 @@ void XYCurveDock::init() {
 
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.drawLine(3,3,3,17);
@@ -289,8 +291,8 @@ void XYCurveDock::init() {
 	//horizontal midpoint
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.drawLine(3,3,10,3);
@@ -302,8 +304,8 @@ void XYCurveDock::init() {
 	//vertical midpoint
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.drawLine(3,3,3,10);
@@ -315,8 +317,8 @@ void XYCurveDock::init() {
 	//2-segments
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 8,8,4,4);
 	pa.drawEllipse( 15,15,4,4);
@@ -327,8 +329,8 @@ void XYCurveDock::init() {
 	//3-segments
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 8,8,4,4);
 	pa.drawEllipse( 15,15,4,4);
@@ -339,8 +341,8 @@ void XYCurveDock::init() {
 	//natural spline
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setPen(pen);
 	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 	pa.drawEllipse( 1,1,4,4);
 	pa.drawEllipse( 15,15,4,4);
 	pa.rotate(45);
@@ -376,6 +378,7 @@ void XYCurveDock::init() {
 		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
+		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
