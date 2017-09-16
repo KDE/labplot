@@ -32,12 +32,14 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/TextLabel.h"
+#include "commonfrontend/core/PartMdiView.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 
 #include <QApplication>
+#include <QMdiArea>
 #include <QMenu>
 #include <QToolBar>
 #include <QDesktopWidget>
@@ -1026,6 +1028,10 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 		event->ignore();
 		return;
 	}
+
+	//select the worksheet in the project explorer and bring the view to the foreground
+	m_worksheet->setSelectedInView(true);
+	m_worksheet->mdiSubWindow()->mdiArea()->setActiveSubWindow(m_worksheet->mdiSubWindow());
 
 	event->setAccepted(true);
 }
