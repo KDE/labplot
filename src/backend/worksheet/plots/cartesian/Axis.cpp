@@ -1430,14 +1430,13 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<float> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i) {
+	for (int i = 0; i < tickLabelValues.size(); ++i)
 		tempValues.append( round(tickLabelValues[i], precision) );
-	}
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
+				if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate for the current precision found, increase the precision and check again
 				return upperLabelsPrecision(precision + 1);
 			}
@@ -1457,17 +1456,16 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<float> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i) {
+	for (int i = 0; i < tickLabelValues.size(); ++i)
 		tempValues.append( round(tickLabelValues[i], precision-1) );
-	}
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
+			if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate found for the reduced precision
-				//-> current precision cannot be reduced, return the current value + 1
-				return precision + 1;
+				//-> current precision cannot be reduced, return the current value
+				return precision;
 			}
 		}
 	}
