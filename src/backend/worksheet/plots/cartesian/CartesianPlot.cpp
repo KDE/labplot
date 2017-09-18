@@ -163,6 +163,7 @@ void CartesianPlot::initDefault(Type type) {
 
 			//Axes
 			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
 			axis->setStart(0);
@@ -177,8 +178,10 @@ void CartesianPlot::initDefault(Type type) {
 			pen = axis->minorGridPen();
 			pen.setStyle(Qt::DotLine);
 			axis->setMinorGridPen(pen);
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("x axis 2", this, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisTop);
 			axis->setStart(0);
@@ -189,8 +192,10 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
 			axis->setStart(0);
@@ -205,8 +210,10 @@ void CartesianPlot::initDefault(Type type) {
 			pen = axis->minorGridPen();
 			pen.setStyle(Qt::DotLine);
 			axis->setMinorGridPen(pen);
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 2", this, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisRight);
 			axis->setStart(0);
@@ -218,6 +225,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			break;
 		}
@@ -228,6 +236,7 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMax = 1;
 
 			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
 			axis->setStart(0);
@@ -237,8 +246,10 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
 			axis->setStart(0);
@@ -248,6 +259,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setSuppressRetransform(false);
 
 			break;
 		}
@@ -265,6 +277,7 @@ void CartesianPlot::initDefault(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
 			axis->setStart(-0.5);
@@ -275,8 +288,10 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
 			axis->setStart(-0.5);
@@ -287,6 +302,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			break;
 		}
@@ -304,6 +320,7 @@ void CartesianPlot::initDefault(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);
 			axis->setOffset(0);
@@ -315,8 +332,10 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);
 			axis->setOffset(0);
@@ -328,6 +347,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
+			axis->setSuppressRetransform(false);
 
 			break;
 		}
@@ -353,7 +373,6 @@ void CartesianPlot::initDefault(Type type) {
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
-	d->retransform();
 }
 
 void CartesianPlot::initActions() {

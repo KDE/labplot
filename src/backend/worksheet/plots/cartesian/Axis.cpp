@@ -929,6 +929,9 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
+	if (suppressRetransform)
+		return;
+
 	linePath = QPainterPath();
 	lines.clear();
 
@@ -978,6 +981,9 @@ void AxisPrivate::retransformLine() {
 }
 
 void AxisPrivate::retransformArrow() {
+	if (suppressRetransform)
+		return;
+
 	arrowPath = QPainterPath();
 	if (arrowType == Axis::NoArrow || lines.isEmpty()) {
 		recalcShapeAndBoundingRect();
@@ -1107,6 +1113,9 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
+	if (suppressRetransform)
+		return;
+
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 
 	majorTicksPath = QPainterPath();
@@ -1344,6 +1353,9 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
+	if (suppressRetransform)
+		return;
+
 // 	DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
@@ -1550,6 +1562,9 @@ void AxisPrivate::retransformTickLabelPositions() {
 }
 
 void AxisPrivate::retransformMajorGrid() {
+	if (suppressRetransform)
+		return;
+
 	majorGridPath = QPainterPath();
 	if (majorGridPen.style() == Qt::NoPen || majorTickPoints.size() == 0) {
 		recalcShapeAndBoundingRect();
@@ -1626,6 +1641,9 @@ void AxisPrivate::retransformMajorGrid() {
 }
 
 void AxisPrivate::retransformMinorGrid() {
+	if (suppressRetransform)
+		return;
+
 	minorGridPath = QPainterPath();
 	if (minorGridPen.style() == Qt::NoPen) {
 		recalcShapeAndBoundingRect();
