@@ -555,7 +555,10 @@ void LiveDataSource::read() {
 		case Binary:
 			//bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
-		default:
+		case Image:
+		case HDF:
+		case NETCDF:
+		case FITS:
 			break;
 		}
 		break;
@@ -687,9 +690,16 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		QMessageBox::critical(0, i18n("Serial Port Error"),
 		                      i18n("The device timed out."));
 		break;
-	default:
+	case QSerialPort::ParityError:
+	case QSerialPort::FramingError:
+	case QSerialPort::BreakConditionError:
+	case QSerialPort::WriteError:
+	case QSerialPort::UnsupportedOperationError:
+	case QSerialPort::UnknownError:
 		QMessageBox::critical(0, i18n("Serial Port Error"),
 		                      i18n("The following error occurred: %1.").arg(m_serialPort->errorString()));
+		break;
+	case QSerialPort::NoError:
 		break;
 	}
 }
