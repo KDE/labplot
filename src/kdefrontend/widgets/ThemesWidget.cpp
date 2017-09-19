@@ -85,13 +85,14 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 
 	//create and add the icon for "None"
 	QPixmap pm(size, size);
-	QColor color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::black : Qt::white;
-	QPen pen(color);
-	pen.setWidth(2);
+	QPen pen(Qt::SolidPattern, 1);
+	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
 	QPainter pa;
 	pa.setPen(pen);
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
+	pa.setPen(pen);
 	pa.drawRect(5, 5, size-10, size-10);
 	pa.end();
 
