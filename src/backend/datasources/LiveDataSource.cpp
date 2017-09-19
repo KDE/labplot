@@ -618,6 +618,7 @@ void LiveDataSource::readyRead() {
 }
 
 void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
+	Q_UNUSED(socketError);
 	/*disconnect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
 	disconnect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));*/
 
@@ -641,6 +642,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 }
 
 void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
+	Q_UNUSED(socketError);
 	/*switch (socketError) {
 	case QAbstractSocket::ConnectionRefusedError:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
