@@ -94,7 +94,7 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 		return;
 
 	Q_D(XYFitCurve);
-	XYFitCurve::FitData fitData = d->fitData;
+	XYFitCurve::FitData& fitData = d->fitData;
 	if (action == PlotDataDialog::FitLinear) {
 		//Linear
 		fitData.modelCategory = nsl_fit_model_basic;
