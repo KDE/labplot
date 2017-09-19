@@ -194,17 +194,17 @@ private:
 public slots:
 	void addHorizontalAxis();
 	void addVerticalAxis();
-	XYCurve* addCurve();
-	Histogram* addHistogram();
-	XYEquationCurve* addEquationCurve();
-	XYDataReductionCurve* addDataReductionCurve();
-	XYDifferentiationCurve* addDifferentiationCurve();
-	XYIntegrationCurve* addIntegrationCurve();
-	XYInterpolationCurve* addInterpolationCurve();
-	XYSmoothCurve* addSmoothCurve();
-	XYFitCurve* addFitCurve();
-	XYFourierFilterCurve* addFourierFilterCurve();
-	XYFourierTransformCurve* addFourierTransformCurve();
+	void addCurve();
+	void addHistogram();
+	void addEquationCurve();
+	void addDataReductionCurve();
+	void addDifferentiationCurve();
+	void addIntegrationCurve();
+	void addInterpolationCurve();
+	void addSmoothCurve();
+	void addFitCurve();
+	void addFourierFilterCurve();
+	void addFourierTransformCurve();
 	void addLegend();
 	void addCustomPoint();
 	void scaleAuto();

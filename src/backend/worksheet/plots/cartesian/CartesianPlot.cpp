@@ -956,22 +956,16 @@ void CartesianPlot::addVerticalAxis() {
 	addChild(axis);
 }
 
-XYCurve* CartesianPlot::addCurve() {
-	XYCurve* curve = new XYCurve("xy-curve");
-	addChild(curve);
-	return curve;
+void CartesianPlot::addCurve() {
+	addChild(new XYCurve("xy-curve"));
 }
 
-XYEquationCurve* CartesianPlot::addEquationCurve() {
-	XYEquationCurve* curve = new XYEquationCurve("f(x)");
-	addChild(curve);
-	return curve;
+void CartesianPlot::addEquationCurve() {
+	addChild(new XYEquationCurve("f(x)"));
 }
 
-Histogram* CartesianPlot::addHistogram() {
-	Histogram* curve= new Histogram("Histogram");
-	addChild(curve);
-	return curve;
+void CartesianPlot::addHistogram() {
+	addChild(new Histogram("Histogram"));
 }
 
 /*!
@@ -986,7 +980,7 @@ const XYCurve* CartesianPlot::currentCurve() const {
 	return 0;
 }
 
-XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
+void CartesianPlot::addDataReductionCurve() {
 	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1003,11 +997,9 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
+void CartesianPlot::addDifferentiationCurve() {
 	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1024,11 +1016,9 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
+void CartesianPlot::addIntegrationCurve() {
 	XYIntegrationCurve* curve = new XYIntegrationCurve("Integration");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1045,11 +1035,9 @@ XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
+void CartesianPlot::addInterpolationCurve() {
 	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1057,8 +1045,8 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 		curve->setName( i18n("Interpolation of '%1'", curCurve->name()) );
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
-		this->addChild(curve);
 		curve->recalculate();
+		this->addChild(curve);
 		emit curve->interpolationDataChanged(curve->interpolationData());
 	} else {
 		beginMacro(i18n("%1: add interpolation curve", name()));
@@ -1066,11 +1054,9 @@ XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYSmoothCurve* CartesianPlot::addSmoothCurve() {
+void CartesianPlot::addSmoothCurve() {
 	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1087,11 +1073,9 @@ XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYFitCurve* CartesianPlot::addFitCurve() {
+void CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1104,7 +1088,6 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		curve->initFitData(type);
-
 		this->addChild(curve);
 		curve->recalculate();
 		emit curve->fitDataChanged(curve->fitData());
@@ -1114,11 +1097,9 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
+void CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1133,14 +1114,11 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	}
 
 	endMacro();
-
-	return curve;
 }
 
-XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
+void CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
-	return curve;
 }
 
 void CartesianPlot::addLegend() {
@@ -2748,7 +2726,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if(reader->name() == "Histogram") {
-			Histogram* curve = addHistogram();
+			Histogram* curve = new Histogram("Histogram");
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
