@@ -101,18 +101,21 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 		fitData.modelType = nsl_fit_model_polynomial;
 		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
 		fitData.paramNames << "c0" << "c1";
+		fitData.paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
 	} else if (action == PlotDataDialog::FitPower) {
 		//Power
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_power;
 		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
 		fitData.paramNames << "a" << "b";
+		fitData.paramNamesUtf8 << "a" << "b";
 	} else if (action == PlotDataDialog::FitExp1) {
 		//Exponential (degree 1)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_exponential;
 		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
 		fitData.paramNames << "a" << "b";
+		fitData.paramNamesUtf8 << "a" << "b";
 	} else if (action == PlotDataDialog::FitExp2) {
 		//Exponential (degree 2)
 		fitData.modelCategory = nsl_fit_model_basic;
@@ -120,42 +123,50 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 		fitData.degree = 2;
 		fitData.model = "a1*exp(b1*x) + a2*exp(b2*x)";
 		fitData.paramNames << "a1" << "b1" << "a2" << "b2";
+		fitData.paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
+								<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082");
 	} else if (action == PlotDataDialog::FitInvExp) {
 		//Inverse exponential
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_inverse_exponential;
 		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
 		fitData.paramNames << "a" << "b" << "c";
+		fitData.paramNamesUtf8 << "a" << "b" << "c";
 	} else if (action == PlotDataDialog::FitGauss) {
 		//Gauss
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
 		fitData.modelType = nsl_fit_model_gaussian;
 		fitData.paramNames << "s" << "mu" << "a";
+		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitCauchyLorentz) {
 		//Cauchy-Lorentz
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = nsl_fit_model_lorentz;
 		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
 		fitData.paramNames << "g" << "mu" << "a";
+		fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitTan) {
 		//Arc tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_atan;
 		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
 		fitData.paramNames << "s" << "mu" << "a";
+		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitTanh) {
 		//Hyperbolic tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_tanh;
 		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
 		fitData.paramNames << "s" << "mu" << "a";
+		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitErrFunc) {
 		//Error function
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_erf;
 		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
 		fitData.paramNames << "s" << "mu" << "a";
+		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else {
 		//Custom
 		fitData.modelCategory = nsl_fit_model_custom;
