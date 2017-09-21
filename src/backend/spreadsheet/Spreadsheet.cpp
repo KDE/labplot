@@ -834,34 +834,33 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-		this->child<Column>(columnOffset+n)->setColumnMode(columnMode[n]);
+		Column* column = this->child<Column>(columnOffset+n);
+		column->setColumnMode(columnMode[n]);
 
 		//in the most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
 		//it should be possible to specify x-error plot designation, etc.
-		if (n == 0)
-			this->child<Column>(columnOffset)->setPlotDesignation(AbstractColumn::X);
-		else
-			this->child<Column>(columnOffset)->setPlotDesignation(AbstractColumn::Y);
+		AbstractColumn::PlotDesignation desig =  (n == 0) ? AbstractColumn::X : AbstractColumn::Y;
+		column->setPlotDesignation(desig);
 
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>*>(this->child<Column>(columnOffset+n)->data());
+				QVector<double>* vector = static_cast<QVector<double>*>(column->data());
 				vector->reserve(actualRows);
 				vector->resize(actualRows);
 				dataContainer[n] = static_cast<void*>(vector);
 				break;
 			}
 		case AbstractColumn::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>*>(this->child<Column>(columnOffset+n)->data());
+				QVector<int>* vector = static_cast<QVector<int>*>(column->data());
 				vector->reserve(actualRows);
 				vector->resize(actualRows);
 				dataContainer[n] = static_cast<void*>(vector);
 				break;
 			}
 		case AbstractColumn::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(this->child<Column>(columnOffset+n)->data());
+				QVector<QString>* vector = static_cast<QVector<QString>*>(column->data());
 				vector->reserve(actualRows);
 				vector->resize(actualRows);
 				dataContainer[n] = static_cast<void*>(vector);
@@ -870,7 +869,7 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(this->child<Column>(columnOffset+n)->data());
+				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(column->data());
 				vector->reserve(actualRows);
 				vector->resize(actualRows);
 				dataContainer[n] = static_cast<void*>(vector);
