@@ -83,6 +83,9 @@ ImportDialog::ImportDialog(MainWin* parent) : KDialog(parent),
 ImportDialog::~ImportDialog() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
+
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+	conf.writeEntry("Position", cbPosition->currentIndex());
 }
 
 /*!
