@@ -84,8 +84,11 @@ ImportDialog::~ImportDialog() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
-	conf.writeEntry("Position", cbPosition->currentIndex());
+	//save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
+	if (cbPosition) {
+		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+		conf.writeEntry("Position", cbPosition->currentIndex());
+	}
 }
 
 /*!
