@@ -1742,6 +1742,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramUpperLimits << DBL_MAX;
 	}
+	DEBUG("paramFixed size = " << d->fitData.paramFixed.size());
 
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->setHidden(true);

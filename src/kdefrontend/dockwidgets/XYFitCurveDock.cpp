@@ -461,14 +461,14 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::weightChanged(int index) {
-	QDEBUG("weightChanged() weight =" << nsl_fit_weight_type_name[index]);
+	DEBUG("weightChanged() weight = " << nsl_fit_weight_type_name[index]);
 
 	m_fitData.weightsType = (nsl_fit_weight_type)index;
 	enableRecalculate();
 }
 
 void XYFitCurveDock::categoryChanged(int index) {
-	QDEBUG("categoryChanged() category =" << nsl_fit_model_category_name[index] << ", type =" << m_fitData.modelType);
+	DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\", type = " << m_fitData.modelType);
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
@@ -523,7 +523,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 }
 
 void XYFitCurveDock::modelChanged(int index) {
-	DEBUG("modelChanged() type =" << index << ", initializing =" << m_initializing);
+	DEBUG("modelChanged() type = " << index << ", initializing = " << m_initializing);
 	// leave if there is no selection
 	if(index == -1)
 		return;
@@ -587,7 +587,7 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG("updateModelEquation() type =" << m_fitData.modelType);
+	DEBUG("updateModelEquation() type = " << m_fitData.modelType);
 
 	int num = uiGeneralTab.sbDegree->value();
 	QStringList vars; // variables/parameter that are known
@@ -971,7 +971,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelCategory != nsl_fit_model_custom ||
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		DEBUG(" number of start values" << m_fitData.paramNames.size() << ' ' << m_fitData.paramStartValues.size());
+		DEBUG("number of start values = " << m_fitData.paramNames.size() << ' ' << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
@@ -1326,6 +1326,7 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	const int np = fitResult.paramValues.size();
+	DEBUG("np = " << np << " paramFixed size = " << m_fitData.paramFixed.size() << " paramNames size = " << m_fitData.paramNames.size());
 	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
 	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
