@@ -107,6 +107,8 @@ public:
 
 	void recalculate();
 	void initFitData(PlotDataDialog::AnalysisAction);
+	static void initFitData(XYFitCurve::FitData&);
+
 	virtual QIcon icon() const override;
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;

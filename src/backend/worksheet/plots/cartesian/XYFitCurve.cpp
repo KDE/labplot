@@ -99,79 +99,55 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 		//Linear
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_polynomial;
-		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
-		fitData.paramNames << "c0" << "c1";
-		fitData.paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
+		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitPower) {
 		//Power
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_power;
-		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
-		fitData.paramNames << "a" << "b";
-		fitData.paramNamesUtf8 << "a" << "b";
+		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitExp1) {
 		//Exponential (degree 1)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_exponential;
-		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
-		fitData.paramNames << "a" << "b";
-		fitData.paramNamesUtf8 << "a" << "b";
+		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitExp2) {
 		//Exponential (degree 2)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_exponential;
 		fitData.degree = 2;
-		fitData.model = "a1*exp(b1*x) + a2*exp(b2*x)";
-		fitData.paramNames << "a1" << "b1" << "a2" << "b2";
-		fitData.paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
-								<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082");
 	} else if (action == PlotDataDialog::FitInvExp) {
 		//Inverse exponential
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = nsl_fit_model_inverse_exponential;
-		fitData.model = nsl_fit_model_basic_equation[fitData.modelType];
-		fitData.paramNames << "a" << "b" << "c";
-		fitData.paramNamesUtf8 << "a" << "b" << "c";
 	} else if (action == PlotDataDialog::FitGauss) {
 		//Gauss
 		fitData.modelCategory = nsl_fit_model_peak;
-		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
 		fitData.modelType = nsl_fit_model_gaussian;
-		fitData.paramNames << "s" << "mu" << "a";
-		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitCauchyLorentz) {
 		//Cauchy-Lorentz
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = nsl_fit_model_lorentz;
-		fitData.model = nsl_fit_model_peak_equation[fitData.modelType];
-		fitData.paramNames << "g" << "mu" << "a";
-		fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitTan) {
 		//Arc tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_atan;
-		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
-		fitData.paramNames << "s" << "mu" << "a";
-		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitTanh) {
 		//Hyperbolic tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_tanh;
-		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
-		fitData.paramNames << "s" << "mu" << "a";
-		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else if (action == PlotDataDialog::FitErrFunc) {
 		//Error function
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = nsl_fit_model_erf;
-		fitData.model = nsl_fit_model_growth_equation[fitData.modelType];
-		fitData.paramNames << "s" << "mu" << "a";
-		fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 	} else {
 		//Custom
 		fitData.modelCategory = nsl_fit_model_custom;
 		fitData.modelType = nsl_fit_model_custom;
 	}
+
+	XYFitCurve::initFitData(fitData);
 
 	if (fitData.modelCategory != nsl_fit_model_custom) {
 		fitData.paramStartValues.resize(fitData.paramNames.size());
@@ -186,6 +162,368 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 			fitData.paramUpperLimits[i] = DBL_MAX;
 		}
 	}
+}
+
+/*!
+ * sets the model expression and the parameter names for given model category, model type and degree in \c fitData
+ */
+void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
+	nsl_fit_model_category modelCategory = fitData.modelCategory;
+	unsigned int modelType = fitData.modelType;
+	QString& model = fitData.model;
+	QStringList& paramNames = fitData.paramNames;
+	QStringList& paramNamesUtf8 = fitData.paramNamesUtf8;
+	int num = fitData.degree;
+
+	paramNames.clear();
+	paramNamesUtf8.clear();
+
+	// indices used in multi peak parameter models
+	QStringList indices;
+	indices << QString::fromUtf8("\u2081") << QString::fromUtf8("\u2082") << QString::fromUtf8("\u2083") << QString::fromUtf8("\u2084") << QString::fromUtf8("\u2085")
+		<< QString::fromUtf8("\u2086") << QString::fromUtf8("\u2087") << QString::fromUtf8("\u2088") << QString::fromUtf8("\u2089");
+
+	switch (modelCategory) {
+	case nsl_fit_model_basic:
+		switch (modelType) {
+		case nsl_fit_model_polynomial:
+			paramNames << "c0" << "c1";
+			paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
+			if (num == 2) {
+				model += " + c2*x^2";
+				paramNames << "c2";
+				paramNamesUtf8 << QString::fromUtf8("c\u2082");
+			} else if (num > 2) {
+				QString numStr = QString::number(num);
+				for (int i = 2; i <= num; ++i) {
+					numStr = QString::number(i);
+					model += "+c" + numStr + "*x^" + numStr;
+					paramNames << "c" + numStr;
+					paramNamesUtf8 << "c" + indices[i-1];
+				}
+			}
+			break;
+		case nsl_fit_model_power:
+			if (num == 1)
+				paramNames << "a" << "b";
+			else {
+				paramNames << "a" << "b" << "c";
+				model = "a + b*x^c";
+			}
+			break;
+		case nsl_fit_model_exponential:
+			switch (num) {
+			case 1:
+				paramNames << "a" << "b";
+				break;
+			case 2:
+				model = "a1*exp(b1*x) + a2*exp(b2*x)";
+				paramNames << "a1" << "b1" << "a2" << "b2";
+				paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
+						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082");
+				break;
+			case 3:
+				model = "a1*exp(b1*x) + a2*exp(b2*x) + a3*exp(b3*x)";
+				paramNames << "a1" << "b1" << "a2" << "b2" << "a3" << "b3";
+				paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
+						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082")
+						<< QString::fromUtf8("a\u2083") << QString::fromUtf8("b\u2083");
+				break;
+			//TODO: up to 9 exponentials
+			}
+			break;
+		case nsl_fit_model_inverse_exponential:
+			num = 1;
+			paramNames << "a" << "b" << "c";
+			break;
+		case nsl_fit_model_fourier:
+			paramNames << "w" << "a0" << "a1" << "b1";
+			paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
+				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
+			if (num > 1) {
+				for (int i = 1; i <= num; ++i) {
+					QString numStr = QString::number(i);
+					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
+					paramNames << "a"+numStr << "b"+numStr;
+					paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
+				}
+			}
+			break;
+		}
+		break;
+	case nsl_fit_model_peak:
+		switch ((nsl_fit_model_type_peak)modelType) {
+		case nsl_fit_model_gaussian:
+			switch (num) {
+			case 1:
+				paramNames << "s" << "mu" << "a";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				break;
+			case 2:
+				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				break;
+			case 3:
+				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				break;
+			default:
+				model = "1./sqrt(2*pi) * (";
+				for (int i = 1; i <= num; ++i) {
+					QString numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
+				}
+				model += ")";
+			}
+			break;
+		case nsl_fit_model_lorentz:
+			switch (num) {
+			case 1:
+				paramNames << "g" << "mu" << "a";
+				paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+				break;
+			case 2:
+				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2))";
+				paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2";
+				paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				break;
+			case 3:
+				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2) + a3 * g3/(g3^2+(x-mu3)^2))";
+				paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2" << "g3" << "mu3" << "a3";
+				paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03b3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				break;
+			default:
+				QString numStr = QString::number(num);
+				model = "1./pi * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += "a" + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
+					paramNames << "g" + numStr << "mu" + numStr << "a" + numStr;
+					paramNamesUtf8 << QString::fromUtf8("\u03b3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
+				}
+				model += ")";
+			}
+			break;
+		case nsl_fit_model_sech:
+			switch (num) {
+			case 1:
+				paramNames << "s" << "mu" << "a";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				break;
+			case 2:
+				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				break;
+			case 3:
+				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				break;
+			default:
+				QString numStr = QString::number(num);
+				model = "1/pi * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
+					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
+				}
+				model += ")";
+			}
+			break;
+		case nsl_fit_model_logistic:
+			switch (num) {
+			case 1:
+				paramNames << "s" << "mu" << "a";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				break;
+			case 2:
+				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				break;
+			case 3:
+				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
+				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				break;
+			default:
+				QString numStr = QString::number(num);
+				model = "1/4 * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
+					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
+				}
+				model += ")";
+			}
+			break;
+		}
+		break;
+	case nsl_fit_model_growth:
+		switch ((nsl_fit_model_type_growth)modelType) {
+		case nsl_fit_model_atan:
+		case nsl_fit_model_tanh:
+		case nsl_fit_model_algebraic_sigmoid:
+		case nsl_fit_model_erf:
+		case nsl_fit_model_gudermann:
+			paramNames << "s" << "mu" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_fit_model_sigmoid:
+			paramNames << "k" << "mu" << "a";
+			paramNamesUtf8 << "k" << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_fit_model_hill:
+			paramNames << "s" << "n" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "n" << "A";
+			break;
+		case nsl_fit_model_gompertz:
+			paramNames << "a" << "b" << "c";
+			break;
+		}
+		break;
+	case nsl_fit_model_distribution:
+		switch ((nsl_sf_stats_distribution)modelType) {
+		case nsl_sf_stats_gaussian:
+		case nsl_sf_stats_laplace:
+		case nsl_sf_stats_rayleigh_tail:
+		case nsl_sf_stats_lognormal:
+		case nsl_sf_stats_logistic:
+		case nsl_sf_stats_sech:
+			paramNames << "s" << "mu" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_gaussian_tail:
+			paramNames << "s" << "mu" << "A" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "a";
+			break;
+		case nsl_sf_stats_exponential:
+			paramNames << "l" << "mu" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_exponential_power:
+			paramNames << "s" << "mu" << "b" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "b" << "A";
+			break;
+		case nsl_sf_stats_cauchy_lorentz:
+		case nsl_sf_stats_levy:
+			paramNames << "g" << "mu" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_rayleigh:
+			paramNames << "s" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			break;
+		case nsl_sf_stats_landau:
+			paramNames << "a";
+			paramNamesUtf8 << "A";
+			break;
+		case nsl_sf_stats_levy_alpha_stable:	// unused distributions
+		case nsl_sf_stats_levy_skew_alpha_stable:
+		case nsl_sf_stats_bernoulli:
+			break;
+		case nsl_sf_stats_gamma:
+			paramNames << "t" << "k" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03b8") << "k" << "A";
+			break;
+		case nsl_sf_stats_flat:
+			paramNames << "a" << "b" << "A";
+			break;
+		case nsl_sf_stats_chi_squared:
+			paramNames << "n" << "a";
+			paramNamesUtf8 << "n" << "A";
+			break;
+		case nsl_sf_stats_fdist:
+			paramNames << "n1" << "n2" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2081")
+				<< QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2082") << "A";
+			break;
+		case nsl_sf_stats_tdist:
+			paramNames << "n" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03bd") << "A";
+			break;
+		case nsl_sf_stats_beta:
+		case nsl_sf_stats_pareto:
+			paramNames << "a" << "b" << "A";
+			break;
+		case nsl_sf_stats_weibull:
+			paramNames << "k" << "l" << "mu" << "a";
+			paramNamesUtf8 << "k" << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_gumbel1:
+			paramNames << "s" << "b" << "mu" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_gumbel2:
+			paramNames << "a" << "b" << "mu" << "A";
+			paramNamesUtf8 << "a" << "b" << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_poisson:
+			paramNames << "l" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
+			break;
+		case nsl_sf_stats_binomial:
+		case nsl_sf_stats_negative_binomial:
+		case nsl_sf_stats_pascal:
+			paramNames << "p" << "n" << "a";
+			paramNamesUtf8 << "p" << "n" << "A";
+			break;
+		case nsl_sf_stats_geometric:
+		case nsl_sf_stats_logarithmic:
+			paramNames << "p" << "a";
+			paramNamesUtf8 << "p" << "A";
+			break;
+		case nsl_sf_stats_hypergeometric:
+			paramNames << "n1" << "n2" << "t" << "a";
+			paramNamesUtf8 << "n" + QString::fromUtf8("\u2081") << "n" + QString::fromUtf8("\u2082") << "t" << "A";
+			break;
+		case nsl_sf_stats_maxwell_boltzmann:
+			paramNames << "s" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			break;
+		case nsl_sf_stats_frechet:
+			paramNames << "g" << "mu" << "s" << "a";
+			paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << QString::fromUtf8("\u03c3") << "A";
+			break;
+		}
+		break;
+	case nsl_fit_model_custom:
+		break;
+	}
+
+	if (paramNamesUtf8.isEmpty())
+		paramNamesUtf8 << paramNames;
 }
 
 /*!
@@ -1519,7 +1857,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	//write xy-fit-curve specific information
 
-	//fit data
+	//fit data - no need to save model expression and parameter names, they are set in XYFitCurve::initFitData()
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
@@ -1532,22 +1870,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
 	writer->writeAttribute("weightsType", QString::number(d->fitData.weightsType));
 	writer->writeAttribute("degree", QString::number(d->fitData.degree));
-	writer->writeAttribute("model", d->fitData.model);
 	writer->writeAttribute("maxIterations", QString::number(d->fitData.maxIterations));
 	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
 	writer->writeAttribute("evaluateFullRange", QString::number(d->fitData.evaluateFullRange));
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
-
-	writer->writeStartElement("paramNames");
-	foreach (const QString &name, d->fitData.paramNames)
-		writer->writeTextElement("name", name);
-	writer->writeEndElement();
-	writer->writeStartElement("paramNamesUtf8");
-	foreach (const QString &name, d->fitData.paramNamesUtf8)
-		writer->writeTextElement("nameUtf8", name);
-	writer->writeEndElement();
 
 	writer->writeStartElement("paramStartValues");
 	foreach (const double &value, d->fitData.paramStartValues)
@@ -1652,7 +1980,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
 			READ_INT_VALUE("weightsType", fitData.weightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
-			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
@@ -1660,10 +1987,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
-		} else if (reader->name() == "name") {
-			d->fitData.paramNames << reader->readElementText();
-		} else if (reader->name() == "nameUtf8") {
-			d->fitData.paramNamesUtf8 << reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fixed") {
@@ -1725,9 +2048,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT)
 		d->fitData.modelType = 0;
 
-	// use normal param names if no utf8 param names are defined
-	if (d->fitData.paramNamesUtf8.isEmpty())
-		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+	//set the model expression and the parameter names
+	XYFitCurve::initFitData(d->fitData);
 
 	// fixed and limits are not saved in project (old project)
 	if (d->fitData.paramFixed.isEmpty()) {
