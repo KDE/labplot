@@ -37,7 +37,7 @@
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
-
+#include "backend/lib/trace.h"
 #include <QApplication>
 #include <QMdiArea>
 #include <QMenu>
@@ -1043,6 +1043,7 @@ void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
+	PERFTRACE("WorksheetView::dropEvent");
 	const QMimeData* mimeData = event->mimeData();
 	if (!mimeData)
 		return;
@@ -1091,17 +1092,21 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 		xColumn = columns.at(0);
 
 	//create curves
+	bool curvesAdded = false;
 	for (const auto* column : columns) {
 		if (column == xColumn)
 			continue;
 
 		XYCurve* curve = new XYCurve(column->name());
+		curve->suppressRetransform(true); //suppress retransform, all curved will be recalculated at the end
 		curve->setXColumn(xColumn);
 		curve->setYColumn(column);
 		plot->addChild(curve);
+		curve->suppressRetransform(false);
+		curvesAdded = true;
 	}
 
-	if (!columns.isEmpty())
+	if (curvesAdded)
 		plot->dataChanged();
 }
 
