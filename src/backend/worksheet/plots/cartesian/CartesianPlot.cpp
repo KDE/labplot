@@ -1825,7 +1825,7 @@ void CartesianPlotPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	DEBUG("CartesianPlotPrivate::retransform()");
+	PERFTRACE("CartesianPlotPrivate::retransform()");
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 

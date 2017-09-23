@@ -2009,6 +2009,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
+
+			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+			XYFitCurve::initFitData(d->fitData);
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fixed") {
@@ -2063,30 +2066,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	// wait for data to be read before using the pointers
-	QThreadPool::globalInstance()->waitForDone();
-
 	// new fit model style
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT)
 		d->fitData.modelType = 0;
 
-	//set the model expression and the parameter names
-	XYFitCurve::initFitData(d->fitData);
-
-	// fixed and limits are not saved in project (old project)
-	if (d->fitData.paramFixed.isEmpty()) {
-		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramFixed << false;
-	}
-	if (d->fitData.paramLowerLimits.isEmpty()) {
-		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramLowerLimits << -DBL_MAX;
-	}
-	if (d->fitData.paramUpperLimits.isEmpty()) {
-		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
-			d->fitData.paramUpperLimits << DBL_MAX;
-	}
-	DEBUG("paramFixed size = " << d->fitData.paramFixed.size());
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->setHidden(true);
@@ -2101,10 +2086,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
-		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
-		setUndoAware(true);
 	}
 
 	return true;
