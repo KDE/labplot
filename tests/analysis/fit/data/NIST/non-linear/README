@@ -1,0 +1,33 @@
+http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
+
+
+Dataset Name		Level of Difficulty		Model Classification		Number of Parameters		Number of Observations		Source
+Misra1a		Lower		Exponential			2				14	   		Observed
+Chwirut2		Lower		Exponential			3				54	   		Observed
+Chwirut1		Lower		Exponential			3				214	   		Observed
+Lanczos3		Lower		Exponential			6				24	   		Generated
+Gauss1		Lower		Exponential			8				250	   		Generated
+Gauss2		Lower		Exponential			8				250	   		Generated
+DanWood		Lower		Miscellaneous			2				6	   		Observed
+Misra1b		Lower		Miscellaneous			2				14	   		Observed
+
+Kirby2		Average		Rational			5				151	   		Observed
+Hahn1		Average		Rational			7				236	   		Observed
+Nelson		Average		Exponential			3				128	   		Observed
+MGH17		Average		Exponential			5				33	   		Generated
+Lanczos1		Average		Exponential			6				24	   		Generated
+Lanczos2		Average		Exponential			6				24	   		Generated
+Gauss3		Average		Exponential			8				250	   		Generated
+Misra1c		Average		Miscellaneous			2				14	   		Observed
+Misra1d		Average		Miscellaneous			2				14	   		Observed
+Roszman1		Average		Miscellaneous			4				25	   		Observed
+ENSO		Average		Miscellaneous			9				168	   		Observed
+
+MGH09		Higher		Rational			4				11	   		Generated
+Thurber		Higher		Rational			7				37	   		Observed
+BoxBOD		Higher		Exponential			2				6	   		Observed
+Rat42		Higher		Exponential			3				9	   		Observed
+MGH10		Higher		Exponential			3				16	   		Generated
+Eckerle4		Higher		Exponential			3				35	   		Observed
+Rat43		Higher		Exponential			4				15	   		Observed
+Bennett5		Higher		Miscellaneous			3				154	   		Observed
