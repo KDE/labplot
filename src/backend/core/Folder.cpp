@@ -71,12 +71,12 @@ QMenu* Folder::createContextMenu() {
  * \brief Save as XML
  */
 void Folder::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("folder");
+	writer->writeStartElement(QLatin1String("folder"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
-		writer->writeStartElement("child_aspect");
+	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
+		writer->writeStartElement(QLatin1String("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
 	}
@@ -87,7 +87,7 @@ void Folder::save(QXmlStreamWriter* writer) const {
  * \brief Load from XML
  */
 bool Folder::load(XmlStreamReader* reader, bool preview) {
-	if(reader->isStartElement() && reader->name() == "folder") {
+	if(reader->isStartElement() && reader->name() == QLatin1String("folder")) {
 		if (!readBasicAttributes(reader))
 			return false;
 
@@ -98,10 +98,10 @@ bool Folder::load(XmlStreamReader* reader, bool preview) {
 			if (reader->isEndElement()) break;
 
 			if (reader->isStartElement()) {
-				if (reader->name() == "comment") {
+				if (reader->name() == QLatin1String("comment")) {
 					if (!readCommentElement(reader))
 						return false;
-				} else if(reader->name() == "child_aspect") {
+				} else if(reader->name() == QLatin1String("child_aspect")) {
 					if (!readChildAspectElement(reader, preview))
 						return false;
 				} else {// unknown element
@@ -121,38 +121,38 @@ bool Folder::load(XmlStreamReader* reader, bool preview) {
  */
 bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	if (!reader->skipToNextTag()) return false;
-	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
+	if (reader->isEndElement() && reader->name() == QLatin1String("child_aspect")) return true; // empty element tag
 
 	QString element_name = reader->name().toString();
-	if (element_name == "folder") {
+	if (element_name == QLatin1String("folder")) {
 		Folder* folder = new Folder("");
 		if (!folder->load(reader, preview)) {
 			delete folder;
 			return false;
 		}
 		addChildFast(folder);
-	} else if (element_name == "workbook") {
+	} else if (element_name == QLatin1String("workbook")) {
 		Workbook* workbook = new Workbook(0, "");
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
 		addChildFast(workbook);
-	} else if (element_name == "spreadsheet") {
+	} else if (element_name == QLatin1String("spreadsheet")) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChildFast(spreadsheet);
-	} else if (element_name == "matrix") {
+	} else if (element_name == QLatin1String("matrix")) {
 		Matrix* matrix = new Matrix(0, "", true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
 		addChildFast(matrix);
-	} else if (element_name == "worksheet") {
+	} else if (element_name == QLatin1String("worksheet")) {
 		Worksheet* worksheet = new Worksheet(0, "");
 		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader, preview)) {
@@ -162,7 +162,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(worksheet);
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
-	} else if (element_name == "cantorWorksheet") {
+	} else if (element_name == QLatin1String("cantorWorksheet")) {
 		CantorWorksheet* cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
@@ -170,21 +170,21 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(cantorWorksheet);
 #endif
-	} else if (element_name == "LiveDataSource") {
+	} else if (element_name == QLatin1String("LiveDataSource")) {
 		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;
 		}
 		addChildFast(liveDataSource);
-	} else if (element_name == "datapicker") {
+	} else if (element_name == QLatin1String("datapicker")) {
 		Datapicker* datapicker = new Datapicker(0, "", true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
 		addChildFast(datapicker);
-	} else if (element_name == "note") {
+	} else if (element_name == QLatin1String("note")) {
 		Note* note = new Note("");
 		if (!note->load(reader, preview)) {
 			delete note;
