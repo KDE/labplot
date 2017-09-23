@@ -157,7 +157,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	connect(uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
-	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)));
+	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
 	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
 	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()));
 	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
@@ -467,12 +467,19 @@ void XYFitCurveDock::weightChanged(int index) {
 	enableRecalculate();
 }
 
+/*!
+ * called when the fit model category (basic functions, peak functions etc.) was changed.
+ * In the combobox for the model type shows the model types for the current category \index and calls \c modelTypeChanged()
+ * to update the model type dependent widgets in the general-tab.
+ */
 void XYFitCurveDock::categoryChanged(int index) {
-	DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\", type = " << m_fitData.modelType);
+	DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
+
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
+
 	m_initializing = true;
 	uiGeneralTab.cbModel->clear();
 	uiGeneralTab.cbModel->show();
@@ -496,7 +503,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
 
 		// not-used items are disabled here
-        	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			// unused distributions
@@ -513,17 +520,20 @@ void XYFitCurveDock::categoryChanged(int index) {
 		uiGeneralTab.lModel->hide();
 	}
 
+	//show the fit-model for the currently selected default (first) fit-model
 	m_fitData.modelType = 0;
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+	modelTypeChanged(m_fitData.modelType);
 
 	m_initializing = false;
-
-	//show the fit-model for the currently selected default (first) fit-model
-	modelChanged(m_fitData.modelType);
 }
 
-void XYFitCurveDock::modelChanged(int index) {
-	DEBUG("modelChanged() type = " << index << ", initializing = " << m_initializing);
+/*!
+ * called when the fit model type (polynomial, power, etc.) was changed.
+ * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
+ */
+void XYFitCurveDock::modelTypeChanged(int index) {
+	DEBUG("modelTypeChanged() type = " << index << ", initializing = " << m_initializing);
 	// leave if there is no selection
 	if(index == -1)
 		return;
@@ -586,61 +596,33 @@ void XYFitCurveDock::modelChanged(int index) {
 	this->updateModelEquation();
 }
 
+/*!
+ * Show the preview pixmap of the fit model expression for the current model category and type.
+ * Called when the model type or the degree of the model were changed.
+ */
 void XYFitCurveDock::updateModelEquation() {
 	DEBUG("updateModelEquation() type = " << m_fitData.modelType);
 
-	int num = uiGeneralTab.sbDegree->value();
-	QStringList vars; // variables/parameter that are known
-	vars << "x";
+	//this function can also be called when the value for the degree was changed -> update the fit data structure
+	int degree = uiGeneralTab.sbDegree->value();
+	m_fitData.degree = degree;
 	XYFitCurve::initFitData(m_fitData);
+
+	// variables/parameter that are known
+	QStringList vars = {"x"};
 	vars << m_fitData.paramNames;
-
-	//resize the vector for the start values and set the elements to 1.0
-	//in case a custom model is used, do nothing, we take over the previous values
-	//when initializing, don't do anything - we use start values already
-	//available - unless there're no values available
-	if (m_fitData.modelCategory != nsl_fit_model_custom ||
-	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		DEBUG("number of start values = " << m_fitData.paramNames.size() << ' ' << m_fitData.paramStartValues.size());
-		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
-		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
-		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
-
-		for (int i = 0; i < m_fitData.paramNames.size(); ++i) {
-			m_fitData.paramStartValues[i] = 1.0;
-			m_fitData.paramFixed[i] = false;
-			m_fitData.paramLowerLimits[i] = -DBL_MAX;
-			m_fitData.paramUpperLimits[i] = DBL_MAX;
-		}
-
-		// model-dependent start values
-		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
-			nsl_sf_stats_distribution type = (nsl_sf_stats_distribution)m_fitData.modelType;
-			if (type == nsl_sf_stats_flat)
-				m_fitData.paramStartValues[0] = -1.0;
-			else if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
-				m_fitData.paramStartValues[1] = 0.0;
-			else if (type == nsl_sf_stats_weibull || type == nsl_sf_stats_gumbel2)
-				m_fitData.paramStartValues[2] = 0.0;
-			else if (type == nsl_sf_stats_binomial || type == nsl_sf_stats_negative_binomial || type == nsl_sf_stats_pascal
-				|| type == nsl_sf_stats_geometric || type == nsl_sf_stats_logarithmic)
-				m_fitData.paramStartValues[0] = 0.5;
-		}
-	}
-
 	uiGeneralTab.teEquation->setVariables(vars);
 
 	// set formula picture
-	uiGeneralTab.lEquation->setText(("f(x) ="));
+	uiGeneralTab.lEquation->setText(QLatin1String("f(x) ="));
 	QString file;
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic: {
 		// formula pic depends on degree
-		QString numSuffix = QString::number(num);
-		if (num > 4)
+		QString numSuffix = QString::number(degree);
+		if (degree > 4)
 			numSuffix = "4";
-		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && num > 2)
+		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
 			numSuffix = "2";
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
@@ -648,8 +630,8 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 	case nsl_fit_model_peak: {
 		// formula pic depends on number of peaks
-		QString numSuffix = QString::number(num);
-		if (num > 4)
+		QString numSuffix = QString::number(degree);
+		if (degree > 4)
 			numSuffix = "4";
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
@@ -664,9 +646,9 @@ void XYFitCurveDock::updateModelEquation() {
 			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
-			uiGeneralTab.lEquation->setText(("f(k)/A ="));
+			uiGeneralTab.lEquation->setText(QLatin1String("f(k)/A ="));
 		else
-			uiGeneralTab.lEquation->setText(("f(x)/A ="));
+			uiGeneralTab.lEquation->setText(QLatin1String("f(x)/A ="));
 		break;
 	case nsl_fit_model_custom:
 		uiGeneralTab.teEquation->show();

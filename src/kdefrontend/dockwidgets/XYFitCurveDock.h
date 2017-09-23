@@ -74,7 +74,7 @@ private slots:
 	void dataSourceCurveChanged(const QModelIndex&);
 	void weightChanged(int);
 	void categoryChanged(int);
-	void modelChanged(int);
+	void modelTypeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void xErrorColumnChanged(const QModelIndex&);

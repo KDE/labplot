@@ -148,20 +148,6 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 	}
 
 	XYFitCurve::initFitData(fitData);
-
-	if (fitData.modelCategory != nsl_fit_model_custom) {
-		fitData.paramStartValues.resize(fitData.paramNames.size());
-		fitData.paramFixed.resize(fitData.paramNames.size());
-		fitData.paramLowerLimits.resize(fitData.paramNames.size());
-		fitData.paramUpperLimits.resize(fitData.paramNames.size());
-
-		for (int i = 0; i < fitData.paramNames.size(); ++i) {
-			fitData.paramStartValues[i] = 1.0;
-			fitData.paramFixed[i] = false;
-			fitData.paramLowerLimits[i] = -DBL_MAX;
-			fitData.paramUpperLimits[i] = DBL_MAX;
-		}
-	}
 }
 
 /*!
@@ -174,14 +160,19 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QStringList& paramNames = fitData.paramNames;
 	QStringList& paramNamesUtf8 = fitData.paramNamesUtf8;
 	int num = fitData.degree;
+	QVector<double>& paramStartValues = fitData.paramStartValues;
+	QVector<double>& paramLowerLimits = fitData.paramLowerLimits;
+	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
+	QVector<bool>& paramFixed = fitData.paramFixed;
+
+	DEBUG("XYFitCurve::initFitData() for model category  = " << modelCategory << ", model type = " << modelType << ", degree = " << num);
 
 	paramNames.clear();
 	paramNamesUtf8.clear();
 
 	// indices used in multi peak parameter models
-	QStringList indices;
-	indices << QString::fromUtf8("\u2081") << QString::fromUtf8("\u2082") << QString::fromUtf8("\u2083") << QString::fromUtf8("\u2084") << QString::fromUtf8("\u2085")
-		<< QString::fromUtf8("\u2086") << QString::fromUtf8("\u2087") << QString::fromUtf8("\u2088") << QString::fromUtf8("\u2089");
+	QStringList indices = {QString::fromUtf8("\u2081"), QString::fromUtf8("\u2082"), QString::fromUtf8("\u2083"), QString::fromUtf8("\u2084"), QString::fromUtf8("\u2085"),
+							QString::fromUtf8("\u2086"), QString::fromUtf8("\u2087"), QString::fromUtf8("\u2088"), QString::fromUtf8("\u2089")};
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
@@ -524,6 +515,37 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
+
+	//resize the vector for the start values and set the elements to 1.0
+	//in case a custom model is used, do nothing, we take over the previous values
+	if (modelCategory != nsl_fit_model_custom) {
+		const int np = paramNames.size();
+		paramStartValues.resize(np);
+		paramFixed.resize(np);
+		paramLowerLimits.resize(np);
+		paramUpperLimits.resize(np);
+
+		for (int i = 0; i < np; ++i) {
+			paramStartValues[i] = 1.0;
+			paramFixed[i] = false;
+			paramLowerLimits[i] = -DBL_MAX;
+			paramUpperLimits[i] = DBL_MAX;
+		}
+
+		// set some model-dependent start values
+		if (modelCategory == nsl_fit_model_distribution) {
+			nsl_sf_stats_distribution type = (nsl_sf_stats_distribution)modelType;
+			if (type == nsl_sf_stats_flat)
+				paramStartValues[0] = -1.0;
+			else if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
+				paramStartValues[1] = 0.0;
+			else if (type == nsl_sf_stats_weibull || type == nsl_sf_stats_gumbel2)
+				paramStartValues[2] = 0.0;
+			else if (type == nsl_sf_stats_binomial || type == nsl_sf_stats_negative_binomial || type == nsl_sf_stats_pascal
+				|| type == nsl_sf_stats_geometric || type == nsl_sf_stats_logarithmic)
+				paramStartValues[0] = 0.5;
+		}
+	}
 }
 
 /*!
