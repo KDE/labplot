@@ -167,6 +167,24 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	DEBUG("Column::setColumnMode() DONE");
 }
 
+void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
+
+	auto* old_input_filter = d->inputFilter();
+	auto* old_output_filter = d->outputFilter();
+	exec(new ColumnSetModeCmd(d, mode));
+
+	if (d->inputFilter() != old_input_filter) {
+		removeChild(old_input_filter);
+		addChildFast(d->inputFilter());
+		d->inputFilter()->input(0, m_string_io);
+	}
+	if (d->outputFilter() != old_output_filter) {
+		removeChild(old_output_filter);
+		addChildFast(d->outputFilter());
+		d->outputFilter()->input(0, this);
+	}
+}
+
 /**
  * \brief Copy another column of the same type
  *
@@ -756,19 +774,19 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'designation'"));
 	else
-		setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
+		d->setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
 
 	str = attribs.value("mode").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'mode'"));
 	else
-		setColumnMode( AbstractColumn::ColumnMode(str.toInt()) );
+		setColumnModeFast( AbstractColumn::ColumnMode(str.toInt()) );
 
 	str = attribs.value("width").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'width'"));
 	else
-		setWidth(str.toInt());
+		d->setWidth(str.toInt());
 
 	// read child elements
 	while (!reader->atEnd()) {

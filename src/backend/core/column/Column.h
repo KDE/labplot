@@ -57,6 +57,7 @@ public:
 
 	AbstractColumn::ColumnMode columnMode() const override;
 	void setColumnMode(AbstractColumn::ColumnMode) override;
+	void setColumnModeFast(AbstractColumn::ColumnMode);
 
 	bool copy(const AbstractColumn*) override;
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
