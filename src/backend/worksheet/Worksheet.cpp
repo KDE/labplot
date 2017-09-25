@@ -563,7 +563,7 @@ void Worksheet::setLayoutColumnCount(int count) {
 
 class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private, QRectF> {
 public:
-	WorksheetSetPageRectCmd(Worksheet::Private* target, Loki::TypeTraits<QRectF>::ParameterType newValue, const QString& description)
+	WorksheetSetPageRectCmd(Worksheet::Private* target, QRectF newValue, const QString& description)
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
 	virtual void finalize() {
 		m_target->updatePageRect();
