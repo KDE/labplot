@@ -107,8 +107,6 @@ void XYFitCurveDock::setupGeneral() {
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbWeight->addItem(nsl_fit_weight_type_name[i]);
 	uiGeneralTab.cbWeight->setCurrentIndex(nsl_fit_weight_instrumental);
-	uiGeneralTab.lWeight->setEnabled(false);
-	uiGeneralTab.cbWeight->setEnabled(false);
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -1093,8 +1091,6 @@ void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, column);
-	uiGeneralTab.lWeight->setEnabled(true);
-	uiGeneralTab.cbWeight->setEnabled(true);
 	m_initializing = false;
 }
 
