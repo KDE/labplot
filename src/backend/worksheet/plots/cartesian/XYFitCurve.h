@@ -45,7 +45,7 @@ class XYFitCurve : public XYCurve {
 public:
 	struct FitData {
 		FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
-				weightsType(nsl_fit_weight_instrumental),
+				weightsType(nsl_fit_weight_no),
 				degree(1),
 				maxIterations(500),
 				eps(1e-4),

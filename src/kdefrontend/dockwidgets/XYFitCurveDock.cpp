@@ -456,6 +456,10 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
+
+	//y-error column was selected - in case no weighting is selected yet, automatically select instrumental weighting
+	if ( uiGeneralTab.cbWeight->currentIndex() == 0 )
+		uiGeneralTab.cbWeight->setCurrentIndex((int)nsl_fit_weight_instrumental);
 }
 
 void XYFitCurveDock::weightChanged(int index) {
