@@ -48,11 +48,9 @@ extern const char* nsl_fit_model_category_name[];
 extern const char* nsl_fit_model_basic_name[];
 extern const char* nsl_fit_model_peak_name[];
 extern const char* nsl_fit_model_growth_name[];
-extern const char* nsl_fit_model_distribution_name[];
 extern const char* nsl_fit_model_basic_equation[];
 extern const char* nsl_fit_model_peak_equation[];
 extern const char* nsl_fit_model_growth_equation[];
-extern const char* nsl_fit_model_distribution_equation[];
 
 #define NSL_FIT_WEIGHT_TYPE_COUNT 8
 typedef enum {nsl_fit_weight_no,		/* w = 1 */

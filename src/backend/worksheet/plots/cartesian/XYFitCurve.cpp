@@ -51,7 +51,6 @@ extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_statistics_double.h>
 #include "backend/gsl/parser.h"
-#include "backend/nsl/nsl_fit.h"
 #include "backend/nsl/nsl_sf_stats.h"
 }
 #include <cmath>
@@ -176,6 +175,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
+		model = nsl_fit_model_basic_equation[fitData.modelType];
 		switch (modelType) {
 		case nsl_fit_model_polynomial:
 			paramNames << "c0" << "c1";
@@ -243,6 +243,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		}
 		break;
 	case nsl_fit_model_peak:
+		model = nsl_fit_model_peak_equation[fitData.modelType];
 		switch ((nsl_fit_model_type_peak)modelType) {
 		case nsl_fit_model_gaussian:
 			switch (num) {
@@ -382,6 +383,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		}
 		break;
 	case nsl_fit_model_growth:
+		model = nsl_fit_model_growth_equation[fitData.modelType];
 		switch ((nsl_fit_model_type_growth)modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh:
@@ -405,6 +407,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		}
 		break;
 	case nsl_fit_model_distribution:
+		model = nsl_sf_stats_distribution_equation[fitData.modelType];
 		switch ((nsl_sf_stats_distribution)modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
@@ -574,7 +577,6 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	return d->fitResult;
 }
 
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -652,7 +654,7 @@ XYFitCurvePrivate::~XYFitCurvePrivate() {
 	//when the parent aspect is removed
 }
 
-/* data structure to pass parameter to functions */
+// data structure to pass parameter to fit functions
 struct data {
 	size_t n;	//number of data points
 	double* x;	//pointer to the vector with x-data values
@@ -709,7 +711,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_variable("x", x[i]);
 		double Yi = parse(func);
 
-//		DEBUG("evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi);
+//		DEBUG("evaluate function \"" << func << "\": f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -1429,6 +1431,7 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 }
 
 void XYFitCurvePrivate::recalculate() {
+	DEBUG("XYFitCurvePrivate::recalculate()");
 	QElapsedTimer timer;
 	timer.start();
 
@@ -1581,8 +1584,8 @@ void XYFitCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 	double* xerror = xerrorVector.data();	// size may be 0
 	double* yerror = yerrorVector.data();	// size may be 0
-	DEBUG("x errors " << xerrorVector.size());
-	DEBUG("y errors " << yerrorVector.size());
+	DEBUG("x errors: " << xerrorVector.size());
+	DEBUG("y errors: " << yerrorVector.size());
 	double* weight = new double[n];
 
 	for (size_t i = 0; i < n; i++)
@@ -1622,12 +1625,12 @@ void XYFitCurvePrivate::recalculate() {
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	for (unsigned int i = 0; i < np; i++)
-		DEBUG("fixed parameter " << i << ' ' << fitData.paramFixed.data()[i]);
+		DEBUG("parameter " << i << " fixed: " << fitData.paramFixed.data()[i]);
 
 	//function to fit
 	gsl_multifit_function_fdf f;
-	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames,
-				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
+	DEBUG("model = " << fitData.model.toStdString());
+	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
 	f.fdf = &func_fdf;
@@ -1669,7 +1672,10 @@ void XYFitCurvePrivate::recalculate() {
 
 		status = gsl_multifit_fdfsolver_iterate(s);
 		writeSolverState(s);
-		if (status) break;
+		if (status) {
+			DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
+			break;
+		}
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 

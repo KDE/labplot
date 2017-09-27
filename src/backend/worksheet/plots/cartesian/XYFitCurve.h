@@ -74,7 +74,7 @@ public:
 		bool useDataErrors;		// use given data errors when fitting (default)
 		bool useResults;		// use results as new start values (default)
 
-		bool autoRange;			// use all data?
+		bool autoRange;		// use all data?
 		QVector<double> xRange;		// x range for integration
 	};
 
