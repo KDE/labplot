@@ -1,0 +1,15 @@
+http://www.itl.nist.gov/div898/strd/lls/lls.shtml
+
+
+Dataset Name 	    	Level of Difficulty 	Model Class 	Number of Parameters 	Number of Observations 	Source
+Norris 		 Lower 	 Linear 	2          	36           	  Observed
+Pontius 		 Lower 	 Quadratic 	3          	40           	  Observed
+NoInt1 		 Average 	 Linear 	1          	11           	  Generated
+NoInt2 		 Average 	 Linear 	1          	3           	  Generated
+Filip 		 Higher 	 Polynomial 	11          	82           	  Observed
+Longley 		 Higher 	 Multilinear 	7          	16           	  Observed
+Wampler1 		 Higher 	 Polynomial 	6          	21           	  Generated
+Wampler2 		 Higher 	 Polynomial 	6          	21           	  Generated
+Wampler3 		 Higher 	 Polynomial 	6          	21           	  Generated
+Wampler4 		 Higher 	 Polynomial 	6          	21           	  Generated
+Wampler5 		 Higher 	 Polynomial 	6          	21           	  Generated

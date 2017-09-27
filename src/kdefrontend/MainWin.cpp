@@ -36,7 +36,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -44,6 +44,7 @@
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
 
+#include "commonfrontend/core/PartMdiView.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -56,6 +57,11 @@
 #include "commonfrontend/note/NoteView.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportProjectDialog.h"
+#include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
+#ifdef HAVE_LIBORIGIN
+#include "kdefrontend/datasources/ImportOpj.h"
+#endif
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -72,7 +78,6 @@
 #include <QMimeData>
 #include <QElapsedTimer>
 #include <QHash>
-#include <QDebug>	// qWarning()
 
 #include <KActionCollection>
 #include <KFileDialog>
@@ -83,6 +88,7 @@
 #include <KStatusBar>
 #include <KLocalizedString>
 #include <KFilterDev>
+#include <KRecentFilesAction>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
@@ -94,54 +100,55 @@
 
 \ingroup kdefrontend
 */
-
 MainWin::MainWin(QWidget *parent, const QString& filename)
 	: KXmlGuiWindow(parent),
-	m_currentSubWindow(0),
-	m_project(0),
-	m_aspectTreeModel(0),
-	m_projectExplorer(0),
-	m_projectExplorerDock(0),
-	m_propertiesDock(0),
-	m_currentAspect(0),
-	m_currentFolder(0),
-	m_suppressCurrentSubWindowChangedEvent(false),
-	m_closing(false),
-	m_autoSaveActive(false),
-	m_visibilityMenu(0),
-	m_newMenu(0),
-	m_editMenu(0),
-	axisDock(0),
-	notesDock(0),
-	cartesianPlotDock(0),
-	cartesianPlotLegendDock(0),
-	plot3dDock(0),
-	axes3dDock(0),
-	surface3dDock(0),
-	curve3dDock(0),
-	columnDock(0),
-	matrixDock(0),
-	spreadsheetDock(0),
-	projectDock(0),
-	xyCurveDock(0),
-	xyEquationCurveDock(0),
-	xyDataReductionCurveDock(0),
-	xyDifferentiationCurveDock(0),
-	xyIntegrationCurveDock(0),
-	xyInterpolationCurveDock(0),
-	xySmoothCurveDock(0),
-	xyFitCurveDock(0),
-	xyFourierFilterCurveDock(0),
-	xyFourierTransformCurveDock(0),
-	worksheetDock(0),
-	textLabelDock(0),
-	customPointDock(0),
-	datapickerImageDock(0),
-	datapickerCurveDock(0),
+	  m_currentSubWindow(0),
+	  m_project(0),
+	  m_aspectTreeModel(0),
+	  m_projectExplorer(0),
+	  m_projectExplorerDock(0),
+	  m_propertiesDock(0),
+	  m_currentAspect(0),
+	  m_currentFolder(0),
+	  m_suppressCurrentSubWindowChangedEvent(false),
+	  m_closing(false),
+	  m_autoSaveActive(false),
+	  m_visibilityMenu(0),
+	  m_newMenu(0),
+	  m_editMenu(0),
+	  axisDock(0),
+	  notesDock(0),
+	  cartesianPlotDock(0),
+	  cartesianPlotLegendDock(0),
+	  plot3dDock(0),
+	  axes3dDock(0),
+	  surface3dDock(0),
+	  curve3dDock(0),
+	  columnDock(0),
+	  m_liveDataDock(0),
+	  matrixDock(0),
+	  spreadsheetDock(0),
+	  projectDock(0),
+	  xyCurveDock(0),
+	  xyEquationCurveDock(0),
+	  xyDataReductionCurveDock(0),
+	  xyDifferentiationCurveDock(0),
+	  xyIntegrationCurveDock(0),
+	  xyInterpolationCurveDock(0),
+	  xySmoothCurveDock(0),
+	  xyFitCurveDock(0),
+	  xyFourierFilterCurveDock(0),
+	  xyFourierTransformCurveDock(0),
+	  histogramDock(0),
+	  worksheetDock(0),
+	  textLabelDock(0),
+	  customPointDock(0),
+	  datapickerImageDock(0),
+	  datapickerCurveDock(0),
 #ifdef HAVE_CANTOR_LIBS
-	cantorWorksheetDock(0),
+	  cantorWorksheetDock(0),
 #endif
-	m_guiObserver(0) {
+	  m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -151,7 +158,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 MainWin::~MainWin() {
 	//write settings
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
-// 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
 	//etc...
 
 	KSharedConfig::openConfig()->sync();
@@ -169,15 +175,38 @@ MainWin::~MainWin() {
 		delete m_guiObserver;
 }
 
+void MainWin::showPresenter() {
+	Worksheet* w = activeWorksheet();
+	if (w) {
+		WorksheetView* view = dynamic_cast<WorksheetView*>(w->view());
+		view->presenterMode();
+	} else {
+		//currently active object is not a worksheet but we're asked to start in the presenter mode
+		//determine the first available worksheet and show it in the presenter mode
+		QVector<Worksheet*> worksheets = m_project->children<Worksheet>();
+		if (worksheets.size()>0) {
+			WorksheetView* view = qobject_cast<WorksheetView*>(worksheets.first()->view());
+			view->presenterMode();
+		} else {
+			QMessageBox::information(this, i18n("Presenter Mode"),
+			                         i18n("No worksheets are available in the project. The presenter mode won't be started."));
+		}
+	}
+}
+
 AspectTreeModel* MainWin::model() const {
 	return m_aspectTreeModel;
+}
+
+Project* MainWin::project() const {
+	return m_project;
 }
 
 void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-		this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 #ifdef _WIN32
 	QIcon::setThemeName("hicolor");
 #endif
@@ -190,6 +219,16 @@ void MainWin::initGUI(const QString& fileName) {
 	setupGUI(Default, QLatin1String("labplot2ui.rc"));
 #endif
 	initMenus();
+	//setupGUI();
+
+	QToolBar* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	QToolButton* tbImport = new QToolButton(mainToolBar);
+	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	tbImport->setMenu(m_importMenu);
+	tbImport->setDefaultAction(m_importFileAction);
+	mainToolBar->addWidget(tbImport);
+
+	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	setWindowIcon(QIcon::fromTheme("LabPlot2"));
 	setAttribute( Qt::WA_DeleteOnClose );
 
@@ -293,19 +332,29 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
-	m_newFileDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
-	actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
-	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
+	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
+	connect(m_newLiveDataSourceAction, SIGNAL(triggered()), this, SLOT(newLiveDataSourceActionTriggered()));
 
-	//"New database datasources"
-// 	m_newSqlDataSourceAction = new QAction(QIcon::fromTheme("server-database"),i18n("SQL Data Source "),this);
-// 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
-// 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
+	//Import/Export
+	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+	actionCollection()->addAction("import_file", m_importFileAction);
+	connect(m_importFileAction, SIGNAL(triggered()), SLOT(importFileDialog()));
 
-	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
-	actionCollection()->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
-	actionCollection()->addAction("import", m_importAction);
-	connect(m_importAction, SIGNAL(triggered()), SLOT(importFileDialog()));
+	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
+	actionCollection()->addAction("import_sql", m_importSqlAction);
+	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
+
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("document-import"), i18n("LabPlot Project"), this);
+	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
+	connect(m_importLabPlotAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+
+#ifdef HAVE_LIBORIGIN
+	m_importOpjAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Origin Project (OPJ)"), this);
+	actionCollection()->addAction("import_opj", m_importOpjAction);
+	connect(m_importOpjAction, SIGNAL(triggered()),SLOT(importProjectDialog()));
+#endif
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
@@ -333,7 +382,7 @@ void MainWin::initActions() {
 
 	//Windows
 	QAction* action  = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_C);
+	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_U);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
@@ -413,7 +462,18 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newNotesAction);
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
-	m_newMenu->addAction(m_newFileDataSourceAction);
+	m_newMenu->addAction(m_newLiveDataSourceAction);
+
+	//import menu
+	m_importMenu = new QMenu(this);
+	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
+	m_importMenu ->addAction(m_importFileAction);
+	m_importMenu ->addAction(m_importSqlAction);
+	m_importMenu->addSeparator();
+	m_importMenu->addAction(m_importLabPlotAction);
+#ifdef HAVE_LIBORIGIN
+	m_importMenu ->addAction(m_importOpjAction);
+#endif
 
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
@@ -442,8 +502,6 @@ void MainWin::initMenus() {
 	delete this->guiFactory()->container("new_casWorksheet", this);
 	delete this->guiFactory()->container("cas_worksheet_toolbar", this);
 #endif
-
-// 	m_newMenu->addAction(m_newSqlDataSourceAction);
 
 	//menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window visibility policy"), this);
@@ -500,7 +558,11 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_saveAsAction->setEnabled(!b);
 	m_printAction->setEnabled(!b);
 	m_printPreviewAction->setEnabled(!b);
-	m_importAction->setEnabled(!b);
+	m_importFileAction->setEnabled(!b);
+	m_importSqlAction->setEnabled(!b);
+#ifdef HAVE_LIBORIGIN
+	m_importOpjAction->setEnabled(!b);
+#endif
 	m_exportAction->setEnabled(!b);
 	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
@@ -520,6 +582,8 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container("cas_worksheet", this)->setEnabled(false);
@@ -529,6 +593,7 @@ void MainWin::updateGUIOnProjectChanges() {
 
 	factory->container("new", this)->setEnabled(!b);
 	factory->container("edit", this)->setEnabled(!b);
+	factory->container("import", this)->setEnabled(!b);
 
 	if (b)
 		setCaption("LabPlot2");
@@ -545,6 +610,9 @@ void MainWin::updateGUIOnProjectChanges() {
  * depending on the currently active window (worksheet or spreadsheet).
  */
 void MainWin::updateGUI() {
+	if (m_project->isLoading())
+		return;
+
 	if (m_closing)
 		return;
 
@@ -563,6 +631,8 @@ void MainWin::updateGUI() {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
@@ -682,7 +752,7 @@ void MainWin::updateGUI() {
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 	} else {
-		//no cantor worksheet selected -> deactivate cantor worksheet related menu and toolbar
+		//no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
 		factory->container("cas_worksheet", this)->setEnabled(false);
 		factory->container("cas_worksheet_toolbar", this)->setVisible(false);
 	}
@@ -795,7 +865,7 @@ bool MainWin::newProject() {
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*,QMenu*)), this, SLOT(createFolderContextMenu(const Folder*,QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
-	m_undoViewEmptyLabel = i18n("Project %1 created", m_project->name());
+	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	setCaption(m_project->name());
 
 	return true;
@@ -803,19 +873,21 @@ bool MainWin::newProject() {
 
 void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	QString dir = conf.readEntry("LastOpenDir", "");
-	QString path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
+	const QString& dir = conf.readEntry("LastOpenDir", "");
+	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
 	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
-	if (!path.isEmpty()) {
-		this->openProject(path);
+	if (path.isEmpty())// "Cancel" was clicked
+		return;
 
-		int pos = path.lastIndexOf(QDir::separator());
-		if (pos != -1) {
-			QString newDir = path.left(pos);
-			if (newDir != dir)
-				conf.writeEntry("LastOpenDir", newDir);
-		}
+	this->openProject(path);
+
+	//save new "last open directory"
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		const QString& newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastOpenDir", newDir);
 	}
 }
 
@@ -825,54 +897,23 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	QIODevice *file;
-	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
-		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
-	else	// opens filename using file ending
-		file = new KFilterDev(filename);
-
-	if (file == 0)
-		file = new QFile(filename);
-
-	if (!file->open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Sorry. Could not open file for reading."));
+	if (!newProject())
 		return;
-	}
-
-	//TODO: this solves the problem with empty files (the application doesn't hang anymore)
-	//but it crashes from time to time at unexpected places within Qt.
-// 	char* c;
-// 	bool rc = file->getChar(c);
-// 	if (!rc) {
-// 		KMessageBox::error(this, "The project file is empty.", i18n("Error opening project"));
-// 		file->close();
-// 		delete file;
-// 		return;
-// 	}
-// 	file->seek(0);
-
-	if (!newProject()) {
-		file->close();
-		delete file;
-		return;
-	}
 
 	WAIT_CURSOR;
 	QElapsedTimer timer;
 	timer.start();
-	bool rc = openXML(file);
-	file->close();
-	delete file;
+	const bool rc = m_project->load(filename);
 	if (!rc) {
 		closeProject();
+		RESET_CURSOR;
 		return;
 	}
 
 	m_currentFileName = filename;
 	m_project->setFileName(filename);
 	m_project->undoStack()->clear();
-	m_undoViewEmptyLabel = i18n("Project %1 opened", m_project->name());
+	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
 	setCaption(m_project->name());
 	updateGUIOnProjectChanges();
@@ -892,31 +933,6 @@ void MainWin::openRecentProject(const QUrl& url) {
 		this->openProject(url.toLocalFile());
 	else
 		this->openProject(url.path());
-}
-
-bool MainWin::openXML(QIODevice *file) {
-	XmlStreamReader reader(file);
-	if (m_project->load(&reader) == false) {
-		RESET_CURSOR;
-		QString msg_text = reader.errorString();
-		KMessageBox::error(this, msg_text, i18n("Error when opening the project"));
-		statusBar()->showMessage(msg_text);
-		return false;
-	}
-
-	if (reader.hasWarnings()) {
-		QString msg = i18n("The following problems occurred when loading the project file:\n");
-		const QStringList& warnings = reader.warningStrings();
-		foreach (const QString& str, warnings)
-			msg += str + '\n';
-
-		qWarning() << msg;
-//TODO: show warnings in a kind of "log window" but not in message box
-// 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
-// 		statusBar()->showMessage(msg);
-	}
-
-	return true;
 }
 
 /*!
@@ -961,17 +977,25 @@ bool MainWin::saveProject() {
 
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
-	QString dir = conf.readEntry("LastOpenDir", "");
-	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
-		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	const QString& dir = conf.readEntry("LastOpenDir", "");
+	QString path  = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
+	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
-	if (fileName.isEmpty())// "Cancel" was clicked
+	if (path.isEmpty())// "Cancel" was clicked
 		return false;
 
-	if (fileName.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
-		fileName.append(QLatin1String(".lml"));
+	if (path.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
+		path.append(QLatin1String(".lml"));
 
-	return save(fileName);
+	//save new "last open directory"
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		const QString& newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastOpenDir", newDir);
+	}
+
+	return save(path);
 }
 
 /*!
@@ -1120,7 +1144,7 @@ void MainWin::newMatrix() {
 	Matrix* matrix = new Matrix(0, i18n("Matrix"));
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
-	//add the new spreadsheet to the workbook
+	//add the new matrix to the workbook
 	Workbook* workbook = activeWorkbook();
 	if (workbook) {
 		QModelIndex index = m_projectExplorer->currentIndex();
@@ -1138,10 +1162,13 @@ void MainWin::newMatrix() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet= new Worksheet(0, i18n("Worksheet"));
+	Worksheet* worksheet = new Worksheet(0, i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 
+/*!
+	adds a new Note to the project.
+*/
 void MainWin::newNotes() {
 	Note* notes = new Note(i18n("Note"));
 	this->addAspectToProject(notes);
@@ -1274,14 +1301,14 @@ void MainWin::newCantorWorksheet(QAction* action) {
     returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
     Otherwise returns \a 0.
 */
-CantorWorksheet* MainWin::activeCantorWorksheet() const{
-    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-    if (!win)
-        return 0;
+CantorWorksheet* MainWin::activeCantorWorksheet() const {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
 
-    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    Q_ASSERT(part);
-    return dynamic_cast<CantorWorksheet*>(part);
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<CantorWorksheet*>(part);
 }
 #endif
 
@@ -1378,9 +1405,9 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		//for FileDataSource we currently don't show any view
-		if (dynamic_cast<const FileDataSource*>(part))
-			return;
+		//for LiveDataSource we currently don't show any view
+		/*if (dynamic_cast<const LiveDataSource*>(part))
+		    return;*/
 
 		PartMdiView* win;
 
@@ -1568,8 +1595,21 @@ void MainWin::dropEvent(QDropEvent* event) {
 	if (!m_project)
 		newProject();
 
-	QUrl url = event->mimeData()->urls().at(0);
-	importFileDialog(url.toLocalFile());
+	if (event->mimeData() && !event->mimeData()->urls().isEmpty()) {
+		QUrl url = event->mimeData()->urls().at(0);
+		const QString& f = url.toLocalFile();
+
+		//TODO: add later the handling of Origin files here
+		if ( f.endsWith(QLatin1String(".lml")) ||  f.endsWith(QLatin1String(".lml.gz")) || f.endsWith(QLatin1String(".lml.bz2"))
+			|| f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
+			|| f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
+			openProject(f);
+		else
+			importFileDialog(f);
+
+		event->accept();
+	} else
+		event->ignore();
 }
 
 void MainWin::handleSettingsChanges() {
@@ -1639,27 +1679,68 @@ void MainWin::historyDialog() {
 */
 void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG("MainWin::importFileDialog()");
-	m_importFileDialog = new ImportFileDialog(this, false, fileName);
-
-	// explicitly do not delete on close (Windows does this!)
-	m_importFileDialog->setAttribute(Qt::WA_DeleteOnClose, false);
+	ImportFileDialog* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
+		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
 	else if (m_currentAspect->inherits("Column")) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			m_importFileDialog->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+			dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 	}
 
-	if (m_importFileDialog->exec() == QDialog::Accepted) {
-		m_importFileDialog->importTo(statusBar());
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 
-	delete m_importFileDialog;
-	m_importFileDialog = 0;
+	delete dlg;
 	DEBUG("MainWin::importFileDialog() DONE");
+}
+
+void MainWin::importSqlDialog() {
+	DEBUG("MainWin::importSqlDialog()");
+	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this);
+
+	// select existing container
+	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
+		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits("Column")) {
+		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
+			dlg->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+	}
+
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
+		m_project->setChanged(true);
+	}
+
+	delete dlg;
+	DEBUG("MainWin::importSqlDialog() DONE");
+}
+
+void MainWin::importProjectDialog() {
+	DEBUG("MainWin::importProjectDialog()");
+
+	ImportProjectDialog::ProjectType type;
+	if (QObject::sender() == m_importOpjAction)
+		type = ImportProjectDialog::ProjectOrigin;
+	else
+		type = ImportProjectDialog::ProjectLabPlot;
+
+	ImportProjectDialog* dlg = new ImportProjectDialog(this, type);
+
+	// set current folder
+	dlg->setCurrentFolder(m_currentFolder);
+
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
+		m_project->setChanged(true);
+	}
+
+	delete dlg;
+
+	DEBUG("MainWin::importProjectDialog() DONE");
 }
 
 /*!
@@ -1686,33 +1767,23 @@ void MainWin::editFitsFileDialog() {
 /*!
   adds a new file data source to the current project.
 */
-void MainWin::newFileDataSourceActionTriggered() {
+void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
-		dlg->importToFileDataSource(dataSource, statusBar());
+		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1), false);
+		dlg->importToLiveDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
 	delete dlg;
 }
 
-/*!
-  adds a new SQL data source to the current project.
-*/
-void MainWin::newSqlDataSourceActionTriggered() {
-	//TODO
-}
-
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
-	QModelIndex index = m_projectExplorer->currentIndex();
-	if (!index.isValid())
+	const QModelIndex& index = m_projectExplorer->currentIndex();
+	if (index.isValid()) {
+		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
+		parent->folder()->addChild(aspect);
+	} else
 		m_project->addChild(aspect);
-	else {
-		AbstractAspect* parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		// every aspect contained in the project should have a folder
-		Q_ASSERT(parent_aspect->folder());
-		parent_aspect->folder()->addChild(aspect);
-	}
 }
 
 void MainWin::settingsDialog() {

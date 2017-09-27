@@ -68,6 +68,7 @@ public:
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
+
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
@@ -75,20 +76,25 @@ private:
 	void initActions();
 	void initMenus();
 	void processResize();
-	void drawForeground(QPainter*, const QRectF&);
-	void drawBackground(QPainter*, const QRectF&);
+	void drawForeground(QPainter*, const QRectF&) override;
+	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
+	bool isPlotAtPos(const QPoint&) const;
+	CartesianPlot* plotAt(const QPoint&) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
 	//events
-	void resizeEvent(QResizeEvent*);
-	void contextMenuEvent(QContextMenuEvent*);
-	void wheelEvent(QWheelEvent*);
-	void mousePressEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
-	void keyPressEvent(QKeyEvent*);
+	virtual void resizeEvent(QResizeEvent*) override;
+	virtual void contextMenuEvent(QContextMenuEvent*) override;
+	virtual void wheelEvent(QWheelEvent*) override;
+	virtual void mousePressEvent(QMouseEvent*) override;
+	virtual void mouseReleaseEvent(QMouseEvent*) override;
+	virtual void mouseMoveEvent(QMouseEvent*) override;
+	virtual void keyPressEvent(QKeyEvent*) override;
+	virtual void dragEnterEvent(QDragEnterEvent*) override;
+	virtual void dragMoveEvent(QDragMoveEvent*) override;
+	virtual void dropEvent(QDropEvent*) override;
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;
@@ -106,7 +112,8 @@ private:
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
 	bool m_isClosing;
-	bool m_isBeingPresented;
+	bool m_menusInitialized;
+
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
@@ -114,13 +121,13 @@ private:
 	QMenu* m_magnificationMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
+	QMenu* m_themeMenu;
 	QMenu* m_viewMouseModeMenu;
 	QMenu* m_cartesianPlotMenu;
 	QMenu* m_cartesianPlotMouseModeMenu;
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
-	// Data manipulation menu
 	QMenu* m_dataManipulationMenu;
 
 	QToolButton* tbNewCartesianPlot;
@@ -151,6 +158,8 @@ private:
 	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
 	QAction* add3DPlotAction;
+	QAction* addHistogram;
+	QAction* addBarChartPlot;
 
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
@@ -224,12 +233,13 @@ private:
 	QAction* addFourierTransformAction;
 
 public slots:
-	void createContextMenu(QMenu*) const;
-	void createAnalysisMenu(QMenu*) const;
+	void createContextMenu(QMenu*);
+	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
+	void presenterMode();
 
 private slots:
 	void addNew(QAction*);
@@ -252,8 +262,6 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
-
-	void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);

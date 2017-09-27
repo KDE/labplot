@@ -33,7 +33,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -71,12 +71,12 @@ QMenu* Folder::createContextMenu() {
  * \brief Save as XML
  */
 void Folder::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("folder");
+	writer->writeStartElement(QLatin1String("folder"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
-		writer->writeStartElement("child_aspect");
+	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
+		writer->writeStartElement(QLatin1String("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
 	}
@@ -86,8 +86,8 @@ void Folder::save(QXmlStreamWriter* writer) const {
 /**
  * \brief Load from XML
  */
-bool Folder::load(XmlStreamReader* reader) {
-	if(reader->isStartElement() && reader->name() == "folder") {
+bool Folder::load(XmlStreamReader* reader, bool preview) {
+	if(reader->isStartElement() && reader->name() == QLatin1String("folder")) {
 		if (!readBasicAttributes(reader))
 			return false;
 
@@ -98,11 +98,11 @@ bool Folder::load(XmlStreamReader* reader) {
 			if (reader->isEndElement()) break;
 
 			if (reader->isStartElement()) {
-				if (reader->name() == "comment") {
+				if (reader->name() == QLatin1String("comment")) {
 					if (!readCommentElement(reader))
 						return false;
-				} else if(reader->name() == "child_aspect") {
-					if (!readChildAspectElement(reader))
+				} else if(reader->name() == QLatin1String("child_aspect")) {
+					if (!readChildAspectElement(reader, preview))
 						return false;
 				} else {// unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
@@ -110,8 +110,7 @@ bool Folder::load(XmlStreamReader* reader) {
 				}
 			}
 		}
-	}
-	else // no folder element
+	} else // no folder element
 		reader->raiseError(i18n("no folder element found"));
 
 	return !reader->hasError();
@@ -120,78 +119,78 @@ bool Folder::load(XmlStreamReader* reader) {
 /**
  * \brief Read child aspect from XML
  */
-bool Folder::readChildAspectElement(XmlStreamReader* reader) {
+bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	if (!reader->skipToNextTag()) return false;
-	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
+	if (reader->isEndElement() && reader->name() == QLatin1String("child_aspect")) return true; // empty element tag
 
 	QString element_name = reader->name().toString();
-	if (element_name == "folder") {
+	if (element_name == QLatin1String("folder")) {
 		Folder* folder = new Folder("");
-		if (!folder->load(reader)) {
+		if (!folder->load(reader, preview)) {
 			delete folder;
 			return false;
 		}
-		addChild(folder);
-	} else if (element_name == "workbook") {
+		addChildFast(folder);
+	} else if (element_name == QLatin1String("workbook")) {
 		Workbook* workbook = new Workbook(0, "");
-		if (!workbook->load(reader)) {
+		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
-		addChild(workbook);
-	} else if (element_name == "spreadsheet") {
+		addChildFast(workbook);
+	} else if (element_name == QLatin1String("spreadsheet")) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
-		if (!spreadsheet->load(reader)) {
+		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
-		addChild(spreadsheet);
-	} else if (element_name == "matrix") {
+		addChildFast(spreadsheet);
+	} else if (element_name == QLatin1String("matrix")) {
 		Matrix* matrix = new Matrix(0, "", true);
-		if (!matrix->load(reader)) {
+		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
-		addChild(matrix);
-	} else if (element_name == "worksheet") {
+		addChildFast(matrix);
+	} else if (element_name == QLatin1String("worksheet")) {
 		Worksheet* worksheet = new Worksheet(0, "");
 		worksheet->setIsLoading(true);
-		if (!worksheet->load(reader)){
+		if (!worksheet->load(reader, preview)) {
 			delete worksheet;
 			return false;
 		}
-		addChild(worksheet);
+		addChildFast(worksheet);
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
-	}else if (element_name == "cantorWorksheet"){
-		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
-		if (!cantorWorksheet->load(reader)){
+	} else if (element_name == QLatin1String("cantorWorksheet")) {
+		CantorWorksheet* cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
+		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
 			return false;
 		}
-		addChild(cantorWorksheet);
+		addChildFast(cantorWorksheet);
 #endif
-	} else if (element_name == "fileDataSource") {
-		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
-		if (!fileDataSource->load(reader)){
-			delete fileDataSource;
+	} else if (element_name == QLatin1String("LiveDataSource")) {
+		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
+		if (!liveDataSource->load(reader, preview)) {
+			delete liveDataSource;
 			return false;
 		}
-		addChild(fileDataSource);
-	} else if (element_name == "datapicker") {
+		addChildFast(liveDataSource);
+	} else if (element_name == QLatin1String("datapicker")) {
 		Datapicker* datapicker = new Datapicker(0, "", true);
-		if (!datapicker->load(reader)){
+		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
-		addChild(datapicker);
-	} else if (element_name == "note") {
+		addChildFast(datapicker);
+	} else if (element_name == QLatin1String("note")) {
 		Note* note = new Note("");
-		if (!note->load(reader)){
+		if (!note->load(reader, preview)) {
 			delete note;
 			return false;
 		}
-		addChild(note);
+		addChildFast(note);
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

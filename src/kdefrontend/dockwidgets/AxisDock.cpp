@@ -338,7 +338,7 @@ void AxisDock::init() {
 }
 
 void AxisDock::setModel() {
-	QList<const char *>  list;
+	QList<const char*>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
@@ -346,8 +346,6 @@ void AxisDock::setModel() {
 	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	cbMajorTicksColumn->setSelectableClasses(list);
-	cbMinorTicksColumn->setSelectableClasses(list);
 
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);
 	cbMinorTicksColumn->setModel(m_aspectTreeModel);
@@ -386,7 +384,6 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
-
 
 	//show the properties of the first axis
 	this->load();

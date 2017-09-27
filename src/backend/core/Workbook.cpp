@@ -42,11 +42,11 @@
  * \ingroup backend
  */
 Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
-		: AbstractPart(name), scripted(engine){
+	: AbstractPart(name), scripted(engine) {
 }
 
 QIcon Workbook::icon() const {
-    return QIcon::fromTheme("labplot-workbook");
+	return QIcon::fromTheme("labplot-workbook");
 }
 
 /*!
@@ -60,49 +60,48 @@ QMenu* Workbook::createContextMenu() {
 }
 
 QWidget* Workbook::view() const {
-	if (!m_view) {
+	if (!m_view)
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
-	}
 	return m_view;
 }
 
 bool Workbook::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret = false;
-	if (s) {
-        ret = s->exportView();
-	} else {
+	bool ret = false;
+	if (s)
+		ret = s->exportView();
+	else {
 		Matrix* m = currentMatrix();
 		if (m)
-            ret = m->exportView();
+			ret = m->exportView();
 	}
-    return ret;
+	return ret;
 }
 
 bool Workbook::printView() {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret = false;
-	if (s) {
-        ret = s->printView();
-	} else {
+	bool ret = false;
+	if (s)
+		ret = s->printView();
+	else {
 		Matrix* m = currentMatrix();
 		if (m)
-            ret = m->printView();
+			ret = m->printView();
 	}
-    return ret;
+	return ret;
 }
 
 bool Workbook::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret = false;
-	if (s) {
-        ret = s->printPreview();
-	} else {
+	bool ret = false;
+	if (s)
+		ret = s->printPreview();
+	else {
 		Matrix* m = currentMatrix();
 		if (m)
-            ret = m->printPreview();
+			ret = m->printPreview();
 	}
-    return ret;
+	return ret;
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
@@ -134,7 +133,7 @@ Matrix* Workbook::currentMatrix() const {
 	emits \c workbookItemSelected() to forward this event to the \c WorkbookView
 	in order to select the corresponding tab.
  */
-void Workbook::childSelected(const AbstractAspect* aspect){
+void Workbook::childSelected(const AbstractAspect* aspect) {
 	int index = indexOfChild<AbstractAspect>(aspect);
 	emit workbookItemSelected(index);
 }
@@ -142,7 +141,7 @@ void Workbook::childSelected(const AbstractAspect* aspect){
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
  */
-void Workbook::childDeselected(const AbstractAspect* aspect){
+void Workbook::childDeselected(const AbstractAspect* aspect) {
 	Q_UNUSED(aspect);
 }
 
@@ -152,7 +151,7 @@ void Workbook::childDeselected(const AbstractAspect* aspect){
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  *  This function is called in \c WorkbookView when the current tab was changed
  */
-void Workbook::setChildSelectedInView(int index, bool selected){
+void Workbook::setChildSelectedInView(int index, bool selected) {
 	AbstractAspect* aspect = child<AbstractAspect>(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
@@ -174,57 +173,55 @@ void Workbook::setChildSelectedInView(int index, bool selected){
 //##############################################################################
 
 //! Save as XML
-void Workbook::save(QXmlStreamWriter* writer) const{
-    writer->writeStartElement( "workbook" );
-    writeBasicAttributes(writer);
-    writeCommentElement(writer);
+void Workbook::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement( "workbook" );
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
-    //serialize all children
-    foreach(AbstractAspect* aspect, children<AbstractAspect>())
-        aspect->save(writer);
+	//serialize all children
+	foreach(AbstractAspect* aspect, children<AbstractAspect>())
+		aspect->save(writer);
 
-    writer->writeEndElement(); // close "workbook" section
+	writer->writeEndElement(); // close "workbook" section
 }
 
 //! Load from XML
-bool Workbook::load(XmlStreamReader* reader){
-    if(!reader->isStartElement() || reader->name() != "workbook"){
-        reader->raiseError(i18n("no workbook element found"));
-        return false;
-    }
+bool Workbook::load(XmlStreamReader* reader, bool preview) {
+	if(!reader->isStartElement() || reader->name() != "workbook") {
+		reader->raiseError(i18n("no workbook element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "workbook")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "workbook")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-		if(reader->name() == "spreadsheet"){
-            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
-            if (!spreadsheet->load(reader)){
-                delete spreadsheet;
-                return false;
-            }else{
-                addChild(spreadsheet);
-            }
-		} else if (reader->name() == "matrix"){
-            Matrix* matrix = new Matrix(0, i18n("matrix"), true);
-            if (!matrix->load(reader)){
-                delete matrix;
-                return false;
-            }else{
-                addChild(matrix);
-            }
-        }else{ // unknown element
-            reader->raiseWarning(i18n("unknown workbook element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+		if(reader->name() == "spreadsheet") {
+			Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
+			if (!spreadsheet->load(reader, preview)) {
+				delete spreadsheet;
+				return false;
+			} else
+				addChild(spreadsheet);
+		} else if (reader->name() == "matrix") {
+			Matrix* matrix = new Matrix(0, i18n("matrix"), true);
+			if (!matrix->load(reader, preview)) {
+				delete matrix;
+				return false;
+			} else
+				addChild(matrix);
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown workbook element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
-    return true;
+	return true;
 }

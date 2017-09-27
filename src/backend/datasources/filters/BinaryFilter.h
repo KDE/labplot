@@ -3,7 +3,7 @@ File                 : BinaryFilter.h
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,16 +27,21 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
-#include <QStringList>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class BinaryFilterPrivate;
-class BinaryFilter : public AbstractFileFilter{
+class QStringList;
+class QIODevice;
+
+class BinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
+	Q_ENUMS(DataType)
+	Q_ENUMS(ByteOrder)
 
   public:
-	enum DataType{INT8,INT16,INT32,INT64,UINT8,UINT16,UINT32,UINT64,REAL32,REAL64};
-	enum ByteOrder{LittleEndian, BigEndian};
+	//TODO; use ColumnMode?
+	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
+	enum ByteOrder {LittleEndian, BigEndian};
 
 	BinaryFilter();
 	~BinaryFilter();
@@ -44,11 +49,15 @@ class BinaryFilter : public AbstractFileFilter{
 	static QStringList dataTypes();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
-	static long rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type);
+	static size_t rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
 
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
+	// read data from any device
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
+		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource*,
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
@@ -58,28 +67,26 @@ class BinaryFilter : public AbstractFileFilter{
 
 	void setDataType(const BinaryFilter::DataType);
 	BinaryFilter::DataType dataType() const;
-
 	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
-
 	void setSkipStartBytes(const int);
 	int skipStartBytes() const;
-
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);
 	int endRow() const;
-
 	void setSkipBytes(const int);
 	int skipBytes() const;
+	void setCreateIndexEnabled(const bool);
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+
   private:
-	BinaryFilterPrivate* const d;
+	std::unique_ptr<BinaryFilterPrivate> const d;
 	friend class BinaryFilterPrivate;
 };
 

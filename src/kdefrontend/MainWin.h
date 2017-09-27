@@ -27,9 +27,8 @@
  ***************************************************************************/
 #ifndef MAINWIN_H
 #define MAINWIN_H
+
 #include <KXmlGuiWindow>
-#include <KRecentFilesAction>
-#include "commonfrontend/core/PartMdiView.h"
 #include <QTimer>
 
 class AbstractAspect;
@@ -52,9 +51,12 @@ class Plot3DDock;
 class Axes3DDock;
 class Surface3DDock;
 class Curve3DDock;
+class HistogramDock;
+class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
+class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
@@ -70,7 +72,6 @@ class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
-class ImportFileDialog;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
@@ -83,6 +84,10 @@ class QDockWidget;
 class QStackedWidget;
 class QDragEnterEvent;
 class QDropEvent;
+class QMdiArea;
+class QMdiSubWindow;
+class QToolButton;
+class KRecentFilesAction;
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -91,7 +96,9 @@ public:
 	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
 	~MainWin();
 
+	void showPresenter();
 	AspectTreeModel* model() const;
+	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
 private:
@@ -106,7 +113,6 @@ private:
 	Folder* m_currentFolder;
 	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
-	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
 	bool m_closing;
 	bool m_autoSaveActive;
@@ -118,7 +124,10 @@ private:
 	QAction* m_saveAsAction;
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
-	QAction* m_importAction;
+	QAction* m_importFileAction;
+	QAction* m_importSqlAction;
+	QAction* m_importLabPlotAction;
+	QAction* m_importOpjAction;
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
@@ -127,7 +136,7 @@ private:
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
 	QAction* m_newNotesAction;
-	QAction* m_newFileDataSourceAction;
+	QAction* m_newLiveDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
@@ -169,6 +178,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_importMenu;
 	QMenu* m_editMenu;
 
 	//Docks
@@ -182,6 +192,7 @@ private:
 	Surface3DDock *surface3dDock;
 	Curve3DDock *curve3dDock;
 	ColumnDock* columnDock;
+	LiveDataDock* m_liveDataDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
@@ -195,13 +206,12 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
+	HistogramDock* histogramDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;
 	DatapickerImageWidget* datapickerImageDock;
 	DatapickerCurveWidget* datapickerCurveDock;
-
-	bool openXML(QIODevice*);
 
 	void initActions();
 	void initMenus();
@@ -216,7 +226,7 @@ private:
 	Worksheet* activeWorksheet() const;
 	Datapicker* activeDatapicker() const;
 
-	//cantor
+	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock;
@@ -252,15 +262,17 @@ private slots:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importSqlDialog();
+	void importProjectDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
-	
+
 	//Cantor
-	#ifdef HAVE_CANTOR_LIBS
+#ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
-	#endif
+#endif
 
 	void newFolder();
 	void newWorkbook();
@@ -270,8 +282,7 @@ private slots:
 	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
-	void newFileDataSourceActionTriggered();
-	void newSqlDataSourceActionTriggered();
+	void newLiveDataSourceActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

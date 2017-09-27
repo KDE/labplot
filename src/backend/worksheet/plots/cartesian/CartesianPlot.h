@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,11 +31,14 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <cmath>
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+
+#include <math.h>
 
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
+class AbstractColumn;
 class XYCurve;
 class XYEquationCurve;
 class XYDataReductionCurve;
@@ -48,191 +51,231 @@ class XYFourierFilterCurve;
 class KConfig;
 class XYFourierTransformCurve;
 
-class CartesianPlot:public AbstractPlot{
+class CartesianPlot:public AbstractPlot {
 	Q_OBJECT
 
-	public:
-		explicit CartesianPlot(const QString &name);
-		virtual ~CartesianPlot();
+public:
+	explicit CartesianPlot(const QString &name);
+	virtual ~CartesianPlot();
 
-		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
-		enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-		enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
-		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
-		enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
+	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum RangeType {RangeFree, RangeLast, RangeFirst};
+	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
+	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
+	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
+	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
+	                         };
 
-		struct RangeBreak {
-			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
-			bool isValid() const {return (!std::isnan(start) && !std::isnan(end)); }
-			float start;
-			float end;
-			float position;
-			RangeBreakStyle style;
+	struct RangeBreak {
+		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+		bool isValid() const {
+			return (!std::isnan(start) && !std::isnan(end));
+		}
+		float start;
+		float end;
+		float position;
+		RangeBreakStyle style;
+	};
+
+	//simple wrapper for QList<RangeBreaking> in order to get our macros working
+	struct RangeBreaks {
+		RangeBreaks() : lastChanged(-1) {
+			RangeBreak b;
+			list << b;
 		};
+		QList<RangeBreak> list;
+		int lastChanged;
+	};
 
-		//simple wrapper for QList<RangeBreaking> in order to get our macros working
-		struct RangeBreaks {
-			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
-			QList<RangeBreak> list;
-			int lastChanged;
-		};
+	void initDefault(Type = FourAxes);
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QMenu* analysisMenu();
+	void setRect(const QRectF&) override;
+	QRectF plotRect();
+	void setMouseMode(const MouseMode);
+	MouseMode mouseMode() const;
+	void navigate(NavigationOperation);
+	void setSuppressDataChangedSignal(bool);
+	const QList<QColor>& themeColorPalette() const;
 
-		void initDefault(Type=FourAxes);
-		QIcon icon() const;
-		QMenu* createContextMenu();
-		void setRect(const QRectF&);
-		QRectF plotRect();
-		void setMouseMode(const MouseMode);
-		MouseMode mouseMode() const;
-		void navigate(NavigationOperation);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	virtual void loadThemeConfig(const KConfig&) override;
+	void saveTheme(KConfig& config);
 
-		const QList<QColor>& themeColorPalette() const;
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
+	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
+	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
+	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
+	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
+	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
+	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
+	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
+	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
+	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
+	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
+	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	QString theme() const;
 
-		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
-		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
-		BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
-		BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
-		BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
-		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
-		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
-		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
-		BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
-		BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
-		CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks);
-		CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks);
+	typedef CartesianPlotPrivate Private;
 
-		typedef CartesianPlot BaseClass;
-		typedef CartesianPlotPrivate Private;
+public slots:
+	void setTheme(const QString&);
 
-	private:
-		void init();
-		void initActions();
-		void initMenus();
-		void setColorPalette(const KConfig&);
-		void applyThemeOnNewCurve(XYCurve* curve);
+private:
+	void init();
+	void initActions();
+	void initMenus();
+	void setColorPalette(const KConfig&);
+	const XYCurve* currentCurve() const;
 
-		CartesianPlotLegend* m_legend;
-		float m_zoomFactor;
-		QString m_themeName;
-		QList<QColor> m_themeColorPalette;
+	CartesianPlotLegend* m_legend;
+	float m_zoomFactor;
+	QList<QColor> m_themeColorPalette;
+	bool m_menusInitialized;
 
-		QAction* visibilityAction;
+	QAction* visibilityAction;
 
-		QAction* addCurveAction;
-		QAction* addEquationCurveAction;
-		QAction* addDataReductionCurveAction;
-		QAction* addDifferentiationCurveAction;
-		QAction* addIntegrationCurveAction;
-		QAction* addInterpolationCurveAction;
-		QAction* addSmoothCurveAction;
-		QAction* addFitCurveAction;
-		QAction* addFourierFilterCurveAction;
-		QAction* addFourierTransformCurveAction;
-		QAction* addHorizontalAxisAction;
-		QAction* addVerticalAxisAction;
- 		QAction* addLegendAction;
-		QAction* addCustomPointAction;
+	//"add new" actions
+	QAction* addCurveAction;
+	QAction* addEquationCurveAction;
+	QAction* addHistogramPlot;
+	QAction* addDataReductionCurveAction;
+	QAction* addDifferentiationCurveAction;
+	QAction* addIntegrationCurveAction;
+	QAction* addInterpolationCurveAction;
+	QAction* addSmoothCurveAction;
+	QAction* addFitCurveAction;
+	QAction* addFourierFilterCurveAction;
+	QAction* addFourierTransformCurveAction;
+	QAction* addHorizontalAxisAction;
+	QAction* addVerticalAxisAction;
+	QAction* addLegendAction;
+	QAction* addCustomPointAction;
 
-		QAction* scaleAutoXAction;
-		QAction* scaleAutoYAction;
-		QAction* scaleAutoAction;
-		QAction* zoomInAction;
-		QAction* zoomOutAction;
-		QAction* zoomInXAction;
-		QAction* zoomOutXAction;
-		QAction* zoomInYAction;
-		QAction* zoomOutYAction;
-		QAction* shiftLeftXAction;
-		QAction* shiftRightXAction;
-		QAction* shiftUpYAction;
-		QAction* shiftDownYAction;
+	//scaling, zooming, navigation actions
+	QAction* scaleAutoXAction;
+	QAction* scaleAutoYAction;
+	QAction* scaleAutoAction;
+	QAction* zoomInAction;
+	QAction* zoomOutAction;
+	QAction* zoomInXAction;
+	QAction* zoomOutXAction;
+	QAction* zoomInYAction;
+	QAction* zoomOutYAction;
+	QAction* shiftLeftXAction;
+	QAction* shiftRightXAction;
+	QAction* shiftUpYAction;
+	QAction* shiftDownYAction;
 
-		QMenu* addNewMenu;
-		QMenu* zoomMenu;
-		QMenu* themeMenu;
+	//analysis menu actions
+	QAction* addDataOperationAction;
+	QAction* addDataReductionAction;
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
+	QVector <QAction *> addFitAction;
+	QAction* addFourierFilterAction;
 
-		Q_DECLARE_PRIVATE(CartesianPlot)
+	QMenu* addNewMenu;
+	QMenu* zoomMenu;
+	QMenu* dataAnalysisMenu;
+	QMenu* themeMenu;
 
-	public slots:
-		void addHorizontalAxis();
-		void addVerticalAxis();
-		XYCurve* addCurve();
-		XYEquationCurve* addEquationCurve();
-		XYDataReductionCurve* addDataReductionCurve();
-		XYDifferentiationCurve* addDifferentiationCurve();
-		XYIntegrationCurve* addIntegrationCurve();
-		XYInterpolationCurve* addInterpolationCurve();
-		XYSmoothCurve* addSmoothCurve();
-		XYFitCurve* addFitCurve();
-		XYFourierFilterCurve* addFourierFilterCurve();
-		XYFourierTransformCurve* addFourierTransformCurve();
-		void addLegend();
-		void addCustomPoint();
-		void scaleAuto();
-		void scaleAutoX();
-		void scaleAutoY();
-		void zoomIn();
-		void zoomOut();
-		void zoomInX();
-		void zoomOutX();
-		void zoomInY();
-		void zoomOutY();
-		void shiftLeftX();
-		void shiftRightX();
-		void shiftUpY();
-		void shiftDownY();
-		void loadTheme(KConfig& config);
-		void saveTheme(KConfig& config);
+	Q_DECLARE_PRIVATE(CartesianPlot)
 
-	private slots:
-		void updateLegend();
-		void childAdded(const AbstractAspect*);
-		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+public slots:
+	void addHorizontalAxis();
+	void addVerticalAxis();
+	void addCurve();
+	void addHistogram();
+	void addEquationCurve();
+	void addDataReductionCurve();
+	void addDifferentiationCurve();
+	void addIntegrationCurve();
+	void addInterpolationCurve();
+	void addSmoothCurve();
+	void addFitCurve();
+	void addFourierFilterCurve();
+	void addFourierTransformCurve();
+	void addLegend();
+	void addCustomPoint();
+	void scaleAuto();
+	void scaleAutoX();
+	void scaleAutoY();
+	void zoomIn();
+	void zoomOut();
+	void zoomInX();
+	void zoomOutX();
+	void zoomInY();
+	void zoomOutY();
+	void shiftLeftX();
+	void shiftRightX();
+	void shiftUpY();
+	void shiftDownY();
+	void dataChanged();
 
-		void dataChanged();
-		void xDataChanged();
-		void yDataChanged();
-		void curveVisibilityChanged();
+private slots:
+	void updateLegend();
+	void childAdded(const AbstractAspect*);
+	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-		//SLOTs for changes triggered via QActions in the context menu
-		void visibilityChanged();
-		void loadTheme(const QString&);
+	void xDataChanged();
+	void yDataChanged();
+	void HistogramdataChanged();
+	void xHistogramDataChanged();
+	void yHistogramDataChanged();
+	void curveVisibilityChanged();
 
-	protected:
-		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
+	//SLOTs for changes triggered via QActions in the context menu
+	void visibilityChanged();
+	void loadTheme(const QString&);
 
-	signals:
-		friend class CartesianPlotSetRectCmd;
-		friend class CartesianPlotSetAutoScaleXCmd;
-		friend class CartesianPlotSetXMinCmd;
-		friend class CartesianPlotSetXMaxCmd;
-		friend class CartesianPlotSetXScaleCmd;
-		friend class CartesianPlotSetAutoScaleYCmd;
-		friend class CartesianPlotSetYMinCmd;
-		friend class CartesianPlotSetYMaxCmd;
-		friend class CartesianPlotSetYScaleCmd;
-		friend class CartesianPlotSetXRangeBreakingEnabledCmd;
-		friend class CartesianPlotSetYRangeBreakingEnabledCmd;
-		friend class CartesianPlotSetXRangeBreaksCmd;
-		friend class CartesianPlotSetYRangeBreaksCmd;
-		void rectChanged(QRectF&);
-		void xAutoScaleChanged(bool);
-		void xMinChanged(float);
-		void xMaxChanged(float);
-		void xScaleChanged(int);
-		void yAutoScaleChanged(bool);
-		void yMinChanged(float);
-		void yMaxChanged(float);
-		void yScaleChanged(int);
-		void xRangeBreakingEnabledChanged(bool);
-		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
-		void yRangeBreakingEnabledChanged(bool);
-		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
-		void themeLoaded();
+protected:
+	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
+
+signals:
+	friend class CartesianPlotSetCRangeTypeCmd;
+	friend class CartesianPlotSetCRangeLastValuesCmd;
+	friend class CartesianPlotSetCRangeFirstValuesCmd;
+	friend class CartesianPlotSetRectCmd;
+	friend class CartesianPlotSetAutoScaleXCmd;
+	friend class CartesianPlotSetXMinCmd;
+	friend class CartesianPlotSetXMaxCmd;
+	friend class CartesianPlotSetXScaleCmd;
+	friend class CartesianPlotSetAutoScaleYCmd;
+	friend class CartesianPlotSetYMinCmd;
+	friend class CartesianPlotSetYMaxCmd;
+	friend class CartesianPlotSetYScaleCmd;
+	friend class CartesianPlotSetXRangeBreakingEnabledCmd;
+	friend class CartesianPlotSetYRangeBreakingEnabledCmd;
+	friend class CartesianPlotSetXRangeBreaksCmd;
+	friend class CartesianPlotSetYRangeBreaksCmd;
+	friend class CartesianPlotSetThemeCmd;
+	void rangeTypeChanged(CartesianPlot::RangeType);
+	void rangeLastValuesChanged(int);
+	void rangeFirstValuesChanged(int);
+	void rectChanged(QRectF&);
+	void xAutoScaleChanged(bool);
+	void xMinChanged(float);
+	void xMaxChanged(float);
+	void xScaleChanged(int);
+	void yAutoScaleChanged(bool);
+	void yMinChanged(float);
+	void yMaxChanged(float);
+	void yScaleChanged(int);
+	void xRangeBreakingEnabledChanged(bool);
+	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void yRangeBreakingEnabledChanged(bool);
+	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void themeChanged(const QString&);
 };
 
 #endif

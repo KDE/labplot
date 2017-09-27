@@ -32,19 +32,19 @@
 #include "AbstractAspect.h"
 
 class Folder : public AbstractAspect {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit Folder(const QString& name);
+public:
+	explicit Folder(const QString& name);
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-	protected:
-		bool readChildAspectElement(XmlStreamReader*);
+protected:
+	bool readChildAspectElement(XmlStreamReader*, bool preview);
 };
 
 #endif // ifndef FOLDER_H

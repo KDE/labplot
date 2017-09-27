@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a data reduction
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -98,11 +99,6 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 	return d->dataReductionResult;
 }
 
-bool XYDataReductionCurve::isSourceDataChangedSinceLastDataReduction() const {
-	Q_D(const XYDataReductionCurve);
-	return d->sourceDataChangedSinceLastDataReduction;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -111,7 +107,7 @@ void XYDataReductionCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYDataReductionCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYDataReductionCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastDataReduction();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -124,7 +120,7 @@ void XYDataReductionCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYDataReductionCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYDataReductionCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastDataReduction();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -139,21 +135,12 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYDataReductionCurve::handleSourceDataChanged() {
-	Q_D(XYDataReductionCurve);
-	d->sourceDataChangedSinceLastDataReduction = true;
-	emit sourceDataChangedSinceLastDataReduction();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastDataReduction(false),
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -165,7 +152,6 @@ XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() {
 
 // ...
 // see XYFitCurvePrivate
-
 void XYDataReductionCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -194,36 +180,58 @@ void XYDataReductionCurvePrivate::recalculate() {
 	// clear the previous result
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = dataReductionData.xRange.first();
-	const double xmax = dataReductionData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (dataReductionData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = dataReductionData.xRange.first();
+		xmax = dataReductionData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -235,7 +243,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDataReduction = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -256,7 +264,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	emit q->completed(10);
 
 	size_t npoints = 0;
-	double calcTolerance = 0;		// calculated tolerance from Douglas-Peucker variant
+	double calcTolerance = 0;	// calculated tolerance from Douglas-Peucker variant
 	size_t *index = (size_t *) malloc(n*sizeof(size_t));
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker_variant:	// tol used as number of points
@@ -308,8 +316,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	emit q->completed(90);
-	double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
-	double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
+
+	const double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
+	const double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 
 	free(index);
 
@@ -329,7 +338,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastDataReduction = false;
+	sourceDataChangedSinceLastRecalc = false;
+
+	emit q->completed(100);
 }
 
 //##############################################################################
@@ -380,7 +391,7 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYDataReductionCurve::load(XmlStreamReader* reader) {
+bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyDataReductionCurve") {
@@ -401,8 +412,10 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "dataReductionData") {
 			attribs = reader->attributes();
 
@@ -418,7 +431,6 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("autoTolerance2", dataReductionData.autoTolerance2, int);
 			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
 		} else if (reader->name() == "dataReductionResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", dataReductionResult.available, int);
@@ -430,7 +442,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

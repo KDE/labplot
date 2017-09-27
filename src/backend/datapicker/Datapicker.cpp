@@ -203,7 +203,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
 	//select/deselect the data spreadhseets
-	QList<const Spreadsheet*> spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
+	QVector<const Spreadsheet*> spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
@@ -232,7 +232,7 @@ void Datapicker::setSelectedInView(const bool b) {
 }
 
 void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
-	QList<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	QVector<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 	if (childPoints.isEmpty())
 		beginMacro(i18n("%1: add new point", parentAspect->name()));
 	else
@@ -272,8 +272,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
-		QList<DatapickerPoint *> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		foreach(DatapickerPoint *point, childPoints) {
+		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
+		for (auto* point : childPoints) {
 			handleChildAspectAboutToBeRemoved(point);
 		}
 
@@ -294,23 +294,21 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	if (addedPoint) {
 		handleChildAspectAdded(addedPoint);
 	} else if (curve) {
-		QList<DatapickerPoint *> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		foreach(DatapickerPoint *point, childPoints)
+		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
+		for (auto* point : childPoints)
 			handleChildAspectAdded(point);
 	} else {
 		return;
 	}
 
 	qreal zVal = 0;
-	QList<DatapickerPoint *> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
-	foreach(DatapickerPoint *point, childPoints) {
+	QVector<DatapickerPoint*> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
+	for (auto* point : childPoints)
 		point->graphicsItem()->setZValue(zVal++);
-	}
 
-	foreach (DatapickerCurve* curve, children<DatapickerCurve>()) {
-		foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(IncludeHidden)) {
+	for (const auto* curve : children<DatapickerCurve>()) {
+		for (auto* point : curve->children<DatapickerPoint>(IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
-		}
 	}
 
 	emit requestUpdateActions();
@@ -354,7 +352,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool Datapicker::load(XmlStreamReader* reader) {
+bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "datapicker") {
 		reader->raiseError(i18n("no datapicker element found"));
 		return false;
@@ -373,7 +371,7 @@ bool Datapicker::load(XmlStreamReader* reader) {
 
 		if (reader->name() == "datapickerImage") {
 			DatapickerImage* plot = new DatapickerImage(0, i18n("Plot"), true);
-			if (!plot->load(reader)) {
+			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
 			} else {
@@ -383,7 +381,7 @@ bool Datapicker::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "datapickerCurve") {
 			DatapickerCurve* curve = new DatapickerCurve("");
-			if (!curve->load(reader)) {
+			if (!curve->load(reader, preview)) {
 				delete curve;
 				return false;
 			} else {

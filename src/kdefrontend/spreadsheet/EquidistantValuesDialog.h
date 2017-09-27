@@ -39,11 +39,11 @@ class EquidistantValuesDialog : public KDialog{
 
 	public:
 		explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
-		void setColumns(QList<Column*>);
+		void setColumns(QVector<Column*>);
 
 	private:
 		Ui::EquidistantValuesWidget ui;
-		QList<Column*> m_columns;
+		QVector<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
 
 	private slots:

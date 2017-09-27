@@ -70,15 +70,15 @@ public:
 	explicit DatapickerPoint(const QString& name );
 	~DatapickerPoint();
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
     QGraphicsItem *graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
     void setPrinting(bool);
 	void initErrorBar(const DatapickerCurve::Errors&);
 
-	virtual void save(QXmlStreamWriter *) const;
-	virtual bool load(XmlStreamReader *);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
     CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)

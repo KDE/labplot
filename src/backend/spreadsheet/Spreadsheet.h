@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2010-2017 Alexander Semke(alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -30,80 +30,89 @@
 #define SPREADSHEET_H
 
 #include "backend/datasources/AbstractDataSource.h"
-#include "backend/core/column/Column.h"
-#include <QList>
+#include "backend/core/column/ColumnStringIO.h"
+
+class AbstractFileFilter;
+template <class T> class QList;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
-	public:
-		Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+public:
+	Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QWidget* view() const override;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+	virtual bool exportView() const override;
+	virtual bool printView() override;
+	virtual bool printPreview() const override;
 
-		int columnCount() const;
-		int columnCount(AbstractColumn::PlotDesignation) const;
-		Column* column(int index) const;
-		Column* column(const QString&) const;
-		int rowCount() const;
+	int columnCount() const;
+	int columnCount(AbstractColumn::PlotDesignation) const;
+	Column* column(int index) const;
+	Column* column(const QString&) const;
+	int rowCount() const;
 
-		void removeRows(int first, int count);
-		void insertRows(int before, int count);
-		void removeColumns(int first, int count);
-		void insertColumns(int before, int count);
+	void removeRows(int first, int count);
+	void insertRows(int before, int count);
+	void removeColumns(int first, int count);
+	void insertColumns(int before, int count);
 
-		int colX(int col);
-		int colY(int col);
-		QString text(int row, int col) const;
+	int colX(int col);
+	int colY(int col);
+	QString text(int row, int col) const;
 
-		void copy(Spreadsheet* other);
+	void copy(Spreadsheet* other);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-		void setColumnSelectedInView(int index, bool selected);
+	void setColumnSelectedInView(int index, bool selected);
 
-		// used from model to inform dock
-		void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
-		void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+	// used from model to inform dock
+	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
+	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
-	public slots:
-		void appendRows(int count);
-		void appendRow();
-		void appendColumns(int count);
-		void appendColumn();
-		void prependColumns(int count);
+	//data import
+	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
+	virtual void finalizeImport(int columnOffset, int startColumn , int endColumn,
+		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
+	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
-		void setColumnCount(int);
-		void setRowCount(int);
+public slots:
+	void appendRows(int);
+	void appendRow();
+	void appendColumns(int);
+	void appendColumn();
+	void prependColumns(int);
 
-		void clear();
-		void clearMasks();
+	void setColumnCount(int);
+	void setRowCount(int);
 
-		void moveColumn(int from, int to);
-		void sortColumns(Column* leading, QList<Column*> cols, bool ascending);
+	void clear();
+	void clearMasks();
 
-	private:
-		void init();
+	void moveColumn(int from, int to);
+	void sortColumns(Column* leading, QVector<Column*>, bool ascending);
 
-	private slots:
-		virtual void childSelected(const AbstractAspect*);
-		virtual void childDeselected(const AbstractAspect*);
+private:
+	void init();
 
-	signals:
-		void requestProjectContextMenu(QMenu*);
-		void columnSelected(int);
-		void columnDeselected(int);
+private slots:
+	virtual void childSelected(const AbstractAspect*) override;
+	virtual void childDeselected(const AbstractAspect*) override;
 
-		// for spreadsheet dock
-		void rowCountChanged(int);
-		void columnCountChanged(int);
+signals:
+	void requestProjectContextMenu(QMenu*);
+	void columnSelected(int);
+	void columnDeselected(int);
+
+	// for spreadsheet dock
+	void rowCountChanged(int);
+	void columnCountChanged(int);
 };
 
 #endif

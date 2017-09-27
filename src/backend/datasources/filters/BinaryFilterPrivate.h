@@ -3,7 +3,7 @@ File                 : BinaryFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for BinaryFilter.
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,32 +27,43 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef BINARYFILTERPRIVATE_H
 #define BINARYFILTERPRIVATE_H
 
+#include <QVector>
+
 class AbstractDataSource;
+class AbstractColumn;
 
 class BinaryFilterPrivate {
 
-	public:
-		explicit BinaryFilterPrivate(BinaryFilter*);
+public:
+	explicit BinaryFilterPrivate(BinaryFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource,AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	int prepareStreamToRead(QDataStream&);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
+	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 
-		const BinaryFilter* q;
+	const BinaryFilter* q;
 
-		int vectors;
-		BinaryFilter::DataType dataType;
-		BinaryFilter::ByteOrder byteOrder;
+	int vectors;
+	BinaryFilter::DataType dataType;
+	BinaryFilter::ByteOrder byteOrder;
+	QVector<AbstractColumn::ColumnMode> columnModes;
 
-		int skipStartBytes;	// bytes to skip at start
-		int startRow;		// start row (value*vectors) to read
-		int endRow;		// end row to (value*vectors) read
-		int skipBytes;		// bytes to skip after each value
+	int startRow;		// start row (value*vectors) to read
+	int endRow;			// end row to (value*vectors) read
+	int numRows;		// number of rows
+	int skipStartBytes;	// bytes to skip at start
+	int skipBytes;		// bytes to skip after each value
+	bool createIndexEnabled;	// if create index column
 
-		bool autoModeEnabled;
+	bool autoModeEnabled;
 
-	private:
-		void clearDataSource(AbstractDataSource*) const;
+private:
+	int m_actualRows;
+	int m_actualCols;
 };
 
 #endif

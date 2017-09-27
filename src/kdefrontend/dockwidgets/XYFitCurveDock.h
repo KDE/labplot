@@ -39,18 +39,23 @@ class XYFitCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYFitCurveDock(QWidget *parent);
+	explicit XYFitCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	virtual void initGeneralTab();
+	void showFitResultSummary(const XYFitCurve::FitResult& fitResult);
+	void showFitResultLog(const XYFitCurve::FitResult& fitResult);
 	void showFitResult();
+	void updateSettings(const AbstractColumn*);
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
+	TreeViewComboBox* cbDataSourceCurve;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbWeightsColumn;
+	TreeViewComboBox* cbXErrorColumn;
+	TreeViewComboBox* cbYErrorColumn;
 
 	XYFitCurve* m_fitCurve;
 	XYFitCurve::FitData m_fitData;
@@ -65,22 +70,27 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void dataSourceTypeChanged(int);
+	void dataSourceCurveChanged(const QModelIndex&);
+	void weightChanged(int);
 	void categoryChanged(int);
-	void modelChanged(int);
+	void modelTypeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void weightsColumnChanged(const QModelIndex&);
+	void xErrorColumnChanged(const QModelIndex&);
+	void yErrorColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
 
 	void showConstants();
 	void showFunctions();
+	void updateParameterList();
 	void showParameters();
 	void parametersChanged();
 	void showOptions();
-	void insertFunction(const QString&);
-	void insertConstant(const QString&);
+	void insertFunction(const QString&) const;
+	void insertConstant(const QString&) const;
 	void recalculateClicked();
 	void updateModelEquation();
 	void enableRecalculate() const;
@@ -88,9 +98,12 @@ private slots:
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveWeightsColumnChanged(const AbstractColumn*);
+	void curveXErrorColumnChanged(const AbstractColumn*);
+	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();
 };

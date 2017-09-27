@@ -43,7 +43,7 @@ class ThemesWidget : public QListView {
 		void canceled();
 
 	private slots:
-		void applyClicked();
+		void applyClicked(const QModelIndex&);
 // 		void downloadThemes();
 };
 

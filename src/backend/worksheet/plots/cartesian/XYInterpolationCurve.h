@@ -42,7 +42,7 @@ class XYInterpolationCurve: public XYCurve {
 	public:
 		enum PointsMode {Auto, Multiple, Custom};
 		struct InterpolationData {
-			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
+			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference),
 				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
 				pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
 
@@ -68,9 +68,9 @@ class XYInterpolationCurve: public XYCurve {
 		virtual ~XYInterpolationCurve();
 
 		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual QIcon icon() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
@@ -79,9 +79,7 @@ class XYInterpolationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
 		const InterpolationResult& interpolationResult() const;
-		bool isSourceDataChangedSinceLastInterpolation() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYInterpolationCurvePrivate Private;
 
 	protected:
@@ -91,9 +89,6 @@ class XYInterpolationCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYInterpolationCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYInterpolationCurveSetXDataColumnCmd;
 		friend class XYInterpolationCurveSetYDataColumnCmd;
@@ -102,7 +97,6 @@ class XYInterpolationCurve: public XYCurve {
 
 		friend class XYInterpolationCurveSetInterpolationDataCmd;
 		void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
-		void sourceDataChangedSinceLastInterpolation();
 };
 
 #endif

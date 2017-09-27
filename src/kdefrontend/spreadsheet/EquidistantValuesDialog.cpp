@@ -45,7 +45,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbType->addItem(i18n("Number"));
 	ui.cbType->addItem(i18n("Increment"));
 
@@ -80,8 +80,8 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	resize( QSize(300,0).expandedTo(minimumSize()) );
 }
 
-void EquidistantValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void EquidistantValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 	ui.kleNumber->setText( QString::number(m_columns.first()->rowCount()) );
 }
 

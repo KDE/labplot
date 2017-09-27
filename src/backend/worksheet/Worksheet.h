@@ -49,27 +49,29 @@ class Worksheet: public AbstractPart, public scripted {
 
 		enum Unit {Millimeter, Centimeter, Inch, Point};
 		enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
+
 		static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QWidget* view() const override;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+		virtual bool exportView() const override;
+		virtual bool printView() override;
+		virtual bool printPreview() const override;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
 		QGraphicsScene* scene() const;
 		void update();
 		void setPrinting(bool) const;
+		void setThemeName(const QString&);
 
-		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
+		void setItemSelectedInView(const QGraphicsItem*, const bool);
 		void setSelectedInView(const bool);
 		void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 		void setIsClosing();
@@ -95,11 +97,21 @@ class Worksheet: public AbstractPart, public scripted {
 		BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
 		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
+		QString theme() const;
+
+		void setSuppressLayoutUpdate(bool);
+		void updateLayout();
+
 		typedef WorksheetPrivate Private;
+
+	public slots:
+		void setTheme(const QString&);
 
 	private:
 		void init();
 		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
+		void loadTheme(const QString&);
+
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
 
@@ -108,8 +120,8 @@ class Worksheet: public AbstractPart, public scripted {
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-		virtual void childSelected(const AbstractAspect*);
-		virtual void childDeselected(const AbstractAspect*);
+		virtual void childSelected(const AbstractAspect*) override;
+		virtual void childDeselected(const AbstractAspect*) override;
 
 	 signals:
 		void requestProjectContextMenu(QMenu*);
@@ -137,6 +149,7 @@ class Worksheet: public AbstractPart, public scripted {
 		friend class WorksheetSetLayoutHorizontalSpacingCmd;
 		friend class WorksheetSetLayoutRowCountCmd;
 		friend class WorksheetSetLayoutColumnCountCmd;
+		friend class WorksheetSetThemeCmd;
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
@@ -156,6 +169,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void layoutHorizontalSpacingChanged(float);
 		void layoutRowCountChanged(int);
 		void layoutColumnCountChanged(int);
+		void themeChanged(const QString&);
 };
 
 #endif

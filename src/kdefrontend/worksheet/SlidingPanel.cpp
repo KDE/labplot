@@ -43,6 +43,7 @@ SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFra
 	m_worksheetName->setFont(nameFont);
 
 	m_quitPresentingMode = new QPushButton(i18n("Quit presentation"));
+	m_quitPresentingMode->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
 
 	QHBoxLayout* hlayout = new QHBoxLayout;
 	hlayout->addWidget(m_worksheetName);
@@ -71,6 +72,10 @@ void SlidingPanel::movePanel(qreal value) {
 	raise();
 }
 
+QPushButton* SlidingPanel::quitButton() const {
+	return m_quitPresentingMode;
+}
+
 QSize SlidingPanel::sizeHint() const {
 	QSize sh;
 	QDesktopWidget* const dw = QApplication::desktop();
@@ -81,7 +86,7 @@ QSize SlidingPanel::sizeHint() const {
 	//for the height use 1.5 times the height of the font used in the label (20 points) in pixels
 	QFont font;
 	font.setPointSize(20);
-	QFontMetrics fm(font);
+	const QFontMetrics fm(font);
 	sh.setHeight(1.5*fm.ascent());
 
 	return sh;

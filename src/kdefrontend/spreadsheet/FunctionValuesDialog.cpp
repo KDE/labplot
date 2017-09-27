@@ -58,7 +58,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	QFrame* mainWidget = new QFrame(this);
 	ui.setupUi(mainWidget);
 	setMainWidget(mainWidget);
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 
 	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
@@ -103,8 +103,8 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void FunctionValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 	ui.teEquation->setPlainText(m_columns.first()->formula());
 
 	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
@@ -117,7 +117,7 @@ void FunctionValuesDialog::setColumns(QList<Column*> list) {
 		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
 
 		//add all available variables and select the corresponding columns
-		const QList<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
@@ -225,7 +225,6 @@ void FunctionValuesDialog::addVariable() {
 	m_variableDataColumns<<cb;
 
 	cb->setTopLevelClasses(m_topLevelClasses);
-	cb->setSelectableClasses(m_selectableClasses);
 	cb->setModel(m_aspectTreeModel.get());
 	cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
 
@@ -242,6 +241,8 @@ void FunctionValuesDialog::addVariable() {
 		m_variableDeleteButtons<<b;
 		connect(b, SIGNAL(pressed()), this, SLOT(deleteVariable()));
 	}
+
+	ui.lVariable->setText(i18n("Variables:"));
 
 	//TODO: adjust the tab-ordering after new widgets were added
 }
@@ -260,6 +261,8 @@ void FunctionValuesDialog::deleteVariable() {
 
 	//adjust the layout
 	resize( QSize(width(),0).expandedTo(minimumSize()) );
+
+	m_variableNames.size()>1 ? ui.lVariable->setText(i18n("Variables:")) : ui.lVariable->setText(i18n("Variable:"));
 
 	//TODO: adjust the tab-ordering after some widgets were deleted
 }
@@ -281,9 +284,9 @@ void FunctionValuesDialog::variableNameChanged() {
 	}
 
 	if (!text.isEmpty())
-		text = "f(" + text + ')';
+		text = "f(" + text + ") = ";
 	else
-		text = 'f';
+		text = "f = ";
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);

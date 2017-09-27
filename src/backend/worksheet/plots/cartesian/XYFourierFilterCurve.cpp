@@ -57,12 +57,12 @@ extern "C" {
 #include <QThreadPool>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
+	: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
 	init();
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-		: XYCurve(name, dd) {
+	: XYCurve(name, dd) {
 	init();
 }
 
@@ -97,19 +97,20 @@ QIcon XYFourierFilterCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYFourierFilterCurve::xDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->xDataColumnPath; }
-const QString& XYFourierFilterCurve::yDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->yDataColumnPath; }
+const QString& XYFourierFilterCurve::xDataColumnPath() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->xDataColumnPath;
+}
+const QString& XYFourierFilterCurve::yDataColumnPath() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->yDataColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
 const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() const {
 	Q_D(const XYFourierFilterCurve);
 	return d->filterResult;
-}
-
-bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
-	Q_D(const XYFourierFilterCurve);
-	return d->sourceDataChangedSinceLastFilter;
 }
 
 //##############################################################################
@@ -120,7 +121,7 @@ void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierFilterCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastFilter();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -133,7 +134,7 @@ void XYFourierFilterCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYFourierFilterCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYFourierFilterCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastFilter();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -148,21 +149,12 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYFourierFilterCurve::handleSourceDataChanged() {
-	Q_D(XYFourierFilterCurve);
-	d->sourceDataChangedSinceLastFilter = true;
-	emit sourceDataChangedSinceLastFilter();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastFilter(false),
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner) {
 
 }
@@ -203,35 +195,58 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	// clear the previous result
 	filterResult = XYFourierFilterCurve::FilterResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
-	//copy all valid data point for the filter to temporary vectors
+	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = filterData.xRange.first();
-	const double xmax = filterData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (filterData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = filterData.xRange.first();
+		xmax = filterData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
+
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -243,7 +258,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -308,19 +323,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
-	filterResult.status = QString(gsl_strerror(status));;
+	filterResult.status = QString(gsl_strerror(status));
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastFilter = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
+void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierFilterCurve);
 
 	writer->writeStartElement("xyFourierFilterCurve");
@@ -362,7 +377,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
+bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyFourierFilterCurve") {
@@ -383,8 +398,10 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "filterData") {
 			attribs = reader->attributes();
 
@@ -401,9 +418,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
 			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
-
 		} else if (reader->name() == "filterResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", filterResult.available, int);
@@ -412,7 +427,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", filterResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
@@ -441,9 +456,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
-	} else {
+	} else
 		qWarning()<<"	d->xColumn == NULL!";
-	}
 
 	return true;
 }

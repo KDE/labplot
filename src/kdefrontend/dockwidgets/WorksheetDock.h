@@ -35,8 +35,9 @@
 #include "ui_worksheetdock.h"
 #include <KConfig>
 
-class Worksheet;
 class AbstractAspect;
+class ThemeHandler;
+class Worksheet;
 class KUrlCompletion;
 
 class WorksheetDock : public QWidget {
@@ -53,6 +54,7 @@ private:
 	Worksheet* m_worksheet;
 	bool m_initializing;
 	KUrlCompletion* m_completion;
+	ThemeHandler* m_themeHandler;
 
 	void updatePaperSize();
 
@@ -115,9 +117,10 @@ private slots:
 	void worksheetLayoutRowCountChanged(int);
 	void worksheetLayoutColumnCountChanged(int);
 
-	//saving/loading
+	//save/load templates and themes
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
+	void loadTheme(const QString&);
 
 signals:
 	void info(const QString&);

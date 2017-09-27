@@ -59,7 +59,7 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *pa
 	m_panel = new SlidingPanel(this, worksheet->name());
 	qApp->installEventFilter(this);
 	connect(m_timeLine, SIGNAL(valueChanged(qreal)), m_panel, SLOT(movePanel(qreal)));
-	connect(m_panel->m_quitPresentingMode, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(m_panel->quitButton(), SIGNAL(clicked(bool)), this, SLOT(close()));
 	grabMouse();
 
 	slideUp();
@@ -72,7 +72,7 @@ DynamicPresenterWidget::~DynamicPresenterWidget() {
 
 bool DynamicPresenterWidget::eventFilter(QObject *watched, QEvent *event) {
 	if (event->type() == QEvent::MouseMove) {
-		foreach (const QObject* ob, m_panel->children()) {
+		for (const auto* const ob : m_panel->children()) {
 			if (watched == ob)
 				return false;
 		}

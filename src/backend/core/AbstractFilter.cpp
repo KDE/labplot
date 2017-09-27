@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractFilter.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
@@ -30,6 +30,7 @@
 #include <KLocale>
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/lib/macros.h"
 
 /**
  * \class AbstractFilter
@@ -105,7 +106,7 @@ int AbstractFilter::highestConnectedInput() const {
  * \returns true if the connection was accepted, false otherwise.
  *
  * The port number is checked for validity against inputCount() and both port number and data
- * source are passed to inputAcceptable() for review. If both checks succeed,the
+ * source are passed to inputAcceptable() for review. If both checks succeed, the
  * source is recorded in #m_inputs.
  * If applicable, the previously connected data source is disconnected before replacing it.
  *
@@ -114,15 +115,17 @@ int AbstractFilter::highestConnectedInput() const {
  *
  * \sa inputAcceptable(), #m_inputs
  */
-bool AbstractFilter::input(int port, const AbstractColumn* source)
-{
-	if (port<0 || (inputCount()>=0 && port>=inputCount())) return false;
+bool AbstractFilter::input(int port, const AbstractColumn* source) {
+//	DEBUG("AbstractFilter::input()");
+
+	if (port < 0 || (inputCount() >= 0 && port >= inputCount())) return false;
 	if (source && !inputAcceptable(port, source)) return false;
+
 	if (port >= m_inputs.size()) m_inputs.resize(port+1);
 	const AbstractColumn* old_input = m_inputs.value(port);
 	if (source == old_input) return true;
-	if (old_input) 
-	{
+
+	if (old_input) {
 		disconnect(old_input, 0, this, 0);
 		// replace input, notifying the filter implementation of the changes
 		inputDescriptionAboutToChange(old_input);
@@ -136,6 +139,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
 		inputAboutToBeDisconnected(old_input);
 	m_inputs[port] = source;
 	if (source) { // we have a new source
+//		DEBUG("	new source");
 		if(old_input && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(source);
 		inputDataChanged(source);
@@ -178,15 +182,16 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
 		QObject::connect(source, SIGNAL(aboutToBeDestroyed(const AbstractColumn*)),
 				this, SLOT(inputAboutToBeDestroyed(const AbstractColumn*)));
 	} else { // source==0, that is, the input port has been disconnected
+//		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
-		while ( m_inputs.at(num_connected_inputs-1) == 0 )
-		{
+		while (m_inputs.at(num_connected_inputs-1) == 0) {
 			num_connected_inputs--;
 			if(!num_connected_inputs) break;
 		}
 		m_inputs.resize(num_connected_inputs);
 	}
+
 	return true;
 }
 
@@ -196,11 +201,10 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
  *
  * Overloaded method provided for convenience.
  */
-bool AbstractFilter::input(const AbstractFilter* sources)
-{
+bool AbstractFilter::input(const AbstractFilter* sources) {
 	if (!sources) return false;
 	bool result = true;
-	for (int i=0; i<sources->outputCount(); i++)
+	for (int i = 0; i < sources->outputCount(); i++)
 		if (!input(i, sources->output(i)))
 			result = false;
 	return result;
@@ -209,7 +213,7 @@ bool AbstractFilter::input(const AbstractFilter* sources)
 /**
  * \brief Return the input currently connected to the specified port, or 0.
  */
-const AbstractColumn *AbstractFilter::input(int port) const {
+const AbstractColumn* AbstractFilter::input(int port) const {
 	return m_inputs.value(port);
 }
 
@@ -221,8 +225,7 @@ const AbstractColumn *AbstractFilter::input(int port) const {
  *
  * Output ports are implicitly labeled through AbstractAspect::name().
  */
-QString AbstractFilter::inputLabel(int port) const
-{
+QString AbstractFilter::inputLabel(int port) const {
 	return i18nc("default labels of filter input ports", "In%1", port + 1);
 }
 
@@ -242,8 +245,8 @@ QString AbstractFilter::inputLabel(int port) const
 /**
  * \brief Return the input port to which the column is connected or -1 if it's not connected
  */
-int AbstractFilter::portIndexOf(const AbstractColumn * column) {
-	for(int i=0; i<m_inputs.size(); i++)
+int AbstractFilter::portIndexOf(const AbstractColumn* column) {
+	for (int i = 0; i < m_inputs.size(); i++)
 		if(m_inputs.at(i) == column) return i;
 	return -1;
 }
@@ -253,7 +256,7 @@ int AbstractFilter::portIndexOf(const AbstractColumn * column) {
  *
  * If not reimplemented, all connections to ports within [0, inputCount()-1] will be accepted.
  */
-bool AbstractFilter::inputAcceptable(int port, const AbstractColumn *source) {
+bool AbstractFilter::inputAcceptable(int port, const AbstractColumn* source) {
 	Q_UNUSED(port); Q_UNUSED(source); return true;
 }
 
@@ -263,7 +266,7 @@ bool AbstractFilter::inputAcceptable(int port, const AbstractColumn *source) {
  * This is only to notify implementations of the event, the default implementation is a
  * no-op.
  */
-void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn * source) {
+void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
@@ -277,12 +280,12 @@ void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn * source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn * source) {
+void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn* source) {
 	Q_UNUSED(source);
 } 
 
-void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect * aspect) {
-	const AbstractColumn * col = qobject_cast<const AbstractColumn*>(aspect);
+void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect* aspect) {
+	const AbstractColumn* col = qobject_cast<const AbstractColumn*>(aspect);
 	if (col) inputDescriptionAboutToChange(col);
 }
 
@@ -291,12 +294,12 @@ void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect * aspect
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDescriptionChanged(const AbstractColumn * source) {
+void AbstractFilter::inputDescriptionChanged(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
-void AbstractFilter::inputDescriptionChanged(const AbstractAspect * aspect) {
-	const AbstractColumn * col = qobject_cast<const AbstractColumn*>(aspect);
+void AbstractFilter::inputDescriptionChanged(const AbstractAspect* aspect) {
+	const AbstractColumn* col = qobject_cast<const AbstractColumn*>(aspect);
 	if (col && m_inputs.contains(col)) inputDescriptionChanged(col);
 }
 
@@ -305,7 +308,7 @@ void AbstractFilter::inputDescriptionChanged(const AbstractAspect * aspect) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn * source) {
+void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
@@ -314,7 +317,7 @@ void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn * so
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn * source) {
+void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
@@ -323,7 +326,7 @@ void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn * source) 
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputModeAboutToChange(const AbstractColumn * source) {
+void AbstractFilter::inputModeAboutToChange(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
@@ -332,7 +335,7 @@ void AbstractFilter::inputModeAboutToChange(const AbstractColumn * source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputModeChanged(const AbstractColumn * source) {
+void AbstractFilter::inputModeChanged(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 
@@ -341,7 +344,7 @@ void AbstractFilter::inputModeChanged(const AbstractColumn * source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDataAboutToChange(const AbstractColumn * source) { 
+void AbstractFilter::inputDataAboutToChange(const AbstractColumn* source) { 
 	Q_UNUSED(source);
 }
 
@@ -350,7 +353,7 @@ void AbstractFilter::inputDataAboutToChange(const AbstractColumn * source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDataChanged(const AbstractColumn * source) {
+void AbstractFilter::inputDataChanged(const AbstractColumn* source) {
 	Q_UNUSED(source);
 }
 

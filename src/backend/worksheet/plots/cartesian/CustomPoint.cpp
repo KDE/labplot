@@ -120,9 +120,10 @@ void CustomPoint::retransform() {
 	d->retransform();
 }
 
-void CustomPoint::handlePageResize(double horizontalRatio, double verticalRatio) {
+void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
+	Q_UNUSED(pageResize);
 }
 
 /* ============================ getter methods ================= */
@@ -242,7 +243,7 @@ void CustomPointPrivate::retransform() {
 
 	//calculate the point in the scene coordinates
 	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QList<QPointF> list, listScene;
+	QVector<QPointF> list, listScene;
 	list<<position;
 	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
 	if (!listScene.isEmpty()) {
@@ -409,7 +410,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool CustomPoint::load(XmlStreamReader* reader) {
+bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CustomPoint);
 
 	if (!reader->isStartElement() || reader->name() != "customPoint") {
@@ -419,6 +420,9 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;

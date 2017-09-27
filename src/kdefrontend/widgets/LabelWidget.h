@@ -33,6 +33,13 @@
 #include "backend/worksheet/TextLabel.h"
 #include <KConfigGroup>
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <repository.h>
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
+#endif
+
 class Label;
 class Axis;
 class QMenu;
@@ -61,6 +68,10 @@ private:
 	bool m_initializing;
 	QMenu* m_dateTimeMenu;
 	bool m_teXEnabled;
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::Repository m_repository;
+#endif
 
 	void initConnections() const;
 
@@ -73,6 +84,7 @@ private slots:
 	void charFormatChanged(const QTextCharFormat&);
 	void teXUsedChanged(bool);
 	void fontColorChanged(const QColor&);
+	void backgroundColorChanged(const QColor&);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
 	void fontUnderlineChanged(bool);

@@ -40,6 +40,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
+#include <QTextCharFormat>
+#include <QTextDocument>
+#include <QTextCursor>
 
 #include <QIcon>
 #include <KConfig>
@@ -90,6 +93,7 @@ void TextLabel::init() {
 	d->teXFont.setFamily(group.readEntry("TeXFontFamily", "Computer Modern"));
 	d->teXFont.setPointSize(group.readEntry("TeXFontSize", 12));
 	d->teXFontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
+	d->teXBackgroundColor = group.readEntry("TeXBackgroundColor", QColor(Qt::white));
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
 	d->staticText.setTextFormat(Qt::RichText);
@@ -154,12 +158,30 @@ void TextLabel::retransform() {
 	d->retransform();
 }
 
-void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-
+void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("TextLabel::handleResize()");
+	Q_UNUSED(pageResize);
 	Q_D(TextLabel);
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
+
+	d->teXFont.setPointSizeF(d->teXFont.pointSizeF() * ratio);
+	d->updateText();
+
+	//TODO: doesn't seem to work
+	QTextDocument doc;
+	doc.setHtml(d->textWrapper.text);
+	QTextCursor cursor(&doc);
+	cursor.select(QTextCursor::Document);
+	QTextCharFormat fmt = cursor.charFormat();
+	QFont font = fmt.font();
+	font.setPointSizeF(font.pointSizeF() * ratio);
+	fmt.setFont(font);
+	cursor.setCharFormat(fmt);
 }
 
 /*!
@@ -182,6 +204,7 @@ QMenu* TextLabel::createContextMenu() {
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXBackgroundColor, teXBackgroundColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
@@ -204,10 +227,17 @@ void TextLabel::setTeXFont(const QFont& font) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
-void TextLabel::setTeXFontColor(const QColor fontColor) {
+void TextLabel::setTeXFontColor(const QColor color) {
 	Q_D(TextLabel);
-	if (fontColor != d->teXFontColor)
-		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, i18n("%1: set TeX font color")));
+	if (color != d->teXFontColor)
+		exec(new TextLabelSetTeXFontColorCmd(d, color, i18n("%1: set TeX font color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, teXBackgroundColor, updateText);
+void TextLabel::setTeXBackgroundColor(const QColor color) {
+	Q_D(TextLabel);
+	if (color != d->teXBackgroundColor)
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, i18n("%1: set TeX background color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
@@ -417,9 +447,13 @@ void TextLabelPrivate::updatePosition() {
 	updates the static text.
  */
 void TextLabelPrivate::updateText() {
+	if (suppressRetransform)
+		return;
+
 	if (textWrapper.teXUsed) {
 		TeXRenderer::Formatting format;
 		format.fontColor = teXFontColor;
+		format.backgroundColor = teXBackgroundColor;
 		format.fontSize = teXFont.pointSize();
 		format.fontFamily = teXFont.family();
 		format.dpi = teXImageResolution;
@@ -673,9 +707,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool TextLabel::load(XmlStreamReader* reader) {
-	Q_D(TextLabel);
-
+bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "textLabel") {
 		reader->raiseError(i18n("no textLabel element found"));
 		return false;
@@ -684,6 +716,10 @@ bool TextLabel::load(XmlStreamReader* reader) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	if (preview)
+		return true;
+
+	Q_D(TextLabel);
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -806,12 +842,37 @@ bool TextLabel::load(XmlStreamReader* reader) {
 //#########################  Theme management ##################################
 //##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
+	Q_D(TextLabel);
+
 	KConfigGroup group = config.group("Label");
-	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-	this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
+	const QColor fontColor = group.readEntry("FontColor", QColor(Qt::white));
+	const QColor backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
+
+	d->suppressRetransform = true;
+	if (!d->textWrapper.teXUsed) {
+		//replace colors in the html-formatted string
+		QTextDocument doc;
+		doc.setHtml(d->textWrapper.text);
+		QTextCharFormat fmt;
+		fmt.setForeground(QBrush(fontColor));
+		fmt.setBackground(QBrush(backgroundColor));
+		QTextCursor cursor(&doc);
+		cursor.select(QTextCursor::Document);
+		cursor.setCharFormat(fmt);
+
+		TextLabel::TextWrapper wrapper(doc.toHtml(), d->textWrapper.teXUsed);
+		this->setText(wrapper);
+	} else {
+		//replace colors in the TeX-string
+		this->setTeXFontColor(fontColor);
+		this->setTeXBackgroundColor(backgroundColor);
+	}
+	d->suppressRetransform = false;
+	d->updateText();
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Label");
-	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
+	//TODO
+// 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
 }

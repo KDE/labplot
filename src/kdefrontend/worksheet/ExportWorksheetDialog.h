@@ -38,30 +38,29 @@
 class ExportWorksheetDialog : public KDialog {
 	Q_OBJECT
 
-	public:
-		explicit ExportWorksheetDialog(QWidget*);
-		virtual ~ExportWorksheetDialog();
+public:
+	explicit ExportWorksheetDialog(QWidget*);
+	virtual ~ExportWorksheetDialog();
 
-		QString path() const;
-		void setFileName(const QString&);
-		WorksheetView::ExportFormat exportFormat() const;
-		WorksheetView::ExportArea exportArea() const;
-		bool exportBackground() const;
-		int exportResolution() const;
+	QString path() const;
+	void setFileName(const QString&);
+	WorksheetView::ExportFormat exportFormat() const;
+	WorksheetView::ExportArea exportArea() const;
+	bool exportBackground() const;
+	int exportResolution() const;
 
-	private:
-		QWidget* mainWidget;
-		Ui::ExportWorksheetWidget ui;
-        KUrlCompletion* urlCompletion;
-		bool m_showOptions;
+private:
+	QWidget* m_mainWidget;
+	Ui::ExportWorksheetWidget ui;
+	bool m_showOptions;
 
-	private slots:
-		void slotButtonClicked(int);
-		void okClicked();
-		void toggleOptions();
-		void selectFile();
-		void formatChanged(int);
-		void fileNameChanged(const QString&);
+private slots:
+	void slotButtonClicked(int);
+	void okClicked();
+	void toggleOptions();
+	void selectFile();
+	void formatChanged(int);
+	void fileNameChanged(const QString&);
 };
 
 #endif

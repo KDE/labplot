@@ -30,15 +30,16 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include <QObject>
-#include <QFont>
-#include <QBrush>
-#include <QPen>
 #include "backend/lib/macros.h"
 #include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+#include <QFont>
+#include <QBrush>
+#include <QPen>
+
 class TextLabelPrivate;
+
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
@@ -70,18 +71,19 @@ class TextLabel : public WorksheetElement {
 		~TextLabel();
 
 		Type type() const;
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem* graphicsItem() const;
+		virtual QIcon icon() const override;
+		virtual QMenu* createContextMenu() override;
+		virtual QGraphicsItem* graphicsItem() const override;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
+		virtual void loadThemeConfig(const KConfig& config) override;
+		virtual void saveThemeConfig(const KConfig& config) override;
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
+		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor);
 		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
@@ -90,15 +92,14 @@ class TextLabel : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
 		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool);
+		virtual void setVisible(bool on) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool) override;
+
+		virtual void retransform() override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef TextLabelPrivate Private;
-
-	public slots:
-		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	private slots:
 		void updateTeXImage();
@@ -122,6 +123,7 @@ class TextLabel : public WorksheetElement {
 		friend class TextLabelSetTextCmd;
 		friend class TextLabelSetTeXFontCmd;
 		friend class TextLabelSetTeXFontColorCmd;
+		friend class TextLabelSetTeXBackgroundColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
@@ -130,6 +132,7 @@ class TextLabel : public WorksheetElement {
 		void teXFontSizeChanged(const int);
 		void teXFontChanged(const QFont);
 		void teXFontColorChanged(const QColor);
+		void teXBackgroundColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);

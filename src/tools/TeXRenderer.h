@@ -40,6 +40,7 @@ class TeXRenderer {
 public:
 	struct Formatting {
 		QColor fontColor;
+		QColor backgroundColor;
 		int fontSize;
 		QString fontFamily;
 		int dpi;

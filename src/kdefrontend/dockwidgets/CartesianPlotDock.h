@@ -33,12 +33,13 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
-#include <QList>
-#include <KConfig>
-#include <KLocalizedString>
 
+#include <KConfig>
+
+template <class T> class QList;
 class LabelWidget;
-class KUrlCompletion;
+class ThemeHandler;
+class KLocalizedString;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
@@ -55,7 +56,7 @@ private:
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
-	KUrlCompletion* m_completion;
+	ThemeHandler* m_themeHandler;
 
 	void loadConfig(KConfig&);
 
@@ -70,6 +71,10 @@ private slots:
 	void visibilityChanged(bool);
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
+
+	void rangeTypeChanged();
+	void rangeFirstChanged(const QString&);
+	void rangeLastChanged(const QString&);
 
 	void autoScaleXChanged(int);
 	void xMinChanged();
@@ -101,7 +106,7 @@ private slots:
 	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
-  	void backgroundTypeChanged(int);
+	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
 	void backgroundBrushStyleChanged(int);
@@ -110,7 +115,7 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void backgroundOpacityChanged(int);
-  	void borderStyleChanged(int);
+	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
@@ -122,6 +127,9 @@ private slots:
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotRectChanged(QRectF&);
+	void plotRangeTypeChanged(CartesianPlot::RangeType);
+	void plotRangeFirstValuesChanged(int);
+	void plotRangeLastValuesChanged(int);
 	void plotXAutoScaleChanged(bool);
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
@@ -157,14 +165,14 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
+	//save/load themes
+	void loadTheme(const QString&);
+	void saveTheme(KConfig& config) const;
+
+	void load();
+
 signals:
 	void info(const QString&);
-
-public slots:
-	void load();
-	void loadTheme(KConfig& config);
-	void saveTheme(KConfig& config);
-
 };
 
 #endif

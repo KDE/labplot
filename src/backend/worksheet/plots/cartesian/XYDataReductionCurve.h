@@ -38,71 +38,65 @@ class XYDataReductionCurvePrivate;
 class XYDataReductionCurve: public XYCurve {
 	Q_OBJECT
 
-	public:
-		struct DataReductionData {
-			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker_variant), autoTolerance(true), tolerance(0.0),
-						autoTolerance2(true), tolerance2(0.0), autoRange(true), xRange(2) {};
-	
-			nsl_geom_linesim_type type;	// type of simplification
-			bool autoTolerance;		// automatic tolerance
-			double tolerance;		// tolerance
-			bool autoTolerance2;		// automatic tolerance2
-			double tolerance2;		// tolerance2
-			bool autoRange;			// use all data?
-			QVector<double> xRange;		// x range for integration
-		};
-		struct DataReductionResult {
-			DataReductionResult() : available(false), valid(false), elapsedTime(0), npoints(0), posError(0), areaError(0) {};
+public:
+	struct DataReductionData {
+		DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker_variant), autoTolerance(true), tolerance(0.0),
+			autoTolerance2(true), tolerance2(0.0), autoRange(true), xRange(2) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-			size_t npoints;
-			double posError;
-			double areaError;
-		};
+		nsl_geom_linesim_type type;	// type of simplification
+		bool autoTolerance;		// automatic tolerance
+		double tolerance;		// tolerance
+		bool autoTolerance2;		// automatic tolerance2
+		double tolerance2;		// tolerance2
+		bool autoRange;			// use all data?
+		QVector<double> xRange;		// x range for integration
+	};
+	struct DataReductionResult {
+		DataReductionResult() : available(false), valid(false), elapsedTime(0), npoints(0), posError(0), areaError(0) {};
 
-		explicit XYDataReductionCurve(const QString& name);
-		virtual ~XYDataReductionCurve();
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+		size_t npoints;
+		double posError;
+		double areaError;
+	};
 
-		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	explicit XYDataReductionCurve(const QString& name);
+	virtual ~XYDataReductionCurve();
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	void recalculate();
+	virtual QIcon icon() const override;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-		CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
-		const DataReductionResult& dataReductionResult() const;
-		bool isSourceDataChangedSinceLastDataReduction() const;
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+	const QString& xDataColumnPath() const;
+	const QString& yDataColumnPath() const;
 
-		typedef WorksheetElement BaseClass;
-		typedef XYDataReductionCurvePrivate Private;
+	CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
+	const DataReductionResult& dataReductionResult() const;
 
-	protected:
-		XYDataReductionCurve(const QString& name, XYDataReductionCurvePrivate* dd);
+	typedef XYDataReductionCurvePrivate Private;
 
-	private:
-		Q_DECLARE_PRIVATE(XYDataReductionCurve)
-		void init();
+protected:
+	XYDataReductionCurve(const QString& name, XYDataReductionCurvePrivate* dd);
 
-	private slots:
-		void handleSourceDataChanged();
+private:
+	Q_DECLARE_PRIVATE(XYDataReductionCurve)
+	void init();
 
-	signals:
-		friend class XYDataReductionCurveSetXDataColumnCmd;
-		friend class XYDataReductionCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
+signals:
+	friend class XYDataReductionCurveSetXDataColumnCmd;
+	friend class XYDataReductionCurveSetYDataColumnCmd;
+	void xDataColumnChanged(const AbstractColumn*);
+	void yDataColumnChanged(const AbstractColumn*);
 
-		friend class XYDataReductionCurveSetDataReductionDataCmd;
-		void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
-		void sourceDataChangedSinceLastDataReduction();
-		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process
+	friend class XYDataReductionCurveSetDataReductionDataCmd;
+	void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
+	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 
 #endif

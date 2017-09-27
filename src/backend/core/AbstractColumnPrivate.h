@@ -34,15 +34,15 @@
 #include "backend/lib/IntervalAttribute.h"
 
 class AbstractColumnPrivate {
-	public:
-		explicit AbstractColumnPrivate(AbstractColumn *owner);
-		AbstractColumn *owner() { return m_owner; }
+public:
+	explicit AbstractColumnPrivate(AbstractColumn* owner);
+	AbstractColumn* owner() { return m_owner; }
 
-		QString name() const { return m_owner->name(); }
+	QString name() const { return m_owner->name(); }
 
-	public:
-		AbstractColumn *m_owner;
-		IntervalAttribute<bool> m_masking;
+public:
+	AbstractColumn* m_owner;
+	IntervalAttribute<bool> m_masking;
 };
 
-#endif // ifndef ABSTRACT_COLUMN_PRIVATE_H
+#endif //ifndef ABSTRACT_COLUMN_PRIVATE_H

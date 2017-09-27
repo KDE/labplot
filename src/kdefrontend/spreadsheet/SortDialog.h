@@ -36,30 +36,30 @@ class QComboBox;
 class QLabel;
 
 class SortDialog : public QDialog{
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit SortDialog( QWidget* parent = 0, Qt::WFlags fl = 0 );
-		void setColumnsList(QList<Column*> list);
+public:
+	explicit SortDialog( QWidget* parent = 0, Qt::WFlags fl = 0 );
+	void setColumns(QVector<Column*>);
 
-		enum { Separately=0, Together=1 };
-		enum { Ascending=0, Descending=1 };
+	enum { Separately=0, Together=1 };
+	enum { Ascending=0, Descending=1 };
 
-	private slots:
-		void sort();
-		void changeType(int index);
+private slots:
+	void sort();
+	void changeType(int index);
 
-	signals:
-		void sort(Column *leading, QList<Column*> cols, bool ascending);
+signals:
+	void sort(Column*, QVector<Column*>, bool ascending);
 
-	private:
-		QList<Column*> m_columns_list;
+private:
+	QVector<Column*> m_columns;
 
-		QComboBox* cbOrdering;
-		QLabel* lblType;
-		QComboBox* cbType;
-		QLabel* lblColumns;
-		QComboBox* cbColumns;
+	QComboBox* m_cbOrdering;
+	QLabel* m_lType;
+	QComboBox* m_cbType;
+	QLabel* m_lColumns;
+	QComboBox* m_cbColumns;
 };
 
 #endif

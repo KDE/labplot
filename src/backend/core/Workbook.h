@@ -2,7 +2,7 @@
     File                 : Workbook.h
     Project              : LabPlot
     Description          : Aspect providing a container for storing data
-						   in form of spreadsheets and matrices
+				in form of spreadsheets and matrices
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Alexander Semke(alexander.semke@web.de)
 
@@ -40,33 +40,33 @@ class XmlStreamReader;
 class Workbook : public AbstractPart, public scripted {
 	Q_OBJECT
 
-	public:
-		Workbook(AbstractScriptingEngine* engine, const QString& name);
+public:
+	Workbook(AbstractScriptingEngine* engine, const QString& name);
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		virtual QWidget* view() const;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QWidget* view() const override;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+	virtual bool exportView() const override;
+	virtual bool printView() override;
+	virtual bool printPreview() const override;
 
-		Spreadsheet* currentSpreadsheet() const;
-		Matrix* currentMatrix() const;
-		void setChildSelectedInView(int index, bool selected);
+	Spreadsheet* currentSpreadsheet() const;
+	Matrix* currentMatrix() const;
+	void setChildSelectedInView(int index, bool selected);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-	public slots:
-		virtual void childSelected(const AbstractAspect*);
+public slots:
+	virtual void childSelected(const AbstractAspect*) override;
 
-	private slots:
-		virtual void childDeselected(const AbstractAspect*);
+private slots:
+	virtual void childDeselected(const AbstractAspect*) override;
 
-	signals:
-		void requestProjectContextMenu(QMenu*);
-		void workbookItemSelected(int);
+signals:
+	void requestProjectContextMenu(QMenu*);
+	void workbookItemSelected(int);
 };
 
 #endif

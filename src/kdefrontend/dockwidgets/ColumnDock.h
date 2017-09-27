@@ -1,11 +1,11 @@
 /***************************************************************************
     File                 : ColumnDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
     Description          : widget for column properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,28 +31,26 @@
 #define COLUMNDOCK_H
 
 #include "backend/core/column/Column.h"
-#include <QList>
 #include "ui_columndock.h"
-class Column;
 
-class ColumnDock: public QWidget{
+template <class T> class QList;
+
+class ColumnDock : public QWidget {
 	Q_OBJECT
 
-  public:
-	explicit ColumnDock(QWidget *parent);
+public:
+	explicit ColumnDock(QWidget*);
 	void setColumns(QList<Column*>);
 
-  private:
+private:
 	Ui::ColumnDock ui;
 	QList<Column*> m_columnsList;
 	Column* m_column;
 	bool m_initializing;
-	QStringList dateStrings;
-	QStringList timeStrings;
 
 	void updateFormatWidgets(const AbstractColumn::ColumnMode);
 
-  private slots:
+private slots:
 	void retranslateUi();
 
 	void nameChanged();
@@ -67,6 +65,7 @@ class ColumnDock: public QWidget{
 	void columnFormatChanged();
 	void columnPrecisionChanged();
 	void columnPlotDesignationChanged(const AbstractColumn*);
+
 signals:
 	void info(const QString&);
 };

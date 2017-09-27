@@ -55,8 +55,6 @@ class XYDifferentiationCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastDifferentiation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
 		XYDifferentiationCurve* const q;
 };
 

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -30,56 +30,40 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
-#include <KDialog>
-#include <QMenu>
+#include "ImportDialog.h"
 
+class AbstractAspect;
 class MainWin;
 class ImportFileWidget;
-class FileDataSource;
+class LiveDataSource;
 class TreeViewComboBox;
 
 class QStatusBar;
-class QAbstractItemModel;
-class QModelIndex;
-class QVBoxLayout;
-class QLabel;
-class QComboBox;
-class QGroupBox;
-class QToolButton;
+class QMenu;
 
-class ImportFileDialog: public KDialog {
+class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
+	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& fileName = QString());
 	~ImportFileDialog();
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importTo(QStatusBar*) const;
-	void setCurrentIndex(const QModelIndex&);
-private:
-	void setModel(QAbstractItemModel*);
+	virtual QString selectedObject() const;
 
-	MainWin* m_mainWin;
-	QVBoxLayout* vLayout;
-	ImportFileWidget* importFileWidget;
-	QGroupBox* frameAddTo;
-	TreeViewComboBox* cbAddTo;
-	QLabel* lPosition;
-	QComboBox* cbPosition;
-	QPushButton* bNewSpreadsheet;
-	QPushButton* bNewMatrix;
-	QPushButton* bNewWorkbook;
-	QToolButton* tbNewDataContainer;
+	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
+	virtual void importTo(QStatusBar*) const;
+
+private:
+
+	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions;
 	QMenu* m_newDataContainerMenu;
-
+protected  slots:
+	virtual void checkOkButton();
 private slots:
 	void toggleOptions();
-	void newDataContainerMenu();
-	void newDataContainer(QAction*);
-	void checkOkButton();
 	void checkOnFitsTableToMatrix(const bool enable);
+	void loadSettings();
 };
 
 #endif //IMPORTFILEDIALOG_H

@@ -35,14 +35,16 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/core/PartMdiView.h"
 
-#include <QTreeView>
 #include <QContextMenuEvent>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QLabel>
+#include <QDrag>
 #include <QHeaderView>
+#include <QLabel>
+#include <QMimeData>
+#include <QPushButton>
 #include <QSignalMapper>
 #include <QTimer>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 #include <KIconLoader>
 #include <KLineEdit>
@@ -61,47 +63,52 @@
   \ingroup commonfrontend
 */
 
-ProjectExplorer::ProjectExplorer(QWidget* parent) {
-	Q_UNUSED(parent);
+ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
+	m_treeView(new QTreeView(parent)),
+	m_project(nullptr),
+	m_dragStarted(false),
+	m_frameFilter(new QFrame(this))  {
+
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
 
-	frameFilter= new QFrame(this);
-	QHBoxLayout *layoutFilter= new QHBoxLayout(frameFilter);
+	QHBoxLayout* layoutFilter= new QHBoxLayout(m_frameFilter);
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
-	lFilter = new QLabel(i18n("Search/Filter:"));
+	QLabel* lFilter = new QLabel(i18n("Search/Filter:"));
 	layoutFilter->addWidget(lFilter);
 
-	leFilter= new KLineEdit(frameFilter);
-	qobject_cast<KLineEdit*>(leFilter)->setClearButtonShown(true);
-	qobject_cast<KLineEdit*>(leFilter)->setPlaceholderText(i18n("Search/Filter text"));
-	layoutFilter->addWidget(leFilter);
+	m_leFilter = new QLineEdit(m_frameFilter);
+	m_leFilter->setClearButtonEnabled(true);
+	m_leFilter->setPlaceholderText(i18n("Search/Filter text"));
+	layoutFilter->addWidget(m_leFilter);
 
-	bFilterOptions = new QPushButton(frameFilter);
+	bFilterOptions = new QPushButton(m_frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
 
-	layout->addWidget(frameFilter);
+	layout->addWidget(m_frameFilter);
 
-	m_treeView = new QTreeView(this);
 	m_treeView->setAnimated(true);
 	m_treeView->setAlternatingRowColors(true);
 	m_treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	m_treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	m_treeView->setUniformRowHeights(true);
+	m_treeView->viewport()->installEventFilter(this);
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
+	m_treeView->setDragEnabled(true);
+	m_treeView->setAcceptDrops(false);
+	m_treeView->setDropIndicatorShown(false);
 
 	layout->addWidget(m_treeView);
 
-	m_columnToHide=0;
 	this->createActions();
 
-	connect(leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterTextChanged(QString)));
+	connect(m_leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterTextChanged(QString)));
 	connect(bFilterOptions, SIGNAL(toggled(bool)), this, SLOT(toggleFilterOptionsMenu(bool)));
 }
 
@@ -154,11 +161,12 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		m_treeView->clearSelection();
 
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	QMenu *menu = 0;
+	QMenu* menu = 0;
 	if (items.size()/4 == 1) {
-		QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
-		menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		menu = aspect->createContextMenu();
 	}
+
 	if (!menu) {
 		menu = new QMenu();
 		menu->addSeparator()->setText(i18n("Tree options"));
@@ -255,27 +263,57 @@ QModelIndex ProjectExplorer::currentIndex() const {
 	Provides a menu for selective showing and hiding of columns.
 */
 bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
-	QHeaderView* h = m_treeView->header();
-	if (obj!=h)
-		return QObject::eventFilter(obj, event);
+	if (obj == m_treeView->header() && event->type() == QEvent::ContextMenu) {
+		//Menu for showing/hiding the columns in the tree view
+		QMenu* columnsMenu = new QMenu(m_treeView->header());
+		columnsMenu->addSection(i18n("Columns"));
+		columnsMenu->addAction(showAllColumnsAction);
+		columnsMenu->addSeparator();
+		for (int i=0; i<list_showColumnActions.size(); i++)
+			columnsMenu->addAction(list_showColumnActions.at(i));
 
-	if (event->type() != QEvent::ContextMenu)
-		return QObject::eventFilter(obj, event);
+		QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
+		columnsMenu->exec(e->globalPos());
+		delete columnsMenu;
 
-	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
+		return true;
+	} else if (obj == m_treeView->viewport()) {
+		QMouseEvent* e = static_cast<QMouseEvent*>(event);
+		if (event->type() == QEvent::MouseButtonPress) {
+			if (e->button() == Qt::LeftButton) {
+				m_dragStartPos = e->globalPos();
+				m_dragStarted = false;
+			}
+		} else if (event->type() == QEvent::MouseMove) {
+			if ( !m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
+				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 
-	//Menu for showing/hiding the columns in the tree view
-	QMenu* columnsMenu = new QMenu(h);
-	columnsMenu->addSection(i18n("Columns"));
-	columnsMenu->addAction(showAllColumnsAction);
-	columnsMenu->addSeparator();
-	for (int i=0; i<list_showColumnActions.size(); i++)
-		columnsMenu->addAction(list_showColumnActions.at(i));
+				m_dragStarted = true;
+				QDrag* drag = new QDrag(this);
+				QMimeData* mimeData = new QMimeData;
 
-	columnsMenu->exec(e->globalPos());
-	delete columnsMenu;
+				//determine the selected objects and serialize the pointers to QMimeData
+				QVector<quintptr> vec;
+				QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+				//there are four model indices in each row -> divide by 4 to obtain the number of selected rows (=aspects)
+				for (int i = 0; i < items.size()/4; ++i) {
+					const QModelIndex& index = items.at(i*4);
+					AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+					vec << (quintptr)aspect;
+				}
 
-	return true;
+				QByteArray data;
+				QDataStream stream(&data, QIODevice::WriteOnly);
+				stream << vec;
+
+				mimeData->setData("labplot-dnd", data);
+				drag->setMimeData(mimeData);
+				drag->exec();
+			}
+		}
+	}
+
+	return QObject::eventFilter(obj, event);
 }
 
 //##############################################################################
@@ -331,7 +369,7 @@ void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIn
 void ProjectExplorer::toggleColumn(int index) {
 	//determine the total number of checked column actions
 	int checked = 0;
-	foreach(QAction* action, list_showColumnActions) {
+	for (const auto* action : list_showColumnActions) {
 		if (action->isChecked())
 			checked++;
 	}
@@ -341,7 +379,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 
-		foreach(QAction* action, list_showColumnActions)
+		for (auto* action : list_showColumnActions)
 			action->setEnabled(true);
 
 		//deactivate the "show all column"-action, if all actions are checked
@@ -374,7 +412,7 @@ void ProjectExplorer::showAllColumns() {
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	foreach(QAction* action, list_showColumnActions) {
+	for (auto* action : list_showColumnActions) {
 		action->setEnabled(true);
 		action->setChecked(true);
 	}
@@ -384,11 +422,11 @@ void ProjectExplorer::showAllColumns() {
   shows/hides the frame with the search/filter widgets
 */
 void ProjectExplorer::toggleFilterWidgets() {
-	if (frameFilter->isVisible()) {
-		frameFilter->hide();
+	if (m_frameFilter->isVisible()) {
+		m_frameFilter->hide();
 		toggleFilterAction->setText(i18n("show search/filter options"));
 	} else {
-		frameFilter->show();
+		m_frameFilter->show();
 		toggleFilterAction->setText(i18n("hide search/filter options"));
 	}
 }
@@ -459,11 +497,11 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 }
 
 void ProjectExplorer::toggleFilterCaseSensitivity() {
-	filterTextChanged(leFilter->text());
+	filterTextChanged(m_leFilter->text());
 }
 
 void ProjectExplorer::toggleFilterMatchCompleteWord() {
-	filterTextChanged(leFilter->text());
+	filterTextChanged(m_leFilter->text());
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
@@ -508,7 +546,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach (const QModelIndex& index, items) {
+	for (const QModelIndex& index : items) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
@@ -518,13 +556,13 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 void ProjectExplorer::expandSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items)
+	for (const auto& index : items)
 		m_treeView->setExpanded(index, true);
 }
 
 void ProjectExplorer::collapseSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items)
+	for (const auto& index : items)
 		m_treeView->setExpanded(index, false);
 }
 
@@ -569,9 +607,9 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		expanded.push_back(-1);
 
 	int row = 0;
-	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
-	foreach(const AbstractAspect* aspect, aspects) {
-		QModelIndex index = model->modelIndexOfAspect(aspect);
+	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	for (const auto* aspect : aspects) {
+		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
 		const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part && part->hasMdiSubWindow()) {
@@ -630,7 +668,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
 	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;
@@ -739,12 +777,12 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		}
 	}
 
-	foreach (const QModelIndex& index, expanded) {
+	for (const auto& index : expanded) {
 		m_treeView->setExpanded(index, true);
 		collapseParents(index, expanded);//collapse all parent indices if they are not expanded
 	}
 
-	foreach (const QModelIndex& index, selected)
+	for (const auto& index : selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	m_treeView->setCurrentIndex(currentIndex);

@@ -37,11 +37,13 @@ class SlidingPanel : public QFrame {
 public:
 	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
 	~SlidingPanel();
+	bool shouldHide();
+	QPushButton* quitButton() const;
+private:
 
 	QLabel* m_worksheetName;
 	QPushButton* m_quitPresentingMode;
 	virtual QSize sizeHint() const;
-	bool shouldHide();
 
 public slots:
 	void movePanel(qreal);

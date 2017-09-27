@@ -78,17 +78,17 @@ public:
 		int valueThresholdHigh;
 	};
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 	void createContextMenu(QMenu*);
-	virtual QWidget* view() const;
+	virtual QWidget* view() const override;
 
-	virtual bool exportView() const;
-	virtual bool printView();
-	virtual bool printPreview() const;
+	virtual bool exportView() const override;
+	virtual bool printView() override;
+	virtual bool printPreview() const override;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);

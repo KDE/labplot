@@ -39,21 +39,21 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint, Curve3D, Surface3D};
+		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint, Curve3D, Surface3D};
 
 		TemplateHandler(QWidget* parent, ClassName);
 
 	private:
 		void retranslateUi();
 
-		ClassName className;
-		QList<QString> dirNames;
+        ClassName m_className;
+        QList<QString> m_dirNames;
 
-		QToolButton* tbLoad;
-		QToolButton* tbSave;
-		QToolButton* tbSaveDefault;
-		QToolButton* tbCopy;
-		QToolButton* tbPaste;
+        QToolButton* m_tbLoad;
+        QToolButton* m_tbSave;
+        QToolButton* m_tbSaveDefault;
+        QToolButton* m_tbCopy;
+        QToolButton* m_tbPaste;
 
 	private slots:
 		void loadMenu();

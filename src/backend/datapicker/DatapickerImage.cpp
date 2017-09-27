@@ -343,8 +343,8 @@ void DatapickerImage::setPointVisibility(const bool on) {
 }
 
 void DatapickerImage::setPrinting(bool on) const {
-	QList<DatapickerPoint*> childPoints = parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	foreach(DatapickerPoint* point, childPoints)
+	QVector<DatapickerPoint*> childPoints = parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	for (auto* point : childPoints)
 		point->setPrinting(on);
 }
 
@@ -356,8 +356,8 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
         if (childCount) {
             beginMacro(i18n("%1: remove all axis points", name()));
-            QList<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-            foreach(DatapickerPoint* point, childrenPoints)
+            QVector<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+            for (auto* point : childrenPoints)
                 point->remove();
             endMacro();
         }
@@ -387,8 +387,8 @@ QString DatapickerImagePrivate::name() const {
 }
 
 void DatapickerImagePrivate::retransform() {
-	QList<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach(DatapickerPoint* point, childrenPoints)
+	QVector<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : childrenPoints)
 		point->retransform();
 }
 
@@ -459,9 +459,9 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
-    QList<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    QVector<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     if (childPoints.count()) {
-        foreach(DatapickerPoint* point, childPoints)
+        for (auto* point : childPoints)
             point->remove();
     }
 
@@ -534,15 +534,14 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	QList<AbstractAspect*> childrenAspect = children<AbstractAspect>(IncludeHidden);
-	foreach(AbstractAspect* child, childrenAspect)
+	for (auto* child : children<AbstractAspect>(IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement();
 }
 
 //! Load from XML
-bool DatapickerImage::load(XmlStreamReader* reader) {
+bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "datapickerImage") {
 		reader->raiseError(i18n("no image element found"));
 		return false;
@@ -550,6 +549,9 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -807,7 +809,7 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 		} else if(reader->name() == "datapickerPoint") {
 			DatapickerPoint* datapickerPoint = new DatapickerPoint("");
 			datapickerPoint->setHidden(true);
-			if (!datapickerPoint->load(reader)) {
+			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;
 				return false;
 			} else {

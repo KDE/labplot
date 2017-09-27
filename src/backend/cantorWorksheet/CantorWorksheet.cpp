@@ -29,6 +29,7 @@
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
@@ -77,7 +78,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SLOT(sessionChanged()));
 
-		//cantor's session
+		//Cantor's session
 		m_session = m_worksheetAccess->session();
 		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
 
@@ -231,28 +232,31 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	//TODO: save worksheet settings
 	writer->writeEndElement();
 
-	//save the content of cantor's worksheet
+	//save the content of Cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
 	writer->writeStartElement("worksheet");
 	writer->writeAttribute("content", content.toBase64());
 	writer->writeEndElement();
 
 	//save columns(variables)
-	foreach (Column * col, children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // close "cantorWorksheet" section
 }
 
 //! Load from XML
-bool CantorWorksheet::load(XmlStreamReader* reader){
+bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	if(!reader->isStartElement() || reader->name() != "cantorWorksheet"){
-		reader->raiseError(i18n("no cantor worksheet element found"));
+		reader->raiseError(i18n("no Cantor worksheet element found"));
 		return false;
 	}
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -293,7 +297,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 		} else if(reader->name() == "column") {
 			Column* column = new Column("");
 			column->setUndoAware(false);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

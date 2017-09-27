@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectTreeModel.h"
 
@@ -73,6 +74,7 @@
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	: QAbstractItemModel(parent),
 	  m_root(root),
+	  m_readOnly(false),
 	  m_folderSelectable(true),
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
@@ -98,6 +100,10 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 */
 void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
 	m_selectableAspects=list;
+}
+
+void AspectTreeModel::setReadOnly(bool readOnly) {
+	m_readOnly = readOnly;
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const {
@@ -187,8 +193,6 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			return aspect->name() + QLatin1String(", ") + aspect->comment();
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
-	case ContextMenuRole:
-		return QVariant::fromValue(static_cast<QWidget*>(aspect->createContextMenu()));
 	case Qt::ForegroundRole: {
 			const WorksheetElement* we = qobject_cast<WorksheetElement*>(aspect);
 			if (we) {
@@ -237,8 +241,15 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	}
 
 	//the columns "name" and "description" are editable
-	if (index.column() == 0 || index.column() == 3)
-		result |= Qt::ItemIsEditable;
+	if (!m_readOnly) {
+		if (index.column() == 0 || index.column() == 3)
+			result |= Qt::ItemIsEditable;
+	}
+
+	//allow to drag and drop columns for the faster creation of curves in the plots.
+	//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
+	if (dynamic_cast<const AbstractColumn*>(aspect))
+		result = result |Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
 	return result;
 }
@@ -327,9 +338,9 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
  */
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
-	AbstractAspect* aspect = 0;
-	QList<AbstractAspect*> children = m_root->children("AbstractAspect", AbstractAspect::Recursive);
-	foreach (AbstractAspect* child, children) {
+	AbstractAspect* aspect = nullptr;
+	auto children = m_root->children("AbstractAspect", AbstractAspect::Recursive);
+	for (auto* child: children) {
 		if (child->path() == path) {
 			aspect = child;
 			break;

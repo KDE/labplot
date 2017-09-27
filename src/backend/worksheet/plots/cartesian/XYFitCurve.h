@@ -31,116 +31,121 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
+
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
 }
 
 class XYFitCurvePrivate;
+
 class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
-	public:
-		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
+public:
+	struct FitData {
+		FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
+				weightsType(nsl_fit_weight_no),
+				degree(1),
+				maxIterations(500),
+				eps(1e-4),
+				evaluatedPoints(100),
+				evaluateFullRange(true),
+				useDataErrors(true),
+				useResults(true),
+				autoRange(true), xRange(2) {};
 
-		struct FitData {
-			FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
-						weightsType(XYFitCurve::WeightsFromColumn),
-						degree(1),
-						maxIterations(500),
-						eps(1e-4),
-						evaluatedPoints(100),
-						useResults(true),
-						evaluateFullRange(true),
-						autoRange(true), xRange(2) {};
+		nsl_fit_model_category modelCategory;
+		unsigned int modelType;
+		nsl_fit_weight_type weightsType;
+		int degree;
+		QString model;
+		QStringList paramNames;
+		QStringList paramNamesUtf8;	// Utf8 version of paramNames
+		QVector<double> paramStartValues;
+		QVector<double> paramLowerLimits;
+		QVector<double> paramUpperLimits;
+		QVector<bool> paramFixed;
 
-			nsl_fit_model_category modelCategory;
-			unsigned int modelType;
-			WeightsType weightsType;
-			int degree;
-			QString model;
-			QStringList paramNames;
-			QStringList paramNamesUtf8;	// Utf8 version of paramNames
-			QVector<double> paramStartValues;
-			QVector<double> paramLowerLimits;
-			QVector<double> paramUpperLimits;
-			QVector<bool> paramFixed;
+		int maxIterations;
+		double eps;
+		size_t evaluatedPoints;
+		bool evaluateFullRange;		// evaluate fit function on full data range (default)
+		bool useDataErrors;		// use given data errors when fitting (default)
+		bool useResults;		// use results as new start values (default)
 
-			int maxIterations;
-			double eps;
-			size_t evaluatedPoints;
-			bool useResults;		// use results as new start values
-			bool evaluateFullRange;		// evaluate fit function on full data range
+		bool autoRange;			// use all data?
+		QVector<double> xRange;		// x range for integration
+	};
 
-			bool autoRange;			// use all data?
-			QVector<double> xRange;		// x range for integration
-		};
+	struct FitResult {
+		FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
+			dof(0), sse(0), sst(0), rms(0), rsd(0), mse(0), rmse(0), mae(0) {};
 
-		struct FitResult {
-			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-				dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0) {};
+		bool available;
+		bool valid;
+		QString status;
+		int iterations;
+		qint64 elapsedTime;
+		double dof; //degrees of freedom
+		// residuals: r_i = y_i - Y_i
+		double sse; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
+		double sst; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
+		double rms; // residual mean square / reduced chi^2 = SSE/dof
+		double rsd; // residual standard deviation = sqrt(SSE/dof)
+		double mse; // mean squared error = SSE/n
+		double rmse; // root-mean squared error = \sqrt(mse)
+		double mae; // mean absolute error = \sum_i^n |r_i|
+		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
+		QVector<double> paramValues;
+		QVector<double> errorValues;
+		QString solverOutput;
+	};
 
-			bool available;
-			bool valid;
-			QString status;
-			int iterations;
-			qint64 elapsedTime;
-			double dof; //degrees of freedom
-			double sse; //sum of squared errors (SSE) / residual sum of errors (RSS) / sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-			double mse; //mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-			double rmse; //root-mean squared error = \sqrt(mse)
-			double mae; //mean absolute error = \sum_i^n |Y_i-y_i|
-			double rms; //residual mean square = SSE/d.o.f.
-			double rsd; //residual standard deviation = sqrt(SSE/d.o.f)
-			double rsquared; //Coefficient of determination (R^2)
-			double rsquaredAdj; //Adjusted coefficient of determination (R^2)
-			QVector<double> paramValues;
-			QVector<double> errorValues;
-			QString solverOutput;
-		};
+	explicit XYFitCurve(const QString& name);
+	virtual ~XYFitCurve();
 
-		explicit XYFitCurve(const QString& name);
-		virtual ~XYFitCurve();
+	void recalculate();
+	void initFitData(PlotDataDialog::AnalysisAction);
+	static void initFitData(XYFitCurve::FitData&);
 
-		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual QIcon icon() const override;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
-		const QString& weightsColumnPath() const;
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
+	const QString& xDataColumnPath() const;
+	const QString& yDataColumnPath() const;
+	const QString& xErrorColumnPath() const;
+	const QString& yErrorColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
-		const FitResult& fitResult() const;
-		bool isSourceDataChangedSinceLastFit() const;
+	CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
+	const FitResult& fitResult() const;
 
-		typedef WorksheetElement BaseClass;
-		typedef XYFitCurvePrivate Private;
+	typedef XYFitCurvePrivate Private;
 
-	protected:
-		XYFitCurve(const QString& name, XYFitCurvePrivate* dd);
+protected:
+	XYFitCurve(const QString& name, XYFitCurvePrivate* dd);
 
-	private:
-		Q_DECLARE_PRIVATE(XYFitCurve)
-		void init();
+private:
+	Q_DECLARE_PRIVATE(XYFitCurve)
+	void init();
 
-	private slots:
-		void handleSourceDataChanged();
+signals:
+	friend class XYFitCurveSetXDataColumnCmd;
+	friend class XYFitCurveSetYDataColumnCmd;
+	friend class XYFitCurveSetXErrorColumnCmd;
+	friend class XYFitCurveSetYErrorColumnCmd;
+	void xDataColumnChanged(const AbstractColumn*);
+	void yDataColumnChanged(const AbstractColumn*);
+	void xErrorColumnChanged(const AbstractColumn*);
+	void yErrorColumnChanged(const AbstractColumn*);
 
-	signals:
-		friend class XYFitCurveSetXDataColumnCmd;
-		friend class XYFitCurveSetYDataColumnCmd;
-		friend class XYFitCurveSetWeightsColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-		void weightsColumnChanged(const AbstractColumn*);
-
-		friend class XYFitCurveSetFitDataCmd;
-		void fitDataChanged(const XYFitCurve::FitData&);
-		void sourceDataChangedSinceLastFit();
+	friend class XYFitCurveSetFitDataCmd;
+	void fitDataChanged(const XYFitCurve::FitData&);
 };
 
 #endif

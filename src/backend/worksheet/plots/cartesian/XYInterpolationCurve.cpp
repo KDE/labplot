@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 20016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -56,12 +57,12 @@ extern "C" {
 #include <QIcon>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
-		: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
+	: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
 	init();
 }
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd)
-		: XYCurve(name, dd) {
+	: XYCurve(name, dd) {
 	init();
 }
 
@@ -96,19 +97,20 @@ QIcon XYInterpolationCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYInterpolationCurve::xDataColumnPath() const { Q_D(const XYInterpolationCurve); return d->xDataColumnPath; }
-const QString& XYInterpolationCurve::yDataColumnPath() const { Q_D(const XYInterpolationCurve); return d->yDataColumnPath; }
+const QString& XYInterpolationCurve::xDataColumnPath() const {
+	Q_D(const XYInterpolationCurve);
+	return d->xDataColumnPath;
+}
+const QString& XYInterpolationCurve::yDataColumnPath() const {
+	Q_D(const XYInterpolationCurve);
+	return d->yDataColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
 const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpolationResult() const {
 	Q_D(const XYInterpolationCurve);
 	return d->interpolationResult;
-}
-
-bool XYInterpolationCurve::isSourceDataChangedSinceLastInterpolation() const {
-	Q_D(const XYInterpolationCurve);
-	return d->sourceDataChangedSinceLastInterpolation;
 }
 
 //##############################################################################
@@ -119,7 +121,7 @@ void XYInterpolationCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYInterpolationCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYInterpolationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastInterpolation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -132,7 +134,7 @@ void XYInterpolationCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYInterpolationCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYInterpolationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastInterpolation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -147,21 +149,12 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYInterpolationCurve::handleSourceDataChanged() {
-	Q_D(XYInterpolationCurve);
-	d->sourceDataChangedSinceLastInterpolation = true;
-	emit sourceDataChangedSinceLastInterpolation();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastInterpolation(false),
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -202,36 +195,58 @@ void XYInterpolationCurvePrivate::recalculate() {
 	// clear the previous result
 	interpolationResult = XYInterpolationCurve::InterpolationResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = interpolationData.xRange.first();
-	const double xmax = interpolationData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (interpolationData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = interpolationData.xRange.first();
+		xmax = interpolationData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+		        && !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -243,7 +258,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastInterpolation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -362,74 +377,74 @@ void XYInterpolationCurvePrivate::recalculate() {
 			(*yVector)[i] = ydata[a]*pow(ydata[b]/ydata[a],t);
 			break;
 		case nsl_interp_type_pch: {
-			t = (x-xdata[a])/(xdata[b]-xdata[a]);
-			double t2=t*t, t3=t2*t;
-			double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
-			double m1=0.,m2=0.;
-			switch (variant) {
-			case nsl_interp_pch_variant_finite_difference:
-				if (a==0)
-					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
-				if (b==n-1)
-					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+				t = (x-xdata[a])/(xdata[b]-xdata[a]);
+				double t2=t*t, t3=t2*t;
+				double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
+				double m1=0.,m2=0.;
+				switch (variant) {
+				case nsl_interp_pch_variant_finite_difference:
+					if (a==0)
+						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
+					if (b==n-1)
+						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 
-				break;
-			case nsl_interp_pch_variant_catmull_rom:
-				if (a==0)
-					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
-				if (b==n-1)
-					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+					break;
+				case nsl_interp_pch_variant_catmull_rom:
+					if (a==0)
+						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+					if (b==n-1)
+						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
 
-				break;
-			case nsl_interp_pch_variant_cardinal:
-				if (a==0)
-					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
-				m1 *= (1.-tension);
-				if (b==n-1)
-					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
-				m2 *= (1.-tension);
+					break;
+				case nsl_interp_pch_variant_cardinal:
+					if (a==0)
+						m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+					m1 *= (1.-tension);
+					if (b==n-1)
+						m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+					m2 *= (1.-tension);
 
-				break;
-			case nsl_interp_pch_variant_kochanek_bartels:
-				if (a==0)
-					m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) 
-						+ (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
-				m1 *= (1.-tension);
-				if (b==n-1)
-					m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-				else
-					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) 
-						+ (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
-				m2 *= (1.-tension);
-				
-				break;
-			}	
+					break;
+				case nsl_interp_pch_variant_kochanek_bartels:
+					if (a==0)
+						m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1])
+						     + (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+					m1 *= (1.-tension);
+					if (b==n-1)
+						m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+					else
+						m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a])
+						     + (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
+					m2 *= (1.-tension);
 
-			// Hermite polynomial
-			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
-		}
+					break;
+				}
+
+				// Hermite polynomial
+				(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
+			}
 			break;
 		case nsl_interp_type_rational: {
-			double v,dv;
-			nsl_interp_ratint(xdata, ydata, n, x, &v, &dv);
-			(*yVector)[i] = v;
-			//TODO: use error dv
-			break;
-		}
+				double v,dv;
+				nsl_interp_ratint(xdata, ydata, n, x, &v, &dv);
+				(*yVector)[i] = v;
+				//TODO: use error dv
+				break;
+			}
 		}
 	}
 
@@ -466,19 +481,19 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//write the result
 	interpolationResult.available = true;
 	interpolationResult.valid = true;
-	interpolationResult.status = QString(gsl_strerror(status));;
+	interpolationResult.status = QString(gsl_strerror(status));
 	interpolationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastInterpolation = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
+void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYInterpolationCurve);
 
 	writer->writeStartElement("xyInterpolationCurve");
@@ -522,7 +537,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYInterpolationCurve::load(XmlStreamReader* reader) {
+bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
@@ -543,8 +558,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "interpolationData") {
 			attribs = reader->attributes();
 
@@ -563,7 +580,6 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (reader->name() == "interpolationResult") {
-
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", interpolationResult.available, int);
@@ -572,7 +588,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

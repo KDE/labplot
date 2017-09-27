@@ -234,6 +234,21 @@ private:
 	int m_row_count;
 };
 
+class ColumnSetIntegerCmd : public QUndoCommand {
+public:
+	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = 0);
+
+	virtual void redo();
+	virtual void undo();
+
+private:
+	ColumnPrivate* m_col;
+	int m_row;
+	int m_new_value;
+	int m_old_value;
+	int m_row_count;
+};
+
 class ColumnSetDateTimeCmd : public QUndoCommand {
 public:
 	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = 0);
@@ -251,7 +266,7 @@ private:
 
 class ColumnReplaceTextsCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QStringList& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -259,8 +274,8 @@ public:
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QStringList m_new_values;
-	QStringList m_old_values;
+	QVector<QString> m_new_values;
+	QVector<QString> m_old_values;
 	bool m_copied;
 	int m_row_count;
 };
@@ -281,9 +296,9 @@ private:
 	int m_row_count;
 };
 
-class ColumnReplaceDateTimesCmd : public QUndoCommand {
+class ColumnReplaceIntegersCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QList<QDateTime>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -291,8 +306,24 @@ public:
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QList<QDateTime> m_new_values;
-	QList<QDateTime> m_old_values;
+	QVector<int> m_new_values;
+	QVector<int> m_old_values;
+	bool m_copied;
+	int m_row_count;
+};
+
+class ColumnReplaceDateTimesCmd : public QUndoCommand {
+public:
+	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = 0);
+
+	virtual void redo();
+	virtual void undo();
+
+private:
+	ColumnPrivate* m_col;
+	int m_first;
+	QVector<QDateTime> m_new_values;
+	QVector<QDateTime> m_old_values;
 	bool m_copied;
 	int m_row_count;
 };

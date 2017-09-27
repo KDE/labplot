@@ -34,46 +34,45 @@
 class DateTime2StringFilterSetFormatCmd;
 
 //! Conversion filter QDateTime -> QString.
-class DateTime2StringFilter : public AbstractSimpleFilter
-{
+class DateTime2StringFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	public:
-		//! Standard constructor.
-		explicit DateTime2StringFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
-		//! Set the format string to be used for conversion.
-		void setFormat(const QString& format);
+public:
+	//! Standard constructor.
+	explicit DateTime2StringFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
+	//! Set the format string to be used for conversion.
+	void setFormat(const QString& format);
 
-		//! Return the format string
-		/**
-		 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
-		 * \sa QDate::toString()
-		 */
-		QString format() const { return m_format; }
+	//! Return the format string
+	/**
+		* The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
+	* \sa QDate::toString()
+		*/
+	QString format() const { return m_format; }
 
-		//! Return the data type of the column
-		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
+	//! Return the data type of the column
+	virtual AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
 
-	signals:
-		void formatChanged();
+signals:
+	void formatChanged();
 
-	private:
-		friend class DateTime2StringFilterSetFormatCmd;
-		//! The format string.
-		QString m_format;
+private:
+	friend class DateTime2StringFilterSetFormatCmd;
+	//! The format string.
+	QString m_format;
 
-	public:
-		virtual QString textAt(int row) const;
+public:
+	virtual QString textAt(int row) const override;
 
-		//! \name XML related functions
-		//@{
-		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
-		virtual bool load(XmlStreamReader * reader);
-		//@}
+	//! \name XML related functions
+	//@{
+	virtual void writeExtraAttributes(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	//@}
 
-	protected:
-		//! Using typed ports: only DateTime inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source);
+protected:
+	//! Using typed ports: only DateTime inputs are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *source) override;
 };
 
 #endif // ifndef DATE_TIME2STRING_FILTER_H

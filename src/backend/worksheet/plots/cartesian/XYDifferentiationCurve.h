@@ -35,7 +35,7 @@ extern "C" {
 }
 
 class XYDifferentiationCurvePrivate;
-class XYDifferentiationCurve: public XYCurve {
+class XYDifferentiationCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
@@ -60,9 +60,9 @@ class XYDifferentiationCurve: public XYCurve {
 		virtual ~XYDifferentiationCurve();
 
 		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual QIcon icon() const override;
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
@@ -71,9 +71,7 @@ class XYDifferentiationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
 		const DifferentiationResult& differentiationResult() const;
-		bool isSourceDataChangedSinceLastDifferentiation() const;
 
-		typedef WorksheetElement BaseClass;
 		typedef XYDifferentiationCurvePrivate Private;
 
 	protected:
@@ -83,9 +81,6 @@ class XYDifferentiationCurve: public XYCurve {
 		Q_DECLARE_PRIVATE(XYDifferentiationCurve)
 		void init();
 
-	private slots:
-		void handleSourceDataChanged();
-
 	signals:
 		friend class XYDifferentiationCurveSetXDataColumnCmd;
 		friend class XYDifferentiationCurveSetYDataColumnCmd;
@@ -94,7 +89,6 @@ class XYDifferentiationCurve: public XYCurve {
 
 		friend class XYDifferentiationCurveSetDifferentiationDataCmd;
 		void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
-		void sourceDataChangedSinceLastDifferentiation();
 };
 
 #endif

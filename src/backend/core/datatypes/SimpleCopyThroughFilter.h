@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SimpleCopyThroughFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
@@ -42,17 +42,14 @@
  * this inherits AbstractColumn and thus can be directly used
  * as input for other filters and plot functions.
  */
-class SimpleCopyThroughFilter : public AbstractSimpleFilter
-{
+class SimpleCopyThroughFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
-	protected:
-		//! All types are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *)
-		{
-			return true;
-		}
+protected:
+	//! All types are accepted.
+	virtual bool inputAcceptable(int, const AbstractColumn *){
+		return true;
+	}
 };
 
 #endif // ifndef SIMPLE_COPY_THROUGH_FILTER_H
-

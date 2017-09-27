@@ -33,16 +33,15 @@
 #include "backend/lib/macros.h"
 
 #include <QEvent>
+#include <QGroupBox>
 #include <QHeaderView>
 #include <QLineEdit>
-#include <QVBoxLayout>
-#include <QGroupBox>
 #include <QTreeView>
-#include <QDebug>
-#include <cstring>	// strcmp()
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
-#include <KLineEdit>
+
+#include <cstring>	// strcmp()
 
 /*!
     \class TreeViewComboBox
@@ -50,29 +49,29 @@
 
     \ingroup backend/widgets
 */
-TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent) {
+TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
+	m_treeView(new QTreeView),
+	m_groupBox(new QGroupBox),
+	m_lineEdit(new QLineEdit) {
+
 	QVBoxLayout* layout = new QVBoxLayout;
-	m_treeView = new QTreeView;
-	m_lineEdit = new KLineEdit;
-	m_groupBox = new QGroupBox;
-	
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 
 	layout->addWidget(m_lineEdit);
 	layout->addWidget(m_treeView);
-	
+
 	m_groupBox->setLayout(layout);
 	m_groupBox->setParent(parent, Qt::Popup);
 	m_groupBox->hide();
 	m_groupBox->installEventFilter(this);
-	
+
 	m_treeView->header()->hide();
 	m_treeView->setSelectionMode(QAbstractItemView::SingleSelection);
 	m_treeView->setUniformRowHeights(true);
-	
+
 	m_lineEdit->setPlaceholderText(i18n("Search/Filter text"));
-	qobject_cast<KLineEdit*>(m_lineEdit)->setClearButtonShown(true);
+	m_lineEdit->setClearButtonEnabled(true);
 	m_lineEdit->setFocus();
 
 	addItem("");
@@ -87,8 +86,8 @@ void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
 	m_topLevelClasses = list;
 }
 
-void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
-	m_selectableClasses = list;
+void TreeViewComboBox::setHiddenAspects(QList<const AbstractAspect*> list) {
+	m_hiddenAspects = list;
 }
 
 /*!
@@ -135,7 +134,7 @@ void TreeViewComboBox::showPopup() {
 
 	QModelIndex root = m_treeView->model()->index(0,0);
 	showTopLevelOnly(root);
-	
+
 	m_lineEdit->setText("");
 	m_groupBox->show();
 	m_groupBox->resize(this->width(), 250);
@@ -151,25 +150,11 @@ void TreeViewComboBox::hidePopup() {
 */
 void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index) {
 	int rows = index.model()->rowCount(index);
-	bool isTopLevel;
 	for (int i = 0; i < rows; i++) {
 		QModelIndex child = index.child(i, 0);
 		showTopLevelOnly(child);
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(child.internalPointer());
-		isTopLevel = false;
-		foreach (const char* classString, m_topLevelClasses)
-			if (aspect->inherits(classString)) {
-				if ( strcmp(classString, "Spreadsheet") == 0 ) {
-					if (aspect->inherits("FileDataSource"))
-						isTopLevel = false;
-					else
-						isTopLevel = true;
-				} else {
-					isTopLevel = true;
-				}
-			}
-
-		m_treeView->setRowHidden(i, index, !isTopLevel);
+		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(child.internalPointer());
+		m_treeView->setRowHidden(i, index, !(isTopLevel(aspect) && !isHidden(aspect)));
 	}
 }
 
@@ -190,24 +175,17 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	DEBUG("TreeViewComboBox::treeViewIndexActivated()");
 	if (index.internalPointer()) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		const char* currentClassName = aspect->metaObject()->className();
-		foreach (const char* className, m_selectableClasses) {
-			if ( strcmp(currentClassName, className) == 0 ) {
-				QComboBox::setCurrentIndex(0);
-				QComboBox::setItemText(0, index.data().toString());
-				emit currentModelIndexChanged(index);
-				m_groupBox->hide();
-				return;
-			}
-		}
+		QComboBox::setCurrentIndex(0);
+		QComboBox::setItemText(0, index.data().toString());
+		emit currentModelIndexChanged(index);
+		m_groupBox->hide();
+		return;
 	}
 
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
-
 	m_groupBox->hide();
 }
 
@@ -230,10 +208,10 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 		bool visible = aspect->name().contains(text, Qt::CaseInsensitive);
 
 		if (visible) {
-			//current item is visible -> make all its children (allowed top level types only) visible without applying the filter
+			//current item is visible -> make all its children (allowed top level types only and not hidden) visible without applying the filter
 			for (int j = 0; j < child.model()->rowCount(child); ++j) {
 				AbstractAspect* aspect = static_cast<AbstractAspect*>(child.child(j,0).internalPointer());
-				m_treeView->setRowHidden(j, child, !isTopLevel(aspect));
+				m_treeView->setRowHidden(j, child, !(isTopLevel(aspect) && !isHidden(aspect)));
 			}
 
 			childVisible = true;
@@ -244,7 +222,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 				childVisible = true;
 		}
 
-		m_treeView->setRowHidden(i, index, !visible);
+		m_treeView->setRowHidden(i, index, !(visible && !isHidden(aspect)));
 	}
 
 	return childVisible;
@@ -259,7 +237,7 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 		if (aspect->inherits(classString)) {
 			if ( strcmp(classString, "Spreadsheet") == 0 ) {
 				if (aspect->inherits("FileDataSource"))
-					return false;
+                    return true; //here
 				else
 					return true;
 			} else {
@@ -268,4 +246,8 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 		}
 	}
 	return false;
+}
+
+bool TreeViewComboBox::isHidden(const AbstractAspect* aspect) const {
+	return (m_hiddenAspects.indexOf(aspect) != -1);
 }

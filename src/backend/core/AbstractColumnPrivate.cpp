@@ -37,7 +37,7 @@
 /**
  * \brief Ctor
  */
-AbstractColumnPrivate::AbstractColumnPrivate(AbstractColumn *owner) : m_owner(owner) {
+AbstractColumnPrivate::AbstractColumnPrivate(AbstractColumn* owner) : m_owner(owner) {
 	Q_CHECK_PTR(m_owner);
 }
 

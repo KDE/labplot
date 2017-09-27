@@ -53,8 +53,8 @@ public:
 		ErrorType y;
 	};
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
 	void setPrinting(bool);
 	void setSelectedInView(const bool);
 	void addDatasheet(const DatapickerImage::GraphType&);
@@ -87,8 +87,8 @@ public:
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaYColumn, MinusDeltaYColumn)
 	QString& minusDeltaYColumnPath() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
 	typedef DatapickerCurvePrivate Private;
 

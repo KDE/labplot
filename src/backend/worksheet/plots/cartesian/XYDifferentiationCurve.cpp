@@ -102,11 +102,6 @@ const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::dif
 	return d->differentiationResult;
 }
 
-bool XYDifferentiationCurve::isSourceDataChangedSinceLastDifferentiation() const {
-	Q_D(const XYDifferentiationCurve);
-	return d->sourceDataChangedSinceLastDifferentiation;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -115,7 +110,7 @@ void XYDifferentiationCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYDifferentiationCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYDifferentiationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastDifferentiation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -128,7 +123,7 @@ void XYDifferentiationCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYDifferentiationCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYDifferentiationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastDifferentiation();
+		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -143,21 +138,12 @@ void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve
 }
 
 //##############################################################################
-//################################## SLOTS ####################################
-//##############################################################################
-void XYDifferentiationCurve::handleSourceDataChanged() {
-	Q_D(XYDifferentiationCurve);
-	d->sourceDataChangedSinceLastDifferentiation = true;
-	emit sourceDataChangedSinceLastDifferentiation();
-}
-//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), 
-	xColumn(0), yColumn(0), 
-	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastDifferentiation(false),
+	xDataColumn(0), yDataColumn(0),
+	xColumn(0), yColumn(0),
+	xVector(0), yVector(0),
 	q(owner)  {
 
 }
@@ -169,7 +155,6 @@ XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() {
 
 // ...
 // see XYFitCurvePrivate
-
 void XYDifferentiationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -198,36 +183,58 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	// clear the previous result
 	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
 
-	if (!xDataColumn || !yDataColumn) {
+	//determine the data source columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		//curve columns as data source
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentiation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
 		differentiationResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentiation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = differentiationData.xRange.first();
-	const double xmax = differentiationData.xRange.last();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+
+	double xmin;
+	double xmax;
+	if (differentiationData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
+	} else {
+		xmin = differentiationData.xRange.first();
+		xmax = differentiationData.xRange.last();
+	}
+
+	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
+			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
 			}
 		}
 	}
@@ -239,7 +246,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		differentiationResult.valid = false;
 		differentiationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentiation = false;
+		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -291,7 +298,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastDifferentiation = false;
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 //##############################################################################
@@ -336,7 +343,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
+bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDifferentiationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyDifferentiationCurve") {
@@ -357,8 +364,10 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
+			if (preview)
+				return true;
 		} else if (reader->name() == "differentiationData") {
 			attribs = reader->attributes();
 
@@ -380,7 +389,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
-			if (!column->load(reader)) {
+			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}

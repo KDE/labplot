@@ -99,7 +99,7 @@
  */
 
 /**
- * \fn template < class T > QList<T*> AbstractAspect::children(const ChildIndexFlags &flags=0) const
+ * \fn template < class T > QVector<T*> AbstractAspect::children(const ChildIndexFlags &flags=0) const
  * \brief Return list of children inheriting from class T.
  *
  * Use AbstractAspect for T in order to get all children.
@@ -371,7 +371,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: add %2.", name(), new_name));
+	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);
@@ -385,7 +385,9 @@ void AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
+	emit aspectAboutToBeAdded(this, 0, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
+	emit aspectAdded(child);
 }
 
 /**
@@ -395,7 +397,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: insert %2 before %3.", name(), new_name, before ? before->name() : "end"));
+	beginMacro(i18n("%1: insert %2 before %3", name(), new_name, before ? before->name() : "end"));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);
@@ -418,7 +420,10 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	int index = d->indexOfChild(before);
 	if (index == -1)
 		index = d->m_children.count();
+
+	emit aspectAboutToBeAdded(this, 0, child);
 	d->insertChild(index, child);
+	emit aspectAdded(child);
 }
 
 /**
@@ -430,7 +435,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
-	beginMacro(i18n("%1: remove %2.", name(), child->name()));
+	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
 	endMacro();
 }
@@ -439,14 +444,14 @@ void AbstractAspect::removeChild(AbstractAspect* child) {
  * \brief Remove all child Aspects.
  */
 void AbstractAspect::removeAllChildren() {
-	beginMacro(i18n("%1: remove all children.", name()));
+	beginMacro(i18n("%1: remove all children", name()));
 
-	QList<AbstractAspect*> children_list = children();
-	QList<AbstractAspect*>::const_iterator i = children_list.constBegin();
+	QVector<AbstractAspect*> children_list = children();
+	QVector<AbstractAspect*>::const_iterator i = children_list.constBegin();
 	AbstractAspect *current = 0, *nextSibling = 0;
-	if (i != children_list.end()) {
+	if (i != children_list.constEnd()) {
 		current = *i;
-		if (++i != children_list.end())
+		if (++i != children_list.constEnd())
 			nextSibling = *i;
 	}
 
@@ -456,7 +461,7 @@ void AbstractAspect::removeAllChildren() {
 		emit aspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
-		if (i != children_list.end() && ++i != children_list.end())
+		if (i != children_list.constEnd() && ++i != children_list.constEnd())
 			nextSibling = *i;
 		else
 			nextSibling = 0;
@@ -491,9 +496,9 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	endMacro();
 }
 
-QList<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
-	QList<AbstractAspect*> result;
-	foreach (AbstractAspect * child, children()) {
+QVector<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
+	QVector<AbstractAspect*> result;
+	for (auto* child : children()) {
 		if (flags & IncludeHidden || !child->hidden()) {
 			if ( child->inherits(className) || !(flags & Compress)) {
 				result << child;
@@ -506,7 +511,7 @@ QList<AbstractAspect*> AbstractAspect::children(const char* className, const Chi
 	return result;
 }
 
-const QList<AbstractAspect*> AbstractAspect::children() const {
+const QVector<AbstractAspect*> AbstractAspect::children() const {
 	return d->m_children;
 }
 
@@ -577,14 +582,14 @@ void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
  * \return false on error
  */
 bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
-	QXmlStreamAttributes attribs = reader->attributes();
+	const QXmlStreamAttributes& attribs = reader->attributes();
 
 	// name
 	QString str = attribs.value("name").toString();
 	if(str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
 
-	setName(str);
+	d->m_name = str;
 
 	// creation time
 	str = attribs.value("creation_time").toString();
@@ -745,9 +750,8 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
  * \brief Make the specified name unique among my children by incrementing a trailing number.
  */
 QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
-// 	return d->uniqueNameFor(current_name);
 	QStringList child_names;
-	foreach(AbstractAspect * child, children())
+	for (auto* child : children())
 		child_names << child->name();
 
 	if (!child_names.contains(current_name))
@@ -799,13 +803,13 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
 	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0),
-	m_undoAware(true), m_isLoading(false) 
+	m_undoAware(true), m_isLoading(false)
 {
 	m_creation_time = QDateTime::currentDateTime();
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	foreach(AbstractAspect* child, m_children)
+	for(auto* child : m_children)
 		delete child;
 }
 

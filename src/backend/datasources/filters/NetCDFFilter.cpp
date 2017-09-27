@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : NetCDF I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -26,15 +27,11 @@ Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/NetCDFFilterPrivate.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 
-#include <QFile>
-#include <QTextStream>
-#include <QDebug>
 #include <KLocale>
-#include <QIcon>
-#include <cmath>
+#include <QDebug>
 
 /*!
 	\class NetCDFFilter
@@ -42,15 +39,12 @@ Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup datasources
 */
-NetCDFFilter::NetCDFFilter():AbstractFileFilter(), d(new NetCDFFilterPrivate(this)) {
-}
+NetCDFFilter::NetCDFFilter():AbstractFileFilter(), d(new NetCDFFilterPrivate(this)) {}
 
-NetCDFFilter::~NetCDFFilter() {
-	delete d;
-}
+NetCDFFilter::~NetCDFFilter() {}
 
 /*!
-  parses the content of the file \c fileName.
+  parses the content of the file \c ileName.
 */
 void NetCDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
 	d->parse(fileName, rootItem);
@@ -66,15 +60,16 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QList <QStringList> NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
+        AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void NetCDFFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	d->read(fileName, dataSource, importMode);
+QVector<QStringList> NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	return d->readDataFromFile(fileName, dataSource, mode, lines);
 }
 
 /*!
@@ -492,8 +487,8 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 /*!
     reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
 */
-QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QList<QStringList> dataStrings;
+QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
@@ -523,7 +518,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
-	QVector<QVector<double>*> dataPointers;
+	QVector<void*> dataContainer;
 	switch (ndims) {
 	case 0:
 		dataStrings << (QStringList() << i18n("zero dimensions"));
@@ -544,14 +539,21 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			DEBUG("start/end row" << startRow << endRow);
 			DEBUG("act rows/cols" << actualRows << actualCols);
 
-			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+			//TODO: support other modes
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
 
-			double* data = 0;
+			//TODO: use given names?
+			QStringList vectorNames;
+
 			if (dataSource)
-				data = dataPointers[0]->data();
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+
+			double* data = nullptr;
+			if (dataSource)
+				data = static_cast<QVector<double>*>(dataContainer[0])->data();
 			else
-				data = (double *)malloc(actualRows * sizeof(double));
+				data = new double[actualRows];
 
 			size_t start = startRow-1, count = actualRows;
 			status = nc_get_vara_double(ncid, varid, &start, &count, data);
@@ -560,7 +562,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			if (!dataSource) {
 				for (int i = 0; i < qMin(actualRows, lines); i++)
 					dataStrings << (QStringList() << QString::number(data[i]));
-				free(data);
+				delete[] data;
 			}
 			break;
 		}
@@ -586,8 +588,15 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			DEBUG("actual rows/cols:" << actualRows << actualCols);
 			DEBUG("lines:" << lines);
 
-			if (dataSource != NULL)
-				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+			//TODO: support other modes
+			QVector<AbstractColumn::ColumnMode> columnModes;
+			columnModes.resize(actualCols);
+
+			//TODO: use given names?
+			QStringList vectorNames;
+
+			if (dataSource)
+				columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 			double** data = (double**) malloc(rows * sizeof(double*));
 			data[0] = (double*)malloc( cols * rows * sizeof(double) );
@@ -598,11 +607,10 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			for (int i = 0; i < qMin((int)rows, lines); i++) {
 				QStringList line;
 				for (unsigned int j = 0; j < cols; j++) {
-					if (!dataPointers.isEmpty())
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
-					else {
-						line << QString::number(static_cast<double>(data[i][j]));
-					}
+					if (dataContainer[0])
+						static_cast<QVector<double>*>(dataContainer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
+					else
+						line << QString::number(data[i][j]);
 				}
 				dataStrings << line;
 				emit q->completed(100*i/actualRows);
@@ -622,33 +630,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 	if (!dataSource)
 		return dataStrings;
 
-	// make everything undo/redo-able again
-	// set column comments in spreadsheet
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (spreadsheet) {
-		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-		for (int n = 0; n < actualCols; n++) {
-			Column* column = spreadsheet->column(columnOffset+n);
-			column->setComment(comment);
-			column->setName(currentVarName);
-			column->setUndoAware(true);
-			if (mode == AbstractFileFilter::Replace) {
-				column->setSuppressDataChangedSignal(false);
-				column->setChanged();
-			}
-		}
-		spreadsheet->setUndoAware(true);
-		return dataStrings;
-	}
-
-	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-	if (matrix) {
-		matrix->setSuppressDataChangedSignal(false);
-		matrix->setChanged();
-		matrix->setUndoAware(true);
-	}
-
-
+	dataSource->finalizeImport(columnOffset, 1, actualCols, "", mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
@@ -663,14 +645,17 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
     reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	Q_UNUSED(lines);
+	QVector<QStringList> dataStrings;
+
 	if (currentVarName.isEmpty()) {
 		DEBUG(" No variable selected");
-		return;
+		return dataStrings;
 	}
 
-	QDEBUG(" current variable =" << currentVarName);
-	readCurrentVar(fileName, dataSource, mode);
+	DEBUG(" current variable =" << currentVarName.toStdString());
+	return readCurrentVar(fileName, dataSource, mode);
 }
 
 /*!

@@ -4,7 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -115,12 +115,15 @@ void WorksheetElement::setZValue(qreal value) {
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
 QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
+	if (path == QPainterPath())
+		return path;
+
+// 	PERFTRACE("WorksheetElement::shapeFromPath()");
+
 	// TODO: We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
 	// if we pass a value of 0.0 to QPainterPathStroker::setWidth()
 	const qreal penWidthZero = qreal(0.00000001);
 
-	if (path == QPainterPath())
-		return path;
 	QPainterPathStroker ps;
 	ps.setCapStyle(pen.capStyle());
 	if (pen.widthF() <= 0.0)
@@ -129,6 +132,7 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
 		ps.setWidth(pen.widthF());
 	ps.setJoinStyle(pen.joinStyle());
 	ps.setMiterLimit(pen.miterLimit());
+
 	QPainterPath p = ps.createStroke(path);
 	p.addPath(path);
 
@@ -153,8 +157,8 @@ QMenu* WorksheetElement::createContextMenu() {
 
 	//don't add the drawing order menu if the parent element has no other children
 	int children = 0;
-	foreach (WorksheetElement* e, parentAspect()->children<WorksheetElement>()) {
-		if( !dynamic_cast<Axis*>(e) )
+	for (auto* child : parentAspect()->children<WorksheetElement>()) {
+		if( !dynamic_cast<Axis*>(child) )
 			children++;
 	}
 
@@ -170,7 +174,7 @@ void WorksheetElement::prepareMoveBehindMenu() {
 	m_moveBehindMenu->clear();
 	AbstractAspect* parent = parentAspect();
 	int index = parent->indexOfChild<WorksheetElement>(this);
-	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+	const QVector<WorksheetElement*>& children = parent->children<WorksheetElement>();
 
 	for (int i=0; i<index; ++i) {
 		const WorksheetElement* elem = children.at(i);
@@ -190,7 +194,7 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 	m_moveInFrontOfMenu->clear();
 	AbstractAspect* parent = parentAspect();
 	int index = parent->indexOfChild<WorksheetElement>(this);
-	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+	const QVector<WorksheetElement*>& children = parent->children<WorksheetElement>();
 
 	for (int i = index + 1; i < children.size(); ++i) {
 		const WorksheetElement* elem = children.at(i);
@@ -225,21 +229,6 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	remove();
 	parent->insertChildBefore(this, sibling);
 	endMacro();
-}
-
-/**
- * This function is called every time the page is resized.
- *
- * \param horizontalRatio New page width divided by old page width.
- * \param verticalRatio   New page height divided by old page height.
- *
- * Override this function with a handler which rescales all properties
- * which are in page coordinates (such as line widths). Don't forget
- * to call the base class's handler in the overridden version.
- */
-void WorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
 }
 
 void WorksheetElement::loadThemeConfig(const KConfig &)

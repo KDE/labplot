@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -30,7 +30,7 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
@@ -45,7 +45,11 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 #include <KLocalizedString>
+
 #include <QProgressBar>
+#include <QTcpSocket>
+#include <QLocalSocket>
+#include <QUdpSocket>
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
@@ -58,40 +62,47 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : KDialog(parent), m_mainWin(parent),
-	cbAddTo(0), cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
+ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName) : ImportDialog(parent),
+	m_importFileWidget(new ImportFileWidget(this, fileName)),
+	m_showOptions(false) {
 
-	QWidget* mainWidget = new QWidget(this);
-	vLayout = new QVBoxLayout(mainWidget);
-	vLayout->setSpacing(0);
-	vLayout->setContentsMargins(0,0,0,0);
-
-	importFileWidget = new ImportFileWidget(mainWidget, fileName);
-	vLayout->addWidget(importFileWidget);
-	setMainWidget(mainWidget);
-
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+	vLayout->addWidget(m_importFileWidget);
+	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
 	//hide the data-source related widgets
-	if (!fileDataSource) {
-		this->setModel(m_mainWin->model());
+	if (!liveDataSource) {
+		setModel();
 		//TODO: disable for file data sources
-		importFileWidget->hideDataSource();
-	}
+		m_importFileWidget->hideDataSource();
+	} else
+		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
-	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
+	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
-	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
+	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+
+	if (!liveDataSource) {
+		setCaption(i18n("Import Data to Spreadsheet or Matrix"));
+		m_importFileWidget->hideDataSource();
+	} else
+		setCaption(i18n("Add new live data source"));
+
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
-	setAttribute(Qt::WA_DeleteOnClose);
 
+	QTimer::singleShot(0, this, &ImportFileDialog::loadSettings);
+}
+
+void ImportFileDialog::loadSettings() {
 	//restore saved settings
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
-	importFileWidget->showOptions(m_showOptions);
+	m_importFileWidget->showOptions(m_showOptions);
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -107,78 +118,10 @@ ImportFileDialog::~ImportFileDialog() {
 }
 
 /*!
-	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
- */
-void ImportFileDialog::setModel(QAbstractItemModel* model) {
-	DEBUG("ImportFileDialog::setModel()");
-	QDEBUG(" model =" << model);
-	//Frame for the "Add To"-Stuff
-	frameAddTo = new QGroupBox(this);
-	frameAddTo->setTitle(i18n("Import To"));
-	QGridLayout *grid = new QGridLayout(frameAddTo);
-	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
-
-	cbAddTo = new TreeViewComboBox(frameAddTo);
-	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	QList<const char *> list;
-	list << "Folder" << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setTopLevelClasses(list);
-	grid->addWidget(cbAddTo, 0, 1);
-
-	list.clear();
-	list << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setSelectableClasses(list);
-	cbAddTo->setModel(model);
-
-	tbNewDataContainer = new QToolButton(frameAddTo);
-	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
-	grid->addWidget(tbNewDataContainer, 0, 2);
-
-	lPosition = new QLabel(i18n("Position"), frameAddTo);
-	lPosition->setEnabled(false);
-	grid->addWidget(lPosition, 1, 0);
-
-	cbPosition = new QComboBox(frameAddTo);
-	cbPosition->setEnabled(false);
-	cbPosition->addItem(i18n("Append"));
-	cbPosition->addItem(i18n("Prepend"));
-	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
-	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
-
-	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	grid->addWidget(cbPosition, 1, 1);
-
-	vLayout->addWidget(frameAddTo);
-
-	//menu for new data container
-	m_newDataContainerMenu = new QMenu(this);
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
-
-	//ok is only available if a valid container was selected
-	enableButtonOk(false);
-
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
-	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
-	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-	DEBUG("ImportFileDialog::setModel() DONE");
-}
-
-void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
-	DEBUG("ImportFileDialog::setCurrentIndex()");
-	QDEBUG(" index =" << index);
-	cbAddTo->setCurrentModelIndex(index);
-	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
-	checkOkButton();
-}
-
-/*!
-  triggers data import to the file data source \c source
+  triggers data import to the live data source \c source
 */
-void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar* statusBar) const {
-	importFileWidget->saveSettings(source);
+void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
+	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
@@ -192,10 +135,11 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 	QTime timer;
 	timer.start();
 	source->read();
-	statusBar->showMessage( i18n("File data source created in %1 seconds.", (float)timer.elapsed()/1000) );
+	statusBar->showMessage( i18n("Live data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	source->ready();
 }
 /*!
   triggers data import to the currently selected data container
@@ -211,8 +155,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	QString fileName = importFileWidget->fileName();
-	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
+	QString fileName = m_importFileWidget->fileName();
+	AbstractFileFilter* filter = m_importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	//show a progress bar in the status bar
@@ -230,25 +174,25 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	if (aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
-		filter->read(fileName, matrix, mode);
+		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		filter->read(fileName, spreadsheet, mode);
+		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
-		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
+		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
 		QStringList names;
-		FileDataSource::FileType fileType = importFileWidget->currentFileType();
-		if (fileType == FileDataSource::HDF)
-			names = importFileWidget->selectedHDFNames();
-		else if (fileType == FileDataSource::NETCDF)
-			names = importFileWidget->selectedNetCDFNames();
-		//TODO
+		LiveDataSource::FileType fileType = m_importFileWidget->currentFileType();
+		if (fileType == LiveDataSource::HDF)
+			names = m_importFileWidget->selectedHDFNames();
+		else if (fileType == LiveDataSource::NETCDF)
+			names = m_importFileWidget->selectedNetCDFNames();
+
 		//multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
-		if (fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
+		if (fileType == LiveDataSource::HDF || fileType == LiveDataSource::NETCDF) {
 			int nrNames = names.size(), offset = sheets.size();
 
 			int start=0;
@@ -270,31 +214,30 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; i++) {
-				if (fileType == FileDataSource::HDF)
+				if (fileType == LiveDataSource::HDF)
 					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
 				else
 					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
 
 				if (sheets[i+offset]->inherits("Matrix"))
-					filter->read(fileName, qobject_cast<Matrix*>(sheets[i+offset]), AbstractFileFilter::Replace);
+					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[i+offset]));
 				else if (sheets[i+offset]->inherits("Spreadsheet"))
-					filter->read(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]), AbstractFileFilter::Replace);
+					filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]));
 			}
 		} else { // single import file types
 			// use active spreadsheet/matrix if present, else new spreadsheet
 			Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
 			Matrix* matrix = workbook->currentMatrix();
-			if (spreadsheet != NULL)
-				filter->read(fileName, spreadsheet, mode);
-			else if (matrix != NULL)
-				filter->read(fileName, matrix, mode);
+			if (spreadsheet)
+				filter->readDataFromFile(fileName, spreadsheet, mode);
+			else if (matrix)
+				filter->readDataFromFile(fileName, matrix, mode);
 			else {
 				spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 				workbook->addChild(spreadsheet);
-				filter->read(fileName, spreadsheet, mode);
+				filter->readDataFromFile(fileName, spreadsheet, mode);
 			}
 		}
-
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000) );
 
@@ -304,7 +247,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 }
 
 void ImportFileDialog::toggleOptions() {
-	importFileWidget->showOptions(!m_showOptions);
+	m_importFileWidget->showOptions(!m_showOptions);
 	m_showOptions = !m_showOptions;
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
@@ -312,42 +255,6 @@ void ImportFileDialog::toggleOptions() {
 	mainWidget()->resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
-}
-
-void ImportFileDialog::newDataContainer(QAction* action) {
-	DEBUG("ImportFileDialog::newDataContainer()");
-	QString path = importFileWidget->fileName();
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	QString type = action->iconText().split(' ')[1];
-	if (name.isEmpty())
-		name = action->iconText();
-
-	bool ok;
-	// child widgets can't have own icons
-	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
-	if (ok) {
-		AbstractAspect* aspect;
-		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
-		if (actionIndex == 0)
-			aspect = new Workbook(0, name);
-		else if (actionIndex == 1)
-			aspect = new Spreadsheet(0, name);
-		else
-			aspect = new Matrix(0, name);
-
-		m_mainWin->addAspectToProject(aspect);
-		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
-		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
-		checkOkButton();
-	}
-
-	delete dlg;
-}
-
-void ImportFileDialog::newDataContainerMenu() {
-	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }
 
 void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
@@ -383,36 +290,112 @@ void ImportFileDialog::checkOkButton() {
 			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
 			//to name the columns since the column names are fixed in a matrix
 			const Matrix* matrix = dynamic_cast<const Matrix*>(aspect);
-			importFileWidget->showAsciiHeaderOptions(matrix == NULL);
+			m_importFileWidget->showAsciiHeaderOptions(matrix == NULL);
 		}
 	}
 
-	QString fileName = importFileWidget->fileName();
-	if (importFileWidget->currentFileType() != FileDataSource::FITS) {
+	QString fileName = m_importFileWidget->fileName();
 #ifndef HAVE_WINDOWS
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
-	} else {	// FileDataSource::FITS
-		int extensionBraceletPos = -1;
-		if (!fileName.isEmpty()) {
-			if(fileName.right(1) == QLatin1String("]")) {
-				for (int i = fileName.size() - 1; i >= 5; --i) {
-					if (fileName.at(i) == QLatin1Char('[')) {
-						extensionBraceletPos = i;
-						break;
-					}
-				}
-			}
-		}
-#ifndef HAVE_WINDOWS
-		if (fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
-		else
-#endif
-			fileName = fileName.mid(0, extensionBraceletPos);
-	}
+
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
-	enableButtonOk( QFile::exists(fileName) ) ;
+	bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
+
+	switch (m_importFileWidget->currentSourceType()) {
+	case LiveDataSource::SourceType::FileOrPipe:
+		enableButtonOk( QFile::exists(fileName) );
+		break;
+	case LiveDataSource::SourceType::LocalSocket:
+
+        if (QFile::exists(fileName)) {
+            QLocalSocket* socket = new QLocalSocket(this);
+            socket->connectToServer(fileName, QLocalSocket::ReadOnly);
+            bool localSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(localSocketConnected);
+
+            if (socket->state() == QLocalSocket::ConnectedState) {
+                socket->disconnectFromServer();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+
+        } else {
+            enableButtonOk(false);
+        }
+
+		break;
+	case LiveDataSource::SourceType::NetworkTcpSocket:
+        if (enable) {
+            QTcpSocket* socket = new QTcpSocket(this);
+            socket = new QTcpSocket(this);
+            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
+            bool tcpSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(tcpSocketConnected);
+
+            if (socket->state() == QTcpSocket::ConnectedState) {
+                socket->disconnectFromHost();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+        } else {
+            enableButtonOk(false);
+        }
+		break;
+	case LiveDataSource::SourceType::NetworkUdpSocket:
+        if (enable) {
+            QUdpSocket* socket = new QUdpSocket(this);
+            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
+            bool udpSocketConnected = socket->waitForConnected(2000);
+
+            enableButtonOk(udpSocketConnected);
+
+            if (socket->state() == QUdpSocket::ConnectedState) {
+                socket->disconnectFromHost();
+                socket->waitForDisconnected(1000);
+                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+            } else {
+                delete socket;
+            }
+        } else {
+            enableButtonOk(false);
+        }
+
+        break;
+	case LiveDataSource::SourceType::SerialPort:
+        if (!m_importFileWidget->serialPort().isEmpty()) {
+            QSerialPort* serialPort = new QSerialPort(this);
+
+            serialPort->setBaudRate(m_importFileWidget->baudRate());
+            serialPort->setPortName(m_importFileWidget->serialPort());
+
+            bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
+            enableButtonOk(serialPortOpened);
+        } else {
+            enableButtonOk(false);
+        }
+		break;
+	default:
+		break;
+	}
+}
+
+QString ImportFileDialog::selectedObject() const {
+	QString path = m_importFileWidget->fileName();
+
+	//determine the file name only
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	//strip away the extension if available
+	if (name.indexOf('.') != -1)
+		name = name.left(name.lastIndexOf('.'));
+	return name;
 }

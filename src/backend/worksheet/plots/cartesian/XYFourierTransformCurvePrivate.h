@@ -57,8 +57,6 @@ class XYFourierTransformCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastTransform; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
 		XYFourierTransformCurve* const q;
 
 //	private:

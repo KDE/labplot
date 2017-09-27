@@ -5,7 +5,7 @@
     Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          :  constains several static functions which are used on frequently throughout the kde frontend.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +29,7 @@
 
 #include "GuiTools.h"
 
+#include <QApplication>
 #include <QComboBox>
 #include <QMenu>
 #include <QColor>
@@ -61,7 +62,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 	int h=10;
 	QPixmap pm( w, h );
 	comboBox->setIconSize( QSize(w,h) );
-	
+
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
 	static QString list[6] = { i18n("no line"), i18n("solid line"), i18n("dash line"),
 							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
@@ -87,7 +88,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	int w=50;
 	int h=10;
 	QPixmap pm( w, h );
-	
+
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
 	static QString list[6] = { i18n("no line"), i18n("solid line"), i18n("dash line"),
 							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
@@ -96,7 +97,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	if (actionGroup->actions().isEmpty()){
 		//TODO setting of the icon size doesn't work here
 		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
-		
+
 		for (int i=0;i<6;i++){
 			pm.fill(Qt::transparent);
 			pa.begin( &pm );
@@ -134,7 +135,7 @@ Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* ac
 /*!
 	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
 */
-void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
+void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	int index=comboBox->currentIndex();
 	comboBox->clear();
 
@@ -147,15 +148,17 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
 
 	QPen pen(Qt::SolidPattern, 1);
 	pa.setPen( pen );
-	
+
 	static QString list[15] = { i18n("none"), i18n("uniform"), i18n("extremely dense"),
 								i18n("very dense"), i18n("somewhat dense"), i18n("half dense"),
 								i18n("somewhat sparse"), i18n("very sparse"), i18n("extremely sparse"),
-								i18n("horiz. lines"), i18n("vert. lines"), i18n("crossing lines"), 
+								i18n("horiz. lines"), i18n("vert. lines"), i18n("crossing lines"),
 								i18n("backward diag. lines"), i18n("forward diag. lines"), i18n("crossing diag. lines") };
+	const QColor& borderColor = (qApp->palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
 	for (int i=0;i<15;i++) {
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
+		pa.setPen(borderColor);
 		pa.setRenderHint(QPainter::Antialiasing);
  		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
@@ -221,7 +224,7 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 
 // ComboBox with colors
 // 	QImage img(16,16,QImage::Format_RGB32);
-// 	QPainter p(&img);	
+// 	QPainter p(&img);
 // 	QRect rect = img.rect().adjusted(1,1,-1,-1);
 // 	p.fillRect(rect, Qt::red);
 // 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);

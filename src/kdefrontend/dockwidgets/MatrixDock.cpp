@@ -30,7 +30,6 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
-#include <KLocalizedString>
 
  /*!
   \class MatrixDock
@@ -38,7 +37,6 @@
 
   \ingroup kdefrontend
 */
-
 MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initializing(false) {
 	ui.setupUi(this);
 
@@ -76,12 +74,8 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initial
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
 }
 
-/*!
-
-*/
 void MatrixDock::setMatrices(QList<Matrix*> list){
 	m_initializing = true;
 	m_matrixList = list;
@@ -126,14 +120,14 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 //*************************************************************
 //****** SLOTs for changes triggered in MatrixDock *******
 //*************************************************************
-void MatrixDock::nameChanged(){
+void MatrixDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_matrix->setName(ui.leName->text());
 }
 
-void MatrixDock::commentChanged(){
+void MatrixDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -213,7 +207,7 @@ void MatrixDock::headerFormatChanged(int value) {
 		matrix->setHeaderFormat(format);
 }
 
-void MatrixDock::rowCountChanged(int rows){
+void MatrixDock::rowCountChanged(int rows) {
 	if (m_initializing)
 		return;
 
@@ -221,7 +215,7 @@ void MatrixDock::rowCountChanged(int rows){
 		matrix->setRowCount(rows);
 }
 
-void MatrixDock::columnCountChanged(int columns){
+void MatrixDock::columnCountChanged(int columns) {
 	if (m_initializing)
 		return;
 
@@ -237,11 +231,11 @@ void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
+
 	m_initializing = false;
 }
 
@@ -326,13 +320,13 @@ void MatrixDock::load() {
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	const int index = config.name().lastIndexOf(QDir::separator());
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
-	int size = m_matrixList.size();
+	const int size = m_matrixList.size();
 	if (size>1)
 		m_matrix->beginMacro(i18n("%1 matrices: template \"%2\" loaded", size, name));
 	else

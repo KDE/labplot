@@ -42,13 +42,13 @@ class RandomValuesDialog : public QDialog{
 	public:
 		explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
 		~RandomValuesDialog();
-		void setColumns(QList<Column*>);
+		void setColumns(QVector<Column*>);
 
 	private:
 		Ui::RandomValuesWidget ui;
-		QList<Column*> m_columns;
+		QVector<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-		QPushButton *okButton;
+        QPushButton* m_okButton;
 //		QMap<int, QString> m_formulaPixs;
 
 	private slots:

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -53,7 +53,6 @@ XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd
 	init();
 }
 
-
 XYEquationCurve::~XYEquationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
@@ -63,18 +62,20 @@ void XYEquationCurve::init() {
 	Q_D(XYEquationCurve);
 
 	d->xColumn->setHidden(true);
-	addChild(d->xColumn);
+	addChildFast(d->xColumn);
 
 	d->yColumn->setHidden(true);
-	addChild(d->yColumn);
+	addChildFast(d->yColumn);
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::Line;
 	d->symbolsStyle = Symbol::NoSymbols;
 
 	setUndoAware(false);
+	suppressRetransform(true);
 	setXColumn(d->xColumn);
 	setYColumn(d->yColumn);
+	suppressRetransform(false);
 	setUndoAware(true);
 }
 
@@ -191,7 +192,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYEquationCurve::load(XmlStreamReader* reader) {
+bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyEquationCurve") {
@@ -212,9 +213,9 @@ bool XYEquationCurve::load(XmlStreamReader* reader) {
 			continue;
 
 		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader, preview) )
 				return false;
-		} else if (reader->name() == "equationData") {
+		} else if (!preview && reader->name() == "equationData") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);

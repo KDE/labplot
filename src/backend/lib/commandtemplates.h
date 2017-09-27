@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : commandtemplates.h
-    Project              : LabPlot/SciDAVis
-    Description          : Undo command templates.
+    Project              : LabPlot
+    Description          : Undo/Redo command templates
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,101 +31,93 @@
 
 #include <QUndoCommand>
 
-#include "backend/lib/Loki/TypeTraits.h"
-
 template <class target_class, typename value_type>
-class StandardSetterCmd: public QUndoCommand {
-	public:
-		StandardSetterCmd(target_class *target, value_type target_class:: *field, 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
-			: m_target(target), m_field(field), m_otherValue(newValue)  {
-				setText(description.arg(m_target->name()));
-			}
-
-		virtual void initialize() {};
-		virtual void finalize() {};
-
-		virtual void redo() {
-			initialize();
-			value_type tmp = *m_target.*m_field;
-			*m_target.*m_field = m_otherValue;
-			m_otherValue = tmp;
-			finalize();
+class StandardSetterCmd : public QUndoCommand {
+public:
+	StandardSetterCmd(target_class* target, value_type target_class::* field, value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+		: m_target(target), m_field(field), m_otherValue(newValue)  {
+			setText(description.arg(m_target->name()));
 		}
 
-		virtual void undo() { redo(); }
+	virtual void initialize() {};
+	virtual void finalize() {};
 
-	protected:
-		target_class *m_target;
-		value_type target_class:: *m_field;
-		value_type m_otherValue;
+	virtual void redo() {
+		initialize();
+		value_type tmp = *m_target.*m_field;
+		*m_target.*m_field = m_otherValue;
+		m_otherValue = tmp;
+		finalize();
+	}
+
+	virtual void undo() { redo(); }
+
+protected:
+	target_class* m_target;
+	value_type target_class::*m_field;
+	value_type m_otherValue;
 };
 
 template <class target_class, typename value_type>
-class StandardMacroSetterCmd: public QUndoCommand {
-	public:
-		StandardMacroSetterCmd(target_class *target, value_type target_class:: *field, 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
-			: m_target(target), m_field(field), m_otherValue(newValue)  {
-				setText(description.arg(m_target->name()));
-			}
-
-		virtual void initialize() {};
-		virtual void finalize() {};
-		virtual void finalizeUndo() {};
-
-		virtual void redo() {
-			initialize();
-			value_type tmp = *m_target.*m_field;
-			*m_target.*m_field = m_otherValue;
-			m_otherValue = tmp;
-			finalize();
+class StandardMacroSetterCmd : public QUndoCommand {
+public:
+	StandardMacroSetterCmd(target_class* target, value_type target_class::*field, value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+		: m_target(target), m_field(field), m_otherValue(newValue)  {
+			setText(description.arg(m_target->name()));
 		}
 
-		//call finalizeUndo() at the end where only the signal is emmited
-		//and no actual finalize-method is called that can potentially 
-		//cause  new entries on the undo-stack
-		virtual void undo() { 
-			initialize();
-			value_type tmp = *m_target.*m_field;
-			*m_target.*m_field = m_otherValue;
-			m_otherValue = tmp;
-			finalizeUndo();
-		}
+	virtual void initialize() {};
+	virtual void finalize() {};
+	virtual void finalizeUndo() {};
 
-	protected:
-		target_class *m_target;
-		value_type target_class:: *m_field;
-		value_type m_otherValue;
+	virtual void redo() {
+		initialize();
+		value_type tmp = *m_target.*m_field;
+		*m_target.*m_field = m_otherValue;
+		m_otherValue = tmp;
+		finalize();
+	}
+
+	//call finalizeUndo() at the end where only the signal is emmited
+	//and no actual finalize-method is called that can potentially
+	//cause  new entries on the undo-stack
+	virtual void undo() {
+		initialize();
+		value_type tmp = *m_target.*m_field;
+		*m_target.*m_field = m_otherValue;
+		m_otherValue = tmp;
+		finalizeUndo();
+	}
+
+protected:
+	target_class* m_target;
+	value_type target_class::*m_field;
+	value_type m_otherValue;
 };
 
 template <class target_class, typename value_type>
-class StandardSwapMethodSetterCmd: public QUndoCommand {
-	public:
-		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(typename Loki::TypeTraits<value_type>::ParameterType), 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
-			: m_target(target), m_method(method), m_otherValue(newValue) {
-				setText(description.arg(m_target->name()));
-			}
-
-		virtual void initialize() {};
-		virtual void finalize() {};
-
-		virtual void redo() {
-			initialize();
-			m_otherValue = (*m_target.*m_method)(m_otherValue);
-			finalize();
+class StandardSwapMethodSetterCmd : public QUndoCommand {
+public:
+	StandardSwapMethodSetterCmd(target_class* target, value_type (target_class::*method)(value_type), value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+		: m_target(target), m_method(method), m_otherValue(newValue) {
+			setText(description.arg(m_target->name()));
 		}
 
-		virtual void undo() { redo(); }
+	virtual void initialize() {};
+	virtual void finalize() {};
 
-	protected:
-		target_class *m_target;
-		value_type (target_class:: *m_method)(typename Loki::TypeTraits<value_type>::ParameterType);
-		value_type m_otherValue;
+	virtual void redo() {
+		initialize();
+		m_otherValue = (*m_target.*m_method)(m_otherValue);
+		finalize();
+	}
+
+	virtual void undo() { redo(); }
+
+protected:
+	target_class* m_target;
+	value_type (target_class::*m_method)(value_type);
+	value_type m_otherValue;
 };
-
 
 #endif
-
-

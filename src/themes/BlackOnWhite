@@ -47,7 +47,8 @@ BorderStyle=0
 BorderWidth=3.52778
 
 [Label]
-TeXFontColor=0,128,128
+FontColor=104,104,104
+BackgroundColor=255,255,255
 
 [XYCurve]
 DropLineOpacity=1

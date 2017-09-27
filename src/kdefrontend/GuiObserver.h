@@ -33,6 +33,7 @@
 class MainWin;
 class AbstractAspect;
 class CartesianPlot;
+class Histogram;
 
 class GuiObserver : public QObject {
 	Q_OBJECT
@@ -41,8 +42,9 @@ public:
 	explicit GuiObserver(MainWin*);
 
 private:
-	MainWin* mainWindow;
+    MainWin* m_mainWindow;
 	CartesianPlot* m_lastCartesianPlot;
+	Histogram* m_lastHistogram;
 	template<class TDockWidget>
 	void initDockWidget(TDockWidget*& dockWidget);
 

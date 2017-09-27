@@ -1,3 +1,38 @@
+-----2.5-----
+New features:
+	* Syntax highlighting for LaTeX in the text label
+	* Allow to set the background color for LaTeX labels
+	* Improved data fitting
+		* Automatically guess parameter of custom models
+		* Better result presentation
+		* Support different weight types
+		* Consider given x- and y-error when fitting (can be switched off)
+		* Show t statistics, P > |t| and confidence interval
+		* Calculate p-value for chi-square and F test in nonlinear fitting
+		* added fit models for most statistical distributions
+	* Improved theming
+		* Apply themes to worksheet and to all its children
+		* Respect theme settings also in plot legends and labels
+		* Application option to set the default theme for new worksheets
+		* Allow to disable theming in worksheets and plots after a theme was selected
+	* Support different data types
+		* auto detect integer and datetime data in import
+		* support number locale and datetime formats
+		* improved data type support in spreadsheets
+	* Import from SQL databases (tables or custom queries)
+	* Import Origin OPJ projects
+	* support Hermite polynomials from GSL 2.4
+	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
+	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
+	* Direct application of analysis functions  on the data in the spreadsheet and plotting of the results via spreadsheet's context menu
+	* "Show last N points" and "Show first N points" data ranges in cartesian plot
+	* Added CLI option --presenter to start LabPlot directly in the presenter mode
+
+Bug fixes:
+	* Bug 379877 - masked rows in spreadsheet not restored in project
+	* Calculation of fit results corrected
+	* When a LabPlot project is being droped in the main window, load the project directly instead of showing the import file dialog
+
 -----2.4-----
 New features:
 	* Support themes for plots
@@ -36,7 +71,7 @@ New features:
 	* Interpolation of data including different splines, cosine, exponential, cubic Hermite (Catmull-Rom, cardinal, Kochanek-Bartels) and rational functions
 	* Data smoothing using moving average (centered or lagged), percentile filter or Savitzky-Golay algorithm
 	* Fourier filter (low pass, high pass, band pass, band reject) with ideal, Butterworth, Chebychev I+II, Legendre or Bessel-Thomson filter
-	* Fourier transform with many window functions (Welch, Hann, Hamming, etc.) calculating magnitude, amplitude, power, phase, dB, etc. and supporting 
+	* Fourier transform with many window functions (Welch, Hann, Hamming, etc.) calculating magnitude, amplitude, power, phase, dB, etc. and supporting
 		one/two sided spectrum with or without shift and x scaling to frequency, index or period
 	* Filter and search capabilities in the drop down box for the selection of data sources
 	* Sigmoid function as a new pre-defined fit model
@@ -130,7 +165,7 @@ First stable release of LabPlot2. LabPlot2 is a complete rewrite of LabPlot1 and
 Brief summary of features and capabilities of LabPlot2 implemented in the first release:
 	* project-based management of data
 	* created objects are organized in a tree and are visualized and accessible in the project explorer
-	* for a better management of objects, additional folders and sub-folders can be created within a project 
+	* for a better management of objects, additional folders and sub-folders can be created within a project
 	* spreadsheet with very basic functionality is available for manual data entry
 	* "file data source" can be used to import a file and to let LabPlot2 watch for changes in that file
 	* external data from an ascii file can be also directly imported to a spreadsheet for further editing

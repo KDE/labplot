@@ -29,6 +29,9 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/core/column/Column.h"
+
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -39,7 +42,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QButtonGroup>
 #include <KUrlCompletion>
+#include <QAbstractButton>
+#include <QIntValidator>
 
 #include <cmath>
 
@@ -53,12 +59,17 @@
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	m_plot(0),
 	labelWidget(0),
-	m_initializing(false),
-	m_completion(new KUrlCompletion()) {
+	m_initializing(false) {
 
 	ui.setupUi(this);
 
-	//"Coordinate system"-tab
+	//"General"-tab
+	QButtonGroup* rangeButtonsGroup(new QButtonGroup);
+	rangeButtonsGroup->addButton(ui.rbRangeFirst);
+	rangeButtonsGroup->addButton(ui.rbRangeLast);
+	rangeButtonsGroup->addButton(ui.rbRangeFree);
+
+	//"Range breaks"-tab
 	ui.bAddXBreak->setIcon( QIcon::fromTheme("list-add") );
 	ui.bRemoveXBreak->setIcon( QIcon::fromTheme("list-remove") );
 	ui.cbXBreak->addItem("1");
@@ -71,7 +82,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	ui.kleBackgroundFileName->setCompletionObject(m_completion);
+	KUrlCompletion* completion = new KUrlCompletion;
+	ui.kleBackgroundFileName->setCompletionObject(completion);
+	ui.kleBackgroundFileName->setAutoDeleteCompletionObject(true);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -80,8 +93,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i) {
-		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	for (int i = 0; i < ui.tabWidget->count(); ++i) {
+		QGridLayout* layout = qobject_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -91,6 +104,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	}
 
 	//Validators
+	ui.leRangeFirst->setValidator( new QIntValidator(ui.leRangeFirst) );
+	ui.leRangeLast->setValidator( new QIntValidator(ui.leRangeLast) );
 	ui.leXBreakStart->setValidator( new QDoubleValidator(ui.leXBreakStart) );
 	ui.leXBreakEnd->setValidator( new QDoubleValidator(ui.leXBreakEnd) );
 	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
@@ -105,6 +120,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+
+	connect( ui.leRangeFirst, SIGNAL(textChanged(QString)), this, SLOT(rangeFirstChanged(QString)) );
+	connect( ui.leRangeLast, SIGNAL(textChanged(QString)), this, SLOT(rangeLastChanged(QString)) );
+	connect( rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()) );
 
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
 	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
@@ -140,7 +159,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
@@ -162,12 +181,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	QFrame* frame = new QFrame(this);
 	QHBoxLayout* layout = new QHBoxLayout(frame);
 
-	ThemeHandler* themeHandler = new ThemeHandler(this);
-	layout->addWidget(themeHandler);
-	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
-	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
-	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));
+	m_themeHandler = new ThemeHandler(this);
+	layout->addWidget(m_themeHandler);
+	connect(m_themeHandler, SIGNAL(loadThemeRequested(QString)), this, SLOT(loadTheme(QString)));
+	connect(m_themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
+	connect(m_themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	//connect(this, SIGNAL(saveThemeEnable(bool)), m_themeHandler, SLOT(saveThemeEnable(bool)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	layout->addWidget(templateHandler);
@@ -184,7 +203,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 }
 
 CartesianPlotDock::~CartesianPlotDock() {
-	delete m_completion;
 }
 
 void CartesianPlotDock::init() {
@@ -241,17 +259,16 @@ void CartesianPlotDock::init() {
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_initializing = true;
 	m_plotList = list;
-
-	m_plot=list.first();
+	m_plot = list.first();
 
 	QList<TextLabel*> labels;
-	foreach(CartesianPlot* plot, list)
+	for (auto* plot: list)
 		labels.append(plot->title());
 
 	labelWidget->setLabels(labels);
 
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -275,12 +292,14 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
+	m_themeHandler->setCurrentTheme(m_plot->theme());
+
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
 	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
 	Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w) {
-		bool b = (w->layout()==Worksheet::NoLayout);
+		bool b = (w->layout() == Worksheet::NoLayout);
 		ui.sbTop->setEnabled(b);
 		ui.sbLeft->setEnabled(b);
 		ui.sbWidth->setEnabled(b);
@@ -291,6 +310,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//SIGNALs/SLOTs
 	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
+	connect( m_plot, SIGNAL(rangeTypeChanged(CartesianPlot::RangeType)), this, SLOT(plotRangeTypeChanged(CartesianPlot::RangeType)) );
+	connect( m_plot, SIGNAL(rangeFirstValuesChanged(int)), this, SLOT(plotRangeFirstValuesChanged(int)) );
+	connect( m_plot, SIGNAL(rangeLastValuesChanged(int)), this, SLOT(plotRangeLastValuesChanged(int)) );
 	connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
@@ -398,8 +420,8 @@ void CartesianPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-    foreach(CartesianPlot* plot, m_plotList)
-            plot->setVisible(state);
+	for (auto* plot: m_plotList)
+		plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged() {
@@ -428,6 +450,48 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
 	ui.sbHeight->setEnabled(b);
 }
 
+void CartesianPlotDock::rangeTypeChanged() {
+	CartesianPlot::RangeType type;
+	if (ui.rbRangeFirst->isChecked()) {
+		ui.leRangeFirst->setEnabled(true);
+		ui.leRangeLast->setEnabled(false);
+		type = CartesianPlot::RangeFirst;
+	} else if (ui.rbRangeLast->isChecked()) {
+		ui.leRangeFirst->setEnabled(false);
+		ui.leRangeLast->setEnabled(true);
+		type = CartesianPlot::RangeLast;
+	} else {
+		ui.leRangeFirst->setEnabled(false);
+		ui.leRangeLast->setEnabled(false);
+		type = CartesianPlot::RangeFree;
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* plot: m_plotList)
+		plot->setRangeType(type);
+
+}
+
+void CartesianPlotDock::rangeFirstChanged(const QString& text) {
+	if (m_initializing)
+		return;
+
+	const int value = text.toInt();
+	for (auto* plot: m_plotList)
+		plot->setRangeFirstValues(value);
+}
+
+void CartesianPlotDock::rangeLastChanged(const QString & text) {
+	if (m_initializing)
+		return;
+
+	const int value = text.toInt();
+	for (auto* plot: m_plotList)
+		plot->setRangeLastValues(value);
+}
+
 void CartesianPlotDock::autoScaleXChanged(int state) {
 	bool checked = (state==Qt::Checked);
 	ui.kleXMin->setEnabled(!checked);
@@ -436,7 +500,7 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setAutoScaleX(checked);
 }
 
@@ -445,7 +509,7 @@ void CartesianPlotDock::xMinChanged() {
 		return;
 
 	float value = ui.kleXMin->text().toDouble();
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXMin(value);
 }
 
@@ -454,7 +518,7 @@ void CartesianPlotDock::xMaxChanged() {
 		return;
 
 	float value = ui.kleXMax->text().toDouble();
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXMax(value);
 }
 
@@ -465,7 +529,7 @@ void CartesianPlotDock::xScaleChanged(int scale) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXScale((CartesianPlot::Scale) scale);
 }
 
@@ -477,7 +541,7 @@ void CartesianPlotDock::autoScaleYChanged(int state) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setAutoScaleY(checked);
 }
 
@@ -486,7 +550,7 @@ void CartesianPlotDock::yMinChanged() {
 		return;
 
 	float value = ui.kleYMin->text().toDouble();
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYMin(value);
 }
 
@@ -495,7 +559,7 @@ void CartesianPlotDock::yMaxChanged() {
 		return;
 
 	float value = ui.kleYMax->text().toDouble();
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYMax(value);
 }
 
@@ -507,7 +571,7 @@ void CartesianPlotDock::yScaleChanged(int index) {
 		return;
 
 	CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYScale(scale);
 }
 
@@ -524,7 +588,7 @@ void CartesianPlotDock::toggleXBreak(bool b) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreakingEnabled(b);
 }
 
@@ -535,7 +599,7 @@ void CartesianPlotDock::addXBreak() {
 	CartesianPlot::RangeBreak b;
 	breaks.list<<b;
 	breaks.lastChanged = breaks.list.size() - 1;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 
 	ui.cbXBreak->addItem(QString::number(ui.cbXBreak->count()+1));
@@ -548,14 +612,14 @@ void CartesianPlotDock::removeXBreak() {
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
 	breaks.list.takeAt(index);
 	breaks.lastChanged = -1;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 
 	ui.cbXBreak->clear();
-	for (int i=1; i<=breaks.list.size(); ++i)
+	for (int i = 1; i <= breaks.list.size(); ++i)
 		ui.cbXBreak->addItem(QString::number(i));
-	
-	if (index<ui.cbXBreak->count()-1)
+
+	if (index < ui.cbXBreak->count()-1)
 		ui.cbXBreak->setCurrentIndex(index);
 	else
 		ui.cbXBreak->setCurrentIndex(ui.cbXBreak->count()-1);
@@ -567,7 +631,7 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (index==-1)
+	if (index == -1)
 		return;
 
 	m_initializing = true;
@@ -590,7 +654,7 @@ void CartesianPlotDock::xBreakStartChanged() {
 	breaks.list[index].start = ui.leXBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 }
 
@@ -603,7 +667,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 	breaks.list[index].end = ui.leXBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 }
 
@@ -616,7 +680,7 @@ void CartesianPlotDock::xBreakPositionChanged(int value) {
 	breaks.list[index].position = (float)value/100.;
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 }
 
@@ -630,7 +694,7 @@ void CartesianPlotDock::xBreakStyleChanged(int styleIndex) {
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setXRangeBreaks(breaks);
 }
 
@@ -645,7 +709,7 @@ void CartesianPlotDock::toggleYBreak(bool b) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreakingEnabled(b);
 }
 
@@ -654,9 +718,9 @@ void CartesianPlotDock::addYBreak() {
 
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
 	CartesianPlot::RangeBreak b;
-	breaks.list<<b;
+	breaks.list << b;
 	breaks.lastChanged = breaks.list.size() - 1;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 
 	ui.cbYBreak->addItem(QString::number(ui.cbYBreak->count()+1));
@@ -669,26 +733,26 @@ void CartesianPlotDock::removeYBreak() {
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
 	breaks.list.takeAt(index);
 	breaks.lastChanged = -1;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 
 	ui.cbYBreak->clear();
-	for (int i=1; i<=breaks.list.size(); ++i)
+	for (int i = 1; i <= breaks.list.size(); ++i)
 		ui.cbYBreak->addItem(QString::number(i));
-	
-	if (index<ui.cbYBreak->count()-1)
+
+	if (index < ui.cbYBreak->count()-1)
 		ui.cbYBreak->setCurrentIndex(index);
 	else
 		ui.cbYBreak->setCurrentIndex(ui.cbYBreak->count()-1);
 
-	ui.bRemoveYBreak->setVisible(ui.cbYBreak->count()!=1);
+	ui.bRemoveYBreak->setVisible(ui.cbYBreak->count() != 1);
 }
 
 void CartesianPlotDock::currentYBreakChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (index==-1)
+	if (index == -1)
 		return;
 
 	m_initializing = true;
@@ -711,7 +775,7 @@ void CartesianPlotDock::yBreakStartChanged() {
 	breaks.list[index].start = ui.leYBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 }
 
@@ -724,7 +788,7 @@ void CartesianPlotDock::yBreakEndChanged() {
 	breaks.list[index].end = ui.leYBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 }
 
@@ -737,7 +801,7 @@ void CartesianPlotDock::yBreakPositionChanged(int value) {
 	breaks.list[index].position = (float)value/100.;
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 }
 
@@ -751,7 +815,7 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setYRangeBreaks(breaks);
 }
 
@@ -821,7 +885,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundType(type);
 }
 
@@ -843,7 +907,7 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundColorStyle(style);
 }
 
@@ -852,7 +916,7 @@ void CartesianPlotDock::backgroundImageStyleChanged(int index) {
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundImageStyle(style);
 }
 
@@ -861,7 +925,7 @@ void CartesianPlotDock::backgroundBrushStyleChanged(int index) {
 		return;
 
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundBrushStyle(style);
 }
 
@@ -869,7 +933,7 @@ void CartesianPlotDock::backgroundFirstColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundFirstColor(c);
 }
 
@@ -877,7 +941,7 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundSecondColor(c);
 }
 
@@ -885,11 +949,11 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c) {
     opens a file dialog and lets the user select the image file.
 */
 void CartesianPlotDock::selectFile() {
-    KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
-    QString dir = conf.readEntry("LastImageDir", "");
+	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
+	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
+	for (const auto& format: QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -898,16 +962,16 @@ void CartesianPlotDock::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-    int pos = path.lastIndexOf(QDir::separator());
-    if (pos!=-1) {
-        QString newDir = path.left(pos);
-        if (newDir!=dir)
-            conf.writeEntry("LastImageDir", newDir);
-    }
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastImageDir", newDir);
+	}
 
 	ui.kleBackgroundFileName->setText( path );
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundFileName(path);
 }
 
@@ -921,7 +985,7 @@ void CartesianPlotDock::fileNameChanged() {
 	else
 		ui.kleBackgroundFileName->setStyleSheet("");
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
 }
 
@@ -930,7 +994,7 @@ void CartesianPlotDock::backgroundOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundOpacity(opacity);
 }
 
@@ -939,10 +1003,10 @@ void CartesianPlotDock::borderStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	Qt::PenStyle penStyle = Qt::PenStyle(index);
 	QPen pen;
-	foreach(CartesianPlot* plot, m_plotList) {
-		pen=plot->plotArea()->borderPen();
+	for (auto* plot: m_plotList) {
+		pen = plot->plotArea()->borderPen();
 		pen.setStyle(penStyle);
 		plot->plotArea()->setBorderPen(pen);
 	}
@@ -953,15 +1017,15 @@ void CartesianPlotDock::borderColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(CartesianPlot* plot, m_plotList) {
-		pen=plot->plotArea()->borderPen();
+	for (auto* plot: m_plotList) {
+		pen = plot->plotArea()->borderPen();
 		pen.setColor(color);
 		plot->plotArea()->setBorderPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void CartesianPlotDock::borderWidthChanged(double value) {
@@ -969,8 +1033,8 @@ void CartesianPlotDock::borderWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(CartesianPlot* plot, m_plotList) {
-		pen=plot->plotArea()->borderPen();
+	for (auto* plot: m_plotList) {
+		pen = plot->plotArea()->borderPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		plot->plotArea()->setBorderPen(pen);
 	}
@@ -980,7 +1044,7 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
@@ -989,7 +1053,7 @@ void CartesianPlotDock::borderOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->plotArea()->setBorderOpacity(opacity);
 }
 
@@ -997,7 +1061,7 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
@@ -1005,7 +1069,7 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
+	for (auto* plot: m_plotList)
 		plot->setVerticalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
@@ -1018,11 +1082,10 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
@@ -1032,6 +1095,34 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
+	m_initializing = true;
+	switch (type) {
+	case CartesianPlot::RangeFree:
+		ui.rbRangeFree->setChecked(true);
+		break;
+	case CartesianPlot::RangeFirst:
+		ui.rbRangeFirst->setChecked(true);
+		break;
+	case CartesianPlot::RangeLast:
+		ui.rbRangeLast->setChecked(true);
+		break;
+	}
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
+	m_initializing = true;
+	ui.leRangeFirst->setText(QString::number(value));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
+	m_initializing = true;
+	ui.leRangeLast->setText(QString::number(value));
 	m_initializing = false;
 }
 
@@ -1202,13 +1293,13 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
-	if (index!=-1)
+	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
 
 	int size = m_plotList.size();
-	if (size>1)
+	if (size > 1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));
 	else
 		m_plot->beginMacro(i18n("%1: template \"%2\" loaded", m_plot->name(), name));
@@ -1225,6 +1316,21 @@ void CartesianPlotDock::load() {
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+
+	switch (m_plot->rangeType()) {
+	case CartesianPlot::RangeFree:
+		ui.rbRangeFree->setChecked(true);
+		break;
+	case CartesianPlot::RangeFirst:
+		ui.rbRangeFirst->setChecked(true);
+		break;
+	case CartesianPlot::RangeLast:
+		ui.rbRangeLast->setChecked(true);
+		break;
+	}
+	rangeTypeChanged();
+	ui.leRangeFirst->setText( QString::number(m_plot->rangeFirstValues()) );
+	ui.leRangeLast->setText( QString::number(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
 	ui.kleXMin->setText( QString::number(m_plot->xMin()) );
@@ -1245,11 +1351,10 @@ void CartesianPlotDock::load() {
 	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size()>1);
 	ui.cbXBreak->clear();
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
-		for (int i=1; i<=m_plot->xRangeBreaks().list.size(); ++i)
+		for (int i = 1; i <= m_plot->xRangeBreaks().list.size(); ++i)
 			ui.cbXBreak->addItem(QString::number(i));
-	} else {
+	} else
 		ui.cbXBreak->addItem("1");
-	}
 	ui.cbXBreak->setCurrentIndex(0);
 
 	//y-range breaks, show the first break
@@ -1258,11 +1363,10 @@ void CartesianPlotDock::load() {
 	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size()>1);
 	ui.cbYBreak->clear();
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
-		for (int i=1; i<=m_plot->yRangeBreaks().list.size(); ++i)
+		for (int i = 1; i <= m_plot->yRangeBreaks().list.size(); ++i)
 			ui.cbYBreak->addItem(QString::number(i));
-	} else {
+	} else
 		ui.cbYBreak->addItem("1");
-	}
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab
@@ -1329,9 +1433,9 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
@@ -1370,12 +1474,12 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	config.sync();
 }
 
-void CartesianPlotDock::loadTheme(KConfig& config) {
-	foreach(CartesianPlot* plot, m_plotList)
-		plot->loadTheme(config);
+void CartesianPlotDock::loadTheme(const QString& theme) {
+	for (auto* plot: m_plotList)
+		plot->setTheme(theme);
 }
 
-void CartesianPlotDock::saveTheme(KConfig& config) {
+void CartesianPlotDock::saveTheme(KConfig& config) const {
 	if(!m_plotList.isEmpty())
 		m_plotList.at(0)->saveTheme(config);
 }

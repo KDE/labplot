@@ -28,8 +28,10 @@
  ***************************************************************************/
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
@@ -45,14 +47,17 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
-#include <QUndoStack>
-#include <QMenu>
 #include <QDateTime>
+#include <QFile>
+#include <QMenu>
 #include <QThreadPool>
+#include <QUndoStack>
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KFilterDev>
 #include <KLocale>
+#include <KMessageBox>
 
 /**
  * \class Project
@@ -80,26 +85,26 @@
  */
 
 class Project::Private {
-	public:
-		Private() :
-			mdiWindowVisibility(Project::folderOnly),
-			scriptingEngine(0),
-			version(LVERSION),
-			author(QString(qgetenv("USER"))),
-			modificationTime(QDateTime::currentDateTime()),
-			changed(false),
-			loading(false)
-			{}
+public:
+	Private() :
+		mdiWindowVisibility(Project::folderOnly),
+		scriptingEngine(0),
+		version(LVERSION),
+		author(QString(qgetenv("USER"))),
+		modificationTime(QDateTime::currentDateTime()),
+		changed(false),
+		loading(false) {
+	}
 
-		QUndoStack undo_stack;
-		MdiWindowVisibility mdiWindowVisibility;
-		AbstractScriptingEngine* scriptingEngine;
-		QString fileName;
-		QString version;
-		QString author;
-		QDateTime modificationTime;
-		bool changed;
-		bool loading;
+	QUndoStack undo_stack;
+	MdiWindowVisibility mdiWindowVisibility;
+	AbstractScriptingEngine* scriptingEngine;
+	QString fileName;
+	QString version;
+	QString author;
+	QDateTime modificationTime;
+	bool changed;
+	bool loading;
 };
 
 Project::Project() : Folder(i18n("Project")), d(new Private()) {
@@ -128,10 +133,16 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 }
 
 Project::~Project() {
+	//if the project is being closed and the live data sources still continue reading the data,
+	//the dependend objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
+	//->stop reading the live data sources prior to deleting all objects.
+	for (auto* lds : children<LiveDataSource>())
+		lds->pauseReading();
+
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	foreach(Worksheet* w, children<Worksheet>())
+	for (auto* w : children<Worksheet>())
 		w->setIsClosing();
 
 	d->undo_stack.clear();
@@ -231,7 +242,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//save all children
-	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
+	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement();
@@ -245,10 +256,62 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeEndDocument();
 }
 
+bool Project::load(const QString& filename, bool preview) {
+	QIODevice *file;
+	// first try gzip compression, because projects can be gzipped and end with .lml
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
+		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
+	else	// opens filename using file ending
+		file = new KFilterDev(filename);
+
+	if (file == 0)
+		file = new QFile(filename);
+
+	if (!file->open(QIODevice::ReadOnly)) {
+		KMessageBox::error(0, i18n("Sorry. Could not open file for reading."));
+		return false;
+	}
+
+	char c;
+	const bool rc = file->getChar(&c);
+	if (!rc) {
+		KMessageBox::error(0, i18n("The project file is empty."), i18n("Error opening project"));
+		file->close();
+		delete file;
+		return false;
+	}
+	file->seek(0);
+
+	//parse XML
+	XmlStreamReader reader(file);
+	if (this->load(&reader, preview) == false) {
+		RESET_CURSOR;
+		QString msg_text = reader.errorString();
+		KMessageBox::error(0, msg_text, i18n("Error when opening the project"));
+		return false;
+	}
+
+	if (reader.hasWarnings()) {
+		QString msg = i18n("The following problems occurred when loading the project file:\n");
+		const QStringList& warnings = reader.warningStrings();
+		foreach (const QString& str, warnings)
+			msg += str + '\n';
+
+		qWarning() << msg;
+//TODO: show warnings in a kind of "log window" but not in message box
+// 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
+	}
+
+	file->close();
+	delete file;
+
+	return true;
+}
+
 /**
  * \brief Load from XML
  */
-bool Project::load(XmlStreamReader* reader) {
+bool Project::load(XmlStreamReader* reader, bool preview) {
 	d->loading = true;
 
 	while (!(reader->isStartDocument() || reader->atEnd()))
@@ -278,7 +341,7 @@ bool Project::load(XmlStreamReader* reader) {
 						if (!readCommentElement(reader))
 							return false;
 					} else if(reader->name() == "child_aspect") {
-						if (!readChildAspectElement(reader))
+						if (!readChildAspectElement(reader, preview))
 							return false;
 					} else if(reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
@@ -296,35 +359,32 @@ bool Project::load(XmlStreamReader* reader) {
 
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
-			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
-			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-			QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
-			QList<AbstractAspect*> surfaces = children("Surface3D", AbstractAspect::Recursive);
-			QList<AbstractAspect*> curves3d = children("Curve3D", AbstractAspect::Recursive);
-
-			if (!curves.isEmpty() || !axes.isEmpty() || !surfaces.isEmpty()) {
-				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
-				QList<AbstractAspect*> matrices = children("Matrix", AbstractAspect::Recursive);
+			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
+			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+			QList<AbstractAspect*> surfaces = children<Surface3D>(AbstractAspect::Recursive);
+			QList<AbstractAspect*> curves3d = children<Curve3D>(AbstractAspect::Recursive);
+			if (!curves.isEmpty() || !axes.isEmpty()) {
+				QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
 
 				//XY-curves
-				foreach (AbstractAspect* aspect, curves) {
-					XYCurve* curve = dynamic_cast<XYCurve*>(aspect);
+				for (auto* curve : curves) {
 					if (!curve) continue;
-
 					curve->suppressRetransform(true);
 
-					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
-					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(aspect);
-					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(aspect);
-					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(aspect);
-					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
-					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
-					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
-					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
-					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(aspect);
+					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(curve);
+					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(curve);
+					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(curve);
+					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(curve);
+					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(curve);
+					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(curve);
+					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(curve);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
-						equationCurve->recalculate();
+						if (!preview)
+							equationCurve->recalculate();
 					} else if (dataReductionCurve) {
 						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
@@ -343,7 +403,8 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (fitCurve) {
 						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
 					} else if (filterCurve) {
 						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
@@ -359,8 +420,8 @@ bool Project::load(XmlStreamReader* reader) {
 						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
+					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 					curve->suppressRetransform(false);
-					curve->retransform();
 				}
 
 				// 3D surfaces
@@ -390,32 +451,32 @@ bool Project::load(XmlStreamReader* reader) {
 				}
 
 				//Axes
-				foreach (AbstractAspect* aspect, axes) {
-					Axis* axis = dynamic_cast<Axis*>(aspect);
+				for (auto* axis : axes) {
 					if (!axis) continue;
-
 					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
 
-                foreach (AbstractAspect* aspect, dataPickerCurves) {
-                    DatapickerCurve* dataPickerCurve = dynamic_cast<DatapickerCurve*>(aspect);
-                    if (!dataPickerCurve) continue;
-
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-                }
+				for (auto* dataPickerCurve : dataPickerCurves) {
+					if (!dataPickerCurve) continue;
+					RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
+				}
 			}
-		} else {// no project element
+		} else  // no project element
 			reader->raiseError(i18n("no project element found"));
-		}
-	} else {// no start document
+	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
+
+	if (!preview) {
+		for (auto* plot : children<AbstractPlot>(AbstractAspect::Recursive))
+			plot->retransform();
 	}
+
 	d->loading = false;
 	emit loaded();
 	return !reader->hasError();
@@ -435,9 +496,8 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	if(str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
-	} else {
+	} else
 		d->modificationTime = modificationTime;
-	}
 
 	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
 	d->author = str;

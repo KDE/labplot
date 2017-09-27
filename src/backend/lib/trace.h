@@ -1,0 +1,130 @@
+/***************************************************************************
+    File                 : trace.h
+    Project              : LabPlot
+    Description          : Function and macros related to performance and debugging tracing
+    --------------------------------------------------------------------
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef TRACE_H
+#define TRACE_H
+
+#include "backend/lib/macros.h"
+#include <chrono>
+
+class PerfTracer {
+public:
+	PerfTracer(const char* m) {
+		msg = m;
+		start = std::chrono::high_resolution_clock::now();
+	};
+	~PerfTracer() {
+		auto end = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+		std::cout << msg << ": " << diff << " ms" << std::endl;
+	}
+
+private:
+	std::chrono::high_resolution_clock::time_point start;
+	std::string msg;
+};
+
+#define PERFTRACE_ENABLED 1
+
+#define PERFTRACE_CURVES 1
+#define PERFTRACE_LIVE_IMPORT 1
+
+#ifdef PERFTRACE_ENABLED
+#define PERFTRACE(msg) PerfTracer tracer(msg)
+#else
+#define PERFTRACE(msg) DEBUG(msg)
+#endif
+
+
+
+#include <execinfo.h> //backtrace
+#include <dlfcn.h>    //dladdr
+#include <cxxabi.h>   //__cxa_demangle
+
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <sstream>
+
+/*!
+ * this function prints the current call stack and helps to figure out why a certain (e.g. performance critical) function
+ * is called multiple times and from where without involving the debugger.
+ * To get the callstack, simple include \c print_callstack() in the function of interest.
+ * Optionaly, the number of \c frames to be printed out can be provided, default value is 100.
+ */
+static inline void print_callstack(unsigned int frames = 100) {
+	//get the current call stack
+	const int max_frames_count = frames + 1;
+	void* callstack[max_frames_count];
+	const int frames_count = backtrace(callstack, max_frames_count);
+
+	//get the symbols
+	char **symbols = backtrace_symbols(callstack, frames_count);
+
+	std::ostringstream out;
+	char buf[1024];
+
+	// iterate over the frames, skip the first one (frame of this function call)
+    for (int i = 1; i < frames_count; i++) {
+		Dl_info info;
+		if (dladdr(callstack[i], &info) && info.dli_sname) {
+			char* demangled_name = NULL;
+			const char* name_to_print = NULL;
+			int status = -1;
+			if (info.dli_sname[0] == '_')
+				demangled_name = abi::__cxa_demangle(info.dli_sname, NULL, 0, &status);
+
+			if (status == 0)
+				name_to_print = demangled_name;
+			else {
+				if (info.dli_sname == 0)
+					name_to_print = symbols[i];
+				else
+					name_to_print = info.dli_sname;
+			}
+
+			snprintf(buf, sizeof(buf), "%-3d %*p %s + %zd\n",
+                     i,
+					 int(2 + sizeof(void*) * 2),
+					 callstack[i],
+					 name_to_print,
+                     (char*)callstack[i] - (char*)info.dli_saddr);
+
+			free(demangled_name);
+        } else {
+			snprintf(buf, sizeof(buf), "%-3d %*p %s\n",
+						i, int(2 + sizeof(void*) * 2), callstack[i], symbols[i]);
+        }
+		out << buf;
+    }
+	free(symbols);
+
+	std::cout << "stack trace:\n" <<  out.str();
+}
+
+
+#endif //TRACE_H

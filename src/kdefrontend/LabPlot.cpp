@@ -28,53 +28,67 @@
  ***************************************************************************/
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDir>
+#include <QFile>
+#include <QSplashScreen>
+#include <QStandardPaths>
+
 #include <KAboutData>
 #include <KLocalizedString>
-#include <QStandardPaths>
-#include <QSplashScreen>
 #include <KMessageBox>
-#include <QFile>
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
 
 int main (int argc, char *argv[]) {
+	QApplication app(argc, argv);
+	KLocalizedString::setApplicationDomain("labplot2");
+
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
+		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni.kn", 0);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 	aboutData.addCredit(i18n("Garvit Khatri"), i18n("Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
+	aboutData.setOrganizationDomain(QByteArray("kde.org"));
+	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);
 
-	QApplication app(argc, argv);
-	QCoreApplication::setApplicationVersion(QLatin1String(LVERSION));
 	QCommandLineParser parser;
 	parser.addHelpOption();
 	parser.addVersionOption();
+
 	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
 	parser.addOption(nosplashOption);
+
+	QCommandLineOption presenterOption("presenter", i18n("start in the presenter mode"));
+	parser.addOption(presenterOption);
 
 	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
 
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
+
 	const QStringList args = parser.positionalArguments();
 	QString filename;
 	if (args.count() > 0)
 		filename = args[0];
 
 	if(!filename.isEmpty() ) {
+		//determine the absolute file path in order to properly save it in MainWin in "Recent Files"
+		QDir dir;
+		filename = dir.absoluteFilePath(filename);
+
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
 					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
-				filename=""; //Wrong file -> clear the file name and continue
+				filename = ""; //Wrong file -> clear the file name and continue
 			}
 		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
 				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) || filename.contains(".lml.xz", Qt::CaseInsensitive) ) ) {
@@ -83,14 +97,14 @@ int main (int argc, char *argv[]) {
 					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
 			} else {
-				filename=""; //Wrong file -> clear the file name and continue
+				filename = ""; //Wrong file -> clear the file name and continue
 			}
 		}
 	}
 
-	QSplashScreen *splash=0;
-	if (!parser.isSet("no-splash")) {
-		QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
+	QSplashScreen* splash = nullptr;
+	if (!parser.isSet(nosplashOption)) {
+		const QString& file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}
@@ -102,8 +116,12 @@ int main (int argc, char *argv[]) {
 
 	MainWin* window = new MainWin(0, filename);
 	window->show();
+
 	if(splash)
 		splash->finish(window);
+
+	if (parser.isSet(presenterOption))
+		window->showPresenter();
 
 	return app.exec();
 }

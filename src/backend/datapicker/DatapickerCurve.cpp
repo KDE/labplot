@@ -193,17 +193,17 @@ void DatapickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
 	QString yLabel('y');
 
 	if (type == DatapickerImage::PolarInDegree) {
-		xLabel = "r";
-		yLabel = "y(deg)";
+		xLabel = QLatin1String("r");
+		yLabel = QLatin1String("y(deg)");
 	} else if (type == DatapickerImage::PolarInRadians) {
-		xLabel = "r";
-		yLabel = "y(rad)";
+		xLabel = QLatin1String("r");
+		yLabel = QLatin1String("y(rad)");
 	} else if (type == DatapickerImage::LogarithmicX) {
-		xLabel = "log(x)";
-		yLabel = "y";
+		xLabel = QLatin1String("log(x)");
+		yLabel = QLatin1String("y");
 	} else if (type == DatapickerImage::LogarithmicY) {
-		xLabel = "x";
-		yLabel = "log(y)";
+		xLabel = QLatin1String("x");
+		yLabel = QLatin1String("log(y)");
 	}
 
 	if (type == DatapickerImage::Ternary)
@@ -224,28 +224,28 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
 
 		if ( errors.x != NoError && !d->plusDeltaXColumn ) {
-			setPlusDeltaXColumn(appendColumn(i18n("+delta_x")));
+			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
 		} else if ( d->plusDeltaXColumn && errors.x == NoError ) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = 0;
 		}
 
 		if ( errors.x == AsymmetricError && !d->minusDeltaXColumn ) {
-			setMinusDeltaXColumn(appendColumn(i18n("-delta_x")));
+			setMinusDeltaXColumn(appendColumn(QLatin1String("-delta_x")));
 		} else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
 			d->minusDeltaXColumn->remove();
 			d->minusDeltaXColumn = 0;
 		}
 
 		if ( errors.y != NoError && !d->plusDeltaYColumn ) {
-			setPlusDeltaYColumn(appendColumn(i18n("+delta_y")));
+			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
 		} else if ( d->plusDeltaYColumn && errors.y == NoError ) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = 0;
 		}
 
 		if ( errors.y == AsymmetricError && !d->minusDeltaYColumn ) {
-			setMinusDeltaYColumn(appendColumn(i18n("-delta_y")));
+			setMinusDeltaYColumn(appendColumn(QLatin1String("-delta_y")));
 		} else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
 			d->minusDeltaYColumn->remove();
 			d->minusDeltaYColumn = 0;
@@ -376,7 +376,7 @@ void DatapickerCurve::setPointVisibility(bool on) {
 }
 
 void DatapickerCurve::setPrinting(bool on) {
-	foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(IncludeHidden))
 		point->setPrinting(on);
 }
 
@@ -396,7 +396,7 @@ void DatapickerCurve::setSelectedInView(const bool b) {
 void DatapickerCurve::updateDatasheet() {
 	beginMacro(i18n("%1: update datasheet", name()));
 
-	foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+	for (auto* point : children<DatapickerPoint>(IncludeHidden))
 		updateData(point);
 
 	endMacro();
@@ -459,8 +459,8 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
-	QList<DatapickerPoint *> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach(DatapickerPoint *point, childrenPoints)
+	QVector<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	for (auto* point : childrenPoints)
 		point->retransform();
 }
 
@@ -507,15 +507,14 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	QList<AbstractAspect *> childrenAspect = children<AbstractAspect>(IncludeHidden);
-	foreach(AbstractAspect *child, childrenAspect)
+	for (auto* child : children<AbstractAspect>(IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close section
 }
 
 //! Load from XML
-bool DatapickerCurve::load(XmlStreamReader* reader) {
+bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerCurve);
 
 	if(!reader->isStartElement() || reader->name() != "datapickerCurve") {
@@ -525,6 +524,9 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -612,7 +614,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "datapickerPoint") {
 			DatapickerPoint* curvePoint = new DatapickerPoint("");
 			curvePoint->setHidden(true);
-			if (!curvePoint->load(reader)) {
+			if (!curvePoint->load(reader, preview)) {
 				delete curvePoint;
 				return false;
 			} else {
@@ -621,7 +623,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "spreadsheet") {
 			Spreadsheet* datasheet = new Spreadsheet(0, "spreadsheet", true);
-			if (!datasheet->load(reader)) {
+			if (!datasheet->load(reader, preview)) {
 				delete datasheet;
 				return false;
 			} else {

@@ -32,7 +32,7 @@
 
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include <QString>
-#include <QList>
+#include <QVector>
 #include <QLine>
 #include <QRectF>
 
@@ -48,10 +48,10 @@ class AbstractCoordinateSystem {
 		explicit AbstractCoordinateSystem(AbstractPlot*);
 		virtual ~AbstractCoordinateSystem();
 
-		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const = 0;
-		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const = 0;
-		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const = 0;
 
 		class LineClipResult {

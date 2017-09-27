@@ -31,24 +31,20 @@ class AbstractDataSource;
 
 class ImageFilterPrivate {
 
-	public:
-		explicit ImageFilterPrivate(ImageFilter*);
+public:
+	explicit ImageFilterPrivate(ImageFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource,
-					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
+	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void write(const QString& fileName, AbstractDataSource*);
 
-		const ImageFilter* q;
+	const ImageFilter* q;
 
-		ImageFilter::ImportFormat importFormat;	// how to import the image
-
-		int startRow;		// start row
-		int endRow;		// end row
-		int startColumn;	// start column
-		int endColumn;		// end column
-
-	private:
-		void clearDataSource(AbstractDataSource*) const;
+	ImageFilter::ImportFormat importFormat;	// how to import the image
+	int startRow;		// start row
+	int endRow;		// end row
+	int startColumn;	// start column
+	int endColumn;		// end column
 };
 
 #endif

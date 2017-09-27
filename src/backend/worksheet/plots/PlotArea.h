@@ -34,6 +34,7 @@
 
 class PlotAreaPrivate;
 
+//TODO: align
 class PlotArea : public WorksheetElement {
 	Q_OBJECT
 
@@ -48,12 +49,12 @@ class PlotArea : public WorksheetElement {
 								};
 		enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
-		virtual QGraphicsItem* graphicsItem() const;
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool) {};
-		virtual void loadThemeConfig(const KConfig& config);
-		virtual void saveThemeConfig(const KConfig& config);
+		virtual QGraphicsItem* graphicsItem() const override;
+		virtual void setVisible(bool on) override;
+		virtual bool isVisible() const override;
+		virtual void setPrinting(bool) override {};
+		virtual void loadThemeConfig(const KConfig& config) override;
+		virtual void saveThemeConfig(const KConfig& config) override;
 
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -71,15 +72,13 @@ class PlotArea : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+		virtual void save(QXmlStreamWriter*) const override;
+		virtual bool load(XmlStreamReader*, bool preview) override;
 
-		typedef WorksheetElement BaseClass;
+		virtual void retransform() override;
+		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
 		typedef PlotAreaPrivate Private;
-
-	public slots:
-		virtual void retransform();
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		PlotArea(const QString& name, PlotAreaPrivate* dd);

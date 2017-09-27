@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,7 +33,6 @@
 #include <QStandardPaths>
 #include <KLocalizedString>
 #include <QDialogButtonBox>
-// #include <QPushButton>
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -61,14 +60,14 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	okButton->setDefault(true);
-	okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
-	okButton->setText(i18n("&Generate"));
+    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+    m_okButton->setDefault(true);
+    m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+    m_okButton->setText(i18n("&Generate"));
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
                 ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 
@@ -123,8 +122,8 @@ RandomValuesDialog::~RandomValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void RandomValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
+void RandomValuesDialog::setColumns(QVector<Column*> columns) {
+	m_columns = columns;
 }
 
 void RandomValuesDialog::distributionChanged(int index) {
@@ -149,18 +148,18 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
-		ui.lParameter2->setText(QString::fromUtf8("σ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("a =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential:
-		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("λ ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
 		ui.kleParameter1->setText("1.0");
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
@@ -171,8 +170,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
-		ui.lParameter2->setText("a =");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("b =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
@@ -191,10 +190,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
-		ui.lParameter1->setText(QString::fromUtf8("σ ="));
-		ui.lParameter2->setText("a =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_landau:
 		ui.lParameter1->hide();
@@ -204,7 +203,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
 		ui.lParameter1->setText("c =");
-		ui.lParameter2->setText(QString::fromUtf8("α ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
@@ -212,8 +211,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("c ="));
-		ui.lParameter2->setText(QString::fromUtf8("α ="));
-		ui.lParameter3->setText(QString::fromUtf8("β ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
+		ui.lParameter3->setText(QString::fromUtf8("\u03b2 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
@@ -241,7 +240,11 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_beta:
-	case nsl_sf_stats_pareto:
+		ui.lParameter1->setText("a =");
+		ui.lParameter2->setText("b =");
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("1.0");
+		break;
 	case nsl_sf_stats_gumbel1:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
@@ -253,10 +256,20 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_gumbel2:
+		ui.lParameter3->show();
+		ui.kleParameter3->show();
+		ui.lParameter1->setText("a =");
+		ui.lParameter2->setText("b =");
+		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("1.0");
+		ui.kleParameter3->setText("0.0");
+		break;
+	case nsl_sf_stats_pareto:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
 		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_lognormal:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
@@ -271,15 +284,15 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_fdist:
-		ui.lParameter1->setText(QString::fromUtf8("ν1 ="));
-		ui.lParameter2->setText(QString::fromUtf8("ν2 ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bd\u2081 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bd\u2082 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_tdist:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("ν ="));
+		ui.lParameter1->setText(QString::fromUtf8("\u03bd ="));
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_logistic:
@@ -308,7 +321,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("0.5");
 		break;
 	case nsl_sf_stats_binomial:
-	case nsl_sf_stats_negative_bionomial:
+	case nsl_sf_stats_negative_binomial:
 	case nsl_sf_stats_pascal:
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
@@ -340,21 +353,21 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
-		okButton->setEnabled(false);
+        m_okButton->setEnabled(false);
 		return;
 	}
 
-	okButton->setEnabled(true);
+    m_okButton->setEnabled(true);
 	return;
 }
 
@@ -374,8 +387,8 @@ void RandomValuesDialog::generate() {
 					"%1: fill columns with non-uniform random numbers",
 					m_spreadsheet->name(), m_columns.size()));
 
-	int index = ui.cbDistribution->currentIndex();
-	nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const int index = ui.cbDistribution->currentIndex();
+	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> new_data(rows);
@@ -403,11 +416,12 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_exponential: {
-		double mu = ui.kleParameter1->text().toDouble();
-		mu = 1./mu; //GSL uses the inverse for exp. distrib.
+		double l = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
+			//GSL uses the inverse for exp. distrib.
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_exponential(r, mu);
+				new_data[i] = gsl_ran_exponential(r, 1./l) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -453,10 +467,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_rayleigh_tail: {
-		double sigma = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter1->text().toDouble();
+		double sigma = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_rayleigh(r, sigma);
+				new_data[i] = gsl_ran_rayleigh_tail(r, mu, sigma);
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -502,7 +517,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_flat: {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
-		foreach(Column* col, m_columns) {
+		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_flat(r, a, b);
 			col->replaceValues(0, new_data);
@@ -512,7 +527,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_lognormal: {
 		double s = ui.kleParameter1->text().toDouble();
 		double mu = ui.kleParameter2->text().toDouble();
-		foreach(Column* col, m_columns) {
+		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_lognormal(r, mu, s);
 			col->replaceValues(0, new_data);
@@ -602,9 +617,10 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_gumbel2: {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
+		double mu = ui.kleParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_gumbel2(r, a, b);
+				new_data[i] = gsl_ran_gumbel2(r, a, b) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -637,7 +653,7 @@ void RandomValuesDialog::generate() {
 		}
 		break;
 	}
-	case nsl_sf_stats_negative_bionomial: {
+	case nsl_sf_stats_negative_binomial: {
 		double p = ui.kleParameter1->text().toDouble();
 		double n = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {

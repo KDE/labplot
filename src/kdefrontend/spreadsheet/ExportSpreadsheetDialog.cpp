@@ -48,12 +48,13 @@
 	\ingroup kdefrontend
 */
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
-		m_matrixMode(false), m_format(Format::ASCII), urlCompletion(new KUrlCompletion) {
-	mainWidget = new QWidget(this);
-	ui.setupUi(mainWidget);
+	m_matrixMode(false), m_format(Format::ASCII) {
+	m_mainWidget = new QWidget(this);
+	ui.setupUi(m_mainWidget);
 	ui.gbOptions->hide();
-
+	KUrlCompletion* urlCompletion = new KUrlCompletion;
 	ui.kleFileName->setCompletionObject(urlCompletion);
+	ui.kleFileName->setAutoDeleteCompletionObject(true);
 
 	ui.cbFormat->addItem("ASCII");
 	ui.cbFormat->addItem("Binary");
@@ -77,7 +78,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	setMainWidget( mainWidget );
+	setMainWidget( m_mainWidget );
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
@@ -130,7 +131,6 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("FITSSpreadsheetColumnsUnits", ui.chkColumnsAsUnits->isChecked());
 
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
-	delete urlCompletion;
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
@@ -281,7 +281,7 @@ void ExportSpreadsheetDialog::toggleOptions() {
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	//resize the dialog
-	mainWidget->resize(layout()->minimumSize());
+	m_mainWidget->resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
@@ -324,7 +324,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui.lSeparator->hide();
 
 		ui.chkCaptions->show();
-		ui.chkGridLines->show();;
+		ui.chkGridLines->show();
 		ui.lExportArea->show();
 		ui.lGridLines->show();
 		ui.lCaptions->show();
@@ -382,7 +382,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 		ui.chkCaptions->hide();
 		ui.chkEmptyRows->hide();
-		ui.chkGridLines->hide();;
+		ui.chkGridLines->hide();
 		ui.lEmptyRows->hide();
 		ui.lExportArea->hide();
 		ui.lGridLines->hide();

@@ -48,7 +48,6 @@
 #include <KStandardDirs>
 #endif
 
-
 /*!
 	\class TeXRenderer
 	\brief Implements rendering of latex code to a PNG image.
@@ -59,6 +58,7 @@
 */
 QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, const TeXRenderer::Formatting& format) {
 	const QColor& fontColor =format.fontColor;
+	const QColor& backgroundColor =format.backgroundColor;
 	const int fontSize = format.fontSize;
 	const QString& fontFamily = format.fontFamily;
 	const int dpi = format.dpi;
@@ -125,11 +125,11 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
 	// TODO: this fails with pdflatex
 	//out << "\\usepackage{mathtools}";
-	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
+	out << "\\pagecolor[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "\\color{fontcolor}";
+	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << body;
 	out << "\\end{preview}";
 	out << "\\end{document}";
@@ -185,11 +185,17 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 ///	}else{
 ///		qWarning()<<"pdflatex failed."<<endl;
 	*success = (latexProcess.exitCode() == 0);
-	if (*success == false)
+	bool removeLog = true;
+	if (*success == false) {
 		WARNING("latex exit code = " << latexProcess.exitCode());
-
-	QFile::remove(fi.completeBaseName() + ".aux");
-	QFile::remove(fi.completeBaseName() + ".log");
+#ifdef NDEBUG
+		removeLog = false;
+#endif
+	}
+	if (removeLog) {
+		QFile::remove(fi.completeBaseName() + ".aux");
+		QFile::remove(fi.completeBaseName() + ".log");
+	}
 
 	// convert: PDF -> PNG
 	QProcess convertProcess;

@@ -40,13 +40,9 @@ class CartesianCoordinateSystemSetScalePropertiesCmd;
 
 class CartesianScale {
 	public:
-#if __cplusplus < 201103L
-		static const double LIMIT_MAX = 1e15;
-		static const double LIMIT_MIN = -1e15;
-#else
 		static constexpr double LIMIT_MAX = 1e15;
 		static constexpr double LIMIT_MIN = -1e15;
-#endif
+
 		virtual ~CartesianScale();
 
 		enum ScaleType {ScaleLinear, ScaleLog};
@@ -60,7 +56,9 @@ class CartesianScale {
 		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
 				double *a = NULL, double *b = NULL, double *c = NULL) const;
 
-		bool contains(double) const;
+		inline double start() const;
+		inline double end() const;
+		inline bool contains(double) const;
 		virtual bool map(double*) const = 0;
 		virtual bool inverseMap(double*) const = 0;
 		virtual int direction() const = 0;
@@ -79,20 +77,20 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		explicit CartesianCoordinateSystem(CartesianPlot*);
 		virtual ~CartesianCoordinateSystem();
 
-		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
-		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
+		virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
+		void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
 		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const;
-		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
+		virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
 
-		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
+		virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
 		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const;
 
 		int xDirection() const;
 		int yDirection() const;
-		bool setXScales(const QList<CartesianScale*>&);
-		QList<CartesianScale*> xScales() const;
-		bool setYScales(const QList<CartesianScale*>&);
-		QList<CartesianScale*> yScales() const;
+		bool setXScales(const QVector<CartesianScale*>&);
+		QVector<CartesianScale*> xScales() const;
+		bool setYScales(const QVector<CartesianScale*>&);
+		QVector<CartesianScale*> yScales() const;
 
 	private:
 		void init();

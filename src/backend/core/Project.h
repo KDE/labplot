@@ -39,59 +39,65 @@ class AbstractScriptingEngine;
 class Project : public Folder {
 	Q_OBJECT
 
-	public:
-		enum MdiWindowVisibility
-		{
-			folderOnly,
-			folderAndSubfolders,
-			allMdiWindows
-		};
+public:
+	enum MdiWindowVisibility {
+		folderOnly,
+		folderAndSubfolders,
+		allMdiWindows
+	};
 
-	public:
-		Project();
-		~Project();
+public:
+	Project();
+	~Project();
 
-		virtual const Project* project() const { return this; }
-		virtual Project* project() { return this; }
-		virtual QUndoStack* undoStack() const;
-		virtual QString path() const { return name(); }
-		virtual QMenu* createContextMenu();
-		virtual QMenu* createFolderContextMenu(const Folder*);
+	virtual const Project* project() const {
+		return this;
+	}
+	virtual Project* project() override {
+		return this;
+	}
+	virtual QUndoStack* undoStack() const override;
+	virtual QString path() const override {
+		return name();
+	}
+	virtual QMenu* createContextMenu() override;
+	virtual QMenu* createFolderContextMenu(const Folder*);
 
-		AbstractScriptingEngine* scriptingEngine() const;
+	AbstractScriptingEngine* scriptingEngine() const;
 
-		void setMdiWindowVisibility(MdiWindowVisibility visibility);
-		MdiWindowVisibility mdiWindowVisibility() const;
-		CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-		BASIC_D_ACCESSOR_DECL(QString, version, Version)
-		CLASS_D_ACCESSOR_DECL(QString, author, Author)
-		CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
+	void setMdiWindowVisibility(MdiWindowVisibility visibility);
+	MdiWindowVisibility mdiWindowVisibility() const;
+	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(QString, version, Version)
+	CLASS_D_ACCESSOR_DECL(QString, author, Author)
+	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 
-		bool isLoading() const;
-		void setChanged(const bool value=true);
-		bool hasChanged() const;
-		void navigateTo(const QString& path);
+	bool isLoading() const;
+	void setChanged(const bool value=true);
+	bool hasChanged() const;
+	void navigateTo(const QString& path);
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
+	bool load(const QString&, bool preview = false);
 
-	public slots:
-		void descriptionChanged(const AbstractAspect*);
+public slots:
+	void descriptionChanged(const AbstractAspect*);
 
-	signals:
-		void requestSaveState(QXmlStreamWriter*) const;
-		void requestLoadState(XmlStreamReader*) const;
-		void requestProjectContextMenu(QMenu*);
-		void requestFolderContextMenu(const Folder*, QMenu*);
-		void mdiWindowVisibilityChanged();
-		void changed() const;
-		void requestNavigateTo(const QString& path) const;
-		void loaded();
+signals:
+	void requestSaveState(QXmlStreamWriter*) const;
+	void requestLoadState(XmlStreamReader*) const;
+	void requestProjectContextMenu(QMenu*);
+	void requestFolderContextMenu(const Folder*, QMenu*);
+	void mdiWindowVisibilityChanged();
+	void changed() const;
+	void requestNavigateTo(const QString& path) const;
+	void loaded();
 
-	private:
-		class Private;
-		Private* d;
-		bool readProjectAttributes(XmlStreamReader*);
+private:
+	class Private;
+	Private* d;
+	bool readProjectAttributes(XmlStreamReader*);
 };
 
 #endif // ifndef PROJECT_H

@@ -181,14 +181,14 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 			int count = 0;
             QList<QPointF> posList;
             posList.clear();
-			foreach (QLine* line, q->path) {
+			for (QLine* line : q->path) {
 				const int l = (line->y1() > line->y2())?line->y2():line->y1();
 				const int h = (line->y1() > line->y2())?line->y1():line->y2();
 
 				for (int i = l; i <= h; i++) {
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
-						const QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+						const QVector<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 						foreach (DatapickerPoint* point, curvePointsList) {
                             if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
 								positionUsed = true;
@@ -203,7 +203,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 
             if (!posList.isEmpty()) {
                 datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
-                foreach (const QPointF& pos, posList)
+                for (const QPointF& pos : posList)
                     datapicker->addNewPoint(pos, datapicker->activeCurve());
                 datapicker->activeCurve()->endMacro();
             }

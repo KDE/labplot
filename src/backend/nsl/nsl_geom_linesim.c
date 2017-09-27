@@ -188,6 +188,10 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 
 	double *dist = (double *)malloc(n * sizeof(double));
 	double *maxdist = (double *)malloc(nout * sizeof(double));	/* max dist per edge */
+	if (dist == NULL || maxdist == NULL) {
+		printf("nsl_geom_linesim_douglas_peucker_variant(): ERROR allocating memory!\n");
+		return 0;
+	}
 	for (i = 0; i < n; i++) {	/* initialize  dist */
 		dist[i] = nsl_geom_point_line_dist(xdata[0], ydata[0], xdata[n-1], ydata[n-1], xdata[i], ydata[i]);
 		/*printf("%zu: %g\n", i, dist[i]);*/
@@ -353,6 +357,10 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 	double *xtmp = (double *) malloc(n*sizeof(double));
 	double *ytmp = (double *) malloc(n*sizeof(double));
 	size_t *tmpindex = (size_t *) malloc(n*sizeof(size_t));
+	if (xtmp == NULL || ytmp == NULL || tmpindex == NULL) {
+		printf("nsl_geom_linesim_perpdist_repeat(): ERROR allocating memory!\n");
+		return 0;
+	}
 
 	/* first round */
 	nout = nsl_geom_linesim_perpdist(xdata, ydata, n, tol, index);
@@ -416,6 +424,10 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 
 	size_t i, nout = n;
 	double *area = (double *) malloc((n-2)*sizeof(double));	/* area associated with every point */
+	if (area == NULL) {
+		printf("nsl_geom_linesim_visvalingam_whyatt(): ERROR allocating memory!\n");
+		return 0;
+	}
 	for (i = 0; i < n; i++)
 		index[i] = i;
 	for (i = 1; i < n-1; i++)

@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -88,10 +89,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 	}
 
 	//change the visibility of all children
-	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (WorksheetElement *elem, childList) {
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (auto* elem : childList)
 		elem->setVisible(on);
-	}
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
@@ -106,8 +106,8 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (const WorksheetElement* elem, childList) {
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (const auto* elem : childList) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -120,22 +120,30 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	DEBUG("WorksheetElementContainer::retransform()");
+	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
-	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach (WorksheetElement* elem, childList)
-		elem->retransform();
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	for (auto* child : childList)
+		child->retransform();
 
 	d->recalcShapeAndBoundingRect();
 }
 
-void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
+void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("WorksheetElementContainer::handleResize()");
 	Q_D(const WorksheetElementContainer);
-	QRectF rect(d->rect);
-	rect.setWidth(d->rect.width()*horizontalRatio);
-	rect.setHeight(d->rect.height()*verticalRatio);
-	setRect(rect);
+	if (pageResize) {
+		QRectF rect(d->rect);
+		rect.setWidth(d->rect.width()*horizontalRatio);
+		rect.setHeight(d->rect.height()*verticalRatio);
+		setRect(rect);
+	} else {
+		for (auto* elem : children<WorksheetElement>(IncludeHidden))
+			elem->handleResize(horizontalRatio, verticalRatio);
+
+		retransform();
+	}
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) {
@@ -148,9 +156,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
-		QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-		foreach(WorksheetElement* elem, childElements)
-			elem->setZValue(zVal++);
+		for (auto* child : children<WorksheetElement>(IncludeHidden))
+			child->setZValue(zVal++);
 	}
 
 	if (!isLoading())
@@ -227,7 +234,7 @@ void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
 	containerShape = QPainterPath();
-	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach (const WorksheetElement* elem, childList)
 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 
@@ -245,7 +252,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG("WorksheetElementContainerPrivate::paint()");
+// 	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -263,5 +270,5 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
 	}
-	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
+// 	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

@@ -35,42 +35,30 @@
 
 #include <KLocale>
 
-class DateTime2StringFilterSetFormatCmd : public QUndoCommand
-{
-	public:
-		DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
+class DateTime2StringFilterSetFormatCmd : public QUndoCommand {
+public:
+	DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
 
-		virtual void redo();
-		virtual void undo();
+	virtual void redo();
+	virtual void undo();
 
-	private:
-		DateTime2StringFilter* m_target;
-		QString m_other_format;
+private:
+	DateTime2StringFilter* m_target;
+	QString m_other_format;
 };
 
-void DateTime2StringFilter::setFormat(const QString& format)
-{
+void DateTime2StringFilter::setFormat(const QString& format) {
 	exec(new DateTime2StringFilterSetFormatCmd(static_cast<DateTime2StringFilter*>(this), format));
 }
 
 QString DateTime2StringFilter::textAt(int row) const {
+	//DEBUG("DateTime2StringFilter::textAt()");
 	if (!m_inputs.value(0)) return QString();
-	QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-	if (!input_value.isValid()) return QString();
-#if QT_VERSION < 0x040302 // the bug seems to be fixed in Qt 4.3.2
-	// QDate::toString produces shortened year numbers for "yyyy"
-	// in violation of ISO 8601 and ambiguous with respect to "yy" format
-	QString format(m_format);
-	format.replace("yyyy","YYYYyyyyYYYY");
-	QString result = input_value.toString(format);
-	result.replace(QRegExp("YYYY(-)?(\\d\\d\\d\\d)YYYY"), "\\1\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d\\d\\d)YYYY"), "\\10\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d\\d)YYYY"), "\\100\\2");
-	result.replace(QRegExp("YYYY(-)?(\\d)YYYY"), "\\1000\\2");
-	return result;
-#else
-	return input_value.toString(m_format);
-#endif
+	QDateTime inputValue = m_inputs.value(0)->dateTimeAt(row);
+	if (!inputValue.isValid()) return QString();
+
+	//QDEBUG("	: " << inputValue << " -> " << m_format << " -> " << inputValue.toString(m_format));
+	return inputValue.toString(m_format);
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
@@ -88,30 +76,29 @@ DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2St
 		setText(i18n("set date-time format to %1", new_format));
 }
 
-void DateTime2StringFilterSetFormatCmd::redo()
-{
+void DateTime2StringFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
 	emit m_target->formatChanged();
 }
 
-void DateTime2StringFilterSetFormatCmd::undo()
-{
+void DateTime2StringFilterSetFormatCmd::undo() {
 	redo();
 }
 
-void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
-{
+void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
 	writer->writeAttribute("format", format());
 }
 
-bool DateTime2StringFilter::load(XmlStreamReader * reader)
-{
+bool DateTime2StringFilter::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
+
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
 
-	if (AbstractSimpleFilter::load(reader))
+	if (AbstractSimpleFilter::load(reader, preview))
 		setFormat(str);
 	else
 		return false;

@@ -50,6 +50,7 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18n("Sort columns"));
 	setSizeGripEnabled(true);
+    setAttribute(Qt::WA_DeleteOnClose);
 
 	QGroupBox* widget = new QGroupBox(i18n("Options"));
 	QGridLayout* layout = new QGridLayout(widget);
@@ -57,25 +58,24 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 	layout->setContentsMargins(4,4,4,4);
 
 	layout->addWidget( new QLabel( i18n("Order")), 0, 0 );
-	cbOrdering = new QComboBox();
-	cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
-	cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
-	layout->addWidget(cbOrdering, 0, 1 );
-	
-	lblType = new QLabel(i18n("Sort columns"));
-	layout->addWidget( lblType, 1, 0 );
-	cbType = new QComboBox();
-	cbType->addItem(i18n("Separately"));
-	cbType->addItem(i18n("Together"));
-	layout->addWidget(cbType, 1, 1 );
-	cbType->setCurrentIndex(Together);
+    m_cbOrdering = new QComboBox();
+    m_cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
+    m_cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
+    layout->addWidget(m_cbOrdering, 0, 1 );
 
-	lblColumns = new QLabel(i18n("Leading column"));
-	layout->addWidget( lblColumns, 2, 0 );
-	cbColumns = new QComboBox();
-	layout->addWidget(cbColumns, 2, 1);
+    m_lType = new QLabel(i18n("Sort columns"));
+    layout->addWidget( m_lType, 1, 0 );
+    m_cbType = new QComboBox();
+    m_cbType->addItem(i18n("Separately"));
+    m_cbType->addItem(i18n("Together"));
+    layout->addWidget(m_cbType, 1, 1 );
+    m_cbType->setCurrentIndex(Together);
+
+    m_lColumns = new QLabel(i18n("Leading column"));
+    layout->addWidget( m_lColumns, 2, 0 );
+    m_cbColumns = new QComboBox();
+    layout->addWidget(m_cbColumns, 2, 1);
 	layout->setRowStretch(3, 1);
-
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                          | QDialogButtonBox::Cancel);
@@ -90,42 +90,40 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 
 	setLayout(layout);
 
-	connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
+    connect(m_cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
 
 	this->resize(400,0);
 }
 
 void SortDialog::sort(){
 	Column* leading;
-	if(cbType->currentIndex() == Together) 
-		leading = m_columns_list.at(cbColumns->currentIndex());
+    if(m_cbType->currentIndex() == Together)
+        leading = m_columns.at(m_cbColumns->currentIndex());
 	else
 		leading = 0;
-	
-	emit sort(leading, m_columns_list, cbOrdering->currentIndex() == Ascending );
-	
-	accepted();
+
+    emit sort(leading, m_columns, m_cbOrdering->currentIndex() == Ascending );
 }
 
-void SortDialog::setColumnsList(QList<Column*> list){
-	m_columns_list = list;
+void SortDialog::setColumns(QVector<Column*> columns){
+	m_columns = columns;
 
-	for(int i=0; i<list.size(); i++)
-		cbColumns->addItem( list.at(i)->name() );
+	for(int i=0; i<m_columns.size(); i++)
+        m_cbColumns->addItem( m_columns.at(i)->name() );
 
-	cbColumns->setCurrentIndex(0);
-	
-	if (list.size() == 1){
-		lblType->hide();
-		cbType->hide();
-		lblColumns->hide();
-		cbColumns->hide();
+    m_cbColumns->setCurrentIndex(0);
+
+	if (m_columns.size() == 1){
+        m_lType->hide();
+        m_cbType->hide();
+        m_lColumns->hide();
+        m_cbColumns->hide();
 	}
 }
 
 void SortDialog::changeType(int Type){
 	if(Type == Together)
-		cbColumns->setEnabled(true);
+        m_cbColumns->setEnabled(true);
 	else
-		cbColumns->setEnabled(false);
+        m_cbColumns->setEnabled(false);
 }

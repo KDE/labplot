@@ -37,15 +37,15 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-
-#include <QPainter>
-#include <QMenu>
-#include <QTextDocument>
-#include <QGraphicsSceneContextMenuEvent>
-
+// #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
+
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QPainter>
+#include <QTextDocument>
+
 #include <KConfigGroup>
-#include <QIcon>
 #include <KLocale>
 
 #include <cfloat>
@@ -111,13 +111,13 @@ class AxisGrid : public QGraphicsItem {
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString &name, const AxisOrientation &orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
+Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd)
+Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate* dd)
 		: WorksheetElement(name), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
@@ -333,27 +333,32 @@ void Axis::retransform() {
 	d->retransform();
 }
 
-void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
+void Axis::setSuppressRetransform(bool value) {
 	Q_D(Axis);
+	d->suppressRetransform = value;
+}
+
+void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	DEBUG("Axis::handleResize()");
+	Q_D(Axis);
+	Q_UNUSED(pageResize);
+
+
+	double ratio = 0;
+	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+		ratio = qMax(horizontalRatio, verticalRatio);
+	else
+		ratio = qMin(horizontalRatio, verticalRatio);
 
 	QPen pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setLinePen(pen);
+	pen.setWidthF(pen.widthF() * ratio);
+	d->linePen = pen;
 
-	if (d->orientation == Axis::AxisHorizontal) {
-		setMajorTicksLength(d->majorTicksLength * verticalRatio); // ticks are perpendicular to axis line -> verticalRatio relevant
-		setMinorTicksLength(d->minorTicksLength * verticalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio);
-	} else {
-		setMajorTicksLength(d->majorTicksLength * horizontalRatio);
-		setMinorTicksLength(d->minorTicksLength * horizontalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio); // this is not perfectly correct for rotated labels
-															// when the page aspect ratio changes, but should not matter
-	}
-	//TODO setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
-
-	retransform();
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
+	d->minorTicksLength *= ratio;
+	d->labelsFont.setPixelSize( d->labelsFont.pixelSize() * ratio ); //TODO: take into account rotated labels
+	d->labelsOffset *= ratio;
+	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
 /* ============================ getter methods ================= */
@@ -453,7 +458,7 @@ bool Axis::isVisible() const {
 
 void Axis::setPrinting(bool on) {
 	Q_D(Axis);
-	d->m_printing = on;
+	d->setPrinting(on);
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
@@ -870,8 +875,17 @@ void Axis::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	majorTicksColumn(0), minorTicksColumn(0), gridItem(new AxisGrid(this)), q(owner) {
+AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
+	majorTicksColumn(0),
+	minorTicksColumn(0),
+	gridItem(new AxisGrid(this)),
+	q(owner),
+	suppressRetransform(false),
+	m_plot(plot),
+	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
+	m_hovered(false),
+	m_suppressRecalc(false),
+	m_printing(false) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -904,15 +918,10 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	m_plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!m_plot)
+	if (suppressRetransform)
 		return;
 
-	//TODO: add comment here for why we need this
-	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
-	if (!m_cSystem)
-		return;
-
+// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
 	m_suppressRecalc = true;
 	retransformLine();
 	m_suppressRecalc = false;
@@ -920,6 +929,9 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
+	if (suppressRetransform)
+		return;
+
 	linePath = QPainterPath();
 	lines.clear();
 
@@ -969,6 +981,9 @@ void AxisPrivate::retransformLine() {
 }
 
 void AxisPrivate::retransformArrow() {
+	if (suppressRetransform)
+		return;
+
 	arrowPath = QPainterPath();
 	if (arrowType == Axis::NoArrow || lines.isEmpty()) {
 		recalcShapeAndBoundingRect();
@@ -1082,7 +1097,7 @@ void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
 
 //! helper function for retransformTicks()
 bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
-	QList<QPointF> points;
+	QVector<QPointF> points;
 	points.append(*anchorPoint);
 	points = m_cSystem->mapLogicalToScene(points);
 
@@ -1098,6 +1113,9 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
+	if (suppressRetransform)
+		return;
+
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 
 	majorTicksPath = QPainterPath();
@@ -1335,7 +1353,10 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG("AxisPrivate::retransformTickLabelStrings()");
+	if (suppressRetransform)
+		return;
+
+// 	DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1351,7 +1372,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	}
-	DEBUG("labelsPrecision =" << labelsPrecision);
+// 	DEBUG("labelsPrecision =" << labelsPrecision);
 
 	tickLabelStrings.clear();
 	QString str;
@@ -1405,18 +1426,17 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+// 	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
-	QList<float> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i) {
+	QVector<float> tempValues;
+	for (int i = 0; i < tickLabelValues.size(); ++i)
 		tempValues.append( round(tickLabelValues[i], precision) );
-	}
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
+				if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate for the current precision found, increase the precision and check again
 				return upperLabelsPrecision(precision + 1);
 			}
@@ -1432,21 +1452,20 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
-	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
+// 	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
-	QList<float> tempValues;
-	for (int i = 0; i < tickLabelValues.size(); ++i) {
+	QVector<float> tempValues;
+	for (int i = 0; i < tickLabelValues.size(); ++i)
 		tempValues.append( round(tickLabelValues[i], precision-1) );
-	}
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
+			if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate found for the reduced precision
-				//-> current precision cannot be reduced, return the current value + 1
-				return precision + 1;
+				//-> current precision cannot be reduced, return the current value
+				return precision;
 			}
 		}
 	}
@@ -1541,6 +1560,9 @@ void AxisPrivate::retransformTickLabelPositions() {
 }
 
 void AxisPrivate::retransformMajorGrid() {
+	if (suppressRetransform)
+		return;
+
 	majorGridPath = QPainterPath();
 	if (majorGridPen.style() == Qt::NoPen || majorTickPoints.size() == 0) {
 		recalcShapeAndBoundingRect();
@@ -1550,7 +1572,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//major tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
@@ -1587,7 +1609,7 @@ void AxisPrivate::retransformMajorGrid() {
 		end = logicalMajorTickPoints.size();
 	}
 
-	QList<QLineF> lines;
+	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
 		float yMin = m_plot->yMin();
 		float yMax = m_plot->yMax();
@@ -1617,6 +1639,9 @@ void AxisPrivate::retransformMajorGrid() {
 }
 
 void AxisPrivate::retransformMinorGrid() {
+	if (suppressRetransform)
+		return;
+
 	minorGridPath = QPainterPath();
 	if (minorGridPen.style() == Qt::NoPen) {
 		recalcShapeAndBoundingRect();
@@ -1626,9 +1651,9 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
-	QList<QLineF> lines;
+	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
 		float yMin = m_plot->yMin();
 		float yMax = m_plot->yMax();
@@ -1734,7 +1759,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG("AxisPrivate::paint()");
+// 	DEBUG("AxisPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1809,7 +1834,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(axisShape);
 	}
 
-	DEBUG("AxisPrivate::paint() DONE");
+// 	DEBUG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -1830,6 +1855,10 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		q->unhovered();
 		update(axisShape.boundingRect());
 	}
+}
+
+void AxisPrivate::setPrinting(bool on) {
+	m_printing = on;
 }
 
 //##############################################################################
@@ -1927,7 +1956,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool Axis::load(XmlStreamReader* reader) {
+bool Axis::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Axis);
 
 	if (!reader->isStartElement() || reader->name() != "axis") {
@@ -1937,6 +1966,9 @@ bool Axis::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader))
 		return false;
+
+	if (preview)
+		return true;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -2027,7 +2059,7 @@ bool Axis::load(XmlStreamReader* reader) {
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
-			d->title->load(reader);
+			d->title->load(reader, preview);
 		} else if (reader->name() == "line") {
 			attribs = reader->attributes();
 
@@ -2264,8 +2296,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
 	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
-	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	foreach(TextLabel *child, childElements)
+	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	for (auto* child : childElements)
 		child->loadThemeConfig(config);
 }
 
@@ -2304,6 +2336,6 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
-	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	childElements.at(0)->saveThemeConfig(config);
 }

@@ -42,7 +42,15 @@ const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"
 
 /* n - order, x = w/w0 */
 double nsl_filter_gain_bessel(int n, double x) {
+#ifdef _MSC_VER
+	COMPLEX z0 = {0.0, 0.0};
+	COMPLEX z = {0.0, x};
+	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
+	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
+	return creal(value)/norm;
+#else
 	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
+#endif
 }
 
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
@@ -267,7 +275,7 @@ void print_fdata(double data[], size_t n) {
 
 int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, int cutindex, int bandwidth) {
 	/* 1. transform */
-	double fdata[2*n];	/* contains re0,im0,re1,im1,re2,im2,... */
+	double* fdata = (double*)malloc(2*n*sizeof(double));	/* contains re0,im0,re1,im1,re2,im2,... */
 #ifdef HAVE_FFTW3
         fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) fdata, FFTW_ESTIMATE);
         fftw_execute(plan);
@@ -302,6 +310,7 @@ int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter
 	gsl_fft_halfcomplex_wavetable_free(hc);
 	gsl_fft_real_workspace_free (work);
 #endif
+	free(fdata);
 
 	return status;
 }
