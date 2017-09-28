@@ -55,6 +55,8 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 
+#include "ui_plotdatawidget.h"
+
 /*!
 	\class PlotDataDialog
 	\brief Dialog for generating plots for the spreadsheet data.
@@ -72,7 +74,8 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
 	QWidget* mainWidget = new QWidget(this);
-	ui.setupUi(mainWidget);
+	ui = new Ui::PlotDataWidget();
+	ui->setupUi(mainWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
@@ -86,12 +89,12 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	setLayout(layout);
 
 	//create combox boxes for the existing plots and worksheets
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui.gbPlotPlacement->layout());
-	cbExistingPlots = new TreeViewComboBox(ui.gbPlotPlacement);
+	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->gbPlotPlacement->layout());
+	cbExistingPlots = new TreeViewComboBox(ui->gbPlotPlacement);
 	cbExistingPlots->setMinimumWidth(250);//TODO: use proper sizeHint in TreeViewComboBox
 	gridLayout->addWidget(cbExistingPlots, 0, 1, 1, 1);
 
-	cbExistingWorksheets = new TreeViewComboBox(ui.gbPlotPlacement);
+	cbExistingWorksheets = new TreeViewComboBox(ui->gbPlotPlacement);
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
 
@@ -112,17 +115,17 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
-	ui.chkCreateDataCurve->setVisible(false);
+	ui->chkCreateDataCurve->setVisible(false);
 
 	//SIGNALs/SLOTs
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(plot()));
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(ui.rbCurvePlacement1, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
-	connect(ui.rbCurvePlacement2, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
-	connect(ui.rbPlotPlacement1, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
-	connect(ui.rbPlotPlacement2, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
-	connect(ui.rbPlotPlacement3, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
+	connect(ui->rbCurvePlacement1, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
+	connect(ui->rbCurvePlacement2, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
+	connect(ui->rbPlotPlacement1, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
+	connect(ui->rbPlotPlacement2, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
+	connect(ui->rbPlotPlacement3, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
 	connect(cbExistingPlots, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 	connect(cbExistingWorksheets, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 
@@ -135,11 +138,11 @@ void PlotDataDialog::loadSettings() {
 	const KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	if (conf.exists()) {
 		int index = conf.readEntry("CurvePlacement", 0);
-		if (index == 2) ui.rbCurvePlacement2->setChecked(true);
+		if (index == 2) ui->rbCurvePlacement2->setChecked(true);
 
 		index = conf.readEntry("PlotPlacement", 0);
-		if (index == 2) ui.rbPlotPlacement2->setChecked(true);
-		if (index == 3) ui.rbPlotPlacement3->setChecked(true);
+		if (index == 2) ui->rbPlotPlacement2->setChecked(true);
+		if (index == 3) ui->rbPlotPlacement3->setChecked(true);
 		plotPlacementChanged();
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
@@ -153,13 +156,13 @@ PlotDataDialog::~PlotDataDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	int index = 0;
-	if (ui.rbCurvePlacement1->isChecked()) index = 1;
-	if (ui.rbCurvePlacement2->isChecked()) index = 2;
+	if (ui->rbCurvePlacement1->isChecked()) index = 1;
+	if (ui->rbCurvePlacement2->isChecked()) index = 2;
 	conf.writeEntry("CurvePlacement", index);
 
-	if (ui.rbPlotPlacement1->isChecked()) index = 1;
-	if (ui.rbPlotPlacement2->isChecked()) index = 2;
-	if (ui.rbPlotPlacement3->isChecked()) index = 3;
+	if (ui->rbPlotPlacement1->isChecked()) index = 1;
+	if (ui->rbPlotPlacement2->isChecked()) index = 2;
+	if (ui->rbPlotPlacement3->isChecked()) index = 3;
 	conf.writeEntry("PlotPlacement", index);
 
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
@@ -171,7 +174,7 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
-	ui.chkCreateDataCurve->setVisible(true);
+	ui->chkCreateDataCurve->setVisible(true);
 }
 
 void PlotDataDialog::processColumns() {
@@ -185,19 +188,19 @@ void PlotDataDialog::processColumns() {
 
 		//disable everything if the spreadsheet doesn't have any columns
 		if (!m_columns.size()) {
-			ui.gbData->setEnabled(false);
-			ui.gbCurvePlacement->setEnabled(false);
-			ui.gbPlotPlacement->setEnabled(false);
+			ui->gbData->setEnabled(false);
+			ui->gbCurvePlacement->setEnabled(false);
+			ui->gbPlotPlacement->setEnabled(false);
 			return;
 		}
 	}
 
-	m_columnComboBoxes << ui.cbXColumn;
-	m_columnComboBoxes << ui.cbYColumn;
+	m_columnComboBoxes << ui->cbXColumn;
+	m_columnComboBoxes << ui->cbYColumn;
 
 	//ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
 	if (m_columns.size()>2) {
-		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui.scrollAreaYColumns->widget()->layout());
+		QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaYColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			QLabel* label = new QLabel(i18n("Y-data"));
 			QComboBox* comboBox = new QComboBox();
@@ -207,9 +210,9 @@ void PlotDataDialog::processColumns() {
 		}
 	} else {
 		//two columns provided, only one curve is possible -> hide the curve placement options
-		ui.rbCurvePlacement1->setChecked(true);
-		ui.gbCurvePlacement->hide();
-		ui.gbPlotPlacement->setTitle(i18n("Add curve to"));
+		ui->rbCurvePlacement1->setChecked(true);
+		ui->gbCurvePlacement->hide();
+		ui->gbPlotPlacement->setTitle(i18n("Add curve to"));
 	}
 
 	//determine the column names and the name of the first column having "X" as the plot designation
@@ -227,7 +230,7 @@ void PlotDataDialog::processColumns() {
 
 	if (!xColumnName.isEmpty()) {
 		//show in the X-data combobox the first column having X as the plot designation
-		ui.cbXColumn->setCurrentIndex(ui.cbXColumn->findText(xColumnName));
+		ui->cbXColumn->setCurrentIndex(ui->cbXColumn->findText(xColumnName));
 
 		//for the remaining columns, show the names in the comboboxes for the Y-data
 		//TODO: handle columns with error-designations
@@ -253,26 +256,26 @@ void PlotDataDialog::processColumns() {
 
 void PlotDataDialog::plot() {
 	WAIT_CURSOR;
-	if (ui.rbPlotPlacement1->isChecked()) {
+	if (ui->rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		CartesianPlot* plot = dynamic_cast<CartesianPlot*>(aspect);
 		plot->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		addCurvesToPlot(plot);
 		plot->endMacro();
-	} else if (ui.rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacement2->isChecked()) {
 		//add curves to a new plot in an existing worksheet
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		Worksheet* worksheet = dynamic_cast<Worksheet*>(aspect);
 		worksheet->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 
-		if (ui.rbCurvePlacement1->isChecked()) {
+		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
 			//set the x-axis names
-			const QString& xColumnName = ui.cbXColumn->currentText();
+			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
@@ -294,13 +297,13 @@ void PlotDataDialog::plot() {
 		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
 		project->addChild(worksheet);
 
-		if (ui.rbCurvePlacement1->isChecked()) {
+		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
 			//set the x-axis names
-			const QString& xColumnName = ui.cbXColumn->currentText();
+			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
@@ -330,7 +333,7 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	Column* xColumn = columnFromName(ui.cbXColumn->currentText());
+	Column* xColumn = columnFromName(ui->cbXColumn->currentText());
 	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
 		const QString& name = comboBox->currentText();
@@ -344,7 +347,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
 
-	const QString& xColumnName = ui.cbXColumn->currentText();
+	const QString& xColumnName = ui->cbXColumn->currentText();
 	Column* xColumn = columnFromName(xColumnName);
 	for (int i = 1; i < m_columnComboBoxes.size(); ++i) {
 		QComboBox* comboBox = m_columnComboBoxes[i];
@@ -385,7 +388,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		curve->setYColumn(yColumn);
 		plot->addChild(curve);
 	} else {
-		bool createDataCurve = ui.chkCreateDataCurve->isChecked();
+		bool createDataCurve = ui->chkCreateDataCurve->isChecked();
 		if (createDataCurve) {
 			XYCurve* curve = new XYCurve(name);
 			curve->setXColumn(xColumn);
@@ -470,24 +473,24 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 //########################## Slots ###############################
 //################################################################
 void PlotDataDialog::curvePlacementChanged() {
-	if (ui.rbCurvePlacement1->isChecked()) {
-		ui.rbPlotPlacement1->setEnabled(true);
-		ui.rbPlotPlacement2->setText(i18n("new plot in an existing worksheet"));
-		ui.rbPlotPlacement3->setText(i18n("new plot in a new worksheet"));
+	if (ui->rbCurvePlacement1->isChecked()) {
+		ui->rbPlotPlacement1->setEnabled(true);
+		ui->rbPlotPlacement2->setText(i18n("new plot in an existing worksheet"));
+		ui->rbPlotPlacement3->setText(i18n("new plot in a new worksheet"));
 	} else {
-		ui.rbPlotPlacement1->setEnabled(false);
-		if (ui.rbPlotPlacement1->isChecked())
-			ui.rbPlotPlacement2->setChecked(true);
-		ui.rbPlotPlacement2->setText(i18n("new plots in an existing worksheet"));
-		ui.rbPlotPlacement3->setText(i18n("new plots in a new worksheet"));
+		ui->rbPlotPlacement1->setEnabled(false);
+		if (ui->rbPlotPlacement1->isChecked())
+			ui->rbPlotPlacement2->setChecked(true);
+		ui->rbPlotPlacement2->setText(i18n("new plots in an existing worksheet"));
+		ui->rbPlotPlacement3->setText(i18n("new plots in a new worksheet"));
 	}
 }
 
 void PlotDataDialog::plotPlacementChanged() {
-	if (ui.rbPlotPlacement1->isChecked()) {
+	if (ui->rbPlotPlacement1->isChecked()) {
 		cbExistingPlots->setEnabled(true);
 		cbExistingWorksheets->setEnabled(false);
-	} else if (ui.rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacement2->isChecked()) {
 		cbExistingPlots->setEnabled(false);
 		cbExistingWorksheets->setEnabled(true);
 	} else {
@@ -500,10 +503,10 @@ void PlotDataDialog::plotPlacementChanged() {
 
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
-	if (ui.rbPlotPlacement1->isChecked()) {
+	if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		enable = (aspect!=NULL);
-	} else if (ui.rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacement2->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		enable = (aspect!=NULL);
 	} else
