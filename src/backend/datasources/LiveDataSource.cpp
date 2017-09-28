@@ -773,12 +773,8 @@ QString LiveDataSource::fileInfoString(const QString &name) {
 
 #ifdef HAVE_FITS
 		if (fileName.endsWith(QLatin1String(".fits"))) {
-			FITSFilter* fitsFilter = new FITSFilter;
-
-			infoStrings << i18n("Images: %1", QString::number(fitsFilter->imagesCount(fileName) ));
-			infoStrings << i18n("Tables: %1", QString::number(fitsFilter->tablesCount(fileName) ));
-
-			delete fitsFilter;
+            infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
+            infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
 		}
 #endif
 

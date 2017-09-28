@@ -44,15 +44,13 @@ public:
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, bool* okToMatrix = nullptr, int lines = -1);
 	void writeCHDU(const QString& fileName, AbstractDataSource*);
 
-	QMultiMap<QString, QString> extensionNames(const QString &fileName);
+	static QMultiMap<QString, QString> extensionNames(const QString &fileName);
 	void updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates);
 	void addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
 	void addKeywordUnit(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
 	void deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords);
 	void removeExtensions(const QStringList& extensions);
 	const QString valueOf(const QString& fileName, const char* key);
-	int imagesCount(const QString& fileName) ;
-	int tablesCount(const QString& fileName) ;
 	QList<FITSFilter::Keyword> chduKeywords(const QString& fileName);
 	void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
 			bool readKeys = true,
