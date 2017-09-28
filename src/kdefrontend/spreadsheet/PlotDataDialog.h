@@ -28,7 +28,9 @@
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
-#include "ui_plotdatawidget.h"
+namespace Ui {
+	class PlotDataWidget;
+}
 
 #include <QDialog>
 
@@ -55,7 +57,7 @@ public:
 	void setAnalysisAction(AnalysisAction);
 
 private:
-	Ui::PlotDataWidget ui;
+	Ui::PlotDataWidget* ui;
 	QPushButton* m_okButton;
 	Spreadsheet* m_spreadsheet;
 	TreeViewComboBox* cbExistingPlots;
