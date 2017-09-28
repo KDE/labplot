@@ -507,9 +507,9 @@ void LiveDataSource::read() {
 		case NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
 
-            m_udpSocket->bind(QHostAddress(m_host), m_port);
+			m_udpSocket->bind(QHostAddress(m_host), m_port);
 			qDebug() << "socket state before preparing: " << m_udpSocket->state();
-            m_udpSocket->connectToHost(m_host, m_port);
+			m_udpSocket->connectToHost(m_host, m_port);
 
 			m_device = m_udpSocket;
 			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
@@ -572,12 +572,12 @@ void LiveDataSource::read() {
 		break;
 	case NetworkUdpSocket:
 		DEBUG("reading from a UDP socket");
-        qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
+		qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
 		m_udpSocket->abort();
-        m_udpSocket->bind(QHostAddress(m_host), m_port);
-        m_udpSocket->connectToHost(m_host, m_port);
+		m_udpSocket->bind(QHostAddress(m_host), m_port);
+		m_udpSocket->connectToHost(m_host, m_port);
 
-        qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
+		qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
 
 		break;
 	case LocalSocket:
@@ -604,7 +604,7 @@ void LiveDataSource::read() {
  */
 void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
-    qDebug()<< "Got new data from the device";
+	qDebug()<< "Got new data from the device";
 
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
@@ -773,8 +773,8 @@ QString LiveDataSource::fileInfoString(const QString &name) {
 
 #ifdef HAVE_FITS
 		if (fileName.endsWith(QLatin1String(".fits"))) {
-            infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
-            infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
+			infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
+			infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
 		}
 #endif
 

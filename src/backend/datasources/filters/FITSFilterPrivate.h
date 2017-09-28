@@ -41,7 +41,7 @@ public:
 	~FITSFilterPrivate();
 
 	QVector<QStringList> readCHDU(const QString& fileName, AbstractDataSource* = nullptr,
-		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, bool* okToMatrix = nullptr, int lines = -1);
+	                              AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, bool* okToMatrix = nullptr, int lines = -1);
 	void writeCHDU(const QString& fileName, AbstractDataSource*);
 
 	static QMultiMap<QString, QString> extensionNames(const QString &fileName);
@@ -53,8 +53,8 @@ public:
 	const QString valueOf(const QString& fileName, const char* key);
 	QList<FITSFilter::Keyword> chduKeywords(const QString& fileName);
 	void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
-			bool readKeys = true,
-			const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
+	                 bool readKeys = true,
+	                 const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
 	const FITSFilter* q;

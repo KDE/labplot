@@ -249,11 +249,11 @@ void FITSFilter::setExportTo(const int exportTo) {
 
 
 int FITSFilter::imagesCount(const QString &fileName)  {
-    return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
 }
 
 int FITSFilter::tablesCount(const QString &fileName) {
-    return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
+	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
 }
 
 
@@ -964,15 +964,13 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
-    fitsfile* fitsFile = 0;
-    if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
+	fitsfile* fitsFile = 0;
+	if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status ))
 		return QMultiMap<QString, QString>();
-	}
 	int hduCount;
 
-    if (fits_get_num_hdus(fitsFile, &hduCount, &status)) {
+	if (fits_get_num_hdus(fitsFile, &hduCount, &status))
 		return QMultiMap<QString, QString>();
-	}
 	int imageCount = 0;
 	int asciiTableCount = 0;
 	int binaryTableCount = 0;
@@ -980,7 +978,7 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 		int hduType;
 		status = 0;
 
-        fits_get_hdu_type(fitsFile, &hduType, &status);
+		fits_get_hdu_type(fitsFile, &hduType, &status);
 		switch (hduType) {
 		case IMAGE_HDU:
 			imageCount++;
@@ -994,12 +992,12 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 		}
 		char* keyVal = new char[FLEN_VALUE];
 		QString extName;
-        if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
+		if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
 			extName = QLatin1String(keyVal);
 			extName = extName.mid(1, extName.length() -2).simplified();
 		} else {
 			status = 0;
-            if (!fits_read_keyword(fitsFile,"HDUNAME", keyVal, NULL, &status)) {
+			if (!fits_read_keyword(fitsFile,"HDUNAME", keyVal, NULL, &status)) {
 				extName = QLatin1String(keyVal);
 				extName = extName.mid(1, extName.length() -2).simplified();
 			} else {
@@ -1034,13 +1032,13 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 			extensions.insert(QLatin1String("TABLES"), extName);
 			break;
 		}
-        fits_movrel_hdu(fitsFile, 1, NULL, &status);
+		fits_movrel_hdu(fitsFile, 1, NULL, &status);
 	}
 
 	if (status == END_OF_FILE)
 		status = 0;
 
-    fits_close_file(fitsFile, &status);
+	fits_close_file(fitsFile, &status);
 	return extensions;
 #else
 	Q_UNUSED(fileName)
