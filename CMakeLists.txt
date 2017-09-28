@@ -263,9 +263,11 @@ ENDIF()
 IF (USE_LIBORIGIN)
 	add_subdirectory(liborigin)
 ENDIF ()
+
+add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(src)
-add_subdirectory(doc)
+add_subdirectory(tests)
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
