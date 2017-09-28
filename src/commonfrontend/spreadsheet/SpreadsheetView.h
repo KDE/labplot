@@ -60,22 +60,32 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
-	int selectedColumnCount(bool full = false);
-	int selectedColumnCount(AbstractColumn::PlotDesignation);
-	bool isColumnSelected(int col, bool full = false);
-	QVector<Column*> selectedColumns(bool full = false);
-	int firstSelectedColumn(bool full = false);
-	int lastSelectedColumn(bool full = false);
+	int selectedColumnCount(bool full = false) const;
+	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
+	bool isColumnSelected(int col, bool full = false) const;
+	QVector<Column*> selectedColumns(bool full = false) const;
+	int firstSelectedColumn(bool full = false) const;
+	int lastSelectedColumn(bool full = false) const;
 
-	bool isRowSelected(int row, bool full = false);
-	int firstSelectedRow(bool full = false);
-	int lastSelectedRow(bool full = false);
-	IntervalAttribute<bool> selectedRows(bool full = false);
+	bool isRowSelected(int row, bool full = false) const;
+	int firstSelectedRow(bool full = false) const;
+	int lastSelectedRow(bool full = false) const;
+	IntervalAttribute<bool> selectedRows(bool full = false) const;
 
-	bool isCellSelected(int row, int col);
+	bool isCellSelected(int row, int col) const;
 	void setCellSelected(int row, int col, bool select = true);
 	void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
-	void getCurrentCell(int* row, int* col);
+	void getCurrentCell(int* row, int* col) const;
+
+	bool exportView();
+	bool printView();
+	bool printPreview();
+
+private:
+	void init();
+	void initActions();
+	void initMenus();
+	void connectActions();
 
 	void exportToFile(const QString&, const bool, const QString&) const;
 	void exportToLaTeX(const QString&, const bool exportHeaders,
@@ -83,11 +93,6 @@ public:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 	void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
 
-private:
-	void init();
-	void initActions();
-	void initMenus();
-	void connectActions();
 
 	QTableView* m_tableView;
 	Spreadsheet* m_spreadsheet;

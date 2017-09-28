@@ -33,11 +33,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
 #include <QIcon>
 
 #include <KConfigGroup>
@@ -92,75 +88,25 @@ void Spreadsheet::init() {
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
 QWidget* Spreadsheet::view() const {
-	if (!m_view) {
+	if (!m_view)
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
-		KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
-		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry(QLatin1String("ShowComments"), false));
-	}
 
 	return m_view;
 }
 
 bool Spreadsheet::exportView() const {
-	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
-	dlg->setFileName(name());
-
-	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-	for (int i = 0; i < columnCount(); ++i) {
-		if (column(i)->columnMode() != AbstractColumn::Numeric) {
-			dlg->setExportToImage(false);
-			break;
-		}
-	}
-	if (const_cast<SpreadsheetView*>(reinterpret_cast<const SpreadsheetView*>(m_view))->selectedColumnCount() == 0)
-		dlg->setExportSelection(false);
-	bool ret;
-	if ((ret = dlg->exec()) == QDialog::Accepted) {
-		const QString path = dlg->path();
-		const bool exportHeader = dlg->exportHeader();
-		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
-		WAIT_CURSOR;
-		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
-			const bool exportLatexHeader = dlg->exportLatexHeader();
-			const bool gridLines = dlg->gridLines();
-			const bool captions = dlg->captions();
-			const bool skipEmptyRows =dlg->skipEmptyRows();
-			const bool exportEntire = dlg->entireSpreadheet();
-			view->exportToLaTeX(path, exportHeader, gridLines, captions,
-			                    exportLatexHeader, skipEmptyRows, exportEntire);
-		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
-			const int exportTo = dlg->exportToFits();
-			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
-			view->exportToFits(path, exportTo, commentsAsUnits);
-		} else {
-			const QString separator = dlg->separator();
-			view->exportToFile(path, exportHeader, separator);
-		}
-		RESET_CURSOR;
-	}
-	delete dlg;
-
-	return ret;
+	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
+	return view->exportView();
 }
 
 bool Spreadsheet::printView() {
-	QPrinter printer;
-	QPrintDialog* dlg = new QPrintDialog(&printer, view());
-	bool ret;
-	dlg->setWindowTitle(i18n("Print Spreadsheet"));
-	if ((ret = dlg->exec()) == QDialog::Accepted) {
-		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
-		view->print(&printer);
-	}
-	delete dlg;
-	return ret;
+	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
+	return view->printView();
 }
 
 bool Spreadsheet::printPreview() const {
-	const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	return dlg->exec();
+	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
+	return view->printPreview();
 }
 
 /*!

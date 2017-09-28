@@ -33,7 +33,6 @@
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
-
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
@@ -51,13 +50,17 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 #include <QTableView>
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
 
+#include <KConfigGroup>
 #include <KLocale>
 
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
@@ -106,6 +109,9 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 
 		resize(w+50, h);
 	}
+
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	showComments(group.readEntry(QLatin1String("ShowComments"), false));
 }
 
 SpreadsheetView::~SpreadsheetView() {
@@ -821,9 +827,9 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
   Returns the number of selected columns.
   If \c full is \c true, this function only returns the number of fully selected columns.
 */
-int SpreadsheetView::selectedColumnCount(bool full) {
+int SpreadsheetView::selectedColumnCount(bool full) const {
 	int count = 0;
-	int cols = m_spreadsheet->columnCount();
+	const int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
 		if (isColumnSelected(i, full)) count++;
 	return count;
@@ -832,9 +838,9 @@ int SpreadsheetView::selectedColumnCount(bool full) {
 /*!
   Returns the number of (at least partly) selected columns with the plot designation \param pd.
  */
-int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) {
+int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) const{
 	int count = 0;
-	int cols = m_spreadsheet->columnCount();
+	const int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
 		if ( isColumnSelected(i, false) && (m_spreadsheet->column(i)->plotDesignation() == pd) ) count++;
 
@@ -845,7 +851,7 @@ int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) {
   Returns \c true if column \param col is selected, otherwise returns \c false.
   If \param full is \c true, this function only returns true if the whole column is selected.
 */
-bool SpreadsheetView::isColumnSelected(int col, bool full) {
+bool SpreadsheetView::isColumnSelected(int col, bool full) const {
 	if (full)
 		return m_tableView->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
@@ -856,9 +862,9 @@ bool SpreadsheetView::isColumnSelected(int col, bool full) {
   Returns all selected columns.
   If \param full is true, this function only returns a column if the whole column is selected.
   */
-QVector<Column*> SpreadsheetView::selectedColumns(bool full) {
+QVector<Column*> SpreadsheetView::selectedColumns(bool full) const {
 	QVector<Column*> columns;
-	int cols = m_spreadsheet->columnCount();
+	const int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
 		if (isColumnSelected(i, full)) columns << m_spreadsheet->column(i);
 
@@ -869,7 +875,7 @@ QVector<Column*> SpreadsheetView::selectedColumns(bool full) {
   Returns \c true if row \param row is selected; otherwise returns \c false
   If \param full is \c true, this function only returns \c true if the whole row is selected.
 */
-bool SpreadsheetView::isRowSelected(int row, bool full) {
+bool SpreadsheetView::isRowSelected(int row, bool full) const {
 	if (full)
 		return m_tableView->selectionModel()->isRowSelected(row, QModelIndex());
 	else
@@ -880,8 +886,8 @@ bool SpreadsheetView::isRowSelected(int row, bool full) {
   Return the index of the first selected column.
   If \param full is \c true, this function only looks for fully selected columns.
 */
-int SpreadsheetView::firstSelectedColumn(bool full) {
-	int cols = m_spreadsheet->columnCount();
+int SpreadsheetView::firstSelectedColumn(bool full) const {
+	const int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++) {
 		if (isColumnSelected(i, full))
 			return i;
@@ -893,8 +899,8 @@ int SpreadsheetView::firstSelectedColumn(bool full) {
   Return the index of the last selected column.
   If \param full is \c true, this function only looks for fully selected columns.
   */
-int SpreadsheetView::lastSelectedColumn(bool full) {
-	int cols = m_spreadsheet->columnCount();
+int SpreadsheetView::lastSelectedColumn(bool full) const {
+	const int cols = m_spreadsheet->columnCount();
 	for (int i=cols-1; i>=0; i--)
 		if (isColumnSelected(i, full)) return i;
 
@@ -905,7 +911,7 @@ int SpreadsheetView::lastSelectedColumn(bool full) {
   Return the index of the first selected row.
   If \param full is \c true, this function only looks for fully selected rows.
   */
-int SpreadsheetView::firstSelectedRow(bool full) {
+int SpreadsheetView::firstSelectedRow(bool full) const{
 	QModelIndexList indexes;
 	if (!full)
 		indexes = m_tableView->selectionModel()->selectedIndexes();
@@ -922,7 +928,7 @@ int SpreadsheetView::firstSelectedRow(bool full) {
   Return the index of the last selected row.
   If \param full is \c true, this function only looks for fully selected rows.
   */
-int SpreadsheetView::lastSelectedRow(bool full) {
+int SpreadsheetView::lastSelectedRow(bool full) const {
 	QModelIndexList indexes;
 	if (!full)
 		indexes = m_tableView->selectionModel()->selectedIndexes();
@@ -938,8 +944,9 @@ int SpreadsheetView::lastSelectedRow(bool full) {
 /*!
   Return whether a cell is selected
  */
-bool SpreadsheetView::isCellSelected(int row, int col) {
-	if (row < 0 || col < 0 || row >= m_spreadsheet->rowCount() || col >= m_spreadsheet->columnCount()) return false;
+bool SpreadsheetView::isCellSelected(int row, int col) const {
+	if (row < 0 || col < 0 || row >= m_spreadsheet->rowCount() || col >= m_spreadsheet->columnCount())
+		return false;
 
 	return m_tableView->selectionModel()->isSelected(m_model->index(row, col));
 }
@@ -947,9 +954,9 @@ bool SpreadsheetView::isCellSelected(int row, int col) {
 /*!
   Get the complete set of selected rows.
  */
-IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full) {
+IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full) const {
 	IntervalAttribute<bool> result;
-	int rows = m_spreadsheet->rowCount();
+	const int rows = m_spreadsheet->rowCount();
 	for (int i=0; i<rows; i++)
 		if (isRowSelected(i, full))
 			result.setValue(i, true);
@@ -977,7 +984,7 @@ void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_ro
 /*!
   Determine the current cell (-1 if no cell is designated as the current).
  */
-void SpreadsheetView::getCurrentCell(int * row, int * col) {
+void SpreadsheetView::getCurrentCell(int* row, int* col) const {
 	QModelIndex index = m_tableView->selectionModel()->currentIndex();
 	if (index.isValid())	{
 		*row = index.row();
@@ -1991,6 +1998,66 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
 	QItemSelectionModel* selModel = m_tableView->selectionModel();
 	for (int i=0; i<m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
+}
+
+bool SpreadsheetView::exportView() {
+	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
+	dlg->setFileName(m_spreadsheet->name());
+
+	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
+	for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
+		if (m_spreadsheet->column(i)->columnMode() != AbstractColumn::Numeric) {
+			dlg->setExportToImage(false);
+			break;
+		}
+	}
+	if (selectedColumnCount() == 0)
+		dlg->setExportSelection(false);
+
+	bool ret;
+	if ((ret = dlg->exec()) == QDialog::Accepted) {
+		const QString path = dlg->path();
+		const bool exportHeader = dlg->exportHeader();
+		WAIT_CURSOR;
+		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+			const bool exportLatexHeader = dlg->exportLatexHeader();
+			const bool gridLines = dlg->gridLines();
+			const bool captions = dlg->captions();
+			const bool skipEmptyRows =dlg->skipEmptyRows();
+			const bool exportEntire = dlg->entireSpreadheet();
+			exportToLaTeX(path, exportHeader, gridLines, captions,
+			                    exportLatexHeader, skipEmptyRows, exportEntire);
+		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+			const int exportTo = dlg->exportToFits();
+			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
+			exportToFits(path, exportTo, commentsAsUnits);
+		} else {
+			const QString separator = dlg->separator();
+			exportToFile(path, exportHeader, separator);
+		}
+		RESET_CURSOR;
+	}
+	delete dlg;
+
+	return ret;
+}
+
+bool SpreadsheetView::printView() {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, this);
+	bool ret;
+	dlg->setWindowTitle(i18n("Print Spreadsheet"));
+	if ((ret = dlg->exec()) == QDialog::Accepted) {
+		print(&printer);
+	}
+	delete dlg;
+	return ret;
+}
+
+bool SpreadsheetView::printPreview() {
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), this, SLOT(print(QPrinter*)));
+	return dlg->exec();
 }
 
 /*!
