@@ -36,37 +36,37 @@ class QToolButton;
 class KConfig;
 
 class TemplateHandler : public QWidget {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
+public:
+	enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
 
-		TemplateHandler(QWidget* parent, ClassName);
+	TemplateHandler(QWidget* parent, ClassName);
 
-	private:
-		void retranslateUi();
+private:
+	void retranslateUi();
 
-        ClassName m_className;
-        QList<QString> m_dirNames;
+	ClassName m_className;
+	QList<QString> m_dirNames;
 
-        QToolButton* m_tbLoad;
-        QToolButton* m_tbSave;
-        QToolButton* m_tbSaveDefault;
-        QToolButton* m_tbCopy;
-        QToolButton* m_tbPaste;
+	QToolButton* m_tbLoad;
+	QToolButton* m_tbSave;
+	QToolButton* m_tbSaveDefault;
+	QToolButton* m_tbCopy;
+	QToolButton* m_tbPaste;
 
-	private slots:
-		void loadMenu();
-		void saveMenu();
-		void loadMenuSelected(QAction*);
-		void saveMenuSelected(QAction*);
-		void saveNewSelected(const QString&);
-		void saveDefaults();
+private slots:
+	void loadMenu();
+	void saveMenu();
+	void loadMenuSelected(QAction*);
+	void saveMenuSelected(QAction*);
+	void saveNewSelected(const QString&);
+	void saveDefaults();
 
-	signals:
-		void loadConfigRequested(KConfig&);
-		void saveConfigRequested(KConfig&);
-		void info(const QString&);
+signals:
+	void loadConfigRequested(KConfig&);
+	void saveConfigRequested(KConfig&);
+	void info(const QString&);
 };
 
 #endif
