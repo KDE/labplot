@@ -39,6 +39,10 @@
 #include <QDir>
 #include <QDebug>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KUrl>
+
 using namespace DockHelpers;
 
 Surface3DDock::Surface3DDock(QWidget* parent)
@@ -65,7 +69,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	list << "Column";
 
 	foreach(TreeViewComboBox* view, treeViews) {
-		view->setSelectableClasses(list);
+// 		view->setSelectableClasses(list);
 		recorder.connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
 
@@ -76,7 +80,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	list.clear();
 	list<<"Matrix";
-	ui.cbMatrix->setSelectableClasses(list);
+// 	ui.cbMatrix->setSelectableClasses(list);
 
 	//Tab "Color Filling"
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabColorFilling->layout());
@@ -359,7 +363,7 @@ void Surface3DDock::onFileChanged(const KUrl& path) {
 		return;
 
 	const Lock lock(m_initializing);
-	
+
 	foreach (Surface3D* surface, surfaces)
 		surface->setFile(path);
 }

@@ -47,7 +47,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <QDebug>
-#include <QGLContext>
 #include <KLocalizedString>
 #include <cmath>
 
@@ -1004,7 +1003,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "Plot3D") {
 			Plot3D* plot = new Plot3D("");
-			if (!plot->load(reader)) {
+			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
 			} else {

@@ -46,7 +46,7 @@ private:
 	CartesianPlot* m_lastCartesianPlot;
 	Histogram* m_lastHistogram;
 	template<class TDockWidget>
-	void initDockWidget(TDockWidget*& dockWidget);
+	void initDockWidget(TDockWidget*& dockWidget) const;
 
 private slots:
 	void selectedAspectsChanged(QList<AbstractAspect*>&) const;

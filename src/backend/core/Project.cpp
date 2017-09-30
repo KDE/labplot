@@ -362,10 +362,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
 			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
 			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
-			QList<AbstractAspect*> surfaces = children<Surface3D>(AbstractAspect::Recursive);
-			QList<AbstractAspect*> curves3d = children<Curve3D>(AbstractAspect::Recursive);
+			QVector<Surface3D*> surfaces = children<Surface3D>(AbstractAspect::Recursive);
+			QVector<Curve3D*> curves3d = children<Curve3D>(AbstractAspect::Recursive);
 			if (!curves.isEmpty() || !axes.isEmpty()) {
 				QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
+				QVector<Matrix*> matrices = children<Matrix>(AbstractAspect::Recursive);
 
 				//XY-curves
 				for (auto* curve : curves) {

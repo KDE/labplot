@@ -1241,7 +1241,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		d->axes->save(writer);
 		foreach(const Surface3D* surface, d->surfaces)
 			surface->save(writer);
-		
+
 		foreach(const Curve3D* curve, d->curves)
 			curve->save(writer);
 
@@ -1249,7 +1249,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool Plot3D::load(XmlStreamReader* reader) {
+bool Plot3D::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Plot3D);
 	if(!reader->isStartElement() || reader->name() != "Plot3D"){
 		reader->raiseError(i18n("no Plot3D element found"));

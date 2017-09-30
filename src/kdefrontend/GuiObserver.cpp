@@ -216,17 +216,17 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Plot Properties"));
 		QList<Plot3D*> list;
-		foreach(aspect, selectedAspects){
+		for (auto* aspect : selectedAspects){
 			Plot3D *plot3D = qobject_cast<Plot3D*>(aspect);
 			connect(plot3D,
 					SIGNAL(currentAspectChanged(const AbstractAspect*)),
-					mainWindow->m_projectExplorer,
+					m_mainWindow->m_projectExplorer,
 					SLOT(setCurrentAspect(const AbstractAspect*)));
 			list<<plot3D;
 		}
 		m_mainWindow->plot3dDock->setPlots(list);
 
-		m_mainWindow->stackedWidget->setCurrentWidget(mainWindow->plot3dDock);
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->plot3dDock);
 	}else if (className=="Axes"){
 		if (!m_mainWindow->axes3dDock){
 			m_mainWindow->axes3dDock = new Axes3DDock(m_mainWindow->stackedWidget);
@@ -234,7 +234,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Axes properties"));
-		foreach(aspect, selectedAspects){
+		for (auto* aspect : selectedAspects){
 			Axes* axes = qobject_cast<Axes*>(aspect);
 			if (axes) {
 				m_mainWindow->axes3dDock->setAxes(axes);
@@ -242,7 +242,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			}
 		}
 
-		m_mainWindow->stackedWidget->setCurrentWidget(mainWindow->axes3dDock);
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->axes3dDock);
 	}else if (className=="Surface3D"){
 		if (!m_mainWindow->surface3dDock){
 			m_mainWindow->surface3dDock = new Surface3DDock(m_mainWindow->stackedWidget);
@@ -251,7 +251,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Surface properties"));
 		QList<Surface3D*> list;
-		foreach(aspect, selectedAspects){
+		for (auto* aspect : selectedAspects){
 			Surface3D* surface = qobject_cast<Surface3D*>(aspect);
 			if (surface) {
 				list << surface;
@@ -267,7 +267,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Curve properties"));
-		foreach(aspect, selectedAspects){
+		for (auto* aspect : selectedAspects){
 			Curve3D* curve = qobject_cast<Curve3D*>(aspect);
 			if (curve) {
 				m_mainWindow->curve3dDock->setCurve(curve);
@@ -619,10 +619,10 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 }
 
 template<class TDockWidget>
-void GuiObserver::initDockWidget(TDockWidget*& dockWidget){
+void GuiObserver::initDockWidget(TDockWidget*& dockWidget) const {
 	if (dockWidget == 0){
-		dockWidget = new TDockWidget(mainWindow->stackedWidget);
-		mainWindow->stackedWidget->addWidget(dockWidget);
+		dockWidget = new TDockWidget(m_mainWindow->stackedWidget);
+		m_mainWindow->stackedWidget->addWidget(dockWidget);
 	}
 }
 
@@ -656,7 +656,7 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) const {
 		}
 		m_mainWindow->cartesianPlotLegendDock->activateTitleTab();
 	} else if (className == "Plot3D"){
-		initDockWidget(mainWindow->plot3dDock);
+		initDockWidget(m_mainWindow->plot3dDock);
 	}
 }
 

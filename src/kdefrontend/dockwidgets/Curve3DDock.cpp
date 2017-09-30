@@ -34,6 +34,8 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
+#include <KConfig>
+#include <KConfigGroup>
 
 using namespace DockHelpers;
 
@@ -71,7 +73,7 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	templateHandler->show();
 
 	foreach(TreeViewComboBox* view, treeViews) {
-		view->setSelectableClasses(list);
+// 		view->setSelectableClasses(list);
 		recorder.connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
 

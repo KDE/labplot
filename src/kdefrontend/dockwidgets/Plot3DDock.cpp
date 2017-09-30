@@ -43,6 +43,8 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 
+#include <KConfig>
+#include <KConfigGroup>
 #include <KComboBox>
 #include <KUrl>
 #include <KUrlCompletion>
@@ -65,7 +67,7 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-	ui.bBackgroundOpen->setIcon( KIcon("document-open") );
+	ui.bBackgroundOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

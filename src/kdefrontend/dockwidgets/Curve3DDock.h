@@ -37,6 +37,7 @@
 class Curve3D;
 class AbstractColumn;
 class AspectTreeModel;
+class KConfig;
 
 class Curve3DDock : public QWidget {
 	Q_OBJECT
