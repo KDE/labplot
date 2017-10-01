@@ -37,7 +37,7 @@
 #include <QCompleter>
 #include <QDir>
 #include <QFileDialog>
-#include <QFileSystemModel>
+#include <QDirModel>
 #include <QGraphicsScene>
 #include <QImageReader>
 #include <QPainter>
@@ -133,7 +133,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	QCompleter* completer = new QCompleter(this);
-	completer->setModel(new QFileSystemModel(completer));
+	completer->setModel(new QDirModel);
 	ui.leFileName->setCompleter(completer);
 
 	QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
