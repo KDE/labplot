@@ -1,0 +1,20 @@
+http://doc.qt.io/qt-5/qtest-overview.html
+http://doc.qt.io/qt-5/qtest-tutorial.html
+https://wiki.qt.io/Unit_Testing
+https://wiki.qt.io/Writing_Unit_Tests
+https://cmake.org/Wiki/CMake/Testing_With_CTest
+
+There are different ways to execute the tests:
+* navigate to the build folder and do 'make test'
+* navigate to the build folder and execute 'ctest'
+* navigate to the folder containing the actual test executable and execute it from there, e.g 'cd build/tests/import_export/ASCII && ./asciifiltertest'
+
+When executing via ctest, different options are available to execute individual tests:
+* ctest -R filter  -  execute only tests having the substring 'filter' in the file name
+* ctest -E filter  -  execute all tests excluding tests having the substring 'filter' in the file name
+* ctest -I 1, 3, 5 -  execute the first, the third and the fifth tests only, use 'ctest -N' to determine which tests are available
+
+Check https://cmake.org/Wiki/CMake/Testing_With_CTest and ctest --help for more infos.
+
+To selectively execute tests when starting the test binaries directly, simple add the name of the test function you want to execute as a parameter to the executable, e.g. './asciifiltertest testEmptyFileAppend'.
+Check http://doc.qt.io/qt-5/qtest-overview.html and -help output of a test executable for more infos.
