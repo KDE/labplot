@@ -29,7 +29,10 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QWidget>
 #include "backend/datasources/filters/FITSFilter.h"
-#include "ui_fitsheadereditwidget.h"
+
+namespace Ui {
+	class FITSHeaderEditWidget;
+}
 
 class FITSHeaderEditWidget : public QWidget {
 	Q_OBJECT
@@ -39,7 +42,7 @@ public:
 	~FITSHeaderEditWidget();
 
 private:
-	Ui::FITSHeaderEditWidget ui;
+	Ui::FITSHeaderEditWidget* ui;
     QAction* m_action_remove_keyword;
     QAction* m_action_add_keyword;
     QAction* m_action_addmodify_unit;

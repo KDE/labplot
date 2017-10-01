@@ -57,6 +57,7 @@ int CopyThroughFilter::outputCount() const {
  * \brief When asked for an output port, just return the corresponding input port.
  */
 AbstractColumn *CopyThroughFilter::output(int port) const {
-	return m_inputs.value(port);
+	return 0;
+	//TODO: return m_inputs.value(port);
 }
 

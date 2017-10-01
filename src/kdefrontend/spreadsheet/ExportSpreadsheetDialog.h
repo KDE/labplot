@@ -30,7 +30,10 @@
 #define EXPORTSPREADSHEETDIALOG_H
 
 #include <KDialog>
-#include "ui_exportspreadsheetwidget.h"
+
+namespace Ui {
+	class ExportSpreadsheetWidget;
+}
 
 class KUrlCompletion;
 
@@ -70,7 +73,7 @@ public:
 	Format format() const;
 private:
     QWidget* m_mainWidget;
-	Ui::ExportSpreadsheetWidget ui;
+	Ui::ExportSpreadsheetWidget* ui;
 	bool m_showOptions;
 	bool m_matrixMode;
 	Format m_format;

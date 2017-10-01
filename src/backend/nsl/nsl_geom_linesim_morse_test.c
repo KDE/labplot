@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include <stdio.h>
+#include <sys/time.h>
 #include "nsl_geom_linesim.h"
 
 #define FILENAME "morse_code.dat"
@@ -42,18 +43,18 @@ int main() {
 
 	FILE *file;
 	if((file = fopen(FILENAME, "r")) == NULL) {
-		printf("ERROR reading %s. Giving up.\n", FILENAME);	
+		printf("ERROR reading %s. Giving up.\n", FILENAME);
 		return -1;
 	}
 	for(i=0; i<N; i++)
 		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
-	
+
 	printf("automatic tol clip_diag_perpoint = %g\n", nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N));
 	printf("automatic tol clip_area_perpoint = %g\n", nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N));
 	printf("automatic tol avg_dist = %g\n", nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, N));
 
 	printf("* simplification (Douglas Peucker variant) nout = %zu\n", NOUT);
-	
+
 	struct timeval time1, time2;
 	gettimeofday(&time1, NULL);
 	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);

@@ -40,6 +40,7 @@
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
+#include <QAction>
 #include <QStackedWidget>
 #include <QTableView>
 #include <QKeyEvent>
@@ -58,7 +59,6 @@
 // #include <QElapsedTimer>
 
 #include <KLocale>
-#include <KAction>
 #include <QIcon>
 
 #include <cfloat>
