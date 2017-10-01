@@ -37,14 +37,6 @@
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
 
-#include <QIcon>
-#include <QMenu>
-#include <QStyle>
-#include <QApplication>
-#include <QXmlStreamWriter>
-
-#include <KAction>
-#include <KStandardAction>
 #include <QMenu>
 
 /**

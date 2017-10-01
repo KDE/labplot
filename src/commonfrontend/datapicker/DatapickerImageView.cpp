@@ -46,7 +46,6 @@
 #include <QToolButton>
 #include <QApplication>
 
-#include <KAction>
 #include <KLocale>
 
 /**

@@ -34,12 +34,9 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 
-#include <QTabWidget>
 #include <QHBoxLayout>
 #include <QMenu>
-#include <QDebug>
 
-#include <KAction>
 #include <KLocale>
 
 /*!

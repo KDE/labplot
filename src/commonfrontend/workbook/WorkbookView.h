@@ -29,7 +29,6 @@
 #ifndef WORKBOOKVIEW_H
 #define WORKBOOKVIEW_H
 
-#include <QWidget>
 #include <QTabWidget>
 #include <QTabBar>
 

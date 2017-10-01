@@ -35,10 +35,10 @@
 #include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 
-#include <QTabWidget>
 #include <QHBoxLayout>
 #include <QMenu>
-#include <KAction>
+#include <QTabWidget>
+
 #include <KLocale>
 
 /*!
