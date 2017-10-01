@@ -1886,7 +1886,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	//write xy-fit-curve specific information
 
-	//fit data - no need to save model expression and parameter names, they are set in XYFitCurve::initFitData()
+	//fit data - only save model expression and parameter names for custom model, otherwise they are set in XYFitCurve::initFitData()
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
@@ -2088,9 +2088,15 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	// new fit model style
-	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT)
+	// new fit model style (reset model type of old projects)
+	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
 		d->fitData.modelType = 0;
+		// reset size of fields not touched by initFitData()
+		d->fitData.paramStartValues.resize(2);
+		d->fitData.paramFixed.resize(2);
+		d->fitResult.paramValues.resize(2);
+		d->fitResult.errorValues.resize(2);
+	}
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

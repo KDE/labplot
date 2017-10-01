@@ -944,16 +944,11 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	const int np = fitResult.paramValues.size();
-	// This should not happen
-	if (m_fitData.paramFixed.size() != np) {
-		DEBUG("Error: paramFixed.size() != np!");
-		m_fitData.paramFixed.resize(np);
-	}
-	if (m_fitData.paramNames.size() != np) {
-		DEBUG("Error: paramNames.size() != np!");
-		for (int i = m_fitData.paramNames.size(); i < np; i++)	// try to fix it
-			m_fitData.paramNames << "p" + QString::number(m_fitData.paramNames.size() + 1);
+	const int np = m_fitData.paramNames.size();
+	// This should not happen (only for old projects)
+	if (fitResult.paramValues.size() != np) {
+		DEBUG("Warning: fitResult.paramValues.size() [" << fitResult.paramValues.size() << "] != np [" << np << "]");
+		//fitResult.paramValues.resize(np);
 	}
 
 	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
