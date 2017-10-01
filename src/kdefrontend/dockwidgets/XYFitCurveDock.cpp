@@ -603,7 +603,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
  * Called when the model type or the degree of the model were changed.
  */
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG("updateModelEquation() type = " << m_fitData.modelType);
+	DEBUG("updateModelEquation() category = " << m_fitData.modelCategory << ", type = " << m_fitData.modelType);
 
 	//this function can also be called when the value for the degree was changed -> update the fit data structure
 	int degree = uiGeneralTab.sbDegree->value();
@@ -654,6 +654,8 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_custom:
 		uiGeneralTab.teEquation->show();
+		uiGeneralTab.teEquation->clear();
+		uiGeneralTab.teEquation->insertPlainText(m_fitData.model);
 		uiGeneralTab.lFuncPic->hide();
 	}
 
@@ -808,6 +810,7 @@ void XYFitCurveDock::enableRecalculate() const {
  * show the fit result summary (with HTML tables)
  */
 void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult) {
+	DEBUG("XYFitCurveDock::showFitResultSummary()");
 	QString str = "<table border=1>";
 	str += "<tr> <th>" + i18n("status:") + "</th> <th>" + fitResult.status + "</th> </tr>";
 	str += "<tr> <th>" + i18n("degrees of freedom:") + "</th> <th>" + QString::number(fitResult.dof) + "</th> </tr>";
@@ -824,6 +827,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 	}
 
 	const int np = fitResult.paramValues.size();
+
 	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
 	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
@@ -932,6 +936,7 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
  * show the result and details of fit
  */
 void XYFitCurveDock::showFitResult() {
+	DEBUG("XYFitCurveDock::showFitResult()");
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 	if (!fitResult.available) {
 		uiGeneralTab.teResult->clear();
@@ -940,7 +945,17 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	const int np = fitResult.paramValues.size();
-	DEBUG("np = " << np << " paramFixed size = " << m_fitData.paramFixed.size() << " paramNames size = " << m_fitData.paramNames.size());
+	// This should not happen
+	if (m_fitData.paramFixed.size() != np) {
+		DEBUG("Error: paramFixed.size() != np!");
+		m_fitData.paramFixed.resize(np);
+	}
+	if (m_fitData.paramNames.size() != np) {
+		DEBUG("Error: paramNames.size() != np!");
+		for (int i = m_fitData.paramNames.size(); i < np; i++)	// try to fix it
+			m_fitData.paramNames << "p" + QString::number(m_fitData.paramNames.size() + 1);
+	}
+
 	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
 	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 

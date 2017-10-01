@@ -164,9 +164,10 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
-	DEBUG("XYFitCurve::initFitData() for model category  = " << modelCategory << ", model type = " << modelType << ", degree = " << num);
+	DEBUG("XYFitCurve::initFitData() for model category = " << modelCategory << ", model type = " << modelType << ", degree = " << num);
 
-	paramNames.clear();
+	if (modelCategory != nsl_fit_model_custom)
+		paramNames.clear();
 	paramNamesUtf8.clear();
 
 	// indices used in multi peak parameter models
@@ -1898,12 +1899,21 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
 	writer->writeAttribute("weightsType", QString::number(d->fitData.weightsType));
 	writer->writeAttribute("degree", QString::number(d->fitData.degree));
+	if (d->fitData.modelCategory == nsl_fit_model_custom)
+		writer->writeAttribute("model", d->fitData.model);
 	writer->writeAttribute("maxIterations", QString::number(d->fitData.maxIterations));
 	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
 	writer->writeAttribute("evaluateFullRange", QString::number(d->fitData.evaluateFullRange));
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
+
+	if (d->fitData.modelCategory == nsl_fit_model_custom) {
+		writer->writeStartElement("paramNames");
+		foreach (const QString &name, d->fitData.paramNames)
+			writer->writeTextElement("name", name);
+		writer->writeEndElement();
+	}
 
 	writer->writeStartElement("paramStartValues");
 	foreach (const double &value, d->fitData.paramStartValues)
@@ -2008,6 +2018,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
 			READ_INT_VALUE("weightsType", fitData.weightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
+			if (d->fitData.modelCategory == nsl_fit_model_custom) {
+				READ_STRING_VALUE("model", fitData.model);
+				DEBUG("read model = " << d->fitData.model.toStdString());
+			}
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
@@ -2018,6 +2032,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
+		} else if (reader->name() == "name") {	// needed for custom model
+			d->fitData.paramNames << reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fixed") {
