@@ -2091,6 +2091,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// new fit model style (reset model type of old projects)
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
 		d->fitData.modelType = 0;
+		d->fitData.degree = 1;
 		// reset size of fields not touched by initFitData()
 		d->fitData.paramStartValues.resize(2);
 		d->fitData.paramFixed.resize(2);
