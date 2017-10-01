@@ -26,11 +26,54 @@
  ***************************************************************************/
 
 #include "AsciiFilterTest.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
-void AsciiFilterTest::test001() {
-	//TODO
-	QString str = "Hello";
-	QVERIFY(str.toUpper() == "HELLO");
+void AsciiFilterTest::initTestCase() {
+	const QString currentDir = __FILE__;
+	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
+}
+
+void AsciiFilterTest::testEmptyFileAppend() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+
+	const int rowCount = spreadsheet.rowCount();
+	const int colCount = spreadsheet.columnCount();
+	const QString fileName = m_dataDir + "empty_file.txt";
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Append;
+
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), rowCount);
+	QCOMPARE(spreadsheet.columnCount(), colCount);
+}
+
+void AsciiFilterTest::testEmptyFilePrepend() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+
+	const int rowCount = spreadsheet.rowCount();
+	const int colCount = spreadsheet.columnCount();
+	const QString fileName = m_dataDir + "empty_file.txt";
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Prepend;
+
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), rowCount);
+	QCOMPARE(spreadsheet.columnCount(), colCount);
+}
+
+void AsciiFilterTest::testEmptyFileReplace() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+
+	const QString fileName = m_dataDir + "empty_file.txt";
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 0);
+	QCOMPARE(spreadsheet.columnCount(), 0);
 }
 
 QTEST_MAIN(AsciiFilterTest)

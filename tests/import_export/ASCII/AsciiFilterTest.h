@@ -30,5 +30,21 @@ class AsciiFilterTest : public QObject {
 	Q_OBJECT
 
 private slots:
-	void test001();
+	void initTestCase();
+
+	//empty files
+	void testEmptyFileAppend();
+	void testEmptyFilePrepend();
+	void testEmptyFileReplace();
+
+	//different separators
+
+	//different locales
+
+	//handling of NANs
+
+	//automatically skip comments
+
+private:
+	QString m_dataDir;
 };
