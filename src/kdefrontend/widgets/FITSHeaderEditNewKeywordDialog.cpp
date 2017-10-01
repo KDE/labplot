@@ -29,7 +29,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QCompleter>
 
 #include <KDialog>
-#include <KLineEdit>
 #include <KMessageBox>
 
 #define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */

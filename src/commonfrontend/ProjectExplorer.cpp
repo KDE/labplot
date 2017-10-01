@@ -39,6 +39,8 @@
 #include <QDrag>
 #include <QHeaderView>
 #include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
 #include <QSignalMapper>
@@ -46,10 +48,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-#include <KIconLoader>
-#include <KLineEdit>
 #include <KLocale>
-#include <QMenu>
 
 /*!
   \class ProjectExplorer
