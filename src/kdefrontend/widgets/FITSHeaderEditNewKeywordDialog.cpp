@@ -25,10 +25,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "FITSHeaderEditNewKeywordDialog.h"
-// #include <QDebug>
+
+#include <QCompleter>
+
 #include <KDialog>
 #include <KLineEdit>
-#include <KCompletion>
 #include <KMessageBox>
 
 #define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
@@ -50,18 +51,17 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Add keyword"));
 
-	KCompletion* keyCompletion = new KCompletion;
-	keyCompletion->setItems(FITSFilter::standardKeywords());
-	ui.kleKey->setCompletionObject(keyCompletion);
-	ui.kleKey->setAutoDeleteCompletionObject(true);
+	QCompleter* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
+	keyCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+	ui.leKey->setCompleter(keyCompleter);
 
-	ui.kleKey->setPlaceholderText(i18n("Specify the name"));
-	ui.kleValue->setPlaceholderText(i18n("Specify the value"));
-	ui.kleComment->setPlaceholderText(i18n("Specify the comment"));
+	ui.leKey->setPlaceholderText(i18n("Specify the name"));
+	ui.leValue->setPlaceholderText(i18n("Specify the value"));
+	ui.leComment->setPlaceholderText(i18n("Specify the comment"));
 
-	ui.kleKey->setMaxLength(FLEN_KEYWORD);
-	ui.kleValue->setMaxLength(FLEN_VALUE);
-	ui.kleComment->setMaxLength(FLEN_COMMENT);
+	ui.leKey->setMaxLength(FLEN_KEYWORD);
+	ui.leValue->setMaxLength(FLEN_VALUE);
+	ui.leComment->setMaxLength(FLEN_COMMENT);
 }
 
 /*!
@@ -69,8 +69,8 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
  * \return Whether the keyword was "Ok" or not.
  */
 int FITSHeaderEditNewKeywordDialog::okClicked() {
-	if (!ui.kleKey->text().isEmpty()) {
-		m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
+	if (!ui.leKey->text().isEmpty()) {
+		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return KDialog::Ok;
 	} else {
 		const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),

@@ -34,17 +34,18 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/datapicker/ImageEditor.h"
 
-#include <QPainter>
-#include <KUrlCompletion>
-#include <KStandardDirs>
-#include <QFileDialog>
+#include <QCompleter>
 #include <QDir>
+#include <QFileDialog>
+#include <QFileSystemModel>
 #include <QGraphicsScene>
 #include <QImageReader>
+#include <QPainter>
 
-#include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KStandardDirs>
 
 #include <cmath>
 
@@ -128,11 +129,12 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
-	ui.kleFileName->setClearButtonShown(true);
+	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QFileSystemModel(completer));
+	ui.leFileName->setCompleter(completer);
 
 	QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
 	editTabLayout->setContentsMargins(2,2,2,2);
@@ -224,8 +226,8 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.kleFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.kleFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.leFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
 
 	// edit image
 	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
@@ -343,7 +345,7 @@ void DatapickerImageWidget::initConnections() {
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
-	QString fileName =  ui.kleFileName->text().trimmed();
+	QString fileName =  ui.leFileName->text().trimmed();
 	bool b = !fileName.isEmpty();
 	ui.tEdit->setEnabled(b);
 	ui.cbGraphType->setEnabled(b);
@@ -404,7 +406,7 @@ void DatapickerImageWidget::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-	ui.kleFileName->setText( path );
+	ui.leFileName->setText( path );
 	handleWidgetActions();
 
 	foreach(DatapickerImage* image, m_imagesList)
@@ -417,7 +419,7 @@ void DatapickerImageWidget::fileNameChanged() {
 
 	handleWidgetActions();
 
-	QString fileName = ui.kleFileName->text();
+	QString fileName = ui.leFileName->text();
 	foreach(DatapickerImage* image, m_imagesList)
 		image->setFileName(fileName);
 }
@@ -728,7 +730,7 @@ void DatapickerImageWidget::imageDescriptionChanged(const AbstractAspect* aspect
 
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
 	m_initializing = true;
-	ui.kleFileName->setText(name);
+	ui.leFileName->setText(name);
 	m_initializing = false;
 }
 
@@ -838,7 +840,7 @@ void DatapickerImageWidget::load() {
 		return;
 
 	m_initializing = true;
-	ui.kleFileName->setText( m_image->fileName() );
+	ui.leFileName->setText( m_image->fileName() );
 	ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
 	ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());

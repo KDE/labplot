@@ -19,21 +19,14 @@
     </widget>
    </item>
    <item>
-    <widget class="KLineEdit" name="kleUnit">
-     <property name="showClearButton" stdset="0">
+    <widget class="QLineEdit" name="leUnit">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

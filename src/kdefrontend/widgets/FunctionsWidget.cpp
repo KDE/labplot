@@ -43,7 +43,7 @@ FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 
 	//SLOTS
-	connect( ui.kleFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
+	connect( ui.leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
 	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
 	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
 	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );

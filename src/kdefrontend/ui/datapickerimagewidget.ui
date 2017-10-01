@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1181</width>
+    <width>784</width>
     <height>1181</height>
    </rect>
   </property>
@@ -35,12 +35,15 @@
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="KLineEdit" name="leName">
+        <widget class="QLineEdit" name="leName">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -52,12 +55,15 @@
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="KLineEdit" name="leComment">
+        <widget class="QLineEdit" name="leComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -98,11 +104,11 @@
         </widget>
        </item>
        <item row="4" column="5">
-        <widget class="KLineEdit" name="kleFileName">
+        <widget class="QLineEdit" name="leFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -1066,14 +1072,9 @@
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>kleFileName</tabstop>
+  <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>
   <tabstop>sbPoisitionX1</tabstop>

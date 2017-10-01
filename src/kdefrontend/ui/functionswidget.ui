@@ -7,17 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>293</width>
-    <height>234</height>
+    <height>251</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="3">
-    <widget class="KLineEdit" name="kleFilter">
+    <widget class="QLineEdit" name="leFilter">
      <property name="placeholderText">
       <string>Enter search term here</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
+     </property>
+     <property name="showClearButton" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -63,13 +66,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

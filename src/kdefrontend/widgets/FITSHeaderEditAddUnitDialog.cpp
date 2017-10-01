@@ -27,6 +27,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSHeaderEditAddUnitDialog.h"
 #include "backend/datasources/filters/FITSFilter.h"
 
+#include <QCompleter>
+
 FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent) : KDialog(parent) {
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
@@ -38,20 +40,18 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	setButtonText(KDialog::Ok, i18n("&Add"));
 	enableButtonOk(false);
 
-	KCompletion* keyCompletion = new KCompletion;
-	keyCompletion->setItems(FITSFilter::units());
-	ui.kleUnit->setCompletionObject(keyCompletion);
-	ui.kleUnit->setAutoDeleteCompletionObject(true);
-	ui.kleUnit->setPlaceholderText(i18n("Enter unit name here"));
+	QCompleter* keyCompleter = new QCompleter(FITSFilter::units(), this);
+	ui.leUnit->setCompleter(keyCompleter);
+	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 
-	connect(ui.kleUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
-	connect(ui.kleUnit, SIGNAL(clearButtonClicked()), this, SLOT(unitChanged()));
+	connect(ui.leUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
+	connect(ui.leUnit, SIGNAL(clearButtonClicked()), this, SLOT(unitChanged()));
 
-	ui.kleUnit->setText(unit);
+	ui.leUnit->setText(unit);
 }
 
 QString FITSHeaderEditAddUnitDialog::unit() const {
-	QString unit = ui.kleUnit->text();
+	QString unit = ui.leUnit->text();
 	if (unit.contains(QLatin1Char('(')))
 		unit = unit.left(unit.indexOf(QLatin1Char('('))-1);
 
@@ -59,5 +59,5 @@ QString FITSHeaderEditAddUnitDialog::unit() const {
 }
 
 void FITSHeaderEditAddUnitDialog::unitChanged() {
-	enableButtonOk(!ui.kleUnit->text().isEmpty());
+	enableButtonOk(!ui.leUnit->text().isEmpty());
 }

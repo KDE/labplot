@@ -43,7 +43,7 @@ ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 
 	//SLOTS
-	connect( ui.kleFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
+	connect( ui.leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
 	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
 	connect( ui.lwConstants, SIGNAL(currentTextChanged(QString)), this, SLOT(constantChanged(QString)) );
 	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
@@ -85,7 +85,7 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 			ui.lwConstants->setCurrentRow(0);
 			ui.bInsert->setEnabled(true);
 		} else {
-			ui.kleValue->setText("");
+			ui.leValue->setText("");
 			ui.lUnit->setText("");
 			ui.bInsert->setEnabled(false);
 		}
@@ -103,8 +103,8 @@ void ConstantsWidget::constantChanged(const QString& text) {
 	QString name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
 	if (index!=-1){
-		ui.kleValue->setText(values.at(index));
-		ui.kleValue->setCursorPosition(0);
+		ui.leValue->setText(values.at(index));
+		ui.leValue->setCursorPosition(0);
 		ui.lUnit->setText(units.at(index));
 	}
 }

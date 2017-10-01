@@ -19,31 +19,31 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="3">
-    <widget class="KLineEdit" name="kleKey">
+    <widget class="QLineEdit" name="leKey">
      <property name="placeholderText">
       <string>Enter search term here</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="KLineEdit" name="kleValue">
+    <widget class="QLineEdit" name="leValue">
      <property name="placeholderText">
       <string>Enter search term here</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="1" column="4">
-    <widget class="KLineEdit" name="kleComment">
+    <widget class="QLineEdit" name="leComment">
      <property name="placeholderText">
       <string>Enter search term here</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
@@ -64,13 +64,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
