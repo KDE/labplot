@@ -37,9 +37,11 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 
+#include <QCompleter>
 #include <QPainter>
 #include <QTimer>
 #include <QDir>
+#include <QDirModel>
 #include <QFileDialog>
 #include <QImageReader>
 #include <QButtonGroup>
@@ -79,12 +81,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.cbYBreak->addItem("1");
 
 	//"Background"-tab
-	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	KUrlCompletion* completion = new KUrlCompletion;
-	ui.kleBackgroundFileName->setCompletionObject(completion);
-	ui.kleBackgroundFileName->setAutoDeleteCompletionObject(true);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui.leBackgroundFileName->setCompleter(completer);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -126,13 +127,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()) );
 
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
-	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
-	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
+	connect( ui.leXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
+	connect( ui.leXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
 	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
 
 	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
-	connect( ui.kleYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
-	connect( ui.kleYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
+	connect( ui.leYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
+	connect( ui.leYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
 	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
 
 	//Range breaks
@@ -160,8 +161,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
-	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
@@ -494,8 +495,8 @@ void CartesianPlotDock::rangeLastChanged(const QString & text) {
 
 void CartesianPlotDock::autoScaleXChanged(int state) {
 	bool checked = (state==Qt::Checked);
-	ui.kleXMin->setEnabled(!checked);
-	ui.kleXMax->setEnabled(!checked);
+	ui.leXMin->setEnabled(!checked);
+	ui.leXMax->setEnabled(!checked);
 
 	if (m_initializing)
 		return;
@@ -508,7 +509,7 @@ void CartesianPlotDock::xMinChanged() {
 	if (m_initializing)
 		return;
 
-	float value = ui.kleXMin->text().toDouble();
+	float value = ui.leXMin->text().toDouble();
 	for (auto* plot: m_plotList)
 		plot->setXMin(value);
 }
@@ -517,7 +518,7 @@ void CartesianPlotDock::xMaxChanged() {
 	if (m_initializing)
 		return;
 
-	float value = ui.kleXMax->text().toDouble();
+	float value = ui.leXMax->text().toDouble();
 	for (auto* plot: m_plotList)
 		plot->setXMax(value);
 }
@@ -535,8 +536,8 @@ void CartesianPlotDock::xScaleChanged(int scale) {
 
 void CartesianPlotDock::autoScaleYChanged(int state) {
 	bool checked = (state==Qt::Checked);
-	ui.kleYMin->setEnabled(!checked);
-	ui.kleYMax->setEnabled(!checked);
+	ui.leYMin->setEnabled(!checked);
+	ui.leYMax->setEnabled(!checked);
 
 	if (m_initializing)
 		return;
@@ -549,7 +550,7 @@ void CartesianPlotDock::yMinChanged() {
 	if (m_initializing)
 		return;
 
-	float value = ui.kleYMin->text().toDouble();
+	float value = ui.leYMin->text().toDouble();
 	for (auto* plot: m_plotList)
 		plot->setYMin(value);
 }
@@ -558,7 +559,7 @@ void CartesianPlotDock::yMaxChanged() {
 	if (m_initializing)
 		return;
 
-	float value = ui.kleYMax->text().toDouble();
+	float value = ui.leYMax->text().toDouble();
 	for (auto* plot: m_plotList)
 		plot->setYMax(value);
 }
@@ -832,7 +833,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.cbBackgroundBrushStyle->hide();
 
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 
 		ui.lBackgroundFirstColor->show();
@@ -857,7 +858,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->hide();
 		ui.cbBackgroundBrushStyle->hide();
 		ui.lBackgroundFileName->show();
-		ui.kleBackgroundFileName->show();
+		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
 
 		ui.lBackgroundFirstColor->hide();
@@ -873,7 +874,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->show();
 		ui.cbBackgroundBrushStyle->show();
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 
 		ui.lBackgroundFirstColor->show();
@@ -969,7 +970,7 @@ void CartesianPlotDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-	ui.kleBackgroundFileName->setText( path );
+	ui.leBackgroundFileName->setText( path );
 
 	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundFileName(path);
@@ -979,11 +980,11 @@ void CartesianPlotDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.kleBackgroundFileName->text();
+	QString fileName = ui.leBackgroundFileName->text();
 	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	for (auto* plot: m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
@@ -1134,13 +1135,13 @@ void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
 
 void CartesianPlotDock::plotXMinChanged(float value) {
 	m_initializing = true;
-	ui.kleXMin->setText( QString::number(value) );
+	ui.leXMin->setText( QString::number(value) );
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXMaxChanged(float value) {
 	m_initializing = true;
-	ui.kleXMax->setText( QString::number(value) );
+	ui.leXMax->setText( QString::number(value) );
 	m_initializing = false;
 }
 
@@ -1158,13 +1159,13 @@ void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 
 void CartesianPlotDock::plotYMinChanged(float value) {
 	m_initializing = true;
-	ui.kleYMin->setText( QString::number(value) );
+	ui.leYMin->setText( QString::number(value) );
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYMaxChanged(float value) {
 	m_initializing = true;
-	ui.kleYMax->setText( QString::number(value) );
+	ui.leYMax->setText( QString::number(value) );
 	m_initializing = false;
 }
 
@@ -1240,7 +1241,7 @@ void CartesianPlotDock::plotBackgroundSecondColorChanged(QColor& color) {
 
 void CartesianPlotDock::plotBackgroundFileNameChanged(QString& filename) {
 	m_initializing = true;
-	ui.kleBackgroundFileName->setText(filename);
+	ui.leBackgroundFileName->setText(filename);
 	m_initializing = false;
 }
 
@@ -1333,13 +1334,13 @@ void CartesianPlotDock::load() {
 	ui.leRangeLast->setText( QString::number(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
-	ui.kleXMin->setText( QString::number(m_plot->xMin()) );
-	ui.kleXMax->setText( QString::number(m_plot->xMax()) );
+	ui.leXMin->setText( QString::number(m_plot->xMin()) );
+	ui.leXMax->setText( QString::number(m_plot->xMax()) );
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
 
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
-	ui.kleYMin->setText( QString::number(m_plot->yMin()) );
-	ui.kleYMax->setText( QString::number(m_plot->yMax()) );
+	ui.leYMin->setText( QString::number(m_plot->yMin()) );
+	ui.leYMax->setText( QString::number(m_plot->yMax()) );
 	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
 
 	//Title
@@ -1375,16 +1376,16 @@ void CartesianPlotDock::load() {
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundImageStyle() );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundBrushStyle() );
-	ui.kleBackgroundFileName->setText( m_plot->plotArea()->backgroundFileName() );
+	ui.leBackgroundFileName->setText( m_plot->plotArea()->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( m_plot->plotArea()->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
 	if (!m_plot->plotArea()->backgroundFileName().isEmpty() && !QFile::exists(m_plot->plotArea()->backgroundFileName()))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
@@ -1419,7 +1420,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_plot->plotArea()->backgroundImageStyle()) );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_plot->plotArea()->backgroundBrushStyle()) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->plotArea()->backgroundFileName()) );
+	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->plotArea()->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->plotArea()->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->plotArea()->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0) );
@@ -1457,7 +1458,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
 	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
+	group.writeEntry("BackgroundFileName", ui.leBackgroundFileName->text());
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
