@@ -25,6 +25,7 @@ New features:
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
 	* Direct application of analysis functions  on the data in the spreadsheet and plotting of the results via spreadsheet's context menu
+	* Drag columns in the project explorer and drop them on plots (either in a worksheet view or in the project explorer) to create curves
 	* "Show last N points" and "Show first N points" data ranges in cartesian plot
 	* Added CLI option --presenter to start LabPlot directly in the presenter mode
 

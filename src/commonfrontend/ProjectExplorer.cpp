@@ -33,6 +33,7 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/core/PartMdiView.h"
 
 #include <QContextMenuEvent>
@@ -100,8 +101,9 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
 	m_treeView->header()->setStretchLastSection(true);
 	m_treeView->header()->installEventFilter(this);
 	m_treeView->setDragEnabled(true);
-	m_treeView->setAcceptDrops(false);
-	m_treeView->setDropIndicatorShown(false);
+	m_treeView->setAcceptDrops(true);
+	m_treeView->setDropIndicatorShown(true);
+	m_treeView->setDragDropMode(QAbstractItemView::InternalMove);
 
 	layout->addWidget(m_treeView);
 
@@ -309,6 +311,42 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
+		}
+		else if (event->type() == QEvent::DragEnter) {
+			//ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
+			QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
+			const QMimeData* mimeData = dragEnterEvent->mimeData();
+			if (!mimeData) {
+				event->ignore();
+				return false;
+			}
+
+			if (mimeData->formats().at(0) != QLatin1String("labplot-dnd")) {
+				event->ignore();
+				return false;
+			}
+
+			event->setAccepted(true);
+		} else if (event->type() == QEvent::DragMove) {
+			// only accept drop events if we have a plot under the cursor where we can drop columns onto
+			QDragMoveEvent* dragMoveEvent = static_cast<QDragMoveEvent*>(event);
+			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
+			if (!index.isValid())
+				return false;
+
+			AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+			const bool isPlot = (dynamic_cast<CartesianPlot*>(aspect) != nullptr);
+			event->setAccepted(isPlot);
+		} else if (event->type() == QEvent::Drop) {
+			QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
+			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
+			if (!index.isValid())
+				return false;
+
+			AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+			CartesianPlot* plot = dynamic_cast<CartesianPlot*>(aspect);
+			if (plot != nullptr)
+				plot->processDropEvent(dropEvent);
 		}
 	}
 

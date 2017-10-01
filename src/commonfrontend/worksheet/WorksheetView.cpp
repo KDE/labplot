@@ -1043,71 +1043,9 @@ void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
-	PERFTRACE("WorksheetView::dropEvent");
-	const QMimeData* mimeData = event->mimeData();
-	if (!mimeData)
-		return;
-
-	//deserialize the mime data to the vector of aspect pointers
-	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-	QVector<quintptr> vec;
-	QDataStream stream(&data, QIODevice::ReadOnly);
-	stream >> vec;
-	QVector<AbstractColumn*> columns;
-	for (auto i : vec) {
-		AbstractAspect* aspect = (AbstractAspect*)i;
-		AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-		if (column)
-			columns << column;
-	}
-
-	//return if there are no columns being dropped.
-	//TODO: extend this later when we allow to drag&drop plots, etc.
-	if (columns.isEmpty())
-		return;
-
-	//determine the plot under the cursor
 	CartesianPlot* plot = plotAt(event->pos());
-	if (plot == nullptr)
-		return;
-
-	//determine the first column with "x plot designation" as the x-data column for all curves to be created
-	const AbstractColumn* xColumn = nullptr;
-	for (const auto* column : columns) {
-		if (column->plotDesignation() == AbstractColumn::X) {
-			xColumn = column;
-			break;
-		}
-	}
-
-	//if no column with "x plot designation" is available, use the x-data column of the first curve in the plot,
-	if (xColumn == nullptr) {
-		QVector<XYCurve*> curves = plot->children<XYCurve>();
-		if (!curves.isEmpty())
-			xColumn = curves.at(0)->xColumn();
-	}
-
-	//use the first dropped column if no column with "x plot designation" nor curves are available
-	if (xColumn == nullptr)
-		xColumn = columns.at(0);
-
-	//create curves
-	bool curvesAdded = false;
-	for (const auto* column : columns) {
-		if (column == xColumn)
-			continue;
-
-		XYCurve* curve = new XYCurve(column->name());
-		curve->suppressRetransform(true); //suppress retransform, all curved will be recalculated at the end
-		curve->setXColumn(xColumn);
-		curve->setYColumn(column);
-		plot->addChild(curve);
-		curve->suppressRetransform(false);
-		curvesAdded = true;
-	}
-
-	if (curvesAdded)
-		plot->dataChanged();
+	if (plot != nullptr)
+		plot->processDropEvent(event);
 }
 
 //##############################################################################

@@ -35,6 +35,7 @@
 
 #include <math.h>
 
+class QDropEvent;
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -99,6 +100,7 @@ public:
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
+	void processDropEvent(QDropEvent*);
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;
