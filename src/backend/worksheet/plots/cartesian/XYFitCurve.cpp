@@ -683,7 +683,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* weight = ((struct data*)params)->weight;
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
-	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();	// a local byte array is needed!
+	QByteArray funcba = ((struct data*)params)->func->toLatin1();	// a local byte array is needed!
 	const char *func = funcba.constData();	// function to evaluate
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
@@ -693,7 +693,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	for (int i = 0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
-		QByteArray paramnameba = paramNames->at(i).toLocal8Bit();
+		QByteArray paramnameba = paramNames->at(i).toLatin1();
 		assign_variable(paramnameba.constData(), nsl_fit_map_bound(x, min[i], max[i]));
 		QDEBUG("Parameter"<<i<<" (\" "<<paramnameba.constData()<<"\")"<<'['<<min[i]<<','<<max[i]
 			<<"] free/bound:"<<QString::number(x, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
@@ -1381,7 +1381,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_custom:
-		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+		QByteArray funcba = ((struct data*)params)->func->toLatin1();
 		const char* func = funcba.data();
 		QByteArray nameba;
 		double value;
@@ -1393,13 +1393,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (unsigned int j = 0; j < np; j++) {
 				for (unsigned int k = 0; k < np; k++) {
 					if (k != j) {
-						nameba = paramNames->at(k).toLocal8Bit();
+						nameba = paramNames->at(k).toLatin1();
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
 						assign_variable(nameba.data(), value);
 					}
 				}
 
-				nameba = paramNames->at(j).toLocal8Bit();
+				nameba = paramNames->at(j).toLatin1();
 				const char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_variable(name, value);
