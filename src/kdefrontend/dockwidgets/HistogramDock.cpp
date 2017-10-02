@@ -410,12 +410,9 @@ void HistogramDock::initGeneralTab(){
 
 void HistogramDock::recalculateClicked() {
 	Histogram::HistogramData data;
-	qDebug() <<"types " << uiGeneralTab.cbHistogramType->currentIndex();
 	if( data.type != (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex())
-	{
-		qDebug() << "type changed before : " << data.type;
 		data.type = (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex();
-	}
+
 	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
 	data.binValue = uiGeneralTab.sbBins->value();
 // 	m_curve->retransform();
@@ -530,8 +527,6 @@ void HistogramDock::valuesTypeChanged(int index) {
 			ui.lValuesColumn->hide();
 			cbValuesColumn->hide();
 			column = static_cast<const Column*>(m_curve->xColumn());
-			qDebug() <<"column va;" ;
-
 		}
 		this->showValuesColumnFormat(column);
 	}
