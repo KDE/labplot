@@ -29,6 +29,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+
 #include <KLocalizedString>
 
 /*!
@@ -53,25 +54,25 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate equidistant values"));
 
-	ui.kleFrom->setClearButtonShown(true);
-	ui.kleTo->setClearButtonShown(true);
-	ui.kleIncrement->setClearButtonShown(true);
-	ui.kleNumber->setClearButtonShown(true);
+	ui.leFrom->setClearButtonEnabled(true);
+	ui.leTo->setClearButtonEnabled(true);
+	ui.leIncrement->setClearButtonEnabled(true);
+	ui.leNumber->setClearButtonEnabled(true);
 
-	ui.kleFrom->setValidator( new QDoubleValidator(ui.kleFrom) );
-	ui.kleTo->setValidator( new QDoubleValidator(ui.kleTo) );
-	ui.kleIncrement->setValidator( new QDoubleValidator(ui.kleIncrement) );
-	ui.kleNumber->setValidator( new QIntValidator(ui.kleNumber) );
+	ui.leFrom->setValidator( new QDoubleValidator(ui.leFrom) );
+	ui.leTo->setValidator( new QDoubleValidator(ui.leTo) );
+	ui.leIncrement->setValidator( new QDoubleValidator(ui.leIncrement) );
+	ui.leNumber->setValidator( new QIntValidator(ui.leNumber) );
 
-	ui.kleFrom->setText("1");
-	ui.kleTo->setText("100");
-	ui.kleIncrement->setText("1");
+	ui.leFrom->setText("1");
+	ui.leTo->setText("100");
+	ui.leIncrement->setText("1");
 
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged(int)) );
-	connect( ui.kleFrom, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.kleTo, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.kleNumber, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.kleIncrement, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leFrom, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leTo, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leNumber, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leIncrement, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
 
 	//generated data the  default
@@ -82,41 +83,41 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 void EquidistantValuesDialog::setColumns(QVector<Column*> columns) {
 	m_columns = columns;
-	ui.kleNumber->setText( QString::number(m_columns.first()->rowCount()) );
+	ui.leNumber->setText( QString::number(m_columns.first()->rowCount()) );
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
 	if (index==0) { //fixed number
 		ui.lIncrement->hide();
-		ui.kleIncrement->hide();
+		ui.leIncrement->hide();
 		ui.lNumber->show();
-		ui.kleNumber->show();
+		ui.leNumber->show();
 	} else { //fixed increment
 		ui.lIncrement->show();
-		ui.kleIncrement->show();
+		ui.leIncrement->show();
 		ui.lNumber->hide();
-		ui.kleNumber->hide();
+		ui.leNumber->hide();
 	}
 }
 
 void EquidistantValuesDialog::checkValues() {
-	if (ui.kleFrom->text().simplified().isEmpty()) {
+	if (ui.leFrom->text().simplified().isEmpty()) {
 		enableButton(KDialog::Ok, false);
 		return;
 	}
 
-	if (ui.kleTo->text().simplified().isEmpty()) {
+	if (ui.leTo->text().simplified().isEmpty()) {
 		enableButton(KDialog::Ok, false);
 		return;
 	}
 
 	if (ui.cbType->currentIndex() == 0) {
-		if (ui.kleNumber->text().simplified().isEmpty() || ui.kleNumber->text().simplified().toInt()==0) {
+		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt()==0) {
 			enableButton(KDialog::Ok, false);
 			return;
 		}
 	} else {
-		if (ui.kleIncrement->text().simplified().isEmpty() || qFuzzyIsNull(ui.kleIncrement->text().simplified().toDouble())) {
+		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull(ui.leIncrement->text().simplified().toDouble())) {
 			enableButton(KDialog::Ok, false);
 			return;
 		}
@@ -134,25 +135,25 @@ void EquidistantValuesDialog::generate() {
 									m_spreadsheet->name(),
 									m_columns.size()));
 
-	double start  = ui.kleFrom->text().toDouble();
-	double end  = ui.kleTo->text().toDouble();
+	double start  = ui.leFrom->text().toDouble();
+	double end  = ui.leTo->text().toDouble();
 	int number;
 	double dist;
 	if (ui.cbType->currentIndex()==0) { //fixed number
-		number = ui.kleNumber->text().toInt();
+		number = ui.leNumber->text().toInt();
 		if (number!=1)
 			dist = (end - start)/ (number - 1);
 		else
 			dist = 0;
 	} else { //fixed increment
-		dist = ui.kleIncrement->text().toDouble();
+		dist = ui.leIncrement->text().toDouble();
 		number = (end-start)/dist + 1;
 	}
 
 	if (m_spreadsheet->rowCount()<number)
 		m_spreadsheet->setRowCount(number);
 
-	foreach(Column* col, m_columns) {
+	for (auto* col : m_columns) {
 		col->setSuppressDataChangedSignal(true);
 
 		if (m_spreadsheet->rowCount()>number)

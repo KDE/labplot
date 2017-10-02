@@ -29,7 +29,10 @@
 #include "MatrixDock.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/TemplateHandler.h"
+
 #include <QDir>
+#include <KConfig>
+#include <KConfigGroup>
 
  /*!
   \class MatrixDock
@@ -51,19 +54,19 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initial
 	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
 
 	//Validators
-	ui.kleXStart->setValidator( new QDoubleValidator(ui.kleXStart) );
-	ui.kleXEnd->setValidator( new QDoubleValidator(ui.kleXEnd) );
-	ui.kleYStart->setValidator( new QDoubleValidator(ui.kleYStart) );
-	ui.kleYEnd->setValidator( new QDoubleValidator(ui.kleYEnd) );
+	ui.leXStart->setValidator( new QDoubleValidator(ui.leXStart) );
+	ui.leXEnd->setValidator( new QDoubleValidator(ui.leXEnd) );
+	ui.leYStart->setValidator( new QDoubleValidator(ui.leYStart) );
+	ui.leYEnd->setValidator( new QDoubleValidator(ui.leYEnd) );
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
-	connect(ui.kleXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
-	connect(ui.kleXEnd, SIGNAL(returnPressed()), this, SLOT(xEndChanged()));
-	connect(ui.kleYStart, SIGNAL(returnPressed()), this, SLOT(yStartChanged()));
-	connect(ui.kleYEnd, SIGNAL(returnPressed()), this, SLOT(yEndChanged()));
+	connect(ui.leXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
+	connect(ui.leXEnd, SIGNAL(returnPressed()), this, SLOT(xEndChanged()));
+	connect(ui.leYStart, SIGNAL(returnPressed()), this, SLOT(yStartChanged()));
+	connect(ui.leYEnd, SIGNAL(returnPressed()), this, SLOT(yEndChanged()));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
@@ -140,7 +143,7 @@ void MatrixDock::xStartChanged() {
 	if (m_initializing)
 		return;
 
-	QString str = ui.kleXStart->text().trimmed();
+	QString str = ui.leXStart->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
 	foreach(Matrix* matrix, m_matrixList)
@@ -151,7 +154,7 @@ void MatrixDock::xEndChanged() {
 	if (m_initializing)
 		return;
 
-	QString str = ui.kleXEnd->text().trimmed();
+	QString str = ui.leXEnd->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
 	foreach(Matrix* matrix, m_matrixList)
@@ -162,7 +165,7 @@ void MatrixDock::yStartChanged() {
 	if (m_initializing)
 		return;
 
-	QString str = ui.kleYStart->text().trimmed();
+	QString str = ui.leYStart->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
 	foreach(Matrix* matrix, m_matrixList)
@@ -173,7 +176,7 @@ void MatrixDock::yEndChanged() {
 	if (m_initializing)
 		return;
 
-	QString str = ui.kleYEnd->text().trimmed();
+	QString str = ui.leYEnd->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
 	foreach(Matrix* matrix, m_matrixList)
@@ -255,25 +258,25 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 //mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
 	m_initializing = true;
-	ui.kleXStart->setText(QString::number(value));
+	ui.leXStart->setText(QString::number(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
 	m_initializing = true;
-	ui.kleXEnd->setText(QString::number(value));
+	ui.leXEnd->setText(QString::number(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
 	m_initializing = true;
-	ui.kleYStart->setText(QString::number(value));
+	ui.leYStart->setText(QString::number(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
 	m_initializing = true;
-	ui.kleYEnd->setText(QString::number(value));
+	ui.leYEnd->setText(QString::number(value));
 	m_initializing = false;
 }
 
@@ -306,10 +309,10 @@ void MatrixDock::load() {
 	ui.sbColumnCount->setValue(m_matrix->columnCount());
 
 	//mapping to the logical coordinates
-	ui.kleXStart->setText(QString::number(m_matrix->xStart()));
-	ui.kleXEnd->setText(QString::number(m_matrix->xEnd()));
-	ui.kleYStart->setText(QString::number(m_matrix->yStart()));
-	ui.kleYEnd->setText(QString::number(m_matrix->yEnd()));
+	ui.leXStart->setText(QString::number(m_matrix->xStart()));
+	ui.leXEnd->setText(QString::number(m_matrix->xEnd()));
+	ui.leYStart->setText(QString::number(m_matrix->yStart()));
+	ui.leYEnd->setText(QString::number(m_matrix->yEnd()));
 
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
@@ -348,10 +351,10 @@ void MatrixDock::loadConfig(KConfig& config){
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 
 	//mapping to the logical coordinates
-	ui.kleXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
-	ui.kleXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
-	ui.kleYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
-	ui.kleYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
+	ui.leXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
+	ui.leXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
+	ui.leYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
+	ui.leYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
 
 	//format
 	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))) );
@@ -370,10 +373,10 @@ void MatrixDock::saveConfigAsTemplate(KConfig& config){
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 
 	//mapping to the logical coordinates
-	group.writeEntry("XStart", ui.kleXStart->text().toInt());
-	group.writeEntry("XEnd", ui.kleXEnd->text().toInt());
-	group.writeEntry("YStart", ui.kleYStart->text().toInt());
-	group.writeEntry("YEnd", ui.kleYEnd->text().toInt());
+	group.writeEntry("XStart", ui.leXStart->text().toInt());
+	group.writeEntry("XEnd", ui.leXEnd->text().toInt());
+	group.writeEntry("YStart", ui.leYStart->text().toInt());
+	group.writeEntry("YEnd", ui.leYEnd->text().toInt());
 
 	//format
 	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));

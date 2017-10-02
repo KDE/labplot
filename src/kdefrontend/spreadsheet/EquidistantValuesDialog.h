@@ -34,22 +34,22 @@
 class Column;
 class Spreadsheet;
 
-class EquidistantValuesDialog : public KDialog{
-	Q_OBJECT
+class EquidistantValuesDialog : public KDialog {
+Q_OBJECT
 
-	public:
-		explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
-		void setColumns(QVector<Column*>);
+public:
+	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+	void setColumns(QVector<Column*>);
 
-	private:
-		Ui::EquidistantValuesWidget ui;
-		QVector<Column*> m_columns;
-		Spreadsheet* m_spreadsheet;
+private:
+	Ui::EquidistantValuesWidget ui;
+	QVector<Column*> m_columns;
+	Spreadsheet* m_spreadsheet;
 
-	private slots:
-		void generate();
-		void typeChanged(int index);
-		void checkValues();
+private slots:
+	void generate();
+	void typeChanged(int index);
+	void checkValues();
 };
 
 #endif

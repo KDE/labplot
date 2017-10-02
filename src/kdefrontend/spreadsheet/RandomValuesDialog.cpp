@@ -30,13 +30,15 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include <QStandardPaths>
-#include <KLocalizedString>
+
 #include <QDialogButtonBox>
+#include <QPushButton>
+#include <QStandardPaths>
+
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <QFileInfo>
 
 extern "C" {
 #include <stdio.h>
@@ -77,18 +79,18 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	ui.lFuncPic->setAutoFillBackground(true);
 	ui.lFuncPic->setPalette(p);
 
-	ui.kleParameter1->setClearButtonShown(true);
-	ui.kleParameter2->setClearButtonShown(true);
-	ui.kleParameter3->setClearButtonShown(true);
+	ui.leParameter1->setClearButtonEnabled(true);
+	ui.leParameter2->setClearButtonEnabled(true);
+	ui.leParameter3->setClearButtonEnabled(true);
 
-	ui.kleParameter1->setValidator( new QDoubleValidator(ui.kleParameter1) );
-	ui.kleParameter2->setValidator( new QDoubleValidator(ui.kleParameter2) );
-	ui.kleParameter3->setValidator( new QDoubleValidator(ui.kleParameter3) );
+	ui.leParameter1->setValidator( new QDoubleValidator(ui.leParameter1) );
+	ui.leParameter2->setValidator( new QDoubleValidator(ui.leParameter2) );
+	ui.leParameter3->setValidator( new QDoubleValidator(ui.leParameter3) );
 
 	connect( ui.cbDistribution, SIGNAL(currentIndexChanged(int)), SLOT(distributionChanged(int)) );
-	connect( ui.kleParameter1, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.kleParameter2, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.kleParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leParameter1, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leParameter2, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
+	connect( ui.leParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(generate()));
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -98,9 +100,9 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
 		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emmited above, call this slot directly here
-		ui.kleParameter1->setText(conf.readEntry("Parameter1"));
-		ui.kleParameter2->setText(conf.readEntry("Parameter2"));
-		ui.kleParameter3->setText(conf.readEntry("Parameter3"));
+		ui.leParameter1->setText(conf.readEntry("Parameter1"));
+		ui.leParameter2->setText(conf.readEntry("Parameter2"));
+		ui.leParameter3->setText(conf.readEntry("Parameter3"));
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	} else {
@@ -115,9 +117,9 @@ RandomValuesDialog::~RandomValuesDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	conf.writeEntry("Distribution", ui.cbDistribution->currentIndex());
-	conf.writeEntry("Parameter1", ui.kleParameter1->text());
-	conf.writeEntry("Parameter2", ui.kleParameter2->text());
-	conf.writeEntry("Parameter3", ui.kleParameter3->text());
+	conf.writeEntry("Parameter1", ui.leParameter1->text());
+	conf.writeEntry("Parameter2", ui.leParameter2->text());
+	conf.writeEntry("Parameter3", ui.leParameter3->text());
 
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
@@ -131,194 +133,194 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	//  default settings (used by most distributions)
 	ui.lParameter1->show();
-	ui.kleParameter1->show();
+	ui.leParameter1->show();
 	ui.lParameter2->show();
-	ui.kleParameter2->show();
+	ui.leParameter2->show();
 	ui.lParameter3->hide();
-	ui.kleParameter3->hide();
+	ui.leParameter3->hide();
 	ui.lFunc->setText("p(x) =");
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("a =");
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("0.0");
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential:
 		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
-		ui.kleParameter1->setText("1.0");
+		ui.leParameter1->setText("1.0");
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter3->setText("b =");
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("1.0");
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_cauchy_lorentz:
 		ui.lParameter1->setText(QString::fromUtf8("\u03b3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_rayleigh:
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.kleParameter1->setText("1.0");
+		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
 		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_landau:
 		ui.lParameter1->hide();
-		ui.kleParameter1->hide();
+		ui.leParameter1->hide();
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
 		ui.lParameter1->setText("c =");
 		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_levy_skew_alpha_stable:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("c ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
 		ui.lParameter3->setText(QString::fromUtf8("\u03b2 ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_flat:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gamma:
 		ui.lParameter1->setText(QString::fromUtf8("\u03b8 ="));
 		ui.lParameter2->setText("k =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_weibull:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText("k =");
 		ui.lParameter2->setText(QString::fromUtf8("\u03bb ="));
 		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_beta:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gumbel1:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03b2 ="));
 		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_gumbel2:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
 		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
-		ui.kleParameter3->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
+		ui.leParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_pareto:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_lognormal:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_chi_squared:
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		ui.lParameter1->setText("n =");
-		ui.kleParameter1->setText("1.0");
+		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_fdist:
 		ui.lParameter1->setText(QString::fromUtf8("\u03bd\u2081 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bd\u2082 ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_tdist:
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		ui.lParameter1->setText(QString::fromUtf8("\u03bd ="));
-		ui.kleParameter1->setText("1.0");
+		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_logistic:
 		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
 		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("0.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_poisson:
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
-		ui.kleParameter1->setText("1.0");
+		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_bernoulli:
 	case nsl_sf_stats_geometric:
 	case nsl_sf_stats_logarithmic:
 		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
+		ui.leParameter2->hide();
 		if (dist == nsl_sf_stats_bernoulli)
 			ui.lFunc->setText("");
 		else
 			ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
-		ui.kleParameter1->setText("0.5");
+		ui.leParameter1->setText("0.5");
 		break;
 	case nsl_sf_stats_binomial:
 	case nsl_sf_stats_negative_binomial:
@@ -326,19 +328,19 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
 		ui.lParameter1->setText("n =");
-		ui.kleParameter1->setText("0.5");
-		ui.kleParameter2->setText("100");
+		ui.leParameter1->setText("0.5");
+		ui.leParameter2->setText("100");
 		break;
 	case nsl_sf_stats_hypergeometric:
 		ui.lParameter3->show();
-		ui.kleParameter3->show();
+		ui.leParameter3->show();
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("n1 =");
 		ui.lParameter2->setText("n2 =");
 		ui.lParameter3->setText("t =");
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("2.0");
-		ui.kleParameter3->setText("3.0");
+		ui.leParameter1->setText("1.0");
+		ui.leParameter2->setText("2.0");
+		ui.leParameter3->setText("3.0");
 		break;
 	case nsl_sf_stats_maxwell_boltzmann:	// additional non-GSL distros
 	case nsl_sf_stats_sech:
@@ -352,17 +354,17 @@ void RandomValuesDialog::distributionChanged(int index) {
 }
 
 void RandomValuesDialog::checkValues() {
-	if (ui.kleParameter1->text().simplified().isEmpty()) {
+	if (ui.leParameter1->text().simplified().isEmpty()) {
         m_okButton->setEnabled(false);
 		return;
 	}
 
-	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
+	if (ui.leParameter2->isVisible() && ui.leParameter2->text().simplified().isEmpty()) {
         m_okButton->setEnabled(false);
 		return;
 	}
 
-	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
+	if (ui.leParameter3->isVisible() && ui.leParameter3->text().simplified().isEmpty()) {
         m_okButton->setEnabled(false);
 		return;
 	}
@@ -395,8 +397,8 @@ void RandomValuesDialog::generate() {
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double sigma = ui.kleParameter2->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double sigma = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gaussian(r, sigma) + mu;
@@ -405,9 +407,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_gaussian_tail: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double sigma = ui.kleParameter2->text().toDouble();
-		double a = ui.kleParameter3->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double sigma = ui.leParameter2->text().toDouble();
+		double a = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gaussian_tail(r, a, sigma) + mu;
@@ -416,8 +418,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_exponential: {
-		double l = ui.kleParameter1->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double l = ui.leParameter1->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			//GSL uses the inverse for exp. distrib.
 			for (int i = 0; i < rows; ++i)
@@ -427,8 +429,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		double s = ui.kleParameter1->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double s = ui.leParameter1->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_laplace(r, s) + mu;
@@ -437,9 +439,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_exponential_power: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double a = ui.kleParameter2->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double a = ui.leParameter2->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_exppow(r, a, b) + mu;
@@ -448,8 +450,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_cauchy_lorentz: {
-		double gamma = ui.kleParameter1->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double gamma = ui.leParameter1->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_cauchy(r, gamma) + mu;
@@ -458,7 +460,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_rayleigh: {
-		double s = ui.kleParameter1->text().toDouble();
+		double s = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_rayleigh(r, s);
@@ -467,8 +469,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_rayleigh_tail: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double sigma = ui.kleParameter2->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double sigma = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_rayleigh_tail(r, mu, sigma);
@@ -484,8 +486,8 @@ void RandomValuesDialog::generate() {
 		}
 		break;
 	case nsl_sf_stats_levy_alpha_stable: {
-		double c = ui.kleParameter1->text().toDouble();
-		double alpha = ui.kleParameter2->text().toDouble();
+		double c = ui.leParameter1->text().toDouble();
+		double alpha = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_levy(r, c, alpha);
@@ -494,9 +496,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_levy_skew_alpha_stable: {
-		double c = ui.kleParameter1->text().toDouble();
-		double alpha = ui.kleParameter2->text().toDouble();
-		double beta = ui.kleParameter3->text().toDouble();
+		double c = ui.leParameter1->text().toDouble();
+		double alpha = ui.leParameter2->text().toDouble();
+		double beta = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_levy_skew(r, c, alpha, beta);
@@ -505,8 +507,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_gamma: {
-		double a = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
+		double a = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gamma(r, a, b);
@@ -515,8 +517,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_flat: {
-		double a = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
+		double a = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_flat(r, a, b);
@@ -525,8 +527,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_lognormal: {
-		double s = ui.kleParameter1->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double s = ui.leParameter1->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_lognormal(r, mu, s);
@@ -535,7 +537,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_chi_squared: {
-		double n = ui.kleParameter1->text().toDouble();
+		double n = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_chisq(r, n);
@@ -544,8 +546,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_fdist: {
-		double nu1 = ui.kleParameter1->text().toDouble();
-		double nu2 = ui.kleParameter2->text().toDouble();
+		double nu1 = ui.leParameter1->text().toDouble();
+		double nu2 = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_fdist(r, nu1, nu2);
@@ -554,7 +556,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_tdist: {
-		double nu = ui.kleParameter1->text().toDouble();
+		double nu = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_tdist(r, nu);
@@ -563,8 +565,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_beta: {
-		double a = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
+		double a = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_beta(r, a, b);
@@ -573,8 +575,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_logistic: {
-		double s = ui.kleParameter1->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double s = ui.leParameter1->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_logistic(r, s) + mu;
@@ -583,8 +585,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_pareto: {
-		double a = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
+		double a = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_pareto(r, a, b);
@@ -593,9 +595,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_weibull: {
-		double k = ui.kleParameter1->text().toDouble();
-		double l = ui.kleParameter2->text().toDouble();
-		double mu = ui.kleParameter2->text().toDouble();
+		double k = ui.leParameter1->text().toDouble();
+		double l = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_weibull(r, l, k) + mu;
@@ -604,9 +606,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_gumbel1: {
-		double s = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
-		double mu = ui.kleParameter3->text().toDouble();
+		double s = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gumbel1(r, 1./s, b) + mu;
@@ -615,9 +617,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_gumbel2: {
-		double a = ui.kleParameter1->text().toDouble();
-		double b = ui.kleParameter2->text().toDouble();
-		double mu = ui.kleParameter3->text().toDouble();
+		double a = ui.leParameter1->text().toDouble();
+		double b = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gumbel2(r, a, b) + mu;
@@ -626,7 +628,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_poisson: {
-		double l = ui.kleParameter1->text().toDouble();
+		double l = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_poisson(r, l);
@@ -635,7 +637,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_bernoulli: {
-		double p = ui.kleParameter1->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_bernoulli(r, p);
@@ -644,8 +646,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_binomial: {
-		double p = ui.kleParameter1->text().toDouble();
-		double n = ui.kleParameter2->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
+		double n = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_binomial(r, p, n);
@@ -654,8 +656,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_negative_binomial: {
-		double p = ui.kleParameter1->text().toDouble();
-		double n = ui.kleParameter2->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
+		double n = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_negative_binomial(r, p, n);
@@ -664,8 +666,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_pascal: {
-		double p = ui.kleParameter1->text().toDouble();
-		double n = ui.kleParameter2->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
+		double n = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_pascal(r, p, n);
@@ -674,7 +676,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_geometric: {
-		double p = ui.kleParameter1->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_geometric(r, p);
@@ -683,9 +685,9 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_hypergeometric: {
-		double n1 = ui.kleParameter1->text().toDouble();
-		double n2 = ui.kleParameter2->text().toDouble();
-		double t = ui.kleParameter3->text().toDouble();
+		double n1 = ui.leParameter1->text().toDouble();
+		double n2 = ui.leParameter2->text().toDouble();
+		double t = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_hypergeometric(r, n1, n2, t);
@@ -694,7 +696,7 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_logarithmic: {
-		double p = ui.kleParameter1->text().toDouble();
+		double p = ui.leParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_logarithmic(r, p);

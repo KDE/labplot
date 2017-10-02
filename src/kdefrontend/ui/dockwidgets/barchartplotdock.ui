@@ -48,8 +48,8 @@
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="KLineEdit" name="leName">
-         <property name="showClearButton" stdset="0">
+        <widget class="QLineEdit" name="leName">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -62,8 +62,8 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="KLineEdit" name="leComment">
-         <property name="showClearButton" stdset="0">
+        <widget class="QLineEdit" name="leComment">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -240,11 +240,11 @@
         </spacer>
        </item>
        <item row="11" column="2">
-        <widget class="KLineEdit" name="kleXMin">
+        <widget class="QLineEdit" name="leXMin">
          <property name="placeholderText">
           <string>Auto</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -257,11 +257,11 @@
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="KLineEdit" name="kleXMax">
+        <widget class="QLineEdit" name="leXMax">
          <property name="placeholderText">
           <string>Auto</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -313,11 +313,11 @@
         </widget>
        </item>
        <item row="17" column="2">
-        <widget class="KLineEdit" name="kleYMin">
+        <widget class="QLineEdit" name="leYMin">
          <property name="placeholderText">
           <string>Auto</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -343,11 +343,11 @@
         </spacer>
        </item>
        <item row="18" column="2">
-        <widget class="KLineEdit" name="kleYMax">
+        <widget class="QLineEdit" name="leYMax">
          <property name="placeholderText">
           <string>Auto</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -518,7 +518,7 @@
         </widget>
        </item>
        <item row="2" column="3" colspan="3">
-        <widget class="KLineEdit" name="leXBreakStart"/>
+        <widget class="QLineEdit" name="leXBreakStart"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lXBreakEnd">
@@ -528,7 +528,7 @@
         </widget>
        </item>
        <item row="3" column="3" colspan="3">
-        <widget class="KLineEdit" name="leXBreakEnd"/>
+        <widget class="QLineEdit" name="leXBreakEnd"/>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="lXBreakPosition">
@@ -677,7 +677,7 @@
         </widget>
        </item>
        <item row="9" column="3" colspan="3">
-        <widget class="KLineEdit" name="leYBreakStart"/>
+        <widget class="QLineEdit" name="leYBreakStart"/>
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="lYBreakEnd">
@@ -687,7 +687,7 @@
         </widget>
        </item>
        <item row="10" column="3" colspan="3">
-        <widget class="KLineEdit" name="leYBreakEnd"/>
+        <widget class="QLineEdit" name="leYBreakEnd"/>
        </item>
        <item row="11" column="0" colspan="2">
         <widget class="QLabel" name="lYBreakPosition">
@@ -803,11 +803,11 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="KLineEdit" name="kleBackgroundFileName">
+        <widget class="QLineEdit" name="leBackgroundFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>

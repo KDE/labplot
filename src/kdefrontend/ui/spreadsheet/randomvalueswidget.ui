@@ -35,13 +35,13 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="KLineEdit" name="kleParameter1"/>
+       <widget class="QLineEdit" name="leParameter1"/>
       </item>
       <item row="3" column="2">
-       <widget class="KLineEdit" name="kleParameter2"/>
+       <widget class="QLineEdit" name="leParameter2"/>
       </item>
       <item row="4" column="2">
-       <widget class="KLineEdit" name="kleParameter3">
+       <widget class="QLineEdit" name="leParameter3">
         <property name="text">
          <string/>
         </property>
@@ -129,13 +129,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

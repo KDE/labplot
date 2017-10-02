@@ -28,33 +28,31 @@
 #ifndef RANDOMVALUESDIALOG_H
 #define RANDOMVALUESDIALOG_H
 
-#include "ui_randomvalueswidget.h"
-#include <QMap>
 #include <QDialog>
-#include <QPushButton>
+#include "ui_randomvalueswidget.h"
 
 class Column;
 class Spreadsheet;
+class QPushButton;
 
-class RandomValuesDialog : public QDialog{
-	Q_OBJECT
+class RandomValuesDialog : public QDialog {
+Q_OBJECT
 
-	public:
-		explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
-		~RandomValuesDialog();
-		void setColumns(QVector<Column*>);
+public:
+	explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+	~RandomValuesDialog();
+	void setColumns(QVector<Column*>);
 
-	private:
-		Ui::RandomValuesWidget ui;
-		QVector<Column*> m_columns;
-		Spreadsheet* m_spreadsheet;
-        QPushButton* m_okButton;
-//		QMap<int, QString> m_formulaPixs;
+private:
+	Ui::RandomValuesWidget ui;
+	QVector<Column*> m_columns;
+	Spreadsheet* m_spreadsheet;
+	QPushButton* m_okButton;
 
-	private slots:
-		void generate();
-		void distributionChanged(int index);
-		void checkValues();
+private slots:
+	void generate();
+	void distributionChanged(int index);
+	void checkValues();
 };
 
 #endif
