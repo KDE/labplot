@@ -33,15 +33,11 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "ui_histogramdock.h"
 #include "ui_histogramdockgeneraltab.h"
-#include <QList>
-#include <KConfig>
-#include <KLocalizedString>
 
 class Histogram;
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
-class KUrlCompletion;
 
 class HistogramDock : public QWidget {
 	Q_OBJECT
@@ -49,12 +45,12 @@ class HistogramDock : public QWidget {
 public:
 	explicit HistogramDock(QWidget*);
 	~HistogramDock();
-	
+
 	void setCurves(QList<Histogram*>);
 	virtual void setupGeneral();
+
 private:
 	Ui::HistogramDockGeneralTab uiGeneralTab;
-	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
 	QString bin;
@@ -71,11 +67,11 @@ private:
 	void loadConfig(KConfig&);
 
 protected:
-	bool m_initializing;
 	Ui::HistogramDock ui;
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve;
 	AspectTreeModel* m_aspectTreeModel;
+	bool m_initializing;
 
 	void initTabs();
 	virtual void setModel();

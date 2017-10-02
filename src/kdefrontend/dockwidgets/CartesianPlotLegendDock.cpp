@@ -33,13 +33,15 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <QCompleter>
 #include <QDir>
+#include <QDirModel>
 #include <QFileDialog>
 #include <QImageReader>
-#include <KUrlCompletion>
-#include <KLocalizedString>
-#include <cmath>
 
+#include <KLocalizedString>
+
+#include <cmath>
 
 /*!
   \class CartesianPlotLegendDock
@@ -47,27 +49,26 @@
 
   \ingroup kdefrontend
 */
-CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
-	m_legend(0),
-	labelWidget(0),
-	m_initializing(false),
-	m_completion(new KUrlCompletion()) {
+CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(parent),
+	m_legend(nullptr),
+	labelWidget(nullptr),
+	m_initializing(false) {
 
 	ui.setupUi(this);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	labelWidget=new LabelWidget(ui.tabTitle);
+	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
 
 	//"Background"-tab
-	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
-
-	ui.kleBackgroundFileName->setCompletionObject(m_completion);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui.leBackgroundFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i) {
@@ -101,9 +102,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
+	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
@@ -132,10 +133,6 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
-}
-
-CartesianPlotLegendDock::~CartesianPlotLegendDock() {
-	delete m_completion;
 }
 
 void CartesianPlotLegendDock::init() {
@@ -400,7 +397,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.cbBackgroundBrushStyle->hide();
 
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 
 		ui.lBackgroundFirstColor->show();
@@ -425,7 +422,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->hide();
 		ui.cbBackgroundBrushStyle->hide();
 		ui.lBackgroundFileName->show();
-		ui.kleBackgroundFileName->show();
+		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
 
 		ui.lBackgroundFirstColor->hide();
@@ -441,7 +438,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->show();
 		ui.cbBackgroundBrushStyle->show();
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 
 		ui.lBackgroundFirstColor->show();
@@ -537,7 +534,7 @@ void CartesianPlotLegendDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-    ui.kleBackgroundFileName->setText( path );
+    ui.leBackgroundFileName->setText( path );
 
 	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(path);
@@ -547,11 +544,11 @@ void CartesianPlotLegendDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.kleBackgroundFileName->text();
+	QString fileName = ui.leBackgroundFileName->text();
 	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(fileName);
@@ -787,7 +784,7 @@ void CartesianPlotLegendDock::legendBackgroundSecondColorChanged(QColor& color) 
 
 void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename) {
 	m_initializing = true;
-	ui.kleBackgroundFileName->setText(filename);
+	ui.leBackgroundFileName->setText(filename);
 	m_initializing = false;
 }
 
@@ -894,16 +891,16 @@ void CartesianPlotLegendDock::load() {
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_legend->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_legend->backgroundImageStyle() );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_legend->backgroundBrushStyle() );
-	ui.kleBackgroundFileName->setText( m_legend->backgroundFileName() );
+	ui.leBackgroundFileName->setText( m_legend->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( m_legend->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_legend->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_legend->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
 	if (!m_legend->backgroundFileName().isEmpty() && !QFile::exists(m_legend->backgroundFileName()))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	//Border
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
@@ -974,7 +971,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_legend->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_legend->backgroundImageStyle()) );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_legend->backgroundBrushStyle()) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_legend->backgroundFileName()) );
+	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_legend->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_legend->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_legend->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0) );
@@ -1027,7 +1024,7 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
 	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
+	group.writeEntry("BackgroundFileName", ui.leBackgroundFileName->text());
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);

@@ -278,7 +278,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KLineEdit" name="leValuesPrefix">
+        <widget class="QLineEdit" name="leValuesPrefix">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -295,7 +295,7 @@
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="KLineEdit" name="leValuesSuffix">
+        <widget class="QLineEdit" name="leValuesSuffix">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -409,11 +409,11 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="KLineEdit" name="kleFillingFileName">
+        <widget class="QLineEdit" name="leFillingFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="showClearButton" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -553,11 +553,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

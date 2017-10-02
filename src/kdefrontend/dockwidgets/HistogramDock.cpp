@@ -38,12 +38,15 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include <QPainter>
+#include <QCompleter>
 #include <QDir>
+#include <QDirModel>
 #include <QFileDialog>
-#include <KUrlCompletion>
+#include <QPainter>
+
 #include <KConfigGroup>
-#include <QDebug>
+#include <KConfig>
+#include <KLocalizedString>
 
 /*!
   \class HistogramDock
@@ -54,12 +57,11 @@
 
   \ingroup kdefrontend
 */
-
-HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
-	m_completion(new KUrlCompletion()),
-	cbXColumn(0),
-	m_curve(0),
-	m_aspectTreeModel(0) {
+HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
+	cbXColumn(nullptr),
+	m_curve(nullptr),
+	m_aspectTreeModel(nullptr),
+	m_initializing(false) {
 
 	ui.setupUi(this);
 
@@ -70,10 +72,11 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	ui.kleFillingFileName->setClearButtonShown(true);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	ui.kleFillingFileName->setCompletionObject(m_completion);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui.leFillingFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
@@ -108,8 +111,8 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
 	connect( ui.cbFillingBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingBrushStyleChanged(int)) );
 	connect( ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.kleFillingFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.kleFillingFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.leFillingFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leFillingFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbFillingFirstColor, SIGNAL(changed(QColor)), this, SLOT(fillingFirstColorChanged(QColor)) );
 	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
 	connect( ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)) );
@@ -126,13 +129,10 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	retranslateUi();
 	init();
 }
-HistogramDock::~HistogramDock()
-{
+
+HistogramDock::~HistogramDock() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
-
-	delete m_completion;
-
 }
 
 //TODO: very similiar to ColumnDock
@@ -664,7 +664,7 @@ void HistogramDock::curveFillingSecondColorChanged(QColor& color){
 }
 void HistogramDock::curveFillingFileNameChanged(QString& filename){
 	m_initializing = true;
-	ui.kleFillingFileName->setText(filename);
+	ui.leFillingFileName->setText(filename);
 	m_initializing = false;
 }
 void HistogramDock::curveFillingOpacityChanged(float opacity){
@@ -720,7 +720,7 @@ void HistogramDock::fillingPositionChanged(int index){
 	ui.cbFillingImageStyle->setEnabled(b);
 	ui.kcbFillingFirstColor->setEnabled(b);
 	ui.kcbFillingSecondColor->setEnabled(b);
-	ui.kleFillingFileName->setEnabled(b);
+	ui.leFillingFileName->setEnabled(b);
 	ui.bFillingOpen->setEnabled(b);
 	ui.sbFillingOpacity->setEnabled(b);
 
@@ -743,7 +743,7 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.cbFillingBrushStyle->hide();
 
 		ui.lFillingFileName->hide();
-		ui.kleFillingFileName->hide();
+		ui.leFillingFileName->hide();
 		ui.bFillingOpen->hide();
 
 		ui.lFillingFirstColor->show();
@@ -768,7 +768,7 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.lFillingBrushStyle->hide();
 		ui.cbFillingBrushStyle->hide();
 		ui.lFillingFileName->show();
-		ui.kleFillingFileName->show();
+		ui.leFillingFileName->show();
 		ui.bFillingOpen->show();
 
 		ui.lFillingFirstColor->hide();
@@ -784,7 +784,7 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.lFillingBrushStyle->show();
 		ui.cbFillingBrushStyle->show();
 		ui.lFillingFileName->hide();
-		ui.kleFillingFileName->hide();
+		ui.leFillingFileName->hide();
 		ui.bFillingOpen->hide();
 
 		ui.lFillingFirstColor->show();
@@ -873,7 +873,7 @@ void HistogramDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-	ui.kleFillingFileName->setText( path );
+	ui.leFillingFileName->setText( path );
 
 	for (auto* curve: m_curvesList)
 		curve->setFillingFileName(path);
@@ -883,7 +883,7 @@ void HistogramDock::fileNameChanged(){
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.kleFillingFileName->text();
+	QString fileName = ui.leFillingFileName->text();
 	for (auto* curve: m_curvesList)
 		curve->setFillingFileName(fileName);
 }
@@ -923,7 +923,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.cbFillingColorStyle->setCurrentIndex( group.readEntry("FillingColorStyle", (int) m_curve->fillingColorStyle()) );
 	ui.cbFillingImageStyle->setCurrentIndex( group.readEntry("FillingImageStyle", (int) m_curve->fillingImageStyle()) );
 	ui.cbFillingBrushStyle->setCurrentIndex( group.readEntry("FillingBrushStyle", (int) m_curve->fillingBrushStyle()) );
-	ui.kleFillingFileName->setText( group.readEntry("FillingFileName", m_curve->fillingFileName()) );
+	ui.leFillingFileName->setText( group.readEntry("FillingFileName", m_curve->fillingFileName()) );
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
@@ -1055,7 +1055,7 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
 	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());
 	group.writeEntry("FillingBrushStyle", ui.cbFillingBrushStyle->currentIndex());
-	group.writeEntry("FillingFileName", ui.kleFillingFileName->text());
+	group.writeEntry("FillingFileName", ui.leFillingFileName->text());
 	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
 	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
 	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);

@@ -45,8 +45,6 @@
 #include <QFileDialog>
 #include <QImageReader>
 #include <QButtonGroup>
-#include <KUrlCompletion>
-#include <QAbstractButton>
 #include <QIntValidator>
 
 #include <cmath>

@@ -35,8 +35,6 @@ namespace Ui {
 	class ExportSpreadsheetWidget;
 }
 
-class KUrlCompletion;
-
 class ExportSpreadsheetDialog : public KDialog {
 	Q_OBJECT
 

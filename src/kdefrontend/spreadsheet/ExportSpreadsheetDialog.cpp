@@ -29,6 +29,8 @@
 #include "ExportSpreadsheetDialog.h"
 #include "ui_exportspreadsheetwidget.h"
 
+#include <QCompleter>
+#include <QDirModel>
 #include <QFileDialog>
 #include <QStandardItemModel>
 
@@ -37,10 +39,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <QStandardItemModel>
-#include <QLabel>
-#include <QComboBox>
-#include <KUrlCompletion>
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -57,9 +55,10 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui->setupUi(mainWidget);
 
 	ui->gbOptions->hide();
-	KUrlCompletion* urlCompletion = new KUrlCompletion;
-	ui->kleFileName->setCompletionObject(urlCompletion);
-	ui->kleFileName->setAutoDeleteCompletionObject(true);
+
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui->leFileName->setCompleter(completer);
 
 	ui->cbFormat->addItem("ASCII");
 	ui->cbFormat->addItem("Binary");
@@ -88,7 +87,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
 	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui->kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
+	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(ui->cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 	connect(ui->cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
@@ -142,7 +141,7 @@ void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
-	ui->kleFileName->setText(dir + QDir::separator() +  name);
+	ui->leFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui->cbFormat->currentIndex());
 }
 
@@ -185,7 +184,7 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 }
 
 QString ExportSpreadsheetDialog::path() const {
-	return ui->kleFileName->text();
+	return ui->leFileName->text();
 }
 
 int ExportSpreadsheetDialog::exportToFits() const {
@@ -253,7 +252,7 @@ void ExportSpreadsheetDialog::setExportToImage(bool possible) {
 //SLOTS
 void ExportSpreadsheetDialog::okClicked() {
 	if (format() != FITS)
-		if ( QFile::exists(ui->kleFileName->text()) ) {
+		if ( QFile::exists(ui->leFileName->text()) ) {
 			int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
 			if (r==KMessageBox::No)
 				return;
@@ -263,10 +262,10 @@ void ExportSpreadsheetDialog::okClicked() {
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
 
-	QString path = ui->kleFileName->text();
+	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		ui->kleFileName->setText(path);
+		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
 			QString newDir = path.left(pos);
@@ -299,7 +298,7 @@ void ExportSpreadsheetDialog::selectFile() {
 	QString dir = conf.readEntry("LastDir", "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
 	if (!path.isEmpty()) {
-		ui->kleFileName->setText(path);
+		ui->leFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
@@ -316,7 +315,7 @@ void ExportSpreadsheetDialog::selectFile() {
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
 	extensions << ".txt" << ".bin" << ".tex" << ".fits";
-	QString path = ui->kleFileName->text();
+	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != 1) {
 		if (i==-1)
@@ -420,7 +419,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	}
 
 	setFormat(static_cast<Format>(index));
-	ui->kleFileName->setText(path);
+	ui->leFileName->setText(path);
 }
 
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {

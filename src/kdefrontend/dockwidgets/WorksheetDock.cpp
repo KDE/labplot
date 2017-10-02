@@ -32,12 +32,15 @@
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/TemplateHandler.h"
 
-#include <QPrinter>
+#include <QCompleter>
+#include <QDirModel>
 #include <QFileDialog>
 #include <QImageReader>
-#include <KUrlCompletion>
-#include <KLocalizedString>
+#include <QPrinter>
+
+#include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <cmath>
 
@@ -83,15 +86,16 @@ const float qt_paperSizes[numOfPaperSizes][2] = {
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), m_completion(new KUrlCompletion()) {
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
 	ui.setupUi(this);
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	ui.kleBackgroundFileName->setCompletionObject(m_completion);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui.leBackgroundFileName->setCompleter(completer);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i) {
@@ -120,8 +124,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
@@ -155,10 +159,6 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	ui.verticalLayout->addWidget(frame);
 
 	this->retranslateUi();
-}
-
-WorksheetDock::~WorksheetDock() {
-	delete m_completion;
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
@@ -444,7 +444,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.cbBackgroundBrushStyle->hide();
 
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 
 		ui.lBackgroundFirstColor->show();
@@ -474,7 +474,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->hide();
 		ui.cbBackgroundBrushStyle->hide();
 		ui.lBackgroundFileName->show();
-		ui.kleBackgroundFileName->show();
+		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
 	} else if (type == PlotArea::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
@@ -490,7 +490,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundBrushStyle->show();
 		ui.cbBackgroundBrushStyle->show();
 		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		ui.leBackgroundFileName->hide();
 		ui.bOpen->hide();
 	}
 
@@ -659,7 +659,7 @@ void WorksheetDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-	ui.kleBackgroundFileName->setText( path );
+	ui.leBackgroundFileName->setText( path );
 
 	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFileName(path);
@@ -669,11 +669,11 @@ void WorksheetDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.kleBackgroundFileName->text();
+	QString fileName = ui.leBackgroundFileName->text();
 	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFileName(fileName);
@@ -746,7 +746,7 @@ void WorksheetDock::worksheetBackgroundSecondColorChanged(const QColor& color) {
 
 void WorksheetDock::worksheetBackgroundFileNameChanged(const QString& name) {
 	m_initializing = true;
-	ui.kleBackgroundFileName->setText(name);
+	ui.leBackgroundFileName->setText(name);
 	m_initializing = false;
 }
 
@@ -846,16 +846,16 @@ void WorksheetDock::load() {
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_worksheet->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_worksheet->backgroundImageStyle() );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_worksheet->backgroundBrushStyle() );
-	ui.kleBackgroundFileName->setText( m_worksheet->backgroundFileName() );
+	ui.leBackgroundFileName->setText( m_worksheet->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( m_worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_worksheet->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_worksheet->backgroundOpacity()*100) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
 	if (!m_worksheet->backgroundFileName().isEmpty() && !QFile::exists(m_worksheet->backgroundFileName()))
-		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
 	else
-		ui.kleBackgroundFileName->setStyleSheet("");
+		ui.leBackgroundFileName->setStyleSheet("");
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
@@ -902,7 +902,7 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_worksheet->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_worksheet->backgroundImageStyle()) );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_worksheet->backgroundBrushStyle()) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
+	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
@@ -933,7 +933,7 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
 	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
+	group.writeEntry("BackgroundFileName", ui.leBackgroundFileName->text());
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);

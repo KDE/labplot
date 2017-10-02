@@ -41,6 +41,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+#include <QStandardPaths>
 
 #include <cfloat>	// DBL_MAX
 #include <cmath>	// fabs()

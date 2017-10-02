@@ -36,14 +36,11 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
-#include <KConfig>
-#include <KLocalizedString>
 
 class XYCurve;
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
-class KUrlCompletion;
 
 class XYCurveDock : public QWidget {
 	Q_OBJECT
@@ -64,7 +61,6 @@ private:
 	void loadConfig(KConfig&);
 
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
-	KUrlCompletion* m_completion;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
