@@ -30,8 +30,6 @@
 #define EXPORTWORKSHEETDIALOG_H
 
 #include <KDialog>
-#include <KUrlCompletion>
-
 #include "commonfrontend/worksheet/WorksheetView.h"
 
 namespace Ui {
@@ -53,7 +51,6 @@ public:
 	int exportResolution() const;
 
 private:
-	QWidget* m_mainWidget;
 	Ui::ExportWorksheetWidget* ui;
 	bool m_showOptions;
 

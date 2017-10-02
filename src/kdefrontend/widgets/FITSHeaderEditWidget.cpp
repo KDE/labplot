@@ -39,7 +39,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QPushButton>
 
 #include <KMessageBox>
-#include <KUrlCompletion>
 
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords
@@ -47,7 +46,9 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
  * \ingroup kdefrontend/widgets
  */
 FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
-	m_fitsFilter(new FITSFilter()), m_initializingTable(false) {
+	ui(new Ui::FITSHeaderEditWidget()),
+	m_fitsFilter(new FITSFilter()),
+	m_initializingTable(false) {
 
 	ui->setupUi(this);
 	initActions();

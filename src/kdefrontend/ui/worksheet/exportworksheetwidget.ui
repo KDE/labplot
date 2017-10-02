@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>322</width>
-    <height>238</height>
+    <width>334</width>
+    <height>338</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -35,11 +35,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="kleFileName">
+       <widget class="QLineEdit" name="leFileName">
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
-        <property name="showClearButton" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -133,11 +133,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

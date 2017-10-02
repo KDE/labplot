@@ -61,8 +61,8 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KLineEdit" name="leHost">
-        <property name="showClearButton" stdset="0">
+       <widget class="QLineEdit" name="leHost">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -95,8 +95,8 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="KLineEdit" name="kleDatabase">
-        <property name="showClearButton" stdset="0">
+       <widget class="QLineEdit" name="leDatabase">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -145,7 +145,7 @@
       </item>
       <item row="0" column="1">
        <widget class="KLineEdit" name="leUserName">
-        <property name="showClearButton" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -158,11 +158,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="lePassword">
+       <widget class="QLineEdit" name="lePassword">
         <property name="text">
          <string/>
         </property>
-        <property name="showClearButton" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -237,13 +237,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -43,23 +43,24 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 
-#include <QTableWidget>
-#include <QUdpSocket>
-#include <QTcpSocket>
-#include <QLocalSocket>
-#include <QInputDialog>
+#include <QCompleter>
 #include <QDir>
+#include <QDirModel>
 #include <QFileDialog>
-#include <QProcess>
+#include <QImageReader>
+#include <QInputDialog>
 #include <QIntValidator>
-#include <KUrlCompletion>
+#include <QLocalSocket>
+#include <QProcess>
+#include <QStandardItemModel>
+#include <QTableWidget>
+#include <QTcpSocket>
+#include <QTimer>
+#include <QUdpSocket>
+
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfigGroup>
-#include <QTimer>
-#include <QStandardItemModel>
-#include <QImageReader>
-#include <KUrlCompletion>
 
 /*!
    \class ImportFileWidget
@@ -71,8 +72,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_liveDataSource(true) {
 	ui.setupUi(this);
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui.leFileName->setCompleter(completer);
 
 	ui.cbFileType->addItems(LiveDataSource::fileTypes());
 	QStringList filterItems;
@@ -144,7 +146,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
-	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
@@ -190,9 +192,9 @@ void ImportFileWidget::loadSettings() {
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 	filterChanged(ui.cbFilter->currentIndex());	// needed if filter is not changed
 	if (m_fileName.isEmpty())
-		ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
+		ui.leFileName->setText(conf.readEntry("LastImportedFile", ""));
 	else
-		ui.kleFileName->setText(m_fileName);
+		ui.leFileName->setText(m_fileName);
 
 	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
@@ -218,7 +220,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// general settings
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
-	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
+	conf.writeEntry("LastImportedFile", ui.leFileName->text());
 
 	//live data related settings
 	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
@@ -283,10 +285,10 @@ QString ImportFileWidget::fileName() const {
 	if (currentFileType() == LiveDataSource::FITS) {
 		QString extensionName = m_fitsOptionsWidget->currentExtensionName();
 		if (!extensionName.isEmpty())
-			return ui.kleFileName->text() + QLatin1String("[") + extensionName + QLatin1String("]");
+			return ui.leFileName->text() + QLatin1String("[") + extensionName + QLatin1String("]");
 	}
 
-	return ui.kleFileName->text();
+	return ui.leFileName->text();
 }
 
 QString ImportFileWidget::host() const {
@@ -314,7 +316,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadType->currentIndex());
 
-	source->setComment( ui.kleFileName->text() );
+	source->setComment( ui.leFileName->text() );
 	source->setFileType(fileType);
 	source->setFilter(this->currentFileFilter());
 
@@ -338,11 +340,11 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		source->setFileName( ui.kleFileName->text() );
+		source->setFileName( ui.leFileName->text() );
 		source->setFileLinked( ui.chbLinkFile->isChecked() );
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
-		source->setLocalSocketName(ui.kleFileName->text());
+		source->setLocalSocketName(ui.leFileName->text());
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -479,12 +481,12 @@ void ImportFileWidget::selectFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	ui.kleFileName->setText(path);
+	ui.leFileName->setText(path);
 
 	//TODO: decide whether the selection of several files should be possible
 // 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
 // 	if (! filelist.isEmpty() )
-// 		ui.kleFileName->setText(filelist.join(";"));
+// 		ui.leFileName->setText(filelist.join(";"));
 }
 
 /************** SLOTS **************************************************************/
@@ -504,9 +506,9 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
-		ui.kleFileName->setStyleSheet("");
+		ui.leFileName->setStyleSheet("");
 	else
-		ui.kleFileName->setStyleSheet("QLineEdit{background:red;}");
+		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
 
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
@@ -533,7 +535,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//check, if we can guess the file type by content
 		QProcess* proc = new QProcess(this);
 		QStringList args;
-		args << "-b" << ui.kleFileName->text();
+		args << "-b" << ui.leFileName->text();
 		proc->start("file", args);
 		if (proc->waitForReadyRead(1000) == false) {
 			QDEBUG("ERROR: reading file type of file" << fileName);
@@ -687,7 +689,7 @@ const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	shows the dialog with the information about the file(s) to be imported.
 */
 void ImportFileWidget::fileInfoDialog() {
-	QStringList files = ui.kleFileName->text().split(';');
+	QStringList files = ui.leFileName->text().split(';');
 	FileInfoDialog* dlg = new FileInfoDialog(this);
 	dlg->setFiles(files);
 	dlg->exec();
@@ -721,7 +723,7 @@ void ImportFileWidget::refreshPreview() {
 	DEBUG("refreshPreview()");
 	WAIT_CURSOR;
 
-	QString fileName = ui.kleFileName->text();
+	QString fileName = ui.leFileName->text();
 #ifndef HAVE_WINDOWS
 	if (fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -960,7 +962,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	switch (type) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
-		ui.kleFileName->show();
+		ui.leFileName->show();
 		ui.bFileInfo->show();
 		ui.bOpen->show();
 
@@ -975,7 +977,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
-		ui.kleFileName->show();
+		ui.leFileName->show();
 		ui.bOpen->show();
 
 		ui.bFileInfo->hide();
@@ -1001,7 +1003,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 
 		ui.lFileName->hide();
-		ui.kleFileName->hide();
+		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		break;
@@ -1016,7 +1018,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.lPort->hide();
 		ui.lFileName->hide();
-		ui.kleFileName->hide();
+		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		break;

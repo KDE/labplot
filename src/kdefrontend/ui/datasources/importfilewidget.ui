@@ -182,11 +182,11 @@
        </spacer>
       </item>
       <item row="1" column="2">
-       <widget class="KLineEdit" name="kleFileName">
+       <widget class="QLineEdit" name="leFileName">
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
-        <property name="showClearButton" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -673,11 +673,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

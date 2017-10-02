@@ -64,6 +64,7 @@
 	\ingroup kdefrontend
  */
 PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
+	ui(new Ui::PlotDataWidget()),
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
@@ -74,7 +75,6 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
 	QWidget* mainWidget = new QWidget(this);
-	ui = new Ui::PlotDataWidget();
 	ui->setupUi(mainWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

@@ -76,7 +76,7 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& con
 	connect( ui.cbDriver, SIGNAL(currentIndexChanged(int)), SLOT(driverChanged()) );
 
 	connect( ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(nameChanged(const QString&)) );
-	connect( ui.kleDatabase, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged()) );
+	connect( ui.leDatabase, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged()) );
 	connect( ui.leHost, SIGNAL(textChanged(QString)), this, SLOT(hostChanged()) );
 	connect( ui.sbPort, SIGNAL(valueChanged(int)), this, SLOT(portChanged()) );
 	connect( ui.leUserName, SIGNAL(textChanged(QString)), this, SLOT(userNameChanged()) );
@@ -106,7 +106,7 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 	m_initializing = true;
 	ui.leName->setText(m_connections[index].name);
 	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(m_connections[index].driver));
-	ui.kleDatabase->setText(m_connections[index].dbName);
+	ui.leDatabase->setText(m_connections[index].dbName);
 
 	if (!isFileDB(m_connections[index].driver)) {
 		ui.leHost->setText(m_connections[index].hostName);
@@ -173,7 +173,7 @@ void DatabaseManagerWidget::selectFile() {
 			conf.writeEntry(QLatin1String("LastDir"), newDir);
 	}
 
-	ui.kleDatabase->setText(path);
+	ui.leDatabase->setText(path);
 }
 
 void DatabaseManagerWidget::hostChanged() {
@@ -196,7 +196,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString dbName = ui.kleDatabase->text().simplified();
+	QString dbName = ui.leDatabase->text().simplified();
 	if (isFileDB(ui.cbDriver->currentText())) {
 #ifndef HAVE_WINDOWS
 		// make relative path
@@ -207,14 +207,14 @@ void DatabaseManagerWidget::databaseNameChanged() {
 		if (!dbName.isEmpty()) {
 			bool fileExists = QFile::exists(dbName);
 			if (fileExists)
-				ui.kleDatabase->setStyleSheet("");
+				ui.leDatabase->setStyleSheet("");
 			else
-				ui.kleDatabase->setStyleSheet("QLineEdit{background:red;}");
+				ui.leDatabase->setStyleSheet("QLineEdit{background:red;}");
 		} else {
-			ui.kleDatabase->setStyleSheet("");
+			ui.leDatabase->setStyleSheet("");
 		}
 	} else {
-		ui.kleDatabase->setStyleSheet("");
+		ui.leDatabase->setStyleSheet("");
 	}
 
 	//don't allow to try to connect if no database name was provided
@@ -262,7 +262,7 @@ void DatabaseManagerWidget::addConnection() {
 	//we have now more then one connection, enable widgets
 	ui.tbDelete->setEnabled(true);
 	ui.leName->setEnabled(true);
-	ui.kleDatabase->setEnabled(true);
+	ui.leDatabase->setEnabled(true);
 	ui.cbDriver->setEnabled(true);
 	ui.leHost->setEnabled(true);
 	ui.sbPort->setEnabled(true);
@@ -297,8 +297,8 @@ void DatabaseManagerWidget::deleteConnection() {
 		ui.bTestConnection->setEnabled(false);
 		ui.leName->clear();
 		ui.leName->setEnabled(false);
-		ui.kleDatabase->clear();
-		ui.kleDatabase->setEnabled(false);
+		ui.leDatabase->clear();
+		ui.leDatabase->setEnabled(false);
 		ui.cbDriver->setEnabled(false);
 		ui.leHost->clear();
 		ui.leHost->setEnabled(false);
@@ -389,7 +389,7 @@ void DatabaseManagerWidget::testConnection() {
 
 	//don't allow to test the connection for file DBs if the file doesn't exist
 	if (isFileDB(ui.cbDriver->currentText())) {
-		QString fileName = ui.kleDatabase->text();
+		QString fileName = ui.leDatabase->text();
 #ifndef HAVE_WINDOWS
 		// make relative path
 		if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())

@@ -72,7 +72,6 @@ public:
 
 	Format format() const;
 private:
-    QWidget* m_mainWidget;
 	Ui::ExportSpreadsheetWidget* ui;
 	bool m_showOptions;
 	bool m_matrixMode;

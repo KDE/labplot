@@ -29,13 +29,15 @@
 #include "ExportWorksheetDialog.h"
 #include "ui_exportworksheetwidget.h"
 
-#include <QFileDialog>
-#include <KMessageBox>
+#include <QCompleter>
 #include <QDesktopWidget>
+#include <QDirModel>
+#include <QFileDialog>
+
 #include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <QWidget>
 
 /*!
 	\class ExportWorksheetDialog
@@ -44,13 +46,15 @@
 	\ingroup kdefrontend
 */
 
-ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
-	m_mainWidget = new QWidget(this);
-	ui->setupUi(m_mainWidget);
+ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
+	ui(new Ui::ExportWorksheetWidget()) {
 
-	KUrlCompletion* urlCompletion = new KUrlCompletion;
-	ui->kleFileName->setCompletionObject(urlCompletion);
-	ui->kleFileName->setAutoDeleteCompletionObject(true);
+	QWidget* mainWidget = new QWidget(this);
+	ui->setupUi(mainWidget);
+
+	QCompleter* completer = new QCompleter(this);
+	completer->setModel(new QDirModel);
+	ui->leFileName->setCompleter(completer);
 
 	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
 
@@ -71,13 +75,13 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui->cbResolution->addItem("600");
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	setMainWidget(m_mainWidget);
+	setMainWidget(mainWidget);
 
 	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
 	connect( ui->cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui->kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
+	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));
@@ -112,12 +116,12 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
-	ui->kleFileName->setText(dir + QDir::separator() +  name);
+	ui->leFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui->cbFormat->currentIndex());
 }
 
 QString ExportWorksheetDialog::path() const {
-	return ui->kleFileName->text();
+	return ui->leFileName->text();
 }
 
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
@@ -155,7 +159,7 @@ void ExportWorksheetDialog::slotButtonClicked(int button) {
 
 //SLOTS
 void ExportWorksheetDialog::okClicked() {
-	if ( QFile::exists(ui->kleFileName->text()) ) {
+	if ( QFile::exists(ui->leFileName->text()) ) {
 		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
 		if (r == KMessageBox::No)
 			return;
@@ -166,10 +170,10 @@ void ExportWorksheetDialog::okClicked() {
 	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
 	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
 
-	QString path = ui->kleFileName->text();
+	QString path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		ui->kleFileName->setText(path);
+		ui->leFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
 			QString newDir = path.left(pos);
@@ -190,7 +194,7 @@ void ExportWorksheetDialog::toggleOptions() {
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
 	//resize the dialog
-	m_mainWidget->resize(layout()->minimumSize());
+	mainWidget()->resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
@@ -203,7 +207,7 @@ void ExportWorksheetDialog::selectFile() {
 	const QString dir = conf.readEntry("LastDir", "");
 	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
 	if (!path.isEmpty()) {
-		ui->kleFileName->setText(path);
+		ui->leFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
@@ -224,14 +228,14 @@ void ExportWorksheetDialog::formatChanged(int index) {
 
 	QStringList extensions;
 	extensions<<".pdf"<<".eps"<<".svg"<<".png";
-	QString path = ui->kleFileName->text();
+	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (i == -1)
 		path = path + extensions.at(index);
 	else
 		path = path.left(i) + extensions.at(index);
 
-	ui->kleFileName->setText(path);
+	ui->leFileName->setText(path);
 
 	// show resolution option for png format
 	ui->lResolution->setVisible(index == 3);
