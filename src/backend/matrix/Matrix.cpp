@@ -95,7 +95,8 @@ void Matrix::init() {
 	d->yEnd = group.readEntry("YEnd", 1.0);
 
 	//format
-	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();
+	QByteArray formatba = group.readEntry("NumericFormat", "f").toLatin1();
+	d->numericFormat = *formatba.data();
 	d->precision = group.readEntry("Precision", 3);
 	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
 }
@@ -1060,8 +1061,10 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("numericFormat").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'numericFormat'"));
-			else
-				d->numericFormat = *str.toLatin1().data();
+			else {
+				QByteArray formatba = str.toLatin1();
+				d->numericFormat = *formatba.data();
+			}
 
 			str = attribs.value("precision").toString();
 			if(str.isEmpty())
