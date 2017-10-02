@@ -684,6 +684,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
 	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();	// a local byte array is needed!
+	const char *func = funcba.constData();	// function to evaluate
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
@@ -692,12 +693,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	for (int i = 0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
-		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
-		QDEBUG("Parameter"<<i<<" (\" "<<paramNames->at(i).toLocal8Bit().data()<<"\")"<<'['<<min[i]<<','<<max[i]
+		QByteArray paramnameba = paramNames->at(i).toLocal8Bit();
+		assign_variable(paramnameba.constData(), nsl_fit_map_bound(x, min[i], max[i]));
+		QDEBUG("Parameter"<<i<<" (\" "<<paramnameba.constData()<<"\")"<<'['<<min[i]<<','<<max[i]
 			<<"] free/bound:"<<QString::number(x, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
 	}
 
-	const char *func = funcba.data();	// function to evaluate
 	for (size_t i = 0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
