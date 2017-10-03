@@ -31,9 +31,7 @@
 #include <QCheckBox>
 #include <QKeyEvent>
 #include <KLocalizedString>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
+
 #include <cfloat>
 
 /*!
@@ -163,7 +161,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 					le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 3, le);
 				connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
-				
+
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
@@ -265,7 +263,6 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void FitParametersWidget::applyClicked() {
-
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
@@ -320,8 +317,8 @@ void FitParametersWidget::applyClicked() {
 
 // check if start values are inside limits
 void FitParametersWidget::startValueChanged() {
-	int row = ui.tableWidget->currentRow();
-	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	const int row = ui.tableWidget->currentRow();
+	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
 
 	double lowerLimit, upperLimit;
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
@@ -333,7 +330,7 @@ void FitParametersWidget::startValueChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	bool invalid = (value < lowerLimit || value > upperLimit);
+	const bool invalid = (value < lowerLimit || value > upperLimit);
 	highlightInvalid(row, 1, invalid);
 
 	if (m_rehighlighting)
@@ -350,9 +347,9 @@ void FitParametersWidget::startValueChanged() {
 
 // check if lower limit fits to start value and upper limit
 void FitParametersWidget::lowerLimitChanged() {
-	int row = ui.tableWidget->currentRow();
+	const int row = ui.tableWidget->currentRow();
 
-	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
 
 	double lowerLimit, upperLimit;
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
@@ -364,7 +361,7 @@ void FitParametersWidget::lowerLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
+	const bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
 	highlightInvalid(row, 3, invalid);
 
 	if (m_rehighlighting)
@@ -381,9 +378,9 @@ void FitParametersWidget::lowerLimitChanged() {
 
 // check if upper limit fits to start value and lower limit
 void FitParametersWidget::upperLimitChanged() {
-	int row = ui.tableWidget->currentRow();
+	const int row = ui.tableWidget->currentRow();
 
-	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
 
 	double lowerLimit, upperLimit;
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
@@ -395,7 +392,7 @@ void FitParametersWidget::upperLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	bool invalid = (upperLimit < value || upperLimit < lowerLimit);
+	const bool invalid = (upperLimit < value || upperLimit < lowerLimit);
 	highlightInvalid(row, 4, invalid);
 
 	if (m_rehighlighting)
@@ -411,7 +408,7 @@ void FitParametersWidget::upperLimitChanged() {
 }
 
 void FitParametersWidget::addParameter() {
-	int rows = ui.tableWidget->rowCount();
+	const int rows = ui.tableWidget->rowCount();
 	ui.tableWidget->setRowCount(rows+1);
 
 	// name

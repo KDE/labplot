@@ -740,6 +740,7 @@ void XYFitCurveDock::showParameters() {
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
+	menu.setMinimumWidth(w.width());
 
 	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
