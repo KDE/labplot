@@ -56,6 +56,7 @@ public:
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
+	bool isFileEmpty() const;
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
@@ -69,7 +70,6 @@ public:
 	void initializeAndFillPortsAndBaudRates();
 
 private:
-
 	Ui::ImportFileWidget ui;
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
@@ -80,6 +80,7 @@ private:
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
+	bool m_fileEmpty;
 	bool m_liveDataSource;
 
 private slots:

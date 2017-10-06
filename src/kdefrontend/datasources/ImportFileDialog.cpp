@@ -155,6 +155,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
+	if (m_importFileWidget->isFileEmpty()) {
+		KMessageBox::information(0, i18n("No data to import."), i18n("No Data"));
+		return;
+	}
+
 	QString fileName = m_importFileWidget->fileName();
 	AbstractFileFilter* filter = m_importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());

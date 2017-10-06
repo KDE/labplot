@@ -39,7 +39,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QTextStream>
 #include <KLocale>
 #include <KFilterDev>
-#include <QElapsedTimer>
 #include <QProcess>
 #include <QDateTime>
 
@@ -376,16 +375,17 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	return lineStringList;
 }
 
-		/*!
+/*!
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
+	DEBUG("device is sequential = " << device.isSequential());
+
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
 
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
-	DEBUG("device is sequential = " << device.isSequential());
 
 /////////////////////////////////////////////////////////////////
 	// Parse the first line:
@@ -1035,13 +1035,10 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError != 0)
+		if (deviceError != 0) {
 			DEBUG("Device error = " << deviceError);
-
-		if (deviceError == 1 && importMode == AbstractFileFilter::Replace && dataSource)
-			dataSource->clear();
-		if (deviceError)
 			return;
+		}
 
 		// matrix data has only one column mode (which is not text)
 		if (dynamic_cast<Matrix*>(dataSource)) {

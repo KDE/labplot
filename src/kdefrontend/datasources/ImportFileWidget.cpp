@@ -68,7 +68,9 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName),
+ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent),
+	m_fileName(fileName),
+	m_fileEmpty(false),
 	m_liveDataSource(true) {
 	ui.setupUi(this);
 
@@ -289,6 +291,14 @@ QString ImportFileWidget::fileName() const {
 	}
 
 	return ui.leFileName->text();
+}
+
+/*!
+ * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
+ * returns \c false otherwise.
+ */
+bool ImportFileWidget::isFileEmpty() const {
+	return m_fileEmpty;
 }
 
 QString ImportFileWidget::host() const {
@@ -926,6 +936,9 @@ void ImportFileWidget::refreshPreview() {
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+		m_fileEmpty = false;
+	} else {
+		m_fileEmpty = true;
 	}
 	RESET_CURSOR;
 }
