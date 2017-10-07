@@ -143,9 +143,10 @@ void Column::setSuppressDataChangedSignal(bool b) {
  * necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
-	DEBUG("Column::setColumnMode()");
-	if (mode == columnMode()) return;
+	if (mode == columnMode())
+		return;
 
+	DEBUG("Column::setColumnMode()");
 	beginMacro(i18n("%1: change column type", name()));
 
 	auto* old_input_filter = d->inputFilter();
@@ -168,6 +169,8 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 }
 
 void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
+	if (mode == columnMode())
+		return;
 
 	auto* old_input_filter = d->inputFilter();
 	auto* old_output_filter = d->outputFilter();
@@ -745,9 +748,15 @@ public:
 	};
 	void run() {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
-		QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
-		memcpy(data->data(), bytes.data(), bytes.size());
-		m_private->replaceData(data);
+		if (m_private->columnMode() == AbstractColumn::Numeric) {
+			QVector<double>* data = new QVector<double>(bytes.size()/sizeof(double));
+			memcpy(data->data(), bytes.data(), bytes.size());
+			m_private->replaceData(data);
+		} else {
+			QVector<int>* data = new QVector<int>(bytes.size()/sizeof(int));
+			memcpy(data->data(), bytes.data(), bytes.size());
+			m_private->replaceData(data);
+		}
 	}
 
 private:
@@ -817,7 +826,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		}
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
+			if (!content.isEmpty() && ( columnMode() == AbstractColumn::Numeric ||  columnMode() == AbstractColumn::Integer)) {
 				DecodeColumnTask* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
