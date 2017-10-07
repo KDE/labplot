@@ -940,27 +940,20 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 void XYFitCurveDock::showFitResult() {
 	DEBUG("XYFitCurveDock::showFitResult()");
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	showFitResultSummary(fitResult);
+	showFitResultLog(fitResult);
+
 	if (!fitResult.available) {
 		uiGeneralTab.teResult->clear();
 		uiGeneralTab.teLog->clear();
 		return;
 	}
 
-	const int np = m_fitData.paramNames.size();
-	// This should not happen (only for old projects)
-	if (fitResult.paramValues.size() != np) {
-		DEBUG("Warning: fitResult.paramValues.size() [" << fitResult.paramValues.size() << "] != np [" << np << "]");
-		//fitResult.paramValues.resize(np);
-	}
-
-	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
-
-	showFitResultSummary(fitResult);
-	showFitResultLog(fitResult);
-
 	// General
 	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
+
+	if (!fitResult.valid)
+		return;
 
 	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
 	uiGeneralTab.twGeneral->item(2, 1)->setText(QString::number(m_fitData.eps));
@@ -974,6 +967,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGeneral->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
 	// Parameters
+	const int np = m_fitData.paramNames.size();
 	uiGeneralTab.twParameters->setRowCount(np);
 	QStringList headerLabels;
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
@@ -1031,6 +1025,8 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 
+		const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
+		const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquare, 'g', 15));
 		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquareAdj, 'g', 15));
 
