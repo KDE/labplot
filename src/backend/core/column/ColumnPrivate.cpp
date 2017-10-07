@@ -169,7 +169,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * initial value) is not supported.
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
-	DEBUG("ColumnPrivate::setColumnMode() " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode) 
+	DEBUG("ColumnPrivate::setColumnMode() " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
 		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode));
 	if (mode == m_column_mode) return;
 
@@ -1013,11 +1013,17 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 }
 
 /**
- * \brief Return the double value in row 'row'
+ * \brief Return the double value in row 'row' for columns with type Numeric and Integer.
+ * This function has to be used everywhere where the exact type (double or int) is not relevant for numerical calculations.
+ * For cases where the integer value is needed without any implicit conversions, \sa intergAt() has to be used.
  */
 double ColumnPrivate::valueAt(int row) const {
-	if (m_column_mode != AbstractColumn::Numeric) return NAN;
-	return static_cast<QVector<double>*>(m_data)->value(row, NAN);
+	if (m_column_mode == AbstractColumn::Numeric)
+		return static_cast<QVector<double>*>(m_data)->value(row, NAN);
+	else if (m_column_mode == AbstractColumn::Integer)
+		return static_cast<QVector<int>*>(m_data)->value(row, 0);
+	else
+		 return NAN;
 }
 
 /**

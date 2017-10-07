@@ -923,10 +923,8 @@ void XYCurvePrivate::retransform() {
 		        && (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 			switch (xColMode) {
 			case AbstractColumn::Numeric:
-				tempPoint.setX(xColumn->valueAt(row));
-				break;
 			case AbstractColumn::Integer:
-				tempPoint.setX(xColumn->integerAt(row));
+				tempPoint.setX(xColumn->valueAt(row));
 				break;
 			case AbstractColumn::Text:	//TODO
 			case AbstractColumn::DateTime:
@@ -937,10 +935,8 @@ void XYCurvePrivate::retransform() {
 
 			switch (yColMode) {
 			case AbstractColumn::Numeric:
-				tempPoint.setY(yColumn->valueAt(row));
-				break;
 			case AbstractColumn::Integer:
-				tempPoint.setY(yColumn->integerAt(row));
+				tempPoint.setY(yColumn->valueAt(row));
 				break;
 			case AbstractColumn::Text:	//TODO
 			case AbstractColumn::DateTime:
@@ -1371,10 +1367,8 @@ void XYCurvePrivate::updateValues() {
 
 				switch (xColMode) {
 				case AbstractColumn::Numeric:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
 				case AbstractColumn::Integer:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->integerAt(i)) + valuesSuffix;
+					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
 					break;
 				case AbstractColumn::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
