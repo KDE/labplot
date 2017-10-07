@@ -68,12 +68,14 @@ void AsciiFilterTest::testEmptyFileReplace() {
 	Spreadsheet spreadsheet(0, "test", false);
 	AsciiFilter filter;
 
+	const int rowCount = spreadsheet.rowCount();
+	const int colCount = spreadsheet.columnCount();
 	const QString fileName = m_dataDir + "empty_file.txt";
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.rowCount(), 0);
-	QCOMPARE(spreadsheet.columnCount(), 0);
+	QCOMPARE(spreadsheet.rowCount(), rowCount);
+	QCOMPARE(spreadsheet.columnCount(), colCount);
 }
 
 QTEST_MAIN(AsciiFilterTest)

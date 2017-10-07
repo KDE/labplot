@@ -1,1 +1,47 @@
-#TODO
+file(GLOB_RECURSE OBJS_TMP ${SRC_BUILD_DIR}/*.o)
+
+# remove LabPlot.cpp.o since it contains main() already
+set(OBJS ${OBJS_TMP})
+list(REMOVE_ITEM OBJS ${SRC_BUILD_DIR}/CMakeFiles/labplot2.dir/kdefrontend/LabPlot.cpp.o)
+
+add_executable (fittest FitTest.cpp)
+target_link_libraries(fittest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} ${QT_QTSQL_LIBRARIES})
+target_link_libraries(fittest KF5::KDELibs4Support KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(fittest ${OBJS})
+
+IF (Qt5SerialPort_FOUND)
+	target_link_libraries(fittest Qt5::SerialPort )
+ENDIF ()
+IF (KF5SyntaxHighlighting_FOUND)
+	target_link_libraries(fittest KF5::SyntaxHighlighting )
+ENDIF ()
+#TODO: KF5::NewStuff
+
+IF (CANTOR_LIBS_FOUND)
+	target_link_libraries(fittest ${CANTOR_LIBS} )
+ENDIF ()
+IF (HDF5_FOUND)
+	target_link_libraries(fittest ${HDF5_C_LIBRARIES} )
+ENDIF ()
+IF (FFTW_FOUND)
+	target_link_libraries(fittest ${FFTW_LIBRARIES} )
+ENDIF ()
+IF (NETCDF_FOUND)
+	target_link_libraries(fittest ${NETCDF_LIBRARY} )
+ENDIF ()
+IF (CFITSIO_FOUND)
+	target_link_libraries(fittest ${CFITSIO_LIBRARY} )
+ENDIF ()
+IF (USE_LIBORIGIN)
+IF (WIN32)
+	IF (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+	target_link_libraries(fittest ${PROJECT_BINARY_DIR}/lib/origin.lib )
+	ELSE ()
+	target_link_libraries(fittest ${PROJECT_BINARY_DIR}/lib/liborigin.a )
+	ENDIF ()
+ELSE ()
+target_link_libraries(fittest ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+ENDIF ()
+ENDIF ()
+
+add_test(NAME fittest COMMAND fittest)
