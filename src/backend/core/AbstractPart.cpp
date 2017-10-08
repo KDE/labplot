@@ -114,7 +114,7 @@ void AbstractPart::deleteView() const {
 /**
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
-QMenu* AbstractPart::createContextMenu(){
+QMenu* AbstractPart::createContextMenu() {
 	QMenu * menu = AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	menu->addSeparator();
@@ -127,7 +127,7 @@ QMenu* AbstractPart::createContextMenu(){
 
 		const QStyle *widget_style = m_mdiWindow->style();
 		QAction *action_temp;
-		if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized))	{
+		if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
 			action_temp = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
 			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
 		}

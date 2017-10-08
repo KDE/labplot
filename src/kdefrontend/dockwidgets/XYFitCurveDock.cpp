@@ -863,6 +863,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
  * show the fit result log (plain text)
  */
 void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
+	DEBUG("XYFitCurveDock::showFitResultLog()");
 	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
 	str += i18n("tolerance:") + ' ' + QString::number(m_fitData.eps) + "<br>";
@@ -944,6 +945,7 @@ void XYFitCurveDock::showFitResult() {
 	showFitResultLog(fitResult);
 
 	if (!fitResult.available) {
+		DEBUG("fit result not available");
 		uiGeneralTab.teResult->clear();
 		uiGeneralTab.teLog->clear();
 		return;
@@ -952,8 +954,10 @@ void XYFitCurveDock::showFitResult() {
 	// General
 	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
 
-	if (!fitResult.valid)
+	if (!fitResult.valid) {
+		DEBUG("fit result not valid");
 		return;
+	}
 
 	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
 	uiGeneralTab.twGeneral->item(2, 1)->setText(QString::number(m_fitData.eps));

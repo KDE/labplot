@@ -98,7 +98,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
 
-	QList<const char*>  list;
+	QList<const char*> list;
 	list<<"Folder"<<"Worksheet"<<"CartesianPlot";
 	cbExistingPlots->setTopLevelClasses(list);
 	list.clear();
@@ -255,6 +255,7 @@ void PlotDataDialog::processColumns() {
 }
 
 void PlotDataDialog::plot() {
+	DEBUG("PlotDataDialog::plot()");
 	WAIT_CURSOR;
 	if (ui->rbPlotPlacement1->isChecked()) {
 		//add curves to an existing plot
@@ -382,6 +383,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
  * helper function that does the actual creation of the curve and adding it as child to the \c plot.
  */
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) const {
+	DEBUG("PlotDataDialog::addCurve()");
 	if (!m_analysisMode) {
 		XYCurve* curve = new XYCurve(name);
 		curve->setXColumn(xColumn);
@@ -453,16 +455,16 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 				analysisCurve->setXDataColumn(xColumn);
 				analysisCurve->setYDataColumn(yColumn);
 				analysisCurve->initFitData(m_analysisAction);
-				plot->addChild(analysisCurve);
 				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
 				break;
 			}
 			case FourierFilter: {
 				XYFourierFilterCurve* analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 				analysisCurve->setXDataColumn(xColumn);
 				analysisCurve->setYDataColumn(yColumn);
-				plot->addChild(analysisCurve);
 				analysisCurve->recalculate();
+				plot->addChild(analysisCurve);
 				break;
 			}
 		}

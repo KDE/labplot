@@ -47,9 +47,9 @@ class PlotDataDialog : public QDialog {
 
 public:
 	enum AnalysisAction {DataReduction,
-							Differentiation, Integration, Interpolation, Smoothing,
-							FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
-							FourierFilter};
+		Differentiation, Integration, Interpolation, Smoothing,
+		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
+		FourierFilter};
 
 	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
 	~PlotDataDialog();
