@@ -170,9 +170,10 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		paramNames.clear();
 	paramNamesUtf8.clear();
 
-	// indices used in multi peak parameter models
-	QStringList indices = {QString::fromUtf8("\u2081"), QString::fromUtf8("\u2082"), QString::fromUtf8("\u2083"), QString::fromUtf8("\u2084"), QString::fromUtf8("\u2085"),
-							QString::fromUtf8("\u2086"), QString::fromUtf8("\u2087"), QString::fromUtf8("\u2088"), QString::fromUtf8("\u2089")};
+	// 10 indices used in multi degree models
+	QStringList indices = {QString::fromUtf8("\u2081"), QString::fromUtf8("\u2082"), QString::fromUtf8("\u2083"),
+		QString::fromUtf8("\u2084"), QString::fromUtf8("\u2085"), QString::fromUtf8("\u2086"), QString::fromUtf8("\u2087"),
+		QString::fromUtf8("\u2088"), QString::fromUtf8("\u2089"), QString::fromUtf8("\u2081") + QString::fromUtf8("\u2080")};
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:

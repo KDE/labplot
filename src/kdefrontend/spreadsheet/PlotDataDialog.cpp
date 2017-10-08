@@ -379,6 +379,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	worksheet->setSuppressLayoutUpdate(false);
 	worksheet->updateLayout();
 }
+
 /*!
  * helper function that does the actual creation of the curve and adding it as child to the \c plot.
  */

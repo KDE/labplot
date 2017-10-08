@@ -562,7 +562,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		case nsl_fit_model_fourier:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(9);
+			uiGeneralTab.sbDegree->setMaximum(10);
 			uiGeneralTab.sbDegree->setValue(1);
 			break;
 		case nsl_fit_model_power:
