@@ -55,9 +55,6 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	connectActions();
 	initContextMenus();
 
-	connect(ui->bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(toggled(bool)));
-	connect(ui->bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
-
 	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
 
 	ui->bAddKey->setIcon(QIcon::fromTheme("list-add"));
@@ -90,6 +87,8 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
+    connect(ui->bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(triggered(bool)));
+    connect(ui->bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
 	connect(ui->bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
 	connect(ui->bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
 	connect(ui->bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
@@ -455,6 +454,7 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
  * dialog if it had one) and if the dialog was accepted then the new keyword unit is set and the tablewidget
  * is updated (filled with the modifications).
  */
+
 void FITSHeaderEditWidget::addModifyKeywordUnit() {
 	FITSHeaderEditAddUnitDialog* addUnitDialog;
 
@@ -472,7 +472,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 		if (!m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty())
 			unit = m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit;
 	} else {
-		if (!m_extensionDatas[m_seletedExtension].keywords.at(idx).unit.isEmpty())
+        if (!m_extensionDatas[m_seletedExtension].keywords.at(idx).unit.isEmpty())
 			unit = m_extensionDatas[m_seletedExtension].keywords.at(idx).unit;
 	}
 

@@ -45,7 +45,6 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 
 	connect(ui.leUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
-	connect(ui.leUnit, SIGNAL(clearButtonClicked()), this, SLOT(unitChanged()));
 
 	ui.leUnit->setText(unit);
 }
