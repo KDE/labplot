@@ -745,18 +745,6 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSi
 	col->setWidth(newSize);
 }
 
-/*!
-  Advance current cell after [Return] or [Enter] was pressed.
- */
-void SpreadsheetView::advanceCell() {
-	QModelIndex idx = m_tableView->currentIndex();
-	if (idx.row()+1 >= m_spreadsheet->rowCount()) {
-		int new_size = m_spreadsheet->rowCount()+1;
-		m_spreadsheet->setRowCount(new_size);
-	}
-	m_tableView->setCurrentIndex(idx.sibling(idx.row()+1, idx.column()));
-}
-
 void SpreadsheetView::goToCell(int row, int col) {
 	QModelIndex index = m_model->index(row, col);
 	m_tableView->scrollTo(index);
@@ -1949,11 +1937,6 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	m_tableView->horizontalHeader()->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_tableView->horizontalHeader()->updateGeometry();
 	m_tableView->horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
-}
-
-void SpreadsheetView::keyPressEvent(QKeyEvent * event) {
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-		advanceCell();
 }
 
 /*!

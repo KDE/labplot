@@ -102,7 +102,6 @@ private:
 	bool m_suppressSelectionChangedEvent;
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*);
-	void keyPressEvent(QKeyEvent*);
 	void checkColumnMenu();
 	void checkSpreadsheetMenu();
 
@@ -248,7 +247,6 @@ private slots:
 	void showAllColumnsStatistics();
 	void showRowStatistics();
 
-	void advanceCell();
 	void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);

@@ -3,6 +3,7 @@
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,13 +30,13 @@
 #define SPREADSHEETITEMDELEGATE_H
 
 #include <QItemDelegate>
-#include <QAbstractItemModel>
+class QAbstractItemModel;
 
 class SpreadsheetItemDelegate : public QItemDelegate {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetItemDelegate(QObject * parent = 0);
+	explicit SpreadsheetItemDelegate(QObject* parent = 0);
 
 	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 
@@ -47,6 +48,7 @@ public:
 
 private:
 	QColor m_maskingColor;
+	bool eventFilter(QObject*, QEvent*);
 };
 
 #endif

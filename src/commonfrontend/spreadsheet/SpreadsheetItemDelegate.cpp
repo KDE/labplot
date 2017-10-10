@@ -3,6 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,8 +28,10 @@
 #include "SpreadsheetItemDelegate.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
-#include <QPainter>
+#include <QAbstractItemModel>
+#include <QKeyEvent>
 #include <QMetaProperty>
+#include <QPainter>
 
 /*!
 \class SpreadsheetItemDelegate
@@ -40,8 +43,8 @@ of masked cells used in SpreadsheetView.
 \ingroup commonfrontend
 */
 
-SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject * parent)
-	: QItemDelegate(parent), 	m_maskingColor(0xff,0,0) {
+SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent)  : QItemDelegate(parent),  m_maskingColor(0xff,0,0) {
+		installEventFilter(this);
 
 }
 
@@ -77,4 +80,17 @@ void SpreadsheetItemDelegate::setModelData ( QWidget * editor, QAbstractItemMode
 
 void SpreadsheetItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & index ) const {
 	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
+}
+
+ bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Return) {
+			emit commitData((QWidget*)editor);
+			closeEditor((QWidget*)editor, QAbstractItemDelegate::EditNextItem);
+			return true;
+		}
+	}
+
+	return QItemDelegate::eventFilter(editor, event);
 }
