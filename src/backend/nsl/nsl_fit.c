@@ -127,41 +127,11 @@ double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c,
 
 	return 0;
 }
-double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double weight) {
-	if (param == 0)
-		return weight*exp(b*x);
-	if (param == 1)
-		return weight*a*x*exp(b*x);
-
-	return 0;
-}
-double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double weight) {
-	if (param == 0)
-		return weight*exp(b*x);
-	if (param == 1)
-		return weight*a*x*exp(b*x);
-	if (param == 2)
-		return weight*exp(d*x);
-	if (param == 3)
-		return weight*c*x*exp(d*x);
-
-	return 0;
-}
-double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double weight) {
-	if (param == 0)
-		return weight*exp(b*x);
-	if (param == 1)
-		return weight*a*x*exp(b*x);
-	if (param == 2)
-		return weight*exp(d*x);
-	if (param == 3)
-		return weight*c*x*exp(d*x);
-	if (param == 4)
-		return weight*exp(f*x);
-	if (param == 5)
-		return weight*e*x*exp(f*x);
-
-	return 0;
+double nsl_fit_model_exponentialn_param_deriv(int param, double x, double *p, double weight) {
+	if (param % 2 == 0)
+		return weight*exp(p[param+1]*x);
+	else
+		return weight*p[param-1]*x*exp(p[param]*x);
 }
 double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double weight) {
 	if (param == 0)

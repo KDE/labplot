@@ -158,13 +158,13 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QString& model = fitData.model;
 	QStringList& paramNames = fitData.paramNames;
 	QStringList& paramNamesUtf8 = fitData.paramNamesUtf8;
-	int num = fitData.degree;
+	int degree = fitData.degree;
 	QVector<double>& paramStartValues = fitData.paramStartValues;
 	QVector<double>& paramLowerLimits = fitData.paramLowerLimits;
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
-	DEBUG("XYFitCurve::initFitData() for model category = " << modelCategory << ", model type = " << modelType << ", degree = " << num);
+	DEBUG("XYFitCurve::initFitData() for model category = " << modelCategory << ", model type = " << modelType << ", degree = " << degree);
 
 	if (modelCategory != nsl_fit_model_custom)
 		paramNames.clear();
@@ -182,14 +182,13 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_polynomial:
 			paramNames << "c0" << "c1";
 			paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
-			if (num == 2) {
+			if (degree == 2) {
 				model += " + c2*x^2";
 				paramNames << "c2";
 				paramNamesUtf8 << QString::fromUtf8("c\u2082");
-			} else if (num > 2) {
-				QString numStr = QString::number(num);
-				for (int i = 2; i <= num; ++i) {
-					numStr = QString::number(i);
+			} else if (degree > 2) {
+				for (int i = 2; i <= degree; ++i) {
+					QString numStr = QString::number(i);
 					model += "+c" + numStr + "*x^" + numStr;
 					paramNames << "c" + numStr;
 					paramNamesUtf8 << "c" + indices[i-1];
@@ -197,47 +196,41 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_power:
-			if (num == 1)
+			if (degree == 1) {
 				paramNames << "a" << "b";
-			else {
+			} else {
 				paramNames << "a" << "b" << "c";
 				model = "a + b*x^c";
 			}
 			break;
 		case nsl_fit_model_exponential:
-			switch (num) {
-			case 1:
+			if (degree == 1) {
 				paramNames << "a" << "b";
-				break;
-			case 2:
-				model = "a1*exp(b1*x) + a2*exp(b2*x)";
-				paramNames << "a1" << "b1" << "a2" << "b2";
-				paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
-						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082");
-				break;
-			case 3:
-				model = "a1*exp(b1*x) + a2*exp(b2*x) + a3*exp(b3*x)";
-				paramNames << "a1" << "b1" << "a2" << "b2" << "a3" << "b3";
-				paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
-						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082")
-						<< QString::fromUtf8("a\u2083") << QString::fromUtf8("b\u2083");
-				break;
-			//TODO: up to 9 exponentials
+			} else {
+				for (int i = 1; i <= degree; i++) {
+					QString numStr = QString::number(i);
+					if (i == 1)
+						model = "a1*exp(b1*x)";
+					else
+						model += " + a" + numStr + "*exp(b" + numStr + "*x)";
+					paramNames << "a" + numStr << "b" + numStr;
+					paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
+				}
 			}
 			break;
 		case nsl_fit_model_inverse_exponential:
-			num = 1;
+			degree = 1;
 			paramNames << "a" << "b" << "c";
 			break;
 		case nsl_fit_model_fourier:
 			paramNames << "w" << "a0" << "a1" << "b1";
 			paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
 				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
-			if (num > 1) {
-				for (int i = 1; i <= num; ++i) {
+			if (degree > 1) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-					paramNames << "a"+numStr << "b"+numStr;
+					paramNames << "a" + numStr << "b" + numStr;
 					paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
 				}
 			}
@@ -248,7 +241,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		model = nsl_fit_model_peak_equation[fitData.modelType];
 		switch ((nsl_fit_model_type_peak)modelType) {
 		case nsl_fit_model_gaussian:
-			switch (num) {
+			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
 				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
@@ -268,7 +261,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
-				for (int i = 1; i <= num; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -281,7 +274,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_lorentz:
-			switch (num) {
+			switch (degree) {
 			case 1:
 				paramNames << "g" << "mu" << "a";
 				paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
@@ -300,10 +293,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					<< QString::fromUtf8("\u03b3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
-				QString numStr = QString::number(num);
 				model = "1./pi * (";
-				for (int i = 1; i <= num; ++i) {
-					numStr = QString::number(i);
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
 					model += "a" + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
@@ -315,7 +307,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_sech:
-			switch (num) {
+			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
 				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
@@ -334,10 +326,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
-				QString numStr = QString::number(num);
 				model = "1/pi * (";
-				for (int i = 1; i <= num; ++i) {
-					numStr = QString::number(i);
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
@@ -349,7 +340,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_logistic:
-			switch (num) {
+			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
 				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
@@ -368,10 +359,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
-				QString numStr = QString::number(num);
 				model = "1/4 * (";
-				for (int i = 1; i <= num; ++i) {
-					numStr = QString::number(i);
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
@@ -777,7 +767,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							gsl_matrix_set(J, i, j, nsl_fit_model_power1_param_deriv(j, x, a, b, weight[i]));
 					}
 				}
-				} else if (degree == 2) {
+			} else if (degree == 2) {
 				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 				for (size_t i = 0; i < n; i++) {
@@ -792,54 +782,24 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 			}
 			break;
-		case nsl_fit_model_exponential:	// Y(x) = a*exp(b*x) or Y(x) = a*exp(b*x) + c*exp(d*x) or Y(x) = a*exp(b*x) + c*exp(d*x) + e*exp(f*x)
-			if (degree == 1) {
-				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				for (size_t i = 0; i < n; i++) {
-					x = xVector[i];
+		case nsl_fit_model_exponential:	{ // Y(x) = a*exp(b*x) + c*exp(d*x) + ...
+			double *p = new double[2*degree];
+			for (int i = 0; i < 2*degree; i++)
+				p[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, i), min[i], max[i]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
 
-					for (int j = 0; j < 2; j++) {
-						if (fixed[j])
-							gsl_matrix_set(J, i, j, 0.);
-						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential1_param_deriv(j, x, a, b, weight[i]));
-					}
-				}
-			} else if (degree == 2) {
-				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				const double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-				for (size_t i = 0; i < n; i++) {
-					x = xVector[i];
-
-					for (int j = 0; j < 4; j++) {
-						if (fixed[j])
-							gsl_matrix_set(J, i, j, 0.);
-						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential2_param_deriv(j, x, a, b, c, d, weight[i]));
-					}
-				}
-			} else if (degree == 3) {
-				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				const double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				const double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-				const double e = nsl_fit_map_bound(gsl_vector_get(paramValues, 4), min[4], max[4]);
-				const double f = nsl_fit_map_bound(gsl_vector_get(paramValues, 5), min[5], max[5]);
-				for (size_t i = 0; i < n; i++) {
-					x = xVector[i];
-
-					for (int j = 0; j < 6; j++) {
-						if (fixed[j])
-							gsl_matrix_set(J, i, j, 0.);
-						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_exponential3_param_deriv(j, x, a, b, c, d, e, f, weight[i]));
-					}
+				for (int j = 0; j < 2*degree; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_exponentialn_param_deriv(j, x, p, weight[i]));
 				}
 			}
+			delete[] p;
+
 			break;
+		}
 		case nsl_fit_model_inverse_exponential: {	// Y(x) = a*(1-exp(b*x))+c
 			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
