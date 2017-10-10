@@ -221,13 +221,13 @@
     </widget>
    </item>
    <item row="1" column="2" colspan="2">
-    <widget class="KLineEdit" name="leComment"/>
+    <widget class="QLineEdit" name="leComment"/>
    </item>
    <item row="19" column="2" colspan="2">
     <widget class="KComboBox" name="cbXScale"/>
    </item>
    <item row="0" column="2" colspan="2">
-    <widget class="KLineEdit" name="leName"/>
+    <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="19" column="0">
     <widget class="QLabel" name="lXScale">
@@ -359,11 +359,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -48,7 +48,7 @@
         </spacer>
        </item>
        <item row="0" column="4">
-        <widget class="KLineEdit" name="leName">
+        <widget class="QLineEdit" name="leName">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -65,7 +65,7 @@
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="KLineEdit" name="leComment">
+        <widget class="QLineEdit" name="leComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -114,7 +114,7 @@
         </widget>
        </item>
        <item row="4" column="4">
-        <widget class="KLineEdit" name="klePositionX">
+        <widget class="QLineEdit" name="lePositionX">
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
@@ -137,7 +137,7 @@
         </widget>
        </item>
        <item row="5" column="4">
-        <widget class="KLineEdit" name="klePositionY">
+        <widget class="QLineEdit" name="lePositionY">
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
@@ -482,11 +482,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -101,7 +101,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="KLineEdit" name="leName"/>
+    <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="10" column="0">
     <widget class="QLabel" name="lType">
@@ -167,7 +167,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="KLineEdit" name="leComment"/>
+    <widget class="QLineEdit" name="leComment"/>
    </item>
    <item row="0" column="1">
     <spacer name="hsName">
@@ -221,11 +221,6 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

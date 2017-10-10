@@ -56,10 +56,10 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="KLineEdit" name="leName"/>
+            <widget class="QLineEdit" name="leName"/>
            </item>
            <item>
-            <widget class="KLineEdit" name="leComment">
+            <widget class="QLineEdit" name="leComment">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -135,13 +135,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

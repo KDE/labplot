@@ -44,7 +44,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="leFileName">
+       <widget class="QLineEdit" name="leFileName">
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
@@ -86,13 +86,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

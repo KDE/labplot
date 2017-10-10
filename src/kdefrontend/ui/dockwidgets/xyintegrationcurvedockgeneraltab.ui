@@ -140,7 +140,7 @@
     </spacer>
    </item>
    <item row="1" column="2" colspan="3">
-    <widget class="KLineEdit" name="leComment"/>
+    <widget class="QLineEdit" name="leComment"/>
    </item>
    <item row="8" column="2" colspan="3">
     <widget class="QCheckBox" name="cbAutoRange">
@@ -201,7 +201,7 @@
     </layout>
    </item>
    <item row="0" column="2" colspan="3">
-    <widget class="KLineEdit" name="leName"/>
+    <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
@@ -371,13 +371,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

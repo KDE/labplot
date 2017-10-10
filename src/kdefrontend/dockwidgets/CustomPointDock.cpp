@@ -43,8 +43,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	//Validators
-	ui.klePositionX->setValidator( new QDoubleValidator(ui.klePositionX) );
-	ui.klePositionY->setValidator( new QDoubleValidator(ui.klePositionY) );
+	ui.lePositionX->setValidator( new QDoubleValidator(ui.lePositionX) );
+	ui.lePositionY->setValidator( new QDoubleValidator(ui.lePositionY) );
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i) {
@@ -61,8 +61,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.klePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
-	connect( ui.klePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
+	connect( ui.lePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
+	connect( ui.lePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	//Symbols
@@ -176,7 +176,7 @@ void CustomPointDock::positionXChanged() {
 		return;
 
 	QPointF pos = m_point->position();
-	float x = ui.klePositionX->text().toFloat();
+	float x = ui.lePositionX->text().toFloat();
 	pos.setX(x);
 	foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(pos);
@@ -187,7 +187,7 @@ void CustomPointDock::positionYChanged() {
 		return;
 
 	QPointF pos = m_point->position();
-	float y = ui.klePositionY->text().toFloat();
+	float y = ui.lePositionY->text().toFloat();
 	pos.setY(y);
 	foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(pos);
@@ -369,8 +369,8 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 
 void CustomPointDock::pointPositionChanged(const QPointF& position) {
 	m_initializing = true;
-	ui.klePositionX->setText(QString::number(position.x()));
-	ui.klePositionY->setText(QString::number(position.y()));
+	ui.lePositionX->setText(QString::number(position.x()));
+	ui.lePositionY->setText(QString::number(position.y()));
 	m_initializing = false;
 }
 
@@ -431,8 +431,8 @@ void CustomPointDock::load() {
 
 	m_initializing = true;
 
-	ui.klePositionX->setText(QString::number(m_point->position().x()));
-	ui.klePositionY->setText(QString::number(m_point->position().y()));
+	ui.lePositionX->setText(QString::number(m_point->position().x()));
+	ui.lePositionY->setText(QString::number(m_point->position().y()));
 
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Point) );
