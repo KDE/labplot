@@ -96,9 +96,17 @@ public:
 		double mse; // mean squared error = SSE/n
 		double rmse; // root-mean squared error = \sqrt(mse)
 		double mae; // mean absolute error = \sum_i^n |r_i|
+		double rsquare;
+		double rsquareAdj;
+		double chisq_p;	// chi^2 distribution p-value
+		double fdist_F;	// F distribution F-value
+		double fdist_p;	// F distribution p-value
 		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 		QVector<double> paramValues;
 		QVector<double> errorValues;
+		QVector<double> tdist_tValues;
+		QVector<double> tdist_pValues;
+		QVector<double> tdist_marginValues;
 		QString solverOutput;
 	};
 

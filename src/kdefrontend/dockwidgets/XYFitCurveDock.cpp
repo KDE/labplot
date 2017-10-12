@@ -48,7 +48,6 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-#include "backend/nsl/nsl_stats.h"
 }
 
 /*!
@@ -830,9 +829,6 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 
 	const int np = fitResult.paramValues.size();
 
-	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
-
 	str += "<br><br><b>" + i18n("Parameters:") + "</b>";
 	str += "<table border=1>";
 	str += "<tr> <th>" + i18n("Name") + "</th> <th>" + i18n("Value") +  "</th> <th>" + i18n("Error") +  "</th> <th>" + i18n("Error, %") +  "</th> </tr>";
@@ -852,7 +848,7 @@ void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult
 		str += "<tr> <th>" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
 			+ "</th> <th>" + QString::number(fitResult.rms) + "</th> </tr>";
 		str += "<tr> <th>" + i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ ')' + "</th> <th>" + QString::number(rsquareAdj, 'g', 15) + "</th> </tr>";
+			+ ')' + "</th> <th>" + QString::number(fitResult.rsquareAdj, 'g', 15) + "</th> </tr>";
 	}
 	str +=  "</table>";
 
@@ -881,8 +877,6 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	}
 
 	const int np = fitResult.paramValues.size();
-	const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-	const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
 
 	// Parameter
 	str += "<br> <b>" + i18n("Parameters:") + "</b><br>";
@@ -894,12 +888,11 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)<br>";
 
-			const double t = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
-			const double p = nsl_stats_tdist_p(t, fitResult.dof);
-			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
-			str += " (" + i18n("t statistic:") + ' ' + QString::number(t, 'g', 3) + ", " + i18n("p value:") + ' ' + QString::number(p, 'g', 3)
-				+ ", " + i18n("conf. interval:") + ' ' + QString::number(fitResult.paramValues.at(i) - margin)
-                                + " .. " + QString::number(fitResult.paramValues.at(i) + margin) + ")<br>";
+			const double margin = fitResult.tdist_marginValues.at(i);
+			str += " (" + i18n("t statistic:") + ' ' + QString::number(fitResult.tdist_tValues.at(i), 'g', 3) + ", "
+				+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
+				+ i18n("conf. interval:") + ' ' + QString::number(fitResult.paramValues.at(i) - margin) + " .. "
+				+ QString::number(fitResult.paramValues.at(i) + margin) + ")<br>";
 		}
 	}
 
@@ -909,16 +902,13 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	if (fitResult.dof != 0) {
 		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
 		str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + "<br>";
-		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(rsquare, 'g', 15) + "<br>";
+		str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquare, 'g', 15) + "<br>";
 		str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ "): " + QString::number(rsquareAdj, 'g', 15) + "<br><br>";
+			+ "): " + QString::number(fitResult.rsquareAdj, 'g', 15) + "<br><br>";
 
-		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
-		str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(p, 'g', 3) + "<br>";
-		const double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
-		str += i18n("F statistic") + ": " + QString::number(F, 'g', 3) + "<br>";
-		p = nsl_stats_fdist_p(F, np, fitResult.dof);
-		str += i18n("P > F") + ": " + QString::number(p, 'g', 3) + "<br>";
+		str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.chisq_p, 'g', 3) + "<br>";
+		str += i18n("F statistic") + ": " + QString::number(fitResult.fdist_F, 'g', 3) + "<br>";
+		str += i18n("P > F") + ": " + QString::number(fitResult.fdist_p, 'g', 3) + "<br>";
 	}
 	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br> <br>";
 
@@ -993,12 +983,11 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			const double t = nsl_stats_tdist_t(paramValue, errorValue);
-			item = new QTableWidgetItem(QString::number(t, 'g', 3));
+			item = new QTableWidgetItem(QString::number(fitResult.tdist_tValues.at(i), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values
-			const double p = nsl_stats_tdist_p(t, fitResult.dof);
+			const double p = fitResult.tdist_pValues.at(i);
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
 			//TODO: these hard coded colors don't always look well on dark themes (blue on black, etc. is hard to read)
@@ -1015,7 +1004,7 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
-			const double margin = nsl_stats_tdist_margin(0.05, fitResult.dof, errorValue);
+			const double margin = fitResult.tdist_marginValues.at(i);
 			item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
 			uiGeneralTab.twParameters->setItem(i, 6, item);
 		}
@@ -1029,18 +1018,13 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 
-		const double rsquare = nsl_stats_rsquare(fitResult.sse,fitResult.sst);
-		const double rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, fitResult.dof);
-		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(rsquare, 'g', 15));
-		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(rsquareAdj, 'g', 15));
+		uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquare, 'g', 15));
+		uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquareAdj, 'g', 15));
 
 		// chi^2 and F test p-values
-		double p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
-		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(p, 'g', 3));
-		double F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
-		uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(F, 'g', 3));
-		p = nsl_stats_fdist_p(F, np, fitResult.dof);
-		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(p, 'g', 3));
+		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.chisq_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(fitResult.fdist_F, 'g', 3));
+		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(fitResult.fdist_p, 'g', 3));
 	}
 
 	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));

@@ -52,6 +52,7 @@ extern "C" {
 #include <gsl/gsl_statistics_double.h>
 #include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_sf_stats.h"
+#include "backend/nsl/nsl_stats.h"
 }
 #include <cmath>
 
@@ -1746,10 +1747,19 @@ void XYFitCurvePrivate::recalculate() {
 	//needed for coefficient of determination, R-squared
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
 
+	fitResult.rsquare = nsl_stats_rsquare(fitResult.sse, fitResult.sst);
+	fitResult.rsquareAdj = nsl_stats_rsquareAdj(fitResult.rsquare, np, fitResult.dof);
+	fitResult.chisq_p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
+	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
+	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
+
 	//parameter values
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
+	fitResult.tdist_tValues.resize(np);
+	fitResult.tdist_pValues.resize(np);
+	fitResult.tdist_marginValues.resize(np);
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
@@ -1759,6 +1769,9 @@ void XYFitCurvePrivate::recalculate() {
 			DEBUG("saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
+		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
+		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
+		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(0.05, fitResult.dof, fitResult.errorValues.at(i));
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
@@ -1916,6 +1929,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("mse", QString::number(d->fitResult.mse, 'g', 15));
 	writer->writeAttribute("rmse", QString::number(d->fitResult.rmse, 'g', 15));
 	writer->writeAttribute("mae", QString::number(d->fitResult.mae, 'g', 15));
+	writer->writeAttribute("rsquare", QString::number(d->fitResult.rsquare, 'g', 15));
+	writer->writeAttribute("rsquareAdj", QString::number(d->fitResult.rsquareAdj, 'g', 15));
 	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
 
 	writer->writeStartElement("paramValues");
@@ -1926,6 +1941,22 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("errorValues");
 	foreach (const double &value, d->fitResult.errorValues)
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
+	writer->writeEndElement();
+
+	writer->writeStartElement("tdist_tValues");
+	foreach (const double &value, d->fitResult.tdist_tValues)
+		writer->writeTextElement("tdist_t", QString::number(value, 'g', 15));
+
+	writer->writeEndElement();
+	writer->writeStartElement("tdist_pValues");
+	foreach (const double &value, d->fitResult.tdist_pValues)
+		writer->writeTextElement("tdist_p", QString::number(value, 'g', 15));
+	writer->writeEndElement();
+
+	writer->writeEndElement();
+	writer->writeStartElement("tdist_marginValues");
+	foreach (const double &value, d->fitResult.tdist_marginValues)
+		writer->writeTextElement("tdist_margin", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	//save calculated columns if available
@@ -2018,6 +2049,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
+		} else if (reader->name() == "tdist_t") {
+			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
+		} else if (reader->name() == "tdist_p") {
+			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
+		} else if (reader->name() == "tdist_margin") {
+			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
@@ -2059,6 +2096,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitData.paramFixed.resize(2);
 		d->fitResult.paramValues.resize(2);
 		d->fitResult.errorValues.resize(2);
+		d->fitResult.tdist_tValues.resize(2);
+		d->fitResult.tdist_pValues.resize(2);
+		d->fitResult.tdist_marginValues.resize(2);
 	}
 
 	// wait for data to be read before using the pointers
