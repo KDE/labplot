@@ -275,12 +275,24 @@ void PlotDataDialog::plot() {
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
+			//set the axis titles befor we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
+				}
+			}
+
+			//if we only have one single y-column to plot, we can set the title of the y-axes
+			if (m_columnComboBoxes.size() == 2) {
+				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
+				for (auto axis : plot->children<Axis>()) {
+					if (axis->orientation() == Axis::AxisVertical) {
+						axis->title()->setText(yColumnName);
+						break;
+					}
 				}
 			}
 
@@ -303,12 +315,24 @@ void PlotDataDialog::plot() {
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
+			//set the axis titles befor we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {
 				if (axis->orientation() == Axis::AxisHorizontal) {
 					axis->title()->setText(xColumnName);
 					break;
+				}
+			}
+
+			//if we only have one single y-column to plot, we can set the title of the y-axes
+			if (m_columnComboBoxes.size() == 2) {
+				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
+				for (auto axis : plot->children<Axis>()) {
+					if (axis->orientation() == Axis::AxisVertical) {
+						axis->title()->setText(yColumnName);
+						break;
+					}
 				}
 			}
 
@@ -332,6 +356,9 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 	return 0;
 }
 
+/*!
+ * * for the selected columns in this dialog, creates a curve in the already existing plot \c plot.
+ */
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Column* xColumn = columnFromName(ui->cbXColumn->currentText());
@@ -341,9 +368,13 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) const {
 		Column* yColumn = columnFromName(name);
 		addCurve(name, xColumn, yColumn, plot);
 	}
+
 	plot->scaleAuto();
 }
 
+/*!
+ * for the selected columns in this dialog, creates a plot and a curve in the already existing worksheet \c worksheet.
+ */
 void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	worksheet->setSuppressLayoutUpdate(true);
@@ -358,7 +389,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) const {
 		CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 		plot->initDefault(CartesianPlot::FourAxes);
 
-		//set the axis names
+		//set the axis names in the new plot
 		bool xSet = false;
 		bool ySet = false;
 		for (auto axis : plot->children<Axis>()) {
