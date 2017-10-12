@@ -1931,6 +1931,9 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("mae", QString::number(d->fitResult.mae, 'g', 15));
 	writer->writeAttribute("rsquare", QString::number(d->fitResult.rsquare, 'g', 15));
 	writer->writeAttribute("rsquareAdj", QString::number(d->fitResult.rsquareAdj, 'g', 15));
+	writer->writeAttribute("chisq_p", QString::number(d->fitResult.chisq_p, 'g', 15));
+	writer->writeAttribute("fdist_F", QString::number(d->fitResult.fdist_F, 'g', 15));
+	writer->writeAttribute("fdist_p", QString::number(d->fitResult.fdist_p, 'g', 15));
 	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
 
 	writer->writeStartElement("paramValues");
@@ -2071,6 +2074,11 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("mse", fitResult.mse);
 			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
 			READ_DOUBLE_VALUE("mae", fitResult.mae);
+			READ_DOUBLE_VALUE("rsquare", fitResult.rsquare);
+			READ_DOUBLE_VALUE("rsquareAdj", fitResult.rsquareAdj);
+			READ_DOUBLE_VALUE("chisq_p", fitResult.chisq_p);
+			READ_DOUBLE_VALUE("fdist_F", fitResult.fdist_F);
+			READ_DOUBLE_VALUE("fdist_p", fitResult.fdist_p);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
