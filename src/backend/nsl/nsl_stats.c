@@ -213,3 +213,17 @@ double nsl_stats_fdist_p(double F, size_t np, double dof) {
 		p = 0;
 	return p;
 }
+
+/* Akaike information criterion */
+double nsl_stats_aic(double sse, size_t n, size_t np) {
+	double aic = n * log(sse/n) + 2. * np;	// standard formula
+	if (n < 40 * np)	// bias correction
+		aic += 2. * np * (np + 1.)/(n - np - 1.);
+
+	return aic;
+}
+
+/* Bayasian information criterion */
+double nsl_stats_bic(double sse, size_t n, size_t np) {
+	return n * log(sse/n) + np * log(n);
+}

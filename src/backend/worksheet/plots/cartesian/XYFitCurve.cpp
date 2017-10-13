@@ -1752,6 +1752,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.chisq_p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
 	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
 	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
+	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np);
+	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np);
 
 	//parameter values
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
@@ -1934,6 +1936,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("chisq_p", QString::number(d->fitResult.chisq_p, 'g', 15));
 	writer->writeAttribute("fdist_F", QString::number(d->fitResult.fdist_F, 'g', 15));
 	writer->writeAttribute("fdist_p", QString::number(d->fitResult.fdist_p, 'g', 15));
+	writer->writeAttribute("aic", QString::number(d->fitResult.aic, 'g', 15));
+	writer->writeAttribute("bic", QString::number(d->fitResult.bic, 'g', 15));
 	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
 
 	writer->writeStartElement("paramValues");
@@ -2079,6 +2083,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("chisq_p", fitResult.chisq_p);
 			READ_DOUBLE_VALUE("fdist_F", fitResult.fdist_F);
 			READ_DOUBLE_VALUE("fdist_p", fitResult.fdist_p);
+			READ_DOUBLE_VALUE("aic", fitResult.aic);
+			READ_DOUBLE_VALUE("bic", fitResult.bic);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
