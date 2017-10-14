@@ -31,8 +31,13 @@ class FitTest : public QObject {
 
 private slots:
 	//linear regression
+	void testLinearWampler1();
+	void testLinearWampler2();
+	void testLinearWampler3();
+	void testLinearWampler4();
 	void testLinearWampler5();
 
 	//non-linear regression
 
+	//fits with weights
 };
