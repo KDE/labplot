@@ -2103,6 +2103,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	// new fit model style (reset model type of old projects)
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
+		DEBUG("reset old fit model");
 		d->fitData.modelType = 0;
 		d->fitData.degree = 1;
 		// reset size of fields not touched by initFitData()
@@ -2114,6 +2115,13 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_pValues.resize(2);
 		d->fitResult.tdist_marginValues.resize(2);
 	}
+	// not present in old projects
+	if (d->fitResult.tdist_tValues.size() == 0)
+		d->fitResult.tdist_tValues.resize(d->fitResult.paramValues.size());
+	if (d->fitResult.tdist_pValues.size() == 0)
+		d->fitResult.tdist_pValues.resize(d->fitResult.paramValues.size());
+	if (d->fitResult.tdist_marginValues.size() == 0)
+		d->fitResult.tdist_marginValues.resize(d->fitResult.paramValues.size());
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

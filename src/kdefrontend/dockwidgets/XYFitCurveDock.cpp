@@ -910,7 +910,9 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 		str += i18n("F statistic") + ": " + QString::number(fitResult.fdist_F, 'g', 3) + "<br>";
 		str += i18n("P > F") + ": " + QString::number(fitResult.fdist_p, 'g', 3) + "<br>";
 	}
-	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br> <br>";
+	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
+	str += i18n("Akaike information criterion:") + ' ' + QString::number(fitResult.aic) + "<br>";
+	str += i18n("Bayesian information criterion:") + ' ' + QString::number(fitResult.bic) + "<br> <br>";
 
 	// show all iterations
 	str += "<b>" + i18n("Iterations:") + "</b><br>";
@@ -1025,6 +1027,8 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.chisq_p, 'g', 3));
 		uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(fitResult.fdist_F, 'g', 3));
 		uiGeneralTab.twGoodness->item(7, 2)->setText(QString::number(fitResult.fdist_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(9, 2)->setText(QString::number(fitResult.aic, 'g', 3));
+		uiGeneralTab.twGoodness->item(10, 2)->setText(QString::number(fitResult.bic, 'g', 3));
 	}
 
 	uiGeneralTab.twGoodness->item(8, 2)->setText(QString::number(fitResult.mae));
