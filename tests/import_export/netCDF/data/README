@@ -1,0 +1,9 @@
+Test files from https://www.unidata.ucar.edu/software/netcdf/examples/files.html
+
+madis-maritime.nc (472208 bytes) 	Meteorological Assimilation Data Ingest System(MADIS) maritime data for a single hour.
+
+test_hgroups.nc (90645 bytes) 	A couple of aircraft flight data sets stored as individual groups. For the sake of experimenting, the first group has its dimension (recNum) and the time variable defined at root level. All other groups have all dimensions stored inside the group.
+
+OMI-Aura_L2-example.nc (239738 bytes) 	Example of a satellite data file with averaging kernels. Has variables with two dimensions of the same name in it (short O3.COLUMN.PARTIAL_AVK(DATETIME, PRESSURE, PRESSURE)).
+
+testrh.nc (40080 bytes) 	File with one variable of type float that compresses well and for which shuffling improves compression.
