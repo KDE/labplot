@@ -46,6 +46,7 @@ HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 	ui.twContent->hideColumn(1);
 	ui.twContent->hideColumn(2);
 	ui.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );

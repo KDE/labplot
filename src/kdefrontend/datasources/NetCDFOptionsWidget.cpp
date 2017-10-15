@@ -46,6 +46,7 @@ NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* file
 	ui.twContent->hideColumn(1);
 	ui.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.twContent->setAlternatingRowColors(true);
+	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>500</width>
     <height>250</height>
    </rect>
   </property>
@@ -70,6 +70,9 @@
         <property name="toolTip">
          <string>Shows the content of a HDF file</string>
         </property>
+        <attribute name="headerStretchLastSection">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string notr="true">1</string>

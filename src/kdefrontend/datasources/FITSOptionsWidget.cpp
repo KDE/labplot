@@ -37,6 +37,7 @@ FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twExtensions->headerItem()->setText(0, i18n("Content"));
 	ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
 	ui.twExtensions->setAlternatingRowColors(true);
+	ui.twExtensions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect( ui.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));

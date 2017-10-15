@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>492</width>
     <height>250</height>
    </rect>
   </property>
@@ -45,6 +45,9 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QTreeWidget" name="twExtensions">
+      <attribute name="headerStretchLastSection">
+       <bool>false</bool>
+      </attribute>
       <column>
        <property name="text">
         <string notr="true">1</string>
