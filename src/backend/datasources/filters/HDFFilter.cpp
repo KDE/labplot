@@ -312,13 +312,17 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 }
 
 QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataContainer) {
+	DEBUG("HDFFilterPrivate::readHDFCompoundData1D()");
+	DEBUG("dataContainer size = " << dataContainer.size());
 	int members = H5Tget_nmembers(tid);
 	handleError(members, "H5Tget_nmembers");
+	DEBUG(" # members = " << members);
 
 	QStringList dataString;
 	if (!dataContainer[0]) {
 		for (int i = 0; i < qMin(rows, lines); i++)
 			dataString <<  QLatin1String("(");
+		dataContainer.resize(members);	// avoid "index out of range" for preview
 	}
 
 	for (int m = 0; m < members; m++) {
@@ -391,7 +395,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		else {
 			if (dataContainer[m]) {
 				for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++)
-					static_cast<QVector<double>*>(dataContainer[m])	->operator[](i-startRow+1) = 0;
+					static_cast<QVector<double>*>(dataContainer[m])->operator[](i-startRow+1) = 0;
 			} else {
 				for (int i = 0; i < qMin(rows, lines); i++)
 					mdataString << QLatin1String("_");
