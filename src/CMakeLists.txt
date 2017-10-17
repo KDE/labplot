@@ -12,7 +12,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
-	${KDEFRONTEND_DIR}/LabPlot.cpp
+#	${KDEFRONTEND_DIR}/LabPlot.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
@@ -316,50 +316,54 @@ add_subdirectory( pics/colorchooser )
 add_subdirectory( themes )
 
 ##############################################################################
-set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
 INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+set( LABPLOT_SRCS ${GUI_SOURCES} )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 
-
-
-add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
-target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
+# static library
+add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
+# set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_link_libraries( labplot2lib KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg Qt5::Core ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
 
 IF (Qt5SerialPort_FOUND)
-	target_link_libraries( labplot2 Qt5::SerialPort )
+	target_link_libraries( labplot2lib Qt5::SerialPort )
 ENDIF ()
 
 IF (KF5SyntaxHighlighting_FOUND)
-	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
+	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
 ENDIF ()
 #TODO: KF5::NewStuff
 
 IF (CANTOR_LIBS_FOUND)
-	target_link_libraries( labplot2 ${CANTOR_LIBS} )
+	target_link_libraries( labplot2lib ${CANTOR_LIBS} )
 ENDIF ()
 IF (HDF5_FOUND)
-	target_link_libraries( labplot2 ${HDF5_C_LIBRARIES} )
+	target_link_libraries( labplot2lib ${HDF5_C_LIBRARIES} )
 ENDIF ()
 IF (FFTW_FOUND)
-	target_link_libraries( labplot2 ${FFTW_LIBRARIES} )
+	target_link_libraries( labplot2lib ${FFTW_LIBRARIES} )
 ENDIF ()
 IF (NETCDF_FOUND)
-	target_link_libraries( labplot2 ${NETCDF_LIBRARY} )
+	target_link_libraries( labplot2lib ${NETCDF_LIBRARY} )
 ENDIF ()
 IF (CFITSIO_FOUND)
-	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
+	target_link_libraries( labplot2lib ${CFITSIO_LIBRARY} )
 ENDIF ()
 IF (USE_LIBORIGIN)
 IF (WIN32)
 	IF (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
-	target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/lib/origin.lib )
+	target_link_libraries( labplot2lib ${PROJECT_BINARY_DIR}/lib/origin.lib )
 	ELSE ()
-	target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/lib/liborigin.a )
+	target_link_libraries( labplot2lib ${PROJECT_BINARY_DIR}/lib/liborigin.a )
 	ENDIF ()
 ELSE ()
-target_link_libraries( labplot2 ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+target_link_libraries( labplot2lib ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
 ENDIF ()
 ENDIF ()
+
+# main executable
+add_executable( labplot2 ${KDEFRONTEND_DIR}/LabPlot.cpp )
+target_link_libraries( labplot2 labplot2lib )
 
 ############## installation ################################
 
