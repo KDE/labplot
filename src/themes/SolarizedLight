@@ -67,6 +67,5 @@ LineOpacity=1
 LineStyle=1
 LineWidth=3.52778
 SymbolOpacity=1
-ValuesColor=0,0,0
-ValuesFont=Droid Sans,8,-1,5,50,0,0,0,0,0
+ValuesColor=101,123,131
 ValuesOpacity=1
