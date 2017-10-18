@@ -1132,8 +1132,11 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 }
 
 void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
-	const KConfigGroup group = config.group("CartesianPlot");
 
+	KConfigGroup groupLabel = config.group("Label");
+	this->setLabelColor(groupLabel.readEntry("FontColor", QColor(Qt::white)));
+
+	const KConfigGroup group = config.group("CartesianPlot");
 	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
 	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
 	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
