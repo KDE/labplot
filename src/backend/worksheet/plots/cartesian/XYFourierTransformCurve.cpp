@@ -39,10 +39,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/gsl/errors.h"
 
 #include <cmath>	// isnan
 extern "C" {
-#include <gsl/gsl_errno.h>
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
@@ -312,7 +312,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	//write the result
 	transformResult.available = true;
 	transformResult.valid = true;
-	transformResult.status = QString(gsl_strerror(status));
+	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve

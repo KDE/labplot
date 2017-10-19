@@ -41,6 +41,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/gsl/errors.h"
 #include "backend/gsl/ExpressionParser.h"
 
 extern "C" {
@@ -58,7 +59,6 @@ extern "C" {
 
 #include <QElapsedTimer>
 #include <QIcon>
-#include <KLocalizedString>
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
@@ -1730,7 +1730,7 @@ void XYFitCurvePrivate::recalculate() {
 	//write the result
 	fitResult.available = true;
 	fitResult.valid = true;
-	fitResult.status = QString(gsl_strerror(status)); // i18n? GSL does not support translations
+	fitResult.status = gslErrorToString(status);
 	fitResult.iterations = iter;
 	fitResult.dof = n - np;
 

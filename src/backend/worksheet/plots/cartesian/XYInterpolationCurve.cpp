@@ -40,18 +40,17 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/gsl/errors.h"
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
 extern "C" {
-#include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
 #include "backend/nsl/nsl_diff.h"
 #include "backend/nsl/nsl_int.h"
 }
 
-#include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
 #include <QIcon>
@@ -65,7 +64,6 @@ XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationC
 	: XYCurve(name, dd) {
 	init();
 }
-
 
 XYInterpolationCurve::~XYInterpolationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -481,7 +479,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//write the result
 	interpolationResult.available = true;
 	interpolationResult.valid = true;
-	interpolationResult.status = QString(gsl_strerror(status));
+	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve

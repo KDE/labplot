@@ -39,10 +39,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/gsl/errors.h"
 
 #include <cmath>	// isnan
 extern "C" {
-#include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_pow_int.h>
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
@@ -51,7 +51,6 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <KLocale>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
@@ -323,7 +322,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
-	filterResult.status = QString(gsl_strerror(status));
+	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
