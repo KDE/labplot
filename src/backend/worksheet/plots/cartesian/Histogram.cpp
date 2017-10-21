@@ -154,7 +154,7 @@ void Histogram::setPrinting(bool on) {
 
 void Histogram::setHistrogramType(Histogram::HistogramType histogramType) {
 	d_ptr->histogramType = histogramType;
-	qDebug() << histogramType;
+	DEBUG(histogramType);
 }
 
 Histogram::HistogramType Histogram::getHistrogramType() {
