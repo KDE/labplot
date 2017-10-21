@@ -30,23 +30,15 @@
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
-#include <KDebug>
 #include <KGlobal>
-#include <KConfig>
 
-#include <QImage>
 #include <QColor>
 #include <QDir>
-#include <QDebug>
+#include <QImage>
+#include <QProcess>
+#include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QTextStream>
-#include <QProcess>
-
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <QStandardPaths>
-#else
-#include <KStandardDirs>
-#endif
 
 /*!
 	\class TeXRenderer
@@ -83,7 +75,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	if(file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		qWarning() << "Couldn't open the file " << file.fileName();
+		WARNING(QString("Couldn't open the file " + file.fileName()).toStdString());
 		*success = false;
 		return QImage();
 	}
@@ -151,8 +143,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
 #endif
 	if (!latexProcess.waitForFinished()) {
-		kWarning() << engine << "process failed." << endl;
-		DEBUG("latex process failed!");
+		WARNING("latex process failed.");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
@@ -208,8 +199,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
-		kWarning() << "convert process failed." << endl;
-		DEBUG("convert process failed!");
+		WARNING("convert process failed.");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".pdf");
 		return QImage();
@@ -232,7 +222,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess latexProcess;
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished()) {
-		qWarning() << "latex process failed." << endl;
+		WARNING("latex process failed.");
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
@@ -247,7 +237,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-		qWarning() << "dvips process failed." << endl;
+		WARNING("dvips process failed.");
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		return QImage();
 	}
@@ -263,8 +253,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 			<< fi.completeBaseName() + ".ps" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
-		qWarning() << "convert process failed." << endl;
-		kWarning() << "convert process failed." << endl;
+		WARNING("convert process failed.");
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		QFile::remove(fi.completeBaseName() + ".ps");
 		return QImage();
@@ -306,7 +295,7 @@ bool TeXRenderer::enabled() {
 	}
 
 #if defined(_WIN64)
-	if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists() 
+	if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()
 		&& !QDir(qgetenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
 		WARNING("ghostscript (64bit) does not exist");
 		return false;
@@ -322,9 +311,5 @@ bool TeXRenderer::enabled() {
 }
 
 bool TeXRenderer::executableExists(const QString& exe) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-		return !QStandardPaths::findExecutable(exe).isEmpty();
-#else
-		return !KStandardDirs::findExe(exe).isEmpty();
-#endif
+	return !QStandardPaths::findExecutable(exe).isEmpty();
 }
