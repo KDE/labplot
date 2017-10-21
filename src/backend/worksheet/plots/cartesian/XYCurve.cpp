@@ -46,6 +46,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "tools/ImageTools.h"
 
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
@@ -1921,74 +1922,6 @@ void XYCurvePrivate::updatePixmap() {
 	RESET_CURSOR;
 }
 
-//TODO: move this to a central place
-QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false) {
-	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
-	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
-
-	QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-	int r1 = rect.top();
-	int r2 = rect.bottom();
-	int c1 = rect.left();
-	int c2 = rect.right();
-
-	int bpl = result.bytesPerLine();
-	int rgba[4];
-	unsigned char* p;
-
-	int i1 = 0;
-	int i2 = 3;
-
-	if (alphaOnly)
-		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
-
-	for (int col = c1; col <= c2; col++) {
-		p = result.scanLine(r1) + col * 4;
-		for (int i = i1; i <= i2; i++)
-			rgba[i] = p[i] << 4;
-
-		p += bpl;
-		for (int j = r1; j < r2; j++, p += bpl)
-			for (int i = i1; i <= i2; i++)
-				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-	}
-
-	for (int row = r1; row <= r2; row++) {
-		p = result.scanLine(row) + c1 * 4;
-		for (int i = i1; i <= i2; i++)
-			rgba[i] = p[i] << 4;
-
-		p += 4;
-		for (int j = c1; j < c2; j++, p += 4)
-			for (int i = i1; i <= i2; i++)
-				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-	}
-
-	for (int col = c1; col <= c2; col++) {
-		p = result.scanLine(r2) + col * 4;
-		for (int i = i1; i <= i2; i++)
-			rgba[i] = p[i] << 4;
-
-		p -= bpl;
-		for (int j = r1; j < r2; j++, p -= bpl)
-			for (int i = i1; i <= i2; i++)
-				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-	}
-
-	for (int row = r1; row <= r2; row++) {
-		p = result.scanLine(row) + c2 * 4;
-		for (int i = i1; i <= i2; i++)
-			rgba[i] = p[i] << 4;
-
-		p -= 4;
-		for (int j = c1; j < c2; j++, p -= 4)
-			for (int i = i1; i <= i2; i++)
-				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-	}
-
-	return result;
-}
-
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
@@ -2014,7 +1947,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 			QPixmap pix = m_pixmap;
 			pix.fill(q->hoveredPen.color());
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
-			m_hoverEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5);
+			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
 		}
 
@@ -2028,7 +1961,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 			QPixmap pix = m_pixmap;
 			pix.fill(q->selectedPen.color());
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
-			m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5);
+			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;
 		}
 

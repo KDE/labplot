@@ -297,8 +297,9 @@ ELSE (${CANTOR_LIBS_FOUND})
 ENDIF (${CANTOR_LIBS_FOUND})
 
 set(TOOLS_SOURCES
-	${TOOLS_DIR}/TeXRenderer.cpp
 	${TOOLS_DIR}/EquationHighlighter.cpp
+	${TOOLS_DIR}/ImageTools.cpp
+	${TOOLS_DIR}/TeXRenderer.cpp
 )
 
 bison_target(GslParser
