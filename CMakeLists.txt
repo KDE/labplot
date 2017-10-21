@@ -2,7 +2,6 @@ project(labplot2)
 # minimum 3.2.0 for FindGSL.cmake
 cmake_minimum_required(VERSION 3.2.0)
 set(KF5_MIN_VERSION "5.16.0")
-# enable_testing(true)
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
@@ -267,7 +266,11 @@ ENDIF ()
 add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(src)
-# add_subdirectory(tests)
+
+# if (BUILD_TESTS)
+    enable_testing(true)
+    add_subdirectory(tests)
+# endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)

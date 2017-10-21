@@ -1,13 +1,7 @@
-file(GLOB_RECURSE OBJS_TMP ${SRC_BUILD_DIR}/*.o)
-
-# remove LabPlot.cpp.o since it contains main() already
-set(OBJS ${OBJS_TMP})
-list(REMOVE_ITEM OBJS ${SRC_BUILD_DIR}/CMakeFiles/labplot2.dir/kdefrontend/LabPlot.cpp.o)
-
 add_executable (asciifiltertest AsciiFilterTest.cpp)
+
 target_link_libraries(asciifiltertest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} ${QT_QTSQL_LIBRARIES})
 target_link_libraries(asciifiltertest KF5::KDELibs4Support KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-target_link_libraries(asciifiltertest ${OBJS})
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries(asciifiltertest Qt5::SerialPort )
@@ -33,15 +27,9 @@ IF (CFITSIO_FOUND)
 	target_link_libraries(asciifiltertest ${CFITSIO_LIBRARY} )
 ENDIF ()
 IF (USE_LIBORIGIN)
-IF (WIN32)
-	IF (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
-	target_link_libraries(asciifiltertest ${PROJECT_BINARY_DIR}/lib/origin.lib )
-	ELSE ()
-	target_link_libraries(asciifiltertest ${PROJECT_BINARY_DIR}/lib/liborigin.a )
-	ENDIF ()
-ELSE ()
-target_link_libraries(asciifiltertest ${PROJECT_BINARY_DIR}/liborigin/liborigin.a )
+target_link_libraries(asciifiltertest liborigin-static )
 ENDIF ()
-ENDIF ()
+
+target_link_libraries(asciifiltertest labplot2lib)
 
 add_test(NAME asciifiltertest COMMAND asciifiltertest)

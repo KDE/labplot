@@ -47,8 +47,8 @@ set (devel-headers
 #	SOVERSION ${LIBORIGIN_VERSION_MAJOR} )
 
 # static library
-add_library (origin-static STATIC ${sources})
-set_target_properties(origin-static PROPERTIES OUTPUT_NAME "origin" POSITION_INDEPENDENT_CODE ON)
+add_library (liborigin-static STATIC ${sources})
+set_target_properties(liborigin-static PROPERTIES OUTPUT_NAME "origin" POSITION_INDEPENDENT_CODE ON)
 
 # install libraries
 #install(TARGETS origin origin-static DESTINATION lib)
