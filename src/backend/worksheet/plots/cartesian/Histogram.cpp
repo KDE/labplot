@@ -417,6 +417,7 @@ void Histogram::handleSourceDataChanged() {
 //TODO
 void Histogram::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(pageResize);
+	Q_UNUSED(verticalRatio);
 	Q_D(const Histogram);
 
 	//setValuesDistance(d->distance*);
@@ -629,7 +630,6 @@ void HistogramPrivate::updateLines() {
 	}
 	*/
 	switch(histogramType) {
-		qDebug() << "histogramType switch case " << histogramType;
 	case Histogram::Ordinary: {
 			for (int row = startRow; row <= endRow; row++ ) {
 				if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
@@ -754,61 +754,58 @@ void HistogramPrivate::updateValues() {
 	}
 
 	//determine the value string for all points that are currently visible in the plot
-	switch (valuesType) {
-	case Histogram::NoValues:
-	case Histogram::ValuesY: {
-			switch(histogramType) {
-			case Histogram::Ordinary:
-				for(size_t i=0; i<bins; ++i) {
-					if (!visiblePoints[i]) continue;
+	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
+		switch(histogramType) {
+		case Histogram::Ordinary:
+			for(size_t i=0; i<bins; ++i) {
+				if (!visiblePoints[i]) continue;
+				if (valuesType == Histogram::ValuesY)
 					valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
-				}
-				break;
-			case Histogram::Cumulative: {
-					value = 0;
-					for(size_t i=0; i<bins; ++i) {
-						if (!visiblePoints[i]) continue;
-						value += gsl_histogram_get(histogram, i);
-						valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
-					}
-					break;
-				}
-				//TODO case Histogram::AvgShift:
+				else
+					valuesStrings << valuesPrefix + "(" + QString::number(gsl_histogram_get(histogram, i)) + ")" + valuesSuffix;
 			}
 			break;
-		}
-	case Histogram::ValuesCustomColumn: {
-			if (!valuesColumn) {
-				recalcShapeAndBoundingRect();
-				return;
-			}
-
-			int endRow;
-			if (symbolPointsLogical.size()>valuesColumn->rowCount())
-				endRow =  valuesColumn->rowCount();
-			else
-				endRow = symbolPointsLogical.size();
-
-			AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-			for (int i = 0; i < endRow; ++i) {
-				if (!visiblePoints[i]) continue;
-
-				if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
-					continue;
-
-				switch (xColMode) {
-				case AbstractColumn::Numeric:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
-				case AbstractColumn::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::Integer:
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+		case Histogram::Cumulative: {
+				value = 0;
+				for(size_t i=0; i<bins; ++i) {
+					if (!visiblePoints[i]) continue;
+					value += gsl_histogram_get(histogram, i);
+					if (valuesType == Histogram::ValuesY)
+						valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+					else
+						valuesStrings << valuesPrefix + "(" + QString::number(value) + ")" + valuesSuffix;
 				}
+				break;
+			}
+		case Histogram::AvgShift:
+			break;
+		}
+	} else if (valuesType == Histogram::ValuesCustomColumn) {
+		if (!valuesColumn) {
+			recalcShapeAndBoundingRect();
+			return;
+		}
+
+		const int endRow = qMin(symbolPointsLogical.size(), valuesColumn->rowCount());
+		const AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+		for (int i = 0; i < endRow; ++i) {
+			if (!visiblePoints[i]) continue;
+
+			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
+				continue;
+
+			switch (xColMode) {
+			case AbstractColumn::Numeric:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::Text:
+				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+			case AbstractColumn::Integer:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 		}
 	}
