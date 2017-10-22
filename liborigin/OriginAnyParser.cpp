@@ -35,10 +35,10 @@ OriginAnyParser::OriginAnyParser(const string& fileName)
 }
 
 bool OriginAnyParser::parse() {
-#ifndef NO_CODE_GENERATION_FOR_LOG
+#ifdef GENERATE_CODE_FOR_LOG
 	// append progress in log file
 	logfile = fopen("opjfile.log","a");
-#endif // NO_CODE_GENERATION_FOR_LOG
+#endif // GENERATE_CODE_FOR_LOG
 
 	// get length of file:
 	file.seekg (0, ios_base::end);
@@ -156,9 +156,9 @@ bool OriginAnyParser::parse() {
 	matrixes.clear();
 	matrixes = validMatrices;
 
-#ifndef NO_CODE_GENERATION_FOR_LOG
+#ifdef GENERATE_CODE_FOR_LOG
 	fclose(logfile);
-#endif // NO_CODE_GENERATION_FOR_LOG
+#endif // GENERATE_CODE_FOR_LOG
 
 	return true;
 }
@@ -734,9 +734,9 @@ void OriginAnyParser::readProjectTree() {
 	(void) pte_post_size; // supress compiler warning
 
 	// log info on project tree
-#ifndef NO_CODE_GENERATION_FOR_LOG
+#ifdef GENERATE_CODE_FOR_LOG
 	outputProjectTree();
-#endif // NO_CODE_GENERATION_FOR_LOG
+#endif // GENERATE_CODE_FOR_LOG
 
 	return;
 }
@@ -902,7 +902,7 @@ void OriginAnyParser::readAttachmentList() {
 	att_header = string(12,0);
 	while (true) {
 		// check for eof
-		if (((unsigned int)file.tellg() == d_file_size) || (file.eof())) break;
+		if ((file.tellg() == d_file_size) || (file.eof())) break;
 		// cannot use readObjectAsString: there is no '\n' at end
 		file.read(reinterpret_cast<char*>(&att_header[0]), 12);
 

@@ -79,7 +79,8 @@ protected:
 	iendianfstream file;
 	FILE *logfile;
 
-	unsigned int d_file_size, objectIndex;
+	unsigned long d_file_size;
+	unsigned int objectIndex;
 	int ispread, imatrix, iexcel, igraph;
 	int ilayer;
 };

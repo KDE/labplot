@@ -32,16 +32,10 @@
 #include "OriginObj.h"
 #include "tree.hh"
 
-#ifndef NO_CODE_GENERATION_FOR_LOG
+#ifdef GENERATE_CODE_FOR_LOG
 
 #ifdef HAVE_WINDOWS
-
-#ifdef NDEBUG
-#define LOG_PRINT( logfile, args, ... ) { fprintf(logfile, args); }
-#else
-#define LOG_PRINT( logfile, args, ... ) { int ioret = fprintf(logfile, args); assert(ioret > 0); }
-#endif
-
+#define LOG_PRINT( logfile, ... ) { fprintf(logfile, __VA_ARGS__); }
 #else	// NOT WINDOWS
 
 #ifdef NDEBUG
@@ -52,7 +46,7 @@
 
 #endif
 
-#else // !NO_CODE_GENERATION_FOR_LOG
+#else // !GENERATE_CODE_FOR_LOG
 #define LOG_PRINT( logfile, args, ... ) {};
 #endif
 

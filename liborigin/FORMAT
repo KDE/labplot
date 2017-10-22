@@ -24,7 +24,7 @@ Date:
     dd/MM/yyyy HH:mm        = -119
     dd/MM/yyyy HH:mm:ss     = -118
 	dd.MM.yyyy              = 0
-	y.                      = 1  (year abbreviation - for instance, 'ã.' in russian)
+	y.                      = 1  (year abbreviation - for instance, 'Ã£.' in russian)
 	MMM d                   = 2
 	M/d                     = 3
 	d                       = 4

@@ -98,18 +98,18 @@ int main(int argc, char *argv[]) {
 			for (int i=0;i<(int)spread.maxRows;i++) {
 				for (int j=0;j<columnCount;j++) {
 					if (i<(int)spread.columns[j].data.size()) {
-						Origin::variant value=spread.columns[j].data[i];
+						Origin::variant value(spread.columns[j].data[i]);
 						double v=0.;
-						if (value.type() == typeid(double)) {
-							v = std::get<double>(value);
+						if (value.type() == Origin::variant::V_DOUBLE) {
+							v = value.as_double();
 							if (v != _ONAN) {
 								outf << v << "; ";
 							} else {
 								outf << nan("NaN") << "; ";
 							}
 						}
-						if (value.type() == typeid(string)) {
-							outf << std::get<string>(value).c_str() << "; ";
+						if (value.type() == Origin::variant::V_STRING) {
+							outf << value.as_string() << "; ";
 						}
 					} else {
 						outf << "; ";
