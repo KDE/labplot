@@ -45,7 +45,8 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
     m_cbThemes = new ThemesComboBox();
     ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
 
-	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(QSize(48,48)) );
+	const int size = ui.cbTexEngine->height();
+	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
 
 	//add available TeX typesetting engines
 	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
@@ -94,6 +95,7 @@ void SettingsWorksheetPage::loadSettings() {
 		index = ui.cbTexEngine->findData(engine);
 
 	ui.cbTexEngine->setCurrentIndex(index);
+	checkTeX(index);
 }
 
 void SettingsWorksheetPage::changed() {
