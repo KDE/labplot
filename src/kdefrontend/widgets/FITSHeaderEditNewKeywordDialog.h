@@ -30,9 +30,10 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/FITSFilter.h"
 #include "ui_fitsheadereditnewkeywordwidget.h"
 
-#include <KDialog>
+#include <QDialog>
 
-class FITSHeaderEditNewKeywordDialog : public KDialog {
+class QPushButton;
+class FITSHeaderEditNewKeywordDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -40,12 +41,15 @@ public:
 	FITSFilter::Keyword newKeyword() const;
 
 private:
+    QPushButton* m_okButton;
+    QPushButton* m_cancelButton;
+
 	Ui::FITSHeaderEditNewKeywordDialog ui;
 	FITSFilter::Keyword m_newKeyword;
 	int okClicked();
 
-protected slots:
-	virtual void slotButtonClicked(int button);
+private slots:
+    void slotButtonClicked(QAbstractButton *button);
 };
 
 #endif // FITSHEADEREDITNEWKEYWORDDIALOG_H

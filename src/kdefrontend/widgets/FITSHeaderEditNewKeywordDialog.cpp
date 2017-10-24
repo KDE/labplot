@@ -3,7 +3,7 @@ File                 : FITSHeaderEditNewKeywordDialog.cpp
 Project              : LabPlot
 Description          : Widget for adding new keyword in the FITS edit widget
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -28,7 +28,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QCompleter>
 
-#include <KDialog>
+#include <QDialog>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
+
 #include <KMessageBox>
 
 #define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
@@ -40,15 +44,21 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : KDialog(parent) {
-	QWidget* mainWidget = new QWidget(this);
-	ui.setupUi(mainWidget);
-	setMainWidget(mainWidget);
+FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : QDialog(parent) {
+    ui.setupUi(this);
+
+    QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    ui.gridLayout->addWidget(btnBox);
+    m_okButton = btnBox->button(QDialogButtonBox::Ok);
+    m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+    m_okButton->setText(i18n("&Add keyword"));
+
+    connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
 	setWindowTitle(i18n("Specify the new keyword"));
 	setWindowIcon(QIcon::fromTheme("document-new"));
-	setButtons(KDialog::Ok | KDialog::Cancel);
-	setButtonText(KDialog::Ok, i18n("&Add keyword"));
 
 	QCompleter* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
 	keyCompleter->setCaseSensitivity(Qt::CaseInsensitive);
@@ -70,12 +80,12 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 int FITSHeaderEditNewKeywordDialog::okClicked() {
 	if (!ui.leKey->text().isEmpty()) {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
-		return KDialog::Ok;
+        return QMessageBox::Ok;
 	} else {
 		const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
 		                  i18n("Cannot add empty key"));
 		if (yesNo == KMessageBox::No)
-			return KDialog::Cancel;
+            return QMessageBox::Cancel;
 		return yesNo;
 	}
 }
@@ -89,17 +99,17 @@ FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
 }
 
 /*!
- * \brief Overrides KDialog's slotButtonClicked slot.
- *        Decides whether the dialog should move in an accepted state or canceled.
- * \param button the code of the button clicked
+ * \brief Decides whether the dialog should move in an accepted state or canceled.
+ * \param button the button clicked
  */
-void FITSHeaderEditNewKeywordDialog::slotButtonClicked(int button) {
-	if (button == KDialog::Ok) {
+void FITSHeaderEditNewKeywordDialog::slotButtonClicked(QAbstractButton* button) {
+    if (button == m_okButton) {
 		int okClickedBtn = okClicked();
-		if (okClickedBtn == KDialog::Ok)
+        if (okClickedBtn == QMessageBox::Ok)
 			accept();
-		else if (okClickedBtn == KDialog::Cancel)
+        else if (okClickedBtn == QMessageBox::Cancel)
 			reject();
-	} else
-		KDialog::slotButtonClicked(button);
+    } else if (button == m_cancelButton) {
+        reject();
+    }
 }

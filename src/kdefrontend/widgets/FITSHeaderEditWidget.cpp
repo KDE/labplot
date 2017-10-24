@@ -37,7 +37,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QFileDialog>
 #include <QContextMenuEvent>
 #include <QPushButton>
-
+#include <KConfigGroup>
 #include <KMessageBox>
 
 /*! \class FITSHeaderEditWidget
@@ -312,7 +312,7 @@ void FITSHeaderEditWidget::initContextMenus() {
 void FITSHeaderEditWidget::addKeyword() {
 	FITSHeaderEditNewKeywordDialog* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
 	m_initializingTable = true;
-	if (newKeywordDialog->exec() == KDialog::Accepted) {
+    if (newKeywordDialog->exec() == QDialog::Accepted) {
 		FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
 		QList<FITSFilter::Keyword> currentKeywords = m_extensionDatas[m_seletedExtension].keywords;
 
