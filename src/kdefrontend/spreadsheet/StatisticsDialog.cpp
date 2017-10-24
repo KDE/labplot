@@ -41,27 +41,27 @@
 #include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
-    QDialog(parent) {
+	QDialog(parent) {
 
-    m_twStatistics = new QTabWidget;
+	m_twStatistics = new QTabWidget;
 
-    QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 
-    QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
-    btnOk->setFocus();
+	QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
+	btnOk->setFocus();
 
-    connect(btnOk, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnOk, SIGNAL(clicked(bool)), this, SLOT(close()));
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(m_twStatistics);
-    layout->addWidget(btnBox);
+	QVBoxLayout* layout = new QVBoxLayout;
+	layout->addWidget(m_twStatistics);
+	layout->addWidget(btnBox);
 
-    setLayout(layout);
+	setLayout(layout);
 
 	setWindowTitle(title);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-    const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"

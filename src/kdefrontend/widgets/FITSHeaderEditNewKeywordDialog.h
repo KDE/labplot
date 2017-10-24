@@ -41,15 +41,15 @@ public:
 	FITSFilter::Keyword newKeyword() const;
 
 private:
-    QPushButton* m_okButton;
-    QPushButton* m_cancelButton;
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
 
 	Ui::FITSHeaderEditNewKeywordDialog ui;
 	FITSFilter::Keyword m_newKeyword;
 	int okClicked();
 
 private slots:
-    void slotButtonClicked(QAbstractButton *button);
+	void slotButtonClicked(QAbstractButton *button);
 };
 
 #endif // FITSHEADEREDITNEWKEYWORDDIALOG_H

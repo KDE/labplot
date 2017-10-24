@@ -41,7 +41,7 @@ public:
 
 private:
 	Ui::FITSHeaderEditAddUnitDialog  ui;
-    QPushButton* m_okButton;
+	QPushButton* m_okButton;
 
 private slots:
 	void unitChanged();

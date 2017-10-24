@@ -45,7 +45,7 @@ public:
 private:
 	const QString isNanValue(const double);
 
-    QTabWidget* m_twStatistics;
+	QTabWidget* m_twStatistics;
 	QString m_htmlText;
 	QVector<Column*> m_columns;
 

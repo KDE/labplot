@@ -142,30 +142,30 @@ void MatrixView::init() {
 
 void MatrixView::initActions() {
 	// selection related actions
-    action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
-    action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
-    action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
-    action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
-    action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
+	action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
+	action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
+	action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
+	action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
+	action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
 	QActionGroup* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
-    action_data_view = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Data"), viewActionGroup);
+	action_data_view = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
 	action_data_view->setChecked(true);
-    action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
+	action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
 	action_image_view->setCheckable(true);
 	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
 
-    action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
-    action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
-    action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
-    action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
+	action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
+	action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
+	action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
+	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 
-    action_transpose = new QAction(i18n("&Transpose"), this);
-    action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-    action_mirror_vertically = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+	action_transpose = new QAction(i18n("&Transpose"), this);
+	action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+	action_mirror_vertically = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	//TODO
 	//icon
@@ -1449,7 +1449,7 @@ void MatrixView::showColumnStatistics() {
 			}
 		}
 		dlg->setColumns(columns);
-        if (dlg->exec() == QDialog::Accepted) {
+		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
 		}
@@ -1460,7 +1460,7 @@ void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
 		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
-        QVector<Column*> columns;
+		QVector<Column*> columns;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
 				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();
@@ -1469,7 +1469,7 @@ void MatrixView::showRowStatistics() {
 			}
 		}
 		dlg->setColumns(columns);
-        if (dlg->exec() == QDialog::Accepted) {
+		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
 		}

@@ -32,25 +32,25 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 #include <QPushButton>
 
 FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent) : QDialog(parent) {
-    ui.setupUi(this);
-    QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	ui.setupUi(this);
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    ui.horizontalLayout->addWidget(btnBox);
-    m_okButton = btnBox->button(QDialogButtonBox::Ok);
-    m_okButton->setText(i18n("&Add"));
+	ui.horizontalLayout->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	m_okButton->setText(i18n("&Add"));
 
 	setWindowTitle(i18n("Add New Unit"));
 	setWindowIcon(QIcon::fromTheme("document-new"));
-    m_okButton->setEnabled(false);
+	m_okButton->setEnabled(false);
 
 	QCompleter* keyCompleter = new QCompleter(FITSFilter::units(), this);
 	ui.leUnit->setCompleter(keyCompleter);
 	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 
 	connect(ui.leUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
-    connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
-    QPushButton* btnCancel = btnBox->button(QDialogButtonBox::Cancel);
-    connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
+	QPushButton* btnCancel = btnBox->button(QDialogButtonBox::Cancel);
+	connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
 
 	ui.leUnit->setText(unit);
 }
@@ -64,5 +64,5 @@ QString FITSHeaderEditAddUnitDialog::unit() const {
 }
 
 void FITSHeaderEditAddUnitDialog::unitChanged() {
-    m_okButton->setEnabled(!ui.leUnit->text().isEmpty());
+	m_okButton->setEnabled(!ui.leUnit->text().isEmpty());
 }

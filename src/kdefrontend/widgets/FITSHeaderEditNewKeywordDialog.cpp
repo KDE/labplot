@@ -45,17 +45,17 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
  * \ingroup widgets
  */
 FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : QDialog(parent) {
-    ui.setupUi(this);
+	ui.setupUi(this);
 
-    QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    ui.gridLayout->addWidget(btnBox);
-    m_okButton = btnBox->button(QDialogButtonBox::Ok);
-    m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+	ui.gridLayout->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-    m_okButton->setText(i18n("&Add keyword"));
+	m_okButton->setText(i18n("&Add keyword"));
 
-    connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+	connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
 	setWindowTitle(i18n("Specify the new keyword"));
 	setWindowIcon(QIcon::fromTheme("document-new"));
@@ -80,12 +80,12 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 int FITSHeaderEditNewKeywordDialog::okClicked() {
 	if (!ui.leKey->text().isEmpty()) {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
-        return QMessageBox::Ok;
+		return QMessageBox::Ok;
 	} else {
 		const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
 		                  i18n("Cannot add empty key"));
 		if (yesNo == KMessageBox::No)
-            return QMessageBox::Cancel;
+			return QMessageBox::Cancel;
 		return yesNo;
 	}
 }
@@ -103,13 +103,12 @@ FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
  * \param button the button clicked
  */
 void FITSHeaderEditNewKeywordDialog::slotButtonClicked(QAbstractButton* button) {
-    if (button == m_okButton) {
+	if (button == m_okButton) {
 		int okClickedBtn = okClicked();
-        if (okClickedBtn == QMessageBox::Ok)
+		if (okClickedBtn == QMessageBox::Ok)
 			accept();
-        else if (okClickedBtn == QMessageBox::Cancel)
+		else if (okClickedBtn == QMessageBox::Cancel)
 			reject();
-    } else if (button == m_cancelButton) {
-        reject();
-    }
+	} else if (button == m_cancelButton)
+		reject();
 }
