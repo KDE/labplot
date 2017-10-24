@@ -34,21 +34,34 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <KLocale>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 #include <KWindowConfig>
-
+#include <QPushButton>
 #include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
-	KDialog(parent) {
+    QDialog(parent) {
 
-	m_twStatistics = new QTabWidget(this);
-	setMainWidget(m_twStatistics);
+    m_twStatistics = new QTabWidget;
+
+    QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+
+    QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
+    btnOk->setFocus();
+
+    connect(btnOk, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(m_twStatistics);
+    layout->addWidget(btnBox);
+
+    setLayout(layout);
 
 	setWindowTitle(title);
-	setButtons(KDialog::Ok);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? "#5f5f5f" : "#D1D1D1";
+    const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
@@ -164,8 +177,6 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</table>");
 
 	connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
-	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
-
 	QTimer::singleShot(0, this, &StatisticsDialog::loadSettings);
 }
 

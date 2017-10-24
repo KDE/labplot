@@ -29,12 +29,12 @@
 #ifndef STATISTICSDIALOG_H
 #define STATISTICSDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 class Column;
 class QTabWidget;
 
-class StatisticsDialog : public KDialog {
+class StatisticsDialog : public QDialog {
 	Q_OBJECT
 
 public:
