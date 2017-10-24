@@ -149,10 +149,10 @@ QWidget* DatapickerImage::view() const {
 }
 
 bool DatapickerImage::exportView() const {
-	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
-	dlg->setFileName(name());
+    ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+    dlg->setFileName(name());
     bool ret;
-    if ( (ret = (dlg->exec()==QDialog::Accepted)) ){
+    if ( (ret = (dlg->exec() == QDialog::Accepted)) ){
 		const QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();

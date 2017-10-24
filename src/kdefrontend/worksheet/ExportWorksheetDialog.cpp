@@ -34,6 +34,7 @@
 #include <QDirModel>
 #include <QFileDialog>
 
+#include <QDialogButtonBox>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
@@ -46,12 +47,20 @@
 	\ingroup kdefrontend
 */
 
-ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
+ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui(new Ui::ExportWorksheetWidget()) {
+	ui->setupUi(this);
 
-	QWidget* mainWidget = new QWidget(this);
-	ui->setupUi(mainWidget);
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	m_showOptionsButton = new QPushButton;
 
+	connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+
+	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
+	ui->verticalLayout->addWidget(btnBox);
+
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui->leFileName->setCompleter(completer);
@@ -75,16 +84,12 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
 	ui->cbResolution->addItem("600");
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	setMainWidget(mainWidget);
-
-	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
-
 	connect( ui->cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(m_showOptionsButton,SIGNAL(clicked(bool)), this, SLOT(toggleOptions()));
 
-	setCaption(i18n("Export worksheet"));
+	setWindowTitle(i18n("Export worksheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	//restore saved setting
@@ -95,7 +100,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
+			m_showOptionsButton->setText(i18n("Show Options"));
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -147,14 +153,14 @@ int ExportWorksheetDialog::exportResolution() const {
 		return QApplication::desktop()->physicalDpiX();
 	else
 		return ui->cbResolution->currentText().toInt();
-
 }
 
-void ExportWorksheetDialog::slotButtonClicked(int button) {
-	if (button == KDialog::Ok)
+void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
+	if (button == m_okButton)
 		okClicked();
-	else
-		KDialog::slotButtonClicked(button);
+	else if (button == m_cancelButton) {
+	    reject();
+	}
 }
 
 //SLOTS
@@ -191,10 +197,10 @@ void ExportWorksheetDialog::okClicked() {
 void ExportWorksheetDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
+			m_showOptionsButton->setText(i18n("Show Options"));
 	//resize the dialog
-	mainWidget()->resize(layout()->minimumSize());
+	resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
@@ -243,5 +249,5 @@ void ExportWorksheetDialog::formatChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	enableButtonOk(!name.simplified().isEmpty());
+	m_okButton->setEnabled(!name.simplified().isEmpty());
 }

@@ -42,6 +42,7 @@
 #include <QPrintPreviewDialog>
 #include <QDir>
 #include <QGraphicsItem>
+#include <QIcon>
 
 #include <KConfig>
 #include <KConfigGroup>

@@ -29,14 +29,16 @@
 #ifndef EXPORTWORKSHEETDIALOG_H
 #define EXPORTWORKSHEETDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include "commonfrontend/worksheet/WorksheetView.h"
 
 namespace Ui {
 	class ExportWorksheetWidget;
 }
 
-class ExportWorksheetDialog : public KDialog {
+class QPushButton;
+class QAbstractButton;
+class ExportWorksheetDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -53,9 +55,13 @@ public:
 private:
 	Ui::ExportWorksheetWidget* ui;
 	bool m_showOptions;
+	QPushButton* m_showOptionsButton;
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
+
 
 private slots:
-	void slotButtonClicked(int);
+	void slotButtonClicked(QAbstractButton *);
 	void okClicked();
 	void toggleOptions();
 	void selectFile();
