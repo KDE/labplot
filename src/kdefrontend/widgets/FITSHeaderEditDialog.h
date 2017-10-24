@@ -3,7 +3,7 @@ File                 : FITSHeaderEditDialog.cpp
 Project              : LabPlot
 Description          : Dialog for listing/editing FITS header keywords
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -28,9 +28,10 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define FITSHEADEREDITDIALOG_H
 
 #include "FITSHeaderEditWidget.h"
-#include <KDialog>
+#include <QDialog>
 
-class FITSHeaderEditDialog : public KDialog {
+class QPushButton;
+class FITSHeaderEditDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -41,7 +42,7 @@ public:
 private:
 	FITSHeaderEditWidget* m_headerEditWidget;
 	bool m_saved;
-
+	QPushButton* m_okButton;
 private slots:
 	void save();
 	void headersChanged(bool);

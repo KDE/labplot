@@ -3,7 +3,7 @@ File                 : FITSHeaderEditWidget.cpp
 Project              : LabPlot
 Description          : Widget for listing/editing FITS header keywords
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -87,8 +87,8 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(ui->bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(triggered(bool)));
-    connect(ui->bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
+	connect(ui->bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(triggered(bool)));
+	connect(ui->bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
 	connect(ui->bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
 	connect(ui->bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
 	connect(ui->bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
@@ -238,6 +238,7 @@ void FITSHeaderEditWidget::openFile() {
  */
 bool FITSHeaderEditWidget::save() {
 	bool saved = false;
+
 	for (const QString& fileName : m_extensionDatas.keys()) {
 		if (m_extensionDatas[fileName].updates.newKeywords.size() > 0) {
 			m_fitsFilter->addNewKeyword(fileName,m_extensionDatas[fileName].updates.newKeywords);
@@ -268,6 +269,11 @@ bool FITSHeaderEditWidget::save() {
 		if (!saved)
 			saved = true;
 	}
+	if (saved) {
+		//to reset the window title
+		emit changed(false);
+	}
+
 	return saved;
 }
 
@@ -312,7 +318,7 @@ void FITSHeaderEditWidget::initContextMenus() {
 void FITSHeaderEditWidget::addKeyword() {
 	FITSHeaderEditNewKeywordDialog* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
 	m_initializingTable = true;
-    if (newKeywordDialog->exec() == QDialog::Accepted) {
+	if (newKeywordDialog->exec() == QDialog::Accepted) {
 		FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
 		QList<FITSFilter::Keyword> currentKeywords = m_extensionDatas[m_seletedExtension].keywords;
 
@@ -360,10 +366,10 @@ void FITSHeaderEditWidget::addKeyword() {
 		newKeyWordItem = new QTableWidgetItem(newKeyWord.comment);
 		newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		ui->twKeywordsTable->setItem(lastRow, 2, newKeyWordItem);
+		emit changed(true);
 	}
 	m_initializingTable = false;
 	delete newKeywordDialog;
-	emit changed(true);
 }
 
 /*!
@@ -395,12 +401,12 @@ void FITSHeaderEditWidget::removeKeyword() {
 
 			m_extensionDatas[m_seletedExtension].keywords.removeAt(row);
 			m_extensionDatas[m_seletedExtension].updates.removedKeywords.append(toRemove);
+			emit changed(true);
 		} else
 			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing keyword"));
 	}
 
 	enableButtonAddUnit();
-	emit changed(true);
 }
 
 /*!
@@ -444,9 +450,8 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 				m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).updates.commentUpdated = true;
 			}
 		}
+		emit changed(true);
 	}
-
-	emit changed(true);
 }
 
 /*!
@@ -472,12 +477,12 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 		if (!m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty())
 			unit = m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit;
 	} else {
-        if (!m_extensionDatas[m_seletedExtension].keywords.at(idx).unit.isEmpty())
+		if (!m_extensionDatas[m_seletedExtension].keywords.at(idx).unit.isEmpty())
 			unit = m_extensionDatas[m_seletedExtension].keywords.at(idx).unit;
 	}
 
 	addUnitDialog = new FITSHeaderEditAddUnitDialog(unit);
-    if (addUnitDialog->exec() == QDialog::Accepted) {
+	if (addUnitDialog->exec() == QDialog::Accepted) {
 		if (fromNewKeyword) {
 			m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).unit = addUnitDialog->unit();
 			if (!m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty()) {
@@ -488,12 +493,11 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 			if (!m_extensionDatas[m_seletedExtension].keywords.at(idx).unit.isEmpty())
 				m_extensionDatas[m_seletedExtension].keywords.operator [](idx).updates.unitUpdated = true;
 		}
-
+		emit changed(true);
 		fillTable();
 	}
 
 	delete addUnitDialog;
-	emit changed(true);
 }
 
 /*!

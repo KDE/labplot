@@ -871,7 +871,7 @@ void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
-	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	                      i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
@@ -975,7 +975,7 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	QString path  = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
-	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	                i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1586,8 +1586,8 @@ void MainWin::dropEvent(QDropEvent* event) {
 
 		//TODO: add later the handling of Origin files here
 		if ( f.endsWith(QLatin1String(".lml")) ||  f.endsWith(QLatin1String(".lml.gz")) || f.endsWith(QLatin1String(".lml.bz2"))
-			|| f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
-			|| f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
+		        || f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
+		        || f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
 			openProject(f);
 		else
 			importFileDialog(f);
@@ -1743,7 +1743,7 @@ void MainWin::exportDialog() {
 
 void MainWin::editFitsFileDialog() {
 	FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
-	if (editDialog->exec() == KDialog::Accepted) {
+	if (editDialog->exec() == QDialog::Accepted) {
 		if (editDialog->saved())
 			statusBar()->showMessage(i18n("FITS files saved"));
 	}

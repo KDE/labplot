@@ -3,7 +3,7 @@ File                 : FITSHeaderEditDialog.h
 Project              : LabPlot
 Description          : Dialog for listing/editing FITS header keywords
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -28,24 +28,39 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSHeaderEditDialog.h"
 #include <KSharedConfig>
 #include <KWindowConfig>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m_saved(false) {
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent), m_saved(false) {
 	m_headerEditWidget = new FITSHeaderEditWidget(this);
-	setMainWidget(m_headerEditWidget);
+
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	QVBoxLayout* layout = new QVBoxLayout;
+
+	layout->addWidget(m_headerEditWidget);
+	layout->addWidget(btnBox);
+
+	setLayout(layout);
+
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	m_okButton->setText(i18n("&Save"));
+	m_okButton->setEnabled(false);
+
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 
 	setWindowTitle(i18n("FITS Metadata Editor"));
 	setWindowIcon(QIcon::fromTheme("document-edit"));
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	setButtonText(KDialog::Ok, i18n("&Save"));
-	enableButtonOk(false);
-
-	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(save()));
 	connect(m_headerEditWidget, SIGNAL(changed(bool)), this, SLOT(headersChanged(bool)));
 
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -70,10 +85,10 @@ FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 void FITSHeaderEditDialog::headersChanged(bool changed) {
 	if (changed) {
 		setWindowTitle(i18n("FITS Metadata Editor  [Changed]"));
-		enableButtonOk(true);
+		m_okButton->setEnabled(true);
 	} else {
 		setWindowTitle(i18n("FITS Metadata Editor"));
-		enableButtonOk(false);
+		m_okButton->setEnabled(false);
 	}
 }
 
