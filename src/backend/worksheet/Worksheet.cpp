@@ -183,7 +183,7 @@ bool Worksheet::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
 	bool ret;
-	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const WorksheetView::ExportArea area = dlg->exportArea();
