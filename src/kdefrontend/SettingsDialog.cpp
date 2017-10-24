@@ -34,7 +34,6 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include <KDialog>
 #include <KMessageBox>
 #include <KConfigGroup>
 #include <KSharedConfig>

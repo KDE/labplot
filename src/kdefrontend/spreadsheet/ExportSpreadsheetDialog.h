@@ -29,13 +29,14 @@
 #ifndef EXPORTSPREADSHEETDIALOG_H
 #define EXPORTSPREADSHEETDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 namespace Ui {
 	class ExportSpreadsheetWidget;
 }
-
-class ExportSpreadsheetDialog : public KDialog {
+class QPushButton;
+class QAbstractButton;
+class ExportSpreadsheetDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -75,9 +76,13 @@ private:
 	bool m_matrixMode;
 	Format m_format;
 
+	QPushButton* m_showOptionsButton;
+	QPushButton* m_okButton;
+	QPushButton* m_cancelButton;
+
 private slots:
 	void setFormat(Format format);
-	void slotButtonClicked(int);
+	void slotButtonClicked(QAbstractButton *);
 	void okClicked();
 	void toggleOptions();
 	void selectFile();

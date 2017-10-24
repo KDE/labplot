@@ -33,6 +33,7 @@
 #include <QDirModel>
 #include <QFileDialog>
 #include <QStandardItemModel>
+#include <QDialogButtonBox>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -46,15 +47,24 @@
 
 	\ingroup kdefrontend
 */
-ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
+ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(parent),
 	ui(new Ui::ExportSpreadsheetWidget()),
 	m_matrixMode(false),
 	m_format(Format::ASCII) {
-
-	QWidget* mainWidget = new QWidget(this);
-	ui->setupUi(mainWidget);
+	ui->setupUi(this);
 
 	ui->gbOptions->hide();
+
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	m_showOptionsButton = new QPushButton;
+
+	connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+
+	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
+	ui->verticalLayout->addWidget(btnBox);
+
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
@@ -82,17 +92,13 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 
 	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	setMainWidget(mainWidget);
-
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-
-	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
+	connect(ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
+	connect(m_showOptionsButton,SIGNAL(clicked(bool)), this, SLOT(toggleOptions()));
 	connect(ui->cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 	connect(ui->cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
 
-	setCaption(i18n("Export spreadsheet"));
+	setWindowTitle(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	//restore saved settings
@@ -112,8 +118,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui->cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
+			m_showOptionsButton->setText(i18n("Show Options"));
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
@@ -159,7 +165,7 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 	if (b) {
-		setCaption(i18n("Export matrix"));
+		setWindowTitle(i18n("Export matrix"));
 		ui->lExportHeader->hide();
 		ui->chkExportHeader->hide();
 		ui->lEmptyRows->hide();
@@ -235,11 +241,12 @@ QString ExportSpreadsheetDialog::separator() const {
 	return ui->cbSeparator->currentText();
 }
 
-void ExportSpreadsheetDialog::slotButtonClicked(int button) {
-	if (button == KDialog::Ok)
-		okClicked();
-	else
-		KDialog::slotButtonClicked(button);
+void ExportSpreadsheetDialog::slotButtonClicked(QAbstractButton* button) {
+    if (button == m_okButton)
+	    okClicked();
+    else if (button == m_cancelButton) {
+	reject();
+    }
 }
 
 void ExportSpreadsheetDialog::setExportToImage(bool possible) {
@@ -283,9 +290,9 @@ void ExportSpreadsheetDialog::okClicked() {
 void ExportSpreadsheetDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
-	//resize the dialog
-	mainWidget()->resize(layout()->minimumSize());
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
+			m_showOptionsButton->setText(i18n("Show Options"));	//resize the dialog
+	resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
@@ -443,5 +450,5 @@ ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {
 }
 
 void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
-	enableButtonOk( !name.simplified().isEmpty() );
+	m_okButton->setEnabled(!name.simplified().isEmpty());
 }

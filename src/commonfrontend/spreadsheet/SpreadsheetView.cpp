@@ -1734,7 +1734,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		}
 		dlg->setColumns(columns);
 	}
-	if (dlg->exec() == KDialog::Accepted) {
+	if (dlg->exec() == QDialog::Accepted) {
 		if (forAll)
 			columns.clear();
 	}
@@ -1755,7 +1755,7 @@ void SpreadsheetView::showRowStatistics() {
 	}
 	dlg->setColumns(columns);
 
-	if (dlg->exec() == KDialog::Accepted) {
+	if (dlg->exec() == QDialog::Accepted) {
 		qDeleteAll(columns);
 		columns.clear();
 	}

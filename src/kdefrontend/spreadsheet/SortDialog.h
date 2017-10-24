@@ -29,13 +29,13 @@
 #define SORTDIALOG_H
 
 #include "backend/core/column/Column.h"
-#include <KDialog>
+#include <QDialog>
 
 class QPushButton;
 class QComboBox;
 class QLabel;
 
-class SortDialog : public QDialog{
+class SortDialog : public QDialog {
 Q_OBJECT
 
 public:
