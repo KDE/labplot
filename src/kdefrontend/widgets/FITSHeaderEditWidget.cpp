@@ -477,7 +477,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 	}
 
 	addUnitDialog = new FITSHeaderEditAddUnitDialog(unit);
-	if (addUnitDialog->exec() == KDialog::Accepted) {
+    if (addUnitDialog->exec() == QDialog::Accepted) {
 		if (fromNewKeyword) {
 			m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).unit = addUnitDialog->unit();
 			if (!m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty()) {

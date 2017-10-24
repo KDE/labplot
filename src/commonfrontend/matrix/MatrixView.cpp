@@ -1449,7 +1449,7 @@ void MatrixView::showColumnStatistics() {
 			}
 		}
 		dlg->setColumns(columns);
-		if (dlg->exec() == KDialog::Accepted) {
+        if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
 		}
@@ -1469,7 +1469,7 @@ void MatrixView::showRowStatistics() {
 			}
 		}
 		dlg->setColumns(columns);
-		if (dlg->exec() == KDialog::Accepted) {
+        if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
 		}

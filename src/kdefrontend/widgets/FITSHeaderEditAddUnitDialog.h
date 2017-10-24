@@ -3,7 +3,7 @@ File                 : FITSHeaderEditAddUnitDialog.h
 Project              : LabPlot
 Description          : Widget for adding or modifying FITS header keyword units
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,10 +27,12 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef FITSHEADEREDITADDUNITDIALOG_H
 #define FITSHEADEREDITADDUNITDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include "ui_fitsheadereditaddunitwidget.h"
 
-class FITSHeaderEditAddUnitDialog : public KDialog {
+class QPushButton;
+
+class FITSHeaderEditAddUnitDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -39,6 +41,7 @@ public:
 
 private:
 	Ui::FITSHeaderEditAddUnitDialog  ui;
+    QPushButton* m_okButton;
 
 private slots:
 	void unitChanged();
