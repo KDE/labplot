@@ -38,6 +38,9 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDialogButtonBox>
+#include <QPushButton>
+
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -51,13 +54,11 @@
 	\ingroup kdefrontend
  */
 
-FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 	Q_ASSERT(s);
 	setWindowTitle(i18n("Function values"));
 
-	QFrame* mainWidget = new QFrame(this);
-	ui.setupUi(mainWidget);
-	setMainWidget(mainWidget);
+	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 
@@ -80,15 +81,22 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate function values"));
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	ui.gridLayout->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+	m_okButton->setText(i18n("&Generate"));
+	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect( ui.bAddVariable, SIGNAL(pressed()), this, SLOT(addVariable()) );
 	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
 	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
 
 	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
@@ -143,7 +151,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 void FunctionValuesDialog::checkValues() {
 	//check whether the formulr syntax is correct
 	if (!ui.teEquation->isValid()) {
-		enableButton(KDialog::Ok, false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
@@ -155,12 +163,12 @@ void FunctionValuesDialog::checkValues() {
 		TreeViewComboBox* cb = m_variableDataColumns.at(i);
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect) {
-			enableButton(KDialog::Ok, false);
+			m_okButton->setEnabled(false);
 			return;
 		}
 	}
 
-	enableButton(KDialog::Ok, true);
+	m_okButton->setEnabled(true);
 }
 
 void FunctionValuesDialog::showConstants() {

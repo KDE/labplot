@@ -29,7 +29,7 @@
 #define FUNCTIONVALUESDIALOG_H
 
 #include "ui_functionvalueswidget.h"
-#include <KDialog>
+#include <QDialog>
 
 #include <memory>
 
@@ -37,8 +37,8 @@ class Column;
 class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
-
-class FunctionValuesDialog : public KDialog {
+class QPushButton;
+class FunctionValuesDialog : public QDialog {
 	Q_OBJECT
 
 	public:
@@ -63,6 +63,7 @@ class FunctionValuesDialog : public KDialog {
 		QList<TreeViewComboBox*> m_variableDataColumns;
 		QList<QToolButton*> m_variableDeleteButtons;
 
+		QPushButton* m_okButton;
 	private slots:
 		void generate();
 		void checkValues();
