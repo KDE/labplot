@@ -30,6 +30,9 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <QDialogButtonBox>
+#include <QPushButton>
+
 #include <KLocalizedString>
 
 /*!
@@ -39,20 +42,25 @@
 	\ingroup kdefrontend
  */
 
-EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 
 	setWindowTitle(i18n("Equidistant values"));
 
-	QWidget* mainWidget = new QWidget(this);
-	ui.setupUi(mainWidget);
-	setMainWidget( mainWidget );
+	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbType->addItem(i18n("Number"));
 	ui.cbType->addItem(i18n("Increment"));
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate equidistant values"));
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	ui.gridLayout->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+	m_okButton->setText(i18n("&Generate"));
+	m_okButton->setToolTip(i18n("Generate equidistant values"));
 
 	ui.leFrom->setClearButtonEnabled(true);
 	ui.leTo->setClearButtonEnabled(true);
@@ -73,7 +81,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	connect( ui.leTo, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.leNumber, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.leIncrement, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
 
 	//generated data the  default
 	this->typeChanged(0);
@@ -102,28 +110,28 @@ void EquidistantValuesDialog::typeChanged(int index) {
 
 void EquidistantValuesDialog::checkValues() {
 	if (ui.leFrom->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.leTo->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.cbType->currentIndex() == 0) {
 		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt()==0) {
-			enableButton(KDialog::Ok, false);
+			m_okButton->setEnabled(false);
 			return;
 		}
 	} else {
 		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull(ui.leIncrement->text().simplified().toDouble())) {
-			enableButton(KDialog::Ok, false);
+			m_okButton->setEnabled(false);
 			return;
 		}
 	}
 
-	enableButton(KDialog::Ok, true);
+	m_okButton->setEnabled(true);
 }
 
 void EquidistantValuesDialog::generate() {

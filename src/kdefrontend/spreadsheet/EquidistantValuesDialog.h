@@ -29,12 +29,13 @@
 #define EQUIDISTANTVALUESDIALOG_H
 
 #include "ui_equidistantvalueswidget.h"
-#include <KDialog>
+#include <QDialog>
 
 class Column;
 class Spreadsheet;
+class QPushButton;
 
-class EquidistantValuesDialog : public KDialog {
+class EquidistantValuesDialog : public QDialog {
 Q_OBJECT
 
 public:
@@ -45,6 +46,7 @@ private:
 	Ui::EquidistantValuesWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet;
+	QPushButton* m_okButton;
 
 private slots:
 	void generate();
