@@ -30,37 +30,55 @@
 #include <klocale.h>
 #include <QUndoStack>
 #include <QUndoView>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include <KWindowConfig>
-
 /*!
 	\class HistoryDialog
 	\brief Display the content of project's undo stack.
 
 	\ingroup kdefrontend
  */
-HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : KDialog(parent), m_undoStack(stack) {
+HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : QDialog(parent),
+	m_undoStack(stack), m_clearUndoStackButton(nullptr) {
 	QUndoView* undoView = new QUndoView(stack, this);
 	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
 	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
 	                            "Select an item in the list to navigate to the corresponding step."));
-	setMainWidget(undoView);
 
 	setWindowIcon( QIcon::fromTheme("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
-	showButtonSeparator(true);
 	setAttribute(Qt::WA_DeleteOnClose);
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
 	if (stack->count()) {
-		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-		setButtonIcon(KDialog::User1, QIcon::fromTheme("edit-clear"));
-		setButtonText(KDialog::User1, i18n("Clear"));
-		connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
-	} else
-		setButtons( KDialog::Ok | KDialog::Cancel );
+		m_clearUndoStackButton = new QPushButton;
+		btnBox->addButton(m_clearUndoStackButton, QDialogButtonBox::ActionRole);
+		m_clearUndoStackButton->setText(i18n("&Clear"));
+		m_clearUndoStackButton->setToolTip(i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
+		m_clearUndoStackButton->setIcon(QIcon::fromTheme("edit-clear"));
+		connect(m_clearUndoStackButton, SIGNAL(clicked(bool)), this, SLOT(clearUndoStack()));
+	}
 
+	QFrame* line = new QFrame;
+	line->setFrameShape(QFrame::HLine);
+	line->setFrameShadow(QFrame::Sunken);
+
+	QVBoxLayout* layout = new QVBoxLayout;
+
+	layout->addWidget(undoView);
+	layout->addWidget(line);
+	layout->addWidget(btnBox);
+
+	setLayout(layout);
 	//restore saved dialog size if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
 	if (conf.exists())

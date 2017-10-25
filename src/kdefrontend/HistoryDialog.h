@@ -30,10 +30,11 @@
 #ifndef HISTORYDIALOG_H
 #define HISTORYDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 class QUndoStack;
+class QPushButton;
 
-class HistoryDialog: public KDialog {
+class HistoryDialog: public QDialog {
 	Q_OBJECT
 
 public:
@@ -42,6 +43,8 @@ public:
 
 private:
 	QUndoStack* m_undoStack;
+	QPushButton* m_okButton;
+	QPushButton* m_clearUndoStackButton;
 
 private slots:
 	void clearUndoStack();
