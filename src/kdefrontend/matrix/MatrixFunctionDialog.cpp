@@ -39,6 +39,8 @@ extern "C" {
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <KLocalizedString>
 #include <QThreadPool>
 #ifndef NDEBUG
@@ -53,13 +55,11 @@ extern "C" {
 	\ingroup kdefrontend
  */
 
-MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_matrix(m) {
+MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_matrix(m) {
 	Q_ASSERT(m_matrix);
 	setWindowTitle(i18n("Function values"));
 
-	QFrame* mainWidget = new QFrame(this);
-	ui.setupUi(mainWidget);
-	setMainWidget( mainWidget );
+	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
@@ -76,26 +76,32 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	ui.lYInfo->setText(info);
 
 	ui.teEquation->setPlainText(m_matrix->formula());
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	setButtons(KDialog::Ok | KDialog::Cancel);
-	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate function values"));
+	ui.gridLayout_2->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+	m_okButton->setText(i18n("&Generate"));
+	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect(ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()));
 	connect(ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
 	connect(ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
-	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
 
 	resize(QSize(300,0).expandedTo(minimumSize()));
 }
 
 void MatrixFunctionDialog::checkValues() {
 	if (!ui.teEquation->isValid()) {
-		enableButton(KDialog::Ok, false);
+		m_okButton->setEnabled(false);
 		return;
 	}
 
-	enableButton(KDialog::Ok, true);
+	m_okButton->setEnabled(true);
 }
 
 void MatrixFunctionDialog::showConstants() {

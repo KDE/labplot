@@ -29,11 +29,11 @@
 #define MATRIXFUNCTIONDIALOG_H
 
 #include "ui_matrixfunctionwidget.h"
-#include <KDialog>
+#include <QDialog>
 
 class Matrix;
-
-class MatrixFunctionDialog : public KDialog {
+class QPushButton;
+class MatrixFunctionDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -42,7 +42,7 @@ public:
 private:
 	Ui::MatrixFunctionWidget ui;
 	Matrix* m_matrix;
-
+	QPushButton* m_okButton;
 private slots:
 	void generate();
 	void checkValues();
