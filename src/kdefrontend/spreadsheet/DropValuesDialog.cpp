@@ -31,6 +31,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QThreadPool>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <KLocalizedString>
 
 #include <cmath>
@@ -42,14 +44,12 @@
 	\ingroup kdefrontend
  */
 
-DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl),
+DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
 	m_spreadsheet(s), m_mask(mask) {
 
 	setWindowTitle(i18n("Drop values"));
 
-	QFrame* mainWidget = new QFrame(this);
-	ui.setupUi(mainWidget);
-	setMainWidget( mainWidget );
+	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 	ui.cbOperator->addItem(i18n("equal to"));
 	ui.cbOperator->addItem(i18n("between (including end points)"));
@@ -62,19 +62,26 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 	ui.leValue1->setValidator( new QDoubleValidator(ui.leValue1) );
 	ui.leValue2->setValidator( new QDoubleValidator(ui.leValue2) );
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	ui.horizontalLayout->addWidget(btnBox);
+	m_okButton = btnBox->button(QDialogButtonBox::Ok);
+	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
 	if (m_mask) {
-		setButtonText(KDialog::Ok, i18n("&Mask"));
-		setButtonToolTip(KDialog::Ok, i18n("Mask values in the specified region"));
+		m_okButton->setText(i18n("&Mask"));
+		m_okButton->setToolTip(i18n("Mask values in the specified region"));
 		ui.lMode->setText(i18n("Mask values"));
 		setWindowTitle(i18n("Mask values"));
 	} else {
-		setButtonText(KDialog::Ok, i18n("&Drop"));
-		setButtonToolTip(KDialog::Ok, i18n("Drop values in the specified region"));
+		m_okButton->setText(i18n("&Drop"));
+		m_okButton->setToolTip(i18n("Drop values in the specified region"));
 	}
 
-	connect( ui.cbOperator, SIGNAL(currentIndexChanged(int)), this, SLOT(operatorChanged(int)) );
-	connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+	connect(ui.cbOperator, SIGNAL(currentIndexChanged(int)), this, SLOT(operatorChanged(int)) );
+	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(okClicked()));
 
 	resize( QSize(400,0).expandedTo(minimumSize()) );
 	operatorChanged(0);
@@ -107,7 +114,7 @@ class MaskValuesTask : public QRunnable {
 			m_operator = op;
 			m_value1 = value1;
 			m_value2 = value2;
-		};
+		}
 
 		void run() {
 			m_column->setSuppressDataChangedSignal(true);
@@ -144,7 +151,7 @@ class MaskValuesTask : public QRunnable {
 				}
 			}
 
-			//greater then
+			//greater than
 			else if (m_operator == 3) {
 				for (int i=0; i<data->size(); ++i) {
 					if (data->at(i) > m_value1) {
@@ -154,7 +161,7 @@ class MaskValuesTask : public QRunnable {
 				}
 			}
 
-			//greater then or equal to
+			//greater than or equal to
 			else if (m_operator == 4) {
 				for (int i=0; i<data->size(); ++i) {
 					if (data->at(i) >= m_value1) {
@@ -164,7 +171,7 @@ class MaskValuesTask : public QRunnable {
 				}
 			}
 
-			//lesser then
+			//lesser than
 			else if (m_operator == 5) {
 				for (int i=0; i<data->size(); ++i) {
 					if (data->at(i) < m_value1) {
@@ -174,7 +181,7 @@ class MaskValuesTask : public QRunnable {
 				}
 			}
 
-			//lesser then or equal to
+			//lesser than or equal to
 			else if (m_operator == 6) {
 				for (int i=0; i<data->size(); ++i) {
 					if (data->at(i) <= m_value1) {
@@ -203,7 +210,7 @@ class DropValuesTask : public QRunnable {
 			m_operator = op;
 			m_value1 = value1;
 			m_value2 = value2;
-		};
+		}
 
 		void run() {
 			bool changed = false;
@@ -240,7 +247,7 @@ class DropValuesTask : public QRunnable {
 				}
 			}
 
-			//greater then
+			//greater than
 			else if (m_operator == 3) {
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] > m_value1) {
@@ -250,7 +257,7 @@ class DropValuesTask : public QRunnable {
 				}
 			}
 
-			//greater then or equal to
+			//greater than or equal to
 			else if (m_operator == 4) {
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] >= m_value1) {
@@ -260,7 +267,7 @@ class DropValuesTask : public QRunnable {
 				}
 			}
 
-			//lesser then
+			//lesser than
 			else if (m_operator == 5) {
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] < m_value1) {
@@ -270,7 +277,7 @@ class DropValuesTask : public QRunnable {
 				}
 			}
 
-			//lesser then or equal to
+			//lesser than or equal to
 			else if (m_operator == 6) {
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] <= m_value1) {

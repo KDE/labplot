@@ -29,13 +29,13 @@
 #define DROPVALUESDIALOG_H
 
 #include "ui_dropvalueswidget.h"
-#include <KDialog>
+#include <QDialog>
 
 
 class Column;
 class Spreadsheet;
-
-class DropValuesDialog : public KDialog {
+class QPushButton;
+class DropValuesDialog : public QDialog {
 	Q_OBJECT
 
 	public:
@@ -51,6 +51,7 @@ class DropValuesDialog : public KDialog {
 		void dropValues() const;
 		void maskValues() const;
 
+		QPushButton* m_okButton;
 	private slots:
 		void operatorChanged(int) const;
 		void okClicked() const;
