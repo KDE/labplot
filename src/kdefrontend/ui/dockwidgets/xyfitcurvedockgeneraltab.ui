@@ -471,31 +471,8 @@
         <bool>true</bool>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Summary</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QTextEdit" name="teResult">
-           <property name="maximumSize">
-            <size>
-             <width>9999</width>
-             <height>9999</height>
-            </size>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
        <widget class="QWidget" name="tab">
         <attribute name="title">
          <string>General</string>

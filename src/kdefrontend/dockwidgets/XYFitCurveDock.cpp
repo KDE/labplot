@@ -807,53 +807,6 @@ void XYFitCurveDock::enableRecalculate() const {
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
-/*!
- * show the fit result summary (with HTML tables)
- */
-void XYFitCurveDock::showFitResultSummary(const XYFitCurve::FitResult& fitResult) {
-	DEBUG("XYFitCurveDock::showFitResultSummary()");
-	QString str = "<table border=1>";
-	str += "<tr> <th>" + i18n("status:") + "</th> <th>" + fitResult.status + "</th> </tr>";
-	str += "<tr> <th>" + i18n("degrees of freedom:") + "</th> <th>" + QString::number(fitResult.dof) + "</th> </tr>";
-	//str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	//if (fitResult.elapsedTime > 1000)
-	//	str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
-	// else
-		//str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
-	str +=  "</table>";
-
-	if (!fitResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const int np = fitResult.paramValues.size();
-
-	str += "<br><br><b>" + i18n("Parameters:") + "</b>";
-	str += "<table border=1>";
-	str += "<tr> <th>" + i18n("Name") + "</th> <th>" + i18n("Value") +  "</th> <th>" + i18n("Error") +  "</th> <th>" + i18n("Error, %") +  "</th> </tr>";
-	for (int i = 0; i < np; i++) {
-		if (m_fitData.paramFixed.at(i))
-			str += "<tr> <th>" + m_fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i)) + "</th> </tr>";
-		else
-			str += "<tr> <th>" + m_fitData.paramNamesUtf8.at(i) + "</th> <th>" + QString::number(fitResult.paramValues.at(i))
-				+ "</th> <th>" + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-				+ "</th> <th>" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %" + "</th> </tr>";
-	}
-	str +=  "</table>";
-
-	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b>";
-	str += "<table border=1>";
-	if (fitResult.dof != 0) {
-		str += "<tr> <th>" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
-			+ "</th> <th>" + QString::number(fitResult.rms) + "</th> </tr>";
-		str += "<tr> <th>" + i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-			+ ')' + "</th> <th>" + QString::number(fitResult.rsquareAdj, 'g', 15) + "</th> </tr>";
-	}
-	str +=  "</table>";
-
-	uiGeneralTab.teResult->setText(str);
-}
 
 /*!
  * show the fit result log (plain text)
@@ -933,12 +886,10 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 void XYFitCurveDock::showFitResult() {
 	DEBUG("XYFitCurveDock::showFitResult()");
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
-	showFitResultSummary(fitResult);
 	showFitResultLog(fitResult);
 
 	if (!fitResult.available) {
 		DEBUG("fit result not available");
-		uiGeneralTab.teResult->clear();
 		uiGeneralTab.teLog->clear();
 		return;
 	}

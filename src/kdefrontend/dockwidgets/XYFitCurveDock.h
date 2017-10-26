@@ -45,7 +45,6 @@ public:
 
 private:
 	virtual void initGeneralTab();
-	void showFitResultSummary(const XYFitCurve::FitResult& fitResult);
 	void showFitResultLog(const XYFitCurve::FitResult& fitResult);
 	void showFitResult();
 	void updateSettings(const AbstractColumn*);
