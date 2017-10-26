@@ -42,6 +42,7 @@
 #include <QWidgetAction>
 #include <QStandardItemModel>
 #include <QStandardPaths>
+#include <QClipboard>
 
 #include <cfloat>	// DBL_MAX
 #include <cmath>	// fabs()
@@ -129,6 +130,13 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGeneral->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twGoodness->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	// copy selection
+	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
+	uiGeneralTab.twGoodness->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(uiGeneralTab.twParameters, SIGNAL(customContextMenuRequested(const QPoint &)), this, 	
+			SLOT(resultParametersContextMenuRequest(const QPoint &)) );
+	connect(uiGeneralTab.twGoodness, SIGNAL(customContextMenuRequested(const QPoint &)), this, 	
+			SLOT(resultGoodnessContextMenuRequest(const QPoint &)) );
 
 	uiGeneralTab.twGeneral->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -881,7 +889,46 @@ void XYFitCurveDock::showFitResultLog(const XYFitCurve::FitResult& fitResult) {
 	uiGeneralTab.teLog->setText(str);
 }
 
-/*!
+void XYFitCurveDock::resultCopySelection() {
+//    QTableWidgetSelectionRange range = uiGeneralTab.twParameters->selectedRanges().first();
+	QTableWidget* tw = nullptr;
+	int currentTab = uiGeneralTab.twResults->currentIndex();
+	DEBUG("current tab = " << currentTab);
+	if (currentTab == 1)
+		tw = uiGeneralTab.twParameters;
+	else if (currentTab == 2)
+		tw = uiGeneralTab.twGoodness;
+	else
+		return;
+
+	QTableWidgetSelectionRange range = tw->selectedRanges().first();
+	QString str;
+	for (int i = 0; i < range.rowCount(); ++i) {
+		if (i > 0)
+			str += "\n";
+		for (int j = 0; j < range.columnCount(); ++j) {
+			if (j > 0)
+				str += "\t";
+			str += tw->item(range.topRow() + i, range.leftColumn() + j)->text();
+		}
+	}
+	str += "\n";
+	QApplication::clipboard()->setText(str);
+	DEBUG(QApplication::clipboard()->text().toStdString());
+}
+
+void XYFitCurveDock::resultParametersContextMenuRequest(const QPoint &pos) {
+	QMenu *contextMenu = new QMenu;
+	contextMenu->addAction("Copy selection", this, SLOT(resultCopySelection()));
+	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
+}
+void XYFitCurveDock::resultGoodnessContextMenuRequest(const QPoint &pos) {
+	QMenu *contextMenu = new QMenu;
+	contextMenu->addAction("Copy selection", this, SLOT(resultCopySelection()));
+	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
+}
+
+			 /*!
  * show the result and details of fit
  */
 void XYFitCurveDock::showFitResult() {
@@ -920,6 +967,7 @@ void XYFitCurveDock::showFitResult() {
 	QStringList headerLabels;
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+
 
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);

@@ -93,6 +93,9 @@ private slots:
 	void recalculateClicked();
 	void updateModelEquation();
 	void enableRecalculate() const;
+	void resultParametersContextMenuRequest(const QPoint &);
+	void resultGoodnessContextMenuRequest(const QPoint &);
+	void resultCopySelection();
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
