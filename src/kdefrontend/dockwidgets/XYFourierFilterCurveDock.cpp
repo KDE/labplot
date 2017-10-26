@@ -605,6 +605,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Fourier-Filter status: ") + m_filterCurve->filterResult().status);
 	QApplication::restoreOverrideCursor();
 }
 
@@ -635,7 +636,6 @@ void XYFourierFilterCurveDock::showFilterResult() {
 		return;
 	}
 
-	//const XYFourierFilterCurve::FilterData& filterData = m_filterCurve->filterData();
 	QString str = i18n("status:") + ' ' + filterResult.status + "<br>";
 
 	if (!filterResult.valid) {

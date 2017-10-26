@@ -787,6 +787,7 @@ void XYFitCurveDock::recalculateClicked() {
 
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Fit status: ") + m_fitCurve->fitResult().status);
 	QApplication::restoreOverrideCursor();
 }
 

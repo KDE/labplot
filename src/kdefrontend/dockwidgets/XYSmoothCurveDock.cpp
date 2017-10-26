@@ -507,6 +507,7 @@ void XYSmoothCurveDock::recalculateClicked() {
 		dynamic_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Smoothing status: ") +  m_smoothCurve->smoothResult().status);
 	QApplication::restoreOverrideCursor();
 }
 

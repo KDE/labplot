@@ -404,6 +404,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
 		dynamic_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Integration status: ") + m_integrationCurve->integrationResult().status);
 	QApplication::restoreOverrideCursor();
 }
 
@@ -434,7 +435,6 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 		return;
 	}
 
-	//const XYIntegrationCurve::IntegrationData& integrationData = m_integrationCurve->integrationData();
 	QString str = i18n("status:") + ' ' + integrationResult.status + "<br>";
 
 	if (!integrationResult.valid) {

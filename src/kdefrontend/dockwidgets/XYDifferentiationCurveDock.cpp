@@ -490,6 +490,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Differentiation status: ") +  m_differentiationCurve->differentiationResult().status);
 	QApplication::restoreOverrideCursor();
 }
 
@@ -520,7 +521,6 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 		return;
 	}
 
-	//const XYDifferentiationCurve::DifferentiationData& differentiationData = m_differentiationCurve->differentiationData();
 	QString str = i18n("status:") + ' ' + differentiationResult.status + "<br>";
 
 	if (!differentiationResult.valid) {

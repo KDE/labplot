@@ -50,7 +50,7 @@
   \ingroup kdefrontend
 */
 
-XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent): 
+XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent):
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_transformCurve(0) {
 
 	//remove the tab "Error bars"
@@ -332,6 +332,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	emit info(i18n("Fourier transformation status: ") + m_transformCurve->transformResult().status);
 	QApplication::restoreOverrideCursor();
 }
 
@@ -357,7 +358,6 @@ void XYFourierTransformCurveDock::showTransformResult() {
 		return;
 	}
 
-	//const XYFourierTransformCurve::TransformData& transformData = m_transformCurve->transformData();
 	QString str = i18n("status:") + ' ' + transformResult.status + "<br>";
 
 	if (!transformResult.valid) {
