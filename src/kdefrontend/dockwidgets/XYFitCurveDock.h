@@ -96,6 +96,7 @@ private slots:
 	void resultParametersContextMenuRequest(const QPoint &);
 	void resultGoodnessContextMenuRequest(const QPoint &);
 	void resultCopySelection();
+	void resultCopyAll();
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
