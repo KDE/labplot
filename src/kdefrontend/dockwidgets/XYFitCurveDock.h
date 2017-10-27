@@ -45,7 +45,6 @@ public:
 
 private:
 	virtual void initGeneralTab();
-	void showFitResultLog(const XYFitCurve::FitResult& fitResult);
 	void showFitResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -95,6 +94,7 @@ private slots:
 	void enableRecalculate() const;
 	void resultParametersContextMenuRequest(const QPoint &);
 	void resultGoodnessContextMenuRequest(const QPoint &);
+	void resultLogContextMenuRequest(const QPoint &);
 	void resultCopySelection();
 	void resultCopyAll();
 
