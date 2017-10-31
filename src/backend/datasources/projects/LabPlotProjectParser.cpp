@@ -63,5 +63,6 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 }
 
 void LabPlotProjectParser::importTo(Folder* folder) {
+	Q_UNUSED(folder);
 
 }

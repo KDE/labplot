@@ -65,5 +65,5 @@ QAbstractItemModel* OriginProjectParser::model() {
 }
 
 void OriginProjectParser::importTo(Folder* folder) {
-
+	Q_UNUSED(folder);
 }
