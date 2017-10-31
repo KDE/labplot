@@ -33,6 +33,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
+#include <KConfigGroup>
 #include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>

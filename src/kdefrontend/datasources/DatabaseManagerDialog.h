@@ -29,11 +29,11 @@
 #ifndef DATABASEMANAGERDIALOG_H
 #define DATABASEMANAGERDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 class DatabaseManagerWidget;
 
-class DatabaseManagerDialog : public KDialog {
+class DatabaseManagerDialog : public QDialog {
 	Q_OBJECT
 
 public:

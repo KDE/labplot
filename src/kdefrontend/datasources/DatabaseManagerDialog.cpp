@@ -29,10 +29,12 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
-#include <QTimer>
 #include <KLocale>
 #include <KSharedConfig>
 #include <KWindowConfig>
+
+#include <QDialogButtonBox>
+#include <QTimer>
 
 /*!
 	\class DatabaseManagerDialog
@@ -40,18 +42,23 @@
 
 	\ingroup kdefrontend
 */
-DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : KDialog(parent),
+DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : QDialog(parent),
 	mainWidget(new DatabaseManagerWidget(this, conn)), m_changed(false) {
-
-	setMainWidget(mainWidget);
 
 	setWindowIcon(QIcon::fromTheme("network-server-database"));
 	setWindowTitle(i18n("SQL Database Connections"));
 
-	setButtons(KDialog::Ok | KDialog::Cancel);
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->addWidget(mainWidget);
+	layout->addWidget(buttonBox);
 
 	connect(mainWidget, SIGNAL(changed()), this, SLOT(changed()));
-	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+	connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(save()));
+	connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	QTimer::singleShot(0, this, &DatabaseManagerDialog::loadSettings);
 }
