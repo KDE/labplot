@@ -54,8 +54,7 @@ const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "l
 const char* nsl_fit_weight_type_name[] = {"No", "Instrumental", "Direct", "Inverse", "Statistical", "Statistical (Fit)", "Relative", "Relative (Fit)"};
 
 /* 
-	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
-	and https://lmfit.github.io/lmfit-py/bounds.html
+	see https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_bound(double x, double min, double max) {
 	if (max <= min) {
@@ -73,12 +72,15 @@ double nsl_fit_map_bound(double x, double min, double max) {
 	if (max == DBL_MAX)
 		return min - 1. + sqrt(x*x + 1.);
 
+	return min + sin(x + 1.) * (max - min)/2.;
+
+	/* alternative transformation for closed bounds
 	return min + (max - min)/(1. + exp(-x));
+	*/
 }
 
 /* 
-	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
-	and https://lmfit.github.io/lmfit-py/bounds.html
+	see https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_unbound(double x, double min, double max) {
 	if (max <= min) {
@@ -100,7 +102,11 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 	if (max == DBL_MAX)
 		return sqrt(gsl_pow_2(x - min + 1.) - 1.);
 
+	return asin(2. * (x - min)/(max - min) - 1.);
+
+	/* alternative transformation for closed bounds
 	return -log((max - x)/(x - min));
+	*/
 }
 
 /********************** parameter derivatives ******************/
