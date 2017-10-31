@@ -676,6 +676,7 @@ void MainWin::updateGUI() {
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
+		toolbar->setEnabled(true);
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
@@ -685,6 +686,7 @@ void MainWin::updateGUI() {
 		toolbar->clear();
 		view->fillCartesianPlotToolBar(toolbar);
 		toolbar->setVisible(true);
+		toolbar->setEnabled(true);
 
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
@@ -692,8 +694,8 @@ void MainWin::updateGUI() {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
 //		factory->container("drawing", this)->setEnabled(false);
-		factory->container("worksheet_toolbar", this)->setVisible(false);
-		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
+		factory->container("worksheet_toolbar", this)->setEnabled(false);
+		factory->container("cartesian_plot_toolbar", this)->setEnabled(false);
 	}
 
 	//Handle the Spreadsheet-object
@@ -713,12 +715,13 @@ void MainWin::updateGUI() {
 		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar") == -1)
 			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 
-		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
+		toolbar->setVisible(true);
+		toolbar->setEnabled(true);
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+		factory->container("spreadsheet_toolbar", this)->setEnabled(false);
 	}
 
 	//Handle the Matrix-object

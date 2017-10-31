@@ -635,6 +635,8 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
 	toolBar->addAction(shiftDownYAction);
+
+	handleCartesianPlotActions();
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
