@@ -74,11 +74,10 @@ private:
  * this function prints the current call stack and helps to figure out why a certain (e.g. performance critical) function
  * is called multiple times and from where without involving the debugger.
  * To get the callstack, simple include \c print_callstack() in the function of interest.
- * Optionaly, the number of \c frames to be printed out can be provided, default value is 100.
  */
-static inline void print_callstack(unsigned int frames = 100) {
+static inline void print_callstack() {
 	//get the current call stack
-	const int max_frames_count = frames + 1;
+	const int max_frames_count = 10 + 1; //print the last 10 frames (+1 because of this function frame)
 	void* callstack[max_frames_count];
 	const int frames_count = backtrace(callstack, max_frames_count);
 
