@@ -28,6 +28,7 @@
 #ifndef TRACE_H
 #define TRACE_H
 
+#ifndef HAVE_WINDOWS
 #include "backend/lib/macros.h"
 #include <chrono>
 
@@ -124,6 +125,6 @@ static inline void print_callstack() {
 
 	std::cout << "stack trace:\n" <<  out.str();
 }
-
+#endif //  #ifndef HAVE_WINDOWS
 
 #endif //TRACE_H
