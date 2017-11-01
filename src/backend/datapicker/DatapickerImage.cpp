@@ -550,9 +550,6 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -567,7 +564,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("fileName").toString();
@@ -579,7 +576,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->plotPointsType = DatapickerImage::PointsType(str.toInt());
 
-		} else if (reader->name() == "axisPoint") {
+		} else if (!preview && reader->name() == "axisPoint") {
 			attribs = reader->attributes();
 
 			str = attribs.value("graphType").toString();
@@ -684,7 +681,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->axisPoints.scenePos[2].setY(str.toDouble());
 
-		} else if (reader->name() == "editorSettings") {
+		} else if (!preview && reader->name() == "editorSettings") {
 			attribs = reader->attributes();
 
 			str = attribs.value("plotImageType").toString();
@@ -771,7 +768,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->settings.valueThresholdLow = str.toInt();
 
-		} else if(reader->name() == "symbolProperties") {
+		} else if(!preview && reader->name() == "symbolProperties") {
 			attribs = reader->attributes();
 
 			str = attribs.value("pointRotationAngle").toString();

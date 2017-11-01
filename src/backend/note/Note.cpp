@@ -151,9 +151,6 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -169,10 +166,10 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "background") {
+		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_backgroundColor);
-		} else if (reader->name() == "text") {
+		} else if (!preview && reader->name() == "text") {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);

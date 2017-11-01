@@ -2001,9 +2001,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "fitData") {
+		} else if (!preview && reader->name() == "fitData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -2032,37 +2030,37 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
-		} else if (reader->name() == "name") {	// needed for custom model
+		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
-		} else if (reader->name() == "startValue") {
+		} else if (!preview && reader->name() == "startValue") {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "fixed") {
+		} else if (!preview && reader->name() == "fixed") {
 			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
-		} else if (reader->name() == "lowerLimit") {
+		} else if (!preview && reader->name() == "lowerLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// -DBL_MAX results in conversion error
 				d->fitData.paramLowerLimits << x;
 			else
 				d->fitData.paramLowerLimits << -DBL_MAX;
-		} else if (reader->name() == "upperLimit") {
+		} else if (!preview && reader->name() == "upperLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// DBL_MAX results in conversion error
 				d->fitData.paramUpperLimits << x;
 			else
 				d->fitData.paramUpperLimits << DBL_MAX;
-		} else if (reader->name() == "value") {
+		} else if (!preview && reader->name() == "value") {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "error") {
+		} else if (!preview && reader->name() == "error") {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "tdist_t") {
+		} else if (!preview && reader->name() == "tdist_t") {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "tdist_p") {
+		} else if (!preview && reader->name() == "tdist_p") {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "tdist_margin") {
+		} else if (!preview && reader->name() == "tdist_margin") {
 			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "fitResult") {
+		} else if (!preview && reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", fitResult.available, int);
@@ -2100,6 +2098,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->residualsColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// new fit model style (reset model type of old projects)
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {

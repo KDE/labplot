@@ -363,9 +363,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "integrationData") {
+		} else if (!preview && reader->name() == "integrationData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -376,7 +374,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);
-		} else if (reader->name() == "integrationResult") {
+		} else if (!preview && reader->name() == "integrationResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", integrationResult.available, int);
@@ -384,7 +382,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", integrationResult.status);
 			READ_INT_VALUE("time", integrationResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("value", integrationResult.value);
-		} else if (reader->name() == "column") {
+		} else if (!preview && reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
@@ -396,6 +394,9 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

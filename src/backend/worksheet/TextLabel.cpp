@@ -716,9 +716,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	Q_D(TextLabel);
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
@@ -734,9 +731,9 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "geometry") {
+		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
@@ -786,9 +783,9 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "text") {
+		} else if (!preview && reader->name() == "text") {
 			d->textWrapper.text = reader->readElementText();
-		} else if (reader->name() == "format") {
+		} else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
 			str = attribs.value("teXUsed").toString();
@@ -816,7 +813,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
 			else
 				d->teXFontColor.setBlue( str.toInt() );
-		} else if (reader->name() == "teXImage") {
+		} else if (!preview && reader->name() == "teXImage") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray ba = QByteArray::fromBase64(content.toAscii());

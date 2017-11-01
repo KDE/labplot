@@ -1043,9 +1043,6 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -1062,9 +1059,9 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if(reader->name() == "formula") {
+		} else if(!preview && reader->name() == "formula") {
 			d->formula = reader->text().toString().trimmed();
-		} else if (reader->name() == "format") {
+		} else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
 			str = attribs.value("mode").toString();
@@ -1093,7 +1090,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->precision = str.toInt();
 
-		} else if (reader->name() == "dimension") {
+		} else if (!preview && reader->name() == "dimension") {
 			attribs = reader->attributes();
 
 			str = attribs.value("columns").toString();
@@ -1131,21 +1128,21 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'y_end'"));
 			else
 				d->yEnd = str.toDouble();
-		} else if (reader->name() == "row_heights") {
+		} else if (!preview && reader->name() == "row_heights") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count*sizeof(int));
-		} else if (reader->name() == "column_widths") {
+		} else if (!preview && reader->name() == "column_widths") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count*sizeof(int));
-		} else if (reader->name() == "column") {
+		} else if (!preview && reader->name() == "column") {
 			//TODO: parallelize reading of columns?
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();

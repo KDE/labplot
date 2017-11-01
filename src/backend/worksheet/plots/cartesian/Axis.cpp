@@ -1967,9 +1967,6 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -1983,9 +1980,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("autoScale").toString();
@@ -2060,7 +2057,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
 			d->title->load(reader, preview);
-		} else if (reader->name() == "line") {
+		} else if (!preview && reader->name() == "line") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->linePen);
@@ -2088,7 +2085,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
 			else
 				d->arrowSize = str.toDouble();
-		} else if (reader->name() == "majorTicks") {
+		} else if (!preview && reader->name() == "majorTicks") {
 			attribs = reader->attributes();
 
 			str = attribs.value("direction").toString();
@@ -2130,7 +2127,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->majorTicksOpacity = str.toDouble();
-		} else if (reader->name() == "minorTicks") {
+		} else if (!preview && reader->name() == "minorTicks") {
 			attribs = reader->attributes();
 
 			str = attribs.value("direction").toString();
@@ -2172,7 +2169,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->minorTicksOpacity = str.toDouble();
-		} else if (reader->name() == "labels") {
+		} else if (!preview && reader->name() == "labels") {
 			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();
@@ -2223,7 +2220,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->labelsOpacity = str.toDouble();
-		} else if (reader->name() == "majorGrid") {
+		} else if (!preview && reader->name() == "majorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->majorGridPen);
@@ -2233,7 +2230,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->majorGridOpacity = str.toDouble();
-		} else if (reader->name() == "minorGrid") {
+		} else if (!preview && reader->name() == "minorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->minorGridPen);

@@ -1433,9 +1433,6 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -1450,7 +1447,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xColumn);
@@ -1460,7 +1457,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "typeChanged") {
+		} else if (!preview && reader->name() == "typeChanged") {
 			attribs = reader->attributes();
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
@@ -1473,7 +1470,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("binValue").toString();
 			d->histogramData.binValue = str.toInt();
-		} else if (reader->name() == "values") {
+		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
@@ -1520,7 +1517,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->valuesOpacity = str.toDouble();
-		} else if (reader->name() == "filling") {
+		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();

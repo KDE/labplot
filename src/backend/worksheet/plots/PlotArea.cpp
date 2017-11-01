@@ -440,9 +440,6 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if ( !readBasicAttributes(reader) )
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -455,9 +452,9 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 		if ( !reader->isStartElement() )
 			continue;
 
-		if (reader->name() == "comment") {
+		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "background") {
+		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
@@ -528,7 +525,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("opacity"));
 			else
 				d->backgroundOpacity = str.toDouble();
-		} else if (reader->name() == "border") {
+		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->borderPen);

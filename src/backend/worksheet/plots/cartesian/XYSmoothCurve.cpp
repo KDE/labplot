@@ -380,9 +380,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "smoothData") {
+		} else if (!preview && reader->name() == "smoothData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -399,14 +397,14 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
-		} else if (reader->name() == "smoothResult") {
+		} else if (!preview && reader->name() == "smoothResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", smoothResult.available, int);
 			READ_INT_VALUE("valid", smoothResult.valid, int);
 			READ_STRING_VALUE("status", smoothResult.status);
 			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (!preview && reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
@@ -418,6 +416,9 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

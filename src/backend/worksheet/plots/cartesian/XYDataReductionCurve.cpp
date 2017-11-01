@@ -414,9 +414,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "dataReductionData") {
+		} else if (!preview && reader->name() == "dataReductionData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -430,7 +428,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("tolerance", dataReductionData.tolerance);
 			READ_INT_VALUE("autoTolerance2", dataReductionData.autoTolerance2, int);
 			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
-		} else if (reader->name() == "dataReductionResult") {
+		} else if (!preview && reader->name() == "dataReductionResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", dataReductionResult.available, int);
@@ -452,6 +450,9 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
