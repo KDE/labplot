@@ -36,6 +36,7 @@ template <class T> class QVector;
 class MatrixPrivate {
 public:
 	explicit MatrixPrivate(Matrix*, AbstractColumn::ColumnMode);
+	~MatrixPrivate();
 
 	void insertColumns(int before, int count);
 	void removeColumns(int first, int count);

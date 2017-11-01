@@ -55,8 +55,11 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget *parent):
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_integrationCurve(0) {
+XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent) : XYCurveDock(parent),
+	cbDataSourceCurve(nullptr),
+	cbXDataColumn(nullptr),
+	cbYDataColumn(nullptr),
+	m_integrationCurve(nullptr) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);

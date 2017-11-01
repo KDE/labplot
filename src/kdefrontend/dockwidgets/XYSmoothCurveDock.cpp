@@ -56,8 +56,11 @@
   \ingroup kdefrontend
 */
 
-XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent):
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_smoothCurve(0) {
+XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent) : XYCurveDock(parent),
+	cbDataSourceCurve(nullptr),
+	cbXDataColumn(nullptr),
+	cbYDataColumn(nullptr),
+	m_smoothCurve(nullptr) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);

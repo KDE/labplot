@@ -56,8 +56,12 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent):
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0), dataPoints(0) {
+XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget* parent): XYCurveDock(parent),
+	cbDataSourceCurve(nullptr),
+	cbXDataColumn(nullptr),
+	cbYDataColumn(nullptr),
+	m_interpolationCurve(nullptr),
+	dataPoints(0) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);

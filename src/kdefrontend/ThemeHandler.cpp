@@ -179,43 +179,43 @@ void ThemeHandler::showPanel() {
     menu.exec(m_pbLoadTheme->mapToGlobal(pos));
 }
 
-void ThemeHandler::saveMenu() {
-	QMenu menu;
-	menu.addSection(i18n("Save as"));
+// void ThemeHandler::saveMenu() {
+// 	QMenu menu;
+// 	menu.addSection(i18n("Save as"));
+//
+// 	// add editable action
+// 	QWidgetAction* widgetAction = new QWidgetAction(this);
+// 	QFrame* frame = new QFrame(this);
+// 	QHBoxLayout* layout = new QHBoxLayout(frame);
+//
+// 	QLabel* label = new QLabel(i18n("Enter name:"), frame);
+// 	layout->addWidget(label);
+//
+// 	QLineEdit* leFilename = new QLineEdit("", frame);
+// 	layout->addWidget(leFilename);
+// 	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
+// 	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
+//
+// 	widgetAction->setDefaultWidget(frame);
+// 	menu.addAction(widgetAction);
+//
+//     QPoint pos(-menu.sizeHint().width() + m_pbSaveTheme->width(), -menu.sizeHint().height());
+//     menu.exec(m_pbSaveTheme->mapToGlobal(pos));
+// 	leFilename->setFocus();
+// }
 
-	// add editable action
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	QFrame* frame = new QFrame(this);
-	QHBoxLayout* layout = new QHBoxLayout(frame);
-
-	QLabel* label = new QLabel(i18n("Enter name:"), frame);
-	layout->addWidget(label);
-
-	QLineEdit* leFilename = new QLineEdit("", frame);
-	layout->addWidget(leFilename);
-	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
-	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
-
-	widgetAction->setDefaultWidget(frame);
-	menu.addAction(widgetAction);
-
-    QPoint pos(-menu.sizeHint().width() + m_pbSaveTheme->width(), -menu.sizeHint().height());
-    menu.exec(m_pbSaveTheme->mapToGlobal(pos));
-	leFilename->setFocus();
-}
-
-void ThemeHandler::saveNewSelected(const QString& filename) {
-	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
-	emit (saveThemeRequested(config));
-	emit info( i18n("New theme \"%1\" was saved.", filename) );
-
-	m_currentLocalTheme = filename;
-	m_themeList.append(config.name());
-
-	//enable the publish button so the newly created theme can be published
-	//TODO: enable this later
-// 	pbPublishTheme->setEnabled(true);
-}
+// void ThemeHandler::saveNewSelected(const QString& filename) {
+// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
+// 	emit (saveThemeRequested(config));
+// 	emit info( i18n("New theme \"%1\" was saved.", filename) );
+//
+// 	m_currentLocalTheme = filename;
+// 	m_themeList.append(config.name());
+//
+// 	//enable the publish button so the newly created theme can be published
+// 	//TODO: enable this later
+// // 	pbPublishTheme->setEnabled(true);
+// }
 
 /*!
 	opens the dialog to upload the currently selected local theme.

@@ -53,14 +53,14 @@ class ThemeHandler : public QWidget {
 		QString m_currentLocalTheme;
 
         QPushButton* m_pbLoadTheme;
-        QPushButton* m_pbSaveTheme;
+//      QPushButton* m_pbSaveTheme;
 // 		QPushButton* pbPublishTheme;
 
 	private slots:
 		void loadSelected(QString);
 		void showPanel();
-		void saveMenu();
-		void saveNewSelected(const QString&);
+// 		void saveMenu();
+// 		void saveNewSelected(const QString&);
 // 		void publishThemes();
 
 	signals:

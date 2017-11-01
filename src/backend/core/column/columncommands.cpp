@@ -1009,9 +1009,8 @@ void ColumnSetDateTimeCmd::undo() {
  * \brief Ctor
  */
 ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_copied(false), m_row_count(0) {
 	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
-	m_copied = false;
 }
 
 /**
@@ -1106,9 +1105,8 @@ void ColumnReplaceValuesCmd::undo() {
  ** ***************************************************************************/
 
 ColumnReplaceIntegersCmd::ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
+	: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values), m_copied(false), m_row_count(0) {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
-	m_copied = false;
 }
 
 /**

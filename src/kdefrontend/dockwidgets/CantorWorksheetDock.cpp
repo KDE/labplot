@@ -31,7 +31,7 @@
 #include <cantor/session.h>
 #include <KParts/ReadWritePart>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_initializing(false) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_worksheet(nullptr), m_initializing(false) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
 
@@ -44,7 +44,7 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_in
 }
 
 /*!
-    
+
 */
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 	m_initializing = true;

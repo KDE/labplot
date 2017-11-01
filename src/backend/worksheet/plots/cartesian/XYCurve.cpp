@@ -1125,6 +1125,9 @@ void XYCurvePrivate::updateLines() {
 				QDEBUG(msg);
 
 				recalcShapeAndBoundingRect();
+				delete[] x;
+				delete[] y;
+				gsl_interp_accel_free (acc);
 				return;
 			}
 

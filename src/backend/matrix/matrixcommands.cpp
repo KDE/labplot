@@ -105,7 +105,7 @@ void MatrixSetFormulaCmd::undo() {
 
 //replace values
 MatrixReplaceValuesCmd::MatrixReplaceValuesCmd(MatrixPrivate* private_obj, void* new_values, QUndoCommand* parent)
- : QUndoCommand(parent), m_private_obj(private_obj), m_new_values(new_values) {
+ : QUndoCommand(parent), m_private_obj(private_obj), m_new_values(new_values), m_old_values(nullptr) {
 	setText(i18n("%1: replace values", m_private_obj->name()));
 }
 

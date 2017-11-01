@@ -892,7 +892,7 @@ void HistogramDock::fillingOpacityChanged(int value){
 		curve->setFillingOpacity(opacity);
 }
 void HistogramDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Histogram" );
+	KConfigGroup group = config.group(QLatin1String("Histogram"));
 
   	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
@@ -922,10 +922,8 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
-
-	m_initializing=true;
-	m_initializing=false;
 }
+
 void HistogramDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);

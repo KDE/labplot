@@ -49,7 +49,6 @@ class CantorWorksheetDock : public QWidget {
 		QList< CantorWorksheet* > m_cantorworksheetlist;
 		CantorWorksheet* m_worksheet;
 		QList<int> index;
-		QWidget* w = NULL;
 		bool m_initializing;
 
 	private slots:

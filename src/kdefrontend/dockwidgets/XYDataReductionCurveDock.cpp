@@ -58,8 +58,12 @@
   \ingroup kdefrontend
 */
 
-XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb):
-	XYCurveDock(parent), statusBar(sb), cbXDataColumn(0), cbYDataColumn(0), m_dataReductionCurve(0) {
+XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb) : XYCurveDock(parent),
+	statusBar(sb),
+	cbDataSourceCurve(nullptr),
+	cbXDataColumn(nullptr),
+	cbYDataColumn(nullptr),
+	m_dataReductionCurve(nullptr) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);

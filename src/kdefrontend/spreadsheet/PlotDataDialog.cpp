@@ -68,6 +68,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
 	m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project())),
+	m_analysisAction(Differentiation),
 	m_analysisMode(false) {
 
 	setAttribute(Qt::WA_DeleteOnClose);

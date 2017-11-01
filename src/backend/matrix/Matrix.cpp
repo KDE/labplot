@@ -728,8 +728,8 @@ void Matrix::mirrorVertically() {
 //######################  Private implementation ###############################
 //##############################################################################
 
-MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode mode)
-		: q(owner), mode(mode), rowCount(0), columnCount(0), suppressDataChange(false) {
+MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
+		: q(owner), data(0), mode(m), rowCount(0), columnCount(0), suppressDataChange(false) {
 
 	switch (mode) {
 	case AbstractColumn::Numeric:
@@ -746,6 +746,27 @@ MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode mod
 	case AbstractColumn::Integer:
 		data = new QVector<QVector<int>>();
 		break;
+	}
+}
+
+MatrixPrivate::~MatrixPrivate() {
+	if (data) {
+		switch (mode) {
+		case AbstractColumn::Numeric:
+			delete static_cast<QVector<QVector<double>>*>(data);
+			break;
+		case AbstractColumn::Text:
+			delete static_cast<QVector<QVector<QString>>*>(data);
+			break;
+		case AbstractColumn::Integer:
+			delete static_cast<QVector<QVector<int>>*>(data);
+			break;
+		case AbstractColumn::Day:
+		case AbstractColumn::Month:
+		case AbstractColumn::DateTime:
+			delete static_cast<QVector<QVector<QDateTime>>*>(data);
+			break;
+		}
 	}
 }
 

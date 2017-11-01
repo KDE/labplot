@@ -154,13 +154,13 @@ void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first
 	//We need to fix/change this in Cantor.
 	return;
 
-	Q_UNUSED(parent)
-	for(int i = first; i <= last; ++i) {
-		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-		Column* column = child<Column>(name);
-		if(column)
-			column->remove();
-	}
+// 	Q_UNUSED(parent)
+// 	for(int i = first; i <= last; ++i) {
+// 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+// 		Column* column = child<Column>(name);
+// 		if(column)
+// 			column->remove();
+// 	}
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){

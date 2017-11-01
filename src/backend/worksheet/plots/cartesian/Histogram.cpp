@@ -590,14 +590,15 @@ void HistogramPrivate::updateLines() {
 	int endRow = xColumn->rowCount() - 1;
 	QPointF tempPoint,tempPoint1;
 
-	double xAxisMin= xColumn->minimum();
-	double xAxisMax= xColumn->maximum();
+	double xAxisMin = xColumn->minimum();
+	double xAxisMax = xColumn->maximum();
 	switch (histogramData.binsOption) {
 	case Histogram::Number:
 		bins = (size_t)histogramData.binValue;
 		break;
 	case Histogram::SquareRoot:
 		bins = (size_t)sqrt(histogramData.binValue);
+		break;
 	case Histogram::RiceRule:
 		bins = (size_t)2*cbrt(histogramData.binValue);
 		break;
