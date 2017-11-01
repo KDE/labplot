@@ -1914,7 +1914,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement("fixed", QString::number(fixed));
 	writer->writeEndElement();
 
-	writer->writeEndElement();
+	writer->writeEndElement(); //"fitData"
 
 	//fit results (generated columns and goodness of the fit)
 	writer->writeStartElement("fitResult");
@@ -1953,14 +1953,13 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("tdist_tValues");
 	foreach (const double &value, d->fitResult.tdist_tValues)
 		writer->writeTextElement("tdist_t", QString::number(value, 'g', 15));
-
 	writer->writeEndElement();
+
 	writer->writeStartElement("tdist_pValues");
 	foreach (const double &value, d->fitResult.tdist_pValues)
 		writer->writeTextElement("tdist_p", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeEndElement();
 	writer->writeStartElement("tdist_marginValues");
 	foreach (const double &value, d->fitResult.tdist_marginValues)
 		writer->writeTextElement("tdist_margin", QString::number(value, 'g', 15));
