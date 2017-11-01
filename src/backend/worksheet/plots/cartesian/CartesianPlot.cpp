@@ -52,7 +52,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#ifndef HAVE_WINDOWS
 #include "backend/lib/trace.h"
+#endif
 #include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -667,7 +669,9 @@ void CartesianPlot::setSuppressDataChangedSignal(bool value) {
 }
 
 void CartesianPlot::processDropEvent(QDropEvent* event) {
+#ifndef HAVE_WINDOWS
 	PERFTRACE("CartesianPlot::processDropEvent");
+#endif
 	const QMimeData* mimeData = event->mimeData();
 	if (!mimeData)
 		return;
@@ -1893,7 +1897,9 @@ void CartesianPlotPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	PERFTRACE("CartesianPlotPrivate::retransform()");
+#ifndef HAVE_WINDOWS
+//	PERFTRACE("CartesianPlotPrivate::retransform()");
+#endif
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
@@ -1914,7 +1920,9 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
+#ifndef HAVE_WINDOWS
 	PERFTRACE("CartesianPlotPrivate::retransformScales()");
+#endif
 
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QVector<CartesianScale*> scales;
