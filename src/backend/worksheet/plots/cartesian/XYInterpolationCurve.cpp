@@ -558,9 +558,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "interpolationData") {
+		} else if (!preview && reader->name() == "interpolationData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -577,7 +575,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("npoints", interpolationData.npoints, int);
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
-		} else if (reader->name() == "interpolationResult") {
+		} else if (!preview && reader->name() == "interpolationResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", interpolationResult.available, int);
@@ -596,6 +594,9 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

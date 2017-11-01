@@ -387,9 +387,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "transformData") {
+		} else if (!preview && reader->name() == "transformData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -403,7 +401,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("shifted", transformData.shifted, bool);
 			READ_INT_VALUE("xScale", transformData.xScale, nsl_dft_xscale);
 			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
-		} else if (reader->name() == "transformResult") {
+		} else if (!preview && reader->name() == "transformResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", transformResult.available, int);
@@ -423,6 +421,9 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

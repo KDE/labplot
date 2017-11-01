@@ -928,9 +928,6 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -943,9 +940,9 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_QCOLOR(d->labelColor);
@@ -968,7 +965,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "geometry") {
+		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
@@ -1000,7 +997,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				d->title=0;
 				return false;
 			}
-		} else if (reader->name() == "background") {
+		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
@@ -1071,7 +1068,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("opacity"));
 			else
 				d->backgroundOpacity = str.toDouble();
-		} else if (reader->name() == "border") {
+		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->borderPen);
@@ -1081,7 +1078,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
 			else
 				d->borderOpacity = str.toDouble();
-		} else if (reader->name() == "layout") {
+		} else if (!preview && reader->name() == "layout") {
 			attribs = reader->attributes();
 
 			str = attribs.value("topMargin").toString();

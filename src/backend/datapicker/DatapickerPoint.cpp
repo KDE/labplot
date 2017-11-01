@@ -473,9 +473,6 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -490,7 +487,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "geometry") {
+		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
@@ -504,7 +501,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'y'"));
 			else
                 d->position.setY(str.toDouble());
-		} else if (reader->name() == "errorBar") {
+		} else if (!preview && reader->name() == "errorBar") {
 			attribs = reader->attributes();
 
 			str = attribs.value("plusDeltaXPos_x").toString();

@@ -399,9 +399,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "filterData") {
+		} else if (!preview && reader->name() == "filterData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -417,7 +415,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
 			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
-		} else if (reader->name() == "filterResult") {
+		} else if (!preview && reader->name() == "filterResult") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", filterResult.available, int);
@@ -437,6 +435,9 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();

@@ -149,6 +149,9 @@ void CantorWorksheet::modelReset() {
 }
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
+	Q_UNUSED(parent);
+	Q_UNUSED(first);
+	Q_UNUSED(last);
 	//TODO: Cantor removes rows from the model even when the variable was changed only.
 	//We don't want this behaviour since this removes the columns from the datasource in the curve.
 	//We need to fix/change this in Cantor.
@@ -255,9 +258,6 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -274,13 +274,13 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "comment"){
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general"){
+		} else if (!preview && reader->name() == "general"){
 			attribs = reader->attributes();
 
 			m_backendName = attribs.value("backend_name").toString().trimmed();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'backend_name'"));
-		} else if (reader->name() == "worksheet"){
+		} else if (!preview && reader->name() == "worksheet"){
 			attribs = reader->attributes();
 
 			str = attribs.value("content").toString().trimmed();
@@ -294,7 +294,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseError(msg);
 				return false;
 			}
-		} else if(reader->name() == "column") {
+		} else if(!preview && reader->name() == "column") {
 			Column* column = new Column("");
 			column->setUndoAware(false);
 			if (!column->load(reader, preview)) {

@@ -525,9 +525,6 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	if (preview)
-		return true;
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -542,7 +539,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "general") {
+		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("curveErrorType_X").toString();
@@ -564,8 +561,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(minusDeltaXColumn);
 			READ_COLUMN(plusDeltaYColumn);
 			READ_COLUMN(minusDeltaYColumn);
-
-		} else if(reader->name() == "symbolProperties") {
+		} else if(!preview && reader->name() == "symbolProperties") {
 			attribs = reader->attributes();
 
 			str = attribs.value("pointRotationAngle").toString();
@@ -600,7 +596,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
-		} else if(reader->name() == "errorBarProperties") {
+		} else if(!preview && reader->name() == "errorBarProperties") {
 			attribs = reader->attributes();
 
 			str = attribs.value("pointErrorBarSize").toString();

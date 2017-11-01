@@ -366,9 +366,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader, preview) )
 				return false;
-			if (preview)
-				return true;
-		} else if (reader->name() == "differentiationData") {
+		} else if (!preview && reader->name() == "differentiationData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -379,7 +377,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", differentiationData.xRange.last());
 			READ_INT_VALUE("derivOrder", differentiationData.derivOrder, nsl_diff_deriv_order_type);
 			READ_INT_VALUE("accOrder", differentiationData.accOrder, int);
-		} else if (reader->name() == "differentiationResult") {
+		} else if (!preview && reader->name() == "differentiationResult") {
 
 			attribs = reader->attributes();
 
@@ -399,6 +397,9 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 		}
 	}
+
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
