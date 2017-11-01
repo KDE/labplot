@@ -961,7 +961,7 @@ void HistogramDock::setupGeneral() {
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
-	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged()) );
+	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
 }
@@ -972,8 +972,8 @@ void HistogramDock::histogramTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void HistogramDock::binValueChanged() {
-		m_curve->setBinValue(binValue);
+void HistogramDock::binValueChanged(int value) {
+		m_curve->setBinValue(value);
 		enableRecalculate();
 }
 

@@ -74,7 +74,6 @@ private:
 	bool m_readOnly;
 	bool m_folderSelectable;
 	QList<const char*> m_selectableAspects;
-	int m_defaultHeaderHeight;
 
 	QString m_filterString;
 	Qt::CaseSensitivity m_filterCaseSensitivity;

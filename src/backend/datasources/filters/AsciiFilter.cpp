@@ -345,6 +345,7 @@ int AsciiFilter::endColumn() const {
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	commentCharacter("#"),
 	separatingCharacter("auto"),
+	numberFormat(QLocale::C),
 	autoModeEnabled(true),
 	headerEnabled(true),
 	skipEmptyParts(false),
@@ -356,6 +357,8 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endRow(-1),
 	startColumn(1),
 	endColumn(-1),
+	m_actualRows(0),
+	m_actualCols(0),
 	m_prepared(false),
 	m_columnOffset(0) {
 }

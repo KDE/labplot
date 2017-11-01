@@ -53,8 +53,6 @@ private:
 	Ui::HistogramDockGeneralTab uiGeneralTab;
 	QStringList dateStrings;
 	QStringList timeStrings;
-	QString bin;
-	int binValue;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbValuesColumn;
@@ -90,7 +88,7 @@ private slots:
 	void histogramTypeChanged(int);
 	//bins setting
 	void binsOptionChanged(int);
-	void binValueChanged();
+	void binValueChanged(int);
 
 	void recalculateClicked();
 	void enableRecalculate() const;

@@ -46,7 +46,8 @@
 #include <QtSql>
 #include <QStandardItem>
 
-ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0), m_valid(false), m_numeric(false) {
+ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent),
+	m_cols(0), m_rows(0), m_databaseTreeModel(0), m_initializing(0), m_valid(false), m_numeric(false) {
 	ui.setupUi(this);
 
 	ui.cbImportFrom->addItem(i18n("Table"));
