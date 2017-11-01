@@ -939,6 +939,14 @@ void XYFitCurveDock::resultLogContextMenuRequest(const QPoint &pos) {
  */
 void XYFitCurveDock::showFitResult() {
 	DEBUG("XYFitCurveDock::showFitResult()");
+
+	//clear the previous result
+	uiGeneralTab.twParameters->setRowCount(0);
+	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
+		uiGeneralTab.twGoodness->item(row, 2)->setText("");
+	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row)
+		uiGeneralTab.twLog->item(row, 1)->setText("");
+
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 
 	if (!fitResult.available) {
