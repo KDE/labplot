@@ -28,7 +28,6 @@
 #ifndef TRACE_H
 #define TRACE_H
 
-#ifndef HAVE_WINDOWS
 #include "backend/lib/macros.h"
 #include <chrono>
 
@@ -61,6 +60,7 @@ private:
 #endif
 
 
+#ifndef HAVE_WINDOWS
 
 #include <execinfo.h> //backtrace
 #include <dlfcn.h>    //dladdr

@@ -31,9 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#ifndef HAVE_WINDOWS
 #include "backend/lib/trace.h"
-#endif
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -122,9 +120,7 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-#ifndef HAVE_WINDOWS
 	PERFTRACE("WorksheetElementContainer::retransform()");
-#endif
 	Q_D(WorksheetElementContainer);
 
 	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);

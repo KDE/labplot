@@ -34,9 +34,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"
-#ifndef HAVE_WINDOWS
 #include "backend/lib/trace.h"
-#endif
 
 #include <QTextStream>
 #include <KLocale>
@@ -996,9 +994,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	if (m_prepared) {
 		//notify all affected columns and plots about the changes
-#ifndef HAVE_WINDOWS
 		PERFTRACE("AsciiLiveDataImport, notify affected columns and plots");
-#endif
 		const Project* project = spreadsheet->project();
 		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
 		QVector<CartesianPlot*> plots;
