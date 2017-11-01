@@ -436,8 +436,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-//TODO	if (preview)
-//		true;
+	if (preview)
+		return true;
 
 	// wait for data to be read before using the pointers
 	QThreadPool::globalInstance()->waitForDone();
