@@ -85,7 +85,7 @@ void Column::init() {
 	m_suppressDataChangedSignal = false;
 
 	m_usedInActionGroup = new QActionGroup(this);
-	connect(m_usedInActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(navigateTo(QAction*)));
+	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
 }
 
 Column::~Column() {

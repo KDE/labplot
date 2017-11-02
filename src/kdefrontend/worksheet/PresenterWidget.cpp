@@ -53,8 +53,8 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 
 	m_panel = new SlidingPanel(this, worksheetName);
 	qApp->installEventFilter(this);
-	connect(m_timeLine, SIGNAL(valueChanged(qreal)), m_panel, SLOT(movePanel(qreal)));
-	connect(m_panel->quitButton(), SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, &PresenterWidget::close);
 
 	slideUp();
 	setFocus();

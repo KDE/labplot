@@ -43,11 +43,11 @@ FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 
 	//SLOTS
-	connect( ui.leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
-	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
-	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
-	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );
-	connect( ui.lwFunctions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
+	connect(ui.leFilter, &QLineEdit::textChanged, this, &FunctionsWidget::filterChanged);
+	connect(ui.cbGroup, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &FunctionsWidget::groupChanged);
+	connect(ui.bInsert, &QPushButton::clicked, this, &FunctionsWidget::insertClicked);
+	connect(ui.bCancel, &QPushButton::clicked, this, &FunctionsWidget::canceled);
+	connect(ui.lwFunctions, &QListWidget::itemDoubleClicked, this, &FunctionsWidget::insertClicked);
 
 	this->groupChanged(0);
 }

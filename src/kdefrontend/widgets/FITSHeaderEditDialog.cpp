@@ -53,15 +53,15 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent), m
 	m_okButton->setText(i18n("&Save"));
 	m_okButton->setEnabled(false);
 
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
-
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FITSHeaderEditDialog::reject);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &FITSHeaderEditDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &FITSHeaderEditDialog::reject);
 
 	setWindowTitle(i18n("FITS Metadata Editor"));
 	setWindowIcon(QIcon::fromTheme("document-edit"));
 
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(save()));
-	connect(m_headerEditWidget, SIGNAL(changed(bool)), this, SLOT(headersChanged(bool)));
+	connect(m_okButton, &QPushButton::clicked, this, &FITSHeaderEditDialog::save);
+	connect(m_headerEditWidget, &FITSHeaderEditWidget::changed, this, &FITSHeaderEditDialog::headersChanged);
 
 	setAttribute(Qt::WA_DeleteOnClose);
 

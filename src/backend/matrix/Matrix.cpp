@@ -183,7 +183,7 @@ bool Matrix::printView() {
 bool Matrix::printPreview() const {
 	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &MatrixView::print);
 	return dlg->exec();
 }
 

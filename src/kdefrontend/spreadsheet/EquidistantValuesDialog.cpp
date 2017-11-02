@@ -55,9 +55,10 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	ui.gridLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &EquidistantValuesDialog::close);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &EquidistantValuesDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &EquidistantValuesDialog::reject);
 
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate equidistant values"));
@@ -76,12 +77,12 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.leTo->setText("100");
 	ui.leIncrement->setText("1");
 
-	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged(int)) );
-	connect( ui.leFrom, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.leTo, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.leNumber, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.leIncrement, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
+	connect( ui.cbType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &EquidistantValuesDialog::typeChanged);
+	connect( ui.leFrom, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
+	connect( ui.leTo, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
+	connect( ui.leNumber, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
+	connect( ui.leIncrement, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
+	connect(m_okButton, &QPushButton::clicked, this, &EquidistantValuesDialog::generate);
 
 	//generated data the  default
 	this->typeChanged(0);

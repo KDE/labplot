@@ -109,6 +109,7 @@ signals:
 
 	friend class HDFOptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
+	friend class FITSOptionsWidget;
 };
 
 #endif

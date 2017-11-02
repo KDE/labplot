@@ -47,10 +47,11 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	ui.leUnit->setCompleter(keyCompleter);
 	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 
-	connect(ui.leUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
-	QPushButton* btnCancel = btnBox->button(QDialogButtonBox::Cancel);
-	connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
+	connect(ui.leUnit, &QLineEdit::textChanged, this, &FITSHeaderEditAddUnitDialog::unitChanged);
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FITSHeaderEditAddUnitDialog::close);
+
+	connect(btnBox, &QDialogButtonBox::accepted, this, &FITSHeaderEditAddUnitDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &FITSHeaderEditAddUnitDialog::reject);
 
 	ui.leUnit->setText(unit);
 }

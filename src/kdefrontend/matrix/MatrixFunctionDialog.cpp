@@ -80,17 +80,18 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 
 	ui.gridLayout_2->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MatrixFunctionDialog::close);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &MatrixFunctionDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &MatrixFunctionDialog::reject);
 
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate function values"));
 
-	connect(ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()));
-	connect(ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
-	connect(ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
+	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &MatrixFunctionDialog::checkValues);
+	connect(ui.tbConstants, &QToolButton::clicked, this, &MatrixFunctionDialog::showConstants);
+	connect(ui.tbFunctions, &QToolButton::clicked, this, &MatrixFunctionDialog::showFunctions);
+	connect(m_okButton, &QPushButton::clicked, this, &MatrixFunctionDialog::generate);
 
 	resize(QSize(300,0).expandedTo(minimumSize()));
 }
@@ -107,9 +108,9 @@ void MatrixFunctionDialog::checkValues() {
 void MatrixFunctionDialog::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&constants, &ConstantsWidget::constantSelected, this, &MatrixFunctionDialog::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -122,9 +123,9 @@ void MatrixFunctionDialog::showConstants() {
 void MatrixFunctionDialog::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&functions, &FunctionsWidget::functionSelected, this, &MatrixFunctionDialog::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);

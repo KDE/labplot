@@ -126,7 +126,7 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 // 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
 // 	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 
-	connect(this, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(descriptionChanged(const AbstractAspect*)));
+	connect(this, &Project::aspectDescriptionChanged,this, &Project::descriptionChanged);
 }
 
 Project::~Project() {

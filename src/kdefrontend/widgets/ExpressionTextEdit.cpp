@@ -100,7 +100,7 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
-	connect(m_completer, SIGNAL(activated(QString)),this, SLOT(insertCompletion(QString)));
+	connect(m_completer, static_cast<void (QCompleter::*) (const QString&)>(&QCompleter::activated),this, &ExpressionTextEdit::insertCompletion);
 	connect(this, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
 	connect(this, SIGNAL(cursorPositionChanged()), m_highlighter, SLOT(rehighlight()) );
 }

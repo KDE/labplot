@@ -119,16 +119,16 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	ui->chkCreateDataCurve->setVisible(false);
 
 	//SIGNALs/SLOTs
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(plot()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(ui->rbCurvePlacement1, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
-	connect(ui->rbCurvePlacement2, SIGNAL(toggled(bool)), this, SLOT(curvePlacementChanged()));
-	connect(ui->rbPlotPlacement1, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
-	connect(ui->rbPlotPlacement2, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
-	connect(ui->rbPlotPlacement3, SIGNAL(toggled(bool)), this, SLOT(plotPlacementChanged()));
-	connect(cbExistingPlots, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
-	connect(cbExistingWorksheets, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::plot);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &PlotDataDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::accept);
+	connect(ui->rbCurvePlacement1, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
+	connect(ui->rbCurvePlacement2, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
+	connect(ui->rbPlotPlacement1, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(ui->rbPlotPlacement2, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(ui->rbPlotPlacement3, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(cbExistingPlots, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
+	connect(cbExistingWorksheets, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 
 	QTimer::singleShot(0, this, &PlotDataDialog::loadSettings);
 }

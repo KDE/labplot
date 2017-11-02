@@ -85,10 +85,10 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 
 	ui.gridLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
-
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FunctionValuesDialog::close);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
 	m_okButton->setToolTip(i18n("Generate function values"));
 
@@ -96,7 +96,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
 	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(generate()));
+	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");

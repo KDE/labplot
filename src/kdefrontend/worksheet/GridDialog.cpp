@@ -96,8 +96,8 @@ GridDialog::GridDialog(QWidget* parent) : KDialog(parent){
 
 	setButtons( KDialog::Ok | KDialog::Cancel);
 
-	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
-	connect(this,SIGNAL(okClicked()),SLOT(apply()));
+	connect(this, SIGNAL(applyClicked()) ,SLOT(apply()));
+	connect(this, SIGNAL(okClicked()),SLOT(apply()));
 }
 
 void GridDialog::save(WorksheetView::GridSettings& settings){

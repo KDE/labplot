@@ -92,11 +92,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 
 	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	connect(ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect(ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
-	connect(m_showOptionsButton,SIGNAL(clicked(bool)), this, SLOT(toggleOptions()));
-	connect(ui->cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
-	connect(ui->cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
+	connect(btnBox, &QDialogButtonBox::accepted, this, &ExportSpreadsheetDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &ExportSpreadsheetDialog::reject);
+
+	connect(ui->bOpen, &QPushButton::clicked, this, &ExportSpreadsheetDialog::selectFile);
+	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged );
+	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
+	//connect(ui->cbFormat, &KComboBox::currentIndexChanged, this, &ExportSpreadsheetDialog::formatChanged);
+	//connect(ui->cbExportToFITS, &QComboBox::currentIndexChanged, this, &ExportSpreadsheetDialog::fitsExportToChanged);
 
 	setWindowTitle(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));

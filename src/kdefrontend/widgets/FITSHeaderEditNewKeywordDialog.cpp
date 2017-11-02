@@ -55,7 +55,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 
 	m_okButton->setText(i18n("&Add keyword"));
 
-	connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+	connect(btnBox, &QDialogButtonBox::clicked, this, &FITSHeaderEditNewKeywordDialog::slotButtonClicked);
 
 	setWindowTitle(i18n("Specify the new keyword"));
 	setWindowIcon(QIcon::fromTheme("document-new"));

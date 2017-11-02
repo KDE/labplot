@@ -50,7 +50,8 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
 	btnOk->setFocus();
 
-	connect(btnOk, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnOk, &QPushButton::clicked, this, &StatisticsDialog::close);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &StatisticsDialog::accept);
 
 	QVBoxLayout* layout = new QVBoxLayout;
 	layout->addWidget(m_twStatistics);
@@ -176,7 +177,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "</table>");
 
-	connect(m_twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+	connect(m_twStatistics, &QTabWidget::currentChanged, this, &StatisticsDialog::currentTabChanged);
 	QTimer::singleShot(0, this, &StatisticsDialog::loadSettings);
 }
 

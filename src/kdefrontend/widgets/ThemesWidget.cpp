@@ -113,7 +113,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setModel(mContentItemModel);
 
 	//SLOTS
-	connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked(QModelIndex)));
+	connect(this, &ThemesWidget::clicked, this, &ThemesWidget::applyClicked);
 }
 
 void ThemesWidget::applyClicked(const QModelIndex& index) {

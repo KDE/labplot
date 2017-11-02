@@ -46,7 +46,7 @@ public:
 	enum { Ascending=0, Descending=1 };
 
 private slots:
-	void sort();
+	void sortColumns();
 	void changeType(int index);
 
 signals:

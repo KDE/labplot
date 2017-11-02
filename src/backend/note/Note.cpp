@@ -70,7 +70,7 @@ bool Note::printView() {
 bool Note::printPreview() const {
 	const NoteView* view = reinterpret_cast<const NoteView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &NoteView::print);
 	return dlg->exec();
 }
 

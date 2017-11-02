@@ -83,7 +83,7 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_device(nullptr) {
 
 	initActions();
-	connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(read()));
+	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 }
 
 LiveDataSource::~LiveDataSource() {
@@ -120,14 +120,14 @@ void LiveDataSource::ready() {
 
 void LiveDataSource::initActions() {
 	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
-	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
+	connect(m_reloadAction, &QAction::triggered, this, &LiveDataSource::read);
 
 	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
-	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
+	connect(m_toggleLinkAction, &QAction::triggered, this, &LiveDataSource::linkToggled);
 
 	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
-	connect(m_plotDataAction, SIGNAL(triggered()), this, SLOT(plotData()));
+	connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
 }
 
 QWidget* LiveDataSource::view() const {
@@ -187,7 +187,7 @@ void LiveDataSource::continueReading() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
 	else if (m_updateType == NewData)
-		connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 }
 
 /*!
@@ -396,10 +396,10 @@ void LiveDataSource::setUpdateType(const UpdateType updatetype) {
 		if (m_fileSystemWatcher == nullptr)
 			watch();
 		else
-			connect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	} else {
 		if (m_fileSystemWatcher)
-			disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
 	m_updateType = updatetype;
 }
@@ -499,8 +499,8 @@ void LiveDataSource::read() {
 			m_device = m_tcpSocket;
 
 			qDebug() << "socket state before preparing: " << m_tcpSocket->state();
-			connect(m_tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-			connect(m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
+			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
 			qDebug() << "socket state after preparing: " << m_tcpSocket->state();
 
 			break;
@@ -512,8 +512,8 @@ void LiveDataSource::read() {
 			m_udpSocket->connectToHost(m_host, m_port);
 
 			m_device = m_udpSocket;
-			connect(m_udpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-			connect(m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
+			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
 			qDebug() << "socket state after preparing: " << m_udpSocket->state();
 
 			break;
@@ -524,8 +524,8 @@ void LiveDataSource::read() {
 			qDebug() << "socket state after preparing: " << m_localSocket->state();
 
 			m_device = m_localSocket;
-			connect(m_localSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-			connect(m_localSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(localSocketError(QLocalSocket::LocalSocketError)));
+			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
+			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LiveDataSource::localSocketError);
 
 			break;
 		case SerialPort:
@@ -533,8 +533,8 @@ void LiveDataSource::read() {
 			m_device = m_serialPort;
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
-			connect(m_serialPort, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(serialPortError(QSerialPort::SerialPortError)));
-			connect(m_serialPort, SIGNAL(readyRead()), this, SLOT(readyRead()));
+			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
+			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			break;
 		}
 		m_prepared = true;
@@ -722,7 +722,7 @@ void LiveDataSource::watch() {
 	if (m_fileWatched) {
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
-			connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 		}
 
 		if ( !m_fileSystemWatcher->files().contains(m_fileName) )

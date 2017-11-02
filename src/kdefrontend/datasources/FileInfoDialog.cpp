@@ -53,8 +53,8 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 	layout->addWidget(&m_textEditWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &FileInfoDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &FileInfoDialog::accept);
 
 	layout->addWidget(buttonBox);
 

@@ -66,9 +66,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 
 	ui.horizontalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DropValuesDialog::close);
 
 	if (m_mask) {
 		m_okButton->setText(i18n("&Mask"));
@@ -80,8 +79,10 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));
 	}
 
-	connect(ui.cbOperator, SIGNAL(currentIndexChanged(int)), this, SLOT(operatorChanged(int)) );
-	connect(m_okButton, SIGNAL(clicked(bool)), this, SLOT(okClicked()));
+	connect(ui.cbOperator, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged );
+	connect(m_okButton, &QPushButton::clicked, this, &DropValuesDialog::okClicked);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &DropValuesDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);
 
 	resize( QSize(400,0).expandedTo(minimumSize()) );
 	operatorChanged(0);

@@ -33,13 +33,15 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
-	connect(ui.bPausePlayReading, SIGNAL(clicked(bool)), this, SLOT(pauseContinueReading()));
-	connect(ui.bUpdateNow, SIGNAL(clicked(bool)), this, SLOT(updateNow()));
-	connect(ui.sbUpdateInterval, SIGNAL(valueChanged(int)), this, SLOT(updateIntervalChanged(int)));
-	connect(ui.leKeepNValues, SIGNAL(textChanged(QString)), this, SLOT(keepNvaluesChanged(QString)));
-	connect(ui.sbSampleRate, SIGNAL(valueChanged(int)), this, SLOT(sampleRateChanged(int)));
-	connect(ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect(ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
+	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
+	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
+
+	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
+	connect(ui.sbSampleRate, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleRateChanged);
+	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
+	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
+
 }
 
 LiveDataDock::~LiveDataDock() {

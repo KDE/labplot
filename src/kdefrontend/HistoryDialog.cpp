@@ -53,11 +53,11 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	setWindowTitle(i18n("Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-	QPushButton* cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &HistoryDialog::close);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &HistoryDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &HistoryDialog::reject);
 
 	if (stack->count()) {
 		m_clearUndoStackButton = new QPushButton;
@@ -65,7 +65,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 		m_clearUndoStackButton->setText(i18n("&Clear"));
 		m_clearUndoStackButton->setToolTip(i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
 		m_clearUndoStackButton->setIcon(QIcon::fromTheme("edit-clear"));
-		connect(m_clearUndoStackButton, SIGNAL(clicked(bool)), this, SLOT(clearUndoStack()));
+		connect(m_clearUndoStackButton, &QPushButton::clicked, this, &HistoryDialog::clearUndoStack);
 	}
 
 	QFrame* line = new QFrame;

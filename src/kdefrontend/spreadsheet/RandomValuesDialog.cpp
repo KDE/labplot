@@ -66,6 +66,11 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
     m_okButton->setDefault(true);
     m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
     m_okButton->setText(i18n("&Generate"));
+
+	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &RandomValuesDialog::close);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &RandomValuesDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &RandomValuesDialog::reject);
+
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
@@ -87,13 +92,11 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	ui.leParameter2->setValidator( new QDoubleValidator(ui.leParameter2) );
 	ui.leParameter3->setValidator( new QDoubleValidator(ui.leParameter3) );
 
-	connect( ui.cbDistribution, SIGNAL(currentIndexChanged(int)), SLOT(distributionChanged(int)) );
-	connect( ui.leParameter1, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.leParameter2, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect( ui.leParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(generate()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(ui.cbDistribution, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &RandomValuesDialog::distributionChanged);
+	connect(ui.leParameter1, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
+	connect(ui.leParameter2, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
+	connect(ui.leParameter3, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &RandomValuesDialog::generate);
 
 	//restore saved settings if available
 	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");

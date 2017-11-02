@@ -77,14 +77,13 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
     layout->addWidget(m_cbColumns, 2, 1);
 	layout->setRowStretch(3, 1);
 
-	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-                                         | QDialogButtonBox::Cancel);
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
 	buttonBox->button(QDialogButtonBox::Ok)->setText(i18n("Sort"));
 
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(sort()));
-	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
 
 	layout->addWidget(buttonBox);
 
@@ -95,7 +94,7 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 	this->resize(400,0);
 }
 
-void SortDialog::sort(){
+void SortDialog::sortColumns(){
 	Column* leading;
     if(m_cbType->currentIndex() == Together)
         leading = m_columns.at(m_cbColumns->currentIndex());

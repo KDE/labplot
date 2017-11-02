@@ -56,7 +56,7 @@ ThemesComboBox::ThemesComboBox(QWidget* parent) : QComboBox(parent) {
 	addItem("");
 	setCurrentIndex(0);
 
-	connect(m_view, SIGNAL(themeSelected(QString)), this, SLOT(handleThemeChanged(QString)));
+	connect(m_view, &ThemesWidget::themeSelected, this, &ThemesComboBox::handleThemeChanged);
 }
 
 void ThemesComboBox::showPopup() {
