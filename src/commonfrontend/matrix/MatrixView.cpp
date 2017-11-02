@@ -341,8 +341,8 @@ void MatrixView::adjustHeaders() {
 	QHeaderView* h_header = m_tableView->horizontalHeader();
 	QHeaderView* v_header = m_tableView->verticalHeader();
 
-	disconnect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
-	disconnect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+	disconnect(v_header, &QHeaderView::sectionResized, this, &MatrixView::handleVerticalSectionResized);
+	disconnect(h_header, &QHeaderView::sectionResized, this, &MatrixView::handleHorizontalSectionResized);
 
 	//resize columns to the saved sizes or to fit the contents if the widht is 0
 	int cols = m_matrix->columnCount();

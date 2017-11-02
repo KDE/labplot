@@ -79,20 +79,13 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
 
-	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-	        this, SLOT(aspectDescriptionChanged(const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectAdded(const AbstractAspect*)),
-	        this, SLOT(aspectAdded(const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(aspectRemoved()));
-	connect(m_root, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)),
-	        this, SLOT(aspectHiddenAboutToChange(const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
-	        this, SLOT(aspectHiddenChanged(const AbstractAspect*)));
+	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
+	connect(m_root, &AbstractAspect::aspectAboutToBeAdded, this, &AspectTreeModel::aspectAboutToBeAdded);
+	connect(m_root, &AbstractAspect::aspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
+	connect(m_root, &AbstractAspect::aspectAdded, this, &AspectTreeModel::aspectAdded);
+	connect(m_root, &AbstractAspect::aspectRemoved, this, &AspectTreeModel::aspectRemoved);
+	connect(m_root, &AbstractAspect::aspectHiddenAboutToChange, this, &AspectTreeModel::aspectHiddenAboutToChange);
+	connect(m_root, &AbstractAspect::aspectHiddenChanged, this, &AspectTreeModel::aspectHiddenChanged);
 }
 
 /*!
@@ -272,12 +265,12 @@ void AspectTreeModel::aspectAdded(const AbstractAspect *aspect) {
 	AbstractAspect * parent = aspect->parentAspect();
 	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
 
-	connect(aspect, SIGNAL(renameRequested()), this, SLOT(renameRequested()));
+	connect(aspect, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	foreach(const AbstractAspect* child, aspect->children<AbstractAspect>())
-		connect(child, SIGNAL(renameRequested()), this, SLOT(renameRequested()));
+		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 
-	connect(aspect, SIGNAL(childAspectSelectedInView(const AbstractAspect*)), this, SLOT(aspectSelectedInView(const AbstractAspect*)));
-	connect(aspect, SIGNAL(childAspectDeselectedInView(const AbstractAspect*)), this, SLOT(aspectDeselectedInView(const AbstractAspect*)));
+	connect(aspect, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
+	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
 }
 
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect *aspect) {
@@ -395,7 +388,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
-void AspectTreeModel::renameRequested() {
+void AspectTreeModel::renameRequestedSlot() {
 	AbstractAspect* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)
 		emit renameRequested(modelIndexOfAspect(aspect));

@@ -161,7 +161,7 @@ public:
 		parser_var vars[] = { {"x", x}, {"y", y}};
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
-			for (int row = 0; row < rows; row++) {
+			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
 				double z = parse_with_vars(m_func, vars, 2);
 				//qDebug()<<" z ="<<z;
@@ -235,9 +235,9 @@ void MatrixFunctionDialog::generate() {
 */
 	double x = 0, y = 0;
 	parser_var vars[] = {{"x", x}, {"y", y}};
-	for (int col = 0; col < m_matrix->columnCount(); col++) {
+	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
-		for (int row = 0; row < m_matrix->rowCount(); row++) {
+		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
 			(new_data->operator[](col))[row] = parse_with_vars(func, vars, 2);
 			y += yStep;

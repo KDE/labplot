@@ -97,7 +97,7 @@ void DatapickerCurve::init() {
 
 void DatapickerCurve::initAction() {
 	updateDatasheetAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Update Spreadsheet"), this);
-	connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
+	connect(updateDatasheetAction, &QAction::triggered, this, &DatapickerCurve::updateDatasheet);
 }
 
 /*!

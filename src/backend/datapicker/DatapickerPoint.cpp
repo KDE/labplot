@@ -148,11 +148,11 @@ void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
 	if (errors.x != DatapickerCurve::NoError) {
 		ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
 		plusDeltaXItem->setPosition(plusDeltaXPos());
-		connect(this, SIGNAL(plusDeltaXPosChanged(QPointF)), plusDeltaXItem, SLOT(setPosition(QPointF)));
+		connect(this, &DatapickerPoint::plusDeltaXPosChanged, plusDeltaXItem, &ErrorBarItem::setPosition);
 
 		ErrorBarItem* minusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaX);
 		minusDeltaXItem->setPosition(minusDeltaXPos());
-		connect(this, SIGNAL(minusDeltaXPosChanged(QPointF)), minusDeltaXItem, SLOT(setPosition(QPointF)));
+		connect(this, &DatapickerPoint::minusDeltaXPosChanged, minusDeltaXItem, &ErrorBarItem::setPosition);
 
 		m_errorBarItemList<<plusDeltaXItem<<minusDeltaXItem;
 	}
@@ -160,11 +160,11 @@ void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
 	if (errors.y != DatapickerCurve::NoError) {
 		ErrorBarItem* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaY);
 		plusDeltaYItem->setPosition(plusDeltaYPos());
-		connect(this, SIGNAL(plusDeltaYPosChanged(QPointF)), plusDeltaYItem, SLOT(setPosition(QPointF)));
+		connect(this, &DatapickerPoint::plusDeltaYPosChanged, plusDeltaYItem, &ErrorBarItem::setPosition);
 
 		ErrorBarItem* minusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaY);
 		minusDeltaYItem->setPosition(minusDeltaYPos());
-		connect(this, SIGNAL(minusDeltaYPosChanged(QPointF)), minusDeltaYItem, SLOT(setPosition(QPointF)));
+		connect(this, &DatapickerPoint::minusDeltaYPosChanged, minusDeltaYItem, &ErrorBarItem::setPosition);
 
 		m_errorBarItemList<<plusDeltaYItem<<minusDeltaYItem;
 	}

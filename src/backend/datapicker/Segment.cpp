@@ -185,7 +185,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 				const int l = (line->y1() > line->y2())?line->y2():line->y1();
 				const int h = (line->y1() > line->y2())?line->y1():line->y2();
 
-				for (int i = l; i <= h; i++) {
+				for (int i = l; i <= h; ++i) {
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
 						const QVector<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);

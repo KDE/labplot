@@ -56,18 +56,13 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	connect(m_spreadsheet, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
-	        this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-	        this, SLOT(handleDescriptionChange(const AbstractAspect*)));
+	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeAdded, this, &SpreadsheetModel::handleAspectAboutToBeAdded);
+	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetModel::handleAspectAdded);
+	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::aspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
+	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
-	for (int i=0; i < spreadsheet->columnCount(); i++) {
+	for (int i = 0; i < spreadsheet->columnCount(); ++i) {
 		beginInsertColumns(QModelIndex(), i, i);
 		handleAspectAdded(spreadsheet->column(i));
 	}

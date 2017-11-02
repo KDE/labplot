@@ -205,7 +205,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				start=offset;
 
 			// add additional sheets
-			for (int i = start; i < nrNames; i++) {
+			for (int i = start; i < nrNames; ++i) {
 				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 				if (mode == AbstractFileFilter::Prepend)
 					workbook->insertChildBefore(spreadsheet,sheets[0]);
@@ -218,7 +218,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
-			for (int i = 0; i < nrNames; i++) {
+			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == LiveDataSource::HDF)
 					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
 				else

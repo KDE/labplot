@@ -33,7 +33,7 @@ Transform::Transform() {
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
 	if (axisPoints.type == DatapickerImage::LogarithmicX) {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
 			x[i] = log(axisPoints.logicalPos[i].x());
@@ -42,7 +42,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::LogarithmicY) {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			if (axisPoints.logicalPos[i].y() <= 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x();
@@ -51,7 +51,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::PolarInDegree) {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*M_PI / 180.0);
@@ -60,7 +60,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::PolarInRadians) {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y());
@@ -69,14 +69,14 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else if (axisPoints.type == DatapickerImage::Ternary) {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			x[i] = (2*axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
 			y[i] = (sqrt(3)*axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
 			X[i] = axisPoints.scenePos[i].x();
 			Y[i] = axisPoints.scenePos[i].y();
 		}
 	} else {
-		for(int i=0; i<3; i++) {
+		for(int i=0; i<3; ++i) {
 			x[i] = axisPoints.logicalPos[i].x();
 			y[i] = axisPoints.logicalPos[i].y();
 			X[i] = axisPoints.scenePos[i].x();

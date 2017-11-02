@@ -117,7 +117,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 		ui.twPreview->setRowCount(rows);
 		int colCount = 0;
 		const int maxColumns = 300;
-		for (int i = 0; i < rows; i++) {
+		for (int i = 0; i < rows; ++i) {
 			QStringList lineString = importedStrings[i];
 			if (i == 0) {
 				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
@@ -125,7 +125,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 			}
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
-			for (int j = 0; j < colCount; j++) {
+			for (int j = 0; j < colCount; ++j) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
 				ui.twPreview->setItem(i, j, item);
 			}

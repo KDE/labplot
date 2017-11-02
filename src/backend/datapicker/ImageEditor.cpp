@@ -137,7 +137,7 @@ QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 	QList<ColorEntry>::iterator itrC;
 	ColorList colors;
 	int x, y = 0;
-	for (x = 0; x < plotImage->width(); x++) {
+	for (x = 0; x < plotImage->width(); ++x) {
 		ColorEntry c;
 		c.color = plotImage->pixel(x,y);
 		c.count = 0;
@@ -172,11 +172,11 @@ void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor backg
 // 	timer.start();
 
 	//reset bin
-	for (int i = 0; i <= colorAttributeMax(type); i++)
+	for (int i = 0; i <= colorAttributeMax(type); ++i)
 		bins [i] = 0;
 
-	for (int x = 0; x < originalImage->width(); x++) {
-		for (int y = 0; y < originalImage->height(); y++) {
+	for (int x = 0; x < originalImage->width(); ++x) {
+		for (int y = 0; y < originalImage->height(); ++y) {
 			int value = discretizeValueForeground(x, y, type, background, originalImage);
 			bins[value] += 1;
 		}

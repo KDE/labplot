@@ -143,7 +143,7 @@ QStringList AsciiFilter::dataTypes() {
 	const QMetaObject& mo = AbstractColumn::staticMetaObject;
 	const QMetaEnum& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
 	QStringList list;
-	for (int i = 0; i <= 100; i++)	// me.keyCount() does not work because we have holes in enum
+	for (int i = 0; i <= 100; ++i)	// me.keyCount() does not work because we have holes in enum
 		if (me.valueToKey(i))
 			list << me.valueToKey(i);
 	return list;
@@ -501,7 +501,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
 	// parsing more lines to better determine data types
-	for (unsigned int i = 0; i < m_dataTypeLines; i++) {
+	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
 		firstLineStringList = getLineString(device);
 
 		if (createIndexEnabled)
@@ -604,7 +604,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		m_dataContainer.resize(m_actualCols);
 
-		for (int n = 0; n < m_actualCols; n++) {
+		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
@@ -774,7 +774,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		// if we have fixed size, we do this only once in preparation, here we can use
 		// m_prepared and we need something to decide whether it has a fixed size or increasing
-		for (int n = 0; n < m_actualCols; n++) {
+		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			switch (columnModes[n]) {
 			case AbstractColumn::Numeric: {
@@ -1066,7 +1066,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		lines = m_actualRows;
 
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
+	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
@@ -1088,7 +1088,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (createIndexEnabled)
 			lineStringList.prepend(QString::number(i+1));
 
-		for (int n = 0; n < m_actualCols; n++) {
+		for (int n = 0; n < m_actualCols; ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
 
@@ -1214,7 +1214,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 			lineStringList.prepend(QString::number(i));
 
 		QStringList lineString;
-		for (int n = 0; n < lineStringList.size(); n++) {
+		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
 
@@ -1276,7 +1276,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		lines = m_actualRows;
 
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(lines, m_actualRows); i++) {
+	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
@@ -1297,7 +1297,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 			lineStringList.prepend(QString::number(i+1));
 
 		QStringList lineString;
-		for (int n = 0; n < m_actualCols; n++) {
+		for (int n = 0; n < m_actualCols; ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
 

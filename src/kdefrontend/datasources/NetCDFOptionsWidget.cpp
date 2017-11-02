@@ -99,13 +99,13 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 		int rows = lineStrings.size();
 		ui.twPreview->setRowCount(rows);
 		ui.twPreview->setColumnCount(0);
-		for (int i = 0; i < rows; i++) {
+		for (int i = 0; i < rows; ++i) {
 			QStringList lineString = lineStrings[i].split(' ');
 			int cols = lineString.size();
 			if (ui.twPreview->columnCount() < cols)
 				ui.twPreview->setColumnCount(cols);
 
-			for (int j = 0; j < cols; j++) {
+			for (int j = 0; j < cols; ++j) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				ui.twPreview->setItem(i, j, item);

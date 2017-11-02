@@ -72,7 +72,7 @@ returns the list of all supported locales for numeric data
 */
 QStringList AbstractFileFilter::numberFormats() {
 	QStringList formats;
-	for (int l = 0; l < ENUM_COUNT(QLocale, Language); l++)
+	for (int l = 0; l < ENUM_COUNT(QLocale, Language); ++l)
 		formats << QLocale::languageToString((QLocale::Language)l);
 
 	return formats;

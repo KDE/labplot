@@ -75,7 +75,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 		break;
 	}
 
-	connect(m_output_filter, SIGNAL(formatChanged()), m_owner, SLOT(handleFormatChange()));
+	connect(m_output_filter, &AbstractSimpleFilter::formatChanged, m_owner, &Column::handleFormatChange);
 
 	m_input_filter->setName("InputFilter");
 	m_output_filter->setName("OutputFilter");
@@ -96,14 +96,14 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 	case AbstractColumn::Numeric:
 		m_input_filter = new String2DoubleFilter();
 		m_output_filter = new Double2StringFilter();
-		connect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Double2StringFilter *>(m_output_filter), &Double2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Integer:
 		m_input_filter = new String2IntegerFilter();
 		m_output_filter = new Integer2StringFilter();
-		connect(static_cast<Integer2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Integer2StringFilter *>(m_output_filter), &Integer2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		m_input_filter = new SimpleCopyThroughFilter();
@@ -112,22 +112,22 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 	case AbstractColumn::DateTime:
 		m_input_filter = new String2DateTimeFilter();
 		m_output_filter = new DateTime2StringFilter();
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Month:
 		m_input_filter = new String2MonthFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("MMMM");
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Day:
 		m_input_filter = new String2DayOfWeekFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("dddd");
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	}
 
@@ -185,8 +185,8 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	// determine the conversion filter and allocate the new data vector
 	switch(m_column_mode) {	// old mode
 	case AbstractColumn::Numeric: {
-		disconnect(static_cast<Double2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		           m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<Double2StringFilter*>(m_output_filter), &Double2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		switch(mode) {
 		case AbstractColumn::Numeric:
 			break;
@@ -225,8 +225,8 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	}
 	case AbstractColumn::Integer: {
-		disconnect(static_cast<Integer2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		           m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<Integer2StringFilter*>(m_output_filter), &Integer2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		switch(mode) {
 		case AbstractColumn::Integer:
 			break;
@@ -305,8 +305,8 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
-		disconnect(static_cast<DateTime2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-				m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<DateTime2StringFilter*>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		switch(mode) {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
@@ -351,14 +351,14 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::Numeric:
 		new_in_filter = new String2DoubleFilter();
 		new_out_filter = new Double2StringFilter();
-		connect(static_cast<Double2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Double2StringFilter*>(new_out_filter), &Double2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Integer:
 		new_in_filter = new String2IntegerFilter();
 		new_out_filter = new Integer2StringFilter();
-		connect(static_cast<Integer2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Integer2StringFilter*>(new_out_filter), &Integer2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		new_in_filter = new SimpleCopyThroughFilter();
@@ -367,23 +367,23 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::DateTime:
 		new_in_filter = new String2DateTimeFilter();
 		new_out_filter = new DateTime2StringFilter();
-		connect(static_cast<DateTime2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter*>(new_out_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Month:
 		new_in_filter = new String2MonthFilter();
 		new_out_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat("MMMM");
 		DEBUG("	Month out_filter format: " << static_cast<DateTime2StringFilter*>(new_out_filter)->format().toStdString());
-		connect(static_cast<DateTime2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter*>(new_out_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Day:
 		new_in_filter = new String2DayOfWeekFilter();
 		new_out_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat("dddd");
-		connect(static_cast<DateTime2StringFilter*>(new_out_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter*>(new_out_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	} // switch(mode)
 
@@ -425,20 +425,20 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 	// disconnect formatChanged()
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric:
-		disconnect(static_cast<Double2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		           m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<Double2StringFilter*>(m_output_filter), &Double2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Integer:
-		disconnect(static_cast<Integer2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		           m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<Integer2StringFilter*>(m_output_filter), &Integer2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		break;
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		disconnect(static_cast<DateTime2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		           m_owner, SLOT(handleFormatChange()));
+		disconnect(static_cast<DateTime2StringFilter*>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				   m_owner, &Column::handleFormatChange);
 		break;
 	}
 
@@ -455,20 +455,20 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 	// connect formatChanged()
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric:
-		connect(static_cast<Double2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Double2StringFilter*>(m_output_filter), &Double2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Integer:
-		connect(static_cast<Integer2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<Integer2StringFilter*>(m_output_filter), &Integer2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::Text:
 		break;
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		connect(static_cast<DateTime2StringFilter*>(m_output_filter), SIGNAL(formatChanged()),
-		        m_owner, SLOT(handleFormatChange()));
+		connect(static_cast<DateTime2StringFilter*>(m_output_filter), &DateTime2StringFilter::formatChanged,
+				m_owner, &Column::handleFormatChange);
 		break;
 	}
 
@@ -507,25 +507,25 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric: {
 		double* ptr = static_cast<QVector<double>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->valueAt(i);
 		break;
 	}
 	case AbstractColumn::Integer: {
 		int* ptr = static_cast<QVector<int>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->integerAt(i);
 		break;
 	}
 	case AbstractColumn::Text: {
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QString>*>(m_data)->replace(i, other->textAt(i));
 		break;
 	}
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day: {
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
 		break;
 	}
@@ -606,24 +606,24 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric: {
 		double* ptr = static_cast<QVector<double>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->valueAt(i);
 		break;
 	}
 	case AbstractColumn::Integer: {
 		int* ptr = static_cast<QVector<int>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[i] = other->integerAt(i);
 		break;
 	}
 	case AbstractColumn::Text:
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QString>*>(m_data)->replace(i, other->textAt(i));
 		break;
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QDateTime>*>(m_data)->replace(i, other->dateTimeAt(i));
 		break;
 	}
@@ -656,24 +656,24 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	switch(m_column_mode) {
 	case AbstractColumn::Numeric: {
 		double* ptr = static_cast<QVector<double>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[dest_start+i] = source->valueAt(source_start + i);
 		break;
 	}
 	case AbstractColumn::Integer: {
 		int* ptr = static_cast<QVector<int>*>(m_data)->data();
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			ptr[dest_start+i] = source->integerAt(source_start + i);
 		break;
 	}
 	case AbstractColumn::Text:
-		for (int i = 0; i < num_rows; i++)
+		for (int i = 0; i < num_rows; ++i)
 			static_cast<QVector<QString>*>(m_data)->replace(dest_start+i, source->textAt(source_start + i));
 		break;
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		for (int i = 0; i  <num_rows; i++)
+		for (int i = 0; i  <num_rows; ++i)
 			static_cast<QVector<QDateTime>*>(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
 		break;
 	}
@@ -737,10 +737,10 @@ void ColumnPrivate::resizeTo(int new_size) {
 	case AbstractColumn::Text: {
 		int new_rows = new_size - old_size;
 		if (new_rows > 0) {
-			for(int i = 0; i < new_rows; i++)
+			for(int i = 0; i < new_rows; ++i)
 				static_cast<QVector<QString>*>(m_data)->append(QString());
 		} else {
-			for(int i = 0; i < -new_rows; i++)
+			for(int i = 0; i < -new_rows; ++i)
 				static_cast<QVector<QString>*>(m_data)->removeLast();
 		}
 		break;
@@ -750,10 +750,10 @@ void ColumnPrivate::resizeTo(int new_size) {
 	case AbstractColumn::Day: {
 		int new_rows = new_size - old_size;
 		if (new_rows > 0) {
-			for (int i = 0; i < new_rows; i++)
+			for (int i = 0; i < new_rows; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->append(QDateTime());
 		} else {
-			for(int i = 0; i < -new_rows; i++)
+			for(int i = 0; i < -new_rows; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->removeLast();
 		}
 		break;
@@ -780,11 +780,11 @@ void ColumnPrivate::insertRows(int before, int count) {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < count; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->insert(before, QDateTime());
 			break;
 		case AbstractColumn::Text:
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < count; ++i)
 				static_cast<QVector<QString>*>(m_data)->insert(before, QString());
 			break;
 		}
@@ -814,11 +814,11 @@ void ColumnPrivate::removeRows(int first, int count) {
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			for (int i = 0; i < corrected_count; i++)
+			for (int i = 0; i < corrected_count; ++i)
 				static_cast<QVector<QDateTime>*>(m_data)->removeAt(first);
 			break;
 		case AbstractColumn::Text:
-			for (int i = 0; i < corrected_count; i++)
+			for (int i = 0; i < corrected_count; ++i)
 				static_cast<QVector<QString>*>(m_data)->removeAt(first);
 			break;
 		}
@@ -1065,7 +1065,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
-	for (int i = 0; i < num_rows; i++)
+	for (int i = 0; i < num_rows; ++i)
 		static_cast<QVector<QString>*>(m_data)->replace(first+i, new_values.at(i));
 
 	if (!m_owner->m_suppressDataChangedSignal)
@@ -1136,7 +1136,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
-	for (int i = 0; i < num_rows; i++)
+	for (int i = 0; i < num_rows; ++i)
 		static_cast<QVector<QDateTime>*>(m_data)->replace(first+i, new_values.at(i));
 
 	if (!m_owner->m_suppressDataChangedSignal)
@@ -1176,7 +1176,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		resizeTo(first + num_rows);
 
 	double* ptr = static_cast<QVector<double>*>(m_data)->data();
-	for (int i = 0; i < num_rows; i++)
+	for (int i = 0; i < num_rows; ++i)
 		ptr[first+i] = new_values.at(i);
 
 	if (!m_owner->m_suppressDataChangedSignal)
@@ -1216,7 +1216,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 		resizeTo(first + num_rows);
 
 	int* ptr = static_cast<QVector<int>*>(m_data)->data();
-	for (int i = 0; i < num_rows; i++)
+	for (int i = 0; i < num_rows; ++i)
 		ptr[first+i] = new_values.at(i);
 
 	if (!m_owner->m_suppressDataChangedSignal)

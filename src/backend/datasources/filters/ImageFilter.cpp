@@ -199,8 +199,8 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	// read data
 	switch (importFormat) {
 	case ImageFilter::MATRIX: {
-			for (int i = 0; i < actualRows; i++) {
-				for (int j = 0; j < actualCols; j++) {
+			for (int i = 0; i < actualRows; ++i) {
+				for (int j = 0; j < actualCols; ++j) {
 					double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
 					static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = value;
 				}
@@ -210,8 +210,8 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		}
 	case ImageFilter::XYZ: {
 			int currentRow = 0;
-			for (int i = startRow-1; i < endRow; i++) {
-				for (int j = startColumn-1; j < endColumn; j++) {
+			for (int i = startRow-1; i < endRow; ++i) {
+				for (int j = startColumn-1; j < endColumn; ++j) {
 					QRgb color=image.pixel(j, i);
 					static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
 					static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
@@ -224,8 +224,8 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		}
 	case ImageFilter::XYRGB: {
 			int currentRow = 0;
-			for (int i = startRow-1; i < endRow; i++) {
-				for ( int j = startColumn-1; j < endColumn; j++ ) {
+			for (int i = startRow-1; i < endRow; ++i) {
+				for ( int j = startColumn-1; j < endColumn; ++j) {
 					QRgb color = image.pixel(j, i);
 					static_cast<QVector<int>*>(dataContainer[0])->operator[](currentRow) = i+1;
 					static_cast<QVector<int>*>(dataContainer[1])->operator[](currentRow) = j+1;
@@ -243,7 +243,7 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-		for ( int n = 0; n < actualCols; n++ ) {
+		for ( int n = 0; n < actualCols; ++n) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);

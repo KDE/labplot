@@ -406,8 +406,8 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
  * \brief Insert the given Aspect at a specific position in my list of children.without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before) {
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+	connect(child, &AbstractAspect::selected, this, &AbstractAspect::childSelected);
+	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 
 	int index = d->indexOfChild(before);
 	if (index == -1)
@@ -768,26 +768,18 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 }
 
 void AbstractAspect::connectChild(AbstractAspect* child) {
-	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)),
-	        this, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-	        this, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(child, SIGNAL(aspectAdded(const AbstractAspect*)),
-	        this, SIGNAL(aspectAdded(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(child, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)),
-	        this, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
-	        this, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
-	connect(child, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
+	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
+	connect(child, &AbstractAspect::aspectAboutToBeAdded, this, &AbstractAspect::aspectAboutToBeAdded);
+	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
+	connect(child, &AbstractAspect::aspectAboutToBeRemoved, this, &AbstractAspect::aspectAboutToBeRemoved);
+	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);
+	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
+	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
+	connect(child, &AbstractAspect::statusInfo, this, &AbstractAspect::statusInfo);
 
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+	connect(child, &AbstractAspect::selected, this, &AbstractAspect::childSelected);
+	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 }
 
 //##############################################################################
@@ -816,7 +808,7 @@ void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 }
 
 int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
-	for(int i=0; i<m_children.size(); i++)
+	for(int i=0; i<m_children.size(); ++i)
 		if(m_children.at(i) == child) return i;
 
 	return -1;

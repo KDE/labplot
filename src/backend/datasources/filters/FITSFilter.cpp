@@ -516,7 +516,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 					if (spreadsheet->rowCount() < (lines - startRrow))
 						spreadsheet->setRowCount(lines - startRrow);
 				}
-				for (int n = 0; n < actualCols - startCol; n++) {
+				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
 						QVector<double>* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());

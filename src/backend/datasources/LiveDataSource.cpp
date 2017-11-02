@@ -198,7 +198,7 @@ void LiveDataSource::pauseReading() {
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
 	else if (m_updateType == NewData)
-		disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(read()));
+		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 }
 
 /*!

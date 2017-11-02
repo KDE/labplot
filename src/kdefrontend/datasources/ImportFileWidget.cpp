@@ -909,21 +909,21 @@ void ImportFileWidget::refreshPreview() {
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rows);
 
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; ++i) {
 				QDEBUG(importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())
 					tmpTableWidget->setColumnCount(cols);
 
-				for (int j = 0; j < cols; j++) {
+				for (int j = 0; j < cols; ++j) {
 					QTableWidgetItem* item = new QTableWidgetItem(importedStrings[i][j]);
 					tmpTableWidget->setItem(i, j, item);
 				}
 			}
 
 			// set header if columnMode available
-			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); i++) {
+			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 				QString columnName = QString::number(i+1);
 				if (i < vectorNameList.size())
 					columnName = vectorNameList[i];

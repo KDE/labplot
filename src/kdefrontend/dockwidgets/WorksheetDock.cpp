@@ -252,7 +252,7 @@ void WorksheetDock::updatePaperSize() {
 	}
 
 	//determine the position of the QPrinter::PaperSize in the combobox
-	for (int index=0; index<numOfPaperSizes+1; index++) {
+	for (int index = 0; index < numOfPaperSizes+1; ++index) {
 		if (ui.cbSize->itemData(index+2).toInt() == i) {
 			ui.cbSize->setCurrentIndex(index+2);
 			break;

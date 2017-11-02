@@ -82,23 +82,23 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	loadSegment(lastSegment, height);
 
 	//initialize one column of boolean flags using the pixels of the specified column
-	for (int y = 0; y < height; y++) {
+	for (int y = 0; y < height; ++y) {
 		lastBool[y] = false;
 		currBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, 0, y);
 		nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, 1, y);
 	}
 
-	for (int x = 0; x < width; x++) {
+	for (int x = 0; x < width; ++x) {
 		matchRunsToSegments(x, height, lastBool, lastSegment, currBool, currSegment, nextBool);
 
 		// get ready for next column
-		for (int y = 0; y < height; y++) {
+		for (int y = 0; y < height; ++y) {
 			lastBool[y] = currBool[y];
 			currBool[y] = nextBool[y];
 		}
 
 		if (x + 1 < width) {
-			for (int y = 0; y < height; y++) {
+			for (int y = 0; y < height; ++y) {
 				nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, x+1, y);
 			}
 		}
@@ -117,7 +117,7 @@ void Segments::makeSegments(QImage &imageProcessed) {
     scroll the segment pointers of the right column into the left column
 */
 void Segments::scrollSegment(Segment** left, Segment** right, int height) {
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < height; ++y)
 		left [y] = right [y];
 }
 
@@ -130,7 +130,7 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
 
 	int yStart = 0;
 	bool inRun = false;
-	for (int y = 0; y < height; y++) {
+	for (int y = 0; y < height; ++y) {
 		if (!inRun && currBool [y]) {
 			inRun = true;
 			yStart = y;
@@ -152,12 +152,12 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
 */
 void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment, int height) {
 	Segment* segLast = 0;
-	for (int yLast = 0; yLast < height; yLast++) {
+	for (int yLast = 0; yLast < height; ++yLast) {
 		if (lastSegment [yLast] && (lastSegment [yLast] != segLast)) {
 			segLast = lastSegment [yLast];
 
 			bool found = false;
-			for (int yCur = 0; yCur < height; yCur++)
+			for (int yCur = 0; yCur < height; ++yCur)
 				if (segLast == currSegment [yCur]) {
 					found = true;
 					break;
@@ -178,7 +178,7 @@ void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment,
     initialize one column of segment pointers
 */
 void Segments::loadSegment(Segment** columnSegment, int height) {
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < height; ++y)
 		columnSegment [y] = 0;
 }
 
@@ -240,7 +240,7 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 
 	seg->retransform();
 
-	for (int y = yStart; y <= yStop; y++)
+	for (int y = yStart; y <= yStop; ++y)
 		currSegment [y] = seg;
 }
 
@@ -250,7 +250,7 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) {
 	int runs = 0;
 	bool inRun = false;
-	for (int y = yStart - 1; y <= yStop + 1; y++) {
+	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height)) {
 			if (!inRun && columnBool [y]) {
 				inRun = true;
@@ -268,7 +268,7 @@ int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) 
     find the single segment pointer among the adjacent pixels from yStart-1 to yStop+1
 */
 Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop, int height) {
-	for (int y = yStart - 1; y <= yStop + 1; y++) {
+	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height))
 			if (lastSegment [y])
 				return lastSegment [y];
@@ -283,7 +283,7 @@ Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop,
 int Segments::adjacentSegments(Segment** lastSegment, int yStart, int yStop, int height) {
 	int count = 0;
 	bool inSegment = false;
-	for (int y = yStart - 1; y <= yStop + 1; y++) {
+	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height)) {
 			if (!inSegment && lastSegment [y]) {
 				inSegment = true;

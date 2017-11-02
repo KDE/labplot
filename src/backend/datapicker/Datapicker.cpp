@@ -47,10 +47,8 @@
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
 	: AbstractPart(name), scripted(engine), m_activeCurve(0), m_transform(new Transform()), m_image(0) {
 
-	connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
-	         this, SLOT(handleAspectAdded(const AbstractAspect*)) );
-	connect( this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	         this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)) );
+	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
+	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
 
 	if (!loading)
 		init();

@@ -91,7 +91,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; i++)
+	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
 		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon( QIcon::fromTheme("run-build") );
@@ -325,7 +325,7 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 	}
 
 	size_t n=0;
-	for (int row=0; row < column->rowCount(); row++)
+	for (int row=0; row < column->rowCount(); ++row)
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 

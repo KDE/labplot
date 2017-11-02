@@ -252,7 +252,7 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 		return 1;
 
 	// skip bytes at start
-	for (int i = 0; i < skipStartBytes; i++) {
+	for (int i = 0; i < skipStartBytes; ++i) {
 		qint8 tmp;
 		in >> tmp;
 	}
@@ -316,14 +316,14 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	// read data
 	//TODO: use ColumnMode ?
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(m_actualRows, lines); i++) {
+	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
 		QStringList lineString;
 
 		//prepend the index if required
 		if (createIndexEnabled)
 			lineString << QString::number(i+1);
 
-		for (int n = 0; n < m_actualCols; n++) {
+		for (int n = 0; n < m_actualCols; ++n) {
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 					qint8 value;
@@ -440,13 +440,13 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	// read data
 	//TODO: use ColumnMode ?
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(m_actualRows, lines); i++) {
+	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
 		DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
 			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i+1;
 
-		for (int n = startColumn; n < m_actualCols; n++) {
+		for (int n = startColumn; n < m_actualCols; ++n) {
 			DEBUG("reading column " << n);
 			switch (dataType) {
 			case BinaryFilter::INT8: {

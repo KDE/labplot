@@ -45,28 +45,18 @@
 	\ingroup backend
 */
 MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matrix), m_suppressDataChangedSignal(false) {
-	connect(m_matrix, SIGNAL(columnsAboutToBeInserted(int,int)),
-			this, SLOT(handleColumnsAboutToBeInserted(int,int)));
-	connect(m_matrix, SIGNAL(columnsInserted(int,int)),
-			this, SLOT(handleColumnsInserted(int,int)));
-	connect(m_matrix, SIGNAL(columnsAboutToBeRemoved(int,int)),
-			this, SLOT(handleColumnsAboutToBeRemoved(int,int)));
-	connect(m_matrix, SIGNAL(columnsRemoved(int,int)),
-			this, SLOT(handleColumnsRemoved(int,int)));
-	connect(m_matrix, SIGNAL(rowsAboutToBeInserted(int,int)),
-			this, SLOT(handleRowsAboutToBeInserted(int,int)));
-	connect(m_matrix, SIGNAL(rowsInserted(int,int)),
-			this, SLOT(handleRowsInserted(int,int)));
-	connect(m_matrix, SIGNAL(rowsAboutToBeRemoved(int,int)),
-			this, SLOT(handleRowsAboutToBeRemoved(int,int)));
-	connect(m_matrix, SIGNAL(rowsRemoved(int,int)),
-			this, SLOT(handleRowsRemoved(int,int)));
-	connect(m_matrix, SIGNAL(dataChanged(int,int,int,int)),
-			this, SLOT(handleDataChanged(int,int,int,int)));
-	connect(m_matrix, SIGNAL(coordinatesChanged()),
-			this, SLOT(handleCoordinatesChanged()));
-	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(handleFormatChanged()));
-	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(handleFormatChanged()));
+	connect(m_matrix, &Matrix::columnsAboutToBeInserted, this, &MatrixModel::handleColumnsAboutToBeInserted);
+	connect(m_matrix, &Matrix::columnsInserted, this, &MatrixModel::handleColumnsInserted);
+	connect(m_matrix, &Matrix::columnsAboutToBeRemoved, this, &MatrixModel::handleColumnsAboutToBeRemoved);
+	connect(m_matrix, &Matrix::columnsRemoved, this, &MatrixModel::handleColumnsRemoved);
+	connect(m_matrix, &Matrix::rowsAboutToBeInserted, this, &MatrixModel::handleRowsAboutToBeInserted);
+	connect(m_matrix, &Matrix::rowsInserted, this, &MatrixModel::handleRowsInserted);
+	connect(m_matrix, &Matrix::rowsAboutToBeRemoved, this, &MatrixModel::handleRowsAboutToBeRemoved);
+	connect(m_matrix, &Matrix::rowsRemoved, this, &MatrixModel::handleRowsRemoved);
+	connect(m_matrix, &Matrix::dataChanged, this, &MatrixModel::handleDataChanged);
+	connect(m_matrix, &Matrix::coordinatesChanged, this, &MatrixModel::handleCoordinatesChanged);
+	connect(m_matrix, &Matrix::numericFormatChanged, this, &MatrixModel::handleFormatChanged);
+	connect(m_matrix, &Matrix::precisionChanged, this, &MatrixModel::handleFormatChanged);
 }
 
 void MatrixModel::setSuppressDataChangedSignal(bool b) {

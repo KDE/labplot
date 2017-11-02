@@ -609,14 +609,14 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::Numeric: {
 			QVector<double>* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
-			for (int i = 0; i < rowCount; i++)
+			for (int i = 0; i < rowCount; ++i)
 				vec->operator[](i) = NAN;
 			break;
 		}
 		case AbstractColumn::Integer: {
 			QVector<int>* vec = new QVector<int>(rowCount);
 			m_empty_data = vec;
-			for (int i = 0; i < rowCount; i++)
+			for (int i = 0; i < rowCount; ++i)
 				vec->operator[](i) = 0;
 			break;
 		}
@@ -624,12 +624,12 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			m_empty_data = new QVector<QDateTime>();
-			for (int i = 0; i < rowCount; i++)
+			for (int i = 0; i < rowCount; ++i)
 				static_cast< QVector<QDateTime>*>(m_empty_data)->append(QDateTime());
 			break;
 		case AbstractColumn::Text:
 			m_empty_data = new QVector<QString>();
-			for (int i = 0; i < rowCount; i++)
+			for (int i = 0; i < rowCount; ++i)
 				static_cast<QVector<QString>*>(m_empty_data)->append(QString());
 			break;
 		}

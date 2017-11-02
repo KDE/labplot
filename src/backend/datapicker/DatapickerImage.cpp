@@ -143,7 +143,7 @@ void DatapickerImage::createContextMenu(QMenu* menu) {
 QWidget* DatapickerImage::view() const {
 	if (!m_view) {
 		m_view = new DatapickerImageView(const_cast<DatapickerImage *>(this));
-		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+		connect(static_cast<DatapickerImageView*>(m_view), &DatapickerImageView::statusInfo, this, &DatapickerImage::statusInfo);
 	}
 	return m_view;
 }
@@ -182,7 +182,7 @@ bool DatapickerImage::printView() {
 bool DatapickerImage::printPreview() const {
 	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &DatapickerImageView::print);
     return dlg->exec();
 }
 

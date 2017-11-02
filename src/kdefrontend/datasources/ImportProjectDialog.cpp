@@ -200,7 +200,7 @@ void ImportProjectDialog::refreshPreview() {
 */
 void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	int rows = index.model()->rowCount(index);
-	for (int i = 0; i < rows; i++) {
+	for (int i = 0; i < rows; ++i) {
 		QModelIndex child = index.child(i, 0);
 		showTopLevelOnly(child);
 		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(child.internalPointer());

@@ -67,7 +67,7 @@ private slots:
 	void aspectHiddenChanged(const AbstractAspect*);
 	void aspectSelectedInView(const AbstractAspect*);
 	void aspectDeselectedInView(const AbstractAspect*);
-	void renameRequested();
+	void renameRequestedSlot();
 
 private:
 	AbstractAspect* m_root;
