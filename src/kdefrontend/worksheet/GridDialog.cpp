@@ -2,10 +2,10 @@
     File                 : GridDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011-2017 by Alexander Semke
+    Email (use @ for *)  : alexander.semke@web.de
     Description          : dialog for editing the grid properties for the worksheet view
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,38 +28,42 @@
  ***************************************************************************/
 
 #include "GridDialog.h"
-#include <QLabel>
 #include <QComboBox>
+#include <QDialogButtonBox>
+#include <QLabel>
 #include <QSpinBox>
 #include <QGridLayout>
+
 #include <KLocale>
 #include <KColorButton>
+
+//TODO:
+//1. improve the layout and move the UI-part to a ui-file
+//2. restore the dialog size
+//3. restore the currently active grid settings
 
 /**
  * @brief Provides a dialog for editing the grid properties for the worksheet view
  * \ingroup kdefrontend
  */
-GridDialog::GridDialog(QWidget* parent) : KDialog(parent){
-	setCaption(i18n("Custom grid"));
+GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
+	setWindowTitle(i18n("Custom grid"));
 
-	QFrame* widget = new QFrame( this );
-	widget->setFrameShape(QFrame::Box);
-	widget->setFrameShadow(QFrame::Raised);
-	
+	QWidget* widget = new QWidget;
 	QGridLayout* layout = new QGridLayout(widget);
-	
+
 	QLabel* label = new QLabel(i18n("Style"), widget);
 	layout->addWidget(label, 0, 0);
-	
+
 	cbStyle = new QComboBox(this);
 	cbStyle->addItem(i18n("lines"));
 	cbStyle->addItem(i18n("dots"));
 	cbStyle->setCurrentIndex(0);
 	layout->addWidget(cbStyle, 0, 1);
-	
+
 	label = new QLabel(i18n("Horizontal spacing"), widget);
 	layout->addWidget(label, 1, 0);
-	
+
 	sbHorizontalSpacing = new QSpinBox(widget);
 	sbHorizontalSpacing->setRange(1,100);
 	sbHorizontalSpacing->setValue(10);
@@ -72,14 +76,14 @@ GridDialog::GridDialog(QWidget* parent) : KDialog(parent){
 	sbVerticalSpacing->setRange(1,100);
 	sbVerticalSpacing->setValue(10);
 	layout->addWidget(sbVerticalSpacing, 2, 1);
- 
+
 	label = new QLabel(i18n("Color"), widget);
 	layout->addWidget(label, 3, 0);
-	
+
 	kcbColor = new KColorButton(widget);
 	kcbColor->setColor(Qt::gray);
 	layout->addWidget(kcbColor , 3, 1);
-	
+
 	label = new QLabel(i18n("Opacity"), widget);
 	layout->addWidget(label, 4, 0);
 
@@ -87,17 +91,18 @@ GridDialog::GridDialog(QWidget* parent) : KDialog(parent){
 	sbOpacity->setRange(1,100);
 	sbOpacity->setValue(100);
 	layout->addWidget(sbOpacity, 4, 1);
-	
+
 	label = new QLabel("%", widget);
 	layout->addWidget(label, 4, 2);
 
 
-	setMainWidget( widget );
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	QVBoxLayout* vlayout = new QVBoxLayout(this);
+	vlayout->addWidget(widget);
+	vlayout->addWidget(buttonBox);
 
-	setButtons( KDialog::Ok | KDialog::Cancel);
-
-	connect(this, SIGNAL(applyClicked()) ,SLOT(apply()));
-	connect(this, SIGNAL(okClicked()),SLOT(apply()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void GridDialog::save(WorksheetView::GridSettings& settings){
@@ -105,7 +110,7 @@ void GridDialog::save(WorksheetView::GridSettings& settings){
 		settings.style  = WorksheetView::LineGrid;
 	else
 		settings.style  = WorksheetView::DotGrid;
-	
+
 	settings.horizontalSpacing = sbHorizontalSpacing->value();
 	settings.verticalSpacing = sbVerticalSpacing->value();
 	settings.color = kcbColor->color();

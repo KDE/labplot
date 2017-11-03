@@ -5,7 +5,7 @@
     Copyright            : (C) 2011 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : dialog for editing the grid properties for the worksheet view
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,14 +30,14 @@
 #ifndef GRIDDIALOG_H
 #define GRIDDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include "commonfrontend/worksheet/WorksheetView.h"
 
 class QComboBox;
 class QSpinBox;
 class KColorButton;
 
-class GridDialog: public KDialog {
+class GridDialog : public QDialog {
 	Q_OBJECT
 
 public:
