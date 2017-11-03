@@ -49,6 +49,7 @@ int main (int argc, char *argv[]) {
 		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni.kn", 0);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
+	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18n("developer"), "f-kristof@hotmail.com", 0);
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 	aboutData.addCredit(i18n("Garvit Khatri"), i18n("Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
