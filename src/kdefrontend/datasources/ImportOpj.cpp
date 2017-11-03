@@ -490,11 +490,11 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 				DEBUG("EXTRA TEXT =" << s.text.c_str());
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));
 
-			int auto_color = 0;
-			int style = 0;
+// 			int auto_color = 0;
+// 			int style = 0;
 			for (const auto& curve: layer.curves) {
 				QString data(curve.dataName.c_str());
-				int color = 0;
+// 				int color = 0;
 
 				switch(curve.type) {
 				case Origin::GraphCurve::Line:
