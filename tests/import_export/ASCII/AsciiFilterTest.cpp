@@ -34,6 +34,9 @@ void AsciiFilterTest::initTestCase() {
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 
+//##############################################################################
+//########################  handling of empty files ############################
+//##############################################################################
 void AsciiFilterTest::testEmptyFileAppend() {
 	Spreadsheet spreadsheet(0, "test", false);
 	AsciiFilter filter;
@@ -77,5 +80,111 @@ void AsciiFilterTest::testEmptyFileReplace() {
 	QCOMPARE(spreadsheet.rowCount(), rowCount);
 	QCOMPARE(spreadsheet.columnCount(), colCount);
 }
+
+//##############################################################################
+//################################  header handling ############################
+//##############################################################################
+void AsciiFilterTest::testHeader01() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames("");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+}
+
+void AsciiFilterTest::testHeader02() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(true);
+	filter.setVectorNames("");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 2);//out of 3 rows one row is used for the column names (header)
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1"));
+}
+
+void AsciiFilterTest::testHeader03() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames("x");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 1); //one column name was specified, we import only one column
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+}
+
+void AsciiFilterTest::testHeader04() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames("x");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 1); //one column name was specified -> we import only one column
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+}
+
+void AsciiFilterTest::testHeader05() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames("x y");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2); //two names were specified -> we import two columns
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+}
+
+void AsciiFilterTest::testHeader06() {
+	Spreadsheet spreadsheet(0, "test", false);
+	AsciiFilter filter;
+	const QString fileName = m_dataDir + "separator_semicolon.txt";
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames("x y z");
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2); //thee names were specified, but there're only two columns in the file -> we import only two columns
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+}
+
+//##############################################################################
+//#####################  handling of different separators ######################
+//##############################################################################
+
 
 QTEST_MAIN(AsciiFilterTest)

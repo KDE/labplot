@@ -451,7 +451,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		if (headerEnabled || vectorNames.size() == 0)
 			endColumn = firstLineStringList.size(); // last column
 		else
-			endColumn = vectorNames.size(); //number of vector names provided in the import dialog
+			//number of vector names provided in the import dialog (not more than the maximal number of columns in the file)
+			endColumn = qMin(vectorNames.size(), firstLineStringList.size());
 	}
 	if (createIndexEnabled) {
 		vectorNames.prepend("index");

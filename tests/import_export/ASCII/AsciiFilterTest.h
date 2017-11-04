@@ -37,6 +37,14 @@ private slots:
 	void testEmptyFilePrepend();
 	void testEmptyFileReplace();
 
+	//header handling
+	void testHeader01();
+	void testHeader02();
+	void testHeader03();
+	void testHeader04();
+	void testHeader05();
+	void testHeader06();
+
 	//different separators
 
 	//different locales
