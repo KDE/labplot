@@ -511,7 +511,8 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 				}
 			}
 		}
-		emit q->completed(100*i/m_actualRows);
+		if (m_actualRows > 0)
+			emit q->completed(100*i/m_actualRows);
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, m_actualCols, "", importMode);
