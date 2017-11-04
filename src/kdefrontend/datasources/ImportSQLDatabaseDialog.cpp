@@ -37,6 +37,7 @@
 #include "backend/core/Workbook.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <QDialogButtonBox>
 #include <QProgressBar>
 #include <QStatusBar>
 
@@ -54,13 +55,20 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	vLayout->addWidget(importSQLDatabaseWidget);
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
+	setWindowTitle(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
-
 	setModel();
 
+	//dialog buttons
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setEnabled(false); //ok is only available if a valid container was selected
+	vLayout->addWidget(buttonBox);
+
+	//Signals/Slots
 	connect(importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(checkOkButton()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	QTimer::singleShot(0, this, &ImportSQLDatabaseDialog::loadSettings);
 }
@@ -139,25 +147,25 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		enableButtonOk(false);
+		okButton->setEnabled(false);
 		cbPosition->setEnabled(false);
 		return;
 	}
 
 	//check whether a valid connection and an object to import were selected
 	if (!importSQLDatabaseWidget->isValid()) {
-		enableButtonOk(false);
+		okButton->setEnabled(false);
 		cbPosition->setEnabled(false);
 		return;
 	}
 
 	//for matrix containers allow to import only numerical data
 	if (dynamic_cast<const Matrix*>(aspect) && !importSQLDatabaseWidget->isNumericData()) {
-		enableButtonOk(false);
+		okButton->setEnabled(false);
 		cbPosition->setEnabled(false);
 		return;
 	}
 
-	enableButtonOk(true);
+	okButton->setEnabled(true);
 	cbPosition->setEnabled(true);
 }

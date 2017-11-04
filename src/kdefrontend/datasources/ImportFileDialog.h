@@ -32,11 +32,9 @@
 
 #include "ImportDialog.h"
 
-class AbstractAspect;
 class MainWin;
 class ImportFileWidget;
 class LiveDataSource;
-class TreeViewComboBox;
 
 class QStatusBar;
 class QMenu;
@@ -54,12 +52,14 @@ public:
 	virtual void importTo(QStatusBar*) const;
 
 private:
-
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions;
 	QMenu* m_newDataContainerMenu;
+	QPushButton* m_optionsButton;
+
 protected  slots:
 	virtual void checkOkButton();
+
 private slots:
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);

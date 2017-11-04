@@ -48,6 +48,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
+#include <KConfigGroup>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMessageBox>
@@ -59,15 +60,14 @@
 	\ingroup kdefrontend
  */
 
-ImportDialog::ImportDialog(MainWin* parent) : KDialog(parent),
-	cbAddTo(0), cbPosition(0), m_mainWin(parent), m_newDataContainerMenu(0),
-	m_aspectTreeModel(new AspectTreeModel(parent->project()) ) {
-
-	QWidget* mainWidget = new QWidget(this);
-	vLayout = new QVBoxLayout(mainWidget);
-	vLayout->setSpacing(0);
-	vLayout->setContentsMargins(0,0,0,0);
-	setMainWidget(mainWidget);
+ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
+	vLayout(new QVBoxLayout(this)),
+	okButton(nullptr),
+	cbPosition(nullptr),
+	cbAddTo(nullptr),
+	m_mainWin(parent),
+	m_newDataContainerMenu(nullptr),
+	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 
 	//menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
@@ -75,9 +75,6 @@ ImportDialog::ImportDialog(MainWin* parent) : KDialog(parent),
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-
-	//ok is only available if a valid container was selected
-	enableButtonOk(false);
 }
 
 ImportDialog::~ImportDialog() {
@@ -135,7 +132,8 @@ void ImportDialog::setModel() {
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	grid->addWidget(cbPosition, 1, 1);
 
-	vLayout->addWidget(frameAddTo);
+	//add the "Import to"-frame to the layout after the first main widget
+	vLayout->insertWidget(1, frameAddTo);
 
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));

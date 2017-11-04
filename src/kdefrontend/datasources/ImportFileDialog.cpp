@@ -46,6 +46,7 @@
 #include <KWindowConfig>
 #include <KLocalizedString>
 
+#include <QDialogButtonBox>
 #include <QProgressBar>
 #include <QTcpSocket>
 #include <QLocalSocket>
@@ -67,7 +68,13 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	m_showOptions(false) {
 
 	vLayout->addWidget(m_importFileWidget);
-	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
+
+	//dialog buttons
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset |QDialogButtonBox::Cancel);
+	okButton = buttonBox->button(QDialogButtonBox::Ok);
+	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); //we highjack the default "Reset" button and use if for showing/hiding the options
+	okButton->setEnabled(false); //ok is only available if a valid container was selected
+	vLayout->addWidget(buttonBox);
 
 	//hide the data-source related widgets
 	if (!liveDataSource) {
@@ -77,19 +84,21 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	} else
 		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
-	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	//Signals/Slots
 	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
-
 	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (!liveDataSource) {
-		setCaption(i18n("Import Data to Spreadsheet or Matrix"));
+		setWindowTitle(i18n("Import Data to Spreadsheet or Matrix"));
 		m_importFileWidget->hideDataSource();
 	} else
-		setCaption(i18n("Add new live data source"));
+		setWindowTitle(i18n("Add new live data source"));
 
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
@@ -101,7 +110,7 @@ void ImportFileDialog::loadSettings() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
-	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
+	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 	m_importFileWidget->showOptions(m_showOptions);
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
@@ -254,10 +263,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 void ImportFileDialog::toggleOptions() {
 	m_importFileWidget->showOptions(!m_showOptions);
 	m_showOptions = !m_showOptions;
-	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
+	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 
 	//resize the dialog
-	mainWidget()->resize(layout()->minimumSize());
 	layout()->activate();
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
@@ -272,7 +280,7 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 		}
 
 		if(aspect->inherits("Matrix"))
-			enableButtonOk(enable);
+			okButton->setEnabled(enable);
 	}
 }
 
@@ -282,7 +290,7 @@ void ImportFileDialog::checkOkButton() {
 		QDEBUG(" cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect) {
-			enableButtonOk(false);
+			okButton->setEnabled(false);
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
 			DEBUG("WARNING: no aspect available.");
@@ -311,7 +319,7 @@ void ImportFileDialog::checkOkButton() {
 
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		enableButtonOk( QFile::exists(fileName) );
+		okButton->setEnabled( QFile::exists(fileName) );
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 
@@ -320,7 +328,7 @@ void ImportFileDialog::checkOkButton() {
             socket->connectToServer(fileName, QLocalSocket::ReadOnly);
             bool localSocketConnected = socket->waitForConnected(2000);
 
-            enableButtonOk(localSocketConnected);
+            okButton->setEnabled(localSocketConnected);
 
             if (socket->state() == QLocalSocket::ConnectedState) {
                 socket->disconnectFromServer();
@@ -331,7 +339,7 @@ void ImportFileDialog::checkOkButton() {
             }
 
         } else {
-            enableButtonOk(false);
+            okButton->setEnabled(false);
         }
 
 		break;
@@ -342,7 +350,7 @@ void ImportFileDialog::checkOkButton() {
             socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
             bool tcpSocketConnected = socket->waitForConnected(2000);
 
-            enableButtonOk(tcpSocketConnected);
+            okButton->setEnabled(tcpSocketConnected);
 
             if (socket->state() == QTcpSocket::ConnectedState) {
                 socket->disconnectFromHost();
@@ -352,7 +360,7 @@ void ImportFileDialog::checkOkButton() {
                 delete socket;
             }
         } else {
-            enableButtonOk(false);
+            okButton->setEnabled(false);
         }
 		break;
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -361,7 +369,7 @@ void ImportFileDialog::checkOkButton() {
             socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
             bool udpSocketConnected = socket->waitForConnected(2000);
 
-            enableButtonOk(udpSocketConnected);
+            okButton->setEnabled(udpSocketConnected);
 
             if (socket->state() == QUdpSocket::ConnectedState) {
                 socket->disconnectFromHost();
@@ -371,7 +379,7 @@ void ImportFileDialog::checkOkButton() {
                 delete socket;
             }
         } else {
-            enableButtonOk(false);
+            okButton->setEnabled(false);
         }
 
         break;
@@ -383,9 +391,9 @@ void ImportFileDialog::checkOkButton() {
             serialPort->setPortName(m_importFileWidget->serialPort());
 
             bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
-            enableButtonOk(serialPortOpened);
+            okButton->setEnabled(serialPortOpened);
         } else {
-            enableButtonOk(false);
+			okButton->setEnabled(false);
         }
 		break;
 	default:

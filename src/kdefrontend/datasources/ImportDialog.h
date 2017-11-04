@@ -29,7 +29,7 @@
 #ifndef IMPORTDIALOG_H
 #define IMPORTDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 class AbstractAspect;
 class AspectTreeModel;
@@ -46,7 +46,7 @@ class QGroupBox;
 class QToolButton;
 class QStatusBar;
 
-class ImportDialog : public KDialog {
+class ImportDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -61,9 +61,10 @@ protected:
 	void setModel();
 
 	QVBoxLayout* vLayout;
-	TreeViewComboBox* cbAddTo;
+	QPushButton* okButton;
 	QLabel* lPosition;
 	QComboBox* cbPosition;
+	TreeViewComboBox* cbAddTo;
 	MainWin* m_mainWin;
 	QGroupBox* frameAddTo;
 	QToolButton* tbNewDataContainer;
