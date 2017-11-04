@@ -30,7 +30,6 @@
 #include <QElapsedTimer>
 #include <QMutex>
 #include <cmath>
-// #include <QDebug>
 
 static const QRgb white = QColor(Qt::white).rgb();
 static const QRgb black = QColor(Qt::black).rgb();
@@ -58,7 +57,7 @@ class DiscretizeTask : public QRunnable {
 		void run() {
 			for (int y=m_start; y<m_end; ++y) {
 				mutex.lock();
-				QRgb* line = (QRgb*)m_plotImage->scanLine(y);
+				QRgb* line = reinterpret_cast<QRgb*>(m_plotImage->scanLine(y));
 				mutex.unlock();
 				int value;
 				for (int x=0; x<m_plotImage->width(); ++x) {
@@ -101,9 +100,6 @@ class DiscretizeTask : public QRunnable {
  */
 void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
                              DatapickerImage::EditorSettings settings, QColor background) {
-// 	QElapsedTimer timer;
-// 	timer.start();
-
 	plotImage->fill(white);
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(plotImage->height())/pool->maxThreadCount());
@@ -115,8 +111,6 @@ void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
 		pool->start(task);
 	}
 	pool->waitForDone();
-
-// 	qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
 }
 
 bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
@@ -168,9 +162,6 @@ QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 }
 
 void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor background, DatapickerImage::ColorAttributes type) {
-// 	QElapsedTimer timer;
-// 	timer.start();
-
 	//reset bin
 	for (int i = 0; i <= colorAttributeMax(type); ++i)
 		bins [i] = 0;
@@ -181,8 +172,6 @@ void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor backg
 			bins[value] += 1;
 		}
 	}
-
-// 	qDebug() << "Histogram updated in " << timer.elapsed() << "ms";
 }
 
 int ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes type) {

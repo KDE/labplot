@@ -56,7 +56,6 @@
 #include <QThreadPool>
 #include <QMutex>
 #include <QProcess>
-// #include <QElapsedTimer>
 
 #include <KLocale>
 #include <QIcon>
@@ -735,7 +734,7 @@ public:
 	void run() {
 		for (int row = m_start; row < m_end; ++row) {
 			m_mutex.lock();
-			QRgb* line = (QRgb*)m_image.scanLine(row);
+			QRgb* line = reinterpret_cast<QRgb*>(m_image.scanLine(row));
 			m_mutex.unlock();
 			for (int col = 0; col < m_image.width(); ++col) {
 				const int gray = (static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row)-m_min)*m_scaleFactor;
@@ -759,8 +758,6 @@ void MatrixView::updateImage() {
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
 	//find min/max value
-// 	QTime timer;
-// 	timer.start();
 	double dmax = -DBL_MAX, dmin = DBL_MAX;
 	const QVector<QVector<double>>* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	const int width = m_matrix->columnCount();
@@ -772,10 +769,8 @@ void MatrixView::updateImage() {
 			if (dmin > value) dmin = value;
 		}
 	}
-// 	qDebug()<<"min/max determined in " << (float)timer.elapsed()/1000 << "s";
 
 	//update the image
-// 	timer.start();
 	const double scaleFactor = 255.0/(dmax-dmin);
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height())/pool->maxThreadCount());
@@ -787,7 +782,6 @@ void MatrixView::updateImage() {
 		pool->start(task);
 	}
 	pool->waitForDone();
-// 	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
 
 	m_imageLabel->resize(width, height);
 	m_imageLabel->setPixmap(QPixmap::fromImage(m_image));
