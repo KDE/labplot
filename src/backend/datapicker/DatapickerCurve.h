@@ -61,16 +61,16 @@ public:
 	void updateData(const DatapickerPoint*);
 
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
-    BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
-    BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
-    BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
-    BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
-    CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
-    CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
-    BASIC_D_ACCESSOR_DECL(qreal, pointErrorBarSize, PointErrorBarSize)
-    CLASS_D_ACCESSOR_DECL(QBrush, pointErrorBarBrush, PointErrorBarBrush)
-    CLASS_D_ACCESSOR_DECL(QPen, pointErrorBarPen, PointErrorBarPen)
-    BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
+	BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
+	BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
+	BASIC_D_ACCESSOR_DECL(qreal, pointErrorBarSize, PointErrorBarSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, pointErrorBarBrush, PointErrorBarBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, pointErrorBarPen, PointErrorBarPen)
+	BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
 
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, posXColumn, PosXColumn)
 	QString& posXColumnPath() const;
@@ -117,16 +117,16 @@ signals:
 	void minusDeltaXColumnChanged(const AbstractColumn*);
 	void plusDeltaYColumnChanged(const AbstractColumn*);
 	void minusDeltaYColumnChanged(const AbstractColumn*);
-    void pointStyleChanged(Symbol::Style);
-    void pointSizeChanged(qreal);
-    void pointRotationAngleChanged(qreal);
-    void pointOpacityChanged(qreal);
-    void pointBrushChanged(QBrush);
-    void pointPenChanged(const QPen&);
-    void pointErrorBarSizeChanged(qreal);
-    void pointErrorBarBrushChanged(QBrush);
-    void pointErrorBarPenChanged(const QPen&);
-    void pointVisibilityChanged(bool);
+	void pointStyleChanged(Symbol::Style);
+	void pointSizeChanged(qreal);
+	void pointRotationAngleChanged(qreal);
+	void pointOpacityChanged(qreal);
+	void pointBrushChanged(QBrush);
+	void pointPenChanged(const QPen&);
+	void pointErrorBarSizeChanged(qreal);
+	void pointErrorBarBrushChanged(QBrush);
+	void pointErrorBarPenChanged(const QPen&);
+	void pointVisibilityChanged(bool);
 	friend class DatapickerCurveSetCurveErrorTypesCmd;
 	friend class DatapickerCurveSetPosXColumnCmd;
 	friend class DatapickerCurveSetPosYColumnCmd;
@@ -135,15 +135,15 @@ signals:
 	friend class DatapickerCurveSetMinusDeltaXColumnCmd;
 	friend class DatapickerCurveSetPlusDeltaYColumnCmd;
 	friend class DatapickerCurveSetMinusDeltaYColumnCmd;
-    friend class DatapickerCurveSetPointStyleCmd;
-    friend class DatapickerCurveSetPointSizeCmd;
-    friend class DatapickerCurveSetPointRotationAngleCmd;
-    friend class DatapickerCurveSetPointOpacityCmd;
-    friend class DatapickerCurveSetPointBrushCmd;
-    friend class DatapickerCurveSetPointPenCmd;
-    friend class DatapickerCurveSetPointErrorBarSizeCmd;
-    friend class DatapickerCurveSetPointErrorBarPenCmd;
-    friend class DatapickerCurveSetPointErrorBarBrushCmd;
-    friend class DatapickerCurveSetPointVisibilityCmd;
+	friend class DatapickerCurveSetPointStyleCmd;
+	friend class DatapickerCurveSetPointSizeCmd;
+	friend class DatapickerCurveSetPointRotationAngleCmd;
+	friend class DatapickerCurveSetPointOpacityCmd;
+	friend class DatapickerCurveSetPointBrushCmd;
+	friend class DatapickerCurveSetPointPenCmd;
+	friend class DatapickerCurveSetPointErrorBarSizeCmd;
+	friend class DatapickerCurveSetPointErrorBarPenCmd;
+	friend class DatapickerCurveSetPointErrorBarBrushCmd;
+	friend class DatapickerCurveSetPointVisibilityCmd;
 };
 #endif // DATAPICKERCURVE_H

@@ -30,8 +30,6 @@
 
 #include <QGraphicsScene>
 #include <QImage>
-// #include <QElapsedTimer>
-// #include <QDebug>
 #include <QGraphicsItem>
 
 /**
@@ -98,9 +96,8 @@ void Segments::makeSegments(QImage &imageProcessed) {
 		}
 
 		if (x + 1 < width) {
-			for (int y = 0; y < height; ++y) {
+			for (int y = 0; y < height; ++y)
 				nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, x+1, y);
-			}
 		}
 		scrollSegment(lastSegment, currSegment, height);
 	}
@@ -183,7 +180,7 @@ void Segments::loadSegment(Segment** columnSegment, int height) {
 }
 
 void Segments::clearSegments() {
-	foreach(Segment* seg, segments)
+	for(auto* seg : segments)
 		m_image->scene()->removeItem(seg->graphicsItem());
 
 	segments.clear();
@@ -193,16 +190,16 @@ void Segments::clearSegments() {
     set segments visible
 */
 void Segments::setSegmentsVisible(bool on) {
-	foreach(Segment* seg, segments)
-        seg->setVisible(on);
+	for(auto* seg : segments)
+		seg->setVisible(on);
 }
 
 void Segments::setAcceptHoverEvents(bool on) {
-    foreach(Segment* seg, segments) {
-        QGraphicsItem *item = seg->graphicsItem();
-        item->setAcceptHoverEvents(on);
-        item->setFlag(QGraphicsItem::ItemIsSelectable, on);
-    }
+	for (auto* seg : segments) {
+		QGraphicsItem *item = seg->graphicsItem();
+		item->setAcceptHoverEvents(on);
+		item->setFlag(QGraphicsItem::ItemIsSelectable, on);
+	}
 }
 
 /*!
@@ -255,9 +252,8 @@ int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) 
 			if (!inRun && columnBool [y]) {
 				inRun = true;
 				++runs;
-			} else if (inRun && !columnBool [y]) {
+			} else if (inRun && !columnBool [y])
 				inRun = false;
-			}
 		}
 	}
 
@@ -288,9 +284,8 @@ int Segments::adjacentSegments(Segment** lastSegment, int yStart, int yStop, int
 			if (!inSegment && lastSegment [y]) {
 				inSegment = true;
 				++count;
-			} else if (inSegment && !lastSegment [y]) {
+			} else if (inSegment && !lastSegment [y])
 				inSegment = false;
-			}
 		}
 	}
 

@@ -149,10 +149,10 @@ QWidget* DatapickerImage::view() const {
 }
 
 bool DatapickerImage::exportView() const {
-    ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
-    dlg->setFileName(name());
-    bool ret;
-    if ( (ret = (dlg->exec() == QDialog::Accepted)) ){
+	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setFileName(name());
+	bool ret;
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
@@ -163,27 +163,27 @@ bool DatapickerImage::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
-    return ret;
+	return ret;
 }
 
 bool DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-    bool ret;
+	bool ret;
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
-    if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
-    return ret;
+	return ret;
 }
 
 bool DatapickerImage::printPreview() const {
 	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &DatapickerImageView::print);
-    return dlg->exec();
+	return dlg->exec();
 }
 
 /*!
@@ -196,11 +196,11 @@ void DatapickerImage::setSelectedInView(const bool b) {
 	if (b)
 		emit childAspectSelectedInView(this);
 	else
-        emit childAspectDeselectedInView(this);
+		emit childAspectDeselectedInView(this);
 }
 
 void DatapickerImage::setSegmentsHoverEvent(const bool on) {
-    m_segments->setAcceptHoverEvents(on);
+	m_segments->setAcceptHoverEvents(on);
 }
 
 QGraphicsScene* DatapickerImage::scene() const {
@@ -228,7 +228,7 @@ void DatapickerImage::initSceneParameters() {
 	setminSegmentLength(30);
 	setPointSeparation(30);
 
-    ReferencePoints axisPoints = d->axisPoints;
+	ReferencePoints axisPoints = d->axisPoints;
 	axisPoints.ternaryScale = 1;
 	axisPoints.type = DatapickerImage::Cartesian;
 	setAxisPoints(axisPoints);
@@ -246,8 +246,8 @@ void DatapickerImage::initSceneParameters() {
 	settings.valueThresholdLow = 30;
 	setSettings(settings);
 
-    DatapickerImage::PointsType plotPointsType = DatapickerImage::AxisPoints;
-    setPlotPointsType(plotPointsType);
+	DatapickerImage::PointsType plotPointsType = DatapickerImage::AxisPoints;
+	setPlotPointsType(plotPointsType);
 }
 
 /* =============================== getter methods for background options ================================= */
@@ -354,17 +354,17 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	if (pointsType == DatapickerImage::AxisPoints) {
 		//clear image
 		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-        if (childCount) {
-            beginMacro(i18n("%1: remove all axis points", name()));
-            QVector<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-            for (auto* point : childrenPoints)
-                point->remove();
-            endMacro();
-        }
+		if (childCount) {
+			beginMacro(i18n("%1: remove all axis points", name()));
+			QVector<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+			for (auto* point : childrenPoints)
+				point->remove();
+			endMacro();
+		}
 		m_segments->setSegmentsVisible(false);
-	} else if (pointsType==DatapickerImage::CurvePoints) {
+	} else if (pointsType==DatapickerImage::CurvePoints)
 		m_segments->setSegmentsVisible(false);
-	} else if (pointsType==DatapickerImage::SegmentPoints) {
+	else if (pointsType==DatapickerImage::SegmentPoints) {
 		d->makeSegments();
 		m_segments->setSegmentsVisible(true);
 	}
@@ -459,16 +459,17 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
-    QVector<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-    if (childPoints.count()) {
-        for (auto* point : childPoints)
-            point->remove();
-    }
+	QVector<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	if (childPoints.count()) {
+		for (auto* point : childPoints)
+			point->remove();
+	}
 
-    emit q->requestUpdate();
-    emit q->requestUpdateActions();
+	emit q->requestUpdate();
+	emit q->requestUpdateActions();
 	RESET_CURSOR;
 }
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -809,9 +810,8 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;
 				return false;
-			} else {
+			} else
 				addChild(datapickerPoint);
-			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

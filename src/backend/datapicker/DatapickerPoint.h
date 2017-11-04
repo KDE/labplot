@@ -72,15 +72,15 @@ public:
 
 	virtual QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
-    QGraphicsItem *graphicsItem() const;
+	QGraphicsItem *graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
-    void setPrinting(bool);
+	void setPrinting(bool);
 	void initErrorBar(const DatapickerCurve::Errors&);
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*, bool preview) override;
 
-    CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
+	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
 	CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
 	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
@@ -89,13 +89,13 @@ public:
 	typedef DatapickerPointPrivate Private;
 
 public slots:
-    void retransform();
+	void retransform();
 
 protected:
 	DatapickerPointPrivate* const d_ptr;
 	DatapickerPoint(const QString &name, DatapickerPointPrivate *dd);
-    static QPen selectedPen;
-    static float selectedOpacity;
+	static QPen selectedPen;
+	static float selectedOpacity;
 
 private:
 	Q_DECLARE_PRIVATE(DatapickerPoint)
@@ -105,7 +105,7 @@ private:
 
 signals:
 	friend class DatapickerPointSetPositionCmd;
-    void positionChanged(const QPointF&);
+	void positionChanged(const QPointF&);
 
 	friend class DatapickerPointSetPlusDeltaXPosCmd;
 	friend class DatapickerPointSetMinusDeltaXPosCmd;

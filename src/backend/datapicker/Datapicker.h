@@ -44,51 +44,51 @@ class QVector3D;
 class Datapicker : public AbstractPart, public scripted {
 	Q_OBJECT
 
-	public:
-		explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
-		virtual ~Datapicker();
+public:
+	explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+	virtual ~Datapicker();
 
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
-		virtual QWidget* view() const override;
+	virtual QIcon icon() const override;
+	virtual QMenu* createContextMenu() override;
+	virtual QWidget* view() const override;
 
-        virtual bool exportView() const override;
-        virtual bool printView() override;
-        virtual bool printPreview() const override;
+	virtual bool exportView() const override;
+	virtual bool printView() override;
+	virtual bool printPreview() const override;
 
-		DatapickerCurve* activeCurve();
-		Spreadsheet* currentSpreadsheet() const;
-		DatapickerImage* image() const;
+	DatapickerCurve* activeCurve();
+	Spreadsheet* currentSpreadsheet() const;
+	DatapickerImage* image() const;
 
-		void setChildSelectedInView(int index, bool selected);
-		void setSelectedInView(const bool);
-		void addNewPoint(const QPointF&, AbstractAspect*);
+	void setChildSelectedInView(int index, bool selected);
+	void setSelectedInView(const bool);
+	void addNewPoint(const QPointF&, AbstractAspect*);
 
-		QVector3D mapSceneToLogical(const QPointF&) const;
-		QVector3D mapSceneLengthToLogical(const QPointF&) const;
+	QVector3D mapSceneToLogical(const QPointF&) const;
+	QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+	virtual void save(QXmlStreamWriter*) const override;
+	virtual bool load(XmlStreamReader*, bool preview) override;
 
-	public slots:
-		virtual void childSelected(const AbstractAspect*) override;
+public slots:
+	virtual void childSelected(const AbstractAspect*) override;
 
-	private:
-		DatapickerCurve* m_activeCurve;
-		Transform* m_transform;
-		DatapickerImage* m_image;
-		void init();
-		void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
-		void handleChildAspectAdded(const AbstractAspect*);
+private:
+	DatapickerCurve* m_activeCurve;
+	Transform* m_transform;
+	DatapickerImage* m_image;
+	void init();
+	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleChildAspectAdded(const AbstractAspect*);
 
-	private slots:
-		virtual void childDeselected(const AbstractAspect*) override;
-		void handleAspectAdded(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+private slots:
+	virtual void childDeselected(const AbstractAspect*) override;
+	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
-	signals:
-		void datapickerItemSelected(int);
-		void requestUpdateActions();
+signals:
+	void datapickerItemSelected(int);
+	void requestUpdateActions();
 };
 
 #endif

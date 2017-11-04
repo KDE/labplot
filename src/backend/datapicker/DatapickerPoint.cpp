@@ -49,11 +49,10 @@ float DatapickerPoint::selectedOpacity = 0.3;
  */
 
 ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) :
-    QGraphicsRectItem(parent->graphicsItem()),
-    barLineItem(new QGraphicsLineItem(parent->graphicsItem())),
+	QGraphicsRectItem(parent->graphicsItem()),
+	barLineItem(new QGraphicsLineItem(parent->graphicsItem())),
 	m_type(type),
-    m_parentItem(parent)
-{
+	m_parentItem(parent) {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -135,8 +134,8 @@ void DatapickerPoint::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerPoint");
-    d->position.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
-    d->position.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+	d->position.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+	d->position.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
 	d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
 	d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
 	d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
@@ -169,23 +168,23 @@ void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
 		m_errorBarItemList<<plusDeltaYItem<<minusDeltaYItem;
 	}
 
-    retransform();
+	retransform();
 }
 
 /*!
     Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerPoint::icon() const {
-    return QIcon::fromTheme("draw-cross");
+	return QIcon::fromTheme("draw-cross");
 }
 
 QMenu* DatapickerPoint::createContextMenu() {
-    QMenu* menu = AbstractAspect::createContextMenu();
+	QMenu* menu = AbstractAspect::createContextMenu();
 	return menu;
 }
 
 QGraphicsItem* DatapickerPoint::graphicsItem() const {
-    return d_ptr;
+	return d_ptr;
 }
 
 void DatapickerPoint::setParentGraphicsItem(QGraphicsItem* item) {
@@ -210,7 +209,7 @@ CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaY
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retransform)
 void DatapickerPoint::setPosition(const QPointF& pos) {
 	Q_D(DatapickerPoint);
-    if (pos!=d->position)
+	if (pos!=d->position)
 		exec(new DatapickerPointSetPositionCmd(d, pos, i18n("%1: set position")));
 }
 
@@ -218,17 +217,16 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPo
 void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->plusDeltaXPos ) {
-        DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
-        if (!curve)
-            return;
+		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		if (!curve)
+			return;
 
 		beginMacro(i18n("%1: set +delta_X position", name()));
-        if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
 			setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
-		} else {
+		} else
 			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
-		}
 		endMacro();
 	}
 }
@@ -237,17 +235,16 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaX
 void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->minusDeltaXPos ) {
-        DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
-        if (!curve)
-            return;
+		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		if (!curve)
+			return;
 
 		beginMacro(i18n("%1: set -delta_X position", name()));
-        if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
 			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
-		} else {
+		} else
 			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
-		}
 		endMacro();
 	}
 }
@@ -256,17 +253,16 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPo
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->plusDeltaYPos ) {
-        DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
-        if (!curve)
-            return;
+		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		if (!curve)
+			return;
 
 		beginMacro(i18n("%1: set +delta_Y position", name()));
-        if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
 			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
-		} else {
+		} else
 			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
-		}
 		endMacro();
 	}
 }
@@ -275,32 +271,30 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaY
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->minusDeltaYPos ) {
-        DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
-        if (!curve)
-            return;
+		DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(parentAspect());
+		if (!curve)
+			return;
 
 		beginMacro(i18n("%1: set -delta_Y position", name()));
-        if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
+		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
 			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
-		} else {
+		} else
 			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
-		}
 		endMacro();
 	}
 }
 
 void DatapickerPoint::setPrinting(bool on) {
-    Q_D(DatapickerPoint);
-    d->m_printing = on;
+	Q_D(DatapickerPoint);
+	d->m_printing = on;
 }
 
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint *owner)
-    : m_printing(false),
-      q(owner) {
+DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner)
+	: m_printing(false), q(owner) {
 
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsSelectable);
@@ -315,12 +309,12 @@ QString DatapickerPointPrivate::name() const {
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void DatapickerPointPrivate::retransform() {
-    updatePropeties();
-    setPos(position);
-    QPainterPath path = Symbol::pathFromStyle(pointStyle);
+	updatePropeties();
+	setPos(position);
+	QPainterPath path = Symbol::pathFromStyle(pointStyle);
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
-    retransformErrorBar();
+	retransformErrorBar();
 	updateData();
 }
 
@@ -328,11 +322,11 @@ void DatapickerPointPrivate::retransform() {
   update color and size of all error-bar.
 */
 void DatapickerPointPrivate::retransformErrorBar() {
-	foreach (ErrorBarItem* item, q->m_errorBarItemList) {
+	for(auto* item : q->m_errorBarItemList) {
 		if (item) {
-            item->setBrush(errorBarBrush);
-            item->setPen(errorBarPen);
-            item->setRectSize(errorBarSize);
+			item->setBrush(errorBarBrush);
+			item->setPen(errorBarPen);
+			item->setRectSize(errorBarSize);
 		}
 	}
 }
@@ -343,32 +337,32 @@ void DatapickerPointPrivate::retransformErrorBar() {
 void DatapickerPointPrivate::updateData() {
 	DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	if (curve)
-        curve->updateData(q);
+		curve->updateData(q);
 }
 
 void DatapickerPointPrivate::updatePropeties() {
-    DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
-    DatapickerImage* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
-    if (image) {
-        rotationAngle = image->pointRotationAngle();
-        pointStyle = image->pointStyle();
-        brush = image->pointBrush();
-        pen = image->pointPen();
-        opacity = image->pointOpacity();
-        size = image->pointSize();
-        setVisible(image->pointVisibility());
-    } else if (curve) {
-        rotationAngle = curve->pointRotationAngle();
-        pointStyle = curve->pointStyle();
-        brush = curve->pointBrush();
-        pen = curve->pointPen();
-        opacity = curve->pointOpacity();
-        size = curve->pointSize();
-        errorBarBrush = curve->pointErrorBarBrush();
-        errorBarPen = curve->pointErrorBarPen();
-        errorBarSize = curve->pointErrorBarSize();
-        setVisible(curve->pointVisibility());
-    }
+	DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
+	DatapickerImage* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
+	if (image) {
+		rotationAngle = image->pointRotationAngle();
+		pointStyle = image->pointStyle();
+		brush = image->pointBrush();
+		pen = image->pointPen();
+		opacity = image->pointOpacity();
+		size = image->pointSize();
+		setVisible(image->pointVisibility());
+	} else if (curve) {
+		rotationAngle = curve->pointRotationAngle();
+		pointStyle = curve->pointStyle();
+		brush = curve->pointBrush();
+		pen = curve->pointPen();
+		opacity = curve->pointOpacity();
+		size = curve->pointSize();
+		errorBarBrush = curve->pointErrorBarBrush();
+		errorBarPen = curve->pointErrorBarPen();
+		errorBarSize = curve->pointErrorBarSize();
+		setVisible(curve->pointVisibility());
+	}
 }
 
 /*!
@@ -392,8 +386,8 @@ void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	QMatrix matrix;
-    matrix.scale(size, size);
-    matrix.rotate(-rotationAngle);
+	matrix.scale(size, size);
+	matrix.rotate(-rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
 	itemShape = QPainterPath();
 	itemShape.addRect(transformedBoundingRectangle);
@@ -403,31 +397,31 @@ void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphics
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-    QPainterPath path = Symbol::pathFromStyle(pointStyle);
+	QPainterPath path = Symbol::pathFromStyle(pointStyle);
 	QTransform trafo;
-    trafo.scale(size, size);
+	trafo.scale(size, size);
 	path = trafo.map(path);
 	trafo.reset();
-    if (rotationAngle != 0) {
-        trafo.rotate(-rotationAngle);
+	if (rotationAngle != 0) {
+		trafo.rotate(-rotationAngle);
 		path = trafo.map(path);
 	}
 	painter->save();
-    painter->setPen(pen);
-    painter->setBrush(brush);
-    painter->setOpacity(opacity);
+	painter->setPen(pen);
+	painter->setBrush(brush);
+	painter->setOpacity(opacity);
 	painter->drawPath(path);
 	painter->restore();
 
-    if (isSelected() && !m_printing) {
-        painter->setPen(q->selectedPen);
-        painter->setOpacity(q->selectedOpacity);
-        painter->drawPath(itemShape);
-    }
+	if (isSelected() && !m_printing) {
+		painter->setPen(q->selectedPen);
+		painter->setOpacity(q->selectedOpacity);
+		painter->drawPath(itemShape);
+	}
 }
 
 void DatapickerPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-    q->createContextMenu()->exec(event->screenPos());
+	q->createContextMenu()->exec(event->screenPos());
 }
 
 //##############################################################################
@@ -443,8 +437,8 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 
 	//geometry
 	writer->writeStartElement( "geometry" );
-    writer->writeAttribute( "x", QString::number(d->position.x()) );
-    writer->writeAttribute( "y", QString::number(d->position.y()) );
+	writer->writeAttribute( "x", QString::number(d->position.x()) );
+	writer->writeAttribute( "y", QString::number(d->position.y()) );
 	writer->writeEndElement();
 
 	writer->writeStartElement( "errorBar" );
@@ -494,13 +488,13 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'x'"));
 			else
-                d->position.setX(str.toDouble());
+				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'y'"));
 			else
-                d->position.setY(str.toDouble());
+				d->position.setY(str.toDouble());
 		} else if (!preview && reader->name() == "errorBar") {
 			attribs = reader->attributes();
 
@@ -551,7 +545,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_y'"));
 			else
 				d->minusDeltaYPos.setY(str.toDouble());
-        } else { // unknown element
+		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}

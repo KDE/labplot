@@ -86,44 +86,40 @@ QMenu* Datapicker::createContextMenu() {
 }
 
 QWidget* Datapicker::view() const {
-	if (!m_view) {
+	if (!m_view)
 		m_view = new DatapickerView(const_cast<Datapicker*>(this));
-	}
 	return m_view;
 }
 
 
 bool Datapicker::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret;
-	if (s) {
-        ret = s->exportView();
-	} else {
-        ret = m_image->exportView();
-	}
-    return ret;
+	bool ret;
+	if (s)
+		ret = s->exportView();
+	else
+		ret = m_image->exportView();
+	return ret;
 }
 
 bool Datapicker::printView() {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret;
-	if (s) {
-        ret = s->printView();
-	} else {
-        ret = m_image->printView();
-	}
-    return ret;
+	bool ret;
+	if (s)
+		ret = s->printView();
+	else
+		ret = m_image->printView();
+	return ret;
 }
 
 bool Datapicker::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
-    bool ret;
-	if (s) {
-        ret = s->printPreview();
-	} else {
-        ret = m_image->printPreview();
-	}
-    return ret;
+	bool ret;
+	if (s)
+		ret = s->printPreview();
+	else
+		ret = m_image->printPreview();
+	return ret;
 }
 
 DatapickerCurve* Datapicker::activeCurve() {
@@ -185,13 +181,13 @@ void Datapicker::childDeselected(const AbstractAspect* aspect) {
 void Datapicker::setChildSelectedInView(int index, bool selected) {
 	//select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
 	if (index==0) {
-		if (selected) {
+		if (selected)
 			emit childAspectSelectedInView(this);
-		} else {
+		else {
 			emit childAspectDeselectedInView(this);
 
 			//deselect also all curves (they don't have any tab index in the view) that were potentially selected before
-			foreach(const DatapickerCurve* curve, children<const DatapickerCurve>())
+			for (const auto* curve : children<const DatapickerCurve>())
 				emit childAspectDeselectedInView(curve);
 		}
 
@@ -213,7 +209,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 		emit childAspectDeselectedInView(aspect);
 
 		//deselect also all children that were potentially selected before (columns of a spreadsheet)
-		foreach(const AbstractAspect* child, aspect->children<const AbstractAspect>())
+		for (const auto* child : aspect->children<const AbstractAspect>())
 			emit childAspectDeselectedInView(child);
 	}
 }
@@ -271,17 +267,15 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (curve) {
 		//clear scene
 		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		for (auto* point : childPoints) {
+		for (auto* point : childPoints)
 			handleChildAspectAboutToBeRemoved(point);
-		}
 
 		if (curve==m_activeCurve) {
 			m_activeCurve = 0;
 			emit statusInfo("");
 		}
-	} else {
+	} else
 		handleChildAspectAboutToBeRemoved(aspect);
-	}
 
 	emit requestUpdateActions();
 }
@@ -289,15 +283,14 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
 	const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
-	if (addedPoint) {
+	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
-	} else if (curve) {
+	else if (curve) {
 		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
 		for (auto* point : childPoints)
 			handleChildAspectAdded(point);
-	} else {
+	} else
 		return;
-	}
 
 	qreal zVal = 0;
 	QVector<DatapickerPoint*> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
@@ -343,7 +336,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//serialize all children
-	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden))
+	for (auto* child : children<AbstractAspect>(IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close "datapicker" section
@@ -382,19 +375,17 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 			if (!curve->load(reader, preview)) {
 				delete curve;
 				return false;
-			} else {
+			} else
 				addChild(curve);
-			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
 
-	foreach (AbstractAspect* aspect, children<AbstractAspect>(IncludeHidden)) {
-		foreach (DatapickerPoint* point, aspect->children<DatapickerPoint>(IncludeHidden)) {
+	for (auto* aspect : children<AbstractAspect>(IncludeHidden)) {
+		for (auto* point : aspect->children<DatapickerPoint>(IncludeHidden))
 			handleAspectAdded(point);
-		}
 	}
 
 	return true;

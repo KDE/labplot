@@ -96,7 +96,7 @@ SegmentPrivate::SegmentPrivate(Segment *owner)
     calculates the position and the bounding box of the item. Called on geometry or properties changes.
  */
 void SegmentPrivate::retransform() {
-	foreach (QLine* line, q->path) {
+	for (auto* line : q->path) {
 		linePath.moveTo(line->p1());
 		linePath.lineTo(line->p2());
 	}
@@ -174,13 +174,13 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-    if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
-        Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
+	if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
+		Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
 		Q_ASSERT(datapicker);
 		if (datapicker->activeCurve()) {
 			int count = 0;
-            QList<QPointF> posList;
-            posList.clear();
+			QList<QPointF> posList;
+			posList.clear();
 			for (QLine* line : q->path) {
 				const int l = (line->y1() > line->y2())?line->y2():line->y1();
 				const int h = (line->y1() > line->y2())?line->y1():line->y2();
@@ -189,28 +189,28 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
 						const QVector<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-						foreach (DatapickerPoint* point, curvePointsList) {
-                            if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
+						for (const auto* point : curvePointsList) {
+							if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
 								positionUsed = true;
 						}
 
 						if (!positionUsed)
-                            posList<<QPoint(line->x1(), i)*scaleFactor;
+							posList<<QPoint(line->x1(), i)*scaleFactor;
 					}
 					count++;
 				}
 			}
 
-            if (!posList.isEmpty()) {
-                datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
-                for (const QPointF& pos : posList)
-                    datapicker->addNewPoint(pos, datapicker->activeCurve());
-                datapicker->activeCurve()->endMacro();
-            }
-        }
+			if (!posList.isEmpty()) {
+				datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
+				for (const QPointF& pos : posList)
+					datapicker->addNewPoint(pos, datapicker->activeCurve());
+				datapicker->activeCurve()->endMacro();
+			}
+		}
 
-        //no need to keep segment selected
-        return false;
+		//no need to keep segment selected
+		return false;
 	}
 
 	return QGraphicsItem::itemChange(change, value);
