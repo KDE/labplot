@@ -144,7 +144,7 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 	} else {
 		//Custom
 		fitData.modelCategory = nsl_fit_model_custom;
-		fitData.modelType = nsl_fit_model_custom;
+		fitData.modelType = 0;
 	}
 
 	XYFitCurve::initFitData(fitData);
