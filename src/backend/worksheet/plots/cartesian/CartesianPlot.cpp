@@ -2838,7 +2838,6 @@ void CartesianPlot::loadTheme(const QString& theme) {
 void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	QString str = config.name();
 	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
 	this->setTheme(str);
 
 	//load the color palettes for the curves
@@ -2850,8 +2849,6 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 
 	Q_D(CartesianPlot);
 	d->update(this->rect());
-
-	endMacro();
 }
 
 void CartesianPlot::saveTheme(KConfig &config) {
