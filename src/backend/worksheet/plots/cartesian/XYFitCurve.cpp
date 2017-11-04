@@ -240,7 +240,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		break;
 	case nsl_fit_model_peak:
 		model = nsl_fit_model_peak_equation[fitData.modelType];
-		switch ((nsl_fit_model_type_peak)modelType) {
+		switch (modelType) {
 		case nsl_fit_model_gaussian:
 			switch (degree) {
 			case 1:
@@ -377,7 +377,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		break;
 	case nsl_fit_model_growth:
 		model = nsl_fit_model_growth_equation[fitData.modelType];
-		switch ((nsl_fit_model_type_growth)modelType) {
+		switch (modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh:
 		case nsl_fit_model_algebraic_sigmoid:
@@ -401,7 +401,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		break;
 	case nsl_fit_model_distribution:
 		model = nsl_sf_stats_distribution_equation[fitData.modelType];
-		switch ((nsl_sf_stats_distribution)modelType) {
+		switch (modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_rayleigh_tail:
