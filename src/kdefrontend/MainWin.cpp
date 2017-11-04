@@ -80,6 +80,7 @@
 #include <QHash>
 
 #include <KActionCollection>
+#include <KConfigGroup>
 #include <KFileDialog>
 #include <KStandardAction>
 #include <kxmlguifactory.h>
