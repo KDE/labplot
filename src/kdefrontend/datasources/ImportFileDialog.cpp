@@ -92,7 +92,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
 	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (!liveDataSource) {
 		setWindowTitle(i18n("Import Data to Spreadsheet or Matrix"));
@@ -309,8 +309,8 @@ void ImportFileDialog::checkOkButton() {
 
 	QString fileName = m_importFileWidget->fileName();
 #ifndef HAVE_WINDOWS
-		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
-			fileName = QDir::homePath() + QDir::separator() + fileName;
+	if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
+		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
@@ -323,78 +323,71 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 
-        if (QFile::exists(fileName)) {
-            QLocalSocket* socket = new QLocalSocket(this);
-            socket->connectToServer(fileName, QLocalSocket::ReadOnly);
-            bool localSocketConnected = socket->waitForConnected(2000);
+		if (QFile::exists(fileName)) {
+			QLocalSocket* socket = new QLocalSocket(this);
+			socket->connectToServer(fileName, QLocalSocket::ReadOnly);
+			bool localSocketConnected = socket->waitForConnected(2000);
 
-            okButton->setEnabled(localSocketConnected);
+			okButton->setEnabled(localSocketConnected);
 
-            if (socket->state() == QLocalSocket::ConnectedState) {
-                socket->disconnectFromServer();
-                socket->waitForDisconnected(1000);
-                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-            } else {
-                delete socket;
-            }
+			if (socket->state() == QLocalSocket::ConnectedState) {
+				socket->disconnectFromServer();
+				socket->waitForDisconnected(1000);
+				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+			} else
+				delete socket;
 
-        } else {
-            okButton->setEnabled(false);
-        }
+		} else
+			okButton->setEnabled(false);
 
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
-        if (enable) {
-            QTcpSocket* socket = new QTcpSocket(this);
-            socket = new QTcpSocket(this);
-            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
-            bool tcpSocketConnected = socket->waitForConnected(2000);
+		if (enable) {
+			QTcpSocket* socket = new QTcpSocket(this);
+			socket = new QTcpSocket(this);
+			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
+			bool tcpSocketConnected = socket->waitForConnected(2000);
 
-            okButton->setEnabled(tcpSocketConnected);
+			okButton->setEnabled(tcpSocketConnected);
 
-            if (socket->state() == QTcpSocket::ConnectedState) {
-                socket->disconnectFromHost();
-                socket->waitForDisconnected(1000);
-                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-            } else {
-                delete socket;
-            }
-        } else {
-            okButton->setEnabled(false);
-        }
+			if (socket->state() == QTcpSocket::ConnectedState) {
+				socket->disconnectFromHost();
+				socket->waitForDisconnected(1000);
+				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+			} else
+				delete socket;
+		} else
+			okButton->setEnabled(false);
 		break;
 	case LiveDataSource::SourceType::NetworkUdpSocket:
-        if (enable) {
-            QUdpSocket* socket = new QUdpSocket(this);
-            socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
-            bool udpSocketConnected = socket->waitForConnected(2000);
+		if (enable) {
+			QUdpSocket* socket = new QUdpSocket(this);
+			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
+			bool udpSocketConnected = socket->waitForConnected(2000);
 
-            okButton->setEnabled(udpSocketConnected);
+			okButton->setEnabled(udpSocketConnected);
 
-            if (socket->state() == QUdpSocket::ConnectedState) {
-                socket->disconnectFromHost();
-                socket->waitForDisconnected(1000);
-                connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-            } else {
-                delete socket;
-            }
-        } else {
-            okButton->setEnabled(false);
-        }
-
-        break;
-	case LiveDataSource::SourceType::SerialPort:
-        if (!m_importFileWidget->serialPort().isEmpty()) {
-            QSerialPort* serialPort = new QSerialPort(this);
-
-            serialPort->setBaudRate(m_importFileWidget->baudRate());
-            serialPort->setPortName(m_importFileWidget->serialPort());
-
-            bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
-            okButton->setEnabled(serialPortOpened);
-        } else {
+			if (socket->state() == QUdpSocket::ConnectedState) {
+				socket->disconnectFromHost();
+				socket->waitForDisconnected(1000);
+				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+			} else
+				delete socket;
+		} else
 			okButton->setEnabled(false);
-        }
+
+		break;
+	case LiveDataSource::SourceType::SerialPort:
+		if (!m_importFileWidget->serialPort().isEmpty()) {
+			QSerialPort* serialPort = new QSerialPort(this);
+
+			serialPort->setBaudRate(m_importFileWidget->baudRate());
+			serialPort->setPortName(m_importFileWidget->serialPort());
+
+			bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
+			okButton->setEnabled(serialPortOpened);
+		} else
+			okButton->setEnabled(false);
 		break;
 	default:
 		break;
