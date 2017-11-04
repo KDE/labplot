@@ -73,8 +73,6 @@ void FileInfoDialog::loadSettings() {
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
-
-// 	resize( QSize(500,300) );
 }
 
 FileInfoDialog::~FileInfoDialog() {

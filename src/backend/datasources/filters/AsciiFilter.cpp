@@ -299,7 +299,9 @@ bool AsciiFilter::removeQuotesEnabled() const {
 }
 
 void AsciiFilter::setVectorNames(const QString s) {
-	d->vectorNames = s.simplified().split(' ');
+	d->vectorNames.clear();
+	if (!s.simplified().isEmpty())
+		d->vectorNames = s.simplified().split(' ');
 }
 QStringList AsciiFilter::vectorNames() const {
 	return d->vectorNames;
@@ -446,7 +448,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	// set range to read
 	if (endColumn == -1) {
-		if (headerEnabled)
+		if (headerEnabled || vectorNames.size() == 0)
 			endColumn = firstLineStringList.size(); // last column
 		else
 			endColumn = vectorNames.size(); //number of vector names provided in the import dialog
