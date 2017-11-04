@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : file info dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de alexander.semke*web.de
+    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,15 +33,19 @@
 #include <QDialog>
 #include <QTextEdit>
 
-class FileInfoDialog: public QDialog {
-	Q_OBJECT
+class FileInfoDialog : public QDialog {
+Q_OBJECT
 
-	public:
-		explicit FileInfoDialog(QWidget* parent);
-		void setFiles(QStringList&);
+public:
+	explicit FileInfoDialog(QWidget*);
+	~FileInfoDialog();
+	void setFiles(QStringList&);
 
-	private:
-        QTextEdit m_textEditWidget;
+private:
+	QTextEdit m_textEditWidget;
+
+private slots:
+	void loadSettings();
 };
 
 #endif //IMPORTFILEDIALOG_H

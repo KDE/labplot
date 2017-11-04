@@ -37,6 +37,8 @@
 #include <QIcon>
 #include <QVBoxLayout>
 
+#include <KWindowConfig>
+
 /*!
 \class ImportWidget
 \brief Provides a dialog containing the information about the files to be imported.
@@ -49,7 +51,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 	m_textEditWidget.setReadOnly(true);
 	m_textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 
-	QVBoxLayout *layout = new QVBoxLayout(this);
+	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(&m_textEditWidget);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
@@ -64,7 +66,21 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	setLayout(layout);
 
-	resize( QSize(500,300) );
+	QTimer::singleShot(0, this, &FileInfoDialog::loadSettings);
+}
+
+void FileInfoDialog::loadSettings() {
+	//restore saved settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+
+// 	resize( QSize(500,300) );
+}
+
+FileInfoDialog::~FileInfoDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void FileInfoDialog::setFiles(QStringList& files) {
