@@ -1561,26 +1561,26 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_relative_fit:
 		break;
 	case nsl_fit_weight_instrumental:
-		for(size_t i = 0; i < n; i++)
+		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
 	case nsl_fit_weight_direct:
-		for(size_t i = 0; i < n; i++)
+		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = yerror[i];
 		break;
 	case nsl_fit_weight_inverse:
-		for(size_t i = 0; i < n; i++)
+		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = 1./yerror[i];
 		break;
 	case nsl_fit_weight_statistical:
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < (int)n; i++)
 			weight[i] = 1./ydata[i];
 		break;
 	case nsl_fit_weight_relative:
-		for (size_t i = 0; i < n; i++)
+		for (int i = 0; i < (int)n; i++)
 			weight[i] = 1./gsl_pow_2(ydata[i]);
 		break;
 	}
