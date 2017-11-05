@@ -846,7 +846,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	const QColor backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black));
 
 	d->suppressRetransform = true;
-	if (!d->textWrapper.teXUsed) {
+	if (!d->textWrapper.teXUsed && !d->textWrapper.text.isEmpty()) {
 		//replace colors in the html-formatted string
 		QTextDocument doc;
 		doc.setHtml(d->textWrapper.text);
