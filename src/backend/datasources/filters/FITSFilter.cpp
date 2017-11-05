@@ -680,9 +680,15 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		} else {
 			const int nrows = matrix->rowCount();
 			const int tfields = matrix->columnCount();
-			char* columnNames[tfields];
-			char* tform[tfields];
-			char* tunit[tfields];
+			QVector<char*> columnNames;
+			columnNames.resize(tfields);
+			columnNames.reserve(tfields);
+			QVector<char*> tform;
+			tform.resize(tfields);
+			tform.reserve(tfields);
+			QVector<char*> tunit;
+			tunit.resize(tfields);
+			tunit.reserve(tfields);
 			//TODO: mode
 			const QVector<QVector<double>>* matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			QVector<double> column;
@@ -714,14 +720,13 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			if (fits_create_tbl(m_fitsFile, ASCII_TBL,
 			                    nrows, tfields,
-			                    columnNames, tform, tunit,
+								columnNames.data(), tform.data(), tunit.data(),
 			                    matrix->name().toLatin1().data(),&status )) {
 				printError(status);
-				for (int i = 0; i < tfields; ++i) {
-					delete[] tform[i];
-					delete[] tunit[i];
-					delete[] columnNames[i];
-				}
+
+				qDeleteAll(tform);
+				qDeleteAll(tunit);
+				qDeleteAll(columnNames);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
 				if (!existed) {
@@ -730,12 +735,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				}
 				return;
 			}
-
-			for (int i = 0; i < tfields; ++i) {
-				delete[] tform[i];
-				delete[] tunit[i];
-				delete[] columnNames[i];
-			}
+			qDeleteAll(tform);
+			qDeleteAll(tunit);
+			qDeleteAll(columnNames);
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
@@ -802,9 +804,16 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		} else {
 			const int nrows = spreadsheet->rowCount();
 			const int tfields = spreadsheet->columnCount();
-			char* columnNames[tfields];
-			char* tform[tfields];
-			char* tunit[tfields];
+
+			QVector<char*> columnNames;
+			columnNames.resize(tfields);
+			columnNames.reserve(tfields);
+			QVector<char*> tform;
+			tform.resize(tfields);
+			tform.reserve(tfields);
+			QVector<char*> tunit;
+			tunit.resize(tfields);
+			tunit.reserve(tfields);
 
 			for (int i = 0; i < tfields; ++i) {
 				const Column* column =  spreadsheet->column(i);
@@ -876,14 +885,12 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			if (fits_create_tbl(m_fitsFile, ASCII_TBL,
 			                    nrows, tfields,
-			                    columnNames, tform, tunit,
+								columnNames.data(), tform.data(), tunit.data(),
 			                    spreadsheet->name().toLatin1().data(),&status )) {
 				printError(status);
-				for (int i = 0; i < tfields; ++i) {
-					delete[] tform[i];
-					delete[] tunit[i];
-					delete[] columnNames[i];
-				}
+				qDeleteAll(tform);
+				qDeleteAll(tunit);
+				qDeleteAll(columnNames);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
 				if (!existed) {
@@ -893,13 +900,14 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				return;
 			}
 
-			for (int i = 0; i < tfields; ++i) {
-				delete[] tform[i];
-				delete[] tunit[i];
-				delete[] columnNames[i];
-			}
+			qDeleteAll(tform);
+			qDeleteAll(tunit);
+			qDeleteAll(columnNames);
 
-			char* column[nrows];
+			QVector<char*> column;
+			column.resize(nrows);
+			column.reserve(nrows);
+
 			double* columnNumeric = new double[nrows];
 			bool hadTextColumn = false;
 			for (int col = 1; col <= tfields; ++col) {
@@ -926,13 +934,13 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					hadTextColumn = true;
 					for (int row = 0; row < nrows; ++row) {
 						column[row] = new char[c->textAt(row).size()];
+
 						strcpy(column[row], c->textAt(row).toLatin1().data());
 					}
-					fits_write_col(m_fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
+					fits_write_col(m_fitsFile, TSTRING, col, 1, 1, nrows, column.data(), &status);
 					if (status) {
 						printError(status);
-						for (int i = 0; i < nrows; ++i)
-							delete[] column[i];
+						qDeleteAll(column);
 						status = 0;
 						fits_close_file(m_fitsFile, &status);
 						return;
@@ -942,8 +950,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			delete[] columnNumeric;
 			if (hadTextColumn)
-				for (int i = 0; i < nrows; ++i)
-					delete[] column[i];
+				qDeleteAll(column);
 
 			status = 0;
 			fits_close_file(m_fitsFile, &status);

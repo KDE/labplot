@@ -98,8 +98,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportSpreadsheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged );
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
-	//connect(ui->cbFormat, &KComboBox::currentIndexChanged, this, &ExportSpreadsheetDialog::formatChanged);
-	//connect(ui->cbExportToFITS, &QComboBox::currentIndexChanged, this, &ExportSpreadsheetDialog::fitsExportToChanged);
+	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
+	connect(ui->cbExportToFITS, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
 
 	setWindowTitle(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
