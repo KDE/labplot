@@ -868,7 +868,7 @@ void XYFitCurveDock::resultCopyAll() {
 				str += " (" + i18n("t statistic:") + ' ' + QString::number(fitResult.tdist_tValues.at(i), 'g', 3) + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
 					+ i18n("conf. interval:") + ' ';
-				if (fitResult.tdist_tValues.at(i) < 1.e6) {
+				if (fabs(fitResult.tdist_tValues.at(i)) < 1.e6) {
 					str += QString::number(fitResult.paramValues.at(i) - margin) + " .. "
 						+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
 				} else {
