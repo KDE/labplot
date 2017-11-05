@@ -867,8 +867,13 @@ void XYFitCurveDock::resultCopyAll() {
 				const double margin = fitResult.tdist_marginValues.at(i);
 				str += " (" + i18n("t statistic:") + ' ' + QString::number(fitResult.tdist_tValues.at(i), 'g', 3) + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
-					+ i18n("conf. interval:") + ' ' + QString::number(fitResult.paramValues.at(i) - margin) + " .. "
-					+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
+					+ i18n("conf. interval:") + ' ';
+				if (fitResult.tdist_tValues.at(i) < 1.e6) {
+					str += QString::number(fitResult.paramValues.at(i) - margin) + " .. "
+						+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
+				} else {
+					str += i18n("too small");
+				}
 			}
 		}
 	} else if (currentTab == 1) {
@@ -1030,7 +1035,10 @@ void XYFitCurveDock::showFitResult() {
 
 			// Conf. interval
 			const double margin = fitResult.tdist_marginValues.at(i);
-			item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
+			if (fitResult.tdist_tValues.at(i) < 1.e6)
+				item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
+			else
+				item = new QTableWidgetItem(i18n("too small"));
 			uiGeneralTab.twParameters->setItem(i, 6, item);
 		}
 	}
