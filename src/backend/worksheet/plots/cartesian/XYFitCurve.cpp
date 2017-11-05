@@ -2056,7 +2056,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "tdist_t") {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "tdist_p") {
-			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
+			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "tdist_margin") {
 			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "fitResult") {
