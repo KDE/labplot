@@ -543,15 +543,13 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	}
 	painter->restore();
 
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(q->hoveredPen);
-		painter->setOpacity(q->hoveredOpacity);
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}
 
-	if (isSelected() && !m_printing) {
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+	if (isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}
 }

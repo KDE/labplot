@@ -243,7 +243,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	path.addRect(boundingRectangle);
 
 	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
-	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), q->hoveredPen.widthF()*2)));
+	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), 3)));
 }
 
 // Inherited from QGraphicsItem
@@ -253,7 +253,6 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-// 	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -261,15 +260,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		return;
 
 	if (m_hovered && !isSelected() && !m_printing){
-		painter->setPen(q->hoveredPen);
-		painter->setOpacity(q->hoveredOpacity);
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}
 
 	if (isSelected() && !m_printing){
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}
-// 	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

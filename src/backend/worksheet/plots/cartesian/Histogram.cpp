@@ -1173,53 +1173,40 @@ void HistogramPrivate::updatePixmap() {
   \sa QGraphicsItem::paint().
 */
 void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-//  qDebug()<<"HistogramPrivate::paint, " + q->name();
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
 
-// 	QTime timer;
-// 	timer.start();
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-// TODO: draw directly
 	draw(painter);
-// or use pixmap for double buffering
-// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
-// 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing) {
-// 		timer.start();
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(q->hoveredPen.color());
+			pix.fill(QApplication::palette().color(QPalette::Shadow));
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->setOpacity(q->hoveredOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
 		return;
 	}
 
 	if (isSelected() && !m_printing) {
-// 		timer.start();
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(q->selectedPen.color());
+			pix.fill(QApplication::palette().color(QPalette::Highlight));
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->setOpacity(q->selectedOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
 		return;
 	}
 }
@@ -1228,7 +1215,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	Drawing of symbolsPath is very slow, so we draw every symbol in the loop
 	which us much faster (factor 10)
 */
-
 void HistogramPrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
