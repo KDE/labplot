@@ -153,7 +153,7 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 }
 
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG("ImportProjectDialog::import()");
+	DEBUG("ImportProjectDialog::importTo()");
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
@@ -187,8 +187,10 @@ void ImportProjectDialog::refreshPreview() {
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	//show top-level containers only
-	QModelIndex root = ui.tvPreview->model()->index(0,0);
-	showTopLevelOnly(root);
+	if (ui.tvPreview->model()) {
+		QModelIndex root = ui.tvPreview->model()->index(0,0);
+		showTopLevelOnly(root);
+	}
 
 	ui.tvPreview->header()->resizeSection(0,0);
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
