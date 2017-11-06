@@ -54,7 +54,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_mainWin(parent),
 	m_projectParser(nullptr),
 	m_projectType(type),
-	m_aspectTreeModel(new AspectTreeModel(parent->project()) ){
+	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 
 	QVBoxLayout* vLayout = new QVBoxLayout(this);
 

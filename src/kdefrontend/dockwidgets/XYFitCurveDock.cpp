@@ -1020,17 +1020,16 @@ void XYFitCurveDock::showFitResult() {
 			const double p = fitResult.tdist_pValues.at(i);
 			item = new QTableWidgetItem(QString::number(p, 'g', 3));
 			// color p values depending on value
-			//TODO: these hard coded colors don't always look well on dark themes (blue on black, etc. is hard to read)
 			if (p > 0.05)
-				item->setTextColor(Qt::red);
+				item->setTextColor(QApplication::palette().color(QPalette::LinkVisited));
 			else if (p > 0.01)
 				item->setTextColor(Qt::darkGreen);
 			else if (p > 0.001)
 				item->setTextColor(Qt::darkCyan);
 			else if (p > 0.0001)
-				item->setTextColor(Qt::blue);
+				item->setTextColor(QApplication::palette().color(QPalette::Link));
 			else
-				item->setTextColor(Qt::darkBlue);
+				item->setTextColor(QApplication::palette().color(QPalette::Highlight));
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
