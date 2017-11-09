@@ -404,7 +404,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, double new_value) {
-	DEBUG("Column::setValueAt()");
+//	DEBUG("Column::setValueAt()");
 	setStatisticsAvailable(false);
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }

@@ -53,7 +53,7 @@
 
 	\ingroup kdefrontend
  */
-ImportOpj::ImportOpj(Project *project, const QString& filename, bool preview) : p(project) {
+ImportOpj::ImportOpj(Folder *folder, const QString& filename, bool preview) : p(folder) {
 	DEBUG("Opj import started ...");
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
@@ -74,6 +74,7 @@ ImportOpj::ImportOpj(Project *project, const QString& filename, bool preview) : 
 int ImportOpj::importTables(const OriginFile &opj) {
 	// excels (origin workbook with one or more sheets)
 	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
+		DEBUG("Reading Spreadsheet " << e);
 			Origin::Excel excelwb = opj.excel(e);
 			if (excelwb.sheets.size() == 1) {	// single sheet -> spreadsheet
 				Origin::SpreadSheet spread = excelwb.sheets[0];
@@ -104,6 +105,9 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 	Q_UNUSED(opj);
 	int cols = spread.columns.size();
 	int rows = spread.maxRows;
+	//TODO
+	if (rows > 1000)
+		rows = 1000;
 	if (!cols) // do not create spreadsheet without columns
 		return -1;
 
@@ -113,7 +117,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 		spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
 	else			// multiple sheets (TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
 		spreadsheet = new Spreadsheet(0, spread.name.c_str());
-	DEBUG("OK");
+	DEBUG("OK rows = " << rows);
 	spreadsheet->setRowCount(rows);
 	DEBUG("OK DONE");
 	spreadsheet->setColumnCount(cols);

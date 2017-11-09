@@ -82,7 +82,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	//dialog buttons
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false); //ok is only available if some project objects were selected
+	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true); //TODO: ok is only available if some project objects were selected
 	vLayout->addWidget(m_buttonBox);
 
 	//Signals/Slots
@@ -229,7 +229,7 @@ void ImportProjectDialog::selectionChanged() {
 	//determine the dependent objects and select/deselect them too
 
 	//Ok-button is only available if some project objects were selected
-	bool objectsSelected = false; //TODO
+	bool objectsSelected = true; //TODO
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(objectsSelected);
 }
 
