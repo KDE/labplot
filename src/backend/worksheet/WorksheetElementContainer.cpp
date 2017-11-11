@@ -51,13 +51,13 @@
 WorksheetElementContainer::WorksheetElementContainer(const QString& name)
 	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
     : WorksheetElement(name), d_ptr(dd) {
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::~WorksheetElementContainer() {
@@ -152,8 +152,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 
 	const WorksheetElement* element = qobject_cast<const WorksheetElement*>(aspect);
 	if (element && (aspect->parentAspect() == this)) {
-		connect(element, SIGNAL(hovered()), this, SLOT(childHovered()));
-		connect(element, SIGNAL(unhovered()), this, SLOT(childUnhovered()));
+		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
+		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;

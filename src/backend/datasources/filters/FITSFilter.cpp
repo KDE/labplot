@@ -769,7 +769,24 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 	if (spreadsheet) {
 		//FITS image
 		if (exportTo == 0) {
-			long naxes[2] = { spreadsheet->columnCount(), spreadsheet->rowCount() };
+			int maxRowIdx = -1;
+			//don't export lots of empty lines if all of those contain nans
+			// TODO: option?
+			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
+				const Column* col = spreadsheet->column(c);
+				int currMaxRoxIdx = -1;
+				for (int r = col->rowCount(); r >= 0; --r) {
+					if (col->isValid(r)) {
+						currMaxRoxIdx = r;
+						break;
+					}
+				}
+
+				if (currMaxRoxIdx > maxRowIdx) {
+					maxRowIdx = currMaxRoxIdx;
+				}
+			}
+			long naxes[2] = { spreadsheet->columnCount(), maxRowIdx + 1};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
 				status = 0;

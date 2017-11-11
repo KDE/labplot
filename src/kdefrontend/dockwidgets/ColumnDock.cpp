@@ -50,8 +50,8 @@
 ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(0), m_initializing(false) {
 	ui.setupUi(this);
 
-	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
+	connect(ui.leName, &QLineEdit::returnPressed, this, &ColumnDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::returnPressed, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );

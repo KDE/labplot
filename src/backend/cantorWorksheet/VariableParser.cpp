@@ -104,7 +104,7 @@ QVector< double > VariableParser::values() {
 }
 
 void VariableParser::parseValues(const QStringList& values) {
-	foreach(const QString& v, values) {
+	for(const QString& v : values) {
 		bool isNumber = false;
 		double value = v.trimmed().toDouble(&isNumber);
 

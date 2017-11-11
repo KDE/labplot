@@ -87,15 +87,15 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	connect(ui->bAddUnit, SIGNAL(clicked(bool)), m_action_addmodify_unit, SIGNAL(triggered(bool)));
-	connect(ui->bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
-	connect(ui->bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
-	connect(ui->bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
-	connect(ui->bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
-	connect(ui->twKeywordsTable, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(enableButtonAddUnit()));
-	connect(ui->twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
-	connect(ui->twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*,int)));
-	connect(ui->twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(enableButtonCloseFile(QTreeWidgetItem*,int)));
+	connect(ui->bAddUnit, &QPushButton::clicked, m_action_addmodify_unit, &QAction::triggered);
+	connect(ui->bClose, &QPushButton::clicked, this, &FITSHeaderEditWidget::closeFile);
+	connect(ui->bOpen, &QPushButton::clicked, this, &FITSHeaderEditWidget::openFile);
+	connect(ui->bAddKey, &QPushButton::clicked, this, &FITSHeaderEditWidget::addKeyword);
+	connect(ui->bRemoveKey, &QPushButton::clicked, this, &FITSHeaderEditWidget::removeKeyword);
+	connect(ui->twKeywordsTable, &QTableWidget::itemClicked, this, &FITSHeaderEditWidget::enableButtonAddUnit);
+	connect(ui->twKeywordsTable, &QTableWidget::itemChanged, this, &FITSHeaderEditWidget::updateKeyword);
+	connect(ui->twExtensions, &QTreeWidget::itemClicked, this, &FITSHeaderEditWidget::fillTableSlot);
+	connect(ui->twExtensions, &QTreeWidget::itemClicked, this, &FITSHeaderEditWidget::enableButtonCloseFile);
 }
 
 /*!
@@ -141,7 +141,7 @@ void FITSHeaderEditWidget::fillTable() {
  * \param item the extension selected
  * \param col the column of the selected item
  */
-void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
+void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem *item, int col) {
 	WAIT_CURSOR;
 	const QString& itemText = item->text(col);
 	QString selectedExtension;
@@ -215,7 +215,7 @@ void FITSHeaderEditWidget::openFile() {
 		m_fitsFilter->parseExtensions(fileName, ui->twExtensions);
 		ui->twExtensions->resizeColumnToContents(0);
 		if (ui->twExtensions->selectedItems().size() > 0)
-			fillTable(ui->twExtensions->selectedItems().at(0), 0);
+			fillTableSlot(ui->twExtensions->selectedItems().at(0), 0);
 
 		ui->bAddKey->setEnabled(true);
 		ui->bRemoveKey->setEnabled(true);

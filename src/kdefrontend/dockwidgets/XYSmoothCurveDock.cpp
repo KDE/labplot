@@ -208,7 +208,7 @@ void XYSmoothCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -286,7 +286,7 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
 }
 
@@ -301,7 +301,7 @@ void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -313,7 +313,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
@@ -345,7 +345,7 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -506,7 +506,7 @@ void XYSmoothCurveDock::valueChanged() {
 void XYSmoothCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

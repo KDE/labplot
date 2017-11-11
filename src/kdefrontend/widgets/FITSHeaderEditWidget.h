@@ -83,7 +83,7 @@ public slots:
 private slots:
 	void openFile();
 
-	void fillTable(QTreeWidgetItem* item, int col);
+	void fillTableSlot(QTreeWidgetItem* item, int col);
 	void updateKeyword(QTableWidgetItem*);
 
 	void removeKeyword();

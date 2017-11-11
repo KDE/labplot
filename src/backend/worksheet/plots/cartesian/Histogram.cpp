@@ -114,7 +114,7 @@ void Histogram::init() {
 void Histogram::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &Histogram::visibilityChangedSlot);
 }
 
 QMenu* Histogram::createContextMenu() {
@@ -233,12 +233,12 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 		//emit xHistogramDataChanged() in order to notify the plot about the changes
 		emit xHistogramDataChanged();
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xHistogramDataChanged()));
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::xHistogramDataChanged);
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::handleSourceDataChanged);
 			//update the curve itself on changes
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::retransform);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &Histogram::xColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -263,9 +263,9 @@ void Histogram::setValuesColumn(const AbstractColumn* column) {
 	if (column != d->valuesColumn) {
 		exec(new HistogramSetValuesColumnCmd(d, column, i18n("%1: set values column")));
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateValues);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &Histogram::valuesColumnAboutToBeRemoved);
 		}
 	}
 }
@@ -440,7 +440,7 @@ void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void Histogram::visibilityChanged() {
+void Histogram::visibilityChangedSlot() {
 	Q_D(const Histogram);
 	this->setVisible(!d->isVisible());
 }

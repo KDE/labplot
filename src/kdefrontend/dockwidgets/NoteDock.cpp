@@ -36,18 +36,18 @@
 NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(0) {
 	ui.setupUi(this);
 
-	connect(ui.leName, SIGNAL(returnPressed(QString)), this, SLOT(nameChanged(QString)));
-	connect(ui.leComment, SIGNAL(returnPressed(QString)), this, SLOT(commentChanged(QString)));
+	connect(ui.leName, &QLineEdit::returnPressed, this, [this]() { nameChanged(); });
+	connect(ui.leComment, &QLineEdit::returnPressed, this, &NoteDock::commentChanged);
 	
-	connect(ui.kcbBgColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged(QColor)));
-	connect(ui.kcbTextColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged(QColor)));
-	connect(ui.kfrTextFont, SIGNAL(fontSelected(QFont)), this, SLOT(textFontChanged(QFont)));
+	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
+	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);
+	connect(ui.kfrTextFont, &KFontRequester::fontSelected, this, &NoteDock::textFontChanged);
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.gridLayout->addWidget(templateHandler, 8, 3);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &NoteDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &NoteDock::saveConfigAsTemplate);
 }
 
 void NoteDock::setNotesList(QList< Note* > list) {
@@ -65,21 +65,21 @@ void NoteDock::setNotesList(QList< Note* > list) {
 //*************************************************************
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
-void NoteDock::nameChanged(QString name) {
+void NoteDock::nameChanged(const QString& name) {
 	if (m_initializing)
 		return;
 
 	m_notes->setName(name);
 }
 
-void NoteDock::commentChanged(QString name) {
+void NoteDock::commentChanged(const QString& name) {
 	if (m_initializing)
 		return;
 
 	m_notes->setComment(name);
 }
 
-void NoteDock::backgroundColorChanged(QColor color) {
+void NoteDock::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -87,7 +87,7 @@ void NoteDock::backgroundColorChanged(QColor color) {
 		note->setBackgroundColor(color);
 }
 
-void NoteDock::textColorChanged(QColor color) {
+void NoteDock::textColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -95,7 +95,7 @@ void NoteDock::textColorChanged(QColor color) {
 		note->setTextColor(color);
 }
 
-void NoteDock::textFontChanged(QFont font) {
+void NoteDock::textFontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 

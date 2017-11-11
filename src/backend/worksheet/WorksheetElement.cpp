@@ -54,10 +54,10 @@ WorksheetElement::WorksheetElement(const QString &name) : AbstractAspect(name) {
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
-	connect(m_moveBehindMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveBehindMenu()));
-	connect(m_moveInFrontOfMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveInFrontOfMenu()));
-	connect(m_moveBehindMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveBehind(QAction*)));
-	connect(m_moveInFrontOfMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveInFrontOf(QAction*)));
+	connect(m_moveBehindMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareMoveBehindMenu);
+	connect(m_moveInFrontOfMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareMoveInFrontOfMenu);
+	connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
+	connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
 }
 
 WorksheetElement::~WorksheetElement() {

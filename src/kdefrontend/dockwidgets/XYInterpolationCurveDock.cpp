@@ -211,7 +211,7 @@ void XYInterpolationCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -286,7 +286,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
 }
 
@@ -304,7 +304,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -321,7 +321,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 }
 
@@ -413,7 +413,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -621,7 +621,7 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

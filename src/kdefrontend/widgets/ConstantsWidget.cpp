@@ -43,12 +43,12 @@ ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 
 	//SLOTS
-	connect( ui.leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
-	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
-	connect( ui.lwConstants, SIGNAL(currentTextChanged(QString)), this, SLOT(constantChanged(QString)) );
-	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
-	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );
-	connect( ui.lwConstants, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
+	connect(ui.leFilter, &QLineEdit::textChanged, this, &ConstantsWidget::filterChanged);
+	connect(ui.cbGroup, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ConstantsWidget::groupChanged );
+	connect(ui.lwConstants, &QListWidget::currentTextChanged, this, &ConstantsWidget::constantChanged);
+	connect(ui.bInsert, &QPushButton::clicked, this, &ConstantsWidget::insertClicked);
+	connect(ui.bCancel, &QPushButton::clicked, this, &ConstantsWidget::canceled);
+	connect(ui.lwConstants, &QListWidget::itemDoubleClicked, this, &ConstantsWidget::insertClicked);
 
 	this->groupChanged(0);
 }

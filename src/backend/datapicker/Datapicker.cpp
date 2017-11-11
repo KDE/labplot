@@ -65,7 +65,7 @@ void Datapicker::init() {
 	addChild(m_image);
 	setUndoAware(true);
 
-	connect(m_image, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+	connect(m_image, &DatapickerImage::statusInfo, this, &Datapicker::statusInfo);
 }
 
 /*!

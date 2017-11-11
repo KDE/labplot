@@ -45,19 +45,18 @@
 SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadsheet(0), m_initializing(false) {
 	ui.setupUi(this);
 
-	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
-	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
-	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
+	connect(ui.leName, &QLineEdit::returnPressed, this, &SpreadsheetDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::returnPressed, this, &SpreadsheetDock::commentChanged);
+	connect(ui.sbColumnCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
+	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
+	connect(ui.cbShowComments, &QCheckBox::stateChanged, this, &SpreadsheetDock::commentsShownChanged);
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
 }
 
 /*!

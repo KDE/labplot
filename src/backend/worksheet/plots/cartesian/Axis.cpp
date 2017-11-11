@@ -148,7 +148,7 @@ void Axis::init() {
 
 	// axis title
  	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
-	connect( d->title, SIGNAL(changed()), this, SLOT(labelChanged()) );
+	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
@@ -216,12 +216,12 @@ void Axis::init() {
 void Axis::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChanged);
 
 	//Orientation
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
-	connect(orientationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(orientationChanged(QAction*)));
+	connect(orientationActionGroup, &QActionGroup::triggered, this, &Axis::orientationChangedSlot);
 
 	orientationHorizontalAction = new QAction(i18n("horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
@@ -232,11 +232,11 @@ void Axis::initActions() {
 	//Line
 	lineStyleActionGroup = new QActionGroup(this);
 	lineStyleActionGroup->setExclusive(true);
-	connect(lineStyleActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineStyleChanged(QAction*)));
+	connect(lineStyleActionGroup, &QActionGroup::triggered, this, &Axis::lineStyleChanged);
 
 	lineColorActionGroup = new QActionGroup(this);
 	lineColorActionGroup->setExclusive(true);
-	connect(lineColorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineColorChanged(QAction*)));
+	connect(lineColorActionGroup, &QActionGroup::triggered, this, &Axis::lineColorChanged);
 
 	//Ticks
 	//TODO
@@ -612,9 +612,9 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 		exec(new AxisSetMajorTicksColumnCmd(d, column, i18n("%1: assign major ticks' values")));
 
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(majorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &Axis::majorTicksColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -677,9 +677,9 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 		exec(new AxisSetMinorTicksColumnCmd(d, column, i18n("%1: assign minor ticks' values")));
 
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(minorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &Axis::minorTicksColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -846,7 +846,7 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void Axis::orientationChanged(QAction* action) {
+void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(AxisHorizontal);
 	else
@@ -867,7 +867,7 @@ void Axis::lineColorChanged(QAction* action) {
 	this->setLinePen(pen);
 }
 
-void Axis::visibilityChanged() {
+void Axis::visibilityChangedSlot() {
 	Q_D(const Axis);
 	this->setVisible(!d->isVisible());
 }

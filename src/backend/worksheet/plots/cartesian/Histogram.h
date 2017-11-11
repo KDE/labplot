@@ -121,7 +121,7 @@ private slots:
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
+	void visibilityChangedSlot();
 
 	void handleSourceDataChanged();
 protected:

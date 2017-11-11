@@ -54,7 +54,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_showOptionsButton = new QPushButton;
 
-	connect(btnBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
+	connect(btnBox, &QDialogButtonBox::clicked, this, &ExportWorksheetDialog::slotButtonClicked);
 
 	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
 	ui->verticalLayout->addWidget(btnBox);
@@ -84,10 +84,10 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbResolution->addItem("600");
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	connect( ui->cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
-	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
-	connect(m_showOptionsButton,SIGNAL(clicked(bool)), this, SLOT(toggleOptions()));
+	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::formatChanged );
+	connect(ui->bOpen, &QPushButton::clicked, this, &ExportWorksheetDialog::selectFile);
+	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportWorksheetDialog::fileNameChanged);
+	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportWorksheetDialog::toggleOptions);
 
 	setWindowTitle(i18n("Export worksheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));

@@ -61,12 +61,9 @@
 Worksheet::Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)) {
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-	        this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
+	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
+	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);
 
 	if (!loading)
 		init();
@@ -175,7 +172,7 @@ QMenu* Worksheet::createContextMenu() {
 QWidget* Worksheet::view() const {
 	if (!m_view) {
 		m_view = new WorksheetView(const_cast<Worksheet*>(this));
-		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+		connect(dynamic_cast<WorksheetView*>(m_view), &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
 	}
 	return m_view;
 }
@@ -216,7 +213,7 @@ bool Worksheet::printView() {
 bool Worksheet::printPreview() const {
 	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &WorksheetView::print);
 	return dlg->exec();
 }
 

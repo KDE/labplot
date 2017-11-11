@@ -309,7 +309,7 @@ void DropValuesDialog::maskValues() const {
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
-	foreach(Column* col, m_columns) {
+	for(Column* col: m_columns) {
 		MaskValuesTask* task = new MaskValuesTask(col, op, value1, value2);
 		task->run();
 		//TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
@@ -333,7 +333,7 @@ void DropValuesDialog::dropValues() const {
 	const double value1 = ui.leValue1->text().toDouble();
 	const double value2 = ui.leValue2->text().toDouble();
 
-	foreach(Column* col, m_columns) {
+	for(Column* col: m_columns) {
 		DropValuesTask* task = new DropValuesTask(col, op, value1, value2);
 		QThreadPool::globalInstance()->start(task);
 	}

@@ -45,16 +45,16 @@ class NoteDock : public QWidget {
 		Ui::NoteDock ui;
 		bool m_initializing;
 		Note* m_notes;
-		QList< Note* > m_notesList;
+		QList<Note*> m_notesList;
 
 		void init();
 
 	private slots:
-		void nameChanged(QString);
-		void commentChanged(QString);
-		void backgroundColorChanged(QColor);
-		void textColorChanged(QColor);
-		void textFontChanged(QFont);
+		void nameChanged(const QString&);
+		void commentChanged(const QString&);
+		void backgroundColorChanged(const QColor&);
+		void textColorChanged(const QColor&);
+		void textFontChanged(const QFont&);
 
 		void loadConfigFromTemplate(KConfig&);
 		void saveConfigAsTemplate(KConfig&);

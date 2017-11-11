@@ -57,14 +57,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 
 	//SLOTS
-	connect( ui.leEps, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
-	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
-	connect( ui.leEvaluatedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
-	connect( ui.cbEvaluateFullRange, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
-	connect( ui.cbUseDataErrors, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
-	connect( ui.cbUseResults, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
-	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
-	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
+	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
+	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
+	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
+	connect(ui.cbEvaluateFullRange, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
+	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
+	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
+	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
+	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 }
 
 void FitOptionsWidget::applyClicked() {

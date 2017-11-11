@@ -93,7 +93,7 @@ void CartesianPlotLegend::init() {
 	d->title->setHidden(true);
 	d->title->setParentGraphicsItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	connect(d->title, SIGNAL(changed()), this, SLOT(retransform()));
+	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -131,7 +131,7 @@ void CartesianPlotLegend::init() {
 void CartesianPlotLegend::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChanged);
 }
 
 QMenu* CartesianPlotLegend::createContextMenu() {
@@ -398,7 +398,7 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CartesianPlotLegend::visibilityChanged() {
+void CartesianPlotLegend::visibilityChangedSlot() {
 	Q_D(const CartesianPlotLegend);
 	this->setVisible(!d->isVisible());
 }

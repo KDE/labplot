@@ -173,10 +173,10 @@ class Axis: public WorksheetElement {
 		void minorTicksColumnAboutToBeRemoved(const AbstractAspect*);
 
 		//SLOTs for changes triggered via QActions in the context menu
-		void orientationChanged(QAction*);
+		void orientationChangedSlot(QAction*);
 		void lineStyleChanged(QAction*);
 		void lineColorChanged(QAction*);
-		void visibilityChanged();
+		void visibilityChangedSlot();
 
 	signals:
 		friend class AxisSetOrientationCmd;

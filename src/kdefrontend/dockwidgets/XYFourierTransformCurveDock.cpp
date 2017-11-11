@@ -220,7 +220,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
 
 	if (column != 0) {
@@ -242,7 +242,7 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -328,7 +328,7 @@ void XYFourierTransformCurveDock::xScaleChanged() {
 void XYFourierTransformCurveDock::recalculateClicked() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	foreach(XYCurve* curve, m_curvesList)
+	for(XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

@@ -255,20 +255,14 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
-	        SLOT(handlePlotDesignationChange(const AbstractColumn*)));
+	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
 	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
 	        SLOT(handleDataChange(const AbstractColumn*)));
-	connect(col, SIGNAL(dataChanged(const AbstractColumn*)), this,
-	        SLOT(handleDataChange(const AbstractColumn*)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
-	        SLOT(handleModeChange(const AbstractColumn*)));
-	connect(col, SIGNAL(rowsInserted(const AbstractColumn*,int,int)), this,
-	        SLOT(handleRowsInserted(const AbstractColumn*,int,int)));
-	connect(col, SIGNAL(rowsRemoved(const AbstractColumn*,int,int)), this,
-	        SLOT(handleRowsRemoved(const AbstractColumn*,int,int)));
-	connect(col, SIGNAL(maskingChanged(const AbstractColumn*)), this,
-	        SLOT(handleDataChange(const AbstractColumn*)));
+	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
+	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
+	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
+	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
+	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
 
 	beginResetModel();
 	//TODO: breaks undo/redo

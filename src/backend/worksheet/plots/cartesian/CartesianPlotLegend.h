@@ -113,7 +113,7 @@ private:
 
 private slots:
 	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
+	void visibilityChangedSlot();
 
 signals:
 	friend class CartesianPlotLegendSetLabelFontCmd;

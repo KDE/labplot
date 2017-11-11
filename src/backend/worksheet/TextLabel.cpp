@@ -127,7 +127,7 @@ void TextLabel::init() {
 	d->teXImageResolution = QApplication::desktop()->physicalDpiX();
 	d->teXImageScaleFactor = Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter);
 
-	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
+	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
 
 	this->initActions();
 }
@@ -135,7 +135,7 @@ void TextLabel::init() {
 void TextLabel::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
 }
 
 TextLabel::~TextLabel() {

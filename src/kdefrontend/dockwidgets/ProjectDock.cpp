@@ -43,15 +43,15 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_init
 	ui.setupUi(this);
 
 	// SLOTS
-	connect(ui.leName, SIGNAL(textChanged(QString)), this, SLOT(titleChanged(QString)) );
-	connect(ui.leAuthor, SIGNAL(textChanged(QString)), this, SLOT(authorChanged(QString)) );
-	connect(ui.tbComment, SIGNAL(textChanged()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::titleChanged);
+	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
+	connect(ui.tbComment, &QTextBrowser::textChanged, this, &ProjectDock::commentChanged);
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ProjectDock::loadConfig);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ProjectDock::saveConfig);
 
 	this->retranslateUi();
 }
@@ -68,8 +68,7 @@ void ProjectDock::setProject(Project *project) {
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			this, SLOT(projectDescriptionChanged(const AbstractAspect*)));
+	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::projectDescriptionChanged);
 
 	m_initializing = false;
 }

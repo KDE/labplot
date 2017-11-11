@@ -84,7 +84,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		bool found = false;
 
 		//variables
-		foreach (const QString& var, m_variables) {
+		for (const QString& var: m_variables) {
 			if (remaining.startsWith(var)) {
 				QString nextChar = remaining.mid(var.length(), 1);
 				if (nextChar==" " || nextChar==")" || nextChar=="+" || nextChar=="-"
@@ -100,7 +100,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 			continue;
 
 		//functions
-		foreach (const QString& f, functions) {
+		for (const QString& f: functions) {
 			if (remaining.startsWith(f)) {
 				setFormat(i, f.length(), function);
 				i += f.length() - 1;
@@ -112,7 +112,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 			continue;
 
 		//constants
-		foreach (const QString& f, constants) {
+		for (const QString& f: constants) {
 			if (remaining.startsWith(f)) {
 				setFormat(i, f.length(), function);
 				i += f.length() - 1;
