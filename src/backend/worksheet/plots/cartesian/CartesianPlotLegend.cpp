@@ -783,15 +783,13 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->restore();
 	painter->restore();
 
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(q->hoveredPen);
-		painter->setOpacity(q->hoveredOpacity);
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
 
-	if (isSelected() && !m_printing) {
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+	if (isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
 }

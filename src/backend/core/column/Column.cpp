@@ -404,7 +404,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, double new_value) {
-	DEBUG("Column::setValueAt()");
+//	DEBUG("Column::setValueAt()");
 	setStatisticsAvailable(false);
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
@@ -1100,8 +1100,6 @@ double Column::minimum(int count) const {
 			QVector<int>* vec = static_cast<QVector<int>*>(data());
 			for (int row = start; row < end; ++row) {
 				const int val = vec->at(row);
-				if (std::isnan(val))
-					continue;
 
 				if (val < min)
 					min = val;
@@ -1164,8 +1162,6 @@ double Column::maximum(int count) const {
 			QVector<int>* vec = static_cast<QVector<int>*>(data());
 			for (int row = start; row < end; ++row) {
 				const int val = vec->at(row);
-				if (std::isnan(val))
-					continue;
 
 				if (val > max)
 					max = val;

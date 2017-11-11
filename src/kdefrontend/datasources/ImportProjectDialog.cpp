@@ -54,7 +54,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_mainWin(parent),
 	m_projectParser(nullptr),
 	m_projectType(type),
-	m_aspectTreeModel(new AspectTreeModel(parent->project()) ){
+	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 
 	QVBoxLayout* vLayout = new QVBoxLayout(this);
 
@@ -82,7 +82,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	//dialog buttons
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false); //ok is only available if some project objects were selected
+	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true); //TODO: ok is only available if some project objects were selected
 	vLayout->addWidget(m_buttonBox);
 
 	//Signals/Slots
@@ -153,7 +153,7 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 }
 
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG("ImportProjectDialog::import()");
+	DEBUG("ImportProjectDialog::importTo()");
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
@@ -187,8 +187,10 @@ void ImportProjectDialog::refreshPreview() {
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	//show top-level containers only
-	QModelIndex root = ui.tvPreview->model()->index(0,0);
-	showTopLevelOnly(root);
+	if (ui.tvPreview->model()) {
+		QModelIndex root = ui.tvPreview->model()->index(0,0);
+		showTopLevelOnly(root);
+	}
 
 	ui.tvPreview->header()->resizeSection(0,0);
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
@@ -227,7 +229,7 @@ void ImportProjectDialog::selectionChanged() {
 	//determine the dependent objects and select/deselect them too
 
 	//Ok-button is only available if some project objects were selected
-	bool objectsSelected = false; //TODO
+	bool objectsSelected = true; //TODO
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(objectsSelected);
 }
 

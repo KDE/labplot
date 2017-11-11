@@ -2364,8 +2364,6 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-// 	DEBUG("CartesianPlotPrivate::paint()");
-
 	if (!isVisible())
 		return;
 
@@ -2385,7 +2383,6 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
-// 	DEBUG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################

@@ -1149,7 +1149,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
  * Use this only when columnMode() is Numeric
  */
 void ColumnPrivate::setValueAt(int row, double new_value) {
-	DEBUG("ColumnPrivate::setValueAt()");
+//	DEBUG("ColumnPrivate::setValueAt()");
 	if (m_column_mode != AbstractColumn::Numeric) return;
 
 	emit m_owner->dataAboutToChange(m_owner);

@@ -31,14 +31,14 @@
 
 #include <liborigin/OriginFile.h>
 
-class MainWin;
+class Folder;
 class Workbook;
 class QString;
 
 class ImportOpj {
 
 public:
-	explicit ImportOpj(MainWin* parent, const QString& filename);
+	explicit ImportOpj(Folder*, const QString& filename, bool preview);
 	~ImportOpj() {};
 
 private:
@@ -49,7 +49,7 @@ private:
 	int importGraphs(const OriginFile &opj);
 	QString parseOriginText(const QString &str);
 	QString parseOriginTags(const QString &str);
-	MainWin *mw;
+	Folder *p;
 };
 
 #endif //IMPORTOPJ_H

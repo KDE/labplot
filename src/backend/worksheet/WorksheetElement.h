@@ -67,12 +67,6 @@ class WorksheetElement : public AbstractAspect {
 		QMenu* m_moveBehindMenu;
 		QMenu* m_moveInFrontOfMenu;
 
-	protected:
-		static QPen selectedPen;
-		static float selectedOpacity;
-		static QPen hoveredPen;
-		static float hoveredOpacity;
-
 	private slots:
 		void prepareMoveBehindMenu();
 		void prepareMoveInFrontOfMenu();

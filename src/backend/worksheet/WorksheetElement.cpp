@@ -37,11 +37,6 @@
 #include <QPen>
 #include <KLocale>
 
-QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 3, Qt::SolidLine);
-float WorksheetElement::hoveredOpacity = 0.6;
-QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
-float WorksheetElement::selectedOpacity = 0.3;
-
 /**
  * \class WorksheetElement
  * \brief Base class for all Worksheet children.

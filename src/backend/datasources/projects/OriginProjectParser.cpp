@@ -30,6 +30,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/AspectTreeModel.h"
 #include <liborigin/OriginFile.h>
+#include "kdefrontend/datasources/ImportOpj.h"
 
 /*!
 \class OriginProjectParser
@@ -39,7 +40,7 @@
 */
 
 OriginProjectParser::OriginProjectParser() : ProjectParser() {
-	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"Matrix"<<"Worksheet";
+	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet";
 }
 
 QAbstractItemModel* OriginProjectParser::model() {
@@ -47,15 +48,16 @@ QAbstractItemModel* OriginProjectParser::model() {
 	if (m_project == nullptr)
 		m_project = new Project();
 
-	AspectTreeModel* model = nullptr;
-	OriginFile opj((const char*)m_projectFileName.toLocal8Bit());
 	//parse the OPJ file and create a Project object for the preview
-	bool rc = false;
-	//m_project->setName();
+	ImportOpj(m_project, m_projectFileName, true);
+	bool rc = true;
+
 	//TODO
+	//	m_project->setName("Test");
 
 	RESET_CURSOR;
 
+	AspectTreeModel* model = nullptr;
 	if (rc) {
 		model = new AspectTreeModel(m_project);
 		model->setReadOnly(true);
@@ -65,5 +67,5 @@ QAbstractItemModel* OriginProjectParser::model() {
 }
 
 void OriginProjectParser::importTo(Folder* folder) {
-	Q_UNUSED(folder);
+	ImportOpj(folder, m_projectFileName, true);
 }

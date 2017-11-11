@@ -28,6 +28,7 @@
 
 #include "nsl_stats.h"
 #include <math.h>
+#include <float.h>
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_cdf.h>
 
@@ -182,7 +183,10 @@ double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof) {
 
 /* t distribution */
 double nsl_stats_tdist_t(double parameter, double error) {
-	return parameter/error;
+	if (error > 0)
+		return parameter/error;
+	else
+		return DBL_MAX;
 }
 
 double nsl_stats_tdist_p(double t, double dof) {

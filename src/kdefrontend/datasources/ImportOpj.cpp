@@ -27,8 +27,8 @@
  ***************************************************************************/
 
 #include "ImportOpj.h"
-#include "kdefrontend/MainWin.h"
 #include "backend/lib/macros.h"
+#include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -53,17 +53,19 @@
 
 	\ingroup kdefrontend
  */
-ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
+ImportOpj::ImportOpj(Folder *folder, const QString& filename, bool preview) : p(folder) {
 	DEBUG("Opj import started ...");
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
 	int status = opj.parse();
 	DEBUG("Parsing done with status " << status);
+//	if (status != 0)
+//		return;
 	DEBUG("Starting conversion ...");
 
 	importTables(opj);
-	importGraphs(opj);
-	importNotes(opj);
+//TODO	importGraphs(opj);
+//TODO	importNotes(opj);
 //      if(filename.endsWith(".opj", Qt::CaseInsensitive))
 //              createProjectTree(opj);
 
@@ -72,6 +74,7 @@ ImportOpj::ImportOpj(MainWin* parent, const QString& filename) : mw(parent) {
 int ImportOpj::importTables(const OriginFile &opj) {
 	// excels (origin workbook with one or more sheets)
 	for (unsigned int e = 0; e < opj.excelCount(); ++e) {
+		DEBUG("Reading Spreadsheet " << e);
 			Origin::Excel excelwb = opj.excel(e);
 			if (excelwb.sheets.size() == 1) {	// single sheet -> spreadsheet
 				Origin::SpreadSheet spread = excelwb.sheets[0];
@@ -85,7 +88,7 @@ int ImportOpj::importTables(const OriginFile &opj) {
 					Origin::SpreadSheet spread = excelwb.sheets[s];
 					importSpreadsheet(workbook, opj, spread);
 				}
-				mw->addAspectToProject(workbook);
+				p->addChildFast(workbook);
 			}
 	}
 
@@ -102,16 +105,21 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 	Q_UNUSED(opj);
 	int cols = spread.columns.size();
 	int rows = spread.maxRows;
+	//TODO
+	if (rows > 1000)
+		rows = 1000;
 	if (!cols) // do not create spreadsheet without columns
 		return -1;
 
-	QLocale locale = mw->locale();
+	//TODO QLocale locale = mw->locale();
 	Spreadsheet* spreadsheet;
 	if (workbook == 0 && spread.label.length() > 0)	// single sheet with label (long name)
-			spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
+		spreadsheet = new Spreadsheet(0, spread.name.c_str() + QString(" - ") + spread.label.c_str());
 	else			// multiple sheets (TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
 		spreadsheet = new Spreadsheet(0, spread.name.c_str());
+	DEBUG("OK rows = " << rows);
 	spreadsheet->setRowCount(rows);
+	DEBUG("OK DONE");
 	spreadsheet->setColumnCount(cols);
 
 	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
@@ -126,7 +134,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 		col->setComment(QString(column.comment.c_str()));
 		col->setWidth((int)column.width * scaling_factor);
 
-		switch(column.type){
+		switch (column.type) {
 		case Origin::SpreadColumn::X:
 			col->setPlotDesignation(AbstractColumn::X);
 			break;
@@ -172,8 +180,8 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 					if (datavalue == _ONAN) continue; // mark for empty cell
 					if (!setAsText)
 						col->setValueAt(i, datavalue);
-					else	// convert double to string for Text columns
-						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
+//TODO					else	// convert double to string for Text columns
+//						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
 				} else if (v.type() == Origin::Variant::V_STRING) { // string
 					//printf("STRING !\n");
 					if (!setAsText && i == 0) {
@@ -370,7 +378,7 @@ int ImportOpj::importSpreadsheet(Workbook* workbook, const OriginFile &opj, cons
 //		mw->hideWindow(spreadsheet);
 
 	if (workbook == 0) // single sheet
-		mw->addAspectToProject(spreadsheet);
+		p->addChildFast(spreadsheet);
 	else	// multiple sheets
 		workbook->addChild(spreadsheet);
 
@@ -424,7 +432,7 @@ int ImportOpj::importMatrix(const OriginFile &opj, const Origin::Matrix &matrix)
 		Q_UNUSED(prec);
 		m->setNumericFormat(format);
 
-		mw->addAspectToProject(m);
+		p->addChildFast(m);
 	}
 
 	return 0;
@@ -450,7 +458,7 @@ int ImportOpj::importNotes(const OriginFile &opj) {
 		//int dy = note->parentWidget()->frameGeometry().height() - note->height();
 		//note->parentWidget()->move(QPoint(visible_count*dx+xoffset*OBJECTXOFFSET, visible_count*dy));
 
-		mw->addAspectToProject(note);
+		p->addChildFast(note);
 
 //		visible_count++;
 	}
@@ -569,7 +577,7 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 			worksheet->addChild(plot);
 		}
 
-		mw->addAspectToProject(worksheet);
+		p->addChildFast(worksheet);
 	}
 
 	return 0;

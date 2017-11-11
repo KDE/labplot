@@ -54,7 +54,8 @@ const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "l
 const char* nsl_fit_weight_type_name[] = {"No", "Instrumental", "Direct", "Inverse", "Statistical", "Statistical (Fit)", "Relative", "Relative (Fit)"};
 
 /* 
-	see https://lmfit.github.io/lmfit-py/bounds.html
+	see http://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf
+	and https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_bound(double x, double min, double max) {
 	if (max <= min) {
@@ -80,7 +81,8 @@ double nsl_fit_map_bound(double x, double min, double max) {
 }
 
 /* 
-	see https://lmfit.github.io/lmfit-py/bounds.html
+	see http://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf
+	and https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_unbound(double x, double min, double max) {
 	if (max <= min) {

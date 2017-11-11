@@ -1948,13 +1948,12 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(q->hoveredPen.color());
+			pix.fill(QApplication::palette().color(QPalette::Shadow));
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
 			m_hoverEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->setOpacity(q->hoveredOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
@@ -1962,13 +1961,12 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	if (isSelected() && !m_printing) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
-			pix.fill(q->selectedPen.color());
+			pix.fill(QApplication::palette().color(QPalette::Highlight));
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
 			m_selectionEffectImage = ImageTools::blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->setOpacity(q->selectedOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}

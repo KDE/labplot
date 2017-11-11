@@ -1758,8 +1758,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	paints the content of the axis. Reimplemented from \c QGraphicsItem.
 	\sa QGraphicsItem::paint()
  */
-void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-// 	DEBUG("AxisPrivate::paint()");
+void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1822,19 +1821,15 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		}
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(q->hoveredPen);
-		painter->setOpacity(q->hoveredOpacity);
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
 
-	if (isSelected() && !m_printing) {
-		painter->setPen(q->selectedPen);
-		painter->setOpacity(q->selectedOpacity);
+	if (isSelected() && !m_printing){
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
-
-// 	DEBUG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
