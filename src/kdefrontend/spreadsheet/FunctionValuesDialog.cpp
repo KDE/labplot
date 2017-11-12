@@ -83,10 +83,9 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	ui.gridLayout->addWidget(btnBox);
+	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
-	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FunctionValuesDialog::close);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
