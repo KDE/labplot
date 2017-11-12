@@ -93,21 +93,22 @@ void XYFitCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbDataSourceCurve, 6, 4, 1, 4);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 1);
+	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 4);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXErrorColumn, 7, 5, 1, 4);
+	gridLayout->addWidget(cbXErrorColumn, 10, 5, 1, 4);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 1);
+	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYErrorColumn, 8, 5, 1, 4);
+	gridLayout->addWidget(cbYErrorColumn, 11, 5, 1, 4);
 
-	//Weight
+	//Weights
+	//TODO: XWeight
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
-		uiGeneralTab.cbWeight->addItem(nsl_fit_weight_type_name[i]);
-	uiGeneralTab.cbWeight->setCurrentIndex(nsl_fit_weight_instrumental);
+		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
+	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_instrumental);
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -161,7 +162,8 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	connect(uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged(int)));
+	//TODO: XWeight
+	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
 	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
 	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
@@ -220,7 +222,8 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
-	uiGeneralTab.cbWeight->setCurrentIndex(m_fitData.weightsType);
+//	TODO: uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.weightsType);
+	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.weightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	updateModelEquation();
 	this->showFitResult();
@@ -406,14 +409,31 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 
 	//y-error column was selected - in case no weighting is selected yet, automatically select instrumental weighting
-	if ( uiGeneralTab.cbWeight->currentIndex() == 0 )
-		uiGeneralTab.cbWeight->setCurrentIndex((int)nsl_fit_weight_instrumental);
+	//TODO: XWeight
+	if (uiGeneralTab.cbYWeight->currentIndex() == 0)
+		uiGeneralTab.cbYWeight->setCurrentIndex((int)nsl_fit_weight_instrumental);
 }
 
-void XYFitCurveDock::weightChanged(int index) {
-	DEBUG("weightChanged() weight = " << nsl_fit_weight_type_name[index]);
+void XYFitCurveDock::yWeightChanged(int index) {
+	DEBUG("yWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
 
 	m_fitData.weightsType = (nsl_fit_weight_type)index;
+
+	// enable/disable weight column
+	switch ((nsl_fit_weight_type)index) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative:
+	case nsl_fit_weight_relative_fit:
+		cbYErrorColumn->setEnabled(false);
+		break;
+	case nsl_fit_weight_instrumental:
+	case nsl_fit_weight_direct:
+	case nsl_fit_weight_inverse:
+		cbYErrorColumn->setEnabled(true);
+		break;
+	}
 	enableRecalculate();
 }
 
