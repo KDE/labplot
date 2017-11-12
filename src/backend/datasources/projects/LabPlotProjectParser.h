@@ -38,7 +38,7 @@ public:
 	virtual ~LabPlotProjectParser() override;
 
 	virtual QAbstractItemModel* model() override;
-	virtual void importTo(Folder*) override;
+	virtual void importTo(Folder*, const QStringList&) override;
 };
 
 #endif // LABPLOTPROJECTPARSER_H

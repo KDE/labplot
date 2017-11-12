@@ -62,7 +62,7 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 	return model;
 }
 
-void LabPlotProjectParser::importTo(Folder* folder) {
+void LabPlotProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
 	Q_UNUSED(folder);
-
+	Q_UNUSED(selectedPathes);
 }

@@ -63,6 +63,12 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	ui.setupUi(mainWidget);
 	vLayout->addWidget(mainWidget);
 
+	ui.tvPreview->setAnimated(true);
+	ui.tvPreview->setAlternatingRowColors(true);
+	ui.tvPreview->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui.tvPreview->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	ui.tvPreview->setUniformRowHeights(true);
+
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	m_cbAddTo = new TreeViewComboBox(ui.gbImportTo);
@@ -82,8 +88,10 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	//dialog buttons
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true); //TODO: ok is only available if some project objects were selected
 	vLayout->addWidget(m_buttonBox);
+
+	//ok-button is only enabled if some project objects were selected (s.a. ImportProjectDialog::selectionChanged())
+	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 	//Signals/Slots
 	connect(ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)));
@@ -166,12 +174,22 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	//determine the selected objects, convert the model indexes to string pathes
+	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
+	QStringList selectedPathes;
+	for (int i=0; i<indexes.size()/4; ++i) {
+		QModelIndex index = indexes.at(i*4);
+		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
+		selectedPathes << aspect->path();
+	}
+	QDEBUG("project objects to be imported: " << selectedPathes);
+
 	//import the selected project objects into the specified folder
 	QTime timer;
 	timer.start();
 	Folder* folder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	m_projectParser->importTo(folder);
+	m_projectParser->importTo(folder ,selectedPathes);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
@@ -185,6 +203,9 @@ void ImportProjectDialog::refreshPreview() {
 	QString project = ui.leFileName->text();
 	m_projectParser->setProjectFileName(project);
 	ui.tvPreview->setModel(m_projectParser->model());
+
+	connect(ui.tvPreview->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+			this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 
 	//show top-level containers only
 	if (ui.tvPreview->model()) {
@@ -224,12 +245,14 @@ bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
-void ImportProjectDialog::selectionChanged() {
-	//TODO:
-	//determine the dependent objects and select/deselect them too
+void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
+	Q_UNUSED(deselected);
 
-	//Ok-button is only available if some project objects were selected
-	bool objectsSelected = true; //TODO
+	//determine the dependent objects and select/deselect them too
+	//TODO:
+
+	//Ok-button is only enabled if some project objects were selected
+	bool objectsSelected = (selected.indexes().size() != 0);
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(objectsSelected);
 }
 

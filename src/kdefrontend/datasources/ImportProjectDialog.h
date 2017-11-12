@@ -70,7 +70,7 @@ private:
 private slots:
 	void loadSettings();
 	void fileNameChanged(const QString&);
-	void selectionChanged();
+	void selectionChanged(const QItemSelection&, const QItemSelection&);
 	void selectFile();
 	void newFolder();
 };

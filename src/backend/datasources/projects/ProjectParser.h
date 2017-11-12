@@ -46,7 +46,7 @@ public:
 	const QString& projectFileName() const;
 
 	virtual QAbstractItemModel* model() = 0;
-	virtual void importTo(Folder*) = 0;
+	virtual void importTo(Folder*, const QStringList&) = 0;
 
 	QList<const char*> topLevelClasses() const ;
 
