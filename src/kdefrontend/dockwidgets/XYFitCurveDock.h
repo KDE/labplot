@@ -77,9 +77,6 @@ private slots:
 	void yDataColumnChanged(const QModelIndex&);
 	void xErrorColumnChanged(const QModelIndex&);
 	void yErrorColumnChanged(const QModelIndex&);
-	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
 
 	void showConstants();
 	void showFunctions();
