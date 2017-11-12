@@ -32,10 +32,16 @@ class AsciiFilterTest : public QObject {
 private slots:
 	void initTestCase();
 
-	//empty files
+	//empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();
 	void testEmptyFileReplace();
+
+	void testEmptyLines01();
+
+	void testSparseFile01();
+	void testSparseFile02();
+	void testSparseFile03();
 
 	//header handling
 	void testHeader01();

@@ -440,6 +440,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("number of columns: " << firstLineStringList.size());
 	DEBUG("headerEnabled = " << headerEnabled);
 
+	//optionally, remove potential spaces in the first line
+	if (simplifyWhitespacesEnabled) {
+		for (int i = 0; i < firstLineStringList.size(); ++i)
+			firstLineStringList[i] = firstLineStringList[i].simplified();
+	}
+
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
 		QDEBUG("vector names =" << vectorNames);
