@@ -1555,7 +1555,7 @@ void XYFitCurvePrivate::recalculate() {
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
-		switch (fitData.weightsType) {
+	switch (fitData.yWeightsType) {
 	case nsl_fit_weight_no:
 	case nsl_fit_weight_statistical_fit:
 	case nsl_fit_weight_relative_fit:
@@ -1625,10 +1625,10 @@ void XYFitCurvePrivate::recalculate() {
 		iter++;
 
 		// update weights for Y-depending weights
-		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
+		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
+		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 		}
@@ -1656,7 +1656,7 @@ void XYFitCurvePrivate::recalculate() {
 			yd[i] /= (xdata[index+1] - xdata[index]);
 		}
 
-		switch (fitData.weightsType) {
+		switch (fitData.yWeightsType) {
 		case nsl_fit_weight_no:
 			break;
 		case nsl_fit_weight_instrumental:
@@ -1873,7 +1873,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
-	writer->writeAttribute("weightsType", QString::number(d->fitData.weightsType));
+	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
+	writer->writeAttribute("weightsType", QString::number(d->fitData.yWeightsType));
 	writer->writeAttribute("degree", QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
 		writer->writeAttribute("model", d->fitData.model);
@@ -2012,7 +2013,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
-			READ_INT_VALUE("weightsType", fitData.weightsType, nsl_fit_weight_type);
+			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
+			READ_INT_VALUE("weightsType", fitData.yWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
 			if (d->fitData.modelCategory == nsl_fit_model_custom) {
 				READ_STRING_VALUE("model", fitData.model);

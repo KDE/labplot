@@ -96,19 +96,30 @@ void XYFitCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 4);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
+	cbXErrorColumn->setEnabled(false);
 	gridLayout->addWidget(cbXErrorColumn, 10, 5, 1, 4);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
+	cbYErrorColumn->setEnabled(false);
 	gridLayout->addWidget(cbYErrorColumn, 11, 5, 1, 4);
 
 	//Weights
-	//TODO: XWeight
+	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbXWeight->addItem(nsl_fit_weight_type_name[i]);
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
-	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_instrumental);
+	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
+	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
+
+	// disable nsl_fit_weight_statistical_fit and nsl_fit_weight_relative_fit for xWeight
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbXWeight->model());
+	QStandardItem* item = model->item(nsl_fit_weight_statistical_fit);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item = model->item(nsl_fit_weight_relative_fit);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -162,7 +173,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	//TODO: XWeight
+	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
 	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
@@ -222,8 +233,8 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
-//	TODO: uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.weightsType);
-	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.weightsType);
+	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
+	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	updateModelEquation();
 	this->showFitResult();
@@ -407,17 +418,35 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
+}
 
-	//y-error column was selected - in case no weighting is selected yet, automatically select instrumental weighting
-	//TODO: XWeight
-	if (uiGeneralTab.cbYWeight->currentIndex() == 0)
-		uiGeneralTab.cbYWeight->setCurrentIndex((int)nsl_fit_weight_instrumental);
+void XYFitCurveDock::xWeightChanged(int index) {
+	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
+
+	m_fitData.xWeightsType = (nsl_fit_weight_type)index;
+
+	// enable/disable weight column
+	switch ((nsl_fit_weight_type)index) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative:
+	case nsl_fit_weight_relative_fit:
+		cbXErrorColumn->setEnabled(false);
+		break;
+	case nsl_fit_weight_instrumental:
+	case nsl_fit_weight_direct:
+	case nsl_fit_weight_inverse:
+		cbXErrorColumn->setEnabled(true);
+		break;
+	}
+	enableRecalculate();
 }
 
 void XYFitCurveDock::yWeightChanged(int index) {
 	DEBUG("yWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
 
-	m_fitData.weightsType = (nsl_fit_weight_type)index;
+	m_fitData.yWeightsType = (nsl_fit_weight_type)index;
 
 	// enable/disable weight column
 	switch ((nsl_fit_weight_type)index) {
