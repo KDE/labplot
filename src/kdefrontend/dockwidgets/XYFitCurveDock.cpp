@@ -851,7 +851,12 @@ void XYFitCurveDock::resultCopyAll() {
 					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
 
 				const double margin = fitResult.tdist_marginValues.at(i);
-				str += " (" + i18n("t statistic:") + ' ' + QString::number(fitResult.tdist_tValues.at(i), 'g', 3) + ", "
+				QString tdistValueString;
+				if (fitResult.tdist_tValues.at(i) < DBL_MAX)
+					tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
+				else
+					tdistValueString = QString::fromUtf8("\u221e");
+				str += " (" + i18n("t statistic:") + ' ' + tdistValueString + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
 					+ i18n("conf. interval:") + ' ';
 				if (fabs(fitResult.tdist_tValues.at(i)) < 1.e6) {
@@ -999,7 +1004,12 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			item = new QTableWidgetItem(QString::number(fitResult.tdist_tValues.at(i), 'g', 3));
+			QString tdistValueString;
+			if (fitResult.tdist_tValues.at(i) < DBL_MAX)
+				tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
+			else
+				tdistValueString = QString::fromUtf8("\u221e");
+			item = new QTableWidgetItem(tdistValueString);
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values

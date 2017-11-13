@@ -1552,6 +1552,8 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("y errors: " << yerrorVector.size());
 	double* weight = new double[n];
 
+	//TODO: handle fitData.xWeightType
+
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
