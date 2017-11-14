@@ -1551,7 +1551,29 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("y errors: " << yerrorVector.size());
 	double* weight = new double[n];
 
-	//TODO: handle fitData.xWeightType
+	switch(fitData.xWeightsType) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative_fit:
+	case nsl_fit_weight_direct:
+		break;
+	case nsl_fit_weight_instrumental:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./gsl_pow_2(xerror[i]);
+		break;
+	case nsl_fit_weight_inverse:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./xerror[i];
+		break;
+	case nsl_fit_weight_statistical:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./xdata[i];
+		break;
+	case nsl_fit_weight_relative:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./gsl_pow_2(xdata[i]);
+		break;
+	}
 
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
