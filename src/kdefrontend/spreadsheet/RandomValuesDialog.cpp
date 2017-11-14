@@ -145,10 +145,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.leParameter1->setText("1.0");
-		ui.leParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
@@ -167,10 +167,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.leParameter1->setText("1.0");
-		ui.leParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
@@ -330,7 +330,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_pascal:
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
-		ui.lParameter1->setText("n =");
+		ui.lParameter2->setText("n =");
 		ui.leParameter1->setText("0.5");
 		ui.leParameter2->setText("100");
 		break;
@@ -432,8 +432,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		double s = ui.leParameter1->text().toDouble();
-		double mu = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double s = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_laplace(r, s) + mu;
@@ -444,7 +444,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_exponential_power: {
 		double mu = ui.leParameter1->text().toDouble();
 		double a = ui.leParameter2->text().toDouble();
-		double b = ui.leParameter2->text().toDouble();
+		double b = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_exppow(r, a, b) + mu;
@@ -600,7 +600,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_weibull: {
 		double k = ui.leParameter1->text().toDouble();
 		double l = ui.leParameter2->text().toDouble();
-		double mu = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_weibull(r, l, k) + mu;
