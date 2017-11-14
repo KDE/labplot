@@ -37,8 +37,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include <cmath>
-
 CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
@@ -389,13 +387,13 @@ void CustomPointDock::pointSymbolSizeChanged(qreal size) {
 
 void CustomPointDock::pointSymbolRotationAngleChanged(qreal angle) {
 	m_initializing = true;
-	ui.sbSymbolRotation->setValue(round(angle));
+	ui.sbSymbolRotation->setValue(qRound(angle));
 	m_initializing = false;
 }
 
 void CustomPointDock::pointSymbolOpacityChanged(qreal opacity) {
 	m_initializing = true;
-	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
+	ui.sbSymbolOpacity->setValue( qRound(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -437,7 +435,7 @@ void CustomPointDock::load() {
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( m_point->symbolRotationAngle() );
-	ui.sbSymbolOpacity->setValue( round(m_point->symbolOpacity()*100.0) );
+	ui.sbSymbolOpacity->setValue( qRound(m_point->symbolOpacity()*100.0) );
 
 	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_point->symbolBrush().style() );
 	ui.kcbSymbolFillingColor->setColor(  m_point->symbolBrush().color() );
@@ -477,7 +475,7 @@ void CustomPointDock::loadConfig(KConfig& config) {
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_point->symbolStyle()) );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_point->symbolSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_point->symbolRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_point->symbolOpacity())*100.0) );
+	ui.sbSymbolOpacity->setValue( qRound(group.readEntry("SymbolOpacity", m_point->symbolOpacity())*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_point->symbolBrush().style()) );
 	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_point->symbolBrush().color()) );
 	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_point->symbolPen().style()) );

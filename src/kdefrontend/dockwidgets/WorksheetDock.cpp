@@ -42,8 +42,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <cmath>
-
 // a couple of standard sizes in mm, taken from qprinter.cpp
 const int numOfPaperSizes = 30;
 const float qt_paperSizes[numOfPaperSizes][2] = {
@@ -752,7 +750,7 @@ void WorksheetDock::worksheetBackgroundFileNameChanged(const QString& name) {
 
 void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
+	ui.sbBackgroundOpacity->setValue( qRound(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -849,7 +847,7 @@ void WorksheetDock::load() {
 	ui.leBackgroundFileName->setText( m_worksheet->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( m_worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_worksheet->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue( round(m_worksheet->backgroundOpacity()*100) );
+	ui.sbBackgroundOpacity->setValue( qRound(m_worksheet->backgroundOpacity()*100) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
 	if (!m_worksheet->backgroundFileName().isEmpty() && !QFile::exists(m_worksheet->backgroundFileName()))
@@ -905,7 +903,7 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
+	ui.sbBackgroundOpacity->setValue( qRound(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );

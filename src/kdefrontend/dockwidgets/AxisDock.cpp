@@ -42,8 +42,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <cmath>
-
 /*!
  \class AxisDock
  \brief Provides a widget for editing the properties of the axes currently selected in the project explorer.

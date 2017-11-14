@@ -36,11 +36,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
-
-#include <cmath>        // isnan
 
 /*!
   \class XYSmoothCurveDock

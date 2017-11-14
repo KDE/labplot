@@ -42,8 +42,6 @@
 #include <QDebug>
 #endif
 
-#include <cmath>        // isnan
-
 /*!
   \class XYDataReductionCurveDock
  \brief  Provides a widget for editing the properties of the XYDataReductionCurves
