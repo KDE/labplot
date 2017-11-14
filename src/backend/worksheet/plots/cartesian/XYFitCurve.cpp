@@ -55,7 +55,6 @@ extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
 }
-#include <cmath>
 
 #include <QElapsedTimer>
 #include <QIcon>
@@ -524,8 +523,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		for (int i = 0; i < np; ++i) {
 			paramStartValues[i] = 1.0;
 			paramFixed[i] = false;
-			paramLowerLimits[i] = -DBL_MAX;
-			paramUpperLimits[i] = DBL_MAX;
+			paramLowerLimits[i] = -std::numeric_limits<double>::max();
+			paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 
 		// set some model-dependent start values
@@ -1367,7 +1366,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				assign_variable(name, value);
 				const double f_p = parse(func);
 
-				const double eps = 1.e-9 * fabs(f_p);	// adapt step size to value
+				const double eps = 1.e-9 * std::abs(f_p);	// adapt step size to value
 				value += eps;
 				assign_variable(name, value);
 				const double f_pdp = parse(func);
@@ -2044,14 +2043,14 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			if (ok)	// -DBL_MAX results in conversion error
 				d->fitData.paramLowerLimits << x;
 			else
-				d->fitData.paramLowerLimits << -DBL_MAX;
+				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
 		} else if (!preview && reader->name() == "upperLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// DBL_MAX results in conversion error
 				d->fitData.paramUpperLimits << x;
 			else
-				d->fitData.paramUpperLimits << DBL_MAX;
+				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
 		} else if (!preview && reader->name() == "value") {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "error") {
