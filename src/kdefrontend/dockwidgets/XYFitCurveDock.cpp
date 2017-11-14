@@ -45,7 +45,6 @@
 #include <QClipboard>
 
 #include <cfloat>	// DBL_MAX
-#include <cmath>	// fabs()
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -848,7 +847,7 @@ void XYFitCurveDock::resultCopyAll() {
 			else {
 				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 					+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
+					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/std::abs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
 
 				const double margin = fitResult.tdist_marginValues.at(i);
 				QString tdistValueString;
@@ -859,7 +858,7 @@ void XYFitCurveDock::resultCopyAll() {
 				str += " (" + i18n("t statistic:") + ' ' + tdistValueString + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
 					+ i18n("conf. interval:") + ' ';
-				if (fabs(fitResult.tdist_tValues.at(i)) < 1.e6) {
+				if (std::abs(fitResult.tdist_tValues.at(i)) < 1.e6) {
 					str += QString::number(fitResult.paramValues.at(i) - margin) + " .. "
 						+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
 				} else {
@@ -1000,7 +999,7 @@ void XYFitCurveDock::showFitResult() {
 		if (!m_fitData.paramFixed.at(i)) {
 			item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
 			uiGeneralTab.twParameters->setItem(i, 2, item);
-			item = new QTableWidgetItem(QString::number(100.*errorValue/fabs(paramValue), 'g', 3));
+			item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
