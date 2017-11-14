@@ -74,6 +74,7 @@ private slots:
 
 	void handleDescriptionChange(const AbstractAspect*);
 	void handleModeChange(const AbstractColumn*);
+	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
 	void handleRowsInserted(const AbstractColumn* col, int before, int count);
