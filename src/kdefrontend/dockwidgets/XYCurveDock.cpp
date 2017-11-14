@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QDirModel>
 #include <QFileDialog>
+#include <QImageReader>
 #include <QPainter>
 
 #include <KConfig>
@@ -1456,7 +1457,14 @@ void XYCurveDock::fillingSecondColorChanged(const QColor& c) {
 void XYCurveDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "XYCurveDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 

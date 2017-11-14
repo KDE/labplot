@@ -67,6 +67,7 @@ private slots:
 	void selectFile();
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
+	void loadSettings();
 };
 
 #endif
