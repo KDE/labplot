@@ -41,7 +41,6 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/errors.h"
 
-#include <cmath>	// isnan
 extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
@@ -50,6 +49,7 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+#include <QDebug>	// qWarning()
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 	: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {

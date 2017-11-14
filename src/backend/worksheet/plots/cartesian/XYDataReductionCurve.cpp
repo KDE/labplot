@@ -41,8 +41,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <cmath>	// isnan
-
 #include <KLocale>
 #include <QIcon>
 #include <QElapsedTimer>

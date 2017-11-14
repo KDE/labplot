@@ -32,9 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 
-#include <cmath>
-#include <QDebug>
-
 class XYFourierFilterCurve;
 class Column;
 

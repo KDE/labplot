@@ -32,9 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 
-#include <cmath>
-#include <QDebug>
-
 class XYFourierTransformCurve;
 class Column;
 

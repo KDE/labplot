@@ -32,8 +32,6 @@
 #include <QKeyEvent>
 #include <KLocalizedString>
 
-#include <cfloat>
-
 /*!
 	\class FitParametersWidget
 	\brief Widget for editing fit parameters. For predefined models the number of parameters,
@@ -107,7 +105,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
-			if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
+			if (m_fitData->paramLowerLimits.at(i) > -std::numeric_limits<double>::max())
 				le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
 			ui.tableWidget->setCellWidget(i, 3, le);
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
@@ -115,7 +113,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
-			if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
+			if (m_fitData->paramUpperLimits.at(i) < std::numeric_limits<double>::max())
 				le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
 			ui.tableWidget->setCellWidget(i, 4, le);
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
@@ -157,7 +155,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
-				if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
+				if (m_fitData->paramLowerLimits.at(i) > -std::numeric_limits<double>::max())
 					le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 3, le);
 				connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
@@ -165,7 +163,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
-				if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
+				if (m_fitData->paramUpperLimits.at(i) < std::numeric_limits<double>::max())
 					le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 4, le);
 				connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
@@ -273,11 +271,11 @@ void FitParametersWidget::applyClicked() {
 			if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().isEmpty() )
 				m_fitData->paramLowerLimits[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().toDouble();
 			else
-				m_fitData->paramLowerLimits[i] = -DBL_MAX;
+				m_fitData->paramLowerLimits[i] = -std::numeric_limits<double>::max();
 			if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().isEmpty() )
 				m_fitData->paramUpperLimits[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().toDouble();
 			else
-				m_fitData->paramUpperLimits[i] = DBL_MAX;
+				m_fitData->paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 	} else {	// custom model
 		m_fitData->paramNames.clear();
@@ -300,11 +298,11 @@ void FitParametersWidget::applyClicked() {
 				if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().isEmpty() )
 					m_fitData->paramLowerLimits.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().toDouble() );
 				else
-					m_fitData->paramLowerLimits.append(-DBL_MAX);
+					m_fitData->paramLowerLimits.append(-std::numeric_limits<double>::max());
 				if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().isEmpty() )
 					m_fitData->paramUpperLimits.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().toDouble() );
 				else
-					m_fitData->paramUpperLimits.append(DBL_MAX);
+					m_fitData->paramUpperLimits.append(std::numeric_limits<double>::max());
 			}
 		}
 	}
@@ -324,11 +322,11 @@ void FitParametersWidget::startValueChanged() {
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
 		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
 	else
-		lowerLimit = -DBL_MAX;
+		lowerLimit = -std::numeric_limits<double>::max();
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
 		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
 	else
-		upperLimit = DBL_MAX;
+		upperLimit = std::numeric_limits<double>::max();
 
 	const bool invalid = (value < lowerLimit || value > upperLimit);
 	highlightInvalid(row, 1, invalid);
@@ -355,11 +353,11 @@ void FitParametersWidget::lowerLimitChanged() {
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
 		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
 	else
-		lowerLimit = -DBL_MAX;
+		lowerLimit = -std::numeric_limits<double>::max();
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
 		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
 	else
-		upperLimit = DBL_MAX;
+		upperLimit = std::numeric_limits<double>::max();
 
 	const bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
 	highlightInvalid(row, 3, invalid);
@@ -386,11 +384,11 @@ void FitParametersWidget::upperLimitChanged() {
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
 		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
 	else
-		lowerLimit = -DBL_MAX;
+		lowerLimit = -std::numeric_limits<double>::max();
 	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
 		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
 	else
-		upperLimit = DBL_MAX;
+		upperLimit = std::numeric_limits<double>::max();
 
 	const bool invalid = (upperLimit < value || upperLimit < lowerLimit);
 	highlightInvalid(row, 4, invalid);

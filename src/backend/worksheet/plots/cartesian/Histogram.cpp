@@ -51,8 +51,6 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#include <cmath>
-#include <vector>
 extern "C" {
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>

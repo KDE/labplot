@@ -56,8 +56,6 @@
 #include <KGlobal>
 #include <KLocale>
 
-#include <cmath>
-#include <vector>
 extern "C" {
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
