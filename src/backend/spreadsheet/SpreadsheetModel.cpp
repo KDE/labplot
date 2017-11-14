@@ -30,6 +30,7 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
 
 #include <QBrush>
 #include <QIcon>
@@ -257,16 +258,21 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 
 	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
 	        SLOT(handlePlotDesignationChange(const AbstractColumn*)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
-	        SLOT(handleDataChange(const AbstractColumn*)));
+
+	connect(col->outputFilter(), SIGNAL(digitsChanged()), this, SLOT(handleDigitsChange()));
+
 	connect(col, SIGNAL(dataChanged(const AbstractColumn*)), this,
 	        SLOT(handleDataChange(const AbstractColumn*)));
+
 	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
 	        SLOT(handleModeChange(const AbstractColumn*)));
+
 	connect(col, SIGNAL(rowsInserted(const AbstractColumn*,int,int)), this,
 	        SLOT(handleRowsInserted(const AbstractColumn*,int,int)));
+
 	connect(col, SIGNAL(rowsRemoved(const AbstractColumn*,int,int)), this,
 	        SLOT(handleRowsRemoved(const AbstractColumn*,int,int)));
+
 	connect(col, SIGNAL(maskingChanged(const AbstractColumn*)), this,
 	        SLOT(handleDataChange(const AbstractColumn*)));
 
@@ -321,6 +327,20 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, index);
+	handleDataChange(col);
+
+	//output filter was changed after the mode change, update the signal-slot connection
+	disconnect(0, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
+	connect(dynamic_cast<const Column*>(col)->outputFilter(), SIGNAL(digitsChanged()), this, SLOT(handleDigitsChange()));
+}
+
+void SpreadsheetModel::handleDigitsChange() {
+	const Double2StringFilter* filter = dynamic_cast<const Double2StringFilter*>(QObject::sender());
+	if (!filter)
+		return;
+
+	const AbstractColumn* col = filter->output(0);
+	handleDataChange(col);
 }
 
 void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {
