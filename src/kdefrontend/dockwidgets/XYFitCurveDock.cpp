@@ -44,8 +44,6 @@
 #include <QStandardPaths>
 #include <QClipboard>
 
-#include <cfloat>	// DBL_MAX
-
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 }
@@ -716,8 +714,8 @@ void XYFitCurveDock::updateParameterList() {
 		for (int i = m_fitData.paramStartValues.size() - 1; i < m_fitData.paramNames.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
 			m_fitData.paramFixed[i] = false;
-			m_fitData.paramLowerLimits[i] = -DBL_MAX;
-			m_fitData.paramUpperLimits[i] = DBL_MAX;
+			m_fitData.paramLowerLimits[i] = -std::numeric_limits<double>::max();
+			m_fitData.paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 	}
 	parametersChanged();
@@ -851,7 +849,7 @@ void XYFitCurveDock::resultCopyAll() {
 
 				const double margin = fitResult.tdist_marginValues.at(i);
 				QString tdistValueString;
-				if (fitResult.tdist_tValues.at(i) < DBL_MAX)
+				if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
 					tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
 				else
 					tdistValueString = QString::fromUtf8("\u221e");
@@ -1004,7 +1002,7 @@ void XYFitCurveDock::showFitResult() {
 
 			// t values
 			QString tdistValueString;
-			if (fitResult.tdist_tValues.at(i) < DBL_MAX)
+			if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
 				tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
 			else
 				tdistValueString = QString::fromUtf8("\u221e");
