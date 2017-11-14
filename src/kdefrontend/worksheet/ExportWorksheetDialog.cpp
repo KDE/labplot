@@ -33,6 +33,7 @@
 #include <QDesktopWidget>
 #include <QDirModel>
 #include <QFileDialog>
+#include <QTimer>
 
 #include <QDialogButtonBox>
 #include <KLocalizedString>
@@ -48,7 +49,8 @@
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
-	ui(new Ui::ExportWorksheetWidget()) {
+	ui(new Ui::ExportWorksheetWidget()), m_showOptions(true) {
+
 	ui->setupUi(this);
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -84,6 +86,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbResolution->addItem("600");
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
+	ui->leFileName->setFocus();
+
 	connect( ui->cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui->bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui->leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
@@ -92,18 +96,23 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	setWindowTitle(i18n("Export worksheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
+	QTimer::singleShot(0, this, &ExportWorksheetDialog::loadSettings);
+}
+
+void ExportWorksheetDialog::loadSettings() {
 	//restore saved setting
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
-	m_showOptions = conf.readEntry("ShowOptions", false);
-	ui->gbOptions->setVisible(m_showOptions);
+	m_showOptions = conf.readEntry("ShowOptions", true);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));
-
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+				m_showOptionsButton->setText(i18n("Show Options"));
+	ui->gbOptions->setVisible(m_showOptions);
 }
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
