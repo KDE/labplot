@@ -522,7 +522,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 	modelTypeChanged(m_fitData.modelType);
 
 	m_initializing = false;
-	//TODO: enableRecalculate();
+	enableRecalculate();
 }
 
 /*!
@@ -787,7 +787,7 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::enableRecalculate() const {
-	if (m_initializing)
+	if (m_initializing || m_fitCurve == nullptr)
 		return;
 
 	//no fitting possible without the x- and y-data
@@ -797,7 +797,7 @@ void XYFitCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != 0 && aspectY != 0);
 	} else {
-		 hasSourceData = (m_fitCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
