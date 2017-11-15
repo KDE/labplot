@@ -522,6 +522,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 	modelTypeChanged(m_fitData.modelType);
 
 	m_initializing = false;
+	enableRecalculate();
 }
 
 /*!
