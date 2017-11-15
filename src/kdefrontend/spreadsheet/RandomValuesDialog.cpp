@@ -62,10 +62,10 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
-    m_okButton->setDefault(true);
-    m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
-    m_okButton->setText(i18n("&Generate"));
+	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+	m_okButton->setDefault(true);
+	m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+	m_okButton->setText(i18n("&Generate"));
 
 	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &RandomValuesDialog::close);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &RandomValuesDialog::accept);
@@ -76,7 +76,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	setLayout(layout);
     setAttribute(Qt::WA_DeleteOnClose);
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-                ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
+		ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 
 	//use white background in the preview label
 	QPalette p;
@@ -394,6 +394,7 @@ void RandomValuesDialog::generate() {
 
 	const int index = ui.cbDistribution->currentIndex();
 	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	DEBUG("random number distribution: " << nsl_sf_stats_distribution_name[dist]);
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> new_data(rows);
@@ -402,6 +403,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_gaussian: {
 		double mu = ui.leParameter1->text().toDouble();
 		double sigma = ui.leParameter2->text().toDouble();
+		DEBUG(" mu = " << mu << ", sigma = " << sigma);
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gaussian(r, sigma) + mu;
