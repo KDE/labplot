@@ -27,8 +27,8 @@
 ***************************************************************************/
 
 #include "backend/datasources/projects/LabPlotProjectParser.h"
-#include "backend/core/Project.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 
 /*!
 \class LabPlotProjectParser
@@ -63,6 +63,19 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 }
 
 void LabPlotProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
-	Q_UNUSED(folder);
+	QDEBUG("Starting the import of " + m_projectFileName);
 	Q_UNUSED(selectedPathes);
+
+	//import the selected objects into a temporary project
+	Project* project = new Project();
+	project->load(m_projectFileName);
+
+	//move all children from the temp project to the target folder
+	for (auto* child : project->children<AbstractAspect>()) {
+		project->removeChild(child);
+		folder->addChild(child);
+	}
+	delete project;
+
+	QDEBUG("Import of " + m_projectFileName + " done.");
 }
