@@ -54,6 +54,7 @@
 	\ingroup kdefrontend
  */
 ImportOpj::ImportOpj(Folder *folder, const QString& filename, bool preview) : p(folder) {
+	Q_UNUSED(preview);
 	DEBUG("Opj import started ...");
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
