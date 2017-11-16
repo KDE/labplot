@@ -1549,7 +1549,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 					GET_DOUBLE(stmp, end.y)
 				}
 			} else {
-				short x1, x2, y1, y2;
+				short x1=0, x2=0, y1=0, y2=0;
 				if (type == 2) {//straight line/arrow
 					stmp.str(andt1.substr(0x01));
 					GET_SHORT(stmp, x1)
