@@ -142,7 +142,10 @@ int NetCDFFilter::endColumn() const {
 //#####################################################################
 
 NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
-	q(owner), startRow(1), endRow(-1), startColumn(1), endColumn(-1), m_status(0) {
+	q(owner), startRow(1), endRow(-1), startColumn(1), endColumn(-1) {
+#ifdef HAVE_NETCDF
+	m_status = 0;
+#endif
 }
 
 #ifdef HAVE_NETCDF
