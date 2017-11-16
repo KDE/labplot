@@ -143,9 +143,6 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="4" colspan="2">
-    <widget class="QComboBox" name="cbYWeight"/>
-   </item>
    <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
@@ -790,9 +787,6 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="4" colspan="2">
-    <widget class="QComboBox" name="cbXWeight"/>
-   </item>
    <item row="14" column="0">
     <widget class="QLabel" name="lCategory">
      <property name="text">
@@ -838,6 +832,38 @@
      </property>
      <property name="text">
       <string>Errors:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="4">
+    <widget class="QComboBox" name="cbXWeight"/>
+   </item>
+   <item row="11" column="4">
+    <widget class="QComboBox" name="cbYWeight"/>
+   </item>
+   <item row="10" column="5">
+    <widget class="QLabel" name="lXErrorCol">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>col =</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="5">
+    <widget class="QLabel" name="lYErrorCol">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>col =</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

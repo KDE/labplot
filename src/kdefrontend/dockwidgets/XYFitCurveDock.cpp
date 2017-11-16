@@ -94,14 +94,14 @@ void XYFitCurveDock::setupGeneral() {
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
 	cbXErrorColumn->setEnabled(false);
-	gridLayout->addWidget(cbXErrorColumn, 10, 5, 1, 4);
+	gridLayout->addWidget(cbXErrorColumn, 10, 6, 1, 2);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
 	cbYErrorColumn->setEnabled(false);
-	gridLayout->addWidget(cbYErrorColumn, 11, 5, 1, 4);
+	gridLayout->addWidget(cbYErrorColumn, 11, 6, 1, 2);
 
 	//Weights
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
@@ -426,11 +426,13 @@ void XYFitCurveDock::xWeightChanged(int index) {
 	case nsl_fit_weight_relative:
 	case nsl_fit_weight_relative_fit:
 		cbXErrorColumn->setEnabled(false);
+		uiGeneralTab.lXErrorCol->setEnabled(false);
 		break;
 	case nsl_fit_weight_instrumental:
 	case nsl_fit_weight_direct:
 	case nsl_fit_weight_inverse:
 		cbXErrorColumn->setEnabled(true);
+		uiGeneralTab.lXErrorCol->setEnabled(true);
 		break;
 	}
 	enableRecalculate();
@@ -449,11 +451,13 @@ void XYFitCurveDock::yWeightChanged(int index) {
 	case nsl_fit_weight_relative:
 	case nsl_fit_weight_relative_fit:
 		cbYErrorColumn->setEnabled(false);
+		uiGeneralTab.lYErrorCol->setEnabled(false);
 		break;
 	case nsl_fit_weight_instrumental:
 	case nsl_fit_weight_direct:
 	case nsl_fit_weight_inverse:
 		cbYErrorColumn->setEnabled(true);
+		uiGeneralTab.lYErrorCol->setEnabled(true);
 		break;
 	}
 	enableRecalculate();
