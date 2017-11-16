@@ -140,7 +140,10 @@ int HDFFilter::endColumn() const {
 //#####################################################################
 
 HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
-	q(owner),currentDataSetName(""),startRow(1), endRow(-1), startColumn(1), endColumn(-1), m_status(0) {
+	q(owner),currentDataSetName(""),startRow(1), endRow(-1), startColumn(1), endColumn(-1) { 
+#ifdef HAVE_HDF5
+	m_status = 0;
+#endif
 }
 
 #ifdef HAVE_HDF5
