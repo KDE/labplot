@@ -322,8 +322,6 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->show();
 		uiGeneralTab.lYColumn->show();
 		cbYDataColumn->show();
-		cbXErrorColumn->show();
-		cbYErrorColumn->show();
 	} else {
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
@@ -331,8 +329,6 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->hide();
 		uiGeneralTab.lYColumn->hide();
 		cbYDataColumn->hide();
-		cbXErrorColumn->hide();
-		cbYErrorColumn->hide();
 	}
 
 	if (m_initializing)
