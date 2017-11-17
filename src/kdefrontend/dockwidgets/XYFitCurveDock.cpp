@@ -94,14 +94,14 @@ void XYFitCurveDock::setupGeneral() {
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
 	cbXErrorColumn->setEnabled(false);
-	gridLayout->addWidget(cbXErrorColumn, 10, 6, 1, 2);
+	uiGeneralTab.hlXError->addWidget(cbXErrorColumn);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
 	cbYErrorColumn->setEnabled(false);
-	gridLayout->addWidget(cbYErrorColumn, 11, 6, 1, 2);
+	uiGeneralTab.hlYWeight->addWidget(cbYErrorColumn);
 
 	//Weights
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
