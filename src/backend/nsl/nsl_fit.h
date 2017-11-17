@@ -52,6 +52,12 @@ extern const char* nsl_fit_model_basic_equation[];
 extern const char* nsl_fit_model_peak_equation[];
 extern const char* nsl_fit_model_growth_equation[];
 
+#define NSL_FIT_ERROR_TYPE_COUNT 3
+typedef enum {nsl_fit_error_no,		/* e = 1 */
+              nsl_fit_error_direct,	/* e = c: default */
+              nsl_fit_error_inverse,	/* e = 1/c */
+} nsl_fit_error_type;
+extern const char* nsl_fit_error_type_name[];
 #define NSL_FIT_WEIGHT_TYPE_COUNT 8
 typedef enum {nsl_fit_weight_no,		/* w = 1 */
               nsl_fit_weight_instrumental,	/* w = 1/c^2    (Gaussian, Given errors): default */

@@ -1551,27 +1551,13 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("y errors: " << yerrorVector.size());
 	double* weight = new double[n];
 
-	switch(fitData.xWeightsType) {
-	case nsl_fit_weight_no:
-	case nsl_fit_weight_statistical_fit:
-	case nsl_fit_weight_relative_fit:
-	case nsl_fit_weight_direct:
+	switch(fitData.xErrorsType) {
+	case nsl_fit_error_no:
+	case nsl_fit_error_direct:
 		break;
-	case nsl_fit_weight_instrumental:
-		for(int i = 0; i < xerrorVector.size(); i++)
-				xerror[i] = 1./gsl_pow_2(xerror[i]);
-		break;
-	case nsl_fit_weight_inverse:
+	case nsl_fit_error_inverse:
 		for(int i = 0; i < xerrorVector.size(); i++)
 				xerror[i] = 1./xerror[i];
-		break;
-	case nsl_fit_weight_statistical:
-		for(int i = 0; i < xerrorVector.size(); i++)
-				xerror[i] = 1./xdata[i];
-		break;
-	case nsl_fit_weight_relative:
-		for(int i = 0; i < xerrorVector.size(); i++)
-				xerror[i] = 1./gsl_pow_2(xdata[i]);
 		break;
 	}
 
@@ -1896,7 +1882,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
-	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
+	writer->writeAttribute("xErrorsType", QString::number(d->fitData.xErrorsType));
 	writer->writeAttribute("weightsType", QString::number(d->fitData.yWeightsType));
 	writer->writeAttribute("degree", QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
@@ -2036,7 +2022,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
-			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
+			READ_INT_VALUE("xErrorsType", fitData.xErrorsType, nsl_fit_error_type);
 			READ_INT_VALUE("weightsType", fitData.yWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
 			if (d->fitData.modelCategory == nsl_fit_model_custom) {

@@ -103,20 +103,13 @@ void XYFitCurveDock::setupGeneral() {
 	cbYErrorColumn->setEnabled(false);
 	uiGeneralTab.hlYWeight->addWidget(cbYErrorColumn);
 
-	//Weights
-	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
-		uiGeneralTab.cbXWeight->addItem(nsl_fit_weight_type_name[i]);
+	//X-Error/Y-Weight
+	for(int i = 0; i < NSL_FIT_ERROR_TYPE_COUNT; i++)
+		uiGeneralTab.cbXError->addItem(nsl_fit_error_type_name[i]);
+	uiGeneralTab.cbXError->setCurrentIndex(nsl_fit_error_no);
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
-	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
-
-	// disable nsl_fit_weight_statistical_fit and nsl_fit_weight_relative_fit for xWeight
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbXWeight->model());
-	QStandardItem* item = model->item(nsl_fit_weight_statistical_fit);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-	item = model->item(nsl_fit_weight_relative_fit);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -170,7 +163,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
 
-	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
+	connect(uiGeneralTab.cbXError, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorChanged(int)));
 	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
 	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
@@ -230,7 +223,7 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
-	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
+	uiGeneralTab.cbXError->setCurrentIndex(m_fitData.xErrorsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	updateModelEquation();
@@ -413,24 +406,19 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
-void XYFitCurveDock::xWeightChanged(int index) {
-	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
+void XYFitCurveDock::xErrorChanged(int index) {
+	DEBUG("xErrorChanged() error = " << nsl_fit_error_type_name[index]);
 
-	m_fitData.xWeightsType = (nsl_fit_weight_type)index;
+	m_fitData.xErrorsType = (nsl_fit_error_type)index;
 
 	// enable/disable weight column
-	switch ((nsl_fit_weight_type)index) {
-	case nsl_fit_weight_no:
-	case nsl_fit_weight_statistical:
-	case nsl_fit_weight_statistical_fit:
-	case nsl_fit_weight_relative:
-	case nsl_fit_weight_relative_fit:
+	switch ((nsl_fit_error_type)index) {
+	case nsl_fit_error_no:
 		cbXErrorColumn->setEnabled(false);
 		uiGeneralTab.lXErrorCol->setEnabled(false);
 		break;
-	case nsl_fit_weight_instrumental:
-	case nsl_fit_weight_direct:
-	case nsl_fit_weight_inverse:
+	case nsl_fit_error_direct:
+	case nsl_fit_error_inverse:
 		cbXErrorColumn->setEnabled(true);
 		uiGeneralTab.lXErrorCol->setEnabled(true);
 		break;

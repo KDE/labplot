@@ -880,7 +880,7 @@
    <item row="11" column="4" colspan="4">
     <layout class="QHBoxLayout" name="hlXError">
      <item>
-      <widget class="QComboBox" name="cbXWeight"/>
+      <widget class="QComboBox" name="cbXError"/>
      </item>
      <item>
       <widget class="QLabel" name="lXErrorCol">
