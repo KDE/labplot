@@ -77,7 +77,8 @@ public:
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
 	const QStringList& formulaVariableColumnPathes() const;
-	QString formula(const int) const  override;
+
+	QString formula(int) const  override;
 	QList< Interval<int> > formulaIntervals() const override;
 	void setFormula(Interval<int>, QString) override;
 	void setFormula(int, QString) override;
@@ -86,22 +87,22 @@ public:
 	const AbstractColumn::ColumnStatistics& statistics();
 	void* data() const;
 
-	QString textAt(const int) const override;
-	void setTextAt(const int, const QString&) override;
-	void replaceTexts(const int, const QVector<QString>&) override;
-	QDate dateAt(const int) const override;
-	void setDateAt(const int, const QDate&) override;
-	QTime timeAt(const int) const override;
-	void setTimeAt(const int, const QTime&) override;
-	QDateTime dateTimeAt(const int) const override;
-	void setDateTimeAt(const int, const QDateTime&) override;
-	void replaceDateTimes(const int, const QVector<QDateTime>&) override;
-	double valueAt(const int) const override;
-	void setValueAt(const int, const double) override;
-	virtual void replaceValues(const int, const QVector<double>&) override;
-	int integerAt(const int) const override;
-	void setIntegerAt(const int, const int) override;
-	virtual void replaceInteger(const int, const QVector<int>&) override;
+	QString textAt(int) const override;
+	void setTextAt(int, const QString&) override;
+	void replaceTexts(int, const QVector<QString>&) override;
+	QDate dateAt(int) const override;
+	void setDateAt(int, const QDate&) override;
+	QTime timeAt(int) const override;
+	void setTimeAt(int, const QTime&) override;
+	QDateTime dateTimeAt(int) const override;
+	void setDateTimeAt(int, const QDateTime&) override;
+	void replaceDateTimes(int, const QVector<QDateTime>&) override;
+	double valueAt(int) const override;
+	void setValueAt(int, const double) override;
+	void replaceValues(int, const QVector<double>&) override;
+	int integerAt(int) const override;
+	void setIntegerAt(int, const int) override;
+	void replaceInteger(int, const QVector<int>&) override;
 
 	virtual double maximum(int count = 0) const override;
 	virtual double minimum(int count = 0) const override;

@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of equation curves
 
  ***************************************************************************/
@@ -70,16 +71,14 @@ private slots:
 	void commentChanged();
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
-	void weightChanged(int);
+	void xWeightChanged(int);
+	void yWeightChanged(int);
 	void categoryChanged(int);
 	void modelTypeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void xErrorColumnChanged(const QModelIndex&);
 	void yErrorColumnChanged(const QModelIndex&);
-	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
 
 	void showConstants();
 	void showFunctions();

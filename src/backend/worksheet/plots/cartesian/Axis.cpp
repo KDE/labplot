@@ -48,8 +48,6 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#include <cfloat>
-
 /**
  * \class AxisGrid
  * \brief Helper class to get the axis grid drawn with the z-Value=0.
@@ -318,12 +316,12 @@ QGraphicsItem *Axis::graphicsItem() const {
 }
 
 /*!
- * overrides the implementation in WorkhseetElement and sets the z-value to the maximal possible,
+ * overrides the implementation in WorksheetElement and sets the z-value to the maximal possible,
  * axes are drawn on top of all other object in the plot.
  */
 void Axis::setZValue(qreal) {
 	Q_D(Axis);
-	d->setZValue(FLT_MAX);
+	d->setZValue(std::numeric_limits<float>::max());	//TODO: Why float?
 	d->gridItem->setParentItem(d->parentItem());
 	d->gridItem->setZValue(0);
 }

@@ -34,7 +34,8 @@
 
 	\ingroup kdefrontend
  */
-FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData), m_changed(false) {
+FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData, XYFitCurve* fitCurve):
+		QWidget(parent), m_fitData(fitData), m_fitCurve(fitCurve), m_changed(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -52,6 +53,11 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
+	ui.cbAutoRange->setChecked(m_fitData->autoRange);
+	ui.sbMin->setValue(m_fitData->xRange.first());
+	ui.sbMax->setValue(m_fitData->xRange.last());
+	this->autoRangeChanged();
+
 	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
@@ -65,7 +71,53 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
+	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
+	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::xRangeMinChanged);
+	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::xRangeMaxChanged);
 }
+
+void FitOptionsWidget::autoRangeChanged() {
+	const bool autoRange = ui.cbAutoRange->isChecked();
+	m_fitData->autoRange = autoRange;
+
+	if (autoRange) {
+		ui.sbMin->setEnabled(false);
+		ui.lXRange->setEnabled(false);
+		ui.sbMax->setEnabled(false);
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+			xDataColumn = m_fitCurve->xDataColumn();
+		else {
+			if (m_fitCurve->dataSourceCurve())
+				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+		}
+
+		if (xDataColumn) {
+			ui.sbMin->setValue(xDataColumn->minimum());
+			ui.sbMax->setValue(xDataColumn->maximum());
+		}
+	} else {
+		ui.sbMin->setEnabled(true);
+		ui.lXRange->setEnabled(true);
+		ui.sbMax->setEnabled(true);
+	}
+
+}
+void FitOptionsWidget::xRangeMinChanged() {
+	const double xMin = ui.sbMin->value();
+
+	m_fitData->xRange.first() = xMin;
+	changed();
+}
+
+void FitOptionsWidget::xRangeMaxChanged() {
+	const double xMax = ui.sbMax->value();
+
+	m_fitData->xRange.last() = xMax;
+	changed();
+}
+
 
 void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();

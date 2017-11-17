@@ -55,9 +55,11 @@ public:
 	int endColumn;
 
 private:
+#ifdef HAVE_HDF5
+	int m_status;
+#endif
 	const static int MAXNAMELENGTH = 1024;
 	const static int MAXSTRINGLENGTH = 1024*1024;
-	int m_status;
 	QList<unsigned long> m_multiLinkList;	// used to find hard links
 
 #ifdef HAVE_HDF5

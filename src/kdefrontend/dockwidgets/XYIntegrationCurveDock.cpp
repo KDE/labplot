@@ -39,7 +39,6 @@
 extern "C" {
 #include "backend/nsl/nsl_int.h"
 }
-#include <cmath>        // isnan
 
 /*!
   \class XYIntegrationCurveDock

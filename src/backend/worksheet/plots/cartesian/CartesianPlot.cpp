@@ -70,8 +70,6 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#include <cfloat>	// DBL_MAX
-
 /**
  * \class CartesianPlot
  * \brief A xy-plot.

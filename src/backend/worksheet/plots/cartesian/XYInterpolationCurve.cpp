@@ -42,8 +42,6 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/errors.h"
 
-#include <cmath>	// isnan
-#include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>

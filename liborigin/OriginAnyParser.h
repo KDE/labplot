@@ -80,7 +80,7 @@ protected:
 	FILE *logfile;
 
 	unsigned long d_file_size;
-	unsigned int objectIndex;
+	unsigned int objectIndex, parseError;
 	int ispread, imatrix, iexcel, igraph;
 	int ilayer;
 };

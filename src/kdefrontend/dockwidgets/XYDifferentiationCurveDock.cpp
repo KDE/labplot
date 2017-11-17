@@ -38,7 +38,6 @@
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
 }
-#include <cmath>        // isnan
 
 /*!
   \class XYDifferentiationCurveDock

@@ -32,6 +32,7 @@ OriginAnyParser::OriginAnyParser(const string& fileName)
 :	file(fileName.c_str(),ios::binary)
 {
 	objectIndex = 0;
+	parseError = 0;
 }
 
 bool OriginAnyParser::parse() {
@@ -49,12 +50,14 @@ bool OriginAnyParser::parse() {
 
 	// get file and program version, check it is a valid file
 	readFileVersion();
+	if (parseError > 1) return false;
 	unsigned long curpos = 0;
 	curpos = (unsigned long)file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX]\n", curpos, curpos)
 
 	// get global header
 	readGlobalHeader();
+	if (parseError > 1) return false;
 	curpos = (unsigned long)file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX]\n", curpos, curpos)
 
@@ -66,6 +69,7 @@ bool OriginAnyParser::parse() {
 		if (!readDataSetElement()) break;
 		dataset_list_size++;
 	}
+	if (parseError > 1) return false;
 	LOG_PRINT(logfile, " ... done. Data sets: %d\n", dataset_list_size)
 	curpos = (unsigned long)file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, d_file_size)
@@ -185,7 +189,8 @@ unsigned int OriginAnyParser::readObjectSize() {
 	if (c != '\n') {
 		curpos = (unsigned long)file.tellg();
 		LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
-		exit(2);
+		parseError = 3;
+		return 0;
 	}
 	return obj_size;
 }
@@ -205,7 +210,8 @@ string OriginAnyParser::readObjectAsString(unsigned int size) {
 		if (c != '\n') {
 			curpos = (unsigned long)file.tellg();
 			LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
-			exit(3);
+			parseError = 2;
+			return string();
 		}
 		return blob;
 	}
@@ -217,10 +223,12 @@ void OriginAnyParser::readFileVersion() {
 	string sFileVersion;
 	getline(file, sFileVersion);
 
-	if ((sFileVersion.substr(0,4) != "CPYA") || (*sFileVersion.rbegin() != '#')) {
+	if ((sFileVersion.substr(0,4) != "CPYA")) {
 		LOG_PRINT(logfile, "File, is not a valid opj file\n")
-		exit(1);
+		parseError = 2;
+		return;
 	}
+	if (*sFileVersion.rbegin() != '#') parseError = 1;
 	LOG_PRINT(logfile, "File version string: %s\n", sFileVersion.c_str())
 }
 
@@ -258,7 +266,8 @@ void OriginAnyParser::readGlobalHeader() {
 	if (gh_endmark != 0) {
 		curpos = (unsigned long)file.tellg();
 		LOG_PRINT(logfile, "Wrong end of list mark %d at %ld [0x%lX]\n", gh_endmark, curpos, curpos)
-		exit(4);
+		parseError = 5;
+		return;
 	}
 }
 
@@ -666,7 +675,8 @@ bool OriginAnyParser::readParameterElement() {
 	if (c != '\n') {
 		curpos = (unsigned long)file.tellg();
 		LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
-		exit(3);
+		parseError = 6;
+		return false;
 	}
 
 	return true;
@@ -1539,7 +1549,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 					GET_DOUBLE(stmp, end.y)
 				}
 			} else {
-				short x1, x2, y1, y2;
+				short x1=0, x2=0, y1=0, y2=0;
 				if (type == 2) {//straight line/arrow
 					stmp.str(andt1.substr(0x01));
 					GET_SHORT(stmp, x1)

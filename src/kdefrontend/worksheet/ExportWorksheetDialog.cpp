@@ -33,6 +33,7 @@
 #include <QDesktopWidget>
 #include <QDirModel>
 #include <QFileDialog>
+#include <QTimer>
 
 #include <QDialogButtonBox>
 #include <KLocalizedString>
@@ -48,7 +49,8 @@
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
-	ui(new Ui::ExportWorksheetWidget()) {
+	ui(new Ui::ExportWorksheetWidget()), m_showOptions(true) {
+
 	ui->setupUi(this);
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -67,7 +69,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 
 	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
 
-	ui->cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
+	ui->cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable Data Format (PDF)");
 	ui->cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
 	ui->cbFormat->insertSeparator(3);
 	ui->cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
@@ -88,22 +90,28 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportWorksheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportWorksheetDialog::fileNameChanged);
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportWorksheetDialog::toggleOptions);
+	ui->leFileName->setFocus();
 
 	setWindowTitle(i18n("Export worksheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
+	QTimer::singleShot(0, this, &ExportWorksheetDialog::loadSettings);
+}
+
+void ExportWorksheetDialog::loadSettings() {
 	//restore saved setting
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
-	m_showOptions = conf.readEntry("ShowOptions", false);
-	ui->gbOptions->setVisible(m_showOptions);
+	m_showOptions = conf.readEntry("ShowOptions", true);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));
-
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
+				m_showOptionsButton->setText(i18n("Show Options"));
+	ui->gbOptions->setVisible(m_showOptions);
 }
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
@@ -211,7 +219,16 @@ void ExportWorksheetDialog::toggleOptions() {
 void ExportWorksheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	const QString dir = conf.readEntry("LastDir", "");
-	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
+
+	QString format;
+	if (ui->cbFormat->currentIndex() == 0)
+		format = i18n("Portable Data Format (PDF) (*.pdf *.PDF)");
+	else if (ui->cbFormat->currentIndex() == 1)
+		format = i18n("Scalable Vector Graphics (SVG) (*.svg *.SVG)");
+	else
+		format = i18n("Portable Network Graphics (PNG) (*.png *.PNG)");
+
+	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir, format);
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
@@ -228,12 +245,12 @@ void ExportWorksheetDialog::selectFile() {
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
 void ExportWorksheetDialog::formatChanged(int index) {
-	//we have a separator in the format combobox at the 4th posiiton -> skip it
-	if (index > 3)
+	//we have a separator in the format combobox at the 3rd posiiton -> skip it
+	if (index > 2)
 		index --;
 
 	QStringList extensions;
-	extensions<<".pdf"<<".eps"<<".svg"<<".png";
+	extensions << ".pdf" << ".svg" << ".png";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (i == -1)

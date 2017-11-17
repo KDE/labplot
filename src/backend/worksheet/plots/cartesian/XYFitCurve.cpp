@@ -55,7 +55,6 @@ extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
 }
-#include <cmath>
 
 #include <QElapsedTimer>
 #include <QIcon>
@@ -524,8 +523,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		for (int i = 0; i < np; ++i) {
 			paramStartValues[i] = 1.0;
 			paramFixed[i] = false;
-			paramLowerLimits[i] = -DBL_MAX;
-			paramUpperLimits[i] = DBL_MAX;
+			paramLowerLimits[i] = -std::numeric_limits<double>::max();
+			paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 
 		// set some model-dependent start values
@@ -1367,7 +1366,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				assign_variable(name, value);
 				const double f_p = parse(func);
 
-				const double eps = 1.e-9 * fabs(f_p);	// adapt step size to value
+				const double eps = 1.e-9 * std::abs(f_p);	// adapt step size to value
 				value += eps;
 				assign_variable(name, value);
 				const double f_pdp = parse(func);
@@ -1552,10 +1551,34 @@ void XYFitCurvePrivate::recalculate() {
 	DEBUG("y errors: " << yerrorVector.size());
 	double* weight = new double[n];
 
+	switch(fitData.xWeightsType) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative_fit:
+	case nsl_fit_weight_direct:
+		break;
+	case nsl_fit_weight_instrumental:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./gsl_pow_2(xerror[i]);
+		break;
+	case nsl_fit_weight_inverse:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./xerror[i];
+		break;
+	case nsl_fit_weight_statistical:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./xdata[i];
+		break;
+	case nsl_fit_weight_relative:
+		for(int i = 0; i < xerrorVector.size(); i++)
+				xerror[i] = 1./gsl_pow_2(xdata[i]);
+		break;
+	}
+
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
-		switch (fitData.weightsType) {
+	switch (fitData.yWeightsType) {
 	case nsl_fit_weight_no:
 	case nsl_fit_weight_statistical_fit:
 	case nsl_fit_weight_relative_fit:
@@ -1625,10 +1648,10 @@ void XYFitCurvePrivate::recalculate() {
 		iter++;
 
 		// update weights for Y-depending weights
-		if (fitData.weightsType == nsl_fit_weight_statistical_fit) {
+		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-		} else if (fitData.weightsType == nsl_fit_weight_relative_fit) {
+		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 		}
@@ -1656,7 +1679,7 @@ void XYFitCurvePrivate::recalculate() {
 			yd[i] /= (xdata[index+1] - xdata[index]);
 		}
 
-		switch (fitData.weightsType) {
+		switch (fitData.yWeightsType) {
 		case nsl_fit_weight_no:
 			break;
 		case nsl_fit_weight_instrumental:
@@ -1873,7 +1896,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
-	writer->writeAttribute("weightsType", QString::number(d->fitData.weightsType));
+	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
+	writer->writeAttribute("weightsType", QString::number(d->fitData.yWeightsType));
 	writer->writeAttribute("degree", QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
 		writer->writeAttribute("model", d->fitData.model);
@@ -2012,7 +2036,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
-			READ_INT_VALUE("weightsType", fitData.weightsType, nsl_fit_weight_type);
+			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
+			READ_INT_VALUE("weightsType", fitData.yWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
 			if (d->fitData.modelCategory == nsl_fit_model_custom) {
 				READ_STRING_VALUE("model", fitData.model);
@@ -2040,14 +2065,14 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			if (ok)	// -DBL_MAX results in conversion error
 				d->fitData.paramLowerLimits << x;
 			else
-				d->fitData.paramLowerLimits << -DBL_MAX;
+				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
 		} else if (!preview && reader->name() == "upperLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok)	// DBL_MAX results in conversion error
 				d->fitData.paramUpperLimits << x;
 			else
-				d->fitData.paramUpperLimits << DBL_MAX;
+				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
 		} else if (!preview && reader->name() == "value") {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "error") {

@@ -41,7 +41,6 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/errors.h"
 
-#include <cmath>	// isnan
 extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
 #ifdef HAVE_FFTW3
@@ -54,6 +53,7 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+#include <QDebug>	// qWarning()
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 	: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {

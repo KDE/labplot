@@ -41,8 +41,6 @@
 
 #include <KLocalizedString>
 
-#include <cmath>
-
 /*!
   \class CartesianPlotLegendDock
   \brief  Provides a widget for editing the properties of the cartesian plot legend currently selected in the project explorer.
@@ -790,7 +788,7 @@ void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename)
 
 void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
+	ui.sbBackgroundOpacity->setValue( qRound(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -817,7 +815,7 @@ void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
 
 void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBorderOpacity->setValue( round(opacity*100.0) );
+	ui.sbBorderOpacity->setValue( qRound(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -873,7 +871,7 @@ void CartesianPlotLegendDock::load() {
 
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 // 	qDebug()<<"font size " << font.pixelSize() << "  " << font.pointSizeF();
 	ui.kfrLabelFont->setFont(font);
 
@@ -894,7 +892,7 @@ void CartesianPlotLegendDock::load() {
 	ui.leBackgroundFileName->setText( m_legend->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( m_legend->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_legend->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue( round(m_legend->backgroundOpacity()*100.0) );
+	ui.sbBackgroundOpacity->setValue( qRound(m_legend->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
 	if (!m_legend->backgroundFileName().isEmpty() && !QFile::exists(m_legend->backgroundFileName()))
@@ -907,7 +905,7 @@ void CartesianPlotLegendDock::load() {
 	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), Worksheet::Centimeter) );
-	ui.sbBorderOpacity->setValue( round(m_legend->borderOpacity()*100.0) );
+	ui.sbBorderOpacity->setValue( qRound(m_legend->borderOpacity()*100.0) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter) );
@@ -952,7 +950,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
 
 	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
@@ -974,14 +972,14 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_legend->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_legend->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_legend->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0) );
+	ui.sbBackgroundOpacity->setValue( qRound(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0) );
 
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), Worksheet::Centimeter) );
-	ui.sbBorderOpacity->setValue( round(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
+	ui.sbBorderOpacity->setValue( qRound(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",

@@ -55,8 +55,9 @@ public:
 	int endColumn;
 
 private:
-	int status;
 #ifdef HAVE_NETCDF
+	int m_status;
+
 	void handleError(int status, QString function);
 	QString translateDataType(nc_type type);
 	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);

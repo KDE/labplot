@@ -62,10 +62,10 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
-    m_okButton->setDefault(true);
-    m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
-    m_okButton->setText(i18n("&Generate"));
+	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+	m_okButton->setDefault(true);
+	m_okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+	m_okButton->setText(i18n("&Generate"));
 
 	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &RandomValuesDialog::close);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &RandomValuesDialog::accept);
@@ -76,7 +76,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	setLayout(layout);
     setAttribute(Qt::WA_DeleteOnClose);
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-                ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
+		ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 
 	//use white background in the preview label
 	QPalette p;
@@ -145,10 +145,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.leParameter1->setText("1.0");
-		ui.leParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
@@ -167,10 +167,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
-		ui.leParameter1->setText("1.0");
-		ui.leParameter2->setText("0.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.leParameter1->setText("0.0");
+		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
@@ -330,7 +330,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_pascal:
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
-		ui.lParameter1->setText("n =");
+		ui.lParameter2->setText("n =");
 		ui.leParameter1->setText("0.5");
 		ui.leParameter2->setText("100");
 		break;
@@ -394,6 +394,7 @@ void RandomValuesDialog::generate() {
 
 	const int index = ui.cbDistribution->currentIndex();
 	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	DEBUG("random number distribution: " << nsl_sf_stats_distribution_name[dist]);
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> new_data(rows);
@@ -402,6 +403,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_gaussian: {
 		double mu = ui.leParameter1->text().toDouble();
 		double sigma = ui.leParameter2->text().toDouble();
+		DEBUG(" mu = " << mu << ", sigma = " << sigma);
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_gaussian(r, sigma) + mu;
@@ -432,8 +434,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		double s = ui.leParameter1->text().toDouble();
-		double mu = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter1->text().toDouble();
+		double s = ui.leParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_laplace(r, s) + mu;
@@ -444,7 +446,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_exponential_power: {
 		double mu = ui.leParameter1->text().toDouble();
 		double a = ui.leParameter2->text().toDouble();
-		double b = ui.leParameter2->text().toDouble();
+		double b = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_exppow(r, a, b) + mu;
@@ -600,7 +602,7 @@ void RandomValuesDialog::generate() {
 	case nsl_sf_stats_weibull: {
 		double k = ui.leParameter1->text().toDouble();
 		double l = ui.leParameter2->text().toDouble();
-		double mu = ui.leParameter2->text().toDouble();
+		double mu = ui.leParameter3->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_weibull(r, l, k) + mu;

@@ -44,9 +44,6 @@
 #include <QStandardPaths>
 #include <QClipboard>
 
-#include <cfloat>	// DBL_MAX
-#include <cmath>	// fabs()
-
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 }
@@ -93,21 +90,33 @@ void XYFitCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbDataSourceCurve, 6, 4, 1, 4);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 1);
+	gridLayout->addWidget(cbXDataColumn, 7, 4, 1, 4);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXErrorColumn, 7, 5, 1, 4);
+	cbXErrorColumn->setEnabled(false);
+	gridLayout->addWidget(cbXErrorColumn, 10, 6, 1, 2);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 1);
+	gridLayout->addWidget(cbYDataColumn, 8, 4, 1, 4);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYErrorColumn, 8, 5, 1, 4);
+	cbYErrorColumn->setEnabled(false);
+	gridLayout->addWidget(cbYErrorColumn, 11, 6, 1, 2);
 
-	//Weight
+	//Weights
 	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
-		uiGeneralTab.cbWeight->addItem(nsl_fit_weight_type_name[i]);
-	uiGeneralTab.cbWeight->setCurrentIndex(nsl_fit_weight_instrumental);
+		uiGeneralTab.cbXWeight->addItem(nsl_fit_weight_type_name[i]);
+	for(int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
+	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
+	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
+
+	// disable nsl_fit_weight_statistical_fit and nsl_fit_weight_relative_fit for xWeight
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbXWeight->model());
+	QStandardItem* item = model->item(nsl_fit_weight_statistical_fit);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item = model->item(nsl_fit_weight_relative_fit);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
@@ -160,11 +169,9 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)));
-	connect(uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()));
-	connect(uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()));
-	connect(uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()));
 
-	connect(uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged(int)));
+	connect(uiGeneralTab.cbXWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(xWeightChanged(int)));
+	connect(uiGeneralTab.cbYWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(yWeightChanged(int)));
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
 	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
 	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
@@ -213,10 +220,6 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, m_fitCurve->xErrorColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, m_fitCurve->yErrorColumn());
-	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
-	this->autoRangeChanged();
 
 	unsigned int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -227,7 +230,8 @@ void XYFitCurveDock::initGeneralTab() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
-	uiGeneralTab.cbWeight->setCurrentIndex(m_fitData.weightsType);
+	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
+	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	updateModelEquation();
 	this->showFitResult();
@@ -318,8 +322,6 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->show();
 		uiGeneralTab.lYColumn->show();
 		cbYDataColumn->show();
-		cbXErrorColumn->show();
-		cbYErrorColumn->show();
 	} else {
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
@@ -327,8 +329,6 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->hide();
 		uiGeneralTab.lYColumn->hide();
 		cbYDataColumn->hide();
-		cbXErrorColumn->hide();
-		cbYErrorColumn->hide();
 	}
 
 	if (m_initializing)
@@ -345,8 +345,6 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 		Q_ASSERT(dataSourceCurve);
 	}
-
-	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
@@ -366,20 +364,8 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	this->updateSettings(column);
-
 	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
-}
-
-void XYFitCurveDock::updateSettings(const AbstractColumn* column) {
-	if (!column)
-		return;
-
-	if (uiGeneralTab.cbAutoRange->isChecked()) {
-		uiGeneralTab.sbMin->setValue(column->minimum());
-		uiGeneralTab.sbMax->setValue(column->maximum());
-	}
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -395,48 +381,6 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
-}
-
-void XYFitCurveDock::autoRangeChanged() {
-	const bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
-	m_fitData.autoRange = autoRange;
-
-	if (autoRange) {
-		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lXRange2->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
-
-		const AbstractColumn* xDataColumn = 0;
-		if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
-			xDataColumn = m_fitCurve->xDataColumn();
-		else {
-			if (m_fitCurve->dataSourceCurve())
-				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
-		}
-
-		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
-		}
-	} else {
-		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lXRange2->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
-	}
-
-}
-void XYFitCurveDock::xRangeMinChanged() {
-	const double xMin = uiGeneralTab.sbMin->value();
-
-	m_fitData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
-}
-
-void XYFitCurveDock::xRangeMaxChanged() {
-	const double xMax = uiGeneralTab.sbMax->value();
-
-	m_fitData.xRange.last() = xMax;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
@@ -467,16 +411,55 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
-
-	//y-error column was selected - in case no weighting is selected yet, automatically select instrumental weighting
-	if ( uiGeneralTab.cbWeight->currentIndex() == 0 )
-		uiGeneralTab.cbWeight->setCurrentIndex((int)nsl_fit_weight_instrumental);
 }
 
-void XYFitCurveDock::weightChanged(int index) {
-	DEBUG("weightChanged() weight = " << nsl_fit_weight_type_name[index]);
+void XYFitCurveDock::xWeightChanged(int index) {
+	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
 
-	m_fitData.weightsType = (nsl_fit_weight_type)index;
+	m_fitData.xWeightsType = (nsl_fit_weight_type)index;
+
+	// enable/disable weight column
+	switch ((nsl_fit_weight_type)index) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative:
+	case nsl_fit_weight_relative_fit:
+		cbXErrorColumn->setEnabled(false);
+		uiGeneralTab.lXErrorCol->setEnabled(false);
+		break;
+	case nsl_fit_weight_instrumental:
+	case nsl_fit_weight_direct:
+	case nsl_fit_weight_inverse:
+		cbXErrorColumn->setEnabled(true);
+		uiGeneralTab.lXErrorCol->setEnabled(true);
+		break;
+	}
+	enableRecalculate();
+}
+
+void XYFitCurveDock::yWeightChanged(int index) {
+	DEBUG("yWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
+
+	m_fitData.yWeightsType = (nsl_fit_weight_type)index;
+
+	// enable/disable weight column
+	switch ((nsl_fit_weight_type)index) {
+	case nsl_fit_weight_no:
+	case nsl_fit_weight_statistical:
+	case nsl_fit_weight_statistical_fit:
+	case nsl_fit_weight_relative:
+	case nsl_fit_weight_relative_fit:
+		cbYErrorColumn->setEnabled(false);
+		uiGeneralTab.lYErrorCol->setEnabled(false);
+		break;
+	case nsl_fit_weight_instrumental:
+	case nsl_fit_weight_direct:
+	case nsl_fit_weight_inverse:
+		cbYErrorColumn->setEnabled(true);
+		uiGeneralTab.lYErrorCol->setEnabled(true);
+		break;
+	}
 	enableRecalculate();
 }
 
@@ -539,6 +522,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 	modelTypeChanged(m_fitData.modelType);
 
 	m_initializing = false;
+	enableRecalculate();
 }
 
 /*!
@@ -731,8 +715,8 @@ void XYFitCurveDock::updateParameterList() {
 		for (int i = m_fitData.paramStartValues.size() - 1; i < m_fitData.paramNames.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
 			m_fitData.paramFixed[i] = false;
-			m_fitData.paramLowerLimits[i] = -DBL_MAX;
-			m_fitData.paramUpperLimits[i] = DBL_MAX;
+			m_fitData.paramLowerLimits[i] = -std::numeric_limits<double>::max();
+			m_fitData.paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 	}
 	parametersChanged();
@@ -767,7 +751,7 @@ void XYFitCurveDock::parametersChanged() {
 
 void XYFitCurveDock::showOptions() {
 	QMenu menu;
-	FitOptionsWidget w(&menu, &m_fitData);
+	FitOptionsWidget w(&menu, &m_fitData, m_fitCurve);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
 	connect(&w, SIGNAL(optionsChanged()), this, SLOT(enableRecalculate()));
 
@@ -803,7 +787,7 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::enableRecalculate() const {
-	if (m_initializing)
+	if (m_initializing || m_fitCurve == nullptr)
 		return;
 
 	//no fitting possible without the x- and y-data
@@ -813,7 +797,7 @@ void XYFitCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != 0 && aspectY != 0);
 	} else {
-		 hasSourceData = (m_fitCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -862,13 +846,18 @@ void XYFitCurveDock::resultCopyAll() {
 			else {
 				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 					+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
+					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/std::abs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
 
 				const double margin = fitResult.tdist_marginValues.at(i);
-				str += " (" + i18n("t statistic:") + ' ' + QString::number(fitResult.tdist_tValues.at(i), 'g', 3) + ", "
+				QString tdistValueString;
+				if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
+					tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
+				else
+					tdistValueString = QString::fromUtf8("\u221e");
+				str += " (" + i18n("t statistic:") + ' ' + tdistValueString + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
 					+ i18n("conf. interval:") + ' ';
-				if (fabs(fitResult.tdist_tValues.at(i)) < 1.e6) {
+				if (std::abs(fitResult.tdist_tValues.at(i)) < 1.e6) {
 					str += QString::number(fitResult.paramValues.at(i) - margin) + " .. "
 						+ QString::number(fitResult.paramValues.at(i) + margin) + ")\n";
 				} else {
@@ -903,7 +892,7 @@ void XYFitCurveDock::resultCopyAll() {
 			str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + '\n';
 		str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + '\n';
 		str += i18n("number of parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + '\n';
-		str += i18n("X range:") + ' ' + QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) + '\n';
+		str += i18n("X range:") + ' ' + QString::number(m_fitData.xRange.first()) + " .. " + QString::number(m_fitData.xRange.last()) + '\n';
 
 		str += i18n("Iterations:") + '\n';
 		for (const auto &s: m_fitData.paramNamesUtf8)
@@ -976,7 +965,7 @@ void XYFitCurveDock::showFitResult() {
 
 	uiGeneralTab.twLog->item(4, 1)->setText(QString::number(fitResult.dof));
 	uiGeneralTab.twLog->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
-	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
+	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(m_fitData.xRange.first()) + " .. " + QString::number(m_fitData.xRange.last()) );
 	// show all iterations
 	QString str;
 	for (const auto &s: m_fitData.paramNamesUtf8)
@@ -1009,11 +998,16 @@ void XYFitCurveDock::showFitResult() {
 		if (!m_fitData.paramFixed.at(i)) {
 			item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
 			uiGeneralTab.twParameters->setItem(i, 2, item);
-			item = new QTableWidgetItem(QString::number(100.*errorValue/fabs(paramValue), 'g', 3));
+			item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 3, item);
 
 			// t values
-			item = new QTableWidgetItem(QString::number(fitResult.tdist_tValues.at(i), 'g', 3));
+			QString tdistValueString;
+			if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
+				tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
+			else
+				tdistValueString = QString::fromUtf8("\u221e");
+			item = new QTableWidgetItem(tdistValueString);
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values

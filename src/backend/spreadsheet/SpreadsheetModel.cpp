@@ -30,6 +30,7 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
 
 #include <QBrush>
 #include <QIcon>
@@ -256,13 +257,13 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 	updateHorizontalHeader();
 
 	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
-	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
-	        SLOT(handleDataChange(const AbstractColumn*)));
+	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
 	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
 	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
 	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
+	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
 	beginResetModel();
 	//TODO: breaks undo/redo
@@ -315,6 +316,20 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, index);
+	handleDataChange(col);
+
+	//output filter was changed after the mode change, update the signal-slot connection
+	disconnect(0, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
+	connect(dynamic_cast<const Column*>(col)->outputFilter(), SIGNAL(digitsChanged()), this, SLOT(handleDigitsChange()));
+}
+
+void SpreadsheetModel::handleDigitsChange() {
+	const Double2StringFilter* filter = dynamic_cast<const Double2StringFilter*>(QObject::sender());
+	if (!filter)
+		return;
+
+	const AbstractColumn* col = filter->output(0);
+	handleDataChange(col);
 }
 
 void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {

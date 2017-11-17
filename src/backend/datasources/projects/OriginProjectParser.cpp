@@ -66,6 +66,7 @@ QAbstractItemModel* OriginProjectParser::model() {
 	return model;
 }
 
-void OriginProjectParser::importTo(Folder* folder) {
+void OriginProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
+	Q_UNUSED(selectedPathes);
 	ImportOpj(folder, m_projectFileName, true);
 }

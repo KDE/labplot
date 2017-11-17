@@ -4,6 +4,7 @@
     Description          : widget for editing advanced fit parameters
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -35,11 +36,12 @@ class FitOptionsWidget: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FitOptionsWidget(QWidget*, XYFitCurve::FitData*);
+	explicit FitOptionsWidget(QWidget*, XYFitCurve::FitData*, XYFitCurve*);
 
 private:
 	Ui::FitOptionsWidget ui;
 	XYFitCurve::FitData* m_fitData;
+	XYFitCurve* m_fitCurve;
 	bool m_changed;
 
 signals:
@@ -47,6 +49,9 @@ signals:
 	void optionsChanged();
 
 private slots:
+	void autoRangeChanged();
+	void xRangeMinChanged();
+	void xRangeMaxChanged();
 	void applyClicked();
 	void changed();
 };
