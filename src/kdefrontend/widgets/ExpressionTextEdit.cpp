@@ -2,7 +2,7 @@
     File             : ExpressionTextEdit.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
 					   modified version of
 					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
@@ -85,7 +85,7 @@
 
   \ingroup kdefrontend
 */
-ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
+ExpressionTextEdit::ExpressionTextEdit(QWidget* parent) : KTextEdit(parent),
 	m_highlighter(new EquationHighlighter(this)),
 	m_expressionType(XYEquationCurve::Neutral),
 	m_isValid(false) {
@@ -143,24 +143,41 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 	setTextCursor(tc);
 }
 
-QString ExpressionTextEdit::textUnderCursor() const {
-	QTextCursor tc = textCursor();
-	tc.select(QTextCursor::WordUnderCursor);
-	return tc.selectedText();
+
+/*!
+ * \brief Validates the current expression if the text was changed and highlights the text field red if the expression is invalid.
+ * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
+ */
+void ExpressionTextEdit::validateExpression(bool force) {
+	//check whether the expression was changed or only the formating
+	QString text = toPlainText();
+	if (text != m_currentExpression || force) {
+		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
+		if (!m_isValid)
+			setStyleSheet("QTextEdit{background: red;}");
+		else
+			setStyleSheet("");
+
+		m_currentExpression = text;
+		emit expressionChanged();
+	}
 }
 
-void ExpressionTextEdit::focusInEvent(QFocusEvent *e) {
+//##############################################################################
+//####################################  Events   ###############################
+//##############################################################################
+void ExpressionTextEdit::focusInEvent(QFocusEvent* e) {
 	m_completer->setWidget(this);
 	QTextEdit::focusInEvent(e);
 }
 
-void ExpressionTextEdit::focusOutEvent(QFocusEvent *e) {
+void ExpressionTextEdit::focusOutEvent(QFocusEvent* e) {
 	//when loosing focus, rehighlight to remove potential highlighting of openning and closing brackets
 	m_highlighter->rehighlight();
 	QTextEdit::focusOutEvent(e);
 }
 
-void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
+void ExpressionTextEdit::keyPressEvent(QKeyEvent* e) {
 	switch (e->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
@@ -180,7 +197,9 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 
 	static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
 	bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-	QString completionPrefix = textUnderCursor();
+	QTextCursor tc = textCursor();
+	tc.select(QTextCursor::WordUnderCursor);
+	const QString& completionPrefix = tc.selectedText();
 
 	if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 1
 					|| eow.contains(e->text().right(1)))) {
@@ -198,21 +217,35 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 	m_completer->complete(cr); // popup it up!
 }
 
-/*!
- * \brief Validates the current expression if the text was changed and highlights the text field red if the expression is invalid.
- * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
- */
-void ExpressionTextEdit::validateExpression(bool force) {
-	//check whether the expression was changed or only the formating
-	QString text = toPlainText();
-	if (text != m_currentExpression || force) {
-		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
-		if (!m_isValid)
-			setStyleSheet("QTextEdit{background: red;}");
-		else
-			setStyleSheet("");
+void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
+	QTextCursor tc = cursorForPosition(e->pos());
+	tc.select(QTextCursor::WordUnderCursor);
 
-		m_currentExpression = text;
-		emit expressionChanged();
+	const QString& token = tc.selectedText();
+	if (token.isEmpty()) {
+		setToolTip("");
+		return;
 	}
+
+	//try to find the token under the mouse cursor in the list of constants first
+	static const QStringList& constants = ExpressionParser::getInstance()->constants();
+	int index = constants.indexOf(token);
+
+	if (index != -1) {
+		static const QStringList& names = ExpressionParser::getInstance()->constantsNames();
+		static const QStringList& values = ExpressionParser::getInstance()->constantsValues();
+		static const QStringList& units = ExpressionParser::getInstance()->constantsUnits();
+		setToolTip(names.at(index) + ": " + constants.at(index) + " = " + values.at(index) + " " + units.at(index));
+	} else {
+		//text token was not found in the list of constants -> check functions as next
+		static const QStringList& functions = ExpressionParser::getInstance()->functions();
+		index = functions.indexOf(token);
+		if (index != -1) {
+			static const QStringList& names = ExpressionParser::getInstance()->functionsNames();
+			setToolTip(functions.at(index) + " - " + names.at(index));
+		} else
+			setToolTip("");
+	}
+
+	KTextEdit::mouseMoveEvent(e);
 }
