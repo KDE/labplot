@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "FunctionsWidget.h"
 #include "backend/gsl/ExpressionParser.h"
+#include <QTimer>
 
 /*!
 	\class FunctionsWidget
@@ -41,7 +42,6 @@ FunctionsWidget::FunctionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
-	ui.leFilter->setFocus();
 
 	//SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &FunctionsWidget::filterChanged);
@@ -50,7 +50,8 @@ FunctionsWidget::FunctionsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.bCancel, &QPushButton::clicked, this, &FunctionsWidget::canceled);
 	connect(ui.lwFunctions, &QListWidget::itemDoubleClicked, this, &FunctionsWidget::insertClicked);
 
-	this->groupChanged(0);
+	//set the focus to the search field and select the first group after the widget is shown
+	QTimer::singleShot(0, this, [=] () { ui.leFilter->setFocus(); this->groupChanged(0); });
 }
 
 /*!

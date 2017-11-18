@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "ConstantsWidget.h"
 #include "backend/gsl/ExpressionParser.h"
+#include <QTimer>
 
 /*!
 	\class ConstantsWidget
@@ -50,7 +51,8 @@ ConstantsWidget::ConstantsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.bCancel, &QPushButton::clicked, this, &ConstantsWidget::canceled);
 	connect(ui.lwConstants, &QListWidget::itemDoubleClicked, this, &ConstantsWidget::insertClicked);
 
-	this->groupChanged(0);
+	//set the focus to the search field and select the first group after the widget is shown
+	QTimer::singleShot(0, this, [=] () { ui.leFilter->setFocus(); this->groupChanged(0); });
 }
 
 /*!
