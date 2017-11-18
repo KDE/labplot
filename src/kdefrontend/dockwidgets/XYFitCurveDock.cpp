@@ -984,10 +984,17 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twParameters->setItem(i, 1, item);
 
 		if (!m_fitData.paramFixed.at(i)) {
-			item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
-			uiGeneralTab.twParameters->setItem(i, 2, item);
-			item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
-			uiGeneralTab.twParameters->setItem(i, 3, item);
+			if (!std::isnan(errorValue)) {
+				item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
+				uiGeneralTab.twParameters->setItem(i, 2, item);
+				item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
+				uiGeneralTab.twParameters->setItem(i, 3, item);
+			} else {
+				item = new QTableWidgetItem(QString::fromUtf8("\u221e"));
+				uiGeneralTab.twParameters->setItem(i, 2, item);
+				item = new QTableWidgetItem(QString::fromUtf8("\u221e"));
+				uiGeneralTab.twParameters->setItem(i, 3, item);
+			}
 
 			// t values
 			QString tdistValueString;
@@ -1015,12 +1022,14 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 5, item);
 
 			// Conf. interval
-			const double margin = fitResult.tdist_marginValues.at(i);
-			if (fitResult.tdist_tValues.at(i) < 1.e6)
-				item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
-			else
-				item = new QTableWidgetItem(i18n("too small"));
-			uiGeneralTab.twParameters->setItem(i, 6, item);
+			if (!std::isnan(errorValue)) {
+				const double margin = fitResult.tdist_marginValues.at(i);
+				if (fitResult.tdist_tValues.at(i) < 1.e6)
+					item = new QTableWidgetItem(QString::number(paramValue - margin) + QLatin1String(" .. ") + QString::number(paramValue + margin));
+				else
+					item = new QTableWidgetItem(i18n("too small"));
+				uiGeneralTab.twParameters->setItem(i, 6, item);
+			}
 		}
 	}
 
