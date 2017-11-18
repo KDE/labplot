@@ -47,7 +47,7 @@ public:
 	CartesianPlot::RangeType rangeType;
 	int rangeFirstValues;
 	int rangeLastValues;
-	float xMin, xMax, yMin, yMax;
+	double xMin, xMax, yMin, yMax;
 	float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 	bool autoScaleX, autoScaleY;
 	float autoScaleOffsetFactor;

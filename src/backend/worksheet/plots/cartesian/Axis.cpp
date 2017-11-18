@@ -1580,11 +1580,11 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare((float)logicalMajorTickPoints.at(0).x(), m_plot->xMin());
-		skipUpperTick = qFuzzyCompare((float)logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), m_plot->xMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
 	} else {
-		skipLowestTick = qFuzzyCompare((float)logicalMajorTickPoints.at(0).y(), m_plot->yMin());
-		skipUpperTick = qFuzzyCompare((float)logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), m_plot->yMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
 	}
 
 	int start, end;

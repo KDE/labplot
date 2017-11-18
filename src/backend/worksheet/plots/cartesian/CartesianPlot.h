@@ -112,10 +112,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
-	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
-	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
-	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
-	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
+	BASIC_D_ACCESSOR_DECL(double, xMin, XMin)
+	BASIC_D_ACCESSOR_DECL(double, xMax, XMax)
+	BASIC_D_ACCESSOR_DECL(double, yMin, YMin)
+	BASIC_D_ACCESSOR_DECL(double, yMax, YMax)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
@@ -266,12 +266,12 @@ signals:
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
 	void xAutoScaleChanged(bool);
-	void xMinChanged(float);
-	void xMaxChanged(float);
+	void xMinChanged(double);
+	void xMaxChanged(double);
 	void xScaleChanged(int);
 	void yAutoScaleChanged(bool);
-	void yMinChanged(float);
-	void yMaxChanged(float);
+	void yMinChanged(double);
+	void yMaxChanged(double);
 	void yScaleChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
