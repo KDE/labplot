@@ -321,7 +321,7 @@ QGraphicsItem *Axis::graphicsItem() const {
  */
 void Axis::setZValue(qreal) {
 	Q_D(Axis);
-	d->setZValue(std::numeric_limits<float>::max());	//TODO: Why float?
+	d->setZValue(std::numeric_limits<double>::max());
 	d->gridItem->setParentItem(d->parentItem());
 	d->gridItem->setZValue(0);
 }
@@ -364,21 +364,21 @@ BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
-BASIC_SHARED_D_READER_IMPL(Axis, float, offset, offset)
-BASIC_SHARED_D_READER_IMPL(Axis, float, start, start)
-BASIC_SHARED_D_READER_IMPL(Axis, float, end, end)
+BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
+BASIC_SHARED_D_READER_IMPL(Axis, double, start, start)
+BASIC_SHARED_D_READER_IMPL(Axis, double, end, end)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
-BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffsetX, titleOffsetX)
-BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffsetY, titleOffsetY)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetX, titleOffsetX)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetY, titleOffsetY)
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowType, arrowType, arrowType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowPosition, arrowPosition, arrowPosition)
-BASIC_SHARED_D_READER_IMPL(Axis, float, arrowSize, arrowSize)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, arrowSize, arrowSize)
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
@@ -404,7 +404,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsAutoPrecision, labelsAutoPrecision);
 BASIC_SHARED_D_READER_IMPL(Axis, int, labelsPrecision, labelsPrecision);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
-BASIC_SHARED_D_READER_IMPL(Axis, float, labelsOffset, labelsOffset);
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
 CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 CLASS_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
@@ -480,8 +480,8 @@ void Axis::setScale(AxisScale scale) {
 		exec(new AxisSetScalingCmd(d, scale, i18n("%1: set axis scale")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetOffset, float, offset, retransform);
-void Axis::setOffset(float offset, bool undo) {
+STD_SETTER_CMD_IMPL_F(Axis, SetOffset, double, offset, retransform);
+void Axis::setOffset(double offset, bool undo) {
 	Q_D(Axis);
 	if (offset != d->offset) {
 		if (undo) {
@@ -495,15 +495,15 @@ void Axis::setOffset(float offset, bool undo) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, float, start, retransform);
-void Axis::setStart(float start) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, double, start, retransform);
+void Axis::setStart(double start) {
 	Q_D(Axis);
 	if (start != d->start)
 		exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, float, end, retransform);
-void Axis::setEnd(float end) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, double, end, retransform);
+void Axis::setEnd(double end) {
 	Q_D(Axis);
 	if (end != d->end)
 		exec(new AxisSetEndCmd(d, end, i18n("%1: set axis end")));
@@ -524,15 +524,15 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 }
 
 //Title
-STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetX, float, titleOffsetX, retransform);
-void Axis::setTitleOffsetX(float offset) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetX, qreal, titleOffsetX, retransform);
+void Axis::setTitleOffsetX(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetX)
 		exec(new AxisSetTitleOffsetXCmd(d, offset, i18n("%1: set title offset")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, float, titleOffsetY, retransform);
-void Axis::setTitleOffsetY(float offset) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, qreal, titleOffsetY, retransform);
+void Axis::setTitleOffsetY(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetY)
 		exec(new AxisSetTitleOffsetYCmd(d, offset, i18n("%1: set title offset")));
@@ -567,8 +567,8 @@ void Axis::setArrowPosition(ArrowPosition position) {
 		exec(new AxisSetArrowPositionCmd(d, position, i18n("%1: set arrow position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, float, arrowSize, retransformArrow);
-void Axis::setArrowSize(float arrowSize) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, qreal, arrowSize, retransformArrow);
+void Axis::setArrowSize(qreal arrowSize) {
 	Q_D(Axis);
 	if (arrowSize != d->arrowSize)
 		exec(new AxisSetArrowSizeCmd(d, arrowSize, i18n("%1: set arrow size")));
@@ -733,8 +733,8 @@ void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, i18n("%1: set labels position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabelPositions);
-void Axis::setLabelsOffset(float offset) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, double, labelsOffset, retransformTickLabelPositions);
+void Axis::setLabelsOffset(double offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
 		exec(new AxisSetLabelsOffsetCmd(d, offset, i18n("%1: set label offset")));
@@ -835,7 +835,7 @@ void Axis::majorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
-	if (aspect==d->minorTicksColumn) {
+	if (aspect == d->minorTicksColumn) {
 		d->minorTicksColumn = 0;
 		d->retransformTicks();
 	}
@@ -1002,7 +1002,7 @@ void AxisPrivate::retransformArrow() {
 }
 
 void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
-	static const float cos_phi = cos(3.14159/6);
+	static const double cos_phi = cos(M_PI/6.);
 
 	if (orientation == Axis::AxisHorizontal) {
 		QPointF endPoint = QPointF(startPoint.x() + direction*arrowSize, startPoint.y());
@@ -1200,8 +1200,8 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
-	float middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	float middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
+	double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1376,7 +1376,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	QString str;
 	if (labelsFormat == Axis::FormatDecimal) {
 		QString nullStr = QString::number(0, 'f', labelsPrecision);
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = QString::number(value, 'f', labelsPrecision);
 			if (str == "-" + nullStr) str = nullStr;
 			str = labelsPrefix + str + labelsSuffix;
@@ -1384,31 +1384,31 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	} else if (labelsFormat == Axis::FormatScientificE) {
 		QString nullStr = QString::number(0, 'e', labelsPrecision);
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = QString::number(value, 'e', labelsPrecision);
 			if (str == "-" + nullStr) str = nullStr;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers10) {
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers2) {
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowersE) {
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatMultipliesPi) {
-		foreach (float value, tickLabelValues) {
+		foreach (double value, tickLabelValues) {
 			str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
@@ -1427,9 +1427,9 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 // 	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
-	QVector<float> tempValues;
+	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( round(tickLabelValues[i], precision) );
+		tempValues.append( roundP(tickLabelValues[i], precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1453,9 +1453,9 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 // 	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
-	QVector<float> tempValues;
+	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( round(tickLabelValues[i], precision-1) );
+		tempValues.append( roundP(tickLabelValues[i], precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1475,9 +1475,9 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 		return lowerLabelsPrecision(precision - 1);
 }
 
-double AxisPrivate::round(double value, int precision) {
+double AxisPrivate::roundP(double value, int precision) {
 	//DEBUG("AxisPrivate::round() value =" << value << "precision =" << precision);
-	double result = roundf(value * pow(10, precision)) / pow(10, precision);
+	double result = round(value * pow(10, precision)) / pow(10, precision);
 	//DEBUG("	result =" << result);
 	return result;
 }
@@ -1498,8 +1498,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	float height = fm.ascent();
 	QString label;
 	QPointF pos;
-	float middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	float middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
+	double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
 	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
 
@@ -1508,7 +1508,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
 
-	for ( int i=0; i<majorTickPoints.size(); i++ ) {
+	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
 		if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
 			width = fm.width(tickLabelStrings.at(i));
 		} else {
@@ -1551,7 +1551,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 				pos.setY( startPoint.y() + height/2 );
 			}
 		}
-		tickLabelPoints<<pos;
+		tickLabelPoints << pos;
 	}
 
 	recalcShapeAndBoundingRect();
@@ -1589,7 +1589,7 @@ void AxisPrivate::retransformMajorGrid() {
 
 	int start, end;
 	if (skipLowestTick) {
-		if (logicalMajorTickPoints.size()>1)
+		if (logicalMajorTickPoints.size() > 1)
 			start = 1;
 		else
 			start = 0;
@@ -1597,9 +1597,9 @@ void AxisPrivate::retransformMajorGrid() {
 		start = 0;
 	}
 
-	if ( skipUpperTick ) {
-		if (logicalMajorTickPoints.size()>1)
-			end = logicalMajorTickPoints.size()-1;
+	if (skipUpperTick) {
+		if (logicalMajorTickPoints.size() > 1)
+			end = logicalMajorTickPoints.size() - 1;
 		else
 			end = 0;
 
@@ -1609,19 +1609,19 @@ void AxisPrivate::retransformMajorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		float yMin = m_plot->yMin();
-		float yMax = m_plot->yMax();
+		double yMin = m_plot->yMin();
+		double yMax = m_plot->yMax();
 
 		for (int i=start; i<end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	} else { //vertical axis
-		float xMin = m_plot->xMin();
-		float xMax = m_plot->xMax();
+		double xMin = m_plot->xMin();
+		double xMax = m_plot->xMax();
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
-		for (int i=start; i<end; ++i) {
+		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 		}
@@ -1653,18 +1653,18 @@ void AxisPrivate::retransformMinorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		float yMin = m_plot->yMin();
-		float yMax = m_plot->yMax();
+		double yMin = m_plot->yMin();
+		double yMax = m_plot->yMax();
 
-		for (int i=0; i<logicalMinorTickPoints.size(); ++i) {
+		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
 			const QPointF& point = logicalMinorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	} else { //vertical axis
-		float xMin = m_plot->xMin();
-		float xMax = m_plot->xMax();
+		double xMin = m_plot->xMin();
+		double xMax = m_plot->xMax();
 
-		for (int i=0; i<logicalMinorTickPoints.size(); ++i) {
+		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
 			const QPointF& point = logicalMinorTickPoints.at(i);
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 		}
@@ -1707,7 +1707,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		QFontMetrics fm(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-	  	for (int i=0; i<tickLabelPoints.size(); i++) {
+		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
 			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
 				tempPath.addRect( fm.boundingRect(tickLabelStrings.at(i)) );
@@ -1732,8 +1732,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		//we calculate the new position here and not in retransform(),
 		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
 		QRectF rect=linePath.boundingRect();
-		float offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
-		float offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
+		qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
+		qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal) {
 			offsetY -= title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
 			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + offsetX, rect.bottomLeft().y() - offsetY ) );

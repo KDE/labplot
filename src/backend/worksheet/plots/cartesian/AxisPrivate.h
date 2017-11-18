@@ -66,9 +66,9 @@ public:
 	Axis::AxisOrientation orientation; //!< horizontal or vertical
 	Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
 	Axis::AxisScale scale;
-	float offset; //!< offset from zero in the direction perpendicular to the axis
-	float start; //!< start coordinate of the axis line
-	float end; //!< end coordinate of the axis line
+	double offset; //!< offset from zero in the direction perpendicular to the axis
+	double start; //!< start coordinate of the axis line
+	double end; //!< end coordinate of the axis line
 	qreal scalingFactor;
 	qreal zeroOffset;
 
@@ -78,12 +78,12 @@ public:
 	qreal lineOpacity;
 	Axis::ArrowType arrowType;
 	Axis::ArrowPosition arrowPosition;
-	float arrowSize;
+	qreal arrowSize;
 
 	// Title
 	TextLabel* title;
-	float titleOffsetX; //distance to the axis line
-	float titleOffsetY; //distance to the axis line
+	qreal titleOffsetX; //distance to the axis line
+	qreal titleOffsetY; //distance to the axis line
 
 	// Ticks
 	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
@@ -114,7 +114,7 @@ public:
 	qreal labelsRotationAngle;
 	QColor labelsColor;
 	QFont labelsFont;
-	float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
+	qreal labelsOffset; //!< offset, distance to the end of the tick line (in page units)
 	qreal labelsOpacity;
 	QString labelsPrefix;
 	QString labelsSuffix;
@@ -142,7 +142,7 @@ private:
 	void addArrow(const QPointF& point, int direction);
 	int upperLabelsPrecision(int);
 	int lowerLabelsPrecision(int);
-	double round(double value, int precision);
+	double roundP(double value, int precision);
 	bool transformAnchor(QPointF*);
 
 	QPainterPath arrowPath;
@@ -154,7 +154,7 @@ private:
 	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
 	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
 	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
-	QVector<float> tickLabelValues; //!< major tick labels values
+	QVector<double> tickLabelValues; //!< major tick labels values
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 	CartesianPlot* m_plot;

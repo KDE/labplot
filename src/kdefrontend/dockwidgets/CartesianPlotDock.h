@@ -131,12 +131,12 @@ private slots:
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
 	void plotXAutoScaleChanged(bool);
-	void plotXMinChanged(float);
-	void plotXMaxChanged(float);
+	void plotXMinChanged(double);
+	void plotXMaxChanged(double);
 	void plotXScaleChanged(int);
 	void plotYAutoScaleChanged(bool);
-	void plotYMinChanged(float);
-	void plotYMaxChanged(float);
+	void plotYMinChanged(double);
+	void plotYMaxChanged(double);
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 

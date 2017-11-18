@@ -392,8 +392,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, SIGNAL(positionChanged(Axis::AxisPosition)), this, SLOT(axisPositionChanged(Axis::AxisPosition)));
 	connect(m_axis, SIGNAL(scaleChanged(Axis::AxisScale)), this, SLOT(axisScaleChanged(Axis::AxisScale)));
 	connect(m_axis, SIGNAL(autoScaleChanged(bool)), this, SLOT(axisAutoScaleChanged(bool)));
-	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
-	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
+	connect(m_axis, SIGNAL(startChanged(double)), this, SLOT(axisStartChanged(double)));
+	connect(m_axis, SIGNAL(endChanged(double)), this, SLOT(axisEndChanged(double)));
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
 	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
 
@@ -402,7 +402,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
 	connect(m_axis, SIGNAL(arrowTypeChanged(Axis::ArrowType)), this, SLOT(axisArrowTypeChanged(Axis::ArrowType)));
 	connect(m_axis, SIGNAL(arrowPositionChanged(Axis::ArrowPosition)), this, SLOT(axisArrowPositionChanged(Axis::ArrowPosition)));
-	connect(m_axis, SIGNAL(arrowSizeChanged(float)), this, SLOT(axisArrowSizeChanged(float)));
+	connect(m_axis, SIGNAL(arrowSizeChanged(qreal)), this, SLOT(axisArrowSizeChanged(qreal)));
 
 	// ticks
 	connect(m_axis, SIGNAL(majorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMajorTicksDirectionChanged(Axis::TicksDirection)));
@@ -425,7 +425,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, SIGNAL(labelsAutoPrecisionChanged(bool)), this, SLOT(axisLabelsAutoPrecisionChanged(bool)));
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
 	connect(m_axis, SIGNAL(labelsPositionChanged(Axis::LabelsPosition)), this, SLOT(axisLabelsPositionChanged(Axis::LabelsPosition)));
-	connect(m_axis, SIGNAL(labelsOffsetChanged(float)), this, SLOT(axisLabelsOffsetChanged(float)));
+	connect(m_axis, SIGNAL(labelsOffsetChanged(double)), this, SLOT(axisLabelsOffsetChanged(double)));
 	connect(m_axis, SIGNAL(labelsRotationAngleChanged(qreal)), this, SLOT(axisLabelsRotationAngleChanged(qreal)));
 	connect(m_axis, SIGNAL(labelsFontChanged(QFont)), this, SLOT(axisLabelsFontChanged(QFont)));
 	connect(m_axis, SIGNAL(labelsColorChanged(QColor)), this, SLOT(axisLabelsFontColorChanged(QColor)));

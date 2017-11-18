@@ -311,12 +311,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot, SIGNAL(rangeFirstValuesChanged(int)), this, SLOT(plotRangeFirstValuesChanged(int)) );
 	connect( m_plot, SIGNAL(rangeLastValuesChanged(int)), this, SLOT(plotRangeLastValuesChanged(int)) );
 	connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
-	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
-	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
+	connect( m_plot, SIGNAL(xMinChanged(double)), this, SLOT(plotXMinChanged(double)) );
+	connect( m_plot, SIGNAL(xMaxChanged(double)), this, SLOT(plotXMaxChanged(double)) );
 	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
 	connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
-	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
-	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
+	connect( m_plot, SIGNAL(yMinChanged(double)), this, SLOT(plotYMinChanged(double)) );
+	connect( m_plot, SIGNAL(yMaxChanged(double)), this, SLOT(plotYMaxChanged(double)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
 	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
 
@@ -1129,13 +1129,13 @@ void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotXMinChanged(float value) {
+void CartesianPlotDock::plotXMinChanged(double value) {
 	m_initializing = true;
 	ui.leXMin->setText( QString::number(value) );
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotXMaxChanged(float value) {
+void CartesianPlotDock::plotXMaxChanged(double value) {
 	m_initializing = true;
 	ui.leXMax->setText( QString::number(value) );
 	m_initializing = false;
@@ -1153,13 +1153,13 @@ void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotYMinChanged(float value) {
+void CartesianPlotDock::plotYMinChanged(double value) {
 	m_initializing = true;
 	ui.leYMin->setText( QString::number(value) );
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotYMaxChanged(float value) {
+void CartesianPlotDock::plotYMaxChanged(double value) {
 	m_initializing = true;
 	ui.leYMax->setText( QString::number(value) );
 	m_initializing = false;

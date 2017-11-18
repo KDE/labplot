@@ -79,22 +79,22 @@ class Axis: public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
 		BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
-		BASIC_D_ACCESSOR_DECL(float, start, Start)
-		BASIC_D_ACCESSOR_DECL(float, end, End)
-		void setOffset(const float, const bool=true);
-		float offset() const;
+		BASIC_D_ACCESSOR_DECL(double, start, Start)
+		BASIC_D_ACCESSOR_DECL(double, end, End)
+		void setOffset(const double, const bool=true);
+		double offset() const;
 		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
 		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
-		BASIC_D_ACCESSOR_DECL(float, titleOffsetX, TitleOffsetX)
-		BASIC_D_ACCESSOR_DECL(float, titleOffsetY, TitleOffsetY)
+		BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
+		BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 		BASIC_D_ACCESSOR_DECL(ArrowType, arrowType, ArrowType)
 		BASIC_D_ACCESSOR_DECL(ArrowPosition, arrowPosition, ArrowPosition)
-		BASIC_D_ACCESSOR_DECL(float, arrowSize, ArrowSize)
+		BASIC_D_ACCESSOR_DECL(double, arrowSize, ArrowSize)
 
 		BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 		BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
@@ -120,7 +120,7 @@ class Axis: public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 		BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
 		BASIC_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition)
-		BASIC_D_ACCESSOR_DECL(float, labelsOffset, LabelsOffset)
+		BASIC_D_ACCESSOR_DECL(qreal, labelsOffset, LabelsOffset)
 		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
 		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 		CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
@@ -189,19 +189,19 @@ class Axis: public WorksheetElement {
 		friend class AxisSetScalingFactorCmd;
 		void orientationChanged(Axis::AxisOrientation);
 		void positionChanged(Axis::AxisPosition);
-		void positionChanged(float);
+		void positionChanged(double);
 		void scaleChanged(Axis::AxisScale);
-		void startChanged(float);
+		void startChanged(double);
 		void autoScaleChanged(bool);
-		void endChanged(float);
+		void endChanged(double);
 		void zeroOffsetChanged(qreal);
 		void scalingFactorChanged(qreal);
 
 		//title
 		friend class AxisSetTitleOffsetXCmd;
 		friend class AxisSetTitleOffsetYCmd;
-		void titleOffsetXChanged(float);
-		void titleOffsetYChanged(float);
+		void titleOffsetXChanged(qreal);
+		void titleOffsetYChanged(qreal);
 
 		// line
 		friend class AxisSetLinePenCmd;
@@ -213,7 +213,7 @@ class Axis: public WorksheetElement {
 		void lineOpacityChanged(qreal);
 		void arrowTypeChanged(Axis::ArrowType);
 		void arrowPositionChanged(Axis::ArrowPosition);
-		void arrowSizeChanged(float);
+		void arrowSizeChanged(qreal);
 
 		// major ticks
 		friend class AxisSetMajorTicksDirectionCmd;
@@ -267,7 +267,7 @@ class Axis: public WorksheetElement {
 		void labelsAutoPrecisionChanged(bool);
 		void labelsPrecisionChanged(int);
 		void labelsPositionChanged(Axis::LabelsPosition);
-		void labelsOffsetChanged(float);
+		void labelsOffsetChanged(double);
 		void labelsRotationAngleChanged(qreal);
 		void labelsColorChanged(QColor);
 		void labelsFontChanged(QFont);

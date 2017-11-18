@@ -861,8 +861,8 @@ private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
 	bool m_autoScaleOld;
-	float m_minOld;
-	float m_maxOld;
+	double m_minOld;
+	double m_maxOld;
 };
 
 void CartesianPlot::setAutoScaleX(bool autoScaleX) {
@@ -937,8 +937,8 @@ private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
 	bool m_autoScaleOld;
-	float m_minOld;
-	float m_maxOld;
+	double m_minOld;
+	double m_maxOld;
 };
 
 void CartesianPlot::setAutoScaleY(bool autoScaleY) {
@@ -1518,7 +1518,7 @@ void CartesianPlot::scaleAutoX() {
 				d->xMin = -0.1;
 			}
 		} else {
-			float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
+			double offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
 			d->xMin -= offset;
 			d->xMax += offset;
 		}
@@ -1600,7 +1600,7 @@ void CartesianPlot::scaleAutoY() {
 				d->yMin = -0.1;
 			}
 		} else {
-			float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
+			double offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
 			d->yMin -= offset;
 			d->yMax += offset;
 		}
@@ -2164,7 +2164,7 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 	if (type == CartesianPlot::ScaleLinear)
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	else {
-		float base;
+		double base;
 		if (type == CartesianPlot::ScaleLog10)
 			base = 10.0;
 		else if (type == CartesianPlot::ScaleLog2)

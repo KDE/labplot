@@ -178,9 +178,9 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	foreach (Axis* axis, axes) {
 		m_labelsList.append(axis->title());
-		connect(axis, SIGNAL(titleOffsetXChanged(float)), this, SLOT(labelOffsetxChanged(float)) );
-		connect(axis, SIGNAL(titleOffsetYChanged(float)), this, SLOT(labelOffsetyChanged(float)) );
-		connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+		connect(axis, SIGNAL(titleOffsetXChanged(double)), this, SLOT(labelOffsetxChanged(double)) );
+		connect(axis, SIGNAL(titleOffsetYChanged(double)), this, SLOT(labelOffsetyChanged(double)) );
+		connect(axis->title(), SIGNAL(rotationAngleChanged(double)), this, SLOT(labelRotationAngleChanged(double)) );
 	}
 
 	m_axesList = axes;
