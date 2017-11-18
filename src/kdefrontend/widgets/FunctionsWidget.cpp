@@ -35,12 +35,13 @@
 
 	\ingroup kdefrontend
  */
-FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
+FunctionsWidget::FunctionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
 	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
+	ui.leFilter->setFocus();
 
 	//SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &FunctionsWidget::filterChanged);
@@ -76,7 +77,7 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 		static const QStringList& functions = m_expressionParser->functions();
 		ui.lwFunctions->clear();
 		for (int i=0; i<names.size(); ++i) {
-			if (names.at(i).contains(filter, Qt::CaseInsensitive))
+			if (names.at(i).contains(filter, Qt::CaseInsensitive) || functions.at(i).contains(filter, Qt::CaseInsensitive))
 				ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ')' );
 		}
 
