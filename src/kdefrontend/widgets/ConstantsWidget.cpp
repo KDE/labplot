@@ -35,7 +35,7 @@
 
 	\ingroup kdefrontend
  */
-ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
+ConstantsWidget::ConstantsWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
 	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -77,7 +77,7 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 		static const QStringList& constants = m_expressionParser->constants();
 		ui.lwConstants->clear();
 		for (int i=0; i<names.size(); ++i) {
-			if (names.at(i).contains(filter, Qt::CaseInsensitive))
+			if (names.at(i).contains(filter, Qt::CaseInsensitive) || constants.at(i).contains(filter, Qt::CaseInsensitive))
 				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ')' );
 		}
 
