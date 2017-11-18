@@ -45,7 +45,7 @@ struct con _constants[] = {
 	/* Physical constants in MKSA system */
 
 	/* Fundamental Constants */
-	{"c0", GSL_CONST_MKSA_SPEED_OF_LIGHT},
+	{"cL", GSL_CONST_MKSA_SPEED_OF_LIGHT},
 	{"mu0", GSL_CONST_MKSA_VACUUM_PERMEABILITY},
 	{"e0", GSL_CONST_MKSA_VACUUM_PERMITTIVITY},
 	{"hPlanck", GSL_CONST_MKSA_PLANCKS_CONSTANT_H},
@@ -76,7 +76,7 @@ struct con _constants[] = {
 	{"mn", GSL_CONST_MKSA_MASS_NEUTRON},
 	{"alpha", GSL_CONST_NUM_FINE_STRUCTURE},
 	{"Ry", GSL_CONST_MKSA_RYDBERG},
-	{"a0", GSL_CONST_MKSA_BOHR_RADIUS},
+	{"aB", GSL_CONST_MKSA_BOHR_RADIUS},
 	{"ao", GSL_CONST_MKSA_ANGSTROM},
 	{"barn", GSL_CONST_MKSA_BARN},
 	{"muB", GSL_CONST_MKSA_BOHR_MAGNETON},
