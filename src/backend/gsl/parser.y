@@ -118,7 +118,7 @@ int parse_errors(void) {
 int yyerror(param *p, const char *s) {
 	/* remove trailing newline */
 	p->string[strcspn(p->string, "\n")] = 0;
-#if defined(__GNUC__)
+#if defined(__GNUC__) || _MSC_VER >= 1800
 	printf("PARSER ERROR: %s @ position %zu of string \'%s\'\n", s, p->pos, p->string);
 #else
 	printf("PARSER ERROR: %s @ position %Iu of string \'%s\'\n", s, p->pos, p->string);
@@ -220,7 +220,7 @@ static void ungetcstr(size_t *pos) {
 }
 
 double parse(const char *str) {
-#if defined(__GNUC__)
+#if defined(__GNUC__) || _MSC_VER >= 1800
 	pdebug("\nPARSER: parse(\"%s\") len=%zu\n", str, strlen(str));
 #else
 	pdebug("\nPARSER: parse(\"%s\") len=%Iu\n", str, strlen(str));
@@ -238,7 +238,7 @@ double parse(const char *str) {
 
 	strncpy(p.string, str, slen);
 	p.string[strlen(p.string)] = '\n';
-#if defined(__GNUC__)
+#if defined(__GNUC__) || _MSC_VER >= 1800
 	pdebug("\nPARSER: yyparse(\"%s\") len=%zu\n", p.string, strlen(p.string));
 #else
 	pdebug("\nPARSER: yyparse(\"%s\") len=%Iu\n", p.string, strlen(p.string));
@@ -255,7 +255,7 @@ double parse(const char *str) {
 }
 
 double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
-#if defined(__GNUC__)
+#if defined(__GNUC__) || _MSC_VER >= 1800
 	pdebug("\nPARSER: parse_with_var(\"%s\") len=%zu\n", str, strlen(str));
 #else
 	pdebug("\nPARSER: parse_with_var(\"%s\") len=%Iu\n", str, strlen(str));
@@ -271,7 +271,7 @@ double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
 
 int yylex(param *p) {
 	pdebug("PARSER: yylex()\n");
-	int c;
+	char c;
 
 	/* skip white space  */
 	while ((c = getcharstr(p)) == ' ' || c == '\t');
