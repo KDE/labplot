@@ -132,6 +132,10 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twLog->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twGoodness->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+	//don't allow word wrapping in the log-table for the multi-line iterations string
+	uiGeneralTab.twLog->setWordWrap(false);
+
 	// context menus
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twGoodness->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -936,7 +940,7 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	// General
+	// Log
 	uiGeneralTab.twLog->item(0, 1)->setText(fitResult.status);
 
 	if (!fitResult.valid) {
@@ -954,6 +958,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twLog->item(4, 1)->setText(QString::number(fitResult.dof));
 	uiGeneralTab.twLog->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
 	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(m_fitData.xRange.first()) + " .. " + QString::number(m_fitData.xRange.last()) );
+
 	// show all iterations
 	QString str;
 	for (const auto &s: m_fitData.paramNamesUtf8)
@@ -979,6 +984,7 @@ void XYFitCurveDock::showFitResult() {
 		const double errorValue = fitResult.errorValues.at(i);
 
 		QTableWidgetItem* item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
+		item->setBackground(QApplication::palette().color(QPalette::Window));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
 		item = new QTableWidgetItem(QString::number(paramValue));
 		uiGeneralTab.twParameters->setItem(i, 1, item);
