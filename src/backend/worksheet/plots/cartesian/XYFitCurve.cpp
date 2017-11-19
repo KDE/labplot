@@ -1081,7 +1081,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_sf_stats_chi_squared: {
-			const double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double nu = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
@@ -1090,13 +1090,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
-						gsl_matrix_set(J, (const size_t)i, (const size_t)j, nsl_fit_model_chi_square_param_deriv(j, x, n, a, weight[i]));
+						gsl_matrix_set(J, (const size_t)i, (const size_t)j, nsl_fit_model_chi_square_param_deriv(j, x, nu, a, weight[i]));
 				}
 			}
 			break;
 		}
 		case nsl_sf_stats_tdist: {
-			const double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double nu = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
@@ -1105,7 +1105,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
-						gsl_matrix_set(J, (const size_t)i, (const size_t)j, nsl_fit_model_students_t_param_deriv(j, x, n, a, weight[i]));
+						gsl_matrix_set(J, (const size_t)i, (const size_t)j, nsl_fit_model_students_t_param_deriv(j, x, nu, a, weight[i]));
 				}
 			}
 			break;
