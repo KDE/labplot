@@ -77,8 +77,6 @@ int nsl_diff_first_deriv(const double *x, double *y, const size_t n, int order) 
 		printf("nsl_diff_first_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n) {
@@ -182,8 +180,6 @@ int nsl_diff_second_deriv(const double *x, double *y, const size_t n, int order)
 		printf("nsl_diff_second_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n) {
@@ -297,8 +293,6 @@ int nsl_diff_third_deriv(const double *x, double *y, const size_t n, int order) 
 		printf("nsl_diff_third_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_third_deriv_second_order(const double *x, double *y, const size_t n) {
@@ -343,8 +337,6 @@ int nsl_diff_fourth_deriv(const double *x, double *y, const size_t n, int order)
 		printf("nsl_diff_fourth_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_fourth_deriv_first_order(const double *x, double *y, const size_t n) {
@@ -418,8 +410,6 @@ int nsl_diff_fifth_deriv(const double *x, double *y, const size_t n, int order) 
 		printf("nsl_diff_fifth_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_fifth_deriv_second_order(const double *x, double *y, const size_t n) {
@@ -462,8 +452,6 @@ int nsl_diff_sixth_deriv(const double *x, double *y, const size_t n, int order) 
 		printf("nsl_diff_sixth_deriv() unsupported order %d\n", order);
 		return -1;
 	}
-
-	return 0;
 }
 
 int nsl_diff_sixth_deriv_first_order(const double *x, double *y, const size_t n) {
