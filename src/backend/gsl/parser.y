@@ -205,13 +205,13 @@ symrec* assign_variable(const char* symb_name, double value) {
 	return ptr;
 };
 
-static int getcharstr(param *p) {
+static char getcharstr(param *p) {
 	pdebug("PARSER: getcharstr() pos = %d\n", p->pos);
 
 	if (p->string[p->pos] == '\0')
 		return EOF;
 	pdebug("next char is %c\n", p->string[p->pos]);
-	return (int) p->string[(p->pos)++];
+	return p->string[(p->pos)++];
 }
 
 static void ungetcstr(size_t *pos) {
