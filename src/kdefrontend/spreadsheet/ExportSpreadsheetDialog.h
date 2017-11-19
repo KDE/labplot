@@ -89,6 +89,7 @@ private slots:
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
 	void fitsExportToChanged(int);
+	void loadSettings();
 };
 
 #endif

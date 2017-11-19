@@ -34,6 +34,7 @@
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QDialogButtonBox>
+#include <QTimer>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -49,6 +50,7 @@
 */
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(parent),
 	ui(new Ui::ExportSpreadsheetWidget()),
+	m_showOptions(true),
 	m_matrixMode(false),
 	m_format(Format::ASCII) {
 	ui->setupUi(this);
@@ -92,6 +94,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 
 	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
 
+	ui->leFileName->setFocus();
+
 	connect(btnBox, &QDialogButtonBox::accepted, this, &ExportSpreadsheetDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &ExportSpreadsheetDialog::reject);
 
@@ -104,9 +108,13 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	setWindowTitle(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
-	//restore saved settings
+	QTimer::singleShot(0, this, &ExportSpreadsheetDialog::loadSettings);
+}
 
+void ExportSpreadsheetDialog::loadSettings() {
+	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
@@ -123,7 +131,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->gbOptions->setVisible(m_showOptions);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
 			m_showOptionsButton->setText(i18n("Show Options"));
-	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
@@ -306,7 +313,18 @@ void ExportSpreadsheetDialog::toggleOptions() {
 void ExportSpreadsheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
+
+	QString format;
+	if (ui->cbFormat->currentIndex() == 0)
+		format = i18n("Text files (*.txt *.dat *.csv)");
+	else if (ui->cbFormat->currentIndex() == 1)
+		format = i18n("Binary files (*.*)");
+	else if (ui->cbFormat->currentIndex() == 2)
+		format = i18n("LaTeX files (*.tex)");
+	else
+		format =  i18n("FITS files (*.fits *.fit *.fts)");
+
+	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir, format);
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
