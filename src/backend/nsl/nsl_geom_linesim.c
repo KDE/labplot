@@ -639,7 +639,7 @@ size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const s
 size_t nsl_geom_linesim_lang_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
 	/* TODO: calculate search region */
-	double region = 0;
+	size_t region = 0;
 	printf("nsl_geom_linesim_lang_auto(): Not implemented yet\n");
 
 	return nsl_geom_linesim_lang(xdata, ydata, n, tol, region, index);
