@@ -46,6 +46,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/gsl/errors.h"
 #include "tools/ImageTools.h"
 
 #include <QPainter>
@@ -1092,7 +1093,6 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::SplineCubicPeriodic:
 	case XYCurve::SplineAkimaNatural:
 	case XYCurve::SplineAkimaPeriodic: {
-			//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
 			gsl_interp_accel *acc = gsl_interp_accel_alloc();
 			gsl_spline *spline = 0;
 
@@ -1135,7 +1135,7 @@ void XYCurvePrivate::updateLines() {
 				if (status == GSL_EINVAL)
 					gslError = i18n("x values must be monotonically increasing.");
 				else
-					gslError = gsl_strerror(status);
+					gslError = gslErrorToString(status);
 				emit q->info( i18n("Error: %1").arg(gslError) );
 
 				recalcShapeAndBoundingRect();
