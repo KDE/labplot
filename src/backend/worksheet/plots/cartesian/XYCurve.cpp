@@ -1093,7 +1093,6 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::SplineAkimaNatural:
 	case XYCurve::SplineAkimaPeriodic: {
 			//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
-			//TODO: forward the error message to the UI.
 			gsl_interp_accel *acc = gsl_interp_accel_alloc();
 			gsl_spline *spline = 0;
 
@@ -1119,8 +1118,8 @@ void XYCurvePrivate::updateLines() {
 				if ( (lineType == XYCurve::SplineAkimaNatural || lineType == XYCurve::SplineAkimaPeriodic) && count < 5)
 					msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 				else
-					msg = i18n("Couldn't initialize spline function");
-				QDEBUG(msg);
+					msg = i18n("Error: Couldn't initialize the spline function.");
+				emit q->info(msg);
 
 				recalcShapeAndBoundingRect();
 				delete[] x;
@@ -1134,12 +1133,16 @@ void XYCurvePrivate::updateLines() {
 				//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
 				QString gslError;
 				if (status == GSL_EINVAL)
-					gslError = "x values must be monotonically increasing.";
+					gslError = i18n("x values must be monotonically increasing.");
 				else
-					gslError = gsl_strerror (status);
-				QDEBUG("Error in spline calculation. " << gslError);
+					gslError = gsl_strerror(status);
+				emit q->info( i18n("Error: %1").arg(gslError) );
 
 				recalcShapeAndBoundingRect();
+				delete[] x;
+				delete[] y;
+				gsl_spline_free (spline);
+				gsl_interp_accel_free (acc);
 				return;
 			}
 
