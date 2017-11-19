@@ -49,7 +49,7 @@
 
 /* params passed to yylex (and yyerror) */
 typedef struct param {
-	unsigned int pos;	/* current position in string */
+	size_t pos;	/* current position in string */
 	char *string;		/* the string to parse */
 /*	symrec *sym_table;	the symbol table (not used) */
 } param;
@@ -111,14 +111,18 @@ expr:      NUM       { $$ = $1;                         }
 /* global symbol table */
 symrec *sym_table = 0;
 
-int parse_errors() {
+int parse_errors(void) {
 	return yynerrs;
 }
 
 int yyerror(param *p, const char *s) {
 	/* remove trailing newline */
 	p->string[strcspn(p->string, "\n")] = 0;
-	printf("PARSER ERROR: %s @ position %d of string \'%s\'\n", s, p->pos, p->string);
+#if defined(__GNUC__)
+	printf("PARSER ERROR: %s @ position %zu of string \'%s\'\n", s, p->pos, p->string);
+#else
+	printf("PARSER ERROR: %s @ position %Iu of string \'%s\'\n", s, p->pos, p->string);
+#endif
 	return 0;
 }
 
@@ -210,13 +214,17 @@ static int getcharstr(param *p) {
 	return (int) p->string[(p->pos)++];
 }
 
-static void ungetcstr(unsigned int *pos) {
+static void ungetcstr(size_t *pos) {
     if (*pos > 0)
         (*pos)--;
 }
 
 double parse(const char *str) {
+#if defined(__GNUC__)
 	pdebug("\nPARSER: parse(\"%s\") len=%zu\n", str, strlen(str));
+#else
+	pdebug("\nPARSER: parse(\"%s\") len=%Iu\n", str, strlen(str));
+#endif
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
@@ -230,7 +238,11 @@ double parse(const char *str) {
 
 	strncpy(p.string, str, slen);
 	p.string[strlen(p.string)] = '\n';
+#if defined(__GNUC__)
 	pdebug("\nPARSER: yyparse(\"%s\") len=%zu\n", p.string, strlen(p.string));
+#else
+	pdebug("\nPARSER: yyparse(\"%s\") len=%Iu\n", p.string, strlen(p.string));
+#endif
 
 	/* parameter for yylex */
 	yyparse(&p);
@@ -243,7 +255,11 @@ double parse(const char *str) {
 }
 
 double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
+#if defined(__GNUC__)
 	pdebug("\nPARSER: parse_with_var(\"%s\") len=%zu\n", str, strlen(str));
+#else
+	pdebug("\nPARSER: parse_with_var(\"%s\") len=%Iu\n", str, strlen(str));
+#endif
 	int i;
 	for(i = 0; i < nvars; i++) {	/*assign vars */
 		pdebug("assign %s the value %g\n", vars[i].name, vars[i].value);
