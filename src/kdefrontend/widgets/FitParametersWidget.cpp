@@ -70,6 +70,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
+	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
@@ -78,7 +79,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			// name
 			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-			item->setBackground(QBrush(Qt::lightGray));
+			item->setBackground(QApplication::palette().color(QPalette::Window));
 			ui.tableWidget->setItem(i, 0, item);
 
 			// start value
@@ -128,7 +129,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			for (int i = 0; i < m_fitData->paramNames.size(); ++i){
 				// name
 				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
-				item->setBackground(QBrush(Qt::lightGray));
+				item->setBackground(QApplication::palette().color(QPalette::Window));
 				ui.tableWidget->setItem(i, 0, item);
 
 				// start value
@@ -172,7 +173,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			ui.tableWidget->setRowCount(1);
 			// name
 			QTableWidgetItem* item = new QTableWidgetItem();
-			item->setBackground(QBrush(Qt::lightGray));
+			item->setBackground(QApplication::palette().color(QPalette::Window));
 			ui.tableWidget->setItem(0, 0, item);
 
 			// start value
