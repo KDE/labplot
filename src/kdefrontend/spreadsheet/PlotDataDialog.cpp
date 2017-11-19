@@ -138,19 +138,19 @@ void PlotDataDialog::loadSettings() {
 	 QApplication::processEvents(QEventLoop::AllEvents, 0);
 	const KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+
 		int index = conf.readEntry("CurvePlacement", 0);
 		if (index == 2) ui->rbCurvePlacement2->setChecked(true);
 
 		index = conf.readEntry("PlotPlacement", 0);
 		if (index == 2) ui->rbPlotPlacement2->setChecked(true);
 		if (index == 3) ui->rbPlotPlacement3->setChecked(true);
-		plotPlacementChanged();
-
-		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	} else
-		resize( QSize(500,0).expandedTo(minimumSize()) );
+		resize( QSize(0,0).expandedTo(minimumSize()) );
 
-	this->processColumns();
+	processColumns();
+	plotPlacementChanged();
 }
 
 PlotDataDialog::~PlotDataDialog() {
