@@ -205,7 +205,7 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 	for (i = 0; i < nout; i++)
 		maxdist[i] = 0;
 
-	double newmaxdist;
+	double newmaxdist = 0;
 	while (ntmp < nout) {
 		size_t key = 0, v;
 
@@ -599,8 +599,6 @@ size_t nsl_geom_linesim_opheim_auto(const double xdata[], const double ydata[], 
 	double maxtol = 5.*mintol;
 
 	return nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
-
-	return 0;
 }
 
 size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const size_t n, const double tol, const size_t region, size_t index[]) {
