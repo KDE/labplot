@@ -88,16 +88,16 @@ COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
 		return z;
 	} else if (n == 1) {
 		COMPLEX z;
-		z.re = creal(x) + 1.0;
-		z.im = cimag(x);
+		z.x = creal(x) + 1.0;
+		z.y = cimag(x);
 		return z;
 	}
 	double factor = 2 * n - 1;
 	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
 	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
 	COMPLEX z;
-	z.re = factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2);
-	z.im = factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2);
+	z.x = factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2);
+	z.y = factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2);
 	return z;
 #else
 	if (n == 0)
@@ -120,8 +120,8 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 		return z;
 	} else if (n == 1) {
 		COMPLEX z;
-		z.re = creal(x) + 1.0;
-		z.im = cimag(x);
+		z.x = creal(x) + 1.0;
+		z.y = cimag(x);
 		return z;
 	}
 	double factor = 2 * n - 1;
@@ -130,8 +130,8 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
 	double imx2 = 2.0*creal(x)*cimag(x);
 	COMPLEX z;
-	z.re = factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2);
-	z.im = factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2);
+	z.x = factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2);
+	z.y = factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2);
 	return z;
 #else
 	if (n == 0)

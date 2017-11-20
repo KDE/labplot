@@ -33,9 +33,9 @@
 #include <gsl/gsl_version.h>
 
 /* stdlib.h */
-double nsl_sf_rand() { return rand(); }
-double nsl_sf_random() { return random(); }
-double nsl_sf_drand() { return random()/(double)RAND_MAX; }
+double nsl_sf_rand(void) { return rand(); }
+double nsl_sf_random(void) { return random(); }
+double nsl_sf_drand(void) { return random()/(double)RAND_MAX; }
 
 /* math.h */
 double nsl_sf_sgn(double x) {

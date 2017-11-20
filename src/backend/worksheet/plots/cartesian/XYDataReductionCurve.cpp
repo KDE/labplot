@@ -308,7 +308,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
-	for (unsigned int i = 0; i < npoints; i++) {
+	for (size_t i = 0; i < npoints; i++) {
 		(*xVector)[i] = xdata[index[i]];
 		(*yVector)[i] = ydata[index[i]];
 	}

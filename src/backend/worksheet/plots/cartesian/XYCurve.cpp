@@ -1706,10 +1706,10 @@ void XYCurvePrivate::updateErrorBars() {
 		capSizeX = (pointLogical.y() - symbolPointsLogical.at(i).y())/2;
 
 		//cap size for y-error bars
-		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
+		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at((int)i));
 		pointScene.setX(pointScene.x()+errorBarsCapSize);
 		pointLogical = cSystem->mapSceneToLogical(pointScene);
-		capSizeY = (pointLogical.x() - symbolPointsLogical.at(i).x())/2;
+		capSizeY = (pointLogical.x() - symbolPointsLogical.at((int)i).x())/2;
 	}
 
 	for (int i=0; i < symbolPointsLogical.size(); ++i) {
