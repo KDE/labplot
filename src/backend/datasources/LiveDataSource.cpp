@@ -229,7 +229,7 @@ QString LiveDataSource::fileName() const {
  * \brief Sets the local socket's server name to name
  * \param name
  */
-void LiveDataSource::setLocalSocketName(const QString & name) {
+void LiveDataSource::setLocalSocketName(const QString& name) {
 	m_localSocketName = name;
 }
 
@@ -237,7 +237,7 @@ QString LiveDataSource::localSocketName() const {
 	return m_localSocketName;
 }
 
-void LiveDataSource::setFileType(const FileType type) {
+void LiveDataSource::setFileType(FileType type) {
 	m_fileType = type;
 }
 
@@ -257,7 +257,7 @@ AbstractFileFilter* LiveDataSource::filter() const {
   sets whether the file should be watched or not.
   In the first case the data source will be automatically updated on file changes.
 */
-void LiveDataSource::setFileWatched(const bool b) {
+void LiveDataSource::setFileWatched(bool b) {
 	m_fileWatched = b;
 }
 
@@ -269,7 +269,7 @@ bool LiveDataSource::isFileWatched() const {
  * \brief Sets whether we'll keep the last values or append it to the previous ones
  * \param keepLastValues
  */
-void LiveDataSource::setKeepLastValues(const bool keepLastValues) {
+void LiveDataSource::setKeepLastValues(bool keepLastValues) {
 	m_keepLastValues = keepLastValues;
 }
 
@@ -281,7 +281,7 @@ bool LiveDataSource::keepLastValues() const {
  * \brief Sets the serial port's baud rate
  * \param baudrate
  */
-void LiveDataSource::setBaudRate(const int baudrate) {
+void LiveDataSource::setBaudRate(int baudrate) {
 	m_baudRate = baudrate;
 }
 
@@ -293,7 +293,7 @@ int LiveDataSource::baudRate() const {
  * \brief Sets the source's update interval to \c interval
  * \param interval
  */
-void LiveDataSource::setUpdateInterval(const int interval) {
+void LiveDataSource::setUpdateInterval(int interval) {
 	m_updateInterval = interval;
 	m_updateTimer->start(m_updateInterval);
 }
@@ -306,7 +306,7 @@ int LiveDataSource::updateInterval() const {
  * \brief Sets how many values we should store
  * \param keepnvalues
  */
-void LiveDataSource::setKeepNvalues(const int keepnvalues) {
+void LiveDataSource::setKeepNvalues(int keepnvalues) {
 	m_keepNvalues = keepnvalues;
 }
 
@@ -318,11 +318,11 @@ int LiveDataSource::keepNvalues() const {
  * \brief Sets the network socket's port to port
  * \param port
  */
-void LiveDataSource::setPort(const int port) {
+void LiveDataSource::setPort(quint16 port) {
 	m_port = port;
 }
 
-void LiveDataSource::setBytesRead(const qint64 bytes) {
+void LiveDataSource::setBytesRead(qint64 bytes) {
 	m_bytesRead = bytes;
 }
 
@@ -338,7 +338,7 @@ int LiveDataSource::port() const {
  * \brief Sets the serial port's name to name
  * \param name
  */
-void LiveDataSource::setSerialPort(const QString &name) {
+void LiveDataSource::setSerialPort(const QString& name) {
 	m_serialPortName = name;
 }
 
@@ -354,7 +354,7 @@ bool LiveDataSource::isPaused() const {
  * \brief Sets the sample rate to samplerate
  * \param samplerate
  */
-void LiveDataSource::setSampleRate(const int samplerate) {
+void LiveDataSource::setSampleRate(int samplerate) {
 	m_sampleRate = samplerate;
 }
 
@@ -366,7 +366,7 @@ int LiveDataSource::sampleRate() const {
  * \brief Sets the source's type to sourcetype
  * \param sourcetype
  */
-void LiveDataSource::setSourceType(const SourceType sourcetype) {
+void LiveDataSource::setSourceType(SourceType sourcetype) {
 	m_sourceType = sourcetype;
 }
 
@@ -378,7 +378,7 @@ LiveDataSource::SourceType LiveDataSource::sourceType() const {
  * \brief Sets the source's reading type to readingType
  * \param readingType
  */
-void LiveDataSource::setReadingType(const ReadingType readingType) {
+void LiveDataSource::setReadingType(ReadingType readingType) {
 	m_readingType = readingType;
 }
 
@@ -390,7 +390,7 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
  * \brief Sets the source's update type to updatetype and handles this change
  * \param updatetype
  */
-void LiveDataSource::setUpdateType(const UpdateType updatetype) {
+void LiveDataSource::setUpdateType(UpdateType updatetype) {
 	if (updatetype == NewData) {
 		m_updateTimer->stop();
 		if (m_fileSystemWatcher == nullptr)
@@ -412,7 +412,7 @@ LiveDataSource::UpdateType LiveDataSource::updateType() const {
  * \brief Sets the network socket's host
  * \param host
  */
-void LiveDataSource::setHost(const QString & host) {
+void LiveDataSource::setHost(const QString& host) {
 	m_host = host;
 }
 
@@ -424,7 +424,7 @@ QString LiveDataSource::host() const {
   sets whether only a link to the file is saved in the project file (\c b=true)
   or the whole content of the file (\c b=false).
 */
-void LiveDataSource::setFileLinked(const bool b) {
+void LiveDataSource::setFileLinked(bool b) {
 	m_fileLinked = b;
 }
 

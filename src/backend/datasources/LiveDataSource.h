@@ -84,22 +84,22 @@ public:
 	FileType fileType() const;
 
 	UpdateType updateType() const;
-	void setUpdateType(const UpdateType);
+	void setUpdateType(UpdateType);
 
 	SourceType sourceType() const;
-	void setSourceType(const SourceType);
+	void setSourceType(SourceType);
 
 	ReadingType readingType() const;
-	void setReadingType(const ReadingType);
+	void setReadingType(ReadingType);
 
 	int sampleRate() const;
-	void setSampleRate(const int);
+	void setSampleRate(int);
 
-	void setBytesRead(const qint64 bytes);
+	void setBytesRead(qint64 bytes);
 	int bytesRead() const;
 
 	int port() const;
-	void setPort(const int);
+	void setPort(quint16);
 
 	bool isPaused() const;
 
@@ -110,21 +110,21 @@ public:
 	void setHost(const QString&);
 
 	int baudRate() const;
-	void setBaudRate(const int);
+	void setBaudRate(int);
 
-	void setUpdateInterval(const int);
+	void setUpdateInterval(int);
 	int updateInterval() const;
 
-	void setKeepNvalues(const int);
+	void setKeepNvalues(int);
 	int keepNvalues() const;
 
-	void setKeepLastValues(const bool);
+	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setFileWatched(const bool);
+	void setFileWatched(bool);
 	bool isFileWatched() const;
 
-	void setFileLinked(const bool);
+	void setFileLinked(bool);
 	bool isFileLinked() const;
 
 	void setFileName(const QString&);
@@ -170,7 +170,7 @@ private:
 	int m_sampleRate;
 	int m_keepNvalues;
 	int m_updateInterval;
-	int m_port;
+	quint16 m_port;
 	int m_baudRate;
 
 	qint64 m_bytesRead;
