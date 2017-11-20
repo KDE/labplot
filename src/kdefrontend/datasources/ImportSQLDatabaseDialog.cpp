@@ -148,6 +148,7 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		okButton->setEnabled(false);
+		okButton->setToolTip(i18n("Select a data container where the data has to be imported into."));
 		cbPosition->setEnabled(false);
 		return;
 	}
@@ -155,6 +156,7 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	//check whether a valid connection and an object to import were selected
 	if (!importSQLDatabaseWidget->isValid()) {
 		okButton->setEnabled(false);
+		okButton->setToolTip(i18n("Select a valid database object (table or query result set) that has to be imported."));
 		cbPosition->setEnabled(false);
 		return;
 	}
@@ -162,10 +164,12 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	//for matrix containers allow to import only numerical data
 	if (dynamic_cast<const Matrix*>(aspect) && !importSQLDatabaseWidget->isNumericData()) {
 		okButton->setEnabled(false);
+		okButton->setToolTip(i18n("Cannot import into a matrix since the data contains non-numerical data."));
 		cbPosition->setEnabled(false);
 		return;
 	}
 
 	okButton->setEnabled(true);
+	okButton->setToolTip(i18n("Close the dialog and import the data."));
 	cbPosition->setEnabled(true);
 }

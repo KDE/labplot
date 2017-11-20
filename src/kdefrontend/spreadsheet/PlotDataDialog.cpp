@@ -538,14 +538,23 @@ void PlotDataDialog::plotPlacementChanged() {
 
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
+	QString msg;
 	if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		enable = (aspect!=NULL);
+		if (!enable)
+			msg = i18n("An already existing plot has to be selected.");
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		enable = (aspect!=NULL);
+		if (!enable)
+			msg = i18n("An already existing worksheet has to be selected.");
 	} else
 		enable = true;
 
 	m_okButton->setEnabled(enable);
+	if (enable)
+		m_okButton->setToolTip(i18n("Close the dialog and plot the data."));
+	else
+		m_okButton->setToolTip(msg);
 }

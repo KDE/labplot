@@ -291,12 +291,11 @@ void ImportFileDialog::checkOkButton() {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect) {
 			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Select a data container where the data has to be imported into."));
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
-			DEBUG("WARNING: no aspect available.");
 			return;
 		} else {
-			DEBUG("Aspect available.");
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
 
@@ -315,20 +314,29 @@ void ImportFileDialog::checkOkButton() {
 
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
-	bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
-
 	switch (m_importFileWidget->currentSourceType()) {
-	case LiveDataSource::SourceType::FileOrPipe:
-		okButton->setEnabled( QFile::exists(fileName) );
-		break;
-	case LiveDataSource::SourceType::LocalSocket:
+	case LiveDataSource::SourceType::FileOrPipe: {
+		const bool enable = QFile::exists(fileName);
+		okButton->setEnabled(enable);
+		if (enable)
+			okButton->setToolTip(i18n("Close the dialog and import the data."));
+		else
+			okButton->setToolTip(i18n("Provide an existing file."));
 
-		if (QFile::exists(fileName)) {
+		break;
+	}
+	case LiveDataSource::SourceType::LocalSocket: {
+		const bool enable = QFile::exists(fileName);
+		if (enable) {
 			QLocalSocket* socket = new QLocalSocket(this);
 			socket->connectToServer(fileName, QLocalSocket::ReadOnly);
 			bool localSocketConnected = socket->waitForConnected(2000);
 
 			okButton->setEnabled(localSocketConnected);
+			if (localSocketConnected)
+				okButton->setToolTip(i18n("Close the dialog and import the data."));
+			else
+				okButton->setToolTip(i18n("Couldn't connect to the provided local socket."));
 
 			if (socket->state() == QLocalSocket::ConnectedState) {
 				socket->disconnectFromServer();
@@ -337,11 +345,15 @@ void ImportFileDialog::checkOkButton() {
 			} else
 				delete socket;
 
-		} else
+		} else {
 			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Selected local socket doesn't exist."));
+		}
 
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
+	}
+	case LiveDataSource::SourceType::NetworkTcpSocket: {
+		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket* socket = new QTcpSocket(this);
 			socket = new QTcpSocket(this);
@@ -349,6 +361,10 @@ void ImportFileDialog::checkOkButton() {
 			bool tcpSocketConnected = socket->waitForConnected(2000);
 
 			okButton->setEnabled(tcpSocketConnected);
+			if (tcpSocketConnected)
+				okButton->setToolTip(i18n("Close the dialog and import the data."));
+			else
+				okButton->setToolTip(i18n("Couldn't connect to the provided TCP socket."));
 
 			if (socket->state() == QTcpSocket::ConnectedState) {
 				socket->disconnectFromHost();
@@ -356,16 +372,24 @@ void ImportFileDialog::checkOkButton() {
 				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
 			} else
 				delete socket;
-		} else
+		} else {
 			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Either the host name or the port number is missing."));
+		}
 		break;
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	}
+	case LiveDataSource::SourceType::NetworkUdpSocket: {
+		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket* socket = new QUdpSocket(this);
 			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
 			bool udpSocketConnected = socket->waitForConnected(2000);
 
 			okButton->setEnabled(udpSocketConnected);
+			if (udpSocketConnected)
+				okButton->setToolTip(i18n("Close the dialog and import the data."));
+			else
+				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
 
 			if (socket->state() == QUdpSocket::ConnectedState) {
 				socket->disconnectFromHost();
@@ -373,12 +397,16 @@ void ImportFileDialog::checkOkButton() {
 				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
 			} else
 				delete socket;
-		} else
+		} else {
 			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Either the host name or the port number is missing."));
+		}
 
 		break;
-	case LiveDataSource::SourceType::SerialPort:
-		if (!m_importFileWidget->serialPort().isEmpty()) {
+	}
+	case LiveDataSource::SourceType::SerialPort: {
+		const bool enable = !m_importFileWidget->serialPort().isEmpty();
+		if (enable) {
 			QSerialPort* serialPort = new QSerialPort(this);
 
 			serialPort->setBaudRate(m_importFileWidget->baudRate());
@@ -386,11 +414,15 @@ void ImportFileDialog::checkOkButton() {
 
 			bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
 			okButton->setEnabled(serialPortOpened);
-		} else
+			if (serialPortOpened)
+				okButton->setToolTip(i18n("Close the dialog and import the data."));
+			else
+				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
+		} else {
 			okButton->setEnabled(false);
-		break;
-	default:
-		break;
+			okButton->setToolTip(i18n("Serial port number is missing."));
+		}
+	}
 	}
 }
 
