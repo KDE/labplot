@@ -574,13 +574,13 @@ double nsl_fit_model_binomial_param_deriv(int param, double k, double p, double 
 	k = round(k);
 	n = round(n);
 
-	double norm = weight * gsl_sf_fact(n)/gsl_sf_fact(n-k)/gsl_sf_fact(k);
+	double norm = weight * gsl_sf_fact((unsigned int)n)/gsl_sf_fact((unsigned int)(n-k))/gsl_sf_fact((unsigned int)(k));
 	if (param == 0)
 		return A * norm * pow(p, k-1.) * pow(1.-p, n-k-1.) * (k-n*p);
 	if (param == 1)
 		return A * norm * pow(p, k) * pow(1.-p, n-k) * (log(1.-p) + gsl_sf_psi(n+1.) - gsl_sf_psi(n-k+1.));
 	if (param == 2)
-		return weight * gsl_ran_binomial_pdf(k, p, n);
+		return weight * gsl_ran_binomial_pdf((unsigned int)k, p, (unsigned int)n);
 
 	return 0;
 }
@@ -594,7 +594,7 @@ double nsl_fit_model_negative_binomial_param_deriv(int param, double k, double p
 	if (param == 1)
 		return norm * pow(p, n) * pow(1.-p, k) * (log(p) - gsl_sf_psi(n) + gsl_sf_psi(n+k));
 	if (param == 2)
-		return weight * gsl_ran_negative_binomial_pdf(k, p, n);
+		return weight * gsl_ran_negative_binomial_pdf((unsigned int)k, p, n);
 
 	return 0;
 }
@@ -605,7 +605,7 @@ double nsl_fit_model_geometric_param_deriv(int param, double k, double p, double
 	if (param == 0)
 		return A * weight * pow(1.-p, k-2.) * (1.-k*p);
 	if (param == 1)
-		return weight * gsl_ran_geometric_pdf(k, p);
+		return weight * gsl_ran_geometric_pdf((unsigned int)k, p);
 
 	return 0;
 }
@@ -613,7 +613,7 @@ double nsl_fit_model_hypergeometric_param_deriv(int param, double k, double n1, 
 	if (t > n1 + n2)
 		return 0;
 
-	double norm = weight * gsl_ran_hypergeometric_pdf(k, n1, n2, t);
+	double norm = weight * gsl_ran_hypergeometric_pdf((unsigned int)k, (unsigned int)n1, (unsigned int)n2, (unsigned int)t);
 	if (param == 0)
 		return A * norm * (gsl_sf_psi(n1+1.) - gsl_sf_psi(n1-k+1.) - gsl_sf_psi(n1+n2+1.) + gsl_sf_psi(n1+n2-t+1.));
 	if (param == 1)
@@ -629,7 +629,7 @@ double nsl_fit_model_logarithmic_param_deriv(int param, double k, double p, doub
 	if (param == 0)
 		return A * weight * pow(1.-p, k-2.) * (1.-k*p);
 	if (param == 1)
-		return weight * gsl_ran_logarithmic_pdf(k, p);
+		return weight * gsl_ran_logarithmic_pdf((unsigned int)k, p);
 
 	return 0;
 }

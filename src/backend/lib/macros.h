@@ -36,7 +36,9 @@
 
 // C++ style warning (works on Windows)
 #include <iostream>
+#ifndef WARNING
 #define WARNING(x) std::cout << x << std::endl
+#endif
 
 #ifndef NDEBUG
 #include <QDebug>

@@ -56,21 +56,22 @@ int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points,
 		}
 
 		/* weight */
-		double sum=0.0, *w = (double *)malloc(np*sizeof(double));
-		switch(weight) {
+		double sum = 0.0;
+		double* w = (double*)malloc(np * sizeof(double));
+		switch (weight) {
 		case nsl_smooth_weight_uniform:
-			for(j=0;j<np;j++)
-				w[j]=1./np;
+			for (j = 0; j < np; j++)
+				w[j] = 1./np;
 			break;
 		case nsl_smooth_weight_triangular:
-			sum = gsl_pow_2((np+1)/2);
-			for(j=0;j<np;j++)
-				w[j]=GSL_MIN(j+1,np-j)/sum;
+			sum = gsl_pow_2((np + 1)/2);
+			for (j = 0; j < np; j++)
+				w[j] = GSL_MIN(j + 1, np - j)/sum;
 			break;
 		case nsl_smooth_weight_binomial:
-			sum = (np-1)/2.;
-			for(j=0;j<np;j++)
-				w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
+			sum = (np - 1)/2.;
+			for (j = 0; j < np; j++)
+				w[j] = gsl_sf_choose((unsigned int)(2 * sum), (unsigned int)((sum + fabs(j - sum))/pow(4., sum)));
 			break;
 		case nsl_smooth_weight_parabolic:
 			for(j=0;j<np;j++) {

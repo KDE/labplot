@@ -116,7 +116,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		else if (p == 1.0)
 			return d[(n-1)*stride];
 		else {
-			int i = floor(n*p);
+			int i = (int)floor(n*p);
 			return d[(i-1)*stride]+(n*p-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	case nsl_stats_quantile_type5:
@@ -125,7 +125,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		else if (p >= (n-0.5)/n)
 			return d[(n-1)*stride];
 		else {
-			int i = floor(n*p+0.5);
+			int i = (int)floor(n*p+0.5);
 			return d[(i-1)*stride]+(n*p+0.5-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	case nsl_stats_quantile_type6:
@@ -134,14 +134,14 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		else if (p > n/(n+1.))
 			return d[(n-1)*stride];
 		else {
-			int i = floor((n+1)*p);
+			int i = (int)floor((n+1)*p);
 			return d[(i-1)*stride]+((n+1)*p-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	case nsl_stats_quantile_type7:
 		if (p == 1.0)
                         return d[(n-1)*stride];
                 else {
-			int i = floor((n-1)*p+1);
+			int i = (int)floor((n-1)*p+1);
 			return d[(i-1)*stride]+((n-1)*p+1-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	case nsl_stats_quantile_type8:
@@ -150,7 +150,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		else if (p >= (n-1./3.)/(n+1./3.))
 			return d[(n-1)*stride];
 		else {
-			int i = floor((n+1./3.)*p+1./3.);
+			int i = (int)floor((n+1./3.)*p+1./3.);
 			return d[(i-1)*stride]+((n+1./3.)*p+1./3.-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	case nsl_stats_quantile_type9:
@@ -159,7 +159,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		else if (p >= (n-3./8.)/(n+1./4.))
 			return d[(n-1)*stride];
 		else {
-			int i = floor((n+1./4.)*p+3./8.);
+			int i = (int)floor((n+1./4.)*p+3./8.);
 			return d[(i-1)*stride]+((n+1./4.)*p+3./8.-i)*(d[i*stride]-d[(i-1)*stride]);	
 		}
 	}
@@ -212,7 +212,7 @@ double nsl_stats_fdist_F(double sst, double rms) {
 	return sst/rms;
 }
 double nsl_stats_fdist_p(double F, size_t np, double dof) {
-	double p = gsl_cdf_fdist_Q(F, np, dof);
+	double p = gsl_cdf_fdist_Q(F, (double)np, dof);
 	if (p < 1.e-9)
 		p = 0;
 	return p;
@@ -229,5 +229,5 @@ double nsl_stats_aic(double sse, size_t n, size_t np) {
 
 /* Bayasian information criterion */
 double nsl_stats_bic(double sse, size_t n, size_t np) {
-	return n * log(sse/n) + np * log(n);
+	return n * log(sse/(double)n) + np * log((double)n);
 }

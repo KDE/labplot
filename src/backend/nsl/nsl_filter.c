@@ -44,7 +44,9 @@ const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"
 double nsl_filter_gain_bessel(int n, double x) {
 #ifdef _MSC_VER
 	COMPLEX z0 = {0.0, 0.0};
-	COMPLEX z = {0.0, x};
+	COMPLEX z;
+	z.re = 0.0;
+	z.im = x;
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	return creal(value)/norm;
@@ -69,7 +71,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 	case nsl_filter_type_low_pass:
 		switch (form) {
 		case nsl_filter_form_ideal:
-			for (i = cutindex; i < n/2+1; i++)
+			for (i = (size_t)cutindex; i < n/2+1; i++)
 				data[2*i] = data[2*i+1] = 0;
 			break;
 		case nsl_filter_form_butterworth:
@@ -159,7 +161,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 	case nsl_filter_type_band_pass:
 		switch (form) {
 		case nsl_filter_form_ideal:
-			for (i = 0; i < cutindex; i++)
+			for (i = 0; i < (size_t)cutindex; i++)
 				data[2*i] = data[2*i+1] = 0;
 			for (i = cutindex + bandwidth; i < n/2+1; i++)
 				data[2*i] = data[2*i+1] = 0;
@@ -209,7 +211,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 	case nsl_filter_type_band_reject:
 		switch (form) {
 		case nsl_filter_form_ideal:
-			for (i = cutindex; i < cutindex + bandwidth; i++)
+			for (i = (size_t)cutindex; i < (size_t)(cutindex + bandwidth); i++)
 				data[2*i] = data[2*i+1] = 0;
 			break;
 		case nsl_filter_form_butterworth:
