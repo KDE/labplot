@@ -87,17 +87,13 @@ COMPLEX nsl_sf_poly_bessel_y(int n, COMPLEX x) {
 		COMPLEX z = {1.0, 0.0};
 		return z;
 	} else if (n == 1) {
-		COMPLEX z;
-		z.real = creal(x) + 1.0;
-		z.imag = cimag(x);
+		COMPLEX z ={(const double)(creal(x) + 1.0), (const double)cimag(x)};
 		return z;
 	}
 	double factor = 2 * n - 1;
 	COMPLEX z1 = nsl_sf_poly_bessel_y(n - 1, x);
 	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
-	COMPLEX z;
-	z.real = factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2);
-	z.imag = factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2);
+	COMPLEX z = {(const double)(factor * (creal(x)*creal(z1)-cimag(x)*cimag(z1)) + creal(z2)), (const double)(factor * (creal(x)*cimag(z1) - cimag(x)*creal(z1)) + cimag(z2))};
 	return z;
 #else
 	if (n == 0)
@@ -119,9 +115,7 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 		COMPLEX z = {1.0, 0.0};
 		return z;
 	} else if (n == 1) {
-		COMPLEX z;
-		z.real = creal(x) + 1.0;
-		z.imag = cimag(x);
+		COMPLEX z = {(const double)(creal(x) + 1.0), (const double)cimag(x)};
 		return z;
 	}
 	double factor = 2 * n - 1;
@@ -129,9 +123,7 @@ COMPLEX nsl_sf_poly_reversed_bessel_theta(int n, COMPLEX x) {
 	COMPLEX z2 = nsl_sf_poly_bessel_y(n - 2, x);
 	double rex2 = creal(x)*creal(x) - cimag(x)*cimag(x);
 	double imx2 = 2.0*creal(x)*cimag(x);
-	COMPLEX z;
-	z.real = factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2);
-	z.imag = factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2);
+	COMPLEX z = {(const double)(factor * creal(z1) + rex2*creal(z2) - imx2*cimag(z2)), (const double)(factor * cimag(z1) + rex2*cimag(z2) + imx2*creal(z2))};
 	return z;
 #else
 	if (n == 0)
