@@ -75,7 +75,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	if(file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		WARNING(QString("Couldn't open the file " + file.fileName()).toStdString());
+		WARN(QString("Couldn't open the file " + file.fileName()).toStdString());
 		*success = false;
 		return QImage();
 	}
@@ -143,7 +143,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
 #endif
 	if (!latexProcess.waitForFinished()) {
-		WARNING("latex process failed.");
+		WARN("latex process failed.");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
@@ -178,7 +178,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	*success = (latexProcess.exitCode() == 0);
 	bool removeLog = true;
 	if (*success == false) {
-		WARNING("latex exit code = " << latexProcess.exitCode());
+		WARN("latex exit code = " << latexProcess.exitCode());
 #ifdef NDEBUG
 		removeLog = false;
 #endif
@@ -199,7 +199,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
-		WARNING("convert process failed.");
+		WARN("convert process failed.");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".pdf");
 		return QImage();
@@ -222,7 +222,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess latexProcess;
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished()) {
-		WARNING("latex process failed.");
+		WARN("latex process failed.");
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
@@ -237,7 +237,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-		WARNING("dvips process failed.");
+		WARN("dvips process failed.");
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		return QImage();
 	}
@@ -253,7 +253,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 			<< fi.completeBaseName() + ".ps" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
-		WARNING("convert process failed.");
+		WARN("convert process failed.");
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		QFile::remove(fi.completeBaseName() + ".ps");
 		return QImage();
@@ -275,21 +275,21 @@ bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
 	if (engine.isEmpty() || !executableExists(engine)) {
-		WARNING("LaTeX engine does not exist");
+		WARN("LaTeX engine does not exist");
 		return false;
 	}
 
 	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
 	if (!executableExists(QLatin1String("convert"))) {
-		WARNING("program \"convert\" does not exist");
+		WARN("program \"convert\" does not exist");
 		return false;
 	}
 
 	//to convert the generated PS files to DVI we need 'dvips'
 	if (engine == "latex") {
 		if (!executableExists(QLatin1String("dvips"))) {
-			WARNING("program \"dvips\" does not exist");
+			WARN("program \"dvips\" does not exist");
 			return false;
 		}
 	}
@@ -297,12 +297,12 @@ bool TeXRenderer::enabled() {
 #if defined(_WIN64)
 	if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()
 		&& !QDir(qgetenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
-		WARNING("ghostscript (64bit) does not exist");
+		WARN("ghostscript (64bit) does not exist");
 		return false;
 	}
 #elif defined(HAVE_WINDOWS)
 	if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()) {
-		WARNING("ghostscript (32bit) does not exist");
+		WARN("ghostscript (32bit) does not exist");
 		return false;
 	}
 #endif

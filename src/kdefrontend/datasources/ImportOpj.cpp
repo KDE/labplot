@@ -59,7 +59,7 @@ ImportOpj::ImportOpj(Folder *folder, const QString& filename, bool preview) : p(
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
 	int status = opj.parse();
-	WARNING("Parsing done with status " << status);
+	WARN("Parsing done with status " << status);
 //	if (status != 0)
 //		return;
 	DEBUG("Starting conversion ...");
