@@ -45,8 +45,8 @@ double nsl_filter_gain_bessel(int n, double x) {
 #ifdef _MSC_VER
 	COMPLEX z0 = {0.0, 0.0};
 	COMPLEX z;
-	z.x = 0.0;
-	z.y = x;
+	z.real = 0.0;
+	z.imag = x;
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	return creal(value)/norm;
