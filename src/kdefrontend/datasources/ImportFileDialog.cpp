@@ -279,8 +279,13 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 			return;
 		}
 
-		if(aspect->inherits("Matrix"))
+		if(aspect->inherits("Matrix")) {
 			okButton->setEnabled(enable);
+			if (enable)
+				okButton->setToolTip(i18n("Close the dialog and import the data."));
+			else
+				okButton->setToolTip(i18n("Cannot import into a matrix since the data contains non-numerical data."));
+		}
 	}
 }
 
