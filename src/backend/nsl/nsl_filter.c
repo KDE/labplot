@@ -44,7 +44,7 @@ const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"
 double nsl_filter_gain_bessel(int n, double x) {
 #ifdef _MSC_VER
 	COMPLEX z0 = {0.0, 0.0};
-	COMPLEX z = {(0.0, (const double)x};
+	COMPLEX z = {0.0, (const double)x};
 	double norm = cabs(nsl_sf_poly_reversed_bessel_theta(n, z));
 	COMPLEX value = nsl_sf_poly_reversed_bessel_theta(n, z0);
 	return creal(value)/norm;
