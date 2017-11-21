@@ -73,9 +73,9 @@ public:
 		bool isValid() const {
 			return (!std::isnan(start) && !std::isnan(end));
 		}
-		float start;
-		float end;
-		float position;
+		double start;
+		double end;
+		double position;
 		RangeBreakStyle style;
 	};
 
@@ -138,7 +138,7 @@ private:
 	const XYCurve* currentCurve() const;
 
 	CartesianPlotLegend* m_legend;
-	float m_zoomFactor;
+	double m_zoomFactor;
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized;
 

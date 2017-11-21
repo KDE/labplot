@@ -429,7 +429,7 @@ void XYFourierFilterCurveDock::formChanged() {
 }
 
 void XYFourierFilterCurveDock::orderChanged() {
-	m_filterData.order = uiGeneralTab.sbOrder->value();
+	m_filterData.order = (unsigned int)uiGeneralTab.sbOrder->value();
 
 	enableRecalculate();
 }

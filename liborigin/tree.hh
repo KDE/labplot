@@ -2033,6 +2033,7 @@ typename tree<T, tree_node_allocator>::pre_order_iterator& tree<T, tree_node_all
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::pre_order_iterator tree<T, tree_node_allocator>::pre_order_iterator::operator++(int n)
    {
+   n = 0;
    pre_order_iterator copy = *this;
    ++(*this);
    return copy;
@@ -2041,6 +2042,7 @@ typename tree<T, tree_node_allocator>::pre_order_iterator tree<T, tree_node_allo
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::pre_order_iterator tree<T, tree_node_allocator>::pre_order_iterator::operator--(int n)
 {
+   n = 0;
   pre_order_iterator copy = *this;
   --(*this);
   return copy;
@@ -2243,6 +2245,7 @@ typename tree<T, tree_node_allocator>::breadth_first_queued_iterator& tree<T, tr
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::breadth_first_queued_iterator tree<T, tree_node_allocator>::breadth_first_queued_iterator::operator++(int n)
    {
+   n = 0;
    breadth_first_queued_iterator copy = *this;
    ++(*this);
    return copy;

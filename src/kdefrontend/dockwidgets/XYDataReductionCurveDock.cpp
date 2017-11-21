@@ -375,16 +375,16 @@ void XYDataReductionCurveDock::updateTolerance() {
 	}
 #ifndef NDEBUG
 	qDebug()<<"automatic tolerance:";
-	qDebug()<<"clip_diag_perpoint ="<<nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
-	qDebug()<<"clip_area_perpoint ="<<nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
-	qDebug()<<"avg_dist_perpoint ="<<nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	qDebug()<<"clip_diag_perpoint ="<<nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
+	qDebug()<<"clip_area_perpoint ="<<nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
+	qDebug()<<"avg_dist_perpoint ="<<nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
 #endif
 
 	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	if (type == nsl_geom_linesim_type_raddist || type == nsl_geom_linesim_type_opheim)
-		m_dataReductionData.tolerance = 10.*nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
+		m_dataReductionData.tolerance = 10. * nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
 	else if (type == nsl_geom_linesim_type_visvalingam_whyatt)
-		m_dataReductionData.tolerance = 0.1*nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
+		m_dataReductionData.tolerance = 0.1 * nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
 	else if (type == nsl_geom_linesim_type_douglas_peucker_variant)
 		m_dataReductionData.tolerance = xdataVector.size()/10.;	// reduction to 10%
 	else

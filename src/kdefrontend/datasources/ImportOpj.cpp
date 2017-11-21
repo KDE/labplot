@@ -59,7 +59,7 @@ ImportOpj::ImportOpj(Folder *folder, const QString& filename, bool preview) : p(
 
 	OriginFile opj((const char *)filename.toLocal8Bit());
 	int status = opj.parse();
-	DEBUG("Parsing done with status " << status);
+	WARNING("Parsing done with status " << status);
 //	if (status != 0)
 //		return;
 	DEBUG("Starting conversion ...");
@@ -495,10 +495,11 @@ int ImportOpj::importGraphs(const OriginFile &opj) {
 
 			// TODO: we only support one legend
 			//add texts
-			for (const auto &s: layer.texts)
+/*			for (const auto &s: layer.texts) {
 				DEBUG("EXTRA TEXT =" << s.text.c_str());
-			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(layer.texts[i].text.c_str())));
-
+			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+			}
+*/
 // 			int auto_color = 0;
 // 			int style = 0;
 			for (const auto& curve: layer.curves) {
@@ -675,8 +676,8 @@ QString ImportOpj::parseOriginTags(const QString &str) {
 			postag[i] = rxtags[i].indexIn(line);
 			while (postag[i] > -1) {
 				QString value = rxtags[i].cap(0);
-				int len=value.length();
-				int pos2=value.indexOf("(");
+				int len = value.length();
+				pos2 = value.indexOf("(");
 				if(i<6)
 					value=ltag[i]+value.mid(pos2+1,len-pos2-2)+rtag[i];
 				else

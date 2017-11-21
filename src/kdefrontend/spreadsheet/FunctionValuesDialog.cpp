@@ -124,12 +124,12 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
 
 		//add all available variables and select the corresponding columns
-		const QVector<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
-			foreach (const AbstractAspect* aspect, columns) {
+			foreach (const AbstractAspect* aspect, cols) {
 				if (aspect->path() == columnPathes.at(i)) {
 					const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
 					if (column)

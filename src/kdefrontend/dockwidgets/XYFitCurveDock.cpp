@@ -225,7 +225,7 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
 	m_fitData.modelType = tmpModelType;
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+		uiGeneralTab.cbModel->setCurrentIndex((int)m_fitData.modelType);
 
 	uiGeneralTab.cbXError->setCurrentIndex(m_fitData.xErrorsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);

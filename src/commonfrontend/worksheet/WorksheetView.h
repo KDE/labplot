@@ -58,7 +58,7 @@ public:
 		QColor color;
 		int horizontalSpacing;
 		int verticalSpacing;
-		float opacity;
+		double opacity;
 	};
 
 	void setScene(QGraphicsScene*);

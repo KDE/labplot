@@ -136,9 +136,9 @@ void SegmentPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 	QPen pen(Qt::green);
 	QPen hoveredPen = QPen(QColor(128,179,255), 3, Qt::SolidLine);
-	float hoveredOpacity = 0.6;
+	qreal hoveredOpacity = 0.6;
 	QPen selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
-	float selectedOpacity = 0.3;
+	qreal selectedOpacity = 0.3;
 
 	painter->save();
 	painter->setPen(pen);

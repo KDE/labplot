@@ -318,13 +318,13 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.sbMax->setValue(column->maximum());
 		}
 
-		unsigned int n=0;
-		for (int row=0; row < column->rowCount(); row++)
+		unsigned int n = 0;
+		for (int row = 0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
 		// set maximum of sbPoints to number of columns
-		uiGeneralTab.sbPoints->setMaximum(n);
+		uiGeneralTab.sbPoints->setMaximum((int)n);
 	}
 
 }
