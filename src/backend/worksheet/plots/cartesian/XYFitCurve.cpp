@@ -654,7 +654,7 @@ struct data {
 	double* weight;	//pointer to the vector with weight values
 	nsl_fit_model_category modelCategory;
 	unsigned int modelType;
-	int degree;
+	unsigned int degree;
 	QString* func;	// string containing the definition of the model/function
 	QStringList* paramNames;
 	double* paramMin;	// lower parameter limits
@@ -682,12 +682,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 	// set current values of the parameters
 	for (int i = 0; i < paramNames->size(); i++) {
-		double x = gsl_vector_get(paramValues, (const size_t)i);
+		double v = gsl_vector_get(paramValues, (const size_t)i);
 		// bound values if limits are set
 		QByteArray paramnameba = paramNames->at(i).toLatin1();
-		assign_variable(paramnameba.constData(), nsl_fit_map_bound(x, min[i], max[i]));
+		assign_variable(paramnameba.constData(), nsl_fit_map_bound(v, min[i], max[i]));
 		QDEBUG("Parameter"<<i<<" (\" "<<paramnameba.constData()<<"\")"<<'['<<min[i]<<','<<max[i]
-			<<"] free/bound:"<<QString::number(x, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
+			<<"] free/bound:"<<QString::number(v, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
 	for (size_t i = 0; i < n; i++) {
@@ -727,7 +727,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double* weight = ((struct data*)params)->weight;
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
-	int degree = ((struct data*)params)->degree;
+	unsigned int degree = ((struct data*)params)->degree;
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
