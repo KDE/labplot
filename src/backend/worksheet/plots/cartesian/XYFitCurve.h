@@ -60,7 +60,7 @@ public:
 		unsigned int modelType;
 		nsl_fit_error_type xErrorsType;
 		nsl_fit_weight_type yWeightsType;
-		int degree;
+		unsigned int degree;
 		QString model;
 		QStringList paramNames;
 		QStringList paramNamesUtf8;	// Utf8 version of paramNames

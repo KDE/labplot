@@ -784,12 +784,12 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		case nsl_fit_model_exponential:	{ // Y(x) = a*exp(b*x) + c*exp(d*x) + ...
 			double *p = new double[2*degree];
-			for (int i = 0; i < 2*degree; i++)
+			for (unsigned int i = 0; i < 2*degree; i++)
 				p[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, i), min[i], max[i]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2*degree; j++) {
+				for (unsigned int j = 0; j < 2*degree; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -822,25 +822,25 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			a[0] = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			b[0] = 0;
-			for (int i = 1; i < degree; ++i) {
+			for (unsigned int i = 1; i < degree; ++i) {
 				a[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i), min[2*i], max[2*i]);
 				b[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i+1), min[2*i+1], max[2*i+1]);
 			}
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 				double wd = 0; //first derivative with respect to the w parameter
-				for (int j = 1; j < degree; ++j) {
+				for (unsigned int j = 1; j < degree; ++j) {
 					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
 				}
 
 				gsl_matrix_set(J, i, 0, weight[i]*wd);
 				gsl_matrix_set(J, i, 1, weight[i]);
-				for (int j = 1; j <= degree; ++j) {
+				for (unsigned int j = 1; j <= degree; ++j) {
 					gsl_matrix_set(J, (const size_t)i, (const size_t)(2*j), nsl_fit_model_fourier_param_deriv(0, j, x, w, weight[i]));
 					gsl_matrix_set(J, (const size_t)i, (const size_t)(2*j+1), nsl_fit_model_fourier_param_deriv(1, j, x, w, weight[i]));
 				}
 
-				for (int j = 0; j <= 2*degree+1; j++)
+				for (unsigned int j = 0; j <= 2*degree+1; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 			}
@@ -861,7 +861,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < degree; ++j) {
+				for (unsigned int j = 0; j < degree; ++j) {
 					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
 					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
 					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
@@ -890,7 +890,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					}
 				}
 
-				for (int j = 0; j < 3*degree; j++)
+				for (unsigned int j = 0; j < 3*degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 			}
