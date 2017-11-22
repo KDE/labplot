@@ -992,7 +992,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	int count = symbolPointsLogical.count();
+	unsigned int count = (unsigned int)symbolPointsLogical.count();
 	if (count <= 1) {
 		//nothing to do, if no data points available
 		recalcShapeAndBoundingRect();
@@ -1010,13 +1010,13 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::NoLine:
 		break;
 	case XYCurve::Line:
-		for (int i = 0; i < count - 1; i++) {
+		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	case XYCurve::StartHorizontal:
-		for (int i = 0; i < count - 1; i++) {
+		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
@@ -1026,7 +1026,7 @@ void XYCurvePrivate::updateLines() {
 		}
 		break;
 	case XYCurve::StartVertical:
-		for (int i = 0; i < count - 1; i++) {
+		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
@@ -1036,7 +1036,7 @@ void XYCurvePrivate::updateLines() {
 		}
 		break;
 	case XYCurve::MidpointHorizontal:
-		for (int i = 0; i < count - 1; i++) {
+		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
@@ -1048,7 +1048,7 @@ void XYCurvePrivate::updateLines() {
 		}
 		break;
 	case XYCurve::MidpointVertical:
-		for (int i = 0; i < count - 1; i++) {
+		for (unsigned int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint = symbolPointsLogical.at(i);
 			nextPoint = symbolPointsLogical.at(i+1);
@@ -1061,7 +1061,7 @@ void XYCurvePrivate::updateLines() {
 		break;
 	case XYCurve::Segments2: {
 			int skip=0;
-			for (int i = 0; i < count - 1; i++) {
+			for (unsigned int i = 0; i < count - 1; i++) {
 				if (skip != 1) {
 					if (!lineSkipGaps && !connectedPointsLogical[i]) {
 						skip = 0;
@@ -1076,7 +1076,7 @@ void XYCurvePrivate::updateLines() {
 		}
 	case XYCurve::Segments3: {
 			int skip = 0;
-			for (int i = 0; i < count - 1; i++) {
+			for (unsigned int i = 0; i < count - 1; i++) {
 				if (skip != 2) {
 					if (!lineSkipGaps && !connectedPointsLogical[i]) {
 						skip = 0;
@@ -1098,7 +1098,7 @@ void XYCurvePrivate::updateLines() {
 
 			double* x = new double[count];
 			double* y = new double[count];
-			for (int i = 0; i < count; i++) {
+			for (unsigned int i = 0; i < count; i++) {
 				x[i] = symbolPointsLogical.at(i).x();
 				y[i] = symbolPointsLogical.at(i).y();
 			}
@@ -1150,7 +1150,7 @@ void XYCurvePrivate::updateLines() {
 			std::vector<double> xinterp, yinterp;
 			double step;
 			double xi, yi, x1, x2;
-			for (int i = 0; i < count - 1; i++) {
+			for (unsigned int i = 0; i < count - 1; i++) {
 				x1 = x[i];
 				x2 = x[i+1];
 				step=fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
