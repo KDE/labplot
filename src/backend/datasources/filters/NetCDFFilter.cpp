@@ -533,7 +533,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			handleError(m_status, "nc_inq_dimlen");
 
 			if (endRow == -1)
-				endRow = size;
+				endRow = (int)size;
 			if (lines == -1)
 				lines = endRow;
 			actualRows = endRow-startRow+1;
@@ -556,9 +556,9 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			if (dataSource)
 				data = static_cast<QVector<double>*>(dataContainer[0])->data();
 			else
-				data = new double[actualRows];
+				data = new double[(unsigned int)actualRows];
 
-			size_t start = startRow-1, count = actualRows;
+			size_t start = (size_t)(startRow-1), count = (size_t)actualRows;
 			m_status = nc_get_vara_double(ncid, varid, &start, &count, data);
 			handleError(m_status, "nc_get_vara_double");
 
@@ -577,11 +577,11 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			handleError(m_status, "nc_inq_dimlen");
 
 			if (endRow == -1)
-				endRow = rows;
+				endRow = (int)rows;
 			if (lines == -1)
 				lines = endRow;
 			if (endColumn == -1)
-				endColumn = cols;
+				endColumn = (int)cols;
 			actualRows = endRow-startRow+1;
 			actualCols = endColumn-startColumn+1;
 
@@ -609,9 +609,9 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			handleError(m_status, "nc_get_var_double");
 			for (int i = 0; i < qMin((int)rows, lines); i++) {
 				QStringList line;
-				for (unsigned int j = 0; j < cols; j++) {
+				for (size_t j = 0; j < cols; j++) {
 					if (dataContainer[0])
-						static_cast<QVector<double>*>(dataContainer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
+						static_cast<QVector<double>*>(dataContainer[j-(size_t)startColumn+1])->operator[](i-startRow+1) = data[i][j];
 					else
 						line << QString::number(data[i][j]);
 				}
