@@ -100,7 +100,7 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
 /*!
   returns the number of rows (length of vectors) in the file \c fileName.
 */
-size_t BinaryFilter::rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType type) {
+size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType type) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly))
 		return 0;
@@ -108,7 +108,7 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const int vectors, const
 	size_t rows = 0;
 	while (!device.atEnd()) {
 		// one row
-		for (int i = 0; i < vectors; ++i) {
+		for (size_t i = 0; i < vectors; ++i) {
 			for (int j = 0; j < BinaryFilter::dataSize(type); ++j)
 				device.read(1);
 		}
@@ -135,11 +135,11 @@ void BinaryFilter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 
-void BinaryFilter::setVectors(const int v) {
+void BinaryFilter::setVectors(const size_t v) {
 	d->vectors = v;
 }
 
-int BinaryFilter::vectors() const {
+size_t BinaryFilter::vectors() const {
 	return d->vectors;
 }
 
@@ -159,11 +159,11 @@ BinaryFilter::ByteOrder BinaryFilter::byteOrder() const {
 	return d->byteOrder;
 }
 
-void BinaryFilter::setSkipStartBytes(const int s) {
+void BinaryFilter::setSkipStartBytes(const size_t s) {
 	d->skipStartBytes = s;
 }
 
-int BinaryFilter::skipStartBytes() const {
+size_t BinaryFilter::skipStartBytes() const {
 	return d->skipStartBytes;
 }
 
@@ -183,11 +183,11 @@ int BinaryFilter::endRow() const {
 	return d->endRow;
 }
 
-void BinaryFilter::setSkipBytes(const int s) {
+void BinaryFilter::setSkipBytes(const size_t s) {
 	d->skipBytes = s;
 }
 
-int BinaryFilter::skipBytes() const {
+size_t BinaryFilter::skipBytes() const {
 	return d->skipBytes;
 }
 
@@ -248,11 +248,11 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 		in.setByteOrder(QDataStream::LittleEndian);
 
 	// catch case that skipStartBytes or startRow is bigger than file
-	if (skipStartBytes >= BinaryFilter::dataSize(dataType) * vectors * numRows || startRow > numRows)
+	if (skipStartBytes >= BinaryFilter::dataSize(dataType) * vectors * numRows || startRow > (int)numRows)
 		return 1;
 
 	// skip bytes at start
-	for (int i = 0; i < skipStartBytes; ++i) {
+	for (size_t i = 0; i < skipStartBytes; ++i) {
 		qint8 tmp;
 		in >> tmp;
 	}
@@ -268,7 +268,7 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 	// set range of rows
 	if (endRow == -1)
 		m_actualRows = numRows - startRow + 1;
-	else if (endRow > numRows - startRow + 1)
+	else if (endRow > (int)numRows - startRow + 1)
 		m_actualRows = numRows;
 	else
 		m_actualRows = endRow - startRow + 1;

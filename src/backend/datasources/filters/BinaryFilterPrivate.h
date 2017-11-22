@@ -52,11 +52,11 @@ public:
 	BinaryFilter::ByteOrder byteOrder;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
-	int startRow;		// start row (value*vectors) to read
-	int endRow;			// end row to (value*vectors) read
-	int numRows;		// number of rows
-	int skipStartBytes;	// bytes to skip at start
-	int skipBytes;		// bytes to skip after each value
+	int startRow;			// start row (value*vectors) to read (can be -1)
+	int endRow;			// end row to (value*vectors) read (can be -1)
+	size_t numRows;			// number of rows
+	size_t skipStartBytes;		// bytes to skip at start
+	size_t skipBytes;		// bytes to skip after each value
 	bool createIndexEnabled;	// if create index column
 
 	bool autoModeEnabled;

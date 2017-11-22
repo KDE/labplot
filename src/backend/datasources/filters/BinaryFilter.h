@@ -49,7 +49,7 @@ class BinaryFilter : public AbstractFileFilter {
 	static QStringList dataTypes();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataType);
-	static size_t rowNumber(const QString& fileName, const int vectors, const BinaryFilter::DataType);
+	static size_t rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType);
 
 	// read data from any device
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
@@ -62,21 +62,21 @@ class BinaryFilter : public AbstractFileFilter {
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
 
-	void setVectors(const int);
-	int vectors() const;
+	void setVectors(const size_t);
+	size_t vectors() const;
 
 	void setDataType(const BinaryFilter::DataType);
 	BinaryFilter::DataType dataType() const;
 	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
-	void setSkipStartBytes(const int);
-	int skipStartBytes() const;
+	void setSkipStartBytes(const size_t);
+	size_t skipStartBytes() const;
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);
 	int endRow() const;
-	void setSkipBytes(const int);
-	int skipBytes() const;
+	void setSkipBytes(const size_t);
+	size_t skipBytes() const;
 	void setCreateIndexEnabled(const bool);
 
 	void setAutoModeEnabled(const bool);
