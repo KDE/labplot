@@ -148,8 +148,14 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 
 #ifdef HAVE_HDF5
 void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
+#ifdef NDEBUG
+	Q_UNUSED(err)
+	Q_UNUSED(function)
+	Q_UNUSED(arg)
+#else
 	if (err < 0)
 		DEBUG("ERROR " << err << ":" << function.toStdString() << "() - " << arg.toStdString());
+#endif
 }
 
 QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
@@ -551,8 +557,10 @@ QVector<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_
 					lineString << QLatin1String("_");
 				mdataStrings << lineString;
 			}
+#ifndef NDEBUG
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
 			DEBUG("unsupported class " << translateHDFClass(mclass).toStdString());
+#endif
 		}
 
 		m_status = H5Tclose(ctype);
