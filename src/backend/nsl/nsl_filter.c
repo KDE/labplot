@@ -161,7 +161,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 		case nsl_filter_form_ideal:
 			for (i = 0; i < (size_t)cutindex; i++)
 				data[2*i] = data[2*i+1] = 0;
-			for (i = cutindex + bandwidth; i < n/2+1; i++)
+			for (i = (size_t)(cutindex + bandwidth); i < n/2+1; i++)
 				data[2*i] = data[2*i+1] = 0;
 			break;
 		case nsl_filter_form_butterworth:
