@@ -158,7 +158,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QString& model = fitData.model;
 	QStringList& paramNames = fitData.paramNames;
 	QStringList& paramNamesUtf8 = fitData.paramNamesUtf8;
-	int degree = fitData.degree;
+	unsigned int degree = fitData.degree;
 	QVector<double>& paramStartValues = fitData.paramStartValues;
 	QVector<double>& paramLowerLimits = fitData.paramLowerLimits;
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
@@ -187,7 +187,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "c2";
 				paramNamesUtf8 << QString::fromUtf8("c\u2082");
 			} else if (degree > 2) {
-				for (int i = 2; i <= degree; ++i) {
+				for (unsigned int i = 2; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+c" + numStr + "*x^" + numStr;
 					paramNames << "c" + numStr;
@@ -207,7 +207,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			if (degree == 1) {
 				paramNames << "a" << "b";
 			} else {
-				for (int i = 1; i <= degree; i++) {
+				for (unsigned int i = 1; i <= degree; i++) {
 					QString numStr = QString::number(i);
 					if (i == 1)
 						model = "a1*exp(b1*x)";
@@ -227,7 +227,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
 				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
 			if (degree > 1) {
-				for (int i = 1; i <= degree; ++i) {
+				for (unsigned int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 					paramNames << "a" + numStr << "b" + numStr;
@@ -261,7 +261,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
-				for (int i = 1; i <= degree; ++i) {
+				for (unsigned int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -294,7 +294,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1./pi * (";
-				for (int i = 1; i <= degree; ++i) {
+				for (unsigned int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -327,7 +327,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1/pi * (";
-				for (int i = 1; i <= degree; ++i) {
+				for (unsigned int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -360,7 +360,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1/4 * (";
-				for (int i = 1; i <= degree; ++i) {
+				for (unsigned int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -745,7 +745,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_polynomial:	// Y(x) = c0 + c1*x + ... + cn*x^n
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
-				for (int j = 0; j < paramNames->size(); ++j) {
+				for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -806,7 +806,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -914,7 +914,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -958,7 +958,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -1007,7 +1007,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1024,7 +1024,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1039,7 +1039,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1055,7 +1055,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1071,7 +1071,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1086,7 +1086,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1101,7 +1101,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1117,7 +1117,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1134,7 +1134,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -1159,7 +1159,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -1180,7 +1180,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1197,7 +1197,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1212,7 +1212,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1227,7 +1227,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1244,7 +1244,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
@@ -1273,7 +1273,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (unsigned int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -1300,7 +1300,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 2; j++) {
+				for (unsigned int j = 0; j < 2; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else {
@@ -1325,7 +1325,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (int j = 0; j < 4; j++) {
+				for (unsigned int j = 0; j < 4; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (const size_t)i, (const size_t)j, 0.);
 					else
