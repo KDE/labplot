@@ -47,7 +47,7 @@ public:
 
 	const BinaryFilter* q;
 
-	int vectors;
+	size_t vectors;
 	BinaryFilter::DataType dataType;
 	BinaryFilter::ByteOrder byteOrder;
 	QVector<AbstractColumn::ColumnMode> columnModes;

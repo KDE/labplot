@@ -276,10 +276,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 	DEBUG("npoints ="<<npoints);
 
 ///////////////////////////////////////////////////////////
-	int status=0;
+	int status = 0;
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
-	gsl_spline *spline=0;
+	gsl_spline *spline = 0;
 	switch (type) {
 	case nsl_interp_type_linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);
@@ -318,8 +318,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 		break;
 	}
 
-	xVector->resize(npoints);
-	yVector->resize(npoints);
+	xVector->resize((int)npoints);
+	yVector->resize((int)npoints);
 	for (unsigned int i = 0; i < npoints; i++) {
 		unsigned int a=0,b=n-1;
 

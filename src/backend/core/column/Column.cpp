@@ -469,7 +469,7 @@ void Column::calculateStatistics() {
 	// TODO: support other data types?
 	QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
 
-	int notNanCount = 0;
+	size_t notNanCount = 0;
 	double val;
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
@@ -706,14 +706,14 @@ void Column::save(QXmlStreamWriter* writer) const {
 	switch(columnMode()) {
 	case AbstractColumn::Numeric: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
-			int size = d->rowCount() * sizeof(double);
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			size_t size = d->rowCount() * sizeof(double);
+			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
 	case AbstractColumn::Integer: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
-			int size = d->rowCount() * sizeof(int);
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			size_t size = d->rowCount() * sizeof(int);
+			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
 			break;
 		}
 	case AbstractColumn::Text:
@@ -749,11 +749,11 @@ public:
 	void run() {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 		if (m_private->columnMode() == AbstractColumn::Numeric) {
-			QVector<double>* data = new QVector<double>(bytes.size()/sizeof(double));
+			QVector<double>* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		} else {
-			QVector<int>* data = new QVector<int>(bytes.size()/sizeof(int));
+			QVector<int>* data = new QVector<int>(bytes.size()/(int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}

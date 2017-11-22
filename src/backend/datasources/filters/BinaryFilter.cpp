@@ -258,7 +258,7 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 	}
 
 	// skip until start row
-	for (int i = 0; i < (startRow-1) * vectors; ++i) {
+	for (size_t i = 0; i < (startRow-1) * vectors; ++i) {
 		for (int j = 0; j < BinaryFilter::dataSize(dataType); ++j) {
 			qint8 tmp;
 			in >> tmp;

@@ -475,7 +475,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	*/
 
 	// ATTENTION: This resets the position in the device to 0
-	m_actualRows = AsciiFilter::lineNumber(device);
+	m_actualRows = (int)AsciiFilter::lineNumber(device);
 /////////////////////////////////////////////////////////////////
 
 	// Find first data line (ignoring comment lines)
