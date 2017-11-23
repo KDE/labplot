@@ -39,7 +39,11 @@ struct con {
 
 struct func {
 	char const *name;
+#ifdef _MSC_VER
+	double (*fnct)(void);
+#else
 	double (*fnct)();
+#endif
 };
 
 /* variables to pass to parser */
@@ -50,7 +54,11 @@ typedef struct parser_var {
 } parser_var;
 
 /* Functions type */
+#ifdef _MSC_VER
+typedef double (*func_t) (void);
+#else
 typedef double (*func_t) ();
+#endif
 
 /* structure for list of symbols */
 typedef struct symrec {
