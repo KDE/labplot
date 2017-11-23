@@ -3,7 +3,6 @@
   <!ENTITY latex "L<superscript>A</superscript>T<subscript>E</subscript>X">
   <!ENTITY tex "T<subscript>E</subscript>X">
   <!ENTITY LabPlot "<application>LabPlot</application>">
-  <!ENTITY kappname "&LabPlot;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
 ]>
@@ -79,7 +78,7 @@
 <chapter id="introduction">
 <title>Introduction</title>
 <para>
-&LabPlot; is a &kde;-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
+&LabPlot; is a &kde; application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
 </para>
 
 <para>
@@ -349,7 +348,7 @@ The results shown on the worksheet can be exported to different formats via the 
 <sect1 id="CASworksheet">
 <title>CAS Worksheet</title>
 <para>
-The CAS worksheet is, besides the <link linkend="worksheet">worksheet</link>, the third central part of the application and provides an area to you use your favorite mathematical applications from within an elegant &kde;-integrated Worksheet Interface.
+The CAS worksheet is, besides the <link linkend="worksheet">worksheet</link>, the third central part of the application and provides an area to you use your favorite mathematical applications from within an elegant Worksheet Interface.
 </para>
 <para>
   &LabPlot; offers you several choices for the backends you wish to use with it. The choice to make depends on what you want to achieve.
@@ -2333,26 +2332,13 @@ When starting &LabPlot; from the command prompt, you can supply the name of a pr
 </varlistentry>
 
 <varlistentry>
-<term><command>labplot2 <option>--help-qt</option></command></term>
-<listitem><para>This lists the options available for changing the
-way &LabPlot; interacts with &Qt;.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--help-kde</option></command></term>
-<listitem><para>This lists the options available for changing the way
-&LabPlot; interacts with &kde;.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--help-all</option></command></term>
-<listitem><para>This lists all of the command line options.</para></listitem>
-</varlistentry>
-
-
-<varlistentry>
 <term><command>labplot2 <option>--no-splash</option></command></term>
-<listitem><para>do not show the splash screen</para></listitem>
+<listitem><para>Do not show the splash screen</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--presenter</option></command></term>
+<listitem><para>Start in the presenter mode</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -2362,7 +2348,7 @@ way &LabPlot; interacts with &Qt;.</para></listitem>
 
 <varlistentry>
 <term><command>labplot2 <option>--version</option></command></term>
-<listitem><para>Lists version information for &Qt;, &kde;, and &LabPlot;.
+<listitem><para>Lists version information for &LabPlot;.
 Also available through <command>labplot2 <option>-v</option></command>
 </para></listitem>
 </varlistentry>
@@ -2384,8 +2370,8 @@ Also available through <command>labplot2 <option>-v</option></command>
 </question>
 <answer>
 <para>
-&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde;. Normally you can expect &LabPlot;
-to build and run on every platform &kde; (&gt;=4) supports.
+&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde-frameworks;. Normally you can expect &LabPlot;
+to build and run on every platform &kde-frameworks; supports.
 A recent list of supported platforms and tips for compiling and running &LabPlot; can be found on
 <ulink url="http://labplot.wiki.sourceforge.net/Download">
 http://labplot.wiki.sourceforge.net/Download</ulink>.
