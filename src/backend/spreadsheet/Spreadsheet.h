@@ -41,13 +41,13 @@ class Spreadsheet : public AbstractDataSource {
 public:
 	Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
@@ -66,8 +66,8 @@ public:
 
 	void copy(Spreadsheet* other);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	void setColumnSelectedInView(int index, bool selected);
 
@@ -76,9 +76,9 @@ public:
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
 	//data import
-	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	virtual void finalizeImport(int columnOffset, int startColumn , int endColumn,
+	void finalizeImport(int columnOffset, int startColumn , int endColumn,
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
@@ -102,8 +102,8 @@ private:
 	void init();
 
 private slots:
-	virtual void childSelected(const AbstractAspect*) override;
-	virtual void childDeselected(const AbstractAspect*) override;
+	void childSelected(const AbstractAspect*) override;
+	void childDeselected(const AbstractAspect*) override;
 
 signals:
 	void requestProjectContextMenu(QMenu*);

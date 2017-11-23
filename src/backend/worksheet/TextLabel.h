@@ -68,18 +68,18 @@ class TextLabel : public WorksheetElement {
 		};
 
 		explicit TextLabel(const QString& name, Type type = General);
-		~TextLabel();
+		~TextLabel() override;
 
 		Type type() const;
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
-		virtual QGraphicsItem* graphicsItem() const override;
+		QIcon icon() const override;
+		QMenu* createContextMenu() override;
+		QGraphicsItem* graphicsItem() const override;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
-		virtual void loadThemeConfig(const KConfig& config) override;
-		virtual void saveThemeConfig(const KConfig& config) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
+		void loadThemeConfig(const KConfig& config) override;
+		void saveThemeConfig(const KConfig& config) override;
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
@@ -92,12 +92,12 @@ class TextLabel : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
 		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
 
-		virtual void setVisible(bool on) override;
-		virtual bool isVisible() const override;
-		virtual void setPrinting(bool) override;
+		void setVisible(bool on) override;
+		bool isVisible() const override;
+		void setPrinting(bool) override;
 
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+		void retransform() override;
+		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef TextLabelPrivate Private;
 

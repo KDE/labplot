@@ -578,11 +578,11 @@ class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private
 public:
 	WorksheetSetPageRectCmd(Worksheet::Private* target, QRectF newValue, const QString& description)
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
-	virtual void finalize() {
+	void finalize() override {
 		m_target->updatePageRect();
 		m_target->q->pageRectChanged(m_target->*m_field);
 	}
-	virtual void finalizeUndo() {
+	void finalizeUndo() override {
 		m_target->m_scene->setSceneRect(m_target->*m_field);
 		m_target->q->pageRectChanged(m_target->*m_field);
 	}

@@ -44,15 +44,15 @@ public:
 	QRectF transformedBoundingRectangle;
 	QPainterPath itemShape;
 
-	virtual QRectF boundingRect() const;
-	virtual QPainterPath shape() const;
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 	Segment* const q;
 
 private:
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 };
 
 #endif

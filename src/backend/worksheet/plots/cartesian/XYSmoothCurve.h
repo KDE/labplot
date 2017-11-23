@@ -64,12 +64,12 @@ class XYSmoothCurve: public XYCurve {
 		};
 
 		explicit XYSmoothCurve(const QString& name);
-		virtual ~XYSmoothCurve();
+		~XYSmoothCurve() override;
 
 		void recalculate();
-		virtual QIcon icon() const override;
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		QIcon icon() const override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)

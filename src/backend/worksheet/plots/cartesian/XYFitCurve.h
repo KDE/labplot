@@ -116,15 +116,15 @@ public:
 	};
 
 	explicit XYFitCurve(const QString& name);
-	virtual ~XYFitCurve();
+	~XYFitCurve() override;
 
 	void recalculate();
 	void initFitData(PlotDataDialog::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
 
-	virtual QIcon icon() const override;
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)

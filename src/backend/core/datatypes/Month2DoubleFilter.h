@@ -43,7 +43,7 @@ class Month2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	virtual double valueAt(int row) const {
+	double valueAt(int row) const override {
 		if (!m_inputs.value(0)) return NAN;
 		QDate inputValue = m_inputs.value(0)->dateAt(row);
 		if (!inputValue.isValid()) return NAN;
@@ -51,11 +51,11 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Numeric; }
 
 protected:
 	//! Using typed ports: only date-time inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Month;
 	}
 };

@@ -43,26 +43,26 @@ class Workbook : public AbstractPart, public scripted {
 public:
 	Workbook(AbstractScriptingEngine* engine, const QString& name);
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
 	Spreadsheet* currentSpreadsheet() const;
 	Matrix* currentMatrix() const;
 	void setChildSelectedInView(int index, bool selected);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 public slots:
-	virtual void childSelected(const AbstractAspect*) override;
+	void childSelected(const AbstractAspect*) override;
 
 private slots:
-	virtual void childDeselected(const AbstractAspect*) override;
+	void childDeselected(const AbstractAspect*) override;
 
 signals:
 	void requestProjectContextMenu(QMenu*);

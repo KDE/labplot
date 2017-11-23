@@ -60,19 +60,19 @@ public:
     /**
      * Destructor
      */
-    virtual ~CantorPart();
+    ~CantorPart() override;
 
     /**
      * This is a virtual function inherited from KParts::ReadWritePart.
      * A shell will use this to inform this Part if it should act
      * read-only
      */
-    virtual void setReadWrite(bool rw);
+    void setReadWrite(bool rw) override;
 
     /**
      * Reimplemented to disable and enable Save action
      */
-    virtual void setModified(bool modified);
+    void setModified(bool modified) override;
 
     KAboutData& createAboutData();
 
@@ -86,18 +86,18 @@ protected:
     /**
      * This must be implemented by each part
      */
-    virtual bool openFile();
+    bool openFile() override;
 
     /**
      * This must be implemented by each read-write part
      */
-    virtual bool saveFile();
+    bool saveFile() override;
 
     /**
      * Called when this part becomes the active one,
      * or if it looses activity
      **/
-    void guiActivateEvent( KParts::GUIActivateEvent * event );
+    void guiActivateEvent( KParts::GUIActivateEvent * event ) override;
 
 
     void loadAssistants();

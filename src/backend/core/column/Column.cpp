@@ -746,7 +746,7 @@ public:
 		m_private = priv;
 		m_content = content;
 	};
-	void run() {
+	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 		if (m_private->columnMode() == AbstractColumn::Numeric) {
 			QVector<double>* data = new QVector<double>(bytes.size()/(int)sizeof(double));

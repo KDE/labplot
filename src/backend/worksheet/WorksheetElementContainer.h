@@ -40,14 +40,14 @@ class WorksheetElementContainer : public WorksheetElement {
 
 	public:
 		explicit WorksheetElementContainer(const QString&);
-		virtual ~WorksheetElementContainer();
+		~WorksheetElementContainer() override;
 
-		virtual QGraphicsItem* graphicsItem() const override;
+		QGraphicsItem* graphicsItem() const override;
 
-		virtual void setVisible(bool) override;
-		virtual bool isVisible() const override;
-		virtual bool isFullyVisible() const override;
-		virtual void setPrinting(bool) override;
+		void setVisible(bool) override;
+		bool isVisible() const override;
+		bool isFullyVisible() const override;
+		void setPrinting(bool) override;
 
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;
@@ -56,8 +56,8 @@ class WorksheetElementContainer : public WorksheetElement {
 		typedef WorksheetElementContainerPrivate Private;
 
 	public slots:
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
+		void retransform() override;
+		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 		void childHovered();
 		void childUnhovered();
 

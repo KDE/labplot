@@ -46,15 +46,15 @@ class Datapicker : public AbstractPart, public scripted {
 
 public:
 	explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
-	virtual ~Datapicker();
+	~Datapicker() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
 	DatapickerCurve* activeCurve();
 	Spreadsheet* currentSpreadsheet() const;
@@ -67,11 +67,11 @@ public:
 	QVector3D mapSceneToLogical(const QPointF&) const;
 	QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 public slots:
-	virtual void childSelected(const AbstractAspect*) override;
+	void childSelected(const AbstractAspect*) override;
 
 private:
 	DatapickerCurve* m_activeCurve;
@@ -82,7 +82,7 @@ private:
 	void handleChildAspectAdded(const AbstractAspect*);
 
 private slots:
-	virtual void childDeselected(const AbstractAspect*) override;
+	void childDeselected(const AbstractAspect*) override;
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 

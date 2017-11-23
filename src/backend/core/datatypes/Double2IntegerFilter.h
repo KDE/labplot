@@ -39,7 +39,7 @@ class Double2IntegerFilter : public AbstractSimpleFilter {
 public:
 	Double2IntegerFilter() {}
 
-	virtual int integerAt(int row) const {
+	int integerAt(int row) const override {
 		if (!m_inputs.value(0)) return 0;
 
 		double value = m_inputs.value(0)->valueAt(row);
@@ -53,11 +53,11 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Integer; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Integer; }
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Numeric;
 	}
 };

@@ -37,17 +37,17 @@ class ColumnStringIO : public AbstractColumn {
 
 public:
 	ColumnStringIO(Column* owner);
-	virtual AbstractColumn::ColumnMode columnMode() const override;
-	virtual AbstractColumn::PlotDesignation plotDesignation() const override;
-	virtual int rowCount() const override;
-	virtual QString textAt(int) const override;
-	virtual void setTextAt(int, const QString&) override;
+	AbstractColumn::ColumnMode columnMode() const override;
+	AbstractColumn::PlotDesignation plotDesignation() const override;
+	int rowCount() const override;
+	QString textAt(int) const override;
+	void setTextAt(int, const QString&) override;
 	virtual bool isValid(int) const;
-	virtual bool copy(const AbstractColumn*) override;
-	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
-	virtual void replaceTexts(int start_row, const QVector<QString>& texts) override;
-	virtual void save(QXmlStreamWriter*) const override {};
-	virtual bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
+	bool copy(const AbstractColumn*) override;
+	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
+	void replaceTexts(int start_row, const QVector<QString>& texts) override;
+	void save(QXmlStreamWriter*) const override {};
+	bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:
 	Column* m_owner;
 	bool m_setting;

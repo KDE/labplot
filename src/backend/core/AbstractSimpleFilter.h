@@ -41,10 +41,10 @@ class AbstractSimpleFilter : public AbstractFilter {
 
 public:
 	AbstractSimpleFilter();
-	virtual int inputCount() const override;
-	virtual int outputCount() const override;
-	virtual AbstractColumn* output(int port) override;
-	virtual const AbstractColumn * output(int port) const override;
+	int inputCount() const override;
+	int outputCount() const override;
+	AbstractColumn* output(int port) override;
+	const AbstractColumn * output(int port) const override;
 	virtual AbstractColumn::PlotDesignation plotDesignation() const;
 	virtual AbstractColumn::ColumnMode columnMode() const;
 	virtual QString textAt(int row) const;
@@ -57,8 +57,8 @@ public:
 	virtual int rowCount() const;
 	virtual QList<Interval<int>> dependentRows(Interval<int> inputRange) const;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 	virtual void writeExtraAttributes(QXmlStreamWriter*) const;
 
 signals:
@@ -66,17 +66,17 @@ signals:
 	void digitsChanged();
 
 protected:
-	virtual void inputPlotDesignationAboutToChange(const AbstractColumn*) override;
-	virtual void inputPlotDesignationChanged(const AbstractColumn*) override;
-	virtual void inputModeAboutToChange(const AbstractColumn*) override;
-	virtual void inputModeChanged(const AbstractColumn*) override;
-	virtual void inputDataAboutToChange(const AbstractColumn*) override;
-	virtual void inputDataChanged(const AbstractColumn*) override;
+	void inputPlotDesignationAboutToChange(const AbstractColumn*) override;
+	void inputPlotDesignationChanged(const AbstractColumn*) override;
+	void inputModeAboutToChange(const AbstractColumn*) override;
+	void inputModeChanged(const AbstractColumn*) override;
+	void inputDataAboutToChange(const AbstractColumn*) override;
+	void inputDataChanged(const AbstractColumn*) override;
 
-	virtual void inputRowsAboutToBeInserted(const AbstractColumn * source, int before, int count) override;
-	virtual void inputRowsInserted(const AbstractColumn * source, int before, int count) override;
-	virtual void inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count) override;
-	virtual void inputRowsRemoved(const AbstractColumn * source, int first, int count) override;
+	void inputRowsAboutToBeInserted(const AbstractColumn * source, int before, int count) override;
+	void inputRowsInserted(const AbstractColumn * source, int before, int count) override;
+	void inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count) override;
+	void inputRowsRemoved(const AbstractColumn * source, int first, int count) override;
 
 	SimpleFilterColumn* m_output_column;
 };
@@ -87,17 +87,17 @@ class SimpleFilterColumn : public AbstractColumn {
 public:
 	SimpleFilterColumn(AbstractSimpleFilter* owner) : AbstractColumn(owner->name()), m_owner(owner) {}
 
-	virtual AbstractColumn::ColumnMode columnMode() const override;
-	virtual int rowCount() const override { return m_owner->rowCount(); }
-	virtual AbstractColumn::PlotDesignation plotDesignation() const override { return m_owner->plotDesignation(); }
-	virtual QString textAt(int row) const override;
-	virtual QDate dateAt(int row) const override;
-	virtual QTime timeAt(int row) const override;
-	virtual QDateTime dateTimeAt(int row) const override;
-	virtual double valueAt(int row) const override;
-	virtual int integerAt(int row) const override;
-	virtual void save(QXmlStreamWriter*) const override {};
-	virtual bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
+	AbstractColumn::ColumnMode columnMode() const override;
+	int rowCount() const override { return m_owner->rowCount(); }
+	AbstractColumn::PlotDesignation plotDesignation() const override { return m_owner->plotDesignation(); }
+	QString textAt(int row) const override;
+	QDate dateAt(int row) const override;
+	QTime timeAt(int row) const override;
+	QDateTime dateTimeAt(int row) const override;
+	double valueAt(int row) const override;
+	int integerAt(int row) const override;
+	void save(QXmlStreamWriter*) const override {};
+	bool load(XmlStreamReader*, bool preview) override {Q_UNUSED(preview); return true;};
 private:
 	AbstractSimpleFilter* m_owner;
 

@@ -40,7 +40,7 @@ class PlotArea : public WorksheetElement {
 
 	public:
 		explicit PlotArea(const QString& name);
-		virtual ~PlotArea();
+		~PlotArea() override;
 
 		enum BackgroundType {Color, Image, Pattern};
 		enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
@@ -49,12 +49,12 @@ class PlotArea : public WorksheetElement {
 								};
 		enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
-		virtual QGraphicsItem* graphicsItem() const override;
-		virtual void setVisible(bool on) override;
-		virtual bool isVisible() const override;
-		virtual void setPrinting(bool) override {};
-		virtual void loadThemeConfig(const KConfig& config) override;
-		virtual void saveThemeConfig(const KConfig& config) override;
+		QGraphicsItem* graphicsItem() const override;
+		void setVisible(bool on) override;
+		bool isVisible() const override;
+		void setPrinting(bool) override {};
+		void loadThemeConfig(const KConfig& config) override;
+		void saveThemeConfig(const KConfig& config) override;
 
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -72,11 +72,11 @@ class PlotArea : public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+		void retransform() override;
+		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef PlotAreaPrivate Private;
 

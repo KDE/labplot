@@ -77,18 +77,18 @@ class TextLabelPrivate: public QGraphicsItem {
 		QPainterPath labelShape;
 
 		//reimplemented from QGraphicsItem
-		virtual QRectF boundingRect() const;
- 		virtual QPainterPath shape() const;
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		QRectF boundingRect() const override;
+ 		QPainterPath shape() const override;
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+		QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 		TextLabel* const q;
 
 	private:
-		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

@@ -45,8 +45,8 @@ class AxisPrivate: public QGraphicsItem {
 public:
 	explicit AxisPrivate(Axis*, CartesianPlot*);
 
-	virtual QRectF boundingRect() const override;
-	virtual QPainterPath shape() const override;
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
 
 	QString name() const;
 	void retransform();
@@ -134,10 +134,10 @@ public:
 	bool suppressRetransform;
 
 private:
-	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 	void addArrow(const QPointF& point, int direction);
 	int upperLabelsPrecision(int);

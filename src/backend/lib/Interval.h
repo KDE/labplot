@@ -221,7 +221,7 @@ template<class T> class Interval : public IntervalBase<T> {
 			return ( IntervalBase<T>::m_start >= 0 && IntervalBase<T>::m_end >= 0 &&
 					IntervalBase<T>::m_start <= IntervalBase<T>::m_end );
 		}
-		bool touches(const Interval<T>& other) const {
+		bool touches(const Interval<T>& other) const override {
 			return ( (other.end() == IntervalBase<T>::m_start-1) ||
 					(other.start() == IntervalBase<T>::m_end+1) );
 		}
@@ -234,7 +234,7 @@ template<> class Interval<float> : public IntervalBase<float> {
 		Interval(const Interval<float>& other) : IntervalBase<float>(other) {}
 		float size() const { return IntervalBase<float>::m_end - IntervalBase<float>::m_start; }
 		bool isValid() const { return ( IntervalBase<float>::m_start <= IntervalBase<float>::m_end ); }
-		bool touches(const Interval<float>& other) const {
+		bool touches(const Interval<float>& other) const override {
 			return ( (other.end() == IntervalBase<float>::m_start) ||
 					(other.start() == IntervalBase<float>::m_end) );
 		}
@@ -247,7 +247,7 @@ template<> class Interval<double> : public IntervalBase<double> {
 		Interval(const Interval<double>& other) : IntervalBase<double>(other) {}
 		double size() const { return IntervalBase<double>::m_end - IntervalBase<double>::m_start; }
 		bool isValid() const { return ( IntervalBase<double>::m_start <= IntervalBase<double>::m_end ); }
-		bool touches(const Interval<double>& other) const {
+		bool touches(const Interval<double>& other) const override {
 			return ( (other.end() == IntervalBase<double>::m_start) ||
 					(other.start() == IntervalBase<double>::m_end) );
 		}
@@ -260,7 +260,7 @@ template<> class Interval<long double> : public IntervalBase<long double> {
 		Interval(const Interval<long double>& other) : IntervalBase<long double>(other) {}
 		long double size() const { return IntervalBase<long double>::m_end - IntervalBase<long double>::m_start; }
 		bool isValid() const { return ( IntervalBase<long double>::m_start <= IntervalBase<long double>::m_end ); }
-		bool touches(const Interval<long double>& other) const {
+		bool touches(const Interval<long double>& other) const override {
 			return ( (other.end() == IntervalBase<long double>::m_start) ||
 					(other.start() == IntervalBase<long double>::m_end) );
 		}

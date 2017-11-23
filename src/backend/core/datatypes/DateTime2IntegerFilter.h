@@ -36,7 +36,7 @@ class DateTime2IntegerFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	virtual int integerAt(int row) const {
+	int integerAt(int row) const override {
 		//DEBUG("integerAt()");
 		if (!m_inputs.value(0)) return 0;
 		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
@@ -46,11 +46,11 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Integer; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Integer; }
 
 protected:
 	//! Using typed ports: only DateTime inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::DateTime;
 	}
 };

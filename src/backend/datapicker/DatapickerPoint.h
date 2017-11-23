@@ -47,7 +47,7 @@ public:
 
 	explicit ErrorBarItem(DatapickerPoint* parent = 0, const ErrorBarType& type = PlusDeltaX);
 
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 	void setRectSize(const qreal);
 
 public slots:
@@ -55,7 +55,7 @@ public slots:
 
 private:
 	void initRect();
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	QGraphicsLineItem* barLineItem;
 	QRectF m_rect;
 	ErrorBarType m_type;
@@ -68,17 +68,17 @@ class DatapickerPoint : public AbstractAspect {
 
 public:
 	explicit DatapickerPoint(const QString& name );
-	~DatapickerPoint();
+	~DatapickerPoint() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 	QGraphicsItem *graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
 	void setPrinting(bool);
 	void initErrorBar(const DatapickerCurve::Errors&);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)

@@ -53,7 +53,7 @@ class SpreadsheetView : public QWidget {
 
 public:
 	explicit SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly = false);
-	virtual ~SpreadsheetView();
+	~SpreadsheetView() override;
 
 	void resizeHeader();
 
@@ -101,7 +101,7 @@ private:
 	SpreadsheetHeaderView* m_horizontalHeader;
 	bool m_suppressSelectionChangedEvent;
 	bool m_readOnly;
-	bool eventFilter(QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent*) override;
 	void checkColumnMenu();
 	void checkSpreadsheetMenu();
 

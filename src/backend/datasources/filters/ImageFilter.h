@@ -40,16 +40,16 @@ public:
 	enum ImportFormat {MATRIX,XYZ,XYRGB};
 
 	ImageFilter();
-	~ImageFilter();
+	~ImageFilter() override;
 
 	static QStringList importFormats();
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&);
-	void saveFilterSettings(const QString&) const;
+	void loadFilterSettings(const QString&) override;
+	void saveFilterSettings(const QString&) const override;
 
 	void setImportFormat(const ImageFilter::ImportFormat);
 	ImageFilter::ImportFormat importFormat() const;
@@ -63,8 +63,8 @@ public:
 	void setEndColumn(const int);
 	int endColumn() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
 private:
 	std::unique_ptr<ImageFilterPrivate> const d;

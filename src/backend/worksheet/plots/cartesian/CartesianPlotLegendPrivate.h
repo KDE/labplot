@@ -49,11 +49,11 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		void updatePosition();
 
 		//QGraphicsItem's virtual functions
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-		virtual QRectF boundingRect() const;
-		virtual QPainterPath shape() const;
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+		QRectF boundingRect() const override;
+		QPainterPath shape() const override;
+		QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 		bool suppressItemChangeEvent;
 		bool suppressRetransform;
@@ -97,9 +97,9 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		int layoutColumnCount;
 
 	private:
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

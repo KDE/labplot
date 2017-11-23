@@ -36,8 +36,8 @@ class OriginProjectParser : public ProjectParser {
 public:
 	OriginProjectParser();
 
-	virtual QAbstractItemModel* model() override;
-	virtual void importTo(Folder*, const QStringList&) override;
+	QAbstractItemModel* model() override;
+	void importTo(Folder*, const QStringList&) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

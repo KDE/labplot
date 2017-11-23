@@ -40,7 +40,7 @@ class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
 
-	void retransform();
+	void retransform() override;
 	void retransformScales();
 	void rangeChanged();
 
@@ -68,13 +68,13 @@ public:
 	bool suppressRetransform;
 
 private:
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-	virtual void wheelEvent(QGraphicsSceneWheelEvent*);
-	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr);
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void wheelEvent(QGraphicsSceneWheelEvent*) override;
+	void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void checkXRange();
 	void checkYRange();

@@ -43,7 +43,7 @@ class WorksheetElement : public AbstractAspect {
 
 	public:
 		explicit WorksheetElement(const QString&);
-		virtual ~WorksheetElement();
+		~WorksheetElement() override;
 
 		enum WorksheetElementName {NameCartesianPlot = 1};
 
@@ -53,7 +53,7 @@ class WorksheetElement : public AbstractAspect {
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
 		virtual void setPrinting(bool) = 0;
-		virtual QMenu* createContextMenu();
+		QMenu* createContextMenu() override;
 		virtual void loadThemeConfig(const KConfig&);
 		virtual void saveThemeConfig(const KConfig&);
 		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);

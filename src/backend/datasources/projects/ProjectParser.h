@@ -40,7 +40,7 @@ class ProjectParser : public QObject {
 
 public:
 	ProjectParser();
-	virtual ~ProjectParser() {};
+	~ProjectParser() override {};
 
 	void setProjectFileName(const QString&);
 	const QString& projectFileName() const;

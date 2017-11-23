@@ -40,10 +40,10 @@ class SignallingUndoCommand : public QUndoCommand
 		SignallingUndoCommand(const QString &text, QObject *receiver, const char *redoMethod, const char *undoMethod,
 				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
 				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
-		~SignallingUndoCommand();
+		~SignallingUndoCommand() override;
 
-		virtual void redo();
-		virtual void undo();
+		void redo() override;
+		void undo() override;
 
 	private:
 		QGenericArgument arg(int index);

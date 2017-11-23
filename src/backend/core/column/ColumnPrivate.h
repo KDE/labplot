@@ -40,7 +40,7 @@ class ColumnPrivate : QObject {
 
 public:
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode);
-	~ColumnPrivate();
+	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
 
 	AbstractColumn::ColumnMode columnMode() const;

@@ -38,7 +38,7 @@ class Column;
 class XYEquationCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYEquationCurvePrivate(XYEquationCurve*);
-		~XYEquationCurvePrivate();
+		~XYEquationCurvePrivate() override;
 
 		void recalculate();
 

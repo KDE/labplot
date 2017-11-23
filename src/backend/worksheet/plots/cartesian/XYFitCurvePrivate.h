@@ -42,7 +42,7 @@ extern "C" {
 class XYFitCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate();
+		~XYFitCurvePrivate() override;
 
 		void recalculate();
 

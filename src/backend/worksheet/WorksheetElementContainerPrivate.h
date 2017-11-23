@@ -38,18 +38,18 @@ class WorksheetElementContainer;
 class WorksheetElementContainerPrivate : public QGraphicsItem {
 	public:
 		explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
-		virtual ~WorksheetElementContainerPrivate(){}
+		~WorksheetElementContainerPrivate() override{}
 
 		QString name() const;
-		virtual QRectF boundingRect() const;
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+		QRectF boundingRect() const override;
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 		bool swapVisible(bool on);
 		void prepareGeometryChangeRequested();
 		void recalcShapeAndBoundingRect();
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
 		WorksheetElementContainer* q;
 		QRectF boundingRectangle;

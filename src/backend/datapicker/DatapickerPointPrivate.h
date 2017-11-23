@@ -62,14 +62,14 @@ public:
 	qreal errorBarSize;
 
 	//reimplemented from QGraphicsItem
-	virtual QRectF boundingRect() const;
-	virtual QPainterPath shape() const;
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+	QRectF boundingRect() const override;
+	QPainterPath shape() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 	DatapickerPoint* const q;
 
 private:
-	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 };
 
 #endif

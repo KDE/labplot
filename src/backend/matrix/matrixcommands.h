@@ -41,8 +41,8 @@
 class MatrixInsertColumnsCmd : public QUndoCommand {
 public:
 	MatrixInsertColumnsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = 0);
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	MatrixPrivate* m_private_obj;
@@ -54,8 +54,8 @@ private:
 class MatrixInsertRowsCmd : public QUndoCommand {
 public:
 	MatrixInsertRowsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = 0);
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	MatrixPrivate* m_private_obj;
@@ -71,7 +71,7 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj), m_first(first), m_count(count) {
 		setText(i18np("%1: remove %2 column", "%1: remove %2 columns", m_private_obj->name(), m_count));
 	}
-	virtual void redo() {
+	void redo() override {
 		if(m_backups.isEmpty()) {
 			int last_row = m_private_obj->rowCount-1;
 			for (int i = 0; i < m_count; i++)
@@ -80,7 +80,7 @@ public:
 		m_private_obj->removeColumns(m_first, m_count);
 		emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->insertColumns(m_first, m_count);
 		int last_row = m_private_obj->rowCount-1;
 		//TODO: use memcopy to copy from the backup vector
@@ -106,7 +106,7 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj), m_first(first), m_count(count) {
 		setText(i18np("%1: remove %2 row", "%1: remove %2 rows", m_private_obj->name(), m_count));
 	}
-	virtual void redo() {
+	void redo() override {
 		if(m_backups.isEmpty()) {
 			int last_row = m_first+m_count-1;
 				for (int col = 0; col < m_private_obj->columnCount; col++)
@@ -115,7 +115,7 @@ public:
 		m_private_obj->removeRows(m_first, m_count);
 		emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->insertRows(m_first, m_count);
 		int last_row = m_first+m_count-1;
 		for (int col = 0; col < m_private_obj->columnCount; col++)
@@ -138,7 +138,7 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: clear", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		if(m_backups.isEmpty()) {
 			int last_row = m_private_obj->rowCount-1;
 
@@ -149,7 +149,7 @@ public:
 		for (int i = 0; i < m_private_obj->columnCount; i++)
 			m_private_obj->clearColumn(i);
 	}
-	virtual void undo() {
+	void undo() override {
 		int last_row = m_private_obj->rowCount-1;
 		for (int i = 0; i < m_private_obj->columnCount; i++)
 			m_private_obj->setColumnCells(i, 0, last_row, m_backups.at(i));
@@ -168,12 +168,12 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj), m_col(col) {
 		setText(i18n("%1: clear column %2", m_private_obj->name(), m_col+1));
 	}
-	virtual void redo() {
+	void redo() override {
 		if(m_backup.isEmpty())
 			m_backup = m_private_obj->columnCells<T>(m_col, 0, m_private_obj->rowCount-1);
 		m_private_obj->clearColumn(m_col);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->setColumnCells(m_col, 0, m_private_obj->rowCount-1, m_backup);
 	}
 
@@ -193,11 +193,11 @@ public:
 		// they use a lot of execution time
 		setText(i18n("%1: set cell value", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		m_old_value = m_private_obj->cell<T>(m_row, m_col);
 		m_private_obj->setCell(m_row, m_col, m_value);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->setCell(m_row, m_col, m_old_value);
 	}
 
@@ -213,8 +213,8 @@ private:
 class MatrixSetCoordinatesCmd : public QUndoCommand {
 public:
 	MatrixSetCoordinatesCmd(MatrixPrivate*, double x1, double x2, double y1, double y2, QUndoCommand* = 0);
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	MatrixPrivate* m_private_obj;
@@ -232,8 +232,8 @@ private:
 class MatrixSetFormulaCmd : public QUndoCommand {
 public:
 	MatrixSetFormulaCmd(MatrixPrivate*, QString formula);
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	MatrixPrivate* m_private_obj;
@@ -248,12 +248,12 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj), m_col(col), m_first_row(first_row), m_last_row(last_row), m_values(values) {
 		setText(i18n("%1: set cell values", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		if (m_old_values.isEmpty())
 			m_old_values = m_private_obj->columnCells<T>(m_col, m_first_row, m_last_row);
 		m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_values);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->setColumnCells(m_col, m_first_row, m_last_row, m_old_values);
 	}
 
@@ -275,12 +275,12 @@ public:
 				m_last_column(last_column), m_values(values) {
 		setText(i18n("%1: set cell values", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		if (m_old_values.isEmpty())
 			m_old_values = m_private_obj->rowCells<T>(m_row, m_first_column, m_last_column);
 		m_private_obj->setRowCells(m_row, m_first_column, m_last_column, m_values);
 	}
-	virtual void undo() {
+	void undo() override {
 		m_private_obj->setRowCells(m_row, m_first_column, m_last_column, m_old_values);
 	}
 
@@ -301,7 +301,7 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: transpose", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		int rows = m_private_obj->rowCount;
 		int cols = m_private_obj->columnCount;
 		int temp_size = qMax(rows, cols);
@@ -325,7 +325,7 @@ public:
 		m_private_obj->suppressDataChange = false;
 		m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount-1, m_private_obj->columnCount-1);
 	}
-	virtual void undo() {
+	void undo() override {
 		redo();
 	}
 
@@ -341,7 +341,7 @@ public:
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: mirror horizontally", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		int rows = m_private_obj->rowCount;
 		int cols = m_private_obj->columnCount;
 		int middle = cols/2;
@@ -355,7 +355,7 @@ public:
 		m_private_obj->suppressDataChange = false;
 		m_private_obj->emitDataChanged(0, 0, rows-1, cols-1);
 	}
-	virtual void undo() {
+	void undo() override {
 		redo();
 	}
 
@@ -371,7 +371,7 @@ public:
 		: QUndoCommand(parent), m_private_obj(private_obj) {
 			setText(i18n("%1: mirror vertically", m_private_obj->name()));
 	}
-	virtual void redo() {
+	void redo() override {
 		int rows = m_private_obj->rowCount;
 		int cols = m_private_obj->columnCount;
 		int middle = rows/2;
@@ -386,7 +386,7 @@ public:
 		m_private_obj->suppressDataChange = false;
 		m_private_obj->emitDataChanged(0, 0, rows-1, cols-1);
 	}
-	virtual void undo() {
+	void undo() override {
 		redo();
 	}
 
@@ -398,8 +398,8 @@ private:
 class MatrixReplaceValuesCmd : public QUndoCommand {
 public:
 	explicit MatrixReplaceValuesCmd(MatrixPrivate*, void* new_values, QUndoCommand* = 0);
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	MatrixPrivate* m_private_obj;

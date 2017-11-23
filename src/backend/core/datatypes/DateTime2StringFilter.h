@@ -51,7 +51,7 @@ public:
 	QString format() const { return m_format; }
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
 
 signals:
 	void formatChanged();
@@ -62,17 +62,17 @@ private:
 	QString m_format;
 
 public:
-	virtual QString textAt(int row) const override;
+	QString textAt(int row) const override;
 
 	//! \name XML related functions
 	//@{
-	virtual void writeExtraAttributes(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void writeExtraAttributes(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 	//@}
 
 protected:
 	//! Using typed ports: only DateTime inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) override;
+	bool inputAcceptable(int, const AbstractColumn *source) override;
 };
 
 #endif // ifndef DATE_TIME2STRING_FILTER_H

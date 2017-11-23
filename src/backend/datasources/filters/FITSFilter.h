@@ -43,14 +43,14 @@ class FITSFilter : public AbstractFileFilter {
 
 public:
 	FITSFilter();
-	~FITSFilter();
+	~FITSFilter() override;
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
+	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> readChdu(const QString& fileName, bool *okToMatrix = nullptr, int lines = -1);
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
 	struct KeywordUpdate {
 		KeywordUpdate() : keyUpdated(false), valueUpdated(false),
@@ -99,8 +99,8 @@ public:
 	static QStringList mandatoryTableExtensionKeywords();
 	static QStringList units();
 
-	void loadFilterSettings(const QString&);
-	void saveFilterSettings(const QString&) const;
+	void loadFilterSettings(const QString&) override;
+	void saveFilterSettings(const QString&) const override;
 
 	void setStartRow(const int);
 	int startRow() const;

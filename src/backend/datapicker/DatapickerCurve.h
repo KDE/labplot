@@ -45,7 +45,7 @@ class DatapickerCurve: public AbstractAspect {
 
 public:
 	explicit DatapickerCurve(const QString&);
-	~DatapickerCurve();
+	~DatapickerCurve() override;
 
 	enum ErrorType { NoError, SymmetricError, AsymmetricError };
 	struct Errors {
@@ -53,8 +53,8 @@ public:
 		ErrorType y;
 	};
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 	void setPrinting(bool);
 	void setSelectedInView(const bool);
 	void addDatasheet(const DatapickerImage::GraphType&);
@@ -87,8 +87,8 @@ public:
 	POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaYColumn, MinusDeltaYColumn)
 	QString& minusDeltaYColumnPath() const;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	typedef DatapickerCurvePrivate Private;
 

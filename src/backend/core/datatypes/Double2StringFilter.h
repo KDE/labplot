@@ -50,7 +50,7 @@ public:
 	int numDigits() const { return m_digits; }
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
 
 private:
 	friend class Double2StringFilterSetFormatCmd;
@@ -62,12 +62,12 @@ private:
 
 	//! \name XML related functions
 	//@{
-	virtual void writeExtraAttributes(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void writeExtraAttributes(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 	//@}
 
 public:
-	virtual QString textAt(int row) const override {
+	QString textAt(int row) const override {
 		//DEBUG("Double2String::textAt()");
 		if (!m_inputs.value(0)) return QString();
 		if (m_inputs.value(0)->rowCount() <= row) return QString();
@@ -78,7 +78,7 @@ public:
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Numeric;
 	}
 };

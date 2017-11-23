@@ -48,7 +48,7 @@ class DatapickerImageView : public QGraphicsView {
 
 public:
 	explicit DatapickerImageView(DatapickerImage* image);
-	~DatapickerImageView();
+	~DatapickerImageView() override;
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
@@ -58,16 +58,16 @@ private:
 
 	void initActions();
 	void initMenus();
-	void drawForeground(QPainter*, const QRectF&);
-	void drawBackground(QPainter*, const QRectF&);
+	void drawForeground(QPainter*, const QRectF&) override;
+	void drawBackground(QPainter*, const QRectF&) override;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
 
 	//events
-	void contextMenuEvent(QContextMenuEvent*);
-	void wheelEvent(QWheelEvent*);
-	void mousePressEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
+	void contextMenuEvent(QContextMenuEvent*) override;
+	void wheelEvent(QWheelEvent*) override;
+	void mousePressEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseMoveEvent(QMouseEvent*) override;
 
 	DatapickerImage* m_image;
 	Datapicker* m_datapicker;

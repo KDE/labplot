@@ -43,7 +43,7 @@ class DatapickerView : public QWidget {
 
 public:
 	explicit DatapickerView(Datapicker*);
-	virtual ~DatapickerView();
+	~DatapickerView() override;
 
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);

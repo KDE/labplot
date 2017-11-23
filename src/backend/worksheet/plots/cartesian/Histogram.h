@@ -56,11 +56,11 @@ public:
 	explicit Histogram(const QString &name);
 	//size_t bins;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QGraphicsItem* graphicsItem() const override;
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
 
@@ -97,9 +97,9 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
 
-	virtual void setVisible(bool on) override;
-	virtual bool isVisible() const override;
-	virtual void setPrinting(bool on) override;
+	void setVisible(bool on) override;
+	bool isVisible() const override;
+	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 	double getYMaximum() const;
 	void setHistrogramType(Histogram::HistogramType);
@@ -113,8 +113,8 @@ public:
 	bool isSourceDataChangedSinceLastPlot() const;
 
 public slots:
-	virtual void retransform() override;
-	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 private slots:
 	void updateValues();

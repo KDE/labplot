@@ -43,7 +43,7 @@ class PartMdiView : public QMdiSubWindow {
 		AbstractPart* part() const;
 
 	private:
-		void closeEvent(QCloseEvent*);
+		void closeEvent(QCloseEvent*) override;
 		AbstractPart* m_part;
 
 	private slots:

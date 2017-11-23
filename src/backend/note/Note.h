@@ -42,12 +42,12 @@ class Note : public AbstractPart {
 	public:
 		explicit Note(const QString& name);
 
-		virtual QWidget* view() const override;
-		virtual QIcon icon() const override;
+		QWidget* view() const override;
+		QIcon icon() const override;
 
-		virtual bool exportView() const override;
-		virtual bool printView() override;
-		virtual bool printPreview() const override;
+		bool exportView() const override;
+		bool printView() override;
+		bool printPreview() const override;
 
 		void setNote(const QString&);
 		const QString& note() const;
@@ -61,8 +61,8 @@ class Note : public AbstractPart {
 		void setTextFont(const QFont&);
 		const QFont& textFont() const;
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
 	signals:
 		void backgroundColorChanged(QColor);

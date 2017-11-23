@@ -70,7 +70,7 @@ public:
 	};
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
-	~LiveDataSource();
+	~LiveDataSource() override;
 
 	void ready();
 
@@ -140,12 +140,12 @@ public:
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 private:
 	void initActions();

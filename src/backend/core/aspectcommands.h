@@ -43,14 +43,14 @@ public:
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
-	~AspectChildRemoveCmd() {
+	~AspectChildRemoveCmd() override {
 		//TODO: this makes labplot crashing on project close/save.
 // 			if (m_removed)
 // 				delete m_child;
 	}
 
 	// calling redo transfers ownership of m_child to the undo command
-	virtual void redo() {
+	void redo() override {
 		AbstractAspect* nextSibling;
 		if (m_child == m_target->m_children.last())
 			nextSibling = 0;
@@ -64,7 +64,7 @@ public:
 	}
 
 	// calling undo transfers ownership of m_child back to its parent aspect
-	virtual void undo() {
+	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
 		emit m_target->q->aspectAboutToBeAdded(m_target->q, 0, m_child);
@@ -89,11 +89,11 @@ public:
 // 		m_removed = true;
 	}
 
-	virtual void redo() {
+	void redo() override {
 		AspectChildRemoveCmd::undo();
 	}
 
-	virtual void undo() {
+	void undo() override {
 		AspectChildRemoveCmd::redo();
 	}
 };
@@ -107,13 +107,13 @@ public:
 	}
 
 	// calling redo transfers ownership of m_child to the new parent aspect
-	virtual void redo() {
+	void redo() override {
 		m_index = m_target->removeChild(m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
-	virtual void undo() {
+	void undo() override {
 		Q_ASSERT(m_index != -1);
 		m_new_parent->removeChild(m_child);
 		m_target->insertChild(m_index, m_child);

@@ -55,7 +55,7 @@ class WorkbookView : public QWidget {
 
 	public:
 		explicit WorkbookView(Workbook*);
-		virtual ~WorkbookView();
+		~WorkbookView() override;
 
 		int currentIndex() const;
 

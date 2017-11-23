@@ -49,7 +49,7 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
     /**
      * Destructor
      */
-    ~PanelPlugin();
+    ~PanelPlugin() override;
 
     /**
      * Sets the properties of this PanelPlugin

@@ -42,7 +42,7 @@ public:
 	virtual void initialize() {};
 	virtual void finalize() {};
 
-	virtual void redo() {
+	void redo() override {
 		initialize();
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
@@ -50,7 +50,7 @@ public:
 		finalize();
 	}
 
-	virtual void undo() { redo(); }
+	void undo() override { redo(); }
 
 protected:
 	target_class* m_target;
@@ -70,7 +70,7 @@ public:
 	virtual void finalize() {};
 	virtual void finalizeUndo() {};
 
-	virtual void redo() {
+	void redo() override {
 		initialize();
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
@@ -81,7 +81,7 @@ public:
 	//call finalizeUndo() at the end where only the signal is emmited
 	//and no actual finalize-method is called that can potentially
 	//cause  new entries on the undo-stack
-	virtual void undo() {
+	void undo() override {
 		initialize();
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
@@ -106,13 +106,13 @@ public:
 	virtual void initialize() {};
 	virtual void finalize() {};
 
-	virtual void redo() {
+	void redo() override {
 		initialize();
 		m_otherValue = (*m_target.*m_method)(m_otherValue);
 		finalize();
 	}
 
-	virtual void undo() { redo(); }
+	void undo() override { redo(); }
 
 protected:
 	target_class* m_target;

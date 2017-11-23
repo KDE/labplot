@@ -50,10 +50,10 @@ public:
 		init();
 	};
 	void init();
-	~Column();
+	~Column() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 
 	AbstractColumn::ColumnMode columnMode() const override;
 	void setColumnMode(AbstractColumn::ColumnMode) override;
@@ -104,8 +104,8 @@ public:
 	void setIntegerAt(int, const int) override;
 	void replaceInteger(int, const QVector<int>&) override;
 
-	virtual double maximum(int count = 0) const override;
-	virtual double minimum(int count = 0) const override;
+	double maximum(int count = 0) const override;
+	double minimum(int count = 0) const override;
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);

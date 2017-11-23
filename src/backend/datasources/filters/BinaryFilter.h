@@ -44,7 +44,7 @@ class BinaryFilter : public AbstractFileFilter {
 	enum ByteOrder {LittleEndian, BigEndian};
 
 	BinaryFilter();
-	~BinaryFilter();
+	~BinaryFilter() override;
 
 	static QStringList dataTypes();
 	static QStringList byteOrders();
@@ -55,12 +55,12 @@ class BinaryFilter : public AbstractFileFilter {
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 		AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource*,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
-	void loadFilterSettings(const QString&);
-	void saveFilterSettings(const QString&) const;
+	void loadFilterSettings(const QString&) override;
+	void saveFilterSettings(const QString&) const override;
 
 	void setVectors(const size_t);
 	size_t vectors() const;
@@ -82,8 +82,8 @@ class BinaryFilter : public AbstractFileFilter {
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
   private:
 	std::unique_ptr<BinaryFilterPrivate> const d;

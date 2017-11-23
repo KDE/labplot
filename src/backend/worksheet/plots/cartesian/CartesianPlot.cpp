@@ -797,7 +797,7 @@ public:
 		setText(i18n("%1: change geometry rect", m_private->name()));
 	};
 
-	virtual void redo() {
+	void redo() override {
 		QRectF tmp = m_private->rect;
 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
 		const double verticalRatio = m_rect.height() / m_private->rect.height();
@@ -808,7 +808,7 @@ public:
 		emit m_private->q->rectChanged(m_private->rect);
 	};
 
-	virtual void undo() {
+	void undo() override {
 		redo();
 	}
 
@@ -852,7 +852,7 @@ public:
 		setText(i18n("%1: change x-range auto scaling", m_private->name()));
 	};
 
-	virtual void redo() {
+	void redo() override {
 		m_autoScaleOld = m_private->autoScaleX;
 		if (m_autoScale) {
 			m_minOld = m_private->xMin;
@@ -863,7 +863,7 @@ public:
 		emit m_private->q->xAutoScaleChanged(m_autoScale);
 	};
 
-	virtual void undo() {
+	void undo() override {
 		if (!m_autoScaleOld) {
 			m_private->xMin = m_minOld;
 			m_private->xMax = m_maxOld;
@@ -928,7 +928,7 @@ public:
 		setText(i18n("%1: change y-range auto scaling", m_private->name()));
 	};
 
-	virtual void redo() {
+	void redo() override {
 		m_autoScaleOld = m_private->autoScaleY;
 		if (m_autoScale) {
 			m_minOld = m_private->yMin;
@@ -939,7 +939,7 @@ public:
 		emit m_private->q->yAutoScaleChanged(m_autoScale);
 	};
 
-	virtual void undo() {
+	void undo() override {
 		if (!m_autoScaleOld) {
 			m_private->yMin = m_minOld;
 			m_private->yMax = m_maxOld;

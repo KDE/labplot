@@ -57,15 +57,15 @@ public:
 	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
 	explicit XYCurve(const QString &name);
-	virtual ~XYCurve();
+	~XYCurve() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QGraphicsItem* graphicsItem() const override;
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
-	virtual void loadThemeConfig(const KConfig&) override;
-	virtual void saveThemeConfig(const KConfig&) override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
@@ -129,16 +129,16 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-	virtual void setVisible(bool on) override;
-	virtual bool isVisible() const override;
-	virtual void setPrinting(bool on) override;
+	void setVisible(bool on) override;
+	bool isVisible() const override;
+	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 	bool isSourceDataChangedSinceLastRecalc() const;
 
 	typedef XYCurvePrivate Private;
 
-	virtual void retransform() override;
-	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 public slots:
 	void handleSourceDataChanged();

@@ -38,7 +38,7 @@ class AbstractPart : public AbstractAspect {
 
 	public:
 		explicit AbstractPart(const QString &name);
-		virtual ~AbstractPart();
+		~AbstractPart() override;
 
 		virtual QWidget* view() const = 0;
 		void deleteView() const;
@@ -47,7 +47,7 @@ class AbstractPart : public AbstractAspect {
 		bool hasMdiSubWindow() const;
 		void deleteMdiSubWindow();
 
-		virtual QMenu* createContextMenu();
+		QMenu* createContextMenu() override;
         virtual bool exportView() const = 0;
         virtual bool printView() = 0;
         virtual bool printPreview() const = 0;

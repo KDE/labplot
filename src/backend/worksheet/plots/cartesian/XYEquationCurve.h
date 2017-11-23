@@ -50,12 +50,12 @@ class XYEquationCurve : public XYCurve {
 		};
 
 		explicit XYEquationCurve(const QString& name);
-		virtual ~XYEquationCurve();
+		~XYEquationCurve() override;
 
 		void recalculate();
-		virtual QIcon icon() const override;
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		QIcon icon() const override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
 		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
 

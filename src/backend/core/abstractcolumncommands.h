@@ -36,10 +36,10 @@
 class AbstractColumnClearMasksCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate* col, QUndoCommand* parent = 0);
-	~AbstractColumnClearMasksCmd();
+	~AbstractColumnClearMasksCmd() override;
 
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	AbstractColumnPrivate *m_col;
@@ -50,10 +50,10 @@ private:
 class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, Interval<int> interval, bool masked, QUndoCommand* parent = 0);
-	~AbstractColumnSetMaskedCmd();
+	~AbstractColumnSetMaskedCmd() override;
 
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	AbstractColumnPrivate* m_col;
@@ -66,10 +66,10 @@ private:
 class AbstractColumnInsertRowsCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnInsertRowsCmd(AbstractColumn* col, int before, int count, QUndoCommand* parent = 0);
-	~AbstractColumnInsertRowsCmd();
+	~AbstractColumnInsertRowsCmd() override;
 
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 protected:
 	AbstractColumnPrivate* m_col;
@@ -80,10 +80,10 @@ protected:
 class AbstractColumnRemoveRowsCmd : public QUndoCommand {
 public:
 	explicit AbstractColumnRemoveRowsCmd(AbstractColumn* col, int first, int count, QUndoCommand* parent = 0);
-	~AbstractColumnRemoveRowsCmd();
+	~AbstractColumnRemoveRowsCmd() override;
 
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 protected:
 	AbstractColumnPrivate* m_col;

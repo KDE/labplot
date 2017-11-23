@@ -45,7 +45,7 @@ class Worksheet: public AbstractPart, public scripted {
 
 	public:
 		Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-		~Worksheet();
+		~Worksheet() override;
 
 		enum Unit {Millimeter, Centimeter, Inch, Point};
 		enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
@@ -53,17 +53,17 @@ class Worksheet: public AbstractPart, public scripted {
 		static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
-		virtual QWidget* view() const override;
-		virtual QVector<AbstractAspect*> dependsOn() const override;
+		QIcon icon() const override;
+		QMenu* createContextMenu() override;
+		QWidget* view() const override;
+		QVector<AbstractAspect*> dependsOn() const override;
 
-		virtual bool exportView() const override;
-		virtual bool printView() override;
-		virtual bool printPreview() const override;
+		bool exportView() const override;
+		bool printView() override;
+		bool printPreview() const override;
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
@@ -121,8 +121,8 @@ class Worksheet: public AbstractPart, public scripted {
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-		virtual void childSelected(const AbstractAspect*) override;
-		virtual void childDeselected(const AbstractAspect*) override;
+		void childSelected(const AbstractAspect*) override;
+		void childDeselected(const AbstractAspect*) override;
 
 	 signals:
 		void requestProjectContextMenu(QMenu*);

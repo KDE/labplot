@@ -47,7 +47,7 @@ class SimpleCopyThroughFilter : public AbstractSimpleFilter {
 
 protected:
 	//! All types are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *){
+	bool inputAcceptable(int, const AbstractColumn *) override{
 		return true;
 	}
 };

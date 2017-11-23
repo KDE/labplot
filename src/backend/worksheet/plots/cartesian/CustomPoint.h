@@ -43,14 +43,14 @@ class CustomPoint : public WorksheetElement {
 
 	public:
 		explicit CustomPoint(const CartesianPlot*, const QString&);
-		~CustomPoint();
+		~CustomPoint() override;
 
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
-		virtual QGraphicsItem* graphicsItem() const override;
+		QIcon icon() const override;
+		QMenu* createContextMenu() override;
+		QGraphicsItem* graphicsItem() const override;
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
 
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
 		BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)
@@ -60,12 +60,12 @@ class CustomPoint : public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolBrush, SymbolBrush)
 		CLASS_D_ACCESSOR_DECL(QPen, symbolPen, SymbolPen)
 
-		virtual void setVisible(bool on) override;
-		virtual bool isVisible() const override;
-		virtual void setPrinting(bool) override;
+		void setVisible(bool on) override;
+		bool isVisible() const override;
+		void setPrinting(bool) override;
 
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+		void retransform() override;
+		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef CustomPointPrivate Private;
 

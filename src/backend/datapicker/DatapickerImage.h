@@ -51,7 +51,7 @@ class DatapickerImage: public AbstractPart, public scripted {
 
 public:
 	DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-	~DatapickerImage();
+	~DatapickerImage() override;
 
 	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
 	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
@@ -78,17 +78,17 @@ public:
 		int valueThresholdHigh;
 	};
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 	void createContextMenu(QMenu*);
-	virtual QWidget* view() const override;
+	QWidget* view() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);

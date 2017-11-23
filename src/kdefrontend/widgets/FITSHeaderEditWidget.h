@@ -39,7 +39,7 @@ class FITSHeaderEditWidget : public QWidget {
 
 public:
 	explicit FITSHeaderEditWidget(QWidget *parent = 0);
-	~FITSHeaderEditWidget();
+	~FITSHeaderEditWidget() override;
 
 private:
 	Ui::FITSHeaderEditWidget* ui;
@@ -75,7 +75,7 @@ private:
 	void connectActions();
 	void fillTable();
 	QList<QString> mandatoryKeywords() const;
-	bool eventFilter(QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent*) override;
 
 public slots:
 	bool save();

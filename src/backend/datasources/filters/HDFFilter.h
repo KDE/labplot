@@ -38,17 +38,17 @@ class HDFFilter : public AbstractFileFilter {
 
 public:
 	HDFFilter();
-	~HDFFilter();
+	~HDFFilter() override;
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-				  AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+				  AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
 	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok,
 						AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
+	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&);
-	void saveFilterSettings(const QString&) const;
+	void loadFilterSettings(const QString&) override;
+	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentDataSetName(const QString);
 	const QString currentDataSetName() const;
@@ -62,8 +62,8 @@ public:
 	void setEndColumn(const int);
 	int endColumn() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
 private:
 	std::unique_ptr<HDFFilterPrivate> const d;

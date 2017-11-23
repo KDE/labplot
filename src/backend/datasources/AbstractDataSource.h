@@ -41,7 +41,7 @@ class AbstractDataSource : public AbstractPart, public scripted {
 
 public:
 	AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
-	virtual ~AbstractDataSource() {}
+	~AbstractDataSource() override {}
 
 	void clear();
 	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,

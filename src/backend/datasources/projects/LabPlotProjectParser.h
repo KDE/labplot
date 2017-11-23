@@ -35,10 +35,10 @@ class LabPlotProjectParser : public ProjectParser {
 
 public:
 	LabPlotProjectParser();
-	virtual ~LabPlotProjectParser() override;
+	~LabPlotProjectParser() override;
 
-	virtual QAbstractItemModel* model() override;
-	virtual void importTo(Folder*, const QStringList&) override;
+	QAbstractItemModel* model() override;
+	void importTo(Folder*, const QStringList&) override;
 };
 
 #endif // LABPLOTPROJECTPARSER_H

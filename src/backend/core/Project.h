@@ -48,19 +48,19 @@ public:
 
 public:
 	Project();
-	~Project();
+	~Project() override;
 
 	virtual const Project* project() const {
 		return this;
 	}
-	virtual Project* project() override {
+	Project* project() override {
 		return this;
 	}
-	virtual QUndoStack* undoStack() const override;
-	virtual QString path() const override {
+	QUndoStack* undoStack() const override;
+	QString path() const override {
 		return name();
 	}
-	virtual QMenu* createContextMenu() override;
+	QMenu* createContextMenu() override;
 	virtual QMenu* createFolderContextMenu(const Folder*);
 
 	AbstractScriptingEngine* scriptingEngine() const;
@@ -77,8 +77,8 @@ public:
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 
 public slots:

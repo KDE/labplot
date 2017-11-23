@@ -81,21 +81,21 @@ public:
 
 		}
 
-	virtual ~LinearScale() {}
+	~LinearScale() override {}
 
-	virtual bool map(double *value) const {
+	bool map(double *value) const override {
 		*value = *value * m_b + m_a;
 		return true;
 	}
 
-	virtual bool inverseMap(double *value) const {
+	bool inverseMap(double *value) const override {
 		if (m_b == 0.0)
 			return false;
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
 
-	virtual int direction() const {
+	int direction() const override {
 		return m_b < 0 ? -1 : 1;
 	}
 };
@@ -112,9 +112,9 @@ public:
 			Q_ASSERT(base > 0.0);
 	}
 
-	virtual ~LogScale() {}
+	~LogScale() override {}
 
-	virtual bool map(double *value) const {
+	bool map(double *value) const override {
 		if (*value > 0.0)
 			*value = log(*value)/log(m_c) * m_b + m_a;
 		else
@@ -123,7 +123,7 @@ public:
 		return true;
 	}
 
-	virtual bool inverseMap(double *value) const {
+	bool inverseMap(double *value) const override {
 		if (m_a == 0.0)
 			return false;
 		if (m_c <= 0.0)
@@ -132,7 +132,7 @@ public:
 		*value = pow(m_c, (*value - m_a) / m_b);
 		return true;
 	}
-	virtual int direction() const {
+	int direction() const override {
 		return m_b < 0 ? -1 : 1;
 	}
 };

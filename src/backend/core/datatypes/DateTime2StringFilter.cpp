@@ -39,8 +39,8 @@ class DateTime2StringFilterSetFormatCmd : public QUndoCommand {
 public:
 	DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
 
-	virtual void redo();
-	virtual void undo();
+	void redo() override;
+	void undo() override;
 
 private:
 	DateTime2StringFilter* m_target;

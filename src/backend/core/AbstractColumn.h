@@ -128,7 +128,7 @@ public:
 	};
 
 	explicit AbstractColumn(const QString& name);
-	virtual ~AbstractColumn();
+	~AbstractColumn() override;
 
 	static QStringList dateFormats();	// supported date formats
 	static QStringList timeFormats();	// supported time formats

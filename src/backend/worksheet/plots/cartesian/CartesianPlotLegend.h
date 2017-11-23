@@ -52,18 +52,18 @@ public:
 	};
 
 	CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
-	virtual ~CartesianPlotLegend();
+	~CartesianPlotLegend() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QGraphicsItem* graphicsItem() const override;
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
-	virtual void loadThemeConfig(const KConfig& config) override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig& config) override;
 
-	virtual void setVisible(bool) override;
-	virtual bool isVisible() const override;
-	virtual void setPrinting(bool) override;
+	void setVisible(bool) override;
+	bool isVisible() const override;
+	void setPrinting(bool) override;
 
 	TextLabel* title();
 
@@ -94,8 +94,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-	virtual void retransform() override;
-	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	typedef CartesianPlotLegendPrivate Private;
 

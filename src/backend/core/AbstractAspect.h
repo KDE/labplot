@@ -60,7 +60,7 @@ public:
 	friend class AbstractAspectPrivate;
 
 	explicit AbstractAspect(const QString& name);
-	virtual ~AbstractAspect();
+	~AbstractAspect() override;
 
 	QString name() const;
 	QString comment() const;

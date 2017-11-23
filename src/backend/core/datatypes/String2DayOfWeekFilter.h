@@ -39,15 +39,15 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	virtual QDate dateAt(int row) const {
+	QDate dateAt(int row) const override {
 			return dateTimeAt(row).date();
 	}
 
-	virtual QTime timeAt(int row) const{
+	QTime timeAt(int row) const override{
 			return dateTimeAt(row).time();
 	}
 
-	virtual QDateTime dateTimeAt(int row) const {
+	QDateTime dateTimeAt(int row) const override {
 		if (!m_inputs.value(0)) return QDateTime();
 
 		QString input_value = m_inputs.value(0)->textAt(row);
@@ -72,10 +72,10 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Day; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Day; }
 
 protected:
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Text;
 	}
 };

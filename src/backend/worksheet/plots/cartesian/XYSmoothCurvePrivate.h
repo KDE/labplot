@@ -38,7 +38,7 @@ class Column;
 class XYSmoothCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYSmoothCurvePrivate(XYSmoothCurve*);
-		~XYSmoothCurvePrivate();
+		~XYSmoothCurvePrivate() override;
 
 		void recalculate();
 

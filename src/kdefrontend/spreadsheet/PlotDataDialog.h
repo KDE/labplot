@@ -52,7 +52,7 @@ public:
 		FourierFilter};
 
 	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0, Qt::WFlags fl = 0);
-	~PlotDataDialog();
+	~PlotDataDialog() override;
 
 	void setAnalysisAction(AnalysisAction);
 

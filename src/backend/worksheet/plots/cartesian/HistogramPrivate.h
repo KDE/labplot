@@ -43,8 +43,8 @@ class HistogramPrivate : public QGraphicsItem {
 		explicit HistogramPrivate(Histogram *owner);
 
 		QString name() const;
-		virtual QRectF boundingRect() const;
-		QPainterPath shape() const;
+		QRectF boundingRect() const override;
+		QPainterPath shape() const override;
 
 		bool m_printing;
 		bool m_hovered;
@@ -72,7 +72,7 @@ class HistogramPrivate : public QGraphicsItem {
 		Histogram::HistogramType histogramType;
 		Histogram::BinsOption binsOption;
 
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 		//data columns
 		const AbstractColumn* xColumn;
@@ -142,9 +142,9 @@ class HistogramPrivate : public QGraphicsItem {
 		gsl_histogram * histogram;
 		size_t bins;
 
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 		QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly);
 };
 

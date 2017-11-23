@@ -50,7 +50,7 @@ class MatrixView : public QWidget {
 
 public:
 	explicit MatrixView(Matrix*);
-	virtual ~MatrixView();
+	~MatrixView() override;
 
 	MatrixModel* model() const;
 
@@ -86,8 +86,8 @@ private:
 	void goToCell(int row, int col);
 	void updateImage();
 
-	bool eventFilter(QObject*, QEvent*);
-	virtual void keyPressEvent(QKeyEvent*);
+	bool eventFilter(QObject*, QEvent*) override;
+	void keyPressEvent(QKeyEvent*) override;
 
 	QStackedWidget* m_stackedWidget;
 	QTableView* m_tableView;

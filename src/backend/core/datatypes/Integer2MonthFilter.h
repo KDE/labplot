@@ -38,13 +38,13 @@ class Integer2MonthFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	virtual QDate dateAt(int row) const {
+	QDate dateAt(int row) const override {
 		return dateTimeAt(row).date();
 	}
-	virtual QTime timeAt(int row) const {
+	QTime timeAt(int row) const override {
 		return dateTimeAt(row).time();
 	}
-	virtual QDateTime dateTimeAt(int row) const {
+	QDateTime dateTimeAt(int row) const override {
 		if (!m_inputs.value(0)) return QDateTime();
 		int inputValue = m_inputs.value(0)->integerAt(row);
 		// Don't use Julian days here since support for years < 1 is bad
@@ -55,10 +55,10 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Month; }
 
 protected:
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Integer;
 	}
 };

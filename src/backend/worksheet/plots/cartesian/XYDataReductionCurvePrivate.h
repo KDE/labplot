@@ -38,7 +38,7 @@ class Column;
 class XYDataReductionCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
-		~XYDataReductionCurvePrivate();
+		~XYDataReductionCurvePrivate() override;
 
 		void recalculate();
 

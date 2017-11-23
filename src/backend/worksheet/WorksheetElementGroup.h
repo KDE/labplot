@@ -37,7 +37,7 @@ class WorksheetElementGroup: public WorksheetElementContainer {
 
 	public:
 		explicit WorksheetElementGroup(const QString &name);
-		~WorksheetElementGroup();
+		~WorksheetElementGroup() override;
 
 	protected:
 		WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd);

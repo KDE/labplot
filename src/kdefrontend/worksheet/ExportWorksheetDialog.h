@@ -43,7 +43,7 @@ class ExportWorksheetDialog : public QDialog {
 
 public:
 	explicit ExportWorksheetDialog(QWidget*);
-	virtual ~ExportWorksheetDialog();
+	~ExportWorksheetDialog() override;
 
 	QString path() const;
 	void setFileName(const QString&);

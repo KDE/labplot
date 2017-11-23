@@ -50,13 +50,13 @@ template<class T> class PropertyChangeCommand : public QUndoCommand
 				setText(text);
 			}
 
-		virtual void redo() {
+		void redo() override {
 			T tmp = *m_property;
 			*m_property = m_other_value;
 			m_other_value = tmp;
 		}
 
-		virtual void undo() { redo(); }
+		void undo() override { redo(); }
 
 	private:
 		T *m_property;

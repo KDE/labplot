@@ -1,0 +1,25 @@
+http://clang.llvm.org/extra/clang-tidy/
+
+To use clang-tidy:
+* add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON to cmake (for example in compile-clang)
+* cd src && ln -s ../build-clang/compile_commands.json compile_commands.json
+* execute clang-tidy
+
+
+To list all available checks:
+* clang-tidy --list-checks -checks='*' | grep "modernize"
+
+E.g., use override for virtual funcsion:
+* clang-tidy my_file.cpp -checks='modernize-use-override'
+
+clan-tidy can also execute clang-analyzer checks, e.g.
+* clang-tidy my_file.cpp -checks=-*,clang-analyzer-*,-clang-analyzer-cplusplus*
+
+To apply the fixes direcly on the file, add 'fix' parameter:
+* clang-tidy.py my_file.cpp -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
+
+run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
+run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-override' -fix
+
+
+https://github.com/llvm-mirror/clang-tools-extra/blob/master/clang-tidy/tool/run-clang-tidy.py

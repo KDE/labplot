@@ -51,16 +51,16 @@ class CantorWorksheet : public AbstractPart, public scripted {
 public:
 	CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
-	virtual QWidget* view() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QIcon icon() const override;
+	QWidget* view() const override;
+	QMenu* createContextMenu() override;
+	QIcon icon() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 	QString backendName();
 	KParts::ReadWritePart* part();

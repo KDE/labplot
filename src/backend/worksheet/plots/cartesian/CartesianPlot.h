@@ -57,7 +57,7 @@ class CartesianPlot:public AbstractPlot {
 
 public:
 	explicit CartesianPlot(const QString &name);
-	virtual ~CartesianPlot();
+	~CartesianPlot() override;
 
 	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
@@ -93,7 +93,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
-	virtual QVector<AbstractAspect*> dependsOn() const override;
+	QVector<AbstractAspect*> dependsOn() const override;
 	void setRect(const QRectF&) override;
 	QRectF plotRect();
 	void setMouseMode(const MouseMode);
@@ -103,9 +103,9 @@ public:
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(QDropEvent*);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
-	virtual void loadThemeConfig(const KConfig&) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)

@@ -45,9 +45,9 @@ class PlotAreaPrivate: public QGraphicsItem {
 		void setRect(const QRectF&);
 
 		//QGraphicsItem's virtual functions
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-		virtual QRectF boundingRect() const;
-		virtual QPainterPath shape() const;
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
+		QRectF boundingRect() const override;
+		QPainterPath shape() const override;
 
 		QRectF rect;
 		PlotArea::BackgroundType backgroundType;

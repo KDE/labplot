@@ -45,7 +45,7 @@ class CantorWorksheetView : public QWidget {
     
 	public:
 		CantorWorksheetView(CantorWorksheet*);
-		~CantorWorksheetView();
+		~CantorWorksheetView() override;
 	
 	public slots:
 		void createContextMenu(QMenu*) const;

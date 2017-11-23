@@ -67,7 +67,7 @@ class AxisGrid : public QGraphicsItem {
 			setAcceptHoverEvents(false);
 		}
 
-		QRectF boundingRect() const {
+		QRectF boundingRect() const override {
 			QPainterPath gridShape;
 			gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridPen));
 			gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridPen));
@@ -75,7 +75,7 @@ class AxisGrid : public QGraphicsItem {
 			return boundingRectangle;
 		}
 
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
 			Q_UNUSED(option)
 			Q_UNUSED(widget)
 

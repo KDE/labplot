@@ -54,7 +54,7 @@ class DiscretizeTask : public QRunnable {
 			m_background = background;
 		};
 
-		void run() {
+		void run() override {
 			for (int y=m_start; y<m_end; ++y) {
 				mutex.lock();
 				QRgb* line = reinterpret_cast<QRgb*>(m_plotImage->scanLine(y));

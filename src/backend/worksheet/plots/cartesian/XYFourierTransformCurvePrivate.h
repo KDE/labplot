@@ -38,7 +38,7 @@ class Column;
 class XYFourierTransformCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYFourierTransformCurvePrivate(XYFourierTransformCurve*);
-		~XYFourierTransformCurvePrivate();
+		~XYFourierTransformCurvePrivate() override;
 		void recalculate();
 
 		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted

@@ -38,7 +38,7 @@ class Column;
 class XYIntegrationCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYIntegrationCurvePrivate(XYIntegrationCurve*);
-		~XYIntegrationCurvePrivate();
+		~XYIntegrationCurvePrivate() override;
 
 		void recalculate();
 

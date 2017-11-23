@@ -37,11 +37,11 @@ Q_OBJECT
 public:
 	explicit Folder(const QString& name);
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 protected:
 	bool readChildAspectElement(XmlStreamReader*, bool preview);

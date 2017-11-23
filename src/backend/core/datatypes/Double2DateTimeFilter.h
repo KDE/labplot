@@ -39,14 +39,14 @@ class Double2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	virtual QDate dateAt(int row) const {
+	QDate dateAt(int row) const override {
 		if (!m_inputs.value(0)) return QDate();
 		double inputValue = m_inputs.value(0)->valueAt(row);
 		if (std::isnan(inputValue)) return QDate();
 		//QDEBUG("	convert " << inputValue << " to " << QDate(1900, 1, int(inputValue)));
 		return QDate(1900, 1, 1 + int(inputValue));
 	}
-	virtual QTime timeAt(int row) const {
+	QTime timeAt(int row) const override {
 		if (!m_inputs.value(0)) return QTime();
 		double inputValue = m_inputs.value(0)->valueAt(row);
 		if (std::isnan(inputValue)) return QTime();
@@ -54,16 +54,16 @@ public:
 		//QDEBUG("	convert " << inputValue << " to " << QTime(0,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 )));
 		return QTime(0,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 ));
 	}
-	virtual QDateTime dateTimeAt(int row) const {
+	QDateTime dateTimeAt(int row) const override {
 		return QDateTime(dateAt(row), timeAt(row));
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::DateTime; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::DateTime; }
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Numeric;
 	}
 };

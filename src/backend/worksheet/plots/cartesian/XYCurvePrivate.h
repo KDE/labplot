@@ -38,7 +38,7 @@ class XYCurvePrivate : public QGraphicsItem {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
-	virtual QRectF boundingRect() const override;
+	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
 	QString name() const;
@@ -132,9 +132,9 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);

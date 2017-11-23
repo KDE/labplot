@@ -83,16 +83,16 @@ private:
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
 	//events
-	virtual void resizeEvent(QResizeEvent*) override;
-	virtual void contextMenuEvent(QContextMenuEvent*) override;
-	virtual void wheelEvent(QWheelEvent*) override;
-	virtual void mousePressEvent(QMouseEvent*) override;
-	virtual void mouseReleaseEvent(QMouseEvent*) override;
-	virtual void mouseMoveEvent(QMouseEvent*) override;
-	virtual void keyPressEvent(QKeyEvent*) override;
-	virtual void dragEnterEvent(QDragEnterEvent*) override;
-	virtual void dragMoveEvent(QDragMoveEvent*) override;
-	virtual void dropEvent(QDropEvent*) override;
+	void resizeEvent(QResizeEvent*) override;
+	void contextMenuEvent(QContextMenuEvent*) override;
+	void wheelEvent(QWheelEvent*) override;
+	void mousePressEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseMoveEvent(QMouseEvent*) override;
+	void keyPressEvent(QKeyEvent*) override;
+	void dragEnterEvent(QDragEnterEvent*) override;
+	void dragMoveEvent(QDragMoveEvent*) override;
+	void dropEvent(QDropEvent*) override;
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;

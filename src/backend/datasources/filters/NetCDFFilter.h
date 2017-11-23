@@ -37,18 +37,18 @@ class NetCDFFilter : public AbstractFileFilter {
 
 public:
 	NetCDFFilter();
-	~NetCDFFilter();
+	~NetCDFFilter() override;
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
 	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
 					    AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
+	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&);
-	void saveFilterSettings(const QString&) const;
+	void loadFilterSettings(const QString&) override;
+	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentVarName(const QString);
 	const QString currentVarName() const;
@@ -62,8 +62,8 @@ public:
 	void setEndColumn(const int);
 	int endColumn() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
 private:
 	std::unique_ptr<NetCDFFilterPrivate> const d;

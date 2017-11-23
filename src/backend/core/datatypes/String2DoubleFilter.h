@@ -42,7 +42,7 @@ public:
 	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
-	virtual double valueAt(int row) const {
+	double valueAt(int row) const override {
 		DEBUG("String2Double::valueAt()");
 
 		if (!m_inputs.value(0)) return 0;
@@ -60,11 +60,11 @@ public:
 	}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Numeric; }
 
 protected:
 	//! Using typed ports: only string inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Text;
 	}
 

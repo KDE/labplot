@@ -41,7 +41,7 @@ class ExportSpreadsheetDialog : public QDialog {
 
 public:
 	explicit ExportSpreadsheetDialog(QWidget*);
-	virtual ~ExportSpreadsheetDialog();
+	~ExportSpreadsheetDialog() override;
 
 	QString path() const;
 	void setFileName(const QString&);

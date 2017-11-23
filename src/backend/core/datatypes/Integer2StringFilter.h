@@ -39,10 +39,10 @@ public:
 	explicit Integer2StringFilter() {}
 
 	//! Return the data type of the column
-	virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
 
 public:
-	virtual QString textAt(int row) const {
+	QString textAt(int row) const override {
 		if (!m_inputs.value(0)) return QString();
 		if (m_inputs.value(0)->rowCount() <= row) return QString();
 
@@ -53,7 +53,7 @@ public:
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	virtual bool inputAcceptable(int, const AbstractColumn *source) {
+	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::Integer;
 	}
 };

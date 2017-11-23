@@ -62,18 +62,18 @@ class Axis: public WorksheetElement {
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
 		explicit Axis(const QString&, CartesianPlot*, const AxisOrientation& orientation = AxisHorizontal);
-		virtual ~Axis();
+		~Axis() override;
 
-		virtual QIcon icon() const override;
-		virtual QMenu* createContextMenu() override;
+		QIcon icon() const override;
+		QMenu* createContextMenu() override;
 
-		virtual QGraphicsItem* graphicsItem() const override;
-		virtual void setZValue(qreal) override;
+		QGraphicsItem* graphicsItem() const override;
+		void setZValue(qreal) override;
 
-		virtual void save(QXmlStreamWriter*) const override;
-		virtual bool load(XmlStreamReader*, bool preview) override;
-		virtual void loadThemeConfig(const KConfig&) override;
-		virtual void saveThemeConfig(const KConfig&) override;
+		void save(QXmlStreamWriter*) const override;
+		bool load(XmlStreamReader*, bool preview) override;
+		void loadThemeConfig(const KConfig&) override;
+		void saveThemeConfig(const KConfig&) override;
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
@@ -133,12 +133,12 @@ class Axis: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
-		virtual void setVisible(bool) override;
-		virtual bool isVisible() const override;
-		virtual void setPrinting(bool) override;
+		void setVisible(bool) override;
+		bool isVisible() const override;
+		void setPrinting(bool) override;
 		void setSuppressRetransform(bool);
-		virtual void retransform() override;
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+		void retransform() override;
+		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 		typedef AxisPrivate Private;
 

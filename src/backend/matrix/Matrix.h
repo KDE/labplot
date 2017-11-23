@@ -49,15 +49,15 @@ public:
 		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name,
 		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
-	~Matrix();
+	~Matrix() override;
 
-	virtual QIcon icon() const override;
-	virtual QMenu* createContextMenu() override;
-	virtual QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
-	virtual bool exportView() const override;
-	virtual bool printView() override;
-	virtual bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
 	void* data() const;
 	void setData(void*);
@@ -107,12 +107,12 @@ public:
 
 	void copy(Matrix* other);
 
-	virtual void save(QXmlStreamWriter*) const override;
-	virtual bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	virtual void finalizeImport(int columnOffset, int startColumn, int endColumn,
+	void finalizeImport(int columnOffset, int startColumn, int endColumn,
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
 	typedef MatrixPrivate Private;
