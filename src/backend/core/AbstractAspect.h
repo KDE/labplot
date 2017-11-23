@@ -89,6 +89,7 @@ public:
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
 	void removeChild(AbstractAspect*);
 	void removeAllChildren();
+	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	template <class T> T* ancestor() const {
 		AbstractAspect* parent = parentAspect();

@@ -249,11 +249,28 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	Q_UNUSED(deselected);
 
 	//determine the dependent objects and select/deselect them too
-	//TODO:
+	const QModelIndexList& indexes = selected.indexes();
+	if (indexes.isEmpty())
+		return;
+
+	//for the just selected aspect, determine all the objects it depends on and select them, too
+	//TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
+	const AbstractAspect* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
+	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
+	AspectTreeModel* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
+	for (const auto* aspect : aspects) {
+		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
+		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+	}
+
 
 	//Ok-button is only enabled if some project objects were selected
-	bool objectsSelected = (selected.indexes().size() != 0);
-	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(objectsSelected);
+	bool enable = (selected.indexes().size() != 0);
+	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(enable);
+	if (enable)
+		m_buttonBox->button(QDialogButtonBox::Ok)->setToolTip(i18n("Close the dialog and import the selected objects."));
+	else
+		m_buttonBox->button(QDialogButtonBox::Ok)->setToolTip(i18n("Select object(s) to be imported."));
 }
 
 /*!

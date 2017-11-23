@@ -177,6 +177,21 @@ QWidget* Worksheet::view() const {
 	return m_view;
 }
 
+/*!
+ * returns the list of all parent aspects (folders and sub-folders)
+ * together with all the data containers required to plot the data in the worksheet
+ */
+QVector<AbstractAspect*> Worksheet::dependsOn() const {
+	//add all parent aspects (folders and sub-folders)
+	QVector<AbstractAspect*> aspects = AbstractAspect::dependsOn();
+
+	//traverse all plots and add all data containers they depend on
+	for (const auto* plot : children<AbstractPlot>())
+		aspects << plot->dependsOn();
+
+	return aspects;
+}
+
 bool Worksheet::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());

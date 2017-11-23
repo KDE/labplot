@@ -56,6 +56,7 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QIcon icon() const override;
 		virtual QMenu* createContextMenu() override;
 		virtual QWidget* view() const override;
+		virtual QVector<AbstractAspect*> dependsOn() const override;
 
 		virtual bool exportView() const override;
 		virtual bool printView() override;

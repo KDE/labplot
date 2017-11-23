@@ -515,6 +515,17 @@ void AbstractAspect::remove() {
 		parentAspect()->removeChild(this);
 }
 
+/*!
+ * returns the list of all parent aspects (folders and sub-folders)
+ */
+QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
+	QVector<AbstractAspect*> aspects;
+	if (parentAspect())
+		aspects << parentAspect() << parentAspect()->dependsOn();
+
+	return aspects;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name serialize/deserialize
 //@{

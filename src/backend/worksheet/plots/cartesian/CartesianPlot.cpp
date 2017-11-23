@@ -42,6 +42,7 @@
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -641,6 +642,21 @@ QMenu* CartesianPlot::analysisMenu() {
 */
 QIcon CartesianPlot::icon() const {
 	return QIcon::fromTheme("office-chart-line");
+}
+
+QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
+	//aspects which the plotted data in the worksheet depends on (spreadsheets and later matrices)
+	QVector<AbstractAspect*> aspects;
+
+	for (const auto* curve : children<XYCurve>()) {
+		if (curve->xColumn() && dynamic_cast<Spreadsheet*>(curve->xColumn()->parentAspect()) )
+			aspects << curve->xColumn()->parentAspect();
+
+		if (curve->yColumn() && dynamic_cast<Spreadsheet*>(curve->yColumn()->parentAspect()) )
+			aspects << curve->yColumn()->parentAspect();
+	}
+
+	return aspects;
 }
 
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {

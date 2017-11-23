@@ -93,6 +93,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
+	virtual QVector<AbstractAspect*> dependsOn() const override;
 	void setRect(const QRectF&) override;
 	QRectF plotRect();
 	void setMouseMode(const MouseMode);

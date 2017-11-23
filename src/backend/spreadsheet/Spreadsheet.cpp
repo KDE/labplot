@@ -270,15 +270,15 @@ void Spreadsheet::clearMasks() {
 /*!
   Returns a new context menu. The caller takes ownership of the menu.
 */
-QMenu *Spreadsheet::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
+QMenu* Spreadsheet::createContextMenu() {
+	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
 }
 
 void Spreadsheet::moveColumn(int from, int to) {
-	Column * col = child<Column>(from);
+	Column* col = child<Column>(from);
 	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from+1, to+1));
 	col->remove();
 	insertChildBefore(col, child<Column>(to));
