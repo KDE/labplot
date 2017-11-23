@@ -140,7 +140,7 @@ int HDFFilter::endColumn() const {
 //#####################################################################
 
 HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
-	q(owner),currentDataSetName(""),startRow(1), endRow(-1), startColumn(1), endColumn(-1) { 
+	q(owner),currentDataSetName(""),startRow(1), endRow(-1), startColumn(1), endColumn(-1) {
 #ifdef HAVE_HDF5
 	m_status = 0;
 #endif
@@ -1262,7 +1262,6 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
 	switch (rank) {
 	case 0: {	// single value
-			actualRows = 1;
 			actualCols = 1;
 
 			switch (dclass) {

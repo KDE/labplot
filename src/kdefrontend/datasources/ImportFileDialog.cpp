@@ -361,7 +361,6 @@ void ImportFileDialog::checkOkButton() {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket* socket = new QTcpSocket(this);
-			socket = new QTcpSocket(this);
 			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
 			bool tcpSocketConnected = socket->waitForConnected(2000);
 

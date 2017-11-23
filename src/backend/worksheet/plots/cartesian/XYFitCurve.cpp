@@ -219,7 +219,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_inverse_exponential:
-			degree = 1;
 			paramNames << "a" << "b" << "c";
 			break;
 		case nsl_fit_model_fourier:

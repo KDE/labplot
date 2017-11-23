@@ -837,7 +837,6 @@ void HistogramPrivate::updateValues() {
 		break;
 	case Histogram::ValuesRight:
 		for (int i = 0; i < valuesStrings.size(); i++) {
-			w=fm.width(valuesStrings.at(i));
 			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
 			tempPoint.setY( symbolPointsScene.at(i).y() );
 			valuesPoints.append(tempPoint);
