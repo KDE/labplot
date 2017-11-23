@@ -267,12 +267,12 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 
 	// set range of rows
 	if (endRow == -1)
-		m_actualRows = numRows - startRow + 1;
+		m_actualRows = (int)numRows - startRow + 1;
 	else if (endRow > (int)numRows - startRow + 1)
-		m_actualRows = numRows;
+		m_actualRows = (int)numRows;
 	else
 		m_actualRows = endRow - startRow + 1;
-	m_actualCols = vectors;
+	m_actualCols = (int)vectors;
 
 	DEBUG("numRows = " << numRows);
 	DEBUG("endRow = " << endRow);
@@ -565,7 +565,7 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'vectors'"));
 	else
-		d->vectors = str.toInt();
+		d->vectors = (size_t)str.toULong();
 
 	str = attribs.value("dataType").toString();
 	if (str.isEmpty())
@@ -601,13 +601,13 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipStartBytes'"));
 	else
-		d->skipStartBytes = str.toInt();
+		d->skipStartBytes = (size_t)str.toULong();
 
 	str = attribs.value("skipBytes").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
 	else
-		d->skipBytes = str.toInt();
+		d->skipBytes = (size_t)str.toULong();
 
 	str = attribs.value("createIndex").toString();
 	if (str.isEmpty())
