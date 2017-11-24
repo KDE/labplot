@@ -18,8 +18,7 @@ clan-tidy can also execute clang-analyzer checks, e.g.
 To apply the fixes direcly on the file, add 'fix' parameter:
 * clang-tidy.py my_file.cpp -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
 
-run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
-run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-override' -fix
-
-
-https://github.com/llvm-mirror/clang-tools-extra/blob/master/clang-tidy/tool/run-clang-tidy.py
+To apply clang-tidy to many files, use the run-clang-tidy.py script in this folder (current version under run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix), execute in src/:
+* python3 ../admin/run-clang-tidy.py backend/ -header-filter='.*' -checks='-*,modernize-use-override' -fix
+* python3 ../admin/run-clang-tidy.py backend/ -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
+* etc.
