@@ -2245,7 +2245,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("dataSourceType", dataSourceType, XYCurve::DataSourceType);
