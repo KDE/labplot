@@ -154,11 +154,11 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
  */
 void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	nsl_fit_model_category modelCategory = fitData.modelCategory;
-	unsigned int modelType = fitData.modelType;
+	int modelType = fitData.modelType;
 	QString& model = fitData.model;
 	QStringList& paramNames = fitData.paramNames;
 	QStringList& paramNamesUtf8 = fitData.paramNamesUtf8;
-	unsigned int degree = fitData.degree;
+	int degree = fitData.degree;
 	QVector<double>& paramStartValues = fitData.paramStartValues;
 	QVector<double>& paramLowerLimits = fitData.paramLowerLimits;
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
@@ -187,7 +187,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "c2";
 				paramNamesUtf8 << QString::fromUtf8("c\u2082");
 			} else if (degree > 2) {
-				for (unsigned int i = 2; i <= degree; ++i) {
+				for (int i = 2; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+c" + numStr + "*x^" + numStr;
 					paramNames << "c" + numStr;
@@ -207,7 +207,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			if (degree == 1) {
 				paramNames << "a" << "b";
 			} else {
-				for (unsigned int i = 1; i <= degree; i++) {
+				for (int i = 1; i <= degree; i++) {
 					QString numStr = QString::number(i);
 					if (i == 1)
 						model = "a1*exp(b1*x)";
@@ -226,7 +226,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
 				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
 			if (degree > 1) {
-				for (unsigned int i = 1; i <= degree; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 					paramNames << "a" + numStr << "b" + numStr;
@@ -260,7 +260,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
-				for (unsigned int i = 1; i <= degree; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -293,7 +293,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1./pi * (";
-				for (unsigned int i = 1; i <= degree; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -326,7 +326,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1/pi * (";
-				for (unsigned int i = 1; i <= degree; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -359,7 +359,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model = "1/4 * (";
-				for (unsigned int i = 1; i <= degree; ++i) {
+				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
@@ -652,8 +652,8 @@ struct data {
 	double* y;	//pointer to the vector with y-data values
 	double* weight;	//pointer to the vector with weight values
 	nsl_fit_model_category modelCategory;
-	unsigned int modelType;
-	unsigned int degree;
+	int modelType;
+	int degree;
 	QString* func;	// string containing the definition of the model/function
 	QStringList* paramNames;
 	double* paramMin;	// lower parameter limits

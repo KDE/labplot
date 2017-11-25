@@ -57,10 +57,10 @@ public:
 				autoRange(true), xRange(2) {};
 
 		nsl_fit_model_category modelCategory;
-		unsigned int modelType;
+		int modelType;
 		nsl_fit_error_type xErrorsType;
 		nsl_fit_weight_type yWeightsType;
-		unsigned int degree;
+		int degree;
 		QString model;
 		QStringList paramNames;
 		QStringList paramNamesUtf8;	// Utf8 version of paramNames

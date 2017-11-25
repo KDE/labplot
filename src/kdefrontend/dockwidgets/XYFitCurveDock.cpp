@@ -1125,9 +1125,9 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
+void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 	m_initializing = true;
-	m_fitData = data;
+	m_fitData = fitData;
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 	else
