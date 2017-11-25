@@ -180,8 +180,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	for (int i=0; i<indexes.size()/4; ++i) {
 		QModelIndex index = indexes.at(i*4);
 		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
+
+		//path of the the current aspect and the pathes of all aspects it depends on
 		selectedPathes << aspect->path();
+		for (const auto* depAspect : aspect->dependsOn())
+			selectedPathes << depAspect->path();
 	}
+	selectedPathes.removeDuplicates();
 	QDEBUG("project objects to be imported: " << selectedPathes);
 
 	//import the selected project objects into the specified folder
@@ -189,7 +194,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	Folder* folder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	m_projectParser->importTo(folder ,selectedPathes);
+	m_projectParser->importTo(folder, selectedPathes);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();

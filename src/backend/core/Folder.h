@@ -3,6 +3,7 @@
     Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
+    Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
@@ -42,6 +43,10 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void setPathesToLoad(const QStringList&);
+
+private:
+	QStringList pathesToLoad;
 
 protected:
 	bool readChildAspectElement(XmlStreamReader*, bool preview);

@@ -64,10 +64,10 @@ QAbstractItemModel* LabPlotProjectParser::model() {
 
 void LabPlotProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
 	QDEBUG("Starting the import of " + m_projectFileName);
-	Q_UNUSED(selectedPathes);
 
 	//import the selected objects into a temporary project
 	Project* project = new Project();
+	project->setPathesToLoad(selectedPathes);
 	project->load(m_projectFileName);
 
 	//move all children from the temp project to the target folder
