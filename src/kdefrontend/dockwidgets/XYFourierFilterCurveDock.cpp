@@ -149,7 +149,6 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
-	Q_ASSERT(m_filterCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_filterCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -194,7 +193,7 @@ void XYFourierFilterCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -219,7 +218,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList=list;
 	m_curve=list.first();
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
-	Q_ASSERT(m_filterCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
@@ -266,17 +264,15 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setDataSourceType(type);
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
+	XYCurve* dataSourceCurve = nullptr;
+	if (aspect)
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
 
 	// update range of cutoff spin boxes (like a unit change)
 	unitChanged();
@@ -285,7 +281,7 @@ void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -294,20 +290,16 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
 	// update range of cutoff spin boxes (like a unit change)
 	unitChanged();
 	unit2Changed();
 
-	if (column != 0) {
+	if (column != nullptr) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			uiGeneralTab.sbMin->setValue(column->minimum());
 			uiGeneralTab.sbMax->setValue(column->maximum());
@@ -320,13 +312,9 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -604,7 +592,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 	}
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -700,9 +688,9 @@ void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* col
 	m_initializing = false;
 }
 
-void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& data) {
+void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& filterData) {
 	m_initializing = true;
-	m_filterData = data;
+	m_filterData = filterData;
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
 	this->typeChanged();
 
