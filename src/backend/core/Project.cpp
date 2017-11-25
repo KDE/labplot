@@ -158,7 +158,6 @@ QMenu* Project::createContextMenu() {
 
 QMenu* Project::createFolderContextMenu(const Folder* folder) {
 	QMenu* menu = const_cast<Folder*>(folder)->AbstractAspect::createContextMenu();
-	Q_ASSERT(menu);
 	emit requestFolderContextMenu(folder, menu);
 	return menu;
 }
