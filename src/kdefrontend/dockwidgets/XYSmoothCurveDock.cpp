@@ -154,7 +154,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
-	Q_ASSERT(m_smoothCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_smoothCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -170,10 +169,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 	typeChanged();	// needed, when type does not change
-#ifndef NDEBUG
-	qDebug()<<"	curve ="<<m_smoothCurve->name();
-	qDebug()<<"	m_smoothData.points ="<<m_smoothData.points;
-#endif
 	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
@@ -203,7 +198,7 @@ void XYSmoothCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -230,7 +225,6 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList=list;
 	m_curve=list.first();
 	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
-	Q_ASSERT(m_smoothCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
@@ -281,38 +275,30 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if (column != 0) {
+	if (column != nullptr) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			uiGeneralTab.sbMin->setValue(column->minimum());
 			uiGeneralTab.sbMax->setValue(column->maximum());
@@ -334,13 +320,9 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -501,7 +483,7 @@ void XYSmoothCurveDock::valueChanged() {
 void XYSmoothCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -598,9 +580,9 @@ void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
-void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& data) {
+void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& smoothData) {
 	m_initializing = true;
-	m_smoothData = data;
+	m_smoothData = smoothData;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
 	this->showSmoothResult();
