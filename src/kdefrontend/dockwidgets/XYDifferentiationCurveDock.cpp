@@ -138,7 +138,6 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
-	Q_ASSERT(m_differentiationCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_differentiationCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -177,7 +176,7 @@ void XYDifferentiationCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -202,7 +201,6 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
-	Q_ASSERT(m_differentiationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_differentiationData = m_differentiationCurve->differentiationData();
@@ -253,17 +251,13 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -271,7 +265,7 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -280,11 +274,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
@@ -292,7 +282,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 }
 
@@ -301,13 +291,9 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -487,7 +473,7 @@ void XYDifferentiationCurveDock::accOrderChanged() {
 void XYDifferentiationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		if (curve != 0)
 			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
@@ -583,9 +569,9 @@ void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* c
 	m_initializing = false;
 }
 
-void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& data) {
+void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
 	m_initializing = true;
-	m_differentiationData = data;
+	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged();
 	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);

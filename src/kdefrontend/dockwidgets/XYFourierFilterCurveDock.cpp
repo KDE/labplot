@@ -656,11 +656,10 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 

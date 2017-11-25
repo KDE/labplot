@@ -127,7 +127,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
-	Q_ASSERT(m_transformCurve);
+
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_transformCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_transformCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
@@ -183,7 +183,6 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList=list;
 	m_curve=list.first();
 	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
-	Q_ASSERT(m_transformCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
@@ -214,16 +213,12 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
 
-	if (column != 0) {
+	if (column != nullptr) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			uiGeneralTab.sbMin->setValue(column->minimum());
 			uiGeneralTab.sbMax->setValue(column->maximum());
@@ -236,13 +231,9 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -256,7 +247,6 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 		m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
-		Q_ASSERT(m_transformCurve);
 		if (m_transformCurve->xDataColumn()) {
 			uiGeneralTab.sbMin->setValue(m_transformCurve->xDataColumn()->minimum());
 			uiGeneralTab.sbMax->setValue(m_transformCurve->xDataColumn()->maximum());
@@ -328,7 +318,7 @@ void XYFourierTransformCurveDock::xScaleChanged() {
 void XYFourierTransformCurveDock::recalculateClicked() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	for(XYCurve* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -384,11 +374,10 @@ void XYFourierTransformCurveDock::curveDescriptionChanged(const AbstractAspect* 
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
@@ -404,9 +393,9 @@ void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* 
 	m_initializing = false;
 }
 
-void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& data) {
+void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& transformData) {
 	m_initializing = true;
-	m_transformData = data;
+	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 

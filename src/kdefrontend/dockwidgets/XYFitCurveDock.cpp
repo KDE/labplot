@@ -208,7 +208,6 @@ void XYFitCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-	Q_ASSERT(m_fitCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_fitCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -253,7 +252,7 @@ void XYFitCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -282,7 +281,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-	Q_ASSERT(m_fitCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
@@ -331,22 +329,18 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -355,13 +349,9 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 }
 
@@ -370,13 +360,9 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -385,13 +371,9 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
 }
 
@@ -400,13 +382,9 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 }
 
@@ -1081,11 +1059,10 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 

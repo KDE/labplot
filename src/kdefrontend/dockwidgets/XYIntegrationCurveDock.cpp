@@ -139,7 +139,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
-	Q_ASSERT(m_integrationCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_integrationCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -178,7 +177,7 @@ void XYIntegrationCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	foreach (XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -203,7 +202,6 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList=list;
 	m_curve=list.first();
 	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
-	Q_ASSERT(m_integrationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
@@ -254,17 +252,13 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 	// disable integration orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -272,7 +266,7 @@ void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -281,16 +275,12 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
 
-	if (column != 0) {
+	if (column != nullptr) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			uiGeneralTab.sbMin->setValue(column->minimum());
 			uiGeneralTab.sbMax->setValue(column->maximum());
@@ -319,13 +309,9 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -402,7 +388,7 @@ void XYIntegrationCurveDock::absoluteChanged() {
 void XYIntegrationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -467,11 +453,10 @@ void XYIntegrationCurveDock::curveDescriptionChanged(const AbstractAspect* aspec
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
@@ -499,9 +484,9 @@ void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* colum
 	m_initializing = false;
 }
 
-void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& data) {
+void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& integrationData) {
 	m_initializing = true;
-	m_integrationData = data;
+	m_integrationData = integrationData;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
 	this->methodChanged();
 	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);

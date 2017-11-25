@@ -146,7 +146,6 @@ void XYDataReductionCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
-	Q_ASSERT(m_dataReductionCurve);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_dataReductionCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
@@ -194,7 +193,7 @@ void XYDataReductionCurveDock::setModel() {
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
@@ -219,7 +218,6 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList=list;
 	m_curve=list.first();
 	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
-	Q_ASSERT(m_dataReductionCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
@@ -270,17 +268,13 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
-	if (aspect) {
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(dataSourceCurve);
-	}
+	XYCurve* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
 // 	// disable deriv orders and accuracies that need more data points
 // 	this->updateSettings(dataSourceCurve->xColumn());
@@ -288,7 +282,7 @@ void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 	if (m_initializing)
 		return;
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
@@ -297,13 +291,9 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	//TODO: this->updateSettings(column); ?
@@ -321,13 +311,9 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
 
 	updateTolerance();
@@ -599,7 +585,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	statusBar->addWidget(progressBar, 1);
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	for (auto* curve: m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
 	QApplication::restoreOverrideCursor();
@@ -697,9 +683,9 @@ void XYDataReductionCurveDock::curveYDataColumnChanged(const AbstractColumn* col
 	m_initializing = false;
 }
 
-void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData& data) {
+void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData& dataReductionData) {
 	m_initializing = true;
-	m_dataReductionData = data;
+	m_dataReductionData = dataReductionData;
 	//uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
 	//this->typeChanged();
 
