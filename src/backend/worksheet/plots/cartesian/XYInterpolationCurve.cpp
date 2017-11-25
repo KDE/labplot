@@ -248,7 +248,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to interpolate
-	const unsigned int n = xdataVector.size();
+	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
@@ -327,14 +327,14 @@ void XYInterpolationCurvePrivate::recalculate() {
 		(*xVector)[i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
-		int j=0;
+		unsigned int j=0;
 		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
 			while (b-a > 1) {
-				j=floor((a+b)/2.);
+				j = floor((a+b)/2.);
 				if (xdata[j] > x)
-					b=j;
+					b = j;
 				else
-					a=j;
+					a = j;
 			}
 		}
 
@@ -350,27 +350,27 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case nsl_interp_type_steffen:
 			switch (evaluate) {
 			case nsl_interp_evaluate_function:
-				(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+				(*yVector)[(int)i] = gsl_spline_eval(spline, x, acc);
 				break;
 			case nsl_interp_evaluate_derivative:
-				(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+				(*yVector)[(int)i] = gsl_spline_eval_deriv(spline, x, acc);
 				break;
 			case nsl_interp_evaluate_second_derivative:
-				(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+				(*yVector)[(int)i] = gsl_spline_eval_deriv2(spline, x, acc);
 				break;
 			case nsl_interp_evaluate_integral:
-				(*yVector)[i] = gsl_spline_eval_integ(spline, xmin, x, acc);
+				(*yVector)[(int)i] = gsl_spline_eval_integ(spline, xmin, x, acc);
 				break;
 			}
 			break;
 		case nsl_interp_type_cosine:
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
 			t = (1.-cos(M_PI*t))/2.;
-			(*yVector)[i] =  ydata[a] + t*(ydata[b]-ydata[a]);
+			(*yVector)[i] =  ydata[(int)a] + t*(ydata[b]-ydata[a]);
 			break;
 		case nsl_interp_type_exponential:
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
-			(*yVector)[i] = ydata[a]*pow(ydata[b]/ydata[a],t);
+			(*yVector)[i] = ydata[(int)a]*pow(ydata[b]/ydata[a],t);
 			break;
 		case nsl_interp_type_pch: {
 				t = (x-xdata[a])/(xdata[b]-xdata[a]);
@@ -431,13 +431,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 				}
 
 				// Hermite polynomial
-				(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
+				(*yVector)[(int)i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
 			}
 			break;
 		case nsl_interp_type_rational: {
 				double v,dv;
-				nsl_interp_ratint(xdata, ydata, n, x, &v, &dv);
-				(*yVector)[i] = v;
+				nsl_interp_ratint(xdata, ydata, (int)n, x, &v, &dv);
+				(*yVector)[(int)i] = v;
 				//TODO: use error dv
 				break;
 			}
@@ -462,7 +462,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	// check values
-	for (unsigned int i = 0; i < npoints; i++) {
+	for (int i = 0; i < (int)npoints; i++) {
 		if ((*yVector)[i] > CartesianScale::LIMIT_MAX)
 			(*yVector)[i] = CartesianScale::LIMIT_MAX;
 		else if ((*yVector)[i] < CartesianScale::LIMIT_MIN)
@@ -570,7 +570,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("tension", interpolationData.tension);
 			READ_DOUBLE_VALUE("continuity", interpolationData.continuity);
 			READ_DOUBLE_VALUE("bias", interpolationData.bias);
-			READ_INT_VALUE("npoints", interpolationData.npoints, int);
+			READ_INT_VALUE("npoints", interpolationData.npoints, unsigned int);
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (!preview && reader->name() == "interpolationResult") {

@@ -251,7 +251,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 
 	//number of data points to filter
-	unsigned int n = xdataVector.size();
+	const size_t n = (size_t)xdataVector.size();
 	if (n == 0) {
 		filterResult.available = true;
 		filterResult.valid = false;
@@ -286,7 +286,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		cutindex = cutoff*(xmax-xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		cutindex = cutoff*n;
+		cutindex = cutoff*(int)n;
 		break;
 	case nsl_filter_cutoff_unit_index:
 		cutindex = cutoff;
@@ -313,8 +313,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	// run filter
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);
 
-	xVector->resize(n);
-	yVector->resize(n);
+	xVector->resize((int)n);
+	yVector->resize((int)n);
 	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.last());
 			READ_INT_VALUE("type", filterData.type, nsl_filter_type);
 			READ_INT_VALUE("form", filterData.form, nsl_filter_form);
-			READ_INT_VALUE("order", filterData.order, int);
+			READ_INT_VALUE("order", filterData.order, unsigned int);
 			READ_DOUBLE_VALUE("cutoff", filterData.cutoff);
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);

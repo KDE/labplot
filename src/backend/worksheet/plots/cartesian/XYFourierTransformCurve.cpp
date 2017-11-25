@@ -224,7 +224,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	}
 
 	//number of data points to transform
-	unsigned int n = ydataVector.size();
+	unsigned int n = (unsigned int)ydataVector.size();
 	if (n == 0) {
 		transformResult.available = true;
 		transformResult.valid = false;
@@ -296,8 +296,8 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		out << ydata[i] << '(' << xdata[i] << ')';
 #endif
 
-	xVector->resize(N);
-	yVector->resize(N);
+	xVector->resize((int)N);
+	yVector->resize((int)N);
 	if(shifted) {
 		memcpy(xVector->data(), &xdata[n/2], n/2*sizeof(double));
 		memcpy(&xVector->data()[n/2], xdata, n/2*sizeof(double));

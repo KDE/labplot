@@ -235,7 +235,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	//number of data points to use
-	const unsigned int n = xdataVector.size();
+	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
@@ -306,9 +306,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	emit q->completed(80);
 
-	xVector->resize(npoints);
-	yVector->resize(npoints);
-	for (size_t i = 0; i < npoints; i++) {
+	xVector->resize((int)npoints);
+	yVector->resize((int)npoints);
+	for (int i = 0; i < (int)npoints; i++) {
 		(*xVector)[i] = xdata[index[i]];
 		(*yVector)[i] = ydata[index[i]];
 	}
@@ -433,7 +433,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("valid", dataReductionResult.valid, int);
 			READ_STRING_VALUE("status", dataReductionResult.status);
 			READ_INT_VALUE("time", dataReductionResult.elapsedTime, int);
-			READ_INT_VALUE("npoints", dataReductionResult.npoints, int);
+			READ_INT_VALUE("npoints", dataReductionResult.npoints, unsigned int);
 			READ_DOUBLE_VALUE("posError", dataReductionResult.posError);
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {

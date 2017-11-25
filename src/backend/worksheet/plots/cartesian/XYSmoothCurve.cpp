@@ -241,7 +241,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	}
 
 	//number of data points to smooth
-	const unsigned int n = xdataVector.size();
+	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
 		smoothResult.valid = false;
@@ -292,8 +292,8 @@ void XYSmoothCurvePrivate::recalculate() {
 		break;
 	}
 
-	xVector->resize(n);
-	yVector->resize(n);
+	xVector->resize((int)n);
+	yVector->resize((int)n);
 	memcpy(xVector->data(), xdata, n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
@@ -390,10 +390,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.last());
 			READ_INT_VALUE("type", smoothData.type, nsl_smooth_type);
-			READ_INT_VALUE("points", smoothData.points, int);
+			READ_INT_VALUE("points", smoothData.points, unsigned int);
 			READ_INT_VALUE("weight", smoothData.weight, nsl_smooth_weight_type);
 			READ_DOUBLE_VALUE("percentile", smoothData.percentile);
-			READ_INT_VALUE("order", smoothData.order, int);
+			READ_INT_VALUE("order", smoothData.order, unsigned int);
 			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);

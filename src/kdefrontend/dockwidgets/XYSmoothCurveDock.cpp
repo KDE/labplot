@@ -174,10 +174,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 	qDebug()<<"	curve ="<<m_smoothCurve->name();
 	qDebug()<<"	m_smoothData.points ="<<m_smoothData.points;
 #endif
-	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
+	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
-	uiGeneralTab.sbOrder->setValue(m_smoothData.order);
+	uiGeneralTab.sbOrder->setValue((int)m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
 	modeChanged();	// needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
@@ -442,10 +442,10 @@ void XYSmoothCurveDock::typeChanged() {
 }
 
 void XYSmoothCurveDock::pointsChanged() {
-	m_smoothData.points = uiGeneralTab.sbPoints->value();
+	m_smoothData.points = (unsigned int)uiGeneralTab.sbPoints->value();
 
 	// set maximum order
-	uiGeneralTab.sbOrder->setMaximum(m_smoothData.points-1);
+	uiGeneralTab.sbOrder->setMaximum((int)m_smoothData.points - 1);
 
 	enableRecalculate();
 }
@@ -463,7 +463,7 @@ void XYSmoothCurveDock::percentileChanged() {
 }
 
 void XYSmoothCurveDock::orderChanged() {
-	m_smoothData.order = uiGeneralTab.sbOrder->value();
+	m_smoothData.order = (unsigned int)uiGeneralTab.sbOrder->value();
 
 	enableRecalculate();
 }

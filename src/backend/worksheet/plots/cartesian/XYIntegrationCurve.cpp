@@ -225,7 +225,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		xmax = integrationData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -238,7 +238,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		}
 	}
 
-	const size_t n = xdataVector.size();	// number of data points to integrate
+	const size_t n = (size_t)xdataVector.size();	// number of data points to integrate
 	if (n < 2) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
@@ -259,8 +259,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 	DEBUG("absolute area:"<<absolute);
 
 ///////////////////////////////////////////////////////////
-	int status=0;
-	size_t np=n;
+	int status = 0;
+	size_t np = n;
 
 	switch (method) {
 	case nsl_int_method_rectangle:
@@ -277,10 +277,10 @@ void XYIntegrationCurvePrivate::recalculate() {
 		break;
 	}
 
-	xVector->resize(np);
-	yVector->resize(np);
-	memcpy(xVector->data(), xdata, np*sizeof(double));
-	memcpy(yVector->data(), ydata, np*sizeof(double));
+	xVector->resize((int)np);
+	yVector->resize((int)np);
+	memcpy(xVector->data(), xdata, np * sizeof(double));
+	memcpy(yVector->data(), ydata, np * sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result

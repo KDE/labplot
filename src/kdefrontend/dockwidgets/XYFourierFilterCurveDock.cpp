@@ -165,7 +165,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	this->typeChanged();
 	uiGeneralTab.cbForm->setCurrentIndex(m_filterData.form);
 	this->formChanged();
-	uiGeneralTab.sbOrder->setValue(m_filterData.order);
+	uiGeneralTab.sbOrder->setValue((int)m_filterData.order);
 	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
 	this->unitChanged();
 	// after unit has set

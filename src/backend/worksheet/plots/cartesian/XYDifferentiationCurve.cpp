@@ -238,7 +238,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to differentiate
-	const unsigned int n = xdataVector.size();
+	const size_t n = (size_t)xdataVector.size();
 	if (n < 3) {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
@@ -259,7 +259,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	DEBUG("accuracy order:" << accOrder);
 
 ///////////////////////////////////////////////////////////
-	int status=0;
+	int status = 0;
 
 	switch (derivOrder) {
 	case nsl_diff_deriv_order_first:
@@ -282,10 +282,10 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		break;
 	}
 
-	xVector->resize(n);
-	yVector->resize(n);
-	memcpy(xVector->data(), xdata, n*sizeof(double));
-	memcpy(yVector->data(), ydata, n*sizeof(double));
+	xVector->resize((int)n);
+	yVector->resize((int)n);
+	memcpy(xVector->data(), xdata, n * sizeof(double));
+	memcpy(yVector->data(), ydata, n * sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
