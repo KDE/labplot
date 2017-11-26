@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2014-2017 Stefan Gerlach  (stefan.gerlach@uni.kn)
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -30,6 +30,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+/* uncomment to enable parser specific debugging */
 /* #define PDEBUG 1 */
 
 struct con {
