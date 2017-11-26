@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a Fourier filter
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -56,27 +57,16 @@ extern "C" {
 #include <QDebug>	// qWarning()
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-	: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
-	init();
+	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this)) {
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-	: XYCurve(name, dd) {
-	init();
+	: XYAnalysisCurve(name, dd) {
 }
-
 
 XYFourierFilterCurve::~XYFourierFilterCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYFourierFilterCurve::init() {
-	Q_D(XYFourierFilterCurve);
-
-	//TODO: read from the saved settings for XYFourierFilterCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYFourierFilterCurve::recalculate() {
@@ -94,17 +84,6 @@ QIcon XYFourierFilterCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYFourierFilterCurve::xDataColumnPath() const {
-	Q_D(const XYFourierFilterCurve);
-	return d->xDataColumnPath;
-}
-const QString& XYFourierFilterCurve::yDataColumnPath() const {
-	Q_D(const XYFourierFilterCurve);
-	return d->yDataColumnPath;
-}
-
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
 const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() const {
@@ -115,32 +94,6 @@ const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() c
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYFourierFilterCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYFourierFilterCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYFourierFilterCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYFourierFilterCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYFourierFilterCurve, SetFilterData, XYFourierFilterCurve::FilterData, filterData, recalculate);
 void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData& filterData) {
 	Q_D(XYFourierFilterCurve);
@@ -150,10 +103,7 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
+XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner) {
 
 }
@@ -162,9 +112,6 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
-
-// ...
-// see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;
@@ -197,7 +144,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -339,14 +286,12 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyFourierFilterCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-fourier_filter-curve specific information
 	//filter data
 	writer->writeStartElement("filterData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->filterData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->filterData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->filterData.xRange.last()) );
@@ -379,11 +324,6 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyFourierFilterCurve") {
-		reader->raiseError(i18n("no xy Fourier filter curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -396,15 +336,11 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "filterData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
-
 			READ_INT_VALUE("autoRange", filterData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.last());
@@ -417,7 +353,6 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
 		} else if (!preview && reader->name() == "filterResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", filterResult.available, int);
 			READ_INT_VALUE("valid", filterResult.valid, int);
 			READ_STRING_VALUE("status", filterResult.status);

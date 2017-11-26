@@ -4,6 +4,7 @@
     Description          : Private members of XYDifferentiationCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,33 +30,23 @@
 #ifndef XYDIFFERENTIATIONCURVEPRIVATE_H
 #define XYDIFFERENTIATIONCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 
 class XYDifferentiationCurve;
 class Column;
 
-class XYDifferentiationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYDifferentiationCurvePrivate(XYDifferentiationCurve*);
-		~XYDifferentiationCurvePrivate() override;
+class XYDifferentiationCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYDifferentiationCurvePrivate(XYDifferentiationCurve*);
+	~XYDifferentiationCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be differentiated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be differentiated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYDifferentiationCurve::DifferentiationData differentiationData;
+	XYDifferentiationCurve::DifferentiationResult differentiationResult;
 
-		XYDifferentiationCurve::DifferentiationData differentiationData;
-		XYDifferentiationCurve::DifferentiationResult differentiationResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result differentiation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result differentiation curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYDifferentiationCurve* const q;
+	XYDifferentiationCurve* const q;
 };
 
 #endif

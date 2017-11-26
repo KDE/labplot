@@ -4,6 +4,7 @@
     Description          : Private members of XYFourierTransformCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,35 +30,22 @@
 #ifndef XYFOURIERTRANSFORMCURVEPRIVATE_H
 #define XYFOURIERTRANSFORMCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 
 class XYFourierTransformCurve;
 class Column;
 
-class XYFourierTransformCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFourierTransformCurvePrivate(XYFourierTransformCurve*);
-		~XYFourierTransformCurvePrivate() override;
-		void recalculate();
+class XYFourierTransformCurvePrivate: public XYAnalysisCurvePrivate {
+public:
+	explicit XYFourierTransformCurvePrivate(XYFourierTransformCurve*);
+	~XYFourierTransformCurvePrivate() override;
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYFourierTransformCurve::TransformData transformData;
+	XYFourierTransformCurve::TransformResult transformResult;
 
-		XYFourierTransformCurve::TransformData transformData;
-		XYFourierTransformCurve::TransformResult transformResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYFourierTransformCurve* const q;
-
-//	private:
-//		void writeSolverState(gsl_multifit_fdfsolver* s);
+	XYFourierTransformCurve* const q;
 };
 
 #endif

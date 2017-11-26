@@ -54,7 +54,6 @@ public:
 	enum ErrorType {NoError, SymmetricError, AsymmetricError};
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
 	explicit XYCurve(const QString &name);
 	~XYCurve() override;
@@ -67,11 +66,8 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
-	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-	const QString& dataSourceCurvePath() const;
 	const QString& xColumnPath() const;
 	const QString& yColumnPath() const;
 
@@ -140,9 +136,6 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-public slots:
-	void handleSourceDataChanged();
-
 private slots:
 	void updateValues();
 	void updateErrorBars();
@@ -171,20 +164,14 @@ private:
 	QAction* navigateToAction;
 
 signals:
-	void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
-
 	//General-Tab
 	void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
 	void visibilityChanged(bool);
 
-	friend class XYCurveSetDataSourceTypeCmd;
-	friend class XYCurveSetDataSourceCurveCmd;
 	friend class XYCurveSetXColumnCmd;
 	friend class XYCurveSetYColumnCmd;
-	void dataSourceTypeChanged(XYCurve::DataSourceType);
-	void dataSourceCurveChanged(const XYCurve*);
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 

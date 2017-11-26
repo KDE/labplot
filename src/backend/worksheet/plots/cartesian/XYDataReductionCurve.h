@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a data reduction
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,13 +30,13 @@
 #ifndef XYDATAREDUCTIONCURVE_H
 #define XYDATAREDUCTIONCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_geom_linesim.h"
 }
 
 class XYDataReductionCurvePrivate;
-class XYDataReductionCurve: public XYCurve {
+class XYDataReductionCurve : public XYAnalysisCurve {
 	Q_OBJECT
 
 public:
@@ -66,15 +67,10 @@ public:
 	explicit XYDataReductionCurve(const QString& name);
 	~XYDataReductionCurve() override;
 
-	void recalculate();
+	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-	const QString& xDataColumnPath() const;
-	const QString& yDataColumnPath() const;
 
 	CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
 	const DataReductionResult& dataReductionResult() const;
@@ -86,14 +82,8 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYDataReductionCurve)
-	void init();
 
 signals:
-	friend class XYDataReductionCurveSetXDataColumnCmd;
-	friend class XYDataReductionCurveSetYDataColumnCmd;
-	void xDataColumnChanged(const AbstractColumn*);
-	void yDataColumnChanged(const AbstractColumn*);
-
 	friend class XYDataReductionCurveSetDataReductionDataCmd;
 	void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process

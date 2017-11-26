@@ -4,6 +4,7 @@
     Description          : Private members of XYFourierFilterCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,35 +30,22 @@
 #ifndef XYFOURIERFILTERCURVEPRIVATE_H
 #define XYFOURIERFILTERCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 
 class XYFourierFilterCurve;
 class Column;
 
-class XYFourierFilterCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
-		~XYFourierFilterCurvePrivate() override;
-		void recalculate();
+class XYFourierFilterCurvePrivate: public XYAnalysisCurvePrivate {
+public:
+	explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
+	~XYFourierFilterCurvePrivate() override;
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYFourierFilterCurve::FilterData filterData;
+	XYFourierFilterCurve::FilterResult filterResult;
 
-		XYFourierFilterCurve::FilterData filterData;
-		XYFourierFilterCurve::FilterResult filterResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYFourierFilterCurve* const q;
-
-//	private:
-//		void writeSolverState(gsl_multifit_fdfsolver* s);
+	XYFourierFilterCurve* const q;
 };
 
 #endif

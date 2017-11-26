@@ -4,6 +4,7 @@
     Description          : Private members of XYSmoothCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,35 +30,23 @@
 #ifndef XYSMOOTHCURVEPRIVATE_H
 #define XYSMOOTHCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
 class XYSmoothCurve;
 class Column;
 
-class XYSmoothCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYSmoothCurvePrivate(XYSmoothCurve*);
-		~XYSmoothCurvePrivate() override;
+class XYSmoothCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYSmoothCurvePrivate(XYSmoothCurve*);
+	~XYSmoothCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be interpolated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be interpolated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYSmoothCurve::SmoothData smoothData;
+	XYSmoothCurve::SmoothResult smoothResult;
 
-		XYSmoothCurve::SmoothData smoothData;
-		XYSmoothCurve::SmoothResult smoothResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result smooth curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result smooth curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYSmoothCurve* const q;
-
-//	private:
+	XYSmoothCurve* const q;
 };
 
 #endif

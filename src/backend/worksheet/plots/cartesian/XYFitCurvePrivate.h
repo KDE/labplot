@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,7 +29,7 @@
 #ifndef XYFITCURVEPRIVATE_H
 #define XYFITCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 class XYFitCurve;
@@ -39,37 +39,29 @@ extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
 }
 
-class XYFitCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate() override;
+class XYFitCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYFitCurvePrivate(XYFitCurve*);
+	~XYFitCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* xErrorColumn; //<! column storing the values for the x-error to be used in the fit
-		const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-		QString xErrorColumnPath;
-		QString yErrorColumnPath;
+	const AbstractColumn* xErrorColumn; //<! column storing the values for the x-error to be used in the fit
+	const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
+	QString xErrorColumnPath;
+	QString yErrorColumnPath;
 
-		XYFitCurve::FitData fitData;
-		XYFitCurve::FitResult fitResult;
-		QStringList solverOutput;
+	XYFitCurve::FitData fitData;
+	XYFitCurve::FitResult fitResult;
+	QStringList solverOutput;
 
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		Column* residualsColumn;
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-		QVector<double>* residualsVector;
+	Column* residualsColumn;
+	QVector<double>* residualsVector;
 
-		XYFitCurve* const q;
+	XYFitCurve* const q;
 
-	private:
-		void writeSolverState(gsl_multifit_fdfsolver* s);
+private:
+	void writeSolverState(gsl_multifit_fdfsolver*);
 };
 
 #endif

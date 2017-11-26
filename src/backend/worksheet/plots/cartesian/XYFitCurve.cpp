@@ -61,26 +61,16 @@ extern "C" {
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
-		: XYCurve(name, new XYFitCurvePrivate(this)) {
-	init();
+		: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
 }
 
 XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
-		: XYCurve(name, dd) {
-	init();
+		: XYAnalysisCurve(name, dd) {
 }
 
 XYFitCurve::~XYFitCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYFitCurve::init() {
-	Q_D(XYFitCurve);
-
-	//TODO: read from the saved settings for XYFitCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYFitCurve::recalculate() {
@@ -552,12 +542,8 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yDataColumn, yDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
-const QString& XYFitCurve::xDataColumnPath() const { Q_D(const XYFitCurve); return d->xDataColumnPath; }
-const QString& XYFitCurve::yDataColumnPath() const { Q_D(const XYFitCurve); return d->yDataColumnPath; }
 const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve);return d->xErrorColumnPath; }
 const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve);return d->yErrorColumnPath; }
 
@@ -571,32 +557,6 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYFitCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYFitCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYFitCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYFitCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYFitCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYFitCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXErrorColumn, const AbstractColumn*, xErrorColumn)
 void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
@@ -632,10 +592,10 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), xErrorColumn(0), yErrorColumn(0),
-	xColumn(0), yColumn(0), residualsColumn(0),
-	xVector(0), yVector(0), residualsVector(0),
+XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner),
+	xErrorColumn(0), yErrorColumn(0),
+	residualsColumn(0),
+	residualsVector(0),
 	q(owner)  {
 
 }
@@ -1443,7 +1403,7 @@ void XYFitCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -1501,7 +1461,7 @@ void XYFitCurvePrivate::recalculate() {
 
 			// only when inside given range
 			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				if (dataSourceType == XYCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+				if (dataSourceType == XYAnalysisCurve::DataSourceCurve || (!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				} else if (!xErrorColumn) {		// x-y-dy
@@ -1865,15 +1825,13 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyFitCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-fit-curve specific information
 
 	//fit data - only save model expression and parameter names for custom model, otherwise they are set in XYFitCurve::initFitData()
 	writer->writeStartElement("fitData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
@@ -1988,11 +1946,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyFitCurve") {
-		reader->raiseError(i18n("no xy fit curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -2005,14 +1958,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "fitData") {
 			attribs = reader->attributes();
 
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
 			READ_COLUMN(xErrorColumn);
 			READ_COLUMN(yErrorColumn);
 

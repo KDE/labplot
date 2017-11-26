@@ -179,7 +179,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_filterCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_filterCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_filterCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
 	connect(m_filterCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_filterCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -244,8 +244,8 @@ void XYFourierFilterCurveDock::commentChanged(){
 }
 
 void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
-	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
-	if (type == XYCurve::DataSourceSpreadsheet) {
+	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -265,7 +265,7 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setDataSourceType(type);
+		dynamic_cast<XYFourierFilterCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -282,7 +282,7 @@ void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setDataSourceCurve(dataSourceCurve);
+		dynamic_cast<XYFourierFilterCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -329,7 +329,7 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
-		if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_filterCurve->xDataColumn();
 		else {
 			if (m_filterCurve->dataSourceCurve())
@@ -431,7 +431,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -510,7 +510,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -606,7 +606,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 
 	//no filtering possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_filterCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX!=0 && aspectY!=0);
@@ -663,7 +663,7 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 	m_initializing = false;
 }
 
-void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
 	m_initializing = false;

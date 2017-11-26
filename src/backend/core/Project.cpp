@@ -414,7 +414,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
-					RESTORE_POINTER(curve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
+					if (dynamic_cast<XYAnalysisCurve*>(curve))
+						RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
+
 					curve->suppressRetransform(false);
 				}
 

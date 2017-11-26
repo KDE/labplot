@@ -86,7 +86,7 @@ void FitOptionsWidget::autoRangeChanged() {
 		ui.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
-		if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_fitCurve->xDataColumn();
 		else {
 			if (m_fitCurve->dataSourceCurve())

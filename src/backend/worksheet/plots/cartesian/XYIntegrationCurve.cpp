@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by an integration
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -50,27 +51,16 @@ extern "C" {
 #include <QThreadPool>
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
-		: XYCurve(name, new XYIntegrationCurvePrivate(this)) {
-	init();
+		: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this)) {
 }
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd)
-		: XYCurve(name, dd) {
-	init();
+		: XYAnalysisCurve(name, dd) {
 }
-
 
 XYIntegrationCurve::~XYIntegrationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYIntegrationCurve::init() {
-	Q_D(XYIntegrationCurve);
-
-	//TODO: read from the saved settings for XYIntegrationCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYIntegrationCurve::recalculate() {
@@ -88,11 +78,6 @@ QIcon XYIntegrationCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYIntegrationCurve::xDataColumnPath() const { Q_D(const XYIntegrationCurve); return d->xDataColumnPath; }
-const QString& XYIntegrationCurve::yDataColumnPath() const { Q_D(const XYIntegrationCurve); return d->yDataColumnPath; }
-
 BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, XYIntegrationCurve::IntegrationData, integrationData, integrationData)
 
 const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResult() const {
@@ -103,32 +88,6 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYIntegrationCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYIntegrationCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYIntegrationCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYIntegrationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYIntegrationCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYIntegrationCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYIntegrationCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYIntegrationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYIntegrationCurve, SetIntegrationData, XYIntegrationCurve::IntegrationData, integrationData, recalculate);
 void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::IntegrationData& integrationData) {
 	Q_D(XYIntegrationCurve);
@@ -138,10 +97,7 @@ void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::Integratio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
+XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
 
 }
@@ -150,9 +106,6 @@ XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
-
-// ...
-// see XYFitCurvePrivate
 
 void XYIntegrationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
@@ -185,7 +138,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -304,14 +257,12 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 
 	writer->writeStartElement("xyIntegrationCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-integration-curve specific information
 	// integration data
 	writer->writeStartElement("integrationData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->integrationData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->integrationData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->integrationData.xRange.last()) );
@@ -358,23 +309,18 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "integrationData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
 			READ_INT_VALUE("autoRange", integrationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.last());
-
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);
 		} else if (!preview && reader->name() == "integrationResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", integrationResult.available, int);
 			READ_INT_VALUE("valid", integrationResult.valid, int);
 			READ_STRING_VALUE("status", integrationResult.status);

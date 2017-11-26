@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a Fourier filter
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,73 +30,62 @@
 #ifndef XYFOURIERFILTERCURVE_H
 #define XYFOURIERFILTERCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_filter.h"
 }
 
 class XYFourierFilterCurvePrivate;
-class XYFourierFilterCurve : public XYCurve {
-	Q_OBJECT
+class XYFourierFilterCurve : public XYAnalysisCurve {
+Q_OBJECT
 
-	public:
-		struct FilterData {
-			FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
-				cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency),
-				autoRange(true), xRange(2) {};
+public:
+	struct FilterData {
+		FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
+			cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency),
+			autoRange(true), xRange(2) {};
 
-			nsl_filter_type type;
-			nsl_filter_form form;
-			unsigned int order;
-			double cutoff;			// (low) cutoff
-			nsl_filter_cutoff_unit unit;	// (low) value unit
-			double cutoff2;			// high cutoff
-			nsl_filter_cutoff_unit unit2;	// high value unit
-			bool autoRange;			// use all data?
-			QVector<double> xRange;		// x range for integration
-		};
-		struct FilterResult {
-			FilterResult() : available(false), valid(false), elapsedTime(0) {};
+		nsl_filter_type type;
+		nsl_filter_form form;
+		unsigned int order;
+		double cutoff;			// (low) cutoff
+		nsl_filter_cutoff_unit unit;	// (low) value unit
+		double cutoff2;			// high cutoff
+		nsl_filter_cutoff_unit unit2;	// high value unit
+		bool autoRange;			// use all data?
+		QVector<double> xRange;		// x range for integration
+	};
+	struct FilterResult {
+		FilterResult() : available(false), valid(false), elapsedTime(0) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-		};
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+	};
 
-		explicit XYFourierFilterCurve(const QString& name);
-		~XYFourierFilterCurve() override;
+	explicit XYFourierFilterCurve(const QString& name);
+	~XYFourierFilterCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate() override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
+	const FilterResult& filterResult() const;
 
-		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
-		const FilterResult& filterResult() const;
+	typedef XYFourierFilterCurvePrivate Private;
 
-		typedef XYFourierFilterCurvePrivate Private;
+protected:
+	XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd);
 
-	protected:
-		XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd);
+private:
+	Q_DECLARE_PRIVATE(XYFourierFilterCurve)
 
-	private:
-		Q_DECLARE_PRIVATE(XYFourierFilterCurve)
-		void init();
-
-	signals:
-		friend class XYFourierFilterCurveSetXDataColumnCmd;
-		friend class XYFourierFilterCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-
-		friend class XYFourierFilterCurveSetFilterDataCmd;
-		void filterDataChanged(const XYFourierFilterCurve::FilterData&);
+signals:
+	friend class XYFourierFilterCurveSetFilterDataCmd;
+	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
 };
 
 #endif

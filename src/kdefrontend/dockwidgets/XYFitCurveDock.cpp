@@ -236,7 +236,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_fitCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_fitCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
 	connect(m_fitCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -309,8 +309,8 @@ void XYFitCurveDock::commentChanged() {
 }
 
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
-	const XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
-	if (type == XYCurve::DataSourceSpreadsheet) {
+	const XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -762,7 +762,7 @@ void XYFitCurveDock::enableRecalculate() const {
 
 	//no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_fitCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != 0 && aspectY != 0);
@@ -1066,7 +1066,7 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
 	m_initializing = false;

@@ -56,8 +56,6 @@ public:
 	void suppressRetransform(bool);
 
 	//data source
-	XYCurve::DataSourceType dataSourceType;
-	const XYCurve* dataSourceCurve;
 	const AbstractColumn* xColumn;
 	const AbstractColumn* yColumn;
 	QString dataSourceCurvePath;

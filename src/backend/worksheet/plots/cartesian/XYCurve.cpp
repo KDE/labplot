@@ -81,10 +81,8 @@ void XYCurve::init() {
 	KConfig config;
 	KConfigGroup group = config.group("XYCurve");
 
-	d->dataSourceType = (XYCurve::DataSourceType) group.readEntry("DataSourceType", (int)XYCurve::DataSourceSpreadsheet);
-	d->xColumn = NULL;
-	d->yColumn = NULL;
-	d->dataSourceCurve = NULL;
+	d->xColumn = nullptr;
+	d->yColumn = nullptr;
 
 	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::Line);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
@@ -111,7 +109,7 @@ void XYCurve::init() {
 	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
 
 	d->valuesType = (XYCurve::ValuesType) group.readEntry("ValuesType", (int)XYCurve::NoValues);
-	d->valuesColumn = NULL;
+	d->valuesColumn = nullptr;
 	d->valuesPosition = (XYCurve::ValuesPosition) group.readEntry("ValuesPosition", (int)XYCurve::ValuesAbove);
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
@@ -133,11 +131,11 @@ void XYCurve::init() {
 	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
 
 	d->xErrorType = (XYCurve::ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
-	d->xErrorPlusColumn = NULL;
-	d->xErrorMinusColumn = NULL;
+	d->xErrorPlusColumn = nullptr;
+	d->xErrorMinusColumn = nullptr;
 	d->yErrorType = (XYCurve::ErrorType) group.readEntry("YErrorType", (int)XYCurve::NoError);
-	d->yErrorPlusColumn = NULL;
-	d->yErrorMinusColumn = NULL;
+	d->yErrorPlusColumn = nullptr;
+	d->yErrorMinusColumn = nullptr;
 	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
@@ -216,13 +214,8 @@ void XYCurve::setPrinting(bool on) {
 //##############################################################################
 
 //data source
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DataSourceType, dataSourceType, dataSourceType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
-const QString& XYCurve::dataSourceCurvePath() const {
-	return d_ptr->dataSourceCurvePath;
-}
 const QString& XYCurve::xColumnPath() const {
 	return d_ptr->xColumnPath;
 }
@@ -314,34 +307,6 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-
-//data source
-STD_SETTER_CMD_IMPL_S(XYCurve, SetDataSourceType, XYCurve::DataSourceType, dataSourceType)
-void XYCurve::setDataSourceType(DataSourceType type) {
-	Q_D(XYCurve);
-	if (type != d->dataSourceType)
-		exec(new XYCurveSetDataSourceTypeCmd(d, type, i18n("%1: data source type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, retransform)
-void XYCurve::setDataSourceCurve(const XYCurve* curve) {
-	Q_D(XYCurve);
-	if (curve != d->dataSourceCurve) {
-		exec(new XYCurveSetDataSourceCurveCmd(d, curve, i18n("%1: data source curve changed")));
-		handleSourceDataChanged();
-
-		//handle the changes when different columns were provided for the source curve
-		connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-		connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-
-		//handle the changes when the data inside of the source curve columns
-		connect(curve, SIGNAL(xDataChanged()), this, SLOT(handleSourceDataChanged()));
-		connect(curve, SIGNAL(yDataChanged()), this, SLOT(handleSourceDataChanged()));
-
-		//TODO: add disconnect in the undo-function
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
@@ -823,12 +788,6 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->yErrorMinusColumn = 0;
 		d->updateErrorBars();
 	}
-}
-
-void XYCurve::handleSourceDataChanged() {
-	Q_D(XYCurve);
-	d->sourceDataChangedSinceLastRecalc = true;
-	emit sourceDataChanged();
 }
 
 //##############################################################################
@@ -2137,8 +2096,6 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
-	writer->writeAttribute( "dataSourceType", QString::number(d->dataSourceType) );
-	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
@@ -2247,9 +2204,6 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader)) return false;
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
-
-			READ_INT_VALUE("dataSourceType", dataSourceType, XYCurve::DataSourceType);
-			READ_PATH(dataSourceCurve);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 

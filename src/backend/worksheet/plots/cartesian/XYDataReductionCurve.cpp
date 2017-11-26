@@ -47,27 +47,17 @@
 #include <QThreadPool>
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
-		: XYCurve(name, new XYDataReductionCurvePrivate(this)) {
-	init();
+		: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this)) {
 }
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionCurvePrivate* dd)
-		: XYCurve(name, dd) {
-	init();
+		: XYAnalysisCurve(name, dd) {
 }
 
 
 XYDataReductionCurve::~XYDataReductionCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYDataReductionCurve::init() {
-	Q_D(XYDataReductionCurve);
-
-	//TODO: read from the saved settings for XYDataReductionCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYDataReductionCurve::recalculate() {
@@ -85,11 +75,6 @@ QIcon XYDataReductionCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYDataReductionCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYDataReductionCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYDataReductionCurve::xDataColumnPath() const { Q_D(const XYDataReductionCurve); return d->xDataColumnPath; }
-const QString& XYDataReductionCurve::yDataColumnPath() const { Q_D(const XYDataReductionCurve); return d->yDataColumnPath; }
-
 BASIC_SHARED_D_READER_IMPL(XYDataReductionCurve, XYDataReductionCurve::DataReductionData, dataReductionData, dataReductionData)
 
 const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReductionResult() const {
@@ -100,32 +85,6 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYDataReductionCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYDataReductionCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYDataReductionCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYDataReductionCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYDataReductionCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYDataReductionCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYDataReductionCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYDataReductionCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYDataReductionCurve, SetDataReductionData, XYDataReductionCurve::DataReductionData, dataReductionData, recalculate);
 void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::DataReductionData& reductionData) {
 	Q_D(XYDataReductionCurve);
@@ -135,10 +94,7 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
+XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
 
 }
@@ -148,8 +104,6 @@ XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() {
 	//when the parent aspect is removed
 }
 
-// ...
-// see XYFitCurvePrivate
 void XYDataReductionCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -181,7 +135,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -350,14 +304,12 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 
 	writer->writeStartElement("xyDataReductionCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-dataReduction-curve specific information
 	// dataReduction data
 	writer->writeStartElement("dataReductionData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->dataReductionData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->dataReductionData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->dataReductionData.xRange.last()) );
@@ -392,11 +344,6 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyDataReductionCurve") {
-		reader->raiseError(i18n("no xy dataReduction curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -409,18 +356,14 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "dataReductionData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
 			READ_INT_VALUE("autoRange", dataReductionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", dataReductionData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", dataReductionData.xRange.last());
-
 			READ_INT_VALUE("type", dataReductionData.type, nsl_geom_linesim_type);
 			READ_INT_VALUE("autoTolerance", dataReductionData.autoTolerance, int);
 			READ_DOUBLE_VALUE("tolerance", dataReductionData.tolerance);
@@ -428,7 +371,6 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
 		} else if (!preview && reader->name() == "dataReductionResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", dataReductionResult.available, int);
 			READ_INT_VALUE("valid", dataReductionResult.valid, int);
 			READ_STRING_VALUE("status", dataReductionResult.status);

@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by an integration
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,67 +30,56 @@
 #ifndef XYINTEGRATIONCURVE_H
 #define XYINTEGRATIONCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_int.h"
 }
 
 class XYIntegrationCurvePrivate;
-class XYIntegrationCurve: public XYCurve {
-	Q_OBJECT
+class XYIntegrationCurve : public XYAnalysisCurve {
+Q_OBJECT
 
-	public:
-		struct IntegrationData {
-			IntegrationData() : method(nsl_int_method_trapezoid), absolute(false), autoRange(true), xRange(2) {};
+public:
+	struct IntegrationData {
+		IntegrationData() : method(nsl_int_method_trapezoid), absolute(false), autoRange(true), xRange(2) {};
 
-			nsl_int_method_type method;	// method for integration
-			bool absolute;			// absolute area?
-			bool autoRange;			// use all data?
-			QVector<double> xRange;		// x range for integration
-		};
-		struct IntegrationResult {
-			IntegrationResult() : available(false), valid(false), elapsedTime(0), value(0) {};
+		nsl_int_method_type method;	// method for integration
+		bool absolute;			// absolute area?
+		bool autoRange;			// use all data?
+		QVector<double> xRange;		// x range for integration
+	};
+	struct IntegrationResult {
+		IntegrationResult() : available(false), valid(false), elapsedTime(0), value(0) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-			double value;	// final result of integration
-		};
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+		double value;	// final result of integration
+	};
 
-		explicit XYIntegrationCurve(const QString& name);
-		~XYIntegrationCurve() override;
+	explicit XYIntegrationCurve(const QString& name);
+	~XYIntegrationCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate() override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(IntegrationData, integrationData, IntegrationData)
+	const IntegrationResult& integrationResult() const;
 
-		CLASS_D_ACCESSOR_DECL(IntegrationData, integrationData, IntegrationData)
-		const IntegrationResult& integrationResult() const;
+	typedef XYIntegrationCurvePrivate Private;
 
-		typedef XYIntegrationCurvePrivate Private;
+protected:
+	XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd);
 
-	protected:
-		XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd);
+private:
+	Q_DECLARE_PRIVATE(XYIntegrationCurve)
 
-	private:
-		Q_DECLARE_PRIVATE(XYIntegrationCurve)
-		void init();
-
-	signals:
-		friend class XYIntegrationCurveSetXDataColumnCmd;
-		friend class XYIntegrationCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-
-		friend class XYIntegrationCurveSetIntegrationDataCmd;
-		void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
+signals:
+	friend class XYIntegrationCurveSetIntegrationDataCmd;
+	void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 };
 
 #endif

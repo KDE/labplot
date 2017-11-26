@@ -52,27 +52,16 @@ extern "C" {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
-		: XYCurve(name, new XYSmoothCurvePrivate(this)) {
-	init();
+		: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this)) {
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
-		: XYCurve(name, dd) {
-	init();
+		: XYAnalysisCurve(name, dd) {
 }
-
 
 XYSmoothCurve::~XYSmoothCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYSmoothCurve::init() {
-	Q_D(XYSmoothCurve);
-
-	//TODO: read from the saved settings for XYSmoothCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYSmoothCurve::recalculate() {
@@ -90,11 +79,6 @@ QIcon XYSmoothCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYSmoothCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYSmoothCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYSmoothCurve::xDataColumnPath() const { Q_D(const XYSmoothCurve); return d->xDataColumnPath; }
-const QString& XYSmoothCurve::yDataColumnPath() const { Q_D(const XYSmoothCurve); return d->yDataColumnPath; }
-
 BASIC_SHARED_D_READER_IMPL(XYSmoothCurve, XYSmoothCurve::SmoothData, smoothData, smoothData)
 
 const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
@@ -105,32 +89,6 @@ const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYSmoothCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYSmoothCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYSmoothCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYSmoothCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYSmoothCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYSmoothCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYSmoothCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYSmoothCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYSmoothCurve, SetSmoothData, XYSmoothCurve::SmoothData, smoothData, recalculate);
 void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 	Q_D(XYSmoothCurve);
@@ -140,10 +98,7 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
+XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner)  {
 
 }
@@ -152,9 +107,6 @@ XYSmoothCurvePrivate::~XYSmoothCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
-
-// ...
-// see XYFitCurvePrivate
 
 void XYSmoothCurvePrivate::recalculate() {
 	QElapsedTimer timer;
@@ -187,7 +139,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -318,14 +270,12 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 
 	writer->writeStartElement("xySmoothCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-smooth-curve specific information
 	// smooth data
 	writer->writeStartElement("smoothData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->smoothData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->smoothData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->smoothData.xRange.last()) );
@@ -360,11 +310,6 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYSmoothCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
-		reader->raiseError(i18n("no xy smooth curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -377,15 +322,11 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "smoothData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
-
 			READ_INT_VALUE("autoRange", smoothData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.last());
@@ -399,7 +340,6 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
 		} else if (!preview && reader->name() == "smoothResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", smoothResult.available, int);
 			READ_INT_VALUE("valid", smoothResult.valid, int);
 			READ_STRING_VALUE("status", smoothResult.status);

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -30,7 +30,7 @@
 #ifndef XYFITCURVE_H
 #define XYFITCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 
 extern "C" {
@@ -39,7 +39,7 @@ extern "C" {
 
 class XYFitCurvePrivate;
 
-class XYFitCurve : public XYCurve {
+class XYFitCurve : public XYAnalysisCurve {
 	Q_OBJECT
 
 public:
@@ -118,7 +118,7 @@ public:
 	explicit XYFitCurve(const QString& name);
 	~XYFitCurve() override;
 
-	void recalculate();
+	void recalculate() override;
 	void initFitData(PlotDataDialog::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
 
@@ -126,12 +126,8 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
-	const QString& xDataColumnPath() const;
-	const QString& yDataColumnPath() const;
 	const QString& xErrorColumnPath() const;
 	const QString& yErrorColumnPath() const;
 
@@ -145,15 +141,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYFitCurve)
-	void init();
 
 signals:
-	friend class XYFitCurveSetXDataColumnCmd;
-	friend class XYFitCurveSetYDataColumnCmd;
 	friend class XYFitCurveSetXErrorColumnCmd;
 	friend class XYFitCurveSetYErrorColumnCmd;
-	void xDataColumnChanged(const AbstractColumn*);
-	void yDataColumnChanged(const AbstractColumn*);
 	void xErrorColumnChanged(const AbstractColumn*);
 	void yErrorColumnChanged(const AbstractColumn*);
 

@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,74 +30,63 @@
 #ifndef XYINTERPOLATIONCURVE_H
 #define XYINTERPOLATIONCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include <gsl/gsl_version.h>
 #include "backend/nsl/nsl_interp.h"
 }
 
 class XYInterpolationCurvePrivate;
-class XYInterpolationCurve: public XYCurve {
-	Q_OBJECT
+class XYInterpolationCurve : public XYAnalysisCurve {
+Q_OBJECT
 
-	public:
-		enum PointsMode {Auto, Multiple, Custom};
-		struct InterpolationData {
-			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference),
-				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
-				pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
+public:
+	enum PointsMode {Auto, Multiple, Custom};
+	struct InterpolationData {
+		InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference),
+			tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
+			pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
 
-			nsl_interp_type type;			// type of interpolation
-			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
-			double tension, continuity, bias;	// TCB values
-			nsl_interp_evaluate evaluate;		// what to evaluate
-			unsigned int npoints;			// nr. of points
-			XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
-			bool autoRange;				// use all data?
-			QVector<double> xRange;			// x range for interpolation
-		};
-		struct InterpolationResult {
-			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};
+		nsl_interp_type type;			// type of interpolation
+		nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
+		double tension, continuity, bias;	// TCB values
+		nsl_interp_evaluate evaluate;		// what to evaluate
+		unsigned int npoints;			// nr. of points
+		XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
+		bool autoRange;				// use all data?
+		QVector<double> xRange;			// x range for interpolation
+	};
+	struct InterpolationResult {
+		InterpolationResult() : available(false), valid(false), elapsedTime(0) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-		};
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+	};
 
-		explicit XYInterpolationCurve(const QString& name);
-		~XYInterpolationCurve() override;
+	explicit XYInterpolationCurve(const QString& name);
+	~XYInterpolationCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate() override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
+	const InterpolationResult& interpolationResult() const;
 
-		CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
-		const InterpolationResult& interpolationResult() const;
+	typedef XYInterpolationCurvePrivate Private;
 
-		typedef XYInterpolationCurvePrivate Private;
+protected:
+	XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd);
 
-	protected:
-		XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd);
+private:
+	Q_DECLARE_PRIVATE(XYInterpolationCurve)
 
-	private:
-		Q_DECLARE_PRIVATE(XYInterpolationCurve)
-		void init();
-
-	signals:
-		friend class XYInterpolationCurveSetXDataColumnCmd;
-		friend class XYInterpolationCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-
-		friend class XYInterpolationCurveSetInterpolationDataCmd;
-		void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
+signals:
+	friend class XYInterpolationCurveSetInterpolationDataCmd;
+	void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
 };
 
 #endif

@@ -29,33 +29,23 @@
 #ifndef XYINTEGRATIONCURVEPRIVATE_H
 #define XYINTEGRATIONCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 
 class XYIntegrationCurve;
 class Column;
 
-class XYIntegrationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYIntegrationCurvePrivate(XYIntegrationCurve*);
-		~XYIntegrationCurvePrivate() override;
+class XYIntegrationCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYIntegrationCurvePrivate(XYIntegrationCurve*);
+	~XYIntegrationCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be integrated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be integrated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYIntegrationCurve::IntegrationData integrationData;
+	XYIntegrationCurve::IntegrationResult integrationResult;
 
-		XYIntegrationCurve::IntegrationData integrationData;
-		XYIntegrationCurve::IntegrationResult integrationResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result integration curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result integration curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYIntegrationCurve* const q;
+	XYIntegrationCurve* const q;
 };
 
 #endif

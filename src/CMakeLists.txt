@@ -245,6 +245,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/BarChartPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp

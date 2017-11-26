@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a Fourier transform
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,71 +30,60 @@
 #ifndef XYFOURIERTRANSFORMCURVE_H
 #define XYFOURIERTRANSFORMCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_dft.h"
 #include "backend/nsl/nsl_sf_window.h"
 }
 
 class XYFourierTransformCurvePrivate;
-class XYFourierTransformCurve: public XYCurve {
-	Q_OBJECT
+class XYFourierTransformCurve : public XYAnalysisCurve {
+Q_OBJECT
 
-	public:
-		struct TransformData {
-			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false),
-				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
+public:
+	struct TransformData {
+		TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false),
+			xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
 
-			nsl_dft_result_type type;
-			bool twoSided;
-			bool shifted;
-			nsl_dft_xscale xScale;
-			nsl_sf_window_type windowType;
-			bool autoRange;			// use all data?
-			QVector<double> xRange;		// x range for transform
-		};
-		struct TransformResult {
-			TransformResult() : available(false), valid(false), elapsedTime(0) {};
+		nsl_dft_result_type type;
+		bool twoSided;
+		bool shifted;
+		nsl_dft_xscale xScale;
+		nsl_sf_window_type windowType;
+		bool autoRange;			// use all data?
+		QVector<double> xRange;		// x range for transform
+	};
+	struct TransformResult {
+		TransformResult() : available(false), valid(false), elapsedTime(0) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-		};
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+	};
 
-		explicit XYFourierTransformCurve(const QString& name);
-		~XYFourierTransformCurve() override;
+	explicit XYFourierTransformCurve(const QString& name);
+	~XYFourierTransformCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate() override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
+	const TransformResult& transformResult() const;
 
-		CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
-		const TransformResult& transformResult() const;
+	typedef XYFourierTransformCurvePrivate Private;
 
-		typedef XYFourierTransformCurvePrivate Private;
+protected:
+	XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd);
 
-	protected:
-		XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd);
+private:
+	Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 
-	private:
-		Q_DECLARE_PRIVATE(XYFourierTransformCurve)
-		void init();
-
-	signals:
-		friend class XYFourierTransformCurveSetXDataColumnCmd;
-		friend class XYFourierTransformCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-
-		friend class XYFourierTransformCurveSetTransformDataCmd;
-		void transformDataChanged(const XYFourierTransformCurve::TransformData&);
+signals:
+	friend class XYFourierTransformCurveSetTransformDataCmd;
+	void transformDataChanged(const XYFourierTransformCurve::TransformData&);
 };
 
 #endif

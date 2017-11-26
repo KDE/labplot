@@ -184,7 +184,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_smoothCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_smoothCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_smoothCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
 	connect(m_smoothCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_smoothCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_smoothCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -255,8 +255,8 @@ void XYSmoothCurveDock::commentChanged() {
 }
 
 void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
-	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
-	if (type == XYCurve::DataSourceSpreadsheet) {
+	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -337,7 +337,7 @@ void XYSmoothCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
-		if (m_smoothCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		if (m_smoothCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_smoothCurve->xDataColumn();
 		else {
 			if (m_smoothCurve->dataSourceCurve())
@@ -497,7 +497,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
 
 	//no smoothing possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_smoothCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+	if (m_smoothCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX!=0 && aspectY!=0);
@@ -555,7 +555,7 @@ void XYSmoothCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void XYSmoothCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
 	m_initializing = false;

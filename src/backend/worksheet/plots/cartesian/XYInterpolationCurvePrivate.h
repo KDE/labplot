@@ -4,6 +4,7 @@
     Description          : Private members of XYInterpolationCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,33 +30,23 @@
 #ifndef XYINTERPOLATIONCURVEPRIVATE_H
 #define XYINTERPOLATIONCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 
 class XYInterpolationCurve;
 class Column;
 
-class XYInterpolationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
-		~XYInterpolationCurvePrivate() override;
+class XYInterpolationCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
+	~XYInterpolationCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be interpolated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be interpolated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYInterpolationCurve::InterpolationData interpolationData;
+	XYInterpolationCurve::InterpolationResult interpolationResult;
 
-		XYInterpolationCurve::InterpolationData interpolationData;
-		XYInterpolationCurve::InterpolationResult interpolationResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result interpolation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result interpolation curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYInterpolationCurve* const q;
+	XYInterpolationCurve* const q;
 };
 
 #endif

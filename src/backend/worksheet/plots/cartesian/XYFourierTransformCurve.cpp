@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a Fourier transform
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -52,27 +53,16 @@ extern "C" {
 #include <QDebug>	// qWarning()
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
-	: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {
-	init();
+	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this)) {
 }
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd)
-	: XYCurve(name, dd) {
-	init();
+	: XYAnalysisCurve(name, dd) {
 }
-
 
 XYFourierTransformCurve::~XYFourierTransformCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYFourierTransformCurve::init() {
-	Q_D(XYFourierTransformCurve);
-
-	//TODO: read from the saved settings for XYFourierTransformCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYFourierTransformCurve::recalculate() {
@@ -90,17 +80,6 @@ QIcon XYFourierTransformCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYFourierTransformCurve::xDataColumnPath() const {
-	Q_D(const XYFourierTransformCurve);
-	return d->xDataColumnPath;
-}
-const QString& XYFourierTransformCurve::yDataColumnPath() const {
-	Q_D(const XYFourierTransformCurve);
-	return d->yDataColumnPath;
-}
-
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
 const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transformResult() const {
@@ -111,32 +90,6 @@ const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transfo
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYFourierTransformCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYFourierTransformCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYFourierTransformCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYFourierTransformCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYFourierTransformCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYFourierTransformCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYFourierTransformCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYFourierTransformCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYFourierTransformCurve, SetTransformData, XYFourierTransformCurve::TransformData, transformData, recalculate);
 void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::TransformData& transformData) {
 	Q_D(XYFourierTransformCurve);
@@ -146,10 +99,7 @@ void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::Tr
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
+XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner) : XYAnalysisCurvePrivate(owner),
 	q(owner) {
 
 }
@@ -158,9 +108,6 @@ XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
-
-// ...
-// see XYFitCurvePrivate
 
 void XYFourierTransformCurvePrivate::recalculate() {
 	QElapsedTimer timer;
@@ -329,14 +276,12 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyFourierTransformCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-fourier_transform-curve specific information
 	//transform data
 	writer->writeStartElement("transformData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->transformData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.last()) );
@@ -367,11 +312,6 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyFourierTransformCurve") {
-		reader->raiseError(i18n("no xy Fourier transform curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -384,15 +324,11 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "transformData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
-
 			READ_INT_VALUE("autoRange", transformData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.last());
@@ -403,7 +339,6 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
 		} else if (!preview && reader->name() == "transformResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", transformResult.available, int);
 			READ_INT_VALUE("valid", transformResult.valid, int);
 			READ_STRING_VALUE("status", transformResult.status);

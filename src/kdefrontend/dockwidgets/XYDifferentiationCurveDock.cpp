@@ -162,7 +162,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_differentiationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_differentiationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_differentiationCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
 	connect(m_differentiationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_differentiationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_differentiationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -231,8 +231,8 @@ void XYDifferentiationCurveDock::commentChanged() {
 }
 
 void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
-	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
-	if (type == XYCurve::DataSourceSpreadsheet) {
+	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -389,7 +389,7 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
-		if (m_differentiationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_differentiationCurve->xDataColumn();
 		else {
 			if (m_differentiationCurve->dataSourceCurve())
@@ -488,7 +488,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 
 	//no differentiation possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_differentiationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+	if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX!=0 && aspectY!=0);
@@ -545,7 +545,7 @@ void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* a
 	m_initializing = false;
 }
 
-void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
 	m_initializing = false;

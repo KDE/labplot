@@ -163,7 +163,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_integrationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_integrationCurve, SIGNAL(dataSourceTypeChanged(XYCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYCurve::DataSourceType)));
+	connect(m_integrationCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
 	connect(m_integrationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
 	connect(m_integrationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
 	connect(m_integrationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
@@ -232,8 +232,8 @@ void XYIntegrationCurveDock::commentChanged() {
 }
 
 void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
-	XYCurve::DataSourceType type = (XYCurve::DataSourceType)index;
-	if (type == XYCurve::DataSourceSpreadsheet) {
+	XYAnalysisCurve::DataSourceType type = (XYAnalysisCurve::DataSourceType)index;
+	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -326,7 +326,7 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = 0;
-		if (m_integrationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+		if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_integrationCurve->xDataColumn();
 		else {
 			if (m_integrationCurve->dataSourceCurve())
@@ -402,7 +402,7 @@ void XYIntegrationCurveDock::enableRecalculate() const {
 
 	//no integration possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_integrationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet) {
+	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX!=0 && aspectY!=0);
@@ -460,7 +460,7 @@ void XYIntegrationCurveDock::curveDescriptionChanged(const AbstractAspect* aspec
 	m_initializing = false;
 }
 
-void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYCurve::DataSourceType type) {
+void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
 	m_initializing = false;

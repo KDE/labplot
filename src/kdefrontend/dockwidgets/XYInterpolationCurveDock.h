@@ -30,6 +30,7 @@
 #define XYINTERPOLATIONCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "ui_xyinterpolationcurvedockgeneraltab.h"
 
@@ -87,7 +88,7 @@ private slots:
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
-	void curveDataSourceTypeChanged(XYCurve::DataSourceType);
+	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);

@@ -37,6 +37,7 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 extern "C" {
 #include <gsl/gsl_sort.h>
@@ -111,7 +112,17 @@ QMenu* Column::createContextMenu() {
 	//add curves where the column is currently in use
 	QVector<XYCurve*> curves = project()->children<XYCurve>(AbstractAspect::Recursive);
 	for (const auto* curve: curves) {
-		if (curve->dataSourceType() == XYCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) ) {
+		bool used = false;
+
+		if (dynamic_cast<const XYAnalysisCurve*>(curve)) {
+			if (dynamic_cast<const XYAnalysisCurve*>(curve)->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet && (curve->xColumn() == this || curve->yColumn() == this) )
+				used = true;
+		} else {
+				if (curve->xColumn() == this || curve->yColumn() == this)
+				used = true;
+		}
+
+		if (used) {
 			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);

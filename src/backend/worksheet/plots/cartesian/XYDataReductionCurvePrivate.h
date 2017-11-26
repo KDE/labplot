@@ -4,6 +4,7 @@
     Description          : Private members of XYDataReductionCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,33 +30,23 @@
 #ifndef XYDATAREDUCTIONCURVEPRIVATE_H
 #define XYDATAREDUCTIONCURVEPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 
 class XYDataReductionCurve;
 class Column;
 
-class XYDataReductionCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
-		~XYDataReductionCurvePrivate() override;
+class XYDataReductionCurvePrivate : public XYAnalysisCurvePrivate {
+public:
+	explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
+	~XYDataReductionCurvePrivate() override;
 
-		void recalculate();
+	void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be interpolated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be interpolated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+	XYDataReductionCurve::DataReductionData dataReductionData;
+	XYDataReductionCurve::DataReductionResult dataReductionResult;
 
-		XYDataReductionCurve::DataReductionData dataReductionData;
-		XYDataReductionCurve::DataReductionResult dataReductionResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result data reduction curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result data reduction curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYDataReductionCurve* const q;
+	XYDataReductionCurve* const q;
 };
 
 #endif

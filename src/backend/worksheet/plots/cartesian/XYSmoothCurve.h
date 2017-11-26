@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a smooth
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,73 +30,62 @@
 #ifndef XYSMOOTHCURVE_H
 #define XYSMOOTHCURVE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 extern "C" {
 #include "backend/nsl/nsl_smooth.h"
 }
 
 class XYSmoothCurvePrivate;
-class XYSmoothCurve: public XYCurve {
-	Q_OBJECT
+class XYSmoothCurve : public XYAnalysisCurve {
+Q_OBJECT
 
-	public:
-		struct SmoothData {
-			SmoothData() : type(nsl_smooth_type_moving_average), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
-				mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange(2) {};
+public:
+	struct SmoothData {
+		SmoothData() : type(nsl_smooth_type_moving_average), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
+			mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange(2) {};
 
-			nsl_smooth_type type;			// type of smoothing
-			unsigned int points;			// number of points
-			nsl_smooth_weight_type weight;		// type of weight
-			double percentile;			// percentile for percentile filter (0.0 .. 1.0)
-			unsigned order;				// order for Savitzky-Golay filter
-			nsl_smooth_pad_mode mode;		// mode of padding for edges
-			double lvalue, rvalue;			// values for constant padding
-			bool autoRange;				// use all data?
-			QVector<double> xRange;			// x range for integration
-		};
-		struct SmoothResult {
-			SmoothResult() : available(false), valid(false), elapsedTime(0) {};
+		nsl_smooth_type type;			// type of smoothing
+		unsigned int points;			// number of points
+		nsl_smooth_weight_type weight;		// type of weight
+		double percentile;			// percentile for percentile filter (0.0 .. 1.0)
+		unsigned order;				// order for Savitzky-Golay filter
+		nsl_smooth_pad_mode mode;		// mode of padding for edges
+		double lvalue, rvalue;			// values for constant padding
+		bool autoRange;				// use all data?
+		QVector<double> xRange;			// x range for integration
+	};
+	struct SmoothResult {
+		SmoothResult() : available(false), valid(false), elapsedTime(0) {};
 
-			bool available;
-			bool valid;
-			QString status;
-			qint64 elapsedTime;
-		};
+		bool available;
+		bool valid;
+		QString status;
+		qint64 elapsedTime;
+	};
 
-		explicit XYSmoothCurve(const QString& name);
-		~XYSmoothCurve() override;
+	explicit XYSmoothCurve(const QString& name);
+	~XYSmoothCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate() override;
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		const QString& xDataColumnPath() const;
-		const QString& yDataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
+	const SmoothResult& smoothResult() const;
 
-		CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
-		const SmoothResult& smoothResult() const;
+	typedef XYSmoothCurvePrivate Private;
 
-		typedef XYSmoothCurvePrivate Private;
+protected:
+	XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd);
 
-	protected:
-		XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd);
+private:
+	Q_DECLARE_PRIVATE(XYSmoothCurve)
 
-	private:
-		Q_DECLARE_PRIVATE(XYSmoothCurve)
-		void init();
-
-	signals:
-		friend class XYSmoothCurveSetXDataColumnCmd;
-		friend class XYSmoothCurveSetYDataColumnCmd;
-		void xDataColumnChanged(const AbstractColumn*);
-		void yDataColumnChanged(const AbstractColumn*);
-
-		friend class XYSmoothCurveSetSmoothDataCmd;
-		void smoothDataChanged(const XYSmoothCurve::SmoothData&);
+signals:
+	friend class XYSmoothCurveSetSmoothDataCmd;
+	void smoothDataChanged(const XYSmoothCurve::SmoothData&);
 };
 
 #endif

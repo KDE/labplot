@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 20016-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -54,26 +54,16 @@ extern "C" {
 #include <QIcon>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
-	: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
-	init();
+	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this)) {
 }
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd)
-	: XYCurve(name, dd) {
-	init();
+	: XYAnalysisCurve(name, dd) {
 }
 
 XYInterpolationCurve::~XYInterpolationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
-}
-
-void XYInterpolationCurve::init() {
-	Q_D(XYInterpolationCurve);
-
-	//TODO: read from the saved settings for XYInterpolationCurve?
-	d->lineType = XYCurve::Line;
-	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYInterpolationCurve::recalculate() {
@@ -91,17 +81,6 @@ QIcon XYInterpolationCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYInterpolationCurve::xDataColumnPath() const {
-	Q_D(const XYInterpolationCurve);
-	return d->xDataColumnPath;
-}
-const QString& XYInterpolationCurve::yDataColumnPath() const {
-	Q_D(const XYInterpolationCurve);
-	return d->yDataColumnPath;
-}
-
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
 const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpolationResult() const {
@@ -112,32 +91,6 @@ const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpola
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYInterpolationCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYInterpolationCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYInterpolationCurve);
-	if (column != d->xDataColumn) {
-		exec(new XYInterpolationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_S(XYInterpolationCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYInterpolationCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYInterpolationCurve);
-	if (column != d->yDataColumn) {
-		exec(new XYInterpolationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		handleSourceDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate);
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
@@ -147,11 +100,8 @@ void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::Inte
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0),
-	xColumn(0), yColumn(0),
-	xVector(0), yVector(0),
-	q(owner)  {
+XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner) : XYAnalysisCurvePrivate(owner),
+	q(owner) {
 
 }
 
@@ -159,9 +109,6 @@ XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
-
-// ...
-// see XYFitCurvePrivate
 
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
@@ -194,7 +141,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = 0;
 	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -494,14 +441,12 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyInterpolationCurve");
 
-	//write xy-curve information
-	XYCurve::save(writer);
+	//write the base class
+	XYAnalysisCurve::save(writer);
 
 	//write xy-interpolation-curve specific information
 	// interpolation data
 	writer->writeStartElement("interpolationData");
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->interpolationData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->interpolationData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->interpolationData.xRange.last()) );
@@ -536,11 +481,6 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
-		reader->raiseError(i18n("no xy interpolation curve element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
@@ -553,15 +493,11 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == "xyAnalysisCurve") {
+			if ( !XYAnalysisCurve::load(reader, preview) )
 				return false;
 		} else if (!preview && reader->name() == "interpolationData") {
 			attribs = reader->attributes();
-
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
-
 			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", interpolationData.xRange.last());
@@ -575,7 +511,6 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (!preview && reader->name() == "interpolationResult") {
 			attribs = reader->attributes();
-
 			READ_INT_VALUE("available", interpolationResult.available, int);
 			READ_INT_VALUE("valid", interpolationResult.valid, int);
 			READ_STRING_VALUE("status", interpolationResult.status);
