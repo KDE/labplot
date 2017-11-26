@@ -40,6 +40,7 @@
 #include "functions.h"
 
 #ifdef PDEBUG
+#include <stdio.h>
 #define pdebug(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define pdebug(...) {}
