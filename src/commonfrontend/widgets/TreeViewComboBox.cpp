@@ -94,7 +94,6 @@ void TreeViewComboBox::setHiddenAspects(QList<const AbstractAspect*> list) {
 	Sets the \a model for the view to present.
 */
 void TreeViewComboBox::setModel(QAbstractItemModel* model) {
-	DEBUG("TreeViewComboBox::setModel()");
 	m_treeView->setModel(model);
 
 	//show only the first column in the combo box
@@ -110,7 +109,6 @@ void TreeViewComboBox::setModel(QAbstractItemModel* model) {
 	\sa currentIndex()
 */
 void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
-	DEBUG("TreeViewComboBox::setCurrentModelIndex()");
 	m_treeView->setCurrentIndex(index);
 	QComboBox::setItemText(0, index.data().toString());
 }
@@ -120,7 +118,6 @@ void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
 	\sa setCurrentModelIndex()
 */
 QModelIndex TreeViewComboBox::currentModelIndex() const {
-	DEBUG("TreeViewComboBox::currentModelIndex()");
 	return m_treeView->currentIndex();
 }
 
@@ -171,9 +168,7 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 }
 
 //SLOTs
-
 void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
-	DEBUG("TreeViewComboBox::treeViewIndexActivated()");
 	if (index.internalPointer()) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
@@ -195,7 +190,6 @@ void TreeViewComboBox::filterChanged(const QString& text) {
 }
 
 bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
-	DEBUG("TreeViewComboBox::filter()");
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
@@ -232,7 +226,6 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
-	DEBUG("TreeViewComboBox::isTopLevel()");
 	foreach (const char* classString, m_topLevelClasses) {
 		if (aspect->inherits(classString)) {
 			if ( strcmp(classString, "Spreadsheet") == 0 ) {
