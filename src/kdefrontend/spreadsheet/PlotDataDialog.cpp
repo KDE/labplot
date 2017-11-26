@@ -32,6 +32,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
@@ -431,48 +432,23 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			plot->addChild(curve);
 		}
 
-		//TODO: introduce a base class for all analysis curves and refactor this part
+		XYAnalysisCurve* analysisCurve;
 		switch (m_analysisAction) {
-			case DataReduction: {
-				XYDataReductionCurve* analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case DataReduction:
+				analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
 				break;
-			}
-			case Differentiation: {
-				XYDifferentiationCurve* analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case Differentiation:
+				analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));
 				break;
-			}
-			case Integration: {
-				XYIntegrationCurve* analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case Integration:
+				analysisCurve = new XYIntegrationCurve(i18n("Integral of '%1'", name));
 				break;
-			}
-			case Interpolation: {
-				XYInterpolationCurve* analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case Interpolation:
+				analysisCurve = new XYInterpolationCurve(i18n("Interpolation of '%1'", name));
 				break;
-			}
-			case Smoothing: {
-				XYSmoothCurve* analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case Smoothing:
+				analysisCurve = new XYSmoothCurve(i18n("Smoothing of '%1'", name));
 				break;
-			}
 			case FitLinear:
 			case FitPower:
 			case FitExp1:
@@ -483,24 +459,19 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			case FitTan:
 			case FitTanh:
 			case FitErrFunc:
-			case FitCustom: {
-				XYFitCurve* analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->initFitData(m_analysisAction);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case FitCustom:
+				analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
+				static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 				break;
-			}
-			case FourierFilter: {
-				XYFourierFilterCurve* analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
-				analysisCurve->setXDataColumn(xColumn);
-				analysisCurve->setYDataColumn(yColumn);
-				analysisCurve->recalculate();
-				plot->addChild(analysisCurve);
+			case FourierFilter:
+				analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 				break;
-			}
 		}
+
+		analysisCurve->setXDataColumn(xColumn);
+		analysisCurve->setYDataColumn(yColumn);
+		analysisCurve->recalculate();
+		plot->addChild(analysisCurve);
 	}
 }
 
