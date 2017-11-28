@@ -215,7 +215,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const double continuity = interpolationData.continuity;
 	const double bias = interpolationData.bias;
 	const nsl_interp_evaluate evaluate = interpolationData.evaluate;
-	const unsigned int npoints = interpolationData.npoints;
+	const size_t npoints = interpolationData.npoints;
 
 	DEBUG("type:"<<nsl_interp_type_name[type]);
 	DEBUG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
@@ -506,7 +506,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("tension", interpolationData.tension);
 			READ_DOUBLE_VALUE("continuity", interpolationData.continuity);
 			READ_DOUBLE_VALUE("bias", interpolationData.bias);
-			READ_INT_VALUE("npoints", interpolationData.npoints, unsigned int);
+			READ_INT_VALUE("npoints", interpolationData.npoints, size_t);
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (!preview && reader->name() == "interpolationResult") {

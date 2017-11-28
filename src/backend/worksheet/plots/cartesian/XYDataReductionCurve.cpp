@@ -175,7 +175,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		xmax = dataReductionData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -375,7 +375,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("valid", dataReductionResult.valid, int);
 			READ_STRING_VALUE("status", dataReductionResult.status);
 			READ_INT_VALUE("time", dataReductionResult.elapsedTime, int);
-			READ_INT_VALUE("npoints", dataReductionResult.npoints, unsigned int);
+			READ_INT_VALUE("npoints", dataReductionResult.npoints, size_t);
 			READ_DOUBLE_VALUE("posError", dataReductionResult.posError);
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {

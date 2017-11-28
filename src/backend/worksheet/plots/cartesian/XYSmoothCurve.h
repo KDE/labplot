@@ -46,10 +46,10 @@ public:
 			mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange(2) {};
 
 		nsl_smooth_type type;			// type of smoothing
-		unsigned int points;			// number of points
+		size_t points;				// number of points
 		nsl_smooth_weight_type weight;		// type of weight
 		double percentile;			// percentile for percentile filter (0.0 .. 1.0)
-		unsigned order;				// order for Savitzky-Golay filter
+		int order;				// order for Savitzky-Golay filter
 		nsl_smooth_pad_mode mode;		// mode of padding for edges
 		double lvalue, rvalue;			// values for constant padding
 		bool autoRange;				// use all data?

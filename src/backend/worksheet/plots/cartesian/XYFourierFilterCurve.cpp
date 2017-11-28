@@ -215,7 +215,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	// filter settings
 	const nsl_filter_type type = filterData.type;
 	const nsl_filter_form form = filterData.form;
-	const unsigned int order = filterData.order;
+	const int order = filterData.order;
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const nsl_filter_cutoff_unit unit = filterData.unit, unit2 = filterData.unit2;
 
@@ -346,7 +346,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.last());
 			READ_INT_VALUE("type", filterData.type, nsl_filter_type);
 			READ_INT_VALUE("form", filterData.form, nsl_filter_form);
-			READ_INT_VALUE("order", filterData.order, unsigned int);
+			READ_INT_VALUE("order", filterData.order, int);
 			READ_DOUBLE_VALUE("cutoff", filterData.cutoff);
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);

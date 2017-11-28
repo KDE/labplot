@@ -96,6 +96,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 	https://marcmutz.wordpress.com/effective-qt/containers/
 * In C++ use range-based loops instead of foreach/Q_FOREACH
 	https://www.kdab.com/goodbye-q_foreach/
+* For integer data types int is preferred for small numbers and size_t for big, unsigned values. Use double as floating point type.
 * The keyword 'auto' can be used in range-based loops but should be avoided else to maintain readability
 * use smart pointers unique_ptr when possible and shared_ptr otherwise.
 * Use the 'override' specifier when overriding virtual functions from the base class

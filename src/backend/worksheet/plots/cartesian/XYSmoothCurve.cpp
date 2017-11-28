@@ -179,7 +179,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		xmax = smoothData.xRange.last();
 	}
 
-	for (int row=0; row<tmpXDataColumn->rowCount(); ++row) {
+	for (int row = 0; row<tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
 			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
@@ -208,10 +208,10 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	// smooth settings
 	const nsl_smooth_type type = smoothData.type;
-	const unsigned int points = smoothData.points;
+	const size_t points = smoothData.points;
 	const nsl_smooth_weight_type weight = smoothData.weight;
 	const double percentile = smoothData.percentile;
-	const unsigned int order = smoothData.order;
+	const int order = smoothData.order;
 	const nsl_smooth_pad_mode mode = smoothData.mode;
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
@@ -225,7 +225,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	DEBUG("const. values ="<<lvalue<<rvalue);
 
 ///////////////////////////////////////////////////////////
-	int status=0;
+	int status = 0;
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:
@@ -331,10 +331,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.last());
 			READ_INT_VALUE("type", smoothData.type, nsl_smooth_type);
-			READ_INT_VALUE("points", smoothData.points, unsigned int);
+			READ_INT_VALUE("points", smoothData.points, size_t);
 			READ_INT_VALUE("weight", smoothData.weight, nsl_smooth_weight_type);
 			READ_DOUBLE_VALUE("percentile", smoothData.percentile);
-			READ_INT_VALUE("order", smoothData.order, unsigned int);
+			READ_INT_VALUE("order", smoothData.order, int);
 			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);

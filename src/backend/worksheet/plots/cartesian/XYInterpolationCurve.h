@@ -51,7 +51,7 @@ public:
 		nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
 		double tension, continuity, bias;	// TCB values
 		nsl_interp_evaluate evaluate;		// what to evaluate
-		unsigned int npoints;			// nr. of points
+		size_t npoints;				// nr. of points
 		XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
 		bool autoRange;				// use all data?
 		QVector<double> xRange;			// x range for interpolation

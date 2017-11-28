@@ -63,13 +63,13 @@ extern double nsl_smooth_pad_constant_lvalue, nsl_smooth_pad_constant_rvalue;
 /********* Smoothing algorithms **********/
 
 /* Moving average */
-int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode);
+int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode);
 
 /* Lagged moving average */
-int nsl_smooth_moving_average_lagged(double *data, unsigned int n, unsigned int points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode);
+int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode);
 
 /* Percentile filter */
-int nsl_smooth_percentile(double *data, unsigned int n, unsigned int points, double percentile, nsl_smooth_pad_mode mode);
+int nsl_smooth_percentile(double *data, size_t n, size_t points, double percentile, nsl_smooth_pad_mode mode);
 
 /* Savitzky-Golay coefficents */
 /**
@@ -86,7 +86,7 @@ int nsl_smooth_percentile(double *data, unsigned int n, unsigned int points, dou
  * For a short description of the mathematical background, see
  * http://www.statistics4u.info/fundstat_eng/cc_filter_savgol_math.html
  */
-int nsl_smooth_savgol_coeff(int points, int order, gsl_matrix *h);
+int nsl_smooth_savgol_coeff(size_t points, int order, gsl_matrix *h);
 
 /* set values for constant padding */
 void nsl_smooth_pad_constant_set(double lvalue, double rvalue);
@@ -100,10 +100,10 @@ void nsl_smooth_pad_constant_set(double lvalue, double rvalue);
  * operation can be implemented as a convolution. This is considerably more efficient than a more
  * generic method able to handle non-uniform input data.
  */
-int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigned int order, nsl_smooth_pad_mode mode);
+int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smooth_pad_mode mode);
 
 /* Savitzky-Golay default smooting (interp) */
-int nsl_smooth_savgol_default(double *data, unsigned int n, unsigned int points, unsigned int order);
+int nsl_smooth_savgol_default(double *data, size_t n, size_t points, int order);
 
 /* TODO SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout)
 	see SmoothFilter.cpp of libscidavis

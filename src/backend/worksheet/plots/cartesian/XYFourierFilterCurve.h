@@ -47,7 +47,7 @@ public:
 
 		nsl_filter_type type;
 		nsl_filter_form form;
-		unsigned int order;
+		int order;
 		double cutoff;			// (low) cutoff
 		nsl_filter_cutoff_unit unit;	// (low) value unit
 		double cutoff2;			// high cutoff
