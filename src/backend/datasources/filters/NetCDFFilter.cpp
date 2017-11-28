@@ -611,7 +611,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 				QStringList line;
 				for (size_t j = 0; j < cols; j++) {
 					if (dataContainer[0])
-						static_cast<QVector<double>*>(dataContainer[j-(size_t)startColumn+1])->operator[](i-startRow+1) = data[i][j];
+						static_cast<QVector<double>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i][(int)j];
 					else
 						line << QString::number(data[i][j]);
 				}
