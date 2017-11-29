@@ -361,7 +361,7 @@ void ImportFileDialog::checkOkButton() {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket* socket = new QTcpSocket(this);
-			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QTcpSocket::ReadOnly);
+			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QTcpSocket::ReadOnly);
 			bool tcpSocketConnected = socket->waitForConnected(2000);
 
 			okButton->setEnabled(tcpSocketConnected);
@@ -386,7 +386,7 @@ void ImportFileDialog::checkOkButton() {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket* socket = new QUdpSocket(this);
-			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toInt(), QUdpSocket::ReadOnly);
+			socket->connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QUdpSocket::ReadOnly);
 			bool udpSocketConnected = socket->waitForConnected(2000);
 
 			okButton->setEnabled(udpSocketConnected);
