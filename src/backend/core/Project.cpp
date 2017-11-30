@@ -367,44 +367,19 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					curve->suppressRetransform(true);
 
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
-					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(curve);
-					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(curve);
-					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(curve);
-					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(curve);
-					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(curve);
-					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(curve);
-					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(curve);
+					XYAnalysisCurve* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						if (!preview)
 							equationCurve->recalculate();
-					} else if (dataReductionCurve) {
-						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
-					} else if (differentiationCurve) {
-						RESTORE_COLUMN_POINTER(differentiationCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(differentiationCurve, yDataColumn, YDataColumn);
-					} else if (integrationCurve) {
-						RESTORE_COLUMN_POINTER(integrationCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(integrationCurve, yDataColumn, YDataColumn);
-					} else if (interpolationCurve) {
-						RESTORE_COLUMN_POINTER(interpolationCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(interpolationCurve, yDataColumn, YDataColumn);
-					} else if (smoothCurve) {
-						RESTORE_COLUMN_POINTER(smoothCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(smoothCurve, yDataColumn, YDataColumn);
-					} else if (fitCurve) {
-						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
-						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-					} else if (filterCurve) {
-						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
-					} else if (dftCurve) {
-						RESTORE_COLUMN_POINTER(dftCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(dftCurve, yDataColumn, YDataColumn);
+					} else if (analysisCurve) {
+						RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
+						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+						if (fitCurve) {
+							RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+							RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
+						}
 					} else {
 						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);

@@ -432,7 +432,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			plot->addChild(curve);
 		}
 
-		XYAnalysisCurve* analysisCurve;
+		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
 			case DataReduction:
 				analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
@@ -468,10 +468,12 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 				break;
 		}
 
-		analysisCurve->setXDataColumn(xColumn);
-		analysisCurve->setYDataColumn(yColumn);
-		analysisCurve->recalculate();
-		plot->addChild(analysisCurve);
+		if (analysisCurve != nullptr) {
+			analysisCurve->setXDataColumn(xColumn);
+			analysisCurve->setYDataColumn(yColumn);
+			analysisCurve->recalculate();
+			plot->addChild(analysisCurve);
+		}
 	}
 }
 
