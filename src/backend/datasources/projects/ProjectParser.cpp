@@ -42,7 +42,7 @@ void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
 
 	//delete the previous project object
-	if (m_project != nullptr) {
+	if (m_project) {
 		delete m_project;
 		m_project = nullptr;
 	}

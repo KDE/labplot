@@ -32,6 +32,14 @@
 #include <liborigin/OriginFile.h>
 #include "kdefrontend/datasources/ImportOpj.h"
 
+#include "backend/core/Workbook.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/note/Note.h"
+#include "backend/worksheet/Worksheet.h"
+
+#include <QDateTime>
+
 /*!
 \class OriginProjectParser
 \brief parser for Origin projects.
@@ -48,25 +56,73 @@ QAbstractItemModel* OriginProjectParser::model() {
 	if (m_project == nullptr)
 		m_project = new Project();
 
-	//parse the OPJ file and create a Project object for the preview
-	ImportOpj(m_project, m_projectFileName, true);
-	bool rc = true;
-
-	//TODO
-	//	m_project->setName("Test");
-
-	RESET_CURSOR;
-
 	AspectTreeModel* model = nullptr;
-	if (rc) {
-		model = new AspectTreeModel(m_project);
-		model->setReadOnly(true);
+
+	//read and parse the opj-file
+	OriginFile opj((const char*)m_projectFileName.toLocal8Bit());
+	if (!opj.parse()) {
+		RESET_CURSOR;
+		return model;
 	}
 
+	//convert the project tree from liborigin' representation to LabPlot's project object
+	const tree<Origin::ProjectNode>* projectTree = opj.project();
+	for (tree<Origin::ProjectNode>::iterator it = projectTree->begin(projectTree->begin()); it != projectTree->end(projectTree->begin()); ++it) {
+		//name
+		QString name(it->name.c_str());
+
+		//creation time
+		//this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
+		char time_str[21];
+		strftime(time_str, sizeof(time_str), "%F %T", gmtime(&(*it).creationDate));
+		std::cout <<  string(projectTree->depth(it) - 1, ' ') <<  (*it).name.c_str() << "\t" << time_str << endl;
+		QDateTime creationTime = QDateTime::fromString(QString(time_str), Qt::ISODate);
+
+		if (it == projectTree->begin(projectTree->begin()) && it->type == Origin::ProjectNode::Folder) {
+			m_project->setName(name);
+			m_project->setCreationTime(creationTime);
+			continue;
+		}
+
+		//type
+		AbstractAspect* aspect = nullptr;
+		switch (it->type) {
+		case Origin::ProjectNode::Folder:
+			aspect = new Folder(name);
+			break;
+		case Origin::ProjectNode::SpreadSheet:
+			aspect = new Workbook(0, name);
+			break;
+		case Origin::ProjectNode::Graph:
+			aspect = new Worksheet(0, name);
+			break;
+		case Origin::ProjectNode::Matrix:
+			aspect = new Matrix(0, name);
+			break;
+		case Origin::ProjectNode::Note:
+			aspect = new Note(name);
+			break;
+		case Origin::ProjectNode::Excel:
+		case Origin::ProjectNode::Graph3D:
+		default:
+			//TODO: add UnsupportedAspect
+			break;
+		}
+
+		if (aspect) {
+			m_project->addChildFast(aspect);
+			aspect->setCreationTime(creationTime);
+		}
+	}
+
+	model = new AspectTreeModel(m_project);
+	model->setReadOnly(true);
+
+	RESET_CURSOR;
 	return model;
 }
 
 void OriginProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
 	Q_UNUSED(selectedPathes);
-	ImportOpj(folder, m_projectFileName, true);
+	ImportOpj(folder, m_projectFileName, false);
 }
