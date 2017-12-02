@@ -277,7 +277,7 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 
 size_t nsl_geom_linesim_nthpoint(const size_t n, const int step, size_t index[]) {
 	if (step < 1) {
-		printf("step size must be > 0 (given: %zd)\n", step);
+		printf("step size must be > 0 (given: %d)\n", step);
 		return 0;
 	}
 
