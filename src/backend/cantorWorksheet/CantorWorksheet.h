@@ -42,8 +42,9 @@ namespace KParts {
 class ReadWritePart;
 }
 
-class QAbstractItemModel;
+class CantorWorksheetView;
 class Column;
+class QAbstractItemModel;
 
 class CantorWorksheet : public AbstractPart, public scripted {
 	Q_OBJECT
@@ -67,6 +68,7 @@ public:
 	QList<Cantor::PanelPlugin*> getPlugins();
 
 private:
+	mutable CantorWorksheetView* m_view;
 	QString m_backendName;
 	Cantor::Session* m_session;
 	KParts::ReadWritePart* m_part;

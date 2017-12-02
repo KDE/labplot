@@ -4,7 +4,7 @@
     Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -35,6 +35,8 @@
 class Spreadsheet;
 class DatapickerCurve;
 class DatapickerImage;
+class DatapickerView;
+
 class QXmlStreamWriter;
 class XmlStreamReader;
 class Transform;
@@ -74,6 +76,7 @@ public slots:
 	void childSelected(const AbstractAspect*) override;
 
 private:
+	mutable DatapickerView* m_view;
 	DatapickerCurve* m_activeCurve;
 	Transform* m_transform;
 	DatapickerImage* m_image;

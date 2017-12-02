@@ -40,6 +40,7 @@
 #include <QBrush>
 
 class DatapickerImagePrivate;
+class DatapickerImageView;
 class ImageEditor;
 class Segments;
 
@@ -135,6 +136,7 @@ private:
 	void initSceneParameters();
 
 	DatapickerImagePrivate* const d;
+	mutable DatapickerImageView* m_view;
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
 

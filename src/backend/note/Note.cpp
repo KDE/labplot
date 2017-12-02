@@ -41,7 +41,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-Note::Note(const QString& name) : AbstractPart(name) {
+Note::Note(const QString& name) : AbstractPart(name), m_view(nullptr) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -59,18 +59,16 @@ bool Note::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	bool ret;
-    if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
-		NoteView* view = reinterpret_cast<NoteView*>(m_view);
-		view->print(&printer);
-	}
+    if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+		m_view->print(&printer);
+
 	delete dlg;
 	return ret;
 }
 
 bool Note::printPreview() const {
-	const NoteView* view = reinterpret_cast<const NoteView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &NoteView::print);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &NoteView::print);
 	return dlg->exec();
 }
 
@@ -114,10 +112,11 @@ const QFont& Note::textFont() const {
 }
 
 QWidget* Note::view() const {
-	if (!m_view)
+	if (!m_partView) {
 		m_view = new NoteView(const_cast<Note*>(this));
-
-	return m_view;
+		m_partView = m_view;
+	}
+	return m_partView;
 }
 
 //##############################################################################

@@ -61,7 +61,7 @@
 */
 
 Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name) {
+	: AbstractDataSource(engine, name), m_view(nullptr) {
 
 	if (!loading)
 		init();
@@ -88,25 +88,23 @@ void Spreadsheet::init() {
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
 QWidget* Spreadsheet::view() const {
-	if (!m_view)
+	if (!m_partView) {
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
-
-	return m_view;
+		m_partView = m_view;
+	}
+	return m_partView;
 }
 
 bool Spreadsheet::exportView() const {
-	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
-	return view->exportView();
+	return m_view->exportView();
 }
 
 bool Spreadsheet::printView() {
-	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
-	return view->printView();
+	return m_view->printView();
 }
 
 bool Spreadsheet::printPreview() const {
-	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_view);
-	return view->printPreview();
+	return m_view->printPreview();
 }
 
 /*!
@@ -928,6 +926,6 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_view)
-		reinterpret_cast<SpreadsheetView*>(m_view)->resizeHeader();
+	if (m_view != nullptr)
+		m_view->resizeHeader();
 }

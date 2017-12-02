@@ -58,7 +58,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -68,7 +68,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
 
 	if (!loading)
 		init();
@@ -118,12 +118,12 @@ QMenu* Matrix::createContextMenu() {
 }
 
 QWidget* Matrix::view() const {
-	if (!m_view) {
-		MatrixView* view = new MatrixView(const_cast<Matrix*>(this));
-		m_model = view->model();
-		m_view = view;
+	if (!m_partView) {
+		m_view= new MatrixView(const_cast<Matrix*>(this));
+		m_partView = m_view;
+		m_model = m_view->model();
 	}
-	return m_view;
+	return m_partView;
 }
 
 bool Matrix::exportView() const {
@@ -133,14 +133,13 @@ bool Matrix::exportView() const {
 
 	//TODO FITS filter to decide if it can be exported to both
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-	if (reinterpret_cast<const MatrixView*>(m_view)->selectedColumnCount() == 0) {
+	if (m_view->selectedColumnCount() == 0) {
 		dlg->setExportSelection(false);
 	}
 
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const QString path = dlg->path();
-		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		WAIT_CURSOR;
 
 		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
@@ -150,14 +149,14 @@ bool Matrix::exportView() const {
 			const bool gridLines = dlg->gridLines();
 			const bool entire = dlg->entireSpreadheet();
 			const bool captions = dlg->captions();
-			view->exportToLaTeX(path, verticalHeader, horizontalHeader,
+			m_view->exportToLaTeX(path, verticalHeader, horizontalHeader,
 				latexHeader, gridLines, entire, captions);
 		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
 			const int exportTo = dlg->exportToFits();
-			view->exportToFits(path, exportTo );
+			m_view->exportToFits(path, exportTo );
 		} else {
 			const QString separator = dlg->separator();
-			view->exportToFile(path, separator);
+			m_view->exportToFile(path, separator);
 		}
 		RESET_CURSOR;
     	}
@@ -171,19 +170,17 @@ bool Matrix::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
-		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
-		view->print(&printer);
-	}
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+		m_view->print(&printer);
+
 	delete dlg;
 
 	return ret;
 }
 
 bool Matrix::printPreview() const {
-	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &MatrixView::print);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &MatrixView::print);
 	return dlg->exec();
 }
 
@@ -283,7 +280,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	m_model->updateHeader();
 
 	if (m_view)
-		(reinterpret_cast<MatrixView*>(m_view))->resizeHeaders();
+		m_view->resizeHeaders();
 
 	emit headerFormatChanged(format);
 }
@@ -508,7 +505,7 @@ void Matrix::copy(Matrix* other) {
 	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
 	if (m_view)
-		reinterpret_cast<MatrixView*>(m_view)->adjustHeaders();
+		m_view->adjustHeaders();
 
 	endMacro();
 	RESET_CURSOR;
@@ -525,7 +522,7 @@ void Matrix::duplicate() {
 void Matrix::addRows() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
+	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 rows", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
@@ -535,7 +532,7 @@ void Matrix::addRows() {
 void Matrix::addColumns() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
+	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
@@ -771,7 +768,7 @@ MatrixPrivate::~MatrixPrivate() {
 }
 
 void MatrixPrivate::updateViewHeader() {
-	reinterpret_cast<MatrixView*>(q->m_view)->model()->updateHeader();
+	q->m_view->model()->updateHeader();
 }
 
 /*!

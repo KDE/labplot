@@ -59,7 +59,7 @@
  * * \ingroup worksheet
  */
 Worksheet::Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)) {
+	: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)), m_view(nullptr) {
 
 	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
@@ -170,11 +170,12 @@ QMenu* Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget* Worksheet::view() const {
-	if (!m_view) {
+	if (!m_partView) {
 		m_view = new WorksheetView(const_cast<Worksheet*>(this));
-		connect(dynamic_cast<WorksheetView*>(m_view), &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
+		m_partView = m_view;
+		connect(m_view, &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
 	}
-	return m_view;
+	return m_partView;
 }
 
 /*!
@@ -203,9 +204,8 @@ bool Worksheet::exportView() const {
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 
-		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
 		WAIT_CURSOR;
-		view->exportToFile(path, format, area, background, resolution);
+		m_view->exportToFile(path, format, area, background, resolution);
 		RESET_CURSOR;
 	}
 	delete dlg;
@@ -217,18 +217,16 @@ bool Worksheet::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	bool ret;
-	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
-		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
-		view->print(&printer);
-	}
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+		m_view->print(&printer);
+
 	delete dlg;
 	return ret;
 }
 
 bool Worksheet::printPreview() const {
-	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &WorksheetView::print);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	return dlg->exec();
 }
 
@@ -384,10 +382,8 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 }
 
 void Worksheet::setIsClosing() {
-	if (m_view) {
-		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
-		view->setIsClosing();
-	}
+	if (m_view != nullptr)
+		m_view->setIsClosing();
 }
 
 void Worksheet::update() {

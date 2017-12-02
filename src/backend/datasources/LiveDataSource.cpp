@@ -131,9 +131,9 @@ void LiveDataSource::initActions() {
 }
 
 QWidget* LiveDataSource::view() const {
-	if (!m_view)
-		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
-	return m_view;
+	if (!m_partView)
+		m_partView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+	return m_partView;
 }
 
 /*!

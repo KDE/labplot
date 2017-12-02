@@ -45,7 +45,10 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
-	: AbstractPart(name), scripted(engine), m_activeCurve(0), m_transform(new Transform()), m_image(0) {
+	: AbstractPart(name), scripted(engine),
+	m_activeCurve(nullptr),
+	m_transform(new Transform()),
+	m_image(nullptr) {
 
 	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
 	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
@@ -86,9 +89,11 @@ QMenu* Datapicker::createContextMenu() {
 }
 
 QWidget* Datapicker::view() const {
-	if (!m_view)
+	if (!m_partView) {
 		m_view = new DatapickerView(const_cast<Datapicker*>(this));
-	return m_view;
+		m_partView = m_view;
+	}
+	return m_partView;
 }
 
 
@@ -130,7 +135,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 	if (!m_view)
 		return 0;
 
-	const int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
+	const int index = m_view->currentIndex();
 	if(index>0) {
 		DatapickerCurve* curve = child<DatapickerCurve>(index-1);
 		return curve->child<Spreadsheet>(0);

@@ -39,6 +39,7 @@ class QGraphicsScene;
 class QRectF;
 
 class WorksheetPrivate;
+class WorksheetView;
 
 class Worksheet: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -114,6 +115,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void loadTheme(const QString&);
 
 		WorksheetPrivate* const d;
+		mutable WorksheetView* m_view;
 		friend class WorksheetPrivate;
 
 	 private slots:

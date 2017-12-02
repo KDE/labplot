@@ -165,6 +165,7 @@ private:
 
 	MatrixPrivate* const d;
 	mutable MatrixModel* m_model;
+	mutable MatrixView* m_view;
 
 	friend class MatrixPrivate;
 	template <typename T> friend class MatrixRemoveColumnsCmd;

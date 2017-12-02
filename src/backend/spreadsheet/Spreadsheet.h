@@ -33,6 +33,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 
 class AbstractFileFilter;
+class SpreadsheetView;
 template <class T> class QList;
 
 class Spreadsheet : public AbstractDataSource {
@@ -100,6 +101,7 @@ public slots:
 
 private:
 	void init();
+	mutable SpreadsheetView* m_view;
 
 private slots:
 	void childSelected(const AbstractAspect*) override;

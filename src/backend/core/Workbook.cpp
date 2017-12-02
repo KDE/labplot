@@ -42,7 +42,7 @@
  * \ingroup backend
  */
 Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
-	: AbstractPart(name), scripted(engine) {
+	: AbstractPart(name), scripted(engine), m_view(nullptr) {
 }
 
 QIcon Workbook::icon() const {
@@ -60,9 +60,11 @@ QMenu* Workbook::createContextMenu() {
 }
 
 QWidget* Workbook::view() const {
-	if (!m_view)
+	if (!m_partView) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
-	return m_view;
+		m_partView = m_view;
+	}
+	return m_partView;
 }
 
 bool Workbook::exportView() const {
@@ -106,26 +108,26 @@ bool Workbook::printPreview() const {
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
 	if (!m_view)
-		return 0;
+		return nullptr;
 
-	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
+	int index = m_view->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Spreadsheet*>(aspect);
 	}
-	return 0;
+	return nullptr;
 }
 
 Matrix* Workbook::currentMatrix() const {
 	if (!m_view)
-		return 0;
+		return nullptr;
 
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Matrix*>(aspect);
 	}
-	return 0;
+	return nullptr;
 }
 
 /*!

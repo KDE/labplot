@@ -34,35 +34,34 @@ class PartMdiView;
 class QMenu;
 
 class AbstractPart : public AbstractAspect {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit AbstractPart(const QString &name);
-		~AbstractPart() override;
+public:
+	explicit AbstractPart(const QString &name);
+	~AbstractPart() override;
 
-		virtual QWidget* view() const = 0;
-		void deleteView() const;
+	virtual QWidget* view() const = 0;
+	void deleteView() const;
 
-		PartMdiView* mdiSubWindow() const;
-		bool hasMdiSubWindow() const;
-		void deleteMdiSubWindow();
+	PartMdiView* mdiSubWindow() const;
+	bool hasMdiSubWindow() const;
 
-		QMenu* createContextMenu() override;
-        virtual bool exportView() const = 0;
-        virtual bool printView() = 0;
-        virtual bool printPreview() const = 0;
+	QMenu* createContextMenu() override;
+	virtual bool exportView() const = 0;
+	virtual bool printView() = 0;
+	virtual bool printPreview() const = 0;
 
-	private:
-		mutable PartMdiView* m_mdiWindow;
+private:
+	mutable PartMdiView* m_mdiWindow;
 
-	protected:
-		mutable QWidget* m_view;
+protected:
+	mutable QWidget* m_partView;
 
-	signals:
-		void showRequested();
-		void exportRequested();
-		void printRequested();
-		void printPreviewRequested();
+signals:
+	void showRequested();
+	void exportRequested();
+	void printRequested();
+	void printPreviewRequested();
 };
 
 #endif // ifndef ABSTRACT_PART_H

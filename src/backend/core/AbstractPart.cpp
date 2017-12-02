@@ -33,6 +33,7 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerCurve.h"
+
 #include <QMenu>
 #include <QStyle>
 
@@ -42,14 +43,11 @@
  * \class AbstractPart
  * \brief Base class of Aspects with MDI windows as views (AspectParts).
  */
-AbstractPart::AbstractPart(const QString &name) : AbstractAspect(name),
-	m_mdiWindow(0), m_view(0) {
+AbstractPart::AbstractPart(const QString& name) : AbstractAspect(name),
+	m_mdiWindow(nullptr), m_partView(nullptr) {
 }
 
 AbstractPart::~AbstractPart() {
-	if (m_view)
-		delete m_view;
-
 	if (m_mdiWindow)
 		delete m_mdiWindow;
 }
@@ -82,16 +80,6 @@ bool AbstractPart::hasMdiSubWindow() const {
 }
 
 /*!
- * this function is called in MainWin when an aspect is removed from the project.
- * deletes the view and it's mdi-subwindow-wrapper
- */
-void AbstractPart::deleteMdiSubWindow() {
-	deleteView();
-	delete m_mdiWindow;
-	m_mdiWindow = 0;
-}
-
-/*!
  * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view,
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
@@ -100,14 +88,14 @@ void AbstractPart::deleteView() const {
 	//here just set the pointer to 0.
     if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())
             || dynamic_cast<const Datapicker*>(parentAspect()->parentAspect())) {
-		m_view = 0;
+		m_partView = nullptr;
 		return;
 	}
 
-	if (m_view) {
-		delete m_view;
-		m_view = 0;
-		m_mdiWindow = 0;
+	if (m_partView) {
+		delete m_partView;
+		m_partView = nullptr;
+		m_mdiWindow = nullptr;
 	}
 }
 
@@ -115,7 +103,7 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu * menu = AbstractAspect::createContextMenu();
+	QMenu* menu = AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	menu->addSeparator();
 
@@ -126,20 +114,19 @@ QMenu* AbstractPart::createContextMenu() {
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();
-		QAction *action_temp;
 		if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			action_temp = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
-			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
+			QAction* action = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
+			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
 		}
 
 		if(!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
-			action_temp = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
-			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
+			QAction* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
+			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
 		}
 
 		if(!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
-			action_temp = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
-			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
+			QAction* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
+			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}
 	} else {
 		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry

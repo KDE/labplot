@@ -63,8 +63,9 @@ DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString&
 	  saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
 	  valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
 	  intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
-	  m_magnificationWindow(0),
+	  m_magnificationWindow(nullptr),
 	  d(new DatapickerImagePrivate(this)),
+	  m_view(nullptr),
 	  m_segments(new Segments(this)) {
 
 	if (!loading)
@@ -141,11 +142,12 @@ void DatapickerImage::createContextMenu(QMenu* menu) {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget* DatapickerImage::view() const {
-	if (!m_view) {
+	if (!m_partView) {
 		m_view = new DatapickerImageView(const_cast<DatapickerImage *>(this));
-		connect(static_cast<DatapickerImageView*>(m_view), &DatapickerImageView::statusInfo, this, &DatapickerImage::statusInfo);
+		m_partView = m_view;
+		connect(m_view, &DatapickerImageView::statusInfo, this, &DatapickerImage::statusInfo);
 	}
-	return m_view;
+	return m_partView;
 }
 
 bool DatapickerImage::exportView() const {
@@ -157,9 +159,8 @@ bool DatapickerImage::exportView() const {
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
-		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		WAIT_CURSOR;
-		view->exportToFile(path, format, resolution);
+		m_view->exportToFile(path, format, resolution);
 		RESET_CURSOR;
 	}
 	delete dlg;
@@ -171,18 +172,16 @@ bool DatapickerImage::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
-	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
-		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
-		view->print(&printer);
-	}
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+		m_view->print(&printer);
+
 	delete dlg;
 	return ret;
 }
 
 bool DatapickerImage::printPreview() const {
-	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view, &DatapickerImageView::print);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &DatapickerImageView::print);
 	return dlg->exec();
 }
 

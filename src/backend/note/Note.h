@@ -4,7 +4,7 @@
     Description          : Widget for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017C Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -36,44 +36,47 @@
 #include <QColor>
 #include <QFont>
 
+class NoteView;
+
 class Note : public AbstractPart {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit Note(const QString& name);
+public:
+	explicit Note(const QString& name);
 
-		QWidget* view() const override;
-		QIcon icon() const override;
+	QWidget* view() const override;
+	QIcon icon() const override;
 
-		bool exportView() const override;
-		bool printView() override;
-		bool printPreview() const override;
+	bool exportView() const override;
+	bool printView() override;
+	bool printPreview() const override;
 
-		void setNote(const QString&);
-		const QString& note() const;
+	void setNote(const QString&);
+	const QString& note() const;
 
-		void setBackgroundColor(const QColor&);
-		const QColor& backgroundColor() const;
+	void setBackgroundColor(const QColor&);
+	const QColor& backgroundColor() const;
 
-		void setTextColor(const QColor&);
-		const QColor& textColor() const;
+	void setTextColor(const QColor&);
+	const QColor& textColor() const;
 
-		void setTextFont(const QFont&);
-		const QFont& textFont() const;
+	void setTextFont(const QFont&);
+	const QFont& textFont() const;
 
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-	signals:
-		void backgroundColorChanged(QColor);
-		void textColorChanged(QColor);
-		void textFontChanged(QFont);
+signals:
+	void backgroundColorChanged(QColor);
+	void textColorChanged(QColor);
+	void textFontChanged(QFont);
 
-	private:
-		QColor m_backgroundColor;
-		QColor m_textColor;
-		QFont m_textFont;
-		QString m_note;
+private:
+	mutable NoteView* m_view;
+	QColor m_backgroundColor;
+	QColor m_textColor;
+	QFont m_textFont;
+	QString m_note;
 };
 
 #endif // NOTE_H

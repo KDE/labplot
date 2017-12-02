@@ -49,11 +49,12 @@
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name, bool loading)
 		: AbstractPart(name),
 		scripted(engine),
+		m_view(nullptr),
 		m_backendName(name),
-		m_session(0),
-		m_part(0),
-		m_variableModel(0),
-		m_worksheetAccess(0) {
+		m_session(nullptr),
+		m_part(nullptr),
+		m_variableModel(nullptr),
+		m_worksheetAccess(nullptr) {
 
 	if(!loading)
 		init();
@@ -181,12 +182,13 @@ QIcon CantorWorksheet::icon() const {
 }
 
 QWidget* CantorWorksheet::view() const {
-	if (!m_view) {
+	if (!m_partView) {
 		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 		m_view->setBaseSize(1500, 1500);
+		m_partView = m_view;
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
-	return m_view;
+	return m_partView;
 }
 
 //! Return a new context menu.
