@@ -178,9 +178,9 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	foreach (Axis* axis, axes) {
 		m_labelsList.append(axis->title());
-		connect(axis, SIGNAL(titleOffsetXChanged(double)), this, SLOT(labelOffsetxChanged(double)) );
-		connect(axis, SIGNAL(titleOffsetYChanged(double)), this, SLOT(labelOffsetyChanged(double)) );
-		connect(axis->title(), SIGNAL(rotationAngleChanged(double)), this, SLOT(labelRotationAngleChanged(double)) );
+		connect(axis, SIGNAL(titleOffsetXChanged(qreal)), this, SLOT(labelOffsetxChanged(qreal)) );
+		connect(axis, SIGNAL(titleOffsetYChanged(qreal)), this, SLOT(labelOffsetyChanged(qreal)) );
+		connect(axis->title(), SIGNAL(rotationAngleChanged(qreal)), this, SLOT(labelRotationAngleChanged(qreal)) );
 	}
 
 	m_axesList = axes;
@@ -204,7 +204,7 @@ void LabelWidget::initConnections() const {
 	         this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 	         this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
-	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+	connect( m_label, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(labelRotationAngleChanged(qreal)) );
 	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
 }
 
@@ -708,19 +708,19 @@ void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment ind
 	m_initializing = false;
 }
 
-void LabelWidget::labelOffsetxChanged(float offset) {
+void LabelWidget::labelOffsetxChanged(qreal offset) {
 	m_initializing = true;
 	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
 	m_initializing = false;
 }
 
-void LabelWidget::labelOffsetyChanged(float offset) {
+void LabelWidget::labelOffsetyChanged(qreal offset) {
 	m_initializing = true;
 	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
 	m_initializing = false;
 }
 
-void LabelWidget::labelRotationAngleChanged(float angle) {
+void LabelWidget::labelRotationAngleChanged(qreal angle) {
 	m_initializing = true;
 	ui.sbRotation->setValue(angle);
 	m_initializing = false;

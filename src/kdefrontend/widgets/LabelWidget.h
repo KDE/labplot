@@ -119,9 +119,9 @@ private slots:
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
-	void labelOffsetxChanged(float);
-	void labelOffsetyChanged(float);
-	void labelRotationAngleChanged(float);
+	void labelOffsetxChanged(qreal);
+	void labelOffsetyChanged(qreal);
+	void labelRotationAngleChanged(qreal);
 	void labelVisibleChanged(bool);
 };
 

@@ -39,7 +39,7 @@ class TextLabelPrivate: public QGraphicsItem {
 	public:
 		explicit TextLabelPrivate(TextLabel*);
 
-		float rotationAngle;
+		qreal rotationAngle;
 		float scaleFactor;
 		int teXImageResolution;
 		float teXImageScaleFactor;

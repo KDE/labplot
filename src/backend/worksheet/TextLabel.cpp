@@ -209,7 +209,7 @@ CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
-BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
+BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
@@ -269,8 +269,8 @@ void TextLabel::setPositionInvalid(bool invalid) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, float, rotationAngle, recalcShapeAndBoundingRect);
-void TextLabel::setRotationAngle(float angle) {
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect);
+void TextLabel::setRotationAngle(qreal angle) {
 	Q_D(TextLabel);
 	if (angle != d->rotationAngle)
 		exec(new TextLabelSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));

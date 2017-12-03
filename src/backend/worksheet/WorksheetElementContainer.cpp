@@ -143,7 +143,7 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 // 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
 // 			elem->handleResize(horizontalRatio, verticalRatio);
 
-		retransform();
+// 		retransform();
 	}
 }
 
@@ -239,11 +239,15 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	foreach (const WorksheetElement* elem, childList)
 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 
+	float penWidth = 2.;
+    boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
+                  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
+
 	QPainterPath path;
 	path.addRect(boundingRectangle);
 
 	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
-	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), 3)));
+	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 
 // Inherited from QGraphicsItem

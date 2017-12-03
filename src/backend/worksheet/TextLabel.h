@@ -90,7 +90,7 @@ class TextLabel : public WorksheetElement {
 		void setPositionInvalid(bool);
 		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
-		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
+		BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle);
 
 		void setVisible(bool on) override;
 		bool isVisible() const override;
@@ -136,7 +136,7 @@ class TextLabel : public WorksheetElement {
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);
-		void rotationAngleChanged(float);
+		void rotationAngleChanged(qreal);
 		void visibleChanged(bool);
 
 		void teXImageUpdated(bool);
