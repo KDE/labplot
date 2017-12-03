@@ -2340,7 +2340,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (gridLines)
 					textable << QLatin1String("\\hline \n");
 			}
-			foreach(const QString& s, textable)
+			for (const auto& s : textable)
 				out << s;
 
 			QStringList values;
@@ -2364,7 +2364,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					emptyRowIndices.remove(emptyRowIndices.indexOf(row));
 
 				if (notEmpty || !skipEmptyRows) {
-					foreach(const QString& s, values)
+					for (const auto& s : values)
 						out << s;
 					out << QLatin1String("\\\\ \n");
 					if (gridLines)
@@ -2377,7 +2377,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 						if (captions)
 							if (!captionRemoved)
 								textable.removeAt(1);
-						foreach(const QString& s, textable)
+						for (const auto& s : textable)
 							out << s;
 						rowCount = 0;
 						if (!captionRemoved)
@@ -2413,7 +2413,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				remainingTable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, remainingTable)
+		for (const auto& s : remainingTable)
 			out << s;
 
 		QStringList values;
@@ -2433,7 +2433,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			if (!emptyRowIndices.contains(row) && !notEmpty)
 				notEmpty = true;
 			if (notEmpty || !skipEmptyRows) {
-				foreach (const QString& s, values)
+				for (const auto& s : values)
 					out << s;
 				out << QLatin1String("\\\\ \n");
 				if (gridLines)
@@ -2445,7 +2445,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					if (captions)
 						if (!captionRemoved)
 							remainingTable.removeAt(1);
-					foreach(const QString& s, remainingTable)
+					for (const auto& s : remainingTable)
 						out << s;
 					rowCount = 0;
 					if (!captionRemoved)
@@ -2479,7 +2479,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				textable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, textable)
+		for (const auto& s : textable)
 			out << s;
 		QStringList values;
 		captionRemoved = false;
@@ -2498,7 +2498,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			}
 
 			if (notEmpty || !skipEmptyRows) {
-				foreach (const QString& s, values)
+				for (const auto& s : values)
 					out << s;
 				out << QLatin1String("\\\\ \n");
 				if (gridLines)
@@ -2510,7 +2510,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					if (captions)
 						if (!captionRemoved)
 							textable.removeAt(1);
-					foreach (const QString& s, textable)
+					for (const auto& s : textable)
 						out << s;
 					rowCount = 0;
 					if (!captionRemoved)

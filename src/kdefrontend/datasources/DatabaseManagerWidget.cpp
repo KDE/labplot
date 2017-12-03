@@ -320,7 +320,7 @@ void DatabaseManagerWidget::loadConnections() {
 	m_initializing = true;
 
 	KConfig config(m_configPath, KConfig::SimpleConfig);
-	foreach(QString groupName, config.groupList()) {
+	for (auto groupName : config.groupList()) {
 		const KConfigGroup& group = config.group(groupName);
 		SQLConnection conn;
 		conn.name = groupName;
@@ -365,11 +365,11 @@ void DatabaseManagerWidget::saveConnections() {
 	QDEBUG("Saving connections to " + m_configPath);
 	//delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
-	foreach(QString group, config.groupList())
+	for (auto group : config.groupList())
 		config.deleteGroup(group);
 
 	//save connections
-	foreach(SQLConnection conn, m_connections) {
+	for (auto conn : m_connections) {
 		KConfigGroup group = config.group(conn.name);
 		group.writeEntry("Driver", conn.driver);
 		group.writeEntry("DatabaseName", conn.dbName);

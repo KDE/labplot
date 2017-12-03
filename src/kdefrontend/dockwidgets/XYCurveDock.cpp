@@ -801,7 +801,7 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setXColumn(column);
 }
 
@@ -816,7 +816,7 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setYColumn(column);
 }
 
@@ -824,7 +824,7 @@ void XYCurveDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setVisible(state);
 }
 
@@ -864,7 +864,7 @@ void XYCurveDock::lineTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setLineType(lineType);
 }
 
@@ -872,7 +872,7 @@ void XYCurveDock::lineSkipGapsChanged(bool skip) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setLineSkipGaps(skip);
 }
 
@@ -880,7 +880,7 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setLineInterpolationPointsCount(count);
 }
 
@@ -890,7 +890,7 @@ void XYCurveDock::lineStyleChanged(int index) {
 
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->linePen();
 		pen.setStyle(penStyle);
 		curve->setLinePen(pen);
@@ -902,7 +902,7 @@ void XYCurveDock::lineColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->linePen();
 		pen.setColor(color);
 		curve->setLinePen(pen);
@@ -918,7 +918,7 @@ void XYCurveDock::lineWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->linePen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setLinePen(pen);
@@ -930,7 +930,7 @@ void XYCurveDock::lineOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setLineOpacity(opacity);
 }
 
@@ -952,7 +952,7 @@ void XYCurveDock::dropLineTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setDropLineType(dropLineType);
 }
 
@@ -962,7 +962,7 @@ void XYCurveDock::dropLineStyleChanged(int index) {
 
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->dropLinePen();
 		pen.setStyle(penStyle);
 		curve->setDropLinePen(pen);
@@ -974,7 +974,7 @@ void XYCurveDock::dropLineColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->dropLinePen();
 		pen.setColor(color);
 		curve->setDropLinePen(pen);
@@ -990,7 +990,7 @@ void XYCurveDock::dropLineWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->dropLinePen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setDropLinePen(pen);
@@ -1002,7 +1002,7 @@ void XYCurveDock::dropLineOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setDropLineOpacity(opacity);
 }
 
@@ -1045,7 +1045,7 @@ void XYCurveDock::symbolsStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setSymbolsStyle(style);
 }
 
@@ -1053,7 +1053,7 @@ void XYCurveDock::symbolsSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -1061,7 +1061,7 @@ void XYCurveDock::symbolsRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setSymbolsRotationAngle(value);
 }
 
@@ -1070,7 +1070,7 @@ void XYCurveDock::symbolsOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setSymbolsOpacity(opacity);
 }
 
@@ -1082,7 +1082,7 @@ void XYCurveDock::symbolsFillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		brush=curve->symbolsBrush();
 		brush.setStyle(brushStyle);
 		curve->setSymbolsBrush(brush);
@@ -1094,7 +1094,7 @@ void XYCurveDock::symbolsFillingColorChanged(const QColor& color) {
 		return;
 
 	QBrush brush;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		brush=curve->symbolsBrush();
 		brush.setColor(color);
 		curve->setSymbolsBrush(brush);
@@ -1120,7 +1120,7 @@ void XYCurveDock::symbolsBorderStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->symbolsPen();
 		pen.setStyle(penStyle);
 		curve->setSymbolsPen(pen);
@@ -1132,7 +1132,7 @@ void XYCurveDock::symbolsBorderColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->symbolsPen();
 		pen.setColor(color);
 		curve->setSymbolsPen(pen);
@@ -1148,7 +1148,7 @@ void XYCurveDock::symbolsBorderWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->symbolsPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setSymbolsPen(pen);
@@ -1211,7 +1211,7 @@ void XYCurveDock::valuesTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesType(valuesType);
 }
 
@@ -1225,7 +1225,7 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 	Column* column= static_cast<Column*>(index.internalPointer());
 	this->showValuesColumnFormat(column);
 
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		//TODO save also the format of the currently selected column for the values (precision etc.)
 		curve->setValuesColumn(column);
 	}
@@ -1235,7 +1235,7 @@ void XYCurveDock::valuesPositionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesPosition(XYCurve::ValuesPosition(index));
 }
 
@@ -1243,7 +1243,7 @@ void XYCurveDock::valuesDistanceChanged(double  value) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -1251,7 +1251,7 @@ void XYCurveDock::valuesRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesRotationAngle(value);
 }
 
@@ -1260,7 +1260,7 @@ void XYCurveDock::valuesOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesOpacity(opacity);
 }
 
@@ -1269,7 +1269,7 @@ void XYCurveDock::valuesPrefixChanged() {
 		return;
 
 	QString prefix = ui.leValuesPrefix->text();
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesPrefix(prefix);
 }
 
@@ -1278,7 +1278,7 @@ void XYCurveDock::valuesSuffixChanged() {
 		return;
 
 	QString suffix = ui.leValuesSuffix->text();
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesSuffix(suffix);
 }
 
@@ -1288,7 +1288,7 @@ void XYCurveDock::valuesFontChanged(const QFont& font) {
 
 	QFont valuesFont = font;
 	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
 
@@ -1296,7 +1296,7 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesColor(color);
 }
 
@@ -1318,7 +1318,7 @@ void XYCurveDock::fillingPositionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingPosition(fillingPosition);
 }
 
@@ -1387,7 +1387,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingType(type);
 }
 
@@ -1409,7 +1409,7 @@ void XYCurveDock::fillingColorStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingColorStyle(style);
 }
 
@@ -1418,7 +1418,7 @@ void XYCurveDock::fillingImageStyleChanged(int index) {
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingImageStyle(style);
 }
 
@@ -1427,7 +1427,7 @@ void XYCurveDock::fillingBrushStyleChanged(int index) {
 		return;
 
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingBrushStyle(style);
 }
 
@@ -1435,7 +1435,7 @@ void XYCurveDock::fillingFirstColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFirstColor(c);
 
 	m_initializing = true;
@@ -1447,7 +1447,7 @@ void XYCurveDock::fillingSecondColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingSecondColor(c);
 }
 
@@ -1459,7 +1459,7 @@ void XYCurveDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
+	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -1477,7 +1477,7 @@ void XYCurveDock::selectFile() {
 
 	ui.leFillingFileName->setText( path );
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFileName(path);
 }
 
@@ -1486,7 +1486,7 @@ void XYCurveDock::fileNameChanged() {
 		return;
 
 	QString fileName = ui.leFillingFileName->text();
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingFileName(fileName);
 }
 
@@ -1495,7 +1495,7 @@ void XYCurveDock::fillingOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setFillingOpacity(opacity);
 }
 
@@ -1539,7 +1539,7 @@ void XYCurveDock::xErrorTypeChanged(int index) const {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setXErrorType(XYCurve::ErrorType(index));
 }
 
@@ -1552,7 +1552,7 @@ void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setXErrorPlusColumn(column);
 }
 
@@ -1565,7 +1565,7 @@ void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setXErrorMinusColumn(column);
 }
 
@@ -1609,7 +1609,7 @@ void XYCurveDock::yErrorTypeChanged(int index) const {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setYErrorType(XYCurve::ErrorType(index));
 }
 
@@ -1622,7 +1622,7 @@ void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setYErrorPlusColumn(column);
 }
 
@@ -1635,7 +1635,7 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setYErrorMinusColumn(column);
 }
 
@@ -1648,7 +1648,7 @@ void XYCurveDock::errorBarsTypeChanged(int index) const {
 	if (m_initializing)
 		return;
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setErrorBarsType(type);
 }
 
@@ -1657,7 +1657,7 @@ void XYCurveDock::errorBarsCapSizeChanged(double value) const {
 		return;
 
 	float size = Worksheet::convertToSceneUnits(value, Worksheet::Point);
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setErrorBarsCapSize(size);
 }
 
@@ -1667,7 +1667,7 @@ void XYCurveDock::errorBarsStyleChanged(int index) const {
 
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->errorBarsPen();
 		pen.setStyle(penStyle);
 		curve->setErrorBarsPen(pen);
@@ -1679,7 +1679,7 @@ void XYCurveDock::errorBarsColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->errorBarsPen();
 		pen.setColor(color);
 		curve->setErrorBarsPen(pen);
@@ -1695,7 +1695,7 @@ void XYCurveDock::errorBarsWidthChanged(double value) const {
 		return;
 
 	QPen pen;
-	foreach(XYCurve* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		pen=curve->errorBarsPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setErrorBarsPen(pen);
@@ -1707,7 +1707,7 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setErrorBarsOpacity(opacity);
 }
 

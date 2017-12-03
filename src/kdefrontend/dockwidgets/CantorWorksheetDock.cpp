@@ -58,14 +58,14 @@ void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 	//show all available plugins
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
-	foreach(int i, index) {
+	for (int i : index) {
 		ui.tabWidget->removeTab(i-k);
 		++k;
 	}
 	if (m_cantorworksheetlist.size()==1) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
-		foreach(Cantor::PanelPlugin* plugin, plugins) {
+		for (auto* plugin : plugins) {
 			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);

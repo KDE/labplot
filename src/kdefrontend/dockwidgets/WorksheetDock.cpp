@@ -349,7 +349,7 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setScaleContent(scaled);
 }
 
@@ -378,11 +378,11 @@ void WorksheetDock::sizeChanged(int i) {
 
 	if (i==0) {
 		//use the complete view size (first item in the combox is selected)
-		foreach(Worksheet* worksheet, m_worksheetList)
+		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
 	} else if (index==QPrinter::Custom) {
 		if (m_worksheet->useViewSize()) {
-			foreach(Worksheet* worksheet, m_worksheetList)
+			for (auto* worksheet : m_worksheetList)
 				worksheet->setUseViewSize(false);
 		}
 	} else {
@@ -404,7 +404,7 @@ void WorksheetDock::sizeChanged(int i) {
 
 		w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
 		h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
-		foreach(Worksheet* worksheet, m_worksheetList) {
+		for (auto* worksheet : m_worksheetList) {
 			worksheet->setUseViewSize(false);
 			worksheet->setPageRect(QRect(0,0,w,h));
 		}
@@ -417,7 +417,7 @@ void WorksheetDock::sizeChanged() {
 
 	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
 	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setPageRect(QRect(0,0,w,h));
 }
 
@@ -495,7 +495,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundType(type);
 }
 
@@ -518,7 +518,7 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 	int size = m_worksheetList.size();
 	if (size>1) {
 		m_worksheet->beginMacro(i18n("%1 worksheets: background color style changed", size));
-		foreach(Worksheet* w, m_worksheetList)
+		for (auto* w : m_worksheetList)
 			w->setBackgroundColorStyle(style);
 		m_worksheet->endMacro();
 	} else
@@ -530,7 +530,7 @@ void WorksheetDock::backgroundImageStyleChanged(int index) {
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundImageStyle(style);
 }
 
@@ -539,7 +539,7 @@ void WorksheetDock::backgroundBrushStyleChanged(int index) {
 		return;
 
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundBrushStyle(style);
 }
 
@@ -547,7 +547,7 @@ void WorksheetDock::backgroundFirstColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundFirstColor(c);
 }
 
@@ -555,7 +555,7 @@ void WorksheetDock::backgroundSecondColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundSecondColor(c);
 }
 
@@ -564,7 +564,7 @@ void WorksheetDock::backgroundOpacityChanged(int value) {
 		return;
 
 	float opacity = (float)value/100;
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundOpacity(opacity);
 }
 
@@ -573,7 +573,7 @@ void WorksheetDock::layoutTopMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -581,7 +581,7 @@ void WorksheetDock::layoutBottomMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -589,7 +589,7 @@ void WorksheetDock::layoutLeftMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -597,7 +597,7 @@ void WorksheetDock::layoutRightMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -605,7 +605,7 @@ void WorksheetDock::layoutHorizontalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
 }
 
@@ -613,7 +613,7 @@ void WorksheetDock::layoutVerticalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
 }
 
@@ -621,7 +621,7 @@ void WorksheetDock::layoutRowCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutRowCount(count);
 }
 
@@ -629,7 +629,7 @@ void WorksheetDock::layoutColumnCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setLayoutColumnCount(count);
 }
 
@@ -641,7 +641,7 @@ void WorksheetDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
+	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -659,7 +659,7 @@ void WorksheetDock::selectFile() {
 
 	ui.leBackgroundFileName->setText( path );
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundFileName(path);
 }
 
@@ -673,7 +673,7 @@ void WorksheetDock::fileNameChanged() {
 	else
 		ui.leBackgroundFileName->setStyleSheet("");
 
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundFileName(fileName);
 }
 
@@ -950,6 +950,6 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 }
 
 void WorksheetDock::loadTheme(const QString& theme) {
-	foreach(Worksheet* worksheet, m_worksheetList)
+	for (auto* worksheet : m_worksheetList)
 		worksheet->setTheme(theme);
 }

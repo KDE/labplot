@@ -477,7 +477,7 @@ void AxisDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setVisible(state);
 }
 
@@ -530,7 +530,7 @@ void AxisDock::orientationChanged(int index) {
 	posIndex = ui.cbLabelsPosition->currentIndex();
 	Axis::LabelsPosition labelsPosition = Axis::LabelsPosition(posIndex);
 
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		axis->beginMacro(i18n("%1: set axis orientation", axis->name()));
 		axis->setOrientation(orientation);
 		axis->setPosition(axisPosition);
@@ -566,7 +566,7 @@ void AxisDock::positionChanged(int index) {
 		position = Axis::AxisPosition(index+2);
 	}
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setPosition(position);
 }
 
@@ -578,7 +578,7 @@ void AxisDock::positionChanged() {
 		return;
 
 	double offset = ui.lePosition->text().toDouble();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setOffset(offset);
 }
 
@@ -587,7 +587,7 @@ void AxisDock::scaleChanged(int index) {
 		return;
 
 	Axis::AxisScale scale = (Axis::AxisScale)index;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setScale(scale);
 }
 
@@ -599,7 +599,7 @@ void AxisDock::autoScaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setAutoScale(autoScale);
 }
 
@@ -629,7 +629,7 @@ void AxisDock::startChanged() {
 		}
 	}
 
-	foreach (Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
 
@@ -638,7 +638,7 @@ void AxisDock::endChanged() {
 		return;
 
 	double value = ui.leEnd->text().toDouble();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
 
@@ -647,7 +647,7 @@ void AxisDock::zeroOffsetChanged() {
 		return;
 
 	double offset = ui.leZeroOffset->text().toDouble();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
 }
 
@@ -656,7 +656,7 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	double scalingFactor = ui.leScalingFactor->text().toDouble();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setScalingFactor(scalingFactor);
 }
 
@@ -676,7 +676,7 @@ void AxisDock::lineStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->linePen();
 		pen.setStyle(penStyle);
 		axis->setLinePen(pen);
@@ -688,7 +688,7 @@ void AxisDock::lineColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->linePen();
 		pen.setColor(color);
 		axis->setLinePen(pen);
@@ -704,7 +704,7 @@ void AxisDock::lineWidthChanged(double  value) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->linePen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setLinePen(pen);
@@ -716,7 +716,7 @@ void AxisDock::lineOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLineOpacity(opacity);
 }
 
@@ -733,7 +733,7 @@ void AxisDock::arrowTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setArrowType(type);
 }
 
@@ -742,7 +742,7 @@ void AxisDock::arrowPositionChanged(int index) {
 		return;
 
 	Axis::ArrowPosition position = (Axis::ArrowPosition)index;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setArrowPosition(position);
 }
 
@@ -751,7 +751,7 @@ void AxisDock::arrowSizeChanged(int value) {
 		return;
 
 	float v = Worksheet::convertToSceneUnits(value, Worksheet::Point);
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setArrowSize(v);
 }
 
@@ -786,7 +786,7 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksDirection(direction);
 }
 
@@ -822,7 +822,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksType(type);
 }
 
@@ -830,7 +830,7 @@ void AxisDock::majorTicksNumberChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksNumber(value);
 }
 
@@ -840,7 +840,7 @@ void AxisDock::majorTicksIncrementChanged() {
 
 	double value = ui.leMajorTicksIncrement->text().toDouble();
 	if (value<0) value = -1*value; //don't allow negative values
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksIncrement(value);
 }
 
@@ -861,7 +861,7 @@ void AxisDock::majorTicksLineStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorTicksPen();
 		pen.setStyle(penStyle);
 		axis->setMajorTicksPen(pen);
@@ -879,7 +879,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksColumn(column);
 }
 
@@ -888,7 +888,7 @@ void AxisDock::majorTicksColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorTicksPen();
 		pen.setColor(color);
 		axis->setMajorTicksPen(pen);
@@ -904,7 +904,7 @@ void AxisDock::majorTicksWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorTicksPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		axis->setMajorTicksPen(pen);
@@ -915,7 +915,7 @@ void AxisDock::majorTicksLengthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -924,7 +924,7 @@ void AxisDock::majorTicksOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorTicksOpacity(opacity);
 }
 
@@ -958,7 +958,7 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksDirection(direction);
 }
 
@@ -990,7 +990,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksType(type);
 }
 
@@ -998,7 +998,7 @@ void AxisDock::minorTicksNumberChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksNumber(value);
 }
 
@@ -1008,7 +1008,7 @@ void AxisDock::minorTicksIncrementChanged() {
 
 	double value = ui.leMinorTicksIncrement->text().toDouble();
 	if (value<0) value = -1*value; //don't allow negative values
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksIncrement(value);
 }
 
@@ -1020,7 +1020,7 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
 	Q_ASSERT(column);
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksColumn(column);
 }
 
@@ -1041,7 +1041,7 @@ void AxisDock::minorTicksLineStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorTicksPen();
 		pen.setStyle(penStyle);
 		axis->setMinorTicksPen(pen);
@@ -1053,7 +1053,7 @@ void AxisDock::minorTicksColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorTicksPen();
 		pen.setColor(color);
 		axis->setMinorTicksPen(pen);
@@ -1069,7 +1069,7 @@ void AxisDock::minorTicksWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorTicksPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		axis->setMinorTicksPen(pen);
@@ -1080,7 +1080,7 @@ void AxisDock::minorTicksLengthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -1089,7 +1089,7 @@ void AxisDock::minorTicksOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorTicksOpacity(opacity);
 }
 
@@ -1098,7 +1098,7 @@ void AxisDock::labelsFormatChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsFormat(Axis::LabelsFormat(index));
 }
 
@@ -1106,7 +1106,7 @@ void AxisDock::labelsPrecisionChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsPrecision(value);
 }
 
@@ -1118,7 +1118,7 @@ void AxisDock::labelsAutoPrecisionChanged(int state) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsAutoPrecision(checked);
 }
 
@@ -1144,7 +1144,7 @@ void AxisDock::labelsPositionChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsPosition(position);
 }
 
@@ -1152,7 +1152,7 @@ void AxisDock::labelsOffsetChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -1160,7 +1160,7 @@ void AxisDock::labelsRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsRotationAngle(value);
 }
 
@@ -1169,7 +1169,7 @@ void AxisDock::labelsPrefixChanged() {
 		return;
 
 	QString prefix = ui.leLabelsPrefix->text();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsPrefix(prefix);
 }
 
@@ -1178,7 +1178,7 @@ void AxisDock::labelsSuffixChanged() {
 		return;
 
 	QString suffix = ui.leLabelsSuffix->text();
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsSuffix(suffix);
 }
 
@@ -1188,7 +1188,7 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 
 	QFont labelsFont = font;
 	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsFont( labelsFont );
 }
 
@@ -1196,7 +1196,7 @@ void AxisDock::labelsFontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsColor(color);
 }
 
@@ -1205,7 +1205,7 @@ void AxisDock::labelsOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setLabelsOpacity(opacity);
 }
 
@@ -1226,7 +1226,7 @@ void AxisDock::majorGridStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorGridPen();
 		pen.setStyle(penStyle);
 		axis->setMajorGridPen(pen);
@@ -1238,7 +1238,7 @@ void AxisDock::majorGridColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorGridPen();
 		pen.setColor(color);
 		axis->setMajorGridPen(pen);
@@ -1254,7 +1254,7 @@ void AxisDock::majorGridWidthChanged(double  value) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->majorGridPen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setMajorGridPen(pen);
@@ -1266,7 +1266,7 @@ void AxisDock::majorGridOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMajorGridOpacity(opacity);
 }
 
@@ -1286,7 +1286,7 @@ void AxisDock::minorGridStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorGridPen();
 		pen.setStyle(penStyle);
 		axis->setMinorGridPen(pen);
@@ -1298,7 +1298,7 @@ void AxisDock::minorGridColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorGridPen();
 		pen.setColor(color);
 		axis->setMinorGridPen(pen);
@@ -1314,7 +1314,7 @@ void AxisDock::minorGridWidthChanged(double  value) {
 		return;
 
 	QPen pen;
-	foreach(Axis* axis, m_axesList) {
+	for (auto* axis : m_axesList) {
 		pen=axis->minorGridPen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setMinorGridPen(pen);
@@ -1326,7 +1326,7 @@ void AxisDock::minorGridOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(Axis* axis, m_axesList)
+	for (auto* axis : m_axesList)
 		axis->setMinorGridOpacity(opacity);
 }
 

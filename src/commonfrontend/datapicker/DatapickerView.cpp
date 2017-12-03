@@ -64,10 +64,10 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
 	//add tab for each children view
 	m_initializing = true;
-	foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
 		handleAspectAdded(aspect);
-		foreach(const AbstractAspect* aspect, aspect->children<AbstractAspect>()) {
-			handleAspectAdded(aspect);
+		for (const auto* child : aspect->children<AbstractAspect>()) {
+			handleAspectAdded(child);
 		}
 	}
 	m_initializing = false;
@@ -85,9 +85,9 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
 DatapickerView::~DatapickerView() {
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
-	foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
-		foreach(const AbstractAspect* aspect, aspect->children<AbstractAspect>()) {
-			const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+		for (const auto* child : aspect->children<AbstractAspect>()) {
+			const AbstractPart* part = dynamic_cast<const AbstractPart*>(child);
 			if (part)
 				part->deleteView();
 		}

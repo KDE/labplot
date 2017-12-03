@@ -62,7 +62,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 
 	//add tab for each children view
 	m_initializing = true;
-	foreach(const AbstractAspect* aspect, m_workbook->children<AbstractAspect>())
+	for (const auto* aspect : m_workbook->children<AbstractAspect>())
 		handleAspectAdded(aspect);
 	m_initializing = false;
 
@@ -89,7 +89,7 @@ WorkbookView::~WorkbookView() {
 	disconnect(m_tabWidget, 0, 0, 0);
 
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
-	foreach(const AbstractPart* part, m_workbook->children<AbstractPart>())
+	for (const auto* part : m_workbook->children<AbstractPart>())
 		part->deleteView();
 }
 

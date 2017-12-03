@@ -446,7 +446,7 @@ else \
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\
 if (!obj->col ##Path().isEmpty()) {													\
-	foreach (Column* column, columns) {												\
+	for (Column* column : columns) {												\
 		if (!column) continue;														\
 		if (column->path() == obj->col ##Path()) {									\
  			obj->set## Col(column);													\
@@ -476,7 +476,7 @@ do {																				\
 #define RESTORE_POINTER(obj, name, Name, Type, list) 								\
 do {																				\
 if (!obj->name ##Path().isEmpty()) {												\
-	foreach (AbstractAspect* aspect, list) {										\
+	for (AbstractAspect* aspect : list) {											\
 		if (aspect->path() == obj->name ##Path()) {									\
 			Type * a = dynamic_cast<Type*>(aspect);									\
 			if (!a) continue;														\

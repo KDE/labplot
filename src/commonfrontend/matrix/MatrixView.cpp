@@ -1266,7 +1266,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				if (gridLines)
 					textable << QLatin1String("\\hline \n");
 			}
-			foreach (const QString& s, textable)
+			for (const auto& s : textable)
 				out << s;
 			for (int row = 0; row < totalRowCount; ++row) {
 				if (verticalHeaders) {
@@ -1290,7 +1290,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 					if (captions)
 						if (!captionRemoved)
 							textable.removeAt(1);
-					foreach (const QString& s, textable)
+					for (const auto& s : textable)
 						out << s;
 					rowCount = 0;
 					if (!captionRemoved)
@@ -1330,7 +1330,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				remainingTable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, remainingTable)
+		for (const auto& s : remainingTable)
 			out << s;
 
 		for (int row = 0; row < totalRowCount; ++row) {
@@ -1355,7 +1355,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				if (captions)
 					if (!captionRemoved)
 						remainingTable.removeAt(1);
-				foreach (const QString& s, remainingTable)
+				for (const auto& s : remainingTable)
 					out << s;
 				rowCount = 0;
 				if (!captionRemoved)
@@ -1393,7 +1393,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				textable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, textable)
+		for (const auto& s : textable)
 			out << s;
 		for (int row = 0; row < totalRowCount; ++row) {
 			if (verticalHeaders) {
@@ -1416,7 +1416,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				if (captions)
 					if (!captionRemoved)
 						textable.removeAt(1);
-				foreach (const QString& s, textable)
+				for (const auto& s : textable)
 					out << s;
 				if (!captionRemoved)
 					captionRemoved = true;

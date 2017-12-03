@@ -290,7 +290,7 @@ bool Project::load(const QString& filename, bool preview) {
 	if (reader.hasWarnings()) {
 		QString msg = i18n("The following problems occurred when loading the project file:\n");
 		const QStringList& warnings = reader.warningStrings();
-		foreach (const QString& str, warnings)
+		for (const auto& str : warnings)
 			msg += str + '\n';
 
 		qWarning() << msg;

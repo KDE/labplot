@@ -417,7 +417,7 @@ void HistogramDock::recalculateClicked() {
 	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
 	data.binValue = uiGeneralTab.sbBins->value();
 // 	m_curve->retransform();
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<Histogram*>(curve)->setHistogramData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -565,7 +565,7 @@ void HistogramDock::valuesPositionChanged(int index){
 	if (m_initializing)
 		return;
 
-	foreach(Histogram* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		curve->setValuesPosition(Histogram::ValuesPosition(index));
 }
 
@@ -860,7 +860,7 @@ void HistogramDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
+	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -1013,7 +1013,7 @@ void HistogramDock::xColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(Histogram* curve, m_curvesList) {
+	for (auto* curve : m_curvesList) {
 		curve->setXColumn(column);
 	}
 }

@@ -874,7 +874,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 
 	//columns
 	if (!m_fileLinked) {
-		foreach (Column * col, children<Column>(IncludeHidden))
+		for (auto* col : children<Column>(IncludeHidden))
 			col->save(writer);
 	}
 

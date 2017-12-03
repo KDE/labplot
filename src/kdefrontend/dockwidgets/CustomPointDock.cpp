@@ -176,7 +176,7 @@ void CustomPointDock::positionXChanged() {
 	QPointF pos = m_point->position();
 	float x = ui.lePositionX->text().toFloat();
 	pos.setX(x);
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setPosition(pos);
 }
 
@@ -187,7 +187,7 @@ void CustomPointDock::positionYChanged() {
 	QPointF pos = m_point->position();
 	float y = ui.lePositionY->text().toFloat();
 	pos.setY(y);
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setPosition(pos);
 }
 
@@ -196,7 +196,7 @@ void CustomPointDock::visibilityChanged(bool state) {
 		return;
 
 	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setVisible(state);
 	m_point->endMacro();
 }
@@ -221,7 +221,7 @@ void CustomPointDock::symbolStyleChanged(int index) {
 		return;
 
 	m_point->beginMacro(i18n("%1 CustomPoints: style changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setSymbolStyle(style);
 	m_point->endMacro();
 }
@@ -231,7 +231,7 @@ void CustomPointDock::symbolSizeChanged(double value) {
 		return;
 
 	m_point->beginMacro(i18n("%1 CustomPoints: size changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setSymbolSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	m_point->endMacro();
 }
@@ -241,7 +241,7 @@ void CustomPointDock::symbolRotationChanged(int value) {
 		return;
 
 	m_point->beginMacro(i18n("%1 CustomPoints: rotation changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setSymbolRotationAngle(value);
 	m_point->endMacro();
 }
@@ -252,7 +252,7 @@ void CustomPointDock::symbolOpacityChanged(int value) {
 
 	qreal opacity = (float)value/100.;
 	m_point->beginMacro(i18n("%1 CustomPoints: opacity changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList)
+	for (auto* point : m_pointsList)
 		point->setSymbolOpacity(opacity);
 	m_point->endMacro();
 }
@@ -266,7 +266,7 @@ void CustomPointDock::symbolFillingStyleChanged(int index) {
 
 	QBrush brush;
 	m_point->beginMacro(i18n("%1 CustomPoints: filling style changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList) {
+	for (auto* point : m_pointsList) {
 		brush = point->symbolBrush();
 		brush.setStyle(brushStyle);
 		point->setSymbolBrush(brush);
@@ -280,7 +280,7 @@ void CustomPointDock::symbolFillingColorChanged(const QColor& color) {
 
 	QBrush brush;
 	m_point->beginMacro(i18n("%1 CustomPoints: filling color changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList) {
+	for (auto* point : m_pointsList) {
 		brush = point->symbolBrush();
 		brush.setColor(color);
 		point->setSymbolBrush(brush);
@@ -308,7 +308,7 @@ void CustomPointDock::symbolBorderStyleChanged(int index) {
 
 	QPen pen;
 	m_point->beginMacro(i18n("%1 CustomPoints: border style changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList) {
+	for (auto* point : m_pointsList) {
 		pen = point->symbolPen();
 		pen.setStyle(penStyle);
 		point->setSymbolPen(pen);
@@ -322,7 +322,7 @@ void CustomPointDock::symbolBorderColorChanged(const QColor& color) {
 
 	QPen pen;
 	m_point->beginMacro(i18n("%1 CustomPoints: border color changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList) {
+	for (auto* point : m_pointsList) {
 		pen = point->symbolPen();
 		pen.setColor(color);
 		point->setSymbolPen(pen);
@@ -340,7 +340,7 @@ void CustomPointDock::symbolBorderWidthChanged(double value) {
 
 	QPen pen;
 	m_point->beginMacro(i18n("%1 CustomPoints: border width changed", m_pointsList.count()));
-	foreach(CustomPoint* point, m_pointsList) {
+	for (auto* point : m_pointsList) {
 		pen = point->symbolPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		point->setSymbolPen(pen);

@@ -87,7 +87,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full paths (path + file name)
 	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
-	foreach (const QString& dir, dirs) {
+	for (const auto& dir : dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
 		while (it.hasNext())
 			m_themeList.append(it.next());
@@ -131,7 +131,7 @@ void ThemeHandler::loadSelected(QString name) {
 QStringList ThemeHandler::themes() {
 	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
 	QStringList pathList;
-	foreach (const QString& dir, dirs) {
+	for (const auto& dir : dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
 		while (it.hasNext())
 			pathList.append(it.next());
@@ -149,7 +149,7 @@ const QString ThemeHandler::themeFilePath(const QString& name) {
 	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
 
 	QStringList themes;
-	foreach (const QString& dir, dirs) {
+	for (const auto& dir : dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
 		while (it.hasNext())
 			themes.append(it.next());

@@ -1150,7 +1150,7 @@ void XYCurvePrivate::updateLines() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
 #endif
 	//new line path
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1232,7 +1232,7 @@ void XYCurvePrivate::updateDropLines() {
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -1255,7 +1255,7 @@ void XYCurvePrivate::updateSymbols() {
 			path = trafo.map(path);
 		}
 
-		foreach (const QPointF& point, symbolPointsScene) {
+		for (const auto& point : symbolPointsScene) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
@@ -1757,7 +1757,7 @@ void XYCurvePrivate::updateErrorBars() {
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
 	}
@@ -1795,7 +1795,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	boundingRectangle = curveShape.boundingRect();
 
-	foreach (const QPolygonF& pol, fillPolygons)
+	for (const auto& pol : fillPolygons)
 		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
@@ -1947,7 +1947,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 		trafo.rotate(symbolsRotationAngle);
 		path = trafo.map(path);
 	}
-	foreach (const QPointF& point, symbolPointsScene) {
+	for (const auto& point : symbolPointsScene) {
 		trafo.reset();
 		trafo.translate(point.x(), point.y());
 		painter->drawPath(trafo.map(path));
@@ -1971,7 +1971,7 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawFilling(QPainter* painter) {
-	foreach (const QPolygonF& pol, fillPolygons) {
+	for (const auto& pol : fillPolygons) {
 		QRectF rect = pol.boundingRect();
 		if (fillingType == PlotArea::Color) {
 			switch (fillingColorStyle) {

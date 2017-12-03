@@ -254,7 +254,7 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.max = uiGeneralTab.teMax->document()->toPlainText();
 	data.count = uiGeneralTab.sbCount->value();
 
-	foreach(XYCurve* curve, m_curvesList)
+	for (auto* curve : m_curvesList)
 		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

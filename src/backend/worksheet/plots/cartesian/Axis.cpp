@@ -964,7 +964,7 @@ void AxisPrivate::retransformLine() {
 
 	lines.append(QLineF(startPoint, endPoint));
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1376,7 +1376,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	QString str;
 	if (labelsFormat == Axis::FormatDecimal) {
 		QString nullStr = QString::number(0, 'f', labelsPrecision);
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = QString::number(value, 'f', labelsPrecision);
 			if (str == "-" + nullStr) str = nullStr;
 			str = labelsPrefix + str + labelsSuffix;
@@ -1384,31 +1384,31 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	} else if (labelsFormat == Axis::FormatScientificE) {
 		QString nullStr = QString::number(0, 'e', labelsPrecision);
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = QString::number(value, 'e', labelsPrecision);
 			if (str == "-" + nullStr) str = nullStr;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers10) {
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers2) {
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowersE) {
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatMultipliesPi) {
-		foreach (double value, tickLabelValues) {
+		for (auto value : tickLabelValues) {
 			str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
@@ -1628,7 +1628,7 @@ void AxisPrivate::retransformMajorGrid() {
 	}
 
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
 	}
@@ -1671,7 +1671,7 @@ void AxisPrivate::retransformMinorGrid() {
 	}
 
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
-	foreach (const QLineF& line, lines) {
+	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
 	}

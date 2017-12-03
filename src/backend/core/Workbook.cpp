@@ -165,7 +165,7 @@ void Workbook::setChildSelectedInView(int index, bool selected) {
 		emit childAspectDeselectedInView(aspect);
 
 		//deselect also all children that were potentially selected before (columns of a spreadsheet)
-		foreach(AbstractAspect* child, aspect->children<AbstractAspect>())
+		for (auto* child : aspect->children<AbstractAspect>())
 			emit childAspectDeselectedInView(child);
 	}
 }
@@ -181,7 +181,7 @@ void Workbook::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//serialize all children
-	foreach(AbstractAspect* aspect, children<AbstractAspect>())
+	for (auto* aspect : children<AbstractAspect>())
 		aspect->save(writer);
 
 	writer->writeEndElement(); // close "workbook" section

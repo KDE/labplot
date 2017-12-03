@@ -391,7 +391,7 @@ void DatapickerImageWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
 	QString dir = conf.readEntry("LastImageDir", "");
 	QString formats;
-	foreach(QByteArray format, QImageReader::supportedImageFormats()) {
+	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=" "+f;
 	}
@@ -409,7 +409,7 @@ void DatapickerImageWidget::selectFile() {
 	ui.leFileName->setText( path );
 	handleWidgetActions();
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setFileName(path);
 }
 
@@ -420,7 +420,7 @@ void DatapickerImageWidget::fileNameChanged() {
 	handleWidgetActions();
 
 	QString fileName = ui.leFileName->text();
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setFileName(fileName);
 }
 
@@ -451,7 +451,7 @@ void DatapickerImageWidget::graphTypeChanged() {
 		ui.sbPoisitionZ3->setHidden(false);
 	}
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
 
@@ -462,7 +462,7 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
 	points.ternaryScale = value;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
 
@@ -481,7 +481,7 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	points.logicalPos[1].setZ(ui.sbPoisitionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPoisitionZ3->value());
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
 
@@ -504,7 +504,7 @@ void DatapickerImageWidget::pointsStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointStyle(style);
 }
 
@@ -512,7 +512,7 @@ void DatapickerImageWidget::pointsSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -520,7 +520,7 @@ void DatapickerImageWidget::pointsRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointRotationAngle(value);
 }
 
@@ -529,7 +529,7 @@ void DatapickerImageWidget::pointsOpacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointOpacity(opacity);
 }
 
@@ -541,7 +541,7 @@ void DatapickerImageWidget::pointsFillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerImage* image, m_imagesList) {
+	for (auto* image : m_imagesList) {
 		brush = image->pointBrush();
 		brush.setStyle(brushStyle);
 		image->setPointBrush(brush);
@@ -553,7 +553,7 @@ void DatapickerImageWidget::pointsFillingColorChanged(const QColor& color) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerImage* image, m_imagesList) {
+	for (auto* image : m_imagesList) {
 		brush = image->pointBrush();
 		brush.setColor(color);
 		image->setPointBrush(brush);
@@ -579,7 +579,7 @@ void DatapickerImageWidget::pointsBorderStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerImage* image, m_imagesList) {
+	for (auto* image : m_imagesList) {
 		pen = image->pointPen();
 		pen.setStyle(penStyle);
 		image->setPointPen(pen);
@@ -591,7 +591,7 @@ void DatapickerImageWidget::pointsBorderColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerImage* image, m_imagesList) {
+	for (auto* image : m_imagesList) {
 		pen = image->pointPen();
 		pen.setColor(color);
 		image->setPointPen(pen);
@@ -607,7 +607,7 @@ void DatapickerImageWidget::pointsBorderWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerImage* image, m_imagesList) {
+	for (auto* image : m_imagesList) {
 		pen = image->pointPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		image->setPointPen(pen);
@@ -618,7 +618,7 @@ void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointVisibility(state);
 }
 
@@ -629,7 +629,7 @@ void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit)
 	DatapickerImage::EditorSettings settings = m_image->settings();
 	settings.intensityThresholdHigh = upperLimit;
 	settings.intensityThresholdLow = lowerLimit;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setSettings(settings);
 }
 
@@ -640,7 +640,7 @@ void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit
 	DatapickerImage::EditorSettings settings = m_image->settings();
 	settings.foregroundThresholdHigh = upperLimit;
 	settings.foregroundThresholdLow = lowerLimit;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setSettings(settings);
 }
 
@@ -651,7 +651,7 @@ void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 	DatapickerImage::EditorSettings settings = m_image->settings();
 	settings.hueThresholdHigh = upperLimit;
 	settings.hueThresholdLow = lowerLimit;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setSettings(settings);
 }
 
@@ -662,7 +662,7 @@ void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit
 	DatapickerImage::EditorSettings settings = m_image->settings();
 	settings.saturationThresholdHigh = upperLimit;
 	settings.saturationThresholdLow = lowerLimit;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setSettings(settings);
 }
 
@@ -673,7 +673,7 @@ void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 	DatapickerImage::EditorSettings settings = m_image->settings();
 	settings.valueThresholdHigh = upperLimit;
 	settings.valueThresholdLow = lowerLimit;
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setSettings(settings);
 }
 
@@ -681,7 +681,7 @@ void DatapickerImageWidget::plotImageTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
@@ -689,7 +689,7 @@ void DatapickerImageWidget::rotationChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setRotationAngle(value);
 }
 
@@ -697,7 +697,7 @@ void DatapickerImageWidget::minSegmentLengthChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setminSegmentLength(value);
 }
 
@@ -705,7 +705,7 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerImage* image, m_imagesList)
+	for (auto* image : m_imagesList)
 		image->setPointSeparation(value);
 }
 

@@ -266,7 +266,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect *aspect) {
 	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
 
 	connect(aspect, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
-	foreach(const AbstractAspect* child, aspect->children<AbstractAspect>())
+	for (const auto* child : aspect->children<AbstractAspect>())
 		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 
 	connect(aspect, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);

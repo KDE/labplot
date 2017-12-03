@@ -482,7 +482,7 @@ void MainWin::initMenus() {
 	if(m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
-		foreach (Cantor::Backend* backend, Cantor::Backend::availableBackends()) {
+		for (Cantor::Backend* backend : Cantor::Backend::availableBackends()) {
 			if (!backend->isEnabled()) continue;
 			QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(),this);
 			action->setData(backend->name());
@@ -1511,12 +1511,12 @@ void MainWin::updateMdiWindowVisibility() const {
 	PartMdiView* part_view;
 	switch (m_project->mdiWindowVisibility()) {
 	case Project::allMdiWindows:
-		foreach (QMdiSubWindow* window, windows)
+		for (auto* window : windows)
 			window->show();
 
 		break;
 	case Project::folderOnly:
-		foreach (QMdiSubWindow *window, windows) {
+		for (auto* window : windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			Q_ASSERT(part_view);
 			if (part_view->part()->folder() == m_currentFolder)
@@ -1526,7 +1526,7 @@ void MainWin::updateMdiWindowVisibility() const {
 		}
 		break;
 	case Project::folderAndSubfolders:
-		foreach (QMdiSubWindow *window, windows) {
+		for (auto* window : windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			if (part_view->part()->isDescendantOf(m_currentFolder))
 				part_view->show();

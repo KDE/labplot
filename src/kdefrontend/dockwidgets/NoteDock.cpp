@@ -83,7 +83,7 @@ void NoteDock::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	foreach(Note* note, m_notesList)
+	for (auto* note : m_notesList)
 		note->setBackgroundColor(color);
 }
 
@@ -91,7 +91,7 @@ void NoteDock::textColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	foreach(Note* note, m_notesList)
+	for (auto* note : m_notesList)
 		note->setTextColor(color);
 }
 
@@ -99,7 +99,7 @@ void NoteDock::textFontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 
-	foreach(Note* note, m_notesList)
+	for (auto* note : m_notesList)
 		note->setTextFont(font);
 }
 

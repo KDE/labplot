@@ -146,7 +146,7 @@ void MatrixDock::xStartChanged() {
 	QString str = ui.leXStart->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setXStart(value);
 }
 
@@ -157,7 +157,7 @@ void MatrixDock::xEndChanged() {
 	QString str = ui.leXEnd->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setXEnd(value);
 }
 
@@ -168,7 +168,7 @@ void MatrixDock::yStartChanged() {
 	QString str = ui.leYStart->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setYStart(value);
 }
 
@@ -179,7 +179,7 @@ void MatrixDock::yEndChanged() {
 	QString str = ui.leYEnd->text().trimmed();
 	if (str.isEmpty()) return;
 	double value = str.toDouble();
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setYEnd(value);
 }
 
@@ -189,7 +189,7 @@ void MatrixDock::numericFormatChanged(int index) {
 		return;
 
 	char format = ui.cbFormat->itemData(index).toChar().toLatin1();
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setNumericFormat(format);
 }
 
@@ -197,7 +197,7 @@ void MatrixDock::precisionChanged(int precision) {
 	if (m_initializing)
 		return;
 
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setPrecision(precision);
 }
 
@@ -206,7 +206,7 @@ void MatrixDock::headerFormatChanged(int value) {
 		return;
 
 	Matrix::HeaderFormat format = (Matrix::HeaderFormat)value;
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setHeaderFormat(format);
 }
 
@@ -214,7 +214,7 @@ void MatrixDock::rowCountChanged(int rows) {
 	if (m_initializing)
 		return;
 
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setRowCount(rows);
 }
 
@@ -222,7 +222,7 @@ void MatrixDock::columnCountChanged(int columns) {
 	if (m_initializing)
 		return;
 
-	foreach(Matrix* matrix, m_matrixList)
+	for (auto* matrix : m_matrixList)
 		matrix->setColumnCount(columns);
 }
 

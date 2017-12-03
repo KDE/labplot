@@ -1109,7 +1109,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(valuesPath);
 	boundingRectangle = curveShape.boundingRect();
 
-	foreach(const QPolygonF& pol, fillPolygons)
+	for (const auto& pol : fillPolygons)
 		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
@@ -1229,7 +1229,7 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 }
 
 void HistogramPrivate::drawFilling(QPainter* painter) {
-	foreach(const QPolygonF& pol, fillPolygons) {
+	for (const auto& pol : fillPolygons) {
 		QRectF rect = pol.boundingRect();
 		if (fillingType == PlotArea::Color) {
 			switch (fillingColorStyle) {

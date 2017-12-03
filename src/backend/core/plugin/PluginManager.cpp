@@ -4,8 +4,8 @@
     Description          : This class manages all plugins.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -48,7 +48,7 @@
    // somewhere else in the application
    foreach(QObject *plugin, PluginManager::plugins()) {
      MyInterface *myObject = qobject_cast<MyInterface *>(plugin);
-        if (myObject) 
+        if (myObject)
            // found a suitable plugin
    }
    \endcode
@@ -74,7 +74,7 @@ QObjectList PluginManager::m_allPlugins;
  * \brief Load a plugin and append it to the plugin list in the settings.
  *
  * \param absolutePath Absolute path to the plugin file.
- * \return True, if the plugin was successfully loaded. Even if false is returned, 
+ * \return True, if the plugin was successfully loaded. Even if false is returned,
  * the path is still appended to the settings.
  */
 bool PluginManager::enablePlugin(const QString &absolutePath) {
@@ -95,21 +95,21 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
 // 		settings.setValue("enabledPlugins", pluginPaths);
 // 	}
 // 	settings.endGroup();
-	
+
 	// check whether it's already loaded
 	bool result = true;
 	bool alreadyLoaded = false;
-	foreach (PluginLoader *loader, m_loadedPlugins) {
+	for (auto* loader : m_loadedPlugins) {
 		if (loader->fileName() == absolutePath) {
 			alreadyLoaded = true;
 			break;
 		}
 	}
-	
+
 	if (!alreadyLoaded) {
 		PluginLoader *pluginLoader = NULL;
 		// check whether a loader for this plugin already exists
-		foreach (PluginLoader *loader, m_pluginsWithErrors) {
+		for (auto* loader : m_pluginsWithErrors) {
 			if (loader->fileName() == absolutePath) {
 				pluginLoader = loader;
 				m_pluginsWithErrors.removeAll(loader);
@@ -160,7 +160,7 @@ void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
 // 	settings.endGroup();
 
 	// remove the related loader if it is in the list of failed loaders
-	foreach (PluginLoader *loader, m_pluginsWithErrors) {
+	for (auto* loader : m_pluginsWithErrors) {
 		if (loader->fileName() == absolutePath) {
 			m_pluginsWithErrors.removeAll(loader);
 			delete loader;
@@ -170,7 +170,7 @@ void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
 
 	if (rightNow) {
 		// unload the plugin and remove the loader
-		foreach (PluginLoader *loader, m_loadedPlugins) {
+		for (auto* loader : m_loadedPlugins) {
 			if (loader->fileName() == absolutePath) {
 				m_allPlugins.removeAll(loader->instance());
 				m_loadedPlugins.removeAll(loader);
@@ -192,7 +192,7 @@ QObjectList PluginManager::plugins() {
 	loadAll();
 	return m_allPlugins;
 }
-		
+
 /**
  * \brief Load all plugins contained in the "enabledPlugins" setting.
  *
@@ -232,7 +232,7 @@ void PluginManager::loadAll() {
  */
 QStringList PluginManager::loadedPluginFileNames() {
 	QStringList result;
-	foreach (PluginLoader *loader, m_loadedPlugins)
+	for (auto* loader : m_loadedPlugins)
 		result << loader->fileName();
 	return result;
 }
@@ -242,7 +242,7 @@ QStringList PluginManager::loadedPluginFileNames() {
  */
 QStringList PluginManager::failedPluginFileNames() {
 	QStringList result;
-	foreach (PluginLoader *loader, m_pluginsWithErrors)
+	for (auto* loader : m_pluginsWithErrors)
 		result << loader->fileName();
 	return result;
 }
@@ -252,7 +252,7 @@ QStringList PluginManager::failedPluginFileNames() {
  */
 QString PluginManager::errorOfPlugin(const QString &fileName) {
 	QString result;
-	foreach (PluginLoader *loader, m_pluginsWithErrors)
+	for (auto* loader : m_pluginsWithErrors)
 		if (loader->fileName() == fileName)
 			result = loader->statusString();
 	return result;
@@ -263,7 +263,7 @@ QString PluginManager::errorOfPlugin(const QString &fileName) {
  */
 QObject *PluginManager::instanceOfPlugin(const QString &fileName) {
 	QObject *result = NULL;
-	foreach (PluginLoader *loader, m_loadedPlugins)
+	for (auto* loader : m_loadedPlugins)
 		if (loader->fileName() == fileName)
 			result = loader->instance();
 	return result;
@@ -272,11 +272,11 @@ QObject *PluginManager::instanceOfPlugin(const QString &fileName) {
 #ifdef QT_DEBUG
 void PluginManager::printAll() {
 	loadAll();
-	foreach (PluginLoader *loader, m_loadedPlugins) {
+	for (auto* loader : m_loadedPlugins) {
 		qDebug() << "Plugin" << loader->fileName() << "loaded";
 	}
 
-	foreach (PluginLoader *loader, m_pluginsWithErrors) {
+	for (auto* loader : m_pluginsWithErrors) {
 		qDebug() << loader->statusString();
 	}
 

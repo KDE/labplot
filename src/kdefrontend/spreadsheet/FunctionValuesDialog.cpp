@@ -129,7 +129,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
-			foreach (const AbstractAspect* aspect, cols) {
+			for (const auto* aspect : cols) {
 				if (aspect->path() == columnPathes.at(i)) {
 					const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
 					if (column)
@@ -345,7 +345,7 @@ void FunctionValuesDialog::generate() {
 	parser->evaluateCartesian(expression, variableNames, xVectors, &new_data);
 
 	//set the new values and store the expression, variable names and the used data columns
-	foreach(Column* col, m_columns) {
+	for (auto* col : m_columns) {
 		col->setFormula(expression, variableNames, columnPathes);
 		col->replaceValues(0, new_data);
 	}

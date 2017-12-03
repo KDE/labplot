@@ -690,14 +690,14 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	if (layout == Worksheet::VerticalLayout) {
 		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
-		foreach(WorksheetElementContainer* elem, list) {
+		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
 			y+=h + layoutVerticalSpacing;
 		}
 	} else if (layout == Worksheet::HorizontalLayout) {
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
-		foreach(WorksheetElementContainer* elem, list) {
+		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 		}
@@ -711,7 +711,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
-		foreach(WorksheetElementContainer* elem, list) {
+		for (auto* elem : list) {
 			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 			columnIndex++;

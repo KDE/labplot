@@ -452,8 +452,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	prepareGeometryChange();
 
 	curvesList.clear();
-	QVector<XYCurve*> children = q->m_plot->children<XYCurve>();
-	foreach(XYCurve* curve, children) {
+	for (auto* curve : q->m_plot->children<XYCurve>()) {
 		if (curve && curve->isVisible())
 			curvesList.push_back(curve);
 	}

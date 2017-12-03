@@ -218,13 +218,13 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const CartesianScale* xScale, d->xScales) {
+	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
-		foreach (const CartesianScale* yScale, d->yScales) {
+		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
-			foreach(const QPointF& point, points) {
+			for (const auto& point : points) {
 				double x = point.x();
 				double y = point.y();
 
@@ -265,10 +265,10 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	QVector<QPointF> result;
 	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const CartesianScale* xScale, d->xScales) {
+	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
-		foreach (const CartesianScale* yScale, d->yScales) {
+		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
 			for (int i=0; i<logicalPoints.size(); ++i) {
@@ -306,10 +306,10 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	double x = logicalPoint.x();
 	double y = logicalPoint.y();
 
-	foreach (const CartesianScale* xScale, d->xScales) {
+	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
-		foreach (const CartesianScale* yScale, d->yScales) {
+		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
 			if (!xScale->contains(x))
@@ -394,7 +394,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(),
 								xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 
-			foreach (QLineF line, lines) {
+			for (auto line : lines) {
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;
@@ -495,18 +495,18 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach(const QPointF& point, points) {
+	for (const auto& point : points) {
 		if (noPageClipping || pageRect.contains(point)) {
 			bool found = false;
 
 			double x = point.x();
 			double y = point.y();
 
-			foreach (const CartesianScale* xScale, d->xScales) {
+			for (const auto* xScale : d->xScales) {
 				if (found) break;
 				if (!xScale) continue;
 
-				foreach (const CartesianScale* yScale, d->yScales) {
+				for (const auto* yScale : d->yScales) {
 					if (found) break;
 					if (!yScale) continue;
 
@@ -549,10 +549,10 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint
 		double x = logicalPoint.x();
 		double y = logicalPoint.y();
 
-		foreach (const CartesianScale* xScale, d->xScales) {
+		for (const auto* xScale : d->xScales) {
 			if (!xScale) continue;
 
-			foreach (const CartesianScale* yScale, d->yScales) {
+			for (const auto* yScale : d->yScales) {
 				if (!yScale) continue;
 
 				if (!xScale->inverseMap(&x))

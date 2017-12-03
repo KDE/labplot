@@ -196,7 +196,7 @@ void DatapickerCurveWidget::xErrorTypeChanged(int index) {
 	DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
 	errors.x = DatapickerCurve::ErrorType(index);
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setCurveErrorTypes(errors);
 }
 
@@ -213,7 +213,7 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 	DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
 	errors.y = DatapickerCurve::ErrorType(index);
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setCurveErrorTypes(errors);
 }
 
@@ -236,7 +236,7 @@ void DatapickerCurveWidget::styleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointStyle(style);
 }
 
@@ -244,7 +244,7 @@ void DatapickerCurveWidget::sizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -252,7 +252,7 @@ void DatapickerCurveWidget::rotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointRotationAngle(value);
 }
 
@@ -261,7 +261,7 @@ void DatapickerCurveWidget::opacityChanged(int value) {
 		return;
 
 	qreal opacity = (float)value/100.;
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointOpacity(opacity);
 }
 
@@ -269,7 +269,7 @@ void DatapickerCurveWidget::errorBarSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -281,7 +281,7 @@ void DatapickerCurveWidget::fillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		brush = curve->pointBrush();
 		brush.setStyle(brushStyle);
 		curve->setPointBrush(brush);
@@ -296,7 +296,7 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		brush = curve->pointBrush();
 		brush.setStyle(brushStyle);
 		curve->setPointErrorBarBrush(brush);
@@ -309,7 +309,7 @@ void DatapickerCurveWidget::fillingColorChanged(const QColor& color) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		brush = curve->pointBrush();
 		brush.setColor(color);
 		curve->setPointBrush(brush);
@@ -325,7 +325,7 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 		return;
 
 	QBrush brush;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		brush = curve->pointErrorBarBrush();
 		brush.setColor(color);
 		curve->setPointErrorBarBrush(brush);
@@ -351,7 +351,7 @@ void DatapickerCurveWidget::borderStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		pen = curve->pointPen();
 		pen.setStyle(penStyle);
 		curve->setPointPen(pen);
@@ -363,7 +363,7 @@ void DatapickerCurveWidget::borderColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		pen = curve->pointPen();
 		pen.setColor(color);
 		curve->setPointPen(pen);
@@ -379,7 +379,7 @@ void DatapickerCurveWidget::borderWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(DatapickerCurve* curve, m_curveList) {
+	for (auto* curve : m_curveList) {
 		pen = curve->pointPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		curve->setPointPen(pen);
@@ -390,7 +390,7 @@ void DatapickerCurveWidget::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(DatapickerCurve* curve, m_curveList)
+	for (auto* curve : m_curveList)
 		curve->setPointVisibility(state);
 }
 

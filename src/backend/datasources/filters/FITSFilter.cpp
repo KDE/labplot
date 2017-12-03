@@ -1283,7 +1283,7 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
 		printError(status);
 		return;
 	}
-	foreach (const FITSFilter::Keyword& keyword, keywords) {
+	for (const auto& keyword : keywords) {
 		if (!keyword.key.isEmpty()) {
 			status = 0;
 			if (fits_delete_key(m_fitsFile, keyword.key.toLatin1(), &status))
@@ -1335,7 +1335,7 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
 void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
 	int status = 0;
-	foreach (const QString& ext, extensions) {
+	for (const auto& ext : extensions) {
 		status = 0;
 		if (fits_open_file(&m_fitsFile, ext.toLatin1(), READWRITE, &status )) {
 			printError(status);
