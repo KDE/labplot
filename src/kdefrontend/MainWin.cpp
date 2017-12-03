@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Main window of the application
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -153,9 +153,8 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
-	//write settings
+	//save the recent opened files
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
-	//etc...
 
 	KSharedConfig::openConfig()->sync();
 
@@ -215,8 +214,31 @@ void MainWin::initGUI(const QString& fileName) {
 #else
 	setupGUI(Default, QLatin1String("labplot2ui.rc"));
 #endif
+
+	//all toolbars created via the KXMLGUI framework are locked on default:
+	// * on the very first program start, unlock all toolbars
+	// * on later program starts, set stored lock status
+	//Furthermore, we want to show icons only after the first program start.
+	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
+	if (groupMain.exists()) {
+		//KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
+		//in case the toolbars are locked -> load this value
+		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
+		bool locked = (str == QLatin1String("Disabled"));
+		KToolBar::setToolBarsLocked(locked);
+	} else {
+		//first start
+		KToolBar::setToolBarsLocked(false);
+
+		//show icons only
+		for (auto* container : factory()->containers(QLatin1String("ToolBar"))) {
+			QToolBar* toolbar = dynamic_cast<QToolBar*>(container);
+			if (toolbar)
+				toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+		}
+	}
+
 	initMenus();
-	//setupGUI();
 
 	QToolBar* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
 	QToolButton* tbImport = new QToolButton(mainToolBar);
@@ -639,12 +661,6 @@ void MainWin::updateGUI() {
 		return;
 	}
 
-	//for the toolbar worksheet_toolbar, spreadsheet_toolbar and cartesian_plot_toolbar
-	//the default desktop style is ignored and the buttons are shown with icons and texts.
-	//We need to set the style explicitly when the toolbar is shown for the first time
-	//(no subgroup in the group "MainWindow" available)
-	//TODO: is this the usual behaviour for toolbars defined in the rc-file?
-	KConfigGroup group = KSharedConfig::openConfig()->group("MainWindow");
 
 	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
@@ -671,9 +687,6 @@ void MainWin::updateGUI() {
 
 		//populate worksheet-toolbar
 		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
-		if (group.groupList().indexOf("Toolbar worksheet_toolbar") == -1)
-			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
-
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -681,9 +694,6 @@ void MainWin::updateGUI() {
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
-		if (group.groupList().indexOf("Toolbar cartesian_plot_toolbar") == -1)
-			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
-
 		toolbar->clear();
 		view->fillCartesianPlotToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -713,9 +723,6 @@ void MainWin::updateGUI() {
 
 		//populate spreadsheet-toolbar
 		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
-		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar") == -1)
-			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
-
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
@@ -769,9 +776,6 @@ void MainWin::updateGUI() {
 
 		//populate spreadsheet-toolbar
 		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
-		if (group.groupList().indexOf("Toolbar datapicker_toolbar") == -1)
-			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
-
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);

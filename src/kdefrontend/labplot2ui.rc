@@ -2,13 +2,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <gui name="LabPlot" version="1">
 
-<ToolBar name="main_toolbar" >
-<text>Main</text>
+<ToolBar name="main_toolbar">
+<text>Project</text>
 <Action name="toggle_project_explorer_dock"/>
 <Action name="toggle_properties_explorer_dock"/>
-<Separator/>
-<Action name="undo" />
-<Action name="redo" />
 <Separator/>
 <Action name="new_workbook" />
 <Action name="new_spreadsheet" />
@@ -19,23 +16,23 @@
 <Action name="export" />
 </ToolBar>
 
-<ToolBar name="worksheet_toolbar" >
+<ToolBar name="worksheet_toolbar">
 <text>Worksheet</text>
 </ToolBar>
 
-<ToolBar name="datapicker_toolbar" >
+<ToolBar name="datapicker_toolbar">
 <text>Datapicker</text>
 </ToolBar>
 
-<ToolBar name="spreadsheet_toolbar" >
+<ToolBar name="spreadsheet_toolbar">
 <text>Spreadsheet</text>
 </ToolBar>
 
-<ToolBar name="cas_worksheet_toolbar" >
+<ToolBar name="cas_worksheet_toolbar">
 <text>CAS Worksheet</text>
 </ToolBar>
 
-<ToolBar name="cartesian_plot_toolbar" >
+<ToolBar name="cartesian_plot_toolbar" position="left">
 <text>CartesianPlot</text>
 </ToolBar>
 
