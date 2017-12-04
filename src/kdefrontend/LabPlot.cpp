@@ -32,6 +32,9 @@
 #include <QFile>
 #include <QSplashScreen>
 #include <QStandardPaths>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include <KAboutData>
 #include <KLocalizedString>
@@ -114,6 +117,14 @@ int main (int argc, char *argv[]) {
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+
+#ifdef _WIN32
+	// enable debugging on console
+	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+	}
+#endif
 
 	MainWin* window = new MainWin(0, filename);
 	window->show();
