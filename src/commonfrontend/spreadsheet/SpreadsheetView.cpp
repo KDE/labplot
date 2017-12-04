@@ -1614,7 +1614,7 @@ void SpreadsheetView::insertColumnRight() {
 			//no columns available anymore -> resize the spreadsheet and the new column to the default size
 			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
-			newCol->insertRows(0, m_spreadsheet->rowCount());
+			newCol->insertRows(0, rows);
 			m_spreadsheet->setRowCount(rows);
 
 			 //add/append a new column

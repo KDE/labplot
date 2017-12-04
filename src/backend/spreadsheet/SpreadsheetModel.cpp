@@ -279,8 +279,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int index = m_spreadsheet->indexOfChild<Column>(col);
-	beginRemoveColumns(QModelIndex(), index, index);
+	beginResetModel();
 	disconnect(col, 0, this, 0);
 }
 
@@ -293,9 +292,6 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const A
 
 	updateVerticalHeader();
 	updateHorizontalHeader();
-
-	beginResetModel();
-	endRemoveColumns();
 	endResetModel();
 
 	m_spreadsheet->emitColumnCountChanged();
