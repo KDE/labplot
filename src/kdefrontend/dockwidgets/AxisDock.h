@@ -151,8 +151,8 @@ private slots:
 	void axisPositionChanged(float);
 	void axisScaleChanged(Axis::AxisScale);
 	void axisAutoScaleChanged(bool);
-	void axisStartChanged(float);
-	void axisEndChanged(float);
+	void axisStartChanged(double);
+	void axisEndChanged(double);
 	void axisZeroOffsetChanged(qreal);
 	void axisScalingFactorChanged(qreal);
 
@@ -161,7 +161,7 @@ private slots:
 	void axisLineOpacityChanged(qreal);
 	void axisArrowTypeChanged(Axis::ArrowType);
 	void axisArrowPositionChanged(Axis::ArrowPosition);
-	void axisArrowSizeChanged(float);
+	void axisArrowSizeChanged(qreal);
 
 	//ticks
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
@@ -184,7 +184,7 @@ private slots:
 	void axisLabelsAutoPrecisionChanged(bool);
 	void axisLabelsPrecisionChanged(int);
 	void axisLabelsPositionChanged(Axis::LabelsPosition);
-	void axisLabelsOffsetChanged(float);
+	void axisLabelsOffsetChanged(double);
 	void axisLabelsRotationAngleChanged(qreal);
 	void axisLabelsFontChanged(const QFont&);
 	void axisLabelsFontColorChanged(const QColor&);

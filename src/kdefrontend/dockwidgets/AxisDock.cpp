@@ -1383,13 +1383,13 @@ void AxisDock::axisAutoScaleChanged(bool on) {
 	m_initializing = false;
 }
 
-void AxisDock::axisStartChanged(float value) {
+void AxisDock::axisStartChanged(double value) {
 	m_initializing = true;
 	ui.leStart->setText( QString::number(value) );
 	m_initializing = false;
 }
 
-void AxisDock::axisEndChanged(float value) {
+void AxisDock::axisEndChanged(double value) {
 	m_initializing = true;
 	ui.leEnd->setText( QString::number(value) );
 	m_initializing = false;
@@ -1435,7 +1435,7 @@ void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position) {
 	m_initializing = false;
 }
 
-void AxisDock::axisArrowSizeChanged(float size) {
+void AxisDock::axisArrowSizeChanged(qreal size) {
 	m_initializing = true;
 	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
 	m_initializing = false;
@@ -1540,7 +1540,7 @@ void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
 	ui.cbLabelsPosition->setCurrentIndex(position);
 	m_initializing = false;
 }
-void AxisDock::axisLabelsOffsetChanged(float offset) {
+void AxisDock::axisLabelsOffsetChanged(double offset) {
 	m_initializing = true;
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(offset, Worksheet::Point) );
 	m_initializing = false;
