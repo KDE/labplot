@@ -652,9 +652,10 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 	if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
+		//TODO: don't hardcode for black here, use a a different color depending on the theme of the worksheet/plot under the mouse cursor?
 		painter->setPen(QPen(Qt::black, 5/transform().m11()));
 		painter->drawRect(selRect);
-		painter->setBrush(Qt::blue);
+		painter->setBrush(QApplication::palette().color(QPalette::Highlight));
 		painter->setOpacity(0.2);
 		painter->drawRect(selRect);
 		painter->restore();
@@ -887,6 +888,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 
 	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
 		m_selectionStart = event->pos();
+		m_selectionEnd = m_selectionStart; //select&zoom'g starts -> reset the end point to the start point
 		m_selectionBandIsShown = true;
 		QGraphicsView::mousePressEvent(event);
 		return;
@@ -954,7 +956,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
 		m_selectionEnd = event->pos();
 		rect = rect.united(QRect(m_selectionStart, m_selectionEnd).normalized());
-		int penWidth = 5/transform().m11();
+		qreal penWidth = 5/transform().m11();
 		rect.setX(rect.x()-penWidth);
 		rect.setY(rect.y()-penWidth);
 		rect.setHeight(rect.height()+2*penWidth);
