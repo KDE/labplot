@@ -125,7 +125,6 @@ private:
 	//spreadsheet related actions
 	QAction* action_toggle_comments;
 	QAction* action_select_all;
-	QAction* action_add_column;
 	QAction* action_clear_spreadsheet;
 	QAction* action_clear_masks;
 	QAction* action_sort_spreadsheet;
@@ -133,7 +132,8 @@ private:
 	QAction* action_statistics_all_columns;
 
 	//column related actions
-	QAction* action_insert_columns;
+	QAction* action_insert_column_left;
+	QAction* action_insert_column_right;
 	QAction* action_remove_columns;
 	QAction* action_clear_columns;
 	QAction* action_add_columns;
@@ -159,12 +159,11 @@ private:
 	QAction* action_statistics_columns;
 
 	//row related actions
-	QAction* action_insert_rows;
+	QAction* action_insert_row_above;
+	QAction* action_insert_row_below;
 	QAction* action_remove_rows;
 	QAction* action_clear_rows;
-	QAction* action_add_rows;
 	QAction* action_statistics_rows;
-
 
 	//analysis and plot data menu actions
 	QAction* action_plot_data;
@@ -218,13 +217,13 @@ private slots:
 	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 
-	void addRows();
-	void insertEmptyRows();
+	void insertRowAbove();
+	void insertRowBelow();
 	void removeSelectedRows();
 	void clearSelectedRows();
 
-	void addColumns();
-	void insertEmptyColumns();
+	void insertColumnLeft();
+	void insertColumnRight();
 	void removeSelectedColumns();
 	void clearSelectedColumns();
 
