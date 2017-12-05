@@ -119,11 +119,8 @@ int parse_errors(void) {
 int yyerror(param *p, const char *s) {
 	/* remove trailing newline */
 	p->string[strcspn(p->string, "\n")] = 0;
-#if defined(__GNUC__) || _MSC_VER >= 1800
-	printf("PARSER ERROR: %s @ position %zu of string \'%s\'\n", s, p->pos, p->string);
-#else
-	printf("PARSER ERROR: %s @ position %Iu of string \'%s\'\n", s, p->pos, p->string);
-#endif
+	printf("PARSER ERROR: %s @ position %d of string \'%s\'\n", s, (int)(p->pos), p->string);
+
 	return 0;
 }
 
@@ -207,7 +204,7 @@ symrec* assign_variable(const char* symb_name, double value) {
 };
 
 static char getcharstr(param *p) {
-	pdebug("PARSER: getcharstr() pos = %d\n", p->pos);
+	pdebug("PARSER: getcharstr() pos = %d\n", (int)(p->pos));
 
 	if (p->string[p->pos] == '\0')
 		return EOF;
@@ -221,11 +218,7 @@ static void ungetcstr(size_t *pos) {
 }
 
 double parse(const char *str) {
-#if defined(__GNUC__) || _MSC_VER >= 1800
-	pdebug("\nPARSER: parse(\"%s\") len=%zu\n", str, strlen(str));
-#else
-	pdebug("\nPARSER: parse(\"%s\") len=%Iu\n", str, strlen(str));
-#endif
+	pdebug("\nPARSER: parse(\"%s\") len=%d\n", str, (int)strlen(str));
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
@@ -239,11 +232,7 @@ double parse(const char *str) {
 
 	strncpy(p.string, str, slen);
 	p.string[strlen(p.string)] = '\n';
-#if defined(__GNUC__) || _MSC_VER >= 1800
-	pdebug("\nPARSER: yyparse(\"%s\") len=%zu\n", p.string, strlen(p.string));
-#else
-	pdebug("\nPARSER: yyparse(\"%s\") len=%Iu\n", p.string, strlen(p.string));
-#endif
+	pdebug("\nPARSER: yyparse(\"%s\") len=%d\n", p.string, (int)strlen(p.string));
 
 	/* parameter for yylex */
 	yyparse(&p);
@@ -256,11 +245,8 @@ double parse(const char *str) {
 }
 
 double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
-#if defined(__GNUC__) || _MSC_VER >= 1800
-	pdebug("\nPARSER: parse_with_var(\"%s\") len=%zu\n", str, strlen(str));
-#else
-	pdebug("\nPARSER: parse_with_var(\"%s\") len=%Iu\n", str, strlen(str));
-#endif
+	pdebug("\nPARSER: parse_with_var(\"%s\") len=%d\n", str, (int)strlen(str));
+
 	int i;
 	for(i = 0; i < nvars; i++) {	/*assign vars */
 		pdebug("assign %s the value %g\n", vars[i].name, vars[i].value);
