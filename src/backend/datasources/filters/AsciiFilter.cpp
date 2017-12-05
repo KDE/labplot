@@ -575,7 +575,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		return 0;
 	}
 
-	Q_ASSERT(dataSource != nullptr);
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
@@ -725,11 +724,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
 
-	int currentRow;	// indexes the position in the vector(column)
-	int linesToRead;
-
-	if (!m_prepared)
-		linesToRead = newLinesTillEnd;
+	int currentRow = 0; // indexes the position in the vector(column)
+	int linesToRead = 0;
 
 	if (m_prepared) {
 		//increase row count if we don't have a fixed size
@@ -760,10 +756,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			//appending
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 		}
-	}
 
-	if (m_prepared && (linesToRead == 0))
-		return 0;
+		if (linesToRead == 0)
+			return 0;
+	} else
+		linesToRead = newLinesTillEnd;
+
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
@@ -1043,7 +1041,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
 	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
-	Q_ASSERT(dataSource != nullptr);
 
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
