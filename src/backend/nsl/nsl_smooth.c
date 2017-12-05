@@ -416,11 +416,11 @@ int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smoo
 	size_t half = (points-1)/2;	/* n//2 */
 
 	if (points > n) {
-		printf("Tried to smooth over more points (points=%zu) than given as input (%zu).", points, n);
+		printf("Tried to smooth over more points (points=%d) than given as input (%d).", (int)points, (int)n);
 		return -1;
 	}
 	if (order < 1 || (size_t)order > points-1) {
-		printf("The polynomial order must be between 1 and %zu (%d given).", points-1, order);
+		printf("The polynomial order must be between 1 and %d (%d given).", (int)(points-1), order);
 		return -2;
 	}
 

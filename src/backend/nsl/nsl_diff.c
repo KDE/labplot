@@ -374,7 +374,7 @@ int nsl_diff_fourth_deriv_third_order(const double *x, double *y, const size_t n
 	if (n < 7)
 		return -1;
 
-	double dy[7], xdata[7], ydata[7];
+	double dy[7]={0}, xdata[7], ydata[7];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)

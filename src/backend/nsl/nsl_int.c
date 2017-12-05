@@ -113,7 +113,7 @@ size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
 
 size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs) {
 	if (n < 4) {
-		printf("minimum number of points is 4 (given %zu).\n", n);
+		printf("minimum number of points is 4 (given %d).\n", (int)n);
 		return 0;
 	}
 	if (abs != 0) {
