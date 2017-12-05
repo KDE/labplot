@@ -107,7 +107,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 
 	setRenderHint(QPainter::Antialiasing);
 	setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
-	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+	setTransformationAnchor(QGraphicsView::AnchorViewCenter);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
