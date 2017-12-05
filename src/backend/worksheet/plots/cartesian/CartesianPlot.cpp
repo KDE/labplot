@@ -126,7 +126,7 @@ void CartesianPlot::init() {
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
 	//Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	d->autoScaleOffsetFactor = 0.05;
+	d->autoScaleOffsetFactor = 0.05f;
 
 	//TODO: make this factor optional.
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
@@ -1355,7 +1355,6 @@ void CartesianPlot::xDataChanged() {
 		this->scaleAutoX();
 	else {
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		Q_ASSERT(curve);
 		curve->retransform();
 	}
 }
@@ -1373,7 +1372,6 @@ void CartesianPlot::xHistogramDataChanged() {
 		this->scaleAutoX();
 	else {
 		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-		Q_ASSERT(curve);
 		curve->retransform();
 	}
 }
@@ -1394,7 +1392,6 @@ void CartesianPlot::yDataChanged() {
 		this->scaleAutoY();
 	else {
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		Q_ASSERT(curve);
 		curve->retransform();
 	}
 }
@@ -1411,7 +1408,6 @@ void CartesianPlot::yHistogramDataChanged() {
 		this->scaleAutoY();
 	else {
 		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-		Q_ASSERT(curve);
 		curve->retransform();
 	}
 }
