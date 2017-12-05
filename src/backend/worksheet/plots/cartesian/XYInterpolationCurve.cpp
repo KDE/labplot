@@ -268,10 +268,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 	xVector->resize((int)npoints);
 	yVector->resize((int)npoints);
 	for (unsigned int i = 0; i < npoints; i++) {
-		unsigned int a=0,b=n-1;
+		size_t a=0, b=n-1;
 
 		double x = xmin + i*(xmax-xmin)/(npoints-1);
-		(*xVector)[i] = x;
+		(*xVector)[(int)i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		unsigned int j=0;
@@ -313,11 +313,11 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case nsl_interp_type_cosine:
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
 			t = (1.-cos(M_PI*t))/2.;
-			(*yVector)[i] =  ydata[(int)a] + t*(ydata[b]-ydata[a]);
+			(*yVector)[(int)i] =  ydata[a] + t*(ydata[b]-ydata[a]);
 			break;
 		case nsl_interp_type_exponential:
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
-			(*yVector)[i] = ydata[(int)a]*pow(ydata[b]/ydata[a],t);
+			(*yVector)[(int)i] = ydata[a]*pow(ydata[b]/ydata[a],t);
 			break;
 		case nsl_interp_type_pch: {
 				t = (x-xdata[a])/(xdata[b]-xdata[a]);
