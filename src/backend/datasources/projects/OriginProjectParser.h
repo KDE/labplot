@@ -29,6 +29,14 @@
 #define ORIGINPROJECTPARSER_H
 
 #include "backend/datasources/projects/ProjectParser.h"
+#include <liborigin/OriginFile.h>
+
+class Project;
+class Workbook;
+class Spreadsheet;
+class Matrix;
+class Worksheet;
+class Note;
 
 class OriginProjectParser : public ProjectParser {
 	Q_OBJECT
@@ -38,6 +46,22 @@ public:
 
 	QAbstractItemModel* model() override;
 	void importTo(Folder*, const QStringList&) override;
+
+private:
+	bool load(Project*, bool preview);
+	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
+	bool loadWorkbook(Workbook*, bool preview);
+	bool loadSpreadsheet(Spreadsheet*, bool preview);
+	bool loadMatrix(Matrix*, bool preview);
+	bool loadWorksheet(Worksheet*,  bool preview);
+	bool loadNote(Note*, bool preview);
+	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
+
+	OriginFile* m_originFile;
+	int m_excelIndex;
+	int m_matrixIndex;
+	int m_worksheetIndex;
+	int m_noteIndex;
 };
 
 #endif // ORIGINPROJECTPARSER_H
