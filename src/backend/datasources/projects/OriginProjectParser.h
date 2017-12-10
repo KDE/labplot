@@ -55,12 +55,15 @@ private:
 	bool loadMatrix(Matrix*, bool preview);
 	bool loadWorksheet(Worksheet*,  bool preview);
 	bool loadNote(Note*, bool preview);
+
+	QString parseOriginText(const QString &str) const;
+	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
 
 	OriginFile* m_originFile;
 	int m_excelIndex;
 	int m_matrixIndex;
-	int m_worksheetIndex;
+	int m_graphIndex;
 	int m_noteIndex;
 };
 
