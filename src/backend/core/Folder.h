@@ -44,9 +44,10 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void setPathesToLoad(const QStringList&);
+	const QStringList& pathesToLoad() const;
 
 private:
-	QStringList pathesToLoad;
+	QStringList m_pathesToLoad;
 
 protected:
 	bool readChildAspectElement(XmlStreamReader*, bool preview);
