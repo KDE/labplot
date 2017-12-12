@@ -221,14 +221,23 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::Matrix: {
-			Matrix* matrix = new Matrix(0, name);
-			loadMatrix(matrix, preview);
-			aspect = matrix;
+			const Origin::Matrix& matrix = m_originFile->matrix(m_matrixIndex);
+			if (matrix.sheets.size() == 1) {
+				// single sheet -> load into a matrix
+				Matrix* matrix = new Matrix(0, name);
+				loadMatrix(matrix, preview);
+				aspect = matrix;
+			} else {
+				// multiple sheets -> load into a workbook
+				Workbook* workbook = new Workbook(0, name);
+				loadMatrixWorkbook(workbook, preview);
+				aspect = workbook;
+			}
 			++m_matrixIndex;
 			break;
 		}
 		case Origin::ProjectNode::Excel: {
-			const Origin::Excel excel = m_originFile->excel(m_excelIndex);
+			const Origin::Excel& excel = m_originFile->excel(m_excelIndex);
 			if (excel.sheets.size() == 1) {
 				// single sheet -> load into a spreadsheet
 				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
@@ -266,31 +275,26 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 }
 
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
-	Q_UNUSED(workbook)
-	Q_UNUSED(preview)
 	//load workbook sheets
-// 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
-// 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-// // 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
-// 		Origin::SpreadSheet spread = excel.sheets[s];
-// 		Spreadsheet* spreadsheet = new Spreadsheet(0, "");
-// 		loadSpreadsheet(spreadsheet, preview);
-// 		workbook->addChildFast()
-// 	}
-// 	p->addChildFast(workbook);
+	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
+	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
+		// 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
+		//TODO: figure out how to set the spreadsheet name
+		Spreadsheet* spreadsheet = new Spreadsheet(0, "");
+		loadSpreadsheet(spreadsheet, preview, s);
+		workbook->addChildFast(spreadsheet);
+	}
+
 	return true;
 }
 
-bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview) {
+bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, int sheetIndex) {
 	if (preview)
 		return true;
 
 	//load spreadsheet data
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
-	Origin::SpreadSheet spread = excel.sheets[0];
-	spread.name = excel.name;
-	spread.label = excel.label;
-
+	Origin::SpreadSheet spread = excel.sheets[sheetIndex];
 
 	const int cols = spread.columns.size();
 	const int rows = spread.maxRows;
@@ -566,7 +570,22 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	return true;
 }
 
-bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview) {
+
+bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
+	//load matrix workbook sheets
+	const Origin::Matrix matrix = m_originFile->matrix(m_matrixIndex);
+	for (unsigned int s = 0; s < matrix.sheets.size(); ++s) {
+		// 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
+		//TODO: figure out how to set the matrix name
+		Matrix* matrix = new Matrix(0, "");
+		loadMatrix(matrix, preview, s);
+		workbook->addChildFast(matrix);
+	}
+
+	return true;
+}
+
+bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, int sheetIndex) {
 	if (preview)
 		return true;
 
@@ -575,49 +594,47 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview) {
 	Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
 
 	unsigned int layers = originMatrix.sheets.size();
+	std::cout << "matrix sheets " << originMatrix.name << "  " << layers;
 	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
-	//TOD: we only support one layer at the moment -> what to do here?
-	for (unsigned int l = 0; l < layers; ++l) {
-		Origin::MatrixSheet layer = originMatrix.sheets[l];
-		const int colCount = layer.columnCount;
-		const int rowCount = layer.rowCount;
+	Origin::MatrixSheet layer = originMatrix.sheets[sheetIndex];
+	const int colCount = layer.columnCount;
+	const int rowCount = layer.rowCount;
 
-		matrix->setRowCount(rowCount);
-		matrix->setColumnCount(colCount);
-		matrix->setFormula(layer.command.c_str());
+	matrix->setRowCount(rowCount);
+	matrix->setColumnCount(colCount);
+	matrix->setFormula(layer.command.c_str());
 
+	for (int j = 0; j < colCount; j++)
+		matrix->setColumnWidth(j, layer.width * scaling_factor);
+
+	//TODO: check colum major vs. row major to improve the performance here
+	for (int i = 0; i < rowCount; i++) {
 		for (int j = 0; j < colCount; j++)
-			matrix->setColumnWidth(j, layer.width * scaling_factor);
-
-		//TODO: check colum major vs. row major to improve the performance here
-		for (int i = 0; i < rowCount; i++) {
-			for (int j = 0; j < colCount; j++)
-				matrix->setCell(i, j, layer.data[j + i*colCount]);
-		}
-
-		char format = 'g';
-		int prec = 6;
-		switch (layer.valueTypeSpecification) {
-		case 0: //Decimal 1000
-			format='f';
-			prec = layer.decimalPlaces;
-			break;
-		case 1: //Scientific
-			format='e';
-			prec = layer.decimalPlaces;
-			break;
-		case 2: //Engineering
-		case 3: //Decimal 1,000
-			format='g';
-			prec = layer.significantDigits;
-			break;
-		}
-
-		//TODO: prec not support by Matrix
-		Q_UNUSED(prec);
-		matrix->setNumericFormat(format);
+			matrix->setCell(i, j, layer.data[j + i*colCount]);
 	}
+
+	char format = 'g';
+	int prec = 6;
+	switch (layer.valueTypeSpecification) {
+	case 0: //Decimal 1000
+		format='f';
+		prec = layer.decimalPlaces;
+		break;
+	case 1: //Scientific
+		format='e';
+		prec = layer.decimalPlaces;
+		break;
+	case 2: //Engineering
+	case 3: //Decimal 1,000
+		format='g';
+		prec = layer.significantDigits;
+		break;
+	}
+
+	//TODO: prec not support by Matrix
+	Q_UNUSED(prec);
+	matrix->setNumericFormat(format);
 
 	return true;
 }
