@@ -55,11 +55,11 @@
  */
 
 FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
-	Q_ASSERT(s);
+	Q_ASSERT(s != nullptr);
 	setWindowTitle(i18n("Function values"));
 
 	ui.setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 
 	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
@@ -71,7 +71,12 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	m_selectableClasses<<"Column";
 
+// needed for buggy compiler
+#if __cplusplus < 201103L
+	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+#else
 	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+#endif
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
