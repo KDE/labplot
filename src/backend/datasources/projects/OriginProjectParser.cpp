@@ -125,25 +125,84 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
 	QString name(projectIt->name.c_str());
-	m_project->setName(name);
-	m_project->setCreationTime(creationTime(projectIt));
+	project->setName(name);
+	project->setCreationTime(creationTime(projectIt));
 	loadFolder(project, projectIt, preview);
 
 	return true;
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectNode>::iterator& baseIt, bool preview) {
-
-	//load folder's children
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
+
+	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
-		QString name(it->name.c_str());
+		QString name(it->name.c_str()); //name of the current child
+
+		//check whether we need to skip the loading of the current child
+		if (!folder->pathesToLoad().isEmpty()) {
+			//child's path is not available yet (child not added yet) -> construct the path manually
+			const QString childPath = folder->path() + '/' + name;
+
+			//skip the current child aspect it is not in the list of aspects to be loaded
+			if (folder->pathesToLoad().indexOf(childPath) == -1) {
+				//increase the index for the skipped child
+				switch(it->type) {
+				case Origin::ProjectNode::Excel:
+					++m_excelIndex;
+					break;
+				case Origin::ProjectNode::Matrix:
+					++m_matrixIndex;
+					break;
+				case Origin::ProjectNode::Graph:
+					++m_graphIndex;
+					break;
+				case Origin::ProjectNode::Note:
+					++m_noteIndex;
+					break;
+				case Origin::ProjectNode::SpreadSheet:
+				case Origin::ProjectNode::Graph3D:
+				case Origin::ProjectNode::Folder:
+				default:
+					break;
+				}
+
+				continue;
+			}
+		}
 
 		//load top-level children
 		AbstractAspect* aspect = nullptr;
 		switch (it->type) {
 		case Origin::ProjectNode::Folder: {
 			Folder* f = new Folder(name);
+
+			if (!folder->pathesToLoad().isEmpty()) {
+				//a child folder to be read -> provide the list of aspects to be loaded to the child folder, too.
+				//since the child folder and all its children are not added yet (path() returns empty string),
+				//we need to remove the path of the current child folder from the full pathes provided in pathesToLoad.
+				//E.g. we want to import the path "Project/Folder/Spreadsheet" in the following project
+				// Project
+				//        \Spreadsheet
+				//        \Folder
+				//               \Spreadsheet
+				//
+				//Here, we remove the part "Project/Folder/" and proceed for this child folder with "Spreadsheet" only.
+				//With this the logic above where it is determined whether to import the child aspect or not works out.
+
+				//manually construct the path of the child folder to be read
+				const QString& curFolderPath = folder->path()  + '/' + name;
+
+				//remove the path of the current child folder
+				QStringList pathesToLoadNew;
+				for (auto path : folder->pathesToLoad()) {
+					if (path.startsWith(curFolderPath))
+						pathesToLoadNew << path.right(path.length() - curFolderPath.length());
+				}
+
+				f->setPathesToLoad(pathesToLoadNew);
+			}
+
 			loadFolder(f, it, preview);
 			aspect = f;
 			break;
@@ -207,6 +266,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 }
 
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
+	Q_UNUSED(workbook)
+	Q_UNUSED(preview)
 	//load workbook sheets
 // 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
 // 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {

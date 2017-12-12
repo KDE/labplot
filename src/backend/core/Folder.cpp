@@ -117,7 +117,11 @@ bool Folder::load(XmlStreamReader* reader, bool preview) {
 }
 
 void Folder::setPathesToLoad(const QStringList& pathes) {
-	pathesToLoad = pathes;
+	m_pathesToLoad = pathes;
+}
+
+const QStringList& Folder::pathesToLoad() const {
+	return m_pathesToLoad;
 }
 
 /**
@@ -131,12 +135,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		return true; // empty element tag
 
 	//check whether we need to skip the loading of the current child aspect
-	if (!pathesToLoad.isEmpty()) {
+	if (!m_pathesToLoad.isEmpty()) {
 		const QString& name = reader->attributes().value("name").toString(); //name of the current child aspect
 		const QString childPath = path() + '/' + name; //child's path is not available yet (child not added yet) -> construct it manually
 
 		//skip the current child aspect it is not in the list of aspects to be loaded
-		if (pathesToLoad.indexOf(childPath) == -1) {
+		if (m_pathesToLoad.indexOf(childPath) == -1) {
 			reader->skipToEndElement(); //skip to the end of the current element
 			reader->skipToEndElement(); //skip to the end of the "child_asspect" element
 			return true;
@@ -147,10 +151,10 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	if (element_name == QLatin1String("folder")) {
 		Folder* folder = new Folder("");
 
-		if (!pathesToLoad.isEmpty()) {
+		if (!m_pathesToLoad.isEmpty()) {
 			//a child folder to be read -> provide the list of aspects to be loaded to the child folder, too.
 			//since the child folder and all its children are not added yet (path() returns empty string),
-			//we need to remove the path of the current child folder from the full pathes provided in pathesToLoad.
+			//we need to remove the path of the current child folder from the full pathes provided in m_pathesToLoad.
 			//E.g. we want to import the path "Project/Folder/Spreadsheet" in the following project
 			// Project
 			//        \Spreadsheet
@@ -160,12 +164,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			//Here, we remove the part "Project/Folder/" and proceed for this child folder with "Spreadsheet" only.
 			//With this the logic above where it is determined whether to import the child aspect or not works out.
 
-			//manually construct the path of child folder to be read
+			//manually construct the path of the child folder to be read
 			const QString& curFolderPath = path()  + '/' + reader->attributes().value("name").toString();
 
 			//remove the path of the current child folder
 			QStringList pathesToLoadNew;
-			for (auto path : pathesToLoad) {
+			for (auto path : m_pathesToLoad) {
 				if (path.startsWith(curFolderPath))
 					pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 			}
