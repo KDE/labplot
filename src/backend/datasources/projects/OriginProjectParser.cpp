@@ -233,6 +233,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	const int cols = spread.columns.size();
 	const int rows = spread.maxRows;
+	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
 
 	if (rows < 0 || cols < 0)
 		return false;

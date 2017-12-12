@@ -71,11 +71,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	m_selectableClasses<<"Column";
 
-#if __cplusplus < 201103L
-	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#else
 	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#endif
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
@@ -148,7 +144,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 	check the user input and enables/disables the Ok-button depending on the correctness of the input
  */
 void FunctionValuesDialog::checkValues() {
-	//check whether the formulr syntax is correct
+	//check whether the formula syntax is correct
 	if (!ui.teEquation->isValid()) {
 		m_okButton->setEnabled(false);
 		return;
@@ -165,6 +161,14 @@ void FunctionValuesDialog::checkValues() {
 			m_okButton->setEnabled(false);
 			return;
 		}
+/*		Column* column = dynamic_cast<Column*>(aspect);
+		DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
+		if (!column || column->rowCount() < 1) {
+			m_okButton->setEnabled(false);
+			//Warning: x column is empty
+			return;
+		}
+*/
 	}
 
 	m_okButton->setEnabled(true);
@@ -217,19 +221,19 @@ void FunctionValuesDialog::addVariable() {
 	le->setMaximumWidth(30);
 	connect(le, SIGNAL(textChanged(QString)), this, SLOT(variableNameChanged()));
 	layout->addWidget(le, row, 0, 1, 1);
-	m_variableNames<<le;
+	m_variableNames << le;
 
 	//label for the "="-sign
 	QLabel* l = new QLabel("=");
 	layout->addWidget(l, row, 1, 1, 1);
-	m_variableLabels<<l;
+	m_variableLabels << l;
 
 	//combo box for the data column
 	TreeViewComboBox* cb = new TreeViewComboBox();
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	connect( cb, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkValues()) );
 	layout->addWidget(cb, row, 2, 1, 1);
-	m_variableDataColumns<<cb;
+	m_variableDataColumns << cb;
 
 	cb->setTopLevelClasses(m_topLevelClasses);
 	cb->setModel(m_aspectTreeModel.get());
@@ -269,7 +273,7 @@ void FunctionValuesDialog::deleteVariable() {
 	//adjust the layout
 	resize( QSize(width(),0).expandedTo(minimumSize()) );
 
-	m_variableNames.size()>1 ? ui.lVariable->setText(i18n("Variables:")) : ui.lVariable->setText(i18n("Variable:"));
+	m_variableNames.size() > 1 ? ui.lVariable->setText(i18n("Variables:")) : ui.lVariable->setText(i18n("Variable:"));
 
 	//TODO: adjust the tab-ordering after some widgets were deleted
 }
@@ -313,7 +317,7 @@ void FunctionValuesDialog::generate() {
 	QVector<QVector<double>*> xVectors;
 	QVector<Column*> xColumns;
 	int maxRowCount = m_spreadsheet->rowCount();
-	for (int i=0; i<m_variableNames.size(); ++i) {
+	for (int i = 0; i < m_variableNames.size(); ++i) {
 		variableNames << m_variableNames.at(i)->text().simplified();
 
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
@@ -324,19 +328,19 @@ void FunctionValuesDialog::generate() {
 		xColumns << column;
 		xVectors << static_cast<QVector<double>* >(column->data());
 
-		if (column->rowCount()>maxRowCount)
+		if (column->rowCount() > maxRowCount)
 			maxRowCount = column->rowCount();
 	}
 
 	//resize the spreadsheet if one of the data vectors from other spreadsheet(s) has more elements then the current spreadsheet.
-	if (m_spreadsheet->rowCount()<maxRowCount)
+	if (m_spreadsheet->rowCount() < maxRowCount)
 		m_spreadsheet->setRowCount(maxRowCount);
 
 	//create new vector for storing the calculated values
 	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
 	//->"clean" the result vector first
 	QVector<double> new_data(maxRowCount);
-	for (int i=0; i<new_data.size(); ++i)
+	for (int i = 0; i < new_data.size(); ++i)
 		new_data[i] = NAN;
 
 	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.

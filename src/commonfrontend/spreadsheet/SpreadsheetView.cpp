@@ -619,7 +619,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	if (m_spreadsheet->columnCount()>0 && m_spreadsheet->rowCount()>0) {
+	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertAction(firstAction, action_plot_data);
 		menu->insertSeparator(firstAction);
 	}
