@@ -852,11 +852,11 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
  * \brief Read XML input filter element
  */
 bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "input_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == "input_filter");
 	if (!reader->skipToNextTag()) return false;
 	if (!d->inputFilter()->load(reader, false)) return false;
 	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() && reader->name() == "input_filter");
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == "input_filter");
 	return true;
 }
 
@@ -864,11 +864,11 @@ bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
  * \brief Read XML output filter element
  */
 bool Column::XmlReadOutputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "output_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == "output_filter");
 	if (!reader->skipToNextTag()) return false;
 	if (!d->outputFilter()->load(reader, false)) return false;
 	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() && reader->name() == "output_filter");
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == "output_filter");
 	return true;
 }
 
@@ -928,7 +928,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
  * \brief Read XML row element
  */
 bool Column::XmlReadRow(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == "row");
 
 	//	QXmlStreamAttributes attribs = reader->attributes();
 
