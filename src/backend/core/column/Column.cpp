@@ -533,11 +533,11 @@ void Column::calculateStatistics() {
 	double sumForCentralMoment_r4 = 0.0;
 
 	gsl_sort(rowData.data(), 1, notNanCount);
-	statistics.median = (notNanCount%2) ? rowData.at((notNanCount-1)/2) :
-	                    (rowData.at((notNanCount-1)/2) + rowData.at(notNanCount/2))/2.0;
+	statistics.median = (notNanCount%2) ? rowData.at((int)((notNanCount-1)/2)) :
+	                    (rowData.at((int)((notNanCount-1)/2)) + rowData.at((int)(notNanCount/2)))/2.0;
 	QVector<double> absoluteMedianList;
-	absoluteMedianList.reserve(notNanCount);
-	absoluteMedianList.resize(notNanCount);
+	absoluteMedianList.reserve((int)notNanCount);
+	absoluteMedianList.resize((int)notNanCount);
 
 	int idx = 0;
 	for(int row = 0; row < rowValues->size(); ++row) {
@@ -556,8 +556,8 @@ void Column::calculateStatistics() {
 	}
 
 	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
-	statistics.medianDeviation = (notNanCount%2) ? absoluteMedianList.at((notNanCount-1)/2) :
-	                             (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0;
+	statistics.medianDeviation = (notNanCount%2) ? absoluteMedianList.at((int)((notNanCount-1)/2)) :
+	                             (absoluteMedianList.at((int)((notNanCount-1)/2)) + absoluteMedianList.at((int)(notNanCount/2)))/2.0;
 
 	const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
 	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
