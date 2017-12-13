@@ -145,58 +145,58 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText("0.0");
 		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.lParameter3->setText("a =");
 		ui.leParameter1->setText("0.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
+		ui.lParameter1->setText(UTF8_QSTRING("λ ="));
 		ui.leParameter1->setText("1.0");
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_laplace:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText("0.0");
 		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.lParameter3->setText("b =");
 		ui.leParameter1->setText("0.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_cauchy_lorentz:
-		ui.lParameter1->setText(QString::fromUtf8("\u03b3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter1->setText(UTF8_QSTRING("γ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_rayleigh:
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh_tail:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText("0.0");
 		ui.leParameter2->setText("1.0");
 		break;
@@ -208,16 +208,16 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
 		ui.lParameter1->setText("c =");
-		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
+		ui.lParameter2->setText(UTF8_QSTRING("α ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_levy_skew_alpha_stable:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("c ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03b1 ="));
-		ui.lParameter3->setText(QString::fromUtf8("\u03b2 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("c ="));
+		ui.lParameter2->setText(UTF8_QSTRING("α ="));
+		ui.lParameter3->setText(UTF8_QSTRING("β ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("1.0");
@@ -229,7 +229,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_gamma:
-		ui.lParameter1->setText(QString::fromUtf8("\u03b8 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("θ ="));
 		ui.lParameter2->setText("k =");
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
@@ -238,8 +238,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter3->show();
 		ui.leParameter3->show();
 		ui.lParameter1->setText("k =");
-		ui.lParameter2->setText(QString::fromUtf8("\u03bb ="));
-		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(UTF8_QSTRING("λ ="));
+		ui.lParameter3->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("1.0");
@@ -253,9 +253,9 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_gumbel1:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03b2 ="));
-		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("β ="));
+		ui.lParameter3->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("0.0");
@@ -265,7 +265,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter3->show();
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
-		ui.lParameter3->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter3->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		ui.leParameter3->setText("0.0");
@@ -277,8 +277,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_lognormal:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		break;
@@ -289,20 +289,20 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_fdist:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bd\u2081 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bd\u2082 ="));
+		ui.lParameter1->setText(UTF8_QSTRING("ν₁ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("ν₂ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_tdist:
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
-		ui.lParameter1->setText(QString::fromUtf8("\u03bd ="));
+		ui.lParameter1->setText(UTF8_QSTRING("ν ="));
 		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_logistic:
-		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText("1.0");
 		ui.leParameter2->setText("0.0");
 		break;
@@ -310,7 +310,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
 		ui.lFunc->setText("p(k) =");
-		ui.lParameter1->setText(QString::fromUtf8("\u03bb ="));
+		ui.lParameter1->setText(UTF8_QSTRING("λ ="));
 		ui.leParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_bernoulli:
