@@ -217,14 +217,14 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, m_fitCurve->xErrorColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, m_fitCurve->yErrorColumn());
 
-	unsigned int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
+	int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
 	else
 		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
 	m_fitData.modelType = tmpModelType;
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex((int)m_fitData.modelType);
+		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.cbXError->setCurrentIndex(m_fitData.xErrorsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
@@ -247,7 +247,7 @@ void XYFitCurveDock::initGeneralTab() {
 }
 
 void XYFitCurveDock::setModel() {
-	QList<const char*>  list;
+	QList<const char*> list;
 	list << "Folder" << "Datapicker" << "Worksheet" << "CartesianPlot" << "XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
 
