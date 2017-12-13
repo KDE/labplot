@@ -180,10 +180,10 @@ public:
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
 	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
 	virtual double valueAt(int row) const;
-	virtual void setValueAt(int row, const double new_value);
+	virtual void setValueAt(int row, double new_value);
 	virtual void replaceValues(int first, const QVector<double>& new_values);
 	virtual int integerAt(int row) const;
-	virtual void setIntegerAt(int row, const int new_value);
+	virtual void setIntegerAt(int row, int new_value);
 	virtual void replaceInteger(int first, const QVector<int>& new_values);
 
 signals:

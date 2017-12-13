@@ -98,10 +98,10 @@ public:
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
 	double valueAt(int) const override;
-	void setValueAt(int, const double) override;
+	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
 	int integerAt(int) const override;
-	void setIntegerAt(int, const int) override;
+	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
 
 	double maximum(int count = 0) const override;
