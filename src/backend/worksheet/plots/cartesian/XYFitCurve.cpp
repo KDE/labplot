@@ -1776,9 +1776,9 @@ void XYFitCurvePrivate::recalculate() {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	}
-	xVector->resize(fitData.evaluatedPoints);
-	yVector->resize(fitData.evaluatedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.evaluatedPoints, xVector, yVector,
+	xVector->resize((int)fitData.evaluatedPoints);
+	yVector->resize((int)fitData.evaluatedPoints);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints, xVector, yVector,
 						fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();

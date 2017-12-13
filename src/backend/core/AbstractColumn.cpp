@@ -509,7 +509,7 @@ double AbstractColumn::valueAt(int row) const {
  *
  * Use this only when columnMode() is Numeric
  */
-void AbstractColumn::setValueAt(int row, double new_value) {
+void AbstractColumn::setValueAt(int row, const double new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
 };
 
@@ -537,7 +537,7 @@ int AbstractColumn::integerAt(int row) const {
  *
  * Use this only when columnMode() is Integer
  */
-void AbstractColumn::setIntegerAt(int row, int new_value) {
+void AbstractColumn::setIntegerAt(int row, const int new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
 };
 
