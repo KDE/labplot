@@ -291,10 +291,11 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, int sheetIndex) {
 	if (preview)
 		return true;
+	DEBUG("loadSpreadsheet() excelIndex/sheetIndex = " << m_excelIndex << ' ' << sheetIndex);
 
 	//load spreadsheet data
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
-	Origin::SpreadSheet spread = excel.sheets[sheetIndex];
+	Origin::SpreadSheet spread = excel.sheets[sheetIndex];	// or m_originFile->spread(sheetIndex) ?
 
 	const int cols = spread.columns.size();
 	const int rows = spread.maxRows;

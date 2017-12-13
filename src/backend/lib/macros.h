@@ -48,6 +48,12 @@
 #define DEBUG(x) {}
 #endif
 
+#ifdef Q_OS_WIN
+ #define UTF8_QSTRING(str) QString::fromWCharArray(L##str)
+#else
+ #define UTF8_QSTRING(str) QString::fromUtf8(str)
+#endif
+
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
 #define ENUM_COUNT(class, enum) \

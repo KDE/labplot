@@ -48,12 +48,6 @@ extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 }
 
-#ifdef Q_OS_WIN
- #define UTF8_QSTRING(str) QString::fromWCharArray(L##str)
-#else
- #define UTF8_QSTRING(str) QString::fromUtf8(str)
-#endif
-
 /*!
   \class XYFitCurveDock
   \brief  Provides a widget for editing the properties of the XYFitCurves
@@ -821,7 +815,7 @@ void XYFitCurveDock::resultCopyAll() {
 				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i)) + "\n";
 			else {
 				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-					+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
+					+ UTF8_QSTRING("±") + QString::number(fitResult.errorValues.at(i))
 					+ " (" + QString::number(100.*fitResult.errorValues.at(i)/std::abs(fitResult.paramValues.at(i)), 'g', 3) + " %)\n";
 
 				const double margin = fitResult.tdist_marginValues.at(i);
