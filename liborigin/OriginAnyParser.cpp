@@ -1344,6 +1344,9 @@ void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_hea
 	} else if (iexcel != -1) { // excel
 
 		excels[iexcel].loose = false;
+		if (lye_header_size > 0xD2) {
+			excels[iexcel].sheets[ilayer].name = lye_header.substr(0xD2,32).c_str();
+		}
 
 	} else { // graph
 		graphs[igraph].layers.push_back(GraphLayer());

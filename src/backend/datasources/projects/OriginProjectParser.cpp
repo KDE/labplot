@@ -278,9 +278,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	//load workbook sheets
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-		// 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
-		//TODO: figure out how to set the spreadsheet name
-		Spreadsheet* spreadsheet = new Spreadsheet(0, "");
+		Spreadsheet* spreadsheet = new Spreadsheet(0, excel.sheets[s].name.c_str());
 		loadSpreadsheet(spreadsheet, preview, s);
 		workbook->addChildFast(spreadsheet);
 	}
