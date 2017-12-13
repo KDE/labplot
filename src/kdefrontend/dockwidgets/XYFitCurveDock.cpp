@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
     File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
@@ -47,6 +47,12 @@
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 }
+
+#ifdef Q_OS_WIN
+ #define UTF8_QSTRING(str) QString::fromWCharArray(L##str)
+#else
+ #define UTF8_QSTRING(str) QString::fromUtf8(str)
+#endif
 
 /*!
   \class XYFitCurveDock
@@ -149,13 +155,13 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-	uiGeneralTab.twGoodness->item(0, 1)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
-	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2")
-		+ " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "/dof)");
-	uiGeneralTab.twGoodness->item(3, 1)->setText("R" + QString::fromUtf8("\u00b2"));
-	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
-	uiGeneralTab.twGoodness->item(5, 1)->setText("P > " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
+	uiGeneralTab.twGoodness->item(0, 1)->setText(UTF8_QSTRING("χ²"));
+	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + UTF8_QSTRING("χ²")
+		+ " (" + UTF8_QSTRING("χ²") + "/dof)");
+	uiGeneralTab.twGoodness->item(3, 1)->setText(UTF8_QSTRING("R²"));
+	uiGeneralTab.twGoodness->item(4, 1)->setText(UTF8_QSTRING("R̄²"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²") + ' ' + i18n("test"));
+	uiGeneralTab.twGoodness->item(5, 1)->setText("P > " + UTF8_QSTRING("χ²"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -823,7 +829,7 @@ void XYFitCurveDock::resultCopyAll() {
 				if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
 					tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
 				else
-					tdistValueString = QString::fromUtf8("\u221e");
+					tdistValueString = UTF8_QSTRING("∞");
 				str += " (" + i18n("t statistic:") + ' ' + tdistValueString + ", "
 					+ i18n("p value:") + ' ' + QString::number(fitResult.tdist_pValues.at(i), 'g', 3) + ", "
 					+ i18n("conf. interval:") + ' ';
@@ -837,15 +843,15 @@ void XYFitCurveDock::resultCopyAll() {
 		}
 	} else if (currentTab == 1) {
 		str = i18n("Goodness of fit:") + "\n";
-		str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "\n";
+		str += i18n("sum of squared residuals") + " (" + UTF8_QSTRING("χ²") + "): " + QString::number(fitResult.sse) + "\n";
 		if (fitResult.dof != 0) {
-			str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + '\n';
+			str += i18n("reduced") + ' ' + UTF8_QSTRING("χ²") + ": " + QString::number(fitResult.rms) + '\n';
 			str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + "\n";
-			str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquare, 'g', 15) + '\n';
-			str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
+			str += i18n("coefficient of determination") + " (" + UTF8_QSTRING("R²") + "): " + QString::number(fitResult.rsquare, 'g', 15) + '\n';
+			str += i18n("adj. coefficient of determination")+ " (" + UTF8_QSTRING("R̄²")
 				+ "): " + QString::number(fitResult.rsquareAdj, 'g', 15) + "\n\n";
 
-			str += i18n("P > ") + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.chisq_p, 'g', 3) + '\n';
+			str += i18n("P > ") + UTF8_QSTRING("χ²") + ": " + QString::number(fitResult.chisq_p, 'g', 3) + '\n';
 			str += i18n("F statistic") + ": " + QString::number(fitResult.fdist_F, 'g', 3) + '\n';
 			str += i18n("P > F") + ": " + QString::number(fitResult.fdist_p, 'g', 3) + '\n';
 		}
@@ -867,7 +873,7 @@ void XYFitCurveDock::resultCopyAll() {
 		str += i18n("Iterations:") + '\n';
 		for (const auto &s: m_fitData.paramNamesUtf8)
 			str += s + '\t';
-		str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
+		str += UTF8_QSTRING("χ²");
 
 		const QStringList iterations = fitResult.solverOutput.split(';');
 		for (const auto &s: iterations)
@@ -941,7 +947,7 @@ void XYFitCurveDock::showFitResult() {
 	QString str;
 	for (const auto &s: m_fitData.paramNamesUtf8)
 		str += s + '\t';
-	str += QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2");
+	str += UTF8_QSTRING("χ²");
 
 	const QStringList iterations = fitResult.solverOutput.split(';');
 	for (const auto &s: iterations)
@@ -974,9 +980,9 @@ void XYFitCurveDock::showFitResult() {
 				item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
 				uiGeneralTab.twParameters->setItem(i, 3, item);
 			} else {
-				item = new QTableWidgetItem(QString::fromUtf8("\u221e"));
+				item = new QTableWidgetItem(UTF8_QSTRING("∞"));
 				uiGeneralTab.twParameters->setItem(i, 2, item);
-				item = new QTableWidgetItem(QString::fromUtf8("\u221e"));
+				item = new QTableWidgetItem(UTF8_QSTRING("∞"));
 				uiGeneralTab.twParameters->setItem(i, 3, item);
 			}
 
@@ -985,7 +991,7 @@ void XYFitCurveDock::showFitResult() {
 			if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
 				tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
 			else
-				tdistValueString = QString::fromUtf8("\u221e");
+				tdistValueString = UTF8_QSTRING("∞");
 			item = new QTableWidgetItem(tdistValueString);
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 

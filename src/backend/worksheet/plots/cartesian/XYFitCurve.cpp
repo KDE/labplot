@@ -1,4 +1,4 @@
-
+﻿
 /***************************************************************************
     File                 : XYFitCurve.cpp
     Project              : LabPlot
@@ -59,6 +59,12 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+
+#ifdef Q_OS_WIN
+ #define UTF8_QSTRING(str) QString::fromWCharArray(L##str)
+#else
+ #define UTF8_QSTRING(str) QString::fromUtf8(str)
+#endif
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYAnalysisCurve(name, new XYFitCurvePrivate(this)) {
@@ -161,9 +167,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	paramNamesUtf8.clear();
 
 	// 10 indices used in multi degree models
-	QStringList indices = {QString::fromUtf8("\u2081"), QString::fromUtf8("\u2082"), QString::fromUtf8("\u2083"),
-		QString::fromUtf8("\u2084"), QString::fromUtf8("\u2085"), QString::fromUtf8("\u2086"), QString::fromUtf8("\u2087"),
-		QString::fromUtf8("\u2088"), QString::fromUtf8("\u2089"), QString::fromUtf8("\u2081") + QString::fromUtf8("\u2080")};
+	QStringList indices = { UTF8_QSTRING("\u2081"), UTF8_QSTRING("\u2082"), UTF8_QSTRING("\u2083"),
+		UTF8_QSTRING("\u2084"), UTF8_QSTRING("\u2085"), UTF8_QSTRING("\u2086"), UTF8_QSTRING("\u2087"),
+		UTF8_QSTRING("\u2088"), UTF8_QSTRING("\u2089"), UTF8_QSTRING("\u2081") + UTF8_QSTRING("\u2080")};
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
@@ -171,11 +177,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		switch (modelType) {
 		case nsl_fit_model_polynomial:
 			paramNames << "c0" << "c1";
-			paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
+			paramNamesUtf8 << UTF8_QSTRING("c\u2080") << UTF8_QSTRING("c\u2081");
 			if (degree == 2) {
 				model += " + c2*x^2";
 				paramNames << "c2";
-				paramNamesUtf8 << QString::fromUtf8("c\u2082");
+				paramNamesUtf8 << UTF8_QSTRING("c\u2082");
 			} else if (degree > 2) {
 				for (int i = 2; i <= degree; ++i) {
 					QString numStr = QString::number(i);
@@ -213,8 +219,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_fit_model_fourier:
 			paramNames << "w" << "a0" << "a1" << "b1";
-			paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
-				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
+			paramNamesUtf8 << UTF8_QSTRING("ω") << UTF8_QSTRING("a\u2080")
+				<< UTF8_QSTRING("a\u2081") << UTF8_QSTRING("b\u2081");
 			if (degree > 1) {
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
@@ -233,20 +239,20 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
 				break;
 			case 2:
 				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082");
 				break;
 			case 3:
 				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
-					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082")
+					<< UTF8_QSTRING("σ\u2083") << UTF8_QSTRING("μ\u2083") << UTF8_QSTRING("A\u2083");
 				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
@@ -256,8 +262,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
 					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
-					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
-						<< QString::fromUtf8("A") + indices[i-1];
+					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
+						<< "A" + indices[i-1];
 				}
 				model += ")";
 			}
@@ -266,20 +272,20 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			switch (degree) {
 			case 1:
 				paramNames << "g" << "mu" << "a";
-				paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+				paramNamesUtf8 << UTF8_QSTRING("γ") << UTF8_QSTRING("μ") << "A";
 				break;
 			case 2:
 				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2))";
 				paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2";
-				paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				paramNamesUtf8 << UTF8_QSTRING("γ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("γ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082");
 				break;
 			case 3:
 				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2) + a3 * g3/(g3^2+(x-mu3)^2))";
 				paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2" << "g3" << "mu3" << "a3";
-				paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
-					<< QString::fromUtf8("\u03b3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				paramNamesUtf8 << UTF8_QSTRING("γ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("γ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082")
+					<< UTF8_QSTRING("γ\u2083") << UTF8_QSTRING("μ\u2083") << UTF8_QSTRING("A\u2083");
 				break;
 			default:
 				model = "1./pi * (";
@@ -289,8 +295,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += "a" + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
 					paramNames << "g" + numStr << "mu" + numStr << "a" + numStr;
-					paramNamesUtf8 << QString::fromUtf8("\u03b3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
-						<< QString::fromUtf8("A") + indices[i-1];
+					paramNamesUtf8 << UTF8_QSTRING("γ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
+						<< "A" + indices[i-1];
 				}
 				model += ")";
 			}
@@ -299,20 +305,20 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
 				break;
 			case 2:
 				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082");
 				break;
 			case 3:
 				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
-					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082")
+					<< UTF8_QSTRING("σ\u2083") << UTF8_QSTRING("μ\u2083") << UTF8_QSTRING("A\u2083");
 				break;
 			default:
 				model = "1/pi * (";
@@ -322,8 +328,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
 					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
-					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
-						<< QString::fromUtf8("A") + indices[i-1];
+					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
+						<< "A" + indices[i-1];
 				}
 				model += ")";
 			}
@@ -332,20 +338,20 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			switch (degree) {
 			case 1:
 				paramNames << "s" << "mu" << "a";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+				paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
 				break;
 			case 2:
 				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082");
 				break;
 			case 3:
 				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
 				paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-				paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
-					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
-					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
+				paramNamesUtf8 << UTF8_QSTRING("σ\u2081") << UTF8_QSTRING("μ\u2081") << UTF8_QSTRING("A\u2081")
+					<< UTF8_QSTRING("σ\u2082") << UTF8_QSTRING("μ\u2082") << UTF8_QSTRING("A\u2082")
+					<< UTF8_QSTRING("σ\u2083") << UTF8_QSTRING("μ\u2083") << UTF8_QSTRING("A\u2083");
 				break;
 			default:
 				model = "1/4 * (";
@@ -355,8 +361,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
 					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
-					paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
-						<< QString::fromUtf8("A") + indices[i-1];
+					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
+						<< "A" + indices[i-1];
 				}
 				model += ")";
 			}
@@ -372,15 +378,15 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
 			paramNames << "s" << "mu" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_fit_model_sigmoid:
 			paramNames << "k" << "mu" << "a";
-			paramNamesUtf8 << "k" << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << "k" << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_fit_model_hill:
 			paramNames << "s" << "n" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "n" << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << "n" << "A";
 			break;
 		case nsl_fit_model_gompertz:
 			paramNames << "a" << "b" << "c";
@@ -397,28 +403,28 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
 			paramNames << "s" << "mu" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_gaussian_tail:
 			paramNames << "s" << "mu" << "A" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "a";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A" << "a";
 			break;
 		case nsl_sf_stats_exponential:
 			paramNames << "l" << "mu" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("λ") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_exponential_power:
 			paramNames << "s" << "mu" << "b" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "b" << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "b" << "A";
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
 			paramNames << "g" << "mu" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("γ") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_rayleigh:
 			paramNames << "s" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << "A";
 			break;
 		case nsl_sf_stats_landau:
 			paramNames << "a";
@@ -430,7 +436,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_gamma:
 			paramNames << "t" << "k" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03b8") << "k" << "A";
+			paramNamesUtf8 << UTF8_QSTRING("θ") << "k" << "A";
 			break;
 		case nsl_sf_stats_flat:
 			paramNames << "a" << "b" << "A";
@@ -441,12 +447,12 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_fdist:
 			paramNames << "n1" << "n2" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2081")
-				<< QString::fromUtf8("\u03bd") + QString::fromUtf8("\u2082") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("ν") + UTF8_QSTRING("\u2081")
+				<< UTF8_QSTRING("ν") + UTF8_QSTRING("\u2082") << "A";
 			break;
 		case nsl_sf_stats_tdist:
 			paramNames << "n" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03bd") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("ν") << "A";
 			break;
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto:
@@ -454,19 +460,19 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_weibull:
 			paramNames << "k" << "l" << "mu" << "a";
-			paramNamesUtf8 << "k" << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << "k" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_gumbel1:
 			paramNames << "s" << "b" << "mu" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("β") << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_gumbel2:
 			paramNames << "a" << "b" << "mu" << "A";
-			paramNamesUtf8 << "a" << "b" << QString::fromUtf8("\u03bc") << "A";
+			paramNamesUtf8 << "a" << "b" << UTF8_QSTRING("μ") << "A";
 			break;
 		case nsl_sf_stats_poisson:
 			paramNames << "l" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("λ") << "A";
 			break;
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_binomial:
@@ -481,15 +487,15 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_hypergeometric:
 			paramNames << "n1" << "n2" << "t" << "a";
-			paramNamesUtf8 << "n" + QString::fromUtf8("\u2081") << "n" + QString::fromUtf8("\u2082") << "t" << "A";
+			paramNamesUtf8 << "n" + UTF8_QSTRING("\u2081") << "n" + UTF8_QSTRING("\u2082") << "t" << "A";
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
 			paramNames << "s" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("σ") << "A";
 			break;
 		case nsl_sf_stats_frechet:
 			paramNames << "g" << "mu" << "s" << "a";
-			paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << QString::fromUtf8("\u03c3") << "A";
+			paramNamesUtf8 << UTF8_QSTRING("γ") << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << "A";
 			break;
 		}
 		break;
