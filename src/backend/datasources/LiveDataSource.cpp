@@ -692,9 +692,6 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		QMessageBox::critical(0, i18n("Serial Port Error"),
 		                      i18n("The device timed out."));
 		break;
-	case QSerialPort::ParityError:
-	case QSerialPort::FramingError:
-	case QSerialPort::BreakConditionError:
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
