@@ -295,8 +295,11 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
 	Origin::SpreadSheet spread = excel.sheets[sheetIndex];	// or m_originFile->spread(sheetIndex) ?
 
+
 	const int cols = spread.columns.size();
-	const int rows = spread.maxRows;
+	int rows = 0;	// or = excel.maxRows;
+	for (int j = 0; j < cols; ++j)
+		rows = std::max((int)spread.columns[j].data.size(), rows);
 	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
 
 	if (rows < 0 || cols < 0)
