@@ -51,9 +51,9 @@ private:
 	bool load(Project*, bool preview);
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
-	bool loadSpreadsheet(Spreadsheet*, bool preview, int sheetIndex = 0);
+	bool loadSpreadsheet(Spreadsheet*, bool preview, size_t sheetIndex = 0);
 	bool loadMatrixWorkbook(Workbook*, bool preview);
-	bool loadMatrix(Matrix*, bool preview, int sheetIndex = 0);
+	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0);
 	bool loadWorksheet(Worksheet*,  bool preview);
 	bool loadNote(Note*, bool preview);
 
@@ -62,10 +62,10 @@ private:
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
 
 	OriginFile* m_originFile;
-	int m_excelIndex;
-	int m_matrixIndex;
-	int m_graphIndex;
-	int m_noteIndex;
+	size_t m_excelIndex;
+	size_t m_matrixIndex;
+	size_t m_graphIndex;
+	size_t m_noteIndex;
 };
 
 #endif // ORIGINPROJECTPARSER_H

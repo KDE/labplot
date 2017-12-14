@@ -59,9 +59,6 @@
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
-#ifdef HAVE_LIBORIGIN
-#include "kdefrontend/datasources/ImportOpj.h"
-#endif
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"

@@ -286,7 +286,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	return true;
 }
 
-bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, int sheetIndex) {
+bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex) {
 	if (preview)
 		return true;
 	DEBUG("loadSpreadsheet() excelIndex/sheetIndex = " << m_excelIndex << ' ' << sheetIndex);
@@ -296,13 +296,13 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	Origin::SpreadSheet spread = excel.sheets[sheetIndex];	// or m_originFile->spread(sheetIndex) ?
 
 
-	const int cols = spread.columns.size();
+	const size_t cols = spread.columns.size();
 	int rows = 0;	// or = excel.maxRows;
-	for (int j = 0; j < cols; ++j)
+	for (size_t j = 0; j < cols; ++j)
 		rows = std::max((int)spread.columns[j].data.size(), rows);
 	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
 
-	if (rows < 0 || cols < 0)
+	if (rows < 0 || (int)cols < 0)
 		return false;
 
 	//TODO QLocale locale = mw->locale();
@@ -312,9 +312,9 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	const int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
-	for (int j = 0; j < cols; ++j) {
+	for (size_t j = 0; j < cols; ++j) {
 		Origin::SpreadColumn column = spread.columns[j];
-		Column *col = spreadsheet->column(j);
+		Column *col = spreadsheet->column((int)j);
 
 		QString name(column.name.c_str());
 		col->setName(name.replace(QRegExp(".*_"),""));
@@ -577,7 +577,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	//load matrix workbook sheets
 	const Origin::Matrix matrix = m_originFile->matrix(m_matrixIndex);
-	for (unsigned int s = 0; s < matrix.sheets.size(); ++s) {
+	for (size_t s = 0; s < matrix.sheets.size(); ++s) {
 		// 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
 		//TODO: figure out how to set the matrix name
 		Matrix* matrix = new Matrix(0, "");
@@ -588,7 +588,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	return true;
 }
 
-bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, int sheetIndex) {
+bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex) {
 	if (preview)
 		return true;
 
@@ -596,8 +596,6 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, int sheetInde
 	Q_UNUSED(matrix);
 	Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
 
-	unsigned int layers = originMatrix.sheets.size();
-	std::cout << "matrix sheets " << originMatrix.name << "  " << layers;
 	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
 	Origin::MatrixSheet layer = originMatrix.sheets[sheetIndex];

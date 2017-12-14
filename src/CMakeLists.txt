@@ -87,9 +87,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 )
-IF (USE_LIBORIGIN)
-	LIST(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/ImportOpj.cpp)
-ENDIF ()
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
