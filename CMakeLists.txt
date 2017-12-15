@@ -131,9 +131,8 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
-### liborigin (own) ###############################
+### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
-	SET (USE_LIBORIGIN TRUE)
 	add_definitions (-DHAVE_LIBORIGIN)
 	MESSAGE (STATUS "Origin project import (through internal liborigin) enabled")
 ELSE ()
@@ -259,7 +258,7 @@ IF (XLOCALE_INCLUDE_DIR)
 	include_directories (${XLOCALE_INCLUDE_DIR})
 ENDIF()
 
-IF (USE_LIBORIGIN)
+IF (ENABLE_LIBORIGIN)
 	add_subdirectory(liborigin)
 ENDIF ()
 

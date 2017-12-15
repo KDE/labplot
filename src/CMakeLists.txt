@@ -348,7 +348,7 @@ ENDIF ()
 IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2lib ${CFITSIO_LIBRARY} )
 ENDIF ()
-IF (USE_LIBORIGIN)
+IF (ENABLE_LIBORIGIN)
 target_link_libraries( labplot2lib liborigin-static )
 ENDIF ()
 
