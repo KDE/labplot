@@ -221,8 +221,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::Matrix: {
-			const Origin::Matrix& matrix = m_originFile->matrix(m_matrixIndex);
-			if (matrix.sheets.size() == 1) {
+			const Origin::Matrix& originMatrix = m_originFile->matrix(m_matrixIndex);
+			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
 				Matrix* matrix = new Matrix(0, name);
 				loadMatrix(matrix, preview);
@@ -308,7 +308,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	//TODO QLocale locale = mw->locale();
 
 	spreadsheet->setRowCount(rows);
-	spreadsheet->setColumnCount(cols);
+	spreadsheet->setColumnCount((int)cols);
 
 	const int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
@@ -576,11 +576,9 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	//load matrix workbook sheets
-	const Origin::Matrix matrix = m_originFile->matrix(m_matrixIndex);
-	for (size_t s = 0; s < matrix.sheets.size(); ++s) {
-		// 	TODO: name of sheets are not saved in liborigin: "Sheet1", "Sheet2", ...)
-		//TODO: figure out how to set the matrix name
-		Matrix* matrix = new Matrix(0, "");
+	const Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
+	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
+		Matrix* matrix = new Matrix(0, originMatrix.sheets[s].name.c_str());
 		loadMatrix(matrix, preview, s);
 		workbook->addChildFast(matrix);
 	}

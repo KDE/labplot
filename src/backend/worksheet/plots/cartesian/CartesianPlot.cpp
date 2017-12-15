@@ -58,7 +58,6 @@
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 
-#include <QtConcurrent/QtConcurrentRun>
 #include <QDir>
 #include <QDropEvent>
 #include <QIcon>
@@ -1306,10 +1305,8 @@ void CartesianPlot::dataChanged() {
 			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
 			//-> retransform all available curves since we don't know which curves are affected.
 			//TODO: this logic can be very expensive
-			qDebug()<<"HERE";
-			for (auto curve : children<XYCurve>())
-				QtConcurrent::run(curve, &XYCurve::retransform);
-// 				curve->retransform();
+			for (auto c : children<XYCurve>())
+				c->retransform();
 		}
 	}
 }
@@ -1332,8 +1329,8 @@ void CartesianPlot::HistogramdataChanged() {
 			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
 			//-> retransform all available curves since we don't know which curves are affected.
 			//TODO: this logic can be very expensive
-			for (auto curve : children<Histogram>())
-				curve->retransform();
+			for (auto c : children<Histogram>())
+				c->retransform();
 		}
 	}
 }
