@@ -298,6 +298,8 @@ void ImportProjectDialog::selectFile() {
 		title = i18n("Open Origin Project");
 		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
 		supportedFormats = i18n("Origin Projects (*.opj *.OPJ)");
+		//TODO (when liborigin supports OPJU):
+		// supportedFormats = i18n("Origin Projects (*.opj *.OPJ *.opju *.OPJU)");
 		break;
 	}
 
