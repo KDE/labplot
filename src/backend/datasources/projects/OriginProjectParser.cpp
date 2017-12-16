@@ -108,10 +108,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		delete m_originFile;
 
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
-	if (!m_originFile->parse()) {
+	if (!m_originFile->parse())
 		return false;
-	}
-
 
 	//Origin project tree and the iterator pointing to the root node
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
@@ -297,9 +295,10 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 
 	const size_t cols = spread.columns.size();
-	int rows = 0;	// or = excel.maxRows;
+	int rows = 0;
 	for (size_t j = 0; j < cols; ++j)
 		rows = std::max((int)spread.columns[j].data.size(), rows);
+	// alternative: int rows = excel.maxRows;
 	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
 
 	if (rows < 0 || (int)cols < 0)
@@ -387,13 +386,13 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				}
 			}
 			if (column.numericDisplayType != 0) {
-				int f = 0;
-				switch(column.valueTypeSpecification) {
+				int fi = 0;
+				switch (column.valueTypeSpecification) {
 				case Origin::Decimal:
-					f=1;
+					fi = 1;
 					break;
 				case Origin::Scientific:
-					f=2;
+					fi = 2;
 					break;
 				case Origin::Engineering:
 				case Origin::DecimalWithMarks:
@@ -401,7 +400,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				}
 
 				Double2StringFilter *filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(f);
+				filter->setNumericFormat(fi);
 				filter->setNumDigits(column.decimalPlaces);
 			}
 			break;
@@ -412,7 +411,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				col->setTextAt(i, column.data[i].as_string());
 			break;
 		case Origin::Time: {
-			switch(column.valueTypeSpecification + 128) {
+			switch (column.valueTypeSpecification + 128) {
 			case Origin::TIME_HH_MM:
 				format="hh:mm";
 				break;
@@ -457,7 +456,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 			break;
 		}
 		case Origin::Date: {
-			switch(column.valueTypeSpecification) {
+			switch (column.valueTypeSpecification) {
 			case Origin::DATE_DD_MM_YYYY:
 				format="dd/MM/yyyy";
 				break;
@@ -539,7 +538,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 			break;
 		}
 		case Origin::Day: {
-			switch(column.valueTypeSpecification) {
+			switch (column.valueTypeSpecification) {
 			case Origin::DAY_DDD:
 				format = "ddd";
 				break;
@@ -675,7 +674,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			QString data(curve.dataName.c_str());
 // 				int color = 0;
 
-			switch(curve.type) {
+			switch (curve.type) {
 			case Origin::GraphCurve::Line:
 //					style = Graph::Line;
 				break;
@@ -787,7 +786,7 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	QStringList lines = str.split("\n");
 	QString text = "";
 	for (int i = 0; i < lines.size(); ++i) {
-		if(i > 0)
+		if (i > 0)
 			text.append("\n");
 		text.append(parseOriginTags(lines[i]));
 	}
@@ -812,9 +811,9 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	int pos = rxline.indexIn(line);
 	while (pos > -1) {
 		QString value = rxline.cap(0);
-		int len=value.length();
+		int len = value.length();
 		value.replace(QRegExp(" "),"");
-		value="\\c{"+value.mid(3,value.length()-4)+"}";
+		value = "\\c{" + value.mid(3, value.length()-4) + "}";
 		line.replace(pos, len, value);
 		pos = rxline.indexIn(line);
 	}
@@ -822,35 +821,35 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
 	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
 	QString linerev = strreverse(line);
-	QString lBracket=strreverse("&lbracket;");
-	QString rBracket=strreverse("&rbracket;");
-	QString ltagBracket=strreverse("&ltagbracket;");
-	QString rtagBracket=strreverse("&rtagbracket;");
+	QString lBracket = strreverse("&lbracket;");
+	QString rBracket = strreverse("&rbracket;");
+	QString ltagBracket = strreverse("&ltagbracket;");
+	QString rtagBracket = strreverse("&rtagbracket;");
 	int pos1 = rx.indexIn(linerev);
 	int pos2 = rxfont.indexIn(linerev);
 
-	while (pos1>-1 || pos2>-1) {
-		if(pos1==pos2) {
+	while (pos1 > -1 || pos2 > -1) {
+		if (pos1 == pos2) {
 			QString value = rx.cap(0);
-			int len=value.length();
-			value=rBracket+value.mid(1,len-2)+lBracket;
+			int len = value.length();
+			value = rBracket + value.mid(1, len-2) + lBracket;
 			linerev.replace(pos1, len, value);
 		}
-		else if ((pos1>pos2&&pos2!=-1)||pos1==-1) {
+		else if ((pos1 > pos2 && pos2 != -1) || pos1 == -1) {
 			QString value = rxfont.cap(0);
-			int len=value.length();
-			value=rtagBracket+value.mid(1,len-2)+ltagBracket;
+			int len = value.length();
+			value = rtagBracket + value.mid(1, len-2) + ltagBracket;
 			linerev.replace(pos2, len, value);
 		}
-		else if ((pos2>pos1&&pos1!=-1)||pos2==-1) {
+		else if ((pos2 > pos1 && pos1 != -1) || pos2 == -1) {
 			QString value = rx.cap(0);
-			int len=value.length();
-			value=rtagBracket+value.mid(1,len-2)+ltagBracket;
+			int len = value.length();
+			value = rtagBracket + value.mid(1, len-2) + ltagBracket;
 			linerev.replace(pos1, len, value);
 		}
 
-		pos1=rx.indexIn(linerev);
-		pos2=rxfont.indexIn(linerev);
+		pos1 = rx.indexIn(linerev);
+		pos2 = rxfont.indexIn(linerev);
 	}
 	linerev.replace(ltagBracket, "(");
 	linerev.replace(rtagBracket, ")");
@@ -861,51 +860,50 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	//replace \b(...), \i(...), \u(...), \g(...), \+(...), \-(...), \f:font(...) tags
 	const QString rxstr[] = { "\\\\\\s*b\\s*\\(", "\\\\\\s*i\\s*\\(", "\\\\\\s*u\\s*\\(", "\\\\\\s*g\\s*\\(", "\\\\\\s*\\+\\s*\\(", "\\\\\\s*\\-\\s*\\(", "\\\\\\s*f\\:[^\\(]*\\("};
 
-	int postag[]={0,0,0,0,0,0,0};
-	QString ltag[]={"<b>","<i>","<u>","<font face=Symbol>","<sup>","<sub>","<font face=%1>"};
-	QString rtag[]={"</b>","</i>","</u>","</font>","</sup>","</sub>","</font>"};
+	int postag[] = {0, 0, 0, 0, 0, 0, 0};
+	QString ltag[] = {"<b>","<i>","<u>","<font face=Symbol>","<sup>","<sub>","<font face=%1>"};
+	QString rtag[] = {"</b>","</i>","</u>","</font>","</sup>","</sub>","</font>"};
 	QRegExp rxtags[7];
-	for(int i=0; i<7; ++i)
+	for (int i = 0; i < 7; ++i)
 		rxtags[i].setPattern(rxstr[i]+"[^\\(\\)]*\\)");
 
-	bool flag=true;
-	while(flag) {
-		for(int i=0; i<7; ++i) {
+	bool flag = true;
+	while (flag) {
+		for (int i = 0; i < 7; ++i) {
 			postag[i] = rxtags[i].indexIn(line);
 			while (postag[i] > -1) {
 				QString value = rxtags[i].cap(0);
 				int len = value.length();
 				pos2 = value.indexOf("(");
-				if(i<6)
-					value=ltag[i]+value.mid(pos2+1,len-pos2-2)+rtag[i];
-				else
-				{
-					int posfont=value.indexOf("f:");
-					value=ltag[i].arg(value.mid(posfont+2,pos2-posfont-2))+value.mid(pos2+1,len-pos2-2)+rtag[i];
+				if (i < 6)
+					value = ltag[i] + value.mid(pos2+1, len-pos2-2) + rtag[i];
+				else {
+					int posfont = value.indexOf("f:");
+					value = ltag[i].arg(value.mid(posfont+2, pos2-posfont-2)) + value.mid(pos2+1, len-pos2-2) + rtag[i];
 				}
 				line.replace(postag[i], len, value);
 				postag[i] = rxtags[i].indexIn(line);
 			}
 		}
-		flag=false;
-		for(int i=0; i<7; ++i) {
-			if(rxtags[i].indexIn(line)>-1) {
-				flag=true;
+		flag = false;
+		for (int i = 0; i < 7; ++i) {
+			if (rxtags[i].indexIn(line) > -1) {
+				flag = true;
 				break;
 			}
 		}
 	}
 
 	//replace unclosed tags
-	for(int i=0; i<6; ++i)
+	for (int i = 0; i < 6; ++i)
 		line.replace(QRegExp(rxstr[i]), ltag[i]);
 	rxfont.setPattern(rxstr[6]);
 	pos = rxfont.indexIn(line);
 	while (pos > -1) {
 		QString value = rxfont.cap(0);
-		int len=value.length();
-		int posfont=value.indexOf("f:");
-		value=ltag[6].arg(value.mid(posfont+2,len-posfont-3));
+		int len = value.length();
+		int posfont = value.indexOf("f:");
+		value = ltag[6].arg(value.mid(posfont+2, len-posfont-3));
 		line.replace(pos, len, value);
 		pos = rxfont.indexIn(line);
 	}
