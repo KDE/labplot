@@ -131,6 +131,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectNode>::iterator& baseIt, bool preview) {
+	DEBUG("OriginProjectParser::loadFolder()");
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
@@ -269,10 +270,16 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 	}
 
+	DEBUG("number of excels:\t" << m_excelIndex);
+	DEBUG("number of matrices:\t" << m_matrixIndex);
+	DEBUG("number of graphs:\t" << m_graphIndex);
+	DEBUG("number of notes:\t" << m_noteIndex);
+
 	return folder;
 }
 
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
+	DEBUG("loadWorkbook() excelIndex = " << m_excelIndex);
 	//load workbook sheets
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
@@ -291,8 +298,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	//load spreadsheet data
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
-	Origin::SpreadSheet spread = excel.sheets[sheetIndex];	// or m_originFile->spread(sheetIndex) ?
-
+	Origin::SpreadSheet spread = excel.sheets[sheetIndex];
 
 	const size_t cols = spread.columns.size();
 	int rows = 0;
@@ -308,6 +314,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount((int)cols);
+	spreadsheet->setComment(excel.label.c_str());
 
 	const int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
