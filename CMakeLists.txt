@@ -5,6 +5,8 @@ set(KF5_MIN_VERSION "5.16.0")
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+# build type: "release", "debug", "debugfull"
+string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
@@ -134,9 +136,15 @@ FIND_PACKAGE(GSL REQUIRED)
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
 	add_definitions (-DHAVE_LIBORIGIN)
-	MESSAGE (STATUS "Origin project import (through internal liborigin) enabled")
+
+	IF (CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "debugfull")
+		MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging enabled)")
+		SET (ENABLE_ORIGIN_PARSER_LOG TRUE)
+	ELSE ()
+		MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging disabled)")
+	ENDIF ()
 ELSE ()
-	MESSAGE (STATUS "Origin project import (through internal liborigin) disabled")
+	MESSAGE (STATUS "Origin project import disabled")
 ENDIF ()
 
 ### Cantorlibs (optional) ###############################
@@ -258,13 +266,13 @@ IF (XLOCALE_INCLUDE_DIR)
 	include_directories (${XLOCALE_INCLUDE_DIR})
 ENDIF()
 
-IF (ENABLE_LIBORIGIN)
-	add_subdirectory(liborigin)
-ENDIF ()
-
 add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(src)
+
+IF (ENABLE_LIBORIGIN)
+	add_subdirectory(liborigin)
+ENDIF ()
 
 # if (BUILD_TESTS)
     enable_testing(true)
