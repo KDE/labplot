@@ -270,12 +270,16 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 	}
 
+	DEBUG("Number of excels:\t" << m_excelIndex);
+	DEBUG("Number of matrices:\t" << m_matrixIndex);
+	DEBUG("Number of graphs:\t" << m_graphIndex);
+	DEBUG("Number of notes:\t" << m_noteIndex);
+
 	// ResultsLog
-	QString resultsLog = m_originFile->resultsLogString().c_str();
+	QString resultsLog = QString::fromStdString(m_originFile->resultsLogString());
 	if (resultsLog.length() > 0) {
-		DEBUG("Found results log");
+		DEBUG("Results log:\t\tyes");
 		Note* note = new Note("ResultsLog");
-		m_noteIndex++;
 
 		if (preview)
 			folder->addChildFast(note);
@@ -288,12 +292,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 //				note->setCreationTime(creationTime(it));
 			}
 		}
-	}
-
-	DEBUG("number of excels:\t" << m_excelIndex);
-	DEBUG("number of matrices:\t" << m_matrixIndex);
-	DEBUG("number of graphs:\t" << m_graphIndex);
-	DEBUG("number of notes (including results log):\t" << m_noteIndex);
+	} else
+		DEBUG("Results log:\t\tno");
 
 	return folder;
 }
