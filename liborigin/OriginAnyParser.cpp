@@ -2726,7 +2726,7 @@ void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, stri
 	// ResultsLog note window has left, top, right, bottom all zero.
 	// All other parameters are also zero, except "name" and "text".
 	if (!rect.bottom || !rect.right) {
-		resultsLog = nwect.c_str();
+		resultsLog = nwect;
 		return;
 	}
 	unsigned char state = nwehd[0x18];

@@ -122,7 +122,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	m_noteIndex = 0;
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
-	QString name(projectIt->name.c_str());
+	QString name(QString::fromLatin1(projectIt->name.c_str()));
 	project->setName(name);
 	project->setCreationTime(creationTime(projectIt));
 	loadFolder(project, projectIt, preview);
@@ -136,7 +136,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
-		QString name(it->name.c_str()); //name of the current child
+		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
 
 		//check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
@@ -276,7 +276,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 	DEBUG("Number of notes:\t" << m_noteIndex);
 
 	// ResultsLog
-	QString resultsLog = QString::fromStdString(m_originFile->resultsLogString());
+	QString resultsLog = QString::fromLatin1(m_originFile->resultsLogString().c_str());
 	if (resultsLog.length() > 0) {
 		DEBUG("Results log:\t\tyes");
 		Note* note = new Note("ResultsLog");
@@ -303,7 +303,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	//load workbook sheets
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-		Spreadsheet* spreadsheet = new Spreadsheet(0, excel.sheets[s].name.c_str());
+		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, s);
 		workbook->addChildFast(spreadsheet);
 	}
@@ -334,7 +334,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount((int)cols);
-	spreadsheet->setComment(excel.label.c_str());
+	spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
 
 	const int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 
@@ -349,7 +349,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 // 		if (column.command.size() > 0)
 // 			col->setFormula(Interval<int>(0, rows), QString(column.command.c_str()));
 
-		col->setComment(QString(column.comment.c_str()));
+		col->setComment(QString::fromLatin1(column.comment.c_str()));
 		col->setWidth((int)column.width * scaling_factor);
 
 		//plot designation
@@ -605,7 +605,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	//load matrix workbook sheets
 	const Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
-		Matrix* matrix = new Matrix(0, originMatrix.sheets[s].name.c_str());
+		Matrix* matrix = new Matrix(0, QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
 		loadMatrix(matrix, preview, s);
 		workbook->addChildFast(matrix);
 	}
@@ -685,7 +685,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		//add legend if available
 		if (!layer.legend.text.empty()) {
 			CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
-			legend->title()->setText( parseOriginText(QString::fromLocal8Bit(layer.legend.text.c_str())) );
+			legend->title()->setText( parseOriginText(QString::fromLatin1(layer.legend.text.c_str())) );
 			plot->addChild(legend);
 		}
 
@@ -701,7 +701,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 		//add curves
 		for (const auto& curve: layer.curves) {
-			QString data(curve.dataName.c_str());
+			QString data(QString::fromLatin1(curve.dataName.c_str()));
 // 				int color = 0;
 
 			switch (curve.type) {
@@ -786,7 +786,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	//load note data
 	Origin::Note originNote = m_originFile->note(m_noteIndex);
 
-	QString name = originNote.name.c_str();
+	QString name = QString::fromLatin1(originNote.name.c_str());
 	//TODO: do we really need this?
 // 	QRegExp rx("^@(\\S+)$");
 // 	if(rx.indexIn(name) == 0)
@@ -797,7 +797,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 		return true;
 
 	//TODO: note->setWindowLabel(originNote.label.c_str());
-	note->setNote(QString(originNote.text.c_str()));
+	note->setNote(QString::fromLatin1(originNote.text.c_str()));
 
 	return true;
 }
