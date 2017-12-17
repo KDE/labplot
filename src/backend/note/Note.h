@@ -4,7 +4,7 @@
     Description          : Widget for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016-2017C Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -52,6 +52,7 @@ public:
 	bool printPreview() const override;
 
 	void setNote(const QString&);
+	void setText(const QString& s) {this->setNote(s);}
 	const QString& note() const;
 
 	void setBackgroundColor(const QColor&);

@@ -2704,6 +2704,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 }
 
 void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, string nwelb, unsigned int nwelbsz, string nwect, unsigned int nwectsz) {
+	LOG_PRINT(logfile, "OriginAnyParser::getNoteProperties()");
 	istringstream stmp;
 	(void) nwehdsz; (void) nwelbsz; (void) nwectsz;
 
@@ -2742,6 +2743,7 @@ void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, stri
 	GET_INT(stmp, labellen)
 
 	notes.push_back(Note(name));
+	LOG_PRINT(logfile,"notes: %d\n", (int)notes.size());
 	notes.back().objectID = objectIndex;
 	++objectIndex;
 
@@ -2903,6 +2905,7 @@ void OriginAnyParser::getZcolorsMap(ColorMap& colorMap, string cmapdata, unsigne
 }
 
 void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator current_folder, string ptldt, unsigned int ptldtsz) {
+	LOG_PRINT(logfile,"OriginAnyParser::getProjectLeafProperties()\n");
 	istringstream stmp;
 	(void) ptldtsz;
 
@@ -2911,7 +2914,9 @@ void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator curre
 	GET_INT(stmp, file_type);
 	GET_INT(stmp, file_object_id);
 
+	LOG_PRINT(logfile,"file_type=%d file_object_id=%d\n",file_type,file_object_id);
 	if (file_type == 0x100000) { // Note window
+		LOG_PRINT(logfile,"notes.size()=%d\n",(int)notes.size());
 		if ((file_object_id <= notes.size()) && (notes.size()>0)) {
 			projectTree.append_child(current_folder, ProjectNode(notes[file_object_id].name, ProjectNode::Note));
 		}

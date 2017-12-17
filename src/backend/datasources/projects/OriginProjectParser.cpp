@@ -62,7 +62,7 @@ OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_graphIndex(0),
 	m_noteIndex(0) {
 
-	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet";
+	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
 QAbstractItemModel* OriginProjectParser::model() {
@@ -270,10 +270,30 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 	}
 
+	// ResultsLog
+	QString resultsLog = m_originFile->resultsLogString().c_str();
+	if (resultsLog.length() > 0) {
+		DEBUG("Found results log");
+		Note* note = new Note("ResultsLog");
+		m_noteIndex++;
+
+		if (preview)
+			folder->addChildFast(note);
+		else {
+			//only import the log if it is in the list of aspects to be loaded
+			const QString childPath = folder->path() + '/' + note->name();
+			if (folder->pathesToLoad().indexOf(childPath) != -1) {
+				note->setText(resultsLog);
+				folder->addChildFast(note);
+//				note->setCreationTime(creationTime(it));
+			}
+		}
+	}
+
 	DEBUG("number of excels:\t" << m_excelIndex);
 	DEBUG("number of matrices:\t" << m_matrixIndex);
 	DEBUG("number of graphs:\t" << m_graphIndex);
-	DEBUG("number of notes:\t" << m_noteIndex);
+	DEBUG("number of notes (including results log):\t" << m_noteIndex);
 
 	return folder;
 }
@@ -292,9 +312,9 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 }
 
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex) {
+	DEBUG("loadSpreadsheet() excelIndex/sheetIndex = " << m_excelIndex << ' ' << sheetIndex);
 	if (preview)
 		return true;
-	DEBUG("loadSpreadsheet() excelIndex/sheetIndex = " << m_excelIndex << ' ' << sheetIndex);
 
 	//load spreadsheet data
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
@@ -581,6 +601,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
+	DEBUG("OriginProjectParser::loadMatrixWorkbook()");
 	//load matrix workbook sheets
 	const Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
@@ -593,6 +614,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 }
 
 bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex) {
+	DEBUG("OriginProjectParser::loadMatrix()");
 	if (preview)
 		return true;
 
@@ -646,6 +668,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 
 
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
+	DEBUG("OriginProjectParser::loadWorksheet()");
 	if (preview)
 		return true;
 
@@ -758,19 +781,20 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
-	if (preview)
-		return true;
+	DEBUG("OriginProjectParser::loadNote()");
 
 	//load note data
 	Origin::Note originNote = m_originFile->note(m_noteIndex);
 
+	QString name = originNote.name.c_str();
 	//TODO: do we really need this?
-// 	QString name = originNote.name.c_str();
 // 	QRegExp rx("^@(\\S+)$");
 // 	if(rx.indexIn(name) == 0)
 // 		name = name.mid(2, name.length() - 3);
-// 	note->setName(name);
+	note->setName(name);
 
+	if (preview)
+		return true;
 
 	//TODO: note->setWindowLabel(originNote.label.c_str());
 	note->setNote(QString(originNote.text.c_str()));
