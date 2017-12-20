@@ -209,7 +209,7 @@ protected:
 	virtual void handleRowRemoval(int first, int count);
 
 private:
-	AbstractColumnPrivate* m_abstract_column_private;
+	AbstractColumnPrivate* d;
 
 	friend class AbstractColumnRemoveRowsCmd;
 	friend class AbstractColumnInsertRowsCmd;

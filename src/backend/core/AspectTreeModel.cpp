@@ -28,7 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/AbstractAspect.h"
-#include "backend/core/AbstractColumn.h"
+// #include "backend/core/AbstractColumn.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectTreeModel.h"
 
@@ -76,6 +77,8 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_root(root),
 	  m_readOnly(false),
 	  m_folderSelectable(true),
+	  m_numericColumnsOnly(false),
+	  m_nonEmptyNumericColumnsOnly(false),
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
 
@@ -97,6 +100,14 @@ void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
 
 void AspectTreeModel::setReadOnly(bool readOnly) {
 	m_readOnly = readOnly;
+}
+
+void AspectTreeModel::enableNumericColumnsOnly(bool value) {
+	m_numericColumnsOnly = value;
+}
+
+void AspectTreeModel::enableNonEmptyNumericColumnsOnly(bool value) {
+	m_nonEmptyNumericColumnsOnly = value;
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const {
@@ -163,13 +174,22 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 	if (!index.isValid())
 		return QVariant();
 
-	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch(role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
 		switch(index.column()) {
-		case 0:
+		case 0: {
+			const Column* column = dynamic_cast<const Column*>(aspect);
+			if (column) {
+				if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
+					return aspect->name() + "   (" + i18n("non-numeric data") + ")";
+
+				if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
+					return aspect->name() + "   (" + i18n("no values") + ")";
+			}
 			return aspect->name();
+		}
 		case 1:
 			return aspect->metaObject()->className();
 		case 2:
@@ -239,10 +259,18 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 			result |= Qt::ItemIsEditable;
 	}
 
-	//allow to drag and drop columns for the faster creation of curves in the plots.
-	//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
-	if (dynamic_cast<const AbstractColumn*>(aspect))
+	const Column* column = dynamic_cast<const Column*>(aspect);
+	if (column) {
+		//allow to drag and drop columns for the faster creation of curves in the plots.
+		//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
 		result = result |Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
+		if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
+			result &= ~Qt::ItemIsEnabled;
+
+		if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
+			result &= ~Qt::ItemIsEnabled;
+	}
 
 	return result;
 }

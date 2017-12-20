@@ -870,15 +870,13 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
 	QPointF tempPoint;
 
 	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
 	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++) {
+	for (int row = 0; row < xColumn->rowCount(); row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
 		        && (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 			switch (xColMode) {

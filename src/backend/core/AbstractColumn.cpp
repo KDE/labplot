@@ -82,12 +82,12 @@
  * \param name the column name (= aspect name)
  */
 AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
-	m_abstract_column_private( new AbstractColumnPrivate(this) ) {
+	d( new AbstractColumnPrivate(this) ) {
 }
 
 AbstractColumn::~AbstractColumn() {
 	emit aboutToBeDestroyed(this);
-	delete m_abstract_column_private;
+	delete d;
 }
 
 QStringList AbstractColumn::dateFormats() {
@@ -295,28 +295,28 @@ bool AbstractColumn::isValid(int row) const {
  * \brief Return whether a certain row is masked
  */
 bool AbstractColumn::isMasked(int row) const {
-	return m_abstract_column_private->m_masking.isSet(row);
+	return d->m_masking.isSet(row);
 }
 
 /**
  * \brief Return whether a certain interval of rows is fully masked
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
-	return m_abstract_column_private->m_masking.isSet(i);
+	return d->m_masking.isSet(i);
 }
 
 /**
  * \brief Return all intervals of masked rows
  */
 QList< Interval<int> > AbstractColumn::maskedIntervals() const {
-	return m_abstract_column_private->m_masking.intervals();
+	return d->m_masking.intervals();
 }
 
 /**
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(m_abstract_column_private),
+	exec(new AbstractColumnClearMasksCmd(d),
 	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 
@@ -327,7 +327,7 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(Interval<int> i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask),
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask),
 	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 

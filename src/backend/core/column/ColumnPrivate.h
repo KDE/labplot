@@ -106,7 +106,10 @@ public:
 	void replaceInteger(int first, const QVector<int>&);
 
 	AbstractColumn::ColumnStatistics statistics;
-	bool statisticsAvailable;
+	bool statisticsAvailable; //is 'statistics' already available or needs to be (re-)calculated?
+
+	bool hasValues;
+	bool hasValuesAvailable; //is 'hasValues' already available or needs to be (re-)calculated?
 
 private:
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data

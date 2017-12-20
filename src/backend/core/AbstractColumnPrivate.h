@@ -4,7 +4,8 @@
     Description          : Private data class of AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net),
-	Copyright            : (C) 2007-2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007-2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,9 +41,10 @@ public:
 
 	QString name() const { return m_owner->name(); }
 
-public:
-	AbstractColumn* m_owner;
 	IntervalAttribute<bool> m_masking;
+
+private:
+	AbstractColumn* m_owner;
 };
 
 #endif //ifndef ABSTRACT_COLUMN_PRIVATE_H
