@@ -123,8 +123,14 @@ pair<string, string> OriginParser::findDataByIndex(unsigned int index) const
 		{
 			for(vector<SpreadColumn>::const_iterator it2 = it1->columns.begin(); it2 != it1->columns.end(); ++it2)
 			{
-				if(it2->index == index)
-					return make_pair("E_" + it->name, it2->name);
+				if(it2->index == index) {
+					int sheetno = (int)(it1-it->sheets.begin())+1;
+					string sheetsuffix = string("@")+std::to_string(sheetno);
+					if (sheetno > 1)
+						return make_pair("E_" + it->name+sheetsuffix, it2->name);
+					else
+						return make_pair("E_" + it->name, it2->name);
+				}
 			}
 		}
 	}
