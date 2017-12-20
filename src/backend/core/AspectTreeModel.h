@@ -53,6 +53,8 @@ public:
 	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
 	void setReadOnly(bool);
+	void enableNumericColumnsOnly(bool);
+	void enableNonEmptyNumericColumnsOnly(bool);
 	void setFilterString(const QString&);
 	void setFilterCaseSensitivity(Qt::CaseSensitivity);
 	void setFilterMatchCompleteWord(bool);
@@ -73,6 +75,8 @@ private:
 	AbstractAspect* m_root;
 	bool m_readOnly;
 	bool m_folderSelectable;
+	bool m_numericColumnsOnly;
+	bool m_nonEmptyNumericColumnsOnly;
 	QList<const char*> m_selectableAspects;
 
 	QString m_filterString;

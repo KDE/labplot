@@ -472,6 +472,8 @@ void XYCurveDock::init() {
 }
 
 void XYCurveDock::setModel() {
+	m_aspectTreeModel->enableNumericColumnsOnly(true);
+
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";

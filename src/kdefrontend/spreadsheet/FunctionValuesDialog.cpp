@@ -78,6 +78,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 #endif
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
+	m_aspectTreeModel->enableNumericColumnsOnly(true);
+	m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
 
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
@@ -117,7 +119,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 
 	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
 	if (!variableNames.size()) {
-		//no formular was used for this column -> add the first variable "x"
+		//no formula was used for this column -> add the first variable "x"
 		addVariable();
 		m_variableNames[0]->setText("x");
 	} else {

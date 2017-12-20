@@ -86,6 +86,7 @@ public:
 
 	const AbstractColumn::ColumnStatistics& statistics();
 	void* data() const;
+	bool hasValues() const;
 
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
@@ -123,8 +124,6 @@ private:
 	void handleRowRemoval(int first, int count) override;
 
 	void calculateStatistics();
-	void setStatisticsAvailable(bool);
-	bool statisticsAvailable() const;
 
 	bool m_suppressDataChangedSignal;
 	QActionGroup* m_usedInActionGroup;

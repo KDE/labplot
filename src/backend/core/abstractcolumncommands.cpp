@@ -189,7 +189,7 @@ void AbstractColumnSetMaskedCmd::undo()
 AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn *col, int before,
 		int count, QUndoCommand *parent) :
 	QUndoCommand(parent),
-	m_col(col->m_abstract_column_private),
+	m_col(col->d),
 	m_before(before),
 	m_count(count) {
 }
@@ -236,7 +236,7 @@ void AbstractColumnInsertRowsCmd::undo() {
 AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn *col, int first,
 		int count, QUndoCommand *parent) :
 	QUndoCommand(parent),
-	m_col(col->m_abstract_column_private),
+	m_col(col->d),
 	m_first(first),
 	m_count(count) {
 }
