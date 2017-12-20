@@ -522,13 +522,14 @@ namespace Origin
 
 	struct GraphCurve
 	{
-		enum Plot {Line = 200, Scatter=201, LineSymbol=202, Column = 203, Area = 204, HiLoClose = 205, Box = 206,
+		enum Plot {Scatter3D = 101, Surface3D = 103, Vector3D = 183, ScatterAndErrorBar3D = 184, TernaryContour = 185,
+			PolarXrYTheta = 186, SmithChart = 191, Polar = 192, BubbleIndexed = 193, BubbleColorMapped = 194,
+			Line = 200, Scatter=201, LineSymbol=202, Column = 203, Area = 204, HiLoClose = 205, Box = 206,
 			ColumnFloat = 207, Vector = 208, PlotDot = 209, Wall3D = 210, Ribbon3D = 211, Bar3D = 212, ColumnStack = 213,
 			AreaStack = 214, Bar = 215, BarStack = 216, FlowVector = 218, Histogram = 219, MatrixImage = 220, Pie = 225,
 			Contour = 226, Unknown = 230, ErrorBar = 231, TextPlot = 232, XErrorBar = 233, SurfaceColorMap = 236,
 			SurfaceColorFill = 237, SurfaceWireframe = 238, SurfaceBars = 239, Line3D = 240, Text3D = 241, Mesh3D = 242,
-			XYZContour = 243, XYZTriangular = 245, LineSeries = 246, YErrorBar = 254, XYErrorBar = 255, GraphScatter3D = 0x8AF0,
-			GraphTrajectory3D = 0x8AF1, Polar = 0x00020000, SmithChart = 0x00040000, FillArea = 0x00800000};
+			XYZContour = 243, XYZTriangular = 245, LineSeries = 246, YErrorBar = 254, XYErrorBar = 255};
 		enum LineStyle {Solid = 0, Dash = 1, Dot = 2, DashDot = 3, DashDotDot = 4, ShortDash = 5, ShortDot = 6, ShortDashDot = 7};
 		enum LineConnect {NoLine = 0, Straight = 1, TwoPointSegment = 2, ThreePointSegment = 3, BSpline = 8, Spline = 9,
 			StepHorizontal = 11, StepVertical = 12, StepHCenter = 13, StepVCenter = 14, Bezier = 15};
@@ -825,8 +826,22 @@ namespace Origin
 		{
 			for (vector<GraphCurve>::const_iterator it = curves.begin(); it != curves.end(); ++it)
 			{
-				if (it->type == GraphCurve::Line3D) return true;
-				if (it->type == GraphCurve::Mesh3D) return true;
+				switch (it->type)
+				{
+					case GraphCurve::Scatter3D:
+					case GraphCurve::Surface3D:
+					case GraphCurve::Vector3D:
+					case GraphCurve::ScatterAndErrorBar3D:
+					case GraphCurve::TernaryContour:
+					case GraphCurve::Line3D:
+					case GraphCurve::Mesh3D:
+					case GraphCurve::XYZContour:
+					case GraphCurve::XYZTriangular:
+						return true;
+						break;
+					default:
+						break;
+				}
 			}
 		return false;
 		}
