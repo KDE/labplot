@@ -83,6 +83,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	m_model( new SpreadsheetModel(spreadsheet) ),
 	m_suppressSelectionChangedEvent(false),
 	m_readOnly(readOnly),
+	m_columnSetAsMenu(nullptr),
 	m_columnGenerateDataMenu(nullptr),
 	m_columnSortMenu(nullptr) {
 
@@ -356,14 +357,13 @@ void SpreadsheetView::initMenus() {
 		submenu= new QMenu(i18n("Fi&ll Selection with"), this);
 		submenu->addAction(action_fill_sel_row_numbers);
 		submenu->addAction(action_fill_const);
-		// 	submenu->addAction(action_fill_random);
 		m_selectionMenu->addMenu(submenu);
 		m_selectionMenu->addSeparator();
+		m_selectionMenu->addAction(action_cut_selection);
 	}
 
-	if (!m_readOnly)
-		m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
+
 	if (!m_readOnly) {
 		m_selectionMenu->addAction(action_paste_into_selection);
 		m_selectionMenu->addAction(action_clear_selection);
@@ -373,13 +373,6 @@ void SpreadsheetView::initMenus() {
 		m_selectionMenu->addSeparator();
 		m_selectionMenu->addAction(action_normalize_selection);
 	}
-	//TODO
-	// 	m_selectionMenu ->addSeparator();
-// 	m_selectionMenu ->addAction(action_set_formula);
-// 	m_selectionMenu ->addAction(action_recalculate);
-
-
-	//TODO add plot menu to spreadsheet- and column-menu, like in scidavis, origin etc.
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
@@ -410,44 +403,44 @@ void SpreadsheetView::initMenus() {
 	dataFitMenu->addAction(addFitAction.at(10));
 
 	//analyze and plot data menu
-	QMenu* analyzePlotMenu = new QMenu(i18n("Analyze and plot data"));
-	analyzePlotMenu->insertMenu(0, dataManipulationMenu);
-	analyzePlotMenu->addSeparator();
-	analyzePlotMenu->addAction(addDifferentiationAction);
-	analyzePlotMenu->addAction(addIntegrationAction);
-	analyzePlotMenu->addSeparator();
-	analyzePlotMenu->addAction(addInterpolationAction);
-	analyzePlotMenu->addAction(addSmoothAction);
-	analyzePlotMenu->addAction(addFourierFilterAction);
-	analyzePlotMenu->addSeparator();
-	analyzePlotMenu->addMenu(dataFitMenu);
-	m_columnMenu->addMenu(analyzePlotMenu);
+	m_analyzePlotMenu = new QMenu(i18n("Analyze and plot data"));
+	m_analyzePlotMenu->insertMenu(0, dataManipulationMenu);
+	m_analyzePlotMenu->addSeparator();
+	m_analyzePlotMenu->addAction(addDifferentiationAction);
+	m_analyzePlotMenu->addAction(addIntegrationAction);
+	m_analyzePlotMenu->addSeparator();
+	m_analyzePlotMenu->addAction(addInterpolationAction);
+	m_analyzePlotMenu->addAction(addSmoothAction);
+	m_analyzePlotMenu->addAction(addFourierFilterAction);
+	m_analyzePlotMenu->addSeparator();
+	m_analyzePlotMenu->addMenu(dataFitMenu);
+	m_columnMenu->addMenu(m_analyzePlotMenu);
 
+	m_columnSetAsMenu = new QMenu(i18n("Set Column As"));
 	m_columnMenu->addSeparator();
-	if (!m_readOnly) {
-		submenu = new QMenu(i18n("Set Column As"));
-		submenu->addAction(action_set_as_x);
-		submenu->addAction(action_set_as_y);
-		submenu->addAction(action_set_as_z);
-		submenu->addSeparator();
-		submenu->addAction(action_set_as_xerr);
-		submenu->addAction(action_set_as_xerr_minus);
-		submenu->addAction(action_set_as_xerr_plus);
-		submenu->addSeparator();
-		submenu->addAction(action_set_as_yerr);
-		submenu->addAction(action_set_as_yerr_minus);
-		submenu->addAction(action_set_as_yerr_plus);
-		submenu->addSeparator();
-		submenu->addAction(action_set_as_none);
-		m_columnMenu->addMenu(submenu);
-		m_columnMenu->addSeparator();
+	m_columnSetAsMenu->addAction(action_set_as_x);
+	m_columnSetAsMenu->addAction(action_set_as_y);
+	m_columnSetAsMenu->addAction(action_set_as_z);
+	m_columnSetAsMenu->addSeparator();
+	m_columnSetAsMenu->addAction(action_set_as_xerr);
+	m_columnSetAsMenu->addAction(action_set_as_xerr_minus);
+	m_columnSetAsMenu->addAction(action_set_as_xerr_plus);
+	m_columnSetAsMenu->addSeparator();
+	m_columnSetAsMenu->addAction(action_set_as_yerr);
+	m_columnSetAsMenu->addAction(action_set_as_yerr_minus);
+	m_columnSetAsMenu->addAction(action_set_as_yerr_plus);
+	m_columnSetAsMenu->addSeparator();
+	m_columnSetAsMenu->addAction(action_set_as_none);
+	m_columnMenu->addMenu(m_columnSetAsMenu);
 
+	if (!m_readOnly) {
 		m_columnGenerateDataMenu = new QMenu(i18n("Generate Data"), this);
 		m_columnGenerateDataMenu->addAction(action_fill_row_numbers);
 		m_columnGenerateDataMenu->addAction(action_fill_const);
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
 		m_columnGenerateDataMenu->addAction(action_fill_function);
+		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
 		m_columnMenu->addSeparator();
 
@@ -462,6 +455,7 @@ void SpreadsheetView::initMenus() {
 		m_columnSortMenu->addAction(action_sort_asc_column);
 		m_columnSortMenu->addAction(action_sort_desc_column);
 		m_columnSortMenu->addAction(action_sort_columns);
+		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnSortMenu);
 		m_columnMenu->addSeparator();
 
@@ -470,8 +464,8 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_columns);
 		m_columnMenu->addAction(action_clear_columns);
-		m_columnMenu->addSeparator();
 	}
+	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
@@ -481,7 +475,7 @@ void SpreadsheetView::initMenus() {
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
 	m_spreadsheetMenu->addAction(action_plot_data);
-	m_spreadsheetMenu->addMenu(analyzePlotMenu);
+	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addSeparator();
@@ -490,8 +484,8 @@ void SpreadsheetView::initMenus() {
 		m_spreadsheetMenu->addAction(action_clear_spreadsheet);
 		m_spreadsheetMenu->addAction(action_clear_masks);
 		m_spreadsheetMenu->addAction(action_sort_spreadsheet);
-		m_spreadsheetMenu->addSeparator();
 	}
+	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
@@ -514,8 +508,8 @@ void SpreadsheetView::initMenus() {
 
 		m_rowMenu->addAction(action_remove_rows);
 		m_rowMenu->addAction(action_clear_rows);
-		m_rowMenu->addSeparator();
 	}
+	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
 	action_statistics_rows->setVisible(false);
 }
@@ -645,67 +639,50 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
  * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
  */
 void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
-	QAction* firstAction = menu->actions().at(1);
+	const Column* column = dynamic_cast<Column*>(QObject::sender());
+	if (!column)
+		return; //should never happen, since the sender is always a Column
 
-	QMenu* submenu = new QMenu(i18n("Set Column As"));
-	submenu->addAction(action_set_as_x);
-	submenu->addAction(action_set_as_y);
-	submenu->addAction(action_set_as_z);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_xerr);
-	submenu->addAction(action_set_as_xerr_minus);
-	submenu->addAction(action_set_as_xerr_plus);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_yerr);
-	submenu->addAction(action_set_as_yerr_minus);
-	submenu->addAction(action_set_as_yerr_plus);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_none);
-	menu->insertMenu(firstAction, submenu);
-	if (!m_readOnly) {
+	const bool numeric = (column->columnMode() == AbstractColumn::Numeric) || (column->columnMode() == AbstractColumn::Integer);
+
+	if (numeric) {
+		QAction* firstAction = menu->actions().at(1);
+		menu->insertMenu(firstAction, m_columnSetAsMenu);
+
+		const bool hasValues = column->hasValues();
+
+		if (!m_readOnly) {
+			menu->insertSeparator(firstAction);
+			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
+
+			menu->insertSeparator(firstAction);
+			menu->insertAction(firstAction, action_reverse_columns);
+			menu->insertAction(firstAction, action_drop_values);
+			menu->insertAction(firstAction, action_mask_values);
+			menu->insertAction(firstAction, action_normalize_columns);
+
+			menu->insertSeparator(firstAction);
+			menu->insertMenu(firstAction, m_columnSortMenu);
+			action_sort_asc_column->setVisible(true);
+			action_sort_desc_column->setVisible(true);
+			action_sort_columns->setVisible(false);
+
+			//in case no cells are available, deactivate the actions that only make sense in the presence of cells
+			const bool hasCells = m_spreadsheet->rowCount() > 0;
+			m_columnGenerateDataMenu->setEnabled(hasCells);
+
+			//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
+			action_reverse_columns->setEnabled(hasValues);
+			action_drop_values->setEnabled(hasValues);
+			action_mask_values->setEnabled(hasValues);
+			action_normalize_columns->setEnabled(hasValues);
+			m_columnSortMenu->setEnabled(hasValues);
+		}
+
 		menu->insertSeparator(firstAction);
-
-		submenu = new QMenu(i18n("Generate Data"), this);
-		submenu->insertAction(firstAction, action_fill_row_numbers);
-		submenu->insertAction(firstAction, action_fill_const);
-		// 	submenu->insertAction(firstAction, action_fill_random);
-		submenu->insertAction(firstAction, action_fill_equidistant);
-		submenu->insertAction(firstAction, action_fill_random_nonuniform);
-		submenu->insertAction(firstAction, action_fill_function);
-		menu->insertMenu(firstAction, submenu);
-		menu->insertSeparator(firstAction);
-
-		menu->insertAction(firstAction, action_reverse_columns);
-		menu->insertAction(firstAction, action_drop_values);
-		menu->insertAction(firstAction, action_mask_values);
-		// 	menu->insertAction(firstAction, action_join_columns);
-		menu->insertAction(firstAction, action_normalize_columns);
-
-		submenu = new QMenu(i18n("Sort"), this);
-		submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
-		submenu->insertAction(firstAction, action_sort_asc_column);
-		submenu->insertAction(firstAction, action_sort_desc_column);
-		submenu->insertAction(firstAction, action_sort_columns);
-		menu->insertMenu(firstAction, submenu);
-		menu->insertSeparator(firstAction);
-	} else {
-		action_sort_columns->setVisible(false);
-		action_sort_asc_column->setVisible(false);
-		action_sort_desc_column->setVisible(true);
+		menu->insertAction(firstAction, action_statistics_columns);
+		action_statistics_columns->setEnabled(hasValues);
 	}
-	menu->insertAction(firstAction, action_statistics_columns);
-
-	action_sort_columns->setVisible(false);
-	action_sort_asc_column->setVisible(false);
-	action_sort_desc_column->setVisible(false);
-
-	//check whether we have non-numeric columns selected and deactivate actions for numeric columns
-	const Column* column = selectedColumns().first();
-	bool numeric = (column->columnMode() == AbstractColumn::Numeric);
-	action_fill_equidistant->setEnabled(numeric);
-	action_fill_random_nonuniform->setEnabled(numeric);
-	action_fill_function->setEnabled(numeric);
-	action_statistics_columns->setVisible(numeric);
 }
 
 //SLOTS
@@ -993,7 +970,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_statistics_rows->setVisible(onlyNumeric);
 			m_rowMenu->exec(global_pos);
 		} else if (watched == m_horizontalHeader) {
-			checkColumnMenu();
 			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
 				QItemSelectionModel* sel_model = m_tableView->selectionModel();
@@ -1015,16 +991,50 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			//check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
-			for(const Column* col: selectedColumns()) {
-				if (col->columnMode() != AbstractColumn::Numeric) {
+			for(const Column* col : selectedColumns()) {
+				if (col->columnMode() != AbstractColumn::Numeric || (col->columnMode() == AbstractColumn::Integer)) {
 					numeric = false;
 					break;
 				}
 			}
-			action_fill_equidistant->setEnabled(numeric);
-			action_fill_random_nonuniform->setEnabled(numeric);
-			action_fill_function->setEnabled(numeric);
-			action_statistics_columns->setVisible(numeric);
+
+			action_plot_data->setEnabled(numeric);
+			m_analyzePlotMenu->setEnabled(numeric);
+			m_columnSetAsMenu->setEnabled(numeric);
+			if (!m_readOnly) {
+				m_columnGenerateDataMenu->setEnabled(numeric);
+				action_reverse_columns->setEnabled(numeric);
+				action_drop_values->setEnabled(numeric);
+				action_mask_values->setEnabled(numeric);
+				action_normalize_columns->setEnabled(numeric);
+				m_columnSortMenu->setEnabled(numeric);
+			}
+			action_statistics_columns->setEnabled(numeric);
+
+			if (numeric) {
+				bool hasValues = false;
+				for (const Column* col : selectedColumns()) {
+					if (col->hasValues()) {
+						hasValues = true;
+						break;
+					}
+				}
+
+				if (!m_readOnly) {
+					//in case no cells are available, deactivate the actions that only make sense in the presence of cells
+					const bool hasCells = m_spreadsheet->rowCount() > 0;
+					m_columnGenerateDataMenu->setEnabled(hasCells);
+
+					//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
+					action_reverse_columns->setEnabled(hasValues);
+					action_drop_values->setEnabled(hasValues);
+					action_mask_values->setEnabled(hasValues);
+					action_normalize_columns->setEnabled(hasValues);
+					m_columnSortMenu->setEnabled(hasValues);
+				}
+
+				action_statistics_columns->setEnabled(hasValues);
+			}
 
 			m_columnMenu->exec(global_pos);
 		} else if (watched == this) {
@@ -1036,25 +1046,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 	}
 
 	return QWidget::eventFilter(watched, event);
-}
-
-/*!
- * disables cell data relevant actions in the column menu if there're no cells available.
- * called in eventFilter(), existence of at least one column can be assumed here.
- */
-void SpreadsheetView::checkColumnMenu() {
-	const bool cellsAvail = m_spreadsheet->rowCount()>0;
-	action_plot_data->setEnabled(cellsAvail);
-	action_reverse_columns->setEnabled(cellsAvail);
-	action_drop_values->setEnabled(cellsAvail);
-	action_mask_values->setEnabled(cellsAvail);
-	action_normalize_columns->setEnabled(cellsAvail);
-	action_clear_columns->setEnabled(cellsAvail);
-	action_statistics_columns->setEnabled(cellsAvail);
-	if (m_columnGenerateDataMenu)
-		m_columnGenerateDataMenu->setEnabled(cellsAvail);
-	if (m_columnSortMenu)
-		m_columnSortMenu->setEnabled(cellsAvail);
 }
 
 /*!
@@ -1939,7 +1930,7 @@ void SpreadsheetView::sortDialog(QVector<Column*> cols) {
 		col->setSuppressDataChangedSignal(true);
 
 	SortDialog* dlg = new SortDialog();
-	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
+	connect(dlg, SIGNAL(sort(Column*,QVector<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QVector<Column*>,bool)));
 	dlg->setColumns(cols);
 	int rc = dlg->exec();
 

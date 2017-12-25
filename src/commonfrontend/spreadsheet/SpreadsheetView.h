@@ -102,7 +102,6 @@ private:
 	bool m_suppressSelectionChangedEvent;
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
-	void checkColumnMenu();
 	void checkSpreadsheetMenu();
 
 	//selection related actions
@@ -179,10 +178,12 @@ private:
 	//Menus
 	QMenu* m_selectionMenu;
 	QMenu* m_columnMenu;
+	QMenu* m_columnSetAsMenu;
 	QMenu* m_columnGenerateDataMenu;
 	QMenu* m_columnSortMenu;
 	QMenu* m_rowMenu;
 	QMenu* m_spreadsheetMenu;
+	QMenu* m_analyzePlotMenu;
 
 public slots:
 	void createContextMenu(QMenu*);
