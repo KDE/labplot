@@ -35,10 +35,9 @@ class LabPlotProjectParser : public ProjectParser {
 
 public:
 	LabPlotProjectParser();
-	~LabPlotProjectParser() override;
 
-	QAbstractItemModel* model() override;
-	void importTo(Folder*, const QStringList&) override;
+protected:
+	bool load(Project*, bool) override;
 };
 
 #endif // LABPLOTPROJECTPARSER_H

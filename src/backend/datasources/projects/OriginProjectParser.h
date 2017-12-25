@@ -44,11 +44,7 @@ class OriginProjectParser : public ProjectParser {
 public:
 	OriginProjectParser();
 
-	QAbstractItemModel* model() override;
-	void importTo(Folder*, const QStringList&) override;
-
 private:
-	bool load(Project*, bool preview);
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
 	bool loadSpreadsheet(Spreadsheet*, bool preview, size_t sheetIndex = 0);
@@ -66,6 +62,9 @@ private:
 	size_t m_matrixIndex;
 	size_t m_graphIndex;
 	size_t m_noteIndex;
+
+protected:
+	bool load(Project*, bool) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

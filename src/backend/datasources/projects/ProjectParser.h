@@ -40,17 +40,19 @@ class ProjectParser : public QObject {
 
 public:
 	ProjectParser();
-	~ProjectParser() override {};
+	~ProjectParser();
 
 	void setProjectFileName(const QString&);
 	const QString& projectFileName() const;
 
-	virtual QAbstractItemModel* model() = 0;
-	virtual void importTo(Folder*, const QStringList&) = 0;
+	QAbstractItemModel* model();
+	void importTo(Folder*, const QStringList&);
 
 	QList<const char*> topLevelClasses() const ;
 
 protected:
+	virtual bool load(Project*, bool preview) = 0;
+
 	QString m_projectFileName;
 	Project* m_project;
 	QList<const char*>  m_topLevelClasses;

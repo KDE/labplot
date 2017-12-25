@@ -26,6 +26,7 @@
 *                                                                         *
 ***************************************************************************/
 #include "ProjectParser.h"
+#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 
 /*!
@@ -36,6 +37,11 @@
 */
 ProjectParser::ProjectParser() : QObject(), m_project(nullptr) {
 
+}
+
+ProjectParser::~ProjectParser() {
+	if (m_project != nullptr)
+		delete m_project;
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
@@ -54,4 +60,38 @@ const QString& ProjectParser::projectFileName() const {
 
 QList<const char*> ProjectParser::topLevelClasses() const {
 	return m_topLevelClasses;
+}
+
+QAbstractItemModel* ProjectParser::model() {
+	WAIT_CURSOR;
+	if (m_project == nullptr)
+		m_project = new Project();
+
+	AspectTreeModel* model = nullptr;
+	bool rc = load(m_project, true);
+	if (rc) {
+		model = new AspectTreeModel(m_project);
+		model->setReadOnly(true);
+	}
+
+	RESET_CURSOR;
+	return model;
+}
+
+void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
+	QDEBUG("Starting the import of " + m_projectFileName);
+
+	//import the selected objects into a temporary project
+	Project* project = new Project();
+	project->setPathesToLoad(selectedPathes);
+	load(project, false);
+
+	//move all children from the temp project to the target folder
+	for (auto* child : project->children<AbstractAspect>()) {
+		project->removeChild(child);
+		folder->addChild(child);
+	}
+	delete project;
+
+	QDEBUG("Import of " + m_projectFileName + " done.");
 }

@@ -29,8 +29,6 @@
 
 #include "backend/datasources/projects/OriginProjectParser.h"
 #include "backend/core/Project.h"
-#include "backend/core/AspectTreeModel.h"
-// #include "kdefrontend/datasources/ImportOpj.h"
 
 #include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -63,40 +61,6 @@ OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_noteIndex(0) {
 
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
-}
-
-QAbstractItemModel* OriginProjectParser::model() {
-	WAIT_CURSOR;
-	if (m_project == nullptr)
-		m_project = new Project();
-
-	AspectTreeModel* model = nullptr;
-	bool rc = load(m_project, true);
-	if (rc) {
-		model = new AspectTreeModel(m_project);
-		model->setReadOnly(true);
-	}
-
-	RESET_CURSOR;
-	return model;
-}
-
-void OriginProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
-	QDEBUG("Starting the import of " + m_projectFileName);
-
-	//import the selected objects into a temporary project
-	Project* project = new Project();
-	project->setPathesToLoad(selectedPathes);
-	load(project, false);
-
-	//move all children from the temp project to the target folder
-	for (auto* child : project->children<AbstractAspect>()) {
-		project->removeChild(child);
-		folder->addChild(child);
-	}
-	delete project;
-
-	QDEBUG("Import of " + m_projectFileName + " done.");
 }
 
 //##############################################################################
