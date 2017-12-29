@@ -29,6 +29,8 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 
+#include <KLocale>
+
 /*!
 \class ProjectParser
 \brief  base class for project parsers
@@ -87,10 +89,12 @@ void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) 
 	load(project, false);
 
 	//move all children from the temp project to the target folder
+	folder->beginMacro(i18n("%1: Import from %2").arg(folder->name()).arg(m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
 		project->removeChild(child);
 		folder->addChild(child);
 	}
+	folder->endMacro();
 	delete project;
 
 	QDEBUG("Import of " + m_projectFileName + " done.");

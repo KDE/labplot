@@ -42,6 +42,7 @@
 #include <QStatusBar>
 
 #include <KLocale>
+#include <KMessageBox>
 #include <KWindowConfig>
 
 /*!
@@ -163,17 +164,6 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportProjectDialog::importTo()");
 
-	//show a progress bar in the status bar
-	QProgressBar* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
-
-	statusBar->clearMessage();
-	statusBar->addWidget(progressBar, 1);
-
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
 	//determine the selected objects, convert the model indexes to string pathes
 	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
 	QStringList selectedPathes;
@@ -187,14 +177,58 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 			selectedPathes << depAspect->path();
 	}
 	selectedPathes.removeDuplicates();
+
+	Folder* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
+
+	//check wether the selected pathes already exist in the target folder and warn the user
+	const QString& targetFolderPath = targetFolder->path();
+	const Project* targetProject = targetFolder->project();
+	QStringList targetAllPathes;
+	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::Recursive))
+		targetAllPathes << aspect->path();
+
+	QStringList existingPathes;
+	for (const auto& path : selectedPathes) {
+		const QString newPath = targetFolderPath + path.right(path.length() - path.indexOf('/'));
+		if (targetAllPathes.indexOf(newPath) != -1)
+			existingPathes << path;
+	}
+
 	QDEBUG("project objects to be imported: " << selectedPathes);
+	QDEBUG("all already available project objects: " << targetAllPathes);
+	QDEBUG("already available project objects to be overwritten: " << existingPathes);
+
+	if (!existingPathes.isEmpty()) {
+		QString msg = i18np("The object listed below already exist in target folder and will be overwritten:",
+							"The objects listed below already exist in target folder and will be overwritten:",
+							existingPathes.size());
+		msg += '\n';// + i18n("Objects to be overwritten:") + "\n\n";
+		for (const auto& path : existingPathes)
+			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1);
+		msg += "\n\n" + i18n("Do you want to proceed?");
+
+		const int rc = KMessageBox::warningYesNo(0, msg, i18n("Override existing objects?"));
+		if (rc == KMessageBox::No)
+			return;
+	}
+
+
+	//show a progress bar in the status bar
+	QProgressBar* progressBar = new QProgressBar();
+	progressBar->setMinimum(0);
+	progressBar->setMaximum(100);
+
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	//import the selected project objects into the specified folder
 	QTime timer;
 	timer.start();
-	Folder* folder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	m_projectParser->importTo(folder, selectedPathes);
+	m_projectParser->importTo(targetFolder, selectedPathes);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
