@@ -317,10 +317,10 @@ void ImportFileDialog::checkOkButton() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
+		DEBUG("fileName = " << fileName.toUtf8().constData());
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable)

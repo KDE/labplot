@@ -82,6 +82,7 @@ private:
 	const QString& m_fileName;
 	bool m_fileEmpty;
 	bool m_liveDataSource;
+	bool m_suppressRefresh;
 
 private slots:
 	void fileNameChanged(const QString&);

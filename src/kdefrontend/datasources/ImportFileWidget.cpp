@@ -71,7 +71,8 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent),
 	m_fileName(fileName),
 	m_fileEmpty(false),
-	m_liveDataSource(true) {
+	m_liveDataSource(true),
+	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
 	QCompleter* completer = new QCompleter(this);
@@ -173,6 +174,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 }
 
 void ImportFileWidget::loadSettings() {
+	m_suppressRefresh = true;
+
 	//load last used settings
 	QString confName;
 	if (m_liveDataSource)
@@ -208,6 +211,9 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+
+	m_suppressRefresh = false;
+	refreshPreview();
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -730,6 +736,9 @@ void ImportFileWidget::filterChanged(int index) {
 }
 
 void ImportFileWidget::refreshPreview() {
+	if (m_suppressRefresh)
+		return;
+
 	DEBUG("refreshPreview()");
 	WAIT_CURSOR;
 
@@ -772,7 +781,7 @@ void ImportFileWidget::refreshPreview() {
 					bool localSocketConnected = lsocket->waitForConnected(2000);
 
 					if (localSocketConnected) {
-						qDebug() << "localPreviewConnected";
+						DEBUG("connected to local socket");
 						bool canread = lsocket->waitForReadyRead(500);
 						if (canread)
 							importedStrings = filter->preview(*lsocket);
@@ -792,7 +801,7 @@ void ImportFileWidget::refreshPreview() {
 
 					if (tcpSocketConnected) {
 						bool canread = tsocket->waitForReadyRead(500);
-						qDebug() << "tcpPreviewconnected";
+						DEBUG("connected to TCP socket");
 						if (canread)
 							importedStrings = filter->preview(*tsocket);
 					}
@@ -812,9 +821,11 @@ void ImportFileWidget::refreshPreview() {
 
 					if (udpSocketConnected) {
 						bool canread = usocket->waitForReadyRead(500);
-						qDebug() << "tcpPreviewconnected";
+						DEBUG("connected to UDP socket");
 						if (canread)
 							importedStrings = filter->preview(*usocket);
+
+						qDebug()<<"can read " << canread << "  " << importedStrings;
 					}
 
 					if (usocket->state() == QUdpSocket::ConnectedState) {
@@ -1040,6 +1051,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	}
 
 	emit sourceTypeChanged();
+	refreshPreview();
 }
 
 void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
