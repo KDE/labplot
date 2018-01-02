@@ -18,7 +18,6 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Test
 	SerialPort
 )
-#find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE OPTIONAL_COMPONENTS)
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
@@ -66,7 +65,7 @@ include(KDECMakeSettings)
 
 ### compiler flags ######################################
 
-set (GENERIC_FLAGS "-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -fno-omit-frame-pointer -fstack-protector")
+set (GENERIC_FLAGS "-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -Wdeprecated-declarations -Wstack-protector -fno-omit-frame-pointer -fstack-protector -fvisibility=default")
 set (GENERIC_C_FLAGS "-std=c99 ${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "-std=c++11 ${GENERIC_FLAGS} -fexceptions")
@@ -80,7 +79,7 @@ elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -W3")
 else ()
 	message(STATUS "UNKNOWN C compiler, adding compile flags")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
@@ -93,9 +92,9 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	message(STATUS "Clang C++ compiler detected, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
-	elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
+elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3")
 else ()
 	message(STATUS "UNKNOWN C++ compiler, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
@@ -110,7 +109,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION=\"2.5.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
-add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
 IF (CMAKE_VERSION VERSION_EQUAL "3.3" OR CMAKE_VERSION VERSION_GREATER "3.3")
