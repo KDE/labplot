@@ -34,7 +34,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>
-#include <KStandardDirs>
 
 #include <QFileDialog>
 #include <QTimer>

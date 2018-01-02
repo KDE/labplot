@@ -37,9 +37,7 @@
 #include <QStandardItemModel>
 
 #include <KGlobal>
-#include <KStandardDirs>
 #include <KMessageBox>
-#include <kdebug.h>
 // #include <knewstuff3/downloaddialog.h>
 
 /*!

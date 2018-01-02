@@ -30,7 +30,7 @@
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
-#include <KGlobal>
+#include <KSharedConfig>
 
 #include <QColor>
 #include <QDir>

@@ -75,15 +75,14 @@
 #include <QMimeData>
 #include <QElapsedTimer>
 #include <QHash>
+#include <QStatusBar>
 
 #include <KActionCollection>
 #include <KConfigGroup>
-#include <KFileDialog>
 #include <KStandardAction>
 #include <kxmlguifactory.h>
 #include <KMessageBox>
 #include <KToolBar>
-#include <KStatusBar>
 #include <KLocalizedString>
 #include <KFilterDev>
 #include <KRecentFilesAction>

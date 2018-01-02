@@ -199,7 +199,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QDEBUG("already available project objects to be overwritten: " << existingPathes);
 
 	if (!existingPathes.isEmpty()) {
-		QString msg = i18np("The object listed below already exist in target folder and will be overwritten:",
+		QString msg = i18np("The object listed below already exists in target folder and will be overwritten:",
 							"The objects listed below already exist in target folder and will be overwritten:",
 							existingPathes.size());
 		msg += '\n';// + i18n("Objects to be overwritten:") + "\n\n";

@@ -41,7 +41,7 @@
 #include <KLocale>
 
 QPen DatapickerPoint::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
-float DatapickerPoint::selectedOpacity = 0.3;
+float DatapickerPoint::selectedOpacity = 0.3f;
 
 /**
  * \class ErrorBarItem

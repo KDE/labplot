@@ -45,7 +45,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KStandardDirs>
 
 #include <cmath>
 

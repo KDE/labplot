@@ -54,7 +54,6 @@
 #include <QMenu>
 
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KLocale>
 
 extern "C" {

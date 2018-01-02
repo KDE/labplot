@@ -38,6 +38,7 @@
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "backend/lib/trace.h"
+
 #include <QApplication>
 #include <QMdiArea>
 #include <QMenu>
@@ -52,13 +53,13 @@
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
 #include <QClipboard>
+#include <QMimeData>
 #include <QWidgetAction>
 
 #include <KColorScheme>
 #include <KLocale>
 #include <KMessageBox>
 #include <KConfigGroup>
-#include <KGlobal>
 
 #include <limits>
 
