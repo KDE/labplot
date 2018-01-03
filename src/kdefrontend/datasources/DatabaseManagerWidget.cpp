@@ -31,7 +31,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>
 

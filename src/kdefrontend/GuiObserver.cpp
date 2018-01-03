@@ -81,12 +81,10 @@
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
-#include <kstatusbar.h>
-
 #include <QDockWidget>
 #include <QStackedWidget>
+#include <QStatusBar>
 #include <QToolBar>
-#include <QDebug>
 #include <KLocalizedString>
 
 /*!

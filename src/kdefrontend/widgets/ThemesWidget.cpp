@@ -35,8 +35,9 @@
 #include <QListWidgetItem>
 #include <QPainter>
 #include <QStandardItemModel>
+#include <QStandardPaths>
 
-#include <KGlobal>
+#include <KLocale>
 #include <KMessageBox>
 // #include <knewstuff3/downloaddialog.h>
 

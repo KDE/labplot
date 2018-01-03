@@ -64,7 +64,7 @@ int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_
 				w[j] = 1./np;
 			break;
 		case nsl_smooth_weight_triangular:
-			sum = gsl_pow_2((np + 1)/2);
+			sum = gsl_pow_2((double)(np + 1)/2);
 			for (j = 0; j < np; j++)
 				w[j] = GSL_MIN(j + 1, np - j)/sum;
 			break;
@@ -159,7 +159,7 @@ int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_
 		/*puts("");*/
 		free(w);
 	}
-	
+
 	for (i = 0; i < n; i++)
 		data[i] = result[i];
 	free(result);
@@ -189,7 +189,7 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 				w[j] = 1./np;
 			break;
 		case nsl_smooth_weight_triangular:
-			sum = np*(np+1)/2;
+			sum = np*(double)(np+1)/2;
 			for (j = 0; j < np; j++)
 				w[j] = (j+1)/sum;
 			break;
@@ -451,7 +451,7 @@ int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smoo
 				free(result);
 				return error;
 			}
-			
+
 			for (k = 0; k < rpoints; k++)
 				result[i] += gsl_matrix_get(rh, i, k) * data[k];
 		}
@@ -502,7 +502,7 @@ int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smoo
 				free(result);
 				return error;
 			}
-			
+
 			for (k = 0; k < rpoints; k++)
 				result[i] += gsl_matrix_get(rh, n-1-i, k) * data[n-rpoints+k];
 		}

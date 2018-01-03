@@ -42,7 +42,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KLocale>
 
 #include <KMessageBox>
