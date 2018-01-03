@@ -12,7 +12,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
-#	${KDEFRONTEND_DIR}/LabPlot.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
@@ -351,6 +350,19 @@ ENDIF ()
 IF (ENABLE_LIBORIGIN)
 target_link_libraries( labplot2lib liborigin-static )
 ENDIF ()
+
+# icons for the executable on Windows and Mac OS X
+
+set(LABPLOT_ICONS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-apps-labplot2.png
+)
+ecm_add_app_icon(LABPLOT_SRCS ICONS ${LABPLOT_ICONS})
 
 # main executable
 add_executable( labplot2 ${KDEFRONTEND_DIR}/LabPlot.cpp )
