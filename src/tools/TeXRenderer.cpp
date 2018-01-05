@@ -273,8 +273,26 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 
 bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
-	if (engine.isEmpty() || !executableExists(engine)) {
+	QString engine = group.readEntry("LaTeXEngine", "");
+	if (engine.isEmpty()) {
+		//empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		//->check whether the latex environment was installed in the meantime
+		engine = QLatin1String("xelatex");
+		if (!executableExists(engine)) {
+			engine = QLatin1String("lualatex");
+			if (!executableExists(engine)) {
+				engine = QLatin1String("pdflatex");
+				if (!executableExists(engine))
+					engine = QLatin1String("latex");
+			}
+		}
+
+		if (!engine.isEmpty()) {
+			//one of the tex engines was found -> automatically save it in the settings without any user action
+			group.writeEntry(QLatin1String("LaTeXEngine"), engine);
+			group.sync();
+		}
+	} else if (!executableExists(engine)) {
 		WARN("LaTeX engine does not exist");
 		return false;
 	}

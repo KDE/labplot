@@ -81,6 +81,7 @@ void SettingsWorksheetPage::applySettings() {
 void SettingsWorksheetPage::restoreDefaults() {
 	loadSettings();
 }
+
 void SettingsWorksheetPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
     m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
@@ -89,8 +90,25 @@ void SettingsWorksheetPage::loadSettings() {
 
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
 	int index = -1;
-	if (engine.isEmpty())
+	if (engine.isEmpty()) {
+		//empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		//->check whether the latex environment was installed in the meantime
 		index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
+		if (index == -1) {
+			index = ui.cbTexEngine->findData(QLatin1String("lualatex"));
+			if (index == -1) {
+				index = ui.cbTexEngine->findData(QLatin1String("pdflatex"));
+				if (index == -1)
+					index = ui.cbTexEngine->findData(QLatin1String("latex"));
+			}
+		}
+
+		if (index != -1) {
+			//one of the tex engines was found -> automatically save it in the settings without any user action
+			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
+		}
+	}
 	else
 		index = ui.cbTexEngine->findData(engine);
 
