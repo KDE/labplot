@@ -78,7 +78,6 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
 		listItem->setText(themeList.at(i));
-		listItem->setData(themeList.at(i), Qt::UserRole);
 		mContentItemModel->appendRow(listItem);
 	}
 
@@ -98,7 +97,6 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	QStandardItem* listItem = new QStandardItem();
 	listItem->setIcon(pm);
 	listItem->setText(i18n("None"));
-	listItem->setData("", Qt::UserRole);
 	mContentItemModel->appendRow(listItem);
 
 	//adding download themes option
@@ -116,7 +114,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 }
 
 void ThemesWidget::applyClicked(const QModelIndex& index) {
-	QString themeName = index.data(Qt::UserRole).toString();
+	const QString& themeName = index.data(Qt::DisplayRole).toString();
 
 	//TODO: activate this later
 // 	if(themeName=="file_download_theme")
