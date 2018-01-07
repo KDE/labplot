@@ -214,7 +214,7 @@ void Axis::init() {
 void Axis::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
 
 	//Orientation
 	orientationActionGroup = new QActionGroup(this);
@@ -1198,10 +1198,10 @@ void AxisPrivate::retransformTicks() {
 	qreal majorTickPos=0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
-	int xDirection = m_cSystem->xDirection();
-	int yDirection = m_cSystem->yDirection();
-	double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
+	const int xDirection = m_cSystem->xDirection();
+	const int yDirection = m_cSystem->yDirection();
+	const double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	const double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1498,10 +1498,10 @@ void AxisPrivate::retransformTickLabelPositions() {
 	float height = fm.ascent();
 	QString label;
 	QPointF pos;
-	double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
-	int xDirection = m_cSystem->xDirection();
-	int yDirection = m_cSystem->yDirection();
+	const double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	const double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
+	const int xDirection = m_cSystem->xDirection();
+	const int yDirection = m_cSystem->yDirection();
 
 	QPointF startPoint, endPoint, anchorPoint;
 

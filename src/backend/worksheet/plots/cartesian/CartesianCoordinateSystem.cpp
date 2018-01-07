@@ -66,7 +66,7 @@ double CartesianScale::end() const {
 }
 
 bool CartesianScale::contains(double value) const {
-	return m_interval.fuzzyContains(value);
+	return m_interval.contains(value);
 }
 
 /**

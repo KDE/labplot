@@ -410,10 +410,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// check values
 	for (int i = 0; i < (int)npoints; i++) {
-		if ((*yVector)[i] > CartesianScale::LIMIT_MAX)
-			(*yVector)[i] = CartesianScale::LIMIT_MAX;
-		else if ((*yVector)[i] < CartesianScale::LIMIT_MIN)
-			(*yVector)[i] = CartesianScale::LIMIT_MIN;
+		if ((*yVector)[i] > std::numeric_limits<double>::max())
+			(*yVector)[i] = std::numeric_limits<double>::max();
+		else if ((*yVector)[i] < std::numeric_limits<double>::lowest())
+			(*yVector)[i] = std::numeric_limits<double>::lowest();
 	}
 
 	gsl_spline_free(spline);

@@ -4,7 +4,7 @@
     Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-201 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2018 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
