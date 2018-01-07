@@ -4,7 +4,7 @@
     Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-201 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -517,7 +517,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	emit(q->changed());
 }
 
-void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -531,10 +531,8 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->rotate(-rotationAngle);
 
 	if (textWrapper.teXUsed) {
-		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0) {
-			QImage todraw = teXImage.scaled(boundingRect().width(), boundingRect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-			painter->drawImage(boundingRect(), todraw);
-		}
+		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
+			painter->drawImage(boundingRect(), teXImage);
 	} else {
 		painter->scale(scaleFactor, scaleFactor);
 		float w = staticText.size().width();
