@@ -237,6 +237,13 @@ void MainWin::initGUI(const QString& fileName) {
 	initMenus();
 
 	QToolBar* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	if (!mainToolBar) {
+		QMessageBox::critical(this, i18n(" GUI configuration file not found"), i18n("labplot2ui.rc file was not found. Please check your installation."));
+		//TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
+		//the application because of the splash screen. We need to find another solution.
+		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
+		return;
+	}
 	QToolButton* tbImport = new QToolButton(mainToolBar);
 	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
 	tbImport->setMenu(m_importMenu);
