@@ -708,8 +708,15 @@ void Axis::setMinorTicksOpacity(qreal opacity) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
 void Axis::setLabelsFormat(const LabelsFormat labelsFormat) {
 	Q_D(Axis);
-	if (labelsFormat != d->labelsFormat)
+	if (labelsFormat != d->labelsFormat) {
 		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, i18n("%1: set labels format")));
+
+		//TODO: this part is not undo/redo-aware
+		if (d->labelsFormatAutoChanged && labelsFormat == Axis::FormatDecimal)
+			d->labelsFormatDecimalOverruled = true;
+		else
+			d->labelsFormatDecimalOverruled = false;
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
@@ -879,6 +886,8 @@ AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
 	gridItem(new AxisGrid(this)),
 	q(owner),
 	suppressRetransform(false),
+	labelsFormatDecimalOverruled(false),
+	labelsFormatAutoChanged(false),
 	m_plot(plot),
 	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
 	m_hovered(false),
@@ -1371,6 +1380,35 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	}
 // 	DEBUG("labelsPrecision =" << labelsPrecision);
+
+	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
+	//and back to decimal when the numbers get smaller after the auto-switch again
+	//TODO: implement similar logic for very small numbers
+	if (labelsFormat == Axis::FormatDecimal && !labelsFormatDecimalOverruled) {
+		for (auto value : tickLabelValues) {
+			if (std::abs(value) > 1e4) {
+				labelsFormat = Axis::FormatScientificE;
+				emit q->labelsFormatChanged(labelsFormat);
+				labelsFormatAutoChanged = true;
+				break;
+			}
+		}
+	} else if (labelsFormatAutoChanged ) {
+		//check whether we still have big numbers
+		bool changeBack = true;
+		for (auto value : tickLabelValues) {
+			if (std::abs(value) > 1e4) {
+				changeBack = false;
+				break;
+			}
+		}
+
+		if (changeBack) {
+			labelsFormatAutoChanged = false;
+			labelsFormat = Axis::FormatDecimal;
+			emit q->labelsFormatChanged(labelsFormat);
+		}
+	}
 
 	tickLabelStrings.clear();
 	QString str;

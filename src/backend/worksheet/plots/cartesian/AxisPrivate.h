@@ -132,6 +132,8 @@ public:
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
 	bool suppressRetransform;
+	bool labelsFormatDecimalOverruled;
+	bool labelsFormatAutoChanged;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
