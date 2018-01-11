@@ -692,6 +692,12 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		QMessageBox::critical(0, i18n("Serial Port Error"),
 		                      i18n("The device timed out."));
 		break;
+#ifndef _MSC_VER
+	//MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
+	case QSerialPort::ParityError:
+	case QSerialPort::FramingError:
+	case QSerialPort::BreakConditionError:
+#endif
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
