@@ -1657,10 +1657,10 @@ void XYCurvePrivate::updateErrorBars() {
 			return; //no visible points -> no error bars to draw
 
 		//cap size for x-error bars
-		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
+		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at((int)i));
 		pointScene.setY(pointScene.y()-errorBarsCapSize);
 		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene);
-		capSizeX = (pointLogical.y() - symbolPointsLogical.at(i).y())/2;
+		capSizeX = (pointLogical.y() - symbolPointsLogical.at((int)i).y())/2;
 
 		//cap size for y-error bars
 		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at((int)i));

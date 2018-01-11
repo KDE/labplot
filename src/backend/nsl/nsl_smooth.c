@@ -195,7 +195,7 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 			break;
 		case nsl_smooth_weight_binomial:
 			for (j = 0; j < np; j++) {
-				w[j] = gsl_sf_choose((unsigned int)(2*(np-1)), j);
+				w[j] = gsl_sf_choose((unsigned int)(2*(np-1)), (unsigned int)j);
 				sum += w[j];
 			}
 			for (j = 0 ; j < np; j++)
