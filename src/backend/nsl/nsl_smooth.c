@@ -149,9 +149,9 @@ int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_
 				break;
 			case nsl_smooth_pad_periodic:
 				if (index < 0)
-					index = n+index;
+					index = index + (int)n;
 				else if (index > (int)n - 1)
-					index = index-n;
+					index = index - (int)n;
 				result[i] += w[j] * data[index];
 				break;
 			}
@@ -195,7 +195,7 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 			break;
 		case nsl_smooth_weight_binomial:
 			for (j = 0; j < np; j++) {
-				w[j] = gsl_sf_choose(2*(np-1), j);
+				w[j] = gsl_sf_choose((unsigned int)(2*(np-1)), j);
 				sum += w[j];
 			}
 			for (j = 0 ; j < np; j++)
@@ -277,7 +277,7 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 				break;
 			case nsl_smooth_pad_periodic:
 				if (index < 0)
-					index += n;
+					index += (int)n;
 				/*printf(" %d",index);*/
 				result[i] += w[j]*data[index];
 				break;
@@ -336,9 +336,9 @@ int nsl_smooth_percentile(double *data, size_t n, size_t points, double percenti
 				break;
 			case nsl_smooth_pad_periodic:
 				if (index < 0)
-					index = n+index;
+					index = index + (int)n;
 				else if (index > (int)n-1)
-					index = index-n;
+					index = index - (int)n;
 				/*printf(" %d",index);*/
 				values[j] = data[index];
 				break;
@@ -441,7 +441,8 @@ int nsl_smooth_savgol(double *data, size_t n, size_t points, int order, nsl_smoo
 	if(mode == nsl_smooth_pad_none) {
 		for (i = 0; i < half; i++) {
 			/*reduce points and order*/
-			size_t rpoints = 2*i+1, rorder = GSL_MIN((size_t)order, rpoints-GSL_MIN(rpoints, 2));
+			size_t rpoints = 2*i+1;
+			int rorder = GSL_MIN(order, (int)(rpoints-GSL_MIN(rpoints, 2)));
 
 			gsl_matrix *rh = gsl_matrix_alloc(rpoints, rpoints);
 			error = nsl_smooth_savgol_coeff(rpoints, rorder, rh);
