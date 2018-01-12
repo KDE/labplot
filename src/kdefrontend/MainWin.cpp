@@ -1588,9 +1588,6 @@ void MainWin::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void MainWin::dropEvent(QDropEvent* event) {
-	if (!m_project)
-		newProject();
-
 	if (event->mimeData() && !event->mimeData()->urls().isEmpty()) {
 		QUrl url = event->mimeData()->urls().at(0);
 		const QString& f = url.toLocalFile();
@@ -1600,8 +1597,11 @@ void MainWin::dropEvent(QDropEvent* event) {
 		        || f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
 		        || f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
 			openProject(f);
-		else
+		else {
+			if (!m_project)
+				newProject();
 			importFileDialog(f);
+		}
 
 		event->accept();
 	} else
