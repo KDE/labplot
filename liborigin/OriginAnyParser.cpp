@@ -1043,6 +1043,8 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				matrixes.push_back(Matrix(name));
 				matrixes.back().sheets.push_back(MatrixSheet(name, dataIndex));
 			}
+			// add an empty data set to keep dataIndex synchronized with datasets.size()
+			datasets.push_back(SpreadColumn(name,dataIndex));
 			++dataIndex;
 			getMatrixValues(col_data, col_data_size, data_type, data_type_u, valuesize, mIndex);
 		}
