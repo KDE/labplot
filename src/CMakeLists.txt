@@ -362,10 +362,11 @@ set(LABPLOT_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-apps-labplot2.png
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-apps-labplot2.png
 )
-ecm_add_app_icon(LABPLOT_SRCS ICONS ${LABPLOT_ICONS})
 
 # main executable
-add_executable( labplot2 ${KDEFRONTEND_DIR}/LabPlot.cpp )
+set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
+ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LABPLOT_ICONS})
+add_executable( labplot2 ${LABPLOT_SOURCE} )
 target_link_libraries( labplot2 labplot2lib )
 
 ############## installation ################################
