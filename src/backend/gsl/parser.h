@@ -34,12 +34,12 @@
 /* #define PDEBUG 1 */
 
 struct con {
-	char const *name;
+	const char* name;
 	double value;
 };
 
 struct func {
-	char const *name;
+	const char* name;
 #ifdef _MSC_VER
 	double (*fnct)(void);
 #else
