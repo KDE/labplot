@@ -330,7 +330,7 @@ void AxisDock::init() {
 	ui.cbLabelsFormat->addItem( i18n("Powers of 10") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 2") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
-	ui.cbLabelsFormat->addItem( i18n("Multiples of \u03C0") );
+	ui.cbLabelsFormat->addItem( i18n("Multiples of π") );
 
 	m_initializing=false;
 }
