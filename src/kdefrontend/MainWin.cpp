@@ -199,9 +199,6 @@ void MainWin::initGUI(const QString& fileName) {
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
-#ifdef _WIN32
-	QIcon::setThemeName("hicolor");
-#endif
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
@@ -251,7 +248,7 @@ void MainWin::initGUI(const QString& fileName) {
 	mainToolBar->addWidget(tbImport);
 
 	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
-	setWindowIcon(QIcon::fromTheme("LabPlot2"));
+	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
 	setAttribute( Qt::WA_DeleteOnClose );
 
 	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
