@@ -31,7 +31,6 @@
 #define MATRIXVIEW_H
 
 #include <QWidget>
-#include <QPrinter>
 #include <QList>
 #include "backend/datasources/filters/FITSFilter.h"
 #include "kdefrontend/widgets/FITSHeaderEditWidget.h"
@@ -39,6 +38,7 @@
 class Matrix;
 class MatrixModel;
 
+class QPrinter;
 class QAction;
 class QLabel;
 class QMenu;

@@ -33,7 +33,7 @@
 #include "backend/matrix/Matrix.h"
 
 #include <QSerialPort>
-#include <QLocalSocket>
+#include <QtNetwork/QLocalSocket>
 #include <QTimer>
 
 class QString;

@@ -38,7 +38,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <KLocalizedString>
+#include <KI18n/KLocalizedString>
 
 /**
  * \brief Settings dialog for Labplot.

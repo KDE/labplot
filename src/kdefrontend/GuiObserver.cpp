@@ -85,7 +85,7 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
-#include <KLocalizedString>
+#include <KI18n/KLocalizedString>
 
 /*!
   \class GuiObserver

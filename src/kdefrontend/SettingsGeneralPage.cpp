@@ -28,7 +28,7 @@
 
 #include "SettingsGeneralPage.h"
 
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
 

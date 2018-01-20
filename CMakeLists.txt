@@ -28,6 +28,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	DocTools
 	I18n
 	IconThemes
+# TODO: remove KDELibs4Support
 	KDELibs4Support
 	KIO
 	TextWidgets

@@ -23,7 +23,7 @@
 
 #include <KXMLGUIClient>
 #include <QObject>
-#include <KPluginInfo>
+#include <KService/KPluginInfo>
 
 #include <cantor/backend.h>
 

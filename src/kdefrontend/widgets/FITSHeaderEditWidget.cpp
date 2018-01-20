@@ -39,6 +39,7 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 #include <QPushButton>
 #include <KConfigGroup>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords

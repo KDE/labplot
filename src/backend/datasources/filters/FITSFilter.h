@@ -30,7 +30,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <QStringList>
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 #include <QTableWidget>
 #include <QTreeWidgetItem>
 #include <QXmlStreamReader>

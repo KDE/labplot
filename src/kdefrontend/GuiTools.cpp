@@ -28,14 +28,13 @@
  ***************************************************************************/
 
 #include "GuiTools.h"
+#include <KI18n/KLocalizedString>
 
 #include <QApplication>
 #include <QComboBox>
 #include <QMenu>
 #include <QColor>
 #include <QPainter>
-
-#include <KLocale>
 
 static const int colorsCount = 26;
 static QColor colors[colorsCount] = {QColor(255,255,255), QColor(0,0,0),
