@@ -37,6 +37,11 @@
 #include <gsl/gsl_cdf.h>
 #include "backend/nsl/nsl_sf_basic.h"
 
+#ifdef _MSC_VER
+/* avoid intrinsics */
+#pragma function(ceil, floor)
+#endif
+
 /* sync with ExpressionParser.cpp */
 struct func _functions[] = {
 	/* standard functions */
