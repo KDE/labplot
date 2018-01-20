@@ -356,7 +356,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_initializing=true;
 	m_axesList=list;
 	m_axis=list.first();
-	Q_ASSERT(m_axis);
+	Q_ASSERT(m_axis != nullptr);
 	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
 
@@ -876,7 +876,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 	AbstractColumn* column = 0;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
+		Q_ASSERT(column != nullptr);
 	}
 
 	for (auto* axis : m_axesList)
@@ -1018,7 +1018,7 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
+	Q_ASSERT(column != nullptr);
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksColumn(column);

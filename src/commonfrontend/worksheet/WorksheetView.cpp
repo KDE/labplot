@@ -523,7 +523,7 @@ void WorksheetView::initMenus() {
  *   - as a part of the worksheet context menu in project explorer
  */
 void WorksheetView::createContextMenu(QMenu* menu) {
-	Q_ASSERT(menu);
+	Q_ASSERT(menu != nullptr);
 
 	if (!m_menusInitialized)
 		initMenus();
@@ -551,7 +551,7 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 }
 
 void WorksheetView::createAnalysisMenu(QMenu* menu) {
-	Q_ASSERT(menu);
+	Q_ASSERT(menu != nullptr);
 
 	if (!m_menusInitialized)
 		initMenus();
