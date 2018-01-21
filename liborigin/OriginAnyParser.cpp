@@ -999,7 +999,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 	LOG_PRINT(logfile, "  signature %d [0x%X], valuesize %d size %d ", signature, signature, valuesize, col_data_size)
 
 
-	unsigned int current_col = 1;//, nr = 0, nbytes = 0;
+	size_t current_col = 1;//, nr = 0, nbytes = 0;
 	static unsigned int col_index = 0;
 	unsigned int current_sheet = 0;
 	vector<Origin::SpreadSheet>::difference_type spread = 0;
@@ -1155,7 +1155,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 	return true;
 }
 
-void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_size, short data_type, char data_type_u, char valuesize, int mIndex) {
+void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_size, short data_type, char data_type_u, char valuesize, vector<Origin::Matrix>::difference_type mIndex) {
 	if (matrixes.empty())
 		return;
 
@@ -1163,7 +1163,7 @@ void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_siz
 	stmp.str(col_data);
 
 	if (mIndex < 0)
-		mIndex = matrixes.size() - 1;
+		mIndex = (vector<Origin::Matrix>::difference_type)matrixes.size() - 1;
 
 	unsigned int size = col_data_size/valuesize;
 	bool logValues = true;
@@ -1466,7 +1466,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 	if (ispread != -1) {
 
 		string sec_name = anhd.substr(0x46,41).c_str();
-		int col_index = findColumnByName(ispread, sec_name);
+		int col_index = findColumnByName((int)ispread, sec_name);
 		if (col_index != -1){ //check if it is a formula
 			spreadSheets[ispread].columns[col_index].command = andt1.c_str();
 			LOG_PRINT(logfile, "				Column: %s has formula: %s\n", sec_name.c_str(), spreadSheets[ispread].columns[col_index].command.c_str())
@@ -1906,7 +1906,7 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			stmp.str(cvehd.substr(0x4A));
 			GET_SHORT(stmp, width)
 		}
-		int col_index = findColumnByName(ispread, name);
+		int col_index = findColumnByName((int)ispread, name);
 		if (col_index != -1) {
 			if (spreadSheets[ispread].columns[col_index].name != name)
 				spreadSheets[ispread].columns[col_index].name = name;
@@ -2945,7 +2945,7 @@ void OriginAnyParser::getProjectFolderProperties(tree<ProjectNode>::iterator cur
 }
 
 void OriginAnyParser::outputProjectTree() {
-	unsigned int windowsCount = spreadSheets.size()+matrixes.size()+excels.size()+graphs.size()+notes.size();
+	size_t windowsCount = spreadSheets.size()+matrixes.size()+excels.size()+graphs.size()+notes.size();
 
 	cout << "Project has " << windowsCount << " windows." << endl;
 	cout << "Origin project Tree" << endl;

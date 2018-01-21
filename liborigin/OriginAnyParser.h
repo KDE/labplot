@@ -55,7 +55,7 @@ protected:
 	void readProjectLeaf(tree<ProjectNode>::iterator);
 	void readAttachmentList();
 	bool getColumnInfoAndData(string, unsigned int, string, unsigned int);
-	void getMatrixValues(string, unsigned int, short, char, char, int);
+	void getMatrixValues(string, unsigned int, short, char, char, vector<Origin::Matrix>::difference_type);
 	void getWindowProperties(Origin::Window&, string, unsigned int);
 	void getLayerProperties(string, unsigned int);
 	Origin::Color getColor(string);

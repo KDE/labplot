@@ -203,7 +203,7 @@ void OriginParser::convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type s
 
 int OriginParser::findColumnByName(int spread, const string& name)
 {
-	unsigned int columns = spreadSheets[spread].columns.size();
+	size_t columns = spreadSheets[spread].columns.size();
 	for (unsigned int i = 0; i < columns; i++){
 		string colName = spreadSheets[spread].columns[i].name;
 		if (colName.size() >= 11)
