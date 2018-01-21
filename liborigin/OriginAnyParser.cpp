@@ -774,6 +774,7 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
 	curpos = (unsigned long)file.tellg();
 	string fle_name = readObjectAsString(fle_name_size);
 	LOG_PRINT(logfile, "Folder name at %ld [0x%lX]: %s\n", curpos, curpos, fle_name.c_str());
+
 	// additional properties
 	fle_prop_size = readObjectSize();
 	for (unsigned int i = 0; i < fle_prop_size; i++) {
