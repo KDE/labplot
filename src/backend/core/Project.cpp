@@ -213,6 +213,11 @@ bool Project::isLoading() const {
 	return d->loading;
 }
 
+bool Project::isLabPlotProject(const QString& fileName) {
+	return fileName.endsWith(".lml", Qt::CaseInsensitive) || fileName.endsWith(".lml.gz", Qt::CaseInsensitive)
+		|| fileName.endsWith(".lml.bz2", Qt::CaseInsensitive) || fileName.endsWith(".lml.xz", Qt::CaseInsensitive);
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

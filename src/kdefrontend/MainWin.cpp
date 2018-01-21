@@ -280,9 +280,15 @@ void MainWin::initGUI(const QString& fileName) {
 	m_autoSaveTimer.setInterval(interval);
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
 
-	if (!fileName.isEmpty())
-		openProject(fileName);
-	else {
+	if (!fileName.isEmpty()) {
+		if (Project::isLabPlotProject(fileName)) {
+			openProject(fileName);
+		} else {
+			newProject();
+			QTimer::singleShot(0, this, [=] () { importFileDialog(fileName); });
+		}
+
+	} else {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
 		int load = group.readEntry("LoadOnStart", 0);
@@ -1590,9 +1596,7 @@ void MainWin::dropEvent(QDropEvent* event) {
 		const QString& f = url.toLocalFile();
 
 		//TODO: add later the handling of Origin files here
-		if ( f.endsWith(QLatin1String(".lml")) ||  f.endsWith(QLatin1String(".lml.gz")) || f.endsWith(QLatin1String(".lml.bz2"))
-		        || f.endsWith(QLatin1String(".lml.xz")) || f.endsWith(QLatin1String(".LML")) || f.endsWith(QLatin1String(".LML.GZ"))
-		        || f.endsWith(QLatin1String(".LML.BZ2")) || f.endsWith(QLatin1String(".LML.XZ")) )
+		if (Project::isLabPlotProject(f))
 			openProject(f);
 		else {
 			if (!m_project)

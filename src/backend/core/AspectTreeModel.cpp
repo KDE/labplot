@@ -28,7 +28,6 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/AbstractAspect.h"
-// #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectTreeModel.h"

@@ -81,6 +81,8 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 
+	static bool isLabPlotProject(const QString& fileName);
+
 public slots:
 	void descriptionChanged(const AbstractAspect*);
 
