@@ -917,8 +917,7 @@ void MainWin::openProject(const QString& filename) {
 	bool rc = false;
 	if (Project::isLabPlotProject(filename))
 		rc = m_project->load(filename);
-	else {
-		//at the moment only Origin files are supported in addition
+	else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 		parser.importTo(m_project, QStringList()); //TODO: add return code
@@ -1606,9 +1605,8 @@ void MainWin::dropEvent(QDropEvent* event) {
 		QUrl url = event->mimeData()->urls().at(0);
 		const QString& f = url.toLocalFile();
 
-		//TODO: add later the handling of Origin files here
-		if (Project::isLabPlotProject(f))
-			openProject(f);
+		if (Project::isLabPlotProject(f) || OriginProjectParser::isOriginProject(f))
+				openProject(f);
 		else {
 			if (!m_project)
 				newProject();

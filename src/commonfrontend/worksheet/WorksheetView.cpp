@@ -49,7 +49,6 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
 #include <QClipboard>

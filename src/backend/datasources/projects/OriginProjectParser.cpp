@@ -64,7 +64,7 @@ OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
-bool OriginProjectParser::isLabPlotProject(const QString& fileName) {
+bool OriginProjectParser::isOriginProject(const QString& fileName) {
 	//TODO add opju later when liborigin supports it
 	return fileName.endsWith(".opj", Qt::CaseInsensitive);
 }

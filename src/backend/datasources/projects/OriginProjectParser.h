@@ -44,7 +44,7 @@ class OriginProjectParser : public ProjectParser {
 public:
 	OriginProjectParser();
 
-	static bool isLabPlotProject(const QString& fileName);
+	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
 
 private:
