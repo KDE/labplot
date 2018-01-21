@@ -1002,7 +1002,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 	unsigned int current_col = 1;//, nr = 0, nbytes = 0;
 	static unsigned int col_index = 0;
 	unsigned int current_sheet = 0;
-	int spread = 0;
+	vector<Origin::SpreadSheet>::difference_type spread = 0;
 
 	if (column_name.empty()) { // Matrix or function
 		if (data_type == 0x6081) { // Function
@@ -1028,7 +1028,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 			LOG_PRINT(logfile, ". Range [%g : %g], number of points: %d\n", f.begin, f.end, f.totalPoints);
 
 		} else { // Matrix
-			int mIndex = -1;
+			vector<Origin::Matrix>::difference_type mIndex = -1;
 			string::size_type pos = name.find_first_of("@");
 			if (pos != string::npos){
 				string sheetName = name;
@@ -1497,7 +1497,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 	} else if (iexcel != -1) {
 
 		string sec_name = anhd.substr(0x46,41).c_str();
-		int col_index = findExcelColumnByName(iexcel, ilayer, sec_name);
+		vector<Origin::SpreadColumn>::difference_type col_index = findExcelColumnByName(iexcel, ilayer, sec_name);
 		if (col_index != -1){ //check if it is a formula
 			excels[iexcel].sheets[ilayer].columns[col_index].command = andt1.c_str();
 		}
@@ -2026,7 +2026,7 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 		GET_SHORT(stmp, dataID)
 
 		unsigned int isheet = datasets[dataID-1].sheet;
-		int col_index = findExcelColumnByName(iexcel, isheet, name);
+		vector<Origin::SpreadColumn>::difference_type col_index = findExcelColumnByName(iexcel, isheet, name);
 		if (col_index != -1) {
 			SpreadColumn::ColumnType type;
 			switch(c){

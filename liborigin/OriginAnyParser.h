@@ -81,8 +81,10 @@ protected:
 
 	unsigned long d_file_size;
 	unsigned int objectIndex, parseError;
-	int ispread, imatrix, iexcel, igraph;
-	int ilayer;
+	vector<Origin::SpreadSheet>::difference_type ispread;
+	vector<Origin::Matrix>::difference_type imatrix;
+	vector<Origin::Excel>::difference_type iexcel;
+	int igraph, ilayer;
 };
 
 #endif // ORIGIN_ANY_PARSER_H
