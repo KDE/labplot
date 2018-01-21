@@ -37,6 +37,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/projects/OriginProjectParser.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -885,7 +886,7 @@ void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
-	                      i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	                      i18n("LabPlot Projects (%1);;Origin Projects (%2)", Project::supportedExtensions(), OriginProjectParser::supportedExtensions()) );
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
@@ -913,7 +914,17 @@ void MainWin::openProject(const QString& filename) {
 	WAIT_CURSOR;
 	QElapsedTimer timer;
 	timer.start();
-	const bool rc = m_project->load(filename);
+	bool rc = false;
+	if (Project::isLabPlotProject(filename))
+		rc = m_project->load(filename);
+	else {
+		//at the moment only Origin files are supported in addition
+		OriginProjectParser parser;
+		parser.setProjectFileName(filename);
+		parser.importTo(m_project, QStringList()); //TODO: add return code
+		rc = true;
+	}
+
 	if (!rc) {
 		closeProject();
 		RESET_CURSOR;

@@ -44,6 +44,9 @@ class OriginProjectParser : public ProjectParser {
 public:
 	OriginProjectParser();
 
+	static bool isLabPlotProject(const QString& fileName);
+	static QString supportedExtensions();
+
 private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);

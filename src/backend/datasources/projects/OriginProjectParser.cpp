@@ -45,6 +45,7 @@
 #include <liborigin/OriginFile.h>
 
 #include <QDateTime>
+#include <../liborigin/OriginFile.h>
 
 /*!
 \class OriginProjectParser
@@ -61,6 +62,17 @@ OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_noteIndex(0) {
 
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
+}
+
+bool OriginProjectParser::isLabPlotProject(const QString& fileName) {
+	//TODO add opju later when liborigin supports it
+	return fileName.endsWith(".opj", Qt::CaseInsensitive);
+}
+
+QString OriginProjectParser::supportedExtensions() {
+	//TODO add opju later when liborigin supports it
+	static const QString extensions = "*.opj *.OPJ";
+	return extensions;
 }
 
 //##############################################################################

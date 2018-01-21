@@ -218,6 +218,11 @@ bool Project::isLabPlotProject(const QString& fileName) {
 		|| fileName.endsWith(".lml.bz2", Qt::CaseInsensitive) || fileName.endsWith(".lml.xz", Qt::CaseInsensitive);
 }
 
+QString Project::supportedExtensions() {
+	static const QString extensions = "*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ";
+	return extensions;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

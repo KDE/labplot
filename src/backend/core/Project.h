@@ -82,6 +82,7 @@ public:
 	bool load(const QString&, bool preview = false);
 
 	static bool isLabPlotProject(const QString& fileName);
+	static QString supportedExtensions();
 
 public slots:
 	void descriptionChanged(const AbstractAspect*);

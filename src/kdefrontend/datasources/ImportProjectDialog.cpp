@@ -326,14 +326,12 @@ void ImportProjectDialog::selectFile() {
 	case (ProjectLabPlot):
 		title = i18n("Open LabPlot Project");
 		lastDirConfEntryName = QLatin1String("LastImportLabPlotProjectDir");
-		supportedFormats = i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)");
+		supportedFormats = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 		break;
 	case (ProjectOrigin):
 		title = i18n("Open Origin Project");
 		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
-		supportedFormats = i18n("Origin Projects (*.opj *.OPJ)");
-		//TODO (when liborigin supports OPJU):
-		// supportedFormats = i18n("Origin Projects (*.opj *.OPJ *.opju *.OPJU)");
+		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
 		break;
 	}
 
