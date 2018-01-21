@@ -371,7 +371,7 @@ bool OriginAnyParser::readWindowElement() {
 	} else {
 		LOG_PRINT(logfile, "\n  Window is a Graph\n")
 		graphs.push_back(Graph(name));
-		igraph = graphs.size()-1;
+		igraph = (int)graphs.size()-1;
 		getWindowProperties(graphs[igraph], wde_header, wde_header_size);
 	}
 
