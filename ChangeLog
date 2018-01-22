@@ -1,7 +1,6 @@
 -----2.5-----
 New features:
-	* Syntax highlighting for LaTeX in the text label
-	* Allow to set the background color for LaTeX labels
+	* Support for reading and plotting of live-data
 	* Improved data fitting
 		* Automatically guess parameter of custom models
 		* Better result presentation
@@ -15,12 +14,16 @@ New features:
 		* Respect theme settings also in plot legends and labels
 		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
+		* Show currently active theme in the "Apply theme" button
+		* New application option in the settings for the default theme used for new worksheets.
 	* Support different data types
 		* auto detect integer and datetime data in import
 		* support number locale and datetime formats
 		* improved data type support in spreadsheets
 	* Import from SQL databases (tables or custom queries)
 	* Import Origin OPJ projects
+	* Syntax highlighting for LaTeX in the text label
+	* Allow to set the background color for LaTeX labels
 	* support Hermite polynomials from GSL 2.4
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
@@ -28,11 +31,20 @@ New features:
 	* Drag columns in the project explorer and drop them on plots (either in a worksheet view or in the project explorer) to create curves
 	* "Show last N points" and "Show first N points" data ranges in cartesian plot
 	* Added CLI option --presenter to start LabPlot directly in the presenter mode
+	* Added CLI parameter to directly open project files (LabPlot or Origin)
+	* Allow drag&drop of projects files (LabPlot and Origin) on the main window to load the project
+	* Allow drag&drop of data files on the main window to import the data
+	* Show tooltips for the supported mathematical functions and constants in the expression text field
+	* Automaticaly switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
+	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog.
+	* build with MSVC
 
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project
 	* Calculation of fit results corrected
 	* When a LabPlot project is being droped in the main window, load the project directly instead of showing the import file dialog
+	* Correctly save and restore masked cells
+	* Don't crash if the rc-file was not found during the startup.
 
 -----2.4-----
 New features:
