@@ -60,6 +60,10 @@ typedef double (*func_t) (void);
 #else
 typedef double (*func_t) ();
 #endif
+typedef double (*func_t1) (double);
+typedef double (*func_t2) (double, double);
+typedef double (*func_t3) (double, double, double);
+typedef double (*func_t4) (double, double, double, double);
 
 /* structure for list of symbols */
 typedef struct symrec {

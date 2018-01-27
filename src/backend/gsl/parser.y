@@ -93,10 +93,10 @@ expr:      NUM       { $$ = $1;                         }
 | VAR                { $$ = $1->value.var;              }
 | VAR '=' expr       { $$ = $3; $1->value.var = $3;     }
 | FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();   }
-| FNCT '(' expr ')'  { $$ = (*($1->value.fnctptr))($3); }
-| FNCT '(' expr ',' expr ')'  { $$ = (*($1->value.fnctptr))($3,$5); }
-| FNCT '(' expr ',' expr ','expr ')'  { $$ = (*($1->value.fnctptr))($3,$5,$7); }
-| FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*($1->value.fnctptr))($3,$5,$7,$9); }
+| FNCT '(' expr ')'  { $$ = (*((func_t1)($1->value.fnctptr)))($3); }
+| FNCT '(' expr ',' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
+| FNCT '(' expr ',' expr ','expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
+| FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
 | expr '+' expr      { $$ = $1 + $3;                    }
 | expr '-' expr      { $$ = $1 - $3;                    }
 | expr '*' expr      { $$ = $1 * $3;                    }
