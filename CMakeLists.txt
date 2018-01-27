@@ -66,18 +66,21 @@ include(KDECompilerSettings)
 include(KDECMakeSettings)
 
 ### compiler flags ######################################
-
-set (GENERIC_FLAGS "-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -Wswitch-enum -Wdeprecated-declarations -Wstack-protector -fno-omit-frame-pointer -fstack-protector -fvisibility=default")
+set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
+set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default")
 set (GENERIC_C_FLAGS "-std=c99 ${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "-std=c++11 ${GENERIC_FLAGS} -fexceptions")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C compiler detected, adding compile flags")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
 elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
 	message(STATUS "Clang C compiler detected, adding compile flags")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS}")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
+	message(STATUS "Intel C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 ${GENERIC_C_FLAGS}")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
@@ -89,10 +92,15 @@ endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS}")
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	message(STATUS "Clang C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS}")
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
+	message(STATUS "Intel C++ compiler detected, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
+	#-std=c++0x comes with cmake's general flags, depricated in icc, remove it
+	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
