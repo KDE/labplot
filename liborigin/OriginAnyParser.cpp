@@ -1296,7 +1296,7 @@ void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_hea
 	else
 		window.title = Window::Both;
 
-	window.hidden = (c & 0x08);
+	window.hidden = ((c & 0x08) != 0);
 	if (window.hidden) {
 		LOG_PRINT(logfile, "			WINDOW %d NAME : %s	is hidden\n", objectIndex, window.name.c_str());
 	} else {
@@ -1333,7 +1333,7 @@ void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_hea
 		GET_SHORT(stmp, graphs[igraph].height)
 
 		unsigned char c = wde_header[0x38];
-		graphs[igraph].connectMissingData = (c & 0x40);
+		graphs[igraph].connectMissingData = ((c & 0x40) != 0);
 
 		string templateName = wde_header.substr(0x45,20).c_str();
 		graphs[igraph].templateName = templateName;
@@ -1394,8 +1394,8 @@ void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_hea
 		glayer.xAxis.majorTicks = lye_header[0x2B];
 
 		unsigned char g = lye_header[0x2D];
-		glayer.xAxis.zeroLine = (g & 0x80);
-		glayer.xAxis.oppositeLine = (g & 0x40);
+		glayer.xAxis.zeroLine = ((g & 0x80) != 0);
+		glayer.xAxis.oppositeLine = ((g & 0x40) != 0);
 
 		glayer.xAxis.minorTicks = lye_header[0x37];
 		glayer.xAxis.scale = lye_header[0x38];
@@ -1408,15 +1408,15 @@ void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_hea
 		glayer.yAxis.majorTicks = lye_header[0x56];
 
 		g = lye_header[0x58];
-		glayer.yAxis.zeroLine = (g & 0x80);
-		glayer.yAxis.oppositeLine = (g & 0x40);
+		glayer.yAxis.zeroLine = ((g & 0x80) != 0);
+		glayer.yAxis.oppositeLine = ((g & 0x40) != 0);
 
 		glayer.yAxis.minorTicks = lye_header[0x62];
 		glayer.yAxis.scale = lye_header[0x63];
 
 		g = lye_header[0x68];
-		glayer.gridOnTop = (g & 0x04);
-		glayer.exchangedAxes = (g & 0x40);
+		glayer.gridOnTop = ((g & 0x04) != 0);
+		glayer.exchangedAxes = ((g & 0x40) != 0);
 
 		stmp.str(lye_header.substr(0x71));
 		GET_SHORT(stmp, glayer.clientRect.left)
@@ -1820,7 +1820,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 		else if (sec_name == "SPECTRUM1") {
 			glayer.isXYY3D = false;
 			glayer.colorScale.visible = true;
-			glayer.colorScale.reverseOrder = andt2[0x18];
+			glayer.colorScale.reverseOrder = (andt2[0x18] != 0);
 			stmp.str(andt2.substr(0x20));
 			GET_SHORT(stmp, glayer.colorScale.colorBarThickness)
 			GET_SHORT(stmp, glayer.colorScale.labelGap)
@@ -2230,10 +2230,10 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			}
 
 			h = cvehd[0x20];
-			curve.text.fontUnderline = (h & 0x1);
-			curve.text.fontItalic = (h & 0x2);
-			curve.text.fontBold = (h & 0x8);
-			curve.text.whiteOut = (h & 0x20);
+			curve.text.fontUnderline = ((h & 0x1) != 0);
+			curve.text.fontItalic = ((h & 0x2) != 0);
+			curve.text.fontBold = ((h & 0x8) != 0);
+			curve.text.whiteOut = ((h & 0x20) != 0);
 
 			char offset = cvehd[0x37];
 			curve.text.xOffset = offset * 5;
@@ -2300,10 +2300,10 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 		if (curve.type == GraphCurve::Pie) {
 			// code from Origin410/500Parser
 			h = cvehd[0x14];
-			curve.pie.formatPercentages = (h & 0x08);
+			curve.pie.formatPercentages = ((h & 0x08) != 0);
 			curve.pie.formatValues = !curve.pie.formatPercentages;
-			curve.pie.positionAssociate = (h & 0x80);
-			curve.pie.formatCategories  = (h & 0x20);
+			curve.pie.positionAssociate = ((h & 0x80) != 0);
+			curve.pie.formatCategories  = ((h & 0x20) != 0);
 
 			h = cvehd[0x19];
 			curve.pie.radius = 100 - h;
@@ -2319,13 +2319,13 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			if (cvehdsz > 0xA9) { // code from Origin750Parser.cpp
 
 				h = cvehd[0x92];
-				curve.pie.formatPercentages = (h & 0x01);
-				curve.pie.formatValues		= (h & 0x02);
-				curve.pie.positionAssociate = (h & 0x08);
-				curve.pie.clockwiseRotation = (h & 0x20);
-				curve.pie.formatCategories	= (h & 0x80);
+				curve.pie.formatPercentages = ((h & 0x01) != 0);
+				curve.pie.formatValues = ((h & 0x02) != 0);
+				curve.pie.positionAssociate = ((h & 0x08) != 0);
+				curve.pie.clockwiseRotation = ((h & 0x20) != 0);
+				curve.pie.formatCategories = ((h & 0x80) != 0);
 
-				curve.pie.formatAutomatic = cvehd[0x93];
+				curve.pie.formatAutomatic = (cvehd[0x93] != 0);
 				stmp.str(cvehd.substr(0x94));
 				GET_SHORT(stmp, curve.pie.distance)
 				curve.pie.viewAngle = cvehd[0x96];
@@ -2358,17 +2358,17 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			else
 				curve.surface.grids = SurfaceProperties::XY;
 
-			curve.surface.sideWallEnabled = (h & 0x10);
+			curve.surface.sideWallEnabled = ((h & 0x10) != 0);
 			curve.surface.frontColor = getColor(cvehd.substr(0x1D,4));
 
 			h = cvehd[0x13];
-			curve.surface.backColorEnabled = (h & 0x08);
-			curve.surface.surface.fill = (h & 0x10);
-			curve.surface.surface.contour = (h & 0x40);
-			curve.surface.topContour.fill = (h & 0x02);
-			curve.surface.topContour.contour = (h & 0x04);
-			curve.surface.bottomContour.fill = (h & 0x80);
-			curve.surface.bottomContour.contour = (h & 0x01);
+			curve.surface.backColorEnabled = ((h & 0x08) != 0);
+			curve.surface.surface.fill = ((h & 0x10) != 0);
+			curve.surface.surface.contour = ((h & 0x40) != 0);
+			curve.surface.topContour.fill = ((h & 0x02) != 0);
+			curve.surface.topContour.contour = ((h & 0x04) != 0);
+			curve.surface.bottomContour.fill = ((h & 0x80) != 0);
+			curve.surface.bottomContour.contour = ((h & 0x01) != 0);
 
 			if (cvehdsz > 0x165) {
 				stmp.str(cvehd.substr(0x14C));
@@ -2401,17 +2401,17 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			if (curve.type == GraphCurve::Contour || curve.type == GraphCurve::XYZContour) glayer.isXYY3D = false;
 			ColorMap& colorMap = (curve.type == GraphCurve::Mesh3D ? curve.surface.colorMap : curve.colorMap);
 			h = cvehd[0x13];
-			colorMap.fillEnabled = (h & 0x82);
+			colorMap.fillEnabled = ((h & 0x82) != 0);
 
 			if ((curve.type == GraphCurve::Contour) && (cvehdsz > 0x89)) {
 				stmp.str(cvehd.substr(0x7A));
 				GET_SHORT(stmp, curve.text.fontSize)
 
 				h = cvehd[0x83];
-				curve.text.fontUnderline = (h & 0x1);
-				curve.text.fontItalic = (h & 0x2);
-				curve.text.fontBold = (h & 0x8);
-				curve.text.whiteOut = (h & 0x20);
+				curve.text.fontUnderline = ((h & 0x1) != 0);
+				curve.text.fontItalic = ((h & 0x2) != 0);
+				curve.text.fontBold = ((h & 0x8) != 0);
+				curve.text.whiteOut = ((h & 0x20) != 0);
 
 				curve.text.color = getColor(cvehd.substr(0x86,4));
 			}
@@ -2460,7 +2460,7 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			curve.symbolFillTransparency = cvehd[0x139];
 
 			h = cvehd[0x143];
-			curve.connectSymbols = (h&0x8);
+			curve.connectSymbols = ((h & 0x8) != 0);
 		}
 	}
 }
@@ -2545,7 +2545,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			axis.majorGrid.width = (double)w/500.0;
 		} else if (iaxispar == 2) { // tickaxis 0
 			h = apdata[0x26];
-			axis.tickAxis[0].showMajorLabels = (h & 0x40);
+			axis.tickAxis[0].showMajorLabels = ((h & 0x40) != 0);
 			axis.tickAxis[0].color = apdata[0x0F];
 			stmp.str(apdata.substr(0x13));
 			GET_SHORT(stmp, w)
@@ -2553,7 +2553,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			GET_SHORT(stmp, w)
 			axis.tickAxis[0].fontSize = w;
 			h = apdata[0x1A];
-			axis.tickAxis[0].fontBold = (h & 0x08);
+			axis.tickAxis[0].fontBold = ((h & 0x08) != 0);
 			stmp.str(apdata.substr(0x23));
 			GET_SHORT(stmp, w)
 			h = apdata[0x25];
@@ -2632,7 +2632,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			}
 		} else if (iaxispar == 4) { // tickaxis 1
 			h = apdata[0x26];
-			axis.tickAxis[1].showMajorLabels = (h & 0x40);
+			axis.tickAxis[1].showMajorLabels = ((h & 0x40) != 0);
 			axis.tickAxis[1].color = apdata[0x0F];
 			stmp.str(apdata.substr(0x13));
 			GET_SHORT(stmp, w)
@@ -2640,7 +2640,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			GET_SHORT(stmp, w)
 			axis.tickAxis[1].fontSize = w;
 			h = apdata[0x1A];
-			axis.tickAxis[1].fontBold = (h & 0x08);
+			axis.tickAxis[1].fontBold = ((h & 0x08) != 0);
 			stmp.str(apdata.substr(0x23));
 			GET_SHORT(stmp, w)
 			h = apdata[0x25];
@@ -2793,7 +2793,7 @@ void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, stri
 	else if (state == 0x0b)
 		notes.back().state = Window::Maximized;
 
-	notes.back().hidden = (state & 0x40);
+	notes.back().hidden = ((state & 0x40) != 0);
 
 	if (labellen > 1) {
 		notes.back().label = nwect.substr(0,labellen);
