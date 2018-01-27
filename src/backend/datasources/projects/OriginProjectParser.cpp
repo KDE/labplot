@@ -377,7 +377,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 						col->setValueAt(i, datavalue);
 //TODO					else	// convert double to string for Text columns
 //						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
-				} else if (v.type() == Origin::Variant::V_STRING) { // string
+				} else if (v.type() == Origin::Variant::V_STRING) {
 					//printf("STRING !\n");
 					if (!setAsText && i == 0) {
 						col->setColumnMode(AbstractColumn::Text);
@@ -618,25 +618,24 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	}
 
 	char format = 'g';
-	int prec = 6;
+	//TODO: prec not support by Matrix
+	//int prec = 6;
 	switch (layer.valueTypeSpecification) {
 	case 0: //Decimal 1000
 		format='f';
-		prec = layer.decimalPlaces;
+	//	prec = layer.decimalPlaces;
 		break;
 	case 1: //Scientific
 		format='e';
-		prec = layer.decimalPlaces;
+	//	prec = layer.decimalPlaces;
 		break;
 	case 2: //Engineering
 	case 3: //Decimal 1,000
 		format='g';
-		prec = layer.significantDigits;
+	//	prec = layer.significantDigits;
 		break;
 	}
 
-	//TODO: prec not support by Matrix
-	Q_UNUSED(prec);
 	matrix->setNumericFormat(format);
 
 	return true;

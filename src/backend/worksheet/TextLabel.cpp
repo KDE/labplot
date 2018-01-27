@@ -716,7 +716,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	QRectF rect;
 	bool teXImageFound = false;
 
 	while (!reader->atEnd()) {
