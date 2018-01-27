@@ -562,10 +562,11 @@ bool OriginAnyParser::readAnnotationElement() {
 
 	// third block
 	unsigned int ane_data_3_size = 0;
-	unsigned long andt3_start = 0; (void) andt3_start;
 	ane_data_3_size = readObjectSize();
 
-	andt3_start = (unsigned long)file.tellg();
+#ifdef GENERATE_CODE_FOR_LOG
+	unsigned long andt3_start = (unsigned long)file.tellg();
+#endif
 	LOG_PRINT(logfile, "     block 3 size %d [0x%X] at %ld [0x%lX]\n", ane_data_3_size, ane_data_3_size, andt3_start, andt3_start)
 	string andt3_data = readObjectAsString(ane_data_3_size);
 
@@ -675,8 +676,8 @@ bool OriginAnyParser::readParameterElement() {
 
 	getline(file, par_name);
 	if (par_name[0] == '\0') {
-		unsigned int eof_parameters_mark = readObjectSize();
-		(void) eof_parameters_mark; // supress compiler warning
+		//unsigned int eof_parameters_mark = readObjectSize();
+		readObjectSize();
 		return false;
 	}
 	LOG_PRINT(logfile, " %s:", par_name.c_str())
@@ -702,7 +703,7 @@ bool OriginAnyParser::readNoteElement() {
 	/* get info of Note windows, including "Results Log"
 	 * return true if a Note window is found, otherwise return false */
 	unsigned int nwe_header_size = 0, nwe_label_size = 0, nwe_contents_size = 0;
-	unsigned long curpos = 0, nwh_start = 0, nwl_start = 0, nwc_start = 0; (void) nwc_start;
+	unsigned long curpos = 0, nwh_start = 0, nwl_start = 0;
 
 	// get note header size
 	nwe_header_size = readObjectSize();
@@ -730,7 +731,9 @@ bool OriginAnyParser::readNoteElement() {
 
 	// get contents size
 	nwe_contents_size = readObjectSize();
-	nwc_start = (unsigned long)file.tellg();
+#ifdef GENERATE_CODE_FOR_LOG
+	unsigned long nwc_start = (unsigned long)file.tellg();
+#endif
 	string nwe_contents = readObjectAsString(nwe_contents_size);
 	LOG_PRINT(logfile, "  contents at %ld [0x%lX]: \n%s\n", nwc_start, nwc_start, nwe_contents.c_str())
 
@@ -752,12 +755,12 @@ void OriginAnyParser::readProjectTree() {
 	string pte_pre2 = readObjectAsString(pte_pre2_size);
 
 	// root element and children
-	unsigned int rootfolder = readFolderTree(projectTree.begin(), pte_depth);
-	(void) rootfolder; // supress compiler warning
+	//unsigned int rootfolder = readFolderTree(projectTree.begin(), pte_depth);
+	readFolderTree(projectTree.begin(), pte_depth);
 
 	// epilogue (should be zero)
-	unsigned int pte_post_size = readObjectSize();
-	(void) pte_post_size; // supress compiler warning
+	//unsigned int pte_post_size = readObjectSize();
+	readObjectSize();
 
 	// log info on project tree
 #ifdef GENERATE_CODE_FOR_LOG
@@ -768,13 +771,13 @@ void OriginAnyParser::readProjectTree() {
 }
 
 unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent, unsigned int depth) {
-	unsigned int fle_header_size = 0, fle_eofh_size = 0, fle_name_size = 0, fle_prop_size = 0;
+	unsigned int fle_header_size = 0, fle_name_size = 0, fle_prop_size = 0;
 
 	// folder header size, data, end mark
 	fle_header_size = readObjectSize();
 	string fle_header = readObjectAsString(fle_header_size);
-	fle_eofh_size = readObjectSize(); // (usually 0)
-	(void) fle_eofh_size; // supress compiler warning
+	//unsigned int fle_eofh_size = readObjectSize(); // (usually 0)
+	readObjectSize();
 
 	// folder name size
 	fle_name_size = readObjectSize();
@@ -832,8 +835,8 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
 
 	for (unsigned int i=0; i < number_of_folders; i++) {
 		depth++;
-		unsigned int files_in_subfolder = readFolderTree(current_folder, depth);
-		(void) files_in_subfolder; // supress compiler warning
+		//unsigned int files_in_subfolder = readFolderTree(current_folder, depth);
+		readFolderTree(current_folder, depth);
 		depth--;
 	}
 
@@ -855,8 +858,8 @@ void OriginAnyParser::readProjectLeaf(tree<ProjectNode>::iterator current_folder
 	LOG_PRINT(logfile, "File at %ld [0x%lX]\n", curpos, curpos)
 
 	// epilogue (should be zero)
-	unsigned int ptl_post_size = readObjectSize();
-	(void) ptl_post_size; // supress compiler warning
+	//unsigned int ptl_post_size = readObjectSize();
+	readObjectSize();
 
 	// get project node properties
 	getProjectLeafProperties(current_folder, ptl_data, ptl_data_size);
@@ -877,7 +880,9 @@ void OriginAnyParser::readAttachmentList() {
 
 	istringstream stmp(ios_base::binary);
 	string att_header;
-	unsigned long curpos = 0; (void) curpos;
+#ifdef GENERATE_CODE_FOR_LOG
+	unsigned long curpos = 0;
+#endif
 	if (att_1st_empty == 8) {
 		// first group
 		unsigned int att_list1_size = 0;
@@ -885,7 +890,9 @@ void OriginAnyParser::readAttachmentList() {
 		// get two integers
 		// next line fails if first attachment group is empty: readObjectSize exits as there is no '\n' after 4 bytes for uint
 		att_list1_size = readObjectSize(); // should be 8 as we expect two integer values
+#ifdef GENERATE_CODE_FOR_LOG
 		curpos = (unsigned long)file.tellg();
+#endif
 		string att_list1 = readObjectAsString(att_list1_size);
 		LOG_PRINT(logfile, "First attachment group at %ld [0x%lX]", curpos, curpos)
 
@@ -909,7 +916,9 @@ void OriginAnyParser::readAttachmentList() {
 			GET_INT(stmp, att_mark) // should be 4096
 			GET_INT(stmp, iattno)
 			GET_INT(stmp, att_data_size)
+#ifdef GENERATE_CODE_FOR_LOG
 			curpos = (unsigned long)file.tellg();
+#endif
 			LOG_PRINT(logfile, "Attachment no %d (%d) at %ld [0x%lX], size %d\n", i, iattno, curpos, curpos, att_data_size)
 
 			// get data
@@ -923,7 +932,9 @@ void OriginAnyParser::readAttachmentList() {
 
 	/* Second group is a series of (header, name, data) triplets
 	   There is no number of attachments. It ends when we reach EOF. */
+#ifdef GENERATE_CODE_FOR_LOG
 	curpos = (unsigned long)file.tellg();
+#endif
 	LOG_PRINT(logfile, "Second attachment group starts at %ld [0x%lX], file size %d\n", curpos, curpos, (int)d_file_size)
 	/* Header is a group of 3 integers, with no '\n' at end
 		1st attachment header+name size including itself
@@ -950,7 +961,9 @@ void OriginAnyParser::readAttachmentList() {
 		unsigned int name_size = att_header_size - 3*4;
 		string att_name = string(name_size, 0);
 		file.read(&att_name[0], name_size);
+#ifdef GENERATE_CODE_FOR_LOG
 		curpos = (unsigned long)file.tellg();
+#endif
 		string att_data = string(att_size, 0);
 		file.read(&att_data[0], att_size);
 		LOG_PRINT(logfile, "attachment at %ld [0x%lX], type 0x%X, size %d [0x%X]: %s\n", curpos, curpos, att_type, att_size, att_size, att_name.c_str())
