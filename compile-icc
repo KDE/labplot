@@ -9,6 +9,6 @@ fi
 cd $BUILDDIR
 
 export CC=icc
-export CXX=icc
+export CXX=icpc
 
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
