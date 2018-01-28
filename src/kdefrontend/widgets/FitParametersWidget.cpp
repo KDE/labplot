@@ -4,7 +4,7 @@
     Description          : widget for editing fit parameters
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -72,10 +72,10 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 	ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined model
+	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
-		for (int i=0; i < m_fitData->paramNames.size(); ++i){
+		for (int i = 0; i < m_fitData->paramNames.size(); ++i) {
 			// name
 			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -208,11 +208,15 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
+		/* we don't need add/remove since parameter are detected automatically
 		ui.pbAdd->setIcon(QIcon::fromTheme("list-add"));
 		ui.pbAdd->setVisible(true);
 		ui.pbRemove->setIcon(QIcon::fromTheme("list-remove"));
 		ui.pbRemove->setVisible(true);
 		ui.pbRemove->setEnabled(m_fitData->paramNames.size() > 1);
+		*/
+		ui.pbAdd->setVisible(false);
+		ui.pbRemove->setVisible(false);
 	}
 
 	ui.tableWidget->installEventFilter(this);
@@ -220,8 +224,9 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
-	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
-	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
+// we don't need add/remove since parameter are detected automatically
+//	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
+//	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
