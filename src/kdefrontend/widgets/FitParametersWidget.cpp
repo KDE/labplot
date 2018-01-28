@@ -316,7 +316,7 @@ void FitParametersWidget::applyClicked() {
 	if (m_changed)
 		emit parametersChanged();
 
-	emit finished() ;
+	emit finished();
 }
 
 // check if start values are inside limits

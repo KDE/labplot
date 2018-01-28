@@ -705,8 +705,11 @@ void XYFitCurveDock::showParameters() {
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
 	menu.setMinimumWidth(w.width());
+	menu.setTearOffEnabled(true);
 
-	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), -menu.sizeHint().height());
+	//menu.setWindowFlags(menu.windowFlags() & Qt::MSWindowsFixedSizeDialogHint);
+
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
 	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
 }
 
@@ -728,8 +731,11 @@ void XYFitCurveDock::showOptions() {
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
+	menu.setTearOffEnabled(true);
 
-	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), -menu.sizeHint().height());
+	//menu.setWindowFlags(menu.windowFlags() & Qt::MSWindowsFixedSizeDialogHint);
+
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), 0);
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 
