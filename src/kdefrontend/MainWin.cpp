@@ -144,15 +144,18 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 #endif
 	  m_guiObserver(0) {
 
-// 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
 	setAcceptDrops(true);
+	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
+	restoreGeometry(group.readEntry("geometry", QByteArray()));
 }
+
 
 MainWin::~MainWin() {
 	//save the recent opened files
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
-
+	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
+	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
 	if (m_project != 0) {
