@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -34,6 +34,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QDir>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -352,7 +353,9 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	}
 
-	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
+	QString sep = QDir::separator();
+	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "gsl_distributions" + sep + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
+	DEBUG("Distribution pixmap path = " << file.toStdString());
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 

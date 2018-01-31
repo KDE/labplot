@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -43,6 +43,7 @@
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QClipboard>
+#include <QDir>
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -582,7 +583,7 @@ void XYFitCurveDock::updateModelEquation() {
 
 	// set formula picture
 	uiGeneralTab.lEquation->setText(QLatin1String("f(x) ="));
-	QString file;
+	QString file, sep = QDir::separator();
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic: {
 		// formula pic depends on degree
@@ -591,7 +592,7 @@ void XYFitCurveDock::updateModelEquation() {
 			numSuffix = "4";
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
 			numSuffix = "2";
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
 			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
@@ -600,16 +601,16 @@ void XYFitCurveDock::updateModelEquation() {
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
 			numSuffix = "4";
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
 			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_growth:
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
 			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
 		break;
 	case nsl_fit_model_distribution:
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/"
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "gsl_distributions" + sep
 			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
@@ -625,6 +626,7 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
+		DEBUG("Model pixmap path = " << file.toStdString());
 		uiGeneralTab.lFuncPic->setPixmap(file);
 		uiGeneralTab.lFuncPic->show();
 		uiGeneralTab.teEquation->hide();
