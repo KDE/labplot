@@ -57,6 +57,9 @@
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/note/NoteView.h"
 
+#include "tools/schememanager.h"
+#include "tools/thememanager.h"
+
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
@@ -542,6 +545,13 @@ void MainWin::initMenus() {
 	//menu for editing files
 	m_editMenu = new QMenu(i18n("Edit"), this);
 	m_editMenu->addAction(m_editFitsFileAction);
+
+	QMenu* themesMenu = new QMenu(i18n("&Themes"), this);
+	Digikam::ThemeManager::instance()->setThemeMenuAction(themesMenu);
+	Digikam::ThemeManager::instance()->registerThemeActions(this);
+	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
+	if (settingsMenu)
+		settingsMenu->insertMenu(settingsMenu->actions().first(), themesMenu);
 }
 
 /*!

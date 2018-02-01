@@ -36,8 +36,9 @@ New features:
 	* Allow drag&drop of data files on the main window to import the data
 	* Show tooltips for the supported mathematical functions and constants in the expression text field
 	* Automaticaly switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
-	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog.
-	* build with MSVC
+	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog
+	* Allow to change the theme from within the application
+	* build with MSVC and ICC
 
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project

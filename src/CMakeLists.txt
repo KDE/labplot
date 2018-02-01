@@ -297,6 +297,8 @@ set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
 	${TOOLS_DIR}/ImageTools.cpp
 	${TOOLS_DIR}/TeXRenderer.cpp
+	${TOOLS_DIR}/thememanager.cpp
+	${TOOLS_DIR}/schememanager.cpp
 )
 
 bison_target(GslParser
