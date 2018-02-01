@@ -274,6 +274,7 @@ IF (XLOCALE_INCLUDE_DIR)
 	include_directories (${XLOCALE_INCLUDE_DIR})
 ENDIF()
 
+add_subdirectory(data)
 add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(src)

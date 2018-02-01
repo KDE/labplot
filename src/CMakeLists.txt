@@ -309,12 +309,6 @@ set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}
 )
 
-add_subdirectory( pics )
-add_subdirectory( pics/gsl_distributions )
-add_subdirectory( pics/fit_models )
-add_subdirectory( pics/colorchooser )
-add_subdirectory( themes )
-
 ##############################################################################
 INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
 set( LABPLOT_SRCS ${GUI_SOURCES} )

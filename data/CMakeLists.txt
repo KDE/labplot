@@ -1,0 +1,6 @@
+add_subdirectory(colorschemes)
+add_subdirectory(pics)
+add_subdirectory(pics/gsl_distributions)
+add_subdirectory(pics/fit_models)
+add_subdirectory(pics/colorchooser)
+add_subdirectory(themes)
