@@ -602,16 +602,16 @@ void XYFitCurveDock::updateModelEquation() {
 		if (degree > 4)
 			numSuffix = "4";
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".png");
 		break;
 	}
 	case nsl_fit_model_growth:
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
+			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".png");
 		break;
 	case nsl_fit_model_distribution:
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/"
-			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
+			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".png");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(QLatin1String("f(k)/A ="));
