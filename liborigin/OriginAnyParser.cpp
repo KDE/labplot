@@ -47,22 +47,21 @@ bool OriginAnyParser::parse() {
 
 	// get length of file:
 	file.seekg (0, ios_base::end);
-	d_file_size = (unsigned long)file.tellg();
+	d_file_size = file.tellg();
 	file.seekg(0, ios_base::beg);
 
-	LOG_PRINT(logfile, "File size: %d\n", (int)d_file_size)
+	LOG_PRINT(logfile, "File size: %ld\n", d_file_size)
 
 	// get file and program version, check it is a valid file
 	readFileVersion();
 	if (parseError > 1) return false;
-	unsigned long curpos = 0;
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX]\n", curpos, curpos)
 
 	// get global header
 	readGlobalHeader();
 	if (parseError > 1) return false;
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "Now at %ld [0x%lX]\n", curpos, curpos)
 
 	// get dataset list
@@ -75,8 +74,8 @@ bool OriginAnyParser::parse() {
 	}
 	if (parseError > 1) return false;
 	LOG_PRINT(logfile, " ... done. Data sets: %d\n", dataset_list_size)
-	curpos = (unsigned long)file.tellg();
-	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+	curpos = file.tellg();
+	LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 
 	for(unsigned int i = 0; i < spreadSheets.size(); ++i){
 #ifdef LVERSION	// LABPLOT wants all sheets converted and not loose order
@@ -99,8 +98,8 @@ bool OriginAnyParser::parse() {
 		window_list_size++;
 	}
 	LOG_PRINT(logfile, " ... done. Windows: %d\n", window_list_size)
-	curpos = (unsigned long)file.tellg();
-	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+	curpos = file.tellg();
+	LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 
 	// get parameter list
 	unsigned int parameter_list_size = 0;
@@ -111,8 +110,8 @@ bool OriginAnyParser::parse() {
 		parameter_list_size++;
 	}
 	LOG_PRINT(logfile, " ... done. Parameters: %d\n", parameter_list_size)
-	curpos = (unsigned long)file.tellg();
-	LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+	curpos = file.tellg();
+	LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 
 	// Note windows were added between version >4.141 and 4.210,
 	// i.e., with Release 5.0
@@ -128,8 +127,8 @@ bool OriginAnyParser::parse() {
 			note_list_size++;
 		}
 		LOG_PRINT(logfile, " ... done. Note windows: %d\n", note_list_size)
-		curpos = (unsigned long)file.tellg();
-		LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+		curpos = file.tellg();
+		LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 	}
 
 	// Project Tree was added between version >4.210 and 4.2616,
@@ -137,16 +136,16 @@ bool OriginAnyParser::parse() {
 	if (curpos < d_file_size) {
 		// get project tree
 		readProjectTree();
-		curpos = (unsigned long)file.tellg();
-		LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+		curpos = file.tellg();
+		LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 	}
 
 	// Attachments were added between version >4.2673_558 and 4.2764_623,
 	// i.e., with Release 7.0
 	if (curpos < d_file_size) {
 		readAttachmentList();
-		curpos = (unsigned long)file.tellg();
-		LOG_PRINT(logfile, "Now at %ld [0x%lX], filesize %d\n", curpos, curpos, (int)d_file_size)
+		curpos = file.tellg();
+		LOG_PRINT(logfile, "Now at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 	}
 
 	if (curpos >= d_file_size) LOG_PRINT(logfile, "Now at end of file\n")
@@ -190,9 +189,7 @@ unsigned int OriginAnyParser::readObjectSize() {
 	file >> obj_size;
 	file >> c;
 	if (c != '\n') {
-#ifdef GENERATE_CODE_FOR_LOG
-		unsigned long curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
 		parseError = 3;
 		return 0;
@@ -212,9 +209,7 @@ string OriginAnyParser::readObjectAsString(unsigned int size) {
 		// read the '\n'
 		file >> c;
 		if (c != '\n') {
-#ifdef GENERATE_CODE_FOR_LOG
-			unsigned long curpos = (unsigned long)file.tellg();
-#endif
+			curpos = file.tellg();
 			LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
 			parseError = 4;
 			return string();
@@ -246,18 +241,14 @@ void OriginAnyParser::readGlobalHeader() {
 	// get global header size
 	unsigned int gh_size = 0, gh_endmark = 0;
 	gh_size = readObjectSize();
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long curpos = (unsigned long)file.tellg();
-#endif
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "Global header size: %d [0x%X], starts at %ld [0x%lX],", gh_size, gh_size, curpos, curpos)
 
 	// get global header data
 	string gh_data;
 	gh_data = readObjectAsString(gh_size);
 
-#ifdef GENERATE_CODE_FOR_LOG
-	curpos = (unsigned long)file.tellg();
-#endif
+	curpos = file.tellg();
 	LOG_PRINT(logfile, " ends at %ld [0x%lX]\n", curpos, curpos)
 
 	// when gh_size > 0x1B, a double with fileVersion/100 can be read at gh_data[0x1B:0x23]
@@ -277,9 +268,7 @@ void OriginAnyParser::readGlobalHeader() {
 	// now read a zero size end mark
 	gh_endmark = readObjectSize();
 	if (gh_endmark != 0) {
-#ifdef GENERATE_CODE_FOR_LOG
-		curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		LOG_PRINT(logfile, "Wrong end of list mark %d at %ld [0x%lX]\n", gh_endmark, curpos, curpos)
 		parseError = 5;
 		return;
@@ -290,14 +279,14 @@ bool OriginAnyParser::readDataSetElement() {
 	/* get info and values of a DataSet (worksheet column, matrix sheet, ...)
 	 * return true if a DataSet is found, otherwise return false */
 	unsigned int dse_header_size = 0, dse_data_size = 0, dse_mask_size = 0;
-	unsigned long curpos = 0, dsh_start = 0, dsd_start = 0, dsm_start = 0;
+	unsigned long dsh_start = 0, dsd_start = 0, dsm_start = 0;
 	string dse_header;
 
 	// get dataset header size
 	dse_header_size = readObjectSize();
 	if (dse_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	dsh_start = curpos;
 	LOG_PRINT(logfile, "Column: header size %d [0x%X], starts at %ld [0x%lX], ", dse_header_size, dse_header_size, curpos, curpos)
 	dse_header = readObjectAsString(dse_header_size);
@@ -311,7 +300,7 @@ bool OriginAnyParser::readDataSetElement() {
 	dse_data_size = readObjectSize();
 	dsd_start = (unsigned long)file.tellg();
 	string dse_data = readObjectAsString(dse_data_size);
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "data size %d [0x%X], from %ld [0x%lX] to %ld [0x%lX],", dse_data_size, dse_data_size, dsd_start, dsd_start, curpos, curpos)
 
 	// get data values
@@ -327,13 +316,13 @@ bool OriginAnyParser::readDataSetElement() {
 
 	// get mask values
 	if (dse_mask_size > 0) {
-		curpos = (unsigned long)file.tellg();
+		curpos = file.tellg();
 		LOG_PRINT(logfile, ", ends at %ld [0x%lX]\n", curpos, curpos)
 		// TODO: extract mask values from dse_mask
 		// go to end of dataset mask
 		file.seekg(dsm_start+dse_mask_size+1, ios_base::beg);
 	}
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, " ends at %ld [0x%lX]: ", curpos, curpos)
 	LOG_PRINT(logfile, "%s\n", name.c_str())
 
@@ -344,13 +333,13 @@ bool OriginAnyParser::readWindowElement() {
 	/* get general info and details of a window
 	 * return true if a Window is found, otherwise return false */
 	unsigned int wde_header_size = 0;
-	unsigned long curpos = 0, wdh_start = 0;
+	unsigned long wdh_start = 0;
 
 	// get window header size
 	wde_header_size = readObjectSize();
 	if (wde_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	wdh_start = curpos;
 	LOG_PRINT(logfile, "Window found: header size %d [0x%X], starts at %ld [0x%lX]: ", wde_header_size, wde_header_size, curpos, curpos)
 	string wde_header = readObjectAsString(wde_header_size);
@@ -395,7 +384,7 @@ bool OriginAnyParser::readWindowElement() {
 		layer_list_size++;
 	}
 	LOG_PRINT(logfile, " ... done. Layers: %d\n", layer_list_size)
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "window ends at %ld [0x%lX]\n", curpos, curpos)
 
 	return true;
@@ -405,13 +394,13 @@ bool OriginAnyParser::readLayerElement() {
 	/* get general info and details of a layer
 	 * return true if a Layer is found, otherwise return false */
 	unsigned int lye_header_size = 0;
-	unsigned long curpos = 0, lyh_start = 0;
+	unsigned long lyh_start = 0;
 
 	// get layer header size
 	lye_header_size = readObjectSize();
 	if (lye_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	lyh_start = curpos;
 	LOG_PRINT(logfile, "  Layer found: header size %d [0x%X], starts at %ld [0x%lX]\n", lye_header_size, lye_header_size, curpos, curpos)
 	string lye_header = readObjectAsString(lye_header_size);
@@ -423,9 +412,14 @@ bool OriginAnyParser::readLayerElement() {
 	file.seekg(lyh_start+lye_header_size+1, ios_base::beg);
 
 	// get annotation list
+	unsigned int annotation_list_size = 0;
+
 	LOG_PRINT(logfile, "   Reading Annotations ...\n")
 	/* Some annotations can be groups of annotations. We need a recursive function for those cases */
-	LOG_PRINT(logfile, "   ... done. Annotations: %d\n", readAnnotationList())
+	annotation_list_size = readAnnotationList();
+	if (annotation_list_size > 0) {
+		LOG_PRINT(logfile, "   ... done. Annotations: %d\n", annotation_list_size)
+	}
 
 	// get curve list
 	unsigned int curve_list_size = 0;
@@ -477,7 +471,7 @@ bool OriginAnyParser::readLayerElement() {
 	}
 	LOG_PRINT(logfile, "   ... done. z-Axis parameters: %d\n", axispar_z_list_size)
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "  layer ends at %ld [0x%lX]\n", curpos, curpos)
 
 	return true;
@@ -498,13 +492,13 @@ bool OriginAnyParser::readAnnotationElement() {
 	/* get general info and details of an Annotation
 	 * return true if an Annotation is found, otherwise return false */
 	unsigned int ane_header_size = 0;
-	unsigned long curpos = 0, anh_start = 0;
+	unsigned long anh_start = 0;
 
 	// get annotation header size
 	ane_header_size = readObjectSize();
 	if (ane_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	anh_start = curpos;
 	LOG_PRINT(logfile, "    Annotation found: header size %d [0x%X], starts at %ld [0x%lX]: ", ane_header_size, ane_header_size, curpos, curpos)
 	string ane_header = readObjectAsString(ane_header_size);
@@ -542,15 +536,13 @@ bool OriginAnyParser::readAnnotationElement() {
 
 	// check for group of annotations
 	if ((ane_data_1_size == 0x5e) && (ane_data_2_size == 0x04)) {
-#ifdef GENERATE_CODE_FOR_LOG
-		unsigned long curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		LOG_PRINT(logfile, "  Annotation group found at %ld [0x%lX] ...\n", curpos, curpos)
-#ifdef GENERATE_CODE_FOR_LOG
 		unsigned int angroup_size = readAnnotationList();
-		curpos = (unsigned long)file.tellg();
-#endif
-		LOG_PRINT(logfile, "  ... group end at %ld [0x%lX]. Annotations: %d\n", curpos, curpos, angroup_size)
+		curpos = file.tellg();
+		if (angroup_size > 0) {
+			LOG_PRINT(logfile, "  ... group end at %ld [0x%lX]. Annotations: %d\n", curpos, curpos, angroup_size)
+		}
 		andt2_data = string("");
 	} else {
 		andt2_data = readObjectAsString(ane_data_2_size);
@@ -564,13 +556,13 @@ bool OriginAnyParser::readAnnotationElement() {
 	unsigned int ane_data_3_size = 0;
 	ane_data_3_size = readObjectSize();
 
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long andt3_start = (unsigned long)file.tellg();
-#endif
-	LOG_PRINT(logfile, "     block 3 size %d [0x%X] at %ld [0x%lX]\n", ane_data_3_size, ane_data_3_size, andt3_start, andt3_start)
+	unsigned long andt3_start = file.tellg();
+	if (andt3_start > 0) {
+		LOG_PRINT(logfile, "     block 3 size %d [0x%X] at %ld [0x%lX]\n", ane_data_3_size, ane_data_3_size, andt3_start, andt3_start)
+	}
 	string andt3_data = readObjectAsString(ane_data_3_size);
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "    annotation ends at %ld [0x%lX]\n", curpos, curpos)
 
 	// get annotation info
@@ -583,13 +575,13 @@ bool OriginAnyParser::readCurveElement() {
 	/* get general info and details of a Curve
 	 * return true if a Curve is found, otherwise return false */
 	unsigned int cve_header_size = 0, cve_data_size = 0;
-	unsigned long curpos = 0, cvh_start = 0, cvd_start = 0;
+	unsigned long cvh_start = 0, cvd_start = 0;
 
 	// get curve header size
 	cve_header_size = readObjectSize();
 	if (cve_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	cvh_start = curpos;
 	LOG_PRINT(logfile, "    Curve: header size %d [0x%X], starts at %ld [0x%lX], ", cve_header_size, cve_header_size, curpos, curpos)
 	string cve_header = readObjectAsString(cve_header_size);
@@ -600,7 +592,7 @@ bool OriginAnyParser::readCurveElement() {
 	// go to end of header, get curve data size
 	file.seekg(cvh_start+cve_header_size+1, ios_base::beg);
 	cve_data_size = readObjectSize();
-	cvd_start = (unsigned long)file.tellg();
+	cvd_start = file.tellg();
 	LOG_PRINT(logfile, "data size %d [0x%X], from %ld [0x%lX]", cve_data_size, cve_data_size, cvd_start, cvd_start)
 	string cve_data = readObjectAsString(cve_data_size);
 
@@ -610,7 +602,7 @@ bool OriginAnyParser::readCurveElement() {
 	file.seekg(cvd_start+cve_data_size, ios_base::beg);
 	if (cve_data_size > 0) file.seekg(1, ios_base::cur);
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "to %ld [0x%lX]: %s\n", curpos, curpos, name.c_str())
 
 	// get curve (or column) info
@@ -623,13 +615,13 @@ bool OriginAnyParser::readAxisBreakElement() {
 	/* get info of Axis breaks
 	 * return true if an Axis break, otherwise return false */
 	unsigned int abe_data_size = 0;
-	unsigned long curpos = 0, abd_start = 0;
+	unsigned long abd_start = 0;
 
 	// get axis break data size
 	abe_data_size = readObjectSize();
 	if (abe_data_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	abd_start = curpos;
 	string abd_data = readObjectAsString(abe_data_size);
 
@@ -648,13 +640,13 @@ bool OriginAnyParser::readAxisParameterElement(unsigned int naxis) {
 	/* get info of Axis parameters for naxis-axis (x,y,z) = (1,2,3)
 	 * return true if an Axis break is found, otherwise return false */
 	unsigned int ape_data_size = 0;
-	unsigned long curpos = 0, apd_start = 0;
+	unsigned long apd_start = 0;
 
 	// get axis break data size
 	ape_data_size = readObjectSize();
 	if (ape_data_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	apd_start = curpos;
 	string apd_data = readObjectAsString(ape_data_size);
 
@@ -676,8 +668,10 @@ bool OriginAnyParser::readParameterElement() {
 
 	getline(file, par_name);
 	if (par_name[0] == '\0') {
-		//unsigned int eof_parameters_mark = readObjectSize();
-		readObjectSize();
+		unsigned int eof_parameters_mark = readObjectSize();
+		if (eof_parameters_mark != 0) {
+			LOG_PRINT(logfile, "Wrong end of parameters mark\n")
+		}
 		return false;
 	}
 	LOG_PRINT(logfile, " %s:", par_name.c_str())
@@ -688,9 +682,7 @@ bool OriginAnyParser::readParameterElement() {
 	// read the '\n'
 	file >> c;
 	if (c != '\n') {
-#ifdef GENERATE_CODE_FOR_LOG
-		unsigned long curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		LOG_PRINT(logfile, "Wrong delimiter %c at %ld [0x%lX]\n", c, curpos, curpos)
 		parseError = 6;
 		return false;
@@ -703,13 +695,13 @@ bool OriginAnyParser::readNoteElement() {
 	/* get info of Note windows, including "Results Log"
 	 * return true if a Note window is found, otherwise return false */
 	unsigned int nwe_header_size = 0, nwe_label_size = 0, nwe_contents_size = 0;
-	unsigned long curpos = 0, nwh_start = 0, nwl_start = 0;
+	unsigned long nwh_start = 0, nwl_start = 0, nwc_start = 0;
 
 	// get note header size
 	nwe_header_size = readObjectSize();
 	if (nwe_header_size == 0) return false;
 
-	curpos = (unsigned long)file.tellg();
+	curpos = file.tellg();
 	nwh_start = curpos;
 	LOG_PRINT(logfile, "  Note window found: header size %d [0x%X], starts at %ld [0x%lX]\n", nwe_header_size, nwe_header_size, curpos, curpos)
 	string nwe_header = readObjectAsString(nwe_header_size);
@@ -721,7 +713,7 @@ bool OriginAnyParser::readNoteElement() {
 
 	// get label size
 	nwe_label_size = readObjectSize();
-	nwl_start = (unsigned long)file.tellg();
+	nwl_start = file.tellg();
 	string nwe_label = readObjectAsString(nwe_label_size);
 	LOG_PRINT(logfile, "  label at %ld [0x%lX]: %s\n", nwl_start, nwl_start, nwe_label.c_str())
 
@@ -731,11 +723,11 @@ bool OriginAnyParser::readNoteElement() {
 
 	// get contents size
 	nwe_contents_size = readObjectSize();
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long nwc_start = (unsigned long)file.tellg();
-#endif
+	nwc_start = file.tellg();
 	string nwe_contents = readObjectAsString(nwe_contents_size);
-	LOG_PRINT(logfile, "  contents at %ld [0x%lX]: \n%s\n", nwc_start, nwc_start, nwe_contents.c_str())
+	if (nwc_start > 0) {
+		LOG_PRINT(logfile, "  contents at %ld [0x%lX]: \n%s\n", nwc_start, nwc_start, nwe_contents.c_str())
+	}
 
 	// get note window info
 	getNoteProperties(nwe_header, nwe_header_size, nwe_label, nwe_label_size, nwe_contents, nwe_contents_size);
@@ -755,12 +747,16 @@ void OriginAnyParser::readProjectTree() {
 	string pte_pre2 = readObjectAsString(pte_pre2_size);
 
 	// root element and children
-	//unsigned int rootfolder = readFolderTree(projectTree.begin(), pte_depth);
-	readFolderTree(projectTree.begin(), pte_depth);
+	unsigned int rootfolder = readFolderTree(projectTree.begin(), pte_depth);
+	if (rootfolder > 0) {
+		LOG_PRINT(logfile, "Number of files at root: %d\n", rootfolder)
+	}
 
 	// epilogue (should be zero)
-	//unsigned int pte_post_size = readObjectSize();
-	readObjectSize();
+	unsigned int pte_post_size = readObjectSize();
+	if (pte_post_size != 0) {
+		LOG_PRINT(logfile, "Wrong end of project tree mark\n")
+	}
 
 	// log info on project tree
 #ifdef GENERATE_CODE_FOR_LOG
@@ -771,20 +767,20 @@ void OriginAnyParser::readProjectTree() {
 }
 
 unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent, unsigned int depth) {
-	unsigned int fle_header_size = 0, fle_name_size = 0, fle_prop_size = 0;
+	unsigned int fle_header_size = 0, fle_eofh_size = 0, fle_name_size = 0, fle_prop_size = 0;
 
 	// folder header size, data, end mark
 	fle_header_size = readObjectSize();
 	string fle_header = readObjectAsString(fle_header_size);
-	//unsigned int fle_eofh_size = readObjectSize(); // (usually 0)
-	readObjectSize();
+	fle_eofh_size = readObjectSize(); // (usually 0)
+	if (fle_eofh_size != 0) {
+		LOG_PRINT(logfile, "Wrong end of folder header mark")
+	}
 
 	// folder name size
 	fle_name_size = readObjectSize();
+	curpos = file.tellg();
 	string fle_name = readObjectAsString(fle_name_size);
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long curpos = (unsigned long)file.tellg();
-#endif
 	LOG_PRINT(logfile, "Folder name at %ld [0x%lX]: %s\n", curpos, curpos, fle_name.c_str());
 
 	// additional properties
@@ -802,9 +798,7 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
 	unsigned int number_of_files_size = 0;
 
 	number_of_files_size = readObjectSize(); // should be 4 as number_of_files is an integer
-#ifdef GENERATE_CODE_FOR_LOG
-	curpos = (unsigned long)file.tellg();
-#endif
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "Number of files at %ld [0x%lX] ", curpos, curpos)
 	string fle_nfiles = readObjectAsString(number_of_files_size);
 
@@ -822,9 +816,7 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
 	unsigned int number_of_folders_size = 0;
 
 	number_of_folders_size = readObjectSize(); // should be 4 as number_of_subfolders is an integer
-#ifdef GENERATE_CODE_FOR_LOG
-	curpos = (unsigned long)file.tellg();
-#endif
+	curpos = file.tellg();
 	LOG_PRINT(logfile, "Number of subfolders at %ld [0x%lX] ", curpos, curpos)
 	string fle_nfolders = readObjectAsString(number_of_folders_size);
 
@@ -835,8 +827,10 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
 
 	for (unsigned int i=0; i < number_of_folders; i++) {
 		depth++;
-		//unsigned int files_in_subfolder = readFolderTree(current_folder, depth);
-		readFolderTree(current_folder, depth);
+		unsigned int files_in_subfolder = readFolderTree(current_folder, depth);
+		if (files_in_subfolder > 0) {
+			LOG_PRINT(logfile, "Number of files in subfolder: %d\n", files_in_subfolder)
+		}
 		depth--;
 	}
 
@@ -850,16 +844,15 @@ void OriginAnyParser::readProjectLeaf(tree<ProjectNode>::iterator current_folder
 
 	// file data size (usually 8) and data
 	unsigned int ptl_data_size = readObjectSize();
+	curpos = file.tellg();
 	string ptl_data = readObjectAsString(ptl_data_size);
-
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long curpos = (unsigned long)file.tellg();
-#endif
 	LOG_PRINT(logfile, "File at %ld [0x%lX]\n", curpos, curpos)
 
 	// epilogue (should be zero)
-	//unsigned int ptl_post_size = readObjectSize();
-	readObjectSize();
+	unsigned int ptl_post_size = readObjectSize();
+	if (ptl_post_size != 0) {
+		LOG_PRINT(logfile, "Wrong end of project leaf mark\n")
+	}
 
 	// get project node properties
 	getProjectLeafProperties(current_folder, ptl_data, ptl_data_size);
@@ -880,9 +873,6 @@ void OriginAnyParser::readAttachmentList() {
 
 	istringstream stmp(ios_base::binary);
 	string att_header;
-#ifdef GENERATE_CODE_FOR_LOG
-	unsigned long curpos = 0;
-#endif
 	if (att_1st_empty == 8) {
 		// first group
 		unsigned int att_list1_size = 0;
@@ -890,9 +880,7 @@ void OriginAnyParser::readAttachmentList() {
 		// get two integers
 		// next line fails if first attachment group is empty: readObjectSize exits as there is no '\n' after 4 bytes for uint
 		att_list1_size = readObjectSize(); // should be 8 as we expect two integer values
-#ifdef GENERATE_CODE_FOR_LOG
-		curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		string att_list1 = readObjectAsString(att_list1_size);
 		LOG_PRINT(logfile, "First attachment group at %ld [0x%lX]", curpos, curpos)
 
@@ -916,9 +904,7 @@ void OriginAnyParser::readAttachmentList() {
 			GET_INT(stmp, att_mark) // should be 4096
 			GET_INT(stmp, iattno)
 			GET_INT(stmp, att_data_size)
-#ifdef GENERATE_CODE_FOR_LOG
-			curpos = (unsigned long)file.tellg();
-#endif
+			curpos = file.tellg();
 			LOG_PRINT(logfile, "Attachment no %d (%d) at %ld [0x%lX], size %d\n", i, iattno, curpos, curpos, att_data_size)
 
 			// get data
@@ -932,10 +918,8 @@ void OriginAnyParser::readAttachmentList() {
 
 	/* Second group is a series of (header, name, data) triplets
 	   There is no number of attachments. It ends when we reach EOF. */
-#ifdef GENERATE_CODE_FOR_LOG
-	curpos = (unsigned long)file.tellg();
-#endif
-	LOG_PRINT(logfile, "Second attachment group starts at %ld [0x%lX], file size %d\n", curpos, curpos, (int)d_file_size)
+	curpos = file.tellg();
+	LOG_PRINT(logfile, "Second attachment group starts at %ld [0x%lX], file size %ld\n", curpos, curpos, d_file_size)
 	/* Header is a group of 3 integers, with no '\n' at end
 		1st attachment header+name size including itself
 		2nd attachment type (0x59 0x04 0xCA 0x7F for excel workbooks)
@@ -945,7 +929,7 @@ void OriginAnyParser::readAttachmentList() {
 	att_header = string(12,0);
 	while (true) {
 		// check for eof
-		if (((unsigned long)file.tellg() == d_file_size) || (file.eof())) break;
+		if ((d_file_size == file.tellg()) || (file.eof())) break;
 		// cannot use readObjectAsString: there is no '\n' at end
 		file.read(reinterpret_cast<char*>(&att_header[0]), 12);
 
@@ -961,9 +945,7 @@ void OriginAnyParser::readAttachmentList() {
 		unsigned int name_size = att_header_size - 3*4;
 		string att_name = string(name_size, 0);
 		file.read(&att_name[0], name_size);
-#ifdef GENERATE_CODE_FOR_LOG
-		curpos = (unsigned long)file.tellg();
-#endif
+		curpos = file.tellg();
 		string att_data = string(att_size, 0);
 		file.read(&att_data[0], att_size);
 		LOG_PRINT(logfile, "attachment at %ld [0x%lX], type 0x%X, size %d [0x%X]: %s\n", curpos, curpos, att_type, att_size, att_size, att_name.c_str())

@@ -79,7 +79,8 @@ protected:
 	iendianfstream file;
 	FILE *logfile;
 
-	unsigned long d_file_size;
+	streamsize d_file_size;
+	streamoff curpos;
 	unsigned int objectIndex, parseError;
 	vector<Origin::SpreadSheet>::difference_type ispread;
 	vector<Origin::Matrix>::difference_type imatrix;
