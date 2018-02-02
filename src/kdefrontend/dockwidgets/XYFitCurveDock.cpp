@@ -583,7 +583,7 @@ void XYFitCurveDock::updateModelEquation() {
 
 	// set formula picture
 	uiGeneralTab.lEquation->setText(QLatin1String("f(x) ="));
-	QString file, sep = QDir::separator();
+	QString file;
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic: {
 		// formula pic depends on degree
@@ -592,7 +592,7 @@ void XYFitCurveDock::updateModelEquation() {
 			numSuffix = "4";
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
 			numSuffix = "2";
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
@@ -601,16 +601,16 @@ void XYFitCurveDock::updateModelEquation() {
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
 			numSuffix = "4";
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_growth:
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "fit_models" + sep
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
 		break;
 	case nsl_fit_model_distribution:
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics" + sep + "gsl_distributions" + sep
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/"
 			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
