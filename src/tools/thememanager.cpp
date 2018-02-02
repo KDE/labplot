@@ -49,8 +49,6 @@
 
 // Local includes
 
-// #include "digikam_debug.h"
-// #include "dxmlguiwindow.h"
 #include "schememanager.h"
 
 namespace Digikam
@@ -207,13 +205,13 @@ void ThemeManager::populateThemeMenu()
     QStringList dirs;
 
     // digiKam colors scheme
-    dirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                      QString::fromLatin1("digikam/colorschemes"),
+    dirs << QStandardPaths::locateAll(QStandardPaths::DataLocation,
+                                      QString::fromLatin1("colorschemes"),
                                       QStandardPaths::LocateDirectory);
 
 //     qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color scheme : " << dirs;
 
-    Q_FOREACH (const QString& dir, dirs)
+    for (const auto& dir : dirs)
     {
         QDirIterator it(dir, QStringList() << QLatin1String("*.colors"));
 

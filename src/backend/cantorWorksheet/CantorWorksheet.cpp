@@ -100,6 +100,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 	else {
 		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		//return false here, a proper error message will be created in load() and propagated further.
+		DEBUG("Failed to load cantor plugin");
 		return false;
 	}
 	return true;
