@@ -593,7 +593,7 @@ void XYFitCurveDock::updateModelEquation() {
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
 			numSuffix = "2";
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".png");
 		break;
 	}
 	case nsl_fit_model_peak: {
