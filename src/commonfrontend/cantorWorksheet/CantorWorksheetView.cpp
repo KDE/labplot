@@ -30,6 +30,7 @@
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QMenu>
 #include <QToolBar>
 
@@ -49,6 +50,10 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 		initMenus();
 		connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 		connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
+	} else {
+		QLabel* label = new QLabel(i18n("Failed to initialize %1").arg(m_worksheet->backendName()));
+		label->setAlignment(Qt::AlignHCenter);
+		layout->addWidget(label);
 	}
 }
 
@@ -175,6 +180,8 @@ void CantorWorksheetView::initMenus() {
  */
 void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	Q_ASSERT(menu);
+	if (!part)
+		return;
 
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
@@ -200,6 +207,8 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 }
 
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
+	if (!part)
+		return;
 	toolbar->addAction(m_restartBackendAction);
 	toolbar->addAction(m_evaluateWorsheetAction);
 }
