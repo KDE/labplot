@@ -28,21 +28,23 @@
 ***************************************************************************/
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "backend/core/Project.h"
-
-#include "backend/core/Workbook.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/note/Note.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
-#include "backend/worksheet/TextLabel.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/Project.h"
+#include "backend/core/Workbook.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/note/Note.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/TextLabel.h"
 
 #include <liborigin/OriginFile.h>
+
+#include <KLocale>
 
 #include <QDateTime>
 #include <QFontMetrics>
@@ -652,107 +654,102 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	//load worksheet data
 	Origin::Graph graph = m_originFile->graph(m_graphIndex);
-
-//	TODO:worksheet->hide();//!hack used in order to avoid resize and repaint events
 	worksheet->setComment(graph.label.c_str());
 
 	//add plots
+	int index = 1;
 	for (const auto& layer: graph.layers) {
-		CartesianPlot* plot = new CartesianPlot("");
+		if (!layer.is3D()) {
+			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
 
-		//add legend if available
-		if (!layer.legend.text.empty()) {
-			CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
-			legend->title()->setText( parseOriginText(QString::fromLatin1(layer.legend.text.c_str())) );
-			plot->addChild(legend);
-		}
-
-		// TODO: we only support one legend
-		//add texts
-/*			for (const auto &s: layer.texts) {
-			DEBUG("EXTRA TEXT =" << s.text.c_str());
-		//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
-		}
-*/
-// 			int auto_color = 0;
-// 			int style = 0;
-
-		//add curves
-		for (const auto& curve: layer.curves) {
-			QString data(QString::fromLatin1(curve.dataName.c_str()));
-// 				int color = 0;
-
-			switch (curve.type) {
-			case Origin::GraphCurve::Line:
-//					style = Graph::Line;
-				break;
-			case Origin::GraphCurve::Scatter:
-//					style = Graph::Scatter;
-				break;
-			case Origin::GraphCurve::LineSymbol:
-//					style = Graph::LineSymbols;
-				break;
-			case Origin::GraphCurve::ErrorBar:
-			case Origin::GraphCurve::XErrorBar:
-//					style = Graph::ErrorBars;
-				break;
-			case Origin::GraphCurve::Column:
-//					style = Graph::VerticalBars;
-				break;
-			case Origin::GraphCurve::Bar:
-//					style = Graph::HorizontalBars;
-				break;
-			case Origin::GraphCurve::Histogram:
-//					style = Graph::Histogram;
-				break;
-			default:
-				continue;
+			//add legend if available
+			if (!layer.legend.text.empty()) {
+				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
+				legend->title()->setText( parseOriginText(QString::fromLatin1(layer.legend.text.c_str())) );
+				plot->addChild(legend);
 			}
 
-/*				QString tableName;
-			switch(data[0].toAscii()) {
-			case 'T':
-			case 'E': {
-				tableName = data.right(data.length() - 2);
-				Table* table = mw->table(tableName);
-				if (!table)
-					break;
-				if(style == Graph::ErrorBars) {
-					int flags=_curve.symbolType;
-					graph->addErrorBars(QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()),
-						((flags&0x10)==0x10?0:1), ceil(_curve.lineWidth), ceil(_curve.symbolSize), QColor(Qt::black),
-						(flags&0x40)==0x40, (flags&2)==2, (flags&1)==1);
-				} else if(style == Graph::Histogram) {
-					graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
-				} else {
-					graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
+			// TODO: we only support one legend
+			//add texts
+	/*			for (const auto &s: layer.texts) {
+				DEBUG("EXTRA TEXT =" << s.text.c_str());
+			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+			}
+	*/
+	// 			int auto_color = 0;
+	// 			int style = 0;
+
+			//add curves
+			int curveIndex = 1;
+			for (const auto& curve: layer.curves) {
+				if (curve.type == Origin::GraphCurve::Line || curve.type == Origin::GraphCurve::Scatter || curve.type == Origin::GraphCurve::LineSymbol
+					|| curve.type == Origin::GraphCurve::ErrorBar || curve.type == Origin::GraphCurve::XErrorBar) {
+					XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+					plot->addChild(xyCurve);
+				} else if (curve.type == Origin::GraphCurve::Column) {
+					//vertical bars
+
+				} else if (curve.type == Origin::GraphCurve::Bar) {
+					//horizontal bars
+
+				} else if (curve.type == Origin::GraphCurve::Histogram) {
+
 				}
-				break;
-			}
-			//TODO
-			}
-*/
 
-/*				CurveLayout cl = graph->initCurveLayout(style, layer.curves.size());
-			cl.sSize = ceil(_curve.symbolSize*0.5);
-			cl.penWidth = _curve.symbolThickness;
-			color = _curve.symbolColor.regular;
-			if((style == Graph::Scatter || style == Graph::LineSymbols) && color == 0xF7) // 0xF7 -Automatic color
-				color = auto_color++;
-			cl.symCol = color;
-			switch(_curve.symbolType & 0xFF) {
-			case 0: //NoSymbol
-				cl.sType = 0;
-				break;
-			//TODO
+
+				QString data(QString::fromLatin1(curve.dataName.c_str()));
+	// 				int color = 0;
+	/*				QString tableName;
+				switch(data[0].toAscii()) {
+				case 'T':
+				case 'E': {
+					tableName = data.right(data.length() - 2);
+					Table* table = mw->table(tableName);
+					if (!table)
+						break;
+					if(style == Graph::ErrorBars) {
+						int flags=_curve.symbolType;
+						graph->addErrorBars(QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()),
+							((flags&0x10)==0x10?0:1), ceil(_curve.lineWidth), ceil(_curve.symbolSize), QColor(Qt::black),
+							(flags&0x40)==0x40, (flags&2)==2, (flags&1)==1);
+					} else if(style == Graph::Histogram) {
+						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
+					} else {
+						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
+					}
+					break;
+				}
+				//TODO
+				}
+	*/
+
+	/*				CurveLayout cl = graph->initCurveLayout(style, layer.curves.size());
+				cl.sSize = ceil(_curve.symbolSize*0.5);
+				cl.penWidth = _curve.symbolThickness;
+				color = _curve.symbolColor.regular;
+				if((style == Graph::Scatter || style == Graph::LineSymbols) && color == 0xF7) // 0xF7 -Automatic color
+					color = auto_color++;
+				cl.symCol = color;
+				switch(_curve.symbolType & 0xFF) {
+				case 0: //NoSymbol
+					cl.sType = 0;
+					break;
+				//TODO
+				}
+	*/
+
+				//TODO
+
+				++curveIndex;
 			}
-*/
 
-			//TODO
-
+			worksheet->addChild(plot);
+		} else {
+			//no support for 3D plots yet
+			//TODO: add an "UnsupportedAspect" here
 		}
 
-		worksheet->addChild(plot);
+		++index;
 	}
 
 	return true;
