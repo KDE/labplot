@@ -59,6 +59,7 @@ private:
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
+	QColor color(const Origin::Color::RegularColor&) const;
 
 	OriginFile* m_originFile;
 	size_t m_excelIndex;

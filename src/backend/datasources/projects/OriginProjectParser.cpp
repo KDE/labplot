@@ -662,6 +662,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
 
+			//background color
+			const Origin::Color::RegularColor regColor = (Origin::Color::RegularColor)layer.backgroundColor.regular;
+			plot->plotArea()->setBackgroundFirstColor(color(regColor));
+
+			//border
+			if (layer.borderType == Origin::BorderType::None)
+				plot->plotArea()->setBorderPen(QPen(Qt::NoPen));
+			else
+				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
+
 			//add legend if available
 			if (!layer.legend.text.empty()) {
 				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
@@ -778,7 +788,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 }
 
 //##############################################################################
-//############## Deserialization from Origin's project tree ####################
+//########################### Helper functions  ################################
 //##############################################################################
 QDateTime OriginProjectParser::creationTime(const tree<Origin::ProjectNode>::iterator& it) const {
 	//this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
@@ -798,6 +808,61 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	}
 
 	return text;
+}
+
+QColor OriginProjectParser::color(const Origin::Color::RegularColor& color) const {
+	switch (color) {
+		case Origin::Color::Black:
+			return QColor(Qt::black);
+		case Origin::Color::Red:
+			return QColor(Qt::red);
+		case Origin::Color::Green:
+			return QColor(Qt::green);
+		case Origin::Color::Blue:
+			return QColor(Qt::blue);
+		case Origin::Color::Cyan:
+			return QColor(Qt::cyan);
+		case Origin::Color::Magenta:
+			return QColor(Qt::magenta);
+		case Origin::Color::Yellow:
+			return QColor(Qt::yellow);
+		case Origin::Color::DarkYellow:
+			return QColor(Qt::darkYellow);
+		case Origin::Color::Navy:
+			return QColor(0, 0, 128);
+		case Origin::Color::Purple:
+			return QColor(128, 0, 128);
+		case Origin::Color::Wine:
+			return QColor(128, 0, 0);
+		case Origin::Color::Olive:
+			return QColor(0, 128, 0);
+		case Origin::Color::DarkCyan:
+			return QColor(Qt::darkCyan);
+		case Origin::Color::Royal:
+			return QColor(0, 0, 160);
+		case Origin::Color::Orange:
+			return QColor(255, 128, 0);
+		case Origin::Color::Violet:
+			return QColor(128, 0, 255);
+		case Origin::Color::Pink:
+			return QColor(255, 0, 128);
+		case Origin::Color::White:
+			return QColor(Qt::white);
+		case Origin::Color::LightGray:
+			return QColor(Qt::lightGray);
+		case Origin::Color::Gray:
+			return QColor(Qt::gray);
+		case Origin::Color::LTYellow:
+			return QColor(255, 0, 128);
+		case Origin::Color::LTCyan:
+			return QColor(128, 255, 255);
+		case Origin::Color::LTMagenta:
+			return QColor(255, 128, 255);
+		case Origin::Color::DarkGray:
+			return QColor(Qt::darkGray);
+	}
+
+	return QColor(Qt::white);
 }
 
 QString strreverse(const QString &str) {	//QString reversing
