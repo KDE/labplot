@@ -279,7 +279,7 @@ bool OriginAnyParser::readDataSetElement() {
 	/* get info and values of a DataSet (worksheet column, matrix sheet, ...)
 	 * return true if a DataSet is found, otherwise return false */
 	unsigned int dse_header_size = 0, dse_data_size = 0, dse_mask_size = 0;
-	unsigned long dsh_start = 0, dsd_start = 0, dsm_start = 0;
+	std::streamoff dsh_start = 0, dsd_start = 0, dsm_start = 0;
 	string dse_header;
 
 	// get dataset header size
@@ -298,7 +298,7 @@ bool OriginAnyParser::readDataSetElement() {
 	// go to end of dataset header, get data size
 	file.seekg(dsh_start+dse_header_size+1, ios_base::beg);
 	dse_data_size = readObjectSize();
-	dsd_start = (unsigned long)file.tellg();
+	dsd_start = file.tellg();
 	string dse_data = readObjectAsString(dse_data_size);
 	curpos = file.tellg();
 	LOG_PRINT(logfile, "data size %d [0x%X], from %ld [0x%lX] to %ld [0x%lX],", dse_data_size, dse_data_size, dsd_start, dsd_start, curpos, curpos)
@@ -310,7 +310,7 @@ bool OriginAnyParser::readDataSetElement() {
 	file.seekg(dsd_start+dse_data_size, ios_base::beg); // dse_data_size can be zero
 	if (dse_data_size > 0) file.seekg(1, ios_base::cur);
 	dse_mask_size = readObjectSize();
-	dsm_start = (unsigned long)file.tellg();
+	dsm_start = file.tellg();
 	if (dse_mask_size > 0) LOG_PRINT(logfile, "\nmask size %d [0x%X], starts at %ld [0x%lX]", dse_mask_size, dse_mask_size, dsm_start, dsm_start)
 	string dse_mask = readObjectAsString(dse_mask_size);
 
@@ -333,7 +333,7 @@ bool OriginAnyParser::readWindowElement() {
 	/* get general info and details of a window
 	 * return true if a Window is found, otherwise return false */
 	unsigned int wde_header_size = 0;
-	unsigned long wdh_start = 0;
+	std::streamoff wdh_start = 0;
 
 	// get window header size
 	wde_header_size = readObjectSize();
@@ -394,7 +394,7 @@ bool OriginAnyParser::readLayerElement() {
 	/* get general info and details of a layer
 	 * return true if a Layer is found, otherwise return false */
 	unsigned int lye_header_size = 0;
-	unsigned long lyh_start = 0;
+	std::streamoff lyh_start = 0;
 
 	// get layer header size
 	lye_header_size = readObjectSize();
@@ -492,7 +492,7 @@ bool OriginAnyParser::readAnnotationElement() {
 	/* get general info and details of an Annotation
 	 * return true if an Annotation is found, otherwise return false */
 	unsigned int ane_header_size = 0;
-	unsigned long anh_start = 0;
+	std::streamoff anh_start = 0;
 
 	// get annotation header size
 	ane_header_size = readObjectSize();
@@ -514,10 +514,10 @@ bool OriginAnyParser::readAnnotationElement() {
 	// data of an annotation element is divided in three blocks
 	// first block
 	unsigned int ane_data_1_size = 0;
-	unsigned long andt1_start = 0;
+	std::streamoff andt1_start = 0;
 	ane_data_1_size = readObjectSize();
 
-	andt1_start = (unsigned long)file.tellg();
+	andt1_start = file.tellg();
 	LOG_PRINT(logfile, "     block 1 size %d [0x%X] at %ld [0x%lX]\n", ane_data_1_size, ane_data_1_size, andt1_start, andt1_start)
 	string andt1_data = readObjectAsString(ane_data_1_size);
 
@@ -528,9 +528,9 @@ bool OriginAnyParser::readAnnotationElement() {
 
 	// second block
 	unsigned int ane_data_2_size = 0;
-	unsigned long andt2_start = 0;
+	std::streamoff andt2_start = 0;
 	ane_data_2_size = readObjectSize();
-	andt2_start = (unsigned long)file.tellg();
+	andt2_start = file.tellg();
 	LOG_PRINT(logfile, "     block 2 size %d [0x%X] at %ld [0x%lX]\n", ane_data_2_size, ane_data_2_size, andt2_start, andt2_start)
 	string andt2_data;
 
@@ -556,7 +556,7 @@ bool OriginAnyParser::readAnnotationElement() {
 	unsigned int ane_data_3_size = 0;
 	ane_data_3_size = readObjectSize();
 
-	unsigned long andt3_start = file.tellg();
+	std::streamoff andt3_start = file.tellg();
 	if (andt3_start > 0) {
 		LOG_PRINT(logfile, "     block 3 size %d [0x%X] at %ld [0x%lX]\n", ane_data_3_size, ane_data_3_size, andt3_start, andt3_start)
 	}
@@ -575,7 +575,7 @@ bool OriginAnyParser::readCurveElement() {
 	/* get general info and details of a Curve
 	 * return true if a Curve is found, otherwise return false */
 	unsigned int cve_header_size = 0, cve_data_size = 0;
-	unsigned long cvh_start = 0, cvd_start = 0;
+	std::streamoff cvh_start = 0, cvd_start = 0;
 
 	// get curve header size
 	cve_header_size = readObjectSize();
@@ -615,7 +615,7 @@ bool OriginAnyParser::readAxisBreakElement() {
 	/* get info of Axis breaks
 	 * return true if an Axis break, otherwise return false */
 	unsigned int abe_data_size = 0;
-	unsigned long abd_start = 0;
+	std::streamoff abd_start = 0;
 
 	// get axis break data size
 	abe_data_size = readObjectSize();
@@ -640,7 +640,7 @@ bool OriginAnyParser::readAxisParameterElement(unsigned int naxis) {
 	/* get info of Axis parameters for naxis-axis (x,y,z) = (1,2,3)
 	 * return true if an Axis break is found, otherwise return false */
 	unsigned int ape_data_size = 0;
-	unsigned long apd_start = 0;
+	std::streamoff apd_start = 0;
 
 	// get axis break data size
 	ape_data_size = readObjectSize();
@@ -695,7 +695,7 @@ bool OriginAnyParser::readNoteElement() {
 	/* get info of Note windows, including "Results Log"
 	 * return true if a Note window is found, otherwise return false */
 	unsigned int nwe_header_size = 0, nwe_label_size = 0, nwe_contents_size = 0;
-	unsigned long nwh_start = 0, nwl_start = 0, nwc_start = 0;
+	std::streamoff nwh_start = 0, nwl_start = 0, nwc_start = 0;
 
 	// get note header size
 	nwe_header_size = readObjectSize();
