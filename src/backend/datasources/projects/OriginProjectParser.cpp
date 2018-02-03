@@ -37,6 +37,7 @@
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -672,6 +673,46 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			else
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
+			//ranges, axes and range breaks
+			//x
+			Origin::GraphAxis xAxis = layer.xAxis;
+			plot->setXMin(xAxis.min);
+			plot->setXMax(xAxis.max);
+
+			Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
+			axis->setSuppressRetransform(true);
+			plot->addChild(axis);
+			(xAxis.position == Origin::GraphAxis::Bottom) ? axis->setPosition(Axis::AxisBottom) : axis->setPosition(Axis::AxisBottom);
+			axis->setStart(xAxis.min);
+			axis->setEnd(xAxis.max);
+// 			axis->setMajorTicksDirection(Axis::ticksBoth);
+// 			axis->setMajorTicksNumber(6);
+// 			axis->setMinorTicksDirection(Axis::ticksBoth);
+// 			axis->setMinorTicksNumber(1);
+// 			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setSuppressRetransform(false);
+
+			//y
+			Origin::GraphAxis yAxis = layer.yAxis;
+			plot->setYMin(yAxis.min);
+			plot->setYMax(yAxis.max);
+
+			axis = new Axis("y axis 1", plot, Axis::AxisVertical);
+			axis->setSuppressRetransform(true);
+			plot->addChild(axis);
+			(xAxis.position == Origin::GraphAxis::Left) ? axis->setPosition(Axis::AxisLeft) : axis->setPosition(Axis::AxisRight);
+			axis->setStart(yAxis.min);
+			axis->setEnd(yAxis.max);
+// 			axis->setMajorTicksDirection(Axis::ticksBoth);
+// 			axis->setMajorTicksNumber(6);
+// 			axis->setMinorTicksDirection(Axis::ticksBoth);
+// 			axis->setMinorTicksNumber(1);
+// 			axis->setArrowType(Axis::FilledArrowSmall);
+			axis->setSuppressRetransform(false);
+
+			//range breaks
+			//TODO
+
 			//add legend if available
 			if (!layer.legend.text.empty()) {
 				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
@@ -686,10 +727,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
 			}
 	*/
-	// 			int auto_color = 0;
-	// 			int style = 0;
 
-			//add curves
+			//curves
 			int curveIndex = 1;
 			for (const auto& curve: layer.curves) {
 				if (curve.type == Origin::GraphCurve::Line || curve.type == Origin::GraphCurve::Scatter || curve.type == Origin::GraphCurve::LineSymbol
