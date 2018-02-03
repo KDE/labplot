@@ -45,7 +45,7 @@
 #include <liborigin/OriginFile.h>
 
 #include <QDateTime>
-#include <../liborigin/OriginFile.h>
+#include <QFontMetrics>
 
 /*!
 \class OriginProjectParser
@@ -312,11 +312,14 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	spreadsheet->setColumnCount((int)cols);
 	spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
 
-	const int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
+	//in Origin column width is measured in characters, we need to convert to pixels
+	QFont font;
+	QFontMetrics fm(font);
+	const int scaling_factor = fm.maxWidth();
 
 	for (size_t j = 0; j < cols; ++j) {
 		Origin::SpreadColumn column = spread.columns[j];
-		Column *col = spreadsheet->column((int)j);
+		Column* col = spreadsheet->column((int)j);
 
 		QString name(column.name.c_str());
 		col->setName(name.replace(QRegExp(".*_"),""));

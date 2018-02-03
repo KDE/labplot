@@ -28,6 +28,9 @@
      <property name="title">
       <string/>
      </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
