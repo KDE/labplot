@@ -21,6 +21,7 @@
 
 #include "OriginAnyParser.h"
 #include <sstream>
+#include <cinttypes>
 
 /* define a macro to get an int (or uint) from a istringstream in binary mode */
 #define GET_INT(iss, ovalue) {iss.read(reinterpret_cast<char *>(&ovalue), 4);};
@@ -50,7 +51,7 @@ bool OriginAnyParser::parse() {
 	d_file_size = file.tellg();
 	file.seekg(0, ios_base::beg);
 
-	LOG_PRINT(logfile, "File size: %ld\n", d_file_size)
+	LOG_PRINT(logfile, "File size: %" PRId64 "\n", d_file_size)
 
 	// get file and program version, check it is a valid file
 	readFileVersion();
