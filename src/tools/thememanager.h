@@ -53,7 +53,7 @@ public:
 
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
-
+	QPalette currentPalette() const;
     QString defaultThemeName() const;
 
     void    setThemeMenuAction(QMenu* const action);

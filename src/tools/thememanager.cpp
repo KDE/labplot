@@ -78,8 +78,8 @@ public:
     }
 
     const QString          defaultThemeName;
+	QPalette               currentPalette;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
-
     QActionGroup*          themeMenuActionGroup;
     QMenu*                 themeMenuAction;
 };
@@ -135,6 +135,10 @@ void ThemeManager::setCurrentTheme(const QString& name)
     }
 }
 
+QPalette ThemeManager::currentPalette() const {
+	return d->currentPalette;
+}
+
 void ThemeManager::slotChangePalette()
 {
     updateCurrentDesktopDefaultThemePreview();
@@ -150,7 +154,8 @@ void ThemeManager::slotChangePalette()
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
     // hint for the style to synchronize the color scheme with the window manager/compositor
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
-    qApp->setPalette(SchemeManager::createApplicationPalette(config));
+	d->currentPalette = SchemeManager::createApplicationPalette(config);
+    qApp->setPalette(d->currentPalette);
     qApp->style()->polish(qApp);
 
 //     qCDebug(DIGIKAM_WIDGETS_LOG) << theme << " :: " << filename;

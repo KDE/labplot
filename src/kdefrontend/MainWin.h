@@ -211,7 +211,6 @@ private:
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
 
-
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
@@ -260,6 +259,7 @@ private slots:
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
+	void colorThemeChanged();
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS

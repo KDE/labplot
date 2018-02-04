@@ -549,9 +549,18 @@ void MainWin::initMenus() {
 	QMenu* themesMenu = new QMenu(i18n("&Themes"), this);
 	Digikam::ThemeManager::instance()->setThemeMenuAction(themesMenu);
 	Digikam::ThemeManager::instance()->registerThemeActions(this);
+	connect(Digikam::ThemeManager::instance(), SIGNAL(signalThemeChanged()), this, SLOT(colorThemeChanged()));
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
 	if (settingsMenu)
 		settingsMenu->insertMenu(settingsMenu->actions().first(), themesMenu);
+}
+
+void MainWin::colorThemeChanged() {
+	//background of the mdi area is not updated on theme changes, do it here.
+	//TODO: move this logic to ThemeManager maybe later.
+	const QPalette& palette = Digikam::ThemeManager::instance()->currentPalette();
+	const QBrush& brush = palette.brush(QPalette::Dark);
+	m_mdiArea->setBackground(brush);
 }
 
 /*!
