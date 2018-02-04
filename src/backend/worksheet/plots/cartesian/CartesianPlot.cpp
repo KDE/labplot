@@ -124,11 +124,10 @@ void CartesianPlot::init() {
 
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
-	//Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	d->autoScaleOffsetFactor = 0.05f;
-
+	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
 	//TODO: make this factor optional.
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
+	d->autoScaleOffsetFactor = 0.0f;
 
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChildFast(m_plotArea);
