@@ -90,6 +90,7 @@ private:
 	void mouseReleaseEvent(QMouseEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
+	void keyReleaseEvent(QKeyEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dragMoveEvent(QDragMoveEvent*) override;
 	void dropEvent(QDropEvent*) override;
@@ -111,6 +112,7 @@ private:
 	QTimeLine* m_fadeOutTimeLine;
 	bool m_isClosing;
 	bool m_menusInitialized;
+	bool m_ctrlPressed;
 
 	//Menus
 	QMenu* m_addNewMenu;

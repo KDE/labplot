@@ -85,6 +85,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeOutTimeLine(0),
 	m_isClosing(false),
 	m_menusInitialized(false),
+	m_ctrlPressed(false),
 	m_addNewMenu(nullptr),
 	m_addNewCartesianPlotMenu(nullptr),
 	m_zoomMenu(nullptr),
@@ -869,7 +870,7 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 }
 
 void WorksheetView::wheelEvent(QWheelEvent *event) {
-	if (m_mouseMode == ZoomSelectionMode) {
+	if (m_mouseMode == ZoomSelectionMode || m_ctrlPressed) {
 		if (event->delta() > 0)
 			scale(1.2, 1.2);
 		else if (event->delta() < 0)
@@ -1015,9 +1016,20 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 }
 
 void WorksheetView::keyPressEvent(QKeyEvent* event) {
-	if (event->matches(QKeySequence::Copy))
+	if (event->matches(QKeySequence::Copy)) {
 		//add here copying of objects
 		exportToClipboard();
+	} else {
+		if (event->key() == Qt::Key_Control)
+			m_ctrlPressed = true;
+	}
+
+	QGraphicsView::keyPressEvent(event);
+}
+
+void WorksheetView::keyReleaseEvent(QKeyEvent* event) {
+	m_ctrlPressed = false;
+	QGraphicsView::keyReleaseEvent(event);
 }
 
 void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
