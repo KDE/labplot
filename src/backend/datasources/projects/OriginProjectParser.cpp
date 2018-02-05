@@ -303,7 +303,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 	return folder;
 }
 
-void OriginProjectParser::handleLooseWindows(Folder *folder, bool preview) {
+void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
+	// TODO: when not in preview: load only given path
 	DEBUG("OriginProjectParser::handleLooseWindows()\n");
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
@@ -339,7 +340,7 @@ void OriginProjectParser::handleLooseWindows(Folder *folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			m_excelNameList << name;
+			//m_excelNameList << name;
 			//aspect->setCreationTime(creationTime(it));
 		}
 	}
@@ -365,7 +366,7 @@ void OriginProjectParser::handleLooseWindows(Folder *folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			m_matrixNameList << name;
+			//m_matrixNameList << name;
 			//aspect->setCreationTime(creationTime(it));
 		}
 	}
