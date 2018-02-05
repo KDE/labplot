@@ -4,7 +4,7 @@
     Description          : parser for Origin projects
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -78,6 +78,15 @@ QString OriginProjectParser::supportedExtensions() {
 	return extensions;
 }
 
+unsigned int OriginProjectParser::findMatrixByName(QString name) {
+	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
+		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
+		if (originMatrix.name == name.toStdString())
+			return i;
+	}
+	return 0;
+}
+
 //##############################################################################
 //############## Deserialization from Origin's project tree ####################
 //##############################################################################
@@ -104,18 +113,20 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	QString name(QString::fromLatin1(projectIt->name.c_str()));
 	project->setName(name);
 	project->setCreationTime(creationTime(projectIt));
+	DEBUG("");
 	loadFolder(project, projectIt, preview);
 
 	return true;
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectNode>::iterator& baseIt, bool preview) {
-	DEBUG("OriginProjectParser::loadFolder()");
+	DEBUG("OriginProjectParser::loadFolder()\n--------------------------------");
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
+		DEBUG("	* folder item name = " << name.toStdString());
 
 		//check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
@@ -127,15 +138,19 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 				//increase the index for the skipped child
 				switch(it->type) {
 				case Origin::ProjectNode::Excel:
+					DEBUG("		type Excel");
 					++m_excelIndex;
 					break;
 				case Origin::ProjectNode::Matrix:
+					DEBUG("		type Matrix");
 					++m_matrixIndex;
 					break;
 				case Origin::ProjectNode::Graph:
+					DEBUG("		type Graph");
 					++m_graphIndex;
 					break;
 				case Origin::ProjectNode::Note:
+					DEBUG("		type Notes");
 					++m_noteIndex;
 					break;
 				case Origin::ProjectNode::SpreadSheet:
@@ -153,6 +168,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		AbstractAspect* aspect = nullptr;
 		switch (it->type) {
 		case Origin::ProjectNode::Folder: {
+			DEBUG("	top level folder");
 			Folder* f = new Folder(name);
 
 			if (!folder->pathesToLoad().isEmpty()) {
@@ -186,12 +202,14 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::SpreadSheet: {
+			DEBUG("	top level spreadsheet");
 			Spreadsheet* spreadsheet = new Spreadsheet(0, name);
 			loadSpreadsheet(spreadsheet, preview);
 			aspect = spreadsheet;
 			break;
 		}
 		case Origin::ProjectNode::Graph: {
+			DEBUG("	top level graph");
 			Worksheet* worksheet = new Worksheet(0, name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
@@ -199,7 +217,10 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::Matrix: {
-			const Origin::Matrix& originMatrix = m_originFile->matrix(m_matrixIndex);
+			DEBUG("	top level matrix");
+			const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(name));
+			DEBUG("	matrix name = " << originMatrix.name.c_str());
+			DEBUG("	number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
 				Matrix* matrix = new Matrix(0, name);
@@ -215,7 +236,9 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::Excel: {
+			DEBUG("	top level excel");
 			const Origin::Excel& excel = m_originFile->excel(m_excelIndex);
+			DEBUG("	number of sheets = " << excel.sheets.size());
 			if (excel.sheets.size() == 1) {
 				// single sheet -> load into a spreadsheet
 				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
@@ -231,6 +254,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			break;
 		}
 		case Origin::ProjectNode::Note: {
+			DEBUG("top level note");
 			Note* note = new Note(name);
 			loadNote(note, preview);
 			aspect = note;
@@ -281,6 +305,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG("loadWorkbook() excelIndex = " << m_excelIndex);
 	//load workbook sheets
 	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
+	DEBUG(" number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, s);
@@ -585,7 +610,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	DEBUG("OriginProjectParser::loadMatrixWorkbook()");
 	//load matrix workbook sheets
-	const Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
+	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
 		Matrix* matrix = new Matrix(0, QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
 		loadMatrix(matrix, preview, s);
@@ -601,8 +626,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 		return true;
 
 	//import matrix data
-	Q_UNUSED(matrix);
-	Origin::Matrix originMatrix = m_originFile->matrix(m_matrixIndex);
+	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(matrix->name()));
 
 	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
 

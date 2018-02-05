@@ -4,6 +4,7 @@
     Description          : parser for Origin projects
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -56,6 +57,7 @@ private:
 	bool loadWorksheet(Worksheet*,  bool preview);
 	bool loadNote(Note*, bool preview);
 
+	unsigned int findMatrixByName(QString name);
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
