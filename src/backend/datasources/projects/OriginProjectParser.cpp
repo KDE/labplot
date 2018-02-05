@@ -87,6 +87,15 @@ unsigned int OriginProjectParser::findMatrixByName(QString name) {
 	return 0;
 }
 
+unsigned int OriginProjectParser::findExcelByName(QString name) {
+	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
+		const Origin::Excel& excel = m_originFile->excel(i);
+		if (excel.name == name.toStdString())
+			return i;
+	}
+	return 0;
+}
+
 //##############################################################################
 //############## Deserialization from Origin's project tree ####################
 //##############################################################################
@@ -219,7 +228,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		case Origin::ProjectNode::Matrix: {
 			DEBUG("	top level matrix");
 			const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(name));
-			DEBUG("	matrix name = " << originMatrix.name.c_str());
+			DEBUG("	matrix name = " << originMatrix.name);
 			DEBUG("	number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
@@ -237,7 +246,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 		case Origin::ProjectNode::Excel: {
 			DEBUG("	top level excel");
-			const Origin::Excel& excel = m_originFile->excel(m_excelIndex);
+			const Origin::Excel& excel = m_originFile->excel(findExcelByName(name));
+			DEBUG(" excel name = " << excel.name);
 			DEBUG("	number of sheets = " << excel.sheets.size());
 			if (excel.sheets.size() == 1) {
 				// single sheet -> load into a spreadsheet
@@ -304,7 +314,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG("loadWorkbook() excelIndex = " << m_excelIndex);
 	//load workbook sheets
-	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
+	const Origin::Excel& excel = m_originFile->excel(findExcelByName(workbook->name()));
 	DEBUG(" number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
@@ -321,7 +331,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		return true;
 
 	//load spreadsheet data
-	const Origin::Excel excel = m_originFile->excel(m_excelIndex);
+	const Origin::Excel& excel = m_originFile->excel(findExcelByName(spreadsheet->name()));
 	Origin::SpreadSheet spread = excel.sheets[sheetIndex];
 
 	const size_t cols = spread.columns.size();

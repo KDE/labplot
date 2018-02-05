@@ -58,6 +58,7 @@ private:
 	bool loadNote(Note*, bool preview);
 
 	unsigned int findMatrixByName(QString name);
+	unsigned int findExcelByName(QString name);
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
