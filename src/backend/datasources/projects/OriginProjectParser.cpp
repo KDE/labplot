@@ -59,8 +59,6 @@
 
 OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_originFile(nullptr),
-	m_excelIndex(0),
-	m_matrixIndex(0),
 	m_graphIndex(0),
 	m_noteIndex(0) {
 
@@ -81,8 +79,10 @@ QString OriginProjectParser::supportedExtensions() {
 unsigned int OriginProjectParser::findMatrixByName(QString name) {
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
-		if (originMatrix.name == name.toStdString())
+		if (originMatrix.name == name.toStdString()) {
+			m_matrixNameList << name;
 			return i;
+		}
 	}
 	return 0;
 }
@@ -90,8 +90,10 @@ unsigned int OriginProjectParser::findMatrixByName(QString name) {
 unsigned int OriginProjectParser::findExcelByName(QString name) {
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		const Origin::Excel& excel = m_originFile->excel(i);
-		if (excel.name == name.toStdString())
+		if (excel.name == name.toStdString()) {
+			m_excelNameList << name;
 			return i;
+		}
 	}
 	return 0;
 }
@@ -100,6 +102,7 @@ unsigned int OriginProjectParser::findExcelByName(QString name) {
 //############## Deserialization from Origin's project tree ####################
 //##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
+	DEBUG("OriginProjectParser::load()");
 	//read and parse the m_originFile-file
 	if (m_originFile)
 		delete m_originFile;
@@ -113,8 +116,6 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
 	//reset the object indices
-	m_excelIndex = 0;
-	m_matrixIndex = 0;
 	m_graphIndex = 0;
 	m_noteIndex = 0;
 
@@ -122,8 +123,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	QString name(QString::fromLatin1(projectIt->name.c_str()));
 	project->setName(name);
 	project->setCreationTime(creationTime(projectIt));
-	DEBUG("");
 	loadFolder(project, projectIt, preview);
+	handleLooseWindows(project, preview);
 
 	return true;
 }
@@ -134,7 +135,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
-		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
+		QString name(QString::fromStdString(it->name)); //name of the current child
 		DEBUG("	* folder item name = " << name.toStdString());
 
 		//check whether we need to skip the loading of the current child
@@ -148,11 +149,9 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 				switch(it->type) {
 				case Origin::ProjectNode::Excel:
 					DEBUG("		type Excel");
-					++m_excelIndex;
 					break;
 				case Origin::ProjectNode::Matrix:
 					DEBUG("		type Matrix");
-					++m_matrixIndex;
 					break;
 				case Origin::ProjectNode::Graph:
 					DEBUG("		type Graph");
@@ -241,7 +240,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 				loadMatrixWorkbook(workbook, preview);
 				aspect = workbook;
 			}
-			++m_matrixIndex;
 			break;
 		}
 		case Origin::ProjectNode::Excel: {
@@ -260,7 +258,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 				loadWorkbook(workbook, preview);
 				aspect = workbook;
 			}
-			++m_excelIndex;
 			break;
 		}
 		case Origin::ProjectNode::Note: {
@@ -282,11 +279,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			aspect->setCreationTime(creationTime(it));
 		}
 	}
-
-	DEBUG("Number of excels:\t" << m_excelIndex);
-	DEBUG("Number of matrices:\t" << m_matrixIndex);
-	DEBUG("Number of graphs:\t" << m_graphIndex);
-	DEBUG("Number of notes:\t" << m_noteIndex);
 
 	// ResultsLog
 	QString resultsLog = QString::fromLatin1(m_originFile->resultsLogString().c_str());
@@ -311,8 +303,76 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 	return folder;
 }
 
+void OriginProjectParser::handleLooseWindows(Folder *folder, bool preview) {
+	DEBUG("OriginProjectParser::handleLooseWindows()\n");
+	m_excelNameList.removeDuplicates();
+	m_matrixNameList.removeDuplicates();
+
+	DEBUG("Number of excels:\t" << m_excelNameList.size());
+	DEBUG("Number of excels in file:\t" << m_originFile->excelCount());
+	DEBUG("Number of matrices:\t" << m_matrixNameList.size());
+	DEBUG("Number of matrices in file:\t" << m_originFile->matrixCount());
+	DEBUG("Number of graphs:\t" << m_graphIndex);
+	DEBUG("Number of graph in file:\t" << m_originFile->graphCount());
+	DEBUG("Number of notes:\t" << m_noteIndex);
+	DEBUG("Number of notes in file:\t" << m_originFile->noteCount());
+
+	// handle loose excels
+	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
+		AbstractAspect* aspect = nullptr;
+		const Origin::Excel& excel = m_originFile->excel(i);
+		QString name = QString::fromStdString(excel.name);
+                if (!m_excelNameList.contains(name)) {
+			DEBUG("	Adding loose excel");
+			DEBUG("		number of sheets = " << excel.sheets.size());
+			if (excel.sheets.size() == 1) {
+				// single sheet -> load into a spreadsheet
+				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
+				loadSpreadsheet(spreadsheet, preview);
+				aspect = spreadsheet;
+			} else {
+				// multiple sheets -> load into a workbook
+				Workbook* workbook = new Workbook(0, name);
+				loadWorkbook(workbook, preview);
+				aspect = workbook;
+			}
+		}
+		if (aspect) {
+			folder->addChildFast(aspect);
+			m_excelNameList << name;
+			//aspect->setCreationTime(creationTime(it));
+		}
+	}
+	// handle loose matrices
+	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
+		AbstractAspect* aspect = nullptr;
+		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
+		QString name = QString::fromStdString(originMatrix.name);
+                if (!m_matrixNameList.contains(name)) {
+			DEBUG("	Adding loose matrix");
+			DEBUG("		number of sheets = " << originMatrix.sheets.size());
+			if (originMatrix.sheets.size() == 1) {
+				// single sheet -> load into a matrix
+				Matrix* matrix = new Matrix(0, name);
+				loadMatrix(matrix, preview);
+				aspect = matrix;
+			} else {
+				// multiple sheets -> load into a workbook
+				Workbook* workbook = new Workbook(0, name);
+				loadMatrixWorkbook(workbook, preview);
+				aspect = workbook;
+			}
+		}
+		if (aspect) {
+			folder->addChildFast(aspect);
+			m_matrixNameList << name;
+			//aspect->setCreationTime(creationTime(it));
+		}
+	}
+}
+
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
-	DEBUG("loadWorkbook() excelIndex = " << m_excelIndex);
+	DEBUG("loadWorkbook()");
 	//load workbook sheets
 	const Origin::Excel& excel = m_originFile->excel(findExcelByName(workbook->name()));
 	DEBUG(" number of sheets = " << excel.sheets.size());
@@ -326,7 +386,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 }
 
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex) {
-	DEBUG("loadSpreadsheet() excelIndex/sheetIndex = " << m_excelIndex << ' ' << sheetIndex);
+	DEBUG("loadSpreadsheet() sheetIndex = " << sheetIndex);
 	if (preview)
 		return true;
 

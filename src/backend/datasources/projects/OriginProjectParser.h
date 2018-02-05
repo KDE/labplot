@@ -56,6 +56,7 @@ private:
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0);
 	bool loadWorksheet(Worksheet*,  bool preview);
 	bool loadNote(Note*, bool preview);
+	void handleLooseWindows(Folder*, bool preview);
 
 	unsigned int findMatrixByName(QString name);
 	unsigned int findExcelByName(QString name);
@@ -65,8 +66,8 @@ private:
 	QColor color(const Origin::Color::RegularColor&) const;
 
 	OriginFile* m_originFile;
-	size_t m_excelIndex;
-	size_t m_matrixIndex;
+	QStringList m_excelNameList;
+	QStringList m_matrixNameList;
 	size_t m_graphIndex;
 	size_t m_noteIndex;
 
