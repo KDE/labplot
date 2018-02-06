@@ -797,9 +797,10 @@ public:
 
 	void redo() override {
 		QRectF tmp = m_private->rect;
-		const double horizontalRatio = m_rect.width() / m_private->rect.width();
-		const double verticalRatio = m_rect.height() / m_private->rect.height();
-		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
+		//TODO:
+// 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
+// 		const double verticalRatio = m_rect.height() / m_private->rect.height();
+// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
 		m_private->rect = m_rect;
 		m_rect = tmp;
 		m_private->retransform();
