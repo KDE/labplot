@@ -842,10 +842,8 @@ void SchemeManagerPrivate::init(const KSharedConfigPtr& config,
     _brushes.bg[7] = ColorTools::tint(_brushes.bg[0].color(), _brushes.fg[7].color());
 }
 
-QBrush SchemeManagerPrivate::background(SchemeManager::BackgroundRole role) const
-{
-    switch (role)
-    {
+QBrush SchemeManagerPrivate::background(SchemeManager::BackgroundRole role) const {
+    switch (role) {
         case SchemeManager::AlternateBackground:
             return _brushes.bg[1];
         case SchemeManager::ActiveBackground:
@@ -860,15 +858,14 @@ QBrush SchemeManagerPrivate::background(SchemeManager::BackgroundRole role) cons
             return _brushes.bg[6];
         case SchemeManager::PositiveBackground:
             return _brushes.bg[7];
-        default:
+	case SchemeManager::NormalBackground:
+	default:
             return _brushes.bg[0];
     }
 }
 
-QBrush SchemeManagerPrivate::foreground(SchemeManager::ForegroundRole role) const
-{
-    switch (role)
-    {
+QBrush SchemeManagerPrivate::foreground(SchemeManager::ForegroundRole role) const {
+    switch (role) {
         case SchemeManager::InactiveText:
             return _brushes.fg[1];
         case SchemeManager::ActiveText:
@@ -883,18 +880,18 @@ QBrush SchemeManagerPrivate::foreground(SchemeManager::ForegroundRole role) cons
             return _brushes.fg[6];
         case SchemeManager::PositiveText:
             return _brushes.fg[7];
-        default:
+        case SchemeManager::NormalText:
+	default:
             return _brushes.fg[0];
     }
 }
 
-QBrush SchemeManagerPrivate::decoration(SchemeManager::DecorationRole role) const
-{
-    switch (role)
-    {
+QBrush SchemeManagerPrivate::decoration(SchemeManager::DecorationRole role) const {
+    switch (role) {
         case SchemeManager::FocusColor:
             return _brushes.deco[1];
-        default:
+	case SchemeManager::HoverColor:
+	default:
             return _brushes.deco[0];
     }
 }
@@ -921,15 +918,15 @@ SchemeManager::~SchemeManager()
 {
 }
 
-SchemeManager::SchemeManager(QPalette::ColorGroup state, ColorSet set, KSharedConfigPtr config)
-{
-    if (!config)
-    {
+SchemeManager::SchemeManager(QPalette::ColorGroup state, ColorSet set, KSharedConfigPtr config) {
+    if (!config) {
         config = KSharedConfig::openConfig();
     }
 
-    switch (set)
-    {
+    switch (set) {
+        case View:
+            d = new SchemeManagerPrivate(config, state, "Colors:View", defaultViewColors);
+	    break;
         case Window:
             d = new SchemeManagerPrivate(config, state, "Colors:Window", defaultWindowColors);
             break;
@@ -965,8 +962,6 @@ SchemeManager::SchemeManager(QPalette::ColorGroup state, ColorSet set, KSharedCo
         case Complementary:
             d = new SchemeManagerPrivate(config, state, "Colors:Complementary", defaultComplementaryColors);
             break;
-        default:
-            d = new SchemeManagerPrivate(config, state, "Colors:View", defaultViewColors);
     }
 }
 
@@ -1024,32 +1019,32 @@ QColor SchemeManager::shade(const QColor& color, ShadeRole role, qreal contrast,
     qreal yi = 1.0 - y;
 
     // handle very dark colors (base, mid, dark, shadow == midlight, light)
-    if (y < 0.006)
-    {
-        switch (role)
-        {
+    if (y < 0.006) {
+        switch (role) {
             case SchemeManager::LightShade:
                 return ColorTools::shade(color, 0.05 + 0.95 * contrast, chromaAdjust);
             case SchemeManager::MidShade:
                 return ColorTools::shade(color, 0.01 + 0.20 * contrast, chromaAdjust);
             case SchemeManager::DarkShade:
                 return ColorTools::shade(color, 0.02 + 0.40 * contrast, chromaAdjust);
+	    case SchemeManager::MidlightShade:
+            case SchemeManager::ShadowShade:
             default:
                 return ColorTools::shade(color, 0.03 + 0.60 * contrast, chromaAdjust);
         }
     }
 
     // handle very light colors (base, midlight, light == mid, dark, shadow)
-    if (y > 0.93)
-    {
-        switch (role)
-        {
+    if (y > 0.93) {
+        switch (role) {
             case SchemeManager::MidlightShade:
                 return ColorTools::shade(color, -0.02 - 0.20 * contrast, chromaAdjust);
             case SchemeManager::DarkShade:
                 return ColorTools::shade(color, -0.06 - 0.60 * contrast, chromaAdjust);
             case SchemeManager::ShadowShade:
                 return ColorTools::shade(color, -0.10 - 0.90 * contrast, chromaAdjust);
+            case SchemeManager::LightShade:
+            case SchemeManager::MidShade:
             default:
                 return ColorTools::shade(color, -0.04 - 0.40 * contrast, chromaAdjust);
         }
@@ -1059,8 +1054,7 @@ QColor SchemeManager::shade(const QColor& color, ShadeRole role, qreal contrast,
     qreal lightAmount = (0.05 + y * 0.55) * (0.25 + contrast * 0.75);
     qreal darkAmount  = (- y)             * (0.55 + contrast * 0.35);
 
-    switch (role)
-    {
+    switch (role) {
         case SchemeManager::LightShade:
             return ColorTools::shade(color, lightAmount, chromaAdjust);
         case SchemeManager::MidlightShade:
@@ -1069,6 +1063,7 @@ QColor SchemeManager::shade(const QColor& color, ShadeRole role, qreal contrast,
             return ColorTools::shade(color, (0.35 + 0.15 * y) * darkAmount, chromaAdjust);
         case SchemeManager::DarkShade:
             return ColorTools::shade(color, darkAmount, chromaAdjust);
+        case SchemeManager::ShadowShade:
         default:
             return ColorTools::darken(ColorTools::shade(color, darkAmount, chromaAdjust), 0.5 + 0.3 * y);
     }
