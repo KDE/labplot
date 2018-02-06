@@ -38,6 +38,7 @@ New features:
 	* Automaticaly switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
 	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog
 	* Allow to change the theme from within the application
+	* Smooth and animated zooming in the worksheet view
 	* build with MSVC and ICC
 
 Bug fixes:

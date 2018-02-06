@@ -86,6 +86,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_isClosing(false),
 	m_menusInitialized(false),
 	m_ctrlPressed(false),
+	m_numScheduledScalings(0),
 	m_addNewMenu(nullptr),
 	m_addNewCartesianPlotMenu(nullptr),
 	m_zoomMenu(nullptr),
@@ -869,14 +870,36 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 	QGraphicsView::resizeEvent(event);
 }
 
-void WorksheetView::wheelEvent(QWheelEvent *event) {
+void WorksheetView::wheelEvent ( QWheelEvent* event) {
+	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == ZoomSelectionMode || m_ctrlPressed) {
-		if (event->delta() > 0)
-			scale(1.2, 1.2);
-		else if (event->delta() < 0)
-			scale(1.0/1.2, 1.0/1.2);
+		int numDegrees = event->delta() / 8;
+		int numSteps = numDegrees / 15; // see QWheelEvent documentation
+		m_numScheduledScalings += numSteps;
+		if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
+			m_numScheduledScalings = numSteps;
+
+		QTimeLine* anim = new QTimeLine(350, this);
+		anim->setUpdateInterval(20);
+
+		connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime(qreal)));
+		connect(anim, SIGNAL (finished()), SLOT (animFinished()));
+		anim->start();
 	} else
 		QGraphicsView::wheelEvent(event);
+}
+
+void WorksheetView::scalingTime(qreal x){
+	qreal factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
+	scale(factor, factor);
+}
+
+void WorksheetView::animFinished() {
+	if (m_numScheduledScalings > 0)
+		m_numScheduledScalings--;
+	else
+		m_numScheduledScalings++;
+	sender()->~QObject();
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {

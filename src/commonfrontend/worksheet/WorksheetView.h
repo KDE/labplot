@@ -113,6 +113,7 @@ private:
 	bool m_isClosing;
 	bool m_menusInitialized;
 	bool m_ctrlPressed;
+	int m_numScheduledScalings;
 
 	//Menus
 	QMenu* m_addNewMenu;
@@ -259,6 +260,9 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
+
+	void scalingTime(qreal);
+	void animFinished();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
