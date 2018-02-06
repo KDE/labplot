@@ -304,8 +304,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 }
 
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
-	// TODO: when not in preview: load only given path
 	DEBUG("OriginProjectParser::handleLooseWindows()\n");
+	QDEBUG("pathes to load: " << folder->pathesToLoad());
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
 
@@ -323,7 +323,9 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Excel& excel = m_originFile->excel(i);
 		QString name = QString::fromStdString(excel.name);
-                if (!m_excelNameList.contains(name)) {
+
+		const QString childPath = folder->path() + '/' + name;
+		if ( (preview && !m_excelNameList.contains(name)) || (!preview && folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose excel");
 			DEBUG("		number of sheets = " << excel.sheets.size());
 			if (excel.sheets.size() == 1) {
@@ -349,7 +351,9 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
 		QString name = QString::fromStdString(originMatrix.name);
-                if (!m_matrixNameList.contains(name)) {
+
+		const QString childPath = folder->path() + '/' + name;
+		if ( (preview && !m_matrixNameList.contains(name)) || (!preview && folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose matrix");
 			DEBUG("		number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
