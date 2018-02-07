@@ -261,7 +261,8 @@ private slots:
 	void fadeIn(qreal);
 	void fadeOut(qreal);
 
-	void scalingTime(qreal);
+	void zoom(int);
+	void scalingTime();
 	void animFinished();
 
 	//SLOTs for cartesian plots

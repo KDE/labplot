@@ -870,26 +870,30 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 	QGraphicsView::resizeEvent(event);
 }
 
-void WorksheetView::wheelEvent ( QWheelEvent* event) {
+void WorksheetView::wheelEvent(QWheelEvent* event) {
 	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == ZoomSelectionMode || m_ctrlPressed) {
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
-		m_numScheduledScalings += numSteps;
-		if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
-			m_numScheduledScalings = numSteps;
-
-		QTimeLine* anim = new QTimeLine(350, this);
-		anim->setUpdateInterval(20);
-
-		connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime(qreal)));
-		connect(anim, SIGNAL (finished()), SLOT (animFinished()));
-		anim->start();
+		zoom(numSteps);
 	} else
 		QGraphicsView::wheelEvent(event);
 }
 
-void WorksheetView::scalingTime(qreal x){
+void WorksheetView::zoom(int numSteps) {
+	m_numScheduledScalings += numSteps;
+	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
+		m_numScheduledScalings = numSteps;
+
+	QTimeLine* anim = new QTimeLine(350, this);
+	anim->setUpdateInterval(20);
+
+	connect(anim, SIGNAL (valueChanged(qreal)), SLOT (scalingTime()));
+	connect(anim, SIGNAL (finished()), SLOT (animFinished()));
+	anim->start();
+}
+
+void WorksheetView::scalingTime(){
 	qreal factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
 	scale(factor, factor);
 }
@@ -1122,9 +1126,9 @@ void WorksheetView::processResize() {
 
 void WorksheetView::changeZoom(QAction* action) {
 	if (action == zoomInViewAction)
-		scale(1.2, 1.2);
+		zoom(1);
 	else if (action == zoomOutViewAction)
-		scale(1.0/1.2, 1.0/1.2);
+		zoom(-1);
 	else if (action == zoomOriginAction) {
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
