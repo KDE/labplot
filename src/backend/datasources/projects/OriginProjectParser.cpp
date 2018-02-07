@@ -304,19 +304,15 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 }
 
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
-	DEBUG("OriginProjectParser::handleLooseWindows()\n");
+	DEBUG("OriginProjectParser::handleLooseWindows()");
 	QDEBUG("pathes to load: " << folder->pathesToLoad());
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
 
-	DEBUG("Number of excels:\t" << m_excelNameList.size());
-	DEBUG("Number of excels in file:\t" << m_originFile->excelCount());
-	DEBUG("Number of matrices:\t" << m_matrixNameList.size());
-	DEBUG("Number of matrices in file:\t" << m_originFile->matrixCount());
-	DEBUG("Number of graphs:\t" << m_graphIndex);
-	DEBUG("Number of graph in file:\t" << m_originFile->graphCount());
-	DEBUG("Number of notes:\t" << m_noteIndex);
-	DEBUG("Number of notes in file:\t" << m_originFile->noteCount());
+	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
+	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
+	DEBUG("Number of graphs loaded:\t" << m_graphIndex << ", in file: " << m_originFile->graphCount());
+	DEBUG("Number of notes loaded:\t\t" << m_noteIndex << ", in file: " << m_originFile->noteCount());
 
 	// handle loose excels
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
@@ -325,9 +321,9 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		QString name = QString::fromStdString(excel.name);
 
 		const QString childPath = folder->path() + '/' + name;
-		if ( (preview && !m_excelNameList.contains(name)) || (!preview && folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose excel");
-			DEBUG("		number of sheets = " << excel.sheets.size());
+		if (!m_excelNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+			DEBUG("	Adding loose excel: " << name.toStdString());
+			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 			if (excel.sheets.size() == 1) {
 				// single sheet -> load into a spreadsheet
 				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
@@ -342,7 +338,6 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//m_excelNameList << name;
 			//aspect->setCreationTime(creationTime(it));
 		}
 	}
@@ -353,9 +348,9 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		QString name = QString::fromStdString(originMatrix.name);
 
 		const QString childPath = folder->path() + '/' + name;
-		if ( (preview && !m_matrixNameList.contains(name)) || (!preview && folder->pathesToLoad().indexOf(childPath) != -1)) {
-			DEBUG("	Adding loose matrix");
-			DEBUG("		number of sheets = " << originMatrix.sheets.size());
+		if (!m_matrixNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+			DEBUG("	Adding loose matrix: " << name.toStdString());
+			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
 				Matrix* matrix = new Matrix(0, name);
@@ -370,7 +365,6 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//m_matrixNameList << name;
 			//aspect->setCreationTime(creationTime(it));
 		}
 	}
