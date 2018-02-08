@@ -1886,7 +1886,8 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	cSystem(nullptr),
 	suppressRetransform(false),
 //	m_printing(false),
-	m_selectionBandIsShown(false) {
+	m_selectionBandIsShown(false),
+	m_panningStarted(false) {
 
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
@@ -2191,13 +2192,13 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		const QPointF& itemPos = value.toPointF();//item's center point in parent's coordinates;
-		float x = itemPos.x();
-		float y = itemPos.y();
+		const qreal x = itemPos.x();
+		const qreal y = itemPos.y();
 
 		//calculate the new rect and forward the changes to the frontend
 		QRectF newRect;
-		float w = rect.width();
-		float h = rect.height();
+		const qreal w = rect.width();
+		const qreal h = rect.height();
 		newRect.setX(x-w/2);
 		newRect.setY(y-h/2);
 		newRect.setWidth(w);
@@ -2222,14 +2223,35 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
-	} else
+	} else {
+		if ( q->plotRect().contains(event->pos()) ){
+			m_panningStarted = true;
+			m_panningStart = event->pos();
+			setCursor(Qt::ClosedHandCursor);
+		}
 		QGraphicsItem::mousePressEvent(event);
+	}
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (mouseMode == CartesianPlot::SelectionMode)
-		QGraphicsItem::mouseMoveEvent(event);
-	else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
+	if (mouseMode == CartesianPlot::SelectionMode) {
+		if (m_panningStarted && q->plotRect().contains(event->pos()) ) {
+			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
+			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
+			float deltaX = (logicalStart.x() - logicalEnd.x());
+			float deltaY = (logicalStart.y() - logicalEnd.y());
+			if (deltaX == 0 && deltaY == 0)
+				return;
+
+			xMax += deltaX;
+			xMin += deltaX;
+			yMax += deltaY;
+			yMin += deltaY;
+			retransformScales();
+			m_panningStart = event->pos();
+		} else
+			QGraphicsItem::mouseMoveEvent(event);
+	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		QGraphicsItem::mouseMoveEvent(event);
 		if ( !boundingRect().contains(event->pos()) ) {
 			q->info("");
@@ -2256,21 +2278,20 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		q->info(info);
 		update();
 	}
-
-	//TODO: implement the navigation in plot on mouse move events,
-	//calculate the position changes and call shift*()-functions
 }
 
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	setCursor(Qt::ArrowCursor);
 	if (mouseMode == CartesianPlot::SelectionMode) {
+		m_panningStarted = false;
 		const QPointF& itemPos = pos();//item's center point in parent's coordinates;
-		float x = itemPos.x();
-		float y = itemPos.y();
+		const qreal x = itemPos.x();
+		const qreal y = itemPos.y();
 
 		//calculate the new rect and set it
 		QRectF newRect;
-		float w = rect.width();
-		float h = rect.height();
+		const qreal w = rect.width();
+		const qreal h = rect.height();
 		newRect.setX(x-w/2);
 		newRect.setY(y-h/2);
 		newRect.setWidth(w);

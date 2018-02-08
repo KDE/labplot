@@ -87,6 +87,8 @@ private:
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;
+	bool m_panningStarted;
+	QPointF m_panningStart;
 };
 
 #endif
