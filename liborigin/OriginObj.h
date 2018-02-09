@@ -72,6 +72,7 @@ namespace Origin
 	enum FillPattern {NoFill = 0, BDiagDense = 1, BDiagMedium = 2, BDiagSparse = 3, FDiagDense = 4, FDiagMedium = 5, FDiagSparse = 6,
 		DiagCrossDense = 7, DiagCrossMedium = 8, DiagCrossSparse = 9, HorizontalDense = 10, HorizontalMedium = 11, HorizontalSparse = 12,
 		VerticalDense = 13, VerticalMedium = 14, VerticalSparse = 15, CrossDense = 16, CrossMedium = 17, CrossSparse = 18};
+	enum ColorGradientDirection {NoGradient = 0, TopLeft = 1, Left = 2, BottomLeft = 3, Top = 4, Center = 5, Bottom = 6, TopRight = 7, Right = 8, BottomRight = 9};
 
 	struct Color
 	{
@@ -158,6 +159,9 @@ namespace Origin
 		Rect frameRect;
 		time_t creationDate;
 		time_t modificationDate;
+		ColorGradientDirection windowBackgroundColorGradient;
+		Color windowBackgroundColorBase;
+		Color windowBackgroundColorEnd;
 
 		Window(const string& _name= "", const string& _label = "", bool _hidden = false)
 		:	name(_name)
@@ -166,6 +170,7 @@ namespace Origin
 		,	hidden(_hidden)
 		,	state(Normal)
 		,	title(Both)
+		,	windowBackgroundColorGradient(NoGradient)
 		{};
 	};
 

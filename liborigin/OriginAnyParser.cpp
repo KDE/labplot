@@ -1270,6 +1270,14 @@ void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_hea
 	else if(c & 0x02)
 		window.state = Window::Maximized;
 
+	window.windowBackgroundColorGradient = (ColorGradientDirection)(wde_header[0x42] >> 2);
+	window.windowBackgroundColorBase.type = Color::Regular;
+	window.windowBackgroundColorBase.regular = wde_header[0x43];
+	window.windowBackgroundColorEnd.type =  Color::Regular;
+	window.windowBackgroundColorEnd.regular = wde_header[0x44];
+	LOG_PRINT(logfile, "ColorGradient %d, base %d, end %d\n",window.windowBackgroundColorGradient,
+		window.windowBackgroundColorBase.regular, window.windowBackgroundColorEnd.regular);
+
 	c = wde_header[0x69];
 
 	if(c & 0x01)
@@ -1294,6 +1302,12 @@ void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_hea
 		window.creationDate = doubleToPosixTime(creationDate);
 		GET_DOUBLE(stmp, modificationDate)
 		window.modificationDate = doubleToPosixTime(modificationDate);
+	}
+
+	if (wde_header_size > 0x9E) {
+		// get window background colors for version > 5.0
+		window.windowBackgroundColorBase = getColor(wde_header.substr(0x97,4));
+		window.windowBackgroundColorEnd = getColor(wde_header.substr(0x9B,4));
 	}
 
 	if(wde_header_size > 0xC3){
