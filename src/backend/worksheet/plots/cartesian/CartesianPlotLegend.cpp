@@ -527,7 +527,7 @@ void CartesianPlotLegendPrivate::retransform() {
 void CartesianPlotLegendPrivate::updatePosition() {
 	//position the legend relative to the actual plot size minus small offset
 	//TODO: make the offset dependent on the size of axis ticks.
-	const QRectF parentRect = q->m_plot->plotRect();
+	const QRectF parentRect = q->m_plot->dataRect();
 	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 

@@ -764,18 +764,12 @@ CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBrea
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 
 /*!
-	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
+	returns the actual bounding rectangular of the plot area showing data (plot's rectangular minus padding)
 	in plot's coordinates
  */
-//TODO: return here a private variable only, update this variable on rect and padding changes.
-QRectF CartesianPlot::plotRect() {
+QRectF CartesianPlot::dataRect() const {
 	Q_D(const CartesianPlot);
-	QRectF rect = d->mapRectFromScene(d->rect);
-	rect.setX(rect.x() + d->horizontalPadding);
-	rect.setY(rect.y() + d->verticalPadding);
-	rect.setWidth(rect.width() - d->horizontalPadding);
-	rect.setHeight(rect.height()-d->verticalPadding);
-	return rect;
+	return d->dataRect;
 }
 
 CartesianPlot::MouseMode CartesianPlot::mouseMode() const {
@@ -1885,7 +1879,6 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	mouseMode(CartesianPlot::SelectionMode),
 	cSystem(nullptr),
 	suppressRetransform(false),
-//	m_printing(false),
 	m_selectionBandIsShown(false),
 	m_panningStarted(false) {
 
@@ -1907,6 +1900,7 @@ void CartesianPlotPrivate::retransform() {
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
+	updateDataRect();
 	retransformScales();
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
@@ -2125,6 +2119,18 @@ void CartesianPlotPrivate::retransformScales() {
 		q->retransform();
 }
 
+/*
+ * calculates the rectangular of the are showing the actual data (plot's rect minus padding),
+ * in plot's coordinates.
+ */
+void CartesianPlotPrivate::updateDataRect() {
+	dataRect = mapRectFromScene(rect);
+	dataRect.setX(dataRect.x() + horizontalPadding);
+	dataRect.setY(dataRect.y() + verticalPadding);
+	dataRect.setWidth(dataRect.width() - horizontalPadding);
+	dataRect.setHeight(dataRect.height() - verticalPadding);
+}
+
 void CartesianPlotPrivate::rangeChanged() {
 	curvesXMinMaxIsDirty = true;
 	curvesYMinMaxIsDirty = true;
@@ -2208,6 +2214,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
+//##############################################################################
+//##################################  Events  ##################################
+//##############################################################################
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 
@@ -2215,16 +2224,16 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 			m_selectionStart = event->pos();
 		else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionStart.setX(event->pos().x());
-			m_selectionStart.setY(q->plotRect().height()/2);
+			m_selectionStart.setY(dataRect.height()/2);
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
-			m_selectionStart.setX(-q->plotRect().width()/2);
+			m_selectionStart.setX(-dataRect.width()/2);
 			m_selectionStart.setY(event->pos().y());
 		}
 
 		m_selectionEnd = m_selectionStart;
 		m_selectionBandIsShown = true;
 	} else {
-		if ( q->plotRect().contains(event->pos()) ){
+		if ( dataRect.contains(event->pos()) ){
 			m_panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -2235,7 +2244,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (mouseMode == CartesianPlot::SelectionMode) {
-		if (m_panningStarted && q->plotRect().contains(event->pos()) ) {
+		if (m_panningStarted && dataRect.contains(event->pos()) ) {
 			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
 			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
 			float deltaX = (logicalStart.x() - logicalEnd.x());
@@ -2266,11 +2275,11 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x()) + QString::fromUtf8(", Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionEnd.setX(event->pos().x());
-			m_selectionEnd.setY(-q->plotRect().height()/2);
+			m_selectionEnd.setY(-dataRect.height()/2);
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
-			m_selectionEnd.setX(q->plotRect().width()/2);
+			m_selectionEnd.setX(dataRect.width()/2);
 			m_selectionEnd.setY(event->pos().y());
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
@@ -2284,6 +2293,8 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	if (mouseMode == CartesianPlot::SelectionMode) {
 		m_panningStarted = false;
+
+		//TODO: why do we do this all the time?!?!
 		const QPointF& itemPos = pos();//item's center point in parent's coordinates;
 		const qreal x = itemPos.x();
 		const qreal y = itemPos.y();
@@ -2370,7 +2381,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
-	if (q->plotRect().contains(point)) {
+	if (dataRect.contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown)
 			info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());

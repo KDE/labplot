@@ -95,7 +95,7 @@ public:
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	void setRect(const QRectF&) override;
-	QRectF plotRect();
+	QRectF dataRect() const;
 	void setMouseMode(const MouseMode);
 	MouseMode mouseMode() const;
 	void navigate(NavigationOperation);

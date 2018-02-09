@@ -44,6 +44,7 @@ public:
 	void retransformScales();
 	void rangeChanged();
 
+	QRectF dataRect;
 	CartesianPlot::RangeType rangeType;
 	int rangeFirstValues;
 	int rangeLastValues;
@@ -76,13 +77,13 @@ private:
 	void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
+	void updateDataRect();
 	void checkXRange();
 	void checkYRange();
 	CartesianScale* createScale(CartesianPlot::Scale type,
 		double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
 
-//	bool m_printing;
 	bool m_selectionBandIsShown;
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
