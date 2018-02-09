@@ -29,6 +29,7 @@
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/datasources/projects/ProjectParser.h"
 #include <liborigin/OriginFile.h>
 
@@ -63,7 +64,8 @@ private:
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
-	QColor color(const Origin::Color::RegularColor&) const;
+	QColor color(const Origin::Color&) const;
+	PlotArea::BackgroundColorStyle backgroundColorStyle(const Origin::ColorGradientDirection&) const;
 
 	OriginFile* m_originFile;
 	QStringList m_excelNameList;

@@ -750,6 +750,30 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	Origin::Graph graph = m_originFile->graph(m_graphIndex);
 	worksheet->setComment(graph.label.c_str());
 
+	// worksheet background color
+	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
+	const Origin::Color bckgBaseColor = graph.windowBackgroundColorBase;
+	const Origin::Color bckgEndColor =  graph.windowBackgroundColorEnd;
+	worksheet->setBackgroundColorStyle(backgroundColorStyle(bckgColorGradient));
+	switch (bckgColorGradient) {
+		case Origin::ColorGradientDirection::NoGradient:
+		case Origin::ColorGradientDirection::TopLeft:
+		case Origin::ColorGradientDirection::Left:
+		case Origin::ColorGradientDirection::BottomLeft:
+		case Origin::ColorGradientDirection::Top:
+			worksheet->setBackgroundFirstColor(color(bckgBaseColor));
+			worksheet->setBackgroundSecondColor(color(bckgEndColor));
+			break;
+		case Origin::ColorGradientDirection::Center:
+			break;
+		case Origin::ColorGradientDirection::Bottom:
+		case Origin::ColorGradientDirection::TopRight:
+		case Origin::ColorGradientDirection::Right:
+		case Origin::ColorGradientDirection::BottomRight:
+			worksheet->setBackgroundFirstColor(color(bckgEndColor));
+			worksheet->setBackgroundSecondColor(color(bckgBaseColor));
+	}
+
 	//add plots
 	int index = 1;
 	for (const auto& layer: graph.layers) {
@@ -757,7 +781,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
 
 			//background color
-			const Origin::Color::RegularColor regColor = (Origin::Color::RegularColor)layer.backgroundColor.regular;
+			const Origin::Color regColor = layer.backgroundColor;
 			plot->plotArea()->setBackgroundFirstColor(color(regColor));
 
 			//border
@@ -942,59 +966,99 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	return text;
 }
 
-QColor OriginProjectParser::color(const Origin::Color::RegularColor& color) const {
-	switch (color) {
-		case Origin::Color::Black:
-			return QColor(Qt::black);
-		case Origin::Color::Red:
-			return QColor(Qt::red);
-		case Origin::Color::Green:
-			return QColor(Qt::green);
-		case Origin::Color::Blue:
-			return QColor(Qt::blue);
-		case Origin::Color::Cyan:
-			return QColor(Qt::cyan);
-		case Origin::Color::Magenta:
-			return QColor(Qt::magenta);
-		case Origin::Color::Yellow:
-			return QColor(Qt::yellow);
-		case Origin::Color::DarkYellow:
-			return QColor(Qt::darkYellow);
-		case Origin::Color::Navy:
-			return QColor(0, 0, 128);
-		case Origin::Color::Purple:
-			return QColor(128, 0, 128);
-		case Origin::Color::Wine:
-			return QColor(128, 0, 0);
-		case Origin::Color::Olive:
-			return QColor(0, 128, 0);
-		case Origin::Color::DarkCyan:
-			return QColor(Qt::darkCyan);
-		case Origin::Color::Royal:
-			return QColor(0, 0, 160);
-		case Origin::Color::Orange:
-			return QColor(255, 128, 0);
-		case Origin::Color::Violet:
-			return QColor(128, 0, 255);
-		case Origin::Color::Pink:
-			return QColor(255, 0, 128);
-		case Origin::Color::White:
-			return QColor(Qt::white);
-		case Origin::Color::LightGray:
-			return QColor(Qt::lightGray);
-		case Origin::Color::Gray:
-			return QColor(Qt::gray);
-		case Origin::Color::LTYellow:
-			return QColor(255, 0, 128);
-		case Origin::Color::LTCyan:
-			return QColor(128, 255, 255);
-		case Origin::Color::LTMagenta:
-			return QColor(255, 128, 255);
-		case Origin::Color::DarkGray:
-			return QColor(Qt::darkGray);
+QColor OriginProjectParser::color(const Origin::Color& color) const {
+	switch (color.type) {
+		case Origin::Color::ColorType::Regular:
+			switch (color.regular) {
+				case Origin::Color::Black:
+					return QColor(Qt::black);
+				case Origin::Color::Red:
+					return QColor(Qt::red);
+				case Origin::Color::Green:
+					return QColor(Qt::green);
+				case Origin::Color::Blue:
+					return QColor(Qt::blue);
+				case Origin::Color::Cyan:
+					return QColor(Qt::cyan);
+				case Origin::Color::Magenta:
+					return QColor(Qt::magenta);
+				case Origin::Color::Yellow:
+					return QColor(Qt::yellow);
+				case Origin::Color::DarkYellow:
+					return QColor(Qt::darkYellow);
+				case Origin::Color::Navy:
+					return QColor(0, 0, 128);
+				case Origin::Color::Purple:
+					return QColor(128, 0, 128);
+				case Origin::Color::Wine:
+					return QColor(128, 0, 0);
+				case Origin::Color::Olive:
+					return QColor(0, 128, 0);
+				case Origin::Color::DarkCyan:
+					return QColor(Qt::darkCyan);
+				case Origin::Color::Royal:
+					return QColor(0, 0, 160);
+				case Origin::Color::Orange:
+					return QColor(255, 128, 0);
+				case Origin::Color::Violet:
+					return QColor(128, 0, 255);
+				case Origin::Color::Pink:
+					return QColor(255, 0, 128);
+				case Origin::Color::White:
+					return QColor(Qt::white);
+				case Origin::Color::LightGray:
+					return QColor(Qt::lightGray);
+				case Origin::Color::Gray:
+					return QColor(Qt::gray);
+				case Origin::Color::LTYellow:
+					return QColor(255, 0, 128);
+				case Origin::Color::LTCyan:
+					return QColor(128, 255, 255);
+				case Origin::Color::LTMagenta:
+					return QColor(255, 128, 255);
+				case Origin::Color::DarkGray:
+					return QColor(Qt::darkGray);
+			}
+			break;
+		case Origin::Color::ColorType::Custom:
+			return QColor(color.custom[0], color.custom[1], color.custom[2]);
+		case Origin::Color::ColorType::None:
+		case Origin::Color::ColorType::Automatic:
+		case Origin::Color::ColorType::Increment:
+		case Origin::Color::ColorType::Indexing:
+		case Origin::Color::ColorType::RGB:
+		case Origin::Color::ColorType::Mapping:
+			break;
 	}
 
 	return QColor(Qt::white);
+}
+
+PlotArea::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(const Origin::ColorGradientDirection& colorGradient) const {
+	switch (colorGradient) {
+		case Origin::ColorGradientDirection::NoGradient:
+			return PlotArea::BackgroundColorStyle::SingleColor;
+		case Origin::ColorGradientDirection::TopLeft:
+			return PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+		case Origin::ColorGradientDirection::Left:
+			return PlotArea::BackgroundColorStyle::HorizontalLinearGradient;
+		case Origin::ColorGradientDirection::BottomLeft:
+			return PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		case Origin::ColorGradientDirection::Top:
+			return PlotArea::BackgroundColorStyle::VerticalLinearGradient;
+		case Origin::ColorGradientDirection::Center:
+			return PlotArea::BackgroundColorStyle::RadialGradient;
+		case Origin::ColorGradientDirection::Bottom:
+			return PlotArea::BackgroundColorStyle::VerticalLinearGradient;
+		case Origin::ColorGradientDirection::TopRight:
+			return PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		case Origin::ColorGradientDirection::Right:
+			return PlotArea::BackgroundColorStyle::HorizontalLinearGradient;
+		case Origin::ColorGradientDirection::BottomRight:
+			return PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+	}
+
+	return PlotArea::BackgroundColorStyle::SingleColor;
 }
 
 QString strreverse(const QString &str) {	//QString reversing
