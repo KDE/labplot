@@ -2617,10 +2617,12 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			axis.formatAxis[0].minorTicksType = (h>>6);
 			axis.formatAxis[0].majorTicksType = ((h>>4) & 3);
 			axis.formatAxis[0].axisPosition = (h & 0x0F);
+			short w1 = 0;
 			switch (axis.formatAxis[0].axisPosition) { // TODO: check if correct
 				case 1:
-					h = apdata[0x37];
-					axis.formatAxis[0].axisPositionValue = (double)h;
+					stmp.str(apdata.substr(0x37));
+					GET_SHORT(stmp, w1)
+					axis.formatAxis[0].axisPositionValue = (double)w1;
 					break;
 				case 2:
 					stmp.str(apdata.substr(0x2F));
@@ -2704,10 +2706,12 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 			axis.formatAxis[1].minorTicksType = (h>>6);
 			axis.formatAxis[1].majorTicksType = ((h>>4) & 3);
 			axis.formatAxis[1].axisPosition = (h & 0x0F);
+			short w1 = 0;
 			switch (axis.formatAxis[1].axisPosition) { // TODO: check if correct
 				case 1:
-					h = apdata[0x37];
-					axis.formatAxis[1].axisPositionValue = (double)h;
+					stmp.str(apdata.substr(0x37));
+					GET_SHORT(stmp, w1)
+					axis.formatAxis[1].axisPositionValue = (double)w1;
 					break;
 				case 2:
 					stmp.str(apdata.substr(0x2F));
