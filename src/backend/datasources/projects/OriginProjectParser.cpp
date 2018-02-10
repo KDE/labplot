@@ -780,8 +780,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
 
 			//background color
-			const Origin::Color regColor = layer.backgroundColor;
-			plot->plotArea()->setBackgroundFirstColor(color(regColor));
+			const Origin::Color& regColor = layer.backgroundColor;
+			if (regColor.type == Origin::Color::None)
+				plot->plotArea()->setBackgroundOpacity(0);
+			else
+				plot->plotArea()->setBackgroundFirstColor(color(regColor));
 
 			//border
 			if (layer.borderType == Origin::BorderType::None)
