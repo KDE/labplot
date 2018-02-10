@@ -845,14 +845,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//TODO
 
 			//add legend if available
-			if (!layer.legend.text.empty()) {
-				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, "");
+			const Origin::TextBox& originLegend = layer.legend;
+			if (!originLegend.text.empty()) {
+				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
 				legend->title()->setText( parseOriginText(QString::fromLatin1(layer.legend.text.c_str())) );
+
+				const Origin::Color& originColor = originLegend.color;
+				if (originColor.type == Origin::Color::None)
+					legend->setBackgroundOpacity(0);
+				else
+					legend->setBackgroundFirstColor(color(originColor));
+
 				plot->addChild(legend);
 			}
 
-			// TODO: we only support one legend
 			//add texts
+			// TODO: not supported yet...
 	/*			for (const auto &s: layer.texts) {
 				DEBUG("EXTRA TEXT =" << s.text.c_str());
 			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
@@ -876,10 +884,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				}
 
-
+/*
 				QString data(QString::fromLatin1(curve.dataName.c_str()));
-	// 				int color = 0;
-	/*				QString tableName;
+				//int color = 0;
+				QString tableName;
 				switch(data[0].toAscii()) {
 				case 'T':
 				case 'E': {
@@ -901,7 +909,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				}
 				//TODO
 				}
-	*/
+*/
 
 	/*				CurveLayout cl = graph->initCurveLayout(style, layer.curves.size());
 				cl.sSize = ceil(_curve.symbolSize*0.5);
@@ -917,9 +925,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//TODO
 				}
 	*/
-
-				//TODO
-
 				++curveIndex;
 			}
 
