@@ -790,42 +790,54 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			else
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
-			//ranges, axes and range breaks
-			//x
-			Origin::GraphAxis xAxis = layer.xAxis;
-			plot->setXMin(xAxis.min);
-			plot->setXMax(xAxis.max);
+			//ranges/scales
+			const Origin::GraphAxis& originXAxis = layer.xAxis;
+			const Origin::GraphAxis& originYAxis = layer.yAxis;
+			plot->setXMin(originXAxis.min);
+			plot->setXMax(originXAxis.max);
+			plot->setYMin(originYAxis.min);
+			plot->setYMax(originYAxis.max);
 
-			Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
-			axis->setSuppressRetransform(true);
-			plot->addChild(axis);
-			(xAxis.position == Origin::GraphAxis::Bottom) ? axis->setPosition(Axis::AxisBottom) : axis->setPosition(Axis::AxisBottom);
-			axis->setStart(xAxis.min);
-			axis->setEnd(xAxis.max);
-// 			axis->setMajorTicksDirection(Axis::ticksBoth);
-// 			axis->setMajorTicksNumber(6);
-// 			axis->setMinorTicksDirection(Axis::ticksBoth);
-// 			axis->setMinorTicksNumber(1);
-// 			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->setSuppressRetransform(false);
+			//axes
+			//x bottom
+			if (!originXAxis.formatAxis[0].hidden) {
+				Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
+				axis->setSuppressRetransform(true);
+				axis->setPosition(Axis::AxisBottom);
+				plot->addChild(axis);
+				loadAxis(originXAxis, axis, 0);
+				axis->setSuppressRetransform(false);
+			}
 
-			//y
-			Origin::GraphAxis yAxis = layer.yAxis;
-			plot->setYMin(yAxis.min);
-			plot->setYMax(yAxis.max);
+			//x top
+			if (!originXAxis.formatAxis[1].hidden) {
+				Axis* axis = new Axis("x top", plot, Axis::AxisHorizontal);
+				axis->setPosition(Axis::AxisTop);
+				axis->setSuppressRetransform(true);
+				plot->addChild(axis);
+				loadAxis(originXAxis, axis, 1);
+				axis->setSuppressRetransform(false);
+			}
 
-			axis = new Axis("y axis 1", plot, Axis::AxisVertical);
-			axis->setSuppressRetransform(true);
-			plot->addChild(axis);
-			(xAxis.position == Origin::GraphAxis::Left) ? axis->setPosition(Axis::AxisLeft) : axis->setPosition(Axis::AxisRight);
-			axis->setStart(yAxis.min);
-			axis->setEnd(yAxis.max);
-// 			axis->setMajorTicksDirection(Axis::ticksBoth);
-// 			axis->setMajorTicksNumber(6);
-// 			axis->setMinorTicksDirection(Axis::ticksBoth);
-// 			axis->setMinorTicksNumber(1);
-// 			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->setSuppressRetransform(false);
+			//y left
+			if (!originYAxis.formatAxis[0].hidden) {
+				Axis* axis = new Axis("y", plot, Axis::AxisVertical);
+				axis->setSuppressRetransform(true);
+				axis->setPosition(Axis::AxisLeft);
+				plot->addChild(axis);
+				loadAxis(originYAxis, axis, 0);
+				axis->setSuppressRetransform(false);
+			}
+
+			//y right
+			if (!originYAxis.formatAxis[1].hidden) {
+				Axis* axis = new Axis("y", plot, Axis::AxisVertical);
+				axis->setSuppressRetransform(true);
+				axis->setPosition(Axis::AxisRight);
+				plot->addChild(axis);
+				loadAxis(originYAxis, axis, 1);
+				axis->setSuppressRetransform(false);
+			}
 
 			//range breaks
 			//TODO
@@ -921,7 +933,48 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	return true;
 }
 
-bool OriginProjectParser::loadNote(Note* note, bool preview) {
+/*
+ * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
+ * \c index being 0 or 1 for "top" and "bottom" or "left" and "right" for horizontal or vertical axes, respectively.
+ */
+void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index) const {
+	//ranges
+	axis->setStart(originAxis.min);
+	axis->setEnd(originAxis.max);
+
+	//format
+	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
+
+	QPen pen;
+// 		unsigned char color;
+	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Point));
+	axis->setLinePen(pen);
+	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Point) );
+	//TODO: minot ticks length?
+// 		int majorTicksType;
+// 		int minorTicksType;
+// 		int axisPosition;
+// 		double axisPositionValue;
+// 		TextBox label;
+	axis->setLabelsPrefix(axisFormat.prefix.c_str());
+	axis->setLabelsSuffix(axisFormat.suffix.c_str());
+//	string factor;
+
+	//ticks
+	const Origin::GraphAxisTick& tickAxis = originAxis.tickAxis[index];
+// 		bool showMajorLabels;
+// 		unsigned char color;
+// 		ValueType valueType;
+// 		int valueTypeSpecification;
+	axis->setLabelsPrecision(tickAxis.decimalPlaces);
+// 		unsigned short fontSize;
+// 		bool fontBold;
+// 		string dataName;
+// 		string columnName;
+	axis->setLabelsRotationAngle(tickAxis.rotation);
+}
+
+bool OriginProjectParser::loadNote(Note* note, bool preview) const {
 	DEBUG("OriginProjectParser::loadNote()");
 
 	//load note data

@@ -33,6 +33,7 @@
 #include "backend/datasources/projects/ProjectParser.h"
 #include <liborigin/OriginFile.h>
 
+class Axis;
 class Project;
 class Workbook;
 class Spreadsheet;
@@ -56,7 +57,8 @@ private:
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0);
 	bool loadWorksheet(Worksheet*,  bool preview);
-	bool loadNote(Note*, bool preview);
+	void loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index) const;
+	bool loadNote(Note*, bool preview) const;
 	void handleLooseWindows(Folder*, bool preview);
 
 	unsigned int findMatrixByName(QString name);
