@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : ProjectImportTest.h
     Project              : LabPlot
-    Description          : Tests project imports
+    Description          : Tests for project imports
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************

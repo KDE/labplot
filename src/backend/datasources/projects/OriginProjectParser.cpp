@@ -391,7 +391,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	//load spreadsheet data
 	const Origin::Excel& excel = m_originFile->excel(findExcelByName(spreadsheet->name()));
-	Origin::SpreadSheet spread = excel.sheets[sheetIndex];
+	const Origin::SpreadSheet& spread = excel.sheets[sheetIndex];
 
 	const size_t cols = spread.columns.size();
 	int rows = 0;
@@ -740,14 +740,13 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	return true;
 }
 
-
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG("OriginProjectParser::loadWorksheet()");
 	if (preview)
 		return true;
 
 	//load worksheet data
-	Origin::Graph graph = m_originFile->graph(m_graphIndex);
+	const Origin::Graph& graph = m_originFile->graph(m_graphIndex);
 	worksheet->setComment(graph.label.c_str());
 
 	// worksheet background color
@@ -978,19 +977,12 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) const {
 	DEBUG("OriginProjectParser::loadNote()");
 
 	//load note data
-	Origin::Note originNote = m_originFile->note(m_noteIndex);
-
-	QString name = QString::fromLatin1(originNote.name.c_str());
-	//TODO: do we really need this?
-// 	QRegExp rx("^@(\\S+)$");
-// 	if(rx.indexIn(name) == 0)
-// 		name = name.mid(2, name.length() - 3);
-	note->setName(name);
+	const Origin::Note& originNote = m_originFile->note(m_noteIndex);
+	note->setComment(originNote.label.c_str());
 
 	if (preview)
 		return true;
 
-	//TODO: note->setWindowLabel(originNote.label.c_str());
 	note->setNote(QString::fromLatin1(originNote.text.c_str()));
 
 	return true;
