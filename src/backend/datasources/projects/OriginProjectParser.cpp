@@ -410,6 +410,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
 
 	//in Origin column width is measured in characters, we need to convert to pixels
+	//TODO: determine the font used in Origin in order to get the same column width as in Origin
 	QFont font;
 	QFontMetrics fm(font);
 	const int scaling_factor = fm.maxWidth();
@@ -697,9 +698,13 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	//import matrix data
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(matrix->name()));
 
-	int scaling_factor = 10; //in Origin width is measured in characters while here in pixels --- need to be accurate
+	//in Origin column width is measured in characters, we need to convert to pixels
+	//TODO: determine the font used in Origin in order to get the same column width as in Origin
+	QFont font;
+	QFontMetrics fm(font);
+	const int scaling_factor = fm.maxWidth();
 
-	Origin::MatrixSheet layer = originMatrix.sheets[sheetIndex];
+	const Origin::MatrixSheet& layer = originMatrix.sheets[sheetIndex];
 	const int colCount = layer.columnCount;
 	const int rowCount = layer.rowCount;
 
@@ -707,6 +712,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	matrix->setColumnCount(colCount);
 	matrix->setFormula(layer.command.c_str());
 
+	//TODO: how to handle different widths for different columns?
 	for (int j = 0; j < colCount; j++)
 		matrix->setColumnWidth(j, layer.width * scaling_factor);
 
@@ -856,6 +862,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				else
 					legend->setBackgroundFirstColor(color(originColor));
 
+				//TODO: position, rotation, etc.
 				plot->addChild(legend);
 			}
 
