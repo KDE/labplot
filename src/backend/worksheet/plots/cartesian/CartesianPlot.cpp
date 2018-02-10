@@ -2245,13 +2245,16 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (mouseMode == CartesianPlot::SelectionMode) {
 		if (m_panningStarted && dataRect.contains(event->pos()) ) {
-			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
-			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
-			float deltaX = (logicalStart.x() - logicalEnd.x());
-			float deltaY = (logicalStart.y() - logicalEnd.y());
-			if (deltaX == 0 && deltaY == 0)
+			//don't retransform on small mouse movement deltas
+			const int deltaXScene = (m_panningStart.x() - event->pos().x());
+			const int deltaYScene = (m_panningStart.y() - event->pos().y());
+			if (abs(deltaXScene) < 5 && abs(deltaYScene) < 5)
 				return;
 
+			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
+			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
+			const float deltaX = (logicalStart.x() - logicalEnd.x());
+			const float deltaY = (logicalStart.y() - logicalEnd.y());
 			xMax += deltaX;
 			xMin += deltaX;
 			yMax += deltaY;
