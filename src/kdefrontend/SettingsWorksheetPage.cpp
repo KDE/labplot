@@ -42,8 +42,8 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 	ui.setupUi(this);
 
-    m_cbThemes = new ThemesComboBox();
-    ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
+	m_cbThemes = new ThemesComboBox();
+	ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
 
 	const int size = ui.cbTexEngine->height();
 	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
@@ -61,7 +61,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
-    connect(m_cbThemes, SIGNAL(currentThemeChanged(QString)), this, SLOT(changed()) );
+	connect(m_cbThemes, SIGNAL(currentThemeChanged(QString)), this, SLOT(changed()) );
 	connect(ui.chkPresenterModeInteractive, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
@@ -72,7 +72,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 void SettingsWorksheetPage::applySettings() {
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
-    group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
+	group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
@@ -84,7 +84,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 
 void SettingsWorksheetPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
-    m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
+	m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
 
