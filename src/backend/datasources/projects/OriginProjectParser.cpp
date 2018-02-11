@@ -131,6 +131,11 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
+	m_excelNameList.clear();
+	m_matrixNameList.clear();
+	m_graphNameList.clear();
+	m_noteNameList.clear();
+
 	//convert the project tree from liborigin's representation to LabPlot's project object
 	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
@@ -202,6 +207,8 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 		case Origin::ProjectNode::Graph: {
 			DEBUG("	top level graph");
+			const Origin::Graph& graph = m_originFile->graph(findGraphByName(name));
+			DEBUG("	graph name = " << graph.name);
 			Worksheet* worksheet = new Worksheet(0, name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
@@ -292,10 +299,14 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	m_matrixNameList.removeDuplicates();
 	m_graphNameList.removeDuplicates();
 	m_noteNameList.removeDuplicates();
+	QDEBUG("	excels = " << m_excelNameList);
+	QDEBUG("	matrices = " << m_matrixNameList);
+	QDEBUG("	graphs = " << m_graphNameList);
+	QDEBUG("	notes = " << m_noteNameList);
 
 	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
-	DEBUG("Number of graphs loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->graphCount());
+	DEBUG("Number of graphs loaded:\t" << m_graphNameList.size() << ", in file: " << m_originFile->graphCount());
 	DEBUG("Number of notes loaded:\t\t" << m_noteNameList.size() << ", in file: " << m_originFile->noteCount());
 
 	// handle loose excels
@@ -322,6 +333,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
+			DEBUG("creation date = " << excel.creationDate);
 			//TODO: aspect->setCreationTime(creationTime(it));
 		}
 	}
@@ -406,11 +418,12 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex) {
 	DEBUG("loadSpreadsheet() sheetIndex = " << sheetIndex);
+	//load spreadsheet data
+	const Origin::Excel& excel = m_originFile->excel(findExcelByName(spreadsheet->name()));
+
 	if (preview)
 		return true;
 
-	//load spreadsheet data
-	const Origin::Excel& excel = m_originFile->excel(findExcelByName(spreadsheet->name()));
 	const Origin::SpreadSheet& spread = excel.sheets[sheetIndex];
 
 	const size_t cols = spread.columns.size();
@@ -698,7 +711,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
-	DEBUG("OriginProjectParser::loadMatrixWorkbook()");
+	DEBUG("loadMatrixWorkbook()");
 	//load matrix workbook sheets
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
@@ -711,12 +724,13 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 }
 
 bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex) {
-	DEBUG("OriginProjectParser::loadMatrix()");
+	DEBUG("loadMatrix()");
+	//import matrix data
+	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(matrix->name()));
+
 	if (preview)
 		return true;
 
-	//import matrix data
-	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(matrix->name()));
 
 	//in Origin column width is measured in characters, we need to convert to pixels
 	//TODO: determine the font used in Origin in order to get the same column width as in Origin
@@ -768,11 +782,12 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG("OriginProjectParser::loadWorksheet()");
+	//load worksheet data
+	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
+
 	if (preview)
 		return true;
 
-	//load worksheet data
-	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
 	worksheet->setComment(graph.label.c_str());
 
 	// worksheet background color
@@ -1010,14 +1025,13 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	DEBUG("OriginProjectParser::loadNote()");
-
 	//load note data
 	const Origin::Note& originNote = m_originFile->note(findNoteByName(note->name()));
-	note->setComment(originNote.label.c_str());
 
 	if (preview)
 		return true;
 
+	note->setComment(originNote.label.c_str());
 	note->setNote(QString::fromLatin1(originNote.text.c_str()));
 
 	return true;
