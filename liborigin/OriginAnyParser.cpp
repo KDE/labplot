@@ -536,7 +536,7 @@ bool OriginAnyParser::readAnnotationElement() {
 	string andt2_data;
 
 	// check for group of annotations
-	if ((ane_data_1_size == 0x5e) && (ane_data_2_size == 0x04)) {
+	if (((ane_data_1_size == 0x5e) || (ane_data_1_size == 0x0A)) && (ane_data_2_size == 0x04)) {
 		curpos = file.tellg();
 		LOG_PRINT(logfile, "  Annotation group found at %" PRId64 " [0x%" PRIx64 "] ...\n", curpos, curpos)
 		unsigned int angroup_size = readAnnotationList();

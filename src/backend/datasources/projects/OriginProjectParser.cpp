@@ -217,8 +217,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 		case Origin::ProjectNode::Graph: {
 			DEBUG("	top level graph");
-			const Origin::Graph& graph = m_originFile->graph(findGraphByName(name));
-			DEBUG("	graph name = " << graph.name);
 			Worksheet* worksheet = new Worksheet(0, name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
@@ -794,6 +792,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG("OriginProjectParser::loadWorksheet()");
 	//load worksheet data
 	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
+	DEBUG("	graph name = " << graph.name);
 
 	if (preview)
 		return true;
