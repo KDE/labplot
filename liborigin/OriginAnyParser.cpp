@@ -2952,8 +2952,11 @@ void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator curre
 			projectTree.append_child(current_folder, ProjectNode(notes[file_object_id].name, ProjectNode::Note));
 		}
 	} else { // other windows
-		pair<ProjectNode::NodeType, string> object = findObjectByIndex(file_object_id);
-		projectTree.append_child(current_folder, ProjectNode(object.second, object.first));
+		tree<Origin::ProjectNode>::iterator childnode;
+		pair<ProjectNode::NodeType, Origin::Window> object = findWindowObjectByIndex(file_object_id);
+		childnode=projectTree.append_child(current_folder, ProjectNode(object.second.name, object.first));
+		(*childnode).creationDate = object.second.creationDate;
+		(*childnode).modificationDate = object.second.modificationDate;
 	}
 }
 

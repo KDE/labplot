@@ -177,6 +177,39 @@ pair<ProjectNode::NodeType, string> OriginParser::findObjectByIndex(unsigned int
 	return pair<ProjectNode::NodeType, string>();
 }
 
+pair<ProjectNode::NodeType, Origin::Window> OriginParser::findWindowObjectByIndex(unsigned int index) const
+{
+	for(vector<SpreadSheet>::const_iterator it = spreadSheets.begin(); it != spreadSheets.end(); ++it)
+	{
+		if(it->objectID == (int)index)
+			return make_pair(ProjectNode::SpreadSheet, (Origin::Window)(*it));
+	}
+
+	for(vector<Matrix>::const_iterator it = matrixes.begin(); it != matrixes.end(); ++it)
+	{
+		if(it->objectID == (int)index)
+			return make_pair(ProjectNode::Matrix, (Origin::Window)(*it));
+	}
+
+	for(vector<Excel>::const_iterator it = excels.begin(); it != excels.end(); ++it)
+	{
+		if(it->objectID == (int)index)
+			return make_pair(ProjectNode::Excel, (Origin::Window)(*it));
+	}
+
+	for(vector<Graph>::const_iterator it = graphs.begin(); it != graphs.end(); ++it)
+	{
+		if(it->objectID == (int)index){
+			if (it->is3D)
+				return make_pair(ProjectNode::Graph3D, (Origin::Window)(*it));
+			else
+				return make_pair(ProjectNode::Graph, (Origin::Window)(*it));
+		}
+	}
+
+	return pair<ProjectNode::NodeType, Origin::Window>();
+}
+
 void OriginParser::convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type spread)
 {
 	//add new Excel sheet
