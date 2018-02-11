@@ -158,7 +158,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 	//load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
-		QString name(QString::fromStdString(it->name)); //name of the current child
+		QString name(QString::fromLatin1(it->name.c_str())); //name of the current child
 		DEBUG("	* folder item name = " << name.toStdString());
 
 		//check whether we need to skip the loading of the current child
