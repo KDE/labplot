@@ -790,6 +790,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG("OriginProjectParser::loadWorksheet()");
+
 	//load worksheet data
 	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
 	DEBUG("	graph name = " << graph.name);
@@ -798,6 +799,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		return true;
 
 	worksheet->setComment(graph.label.c_str());
+
+	//TODO: width, height, view mode (print view, page view, window view, draft view)
 
 	// worksheet background color
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
@@ -810,8 +813,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		case Origin::ColorGradientDirection::Left:
 		case Origin::ColorGradientDirection::BottomLeft:
 		case Origin::ColorGradientDirection::Top:
-			worksheet->setBackgroundFirstColor(color(bckgBaseColor));
-			worksheet->setBackgroundSecondColor(color(bckgEndColor));
+			worksheet->setBackgroundFirstColor(color(bckgEndColor));
+			worksheet->setBackgroundSecondColor(color(bckgBaseColor));
 			break;
 		case Origin::ColorGradientDirection::Center:
 			break;
@@ -819,15 +822,19 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		case Origin::ColorGradientDirection::TopRight:
 		case Origin::ColorGradientDirection::Right:
 		case Origin::ColorGradientDirection::BottomRight:
-			worksheet->setBackgroundFirstColor(color(bckgEndColor));
-			worksheet->setBackgroundSecondColor(color(bckgBaseColor));
+			worksheet->setBackgroundFirstColor(color(bckgBaseColor));
+			worksheet->setBackgroundSecondColor(color(bckgEndColor));
 	}
+
+	//TODO: do we need changes on the worksheet layout?
 
 	//add plots
 	int index = 1;
 	for (const auto& layer: graph.layers) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
+
+			//TODO: width, height
 
 			//background color
 			const Origin::Color& regColor = layer.backgroundColor;
