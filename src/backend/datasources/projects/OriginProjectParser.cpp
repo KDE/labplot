@@ -47,6 +47,7 @@
 
 #include <KLocale>
 
+#include <QDir>
 #include <QDateTime>
 #include <QFontMetrics>
 
@@ -120,10 +121,16 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	m_noteIndex = 0;
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
-	QString name(QString::fromLatin1(projectIt->name.c_str()));
-	project->setName(name);
-	project->setCreationTime(creationTime(projectIt));
-	loadFolder(project, projectIt, preview);
+	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
+		QString name(QString::fromLatin1(projectIt->name.c_str()));
+		project->setName(name);
+		project->setCreationTime(creationTime(projectIt));
+		loadFolder(project, projectIt, preview);
+	} else { // for lower versions put all windows on rootfolder
+		int pos = m_projectFileName.lastIndexOf(QDir::separator()) + 1;
+		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
+	}
+	// TODO: add loose graph windows for opj files of version < 6
 	handleLooseWindows(project, preview);
 
 	return true;
