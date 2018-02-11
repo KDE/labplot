@@ -27,6 +27,7 @@
 ***************************************************************************/
 #include "ProjectParser.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 
 #include <KLocale>
@@ -88,6 +89,8 @@ void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) 
 	project->setPathesToLoad(selectedPathes);
 	load(project, false);
 
+	AbstractAspect* lastTopLevelChild = project->child<AbstractAspect>(project->childCount<AbstractAspect>()-1);
+
 	//move all children from the temp project to the target folder
 	folder->beginMacro(i18n("%1: Import from %2").arg(folder->name()).arg(m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
@@ -96,6 +99,20 @@ void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) 
 	}
 	folder->endMacro();
 	delete project;
+
+	//in the project explorer navigate to the fist child of last top level child in the list of imported objects
+	AbstractAspect* child = nullptr;
+	if (lastTopLevelChild->childCount<AbstractAspect>()>0) {
+		child = lastTopLevelChild->child<AbstractAspect>(0);
+
+		//we don't want to select columns, select rather it's parent spreadsheet
+		if (dynamic_cast<const Column*>(child))
+			child = lastTopLevelChild;
+	} else {
+		child = lastTopLevelChild;
+	}
+
+	folder->project()->navigateTo(child->path());
 
 	QDEBUG("Import of " + m_projectFileName + " done.");
 }
