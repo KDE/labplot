@@ -2762,13 +2762,18 @@ void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, stri
 	}
 	unsigned char state = nwehd[0x18];
 
+	// files from version < 6.0 have nwehdsz < 1D
+	if (nwehdsz < 0x2F) return;
+
 	double creationDate, modificationDate;
 	stmp.str(nwehd.substr(0x20));
 	GET_DOUBLE(stmp, creationDate)
 	GET_DOUBLE(stmp, modificationDate)
 
+	if (nwehdsz < 0x38) return;
 	unsigned char c = nwehd[0x38];
 
+	if (nwehdsz < 0x3F) return;
 	unsigned int labellen = 0;
 	stmp.str(nwehd.substr(0x3C));
 	GET_INT(stmp, labellen)
