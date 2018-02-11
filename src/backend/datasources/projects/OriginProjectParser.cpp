@@ -168,7 +168,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 			//skip the current child aspect it is not in the list of aspects to be loaded
 			if (folder->pathesToLoad().indexOf(childPath) == -1)
-				continue;	
+				continue;
 		}
 
 		//load top-level children
@@ -1004,16 +1004,31 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
 
 	QPen pen;
-// 		unsigned char color;
+	Origin::Color color;
+	color.type = Origin::Color::ColorType::Regular;
+	color.regular = axisFormat.color;
+	pen.setColor(OriginProjectParser::color(color));
 	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Point));
 	axis->setLinePen(pen);
+
 	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Point) );
-	//TODO: minot ticks length?
-// 		int majorTicksType;
-// 		int minorTicksType;
-// 		int axisPosition;
+	axis->setMajorTicksDirection( (Axis::TicksFlags) axisFormat.majorTicksType);
+	axis->setMajorTicksPen(pen);
+	// minorTicksLength is half of majorTicksLength
+	axis->setMinorTicksLength( axis->majorTicksLength()/2);
+	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
+	axis->setMinorTicksPen(pen);
+
+// 	int axisPosition;
+//		possible values:
+//			0: Axis is at default position
+//			1: Axis is at (axisPositionValue)% from standard position
+//			2: Axis is at (axisPositionValue) position of ortogonal axis
 // 		double axisPositionValue;
 // 		TextBox label;
+	// TO FIX: Changes in font,color,size of axis title with AxisDock don't work
+	axis->title()->setText(QString::fromStdString(axisFormat.label.text));
+// 	axis->title()->setTextColor(OriginProjectParser::color(axisFormat.label.color));
 	axis->setLabelsPrefix(axisFormat.prefix.c_str());
 	axis->setLabelsSuffix(axisFormat.suffix.c_str());
 //	string factor;
@@ -1021,7 +1036,15 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//ticks
 	const Origin::GraphAxisTick& tickAxis = originAxis.tickAxis[index];
 // 		bool showMajorLabels;
+	if (tickAxis.showMajorLabels) {
 // 		unsigned char color;
+		color.type = Origin::Color::ColorType::Regular;
+		color.regular = tickAxis.color;
+		axis->setLabelsColor(OriginProjectParser::color(color));
+	} else {
+		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+	}
+
 // 		ValueType valueType;
 // 		int valueTypeSpecification;
 	axis->setLabelsPrecision(tickAxis.decimalPlaces);
