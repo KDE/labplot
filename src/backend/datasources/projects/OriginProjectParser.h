@@ -58,12 +58,13 @@ private:
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0);
 	bool loadWorksheet(Worksheet*,  bool preview);
 	void loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index) const;
-	bool loadNote(Note*, bool preview) const;
+	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
 
 	unsigned int findMatrixByName(QString name);
 	unsigned int findExcelByName(QString name);
 	unsigned int findGraphByName(QString name);
+	unsigned int findNoteByName(QString name);
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
@@ -74,8 +75,7 @@ private:
 	QStringList m_excelNameList;
 	QStringList m_matrixNameList;
 	QStringList m_graphNameList;
-	size_t m_graphIndex;
-	size_t m_noteIndex;
+	QStringList m_noteNameList;
 
 protected:
 	bool load(Project*, bool) override;

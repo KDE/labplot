@@ -58,10 +58,7 @@
 \ingroup datasources
 */
 
-OriginProjectParser::OriginProjectParser() : ProjectParser(),
-	m_originFile(nullptr),
-	m_noteIndex(0) {
-
+OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr) {
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
@@ -86,7 +83,6 @@ unsigned int OriginProjectParser::findMatrixByName(QString name) {
 	}
 	return 0;
 }
-
 unsigned int OriginProjectParser::findExcelByName(QString name) {
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		const Origin::Excel& excel = m_originFile->excel(i);
@@ -97,12 +93,21 @@ unsigned int OriginProjectParser::findExcelByName(QString name) {
 	}
 	return 0;
 }
-
 unsigned int OriginProjectParser::findGraphByName(QString name) {
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
 		const Origin::Graph& graph = m_originFile->graph(i);
 		if (graph.name == name.toStdString()) {
 			m_graphNameList << name;
+			return i;
+		}
+	}
+	return 0;
+}
+unsigned int OriginProjectParser::findNoteByName(QString name) {
+	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
+		const Origin::Note& originNote = m_originFile->note(i);
+		if (originNote.name == name.toStdString()) {
+			m_noteNameList << name;
 			return i;
 		}
 	}
@@ -126,9 +131,6 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
-	//reset the object indices
-	m_noteIndex = 0;
-
 	//convert the project tree from liborigin's representation to LabPlot's project object
 	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
@@ -139,7 +141,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		int pos = m_projectFileName.lastIndexOf(QDir::separator()) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
-	// TODO: add loose graph windows for opj files of version < 6
+	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
 	return true;
@@ -153,39 +155,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromStdString(it->name)); //name of the current child
 		DEBUG("	* folder item name = " << name.toStdString());
-
-		//check whether we need to skip the loading of the current child
-		if (!folder->pathesToLoad().isEmpty()) {
-			//child's path is not available yet (child not added yet) -> construct the path manually
-			const QString childPath = folder->path() + '/' + name;
-
-			//skip the current child aspect it is not in the list of aspects to be loaded
-			if (folder->pathesToLoad().indexOf(childPath) == -1) {
-				//increase the index for the skipped child
-				switch(it->type) {
-				case Origin::ProjectNode::Excel:
-					DEBUG("		type Excel");
-					break;
-				case Origin::ProjectNode::Matrix:
-					DEBUG("		type Matrix");
-					break;
-				case Origin::ProjectNode::Graph:
-					DEBUG("		type Graph");
-					break;
-				case Origin::ProjectNode::Note:
-					DEBUG("		type Notes");
-					++m_noteIndex;
-					break;
-				case Origin::ProjectNode::SpreadSheet:
-				case Origin::ProjectNode::Graph3D:
-				case Origin::ProjectNode::Folder:
-				default:
-					break;
-				}
-
-				continue;
-			}
-		}
 
 		//load top-level children
 		AbstractAspect* aspect = nullptr;
@@ -279,7 +248,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			Note* note = new Note(name);
 			loadNote(note, preview);
 			aspect = note;
-			++m_noteIndex;
 			break;
 		}
 		case Origin::ProjectNode::Graph3D:
@@ -308,7 +276,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			if (folder->pathesToLoad().indexOf(childPath) != -1) {
 				note->setText(resultsLog);
 				folder->addChildFast(note);
-//				note->setCreationTime(creationTime(it));
+				//TODO: note->setCreationTime(creationTime(it));
 			}
 		}
 	} else
@@ -323,11 +291,12 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
 	m_graphNameList.removeDuplicates();
+	m_noteNameList.removeDuplicates();
 
 	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
 	DEBUG("Number of graphs loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->graphCount());
-	DEBUG("Number of notes loaded:\t\t" << m_noteIndex << ", in file: " << m_originFile->noteCount());
+	DEBUG("Number of notes loaded:\t\t" << m_noteNameList.size() << ", in file: " << m_originFile->noteCount());
 
 	// handle loose excels
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
@@ -395,6 +364,24 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			Worksheet* worksheet = new Worksheet(0, name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
+		}
+		if (aspect) {
+			folder->addChildFast(aspect);
+			//TODO: aspect->setCreationTime(creationTime(it));
+		}
+	}
+	// handle loose notes
+	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
+		AbstractAspect* aspect = nullptr;
+		const Origin::Note& originNote = m_originFile->note(i);
+		QString name = QString::fromStdString(originNote.name);
+
+		const QString childPath = folder->path() + '/' + name;
+		if (!m_noteNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+			DEBUG("	Adding loose note: " << name.toStdString());
+			Note* note = new Note(name);
+			loadNote(note, preview);
+			aspect = note;
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
@@ -1021,11 +1008,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setLabelsRotationAngle(tickAxis.rotation);
 }
 
-bool OriginProjectParser::loadNote(Note* note, bool preview) const {
+bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	DEBUG("OriginProjectParser::loadNote()");
 
 	//load note data
-	const Origin::Note& originNote = m_originFile->note(m_noteIndex);
+	const Origin::Note& originNote = m_originFile->note(findNoteByName(note->name()));
 	note->setComment(originNote.label.c_str());
 
 	if (preview)
