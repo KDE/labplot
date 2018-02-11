@@ -283,7 +283,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			if (folder->pathesToLoad().indexOf(childPath) != -1) {
 				note->setText(resultsLog);
 				folder->addChildFast(note);
-				//TODO: note->setCreationTime(creationTime(it));
 			}
 		}
 	} else
@@ -333,8 +332,8 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			DEBUG("creation date = " << excel.creationDate);
-			//TODO: aspect->setCreationTime(creationTime(it));
+			DEBUG("	creation time as reported by liborigin: " << excel.creationDate);
+			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
 		}
 	}
 	// handle loose matrices
@@ -361,7 +360,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//TODO: aspect->setCreationTime(creationTime(it));
+			aspect->setCreationTime(QDateTime::fromTime_t(originMatrix.creationDate));
 		}
 	}
 	// handle loose graphs
@@ -379,7 +378,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//TODO: aspect->setCreationTime(creationTime(it));
+			aspect->setCreationTime(QDateTime::fromTime_t(graph.creationDate));
 		}
 	}
 	// handle loose notes
@@ -397,7 +396,8 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//TODO: aspect->setCreationTime(creationTime(it));
+			QDateTime dt = QDateTime::fromTime_t(originNote.creationDate);
+			aspect->setCreationTime(QDateTime::fromTime_t(originNote.creationDate));
 		}
 	}
 }
