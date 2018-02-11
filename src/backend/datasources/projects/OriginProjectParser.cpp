@@ -161,6 +161,16 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		QString name(QString::fromStdString(it->name)); //name of the current child
 		DEBUG("	* folder item name = " << name.toStdString());
 
+		//check whether we need to skip the loading of the current child
+		if (!folder->pathesToLoad().isEmpty()) {
+			//child's path is not available yet (child not added yet) -> construct the path manually
+			const QString childPath = folder->path() + '/' + name;
+
+			//skip the current child aspect it is not in the list of aspects to be loaded
+			if (folder->pathesToLoad().indexOf(childPath) == -1)
+				continue;	
+		}
+
 		//load top-level children
 		AbstractAspect* aspect = nullptr;
 		switch (it->type) {
