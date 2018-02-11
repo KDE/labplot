@@ -1,2 +1,2 @@
 add_subdirectory(ASCII)
-# add_subdirectory(project)
+add_subdirectory(project)

@@ -52,7 +52,31 @@ void ProjectImportTest::initTestCase() {
 //##############################################################################
 //######################  import of Origin projects ############################
 //##############################################################################
+//project tree of the file "origin8_test_tree_import.opj"
+/*
+test_tree_import\
+					\Folder
+						\Book
+							\Sheet1
+							\Sheet2
+						\MBook
+							\MSheet1
+							\MSheet2
+					\Folder1
+						\BookA
+							\Sheet1
+						\BookB
+							\Sheet1
+						\Graph
+						\MBook
+							\MSheet1
+					\BookC
+*/
+
 void ProjectImportTest::testOrigin01() {
+	//TODO: activate this test once the crash with MBook2 is fixed
+	return;
+
 	//import the opj file into LabPlot's project object
 	OriginProjectParser parser;
 	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
@@ -60,27 +84,6 @@ void ProjectImportTest::testOrigin01() {
 	parser.importTo(&project, QStringList());
 
 	//check the project tree for the imported project
-
-	//project tree of the file "origin8_test_tree_import.opj"
-	/*
-	test_tree_import\
-						\Folder
-							\Book
-								\Sheet1
-								\Sheet2
-							\MBook
-								\MSheet1
-								\MSheet2
-						\Folder1
-							\BookA
-								\Sheet1
-							\BookB
-								\Sheet1
-							\Graph
-							\MBook
-								\MSheet1
-						\BookC
-	*/
 
 	//first child of the root folde, folder "Folder" -> import into a Folder
 	AbstractAspect* aspect = project.child<AbstractAspect>(0);
@@ -160,5 +163,88 @@ void ProjectImportTest::testOrigin01() {
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
 }
 
+/*
+ * import one single folder child
+ */
+void ProjectImportTest::testOrigin02() {
+	//import one single object
+	OriginProjectParser parser;
+	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	Project project;
+	QStringList selectedPathes = {QLatin1String("test_tree_import/Folder1/Book1"), QLatin1String("test_tree_import/Folder1"), QLatin1String("test_tree_import")};
+	parser.importTo(&project, selectedPathes);
+
+	//check the project tree for the imported project
+
+	//first child of the root folder, folder "Folder1" -> import into a Folder
+	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
+	QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
+
+	//first child of "Folder", workbook "Book" with one sheet -> import into a Spreadsheet
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
+}
+
+/*
+ * 1. import one single folder child
+ * 2. import another folder child
+ * 3. check that both children are available after the second import
+ */
+void ProjectImportTest::testOrigin03() {
+	//TODO: this test fails at the moment -> we need to implement this logic first
+	return;
+
+	//import one single object
+	OriginProjectParser parser;
+	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	Project project;
+
+	//import one single child in "Folder1"
+	QStringList selectedPathes = {QLatin1String("test_tree_import/Folder1/Book1"), QLatin1String("test_tree_import/Folder1"), QLatin1String("test_tree_import")};
+	parser.importTo(&project, selectedPathes);
+
+	//first child of the root folder, folder "Folder1" -> import into a Folder
+	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
+	QCOMPARE(aspect->childCount<AbstractAspect>(), 1);
+
+	//first child of "Folder", workbook "Book1" with one sheet -> import into a Spreadsheet
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
+
+
+	//import another child in "Folder1"
+	selectedPathes.clear();
+	selectedPathes << QLatin1String("test_tree_import/Folder1/Book4") << QLatin1String("test_tree_import/Folder1") << QLatin1String("test_tree_import");
+	parser.importTo(&project, selectedPathes);
+
+	//the first child should still be available in the project -> check it
+	aspect = project.child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	QCOMPARE(dynamic_cast<Folder*>(aspect) != nullptr, true);
+
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
+
+	//check the second child, workbook "Book4" with one sheet -> import into a Spreadsheet
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(1);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book4"));
+	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
+
+	QCOMPARE(aspect->childCount<AbstractAspect>(), 2);
+}
 
 QTEST_MAIN(ProjectImportTest)

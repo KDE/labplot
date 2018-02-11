@@ -36,6 +36,8 @@ private slots:
 
 	//import of Origin projects
 	void testOrigin01();
+	void testOrigin02();
+	void testOrigin03();
 
 private:
 	QString m_dataDir;
