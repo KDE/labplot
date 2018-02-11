@@ -60,7 +60,6 @@
 
 OriginProjectParser::OriginProjectParser() : ProjectParser(),
 	m_originFile(nullptr),
-	m_graphIndex(0),
 	m_noteIndex(0) {
 
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
@@ -99,6 +98,17 @@ unsigned int OriginProjectParser::findExcelByName(QString name) {
 	return 0;
 }
 
+unsigned int OriginProjectParser::findGraphByName(QString name) {
+	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
+		const Origin::Graph& graph = m_originFile->graph(i);
+		if (graph.name == name.toStdString()) {
+			m_graphNameList << name;
+			return i;
+		}
+	}
+	return 0;
+}
+
 //##############################################################################
 //############## Deserialization from Origin's project tree ####################
 //##############################################################################
@@ -117,7 +127,6 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
 	//reset the object indices
-	m_graphIndex = 0;
 	m_noteIndex = 0;
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
@@ -162,7 +171,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 					break;
 				case Origin::ProjectNode::Graph:
 					DEBUG("		type Graph");
-					++m_graphIndex;
 					break;
 				case Origin::ProjectNode::Note:
 					DEBUG("		type Notes");
@@ -228,7 +236,6 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			Worksheet* worksheet = new Worksheet(0, name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
-			++m_graphIndex;
 			break;
 		}
 		case Origin::ProjectNode::Matrix: {
@@ -315,10 +322,11 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	QDEBUG("pathes to load: " << folder->pathesToLoad());
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
+	m_graphNameList.removeDuplicates();
 
 	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
-	DEBUG("Number of graphs loaded:\t" << m_graphIndex << ", in file: " << m_originFile->graphCount());
+	DEBUG("Number of graphs loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->graphCount());
 	DEBUG("Number of notes loaded:\t\t" << m_noteIndex << ", in file: " << m_originFile->noteCount());
 
 	// handle loose excels
@@ -345,7 +353,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//aspect->setCreationTime(creationTime(it));
+			//TODO: aspect->setCreationTime(creationTime(it));
 		}
 	}
 	// handle loose matrices
@@ -372,7 +380,25 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			//aspect->setCreationTime(creationTime(it));
+			//TODO: aspect->setCreationTime(creationTime(it));
+		}
+	}
+	// handle loose graphs
+	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
+		AbstractAspect* aspect = nullptr;
+		const Origin::Graph& graph = m_originFile->graph(i);
+		QString name = QString::fromStdString(graph.name);
+
+		const QString childPath = folder->path() + '/' + name;
+		if (!m_graphNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+			DEBUG("	Adding loose graph: " << name.toStdString());
+			Worksheet* worksheet = new Worksheet(0, name);
+			loadWorksheet(worksheet, preview);
+			aspect = worksheet;
+		}
+		if (aspect) {
+			folder->addChildFast(aspect);
+			//TODO: aspect->setCreationTime(creationTime(it));
 		}
 	}
 }
@@ -759,7 +785,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		return true;
 
 	//load worksheet data
-	const Origin::Graph& graph = m_originFile->graph(m_graphIndex);
+	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
 	worksheet->setComment(graph.label.c_str());
 
 	// worksheet background color

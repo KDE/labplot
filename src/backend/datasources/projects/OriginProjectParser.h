@@ -63,6 +63,7 @@ private:
 
 	unsigned int findMatrixByName(QString name);
 	unsigned int findExcelByName(QString name);
+	unsigned int findGraphByName(QString name);
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
@@ -72,6 +73,7 @@ private:
 	OriginFile* m_originFile;
 	QStringList m_excelNameList;
 	QStringList m_matrixNameList;
+	QStringList m_graphNameList;
 	size_t m_graphIndex;
 	size_t m_noteIndex;
 
