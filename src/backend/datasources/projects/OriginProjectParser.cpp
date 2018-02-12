@@ -1007,7 +1007,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setStart(originAxis.min);
 	axis->setEnd(originAxis.max);
 
-	//format
+	//process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
 
 	QPen pen;
@@ -1032,15 +1032,18 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 //			1: Axis is at (axisPositionValue)% from standard position
 //			2: Axis is at (axisPositionValue) position of ortogonal axis
 // 		double axisPositionValue;
-// 		TextBox label;
-	// TO FIX: Changes in font,color,size of axis title with AxisDock don't work
-	axis->title()->setText(QString::fromStdString(axisFormat.label.text));
-// 	axis->title()->setTextColor(OriginProjectParser::color(axisFormat.label.color));
+
+
+	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
+	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
+	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
+	axis->title()->setRotationAngle(axisFormat.label.rotation);
+
 	axis->setLabelsPrefix(axisFormat.prefix.c_str());
 	axis->setLabelsSuffix(axisFormat.suffix.c_str());
 //	string factor;
 
-	//ticks
+	//process Origin::GraphAxisTick
 	const Origin::GraphAxisTick& tickAxis = originAxis.tickAxis[index];
 // 		bool showMajorLabels;
 	if (tickAxis.showMajorLabels) {
@@ -1085,7 +1088,6 @@ QDateTime OriginProjectParser::creationTime(const tree<Origin::ProjectNode>::ite
 	strftime(time_str, sizeof(time_str), "%F %T", gmtime(&(*it).creationDate));
 	return QDateTime::fromString(QString(time_str), Qt::ISODate);
 }
-
 
 QString OriginProjectParser::parseOriginText(const QString &str) const {
 	QStringList lines = str.split("\n");
