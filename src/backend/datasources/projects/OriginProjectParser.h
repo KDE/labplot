@@ -53,9 +53,9 @@ public:
 private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
-	bool loadSpreadsheet(Spreadsheet*, bool preview, size_t sheetIndex = 0);
+	bool loadSpreadsheet(Spreadsheet*, bool preview, size_t sheetIndex = 0, const QString& wbName = QString());
 	bool loadMatrixWorkbook(Workbook*, bool preview);
-	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0);
+	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 	bool loadWorksheet(Worksheet*,  bool preview);
 	void loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index) const;
 	bool loadNote(Note*, bool preview);

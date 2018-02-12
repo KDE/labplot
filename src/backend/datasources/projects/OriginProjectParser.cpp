@@ -417,17 +417,17 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(" number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
-		loadSpreadsheet(spreadsheet, preview, s);
+		loadSpreadsheet(spreadsheet, preview, s, workbook->name());
 		workbook->addChildFast(spreadsheet);
 	}
 
 	return true;
 }
 
-bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex) {
+bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex, const QString& mwbName) {
 	DEBUG("loadSpreadsheet() sheetIndex = " << sheetIndex);
 	//load spreadsheet data
-	const Origin::Excel& excel = m_originFile->excel(findExcelByName(spreadsheet->name()));
+	const Origin::Excel& excel = m_originFile->excel(findExcelByName(mwbName));
 
 	if (preview)
 		return true;
@@ -724,17 +724,17 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
 		Matrix* matrix = new Matrix(0, QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
-		loadMatrix(matrix, preview, s);
+		loadMatrix(matrix, preview, s, workbook->name());
 		workbook->addChildFast(matrix);
 	}
 
 	return true;
 }
 
-bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex) {
+bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex, const QString& mwbName) {
 	DEBUG("loadMatrix()");
 	//import matrix data
-	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(matrix->name()));
+	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(mwbName));
 
 	if (preview)
 		return true;
