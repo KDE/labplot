@@ -316,23 +316,25 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	DEBUG("Number of graphs loaded:\t" << m_graphNameList.size() << ", in file: " << m_originFile->graphCount());
 	DEBUG("Number of notes loaded:\t\t" << m_noteNameList.size() << ", in file: " << m_originFile->noteCount());
 
-	// handle loose excels
+	// loop over all excels to find loose excels
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Excel& excel = m_originFile->excel(i);
 		QString name = QString::fromStdString(excel.name);
 
+		// TODO: we could ignore unused excels (objectID < 0)
+		DEBUG("	excel.objectId = " << excel.objectID);
+
 		const QString childPath = folder->path() + '/' + name;
+		// we could also use excel.loose
 		if (!m_excelNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose excel: " << name.toStdString());
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
-			if (excel.sheets.size() == 1) {
-				// single sheet -> load into a spreadsheet
+			if (excel.sheets.size() == 1) {	// single sheet -> load into a spreadsheet
 				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
 				loadSpreadsheet(spreadsheet, preview);
 				aspect = spreadsheet;
-			} else {
-				// multiple sheets -> load into a workbook
+			} else { // multiple sheets -> load into a workbook
 				Workbook* workbook = new Workbook(0, name);
 				loadWorkbook(workbook, preview);
 				aspect = workbook;
@@ -344,7 +346,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
 		}
 	}
-	// handle loose matrices
+	// handle loose matrices (is this even possible?)
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
@@ -354,13 +356,11 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (!m_matrixNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose matrix: " << name.toStdString());
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
-			if (originMatrix.sheets.size() == 1) {
-				// single sheet -> load into a matrix
+			if (originMatrix.sheets.size() == 1) { // single sheet -> load into a matrix
 				Matrix* matrix = new Matrix(0, name);
 				loadMatrix(matrix, preview);
 				aspect = matrix;
-			} else {
-				// multiple sheets -> load into a workbook
+			} else { // multiple sheets -> load into a workbook
 				Workbook* workbook = new Workbook(0, name);
 				loadMatrixWorkbook(workbook, preview);
 				aspect = workbook;
@@ -371,7 +371,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(originMatrix.creationDate));
 		}
 	}
-	// handle loose graphs
+	// handle loose graphs (is this even possible?)
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Graph& graph = m_originFile->graph(i);
@@ -389,7 +389,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(graph.creationDate));
 		}
 	}
-	// handle loose notes
+	// handle loose notes (is this even possible?)
 	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Note& originNote = m_originFile->note(i);
@@ -1205,6 +1205,8 @@ QString strreverse(const QString &str) {	//QString reversing
 
 // taken from SciDAVis
 QString OriginProjectParser::parseOriginTags(const QString &str) const {
+	DEBUG("parseOriginTags()");
+	DEBUG("	string: " << str.toStdString());
 	QString line = str;
 
 	//replace \l(...) and %(...) tags
@@ -1312,6 +1314,8 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 
 	line.replace("&lbracket;", "(");
 	line.replace("&rbracket;", ")");
+
+	DEBUG("	result: " << line.toStdString());
 
 	return line;
 }
