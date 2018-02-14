@@ -38,6 +38,7 @@ private slots:
 	void testOrigin01();
 	void testOrigin02();
 	void testOrigin03();
+	void testOrigin04();
 
 private:
 	QString m_dataDir;

@@ -111,6 +111,12 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 			moveFolder(targetFolder, folder);
 		} else {
 			project->removeChild(child);
+
+			//remove the object to be imported in the target folder if it's already existing
+			AbstractAspect* targetChild = targetFolder->child<AbstractAspect>(child->name());
+			if (targetChild)
+				targetFolder->removeChild(targetChild);
+
 			targetFolder->addChild(child);
 		}
 	}
@@ -138,6 +144,12 @@ void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFo
 				moveFolder(targetChildFolder, folder);
 			} else {
 				sourceChildFolderToMove->removeChild(child);
+
+				//remove the object to be imported in the target folder if it's already existing
+				AbstractAspect* targetChild = targetChildFolder->child<AbstractAspect>(child->name());
+				if (targetChild)
+					targetChildFolder->removeChild(targetChild);
+
 				targetChildFolder->addChild(child);
 			}
 		}
