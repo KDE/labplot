@@ -94,7 +94,7 @@ public:
 	template <class T> T* ancestor() const {
 		AbstractAspect* parent = parentAspect();
 		while (parent) {
-			T* ancestorAspect = qobject_cast<T*>(parent);
+			T* ancestorAspect = dynamic_cast<T*>(parent);
 			if (ancestorAspect)
 				return ancestorAspect;
 			parent = parent->parentAspect();
@@ -106,7 +106,7 @@ public:
 		QVector<T*> result;
 		for (auto* child: children()) {
 			if (flags & IncludeHidden || !child->hidden()) {
-				T* i = qobject_cast<T*>(child);
+				T* i = dynamic_cast<T*>(child);
 				if (i)
 					result << i;
 
@@ -120,7 +120,7 @@ public:
 	template <class T> T* child(int index, const ChildIndexFlags& flags=0) const {
 		int i = 0;
 		for (auto* child: children()) {
-			T* c = qobject_cast<T*>(child);
+			T* c = dynamic_cast<T*>(child);
 			if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
 				return c;
 		}
@@ -129,7 +129,7 @@ public:
 
 	template <class T> T* child(const QString& name) const {
 		for (auto* child: children()) {
-			T* c = qobject_cast<T*>(child);
+			T* c = dynamic_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
 		}
@@ -139,7 +139,7 @@ public:
 	template <class T> int childCount(const ChildIndexFlags& flags = 0) const {
 		int result = 0;
 		for (auto* child: children()) {
-			T* i = qobject_cast<T*>(child);
+			T* i = dynamic_cast<T*>(child);
 			if (i && (flags & IncludeHidden || !child->hidden()))
 				result++;
 		}
@@ -150,7 +150,7 @@ public:
 		int index = 0;
 		for (auto* c:	 children()) {
 			if (child == c) return index;
-			T* i = qobject_cast<T*>(c);
+			T* i = dynamic_cast<T*>(c);
 			if (i && (flags & IncludeHidden || !c->hidden()))
 				index++;
 		}
