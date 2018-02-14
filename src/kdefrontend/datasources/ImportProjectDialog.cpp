@@ -171,7 +171,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 		QModelIndex index = indexes.at(i*4);
 		const AbstractAspect* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
-		//path of the the current aspect and the pathes of all aspects it depends on
+		//path of the current aspect and the pathes of all aspects it depends on
 		selectedPathes << aspect->path();
 		QDEBUG(" aspect path: " << aspect->path());
 		for (const auto* depAspect : aspect->dependsOn())
@@ -181,16 +181,18 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	Folder* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 
-	//check wether the selected pathes already exist in the target folder and warn the user
+	//check whether the selected pathes already exist in the target folder and warn the user
 	const QString& targetFolderPath = targetFolder->path();
 	const Project* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
-	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::Recursive))
-		targetAllPathes << aspect->path();
+	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::Recursive)) {
+		if (!dynamic_cast<const Folder*>(aspect))
+			targetAllPathes << aspect->path();
+	}
 
 	QStringList existingPathes;
 	for (const auto& path : selectedPathes) {
-		const QString newPath = targetFolderPath + path.right(path.length() - path.indexOf('/'));
+		const QString& newPath = targetFolderPath + path.right(path.length() - path.indexOf('/'));
 		if (targetAllPathes.indexOf(newPath) != -1)
 			existingPathes << path;
 	}
@@ -203,16 +205,15 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 		QString msg = i18np("The object listed below already exists in target folder and will be overwritten:",
 							"The objects listed below already exist in target folder and will be overwritten:",
 							existingPathes.size());
-		msg += '\n';// + i18n("Objects to be overwritten:") + "\n\n";
+		msg += '\n';
 		for (const auto& path : existingPathes)
-			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1);
+			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1); //strip away the name of the root folder "Project"
 		msg += "\n\n" + i18n("Do you want to proceed?");
 
 		const int rc = KMessageBox::warningYesNo(0, msg, i18n("Override existing objects?"));
 		if (rc == KMessageBox::No)
 			return;
 	}
-
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();

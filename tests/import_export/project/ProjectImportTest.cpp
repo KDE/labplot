@@ -201,9 +201,6 @@ void ProjectImportTest::testOrigin02() {
  * 3. check that both children are available after the second import
  */
 void ProjectImportTest::testOrigin03() {
-	//TODO: fix import (second import creates a subfolder "Folder1")
-	return;
-
 	//import one single object
 	OriginProjectParser parser;
 	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));

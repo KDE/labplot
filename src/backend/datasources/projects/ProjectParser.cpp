@@ -81,7 +81,7 @@ QAbstractItemModel* ProjectParser::model() {
 	return model;
 }
 
-void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) {
+void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPathes) {
 	QDEBUG("Starting the import of " + m_projectFileName);
 
 	//import the selected objects into a temporary project
@@ -89,30 +89,62 @@ void ProjectParser::importTo(Folder* folder, const QStringList& selectedPathes) 
 	project->setPathesToLoad(selectedPathes);
 	load(project, false);
 
+	//determine the first child of the last top level child in the list of the imported objects
+	//we want to navigate to in the project explorer after the import
 	AbstractAspect* lastTopLevelChild = project->child<AbstractAspect>(project->childCount<AbstractAspect>()-1);
+	AbstractAspect* childToNavigate = nullptr;
+	if (lastTopLevelChild->childCount<AbstractAspect>() > 0) {
+		childToNavigate = lastTopLevelChild->child<AbstractAspect>(0);
+
+		//we don't want to select columns, select rather their parent spreadsheet
+		if (dynamic_cast<const Column*>(childToNavigate))
+			childToNavigate = lastTopLevelChild;
+	} else {
+		childToNavigate = lastTopLevelChild;
+	}
 
 	//move all children from the temp project to the target folder
-	folder->beginMacro(i18n("%1: Import from %2").arg(folder->name()).arg(m_projectFileName));
+	targetFolder->beginMacro(i18n("%1: Import from %2").arg(targetFolder->name()).arg(m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
-		project->removeChild(child);
-		folder->addChild(child);
+		Folder* folder = dynamic_cast<Folder*>(child);
+		if (folder) {
+			moveFolder(targetFolder, folder);
+		} else {
+			project->removeChild(child);
+			targetFolder->addChild(child);
+		}
 	}
-	folder->endMacro();
+	targetFolder->endMacro();
+
 	delete project;
 
-	//in the project explorer navigate to the fist child of last top level child in the list of imported objects
-	AbstractAspect* child = nullptr;
-	if (lastTopLevelChild->childCount<AbstractAspect>()>0) {
-		child = lastTopLevelChild->child<AbstractAspect>(0);
-
-		//we don't want to select columns, select rather it's parent spreadsheet
-		if (dynamic_cast<const Column*>(child))
-			child = lastTopLevelChild;
-	} else {
-		child = lastTopLevelChild;
-	}
-
-	folder->project()->navigateTo(child->path());
+	targetFolder->project()->navigateTo(childToNavigate->path());
 
 	QDEBUG("Import of " + m_projectFileName + " done.");
+}
+
+/*
+ * moved \c sourceChildFolderToMove from its parten folder to \c targetParentFolder
+ * keeping (not overwriting ) the sub-folder structure.
+ */
+void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const {
+	Folder* targetChildFolder = targetParentFolder->child<Folder>(sourceChildFolderToMove->name());
+	if (targetChildFolder) {
+		//folder exists already in the target parent folder,
+		//-> recursively move its children from source into target parent folder
+		for (auto* child : sourceChildFolderToMove->children<AbstractAspect>()) {
+			Folder* folder = dynamic_cast<Folder*>(child);
+			if (folder) {
+				moveFolder(targetChildFolder, folder);
+			} else {
+				sourceChildFolderToMove->removeChild(child);
+				targetChildFolder->addChild(child);
+			}
+		}
+	} else {
+		//folder doesn't exist yet in the target parent folder -> simply move it
+		Folder* sourceParentFolder = dynamic_cast<Folder*>(sourceChildFolderToMove->parentAspect());
+		sourceParentFolder->removeChild(sourceChildFolderToMove);
+		targetParentFolder->addChild(sourceChildFolderToMove);
+	}
 }

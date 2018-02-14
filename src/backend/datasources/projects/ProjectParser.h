@@ -57,6 +57,9 @@ protected:
 	Project* m_project;
 	QList<const char*>  m_topLevelClasses;
 
+private:
+	void moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const;
+
 signals:
 	void completed(int);
 };
