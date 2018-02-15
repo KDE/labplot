@@ -58,7 +58,7 @@
 \ingroup datasources
 */
 
-OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false), m_hasUnusedObjects(false) {
+OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false) {
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
@@ -71,8 +71,19 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 	m_importUnusedObjects = importUnusedObjects;
 }
 
-bool OriginProjectParser::hasUnusedObjects() const {
-	return m_hasUnusedObjects;
+bool OriginProjectParser::hasUnusedObjects() {
+	if (m_originFile)
+		delete m_originFile;
+	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
+	if (!m_originFile->parse())
+		return false;
+
+	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
+		const Origin::Excel& excel = m_originFile->excel(i);
+		if (excel.objectID < 0)
+			return true;
+	}
+	return false;
 }
 
 QString OriginProjectParser::supportedExtensions() {
@@ -309,15 +320,15 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	DEBUG("OriginProjectParser::handleLooseWindows()");
-	QDEBUG("pathes to load: " << folder->pathesToLoad());
+	QDEBUG("pathes to load:" << folder->pathesToLoad());
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
 	m_graphNameList.removeDuplicates();
 	m_noteNameList.removeDuplicates();
-	QDEBUG("	excels = " << m_excelNameList);
-	QDEBUG("	matrices = " << m_matrixNameList);
-	QDEBUG("	graphs = " << m_graphNameList);
-	QDEBUG("	notes = " << m_noteNameList);
+	QDEBUG("	excels =" << m_excelNameList);
+	QDEBUG("	matrices =" << m_matrixNameList);
+	QDEBUG("	graphs =" << m_graphNameList);
+	QDEBUG("	notes =" << m_noteNameList);
 
 	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
@@ -332,12 +343,9 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		DEBUG("	excel.objectId = " << excel.objectID);
 		// skip unused data sets if selected
-		if (excel.objectID < 0) {
-			m_hasUnusedObjects = true;
-			if (!m_importUnusedObjects) {
-				DEBUG("	Dropping unused loose excel: " << name.toStdString());
-				continue;
-			}
+		if (excel.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose excel: " << name.toStdString());
+			continue;
 		}
 
 		const QString childPath = folder->path() + '/' + name;
