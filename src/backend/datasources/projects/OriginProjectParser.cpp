@@ -83,6 +83,12 @@ bool OriginProjectParser::hasUnusedObjects() {
 		if (excel.objectID < 0)
 			return true;
 	}
+	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
+		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
+		if (originMatrix.objectID < 0)
+			return true;
+	}
+
 	return false;
 }
 
@@ -264,6 +270,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 			const Origin::Excel& excel = m_originFile->excel(findExcelByName(name));
 			DEBUG(" excel name = " << excel.name);
 			DEBUG("	number of sheets = " << excel.sheets.size());
+			//TODO: if we support spreadsheets (native liborigin), we can ommit this case (excels have always >1 sheets)
 			if (excel.sheets.size() == 1) {
 				// single sheet -> load into a spreadsheet
 				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
@@ -369,11 +376,18 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
 		}
 	}
-	// handle loose matrices (is this even possible?)
+	// loop over all excels to find loose matrices
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
 		QString name = QString::fromStdString(originMatrix.name);
+
+		DEBUG("	originMatrix.objectId = " << originMatrix.objectID);
+		// skip unused data sets if selected
+		if (originMatrix.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose matrix: " << name.toStdString());
+			continue;
+		}
 
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_matrixNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
@@ -400,6 +414,13 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		const Origin::Graph& graph = m_originFile->graph(i);
 		QString name = QString::fromStdString(graph.name);
 
+		DEBUG("	graph.objectId = " << graph.objectID);
+		// skip unused graph if selected
+		if (graph.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose graph: " << name.toStdString());
+			continue;
+		}
+
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_graphNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose graph: " << name.toStdString());
@@ -417,6 +438,13 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Note& originNote = m_originFile->note(i);
 		QString name = QString::fromStdString(originNote.name);
+
+		DEBUG("	originNote.objectId = " << originNote.objectID);
+		// skip unused notes if selected
+		if (originNote.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose note: " << name.toStdString());
+			continue;
+		}
 
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_noteNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
