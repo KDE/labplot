@@ -58,7 +58,7 @@
 \ingroup datasources
 */
 
-OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false) {
+OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false), m_hasUnusedObjects(false) {
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
@@ -71,8 +71,8 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 	m_importUnusedObjects = importUnusedObjects;
 }
 
-bool OriginProjectParser::isImportUnusedObjects() const {
-	return m_importUnusedObjects;
+bool OriginProjectParser::hasUnusedObjects() const {
+	return m_hasUnusedObjects;
 }
 
 QString OriginProjectParser::supportedExtensions() {
@@ -332,9 +332,12 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		DEBUG("	excel.objectId = " << excel.objectID);
 		// skip unused data sets if selected
-		if (excel.objectID < 0 && !m_importUnusedObjects) {
-			DEBUG("	Dropping unused loose excel: " << name.toStdString());
-			continue;
+		if (excel.objectID < 0) {
+			m_hasUnusedObjects = true;
+			if (!m_importUnusedObjects) {
+				DEBUG("	Dropping unused loose excel: " << name.toStdString());
+				continue;
+			}
 		}
 
 		const QString childPath = folder->path() + '/' + name;

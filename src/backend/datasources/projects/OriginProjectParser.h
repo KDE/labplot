@@ -50,7 +50,7 @@ public:
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
 	void setImportUnusedObjects(bool);
-	bool isImportUnusedObjects() const;
+	bool hasUnusedObjects() const;
 
 private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
@@ -79,6 +79,7 @@ private:
 	QStringList m_graphNameList;
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects;
+	bool m_hasUnusedObjects;
 
 protected:
 	bool load(Project*, bool) override;
