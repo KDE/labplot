@@ -230,6 +230,10 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 	connect(m_projectParser, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+
+	if (m_projectType == ProjectOrigin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
+		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
+
 	m_projectParser->importTo(targetFolder, selectedPathes);
 	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
 
@@ -243,6 +247,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 void ImportProjectDialog::refreshPreview() {
 	QString project = ui.leFileName->text();
 	m_projectParser->setProjectFileName(project);
+
+	if (m_projectType == ProjectOrigin) {
+		if (reinterpret_cast<const OriginProjectParser*>(m_projectParser)->hasUnusedObjects())
+			ui.chbUnusedObjects->show();
+		else
+			ui.chbUnusedObjects->hide();
+	}
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	connect(ui.tvPreview->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),

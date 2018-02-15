@@ -65,6 +65,13 @@
       <item>
        <widget class="QTreeView" name="tvPreview"/>
       </item>
+      <item>
+       <widget class="QCheckBox" name="chbUnusedObjects">
+        <property name="text">
+         <string>import unused object</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
