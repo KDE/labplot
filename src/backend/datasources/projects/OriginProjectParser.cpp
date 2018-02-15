@@ -330,8 +330,12 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		const Origin::Excel& excel = m_originFile->excel(i);
 		QString name = QString::fromStdString(excel.name);
 
-		// TODO: we could ignore unused excels (objectID < 0)
 		DEBUG("	excel.objectId = " << excel.objectID);
+		// skip unused data sets if selected
+		if (excel.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose excel: " << name.toStdString());
+			continue;
+		}
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use excel.loose
