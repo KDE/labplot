@@ -63,13 +63,13 @@ private:
 	QPushButton* m_bNewFolder;
 	QDialogButtonBox* m_buttonBox;
 
-	void refreshPreview();
 	void showTopLevelOnly(const QModelIndex&);
 	bool isTopLevel(const AbstractAspect*) const;
 
 private slots:
 	void loadSettings();
 	void fileNameChanged(const QString&);
+	void refreshPreview();
 	void selectionChanged(const QItemSelection&, const QItemSelection&);
 	void selectFile();
 	void newFolder();

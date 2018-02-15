@@ -98,6 +98,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	connect(ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)));
 	connect(ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()));
 	connect(m_bNewFolder, SIGNAL(clicked()), this, SLOT(newFolder()));
+	connect(ui.chbUnusedObjects, &QCheckBox::stateChanged, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -249,11 +250,15 @@ void ImportProjectDialog::refreshPreview() {
 	m_projectParser->setProjectFileName(project);
 
 	if (m_projectType == ProjectOrigin) {
-		if (reinterpret_cast<const OriginProjectParser*>(m_projectParser)->hasUnusedObjects())
+		OriginProjectParser* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
+		if (originParser->hasUnusedObjects())
 			ui.chbUnusedObjects->show();
 		else
 			ui.chbUnusedObjects->hide();
+
+		originParser->setImportUnusedObjects(ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked());
 	}
+
 	ui.tvPreview->setModel(m_projectParser->model());
 
 	connect(ui.tvPreview->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
