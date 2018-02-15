@@ -58,13 +58,21 @@
 \ingroup datasources
 */
 
-OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr) {
+OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullptr), m_importUnusedObjects(false) {
 	m_topLevelClasses << "Folder" << "Workbook" << "Spreadsheet" << "Matrix" << "Worksheet" << "Note";
 }
 
 bool OriginProjectParser::isOriginProject(const QString& fileName) {
 	//TODO add opju later when liborigin supports it
 	return fileName.endsWith(".opj", Qt::CaseInsensitive);
+}
+
+void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
+	m_importUnusedObjects = importUnusedObjects;
+}
+
+bool OriginProjectParser::isImportUnusedObjects() const {
+	return m_importUnusedObjects;
 }
 
 QString OriginProjectParser::supportedExtensions() {

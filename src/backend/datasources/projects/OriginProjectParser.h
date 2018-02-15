@@ -49,6 +49,8 @@ public:
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
+	void setImportUnusedObjects(bool);
+	bool isImportUnusedObjects() const;
 
 private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
@@ -76,6 +78,7 @@ private:
 	QStringList m_matrixNameList;
 	QStringList m_graphNameList;
 	QStringList m_noteNameList;
+	bool m_importUnusedObjects;
 
 protected:
 	bool load(Project*, bool) override;
