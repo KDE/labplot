@@ -260,14 +260,17 @@ void ProjectImportTest::testOrigin04() {
 	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
 	Project project;
 
-	//import "Book3"
-	QStringList selectedPathes = {QLatin1String("test_tree_import/Book3"), QLatin1String("test_tree_import")};
+	//import "Book1"
+	QStringList selectedPathes = {QLatin1String("test_tree_import/Folder1/Book1"), QLatin1String("test_tree_import/Folder1"), QLatin1String("test_tree_import")};
 	parser.importTo(&project, selectedPathes);
 
-	//first child of the root folder, workbook "Book3" with one sheet -> import into a spreadsheet
+	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
 	AbstractAspect* aspect = project.child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book3"));
+	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 
@@ -282,9 +285,9 @@ void ProjectImportTest::testOrigin04() {
 	parser.importTo(&project, selectedPathes);
 
 	//check the folder structure and the value of the (0,0)-cell again
-	aspect = project.child<AbstractAspect>(0);
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
 	QCOMPARE(aspect != nullptr, true);
-	QCOMPARE(aspect->name(), QLatin1String("Book3"));
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
 	spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	QCOMPARE(spreadsheet != nullptr, true);
 	QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
