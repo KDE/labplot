@@ -79,11 +79,7 @@ bool OriginAnyParser::parse() {
 	LOG_PRINT(logfile, "Now at %" PRId64 " [0x%" PRIx64 "], file size %" PRId64 "\n", curpos, curpos, d_file_size)
 
 	for(unsigned int i = 0; i < spreadSheets.size(); ++i){
-#ifdef LVERSION	// LABPLOT wants all sheets converted and not loose order
-		if(spreadSheets[i].sheets > 0){
-#else
 		if(spreadSheets[i].sheets > 1){
-#endif
 			LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to EXCEL\n", spreadSheets[i].name.c_str());
 			convertSpreadToExcel(i);
 			--i;

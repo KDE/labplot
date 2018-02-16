@@ -55,7 +55,7 @@ public:
 private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
-	bool loadSpreadsheet(Spreadsheet*, bool preview, size_t sheetIndex = 0, const QString& wbName = QString());
+	bool loadSpreadsheet(Spreadsheet*, bool preview, const QString& wbName = QString(), int sheetIndex = -1);
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 	bool loadWorksheet(Worksheet*,  bool preview);
@@ -63,6 +63,7 @@ private:
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
 
+	unsigned int findSpreadByName(QString name);
 	unsigned int findMatrixByName(QString name);
 	unsigned int findExcelByName(QString name);
 	unsigned int findGraphByName(QString name);
@@ -74,6 +75,7 @@ private:
 	PlotArea::BackgroundColorStyle backgroundColorStyle(const Origin::ColorGradientDirection&) const;
 
 	OriginFile* m_originFile;
+	QStringList m_spreadNameList;
 	QStringList m_excelNameList;
 	QStringList m_matrixNameList;
 	QStringList m_graphNameList;

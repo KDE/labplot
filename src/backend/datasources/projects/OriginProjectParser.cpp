@@ -78,6 +78,11 @@ bool OriginProjectParser::hasUnusedObjects() {
 	if (!m_originFile->parse())
 		return false;
 
+	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
+		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		if (spread.objectID < 0)
+			return true;
+	}
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		const Origin::Excel& excel = m_originFile->excel(i);
 		if (excel.objectID < 0)
@@ -98,6 +103,16 @@ QString OriginProjectParser::supportedExtensions() {
 	return extensions;
 }
 
+unsigned int OriginProjectParser::findSpreadByName(QString name) {
+	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
+		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		if (spread.name == name.toStdString()) {
+			m_spreadNameList << name;
+			return i;
+		}
+	}
+	return 0;
+}
 unsigned int OriginProjectParser::findMatrixByName(QString name) {
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
@@ -156,6 +171,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
+	m_spreadNameList.clear();
 	m_excelNameList.clear();
 	m_matrixNameList.clear();
 	m_graphNameList.clear();
@@ -236,7 +252,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		case Origin::ProjectNode::SpreadSheet: {
 			DEBUG("	top level spreadsheet");
 			Spreadsheet* spreadsheet = new Spreadsheet(0, name);
-			loadSpreadsheet(spreadsheet, preview);
+			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 			break;
 		}
@@ -267,21 +283,9 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		}
 		case Origin::ProjectNode::Excel: {
 			DEBUG("	top level excel");
-			const Origin::Excel& excel = m_originFile->excel(findExcelByName(name));
-			DEBUG(" excel name = " << excel.name);
-			DEBUG("	number of sheets = " << excel.sheets.size());
-			//TODO: if we support spreadsheets (native liborigin), we can ommit this case (excels have always >1 sheets)
-			if (excel.sheets.size() == 1) {
-				// single sheet -> load into a spreadsheet
-				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
-				loadSpreadsheet(spreadsheet, preview);
-				aspect = spreadsheet;
-			} else {
-				// multiple sheets -> load into a workbook
-				Workbook* workbook = new Workbook(0, name);
-				loadWorkbook(workbook, preview);
-				aspect = workbook;
-			}
+			Workbook* workbook = new Workbook(0, name);
+			loadWorkbook(workbook, preview);
+			aspect = workbook;
 			break;
 		}
 		case Origin::ProjectNode::Note: {
@@ -328,21 +332,52 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	DEBUG("OriginProjectParser::handleLooseWindows()");
 	QDEBUG("pathes to load:" << folder->pathesToLoad());
+	m_spreadNameList.removeDuplicates();
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
 	m_graphNameList.removeDuplicates();
 	m_noteNameList.removeDuplicates();
+	QDEBUG("	spreads =" << m_spreadNameList);
 	QDEBUG("	excels =" << m_excelNameList);
 	QDEBUG("	matrices =" << m_matrixNameList);
 	QDEBUG("	graphs =" << m_graphNameList);
 	QDEBUG("	notes =" << m_noteNameList);
 
+	DEBUG("Number of spreads loaded:\t" << m_spreadNameList.size() << ", in file: " << m_originFile->spreadCount());
 	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
 	DEBUG("Number of graphs loaded:\t" << m_graphNameList.size() << ", in file: " << m_originFile->graphCount());
 	DEBUG("Number of notes loaded:\t\t" << m_noteNameList.size() << ", in file: " << m_originFile->noteCount());
 
-	// loop over all excels to find loose excels
+	// loop over all spreads to find loose ones
+	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
+		AbstractAspect* aspect = nullptr;
+		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		QString name = QString::fromStdString(spread.name);
+
+		DEBUG("	spread.objectId = " << spread.objectID);
+		// skip unused spreads if selected
+		if (spread.objectID < 0 && !m_importUnusedObjects) {
+			DEBUG("	Dropping unused loose spread: " << name.toStdString());
+			continue;
+		}
+
+		const QString childPath = folder->path() + '/' + name;
+		// we could also use spread.loose
+		if (!m_spreadNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
+			DEBUG("	Adding loose spread: " << name.toStdString());
+
+			Spreadsheet* spreadsheet = new Spreadsheet(0, name);
+			loadSpreadsheet(spreadsheet, preview, name);
+			aspect = spreadsheet;
+		}
+		if (aspect) {
+			folder->addChildFast(aspect);
+			DEBUG("	creation time as reported by liborigin: " << spread.creationDate);
+			aspect->setCreationTime(QDateTime::fromTime_t(spread.creationDate));
+		}
+	}
+	// loop over all excels to find loose ones
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Excel& excel = m_originFile->excel(i);
@@ -360,15 +395,10 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (!m_excelNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose excel: " << name.toStdString());
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
-			if (excel.sheets.size() == 1) {	// single sheet -> load into a spreadsheet
-				Spreadsheet* spreadsheet = new Spreadsheet(0, name);
-				loadSpreadsheet(spreadsheet, preview);
-				aspect = spreadsheet;
-			} else { // multiple sheets -> load into a workbook
-				Workbook* workbook = new Workbook(0, name);
-				loadWorkbook(workbook, preview);
-				aspect = workbook;
-			}
+
+			Workbook* workbook = new Workbook(0, name);
+			loadWorkbook(workbook, preview);
+			aspect = workbook;
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
@@ -376,7 +406,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
 		}
 	}
-	// loop over all excels to find loose matrices
+	// loop over all matrices to find loose ones
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
@@ -465,25 +495,33 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG("loadWorkbook()");
 	//load workbook sheets
 	const Origin::Excel& excel = m_originFile->excel(findExcelByName(workbook->name()));
+	DEBUG(" excel name = " << excel.name);
 	DEBUG(" number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
-		loadSpreadsheet(spreadsheet, preview, s, workbook->name());
+		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
 	}
 
 	return true;
 }
 
-bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, size_t sheetIndex, const QString& mwbName) {
+// load spreadsheet from spread (sheetIndex == -1) or from excel (only sheet sheetIndex)
+bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, const QString& name, int sheetIndex) {
 	DEBUG("loadSpreadsheet() sheetIndex = " << sheetIndex);
+
 	//load spreadsheet data
-	const Origin::Excel& excel = m_originFile->excel(findExcelByName(mwbName));
+	Origin::SpreadSheet spread;
+	Origin::Excel excel;
+	if (sheetIndex == -1)	// spread
+		spread = m_originFile->spread(findSpreadByName(name));
+	else {
+		excel = m_originFile->excel(findExcelByName(name));
+		spread = excel.sheets[sheetIndex];
+	}
 
 	if (preview)
 		return true;
-
-	const Origin::SpreadSheet& spread = excel.sheets[sheetIndex];
 
 	const size_t cols = spread.columns.size();
 	int rows = 0;
@@ -499,7 +537,10 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount((int)cols);
-	spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
+	if (sheetIndex == -1)
+		spreadsheet->setComment(QString::fromLatin1(spread.label.c_str()));
+	else
+		spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
 
 	//in Origin column width is measured in characters, we need to convert to pixels
 	//TODO: determine the font used in Origin in order to get the same column width as in Origin
@@ -761,7 +802,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 	}
 
-	//TODO
+	//TODO: "hidden" not supporrted yet
 //	if (spread.hidden || spread.loose)
 //		mw->hideWindow(spreadsheet);
 
