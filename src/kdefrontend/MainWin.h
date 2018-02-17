@@ -2,7 +2,7 @@
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
@@ -259,7 +259,7 @@ private slots:
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
-	void colorThemeChanged();
+	void colorSchemeChanged(QAction*);
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Main window of the application
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -57,9 +57,6 @@
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/note/NoteView.h"
 
-#include "tools/schememanager.h"
-#include "tools/thememanager.h"
-
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
@@ -90,6 +87,9 @@
 #include <KLocalizedString>
 #include <KFilterDev>
 #include <KRecentFilesAction>
+#include <KActionMenu>
+#include <KColorScheme>
+#include <KColorSchemeManager>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
@@ -149,10 +149,11 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 
 	initGUI(filename);
 	setAcceptDrops(true);
+
+	//restore the geometry
 	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
 	restoreGeometry(group.readEntry("geometry", QByteArray()));
 }
-
 
 MainWin::~MainWin() {
 	//save the recent opened files
@@ -546,21 +547,45 @@ void MainWin::initMenus() {
 	m_editMenu = new QMenu(i18n("Edit"), this);
 	m_editMenu->addAction(m_editFitsFileAction);
 
-	QMenu* themesMenu = new QMenu(i18n("&Themes"), this);
-	Digikam::ThemeManager::instance()->setThemeMenuAction(themesMenu);
-	Digikam::ThemeManager::instance()->registerThemeActions(this);
-	connect(Digikam::ThemeManager::instance(), SIGNAL(signalThemeChanged()), this, SLOT(colorThemeChanged()));
+	KColorSchemeManager schemeManager;
+	KActionMenu* schemesMenu = schemeManager.createSchemeSelectionMenu(i18n("Colour Theme"), this);
+	schemesMenu->menu()->setTitle(i18n("Colour Theme"));
+	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
+
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
 	if (settingsMenu)
-		settingsMenu->insertMenu(settingsMenu->actions().first(), themesMenu);
+		settingsMenu->insertMenu(settingsMenu->actions().first(), schemesMenu->menu());
+
+	//set the action for the current color scheme checked
+	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
+	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
+
+	for (auto* action : schemesMenu->menu()->actions()) {
+		if (action->text() == schemeName) {
+			action->setChecked(true);
+			break;
+		}
+	}
+
+	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 }
 
-void MainWin::colorThemeChanged() {
+void MainWin::colorSchemeChanged(QAction* action) {
+	QString schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
+
 	//background of the mdi area is not updated on theme changes, do it here.
-	//TODO: move this logic to ThemeManager maybe later.
-	const QPalette& palette = Digikam::ThemeManager::instance()->currentPalette();
+	KColorSchemeManager schemeManager;
+	QModelIndex index = schemeManager.indexForScheme(schemeName);
+	const QPalette& palette = KColorScheme::createApplicationPalette( KSharedConfig::openConfig(index.data(Qt::UserRole).toString()) );
 	const QBrush& brush = palette.brush(QPalette::Dark);
 	m_mdiArea->setBackground(brush);
+
+	//save the selected color scheme
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	group.writeEntry("ColorScheme", schemeName);
+	group.sync();
 }
 
 /*!

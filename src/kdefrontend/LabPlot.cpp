@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QSplashScreen>
 #include <QStandardPaths>
+#include <QModelIndex>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -39,6 +40,10 @@
 #include <KAboutData>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KColorSchemeManager>
+
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
@@ -116,6 +121,13 @@ int main (int argc, char *argv[]) {
 		freopen("CONOUT$", "w", stderr);
 	}
 #endif
+
+	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
+	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
+	KColorSchemeManager manager;
+	manager.activateScheme(manager.indexForScheme(schemeName));
 
 	MainWin* window = new MainWin(0, filename);
 	window->show();
