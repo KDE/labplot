@@ -1270,7 +1270,7 @@ void WorksheetView::deleteElement() {
 
 	int rc = KMessageBox::warningYesNo( this,
 	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
-	                                    i18n("Delete selected objects"));
+	                                    i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
 
 	if (rc == KMessageBox::No)
 		return;

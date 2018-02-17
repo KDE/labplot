@@ -5,7 +5,7 @@
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,7 +29,6 @@
  ***************************************************************************/
 #include "ProjectExplorer.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -45,11 +44,11 @@
 #include <QMimeData>
 #include <QPushButton>
 #include <QSignalMapper>
-#include <QTimer>
 #include <QTreeView>
 #include <QVBoxLayout>
 
 #include <KLocale>
+#include <KMessageBox>
 
 /*!
   \class ProjectExplorer
@@ -124,10 +123,10 @@ void ProjectExplorer::createActions() {
 	matchCompleteWordAction->setChecked(false);
 	connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
 
-	expandTreeAction = new QAction(i18n("expand all"), this);
+	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("expand all"), this);
 	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
-	expandSelectedTreeAction = new QAction(i18n("expand selected"), this);
+	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("expand selected"), this);
 	connect(expandSelectedTreeAction, SIGNAL(triggered()), this, SLOT(expandSelected()));
 
 	collapseTreeAction = new QAction(i18n("collapse all"), this);
@@ -139,7 +138,7 @@ void ProjectExplorer::createActions() {
 	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("delete selected"), this);
 	connect(deleteSelectedTreeAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
 
-	toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
+	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("hide search/filter options"), this);
 	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
 
 	showAllColumnsAction = new QAction(i18n("show all"),this);
@@ -157,41 +156,40 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	if(!m_treeView->model())
 		return;
 
-	QModelIndex index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
+	const QModelIndex& index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
 	if (!index.isValid())
 		m_treeView->clearSelection();
 
-	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	QMenu* menu = 0;
+	const QModelIndexList& items = m_treeView->selectionModel()->selectedIndexes();
+	QMenu* menu = nullptr;
 	if (items.size()/4 == 1) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		menu = aspect->createContextMenu();
-	}
-
-	if (!menu) {
+	} else {
 		menu = new QMenu();
-		menu->addSeparator()->setText(i18n("Tree options"));
 		if (items.size()/4 > 1) {
 			menu->addAction(expandSelectedTreeAction);
 			menu->addAction(collapseSelectedTreeAction);
+			menu->addSeparator();
 			menu->addAction(deleteSelectedTreeAction);
 			menu->addSeparator();
+		} else {
+			menu->addAction(expandTreeAction);
+			menu->addAction(collapseTreeAction);
+			menu->addSeparator();
+			menu->addAction(toggleFilterAction);
+
+			//Menu for showing/hiding the columns in the tree view
+			QMenu* columnsMenu = menu->addMenu(i18n("show/hide columns"));
+			columnsMenu->addAction(showAllColumnsAction);
+			columnsMenu->addSeparator();
+			for (int i=0; i<list_showColumnActions.size(); i++)
+				columnsMenu->addAction(list_showColumnActions.at(i));
+
+			//TODO
+			//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
+			// QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
 		}
-		menu->addAction(expandTreeAction);
-		menu->addAction(collapseTreeAction);
-		menu->addSeparator();
-		menu->addAction(toggleFilterAction);
-
-		//Menu for showing/hiding the columns in the tree view
-		QMenu* columnsMenu = menu->addMenu(i18n("show/hide columns"));
-		columnsMenu->addAction(showAllColumnsAction);
-		columnsMenu->addSeparator();
-		for (int i=0; i<list_showColumnActions.size(); i++)
-			columnsMenu->addAction(list_showColumnActions.at(i));
-
-		//TODO
-		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-		// QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
 	}
 	menu->exec(event->globalPos());
 	delete menu;
@@ -608,7 +606,15 @@ void ProjectExplorer::deleteSelected() {
 	if (!items.size())
 		return;
 
-	m_project->beginMacro(i18np("Project Explorer: removed %1 selected object.", "Project Explorer: removed %1 selected objects.", items.size()/4));
+
+	int rc = KMessageBox::warningYesNo( this,
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()/4),
+	                                    i18np("Delete selected object", "Delete selected objects", items.size()/4));
+
+	if (rc == KMessageBox::No)
+		return;
+
+	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
 	for (int i = 0; i < items.size()/4; ++i) {
 		const QModelIndex& index = items.at(i*4);
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
