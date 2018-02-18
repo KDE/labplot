@@ -1113,8 +1113,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Point) );
 	axis->setMajorTicksDirection( (Axis::TicksFlags) axisFormat.majorTicksType);
 	axis->setMajorTicksPen(pen);
-	// minorTicksLength is half of majorTicksLength
-	axis->setMinorTicksLength( axis->majorTicksLength()/2);
+	axis->setMinorTicksLength( axis->majorTicksLength()/2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
 	axis->setMinorTicksPen(pen);
 
@@ -1133,27 +1132,29 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	axis->setLabelsPrefix(axisFormat.prefix.c_str());
 	axis->setLabelsSuffix(axisFormat.suffix.c_str());
-//	string factor;
+	//TODO: handle string factor member in GraphAxisFormat
 
 	//process Origin::GraphAxisTick
 	const Origin::GraphAxisTick& tickAxis = originAxis.tickAxis[index];
-// 		bool showMajorLabels;
 	if (tickAxis.showMajorLabels) {
-// 		unsigned char color;
 		color.type = Origin::Color::ColorType::Regular;
 		color.regular = tickAxis.color;
 		axis->setLabelsColor(OriginProjectParser::color(color));
+		//TODO: how to set labels position (top vs. bottom)?
 	} else {
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 	}
 
-// 		ValueType valueType;
-// 		int valueTypeSpecification;
+	//TODO: handle ValueType valueType member in GraphAxisTick
+	//TODO: handle int valueTypeSpecification in GraphAxisTick
 	axis->setLabelsPrecision(tickAxis.decimalPlaces);
-// 		unsigned short fontSize;
-// 		bool fontBold;
-// 		string dataName;
-// 		string columnName;
+	QFont font;
+	//TODO: font family?
+	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Point) );
+	font.setBold(tickAxis.fontBold);
+	axis->setLabelsFont(font);
+	//TODO: handle string dataName member in GraphAxisTick
+	//TODO: handle string columnName member in GraphAxisTick
 	axis->setLabelsRotationAngle(tickAxis.rotation);
 }
 
