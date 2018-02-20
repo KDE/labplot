@@ -44,7 +44,6 @@ extern "C" {
 #include <KLocalizedString>
 #include <QThreadPool>
 #ifndef NDEBUG
-#include <QDebug>
 #include <QElapsedTimer>
 #endif
 
@@ -155,9 +154,8 @@ public:
 		const int rows = m_matrixData[m_startCol].size();
 		double x = m_xStart;
 		double y = m_yStart;
-#ifndef NDEBUG
-		qDebug()<<"FILL col"<<m_startCol<<"-"<<m_endCol<<" x/y ="<<x<<'/'<<y<<" steps ="<<m_xStep<<'/'<<m_yStep<<" rows ="<<rows;
-#endif
+		DEBUG("FILL col"<<m_startCol<<"-"<<m_endCol<<" x/y ="<<x<<'/'<<y<<" steps ="<<m_xStep<<'/'<<m_yStep<<" rows ="<<rows);
+
 		parser_var vars[] = { {"x", x}, {"y", y}};
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
@@ -218,9 +216,8 @@ void MatrixFunctionDialog::generate() {
 	const int cols = m_matrix->columnCount();
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(cols)/pool->maxThreadCount());
-#ifndef NDEBUG
-	qDebug() << "Starting" << pool->maxThreadCount() << "threads. cols =" << cols << ": range =" << range;
-#endif
+	DEBUG("Starting" << pool->maxThreadCount() << "threads. cols =" << cols << ": range =" << range);
+
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
 		int end = (i+1)*range;
@@ -247,9 +244,7 @@ void MatrixFunctionDialog::generate() {
 	}
 
 	// Timing
-#ifndef NDEBUG
-	qDebug() << "elapsed time =" << timer.elapsed() << "ms";
-#endif
+	DEBUG("elapsed time =" << timer.elapsed() << "ms");
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);

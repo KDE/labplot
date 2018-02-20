@@ -38,9 +38,6 @@
 #include <QStandardItemModel>
 #include <QStatusBar>
 #include <QProgressBar>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 /*!
   \class XYDataReductionCurveDock
@@ -359,12 +356,10 @@ void XYDataReductionCurveDock::updateTolerance() {
 		uiGeneralTab.cbType->setEnabled(false);
 		return;
 	}
-#ifndef NDEBUG
-	qDebug()<<"automatic tolerance:";
-	qDebug()<<"clip_diag_perpoint ="<<nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
-	qDebug()<<"clip_area_perpoint ="<<nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
-	qDebug()<<"avg_dist_perpoint ="<<nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
-#endif
+	DEBUG("automatic tolerance:");
+	DEBUG("clip_diag_perpoint =" << nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
+	DEBUG("clip_area_perpoint =" << nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
+	DEBUG("avg_dist_perpoint =" << nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 
 	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	if (type == nsl_geom_linesim_type_raddist || type == nsl_geom_linesim_type_opheim)

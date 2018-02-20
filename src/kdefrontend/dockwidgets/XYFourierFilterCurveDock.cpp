@@ -35,9 +35,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <KMessageBox>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 /*!
   \class XYFourierFilterCurveDock
@@ -442,9 +439,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
 		f = (n-1)/range/2.;
-#ifndef NDEBUG
-		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
-#endif
+		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
 
 	switch (unit) {
@@ -521,9 +516,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
 		f = (n-1)/range/2.;
-#ifndef NDEBUG
-		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
-#endif
+		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
 
 	switch (unit) {

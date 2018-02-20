@@ -559,8 +559,8 @@ QVector<QStringList> HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_
 			}
 #ifndef NDEBUG
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
-			DEBUG("unsupported class " << translateHDFClass(mclass).toStdString());
 #endif
+			DEBUG("unsupported class " << translateHDFClass(mclass).toStdString());
 		}
 
 		m_status = H5Tclose(ctype);
@@ -1313,9 +1313,10 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
 			handleError((int)order, "H5Sget_order");
-			qDebug() << translateHDFClass(dclass) << "(" << typeSize << ")" << translateHDFOrder(order)
-			         << ", rows:" << rows << " max:" << maxSize;
 #endif
+			QDEBUG(translateHDFClass(dclass) << '(' << typeSize << ')' << translateHDFOrder(order)
+			         << ", rows:" << rows << " max:" << maxSize);
+
 			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
@@ -1492,12 +1493,13 @@ QVector<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString& fileNam
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
 			handleError((int)order, "H5Tget_order");
-			qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
-			qDebug()<<"startRow/endRow"<<startRow<<endRow;
-			qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
-			qDebug()<<"actual rows/cols"<<actualRows<<actualCols;
-			qDebug()<<"lines"<<lines;
 #endif
+			QDEBUG(translateHDFClass(dclass)<<'('<<typeSize<<')'<<translateHDFOrder(order)<<","<<rows<<"x"<<cols);
+			DEBUG("startRow/endRow"<<startRow<<endRow);
+			DEBUG("startColumn/endColumn"<<startColumn<<endColumn);
+			DEBUG("actual rows/cols"<<actualRows<<actualCols);
+			DEBUG("lines"<<lines);
+
 			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
