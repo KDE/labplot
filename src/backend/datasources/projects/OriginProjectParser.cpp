@@ -1023,6 +1023,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (curve.type == Origin::GraphCurve::Line || curve.type == Origin::GraphCurve::Scatter || curve.type == Origin::GraphCurve::LineSymbol
 					|| curve.type == Origin::GraphCurve::ErrorBar || curve.type == Origin::GraphCurve::XErrorBar) {
 					XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+					loadCurve(curve, xyCurve);
 					plot->addChild(xyCurve);
 				} else if (curve.type == Origin::GraphCurve::Column) {
 					//vertical bars
@@ -1033,48 +1034,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				} else if (curve.type == Origin::GraphCurve::Histogram) {
 
 				}
-
-/*
-				QString data(QString::fromLatin1(curve.dataName.c_str()));
-				//int color = 0;
-				QString tableName;
-				switch(data[0].toAscii()) {
-				case 'T':
-				case 'E': {
-					tableName = data.right(data.length() - 2);
-					Table* table = mw->table(tableName);
-					if (!table)
-						break;
-					if(style == Graph::ErrorBars) {
-						int flags=_curve.symbolType;
-						graph->addErrorBars(QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()),
-							((flags&0x10)==0x10?0:1), ceil(_curve.lineWidth), ceil(_curve.symbolSize), QColor(Qt::black),
-							(flags&0x40)==0x40, (flags&2)==2, (flags&1)==1);
-					} else if(style == Graph::Histogram) {
-						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
-					} else {
-						graph->insertCurve(table, QString("%1_%2").arg(tableName, _curve.xColumnName.c_str()), QString("%1_%2").arg(tableName, _curve.yColumnName.c_str()), style);
-					}
-					break;
-				}
-				//TODO
-				}
-*/
-
-	/*				CurveLayout cl = graph->initCurveLayout(style, layer.curves.size());
-				cl.sSize = ceil(_curve.symbolSize*0.5);
-				cl.penWidth = _curve.symbolThickness;
-				color = _curve.symbolColor.regular;
-				if((style == Graph::Scatter || style == Graph::LineSymbols) && color == 0xF7) // 0xF7 -Automatic color
-					color = auto_color++;
-				cl.symCol = color;
-				switch(_curve.symbolType & 0xFF) {
-				case 0: //NoSymbol
-					cl.sType = 0;
-					break;
-				//TODO
-				}
-	*/
 				++curveIndex;
 			}
 
@@ -1156,6 +1115,44 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//TODO: handle string dataName member in GraphAxisTick
 	//TODO: handle string columnName member in GraphAxisTick
 	axis->setLabelsRotationAngle(tickAxis.rotation);
+}
+
+void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
+	//line properties
+	QPen pen = curve->linePen();
+	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
+		Qt::PenStyle penStyle;
+		switch (originCurve.lineStyle) {
+		case Origin::GraphCurve::Solid:
+			penStyle = Qt::SolidLine;
+			break;
+		case Origin::GraphCurve::Dash:
+		case Origin::GraphCurve::ShortDash:
+			penStyle = Qt::DashLine;
+			break;
+		case Origin::GraphCurve::Dot:
+		case Origin::GraphCurve::ShortDot:
+			penStyle = Qt::DotLine;
+			break;
+		case Origin::GraphCurve::DashDot:
+		case Origin::GraphCurve::ShortDashDot:
+			penStyle = Qt::DashDotLine;
+			break;
+		case Origin::GraphCurve::DashDotDot:
+			penStyle = Qt::DashDotDotLine;
+			break;
+		}
+
+		pen.setStyle(penStyle);
+		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
+		pen.setColor(color(originCurve.lineColor));
+		curve->setLineOpacity(originCurve.lineTransparency);
+		//TODO: handle unsigned char lineConnect member of Origin::GraphCurve
+		//TODO: handle unsigned char boxWidth of Origin::GraphCurve
+	} else {
+		pen.setStyle(Qt::NoPen);
+	}
+	curve->setLinePen(pen);
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
