@@ -96,9 +96,13 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	DEBUG("	fit model type = " << modelType << ", degree = " << degree);
 
 	QVector<double>& paramStartValues = fitData.paramStartValues;
-	QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
+	//QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
 
-	double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
+	//double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
+	double xmin = tmpXDataColumn->minimum();
+	double xmax = tmpXDataColumn->maximum();
+	double xrange = xmax-xmin;
+	DEBUG("	x min/max = " << xmin << ' ' << xmax);
 	//TODO: handle all predefined models
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
@@ -106,10 +110,10 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	case nsl_fit_model_peak:
 		switch (modelType) {
 		case nsl_fit_model_gaussian:
-			if (degree == 1) {
-				// use <x> as mu and <x>/10 as sigma
-				paramStartValues[1] = xmean;
-				paramStartValues[0] = xmean/10.;
+			// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[3*d+1] = (d+1.)*xrange/(degree+1.);
+				paramStartValues[3*d] = xrange/(10.*degree);
 			}
 			break;
 		default:
@@ -121,9 +125,9 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	case nsl_fit_model_distribution:
 		switch (modelType) {
 		case nsl_sf_stats_gaussian:
-			// use <x> as mu and <x>/10 as sigma
-			paramStartValues[1] = xmean;
-			paramStartValues[0] = xmean/10.;
+			// use xmax-xmin as mu and (xmax-xmin)/10 as sigma
+			paramStartValues[1] = xrange;
+			paramStartValues[0] = xrange/10.;
 			break;
 		default:
 			break;

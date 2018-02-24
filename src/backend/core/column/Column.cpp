@@ -1099,7 +1099,7 @@ void Column::handleFormatChange() {
  * calculates the minimal value in the column.
  * for \c count = 0, the minimum of all elements is returned.
  * for \c count > 0, the minimum of the first \count elements is returned.
- * for \c count = 0, the minimum of the last \count elements is returned.
+ * for \c count < 0, the minimum of the last \count elements is returned.
  */
 double Column::minimum(int count) const {
 	double min = INFINITY;
@@ -1160,7 +1160,7 @@ double Column::minimum(int count) const {
  * calculates the maximal value in the column.
  * for \c count = 0, the maximum of all elements is returned.
  * for \c count > 0, the maximum of the first \count elements is returned.
- * for \c count = 0, the maximum of the last \count elements is returned.
+ * for \c count < 0, the maximum of the last \count elements is returned.
  */
 double Column::maximum(int count) const {
 	double max = -INFINITY;
