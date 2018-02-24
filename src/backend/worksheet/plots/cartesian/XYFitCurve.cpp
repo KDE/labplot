@@ -101,17 +101,33 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	//double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
 	double xmin = tmpXDataColumn->minimum();
 	double xmax = tmpXDataColumn->maximum();
-	double xrange = xmax-xmin;
-	DEBUG("	x min/max = " << xmin << ' ' << xmax);
-	//TODO: handle all predefined models
+	double ymin = tmpYDataColumn->minimum();
+	double ymax = tmpYDataColumn->maximum();
+	double xrange = xmax-xmin, yrange = ymax-ymin;
+	DEBUG("	x min/max/range = " << xmin << ' ' << xmax << ' ' << xrange);
+	DEBUG("	y min/max/range = " << ymin << ' ' << ymax << ' ' << yrange);
+
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
-		//TODO
+		switch (modelType) {
+		case nsl_fit_model_polynomial:
+			// intersect
+			//TODO: paramStartValues[0] = xmin + fabs(ymax)/fabs(ymin)*(xmax-xmin)/2.;
+			//slope
+			//TODO: paramStartValues[1] = (ymax-ymin)/(xmax-xmin);
+			break;
+		//TODO: handle basic models
+		case nsl_fit_model_power:
+		case nsl_fit_model_exponential:
+		case nsl_fit_model_inverse_exponential:
+		case nsl_fit_model_fourier:
+			break;
+		}
 		break;
 	case nsl_fit_model_peak:
 		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
 		for (int d = 0; d < degree; d++) {
-			paramStartValues[3*d+1] = (d+1.)*xrange/(degree+1.);
+			paramStartValues[3*d+1] = xmin + (d+1.)*xrange/(degree+1.);
 			paramStartValues[3*d] = xrange/(10.*degree);
 		}
 		break;
@@ -123,12 +139,15 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
 		case nsl_fit_model_sigmoid:
-			// use xmax-xmin as mu and (xmax-xmin)/10 as sigma
-			paramStartValues[1] = xrange;
+			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
+			paramStartValues[1] = (xmax+xmin)/2.;
 			paramStartValues[0] = xrange/10.;
 			break;
-		//TODO
-		default:
+		case nsl_fit_model_hill:
+			paramStartValues[0] = xrange/10.;
+			break;
+		case nsl_fit_model_gompertz:
+			//TODO
 			break;
 		}
 		break;
@@ -142,8 +161,8 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 		case nsl_sf_stats_sech:
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
-			// use xmax-xmin as mu and (xmax-xmin)/10 as sigma
-			paramStartValues[1] = xrange;
+			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
+			paramStartValues[1] = (xmin+xmax)/2.;
 			paramStartValues[0] = xrange/10.;
 			break;
 		//TODO
