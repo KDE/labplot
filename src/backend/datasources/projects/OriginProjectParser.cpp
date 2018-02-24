@@ -1023,8 +1023,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				if (curve.type == Origin::GraphCurve::Line || curve.type == Origin::GraphCurve::Scatter || curve.type == Origin::GraphCurve::LineSymbol
 					|| curve.type == Origin::GraphCurve::ErrorBar || curve.type == Origin::GraphCurve::XErrorBar) {
 					XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+					xyCurve->suppressRetransform(true);
 					loadCurve(curve, xyCurve);
 					plot->addChild(xyCurve);
+					xyCurve->suppressRetransform(false);
 				} else if (curve.type == Origin::GraphCurve::Column) {
 					//vertical bars
 
@@ -1260,6 +1262,32 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	} else {
 		curve->setSymbolsStyle(Symbol::NoSymbols);
 	}
+
+	//filling properties
+	if(originCurve.fillArea) {
+		//TODO: handle unsigned char fillAreaType;
+
+		curve->setFillingPosition(XYCurve::FillingBelow);
+
+		if (originCurve.fillAreaPattern == 0) {
+			curve->setFillingType(PlotArea::Color);
+		} else {
+			curve->setFillingType(PlotArea::Pattern);
+			//TODO map different patters in originCurve.fillAreaPattern to curve->setFillingBrushStyle();
+		}
+
+		curve->setFillingFirstColor(color(originCurve.fillAreaColor)); //TODO doesnt' work...
+		curve->setFillingOpacity(originCurve.fillAreaTransparency);
+
+// 		bool fillAreaWithLineTransparency;
+// 		Color fillAreaPatternColor;
+// 		double fillAreaPatternWidth;
+// 		unsigned char fillAreaPatternBorderStyle;
+// 		Color fillAreaPatternBorderColor;
+// 		double fillAreaPatternBorderWidth;
+
+	} else
+		curve->setFillingPosition(XYCurve::NoFilling);
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {

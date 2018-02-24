@@ -1392,6 +1392,9 @@ void XYCurvePrivate::updateValues() {
 }
 
 void XYCurvePrivate::updateFilling() {
+	if (m_suppressRetransform)
+		return;
+
 	fillPolygons.clear();
 
 	//don't try to calculate the filling polygons if no filling was enabled or the nubmer of visible points on the scene is too high
