@@ -621,7 +621,7 @@ void HistogramPrivate::updateLines() {
 	case Histogram::Ordinary: {
 			for (int row = startRow; row <= endRow; row++ ) {
 				if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-					gsl_histogram_increment(histogram,xColumn->valueAt(row));
+					gsl_histogram_increment(histogram, xColumn->valueAt(row));
 			}
 			for(size_t i=0; i < bins; ++i) {
 				tempPoint.setX(xAxisMin);
@@ -663,7 +663,7 @@ void HistogramPrivate::updateLines() {
 			double point =0.0;
 			for (int row = startRow; row <= endRow; row++ ) {
 				if ( xColumn->isValid(row) && !xColumn->isMasked(row))
-					gsl_histogram_increment(histogram,xColumn->valueAt(row));
+					gsl_histogram_increment(histogram, xColumn->valueAt(row));
 			}
 			for(size_t i=0; i < bins; ++i) {
 				point+= gsl_histogram_get(histogram,i);
@@ -803,9 +803,9 @@ void HistogramPrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	qreal w;
-	qreal h=fm.ascent();
-	double xAxisMin=xColumn->minimum();
-	double xAxisMax=xColumn->maximum();
+	qreal h = fm.ascent();
+	double xAxisMin = xColumn->minimum();
+	double xAxisMax = xColumn->maximum();
 	double width = (xAxisMax-xAxisMin)/bins;
 	switch(valuesPosition) {
 	case Histogram::ValuesAbove:

@@ -354,6 +354,9 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
+	
+	// set model dependent start values from new data
+	XYFitCurve::initStartValues(m_fitData, m_curvesList[0]);
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -365,6 +368,9 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
+
+	// set model dependent start values from new data
+	XYFitCurve::initStartValues(m_fitData, m_curvesList[0]);
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
@@ -575,6 +581,8 @@ void XYFitCurveDock::updateModelEquation() {
 	int degree = uiGeneralTab.sbDegree->value();
 	m_fitData.degree = degree;
 	XYFitCurve::initFitData(m_fitData);
+	// set model dependent start values from curve data
+	XYFitCurve::initStartValues(m_fitData, m_curve);
 
 	// variables/parameter that are known
 	QStringList vars = {"x"};

@@ -78,6 +78,62 @@ void XYFitCurve::recalculate() {
 	d->recalculate();
 }
 
+void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
+	DEBUG("XYFitCurve::initStartValues()");
+	if (!curve)
+		return;
+
+	const Column* tmpXDataColumn = dynamic_cast<const Column*>(curve->xColumn());
+	const Column* tmpYDataColumn = dynamic_cast<const Column*>(curve->yColumn());
+	if (!tmpXDataColumn || !tmpYDataColumn)
+		return;
+
+	DEBUG(" x data rows = " << tmpXDataColumn->rowCount());
+
+	nsl_fit_model_category modelCategory = fitData.modelCategory;
+	int modelType = fitData.modelType;
+	int degree = fitData.degree;
+	DEBUG("	fit model type = " << modelType << ", degree = " << degree);
+
+	QVector<double>& paramStartValues = fitData.paramStartValues;
+	QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
+
+	double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
+	//TODO: handle all predefined models
+	switch (modelCategory) {
+	case nsl_fit_model_basic:
+		break;
+	case nsl_fit_model_peak:
+		switch (modelType) {
+		case nsl_fit_model_gaussian:
+			if (degree == 1) {
+				// use <x> as mu and <x>/10 as sigma
+				paramStartValues[1] = xmean;
+				paramStartValues[0] = xmean/10.;
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+	case nsl_fit_model_growth:
+		break;
+	case nsl_fit_model_distribution:
+		switch (modelType) {
+		case nsl_sf_stats_gaussian:
+			// use <x> as mu and <x>/10 as sigma
+			paramStartValues[1] = xmean;
+			paramStartValues[0] = xmean/10.;
+			break;
+		default:
+			break;
+		}
+		break;
+	case nsl_fit_model_custom:
+		break;
+	}
+}
+
 void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 	if (!action)
 		return;
@@ -543,8 +599,8 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
-const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve);return d->xErrorColumnPath; }
-const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve);return d->yErrorColumnPath; }
+const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve); return d->xErrorColumnPath; }
+const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve); return d->yErrorColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
 

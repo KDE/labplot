@@ -121,6 +121,7 @@ public:
 	void recalculate() override;
 	void initFitData(PlotDataDialog::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
+	static void initStartValues(XYFitCurve::FitData&, XYCurve*);
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
