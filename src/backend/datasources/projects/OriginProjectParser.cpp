@@ -1120,8 +1120,40 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	//line properties
 	QPen pen = curve->linePen();
+	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
-		Qt::PenStyle penStyle;
+		switch(originCurve.lineConnect) {
+		case Origin::GraphCurve::NoLine:
+			curve->setLineType(XYCurve::NoLine);
+			break;
+		case Origin::GraphCurve::Straight:
+			curve->setLineType(XYCurve::Line);
+			break;
+		case Origin::GraphCurve::TwoPointSegment:
+			curve->setLineType(XYCurve::Segments2);
+			break;
+		case Origin::GraphCurve::ThreePointSegment:
+			curve->setLineType(XYCurve::Segments3);
+			break;
+		case Origin::GraphCurve::BSpline:
+		case Origin::GraphCurve::Bezier:
+		case Origin::GraphCurve::Spline:
+			curve->setLineType(XYCurve::SplineCubicNatural);
+			break;
+		case Origin::GraphCurve::StepHorizontal:
+			curve->setLineType(XYCurve::StartHorizontal);
+			break;
+		case Origin::GraphCurve::StepVertical:
+			curve->setLineType(XYCurve::StartVertical);
+			break;
+		case Origin::GraphCurve::StepHCenter:
+			curve->setLineType(XYCurve::MidpointHorizontal);
+			break;
+		case Origin::GraphCurve::StepVCenter:
+			curve->setLineType(XYCurve::MidpointVertical);
+			break;
+		}
+
 		switch (originCurve.lineStyle) {
 		case Origin::GraphCurve::Solid:
 			penStyle = Qt::SolidLine;
@@ -1147,12 +1179,87 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
 		pen.setColor(color(originCurve.lineColor));
 		curve->setLineOpacity(originCurve.lineTransparency);
-		//TODO: handle unsigned char lineConnect member of Origin::GraphCurve
+
 		//TODO: handle unsigned char boxWidth of Origin::GraphCurve
-	} else {
-		pen.setStyle(Qt::NoPen);
 	}
+	pen.setStyle(penStyle);
 	curve->setLinePen(pen);
+
+
+	//symbol properties
+	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
+		//try to map the different symbols, mapping is not exact
+		curve->setSymbolsRotationAngle(0);
+		switch(originCurve.symbolType) {
+		case 0: //NoSymbol
+			curve->setSymbolsStyle(Symbol::NoSymbols);
+			break;
+		case 1: //Rect
+			curve->setSymbolsStyle(Symbol::Square);
+			break;
+		case 2: //Ellipse
+		case 20://Sphere
+			curve->setSymbolsStyle(Symbol::Circle);
+			break;
+		case 3: //UTriangle
+			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			break;
+		case 4: //DTriangle
+			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			break;
+		case 5: //Diamond
+			curve->setSymbolsStyle(Symbol::Diamond);
+			break;
+		case 6: //Cross +
+			curve->setSymbolsStyle(Symbol::Cross);
+			break;
+		case 7: //Cross x
+			curve->setSymbolsStyle(Symbol::Cross);
+			break;
+		case 8: //Snow
+			curve->setSymbolsStyle(Symbol::Star4);
+			break;
+		case 9: //Horizontal -
+			curve->setSymbolsStyle(Symbol::Line);
+			curve->setSymbolsRotationAngle(90);
+			break;
+		case 10: //Vertical |
+			curve->setSymbolsStyle(Symbol::Line);
+			break;
+		case 15: //LTriangle
+			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			break;
+		case 16: //RTriangle
+			curve->setSymbolsStyle(Symbol::EquilateralTriangle);
+			break;
+		case 17: //Hexagon
+		case 19: //Pentagon
+			curve->setSymbolsStyle(Symbol::Square);
+			break;
+		case 18: //Star
+			curve->setSymbolsStyle(Symbol::Star5);
+			break;
+		default:
+			curve->setSymbolsStyle(Symbol::NoSymbols);
+		}
+
+		//Color symbolColor;
+		//Color symbolFillColor;
+		//TODO: doesn't work
+		QBrush brush = curve->symbolsBrush();
+		brush.setColor(color(originCurve.symbolColor));
+		curve->setSymbolsBrush(brush);
+
+		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Point));
+
+		QPen pen = curve->symbolsPen();
+		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.symbolThickness, Worksheet::Point));
+
+		//handle unsigned char pointOffset member
+		//handle bool connectSymbols member
+	} else {
+		curve->setSymbolsStyle(Symbol::NoSymbols);
+	}
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
