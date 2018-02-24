@@ -106,34 +106,53 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	//TODO: handle all predefined models
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
+		//TODO
 		break;
 	case nsl_fit_model_peak:
-		switch (modelType) {
-		case nsl_fit_model_gaussian:
-			// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
-			for (int d = 0; d < degree; d++) {
-				paramStartValues[3*d+1] = (d+1.)*xrange/(degree+1.);
-				paramStartValues[3*d] = xrange/(10.*degree);
-			}
-			break;
-		default:
-			break;
+		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
+		for (int d = 0; d < degree; d++) {
+			paramStartValues[3*d+1] = (d+1.)*xrange/(degree+1.);
+			paramStartValues[3*d] = xrange/(10.*degree);
 		}
 		break;
 	case nsl_fit_model_growth:
-		break;
-	case nsl_fit_model_distribution:
 		switch (modelType) {
-		case nsl_sf_stats_gaussian:
+		case nsl_fit_model_atan:
+		case nsl_fit_model_tanh:
+		case nsl_fit_model_algebraic_sigmoid:
+		case nsl_fit_model_erf:
+		case nsl_fit_model_gudermann:
+		case nsl_fit_model_sigmoid:
 			// use xmax-xmin as mu and (xmax-xmin)/10 as sigma
 			paramStartValues[1] = xrange;
 			paramStartValues[0] = xrange/10.;
 			break;
+		//TODO
+		default:
+			break;
+		}
+		break;
+	case nsl_fit_model_distribution:
+		switch (modelType) {
+		case nsl_sf_stats_gaussian:
+		case nsl_sf_stats_laplace:
+		case nsl_sf_stats_rayleigh_tail:
+		case nsl_sf_stats_lognormal:
+		case nsl_sf_stats_logistic:
+		case nsl_sf_stats_sech:
+		case nsl_sf_stats_cauchy_lorentz:
+		case nsl_sf_stats_levy:
+			// use xmax-xmin as mu and (xmax-xmin)/10 as sigma
+			paramStartValues[1] = xrange;
+			paramStartValues[0] = xrange/10.;
+			break;
+		//TODO
 		default:
 			break;
 		}
 		break;
 	case nsl_fit_model_custom:
+		// not possible
 		break;
 	}
 }
