@@ -819,6 +819,9 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	if (preview)
+		return true;
+
 	//in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	//we just need to retransform.
 	//otherwise, we set the static text and retransform in updateText()

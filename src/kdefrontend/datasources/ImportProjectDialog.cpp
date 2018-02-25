@@ -62,6 +62,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	//main widget
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
+	ui.chbUnusedObjects->hide();
 	vLayout->addWidget(mainWidget);
 
 	ui.tvPreview->setAnimated(true);
