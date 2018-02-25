@@ -1180,7 +1180,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		pen.setStyle(penStyle);
 		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
 		pen.setColor(color(originCurve.lineColor));
-		curve->setLineOpacity(originCurve.lineTransparency);
+		curve->setLineOpacity(originCurve.lineTransparency/255.);
 
 		//TODO: handle unsigned char boxWidth of Origin::GraphCurve
 	}
@@ -1266,26 +1266,70 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	//filling properties
 	if(originCurve.fillArea) {
 		//TODO: handle unsigned char fillAreaType;
-
+		//with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
+		//with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open area.
+		//with 'fillAreaType'=0x12 the area excluded outside the curve is filled. The inverse of fillAreaType=0x14 is filled.
+		//At the moment we only support the first type, so set it to XYCurve::FillingBelow
 		curve->setFillingPosition(XYCurve::FillingBelow);
 
 		if (originCurve.fillAreaPattern == 0) {
 			curve->setFillingType(PlotArea::Color);
 		} else {
 			curve->setFillingType(PlotArea::Pattern);
-			//TODO map different patters in originCurve.fillAreaPattern to curve->setFillingBrushStyle();
+
+			//map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
+			switch(originCurve.fillAreaPattern) {
+			case 0:
+				curve->setFillingBrushStyle(Qt::NoBrush);
+				break;
+			case 1:
+			case 2:
+			case 3:
+				curve->setFillingBrushStyle(Qt::BDiagPattern);
+				break;
+			case 4:
+			case 5:
+			case 6:
+				curve->setFillingBrushStyle(Qt::FDiagPattern);
+				break;
+			case 7:
+			case 8:
+			case 9:
+				curve->setFillingBrushStyle(Qt::DiagCrossPattern);
+				break;
+			case 10:
+			case 11:
+			case 12:
+				curve->setFillingBrushStyle(Qt::HorPattern);
+				break;
+			case 13:
+			case 14:
+			case 15:
+				curve->setFillingBrushStyle(Qt::VerPattern);
+				break;
+			case 16:
+			case 17:
+			case 18:
+				curve->setFillingBrushStyle(Qt::CrossPattern);
+				break;
+			}
 		}
 
-		curve->setFillingFirstColor(color(originCurve.fillAreaColor)); //TODO doesnt' work...
-		curve->setFillingOpacity(originCurve.fillAreaTransparency);
+		curve->setFillingFirstColor(color(originCurve.fillAreaColor));
+		curve->setFillingOpacity(originCurve.fillAreaTransparency/255.);
 
-// 		bool fillAreaWithLineTransparency;
-// 		Color fillAreaPatternColor;
-// 		double fillAreaPatternWidth;
-// 		unsigned char fillAreaPatternBorderStyle;
-// 		Color fillAreaPatternBorderColor;
-// 		double fillAreaPatternBorderWidth;
+		//Color fillAreaPatternColor - color for the pattern lines, not supported
+		//double fillAreaPatternWidth - width of the pattern lines, not supported
+		//bool fillAreaWithLineTransparency - transparency of the pattern lines indepetendent of the area transparency, not supported
 
+		//TODO:
+		//unsigned char fillAreaPatternBorderStyle;
+		//Color fillAreaPatternBorderColor;
+		//double fillAreaPatternBorderWidth;
+		//The Border properties are used only in "Column/Bar" (histogram) plots. Those properties are:
+		//fillAreaPatternBorderStyle   for the line style (use enum Origin::LineStyle here)
+		//fillAreaPatternBorderColor   for the line color
+		//fillAreaPatternBorderWidth   for the line width
 	} else
 		curve->setFillingPosition(XYCurve::NoFilling);
 }
