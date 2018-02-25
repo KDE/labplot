@@ -67,6 +67,7 @@ bool OriginAnyParser::parse() {
 
 	// get dataset list
 	unsigned int dataset_list_size = 0;
+	objectIndex = 0; // use it to count DataSets
 
 	LOG_PRINT(logfile, "Reading Data sets ...\n")
 	while (true) {
@@ -88,6 +89,7 @@ bool OriginAnyParser::parse() {
 
 	// get window list
 	unsigned int window_list_size = 0;
+	objectIndex = 0; // reset it to count Windows (except Notes)
 
 	LOG_PRINT(logfile, "Reading Windows ...\n")
 	while (true) {
@@ -117,8 +119,7 @@ bool OriginAnyParser::parse() {
 		unsigned int note_list_size = 0;
 
 		LOG_PRINT(logfile, "Reading Note windows ...\n")
-		// Note windows have an independent index
-		objectIndex = 0;
+		objectIndex = 0; // reset it to count Notes
 		while (true) {
 			if (!readNoteElement()) break;
 			note_list_size++;
@@ -940,7 +941,6 @@ void OriginAnyParser::readAttachmentList() {
 
 bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_header_size, string col_data, unsigned int col_data_size) {
 	istringstream stmp(ios_base::binary);
-	static unsigned int dataIndex=0;
 	short data_type;
 	char data_type_u;
 	unsigned char valuesize;
@@ -1000,8 +1000,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 
 	if (column_name.empty()) { // Matrix or function
 		if (data_type == 0x6081) { // Function
-			functions.push_back(Function(name, dataIndex));
-			++dataIndex;
+			functions.push_back(Function(name, objectIndex));
 			Origin::Function &f = functions.back();
 			f.formula = toLowerCase(col_data.c_str());
 
@@ -1030,16 +1029,15 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				mIndex = findMatrixByName(name);
 				if (mIndex != -1){
 					LOG_PRINT(logfile, "\n  NEW MATRIX SHEET\n");
-					matrixes[mIndex].sheets.push_back(MatrixSheet(sheetName, dataIndex));
+					matrixes[mIndex].sheets.push_back(MatrixSheet(sheetName, objectIndex));
 				}
 			} else {
 				LOG_PRINT(logfile, "\n  NEW MATRIX\n");
 				matrixes.push_back(Matrix(name));
-				matrixes.back().sheets.push_back(MatrixSheet(name, dataIndex));
+				matrixes.back().sheets.push_back(MatrixSheet(name, objectIndex));
 			}
-			// add an empty data set to keep dataIndex synchronized with datasets.size()
-			datasets.push_back(SpreadColumn(name,dataIndex));
-			++dataIndex;
+			// add an empty data set to keep objectIndex synchronized with datasets.size()
+			datasets.push_back(SpreadColumn(name,objectIndex));
 			getMatrixValues(col_data, col_data_size, data_type, data_type_u, valuesize, mIndex);
 		}
 	} else {
@@ -1057,7 +1055,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 				current_col = 1;
 			++current_col;
 		}
-		spreadSheets[spread].columns.push_back(SpreadColumn(column_name, dataIndex));
+		spreadSheets[spread].columns.push_back(SpreadColumn(column_name, objectIndex));
 		spreadSheets[spread].columns.back().colIndex = ++col_index;
 		spreadSheets[spread].columns.back().dataset_name = dataset_name;
 
@@ -1075,8 +1073,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 					spreadSheets[spread].sheets = sheet;
 			}
 		}
-		++dataIndex;
-		LOG_PRINT(logfile, "  data index %d, valuesize %d, ", dataIndex, valuesize)
+		LOG_PRINT(logfile, "  data index %d, valuesize %d, ", objectIndex, valuesize)
 
 		unsigned int nr = col_data_size / valuesize;
 		LOG_PRINT(logfile, "n. of rows = %d\n\n", nr)
@@ -1145,6 +1142,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 		LOG_PRINT(logfile, "\n\n")
 		datasets.push_back(spreadSheets[spread].columns.back());
 	}
+	++objectIndex;
 
 	return true;
 }
