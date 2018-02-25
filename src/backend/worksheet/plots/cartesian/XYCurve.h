@@ -162,6 +162,7 @@ private:
 
 	QAction* visibilityAction;
 	QAction* navigateToAction;
+	bool m_menusInitialized;
 
 signals:
 	//General-Tab

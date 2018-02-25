@@ -61,12 +61,12 @@
 
 
 TextLabel::TextLabel(const QString& name, Type type):WorksheetElement(name),
-	d_ptr(new TextLabelPrivate(this)), m_type(type) {
+	d_ptr(new TextLabelPrivate(this)), m_type(type), visibilityAction(nullptr) {
 	init();
 }
 
 TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type):WorksheetElement(name),
-	d_ptr(dd), m_type(type) {
+	d_ptr(dd), m_type(type), visibilityAction(nullptr) {
 	init();
 }
 
@@ -128,14 +128,6 @@ void TextLabel::init() {
 	d->teXImageScaleFactor = Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter);
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
-
-	this->initActions();
-}
-
-void TextLabel::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
 }
 
 TextLabel::~TextLabel() {
@@ -195,8 +187,15 @@ QMenu* TextLabel::createContextMenu() {
 	QMenu *menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 
+	if (!visibilityAction) {
+		visibilityAction = new QAction(i18n("visible"), this);
+		visibilityAction->setCheckable(true);
+		connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
+	}
+
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }

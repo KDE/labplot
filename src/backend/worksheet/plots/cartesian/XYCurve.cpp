@@ -61,11 +61,11 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
+XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)), m_menusInitialized(false) {
 	init();
 }
 
-XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd) {
+XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
 	init();
 }
 
@@ -141,8 +141,6 @@ void XYCurve::init() {
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
 	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
-
-	this->initActions();
 }
 
 void XYCurve::initActions() {
@@ -152,9 +150,14 @@ void XYCurve::initActions() {
 
 	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), "", this);
 	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
+
+	m_menusInitialized = true;
 }
 
 QMenu* XYCurve::createContextMenu() {
+	if (!m_menusInitialized)
+		initActions();
+
 	QMenu *menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());

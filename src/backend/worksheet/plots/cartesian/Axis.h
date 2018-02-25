@@ -166,6 +166,8 @@ class Axis: public WorksheetElement {
 		QMenu* lineStyleMenu;
 		QMenu* lineColorMenu;
 
+		bool m_menusInitialized;
+
 	private slots:
 		void labelChanged();
 		void retransformTicks();

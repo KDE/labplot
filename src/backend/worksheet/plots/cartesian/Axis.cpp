@@ -110,13 +110,13 @@ class AxisGrid : public QGraphicsItem {
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)) {
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
 Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate* dd)
-		: WorksheetElement(name), d_ptr(dd) {
+		: WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -202,9 +202,6 @@ void Axis::init() {
 	d->minorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
-
-	this->initActions();
-	this->initMenus();
 }
 
 /*!
@@ -241,6 +238,8 @@ void Axis::initActions() {
 }
 
 void Axis::initMenus() {
+	this->initActions();
+
 	//Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
 	orientationMenu->addAction(orientationHorizontalAction);
@@ -254,9 +253,14 @@ void Axis::initMenus() {
 	lineColorMenu = new QMenu(i18n("color"), lineMenu);
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
+
+	m_menusInitialized = true;
 }
 
 QMenu* Axis::createContextMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
 	Q_D(const Axis);
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
@@ -299,11 +303,10 @@ QIcon Axis::icon() const{
 }
 
 Axis::~Axis() {
-	if (orientationMenu)
+	if (m_menusInitialized) {
 		delete orientationMenu;
-
-	if (lineMenu)
 		delete lineMenu;
+	}
 
 	//no need to delete d->title, since it was added with addChild in init();
 

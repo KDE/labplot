@@ -114,7 +114,6 @@ class TextLabel : public WorksheetElement {
 	private:
 		Q_DECLARE_PRIVATE(TextLabel)
 		void init();
-		void initActions();
 
 		Type m_type;
 		QAction* visibilityAction;
