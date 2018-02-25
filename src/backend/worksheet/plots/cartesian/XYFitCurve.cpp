@@ -78,15 +78,26 @@ void XYFitCurve::recalculate() {
 	d->recalculate();
 }
 
-void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
+void XYFitCurve::initStartValues(const XYCurve* curve) {
+	Q_D(XYFitCurve);
+	XYFitCurve::FitData& fitData = d->fitData;
+	initStartValues(fitData, curve);
+}
+
+void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
 	DEBUG("XYFitCurve::initStartValues()");
-	if (!curve)
+	if (!curve) {
+		DEBUG("	no curve given");
 		return;
+	}
 
 	const Column* tmpXDataColumn = dynamic_cast<const Column*>(curve->xColumn());
 	const Column* tmpYDataColumn = dynamic_cast<const Column*>(curve->yColumn());
-	if (!tmpXDataColumn || !tmpYDataColumn)
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
+		DEBUG("	data columns not available");
 		return;
+	}
 
 	DEBUG(" x data rows = " << tmpXDataColumn->rowCount());
 
@@ -103,9 +114,10 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	double xmax = tmpXDataColumn->maximum();
 	double ymin = tmpYDataColumn->minimum();
 	double ymax = tmpYDataColumn->maximum();
-	double xrange = xmax-xmin, yrange = ymax-ymin;
-	DEBUG("	x min/max/range = " << xmin << ' ' << xmax << ' ' << xrange);
-	DEBUG("	y min/max/range = " << ymin << ' ' << ymax << ' ' << yrange);
+	double xrange = xmax-xmin;
+	//double yrange = ymax-ymin;
+	DEBUG("	x min/max = " << xmin << ' ' << xmax);
+	DEBUG("	y min/max = " << ymin << ' ' << ymax);
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
@@ -176,6 +188,9 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, XYCurve* curve) {
 	}
 }
 
+/*!
+ * sets the parameter names for given model category, model type and degree in \c fitData for given action
+ */
 void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 	if (!action)
 		return;
@@ -252,7 +267,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
-	DEBUG("XYFitCurve::initFitData() for model category = " << modelCategory << ", model type = " << modelType << ", degree = " << degree);
+	DEBUG("XYFitCurve::initFitData() for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType << ", degree = " << degree);
 
 	if (modelCategory != nsl_fit_model_custom)
 		paramNames.clear();
@@ -1502,10 +1517,12 @@ void XYFitCurvePrivate::recalculate() {
 	const AbstractColumn* tmpYDataColumn = 0;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
+		DEBUG("	spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 	} else {
 		//curve columns as data source
+		DEBUG("	curve columns as data source");
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}

@@ -346,6 +346,7 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	DEBUG("XYFitCurveDock::xDataColumnChanged()");
 	if (m_initializing)
 		return;
 
@@ -356,10 +357,11 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 	
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curvesList[0]);
+	XYFitCurve::initStartValues(m_fitData, m_curve);
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	DEBUG("XYFitCurveDock::yDataColumnChanged()");
 	if (m_initializing)
 		return;
 
@@ -370,7 +372,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curvesList[0]);
+	XYFitCurve::initStartValues(m_fitData, m_curve);
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
@@ -575,7 +577,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
  * Called when the model type or the degree of the model were changed.
  */
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG("updateModelEquation() category = " << m_fitData.modelCategory << ", type = " << m_fitData.modelType);
+	DEBUG("XYFitCurveDock::updateModelEquation() category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
 
 	//this function can also be called when the value for the degree was changed -> update the fit data structure
 	int degree = uiGeneralTab.sbDegree->value();

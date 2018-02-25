@@ -1149,6 +1149,7 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
+	DEBUG("CartesianPlot::addFitCurve()");
 	XYFitCurve* curve = new XYFitCurve("fit");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -1161,6 +1162,7 @@ void CartesianPlot::addFitCurve() {
 		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		curve->initFitData(type);
+		curve->initStartValues(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
 		emit curve->fitDataChanged(curve->fitData());
