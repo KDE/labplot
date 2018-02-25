@@ -2405,6 +2405,10 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 			h = cvehd[0x9D];
 			curve.fillAreaWithLineTransparency = !h;
 			curve.fillAreaTransparency = cvehd[0x11E];
+		} else {
+			// use sensible default values
+			curve.fillAreaWithLineTransparency = false;
+			curve.fillAreaTransparency = 255;
 		}
 
 		if (cvehdsz > 0x143) {
