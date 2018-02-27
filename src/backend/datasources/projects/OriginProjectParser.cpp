@@ -41,6 +41,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/TextLabel.h"
 
 #include <liborigin/OriginFile.h>
@@ -1019,27 +1020,68 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//curves
 			int curveIndex = 1;
-			for (const auto& curve: layer.curves) {
-				if (curve.type == Origin::GraphCurve::Line || curve.type == Origin::GraphCurve::Scatter || curve.type == Origin::GraphCurve::LineSymbol
-					|| curve.type == Origin::GraphCurve::ErrorBar || curve.type == Origin::GraphCurve::XErrorBar) {
-					XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
-					xyCurve->suppressRetransform(true);
-					loadCurve(curve, xyCurve);
-					plot->addChild(xyCurve);
-					xyCurve->suppressRetransform(false);
-				} else if (curve.type == Origin::GraphCurve::Column) {
-					//vertical bars
+			for (const auto& originCurve: layer.curves) {
 
-				} else if (curve.type == Origin::GraphCurve::Bar) {
-					//horizontal bars
+				QString data(originCurve.dataName.c_str());
+				switch(data[0].toAscii()) {
+				case 'T':
+				case 'E': {
+					if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol
+						|| originCurve.type == Origin::GraphCurve::ErrorBar || originCurve.type == Origin::GraphCurve::XErrorBar) {
+						XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+						xyCurve->suppressRetransform(true);
+						loadCurve(originCurve, xyCurve);
+						plot->addChild(xyCurve);
+						xyCurve->suppressRetransform(false);
+					} else if (originCurve.type == Origin::GraphCurve::Column) {
+						//vertical bars
 
-				} else if (curve.type == Origin::GraphCurve::Histogram) {
+					} else if (originCurve.type == Origin::GraphCurve::Bar) {
+						//horizontal bars
 
+					} else if (originCurve.type == Origin::GraphCurve::Histogram) {
+
+					}
 				}
+				case 'F': {
+					Origin::Function function;
+					const int funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
+					function = m_originFile->function(funcIndex);
+
+					XYEquationCurve* xyEqCurve = new XYEquationCurve(function.name.c_str());
+					XYEquationCurve::EquationData eqData;
+
+					eqData.count = function.totalPoints;
+					eqData.expression1 = QString(function.formula.c_str());
+
+					if(function.type == Origin::Function::Polar) {
+						eqData.type = XYEquationCurve::Polar;
+
+						//replace 'x' by 'phi'
+						eqData.expression1 = eqData.expression1.replace('x', "phi");
+
+						//convert from degrees to radians
+						eqData.min = QString::number(function.begin*M_PI/180);
+						eqData.max = QString::number(function.end*M_PI/180);
+					} else {
+						eqData.expression1 = QString(function.formula.c_str());
+						eqData.min = QString::number(function.begin);
+						eqData.max = QString::number(function.end);
+					}
+
+					xyEqCurve->suppressRetransform(true);
+					xyEqCurve->setEquationData(eqData);
+					loadCurve(originCurve, xyEqCurve);
+					plot->addChild(xyEqCurve);
+					xyEqCurve->suppressRetransform(false);
+				}
+				}
+
 				++curveIndex;
 			}
 
 			worksheet->addChild(plot);
+
 		} else {
 			//no support for 3D plots yet
 			//TODO: add an "UnsupportedAspect" here
@@ -1316,7 +1358,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->setFillingFirstColor(color(originCurve.fillAreaColor));
-		curve->setFillingOpacity(originCurve.fillAreaTransparency/255.);
+		curve->setFillingOpacity(originCurve.fillAreaTransparency/255);
 
 		//Color fillAreaPatternColor - color for the pattern lines, not supported
 		//double fillAreaPatternWidth - width of the pattern lines, not supported
