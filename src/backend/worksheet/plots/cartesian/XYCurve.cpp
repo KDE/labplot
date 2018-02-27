@@ -158,6 +158,7 @@ QMenu* XYCurve::createContextMenu() {
 	if (!m_menusInitialized)
 		initActions();
 
+
 	QMenu *menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
@@ -181,6 +182,10 @@ QMenu* XYCurve::createContextMenu() {
 		menu->insertAction(visibilityAction, navigateToAction);
 		menu->insertSeparator(visibilityAction);
 	}
+
+	//if the context menu is called on an item that is not selected yet, select it
+	if (!graphicsItem()->isSelected())
+		graphicsItem()->setSelected(true);
 
 	return menu;
 }
