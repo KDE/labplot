@@ -1043,6 +1043,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 					}
 				}
+				break;
 				case 'F': {
 					Origin::Function function;
 					const int funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
@@ -1061,8 +1062,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						eqData.expression1 = eqData.expression1.replace('x', "phi");
 
 						//convert from degrees to radians
-						eqData.min = QString::number(function.begin*M_PI/180);
-						eqData.max = QString::number(function.end*M_PI/180);
+						eqData.min = QString::number(function.begin/180) + QLatin1String("*pi");
+						eqData.max = QString::number(function.end/180) + QLatin1String("*pi");
 					} else {
 						eqData.expression1 = QString(function.formula.c_str());
 						eqData.min = QString::number(function.begin);
