@@ -983,7 +983,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//y right
 			if (!originYAxis.formatAxis[1].hidden) {
-				Axis* axis = new Axis("y", plot, Axis::AxisVertical);
+				Axis* axis = new Axis("y right", plot, Axis::AxisVertical);
 				axis->setSuppressRetransform(true);
 				axis->setPosition(Axis::AxisRight);
 				plot->addChild(axis);
@@ -998,7 +998,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			const Origin::TextBox& originLegend = layer.legend;
 			if (!originLegend.text.empty()) {
 				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
-				legend->title()->setText( parseOriginText(QString::fromLatin1(layer.legend.text.c_str())) );
+				DEBUG("legend text = " << originLegend.text);
+				//legend->title()->setText( parseOriginText(QString::fromLatin1(originLegend.text.c_str())) );
 
 				const Origin::Color& originColor = originLegend.color;
 				if (originColor.type == Origin::Color::None)
@@ -1130,8 +1131,12 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 
 	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
+	DEBUG("axis title text = " << titleText.toStdString());
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
+	//TODO: replace %(?X) with x column title and %(?Y) with y column title
+	//TODO: set axis title text
+	//DEBUG(" set title to " << );
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
 	axis->setLabelsPrefix(axisFormat.prefix.c_str());
@@ -1402,6 +1407,7 @@ QDateTime OriginProjectParser::creationTime(const tree<Origin::ProjectNode>::ite
 }
 
 QString OriginProjectParser::parseOriginText(const QString &str) const {
+	DEBUG("parseOriginText()");
 	QStringList lines = str.split("\n");
 	QString text = "";
 	for (int i = 0; i < lines.size(); ++i) {
