@@ -1046,7 +1046,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				break;
 				case 'F': {
 					Origin::Function function;
-					const int funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
+					const vector<Origin::Function>::size_type funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
 					function = m_originFile->function(funcIndex);
 
 					XYEquationCurve* xyEqCurve = new XYEquationCurve(function.name.c_str());
