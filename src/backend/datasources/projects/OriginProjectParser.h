@@ -62,7 +62,7 @@ private:
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 	bool loadWorksheet(Worksheet*,  bool preview);
-	void loadAxis(const Origin::GraphAxis&, Axis*, int index) const;
+	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);

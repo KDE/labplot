@@ -964,12 +964,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//axes
 			//x bottom
+			Origin::GraphCurve curve = layer.curves[0];
 			if (!originXAxis.formatAxis[0].hidden) {
 				Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
 				axis->setSuppressRetransform(true);
 				axis->setPosition(Axis::AxisBottom);
 				plot->addChild(axis);
-				loadAxis(originXAxis, axis, 0);
+				loadAxis(originXAxis, axis, 0, QString::fromLatin1(curve.xColumnName.c_str()));
 				axis->setSuppressRetransform(false);
 			}
 
@@ -979,7 +980,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				axis->setPosition(Axis::AxisTop);
 				axis->setSuppressRetransform(true);
 				plot->addChild(axis);
-				loadAxis(originXAxis, axis, 1);
+				loadAxis(originXAxis, axis, 1, QString::fromLatin1(curve.xColumnName.c_str()));
 				axis->setSuppressRetransform(false);
 			}
 
@@ -989,7 +990,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				axis->setSuppressRetransform(true);
 				axis->setPosition(Axis::AxisLeft);
 				plot->addChild(axis);
-				loadAxis(originYAxis, axis, 0);
+				loadAxis(originYAxis, axis, 0, QString::fromLatin1(curve.yColumnName.c_str()));
 				axis->setSuppressRetransform(false);
 			}
 
@@ -999,7 +1000,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				axis->setSuppressRetransform(true);
 				axis->setPosition(Axis::AxisRight);
 				plot->addChild(axis);
-				loadAxis(originYAxis, axis, 1);
+				loadAxis(originYAxis, axis, 1, QString::fromLatin1(curve.yColumnName.c_str()));
 				axis->setSuppressRetransform(false);
 			}
 
@@ -1111,7 +1112,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "top" and "bottom" or "left" and "right" for horizontal or vertical axes, respectively.
  */
-void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index) const {
+void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index, const QString& axisTitle) const {
 	//ranges
 	axis->setStart(originAxis.min);
 	axis->setEnd(originAxis.max);
@@ -1148,7 +1149,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
 	//TODO: replace %(?X) with x column title and %(?Y) with y column title
 	//TODO: set axis title text
-	//DEBUG(" set title to " << );
+	DEBUG(" axis title " << axisTitle.toStdString());
+	titleText.replace("%(?X)", axisTitle);
+	titleText.replace("%(?Y)", axisTitle);
+	axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
 	axis->setLabelsPrefix(axisFormat.prefix.c_str());
