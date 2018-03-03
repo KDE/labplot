@@ -319,11 +319,11 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//first non-empty value is numerical, column is set to Numeric, empty or text values in the column a set to NAN
 	Column* column = spreadsheet->column(0);
 	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(std::isnan(column->valueAt(0)), true);
+	QCOMPARE(!std::isnan(column->valueAt(0)), false);
 	QCOMPARE(column->valueAt(1), 1.1);
 	QCOMPARE(column->valueAt(2), 2.2);
-	QCOMPARE(std::isnan(column->valueAt(3)), true);
-	QCOMPARE(std::isnan(column->valueAt(4)), true);
+	QCOMPARE(!std::isnan(column->valueAt(3)), false);
+	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 
 	//2nd column, Origin::TextNumeric:
 	//first non-empty value is string, the column is set to Text, numerical values are converted to strings
@@ -341,8 +341,8 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(column->valueAt(0), 1.1);
 	QCOMPARE(column->valueAt(1), 2.2);
-	QCOMPARE(std::isnan(column->valueAt(2)), true);
-	QCOMPARE(std::isnan(column->valueAt(3)), true);
+	QCOMPARE(!std::isnan(column->valueAt(2)), false);
+	QCOMPARE(!std::isnan(column->valueAt(3)), false);
 	QCOMPARE(column->valueAt(4), 3.3);
 
 	//4th column, Origin::TextNumeric:
@@ -359,11 +359,11 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//column is set to Numeric, empty values in the column a set to NAN
 	column = spreadsheet->column(4);
 	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(std::isnan(column->valueAt(0)), true);
+	QCOMPARE(!std::isnan(column->valueAt(0)), false);
 	QCOMPARE(column->valueAt(1), 1.1);
 	QCOMPARE(column->valueAt(2), 2.2);
 	QCOMPARE(column->valueAt(3), 3.3);
-	QCOMPARE(std::isnan(column->valueAt(4)), true);
+	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 
 	//6th column, Origin::Numeric
 	//column is set to Numeric, empty values in the column a set to NAN
@@ -372,8 +372,8 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(column->valueAt(0), 1.1);
 	QCOMPARE(column->valueAt(1), 2.2);
 	QCOMPARE(column->valueAt(2), 3.3);
-	QCOMPARE(std::isnan(column->valueAt(3)), true);
-	QCOMPARE(std::isnan(column->valueAt(4)), true);
+	QCOMPARE(!std::isnan(column->valueAt(3)), false);
+	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 }
 
 QTEST_MAIN(ProjectImportTest)
