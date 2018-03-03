@@ -330,10 +330,10 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	column = spreadsheet->column(1);
 	QCOMPARE(column->columnMode(), AbstractColumn::Text);
 	QCOMPARE(column->textAt(0).isEmpty(), true);
-	QCOMPARE(column->textAt(1), 'a');
-	QCOMPARE(column->textAt(2), 'b');
-	QCOMPARE(column->textAt(3), "1.1");
-	QCOMPARE(column->textAt(4), "2.2");
+	QCOMPARE(column->textAt(1), QLatin1String("a"));
+	QCOMPARE(column->textAt(2), QLatin1String("b"));
+	QCOMPARE(column->textAt(3), QLatin1String("1.1"));
+	QCOMPARE(column->textAt(4), QLatin1String("2.2"));
 
 	//3rd column, Origin::TextNumeric:
 	//first is numerical, column is set to Numeric, empty or text values in the column a set to NAN
@@ -349,11 +349,11 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//first value is string, the column is set to Text, numerical values are converted to strings
 	column = spreadsheet->column(3);
 	QCOMPARE(column->columnMode(), AbstractColumn::Text);
-	QCOMPARE(column->textAt(0), 'a');
-	QCOMPARE(column->textAt(1), 'b');
-	QCOMPARE(column->textAt(2), "1.1");
-	QCOMPARE(column->textAt(3), "2.2");
-	QCOMPARE(column->textAt(4), 'c');
+	QCOMPARE(column->textAt(0), QLatin1String("a"));
+	QCOMPARE(column->textAt(1), QLatin1String("b"));
+	QCOMPARE(column->textAt(2), QLatin1String("1.1"));
+	QCOMPARE(column->textAt(3), QLatin1String("2.2"));
+	QCOMPARE(column->textAt(4), QLatin1String("c"));
 
 	//5th column, Origin::Numeric
 	//column is set to Numeric, empty values in the column a set to NAN
