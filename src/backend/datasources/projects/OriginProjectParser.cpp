@@ -1009,10 +1009,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//add legend if available
 			const Origin::TextBox& originLegend = layer.legend;
+			QString legendText = parseOriginText(QString::fromLatin1(originLegend.text.c_str()));
+			DEBUG(" parsed legend text = " << legendText.toStdString());
 			if (!originLegend.text.empty()) {
-				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
-				DEBUG("legend text = " << originLegend.text);
-				//legend->title()->setText( parseOriginText(QString::fromLatin1(originLegend.text.c_str())) );
+
+				//CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
+				QString legendTitle = legendText.left(legendText.indexOf("\\c{1}") - 1);
+				legendTitle = legendTitle.trimmed();
+				DEBUG(" title = " << legendTitle.toStdString());
+				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, legendTitle);
 
 				const Origin::Color& originColor = originLegend.color;
 				if (originColor.type == Origin::Color::None)
@@ -1042,7 +1047,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				case 'E': {
 					if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol
 						|| originCurve.type == Origin::GraphCurve::ErrorBar || originCurve.type == Origin::GraphCurve::XErrorBar) {
-						XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+
+						// parse and use legend text
+						// find substring between %c{curveIndex} and %c{curveIndex+1}
+						int pos1 = legendText.indexOf(QString("\\c{%1}").arg(curveIndex)) + 5;
+						int pos2 = legendText.indexOf(QString("\\c{%1}").arg(curveIndex+1));
+						QString curveText = legendText.mid(pos1, pos2 - pos1);
+						// replace %(1), %(2), etc. with curve name
+						curveText.replace(QString("\%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
+						curveText = curveText.trimmed();
+						DEBUG(" curve " << curveIndex << " text = " << curveText.toStdString());
+
+						//XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+						//TODO: curve does not support HTML text
+						//XYCurve* xyCurve = new XYCurve(curveText);
+						XYCurve* xyCurve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+
 						xyCurve->suppressRetransform(true);
 						loadCurve(originCurve, xyCurve);
 						plot->addChild(xyCurve);
@@ -1144,14 +1164,13 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 
 	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
-	DEBUG("axis title text = " << titleText.toStdString());
+	DEBUG("	axis title text = " << titleText.toStdString());
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
-	//TODO: replace %(?X) with x column title and %(?Y) with y column title
-	//TODO: set axis title text
-	DEBUG(" axis title " << axisTitle.toStdString());
+	DEBUG("	curve name = " << axisTitle.toStdString());
 	titleText.replace("%(?X)", axisTitle);
 	titleText.replace("%(?Y)", axisTitle);
+	DEBUG(" axis title = " << titleText.toStdString());
 	axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
