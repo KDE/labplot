@@ -293,4 +293,87 @@ void ProjectImportTest::testOrigin04() {
 	QCOMPARE(spreadsheet->column(0)->valueAt(0), 1.0);
 }
 
+void ProjectImportTest::testOriginTextNumericColumns() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_workbook.opj"));
+	Project project;
+
+	//import "Book1"
+	QStringList selectedPathes = {QLatin1String("origin8_test_workbook/Folder1/Book1"), QLatin1String("origin8_test_workbook/Folder1"), QLatin1String("origin8_test_workbook")};
+	parser.importTo(&project, selectedPathes);
+
+	//first child of folder "Folder1", workbook "Book1" with one sheet -> import into a spreadsheet
+	AbstractAspect* aspect = project.child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Folder1"));
+	aspect = project.child<AbstractAspect>(0)->child<AbstractAspect>(0);
+	QCOMPARE(aspect != nullptr, true);
+	QCOMPARE(aspect->name(), QLatin1String("Book1"));
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
+	QCOMPARE(spreadsheet != nullptr, true);
+
+	//check the values in the imported columns
+	QCOMPARE(spreadsheet->columnCount(), 6);
+
+	//1st column, Origin::TextNumeric:
+	//first non-empty value is numerical, column is set to Numeric, empty or text values in the column a set to NAN
+	Column* column = spreadsheet->column(0);
+	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(std::isnan(column->valueAt(0)), true);
+	QCOMPARE(column->valueAt(1), 1.1);
+	QCOMPARE(column->valueAt(2), 2.2);
+	QCOMPARE(std::isnan(column->valueAt(3)), true);
+	QCOMPARE(std::isnan(column->valueAt(4)), true);
+
+	//2nd column, Origin::TextNumeric:
+	//first non-empty value is string, the column is set to Text, numerical values are converted to strings
+	column = spreadsheet->column(1);
+	QCOMPARE(column->columnMode(), AbstractColumn::Text);
+	QCOMPARE(column->textAt(0).isEmpty(), true);
+	QCOMPARE(column->textAt(1), 'a');
+	QCOMPARE(column->textAt(2), 'b');
+	QCOMPARE(column->textAt(3), "1.1");
+	QCOMPARE(column->textAt(4), "2.2");
+
+	//3rd column, Origin::TextNumeric:
+	//first is numerical, column is set to Numeric, empty or text values in the column a set to NAN
+	column = spreadsheet->column(2);
+	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(column->valueAt(0), 1.1);
+	QCOMPARE(column->valueAt(1), 2.2);
+	QCOMPARE(std::isnan(column->valueAt(2)), true);
+	QCOMPARE(std::isnan(column->valueAt(3)), true);
+	QCOMPARE(column->valueAt(4), 3.3);
+
+	//4th column, Origin::TextNumeric:
+	//first value is string, the column is set to Text, numerical values are converted to strings
+	column = spreadsheet->column(3);
+	QCOMPARE(column->columnMode(), AbstractColumn::Text);
+	QCOMPARE(column->textAt(0), 'a');
+	QCOMPARE(column->textAt(1), 'b');
+	QCOMPARE(column->textAt(2), "1.1");
+	QCOMPARE(column->textAt(3), "2.2");
+	QCOMPARE(column->textAt(4), 'c');
+
+	//5th column, Origin::Numeric
+	//column is set to Numeric, empty values in the column a set to NAN
+	column = spreadsheet->column(4);
+	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(std::isnan(column->valueAt(0)), true);
+	QCOMPARE(column->valueAt(1), 1.1);
+	QCOMPARE(column->valueAt(2), 2.2);
+	QCOMPARE(column->valueAt(3), 3.3);
+	QCOMPARE(std::isnan(column->valueAt(4)), true);
+
+	//6th column, Origin::Numeric
+	//column is set to Numeric, empty values in the column a set to NAN
+	column = spreadsheet->column(5);
+	QCOMPARE(column->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(column->valueAt(0), 1.1);
+	QCOMPARE(column->valueAt(1), 2.2);
+	QCOMPARE(column->valueAt(2), 3.3);
+	QCOMPARE(std::isnan(column->valueAt(3)), true);
+	QCOMPARE(std::isnan(column->valueAt(4)), true);
+}
+
 QTEST_MAIN(ProjectImportTest)

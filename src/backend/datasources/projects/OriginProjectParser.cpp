@@ -588,58 +588,50 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		QString format;
 		switch(column.valueType) {
-		case Origin::Numeric:
+		case Origin::Numeric: {
+			for (int i = 0; i < (int)column.data.size(); ++i) {
+				const double value = column.data.at(i).as_double();
+				if (value != _ONAN)
+					col->setValueAt(i, value);
+			}
+
+			loadColumnNumericFormat(column, col);
+			break;
+		}
 		case Origin::TextNumeric: {
-			/* TODO: check this
-			A TextNumeric column in Origin is a column whose filled cells contain either a double or a string.
-			Here there is no equivalent column type.
-			Set the column type as 'Numeric' or 'Text' depending on the type of first element in column.
-			IDEA: Add a "per column" flag, settable at import dialog, to choose between both types.
-			 */
-			double datavalue;
-			bool setAsText = false;
-			col->setColumnMode(AbstractColumn::Numeric);
-			//printf("column has %ld rows\n", column.data.size());
-			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i) {
-				Origin::variant v(column.data.at(i));
-				//printf("i=%d type = %d\n", i, v.type);
-				if (v.type() == Origin::Variant::V_DOUBLE) {
-					//printf("DOUBLE !\n");
-					datavalue = v.as_double();
-					//printf("datavalue = %g\n", datavalue);
-					if (datavalue == _ONAN) continue; // mark for empty cell
-					if (!setAsText)
-						col->setValueAt(i, datavalue);
-//TODO					else	// convert double to string for Text columns
-//						col->setTextAt(i, locale.toString(datavalue, 'g', 16));
-				} else if (v.type() == Origin::Variant::V_STRING) {
-					//printf("STRING !\n");
-					if (!setAsText && i == 0) {
-						col->setColumnMode(AbstractColumn::Text);
-						setAsText = true;
-					}
-					col->setTextAt(i, v.as_string());
+			//A TextNumeric column can contain numeric and string values, there is no equivalent column mode in LabPlot.
+			// -> Set the column mode as 'Numeric' or 'Text' depending on the type of first non-empty element in column.
+			for (int i = 0; i < (int)column.data.size(); ++i) {
+				const Origin::variant value(column.data.at(i));
+				if (value.type() == Origin::Variant::V_DOUBLE) {
+					if (value.as_double() != _ONAN)
+						break;
 				} else {
-					printf("ERROR: data type = %d unknown!\n", v.type());
+					if (value.as_string() != NULL) {
+						col->setColumnMode(AbstractColumn::Text);
+						break;
+					}
 				}
 			}
-			if (column.numericDisplayType != 0) {
-				int fi = 0;
-				switch (column.valueTypeSpecification) {
-				case Origin::Decimal:
-					fi = 1;
-					break;
-				case Origin::Scientific:
-					fi = 2;
-					break;
-				case Origin::Engineering:
-				case Origin::DecimalWithMarks:
-					break;
-				}
 
-				Double2StringFilter *filter = static_cast<Double2StringFilter*>(col->outputFilter());
-				filter->setNumericFormat(fi);
-				filter->setNumDigits(column.decimalPlaces);
+			if (col->columnMode() == AbstractColumn::Numeric) {
+				for (int i = 0; i < (int)column.data.size(); ++i) {
+					const double value = column.data.at(i).as_double();
+					if (column.data.at(i).type() == Origin::Variant::V_DOUBLE && value != _ONAN)
+						col->setValueAt(i, value);
+				}
+				loadColumnNumericFormat(column, col);
+			} else {
+				for (int i = 0; i < (int)column.data.size(); ++i) {
+					const Origin::variant value(column.data.at(i));
+					if (value.type() == Origin::Variant::V_STRING) {
+						if (value.as_string() != NULL)
+							col->setTextAt(i, value.as_string());
+					} else {
+						if (value.as_double() != _ONAN)
+							col->setTextAt(i, QString::number(value.as_double()));
+					}
+				}
 			}
 			break;
 		}
@@ -810,6 +802,26 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	return true;
 }
 
+void OriginProjectParser::loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const {
+	if (originColumn.numericDisplayType != 0) {
+		int fi = 0;
+		switch (originColumn.valueTypeSpecification) {
+		case Origin::Decimal:
+			fi = 1;
+			break;
+		case Origin::Scientific:
+			fi = 2;
+			break;
+		case Origin::Engineering:
+		case Origin::DecimalWithMarks:
+			break;
+		}
+
+		Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		filter->setNumericFormat(fi);
+		filter->setNumDigits(originColumn.decimalPlaces);
+	}
+}
 
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	DEBUG("loadMatrixWorkbook()");

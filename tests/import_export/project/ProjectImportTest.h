@@ -39,6 +39,7 @@ private slots:
 	void testOrigin02();
 	void testOrigin03();
 	void testOrigin04();
+	void testOriginTextNumericColumns();
 
 private:
 	QString m_dataDir;

@@ -34,6 +34,7 @@
 #include <liborigin/OriginFile.h>
 
 class Axis;
+class Column;
 class Project;
 class Workbook;
 class Spreadsheet;
@@ -57,6 +58,7 @@ private:
 	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
 	bool loadSpreadsheet(Spreadsheet*, bool preview, const QString& wbName = QString(), int sheetIndex = -1);
+	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 	bool loadWorksheet(Worksheet*,  bool preview);
