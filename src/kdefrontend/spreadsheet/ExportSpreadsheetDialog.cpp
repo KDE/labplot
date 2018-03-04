@@ -324,7 +324,7 @@ void ExportSpreadsheetDialog::selectFile() {
 	else
 		format =  i18n("FITS files (*.fits *.fit *.fts)");
 
-	const QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir, format);
+	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, format);
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 
