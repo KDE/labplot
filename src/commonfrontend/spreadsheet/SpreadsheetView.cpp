@@ -1124,19 +1124,26 @@ void SpreadsheetView::copySelection() {
 	WAIT_CURSOR;
 	QString output_str;
 
+	QVector<Column*> columns;
+	QVector<char> formats;
+	for (int c = 0; c < cols; c++) {
+		Column* col = m_spreadsheet->column(first_col + c);
+		columns << col;
+		const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col->outputFilter());
+		formats << out_fltr->numericFormat();
+	}
+
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
-			const Column* col_ptr = m_spreadsheet->column(first_col + c);
-			const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col_ptr->outputFilter());
+			const Column* col_ptr = columns.at(c);
 			if (isCellSelected(first_row + r, first_col + c)) {
 // 				if (formulaModeActive())
 // 					output_str += col_ptr->formula(first_row + r);
 // 				else
-				if (col_ptr->columnMode() == AbstractColumn::Numeric) {
-					output_str += QLocale().toString(col_ptr->valueAt(first_row + r),
-					                                 out_fltr->numericFormat(), 16); // copy with max. precision
-				} else
-					output_str += m_spreadsheet->column(first_col+c)->asStringColumn()->textAt(first_row + r);
+				if (col_ptr->columnMode() == AbstractColumn::Numeric)
+					output_str += QLocale().toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
+				else
+					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
 			}
 			if (c < cols-1)
 				output_str += '\t';
@@ -1144,6 +1151,7 @@ void SpreadsheetView::copySelection() {
 		if (r < rows-1)
 			output_str += '\n';
 	}
+
 	QApplication::clipboard()->setText(output_str);
 	RESET_CURSOR;
 }
@@ -1213,9 +1221,15 @@ void SpreadsheetView::pasteIntoSelection() {
 		Column* col = m_spreadsheet->column(first_col + c);
 		col->setSuppressDataChangedSignal(true);
 		if (col->columnMode() == AbstractColumn::Numeric) {
-			for (int r = 0; r < rows && r < input_row_count; r++) {
-				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
-					col->setValueAt(first_row+r, locale.toDouble(cellTexts.at(r).at(c)));
+			if (rows == m_spreadsheet->rowCount()) {
+				QVector<double> new_data(rows);
+				for (int r = 0; r < rows; ++r)
+					new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
+				col->replaceValues(0, new_data);
+			} else {
+				for (int r = 0; r < rows && r < input_row_count; r++) {
+					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) )
+						col->setValueAt(first_row+r, locale.toDouble(cellTexts.at(r).at(c)));
 				}
 			}
 		} else {
