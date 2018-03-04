@@ -1044,6 +1044,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		}
 
 		return true;
+	} else if (event->type() == QEvent::KeyPress) {
+		QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+		if (key_event->matches(QKeySequence::Copy))
+			copySelection();
+		else if (key_event->matches(QKeySequence::Paste))
+			pasteIntoSelection();
 	}
 
 	return QWidget::eventFilter(watched, event);
