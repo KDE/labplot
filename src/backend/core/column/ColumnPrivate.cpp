@@ -1040,7 +1040,6 @@ int ColumnPrivate::integerAt(int row) const {
  * Use this only when columnMode() is Text
  */
 void ColumnPrivate::setTextAt(int row, const QString& new_value) {
-	DEBUG("ColumnPrivate::setTextAt()");
 	if (m_column_mode != AbstractColumn::Text) return;
 
 	emit m_owner->dataAboutToChange(m_owner);

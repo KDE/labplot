@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : parser for Origin projects
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -589,7 +589,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		QString format;
 		switch(column.valueType) {
 		case Origin::Numeric: {
-			for (int i = 0; i < (int)column.data.size(); ++i) {
+			for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 				const double value = column.data.at(i).as_double();
 				if (value != _ONAN)
 					col->setValueAt(i, value);
@@ -601,7 +601,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::TextNumeric: {
 			//A TextNumeric column can contain numeric and string values, there is no equivalent column mode in LabPlot.
 			// -> Set the column mode as 'Numeric' or 'Text' depending on the type of first non-empty element in column.
-			for (int i = 0; i < (int)column.data.size(); ++i) {
+			for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 				const Origin::variant value(column.data.at(i));
 				if (value.type() == Origin::Variant::V_DOUBLE) {
 					if (value.as_double() != _ONAN)
@@ -615,14 +615,14 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 			}
 
 			if (col->columnMode() == AbstractColumn::Numeric) {
-				for (int i = 0; i < (int)column.data.size(); ++i) {
+				for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 					const double value = column.data.at(i).as_double();
 					if (column.data.at(i).type() == Origin::Variant::V_DOUBLE && value != _ONAN)
 						col->setValueAt(i, value);
 				}
 				loadColumnNumericFormat(column, col);
 			} else {
-				for (int i = 0; i < (int)column.data.size(); ++i) {
+				for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 					const Origin::variant value(column.data.at(i));
 					if (value.type() == Origin::Variant::V_STRING) {
 						if (value.as_string() != NULL)
