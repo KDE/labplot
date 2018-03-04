@@ -256,6 +256,9 @@ namespace Origin
 		unsigned int index;
 		unsigned int colIndex;
 		unsigned int sheet;
+		unsigned int numRows;
+		unsigned int beginRow;
+		unsigned int endRow;
 		vector<variant> data;
 
 		SpreadColumn(const string& _name = "", unsigned int _index = 0)
@@ -271,6 +274,9 @@ namespace Origin
 		,	index(_index)
 		,	colIndex(0)
 		,	sheet(0)
+		,	numRows(0)
+		,	beginRow(0)
+		,	endRow(0)
 		{};
 	};
 

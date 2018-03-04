@@ -975,17 +975,17 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 
 	LOG_PRINT(logfile, "\n  data_type 0x%.4X, data_type_u 0x%.2X, valuesize %d [0x%X], %s [%s]\n", data_type, data_type_u, valuesize, valuesize, name.c_str(), column_name.c_str());
 
+	int total_rows, first_row, last_row;
+	stmp.str(col_header.substr(0x19));
+	GET_INT(stmp, total_rows);
+	GET_INT(stmp, first_row);
+	GET_INT(stmp, last_row);
+	LOG_PRINT(logfile, "  total %d, first %d, last %d rows\n", total_rows, first_row, last_row)
+
 	unsigned short signature;
 	if (col_header_size > 0x72) {
 		stmp.str(col_header.substr(0x71));
 		GET_SHORT(stmp, signature);
-
-		int total_rows, first_row, last_row;
-		stmp.str(col_header.substr(0x19));
-		GET_INT(stmp, total_rows);
-		GET_INT(stmp, first_row);
-		GET_INT(stmp, last_row);
-		LOG_PRINT(logfile, "  total %d, first %d, last %d rows\n", total_rows, first_row, last_row)
 	} else {
 		LOG_PRINT(logfile, "  NOTE: alternative signature determination\n")
 		signature = col_header[0x18];
@@ -1058,6 +1058,9 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 		spreadSheets[spread].columns.push_back(SpreadColumn(column_name, objectIndex));
 		spreadSheets[spread].columns.back().colIndex = ++col_index;
 		spreadSheets[spread].columns.back().dataset_name = dataset_name;
+		spreadSheets[spread].columns.back().numRows = total_rows;
+		spreadSheets[spread].columns.back().beginRow = first_row;
+		spreadSheets[spread].columns.back().endRow = last_row;
 
 		string::size_type sheetpos = spreadSheets[spread].columns.back().name.find_last_of("@");
 		if(sheetpos != string::npos){
