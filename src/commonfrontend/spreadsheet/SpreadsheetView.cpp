@@ -33,6 +33,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
@@ -1108,28 +1109,30 @@ void SpreadsheetView::cutSelection() {
 }
 
 void SpreadsheetView::copySelection() {
-	int first_col = firstSelectedColumn();
+	PERFTRACE("copy selected cells");
+	const int first_col = firstSelectedColumn();
 	if (first_col == -1) return;
-	int last_col = lastSelectedColumn();
+	const int last_col = lastSelectedColumn();
 	if (last_col == -2) return;
-	int first_row = firstSelectedRow();
+	const int first_row = firstSelectedRow();
 	if (first_row == -1)	return;
-	int last_row = lastSelectedRow();
+	const int last_row = lastSelectedRow();
 	if (last_row == -2) return;
-	int cols = last_col - first_col +1;
-	int rows = last_row - first_row +1;
+	const int cols = last_col - first_col + 1;
+	const int rows = last_row - first_row + 1;
 
 	WAIT_CURSOR;
 	QString output_str;
 
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
-			Column* col_ptr = m_spreadsheet->column(first_col + c);
+			const Column* col_ptr = m_spreadsheet->column(first_col + c);
+			const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col_ptr->outputFilter());
 			if (isCellSelected(first_row + r, first_col + c)) {
-				if (formulaModeActive())
-					output_str += col_ptr->formula(first_row + r);
-				else if (col_ptr->columnMode() == AbstractColumn::Numeric) {
-					Double2StringFilter * out_fltr = static_cast<Double2StringFilter *>(col_ptr->outputFilter());
+// 				if (formulaModeActive())
+// 					output_str += col_ptr->formula(first_row + r);
+// 				else
+				if (col_ptr->columnMode() == AbstractColumn::Numeric) {
 					output_str += QLocale().toString(col_ptr->valueAt(first_row + r),
 					                                 out_fltr->numericFormat(), 16); // copy with max. precision
 				} else
@@ -1149,73 +1152,87 @@ void SpreadsheetView::pasteIntoSelection() {
 	if (m_spreadsheet->columnCount() < 1 || m_spreadsheet->rowCount() < 1)
 		return;
 
+	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
+	if (!mime_data->hasFormat("text/plain"))
+		return;
+
+	PERFTRACE("paste selected cells");
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard", m_spreadsheet->name()));
-	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
 
-	if (mime_data->hasFormat("text/plain")) {
-		int first_col = firstSelectedColumn();
-		int last_col = lastSelectedColumn();
-		int first_row = firstSelectedRow();
-		int last_row = lastSelectedRow();
-		int input_row_count = 0;
-		int input_col_count = 0;
-		int rows, cols;
+	int first_col = firstSelectedColumn();
+	int last_col = lastSelectedColumn();
+	int first_row = firstSelectedRow();
+	int last_row = lastSelectedRow();
+	int input_row_count = 0;
+	int input_col_count = 0;
 
-		QString input_str = QString(mime_data->data("text/plain")).trimmed();
-		QList< QStringList > cellTexts;
-		QStringList input_rows(input_str.split('\n'));
-		input_row_count = input_rows.count();
-		input_col_count = 0;
-		for (int i=0; i<input_row_count; i++) {
-			cellTexts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
-			if (cellTexts.at(i).count() > input_col_count) input_col_count = cellTexts.at(i).count();
-		}
-
-		if ( (first_col == -1 || first_row == -1) ||
-		        (last_row == first_row && last_col == first_col) )
-			// if the is no selection or only one cell selected, the
-			// selection will be expanded to the needed size from the current cell
-		{
-			int current_row, current_col;
-			getCurrentCell(&current_row, &current_col);
-			if (current_row == -1) current_row = 0;
-			if (current_col == -1) current_col = 0;
-			setCellSelected(current_row, current_col);
-			first_col = current_col;
-			first_row = current_row;
-			last_row = first_row + input_row_count -1;
-			last_col = first_col + input_col_count -1;
-			// resize the spreadsheet if necessary
-			if (last_col >= m_spreadsheet->columnCount()) {
-				for (int i=0; i<last_col+1-m_spreadsheet->columnCount(); i++) {
-					Column * new_col = new Column(QString::number(i+1), AbstractColumn::Text);
-					new_col->setPlotDesignation(AbstractColumn::Y);
-					new_col->insertRows(0, m_spreadsheet->rowCount());
-					m_spreadsheet->addChild(new_col);
-				}
-			}
-			if (last_row >= m_spreadsheet->rowCount())
-				m_spreadsheet->appendRows(last_row+1-m_spreadsheet->rowCount());
-			// select the rectangle to be pasted in
-			setCellsSelected(first_row, first_col, last_row, last_col);
-		}
-
-		rows = last_row - first_row + 1;
-		cols = last_col - first_col + 1;
-		for (int r=0; r<rows && r<input_row_count; r++) {
-			for (int c=0; c<cols && c<input_col_count; c++) {
-				//TODO c->setSuppressDataChangedSignal(true);
-				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
-					Column * col_ptr = m_spreadsheet->column(first_col + c);
-					if (formulaModeActive())
-						col_ptr->setFormula(first_row + r, cellTexts.at(r).at(c));
-					else
-						col_ptr->asStringColumn()->setTextAt(first_row+r, cellTexts.at(r).at(c));
-				}
-			}
-		}
+	QString input_str = QString(mime_data->data("text/plain")).trimmed();
+	QVector<QStringList> cellTexts;
+	QStringList input_rows(input_str.split('\n'));
+	input_row_count = input_rows.count();
+	input_col_count = 0;
+	for (int i=0; i<input_row_count; i++) {
+		cellTexts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
+		if (cellTexts.at(i).count() > input_col_count) input_col_count = cellTexts.at(i).count();
 	}
+
+	if ( (first_col == -1 || first_row == -1) ||
+			(last_row == first_row && last_col == first_col) )
+		// if the is no selection or only one cell selected, the
+		// selection will be expanded to the needed size from the current cell
+	{
+		int current_row, current_col;
+		getCurrentCell(&current_row, &current_col);
+		if (current_row == -1) current_row = 0;
+		if (current_col == -1) current_col = 0;
+		setCellSelected(current_row, current_col);
+		first_col = current_col;
+		first_row = current_row;
+		last_row = first_row + input_row_count -1;
+		last_col = first_col + input_col_count -1;
+		// resize the spreadsheet if necessary
+		if (last_col >= m_spreadsheet->columnCount()) {
+			for (int i = 0; i < last_col + 1 - m_spreadsheet->columnCount(); i++) {
+				Column* new_col = new Column(QString::number(i+1), AbstractColumn::Text);
+				new_col->setPlotDesignation(AbstractColumn::Y);
+				new_col->insertRows(0, m_spreadsheet->rowCount());
+				m_spreadsheet->addChild(new_col);
+			}
+		}
+		if (last_row >= m_spreadsheet->rowCount())
+			m_spreadsheet->appendRows(last_row + 1 - m_spreadsheet->rowCount());
+		// select the rectangle to be pasted in
+		setCellsSelected(first_row, first_col, last_row, last_col);
+	}
+
+	const int rows = last_row - first_row + 1;
+	const int cols = last_col - first_col + 1;
+	QLocale locale;
+	for (int c = 0; c < cols && c < input_col_count; c++) {
+		Column* col = m_spreadsheet->column(first_col + c);
+		col->setSuppressDataChangedSignal(true);
+		if (col->columnMode() == AbstractColumn::Numeric) {
+			for (int r = 0; r < rows && r < input_row_count; r++) {
+				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
+					col->setValueAt(first_row+r, locale.toDouble(cellTexts.at(r).at(c)));
+				}
+			}
+		} else {
+			for (int r = 0; r < rows && r < input_row_count; r++) {
+				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
+// 					if (formulaModeActive())
+// 						col->setFormula(first_row + r, cellTexts.at(r).at(c));
+// 					else
+					col->asStringColumn()->setTextAt(first_row + r, cellTexts.at(r).at(c));
+				}
+			}
+		}
+
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }

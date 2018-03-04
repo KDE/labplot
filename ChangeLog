@@ -41,6 +41,9 @@ New features:
 	* Smooth and animated zooming in the worksheet view
 	* build with MSVC and ICC
 
+Performance improvements:
+	* Faster copy&paste in the spreadsheet
+
 Bug fixes:
 	* Bug 379877 - masked rows in spreadsheet not restored in project
 	* Calculation of fit results corrected
