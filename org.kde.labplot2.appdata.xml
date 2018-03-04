@@ -104,12 +104,15 @@
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Fit example</caption>
       <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_01.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Mathematical function</caption>
       <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_02.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>CAS worksheet</caption>
       <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_03.png</image>
     </screenshot>
   </screenshots>
