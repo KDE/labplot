@@ -425,8 +425,9 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		plot->addChild(curve);
 	} else {
 		bool createDataCurve = ui->chkCreateDataCurve->isChecked();
+		XYCurve* curve = 0;
 		if (createDataCurve) {
-			XYCurve* curve = new XYCurve(name);
+			curve = new XYCurve(name);
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
 			plot->addChild(curve);
@@ -462,6 +463,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			case FitCustom:
 				analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
 				static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
+				static_cast<XYFitCurve*>(analysisCurve)->initStartValues(curve);
 				break;
 			case FourierFilter:
 				analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));

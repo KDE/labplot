@@ -1054,12 +1054,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						int pos2 = legendText.indexOf(QString("\\c{%1}").arg(curveIndex+1));
 						QString curveText = legendText.mid(pos1, pos2 - pos1);
 						// replace %(1), %(2), etc. with curve name
-						curveText.replace(QString("\%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
+						curveText.replace(QString("%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
 						curveText = curveText.trimmed();
 						DEBUG(" curve " << curveIndex << " text = " << curveText.toStdString());
 
 						//XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
-						//TODO: curve does not support HTML text
+						//TODO: curve (legend) does not support HTML text yet.
 						//XYCurve* xyCurve = new XYCurve(curveText);
 						XYCurve* xyCurve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
 

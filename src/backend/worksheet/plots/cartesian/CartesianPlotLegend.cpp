@@ -765,6 +765,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			//curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
+			//TODO: support HTML text?
 			painter->drawText(QPoint(lineSymbolWidth+layoutHorizontalSpacing, h), curve->name());
 			painter->translate(0,layoutVerticalSpacing+h);
 		}

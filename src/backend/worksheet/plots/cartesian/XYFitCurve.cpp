@@ -736,6 +736,7 @@ struct data {
  * \param f vector with the weighted residuals weight[i]*(Yi - y[i])
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
+	DEBUG("func_f");
 	size_t n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -770,9 +771,9 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		}
 
 		assign_variable("x", x[i]);
+		//DEBUG("evaluate function \"" << func << "\" @ x = " << x[i] << ":");
 		double Yi = parse(func);
-
-//		DEBUG("evaluate function \"" << func << "\": f(x["<< i <<"]) = " << Yi);
+		//DEBUG("	f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -790,6 +791,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
+	DEBUG("func_df");
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
@@ -1455,6 +1457,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
+	DEBUG("func_fdf");
 	func_f(x, params, f);
 	func_df(x, params, J);
 
@@ -1680,22 +1683,25 @@ void XYFitCurvePrivate::recalculate() {
 	f.p = np;
 	f.params = &params;
 
-	// initialize the derivative solver (using Levenberg-Marquardt robust solver)
+	DEBUG("initialize the derivative solver (using Levenberg-Marquardt robust solver)");
 	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
 	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
 
-	// set start values
+	DEBUG("set start values");
 	double* x_init = fitData.paramStartValues.data();
 	double* x_min = fitData.paramLowerLimits.data();
 	double* x_max = fitData.paramUpperLimits.data();
-	// scale start values if limits are set
+	DEBUG("scale start values if limits are set");
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
+	DEBUG(" DONE");
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
-	// initialize solver with function f and initial guess x
+	DEBUG("Turn off GSL error handler to avoid overflow/underflow");
+	gsl_set_error_handler_off();
+	DEBUG("initialize solver with function f and initial guess x");
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
-	// iterate
+	DEBUG("Iterate ...");
 	int status;
 	unsigned int iter = 0;
 	fitResult.solverOutput.clear();
