@@ -55,6 +55,7 @@ public:
 	void setReadOnly(bool);
 	void enableNumericColumnsOnly(bool);
 	void enableNonEmptyNumericColumnsOnly(bool);
+	void enableShowPlotDesignation(bool);
 	void setFilterString(const QString&);
 	void setFilterCaseSensitivity(Qt::CaseSensitivity);
 	void setFilterMatchCompleteWord(bool);
@@ -77,6 +78,7 @@ private:
 	bool m_folderSelectable;
 	bool m_numericColumnsOnly;
 	bool m_nonEmptyNumericColumnsOnly;
+	bool m_showPlotDesignation;
 	QList<const char*> m_selectableAspects;
 
 	QString m_filterString;

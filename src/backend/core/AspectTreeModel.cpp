@@ -78,6 +78,7 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_folderSelectable(true),
 	  m_numericColumnsOnly(false),
 	  m_nonEmptyNumericColumnsOnly(false),
+	  m_showPlotDesignation(false),
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
 
@@ -107,6 +108,10 @@ void AspectTreeModel::enableNumericColumnsOnly(bool value) {
 
 void AspectTreeModel::enableNonEmptyNumericColumnsOnly(bool value) {
 	m_nonEmptyNumericColumnsOnly = value;
+}
+
+void AspectTreeModel::enableShowPlotDesignation(bool value) {
+	m_showPlotDesignation = value;
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const {
@@ -181,13 +186,51 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 		case 0: {
 			const Column* column = dynamic_cast<const Column*>(aspect);
 			if (column) {
+				QString name = aspect->name();
 				if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
-					return aspect->name() + "   (" + i18n("non-numeric data") + ")";
+					name += QLatin1String("   (") + i18n("non-numeric data") + QLatin1Char(')');
+				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
+					name += QLatin1String("   (") + i18n("no values") + QLatin1Char(')');
 
-				if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
-					return aspect->name() + "   (" + i18n("no values") + ")";
-			}
-			return aspect->name();
+				if (m_showPlotDesignation) {
+					QString designation;
+					switch(column->plotDesignation()) {
+						case AbstractColumn::NoDesignation:
+							break;
+						case AbstractColumn::X:
+							designation = QLatin1String(" [X]");
+							break;
+						case AbstractColumn::Y:
+							designation = QLatin1String(" [Y]");
+							break;
+						case AbstractColumn::Z:
+							designation = QLatin1String(" [Z]");
+							break;
+						case AbstractColumn::XError:
+							designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
+							break;
+						case AbstractColumn::XErrorPlus:
+							designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
+							break;
+						case AbstractColumn::XErrorMinus:
+							designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
+							break;
+						case AbstractColumn::YError:
+							designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
+							break;
+						case AbstractColumn::YErrorPlus:
+							designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
+							break;
+						case AbstractColumn::YErrorMinus:
+							designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
+							break;
+					}
+					name += QLatin1Char('\t') + designation;
+				}
+
+				return name;
+			} else
+				return aspect->name();
 		}
 		case 1:
 			return aspect->metaObject()->className();
