@@ -182,11 +182,14 @@ void PlotDataDialog::setAnalysisAction(AnalysisAction action) {
 void PlotDataDialog::processColumns() {
 	//columns to plot
 	SpreadsheetView* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
-	m_columns = view->selectedColumns(true);
+	QVector<Column*> selectedColumns = view->selectedColumns(true);
 
-	//use all spreadsheet columns if no columns are selected
-	if (!m_columns.size()) {
-		m_columns = m_spreadsheet->children<Column>();
+	if (!selectedColumns.size()) {
+		//use all spreadsheet columns if no columns are selected
+		//skip error columns
+		for (Column* col : m_spreadsheet->children<Column>())
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+				m_columns << col;
 
 		//disable everything if the spreadsheet doesn't have any columns
 		if (!m_columns.size()) {
@@ -195,6 +198,11 @@ void PlotDataDialog::processColumns() {
 			ui->gbPlotPlacement->setEnabled(false);
 			return;
 		}
+	} else {
+		//use selected columns, skip error columns
+		for (Column* col : selectedColumns)
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+				m_columns << col;
 	}
 
 	m_columnComboBoxes << ui->cbXColumn;
