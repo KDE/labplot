@@ -702,9 +702,9 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //######################### Private implementation #############################
 //##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner),
-	xErrorColumn(0), yErrorColumn(0),
-	residualsColumn(0),
-	residualsVector(0),
+	xErrorColumn(nullptr), yErrorColumn(nullptr),
+	residualsColumn(nullptr),
+	residualsVector(nullptr),
 	q(owner)  {
 
 }
@@ -1544,7 +1544,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	if (yErrorColumn) {
-		if (yErrorColumn->rowCount() < xDataColumn->rowCount()) {
+		if (yErrorColumn->rowCount() < tmpXDataColumn->rowCount()) {
 			fitResult.available = true;
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
