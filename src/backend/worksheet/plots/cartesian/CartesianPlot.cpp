@@ -1158,11 +1158,21 @@ void CartesianPlot::addFitCurve() {
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
 
+
 		//set the fit model category and type
 		const QAction* action = qobject_cast<const QAction*>(QObject::sender());
 		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
 		curve->initFitData(type);
 		curve->initStartValues(curCurve);
+
+		//fit with weights for y if the curve has error bars for y
+		if (curCurve->yErrorType() == XYCurve::SymmetricError && curCurve->yErrorPlusColumn()) {
+			XYFitCurve::FitData fitData = curve->fitData();
+			fitData.yWeightsType = nsl_fit_weight_instrumental;
+			curve->setFitData(fitData);
+			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
+		}
+
 		this->addChild(curve);
 		curve->recalculate();
 		emit curve->fitDataChanged(curve->fitData());
