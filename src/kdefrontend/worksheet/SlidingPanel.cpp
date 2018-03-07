@@ -91,8 +91,3 @@ QSize SlidingPanel::sizeHint() const {
 
 	return sh;
 }
-
-bool SlidingPanel::shouldHide() {
-	const QRect& frameRect = this->rect();
-	return !(frameRect.contains(QCursor::pos()));
-}

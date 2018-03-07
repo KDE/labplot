@@ -70,23 +70,15 @@ DynamicPresenterWidget::~DynamicPresenterWidget() {
 	delete m_view;
 }
 
-bool DynamicPresenterWidget::eventFilter(QObject *watched, QEvent *event) {
+bool DynamicPresenterWidget::eventFilter(QObject* watched, QEvent* event) {
+	Q_UNUSED(watched);
 	if (event->type() == QEvent::MouseMove) {
-		for (const auto* const ob : m_panel->children()) {
-			if (watched == ob)
-				return false;
-		}
-		if (qobject_cast<SlidingPanel*>(watched) == m_panel)
-			return false;
-
-		if (!m_panel->shouldHide())
+		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();
-
-		else if (m_panel->y() == 0) {
-			if (m_panel->shouldHide())
-				slideUp();
-		}
+		else if (m_panel->y() == 0 && !m_panel->rect().contains(QCursor::pos()))
+			slideUp();
 	}
+
 	return false;
 }
 

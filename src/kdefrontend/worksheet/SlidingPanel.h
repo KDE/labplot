@@ -37,7 +37,6 @@ class SlidingPanel : public QFrame {
 public:
 	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
 	~SlidingPanel();
-	bool shouldHide();
 	QPushButton* quitButton() const;
 private:
 
