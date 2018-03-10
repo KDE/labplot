@@ -1191,11 +1191,24 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 /*!
     parses the content of the file \c fileName and fill the tree using rootItem.
 */
-void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
+void HDFFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
 	DEBUG("HDFFilterPrivate::parse()");
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
 	DEBUG("fileName = " << bafileName.data());
+
+	// check file type first
+	htri_t isHdf5 = H5Fis_hdf5(bafileName.data());
+	if (isHdf5 == 0) {
+		DEBUG(bafileName.data() << " is not a HDF5 file! Giving up.");
+		return;
+	}
+	if (isHdf5 < 0) {
+		DEBUG("H5Fis_hdf5() failed on " << bafileName.data() << "! Giving up.");
+		return;
+	}
+
+	// open file
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
 	if (file < 0) {
@@ -1212,7 +1225,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	m_status = H5Fclose(file);
 	handleError(m_status, "H5Fclose", "");
 #else
-	DEBUG("HDF not available");
+	DEBUG("HDF5 not available");
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
 #endif
