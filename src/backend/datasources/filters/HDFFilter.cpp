@@ -1198,6 +1198,10 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	DEBUG("fileName = " << bafileName.data());
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
+	if (file < 0) {
+		DEBUG("Opening file " << bafileName.data() << " failed! Giving up.");
+		return;
+	}
 	char rootName[] = "/";
 	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
 	handleError((int)group, "H5Gopen", rootName);
