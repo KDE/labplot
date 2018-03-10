@@ -126,7 +126,7 @@ QStringList AsciiFilter::predefinedFilters() {
 */
 QStringList AsciiFilter::separatorCharacters() {
 	return (QStringList() << "auto" << "TAB" << "SPACE" << "," << ";" << ":"
-	        << ",TAB" << ";TAB" << ":TAB" << ",SPACE" << ";SPACE" << ":SPACE");
+	        << ",TAB" << ";TAB" << ":TAB" << ",SPACE" << ";SPACE" << ":SPACE" << "2xSPACE" << "3xSPACE" << "4xSPACE" << "2xTAB");
 }
 
 /*!
@@ -431,8 +431,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		}
 	} else {	// use given separator
 		// replace symbolic "TAB" with '\t'
+		m_separator = separatingCharacter.replace(QLatin1String("2xTAB"), "\t\t", Qt::CaseInsensitive);
 		m_separator = separatingCharacter.replace(QLatin1String("TAB"), "\t", Qt::CaseInsensitive);
 		// replace symbolic "SPACE" with ' '
+		m_separator = m_separator.replace(QLatin1String("2xSPACE"), QLatin1String("  "), Qt::CaseInsensitive);
+		m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
+		m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
 	}
