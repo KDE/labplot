@@ -68,8 +68,8 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-	const QString& xColumnPath() const;
-	const QString& yColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
 
 	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 	BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)

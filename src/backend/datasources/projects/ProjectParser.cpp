@@ -29,6 +29,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/lib/trace.h"
 
 #include <KLocale>
 
@@ -67,6 +68,7 @@ QList<const char*> ProjectParser::topLevelClasses() const {
 
 QAbstractItemModel* ProjectParser::model() {
 	WAIT_CURSOR;
+	PERFTRACE("project model for preview created");
 	if (m_project == nullptr)
 		m_project = new Project();
 

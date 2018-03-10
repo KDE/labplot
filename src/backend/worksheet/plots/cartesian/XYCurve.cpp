@@ -224,12 +224,8 @@ void XYCurve::setPrinting(bool on) {
 //data source
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
-const QString& XYCurve::xColumnPath() const {
-	return d_ptr->xColumnPath;
-}
-const QString& XYCurve::yColumnPath() const {
-	return d_ptr->yColumnPath;
-}
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xColumnPath, xColumnPath)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yColumnPath, yColumnPath)
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
@@ -353,6 +349,16 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			//TODO: add disconnect in the undo-function
 		}
 	}
+}
+
+void XYCurve::setXColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->xColumnPath = path;
+}
+
+void XYCurve::setYColumnPath(const QString& path) {
+	Q_D(XYCurve);
+	d->yColumnPath = path;
 }
 
 //Line

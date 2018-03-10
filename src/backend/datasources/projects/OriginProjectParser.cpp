@@ -191,6 +191,53 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
+
+	//TODO: restore column pointers:
+	//1. extend the pathes to contain the parent structures first
+	//2. restore the pointers from the pathes
+	const QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
+	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::Recursive);
+	for (auto* curve : project->children<XYCurve>(AbstractAspect::Recursive)) {
+
+		//x-column
+		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
+		for (const auto* spreadsheet : spreadsheets) {
+			if (spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = spreadsheet->parentAspect()->path() + "/" + curve->xColumnPath();
+				curve->setXColumnPath(newPath);
+
+				for (auto* column : columns) {
+					if (!column)
+						continue;
+					if (column->path() == newPath) {
+						curve->setXColumn(column);
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		//x-column
+		spreadsheetName = curve->yColumnPath().left(curve->yColumnPath().indexOf(QLatin1Char('/')));
+		for (const auto* spreadsheet : spreadsheets) {
+			if (spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = spreadsheet->parentAspect()->path() + "/" + curve->yColumnPath();
+				curve->setYColumnPath(newPath);
+
+				for (auto* column : columns) {
+					if (!column)
+						continue;
+					if (column->path() == newPath) {
+						curve->setYColumn(column);
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -521,9 +568,6 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		spread = excel.sheets[sheetIndex];
 	}
 
-	if (preview)
-		return true;
-
 	const size_t cols = spread.columns.size();
 	int rows = 0;
 	for (size_t j = 0; j < cols; ++j)
@@ -555,6 +599,9 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		QString name(column.name.c_str());
 		col->setName(name.replace(QRegExp(".*_"),""));
+
+		if (preview)
+			continue;
 
 		//TODO: we don't support any formulas for cells yet.
 // 		if (column.command.size() > 0)
@@ -899,10 +946,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	//load worksheet data
 	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
 	DEBUG("	graph name = " << graph.name);
-
-	if (preview)
-		return true;
-
 	worksheet->setComment(graph.label.c_str());
 
 	//TODO: width, height, view mode (print view, page view, window view, draft view)
@@ -938,7 +981,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	for (const auto& layer: graph.layers) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
-
 			//TODO: width, height
 
 			//background color
@@ -964,44 +1006,48 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//axes
 			//x bottom
-			Origin::GraphCurve curve = layer.curves[0];
-			if (!originXAxis.formatAxis[0].hidden) {
-				Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
-				axis->setSuppressRetransform(true);
-				axis->setPosition(Axis::AxisBottom);
-				plot->addChild(axis);
-				loadAxis(originXAxis, axis, 0, QString::fromLatin1(curve.xColumnName.c_str()));
-				axis->setSuppressRetransform(false);
-			}
+			if (layer.curves.size()){
+				Origin::GraphCurve originCurve = layer.curves[0];
+				if (!originXAxis.formatAxis[0].hidden) {
+					Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
+					axis->setSuppressRetransform(true);
+					axis->setPosition(Axis::AxisBottom);
+					plot->addChild(axis);
+					loadAxis(originXAxis, axis, 0, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					axis->setSuppressRetransform(false);
+				}
 
-			//x top
-			if (!originXAxis.formatAxis[1].hidden) {
-				Axis* axis = new Axis("x top", plot, Axis::AxisHorizontal);
-				axis->setPosition(Axis::AxisTop);
-				axis->setSuppressRetransform(true);
-				plot->addChild(axis);
-				loadAxis(originXAxis, axis, 1, QString::fromLatin1(curve.xColumnName.c_str()));
-				axis->setSuppressRetransform(false);
-			}
+				//x top
+				if (!originXAxis.formatAxis[1].hidden) {
+					Axis* axis = new Axis("x top", plot, Axis::AxisHorizontal);
+					axis->setPosition(Axis::AxisTop);
+					axis->setSuppressRetransform(true);
+					plot->addChild(axis);
+					loadAxis(originXAxis, axis, 1, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					axis->setSuppressRetransform(false);
+				}
 
-			//y left
-			if (!originYAxis.formatAxis[0].hidden) {
-				Axis* axis = new Axis("y", plot, Axis::AxisVertical);
-				axis->setSuppressRetransform(true);
-				axis->setPosition(Axis::AxisLeft);
-				plot->addChild(axis);
-				loadAxis(originYAxis, axis, 0, QString::fromLatin1(curve.yColumnName.c_str()));
-				axis->setSuppressRetransform(false);
-			}
+				//y left
+				if (!originYAxis.formatAxis[0].hidden) {
+					Axis* axis = new Axis("y", plot, Axis::AxisVertical);
+					axis->setSuppressRetransform(true);
+					axis->setPosition(Axis::AxisLeft);
+					plot->addChild(axis);
+					loadAxis(originYAxis, axis, 0, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					axis->setSuppressRetransform(false);
+				}
 
-			//y right
-			if (!originYAxis.formatAxis[1].hidden) {
-				Axis* axis = new Axis("y right", plot, Axis::AxisVertical);
-				axis->setSuppressRetransform(true);
-				axis->setPosition(Axis::AxisRight);
-				plot->addChild(axis);
-				loadAxis(originYAxis, axis, 1, QString::fromLatin1(curve.yColumnName.c_str()));
-				axis->setSuppressRetransform(false);
+				//y right
+				if (!originYAxis.formatAxis[1].hidden) {
+					Axis* axis = new Axis("y right", plot, Axis::AxisVertical);
+					axis->setSuppressRetransform(true);
+					axis->setPosition(Axis::AxisRight);
+					plot->addChild(axis);
+					loadAxis(originYAxis, axis, 1, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					axis->setSuppressRetransform(false);
+				}
+			} else {
+				//TODO: ?
 			}
 
 			//range breaks
@@ -1061,12 +1107,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						//XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
 						//TODO: curve (legend) does not support HTML text yet.
 						//XYCurve* xyCurve = new XYCurve(curveText);
-						XYCurve* xyCurve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+						XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+						const QString& tableName = data.right(data.length() - 2);
+						curve->setXColumnPath(tableName + "/" + originCurve.xColumnName.c_str());
+						curve->setYColumnPath(tableName + "/" + originCurve.yColumnName.c_str());
 
-						xyCurve->suppressRetransform(true);
-						loadCurve(originCurve, xyCurve);
-						plot->addChild(xyCurve);
-						xyCurve->suppressRetransform(false);
+						curve->suppressRetransform(true);
+						if (!preview)
+							loadCurve(originCurve, curve);
+						plot->addChild(curve);
+						curve->suppressRetransform(false);
 					} else if (originCurve.type == Origin::GraphCurve::Column) {
 						//vertical bars
 
@@ -1106,7 +1156,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 					xyEqCurve->suppressRetransform(true);
 					xyEqCurve->setEquationData(eqData);
-					loadCurve(originCurve, xyEqCurve);
+					if (!preview)
+						loadCurve(originCurve, xyEqCurve);
 					plot->addChild(xyEqCurve);
 					xyEqCurve->suppressRetransform(false);
 				}
@@ -1116,7 +1167,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			}
 
 			worksheet->addChild(plot);
-
 		} else {
 			//no support for 3D plots yet
 			//TODO: add an "UnsupportedAspect" here
