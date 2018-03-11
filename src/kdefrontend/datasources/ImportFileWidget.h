@@ -37,7 +37,7 @@
 class AbstractFileFilter;
 class AsciiOptionsWidget;
 class BinaryOptionsWidget;
-class HDFOptionsWidget;
+class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
@@ -57,7 +57,7 @@ public:
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
 	bool isFileEmpty() const;
-	const QStringList selectedHDFNames() const;
+	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
 	void hideDataSource();
@@ -74,7 +74,7 @@ private:
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
-	std::unique_ptr<HDFOptionsWidget> m_hdfOptionsWidget;
+	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
@@ -108,7 +108,7 @@ signals:
 
 	void checkedFitsTableToMatrix(const bool enable);
 
-	friend class HDFOptionsWidget;	// to access refreshPreview()
+	friend class HDF5OptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 };

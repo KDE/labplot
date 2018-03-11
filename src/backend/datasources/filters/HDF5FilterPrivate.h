@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : HDFFilterPrivate.h
+File                 : HDF5FilterPrivate.h
 Project              : LabPlot
-Description          : Private implementation class for HDFFilter.
+Description          : Private implementation class for HDF5Filter.
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
@@ -24,8 +24,8 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef HDFFILTERPRIVATE_H
-#define HDFFILTERPRIVATE_H
+#ifndef HDF5FILTERPRIVATE_H
+#define HDF5FILTERPRIVATE_H
 
 #include <QList>
 #ifdef HAVE_HDF5
@@ -34,10 +34,10 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 class AbstractDataSource;
 
-class HDFFilterPrivate {
+class HDF5FilterPrivate {
 
 public:
-	explicit HDFFilterPrivate(HDFFilter*);
+	explicit HDF5FilterPrivate(HDF5Filter*);
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
@@ -46,7 +46,7 @@ public:
 						AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
-	const HDFFilter* q;
+	const HDF5Filter* q;
 
 	QString currentDataSetName;
 	int startRow;
@@ -64,24 +64,24 @@ private:
 
 #ifdef HAVE_HDF5
 	void handleError(int err, QString function, QString arg=QString());
-	QString translateHDFOrder(H5T_order_t);
-	QString translateHDFType(hid_t);
-	QString translateHDFClass(H5T_class_t);
-	QStringList readHDFCompound(hid_t tid);
-	template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines,
+	QString translateHDF5Order(H5T_order_t);
+	QString translateHDF5Type(hid_t);
+	QString translateHDF5Class(H5T_class_t);
+	QStringList readHDF5Compound(hid_t tid);
+	template <typename T> QStringList readHDF5Data1D(hid_t dataset, hid_t type, int rows, int lines,
 							void* dataPointer = nullptr);
-	QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataPointer);
-	template <typename T> QVector<QStringList> readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines,
+	QStringList readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataPointer);
+	template <typename T> QVector<QStringList> readHDF5Data2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines,
 								 QVector<void*>& dataPointer);
-	QVector<QStringList> readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
-	QStringList readHDFAttr(hid_t aid);
-	QStringList scanHDFAttrs(hid_t oid);
-	QStringList readHDFDataType(hid_t tid);
-	QStringList readHDFPropertyList(hid_t pid);
-	void scanHDFDataType(hid_t tid, char* dataTypeName,  QTreeWidgetItem* parentItem);
-	void scanHDFLink(hid_t gid, char* linkName,  QTreeWidgetItem* parentItem);
-	void scanHDFDataSet(hid_t dsid, char* dataSetName,  QTreeWidgetItem* parentItem);
-	void scanHDFGroup(hid_t gid, char* groupName, QTreeWidgetItem* parentItem);
+	QVector<QStringList> readHDF5CompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
+	QStringList readHDF5Attr(hid_t aid);
+	QStringList scanHDF5Attrs(hid_t oid);
+	QStringList readHDF5DataType(hid_t tid);
+	QStringList readHDF5PropertyList(hid_t pid);
+	void scanHDF5DataType(hid_t tid, char* dataTypeName,  QTreeWidgetItem* parentItem);
+	void scanHDF5Link(hid_t gid, char* linkName,  QTreeWidgetItem* parentItem);
+	void scanHDF5DataSet(hid_t dsid, char* dataSetName,  QTreeWidgetItem* parentItem);
+	void scanHDF5Group(hid_t gid, char* groupName, QTreeWidgetItem* parentItem);
 #endif
 };
 

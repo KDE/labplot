@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : HDFOptionsWidget.cpp
+File                 : HDF5OptionsWidget.cpp
 Project              : LabPlot
-Description          : widget providing options for the import of HDF data
+Description          : widget providing options for the import of HDF5 data
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
@@ -24,23 +24,23 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "HDFOptionsWidget.h"
+#include "HDF5OptionsWidget.h"
 #include "ImportFileWidget.h"
-#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/lib/macros.h"
 
  /*!
-	\class HDFOptionsWidget
-	\brief Widget providing options for the import of HDF data
+	\class HDF5OptionsWidget
+	\brief Widget providing options for the import of HDF5 data
 
 	\ingroup kdefrontend
  */
-HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
-	QStringList hdfheaders;
-	hdfheaders << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
-	ui.twContent->setHeaderLabels(hdfheaders);
+	QStringList hdf5headers;
+	hdf5headers << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
+	ui.twContent->setHeaderLabels(hdf5headers);
 	ui.twContent->setAlternatingRowColors(true);
 	// link and type column are hidden
 	ui.twContent->hideColumn(1);
@@ -51,16 +51,16 @@ HDFOptionsWidget::HDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
-	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
+	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdf5TreeWidgetSelectionChanged()) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), fileWidget, SLOT(refreshPreview()) );
 }
 
-void HDFOptionsWidget::clear() {
+void HDF5OptionsWidget::clear() {
 	ui.twContent->clear();
 	ui.twPreview->clear();
 }
 
-void HDFOptionsWidget::updateContent(HDFFilter *filter, QString fileName) {
+void HDF5OptionsWidget::updateContent(HDF5Filter *filter, QString fileName) {
 	ui.twContent->clear();
 	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
 	filter->parse(fileName, rootItem);
@@ -72,10 +72,10 @@ void HDFOptionsWidget::updateContent(HDFFilter *filter, QString fileName) {
 }
 
 /*!
-	updates the selected data set of a HDF file when a new tree widget item is selected
+	updates the selected data set of a HDF5 file when a new tree widget item is selected
 */
-void HDFOptionsWidget::hdfTreeWidgetSelectionChanged() {
-	DEBUG("hdfTreeWidgetSelectionChanged()");
+void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
+	DEBUG("hdf5TreeWidgetSelectionChanged()");
 	auto items = ui.twContent->selectedItems();
 	QDEBUG("SELECTED ITEMS =" << items);
 
@@ -86,13 +86,13 @@ void HDFOptionsWidget::hdfTreeWidgetSelectionChanged() {
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		m_fileWidget->refreshPreview();
 	else
-		DEBUG("non data set selected in HDF tree widget");
+		DEBUG("non data set selected in HDF5 tree widget");
 }
 
 /*!
-	return list of selected HDF item names
+	return list of selected HDF5 item names
 */
-const QStringList HDFOptionsWidget::selectedHDFNames() const {
+const QStringList HDF5OptionsWidget::selectedHDF5Names() const {
 	QStringList names;
 
 	// the data link is saved in the second column

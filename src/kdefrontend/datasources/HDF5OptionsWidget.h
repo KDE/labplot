@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : HDFOptionsWidget.h
+File                 : HDF5OptionsWidget.h
 Project              : LabPlot
-Description          : widget providing options for the import of HDF data
+Description          : widget providing options for the import of HDF5 data
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -25,31 +25,31 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef HDFOPTIONSWIDGET_H
-#define HDFOPTIONSWIDGET_H
+#ifndef HDF5OPTIONSWIDGET_H
+#define HDF5OPTIONSWIDGET_H
 
-#include "ui_hdfoptionswidget.h"
+#include "ui_hdf5optionswidget.h"
 
-class HDFFilter;
+class HDF5Filter;
 class ImportFileWidget;
 
-class HDFOptionsWidget : public QWidget {
+class HDF5OptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
-	explicit HDFOptionsWidget(QWidget*, ImportFileWidget*);
+	explicit HDF5OptionsWidget(QWidget*, ImportFileWidget*);
 	void clear();
-	void updateContent(HDFFilter*, QString fileName);
-	const QStringList selectedHDFNames() const;
+	void updateContent(HDF5Filter*, QString fileName);
+	const QStringList selectedHDF5Names() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
 	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
-	Ui::HDFOptionsWidget ui;
+	Ui::HDF5OptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 
 private slots:
-	void hdfTreeWidgetSelectionChanged();
+	void hdf5TreeWidgetSelectionChanged();
 };
 
 #endif

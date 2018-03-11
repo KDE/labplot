@@ -209,7 +209,7 @@ QStringList LiveDataSource::fileTypes() {
 	return (QStringList()<< i18n("ASCII data")
 	        << i18n("Binary data")
 	        << i18n("Image")
-	        << i18n("Hierarchical Data Format (HDF)")
+	        << i18n("Hierarchical Data Format 5 (HDF5)")
 	        << i18n("Network Common Data Format (NetCDF)")
 //		<< "CDF"
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
@@ -444,7 +444,7 @@ QIcon LiveDataSource::icon() const {
 		icon = QIcon::fromTheme("application-octet-stream");
 	else if (m_fileType == LiveDataSource::Image)
 		icon = QIcon::fromTheme("image-x-generic");
-	// TODO: HDF, NetCDF, FITS, etc.
+	// TODO: HDF5, NetCDF, FITS, etc.
 
 	return icon;
 }
@@ -556,7 +556,7 @@ void LiveDataSource::read() {
 			//bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
 		case Image:
-		case HDF:
+		case HDF5:
 		case NETCDF:
 		case FITS:
 			break;

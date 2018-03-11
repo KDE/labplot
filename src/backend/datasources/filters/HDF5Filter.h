@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : HDFFilter.h
+File                 : HDF5Filter.h
 Project              : LabPlot
-Description          : HDF I/O-filter
+Description          : HDF5 I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
@@ -24,21 +24,21 @@ Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef HDFFILTER_H
-#define HDFFILTER_H
+#ifndef HDF5FILTER_H
+#define HDF5FILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
 
 class QTreeWidgetItem;
-class HDFFilterPrivate;
+class HDF5FilterPrivate;
 
-class HDFFilter : public AbstractFileFilter {
+class HDF5Filter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	HDFFilter();
-	~HDFFilter() override;
+	HDF5Filter();
+	~HDF5Filter() override;
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
@@ -66,8 +66,8 @@ public:
 	bool load(XmlStreamReader*) override;
 
 private:
-	std::unique_ptr<HDFFilterPrivate> const d;
-	friend class HDFFilterPrivate;
+	std::unique_ptr<HDF5FilterPrivate> const d;
+	friend class HDF5FilterPrivate;
 };
 
 #endif

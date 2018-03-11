@@ -32,7 +32,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
@@ -198,15 +198,15 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 		QStringList names;
 		LiveDataSource::FileType fileType = m_importFileWidget->currentFileType();
-		if (fileType == LiveDataSource::HDF)
-			names = m_importFileWidget->selectedHDFNames();
+		if (fileType == LiveDataSource::HDF5)
+			names = m_importFileWidget->selectedHDF5Names();
 		else if (fileType == LiveDataSource::NETCDF)
 			names = m_importFileWidget->selectedNetCDFNames();
 
 		//multiple extensions selected
 
-		// multiple data sets/variables for HDF/NetCDF
-		if (fileType == LiveDataSource::HDF || fileType == LiveDataSource::NETCDF) {
+		// multiple data sets/variables for HDF5/NetCDF
+		if (fileType == LiveDataSource::HDF5 || fileType == LiveDataSource::NETCDF) {
 			int nrNames = names.size(), offset = sheets.size();
 
 			int start=0;
@@ -228,8 +228,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
-				if (fileType == LiveDataSource::HDF)
-					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
+				if (fileType == LiveDataSource::HDF5)
+					((HDF5Filter*) filter)->setCurrentDataSetName(names[i]);
 				else
 					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
 

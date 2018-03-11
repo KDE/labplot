@@ -32,13 +32,13 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FileInfoDialog.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
-#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
-#include "HDFOptionsWidget.h"
+#include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
@@ -97,9 +97,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
 	ui.swOptions->insertWidget(LiveDataSource::Image, imagew);
 
-	QWidget* hdfw = new QWidget();
-	m_hdfOptionsWidget = std::unique_ptr<HDFOptionsWidget>(new HDFOptionsWidget(hdfw, this));
-	ui.swOptions->insertWidget(LiveDataSource::HDF, hdfw);
+	QWidget* hdf5w = new QWidget();
+	m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
+	ui.swOptions->insertWidget(LiveDataSource::HDF5, hdf5w);
 
 	QWidget* netcdfw = new QWidget();
 	m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
@@ -125,7 +125,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #endif
 #ifndef HAVE_HDF5
 	// disable HDF5 item
-	QStandardItem* item = model->item(LiveDataSource::HDF);
+	QStandardItem* item = model->item(LiveDataSource::HDF5);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_NETCDF
@@ -443,9 +443,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 			return filter;
 		}
-	case LiveDataSource::HDF: {
-			HDFFilter* filter = new HDFFilter();
-			QStringList names = selectedHDFNames();
+	case LiveDataSource::HDF5: {
+			HDF5Filter* filter = new HDF5Filter();
+			QStringList names = selectedHDF5Names();
 			if (!names.isEmpty())
 				filter->setCurrentDataSetName(names[0]);
 			filter->setStartRow( ui.sbStartRow->value() );
@@ -537,7 +537,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//available from the previously selected file
 		ui.tePreview->clear();
 		m_twPreview->clear();
-		m_hdfOptionsWidget->clear();
+		m_hdf5OptionsWidget->clear();
 		m_netcdfOptionsWidget->clear();
 		m_fitsOptionsWidget->clear();
 
@@ -567,10 +567,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
 		} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
 		           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
-			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF);
+			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF5);
 
-			// update HDF tree widget using current selected file
-			m_hdfOptionsWidget->updateContent((HDFFilter*)this->currentFileFilter(), fileName);
+			// update HDF5 tree widget using current selected file
+			m_hdf5OptionsWidget->updateContent((HDF5Filter*)this->currentFileFilter(), fileName);
 		} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
 		           fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::NETCDF);
@@ -647,7 +647,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lEndColumn->hide();
 		ui.sbEndColumn->hide();
 		break;
-	case LiveDataSource::HDF:
+	case LiveDataSource::HDF5:
 	case LiveDataSource::NETCDF:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
@@ -673,7 +673,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		DEBUG("unknown file type");
 	}
 
-	m_hdfOptionsWidget->clear();
+	m_hdf5OptionsWidget->clear();
 	m_netcdfOptionsWidget->clear();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
@@ -689,8 +689,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 }
 
 
-const QStringList ImportFileWidget::selectedHDFNames() const {
-	return m_hdfOptionsWidget->selectedHDFNames();
+const QStringList ImportFileWidget::selectedHDF5Names() const {
+	return m_hdf5OptionsWidget->selectedHDF5Names();
 }
 
 const QStringList ImportFileWidget::selectedNetCDFNames() const {
@@ -716,7 +716,7 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	if (ui.cbFileType->currentIndex() == LiveDataSource::HDF || ui.cbFileType->currentIndex() == LiveDataSource::NETCDF
+	if (ui.cbFileType->currentIndex() == LiveDataSource::HDF5 || ui.cbFileType->currentIndex() == LiveDataSource::NETCDF
 	        || ui.cbFileType->currentIndex() == LiveDataSource::Image || ui.cbFileType->currentIndex() == LiveDataSource::FITS) {
 		ui.swOptions->setEnabled(true);
 		return;
@@ -871,11 +871,11 @@ void ImportFileWidget::refreshPreview() {
 			RESET_CURSOR;
 			return;
 		}
-	case LiveDataSource::HDF: {
-			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			lines = m_hdfOptionsWidget->lines();
+	case LiveDataSource::HDF5: {
+			HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
+			lines = m_hdf5OptionsWidget->lines();
 			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = m_hdfOptionsWidget->previewWidget();
+			tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 			break;
 		}
 	case LiveDataSource::NETCDF: {

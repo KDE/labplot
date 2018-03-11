@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>HDFOptionsWidget</class>
- <widget class="QWidget" name="HDFOptionsWidget">
+ <class>HDF5OptionsWidget</class>
+ <widget class="QWidget" name="HDF5OptionsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -68,7 +68,7 @@
        </property>
        <widget class="QTreeWidget" name="twContent">
         <property name="toolTip">
-         <string>Shows the content of a HDF file</string>
+         <string>Shows the content of a HDF5 file</string>
         </property>
         <attribute name="headerStretchLastSection">
          <bool>false</bool>

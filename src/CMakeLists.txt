@@ -23,7 +23,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
@@ -99,7 +99,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/hdfoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
@@ -195,7 +195,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
-	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
@@ -331,7 +331,6 @@ IF (CANTOR_LIBS_FOUND)
 	target_link_libraries( labplot2lib ${CANTOR_LIBS} )
 ENDIF ()
 IF (HDF5_FOUND)
-	#target_link_libraries( labplot2lib ${HDF5_C_LIBRARIES} )
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
 ENDIF ()
 IF (FFTW_FOUND)
