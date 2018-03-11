@@ -22,6 +22,7 @@ New features:
 		* improved data type support in spreadsheets
 	* Import from SQL databases (tables or custom queries)
 	* Import Origin OPJ projects
+	* Much better support for Windows and macOS
 	* Syntax highlighting for LaTeX in the text label
 	* Allow to set the background color for LaTeX labels
 	* support Hermite polynomials from GSL 2.4
@@ -39,7 +40,7 @@ New features:
 	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog
 	* Allow to change the theme from within the application
 	* Smooth and animated zooming in the worksheet view
-	* build with MSVC and ICC
+	* Improved building with MSVC and ICC
 
 Performance improvements:
 	* Faster copy&paste in the spreadsheet
