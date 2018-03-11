@@ -238,6 +238,14 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		}
 	}
 
+	if (!preview) {
+		for (auto* plot : project->children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
+			plot->setIsLoading(false);
+			plot->retransform();
+		}
+	}
+
+
 	return true;
 }
 
@@ -981,6 +989,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	for (const auto& layer: graph.layers) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
+			plot->setIsLoading(true);
 			//TODO: width, height
 
 			//background color
@@ -1166,7 +1175,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				++curveIndex;
 			}
 
-			worksheet->addChild(plot);
+			worksheet->addChildFast(plot);
 		} else {
 			//no support for 3D plots yet
 			//TODO: add an "UnsupportedAspect" here
@@ -1313,7 +1322,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		pen.setStyle(penStyle);
 		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
 		pen.setColor(color(originCurve.lineColor));
-		curve->setLineOpacity(originCurve.lineTransparency/255.);
+		curve->setLineOpacity(originCurve.lineTransparency/255);
 
 		//TODO: handle unsigned char boxWidth of Origin::GraphCurve
 	}
