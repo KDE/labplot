@@ -428,8 +428,10 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		reader->raiseError(i18n("no valid XML document found"));
 
 	if (!preview) {
-		for (auto* plot : children<AbstractPlot>(AbstractAspect::Recursive))
+		for (auto* plot : children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
+			plot->setIsLoading(false);
 			plot->retransform();
+		}
 	}
 
 	d->loading = false;

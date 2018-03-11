@@ -1003,10 +1003,8 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
-			} else {
+			} else
 				addChildFast(plot);
-				plot->setIsLoading(false);
-			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
 			if (!label->load(reader, preview)) {
