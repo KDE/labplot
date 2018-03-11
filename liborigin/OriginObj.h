@@ -571,7 +571,8 @@ namespace Origin
 		Color fillAreaPatternBorderColor;
 		double fillAreaPatternBorderWidth;
 
-		unsigned short symbolType;
+		unsigned char symbolInterior;
+		unsigned char symbolShape;
 		Color symbolColor;
 		Color symbolFillColor;
 		unsigned char symbolFillTransparency;

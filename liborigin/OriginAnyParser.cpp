@@ -2179,8 +2179,8 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 		GET_SHORT(stmp, w)
 		curve.lineWidth = (double)w/500.0;
 
-		stmp.str(cvehd.substr(0x17));
-		GET_SHORT(stmp, curve.symbolType)
+		curve.symbolShape = cvehd[0x17];
+		curve.symbolInterior = cvehd[0x18];
 
 		stmp.str(cvehd.substr(0x19));
 		GET_SHORT(stmp, w)

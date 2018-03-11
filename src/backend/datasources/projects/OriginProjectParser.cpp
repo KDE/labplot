@@ -1336,7 +1336,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		//try to map the different symbols, mapping is not exact
 		curve->setSymbolsRotationAngle(0);
-		switch(originCurve.symbolType) {
+		switch(originCurve.symbolShape) {
 		case 0: //NoSymbol
 			curve->setSymbolsStyle(Symbol::NoSymbols);
 			break;
