@@ -47,6 +47,7 @@
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/lib/macros.h"
 
 int main (int argc, char *argv[]) {
 	QApplication app(argc, argv);
@@ -108,6 +109,11 @@ int main (int argc, char *argv[]) {
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}
+
+	// debugging paths
+	QStringList appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+	QDEBUG("AppDataLocation paths = " << appdatapaths);
+	QDEBUG("Icon theme search paths = " << QIcon::themeSearchPaths());
 
 	// needed in order to have the signals triggered by SignallingUndoCommand
 	//TODO: redesign/remove this
