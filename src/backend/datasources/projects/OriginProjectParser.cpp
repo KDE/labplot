@@ -192,7 +192,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	handleLooseWindows(project, preview);
 
 
-	//TODO: restore column pointers:
+	//restore column pointers:
 	//1. extend the pathes to contain the parent structures first
 	//2. restore the pointers from the pathes
 	const QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
@@ -236,6 +236,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				break;
 			}
 		}
+
+		//TODO: error columns
 	}
 
 	if (!preview) {
@@ -1322,7 +1324,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		pen.setStyle(penStyle);
 		pen.setWidthF( Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Point) );
 		pen.setColor(color(originCurve.lineColor));
-		curve->setLineOpacity(originCurve.lineTransparency/255);
+		curve->setLineOpacity(1 - originCurve.lineTransparency/255);
 
 		//TODO: handle unsigned char boxWidth of Origin::GraphCurve
 	}
@@ -1458,7 +1460,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->setFillingFirstColor(color(originCurve.fillAreaColor));
-		curve->setFillingOpacity(originCurve.fillAreaTransparency/255);
+		curve->setFillingOpacity(1 - originCurve.fillAreaTransparency/255);
 
 		//Color fillAreaPatternColor - color for the pattern lines, not supported
 		//double fillAreaPatternWidth - width of the pattern lines, not supported
