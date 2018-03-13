@@ -373,7 +373,11 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	if (simplifyWhitespacesEnabled)
 		line = line.simplified();
 	DEBUG("data line : \'" << line.toStdString() << '\'');
-	QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+	QStringList lineStringList;
+	if (skipEmptyParts)
+		lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+	else
+		lineStringList = line.split(m_separator, QString::KeepEmptyParts);
 	//TODO: remove quotes here?
 	QDEBUG("data line, parsed: " << lineStringList);
 
@@ -417,7 +421,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		firstLineStringList = firstLine.split(regExp, QString::SkipEmptyParts);
+		if (skipEmptyParts)
+			firstLineStringList = firstLine.split(regExp, QString::SkipEmptyParts);
+		else
+			firstLineStringList = firstLine.split(regExp, QString::KeepEmptyParts);
 
 		if (!firstLineStringList.isEmpty()) {
 			int length1 = firstLineStringList.at(0).length();
@@ -438,10 +445,14 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-		firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
+		if (skipEmptyParts)
+			firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
+		else
+			firstLineStringList = firstLine.split(m_separator, QString::KeepEmptyParts);
 	}
 	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
+	QDEBUG("first line: " << firstLineStringList);
 	DEBUG("headerEnabled = " << headerEnabled);
 
 	//optionally, remove potential spaces in the first line
@@ -929,7 +940,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			QLocale locale(numberFormat);
 
-			QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+			QStringList lineStringList;
+			if (skipEmptyParts)
+				lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+			else
+				lineStringList = line.split(m_separator, QString::KeepEmptyParts);
+			QDEBUG(" line = " << lineStringList);
 
 			if (createIndexEnabled) {
 				if (spreadsheet->keepLastValues())
@@ -1090,7 +1106,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			continue;
 		}
 
-		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+		QStringList lineStringList;
+		if (skipEmptyParts)
+			lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+		else
+			lineStringList = line.split(m_separator, QString::KeepEmptyParts);
 
 		//prepend the index if required
 		//TODO: come up maybe with a solution with adding the index inside of the loop below,
@@ -1300,7 +1320,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 			continue;
 		}
 
-		QStringList lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+		QStringList lineStringList;
+		if (skipEmptyParts)
+			lineStringList = line.split(m_separator, QString::SkipEmptyParts);
+		else
+			lineStringList = line.split(m_separator, QString::KeepEmptyParts);
 
 		//prepend index if required
 		if (createIndexEnabled)
