@@ -57,6 +57,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	//try to convert to a double
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
 	locale.toDouble(valueString, &ok);
+	DEBUG("string " << valueString.toStdString() << ": toDouble " << locale.toDouble(valueString, &ok) << "?:" << ok);
 
 	//if not a number, check datetime. if that fails: string
 	if (!ok) {
