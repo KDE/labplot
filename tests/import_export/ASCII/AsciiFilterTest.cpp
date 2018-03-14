@@ -182,7 +182,7 @@ void AsciiFilterTest::testSparseFile02() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
  	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-	QCOMPARE(std::isnan(spreadsheet.column(1)->valueAt(1)), true);
+	QCOMPARE((bool)std::isnan(spreadsheet.column(1)->valueAt(1)), true);
  	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
 
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 2.);
