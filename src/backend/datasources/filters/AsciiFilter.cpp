@@ -373,11 +373,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	if (simplifyWhitespacesEnabled)
 		line = line.simplified();
 	DEBUG("data line : \'" << line.toStdString() << '\'');
-	QStringList lineStringList;
-	if (skipEmptyParts)
-		lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-	else
-		lineStringList = line.split(m_separator, QString::KeepEmptyParts);
+	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	//TODO: remove quotes here?
 	QDEBUG("data line, parsed: " << lineStringList);
 
@@ -421,10 +417,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		if (skipEmptyParts)
-			firstLineStringList = firstLine.split(regExp, QString::SkipEmptyParts);
-		else
-			firstLineStringList = firstLine.split(regExp, QString::KeepEmptyParts);
+		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
 
 		if (!firstLineStringList.isEmpty()) {
 			int length1 = firstLineStringList.at(0).length();
@@ -445,10 +438,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-		if (skipEmptyParts)
-			firstLineStringList = firstLine.split(m_separator, QString::SkipEmptyParts);
-		else
-			firstLineStringList = firstLine.split(m_separator, QString::KeepEmptyParts);
+		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	}
 	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
@@ -940,11 +930,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			QLocale locale(numberFormat);
 
-			QStringList lineStringList;
-			if (skipEmptyParts)
-				lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-			else
-				lineStringList = line.split(m_separator, QString::KeepEmptyParts);
+			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 			QDEBUG(" line = " << lineStringList);
 
 			if (createIndexEnabled) {
@@ -1106,11 +1092,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			continue;
 		}
 
-		QStringList lineStringList;
-		if (skipEmptyParts)
-			lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-		else
-			lineStringList = line.split(m_separator, QString::KeepEmptyParts);
+		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 
 		//prepend the index if required
 		//TODO: come up maybe with a solution with adding the index inside of the loop below,
@@ -1320,11 +1302,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 			continue;
 		}
 
-		QStringList lineStringList;
-		if (skipEmptyParts)
-			lineStringList = line.split(m_separator, QString::SkipEmptyParts);
-		else
-			lineStringList = line.split(m_separator, QString::KeepEmptyParts);
+		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 
 		//prepend index if required
 		if (createIndexEnabled)
