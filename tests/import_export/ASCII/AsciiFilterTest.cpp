@@ -137,17 +137,16 @@ void AsciiFilterTest::testSparseFile01() {
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	//TODO: QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Integer);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
-	//TODO:
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 0);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 1);
+ 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+ 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 0);
+ 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 1);
 
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 2);
 	QCOMPARE(spreadsheet.column(2)->integerAt(1), 2);
@@ -161,9 +160,10 @@ void AsciiFilterTest::testSparseFile02() {
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(",");
-	filter.setHeaderEnabled(true);
 	filter.setNaNValueToZero(false);
 	filter.setSimplifyWhitespacesEnabled(true);
+	filter.setSkipEmptyParts(false);
+	filter.setHeaderEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -174,17 +174,16 @@ void AsciiFilterTest::testSparseFile02() {
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	//TODO: QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
-	//TODO.
-// 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-//	QCOMPARE(std::isnan(spreadsheet.column(1)->valueAt(2)), true);
-// 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
+ 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
+	QCOMPARE(std::isnan(spreadsheet.column(1)->valueAt(1)), true);
+ 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
 
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 2.);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.);
@@ -194,16 +193,17 @@ void AsciiFilterTest::testSparseFile02() {
 void AsciiFilterTest::testSparseFile03() {
 	Spreadsheet spreadsheet(0, "test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "sparse_file_02.txt";
+	const QString fileName = m_dataDir + "sparse_file_03.txt";
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
 	filter.setSeparatingCharacter(",");
-	filter.setHeaderEnabled(true);
 	filter.setNaNValueToZero(true);
 	filter.setSimplifyWhitespacesEnabled(true);
+	filter.setSkipEmptyParts(true);
+	filter.setHeaderEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 4);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("N"));
@@ -211,21 +211,23 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Col2"));
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	//TODO: QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 3);
 
-	//TODO.
-// 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-//	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.);
-// 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
+ 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.);
 
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 2.);
-	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0.);
 }
 
 //##############################################################################
