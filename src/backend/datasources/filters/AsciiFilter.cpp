@@ -1105,11 +1105,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			lineStringList.prepend(QString::number(i+1));
 
 		// remove left white spaces
-		for (int n = 0; n < lineStringList.size(); ++n) {
-			QString valueString = lineStringList.at(n);
-			if (skipEmptyParts && !QString::compare(valueString, " ")) {
-				lineStringList.removeAt(n);
-				n--;
+		if (skipEmptyParts) {
+			for (int n = 0; n < lineStringList.size(); ++n) {
+				QString valueString = lineStringList.at(n);
+				if (!QString::compare(valueString, " ")) {
+					lineStringList.removeAt(n);
+					n--;
+				}
 			}
 		}
 
