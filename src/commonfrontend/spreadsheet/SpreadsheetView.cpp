@@ -1139,6 +1139,7 @@ void SpreadsheetView::copySelection() {
 		formats << out_fltr->numericFormat();
 	}
 
+	QLocale locale;
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
 			const Column* col_ptr = columns.at(c);
@@ -1147,7 +1148,7 @@ void SpreadsheetView::copySelection() {
 // 					output_str += col_ptr->formula(first_row + r);
 // 				else
 				if (col_ptr->columnMode() == AbstractColumn::Numeric)
-					output_str += QLocale().toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
+					output_str += locale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
 				else
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
 			}
@@ -1187,15 +1188,14 @@ void SpreadsheetView::pasteIntoSelection() {
 	input_row_count = input_rows.count();
 	input_col_count = 0;
 	for (int i=0; i<input_row_count; i++) {
-		cellTexts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
-		if (cellTexts.at(i).count() > input_col_count) input_col_count = cellTexts.at(i).count();
+		cellTexts.append(input_rows.at(i).split(QRegExp("\\s+")));
+		if (cellTexts.at(i).count() > input_col_count)
+			input_col_count = cellTexts.at(i).count();
 	}
 
-	if ( (first_col == -1 || first_row == -1) ||
-			(last_row == first_row && last_col == first_col) )
+	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
 		// if the is no selection or only one cell selected, the
 		// selection will be expanded to the needed size from the current cell
-	{
 		int current_row, current_col;
 		getCurrentCell(&current_row, &current_col);
 		if (current_row == -1) current_row = 0;
@@ -1205,17 +1205,32 @@ void SpreadsheetView::pasteIntoSelection() {
 		first_row = current_row;
 		last_row = first_row + input_row_count -1;
 		last_col = first_col + input_col_count -1;
-		// resize the spreadsheet if necessary
+
+		//add columns if necessary
 		if (last_col >= m_spreadsheet->columnCount()) {
-			for (int i = 0; i < last_col + 1 - m_spreadsheet->columnCount(); i++) {
-				Column* new_col = new Column(QString::number(i+1), AbstractColumn::Text);
+			for (int c = 0; c < last_col + 1 - m_spreadsheet->columnCount(); ++c) {
+				const int curCol = last_col + c - 1;
+				//first non-empty value in the column to paste determines the column mode/type of the new column to be added
+				QString nonEmptyValue;
+				for (int r = 0; r<cellTexts.size(); ++r) {
+					if (!cellTexts.at(r).at(curCol).isEmpty()) {
+						nonEmptyValue = cellTexts.at(r).at(curCol);
+						break;
+					}
+				}
+				const AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(nonEmptyValue,
+														QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), QLocale::AnyLanguage);
+				Column* new_col = new Column(QString::number(curCol), mode);
 				new_col->setPlotDesignation(AbstractColumn::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
 				m_spreadsheet->addChild(new_col);
 			}
 		}
+
+		//add rows if necessary
 		if (last_row >= m_spreadsheet->rowCount())
 			m_spreadsheet->appendRows(last_row + 1 - m_spreadsheet->rowCount());
+
 		// select the rectangle to be pasted in
 		setCellsSelected(first_row, first_col, last_row, last_col);
 	}
@@ -1223,6 +1238,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	const int rows = last_row - first_row + 1;
 	const int cols = last_col - first_col + 1;
 	QLocale locale;
+
 	for (int c = 0; c < cols && c < input_col_count; c++) {
 		Column* col = m_spreadsheet->column(first_col + c);
 		col->setSuppressDataChangedSignal(true);
@@ -2251,6 +2267,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
 
+	PERFTRACE("export spreadsheet to file");
 	QTextStream out(&file);
 	const int cols = m_spreadsheet->columnCount();
 
