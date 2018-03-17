@@ -158,9 +158,9 @@ ENDIF ()
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
 FIND_LIBRARY (CANTOR_LIBS cantorlibs)
-FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
-	/usr/include/cantor
-	/usr/local/include/cantor
+FIND_PATH (CANTOR_INCLUDE_DIR cantor/worksheetaccess.h
+	/usr/include
+	/usr/local/include
 )
 IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
 	SET (CANTOR_LIBS_FOUND TRUE)
@@ -219,8 +219,8 @@ FIND_LIBRARY (NETCDF_LIBRARY netcdf
 	/usr/local/lib
 )
 FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
-	/usr/include/
-	/usr/local/include/
+	/usr/include
+	/usr/local/include
 )
 IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 	SET (NETCDF_FOUND TRUE)
@@ -244,9 +244,9 @@ FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
 	$ENV{CFITSIO}
 )
 FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
-	/usr/include/
-	/usr/include/cfitsio/
-	/usr/local/include/
+	/usr/include
+	/usr/include/cfitsio
+	/usr/local/include
 	$ENV{CFITSIO}
 )
 IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
@@ -265,8 +265,8 @@ ENDIF ()
 
 #################################################
 FIND_PATH (XLOCALE_INCLUDE_DIR xlocale.h
-	/usr/include/
-	/usr/local/include/
+	/usr/include
+	/usr/local/include
 )
 IF (XLOCALE_INCLUDE_DIR)
 	add_definitions (-DHAVE_XLOCALE)
