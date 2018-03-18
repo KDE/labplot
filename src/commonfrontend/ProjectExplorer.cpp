@@ -196,7 +196,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
-	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
@@ -372,7 +372,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
 		return;
 
-	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
 
 	//expand and make the aspect visible
@@ -386,12 +386,12 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
-	m_treeView->resizeColumnToContents(0);
+	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2);
 }
 
 void ProjectExplorer::navigateTo(const QString& path) {
-	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
 }
@@ -590,19 +590,19 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 }
 
 void ProjectExplorer::expandSelected() {
-	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
 		m_treeView->setExpanded(index, true);
 }
 
 void ProjectExplorer::collapseSelected() {
-	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
 		m_treeView->setExpanded(index, false);
 }
 
 void ProjectExplorer::deleteSelected() {
-	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 	if (!items.size())
 		return;
 
@@ -710,8 +710,8 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  * \brief Load from XML
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
-	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	const AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const QVector<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;
@@ -842,7 +842,7 @@ void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QMod
 	if (index.column()==0 && index.row()==0)
 		return;
 
-	QModelIndex parent = index.parent();
+	const QModelIndex parent = index.parent();
 	if (parent == QModelIndex())
 		return;
 
