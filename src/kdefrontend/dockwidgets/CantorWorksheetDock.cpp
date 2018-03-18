@@ -4,6 +4,7 @@
     Description          : widget for CantorWorksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2015-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,7 +29,6 @@
 
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <cantor/session.h>
 #include <KParts/ReadWritePart>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_worksheet(nullptr), m_initializing(false) {
@@ -43,10 +43,7 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_wo
 	connect( ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()) );
 }
 
-/*!
-
-*/
-void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
+void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	m_initializing = true;
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
@@ -62,6 +59,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 		ui.tabWidget->removeTab(i-k);
 		++k;
 	}
+
 	if (m_cantorworksheetlist.size()==1) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
@@ -73,11 +71,18 @@ void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 	}
 	ui.tabWidget->setCurrentIndex(prev_index);
 
+	if (m_worksheet->part()) {
+		ui.evaluate_worksheet->show();
+		ui.restart_backend->show();
+	} else {
+		ui.evaluate_worksheet->hide();
+		ui.restart_backend->hide();
+	}
+
 	//SIGNALs/SLOTs
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	m_initializing = false;
 }
-
 
 //*************************************************************
 //**** SLOTs for changes triggered in CantorWorksheetDock *****
@@ -105,7 +110,6 @@ void CantorWorksheetDock::restartBackend() {
 	m_worksheet->part()->action("restart_backend")->trigger();
 }
 
-
 //*************************************************************
 //******** SLOTs for changes triggered in CantorWorksheet ***********
 //*************************************************************
@@ -114,10 +118,9 @@ void CantorWorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspe
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
