@@ -1251,8 +1251,12 @@ void SpreadsheetView::pasteIntoSelection() {
 				col->replaceValues(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
-					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) )
-						col->setValueAt(first_row+r, locale.toDouble(cellTexts.at(r).at(c)));
+					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
+						if (!cellTexts.at(r).at(c).isEmpty())
+							col->setValueAt(first_row + r, locale.toDouble(cellTexts.at(r).at(c)));
+						else
+							col->setValueAt(first_row + r, NAN);
+					}
 				}
 			}
 		} else {
