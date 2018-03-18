@@ -1207,9 +1207,10 @@ void SpreadsheetView::pasteIntoSelection() {
 		last_col = first_col + input_col_count -1;
 
 		//add columns if necessary
-		if (last_col >= m_spreadsheet->columnCount()) {
-			for (int c = 0; c < last_col + 1 - m_spreadsheet->columnCount(); ++c) {
-				const int curCol = last_col + c - 1;
+		const int columnCount = m_spreadsheet->columnCount();
+		if (last_col >= columnCount) {
+			for (int c = 0; c < last_col - (columnCount - 1); ++c) {
+				const int curCol = columnCount - 1 + c;
 				//first non-empty value in the column to paste determines the column mode/type of the new column to be added
 				QString nonEmptyValue;
 				for (int r = 0; r<cellTexts.size(); ++r) {
