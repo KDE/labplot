@@ -582,8 +582,7 @@ void XYCurveDock::initTabs() {
 	}
 
 	//show the properties of the first curve
-	KConfig config("", KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 
 	//Slots
 
