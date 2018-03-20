@@ -89,8 +89,7 @@ public:
 		version(LVERSION),
 		author(QString(qgetenv("USER"))),
 		modificationTime(QDateTime::currentDateTime()),
-		changed(false),
-		loading(false) {
+		changed(false) {
 	}
 
 	QUndoStack undo_stack;
@@ -101,7 +100,6 @@ public:
 	QString author;
 	QDateTime modificationTime;
 	bool changed;
-	bool loading;
 };
 
 Project::Project() : Folder(i18n("Project")), d(new Private()) {
@@ -114,11 +112,11 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	//we don't have direct access to the members name and comment
 	//->temporaly disable the undo stack and call the setters
 	setUndoAware(false);
-	d->loading = true;
+	setIsLoading(true);
 	setName(group.readEntry("Name", i18n("Project")));
 	setComment(group.readEntry("Comment", QString()));
 	setUndoAware(true);
-	d->loading = false;
+	setIsLoading(false);
 	d->changed = false;
 
 	// TODO: intelligent engine choosing
@@ -181,7 +179,7 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 
 void Project::setChanged(const bool value) {
-	if (d->loading)
+	if (isLoading())
 		return;
 
 	if (value)
@@ -195,10 +193,10 @@ bool Project ::hasChanged() const {
 }
 
 void Project::descriptionChanged(const AbstractAspect* aspect) {
-	if (d->loading)
+	if (isLoading())
 		return;
 
-	if (this!=aspect)
+	if (this != aspect)
 		return;
 
 	d->changed = true;
@@ -207,10 +205,6 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 void Project::navigateTo(const QString& path) {
 	requestNavigateTo(path);
-}
-
-bool Project::isLoading() const {
-	return d->loading;
 }
 
 bool Project::isLabPlotProject(const QString& fileName) {
@@ -279,7 +273,7 @@ bool Project::load(const QString& filename, bool preview) {
 	}
 
 	char c;
-	const bool rc = file->getChar(&c);
+	bool rc = file->getChar(&c);
 	if (!rc) {
 		KMessageBox::error(0, i18n("The project file is empty."), i18n("Error opening project"));
 		file->close();
@@ -290,7 +284,10 @@ bool Project::load(const QString& filename, bool preview) {
 
 	//parse XML
 	XmlStreamReader reader(file);
-	if (this->load(&reader, preview) == false) {
+	setIsLoading(true);
+	rc = this->load(&reader, preview);
+	setIsLoading(false);
+	if (rc == false) {
 		RESET_CURSOR;
 		QString msg_text = reader.errorString();
 		KMessageBox::error(0, msg_text, i18n("Error when opening the project"));
@@ -318,8 +315,6 @@ bool Project::load(const QString& filename, bool preview) {
  * \brief Load from XML
  */
 bool Project::load(XmlStreamReader* reader, bool preview) {
-	d->loading = true;
-
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
@@ -434,7 +429,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	d->loading = false;
 	emit loaded();
 	return !reader->hasError();
 }
