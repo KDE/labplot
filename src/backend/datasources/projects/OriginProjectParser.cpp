@@ -247,7 +247,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		}
 	}
 
-
+	emit project->loaded();
 	return true;
 }
 
@@ -317,6 +317,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		case Origin::ProjectNode::Graph: {
 			DEBUG("	top level graph");
 			Worksheet* worksheet = new Worksheet(0, name);
+			worksheet->setIsLoading(true);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 			break;
@@ -362,6 +363,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 		if (aspect) {
 			folder->addChildFast(aspect);
 			aspect->setCreationTime(creationTime(it));
+			aspect->setIsLoading(false);
 		}
 	}
 
@@ -1185,6 +1187,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 		++index;
 	}
+
+	if (!preview)
+		worksheet->updateLayout();
 
 	return true;
 }
