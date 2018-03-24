@@ -1572,6 +1572,8 @@ QColor OriginProjectParser::color(const Origin::Color& color) const {
 					return QColor(255, 128, 255);
 				case Origin::Color::DarkGray:
 					return QColor(Qt::darkGray);
+				case Origin::Color::SpecialV7Axis:
+					return QColor(Qt::black);
 			}
 			break;
 		case Origin::Color::ColorType::Custom:

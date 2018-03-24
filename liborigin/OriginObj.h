@@ -79,7 +79,7 @@ namespace Origin
 		enum ColorType {None = 0, Automatic = 1, Regular = 2, Custom = 3, Increment = 4, Indexing = 5, RGB = 6, Mapping = 7};
 		enum RegularColor {Black = 0, Red = 1, Green = 2, Blue = 3, Cyan = 4, Magenta = 5, Yellow = 6, DarkYellow = 7, Navy = 8,
 			Purple = 9, Wine = 10, Olive = 11, DarkCyan = 12, Royal=  13, Orange = 14, Violet = 15, Pink = 16, White = 17,
-			LightGray = 18, Gray = 19, LTYellow = 20, LTCyan = 21, LTMagenta = 22, DarkGray = 23/*, Custom = 255*/};
+			LightGray = 18, Gray = 19, LTYellow = 20, LTCyan = 21, LTMagenta = 22, DarkGray = 23, SpecialV7Axis = 0xF7/*, Custom = 255*/};
 
 		ColorType type;
 		union
