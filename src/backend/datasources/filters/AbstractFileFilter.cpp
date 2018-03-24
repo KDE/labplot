@@ -47,12 +47,16 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
 		return AbstractColumn::Integer;
 
+	if (isNan(valueString))
+		return AbstractColumn::Numeric;
+
 	// check if integer first
 	bool ok;
 	locale.toInt(valueString, &ok);
 	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
 	if (ok || isNan(valueString))
 		return AbstractColumn::Integer;
+
 
 	//try to convert to a double
 	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
