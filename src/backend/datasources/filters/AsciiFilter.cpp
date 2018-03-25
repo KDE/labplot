@@ -1256,7 +1256,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue);
+					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
 					break;
 				}
 				case AbstractColumn::Integer: {
@@ -1347,7 +1347,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue);
+					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
 					break;
 				}
 				case AbstractColumn::Integer: {
