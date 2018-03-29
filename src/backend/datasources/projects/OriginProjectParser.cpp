@@ -961,6 +961,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	worksheet->setComment(graph.label.c_str());
 
 	//TODO: width, height, view mode (print view, page view, window view, draft view)
+	//Origin allows to freely resize the window and ajusts the size of the plot (layer) automatically
+	//by keeping a certain width-to-height ratio. It's not clear what the actual size of the plot/layer is and how to handle this.
+	//For now we simply create a new wokrsheet here with it's default size and make it using the whole view size.
+	//Later we can decide to use one of the following properties:
+	// 1) Window.frameRect gives Rect-corner coordinates (in pixels) of the Window object
+	// 2) GraphLayer.clientRect gives Rect-corner coordinates (pixels) of the Layer inside the (printer?) page.
+	// 3) Graph.width, Graph.height give the (printer?) page size in pixels.
+	worksheet->setUseViewSize(true);
+
 
 	// worksheet background color
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
