@@ -520,7 +520,7 @@ void CartesianPlot::initMenus() {
 
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
-	addNewMenu->addAction(addHistogramPlot);
+// 	addNewMenu->addAction(addHistogramPlot);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);

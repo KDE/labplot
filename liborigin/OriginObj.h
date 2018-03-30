@@ -416,7 +416,7 @@ namespace Origin
 		unsigned short horizontalOffset;
 		unsigned long displacedSectionCount; // maximum - 32 sections
 		unsigned short displacement;
-		
+
 		//labels
 		bool formatAutomatic;
 		bool formatValues;
@@ -647,7 +647,7 @@ namespace Origin
 		bool showMajorLabels;
 		unsigned char color;
 		ValueType valueType;
-		int valueTypeSpecification; 
+		int valueTypeSpecification;
 		int decimalPlaces;
 		unsigned short fontSize;
 		bool fontBold;

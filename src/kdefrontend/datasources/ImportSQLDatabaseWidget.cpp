@@ -243,7 +243,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	QLocale::Language numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 	q.next(); //go to the first record
-	ui.twPreview->setRowCount(1); //add the first row for the check boxes
+// 	ui.twPreview->setRowCount(1); //add the first row for the check boxes
 	for (int i = 0; i < m_cols; ++i) {
 		//name
 		m_columnNames << q.record().fieldName(i);
@@ -262,14 +262,14 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		ui.twPreview->setHorizontalHeaderItem(i, item);
 
 		//create checked items
-		QTableWidgetItem* itemChecked = new QTableWidgetItem();
-		itemChecked->setCheckState(Qt::Checked);
-		ui.twPreview->setItem(0, i, itemChecked);
+// 		QTableWidgetItem* itemChecked = new QTableWidgetItem();
+// 		itemChecked->setCheckState(Qt::Checked);
+// 		ui.twPreview->setItem(0, i, itemChecked);
 	}
 
 	//preview the data
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
-	int row = 1;
+	int row = 0;
 	do {
 		for(int col = 0; col < m_cols; ++col) {
 			ui.twPreview->setRowCount(row+1);
