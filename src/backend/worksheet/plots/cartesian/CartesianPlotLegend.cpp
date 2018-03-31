@@ -698,7 +698,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//error bars
-			if ( (curve->xErrorType() != XYCurve::NoError) || (curve->yErrorType() != XYCurve::NoError) ) {
+			if ( (curve->xErrorType() != XYCurve::NoError && curve->xErrorPlusColumn()) || (curve->yErrorType() != XYCurve::NoError && curve->yErrorPlusColumn()) ) {
 				painter->setOpacity(curve->errorBarsOpacity());
 				painter->setPen(curve->errorBarsPen());
 
@@ -710,32 +710,39 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				switch (curve->errorBarsType()) {
 				case XYCurve::ErrorBarsSimple:
 					//horiz. line
-					painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
-									  lineSymbolWidth/2+errorBarsSize/2, h/2);
+					if (curve->xErrorType() != XYCurve::NoError)
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
+										lineSymbolWidth/2+errorBarsSize/2, h/2);
 					//vert. line
-					painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
-									  lineSymbolWidth/2, h/2+errorBarsSize/2);
+					if (curve->yErrorType() != XYCurve::NoError)
+						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
+										lineSymbolWidth/2, h/2+errorBarsSize/2);
 					break;
 				case XYCurve::ErrorBarsWithEnds:
 					//horiz. line
-					painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
-									  lineSymbolWidth/2+errorBarsSize/2, h/2);
+					if (curve->xErrorType() != XYCurve::NoError) {
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
+										lineSymbolWidth/2+errorBarsSize/2, h/2);
+
+						//caps for the horiz. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2-errorBarsSize/4,
+										lineSymbolWidth/2-errorBarsSize/2, h/2+errorBarsSize/4);
+						painter->drawLine(lineSymbolWidth/2+errorBarsSize/2, h/2-errorBarsSize/4,
+										lineSymbolWidth/2+errorBarsSize/2, h/2+errorBarsSize/4);
+					}
 
 					//vert. line
-					painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
-									  lineSymbolWidth/2, h/2+errorBarsSize/2);
+					if (curve->yErrorType() != XYCurve::NoError) {
+						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
+										lineSymbolWidth/2, h/2+errorBarsSize/2);
 
-					//caps for the horiz. line
-					painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2-errorBarsSize/4,
-									  lineSymbolWidth/2-errorBarsSize/2, h/2+errorBarsSize/4);
-					painter->drawLine(lineSymbolWidth/2+errorBarsSize/2, h/2-errorBarsSize/4,
-									  lineSymbolWidth/2+errorBarsSize/2, h/2+errorBarsSize/4);
 
-					//caps for the vert. line
-					painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2-errorBarsSize/2,
-									  lineSymbolWidth/2+errorBarsSize/4, h/2-errorBarsSize/2);
-					painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2+errorBarsSize/2,
-									  lineSymbolWidth/2+errorBarsSize/4, h/2+errorBarsSize/2);
+						//caps for the vert. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2-errorBarsSize/2,
+										lineSymbolWidth/2+errorBarsSize/4, h/2-errorBarsSize/2);
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2+errorBarsSize/2,
+										lineSymbolWidth/2+errorBarsSize/4, h/2+errorBarsSize/2);
+					}
 					break;
 				}
 			}
