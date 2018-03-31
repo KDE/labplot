@@ -1077,15 +1077,34 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//add legend if available
 			const Origin::TextBox& originLegend = layer.legend;
-			QString legendText = parseOriginText(QString::fromLatin1(originLegend.text.c_str()));
-			DEBUG(" parsed legend text = " << legendText.toStdString());
+			const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
+			DEBUG(" legend text = " << legendText.toStdString());
 			if (!originLegend.text.empty()) {
+				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
 
-				//CartesianPlotLegend* legend = new CartesianPlotLegend(plot, i18n("legend"));
-				QString legendTitle = legendText.left(legendText.indexOf("\\c{1}") - 1);
+				//Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
+				// and "%(...) to format the legend text for each curve
+				//s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
+				//the text before these formatting tags, if available, is interpreted as the legend title
+				QString legendTitle;
+
+				//search for the first occurance of the legend symbol substring
+				int index = legendText.indexOf(QLatin1String("\\l("), 0, Qt::CaseInsensitive);
+				if (index != -1)
+					legendTitle = legendText.left(index);
+				else {
+					//check legend text
+					index = legendText.indexOf(QLatin1String("%("));
+					if (index != -1)
+						legendTitle = legendText.left(index);
+				}
+
 				legendTitle = legendTitle.trimmed();
-				DEBUG(" title = " << legendTitle.toStdString());
-				CartesianPlotLegend* legend = new CartesianPlotLegend(plot, legendTitle);
+				if (!legendTitle.isEmpty())
+					legendTitle = parseOriginText(legendTitle);
+
+				DEBUG(" legend title = " << legendTitle.toStdString());
+				legend->title()->setText(legendTitle);
 
 				const Origin::Color& originColor = originLegend.color;
 				if (originColor.type == Origin::Color::None)
