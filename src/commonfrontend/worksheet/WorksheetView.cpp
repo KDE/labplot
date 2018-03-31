@@ -146,6 +146,11 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 		h *= QApplication::desktop()->physicalDpiY();
 		resize(w*1.1, h*1.1);
 	}
+
+	//rescale to the original size
+	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
 void WorksheetView::initActions() {
@@ -375,7 +380,6 @@ void WorksheetView::initActions() {
 	//set some default values
 	selectionModeAction->setChecked(true);
 	handleCartesianPlotActions();
-	changeZoom(zoomOriginAction);
 	currentZoomAction = zoomInViewAction;
 	currentMagnificationAction = noMagnificationAction;
 }
@@ -643,7 +647,6 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
 	QGraphicsView::setScene(scene);
-	setTransform(QTransform());
 }
 
 void WorksheetView::setIsClosing() {
