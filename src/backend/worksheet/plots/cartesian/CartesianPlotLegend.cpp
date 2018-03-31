@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2018 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,7 +41,6 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <QGraphicsItem>
 #include <QPainterPath>
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
@@ -86,7 +85,6 @@ void CartesianPlotLegend::init() {
 
 	//Title
  	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
-	d->title->setText(this->name());
 	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->setParentGraphicsItem(graphicsItem());
@@ -922,11 +920,6 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 //! Load from XML
 bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CartesianPlotLegend);
-
-	if (!reader->isStartElement() || reader->name() != "cartesianPlotLegend") {
-		reader->raiseError(i18n("no cartesian plot legend element found"));
-		return false;
-	}
 
 	if (!readBasicAttributes(reader))
 		return false;
