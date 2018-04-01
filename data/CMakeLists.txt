@@ -1,4 +1,4 @@
-add_subdirectory(colorschemes)
+add_subdirectory(color-schemes)
 add_subdirectory(pics)
 add_subdirectory(pics/gsl_distributions)
 add_subdirectory(pics/fit_models)

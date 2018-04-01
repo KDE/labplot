@@ -103,7 +103,8 @@ ForegroundPositive=0,110,40
 ForegroundVisited=150,111,232
 
 [General]
-Name=High Key
+ColorScheme=Oxygen
+Name=Oxygen
 shadeSortColumn=true
 
 [KDE]

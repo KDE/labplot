@@ -85,8 +85,7 @@ ForegroundPositive=145,221,100
 ForegroundVisited=64,128,255
 
 [General]
-# https://en.wikipedia.org/wiki/Low-key_lighting
-Name=LowKey
+Name=Wonton Soup
 
 [WM]
 activeBackground=138,151,166
