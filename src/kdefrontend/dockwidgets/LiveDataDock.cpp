@@ -79,10 +79,27 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
 	}
 
+    if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe) {
+        int itemIdx = -1;
+        for (int i = 0; i < ui.cbReadingType->count(); ++i) {
+            if (ui.cbReadingType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx != -1) {
+            ui.cbReadingType->removeItem(itemIdx);
+        }
+    }
+
 	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd) {
 		ui.lSampleRate->hide();
 		ui.sbSampleRate->hide();
-	} else
+    } else if (fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+        ui.lSampleRate->hide();
+        ui.sbSampleRate->hide();
+
+    } else
 		ui.sbSampleRate->setValue(fds->sampleRate());
 }
 

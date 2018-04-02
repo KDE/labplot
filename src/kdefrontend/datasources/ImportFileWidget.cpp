@@ -971,7 +971,7 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
-	if (type == LiveDataSource::ReadingType::TillEnd) {
+    if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleRate->hide();
 		ui.sbSampleRate->hide();
 	} else {
@@ -982,7 +982,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
-
+    int itemIdx = -1;
 	switch (type) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
@@ -998,6 +998,17 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
+
+        itemIdx = -1;
+        for (int i = 0; i < ui.cbReadType->count(); ++i) {
+            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx == -1) {
+            ui.cbReadType->addItem(QLatin1String("Read whole file"));
+        }
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
@@ -1013,7 +1024,19 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
-		break;
+
+        itemIdx = -1;
+        for (int i = 0; i < ui.cbReadType->count(); ++i) {
+            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx != -1) {
+            ui.cbReadType->removeItem(itemIdx);
+        }
+
+    break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.lHost->show();
@@ -1030,6 +1053,17 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+
+        itemIdx = -1;
+        for (int i = 0; i < ui.cbReadType->count(); ++i) {
+            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx != -1) {
+            ui.cbReadType->removeItem(itemIdx);
+        }
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -1045,6 +1079,17 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+        itemIdx = -1;
+        for (int i = 0; i < ui.cbReadType->count(); ++i) {
+            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx != -1) {
+            ui.cbReadType->removeItem(itemIdx);
+        }
+
 		break;
 	default:
 		break;
