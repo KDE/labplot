@@ -1106,13 +1106,28 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				DEBUG(" legend title = " << legendTitle.toStdString());
 				legend->title()->setText(legendTitle);
 
-				const Origin::Color& originColor = originLegend.color;
-				if (originColor.type == Origin::Color::None)
-					legend->setBackgroundOpacity(0);
-				else
-					legend->setBackgroundFirstColor(color(originColor));
+				//TODO: text color
+				//const Origin::Color& originColor = originLegend.color;
 
-				//TODO: position, rotation, etc.
+				//TODO: position
+
+				//TODO: rotation
+				//legend->setRotationAngle(originLegend.rotation);
+
+				//border line
+				if (originLegend.borderType == Origin::BorderType::None)
+					legend->setBorderPen(QPen(Qt::NoPen));
+				else
+					legend->setBorderPen(QPen(Qt::SolidLine));
+
+				//background color, determine it with the help of the border type
+				if (originLegend.borderType == Origin::BorderType::DarkMarble)
+					legend->setBackgroundFirstColor(Qt::darkGray);
+				else if (originLegend.borderType == Origin::BorderType::BlackOut)
+					legend->setBackgroundFirstColor(Qt::black);
+				else
+					legend->setBackgroundFirstColor(Qt::white);
+
 				plot->addChild(legend);
 			}
 
