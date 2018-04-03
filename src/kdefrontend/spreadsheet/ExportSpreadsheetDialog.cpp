@@ -405,8 +405,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->cbExportToFITS->show();
 		ui->lExportToFITS->show();
 		if (!m_matrixMode) {
-			ui->lColumnAsUnits->show();
-			ui->chkColumnsAsUnits->show();
+			if (ui->cbExportToFITS->currentIndex() == 1) {
+				ui->lColumnAsUnits->show();
+				ui->chkColumnsAsUnits->show();
+			}
 		}
 	} else {
 		ui->cbSeparator->show();

@@ -650,7 +650,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			existed = true;
 	}
 
-	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	Matrix* const matrix = dynamic_cast<Matrix*>(dataSource);
 	if (matrix) {
 		//FITS image
 		if (exportTo == 0) {
@@ -662,8 +662,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				return;
 			}
 			const long nelem = naxes[0] * naxes[1];
-			double* array = new double[nelem];
-			const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(matrix->data());
+			double* const array = new double[nelem];
+			const QVector<QVector<double> >* const data = static_cast<QVector<QVector<double>>*>(matrix->data());
 
 			for (int col = 0; col < naxes[0]; ++col)
 				for (int row = 0; row < naxes[1]; ++row)
@@ -690,7 +690,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			tunit.resize(tfields);
 			tunit.reserve(tfields);
 			//TODO: mode
-			const QVector<QVector<double>>* matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
+			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>* const>(matrix->data());
 			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
@@ -765,7 +765,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		return;
 	}
 
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet* const>(dataSource);
 	if (spreadsheet) {
 		//FITS image
 		if (exportTo == 0) {
@@ -773,7 +773,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			//don't export lots of empty lines if all of those contain nans
 			// TODO: option?
 			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
-				const Column* col = spreadsheet->column(c);
+				const Column* const col = spreadsheet->column(c);
 				int currMaxRoxIdx = -1;
 				for (int r = col->rowCount(); r >= 0; --r) {
 					if (col->isValid(r)) {
@@ -833,7 +833,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			tunit.reserve(tfields);
 
 			for (int i = 0; i < tfields; ++i) {
-				const Column* column =  spreadsheet->column(i);
+				const Column* const column =  spreadsheet->column(i);
 
 				columnNames[i] = new char[column->name().size()];
 				strcpy(columnNames[i], column->name().toLatin1().data());
@@ -852,7 +852,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 								maxSize = QString::number(column->valueAt(row)).size();
 						}
 
-						Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+						const Double2StringFilter* const filter = static_cast<Double2StringFilter* const>(column->outputFilter());
 						bool decimals = false;
 						for (int ii = 0; ii < nrows; ++ii) {
 							bool ok;
@@ -1433,7 +1433,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 	headerEditTable->setRowCount(keywords.size());
 	QTableWidgetItem* item;
 	for (int i = 0; i < keywords.size(); ++i) {
-		const FITSFilter::Keyword keyword = keywords.at(i);
+		const FITSFilter::Keyword& keyword = keywords.at(i);
 		const bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keyword.key) ||
 		                       FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
 		item = new QTableWidgetItem(keyword.key);
