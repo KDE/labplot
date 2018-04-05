@@ -752,11 +752,18 @@ QString LiveDataSource::fileInfoString(const QString &name) {
 	QIODevice *file = new QFile(name);
 
 	QString fileName;
+#ifdef Q_OS_WIN
+	if (name.at(1) != QLatin1Char(':')) {
+		fileName = QDir::homePath() + name;
+	} else {
+		fileName = name;
+	}
+#else
 	if (name.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + name;
 	else
 		fileName = name;
-
+#endif
 	if(file==0)
 		file = new QFile(fileName);
 
