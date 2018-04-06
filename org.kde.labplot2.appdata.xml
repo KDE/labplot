@@ -108,6 +108,7 @@
       <caption xml:lang="ca">Exemple d'ajust</caption>
       <caption xml:lang="ca-valencia">Exemple d'ajust</caption>
       <caption xml:lang="en-GB">Fit example</caption>
+      <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
       <caption xml:lang="sv">Anpassningsexempel</caption>
@@ -121,6 +122,7 @@
       <caption xml:lang="ca-valencia">Funció matemàtica</caption>
       <caption xml:lang="cs">Matematická funkce</caption>
       <caption xml:lang="en-GB">Mathematical function</caption>
+      <caption xml:lang="it">Funzioni matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
       <caption xml:lang="pt">Função matemática</caption>
       <caption xml:lang="sv">Matematisk funktion</caption>
@@ -133,6 +135,7 @@
       <caption xml:lang="ca">Full de treball CAS</caption>
       <caption xml:lang="ca-valencia">Full de treball CAS</caption>
       <caption xml:lang="en-GB">CAS worksheet</caption>
+      <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
       <caption xml:lang="sv">CAS-arbetsblad</caption>
