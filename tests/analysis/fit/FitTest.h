@@ -32,7 +32,8 @@ class FitTest : public QObject {
 private slots:
 	void initTestCase();
 
-	//linear regression
+	//linear regression (see NIST/linear data)
+	void testLinearNorris();
 	void testLinearWampler1();
 	void testLinearWampler2();
 	void testLinearWampler3();
