@@ -56,9 +56,17 @@ private slots:
 
 	//non-linear regression
 	void testNonLinearMisra1a();
+	void testNonLinearMisra1a_2();	// second set of start values
+	void testNonLinearMisra1a_3();	// third set of start values
 	void testNonLinearMisra1b();
+	void testNonLinearMisra1b_2();	// second set of start values
+	void testNonLinearMisra1b_3();	// third set of start values
 	void testNonLinearMisra1c();
+	void testNonLinearMisra1c_2();	// second set of start values
+	void testNonLinearMisra1c_3();	// third set of start values
 	void testNonLinearMisra1d();
+	void testNonLinearMisra1d_2();	// second set of start values
+	void testNonLinearMisra1d_3();	// third set of start values
 
 	//fits with weights
 };

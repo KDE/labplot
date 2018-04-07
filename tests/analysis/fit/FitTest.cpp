@@ -789,6 +789,115 @@ void FitTest::testNonLinearMisra1a() {
 	FuzzyCompare(fitResult.sse, 1.2455138894E-01, 1.e-9);
 }
 
+void FitTest::testNonLinearMisra1a_2() {
+	//NIST data for Misra1a dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 250. << 5.e-4;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 238.942305251573
+	FuzzyCompare(fitResult.paramValues.at(0), 2.3894212918E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 2.70651225218243
+	FuzzyCompare(fitResult.errorValues.at(0), 2.7070075241E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000550155958419367
+	FuzzyCompare(fitResult.paramValues.at(1), 5.5015643181E-04, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 7.26565480949189e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 7.2668688436E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.101878763320394
+	FuzzyCompare(fitResult.rsd, 1.0187876330E-01, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.124551388988316
+	FuzzyCompare(fitResult.sse, 1.2455138894E-01, 1.e-9);
+}
+
+void FitTest::testNonLinearMisra1a_3() {
+	//NIST data for Misra1a dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 2.3894212918E+02 << 5.5015643181E-04;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 238.942305251573
+	FuzzyCompare(fitResult.paramValues.at(0), 2.3894212918E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 2.70651225218243
+	FuzzyCompare(fitResult.errorValues.at(0), 2.7070075241E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000550155958419367
+	FuzzyCompare(fitResult.paramValues.at(1), 5.5015643181E-04, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 7.26565480949189e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 7.2668688436E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.101878763320394
+	FuzzyCompare(fitResult.rsd, 1.0187876330E-01, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.124551388988316
+	FuzzyCompare(fitResult.sse, 1.2455138894E-01, 1.e-9);
+}
+
+
 void FitTest::testNonLinearMisra1b() {
 	//NIST data for Misra1b dataset
 	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
@@ -814,6 +923,114 @@ void FitTest::testNonLinearMisra1b() {
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 337.99775062098
+	FuzzyCompare(fitResult.paramValues.at(0), 3.3799746163E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 3.16358581006192
+	FuzzyCompare(fitResult.errorValues.at(0), 3.1643950207E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000390390523934039
+	FuzzyCompare(fitResult.paramValues.at(1), 3.9039091287E-04, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 4.25373670682006e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 4.2547321834E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0793014720259488
+	FuzzyCompare(fitResult.rsd, 7.9301471998E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.0754646815857881
+	FuzzyCompare(fitResult.sse, 7.5464681533E-02, 1.e-9);
+}
+
+void FitTest::testNonLinearMisra1b_2() {
+	//NIST data for Misra1b dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-1./(1.+b2*x/2)^2)";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 300. << 2.e-4;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 337.99775062098
+	FuzzyCompare(fitResult.paramValues.at(0), 3.3799746163E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 3.16358581006192
+	FuzzyCompare(fitResult.errorValues.at(0), 3.1643950207E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000390390523934039
+	FuzzyCompare(fitResult.paramValues.at(1), 3.9039091287E-04, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 4.25373670682006e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 4.2547321834E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0793014720259488
+	FuzzyCompare(fitResult.rsd, 7.9301471998E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.0754646815857881
+	FuzzyCompare(fitResult.sse, 7.5464681533E-02, 1.e-9);
+}
+
+void FitTest::testNonLinearMisra1b_3() {
+	//NIST data for Misra1b dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-1./(1.+b2*x/2)^2)";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 3.3799746163E+02 << 3.9039091287E-04;
 	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
 	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
 	fitCurve.setFitData(fitData);
@@ -897,6 +1114,114 @@ void FitTest::testNonLinearMisra1c() {
 	FuzzyCompare(fitResult.sse, 4.0966836971E-02, 1.e-8);
 }
 
+void FitTest::testNonLinearMisra1c_2() {
+	//NIST data for Misra1c dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-1./sqrt(1.+2.*b2*x))";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 600. << 2.e-4;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 636.427904767969
+	FuzzyCompare(fitResult.paramValues.at(0), 6.3642725809E+02, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 4.66168062054875
+	FuzzyCompare(fitResult.errorValues.at(0), 4.6638326572E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000208136026420746
+	FuzzyCompare(fitResult.paramValues.at(1), 2.0813627256E-04, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 1.77209416674174e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 1.7728423155E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0584286153041661
+	FuzzyCompare(fitResult.rsd, 5.8428615257E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.0409668370363468
+	FuzzyCompare(fitResult.sse, 4.0966836971E-02, 1.e-8);
+}
+
+void FitTest::testNonLinearMisra1c_3() {
+	//NIST data for Misra1c dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-1./sqrt(1.+2.*b2*x))";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 6.3642725809E+02 << 2.0813627256E-04;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 636.427904767969
+	FuzzyCompare(fitResult.paramValues.at(0), 6.3642725809E+02, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 4.66168062054875
+	FuzzyCompare(fitResult.errorValues.at(0), 4.6638326572E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000208136026420746
+	FuzzyCompare(fitResult.paramValues.at(1), 2.0813627256E-04, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 1.77209416674174e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 1.7728423155E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.0584286153041661
+	FuzzyCompare(fitResult.rsd, 5.8428615257E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.0409668370363468
+	FuzzyCompare(fitResult.sse, 4.0966836971E-02, 1.e-8);
+}
+
 void FitTest::testNonLinearMisra1d() {
 	//NIST data for Misra1d dataset
 	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
@@ -922,6 +1247,114 @@ void FitTest::testNonLinearMisra1d() {
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 437.370039987725
+	FuzzyCompare(fitResult.paramValues.at(0), 4.3736970754E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 3.64772833062694
+	FuzzyCompare(fitResult.errorValues.at(0), 3.6489174345E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000302272976784709
+	FuzzyCompare(fitResult.paramValues.at(1), 3.0227324449E-04, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 2.93256059733558e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 2.9334354479E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.068568272134244
+	FuzzyCompare(fitResult.rsd, 6.8568272111E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.056419295321709
+	FuzzyCompare(fitResult.sse, 5.6419295283E-02, 1.e-9);
+}
+
+void FitTest::testNonLinearMisra1d_2() {
+	//NIST data for Misra1d dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*b2*x/(1.+b2*x)";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 450. << 3.e-4;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 437.370039987725
+	FuzzyCompare(fitResult.paramValues.at(0), 4.3736970754E+02, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 3.64772833062694
+	FuzzyCompare(fitResult.errorValues.at(0), 3.6489174345E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000302272976784709
+	FuzzyCompare(fitResult.paramValues.at(1), 3.0227324449E-04, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 2.93256059733558e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 2.9334354479E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.068568272134244
+	FuzzyCompare(fitResult.rsd, 6.8568272111E-02, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.056419295321709
+	FuzzyCompare(fitResult.sse, 5.6419295283E-02, 1.e-8);
+}
+
+void FitTest::testNonLinearMisra1d_3() {
+	//NIST data for Misra1d dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*b2*x/(1.+b2*x)";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 4.3736970754E+02 << 3.0227324449E-04;
 	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
 	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
 	fitCurve.setFitData(fitData);
