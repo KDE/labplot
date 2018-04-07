@@ -448,7 +448,11 @@ void XYFitCurveDock::yWeightChanged(int index) {
  * to update the model type dependent widgets in the general-tab.
  */
 void XYFitCurveDock::categoryChanged(int index) {
-	DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
+	if (index == nsl_fit_model_custom) {
+		DEBUG("categoryChanged() category = \"nsl_fit_model_custom\"");
+	} else {
+		DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
+	}
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
@@ -577,7 +581,11 @@ void XYFitCurveDock::modelTypeChanged(int index) {
  * Called when the model type or the degree of the model were changed.
  */
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG("XYFitCurveDock::updateModelEquation() category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
+	if (m_fitData.modelCategory == nsl_fit_model_custom) {
+		DEBUG("XYFitCurveDock::updateModelEquation() category = nsl_fit_model_custom, type = " << m_fitData.modelType);
+	} else {
+		DEBUG("XYFitCurveDock::updateModelEquation() category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
+	}
 
 	//this function can also be called when the value for the degree was changed -> update the fit data structure
 	int degree = uiGeneralTab.sbDegree->value();
