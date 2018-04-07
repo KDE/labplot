@@ -4,6 +4,7 @@
     Description          : Tests for data fitting
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,6 +39,8 @@ private slots:
 
 	//linear regression (see NIST/linear data)
 	void testLinearNorris();
+	void testLinearPontius();
+
 	void testLinearWampler1();
 	void testLinearWampler2();
 	void testLinearWampler3();
