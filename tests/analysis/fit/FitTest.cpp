@@ -83,12 +83,16 @@ void FitTest::testLinearNorris() {
 	QCOMPARE(np, 2);
 
 	QCOMPARE(fitResult.paramValues.at(0),  -0.262323073774029);
+	QCOMPARE(fitResult.errorValues.at(0),  0.232818234301152);
 	QCOMPARE(fitResult.paramValues.at(1), 1.00211681802045);
+	QCOMPARE(fitResult.errorValues.at(1),   0.429796848199937e-3);
 
 	QCOMPARE(fitResult.rsd, 0.884796396144373);
 	QCOMPARE(fitResult.rsquare, 0.999993745883712);
 	QCOMPARE(fitResult.sse, 26.6173985294224);
 	QCOMPARE(fitResult.rms, 0.782864662630069);
+//	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 5436419.54079774
+	FuzzyCompare(fitResult.fdist_F, 5436385.54079785, 34.);
 }
 
 void FitTest::testLinearWampler1() {

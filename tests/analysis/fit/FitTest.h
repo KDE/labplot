@@ -31,6 +31,10 @@ class FitTest : public QObject {
 
 private slots:
 	void initTestCase();
+	// compare floats with given delta (could be useful for other tests too)
+	static inline void FuzzyCompare(double actual, double expected, double delta = 0.000000000001) {
+		QVERIFY(actual-delta <= expected && actual+delta >=expected);
+	}
 
 	//linear regression (see NIST/linear data)
 	void testLinearNorris();
