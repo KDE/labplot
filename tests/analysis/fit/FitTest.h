@@ -58,6 +58,7 @@ private slots:
 	void testNonLinearMisra1a();
 	void testNonLinearMisra1b();
 	void testNonLinearMisra1c();
+	void testNonLinearMisra1d();
 
 	//fits with weights
 };
