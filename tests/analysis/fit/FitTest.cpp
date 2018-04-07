@@ -459,8 +459,6 @@ void FitTest::testLinearFilip() {
 
 
 void FitTest::testLinearWampler1() {
-	// TODO: remove when finished
-//	qFatal("STOP!");
 	//NIST data for Wampler1 dataset
 	QVector<int> xData = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 	QVector<int> yData = {1,6,63,364,1365,3906,9331,19608,37449,66430,111111,
@@ -736,6 +734,60 @@ void FitTest::testLinearWampler5() {
 //##############################################################################
 //#############  non-linear regression with NIST datasets  #####################
 //##############################################################################
+
+void FitTest::testNonLinearMisra1a() {
+	//NIST data for Misra1a dataset
+	QVector<double> xData = {77.6E0,114.9E0,141.1E0,190.8E0,239.9E0,289.0E0,332.8E0,378.4E0,434.8E0,477.3E0,536.8E0,593.1E0,689.1E0,760.0E0};
+	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.paramNames << "b1" << "b2";
+	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 500. << 0.0001;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max() << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max() << std::numeric_limits<double>::max();
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 238.942305251573
+	FuzzyCompare(fitResult.paramValues.at(0), 2.3894212918E+02, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 2.70651225218243
+	FuzzyCompare(fitResult.errorValues.at(0), 2.7070075241E+00, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.000550155958419367
+	FuzzyCompare(fitResult.paramValues.at(1), 5.5015643181E-04, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 7.26565480949189e-06
+	FuzzyCompare(fitResult.errorValues.at(1), 7.2668688436E-06, 1.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.101878763320394
+	FuzzyCompare(fitResult.rsd, 1.0187876330E-01, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.124551388988316
+	FuzzyCompare(fitResult.sse, 1.2455138894E-01, 1.e-9);
+}
 
 //TODO
 
