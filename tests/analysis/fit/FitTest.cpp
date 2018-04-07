@@ -290,7 +290,9 @@ void FitTest::testLinearWampler1() {
 
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
+		const double errorValue = fitResult.errorValues.at(i);
 		QCOMPARE(paramValue, 1.0);
+		QCOMPARE(errorValue, 0.0);
 	}
 
 	QCOMPARE(fitResult.rsd, 0.0);
@@ -329,7 +331,7 @@ void FitTest::testLinearWampler2() {
 	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
 
 	//check the results
-	qDebug()<<"STATUS " << fitResult.status;
+	qDebug() << "STATUS " << fitResult.status;
 	QCOMPARE(fitResult.available, true);
 	QCOMPARE(fitResult.valid, true);
 
@@ -342,16 +344,20 @@ void FitTest::testLinearWampler2() {
 	QCOMPARE(fitResult.paramValues.at(3), 0.001);
 	QCOMPARE(fitResult.paramValues.at(4), 0.0001);
 	QCOMPARE(fitResult.paramValues.at(5), 0.00001);
+	for (int i = 0; i < np; i++) {
+		const double errorValue = fitResult.errorValues.at(i);
+		FuzzyCompare(errorValue, 0., 3.e-15);
+	}
 
-		//TODO: rsd, sse and rms fails with
-	//FAIL!  : FitTest::testLinearWampler2() Compared doubles are not the same (fuzzy compare)
-	//Actual   (fitResult.rsd): 2,32459e-15
-	//Expected (0.0)          : 0
-	//etc.
-// 	QCOMPARE(fitResult.rsd, 0.000000000000000);
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 2.32458538254974e-15
+	FuzzyCompare(fitResult.rsd, 0., 2.4e-15);
 	QCOMPARE(fitResult.rsquare,  1.00000000000000);
-// 	QCOMPARE(fitResult.sse, 0.000000000000000);
-// 	QCOMPARE(fitResult.rms, 0.000000000000000);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 8.1055458011459e-29
+	FuzzyCompare(fitResult.sse, 0., 8.2e-29);
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 5.40369720076393e-30
+	FuzzyCompare(fitResult.rms, 0., 5.5e-30);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 1.22192608844148e+33
+//	FuzzyCompare(fitResult.fdist_F, INF, 1.);
 }
 
 void FitTest::testLinearWampler3() {
@@ -394,11 +400,19 @@ void FitTest::testLinearWampler3() {
 		const double paramValue = fitResult.paramValues.at(i);
 		QCOMPARE(paramValue, 1.0);
 	}
+// TODO: actual errors are smaller
+//	QCOMPARE(fitResult.errorValues.at(0), 2152.32624678170);
+//	QCOMPARE(fitResult.errorValues.at(1), 2363.55173469681);
+//	QCOMPARE(fitResult.errorValues.at(2), 779.343524331583);
+//	QCOMPARE(fitResult.errorValues.at(3), 101.475507550350);
+//	QCOMPARE(fitResult.errorValues.at(4), 5.64566512170752);
+//	QCOMPARE(fitResult.errorValues.at(5), 0.112324854679312);
 
 	QCOMPARE(fitResult.rsd, 2360.14502379268);
-	QCOMPARE(fitResult.rsquare,  0.999995559025820);
-	QCOMPARE(fitResult.sse,  83554268.0000000);
+	QCOMPARE(fitResult.rsquare, 0.999995559025820);
+	QCOMPARE(fitResult.sse, 83554268.0000000);
 	QCOMPARE(fitResult.rms, 5570284.53333333);
+//	QCOMPARE(fitResult.fdist_F, 675524.458240122);
 }
 
 void FitTest::testLinearWampler4() {
@@ -441,11 +455,19 @@ void FitTest::testLinearWampler4() {
 		const double paramValue = fitResult.paramValues.at(i);
 		QCOMPARE(paramValue, 1.0);
 	}
+// TODO: actual errors are smaller
+//	QCOMPARE(fitResult.errorValues.at(0), 215232.624678170);
+//	QCOMPARE(fitResult.errorValues.at(1), 236355.173469681);
+//	QCOMPARE(fitResult.errorValues.at(2), 77934.3524331583);
+//	QCOMPARE(fitResult.errorValues.at(3), 10147.5507550350);
+//	QCOMPARE(fitResult.errorValues.at(4), 564.566512170752);
+//	QCOMPARE(fitResult.errorValues.at(5), 11.2324854679312);
 
 	QCOMPARE(fitResult.rsd, 236014.502379268);
-	QCOMPARE(fitResult.rsquare,  0.957478440825662);
+	QCOMPARE(fitResult.rsquare, 0.957478440825662);
 	QCOMPARE(fitResult.sse, 835542680000.000);
 	QCOMPARE(fitResult.rms, 55702845333.3333);
+//	QCOMPARE(fitResult.fdist_F, 67.5524458240122);
 }
 
 void FitTest::testLinearWampler5() {
@@ -488,11 +510,19 @@ void FitTest::testLinearWampler5() {
 		const double paramValue = fitResult.paramValues.at(i);
 		QCOMPARE(paramValue, 1.0);
 	}
+// TODO: actual errors are smaller
+//	QCOMPARE(fitResult.errorValues.at(0), 21523262.4678170);
+//	QCOMPARE(fitResult.errorValues.at(1), 23635517.3469681);
+//	QCOMPARE(fitResult.errorValues.at(2), 7793435.24331583);
+//	QCOMPARE(fitResult.errorValues.at(3), 1014755.07550350);
+//	QCOMPARE(fitResult.errorValues.at(4), 56456.6512170752);
+//	QCOMPARE(fitResult.errorValues.at(5), 1123.24854679312);
 
 	QCOMPARE(fitResult.rsd, 23601450.2379268);
 	QCOMPARE(fitResult.rsquare, 0.224668921574940E-02);
 	QCOMPARE(fitResult.sse, 0.835542680000000E+16);
 	QCOMPARE(fitResult.rms, 557028453333333.);
+//	QCOMPARE(fitResult.fdist_F, 0.675524458240122E-02);
 }
 
 //##############################################################################
