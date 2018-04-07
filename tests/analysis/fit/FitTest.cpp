@@ -200,6 +200,7 @@ void FitTest::testLinearNoInt1() {
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 370661768.991551
 //	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
 }
+
 void FitTest::testLinearNoInt1_2() {
 	//NIST data for NoInt1 dataset
 	QVector<int> xData = {60,61,62,63,64,65,66,67,68,69,70};
@@ -248,6 +249,108 @@ void FitTest::testLinearNoInt1_2() {
 //	QCOMPARE(fitResult.rms, 12.7272727272727);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 7.77857142857144
 //	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
+}
+
+void FitTest::testLinearNoInt2() {
+	//NIST data for NoInt2 dataset
+	QVector<int> xData = {4,5,6};
+	QVector<int> yData = {3,4,4};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "c * x";
+	fitData.paramNames << "c";
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 1.;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	//fitData.eps = 1.e-15;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 1);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 0.727272727152573
+	FuzzyCompare(fitResult.paramValues.at(0), 0.727272727272727, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.0420827316561797
+	FuzzyCompare(fitResult.errorValues.at(0), 0.420827318078432E-01, 1.e-9);
+
+	QCOMPARE(fitResult.rsd, 0.369274472937998);
+//	QCOMPARE(fitResult.rsquare, 0.993348115299335);
+	QCOMPARE(fitResult.sse, 0.272727272727273);
+	QCOMPARE(fitResult.rms, 0.136363636363636);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 370661768.991551
+//	FuzzyCompare(fitResult.fdist_F, 298.666666666667, 1.);
+}
+
+void FitTest::testLinearNoInt2_2() {
+	//NIST data for NoInt2 dataset
+	QVector<int> xData = {4,5,6};
+	QVector<int> yData = {3,4,4};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_basic;
+	fitData.modelType = nsl_fit_model_polynomial;
+	fitData.degree = 1;
+	XYFitCurve::initFitData(fitData);
+	fitData.paramStartValues[0] = 0;
+	fitData.paramFixed[0] = true;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	const int np = fitData.paramNames.size();
+	QCOMPARE(np, 2);
+
+	QCOMPARE(fitResult.paramValues.at(0), 0.);
+	QCOMPARE(fitResult.paramValues.at(1),  0.727272727272727);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0595139700643615
+//	QCOMPARE(fitResult.errorValues.at(1), 0.420827318078432e-1);
+
+//	QCOMPARE(fitResult.rsd, 0.369274472937998);	// result: 0.522233
+//	QCOMPARE(fitResult.rsquare, 0.993348115299335);	// result: 0.590909
+	QCOMPARE(fitResult.sse, 0.272727272727273);
+//	QCOMPARE(fitResult.rms, 0.136363636363636);	// result: 0.272727
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 2.44444444444445
+//	FuzzyCompare(fitResult.fdist_F, 298.666666666667, 1.);
 }
 
 void FitTest::testLinearWampler1() {

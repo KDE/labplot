@@ -33,7 +33,8 @@ class FitTest : public QObject {
 private slots:
 	void initTestCase();
 	// compare floats with given delta (could be useful for other tests too)
-	static inline void FuzzyCompare(double actual, double expected, double delta = 0.000000000001) {
+	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
+		qDebug() <<  qSetRealNumberPrecision(15) << actual-delta << expected << actual+delta;
 		QVERIFY(actual-delta <= expected && actual+delta >=expected);
 	}
 
@@ -42,6 +43,8 @@ private slots:
 	void testLinearPontius();
 	void testLinearNoInt1();	// using custom model
 	void testLinearNoInt1_2();	// using polynomial model with fixed parameter
+	void testLinearNoInt2();	// using custom model
+	void testLinearNoInt2_2();	// using polynomial model with fixed parameter
 
 	void testLinearWampler1();
 	void testLinearWampler2();
