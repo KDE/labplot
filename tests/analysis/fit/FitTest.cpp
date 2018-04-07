@@ -149,6 +149,107 @@ void FitTest::testLinearPontius() {
 	//FuzzyCompare(fitResult.fdist_F, 185330865.995752, 1.);
 }
 
+void FitTest::testLinearNoInt1() {
+	//NIST data for NoInt1 dataset
+	QVector<int> xData = {60,61,62,63,64,65,66,67,68,69,70};
+	QVector<int> yData = {130,131,132,133,134,135,136,137,138,139,140};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "c * x";
+	fitData.paramNames << "c";
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 1.;
+	fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+	fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	//fitData.eps = 1.e-15;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 1);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 2.07438016513166
+	FuzzyCompare(fitResult.paramValues.at(0), 2.07438016528926, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.00463315628245255
+//	QCOMPARE(fitResult.errorValues.at(0), 0.165289256198347e-1);
+
+	QCOMPARE(fitResult.rsd, 3.56753034006338);
+//	QCOMPARE(fitResult.rsquare, 0.999365492298663);
+	QCOMPARE(fitResult.sse, 127.272727272727);
+	QCOMPARE(fitResult.rms, 12.7272727272727);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 370661768.991551
+//	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
+}
+void FitTest::testLinearNoInt1_2() {
+	//NIST data for NoInt1 dataset
+	QVector<int> xData = {60,61,62,63,64,65,66,67,68,69,70};
+	QVector<int> yData = {130,131,132,133,134,135,136,137,138,139,140};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_basic;
+	fitData.modelType = nsl_fit_model_polynomial;
+	fitData.degree = 1;
+	XYFitCurve::initFitData(fitData);
+	fitData.paramStartValues[0] = 0;
+	fitData.paramFixed[0] = true;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	const int np = fitData.paramNames.size();
+	QCOMPARE(np, 2);
+
+	QCOMPARE(fitResult.paramValues.at(0), 0.);
+	QCOMPARE(fitResult.paramValues.at(1), 2.07438016528926);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0046331562857966
+	//QCOMPARE(fitResult.errorValues.at(1), 0.165289256198347e-1);
+
+//	QCOMPARE(fitResult.rsd, 3.56753034006338);
+//	QCOMPARE(fitResult.rsquare, 0.999365492298663);
+	QCOMPARE(fitResult.sse, 127.272727272727);
+//	QCOMPARE(fitResult.rms, 12.7272727272727);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 7.77857142857144
+//	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
+}
+
 void FitTest::testLinearWampler1() {
 	// TODO: remove when finished
 //	qFatal("STOP!");

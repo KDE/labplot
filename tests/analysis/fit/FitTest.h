@@ -40,6 +40,8 @@ private slots:
 	//linear regression (see NIST/linear data)
 	void testLinearNorris();
 	void testLinearPontius();
+	void testLinearNoInt1();	// using custom model
+	void testLinearNoInt1_2();	// using polynomial model with fixed parameter
 
 	void testLinearWampler1();
 	void testLinearWampler2();
