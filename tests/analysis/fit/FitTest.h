@@ -33,9 +33,10 @@ class FitTest : public QObject {
 private slots:
 	void initTestCase();
 	// compare floats with given delta (could be useful for other tests too)
+	// delta - relative error (set to 1. if expected == 0.)
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		qDebug() <<  qSetRealNumberPrecision(15) << actual-delta << expected << actual+delta;
-		QVERIFY(actual-delta <= expected && actual+delta >=expected);
+		qDebug() <<  qSetRealNumberPrecision(15) << actual - fabs(actual)*delta << "<=" << expected << "<=" << actual + fabs(actual)*delta;
+		QVERIFY(actual - fabs(actual)*delta <= expected && actual + fabs(actual)*delta >=expected);
 	}
 
 	//linear regression (see NIST/linear data)
@@ -45,6 +46,7 @@ private slots:
 	void testLinearNoInt1_2();	// using polynomial model with fixed parameter
 	void testLinearNoInt2();	// using custom model
 	void testLinearNoInt2_2();	// using polynomial model with fixed parameter
+	void testLinearFilip();
 
 	void testLinearWampler1();
 	void testLinearWampler2();
