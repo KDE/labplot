@@ -56,6 +56,7 @@ private slots:
 
 	//non-linear regression
 	void testNonLinearMisra1a();
+	void testNonLinearMisra1b();
 
 	//fits with weights
 };
