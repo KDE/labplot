@@ -67,6 +67,9 @@ private slots:
 	void testNonLinearMisra1d();
 	void testNonLinearMisra1d_2();	// second set of start values
 	void testNonLinearMisra1d_3();	// third set of start values
+	void testNonLinearMGH09();
+	void testNonLinearMGH09_2();	// second set of start values
+	void testNonLinearMGH09_3();	// third set of start values
 
 	//fits with weights
 };
