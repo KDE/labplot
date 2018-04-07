@@ -264,6 +264,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QVector<double>& paramUpperLimits = fitData.paramUpperLimits;
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
+	DEBUG(" category = " << modelCategory);
 	DEBUG("XYFitCurve::initFitData() for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType << ", degree = " << degree);
 
 	if (modelCategory != nsl_fit_model_custom)
