@@ -1633,8 +1633,8 @@ void FitTest::testNonLinearMGH10() {
 
 	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 2.6009740064923
 	FuzzyCompare(fitResult.rsd, 2.6009740065E+00, 1.e-11);
-	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 87.9458551718321	(FreeBSD: 87.9458551726946)
-	FuzzyCompare(fitResult.sse, 8.7945855171E+01, 1.e-10);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 87.9458551718321	(FreeBSD: 87.9458551726946, Windows: 87.9458551810338)
+	FuzzyCompare(fitResult.sse, 8.7945855171E+01, 1.e-9);
 }
 
 void FitTest::testNonLinearMGH10_2() {
