@@ -26,6 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <QtTest/QtTest>
+#include <backend/lib/macros.h>	// DEBUG()
 
 class FitTest : public QObject {
 	Q_OBJECT
@@ -35,7 +36,7 @@ private slots:
 	// compare floats with given delta (could be useful for other tests too)
 	// delta - relative error (set to 1. if expected == 0.)
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		qDebug() <<  qSetRealNumberPrecision(15) << actual - fabs(actual)*delta << "<=" << expected << "<=" << actual + fabs(actual)*delta;
+		DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << "<=" << expected << "<=" << actual + fabs(actual)*delta);
 		QVERIFY(actual - fabs(actual)*delta <= expected && actual + fabs(actual)*delta >=expected);
 	}
 
