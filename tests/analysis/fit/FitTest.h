@@ -74,6 +74,7 @@ private slots:
 	void testNonLinearMGH10();
 	void testNonLinearMGH10_2();	// second set of start values
 	void testNonLinearMGH10_3();	// third set of start values
+	void testNonLinearRat43();
 
 	//fits with weights
 };
