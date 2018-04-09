@@ -1672,8 +1672,13 @@ void XYFitCurvePrivate::recalculate() {
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
-	for (unsigned int i = 0; i < np; i++)
-		DEBUG("parameter " << i << " fixed: " << fitData.paramFixed.data()[i]);
+	unsigned int nf = 0;	// number of fixed parameter
+	for (unsigned int i = 0; i < np; i++) {
+		const bool fixed = fitData.paramFixed.data()[i];
+		if (fixed)
+			nf++;
+		DEBUG("parameter " << i << " fixed: " << fixed);
+	}
 
 	//function to fit
 	gsl_multifit_function_fdf f;
@@ -1819,7 +1824,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.valid = true;
 	fitResult.status = gslErrorToString(status);
 	fitResult.iterations = iter;
-	fitResult.dof = n - np;
+	fitResult.dof = n - (np - nf);	// samples - (parameter - fixed parameter)
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
