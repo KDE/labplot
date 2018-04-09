@@ -1843,7 +1843,9 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np);
 
 	//parameter values
-	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
+	// GSL: const double c = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
+	// NIST: const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); // decrease error for good fit
+	const double c = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);

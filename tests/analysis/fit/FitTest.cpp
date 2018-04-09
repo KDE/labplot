@@ -190,10 +190,11 @@ void FitTest::testLinearNoInt1() {
 
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 2.07438016513166
 	FuzzyCompare(fitResult.paramValues.at(0), 2.07438016528926, 1.e-9);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.00463315628245255
-//	QCOMPARE(fitResult.errorValues.at(0), 0.165289256198347e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.0165289256079047
+	FuzzyCompare(fitResult.errorValues.at(0), 0.165289256198347e-1, 1.e-9);
 
 	QCOMPARE(fitResult.rsd, 3.56753034006338);
+//TODO
 //	QCOMPARE(fitResult.rsquare, 0.999365492298663);
 	QCOMPARE(fitResult.sse, 127.272727272727);
 	QCOMPARE(fitResult.rms, 12.7272727272727);
@@ -240,8 +241,8 @@ void FitTest::testLinearNoInt1_2() {
 
 	QCOMPARE(fitResult.paramValues.at(0), 0.);
 	QCOMPARE(fitResult.paramValues.at(1), 2.07438016528926);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0046331562857966
-	//QCOMPARE(fitResult.errorValues.at(1), 0.165289256198347e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.017423017411396
+//TODO	QCOMPARE(fitResult.errorValues.at(1), 0.165289256198347e-1);
 
 //	QCOMPARE(fitResult.rsd, 3.56753034006338);
 //	QCOMPARE(fitResult.rsquare, 0.999365492298663);
@@ -342,6 +343,7 @@ void FitTest::testLinearNoInt2_2() {
 
 	QCOMPARE(fitResult.paramValues.at(0), 0.);
 	QCOMPARE(fitResult.paramValues.at(1),  0.727272727272727);
+//TODO: check error calculation
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0595139700643615
 //	QCOMPARE(fitResult.errorValues.at(1), 0.420827318078432e-1);
 
