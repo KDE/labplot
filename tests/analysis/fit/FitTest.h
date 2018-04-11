@@ -55,6 +55,8 @@ private slots:
 	void testLinearWampler4();
 	void testLinearWampler5();
 
+	void testLinearWP_OLS();
+
 	//non-linear regression
 	void testNonLinearMisra1a();
 	void testNonLinearMisra1a_2();	// second set of start values
