@@ -194,10 +194,10 @@ void FitTest::testLinearNoInt1() {
 	FuzzyCompare(fitResult.errorValues.at(0), 0.165289256198347e-1, 1.e-9);
 
 	QCOMPARE(fitResult.rsd, 3.56753034006338);
-	DEBUG(std::setprecision(15) << fitResult.rsquare);	// result:
 	QCOMPARE(fitResult.sse, 127.272727272727);
 	QCOMPARE(fitResult.rms, 12.7272727272727);
-//TODO	QCOMPARE(fitResult.rsquare, 0.999365492298663);
+	DEBUG(std::setprecision(15) << fitResult.rsquare);	// result: -0.157024793388426
+	QCOMPARE(fitResult.rsquare, 0.999365492298663);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 8.64285714285717
 //TODO	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
 }
@@ -246,7 +246,7 @@ void FitTest::testLinearNoInt1_2() {
 	QCOMPARE(fitResult.rsd, 3.56753034006338);
 	QCOMPARE(fitResult.sse, 127.272727272727);
 	QCOMPARE(fitResult.rms, 12.7272727272727);
-//TODO	QCOMPARE(fitResult.rsquare, 0.999365492298663);
+	QCOMPARE(fitResult.rsquare, 0.999365492298663);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 8.64285714285715
 //TODO	FuzzyCompare(fitResult.fdist_F, 15750.25, 1.);
 }
@@ -298,7 +298,9 @@ void FitTest::testLinearNoInt2() {
 	QCOMPARE(fitResult.rsd, 0.369274472937998);
 	QCOMPARE(fitResult.sse, 0.272727272727273);
 	QCOMPARE(fitResult.rms, 0.136363636363636);
-//TODO	QCOMPARE(fitResult.rsquare, 0.993348115299335);
+	DEBUG(std::setprecision(15) << fitResult.rsquare);	// result: 0.590909090909091
+// can not detect that intercept is zero for a custom linear model
+//	QCOMPARE(fitResult.rsquare, 0.993348115299335);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 4.88888888888889
 //TODO	FuzzyCompare(fitResult.fdist_F, 298.666666666667, 1.);
 }
@@ -347,7 +349,7 @@ void FitTest::testLinearNoInt2_2() {
 	QCOMPARE(fitResult.rsd, 0.369274472937998);
 	QCOMPARE(fitResult.sse, 0.272727272727273);
 	QCOMPARE(fitResult.rms, 0.136363636363636);
-//TODO	QCOMPARE(fitResult.rsquare, 0.993348115299335);	// result: 0.590909
+	QCOMPARE(fitResult.rsquare, 0.993348115299335);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 4.8888888888889
 //TODO	FuzzyCompare(fitResult.fdist_F, 298.666666666667, 1.);
 }

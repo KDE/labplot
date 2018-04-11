@@ -1836,8 +1836,18 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f)/n;
-	//needed for coefficient of determination, R-squared
+	// SST needed for coefficient of determination, R-squared
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
+	// for a linear model without intercept R-squared is calculated different
+	// see https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
+	if (fitData.modelCategory == nsl_fit_model_basic && fitData.modelType == nsl_fit_model_polynomial && fitData.degree == 1 && x_init[0] == 0) {
+		DEBUG("Using alternative R^2 for linear model without intercept");
+		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
+	}
+	if (fitResult.sst < fitResult.sse) {
+		DEBUG("Using alternative R^2 since R^2 would be negative (probably custom model without intercept)");
+		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
+	}
 
 	fitResult.rsquare = nsl_stats_rsquare(fitResult.sse, fitResult.sst);
 	fitResult.rsquareAdj = nsl_stats_rsquareAdj(fitResult.rsquare, np, fitResult.dof);
