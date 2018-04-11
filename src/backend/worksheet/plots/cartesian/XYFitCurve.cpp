@@ -1852,7 +1852,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.rsquare = nsl_stats_rsquare(fitResult.sse, fitResult.sst);
 	fitResult.rsquareAdj = nsl_stats_rsquareAdj(fitResult.rsquare, np, fitResult.dof);
 	fitResult.chisq_p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
-	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms);
+	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms, np);
 	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
 	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np);
 	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np);

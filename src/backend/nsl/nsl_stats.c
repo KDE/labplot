@@ -208,7 +208,9 @@ double nsl_stats_chisq_p(double t, double dof) {
 }
 
 /* F distribution */
-double nsl_stats_fdist_F(double sst, double rms) {
+double nsl_stats_fdist_F(double sst, double rms, unsigned int np) {
+        if (np > 2)     // scale according NIST reference
+                sst /= (np-1);
 	return sst/rms;
 }
 double nsl_stats_fdist_p(double F, size_t np, double dof) {
