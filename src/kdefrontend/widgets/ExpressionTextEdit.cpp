@@ -151,7 +151,9 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 void ExpressionTextEdit::validateExpression(bool force) {
 	//check whether the expression was changed or only the formating
 	QString text = toPlainText();
-	if (text != m_currentExpression || force) {
+	bool textChanged = (text != m_currentExpression) ? true : false;
+
+	if (textChanged || force) {
 		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
 		if (!m_isValid)
 			setStyleSheet("QTextEdit{background: red;}");
@@ -159,8 +161,9 @@ void ExpressionTextEdit::validateExpression(bool force) {
 			setStyleSheet("");
 
 		m_currentExpression = text;
-		emit expressionChanged();
 	}
+	if (textChanged)
+		emit expressionChanged();
 }
 
 //##############################################################################

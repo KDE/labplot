@@ -90,6 +90,7 @@ private slots:
 	void insertConstant(const QString&) const;
 	void recalculateClicked();
 	void updateModelEquation();
+	void expressionChanged();
 	void enableRecalculate() const;
 	void resultParametersContextMenuRequest(const QPoint &);
 	void resultGoodnessContextMenuRequest(const QPoint &);

@@ -801,9 +801,9 @@ void FitTest::testLinearWP_OLS() {
 	FuzzyCompare(fitResult.rsquareAdj, 0.9987, 1.e-4);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.759549208792447
 	FuzzyCompare(fitResult.sse, 0.7595, 1.e-4);
-//	QCOMPARE(fitResult.rms, );	// result: 0.0632958
+//	QCOMPARE(fitResult.rms, ???);	// result: 0.0632958
 	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result: 0.999996987409119
-//TODO	FuzzyCompare(fitResult.chisq_p, 1.0890, 1.e-8);		// == Log-likelihood ?
+//TODO	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);		// Log-likelihood = 1.0890
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 5477.24333307392
 	FuzzyCompare(fitResult.fdist_F, 5471.2, 2.e-3);
 	QCOMPARE(fitResult.fdist_p, 0.0);

@@ -173,7 +173,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)));
 	connect(uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelTypeChanged(int)));
 	connect(uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()));
-	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()));
+	connect(uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(expressionChanged()));
 	connect(uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
 	connect(uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
 	connect(uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()));
@@ -574,6 +574,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	}
 
 	this->updateModelEquation();
+	enableRecalculate();
 }
 
 /*!
@@ -683,6 +684,7 @@ void XYFitCurveDock::showFunctions() {
 }
 
 void XYFitCurveDock::updateParameterList() {
+	DEBUG("XYFitCurveDock::updateParameterList()");
 	// use current model function
 	m_fitData.model = uiGeneralTab.teEquation->toPlainText();
 
@@ -737,6 +739,7 @@ void XYFitCurveDock::showParameters() {
  * called when parameter names and/or start values for the custom model were changed
  */
 void XYFitCurveDock::parametersChanged() {
+	DEBUG("XYFitCurveDock::parametersChanged()");
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
 	enableRecalculate();
@@ -760,6 +763,7 @@ void XYFitCurveDock::showOptions() {
 }
 
 void XYFitCurveDock::insertFunction(const QString& str) const {
+	//TODO: not all function have only one argument!
 	uiGeneralTab.teEquation->insertPlainText(str + "(x)");
 }
 
@@ -782,7 +786,20 @@ void XYFitCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
+void XYFitCurveDock::expressionChanged() {
+	DEBUG("XYFitCurveDock::expressionChanged()");
+	if (m_initializing)
+		return;
+
+	// update parameter list for custom model
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		updateParameterList();
+
+	enableRecalculate();
+}
+
 void XYFitCurveDock::enableRecalculate() const {
+	DEBUG("XYFitCurveDock::enableRecalculate()");
 	if (m_initializing || m_fitCurve == nullptr)
 		return;
 

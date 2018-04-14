@@ -1284,6 +1284,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 }
 
 QStringList ExpressionParser::getParameter(const QString& expr, const QStringList& vars) {
+	DEBUG("ExpressionParser::getParameter()");
 	QDEBUG("variables:" << vars);
 	QStringList parameters;
 
