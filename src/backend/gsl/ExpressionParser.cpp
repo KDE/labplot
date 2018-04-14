@@ -1298,6 +1298,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 			QDEBUG(strings[i] << ':' << constants().indexOf(strings[i]) << ' ' << functions().indexOf(strings[i]) << ' '
 			       << vars.indexOf(strings[i]) << ' ' << QRegExp("[0-9]*").exactMatch(strings[i]));
 	}
+	parameters.removeDuplicates();
 	QDEBUG("parameters found:" << parameters);
 
 	return parameters;
