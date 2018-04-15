@@ -1109,7 +1109,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//TODO: text color
 				//const Origin::Color& originColor = originLegend.color;
 
-				//TODO: position
+				//position
+				//TODO: for the first release with OPJ support we put the leget to the bottom left corner,
+				//in the next release we'll evaluate originLegend.clientRect giving the position inside of the whole page in Origin.
+				//In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
+				//To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
+				CartesianPlotLegend::PositionWrapper position;
+				position.horizontalPosition = CartesianPlotLegend::hPositionRight;
+				position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+				legend->setPosition(position);
 
 				//TODO: rotation
 				//legend->setRotationAngle(originLegend.rotation);
