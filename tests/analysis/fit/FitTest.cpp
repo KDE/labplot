@@ -803,16 +803,16 @@ void FitTest::testLinearWP_OLS() {
 	FuzzyCompare(fitResult.sse, 0.7595, 1.e-4);
 //	QCOMPARE(fitResult.rms, ???);	// result: 0.0632958
 	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result: 0.999996987409119
-//TODO	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);
+//	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);
 	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 5477.24333307392
 	FuzzyCompare(fitResult.fdist_F, 5471.2, 2.e-3);
 	QCOMPARE(fitResult.fdist_p, 0.0);
 	DEBUG(std::setprecision(15) << fitResult.logLik);	// result: 1.0890247702592
 	FuzzyCompare(fitResult.logLik, 1.0890, 3.e-5);
-	DEBUG(std::setprecision(15) << fitResult.aic);	// result: -36.5643873548404
+	DEBUG(std::setprecision(15) << fitResult.aic);	// result: 5.82195045948161
 // not reproducable
 //	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
-	DEBUG(std::setprecision(15) << fitResult.bic);	// result: -36.6220549333519
+	DEBUG(std::setprecision(15) << fitResult.bic);	// result: 8.65415126389045
 // not reproducable
 //	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
 }
@@ -894,15 +894,17 @@ void FitTest::testLinearR_lm2() {
 	DEBUG(std::setprecision(15) << fitResult.logLik);	// result: -205.386034235309
 	FuzzyCompare(fitResult.logLik, -205.386, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result: 
-//TODO	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);
-	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result:
-//TODO	FuzzyCompare(fitResult.fdist_F, 47.14, 2.e-3);
-	QCOMPARE(fitResult.fdist_p, 0.0);
+//	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 70.6407481288434
+// reference calculates sst/rms/np
+	DEBUG(std::setprecision(15) << fitResult.sst/fitResult.rms/np);	// result: 47.0938320858956
+	FuzzyCompare(fitResult.sst/fitResult.rms/np, 47.14, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0
+	QCOMPARE(fitResult.fdist_p, 0.);		// exact: 5.852e-12
 	DEBUG(std::setprecision(15) << fitResult.aic);	// result: 418.772068470618
 	FuzzyCompare(fitResult.aic, 418.7721, 1.e-7);
 	DEBUG(std::setprecision(15) << fitResult.bic);	// result: 426.42016049233
 	FuzzyCompare(fitResult.bic, 426.4202, 1.e-7);
-	// p-Value: 5.852e-12
 }
 
 //##############################################################################
