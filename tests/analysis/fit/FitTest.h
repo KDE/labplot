@@ -82,4 +82,5 @@ private slots:
 	void testNonLinearRat43_3();	// third set of start values
 
 	//fits with weights
+	void testNonLinearGP_lcdemo();
 };
