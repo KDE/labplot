@@ -85,6 +85,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
 )
 
 set(UI_SOURCES
