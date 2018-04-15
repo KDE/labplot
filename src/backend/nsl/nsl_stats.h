@@ -65,8 +65,8 @@ double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t st
 
 /* R^2 */
 double nsl_stats_rsquare(double sse, double sst);
-/* adj. R^2 */
-double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof);
+/* adj. R^2 default version=1 */
+double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof, int version);
 
 /* t distribution */
 double nsl_stats_tdist_t(double parameter, double error);

@@ -175,10 +175,15 @@ double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t st
 double nsl_stats_rsquare(double sse, double sst) {
 	return 1. - sse/sst;
 }
-
-double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof) {
+double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof, int version) {
 	size_t n = np + dof;
-	return 1. - (1. - rsquare) * (n - 1.)/(dof - 1.);
+	// see https://stats.stackexchange.com/questions/48703/what-is-the-adjusted-r-squared-formula-in-lm-in-r-and-how-should-it-be-interpret
+	switch (version) {
+	case 2:
+		return 1. - (1. - rsquare) * (n - 1.)/dof;
+	default:
+		return 1. - (1. - rsquare) * (n - 1.)/(dof - 1.);
+	}
 }
 
 /* t distribution */
