@@ -120,5 +120,7 @@ void ResizableTextEdit::resizeEvent(QResizeEvent* e) {
 
 	m_size = e->size();
 
+	QTextEdit::resizeEvent(e);
+
 	e->accept();
 }
