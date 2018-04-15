@@ -1019,6 +1019,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
 			//ranges/scales
+			plot->setAutoScaleX(false);
+			plot->setAutoScaleY(false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
 			plot->setXMin(originXAxis.min);
@@ -1250,9 +1252,34 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
  * \c index being 0 or 1 for "top" and "bottom" or "left" and "right" for horizontal or vertical axes, respectively.
  */
 void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index, const QString& axisTitle) const {
+// 	int axisPosition;
+//		possible values:
+//			0: Axis is at default position
+//			1: Axis is at (axisPositionValue)% from standard position
+//			2: Axis is at (axisPositionValue) position of ortogonal axis
+// 		double axisPositionValue;
+
+// 		bool zeroLine;
+// 		bool oppositeLine;
+
 	//ranges
 	axis->setStart(originAxis.min);
 	axis->setEnd(originAxis.max);
+
+	//ticks
+	axis->setMajorTicksType(Axis::TicksIncrement);
+	axis->setMajorTicksIncrement(originAxis.step);
+	axis->setMinorTicksType(Axis::TicksTotalNumber);
+	axis->setMinorTicksNumber(originAxis.minorTicks);
+
+	//scale
+	//unsigned char scale;
+
+	//major grid
+	//GraphGrid majorGrid;
+
+	//minor grid
+	//GraphGrid minorGrid;
 
 	//process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
@@ -1271,13 +1298,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksLength( axis->majorTicksLength()/2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
 	axis->setMinorTicksPen(pen);
-
-// 	int axisPosition;
-//		possible values:
-//			0: Axis is at default position
-//			1: Axis is at (axisPositionValue)% from standard position
-//			2: Axis is at (axisPositionValue) position of ortogonal axis
-// 		double axisPositionValue;
 
 
 	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
