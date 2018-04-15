@@ -225,6 +225,12 @@ double nsl_stats_fdist_p(double F, size_t np, double dof) {
 	return p;
 }
 
+/* log-likelihood */
+double nsl_stats_logLik(double sse, size_t n) {
+	double ll = -(double)n/2.*log(sse/n) - n/2.*log(2*M_PI) -n/2.;
+	return ll;
+}
+
 /* Akaike information criterion */
 double nsl_stats_aic(double sse, size_t n, size_t np) {
 	double aic = n * log(sse/n) + 2. * np;	// standard formula

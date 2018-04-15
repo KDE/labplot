@@ -887,16 +887,20 @@ void FitTest::testLinearR_lm2() {
 	FuzzyCompare(1.-(1.-fitResult.rsquare)*(50.-1.)/(50.-np), 0.6532, 1.e-4);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 10824.71590767
 	FuzzyCompare(fitResult.sse, 10825, 1.e-4);
-//	QCOMPARE(fitResult.rms, ???);	// result:
-	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result:
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: TODO
+//	QCOMPARE(fitResult.rms, ???);
+	DEBUG(std::setprecision(15) << fitResult.logLik);	// result: -205.386034235309
+	FuzzyCompare(fitResult.logLik, -205.386, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result: 
 //TODO	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);		// Log-likelihood =
-	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 70.6407481288434
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result:
 //TODO	FuzzyCompare(fitResult.fdist_F, 47.14, 2.e-3);
 	QCOMPARE(fitResult.fdist_p, 0.0);
-	DEBUG(std::setprecision(15) << fitResult.aic);	// result:
+	DEBUG(std::setprecision(15) << fitResult.aic);	// result: 
 //	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
 	DEBUG(std::setprecision(15) << fitResult.bic);	// result:
 //	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
+	// p-Value: 5.852e-12
 }
 
 //##############################################################################

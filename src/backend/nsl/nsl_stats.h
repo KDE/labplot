@@ -83,6 +83,9 @@ double nsl_stats_fdist_F(double sst, double rms, unsigned int np);
 /* p value */
 double nsl_stats_fdist_p(double F, size_t np, double dof);
 
+/* log-likelihood */
+double nsl_stats_logLik(double sse, size_t n);
+
 /* Akaike information criterion (AIC) */
 double nsl_stats_aic(double sse, size_t n, size_t np);
 

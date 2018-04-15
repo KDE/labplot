@@ -104,6 +104,7 @@ public:
 		double chisq_p;	// chi^2 distribution p-value
 		double fdist_F;	// F distribution F-value
 		double fdist_p;	// F distribution p-value
+		double logLik;	// log likelihood
 		double aic;	// Akaike information criterion
 		double bic;	// Schwarz Bayesian information criterion
 		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
