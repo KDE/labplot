@@ -808,9 +808,93 @@ void FitTest::testLinearWP_OLS() {
 	FuzzyCompare(fitResult.fdist_F, 5471.2, 2.e-3);
 	QCOMPARE(fitResult.fdist_p, 0.0);
 	DEBUG(std::setprecision(15) << fitResult.aic);	// result: -36.5643873548404
-//TODO	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
+// not reproducable
+//	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
 	DEBUG(std::setprecision(15) << fitResult.bic);	// result: -36.6220549333519
-//TODO	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
+// not reproducable
+//	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
+}
+
+// from http://sia.webpopix.org/polynomialRegression1.html
+void FitTest::testLinearR_lm2() {
+	QVector<int> xData = {4,4,7,7,8,9,10,10,10,11,11,12,12,12,12,13,13,13,13,14,14,14,14,15,15,15,16,16,17,
+		17,17,18,18,18,18,19,19,19,20,20,20,20,20,22,23,24,24,24,24,25};
+	QVector<int> yData = {2,10,4,22,16,10,18,26,34,17,28,14,20,24,28,26,34,34,46,26,36,60,80,20,26,54,32,40,32,40,50,42,56,76,84,36,46,
+                68,32,48,52,56,64,66,54,70,92,93,120,85};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_basic;
+	fitData.modelType = nsl_fit_model_polynomial;
+	fitData.degree = 2;
+	XYFitCurve::initFitData(fitData);
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	const int np = fitData.paramNames.size();
+	QCOMPARE(np, 3);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 2.47013778506623
+	FuzzyCompare(fitResult.paramValues.at(0), 2.47014, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 14.8171647250237
+	FuzzyCompare(fitResult.errorValues.at(0), 14.81716, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(0));	// result: 0.16670785746848
+	FuzzyCompare(fitResult.tdist_tValues.at(0), 0.167, 2.e-3);
+	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(0));	// result: 0.868315075848582
+	FuzzyCompare(fitResult.tdist_pValues.at(0), 0.868, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: 0.913287614242592
+	FuzzyCompare(fitResult.paramValues.at(1), 0.91329, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 2.03422044231195
+	FuzzyCompare(fitResult.errorValues.at(1), 2.03422, 1.e-6);
+	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(1));	// result: 0.448961968548804
+	FuzzyCompare(fitResult.tdist_tValues.at(1), 0.449, 1.e-4);
+	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(1));	// result: 0.655522449402813
+	FuzzyCompare(fitResult.tdist_pValues.at(1), 0.656, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));	// result: 0.0999593020698437
+	FuzzyCompare(fitResult.paramValues.at(2), 0.09996, 1.e-5);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(2));	// result: 0.0659682106823392
+	FuzzyCompare(fitResult.errorValues.at(2), 0.06597, 1.e-4);
+	DEBUG(std::setprecision(15) << fitResult.tdist_tValues.at(2));	// result: 1.5152647166858
+	FuzzyCompare(fitResult.tdist_tValues.at(2), 1.515, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.tdist_pValues.at(2));	// result: 0.136402432803739
+	FuzzyCompare(fitResult.tdist_pValues.at(2), 0.136, 3.e-3);
+
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 15.1760701243277
+	FuzzyCompare(fitResult.rsd, 15.18, 1.e-3);
+	DEBUG(std::setprecision(15) << fitResult.rsquare);	// result: 0.66733081652621
+	FuzzyCompare(fitResult.rsquare, 0.6673, 1.e-4);
+	DEBUG(std::setprecision(15) << fitResult.rsquareAdj);	// result: 0.645635000212702
+//TODO	FuzzyCompare(fitResult.rsquareAdj, 0.6532, 1.e-4);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 10824.71590767
+	FuzzyCompare(fitResult.sse, 10825, 1.e-4);
+//	QCOMPARE(fitResult.rms, ???);	// result:
+	DEBUG(std::setprecision(15) << fitResult.chisq_p);	// result:
+//TODO	FuzzyCompare(fitResult.chisq_p, ???, 1.e-8);		// Log-likelihood =
+	DEBUG(std::setprecision(15) << fitResult.fdist_F);	// result: 70.6407481288434
+//TODO	FuzzyCompare(fitResult.fdist_F, 47.14, 2.e-3);
+	QCOMPARE(fitResult.fdist_p, 0.0);
+	DEBUG(std::setprecision(15) << fitResult.aic);	// result:
+//	FuzzyCompare(fitResult.aic, 0.2548, 2.e-6);
+	DEBUG(std::setprecision(15) << fitResult.bic);	// result:
+//	FuzzyCompare(fitResult.bic, 0.3964, 2.e-6);
 }
 
 //##############################################################################
