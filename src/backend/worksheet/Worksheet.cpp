@@ -263,7 +263,6 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const WorksheetElement* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem* item = removedElement->graphicsItem();
-		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
 }
@@ -315,7 +314,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
  */
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	//determine the corresponding aspect
-	const AbstractAspect* aspect = 0;
+	const AbstractAspect* aspect(nullptr);
 	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
@@ -345,7 +344,7 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspe
 			if (a)
 				return a;
 		}
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -365,7 +364,7 @@ void Worksheet::setSelectedInView(const bool b) {
 void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 	Q_ASSERT(item);
 	//determine the corresponding aspect
-	AbstractAspect* aspect = 0;
+	AbstractAspect* aspect(nullptr);
 	for (const auto* child : children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
@@ -382,7 +381,7 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 }
 
 void Worksheet::setIsClosing() {
-	if (m_view != nullptr)
+	if (m_view)
 		m_view->setIsClosing();
 }
 
