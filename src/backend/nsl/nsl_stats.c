@@ -232,15 +232,27 @@ double nsl_stats_logLik(double sse, size_t n) {
 }
 
 /* Akaike information criterion */
-double nsl_stats_aic(double sse, size_t n, size_t np) {
-	double aic = n * log(sse/n) + 2. * np;	// standard formula
-	if (n < 40 * np)	// bias correction
-		aic += 2. * np * (np + 1.)/(n - np - 1.);
-
-	return aic;
+double nsl_stats_aic(double sse, size_t n, size_t np, int version) {
+	switch (version) {
+	case 2:
+		return n * log(sse/n) + 2. * np;	// reduced formula
+	case 3: {
+		double aic = n * log(sse/n) + 2. * np;
+		if (n < 40 * np)	// bias correction
+			aic += 2. * np * (np + 1.)/(n - np - 1.);
+		return aic;
+	}
+	default:
+		return n * log(sse/n) + 2. * (np+1) + n*log(2.*M_PI) + n;	// complete formula used in R
+	}
 }
 
 /* Bayasian information criterion */
-double nsl_stats_bic(double sse, size_t n, size_t np) {
-	return n * log(sse/(double)n) + np * log((double)n);
+double nsl_stats_bic(double sse, size_t n, size_t np, int version) {
+	switch (version) {
+	case 2:
+		return n * log(sse/n) + np * log((double)n); // reduced formula
+	default:
+		return n * log(sse/n) + (np+1) * log(n) + n + n*log(2.*M_PI); // complete formula used in R
+	}
 }

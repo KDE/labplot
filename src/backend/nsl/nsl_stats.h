@@ -87,9 +87,9 @@ double nsl_stats_fdist_p(double F, size_t np, double dof);
 double nsl_stats_logLik(double sse, size_t n);
 
 /* Akaike information criterion (AIC) */
-double nsl_stats_aic(double sse, size_t n, size_t np);
+double nsl_stats_aic(double sse, size_t n, size_t np, int version);
 
 /* Schwarz Bayesian information criterion (BIC, SBC, SBIC) */
-double nsl_stats_bic(double sse, size_t n, size_t np);
+double nsl_stats_bic(double sse, size_t n, size_t np, int version);
 
 #endif /* NSL_STATS_H */

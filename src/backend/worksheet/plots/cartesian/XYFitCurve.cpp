@@ -1855,8 +1855,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.sst, fitResult.rms, np);
 	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
 	fitResult.logLik = nsl_stats_logLik(fitResult.sse, n);
-	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np);
-	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np);
+	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np, 1);
+	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np, 1);
 
 	//parameter values
 	// GSL: const double c = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
