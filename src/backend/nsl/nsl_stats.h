@@ -88,6 +88,8 @@ double nsl_stats_logLik(double sse, size_t n);
 
 /* Akaike information criterion (AIC) */
 double nsl_stats_aic(double sse, size_t n, size_t np, int version);
+/* bias-corrected version */
+double nsl_stats_aicc(double sse, size_t n, size_t np, int version);
 
 /* Schwarz Bayesian information criterion (BIC, SBC, SBIC) */
 double nsl_stats_bic(double sse, size_t n, size_t np, int version);

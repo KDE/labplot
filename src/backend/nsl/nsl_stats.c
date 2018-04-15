@@ -252,6 +252,16 @@ double nsl_stats_aic(double sse, size_t n, size_t np, int version) {
 		return n * log(sse/n) + 2. * (np+1) + n*log(2.*M_PI) + n;	// complete formula used in R
 	}
 }
+double nsl_stats_aicc(double sse, size_t n, size_t np, int version) {
+	double aic;
+	switch (version) {
+	case 2:
+		aic = n * log(sse/n) + 2. * np;
+	default:
+		aic = n * log(sse/n) + 2. * (np+1) + n*log(2.*M_PI) + n;
+	}
+	return aic + 2. * np * (np + 1.)/(n - np - 1.);
+}
 
 /* Bayasian information criterion */
 double nsl_stats_bic(double sse, size_t n, size_t np, int version) {
