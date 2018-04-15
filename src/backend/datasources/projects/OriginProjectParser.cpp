@@ -198,6 +198,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const QVector<Column*> columns = project->children<Column>(AbstractAspect::Recursive);
 	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::Recursive);
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::Recursive)) {
+		curve->suppressRetransform(true);
 
 		//x-column
 		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
@@ -238,6 +239,9 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		}
 
 		//TODO: error columns
+
+
+		curve->suppressRetransform(false);
 	}
 
 	if (!preview) {
@@ -1276,10 +1280,72 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//unsigned char scale;
 
 	//major grid
-	//GraphGrid majorGrid;
+	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
+	QPen gridPen = axis->majorGridPen();
+	Qt::PenStyle penStyle(Qt::NoPen);
+	if (!majorGrid.hidden) {
+		switch (majorGrid.style) {
+		case Origin::GraphCurve::Solid:
+			penStyle = Qt::SolidLine;
+			break;
+		case Origin::GraphCurve::Dash:
+		case Origin::GraphCurve::ShortDash:
+			penStyle = Qt::DashLine;
+			break;
+		case Origin::GraphCurve::Dot:
+		case Origin::GraphCurve::ShortDot:
+			penStyle = Qt::DotLine;
+			break;
+		case Origin::GraphCurve::DashDot:
+		case Origin::GraphCurve::ShortDashDot:
+			penStyle = Qt::DashDotLine;
+			break;
+		case Origin::GraphCurve::DashDotDot:
+			penStyle = Qt::DashDotDotLine;
+			break;
+		}
+	}
+	gridPen.setStyle(penStyle);
+
+	Origin::Color gridColor;
+	gridColor.type = Origin::Color::ColorType::Regular;
+	gridColor.regular = majorGrid.color;
+	gridPen.setColor(OriginProjectParser::color(gridColor));
+	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Point));
+	axis->setMajorGridPen(gridPen);
 
 	//minor grid
-	//GraphGrid minorGrid;
+	const Origin::GraphGrid& minorGrid = originAxis.minorGrid;
+	gridPen = axis->minorGridPen();
+	penStyle = Qt::NoPen;
+	if (!minorGrid.hidden) {
+		switch (minorGrid.style) {
+		case Origin::GraphCurve::Solid:
+			penStyle = Qt::SolidLine;
+			break;
+		case Origin::GraphCurve::Dash:
+		case Origin::GraphCurve::ShortDash:
+			penStyle = Qt::DashLine;
+			break;
+		case Origin::GraphCurve::Dot:
+		case Origin::GraphCurve::ShortDot:
+			penStyle = Qt::DotLine;
+			break;
+		case Origin::GraphCurve::DashDot:
+		case Origin::GraphCurve::ShortDashDot:
+			penStyle = Qt::DashDotLine;
+			break;
+		case Origin::GraphCurve::DashDotDot:
+			penStyle = Qt::DashDotDotLine;
+			break;
+		}
+	}
+	gridPen.setStyle(penStyle);
+
+	gridColor.regular = minorGrid.color;
+	gridPen.setColor(OriginProjectParser::color(gridColor));
+	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Point));
+	axis->setMinorGridPen(gridPen);
 
 	//process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
