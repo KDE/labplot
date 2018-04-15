@@ -710,11 +710,7 @@ void XYCurve::suppressRetransform(bool b) {
 //##############################################################################
 void XYCurve::retransform() {
 	Q_D(XYCurve);
-
-	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	d->retransform();
-	RESET_CURSOR;
 }
 
 void XYCurve::updateValues() {
@@ -866,6 +862,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
 void XYCurvePrivate::retransform() {
 	if (m_suppressRetransform)
 		return;
+
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
 #endif
@@ -882,6 +879,9 @@ void XYCurvePrivate::retransform() {
 		recalcShapeAndBoundingRect();
 		return;
 	}
+
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QPointF tempPoint;
 
@@ -925,8 +925,10 @@ void XYCurvePrivate::retransform() {
 
 	//calculate the scene coordinates
 	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
-	if (!plot)
+	if (!plot) {
+		RESET_CURSOR;
 		return;
+	}
 
 	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
@@ -945,6 +947,8 @@ void XYCurvePrivate::retransform() {
 	updateValues();
 	m_suppressRecalc = false;
 	updateErrorBars();
+
+	RESET_CURSOR;
 }
 
 /*!
