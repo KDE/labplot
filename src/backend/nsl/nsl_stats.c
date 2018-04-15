@@ -269,6 +269,6 @@ double nsl_stats_bic(double sse, size_t n, size_t np, int version) {
 	case 2:
 		return n * log(sse/n) + np * log((double)n); // reduced formula
 	default:
-		return n * log(sse/n) + (np+1) * log(n) + n + n*log(2.*M_PI); // complete formula used in R
+		return n * log(sse/n) + (np+1) * log((double)n) + n + n*log(2.*M_PI); // complete formula used in R
 	}
 }
