@@ -1897,8 +1897,8 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	mouseMode(CartesianPlot::SelectionMode),
 	cSystem(nullptr),
 	suppressRetransform(false),
-	m_selectionBandIsShown(false),
-	panningStarted(false) {
+	panningStarted(false),
+	m_selectionBandIsShown(false) {
 
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
