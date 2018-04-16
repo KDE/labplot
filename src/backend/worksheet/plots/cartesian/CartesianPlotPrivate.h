@@ -67,6 +67,7 @@ public:
 	CartesianPlot::MouseMode mouseMode;
 	CartesianCoordinateSystem* cSystem;
 	bool suppressRetransform;
+	bool panningStarted;
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
@@ -88,7 +89,6 @@ private:
 	QPointF m_selectionStart;
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;
-	bool m_panningStarted;
 	QPointF m_panningStart;
 };
 

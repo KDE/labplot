@@ -889,8 +889,10 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	if (!plot->isPanningActive()) {
+		WAIT_CURSOR;
+		QApplication::processEvents(QEventLoop::AllEvents, 0);
+	}
 
 	QPointF tempPoint;
 

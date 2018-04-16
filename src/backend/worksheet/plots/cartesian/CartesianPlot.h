@@ -102,6 +102,7 @@ public:
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(QDropEvent*);
+	bool isPanningActive() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

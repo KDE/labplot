@@ -741,6 +741,12 @@ void CartesianPlot::processDropEvent(QDropEvent* event) {
 		dataChanged();
 }
 
+
+bool CartesianPlot::isPanningActive() const {
+	Q_D(const CartesianPlot);
+	return d->panningStarted;
+}
+
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
@@ -1892,7 +1898,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	cSystem(nullptr),
 	suppressRetransform(false),
 	m_selectionBandIsShown(false),
-	m_panningStarted(false) {
+	panningStarted(false) {
 
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
@@ -2246,7 +2252,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 		m_selectionBandIsShown = true;
 	} else {
 		if ( dataRect.contains(event->pos()) ){
-			m_panningStarted = true;
+			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
 		}
@@ -2256,7 +2262,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (mouseMode == CartesianPlot::SelectionMode) {
-		if (m_panningStarted && dataRect.contains(event->pos()) ) {
+		if (panningStarted && dataRect.contains(event->pos()) ) {
 			//don't retransform on small mouse movement deltas
 			const int deltaXScene = (m_panningStart.x() - event->pos().x());
 			const int deltaYScene = (m_panningStart.y() - event->pos().y());
@@ -2307,7 +2313,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	if (mouseMode == CartesianPlot::SelectionMode) {
-		m_panningStarted = false;
+		panningStarted = false;
 
 		//TODO: why do we do this all the time?!?!
 		const QPointF& itemPos = pos();//item's center point in parent's coordinates;
