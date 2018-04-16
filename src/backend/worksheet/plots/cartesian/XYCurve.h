@@ -58,6 +58,7 @@ public:
 	explicit XYCurve(const QString &name);
 	~XYCurve() override;
 
+	void finalizeAdd() override;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;

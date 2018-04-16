@@ -83,6 +83,7 @@ public:
 	bool isDescendantOf(AbstractAspect* other);
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
+	virtual void finalizeAdd() {};
 	QVector<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);

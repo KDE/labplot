@@ -109,8 +109,8 @@ class AxisGrid : public QGraphicsItem {
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, CartesianPlot* plot, const AxisOrientation& orientation)
-		: WorksheetElement(name), d_ptr(new AxisPrivate(this, plot)), m_menusInitialized(false) {
+Axis::Axis(const QString& name, const AxisOrientation& orientation)
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this)), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -119,6 +119,13 @@ Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate*
 		: WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
+}
+
+void Axis::finalizeAdd() {
+	Q_D(Axis);
+	d->plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	Q_ASSERT(d->plot);
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
 }
 
 void Axis::init() {
@@ -883,7 +890,7 @@ void Axis::visibilityChangedSlot() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
+AxisPrivate::AxisPrivate(Axis* owner) :
 	majorTicksColumn(0),
 	minorTicksColumn(0),
 	gridItem(new AxisGrid(this)),
@@ -891,8 +898,8 @@ AxisPrivate::AxisPrivate(Axis* owner, CartesianPlot* plot) :
 	suppressRetransform(false),
 	labelsFormatDecimalOverruled(false),
 	labelsFormatAutoChanged(false),
-	m_plot(plot),
-	m_cSystem(dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem())),
+	plot(nullptr),
+	cSystem(nullptr),
 	m_hovered(false),
 	m_suppressRecalc(false),
 	m_printing(false) {
@@ -928,7 +935,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	if (suppressRetransform)
+	if (suppressRetransform || !plot)
 		return;
 
 // 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
@@ -950,11 +957,11 @@ void AxisPrivate::retransformLine() {
 
 	if (orientation == Axis::AxisHorizontal) {
 		if (position == Axis::AxisTop)
-			offset = m_plot->yMax();
+			offset = plot->yMax();
 		else if (position == Axis::AxisBottom)
-			offset = m_plot->yMin();
+			offset = plot->yMin();
 		else if (position == Axis::AxisCentered)
-			offset = m_plot->yMin() + (m_plot->yMax()-m_plot->yMin())/2;
+			offset = plot->yMin() + (plot->yMax()-plot->yMin())/2;
 
 		startPoint.setX(start);
 		startPoint.setY(offset);
@@ -962,11 +969,11 @@ void AxisPrivate::retransformLine() {
 		endPoint.setY(offset);
 	} else { // vertical
 		if (position == Axis::AxisLeft)
-			offset = m_plot->xMin();
+			offset = plot->xMin();
 		else if (position == Axis::AxisRight)
-			offset = m_plot->xMax();
+			offset = plot->xMax();
 		else if (position == Axis::AxisCentered)
-			offset = m_plot->xMin() + (m_plot->xMax()-m_plot->xMin())/2;
+			offset = plot->xMin() + (plot->xMax()-plot->xMin())/2;
 
 		startPoint.setX(offset);
 		startPoint.setY(start);
@@ -975,7 +982,7 @@ void AxisPrivate::retransformLine() {
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1109,7 +1116,7 @@ void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
 bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QVector<QPointF> points;
 	points.append(*anchorPoint);
-	points = m_cSystem->mapLogicalToScene(points);
+	points = cSystem->mapLogicalToScene(points);
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
@@ -1210,10 +1217,10 @@ void AxisPrivate::retransformTicks() {
 	qreal majorTickPos=0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
-	const int xDirection = m_cSystem->xDirection();
-	const int yDirection = m_cSystem->yDirection();
-	const double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	const double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
+	const int xDirection = cSystem->xDirection();
+	const int yDirection = cSystem->yDirection();
+	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
+	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1386,7 +1393,6 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
 	//and back to decimal when the numbers get smaller after the auto-switch again
-	//TODO: implement similar logic for very small numbers
 	if (labelsFormat == Axis::FormatDecimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
 			if (std::abs(value) > 1e4) {
@@ -1539,10 +1545,10 @@ void AxisPrivate::retransformTickLabelPositions() {
 	float height = fm.ascent();
 	QString label;
 	QPointF pos;
-	const double middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
-	const double middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
-	const int xDirection = m_cSystem->xDirection();
-	const int yDirection = m_cSystem->yDirection();
+	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
+	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
+	const int xDirection = cSystem->xDirection();
+	const int yDirection = cSystem->yDirection();
 
 	QPointF startPoint, endPoint, anchorPoint;
 
@@ -1611,7 +1617,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//major tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
@@ -1621,11 +1627,11 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), m_plot->xMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xMax());
 	} else {
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), m_plot->yMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yMax());
 	}
 
 	int start, end;
@@ -1650,16 +1656,16 @@ void AxisPrivate::retransformMajorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		double yMin = m_plot->yMin();
-		double yMax = m_plot->yMax();
+		double yMin = plot->yMin();
+		double yMax = plot->yMax();
 
 		for (int i=start; i<end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	} else { //vertical axis
-		double xMin = m_plot->xMin();
-		double xMax = m_plot->xMax();
+		double xMin = plot->xMin();
+		double xMax = plot->xMax();
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
@@ -1668,7 +1674,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1690,20 +1696,20 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		double yMin = m_plot->yMin();
-		double yMax = m_plot->yMax();
+		double yMin = plot->yMin();
+		double yMax = plot->yMax();
 
 		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
 			const QPointF& point = logicalMinorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	} else { //vertical axis
-		double xMin = m_plot->xMin();
-		double xMax = m_plot->xMax();
+		double xMin = plot->xMin();
+		double xMax = plot->xMax();
 
 		for (int i = 0; i < logicalMinorTickPoints.size(); ++i) {
 			const QPointF& point = logicalMinorTickPoints.at(i);
@@ -1711,7 +1717,7 @@ void AxisPrivate::retransformMinorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -1730,7 +1736,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		axisShape = QPainterPath();
 		boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
-		if (m_plot) m_plot->prepareGeometryChange();
+		if (plot) plot->prepareGeometryChange();
 		return;
 	} else {
 		title->setPositionInvalid(false);
@@ -1789,8 +1795,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
-	if (m_plot)
-		m_plot->prepareGeometryChange();
+	if (plot)
+		plot->prepareGeometryChange();
 }
 
 /*!

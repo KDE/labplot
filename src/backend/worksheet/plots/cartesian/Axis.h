@@ -61,9 +61,10 @@ class Axis: public WorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-		explicit Axis(const QString&, CartesianPlot*, const AxisOrientation& orientation = AxisHorizontal);
+		explicit Axis(const QString&, const AxisOrientation& orientation = AxisHorizontal);
 		~Axis() override;
 
+		void finalizeAdd() override;
 		QIcon icon() const override;
 		QMenu* createContextMenu() override;
 

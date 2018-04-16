@@ -43,7 +43,7 @@ class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {
 public:
-	explicit AxisPrivate(Axis*, CartesianPlot*);
+	explicit AxisPrivate(Axis*);
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
@@ -135,6 +135,9 @@ public:
 	bool labelsFormatDecimalOverruled;
 	bool labelsFormatAutoChanged;
 
+	CartesianPlot* plot;
+	const CartesianCoordinateSystem* cSystem;
+
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
@@ -159,8 +162,6 @@ private:
 	QVector<double> tickLabelValues; //!< major tick labels values
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
-	CartesianPlot* m_plot;
-	const CartesianCoordinateSystem* m_cSystem;
 	bool m_hovered;
 	bool m_suppressRecalc;
 	bool m_printing;

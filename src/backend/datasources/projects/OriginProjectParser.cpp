@@ -1084,7 +1084,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			if (layer.curves.size()){
 				Origin::GraphCurve originCurve = layer.curves[0];
 				if (!originXAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("x", plot, Axis::AxisHorizontal);
+					Axis* axis = new Axis("x", Axis::AxisHorizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisBottom);
 					plot->addChild(axis);
@@ -1094,7 +1094,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//x top
 				if (!originXAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("x top", plot, Axis::AxisHorizontal);
+					Axis* axis = new Axis("x top", Axis::AxisHorizontal);
 					axis->setPosition(Axis::AxisTop);
 					axis->setSuppressRetransform(true);
 					plot->addChild(axis);
@@ -1104,7 +1104,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//y left
 				if (!originYAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("y", plot, Axis::AxisVertical);
+					Axis* axis = new Axis("y", Axis::AxisVertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisLeft);
 					plot->addChild(axis);
@@ -1114,7 +1114,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//y right
 				if (!originYAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("y right", plot, Axis::AxisVertical);
+					Axis* axis = new Axis("y right", Axis::AxisVertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisRight);
 					plot->addChild(axis);

@@ -74,6 +74,13 @@ XYCurve::~XYCurve() {
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
+void XYCurve::finalizeAdd() {
+	Q_D(XYCurve);
+	d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	Q_ASSERT(d->plot);
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+}
+
 void XYCurve::init() {
 	Q_D(XYCurve);
 
@@ -818,6 +825,8 @@ void XYCurve::navigateTo() {
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) :
 	sourceDataChangedSinceLastRecalc(false),
 	q(owner),
+	plot(nullptr),
+	cSystem(nullptr),
 	m_hoverEffectImageIsDirty(false),
 	m_selectionEffectImageIsDirty(false),
 	m_hovered(false),
@@ -860,7 +869,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	if (m_suppressRetransform)
+	if (m_suppressRetransform || !plot)
 		return;
 
 #ifdef PERFTRACE_CURVES
@@ -924,14 +933,6 @@ void XYCurvePrivate::retransform() {
 	}
 
 	//calculate the scene coordinates
-	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
-	if (!plot) {
-		RESET_CURSOR;
-		return;
-	}
-
-	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	{
 #ifdef PERFTRACE_CURVES
@@ -1151,8 +1152,6 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	//map the lines to scene coordinates
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 	{
 #ifdef PERFTRACE_CURVES
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), map lines to scene coordinates");
@@ -1187,7 +1186,6 @@ void XYCurvePrivate::updateDropLines() {
 	}
 
 	//calculate drop lines
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	QVector<QLineF> lines;
 	float xMin = 0;
 	float yMin = 0;
@@ -1243,7 +1241,6 @@ void XYCurvePrivate::updateDropLines() {
 	}
 
 	//map the drop lines to scene coordinates
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
@@ -1422,8 +1419,6 @@ void XYCurvePrivate::updateFilling() {
 	}
 
 	QVector<QLineF> fillLines;
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
 	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
@@ -1655,8 +1650,6 @@ void XYCurvePrivate::updateErrorBars() {
 
 	QVector<QLineF> lines;
 	float errorPlus, errorMinus;
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
 	//the cap size for the errorbars is given in scene units.
 	//determine first the (half of the) cap size in logical units:

@@ -33,6 +33,7 @@
 #include <vector>
 
 class CartesianPlot;
+class CartesianCoordinateSystem;
 
 class XYCurvePrivate : public QGraphicsItem {
 public:
@@ -127,6 +128,9 @@ public:
 
 	XYCurve* const q;
 	friend class XYCurve;
+
+	const CartesianPlot* plot;
+	const CartesianCoordinateSystem* cSystem;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

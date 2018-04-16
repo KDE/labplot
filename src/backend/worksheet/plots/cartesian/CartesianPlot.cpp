@@ -162,7 +162,7 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMax = 1;
 
 			//Axes
-			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
@@ -180,7 +180,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorGridPen(pen);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("x axis 2", this, Axis::AxisHorizontal);
+			axis = new Axis("x axis 2", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisTop);
@@ -194,7 +194,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis = new Axis("y axis 1", Axis::AxisVertical);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
@@ -212,7 +212,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setMinorGridPen(pen);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 2", this, Axis::AxisVertical);
+			axis = new Axis("y axis 2", Axis::AxisVertical);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisRight);
@@ -235,7 +235,7 @@ void CartesianPlot::initDefault(Type type) {
 			d->yMin = 0;
 			d->yMax = 1;
 
-			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisBottom);
@@ -248,7 +248,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis = new Axis("y axis 1", Axis::AxisVertical);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisLeft);
@@ -276,7 +276,7 @@ void CartesianPlot::initDefault(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
@@ -290,7 +290,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis = new Axis("y axis 1", Axis::AxisVertical);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
@@ -319,7 +319,7 @@ void CartesianPlot::initDefault(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", this, Axis::AxisHorizontal);
+			Axis* axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);
@@ -334,7 +334,7 @@ void CartesianPlot::initDefault(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", this, Axis::AxisVertical);
+			axis = new Axis("y axis 1", Axis::AxisVertical);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCustom);
@@ -1008,7 +1008,7 @@ void CartesianPlot::setTheme(const QString& theme) {
 //########################## Slots ###############################
 //################################################################
 void CartesianPlot::addHorizontalAxis() {
-	Axis* axis = new Axis("x-axis", this, Axis::AxisHorizontal);
+	Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(xMin());
@@ -1019,7 +1019,7 @@ void CartesianPlot::addHorizontalAxis() {
 }
 
 void CartesianPlot::addVerticalAxis() {
-	Axis* axis = new Axis("y-axis", this, Axis::AxisVertical);
+	Axis* axis = new Axis("y-axis", Axis::AxisVertical);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		axis->setStart(yMin());
@@ -2745,7 +2745,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
-			Axis* axis = new Axis("", this);
+			Axis* axis = new Axis("");
 			if (axis->load(reader, preview))
 				addChildFast(axis);
 			else {

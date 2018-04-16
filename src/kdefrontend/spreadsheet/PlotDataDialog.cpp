@@ -428,16 +428,20 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 	DEBUG("PlotDataDialog::addCurve()");
 	if (!m_analysisMode) {
 		XYCurve* curve = new XYCurve(name);
+		curve->suppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
+		curve->suppressRetransform(false);
 		plot->addChild(curve);
 	} else {
 		bool createDataCurve = ui->chkCreateDataCurve->isChecked();
 		XYCurve* curve = 0;
 		if (createDataCurve) {
 			curve = new XYCurve(name);
+			curve->suppressRetransform(true);
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
+			curve->suppressRetransform(false);
 			plot->addChild(curve);
 		}
 
@@ -479,9 +483,11 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		}
 
 		if (analysisCurve != nullptr) {
+			analysisCurve->suppressRetransform(true);
 			analysisCurve->setXDataColumn(xColumn);
 			analysisCurve->setYDataColumn(yColumn);
 			analysisCurve->recalculate();
+			analysisCurve->suppressRetransform(false);
 			plot->addChild(analysisCurve);
 		}
 	}

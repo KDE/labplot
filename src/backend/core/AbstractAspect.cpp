@@ -370,6 +370,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	}
 
 	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
+	child->finalizeAdd();
 	endMacro();
 }
 
@@ -379,6 +380,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 void AbstractAspect::addChildFast(AbstractAspect* child) {
 	emit aspectAboutToBeAdded(this, 0, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
+	child->finalizeAdd();
 	emit aspectAdded(child);
 }
 
