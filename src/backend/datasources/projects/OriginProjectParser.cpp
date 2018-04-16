@@ -1022,7 +1022,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			else
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
-			//ranges/scales
+			//ranges
 			plot->setAutoScaleX(false);
 			plot->setAutoScaleY(false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
@@ -1031,6 +1031,53 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setXMax(originXAxis.max);
 			plot->setYMin(originYAxis.min);
 			plot->setYMax(originYAxis.max);
+
+			//scales
+			switch(originXAxis.scale) {
+			case Origin::GraphAxis::Linear:
+				plot->setXScale(CartesianPlot::ScaleLinear);
+				break;
+			case Origin::GraphAxis::Log10:
+				plot->setXScale(CartesianPlot::ScaleLog10);
+				break;
+			case Origin::GraphAxis::Ln:
+				plot->setXScale(CartesianPlot::ScaleLn);
+				break;
+			case Origin::GraphAxis::Log2:
+				plot->setXScale(CartesianPlot::ScaleLog2);
+				break;
+			case Origin::GraphAxis::Probability:
+			case Origin::GraphAxis::Probit:
+			case Origin::GraphAxis::Reciprocal:
+			case Origin::GraphAxis::OffsetReciprocal:
+			case Origin::GraphAxis::Logit:
+				//TODO:
+				plot->setXScale(CartesianPlot::ScaleLinear);
+				break;
+			}
+
+			switch(originYAxis.scale) {
+			case Origin::GraphAxis::Linear:
+				plot->setYScale(CartesianPlot::ScaleLinear);
+				break;
+			case Origin::GraphAxis::Log10:
+				plot->setYScale(CartesianPlot::ScaleLog10);
+				break;
+			case Origin::GraphAxis::Ln:
+				plot->setYScale(CartesianPlot::ScaleLn);
+				break;
+			case Origin::GraphAxis::Log2:
+				plot->setYScale(CartesianPlot::ScaleLog2);
+				break;
+			case Origin::GraphAxis::Probability:
+			case Origin::GraphAxis::Probit:
+			case Origin::GraphAxis::Reciprocal:
+			case Origin::GraphAxis::OffsetReciprocal:
+			case Origin::GraphAxis::Logit:
+				//TODO:
+				plot->setYScale(CartesianPlot::ScaleLinear);
+				break;
+			}
 
 			//axes
 			//x bottom
@@ -1277,7 +1324,28 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 
 	//scale
-	//unsigned char scale;
+	switch(originAxis.scale) {
+	case Origin::GraphAxis::Linear:
+		axis->setScale(Axis::ScaleLinear);
+		break;
+	case Origin::GraphAxis::Log10:
+		axis->setScale(Axis::ScaleLog10);
+		break;
+	case Origin::GraphAxis::Ln:
+		axis->setScale(Axis::ScaleLn);
+		break;
+	case Origin::GraphAxis::Log2:
+		axis->setScale(Axis::ScaleLog2);
+		break;
+	case Origin::GraphAxis::Probability:
+	case Origin::GraphAxis::Probit:
+	case Origin::GraphAxis::Reciprocal:
+	case Origin::GraphAxis::OffsetReciprocal:
+	case Origin::GraphAxis::Logit:
+		//TODO:
+		axis->setScale(Axis::ScaleLinear);
+		break;
+	}
 
 	//major grid
 	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
