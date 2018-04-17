@@ -2188,19 +2188,93 @@ void FitTest::testNonLinearGP_lcdemo() {
 //TODO	FuzzyCompare(fitResult.errorValues.at(1), 0.00159887430059728, 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));	// result:  -0.000835023995828296 (Windows: -0.000883960665773456)
 	FuzzyCompare(fitResult.paramValues.at(2), -0.0008340717673769, 1.e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(2));	// result:
+//TODO	FuzzyCompare(fitResult.errorValues.at(2), , 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(3));	// result: -0.000987547207638997
 	FuzzyCompare(fitResult.paramValues.at(3), -0.00103152542276233, 1.e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(3));	// result:
+//TODO	FuzzyCompare(fitResult.errorValues.at(3), , 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(4));	// result: 0.00158880319355268
 	FuzzyCompare(fitResult.paramValues.at(4), 0.00139548391000006, 1.5e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(4));	// result:
+//TODO	FuzzyCompare(fitResult.errorValues.at(4), , 1.e-6);
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(5));	// result: 6.34254053273612 (Windows: 4.45482397068125)
 //	FuzzyCompare(fitResult.paramValues.at(5), 6.92493866108287, 1.e-1);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(5));	// result:
+//TODO	FuzzyCompare(fitResult.errorValues.at(5), , 1.e-6);
 
 	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 98.0672185899393
-//	FuzzyCompare(fitResult.rms, ???, 1.e-11);
+//	FuzzyCompare(fitResult.rms, 0.000188776, 1.e-11);
 	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 9.90288940612482
 //	FuzzyCompare(fitResult.rsd, 0.0137395924378767, 1.e-11);
 	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 3040.08377628812
 //	FuzzyCompare(fitResult.sse, 0.00585206841112775, 1.e-11);
+}
+
+// see http://gnuplot.sourceforge.net/demo_5.2/fit.html
+void FitTest::testLinearGP_PY_noerror() {
+	// Pearson's data and York's weights
+	QVector<double> xData = {0.0,0.9,1.8,2.6,3.3,4.4,5.2,6.1,6.5,7.4};
+	QVector<double> yData = {5.9,5.4,4.4,4.6,3.5,3.7,2.8,2.8,2.4,1.5};
+//	QVector<double> xError = {1000.,1000.,500.,800.,200.,80.,60.,20.,1.8,1.0};
+//	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+//	Column yErrorColumn("yerr", AbstractColumn::Numeric);
+//	yErrorColumn.replaceValues(0, yError);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+//	fitCurve.setYErrorColumn(&yErrorColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "a1 + a2 * x";
+	fitData.paramNames << "a1" << "a2";
+//	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 5. << -0.5;
+	for (int i = 0; i < np; i++) {
+		fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	}
+//	fitData.yWeightsType = nsl_fit_weight_instrumental;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 5.76118518568804
+	FuzzyCompare(fitResult.paramValues.at(0), 5.76118519043878, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.189485192391863
+	FuzzyCompare(fitResult.errorValues.at(0), 0.189485195921141, 1.e-7);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.539577274076964
+	FuzzyCompare(fitResult.paramValues.at(1), -0.539577274983977, 1.e-8);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0421265487265946
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0421265483886995, 1.e-8);
+
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 0.100082940279452
+	QCOMPARE(fitResult.rms, 0.100082940279452);
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 0.316358878932538
+	QCOMPARE(fitResult.rsd, 0.316358878932538);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 0.800663522235619
+	QCOMPARE(fitResult.sse, 0.800663522235619);
 }
 
 //TODO: add more tests
