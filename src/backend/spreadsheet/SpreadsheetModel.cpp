@@ -183,7 +183,8 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	//don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::Numeric) {
 		bool ok;
-		double new_value = value.toDouble(&ok);
+		QLocale locale;
+		double new_value = locale.toDouble(value.toString(), &ok);
 		if (ok) {
 			if (column->valueAt(row) == new_value )
 				return false;
