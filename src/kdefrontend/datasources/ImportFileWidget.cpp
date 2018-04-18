@@ -527,10 +527,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
 
 	ui.gbOptions->setEnabled(fileExists);
-	ui.bFileInfo->setEnabled(fileExists);
-	ui.cbFileType->setEnabled(fileExists);
-	ui.cbFilter->setEnabled(fileExists);
 	ui.bManageFilters->setEnabled(fileExists);
+	ui.cbFilter->setEnabled(fileExists);
+	ui.cbFileType->setEnabled(fileExists);
+	ui.bFileInfo->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 	if (!fileExists) {
 		//file doesn't exist -> delete the content preview that is still potentially
@@ -993,6 +993,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
+		fileNameChanged(m_fileName);
+
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
             if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
@@ -1019,6 +1021,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
+
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
+		ui.cbFileType->setEnabled(true);
 
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
@@ -1050,6 +1057,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
 
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
+		ui.cbFileType->setEnabled(true);
+
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
             if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
@@ -1076,6 +1088,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
+		ui.cbFileType->setEnabled(true);
+
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
 
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
