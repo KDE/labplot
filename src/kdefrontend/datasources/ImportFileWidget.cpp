@@ -989,6 +989,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leFileName->show();
 		ui.bFileInfo->show();
 		ui.bOpen->show();
+		ui.chbLinkFile->show();
 
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
@@ -1024,6 +1025,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
+		ui.chbLinkFile->hide();
 
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
@@ -1053,6 +1055,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.chbLinkFile->hide();
 
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
@@ -1079,6 +1082,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
+		ui.chbLinkFile->hide();
+
         itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
             if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
