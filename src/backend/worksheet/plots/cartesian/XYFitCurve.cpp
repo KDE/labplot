@@ -781,7 +781,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
-		gsl_vector_set(f, i, weight[i] * (Yi - y[i]));
+		gsl_vector_set(f, i, sqrt(weight[i]) * (Yi - y[i]));
 	}
 
 	return GSL_SUCCESS;
@@ -1451,7 +1451,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 				else	// calculate finite difference
-					gsl_matrix_set(J, (size_t)i, (size_t)j, weight[i]*(f_pdp - f_p)/eps);
+					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i])*(f_pdp - f_p)/eps);
 			}
 		}
 	}

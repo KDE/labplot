@@ -84,6 +84,7 @@ private slots:
 	//fits with weights
 	void testNonLinearGP_lcdemo();
 	void testLinearGP_PY_noerror();
-//	void testLinearGP_PY_yerror();
+	void testLinearGP_PY_yerror_polynomial();
+	void testLinearGP_PY_yerror_custom();
 //	void testLinearGP_PY_xyerror();
 };
