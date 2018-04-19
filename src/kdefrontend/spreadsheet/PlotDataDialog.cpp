@@ -205,6 +205,31 @@ void PlotDataDialog::processColumns() {
 				m_columns << col;
 	}
 
+	//determine the column names and the name of the first column having "X" as the plot designation
+	QList<QString> columnNames;
+	QString xColumnName;
+	for(const Column* column : m_columns) {
+		columnNames << column->name();
+		if (xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
+			xColumnName = column->name();
+	}
+
+	if (xColumnName.isEmpty()) {
+		//no X-column was selected -> look for the first non-selected X-column left to the first selected column
+		const int index = m_spreadsheet->indexOfChild<Column>(selectedColumns.first()) - 1;
+		if (index >= 0) {
+			for (int i = index; i >= 0; --i) {
+				Column* column = m_spreadsheet->column(i);
+				if (column->plotDesignation() == AbstractColumn::X) {
+					xColumnName = column->name();
+					m_columns.prepend(column);
+					columnNames.prepend(xColumnName);
+					break;
+				}
+			}
+		}
+	}
+
 	m_columnComboBoxes << ui->cbXColumn;
 	m_columnComboBoxes << ui->cbYColumn;
 
@@ -223,15 +248,6 @@ void PlotDataDialog::processColumns() {
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add curve to"));
-	}
-
-	//determine the column names and the name of the first column having "X" as the plot designation
-	QList<QString> columnNames;
-	QString xColumnName;
-	for(const Column* column : m_columns) {
-		columnNames << column->name();
-		if (xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::X)
-			xColumnName = column->name();
 	}
 
 	//show all selected/available column names in the data comboboxes
