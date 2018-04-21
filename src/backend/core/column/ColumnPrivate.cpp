@@ -924,12 +924,12 @@ const QStringList& ColumnPrivate::formulaVariableColumnPathes() const {
  *
  * \code
  * QStringList list;
- * QList< Interval<int> > intervals = my_column.formulaIntervals();
+ * QVector< Interval<int> > intervals = my_column.formulaIntervals();
  * foreach(Interval<int> interval, intervals)
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QList< Interval<int> > ColumnPrivate::formulaIntervals() const {
+QVector< Interval<int> > ColumnPrivate::formulaIntervals() const {
 	return m_formulas.intervals();
 }
 

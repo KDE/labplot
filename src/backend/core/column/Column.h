@@ -79,7 +79,7 @@ public:
 	const QStringList& formulaVariableColumnPathes() const;
 
 	QString formula(int) const  override;
-	QList< Interval<int> > formulaIntervals() const override;
+	QVector< Interval<int> > formulaIntervals() const override;
 	void setFormula(Interval<int>, QString) override;
 	void setFormula(int, QString) override;
 	void clearFormulas() override;

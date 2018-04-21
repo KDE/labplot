@@ -41,7 +41,7 @@ class QString;
 class QDateTime;
 class QDate;
 class QTime;
-template<class T> class QList;
+template<class T> class QVector;
 template<class T> class Interval;
 
 class AbstractColumn : public AbstractAspect {
@@ -158,13 +158,13 @@ public:
 
 	bool isMasked(int row) const;
 	bool isMasked(Interval<int> i) const;
-	QList< Interval<int> > maskedIntervals() const;
+	QVector< Interval<int> > maskedIntervals() const;
 	void clearMasks();
 	void setMasked(Interval<int> i, bool mask = true);
 	void setMasked(int row, bool mask = true);
 
 	virtual QString formula(int row) const;
-	virtual QList< Interval<int> > formulaIntervals() const;
+	virtual QVector< Interval<int> > formulaIntervals() const;
 	virtual void setFormula(Interval<int> i, QString formula);
 	virtual void setFormula(int row, QString formula);
 	virtual void clearFormulas();

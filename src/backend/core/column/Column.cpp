@@ -729,7 +729,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	XmlWriteMask(writer);
 
 	//TODO: formula in cells is not implemented yet
-	// 	QList< Interval<int> > formulas = formulaIntervals();
+	// 	QVector< Interval<int> > formulas = formulaIntervals();
 	// 	foreach(const Interval<int>& interval, formulas) {
 	// 		writer->writeStartElement("formula");
 	// 		writer->writeAttribute("start_row", QString::number(interval.start()));
@@ -1068,12 +1068,12 @@ QString Column::formula(int row) const {
  *
  * \code
  * QStringList list;
- * QList< Interval<int> > intervals = my_column.formulaIntervals();
+ * QVector< Interval<int> > intervals = my_column.formulaIntervals();
  * foreach(Interval<int> interval, intervals)
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QList< Interval<int> > Column::formulaIntervals() const {
+QVector< Interval<int> > Column::formulaIntervals() const {
 	return d->formulaIntervals();
 }
 

@@ -308,7 +308,7 @@ bool AbstractColumn::isMasked(Interval<int> i) const {
 /**
  * \brief Return all intervals of masked rows
  */
-QList< Interval<int> > AbstractColumn::maskedIntervals() const {
+QVector< Interval<int> > AbstractColumn::maskedIntervals() const {
 	return d->m_masking.intervals();
 }
 
@@ -363,13 +363,13 @@ QString AbstractColumn::formula(int row) const {
  *
  * \code
  * QStringList list;
- * QList< Interval<int> > intervals = my_column.formulaIntervals();
+ * QVector< Interval<int> > intervals = my_column.formulaIntervals();
  * foreach(Interval<int> interval, intervals)
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QList< Interval<int> > AbstractColumn::formulaIntervals() const {
-	return QList< Interval<int> >();
+QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
+	return QVector< Interval<int> >();
 }
 
 /**

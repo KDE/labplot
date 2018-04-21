@@ -88,12 +88,12 @@ public slots:
 
 signals:
 	void requestSaveState(QXmlStreamWriter*) const;
-	void requestLoadState(XmlStreamReader*) const;
+	void requestLoadState(XmlStreamReader*);
 	void requestProjectContextMenu(QMenu*);
 	void requestFolderContextMenu(const Folder*, QMenu*);
 	void mdiWindowVisibilityChanged();
-	void changed() const;
-	void requestNavigateTo(const QString& path) const;
+	void changed();
+	void requestNavigateTo(const QString& path);
 	void loaded();
 
 private:

@@ -83,8 +83,8 @@ template<class T> class IntervalBase {
 			return Interval<T>( qMin(a.start(), b.start()), qMax(a.end(), b.end()) );
 		}
 		//! Subtract an interval from another
-		static QList< Interval<T> > subtract(const Interval<T>& src_iv, const Interval<T>& minus_iv) {
-			QList< Interval<T> > list;
+		static QVector< Interval<T> > subtract(const Interval<T>& src_iv, const Interval<T>& minus_iv) {
+			QVector< Interval<T> > list;
 			if( (src_iv == minus_iv) || (minus_iv.contains(src_iv)) )
 				return list;
 
@@ -102,8 +102,8 @@ template<class T> class IntervalBase {
 			return list;
 		}
 		//! Split an interval into two
-		static QList< Interval<T> > split(const Interval<T>& i, T before) {
-			QList< Interval<T> > list;
+		static QVector< Interval<T> > split(const Interval<T>& i, T before) {
+			QVector< Interval<T> > list;
 			if( before < i.start() || before > i.end() )
 			{
 				list.append(i);
@@ -124,7 +124,7 @@ template<class T> class IntervalBase {
 		 * This function merges all intervals in the list until none of them
 		 * intersect or touch anymore.
 		 */
-		static void mergeIntervalIntoList(QList< Interval<T> > * list, Interval<T> i) {
+		static void mergeIntervalIntoList(QVector< Interval<T> > * list, Interval<T> i) {
 			for(int c=0; c<list->size(); c++)
 			{
 				if( list->at(c).touches(i) || list->at(c).intersects(i) )
@@ -140,7 +140,7 @@ template<class T> class IntervalBase {
 		/**
 		 * Remark: This may decrease the list size.
 		 */
-		static void restrictList(QList< Interval<T> > * list, Interval<T> i)
+		static void restrictList(QVector< Interval<T> > * list, Interval<T> i)
 		{
 			Interval<T> temp;
 			for(int c=0; c<list->size(); c++)
@@ -157,8 +157,8 @@ template<class T> class IntervalBase {
 		/**
 		 * Remark: This may increase or decrease the list size.
 		 */
-		static void subtractIntervalFromList(QList< Interval<T> > * list, Interval<T> i) {
-			QList< Interval<T> > temp_list;
+		static void subtractIntervalFromList(QVector< Interval<T> > * list, Interval<T> i) {
+			QVector< Interval<T> > temp_list;
 			for(int c=0; c<list->size(); c++)
 			{
 				temp_list = subtract(list->at(c), i);
@@ -172,18 +172,18 @@ template<class T> class IntervalBase {
 				}
 			}
 		}
-		QList< Interval<T> > operator-(QList< Interval<T> > subtrahend) {
-			QList< Interval<T> > *tmp1, *tmp2;
-			tmp1 = new QList< Interval<T> >();
+		QVector< Interval<T> > operator-(QVector< Interval<T> > subtrahend) {
+			QVector< Interval<T> > *tmp1, *tmp2;
+			tmp1 = new QVector< Interval<T> >();
 			*tmp1 << *static_cast< Interval<T>* >(this);
 			foreach(Interval<T> i, subtrahend) {
-				tmp2 = new QList< Interval<T> >();
+				tmp2 = new QVector< Interval<T> >();
 				foreach(Interval<T> j, *tmp1)
 					*tmp2 << subtract(j, i);
 				delete tmp1;
 				tmp1 = tmp2;
 			}
-			QList< Interval<T> > result = *tmp1;
+			QVector< Interval<T> > result = *tmp1;
 			delete tmp1;
 			return result;
 		}

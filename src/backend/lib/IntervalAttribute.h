@@ -32,16 +32,16 @@
 #define INTERVALATTRIBUTE_H
 
 #include "Interval.h"
-#include <QList>
+#include <QVector>
 
 //! A class representing an interval-based attribute
 template<class T> class IntervalAttribute
 {
 	public:
-		void setValue(Interval<int> i, T value)
+		void setValue(const Interval<int>& i, T value)
 		{
 			// first: subtract the new interval from all others
-			QList< Interval<int> > temp_list;
+			QVector< Interval<int> > temp_list;
 			for(int c=0; c<m_intervals.size(); c++)
 			{
 				temp_list = Interval<int>::subtract(m_intervals.at(c), i);
@@ -94,7 +94,7 @@ template<class T> class IntervalAttribute
 
 		void insertRows(int before, int count)
 		{
-			QList< Interval<int> > temp_list;
+			QVector< Interval<int> > temp_list;
 			// first: split all intervals that contain 'before'
 			for(int c=0; c<m_intervals.size(); c++)
 			{
@@ -122,7 +122,7 @@ template<class T> class IntervalAttribute
 
 		void removeRows(int first, int count)
 		{
-			QList< Interval<int> > temp_list;
+			QVector< Interval<int> > temp_list;
 			Interval<int> i(first, first+count-1);
 			// first: remove the relevant rows from all intervals
 			for(int c=0; c<m_intervals.size(); c++)
@@ -151,8 +151,8 @@ template<class T> class IntervalAttribute
 					m_intervals[c].translate(-count);
 			}
 			// third: merge as many intervals as possible
-			QList<T> values_copy = m_values;
-			QList< Interval<int> > intervals_copy = m_intervals;
+			QVector<T> values_copy = m_values;
+			QVector< Interval<int> > intervals_copy = m_intervals;
 			m_values.clear();
 			m_intervals.clear();
 			for(int c=0; c<intervals_copy.size(); c++)
@@ -176,8 +176,8 @@ template<class T> class IntervalAttribute
 
 		void clear() { m_values.clear(); m_intervals.clear(); }
 
-		QList< Interval<int> > intervals() const { return m_intervals; }
-		QList<T> values() const { return m_values; }
+		QVector< Interval<int> > intervals() const { return m_intervals; }
+		QVector<T> values() const { return m_values; }
 		IntervalAttribute<T>& operator=(const IntervalAttribute<T>& other)
 		{
 			m_intervals.clear();
@@ -190,8 +190,8 @@ template<class T> class IntervalAttribute
 		}
 
 	private:
-		QList<T> m_values;
-		QList< Interval<int> > m_intervals;
+		QVector<T> m_values;
+		QVector< Interval<int> > m_intervals;
 };
 
 //! A class representing an interval-based attribute (bool version)
@@ -199,7 +199,7 @@ template<> class IntervalAttribute<bool>
 {
 	public:
 		IntervalAttribute<bool>() {}
-		IntervalAttribute<bool>(QList< Interval<int> > intervals) : m_intervals(intervals) {}
+		IntervalAttribute<bool>(QVector< Interval<int> > intervals) : m_intervals(intervals) {}
 		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other)
 		{
 			m_intervals.clear();
@@ -245,7 +245,7 @@ template<> class IntervalAttribute<bool>
 
 		void insertRows(int before, int count)
 		{
-			QList< Interval<int> > temp_list;
+			QVector< Interval<int> > temp_list;
 			int c;
 			// first: split all intervals that contain 'before'
 			for(c=0; c<m_intervals.size(); c++)
@@ -290,12 +290,12 @@ template<> class IntervalAttribute<bool>
 			}
 		}
 
-		QList< Interval<int> > intervals() const { return m_intervals; }
+		QVector< Interval<int> > intervals() const { return m_intervals; }
 
 		void clear() { m_intervals.clear(); }
 
 	private:
-		QList< Interval<int> > m_intervals;
+		QVector< Interval<int> > m_intervals;
 };
 
 #endif

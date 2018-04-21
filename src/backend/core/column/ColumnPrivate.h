@@ -80,7 +80,7 @@ public:
 	const QStringList& formulaVariableColumnPathes() const;
 	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 	QString formula(int row) const;
-	QList< Interval<int> > formulaIntervals() const;
+	QVector< Interval<int> > formulaIntervals() const;
 	void setFormula(Interval<int> i, QString formula);
 	void setFormula(int row, QString formula);
 	void clearFormulas();

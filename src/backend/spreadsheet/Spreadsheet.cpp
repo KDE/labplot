@@ -293,10 +293,10 @@ void Spreadsheet::copy(Spreadsheet* other) {
 		Column * new_col = new Column(src_col->name(), src_col->columnMode());
 		new_col->copy(src_col);
 		new_col->setPlotDesignation(src_col->plotDesignation());
-		QList< Interval<int> > masks = src_col->maskedIntervals();
+		QVector< Interval<int> > masks = src_col->maskedIntervals();
 		for (const auto& iv: masks)
 			new_col->setMasked(iv);
-		QList< Interval<int> > formulas = src_col->formulaIntervals();
+		QVector< Interval<int> > formulas = src_col->formulaIntervals();
 		for (const auto& iv: formulas)
 			new_col->setFormula(iv, src_col->formula(iv.start()));
 		new_col->setWidth(src_col->width());
@@ -400,7 +400,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 			switch (col->columnMode()) {
 			case AbstractColumn::Numeric: {
 					int rows = col->rowCount();
-					QList< QPair<double, int> > map;
+					QVector< QPair<double, int> > map;
 
 					for(int j=0; j<rows; j++)
 						map.append(QPair<double, int>(col->valueAt(j), j));
@@ -410,7 +410,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-					QListIterator< QPair<double, int> > it(map);
+					QVectorIterator< QPair<double, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k=0;
@@ -427,7 +427,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				}
 			case AbstractColumn::Integer: {
 					int rows = col->rowCount();
-					QList< QPair<int, int> > map;
+					QVector< QPair<int, int> > map;
 
 					for (int j = 0; j < rows; j++)
 						map.append(QPair<int, int>(col->valueAt(j), j));
@@ -437,7 +437,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-					QListIterator<QPair<int, int>> it(map);
+					QVectorIterator<QPair<int, int>> it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -454,7 +454,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				}
 			case AbstractColumn::Text: {
 					int rows = col->rowCount();
-					QList<QPair<QString, int>> map;
+					QVector<QPair<QString, int>> map;
 
 					for (int j = 0; j < rows; j++)
 						map.append(QPair<QString, int>(col->textAt(j), j));
@@ -464,7 +464,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
-					QListIterator< QPair<QString, int> > it(map);
+					QVectorIterator< QPair<QString, int> > it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
 
 					int k = 0;
@@ -483,7 +483,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 			case AbstractColumn::Month:
 			case AbstractColumn::Day: {
 					int rows = col->rowCount();
-					QList< QPair<QDateTime, int> > map;
+					QVector< QPair<QDateTime, int> > map;
 
 					for(int j=0; j<rows; j++)
 						map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
@@ -493,7 +493,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					else
 						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
-					QListIterator< QPair<QDateTime, int> > it(map);
+					QVectorIterator< QPair<QDateTime, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
 
 					int k=0;
@@ -513,7 +513,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 	} else { // sort with leading column
 		switch (leading->columnMode()) {
 		case AbstractColumn::Numeric: {
-				QList<QPair<double, int>> map;
+				QVector<QPair<double, int>> map;
 				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
@@ -523,7 +523,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
 				else
 					qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
-				QListIterator<QPair<double, int>> it(map);
+				QVectorIterator<QPair<double, int>> it(map);
 
 				for (auto* col: cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -542,7 +542,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				break;
 			}
 		case AbstractColumn::Integer: {
-				QList<QPair<int, int>> map;
+				QVector<QPair<int, int>> map;
 				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
@@ -552,7 +552,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					qStableSort(map.begin(), map.end(), CompareFunctions::integerLess);
 				else
 					qStableSort(map.begin(), map.end(), CompareFunctions::integerGreater);
-				QListIterator<QPair<int, int>> it(map);
+				QVectorIterator<QPair<int, int>> it(map);
 
 				for (auto* col: cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -571,7 +571,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 				break;
 			}
 		case AbstractColumn::Text: {
-				QList<QPair<QString, int>> map;
+				QVector<QPair<QString, int>> map;
 				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
@@ -581,7 +581,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
 				else
 					qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
-				QListIterator<QPair<QString, int>> it(map);
+				QVectorIterator<QPair<QString, int>> it(map);
 
 				for (auto* col: cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -602,7 +602,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day: {
-				QList<QPair<QDateTime, int>> map;
+				QVector<QPair<QDateTime, int>> map;
 				int rows = leading->rowCount();
 
 				for (int i = 0; i < rows; i++)
@@ -612,7 +612,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 				else
 					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
-				QListIterator<QPair<QDateTime, int>> it(map);
+				QVectorIterator<QPair<QDateTime, int>> it(map);
 
 				for (auto* col: cols) {
 					Column *temp_col = new Column("temp", col->columnMode());
