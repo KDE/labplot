@@ -86,7 +86,7 @@ private:
 	void initActions();
 	void initMenus();
 	void connectActions();
-
+	bool formulaModeActive() const;
 	void exportToFile(const QString&, const bool, const QString&) const;
 	void exportToLaTeX(const QString&, const bool exportHeaders,
 	                   const bool gridLines, const bool captions, const bool latexHeaders,
@@ -241,7 +241,6 @@ private slots:
 	void setSelectionAs();
 
 	void activateFormulaMode(bool on);
-	bool formulaModeActive() const;
 
 	void showColumnStatistics(bool forAll = false);
 	void showAllColumnsStatistics();

@@ -363,7 +363,7 @@ void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update();
 	}
 }
@@ -371,7 +371,7 @@ void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update();
 	}
 }

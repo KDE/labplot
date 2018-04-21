@@ -513,7 +513,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	labelShape.addRect(boundingRectangle);
 	labelShape = matrix.map(labelShape);
 
-	emit(q->changed());
+	emit q->changed();
 }
 
 void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
@@ -640,7 +640,7 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update();
 	}
 }
@@ -648,7 +648,7 @@ void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update();
 	}
 }

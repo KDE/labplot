@@ -516,7 +516,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName = name;
 #ifndef HAVE_WINDOWS
 	// make relative path
-	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
+	if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
@@ -744,7 +744,7 @@ void ImportFileWidget::refreshPreview() {
 
 	QString fileName = ui.leFileName->text();
 #ifndef HAVE_WINDOWS
-	if (fileName.left(1) != QDir::separator())
+	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 

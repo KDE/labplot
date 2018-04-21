@@ -204,7 +204,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 }
 
 void Project::navigateTo(const QString& path) {
-	requestNavigateTo(path);
+	emit requestNavigateTo(path);
 }
 
 bool Project::isLabPlotProject(const QString& fileName) {

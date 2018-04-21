@@ -155,7 +155,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -165,7 +165,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("Number of x and y data points must be equal.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -203,7 +203,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -273,7 +273,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
-	emit (q->dataChanged());
+	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

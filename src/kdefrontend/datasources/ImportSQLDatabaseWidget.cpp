@@ -151,7 +151,7 @@ bool ImportSQLDatabaseWidget::isNumericData() const {
 void ImportSQLDatabaseWidget::readConnections() {
 	DEBUG("ImportSQLDatabaseWidget: reading available connections");
 	KConfig config(m_configPath, KConfig::SimpleConfig);
-	for (auto name : config.groupList())
+	for (const auto& name : config.groupList())
 		ui.cbConnection->addItem(name);
 }
 

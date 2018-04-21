@@ -162,7 +162,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem *item, int col) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0) {
 				bool ok;
-				int hduNum = itemText.right(1).toInt(&ok);
+				int hduNum = itemText.rightRef(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + '[' + QString::number(hduNum-1) + ']';
 			}
 		}

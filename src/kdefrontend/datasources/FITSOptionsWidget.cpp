@@ -96,7 +96,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0) {
 				bool ok;
-				int hduNum = itemText.right(1).toInt(&ok);
+				int hduNum = itemText.rightRef(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		}
@@ -164,7 +164,7 @@ const QString FITSOptionsWidget::extensionName(bool* ok) {
 				return item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
 		} else if (extType == 1) {
 			if (item->parent() != 0 && item->parent()->parent() != 0) {
-				int hduNum = itemText.right(1).toInt(ok);
+				int hduNum = itemText.rightRef(1).toInt(ok);
 				return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		} else {
