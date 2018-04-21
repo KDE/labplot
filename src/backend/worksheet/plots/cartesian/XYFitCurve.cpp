@@ -1704,9 +1704,9 @@ void XYFitCurvePrivate::recalculate() {
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	DEBUG(" DONE");
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
-	DEBUG("Turn off GSL error handler to avoid overflow/underflow");
+	DEBUG("Turning off GSL error handler to avoid overflow/underflow");
 	gsl_set_error_handler_off();
-	DEBUG("initialize solver with function f and initial guess x");
+	DEBUG("Initialize solver with function f and initial guess x");
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	DEBUG("Iterate ...");
@@ -1742,7 +1742,9 @@ void XYFitCurvePrivate::recalculate() {
 		// y'(x)
 		double *yd = new double[n];
 		for (size_t i = 0; i < n; i++) {
-			size_t index = i;
+			size_t index = i-1;
+			if (index == 0)
+				index = i;
 			if (index == n-1)
 				index = n-2;
 			yd[i] = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
@@ -1759,21 +1761,24 @@ void XYFitCurvePrivate::recalculate() {
 					// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
 					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(yd[i] * xerror[i]));
 				else	// only x-error
-					sigma = yd[i] * xerror[i];
+					sigma = fabs(yd[i]) * xerror[i];
 				weight[i] = 1./gsl_pow_2(sigma);
 			}
 			break;
-		// other weight types: y'(x) considered correctly?
+		// TODO: other weight types: y'(x) considered correctly?
 		case nsl_fit_weight_direct:
+			double sigma2;
 			for (size_t i = 0; i < n; i++) {
-				weight[i] = xerror[i]/yd[i];
+				sigma2 = yd[i]*yd[i]*xerror[i]*xerror[i];
 				if (yerrorVector.size() > 0)
-					weight[i] += yerror[i];
+					sigma2 += yerror[i]*yerror[i];
+				weight[i] = 1./sigma2;
+				//printf("sigma^2[%d] = %g\n", (int)i, sigma2);
 			}
 			break;
 		case nsl_fit_weight_inverse:
 			for (size_t i = 0; i < n; i++) {
-				weight[i] = yd[i]/xerror[i];
+				weight[i] = fabs(yd[i])/xerror[i];
 				if (yerrorVector.size() > 0)
 					weight[i] += 1./yerror[i];
 			}
@@ -1790,20 +1795,35 @@ void XYFitCurvePrivate::recalculate() {
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
 			break;
 		}
+
+		for (size_t i = 0; i < n; i++) {
+			//DEBUG("y'[" << i << "] = " << yd[i]);
+			//DEBUG("weight[" << i << "] = " << weight[i]);
+			//TEST: weight[i]=1.;
+		}
 		delete[] yd;
 
+	//	params.weight = weight;
+		// update weights
+		gsl_multifit_fdfsolver_set(s, &f, &x.vector);
+
+		writeSolverState(s);
 		do {
+			DEBUG("second run with iter = " << iter);
 			iter++;
 			status = gsl_multifit_fdfsolver_iterate(s);
 			writeSolverState(s);
-			if (status) break;
+			if (status) {
+				DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
+				break;
+			}
 			status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 		} while (status == GSL_CONTINUE && iter < maxIters);
 	}
 
 	delete[] weight;
 
-	// unscale start values
+	// unscale start parameter
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 

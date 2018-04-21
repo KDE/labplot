@@ -86,5 +86,6 @@ private slots:
 	void testLinearGP_PY_noerror();
 	void testLinearGP_PY_yerror_polynomial();
 	void testLinearGP_PY_yerror_custom();
-//	void testLinearGP_PY_xyerror();
+	void testLinearGP_PY_xyerror_polynomial();
+	void testLinearGP_PY_xyerror_custom();
 };
