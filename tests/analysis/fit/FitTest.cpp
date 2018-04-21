@@ -2440,7 +2440,7 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
-	fitData.xErrorsType = nsl_fit_error_direct;
+	fitData.xWeightsType = nsl_fit_weight_direct;
 	fitData.yWeightsType = nsl_fit_weight_direct;
 	fitCurve.setFitData(fitData);
 
@@ -2508,6 +2508,7 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 		fitData.paramUpperLimits << std::numeric_limits<double>::max();
 	}
 
+	fitData.xWeightsType = nsl_fit_weight_direct;
 	fitData.yWeightsType = nsl_fit_weight_direct;
 	fitCurve.setFitData(fitData);
 

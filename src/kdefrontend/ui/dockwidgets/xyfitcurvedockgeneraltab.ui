@@ -79,7 +79,7 @@
     </spacer>
    </item>
    <item row="12" column="0">
-    <widget class="QLabel" name="lWeight">
+    <widget class="QLabel" name="lYWeight">
      <property name="text">
       <string>y-Weight</string>
      </property>
@@ -128,7 +128,7 @@
     </widget>
    </item>
    <item row="10" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lWeights">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -136,7 +136,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Errors:</string>
+      <string>Weights:</string>
      </property>
     </widget>
    </item>
@@ -588,9 +588,9 @@
     </widget>
    </item>
    <item row="11" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lXWeight">
      <property name="text">
-      <string>x-Error</string>
+      <string>x-Weight</string>
      </property>
     </widget>
    </item>
@@ -880,7 +880,7 @@
    <item row="11" column="4" colspan="4">
     <layout class="QHBoxLayout" name="hlXError">
      <item>
-      <widget class="QComboBox" name="cbXError"/>
+      <widget class="QComboBox" name="cbXWeight"/>
      </item>
      <item>
       <widget class="QLabel" name="lXErrorCol">
