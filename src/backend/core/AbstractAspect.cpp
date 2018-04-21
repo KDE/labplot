@@ -212,7 +212,7 @@ QString AbstractAspect::name() const {
 
 void AbstractAspect::setName(const QString &value) {
 	if (value.isEmpty()) {
-		setName("1");
+		setName(QLatin1String("1"));
 		return;
 	}
 
@@ -294,11 +294,11 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-    menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
+    menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 
 	//don't allow to delete data spreadsheets in the datapicker curves
     if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
-		menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 
 	return menu;
 }
@@ -353,7 +353,7 @@ Project* AbstractAspect::project() {
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
 QString AbstractAspect::path() const {
-	return parentAspect() ? parentAspect()->path() + '/' + name() : "";
+	return parentAspect() ? parentAspect()->path() + QLatin1Char('/') + name() : QLatin1String("");
 }
 
 /**
@@ -391,7 +391,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: insert %2 before %3", name(), new_name, before ? before->name() : "end"));
+	beginMacro(i18n("%1: insert %2 before %3", name(), new_name, before ? before->name() : i18n("end")));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);
@@ -560,7 +560,7 @@ QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
  * \brief Save the comment to XML
  */
 void AbstractAspect::writeCommentElement(QXmlStreamWriter * writer) const{
-	writer->writeStartElement("comment");
+	writer->writeStartElement(QLatin1String("comment"));
 	writer->writeCharacters(comment());
 	writer->writeEndElement();
 }
@@ -577,8 +577,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader * reader){
  * \brief Save name and creation time to XML
  */
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
-	writer->writeAttribute("creation_time" , creationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
-	writer->writeAttribute("name", name());
+	writer->writeAttribute(QLatin1String("creation_time") , creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
+	writer->writeAttribute(QLatin1String("name"), name());
 }
 
 /**
@@ -590,19 +590,19 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
 	const QXmlStreamAttributes& attribs = reader->attributes();
 
 	// name
-	QString str = attribs.value("name").toString();
+	QString str = attribs.value(QLatin1String("name")).toString();
 	if(str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
 
 	d->m_name = str;
 
 	// creation time
-	str = attribs.value("creation_time").toString();
+	str = attribs.value(QLatin1String("creation_time")).toString();
 	if(str.isEmpty()) {
 		reader->raiseWarning(i18n("Invalid creation time for '%1'. Using current time.", name()));
 		d->m_creation_time = QDateTime::currentDateTime();
 	} else {
-		QDateTime creation_time = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+		QDateTime creation_time = QDateTime::fromString(str, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 		if (creation_time.isValid())
 			d->m_creation_time = creation_time;
 		else
@@ -679,10 +679,10 @@ void AbstractAspect::exec(QUndoCommand* command,
 		const char* preChangeSignal, const char* postChangeSignal,
 		QGenericArgument val0, QGenericArgument val1, QGenericArgument val2, QGenericArgument val3) {
 	beginMacro(command->text());
-	exec(new SignallingUndoCommand("change signal", this,
+	exec(new SignallingUndoCommand(QLatin1String("change signal"), this,
 				preChangeSignal, postChangeSignal, val0, val1, val2, val3));
 	exec(command);
-	exec(new SignallingUndoCommand("change signal", this,
+	exec(new SignallingUndoCommand(QLatin1String("change signal"), this,
 				postChangeSignal, preChangeSignal, val0, val1, val2, val3));
 	endMacro();
 }
@@ -799,7 +799,7 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //######################  Private implementation ###############################
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
-	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0),
+	: m_name(name.isEmpty() ? QLatin1String("1") : name), m_hidden(false), q(owner), m_parent(0),
 	m_undoAware(true), m_isLoading(false)
 {
 	m_creation_time = QDateTime::currentDateTime();

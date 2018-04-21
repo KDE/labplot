@@ -67,15 +67,15 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	//Icons
-	ui.tbFontBold->setIcon( QIcon::fromTheme("format-text-bold") );
-	ui.tbFontItalic->setIcon( QIcon::fromTheme("format-text-italic") );
-	ui.tbFontUnderline->setIcon( QIcon::fromTheme("format-text-underline") );
-	ui.tbFontStrikeOut->setIcon( QIcon::fromTheme("format-text-strikethrough") );
-	ui.tbFontSuperScript->setIcon( QIcon::fromTheme("format-text-superscript") );
-	ui.tbFontSubScript->setIcon( QIcon::fromTheme("format-text-subscript") );
-	ui.tbSymbols->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
-	ui.tbDateTime->setIcon( QIcon::fromTheme("chronometer") );
-	ui.tbTexUsed->setIcon( QIcon::fromTheme("labplot-TeX-logo") );
+	ui.tbFontBold->setIcon( QIcon::fromTheme(QLatin1String("format-text-bold")) );
+	ui.tbFontItalic->setIcon( QIcon::fromTheme(QLatin1String("format-text-italic")) );
+	ui.tbFontUnderline->setIcon( QIcon::fromTheme(QLatin1String("format-text-underline")) );
+	ui.tbFontStrikeOut->setIcon( QIcon::fromTheme(QLatin1String("format-text-strikethrough")) );
+	ui.tbFontSuperScript->setIcon( QIcon::fromTheme(QLatin1String("format-text-superscript")) );
+	ui.tbFontSubScript->setIcon( QIcon::fromTheme(QLatin1String("format-text-subscript")) );
+	ui.tbSymbols->setIcon( QIcon::fromTheme(QLatin1String("labplot-format-text-symbol")) );
+	ui.tbDateTime->setIcon( QIcon::fromTheme(QLatin1String("chronometer")) );
+	ui.tbTexUsed->setIcon( QIcon::fromTheme(QLatin1String("labplot-TeX-logo")) );
 
 	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("left"));
@@ -107,7 +107,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
-	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
+	m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
 	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
 								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
 								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
@@ -324,9 +324,9 @@ void LabelWidget::teXUsedChanged(bool checked) {
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(ui.teLabel->document());
 #endif
-		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
-		QString engine = conf.readEntry("LaTeXEngine", "");
-		if (engine == "xelatex" || engine == "lualatex") {
+		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+		if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
 			ui.lFontTeX->setVisible(true);
 			ui.kfontRequesterTeX->setVisible(true);
 			ui.lFontSize->setVisible(false);
@@ -352,7 +352,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 		//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-		ui.teLabel->setStyleSheet("");
+		ui.teLabel->setStyleSheet(QLatin1String(""));
 	}
 
 	//no latex is available and the user switched to the text mode,
@@ -362,7 +362,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
 	} else {
 		ui.tbTexUsed->setEnabled(true);
-		ui.tbTexUsed->setToolTip("");
+		ui.tbTexUsed->setToolTip(QLatin1String(""));
 	}
 
 	if (m_initializing)
@@ -661,9 +661,9 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  */
 void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid)
-		ui.teLabel->setStyleSheet("QTextEdit{background: red;}");
+		ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
 	else
-		ui.teLabel->setStyleSheet("");
+		ui.teLabel->setStyleSheet(QLatin1String(""));
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {

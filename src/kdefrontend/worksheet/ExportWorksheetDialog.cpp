@@ -67,23 +67,23 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	completer->setModel(new QDirModel);
 	ui->leFileName->setCompleter(completer);
 
-	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
-	ui->cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable Data Format (PDF)");
-	ui->cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), QLatin1String("Portable Data Format (PDF)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), QLatin1String("Scalable Vector Graphics (SVG)"));
 	ui->cbFormat->insertSeparator(3);
-	ui->cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), QLatin1String("Portable Network Graphics (PNG)"));
 
 	ui->cbExportArea->addItem(i18n("Object's bounding box"));
 	ui->cbExportArea->addItem(i18n("Current selection"));
 	ui->cbExportArea->addItem(i18n("Complete worksheet"));
 
 	ui->cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ')');
-	ui->cbResolution->addItem("100");
-	ui->cbResolution->addItem("150");
-	ui->cbResolution->addItem("200");
-	ui->cbResolution->addItem("300");
-	ui->cbResolution->addItem("600");
+	ui->cbResolution->addItem(QLatin1String("100"));
+	ui->cbResolution->addItem(QLatin1String("150"));
+	ui->cbResolution->addItem(QLatin1String("200"));
+	ui->cbResolution->addItem(QLatin1String("300"));
+	ui->cbResolution->addItem(QLatin1String("600"));
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
 	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::formatChanged );
@@ -93,7 +93,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->leFileName->setFocus();
 
 	setWindowTitle(i18n("Export worksheet"));
-	setWindowIcon(QIcon::fromTheme("document-export-database"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
 	QTimer::singleShot(0, this, &ExportWorksheetDialog::loadSettings);
 }
@@ -250,9 +250,9 @@ void ExportWorksheetDialog::formatChanged(int index) {
 		index --;
 
 	QStringList extensions;
-	extensions << ".pdf" << ".svg" << ".png";
+	extensions << QLatin1String(".pdf") << QLatin1String(".svg") << QLatin1String(".png");
 	QString path = ui->leFileName->text();
-	int i = path.indexOf(".");
+	int i = path.indexOf(QLatin1Char('.'));
 	if (i == -1)
 		path = path + extensions.at(index);
 	else
