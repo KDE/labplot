@@ -262,7 +262,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 												  std::vector<bool>& visiblePoints,
 												  const MappingFlags& flags) const{
 	const QRectF pageRect = d->plot->dataRect();
-	QVector<QPointF> result;
 	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	for (const auto* xScale : d->xScales) {
@@ -300,7 +299,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 
 QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint, const MappingFlags& flags) const{
 	const QRectF pageRect = d->plot->dataRect();
-	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	double x = logicalPoint.x();

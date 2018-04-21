@@ -837,7 +837,7 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update();
 	}
 }
@@ -845,7 +845,7 @@ void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update();
 	}
 }

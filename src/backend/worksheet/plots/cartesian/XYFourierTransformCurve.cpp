@@ -138,7 +138,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	transformResult = XYFourierTransformCurve::TransformResult();
 
 	if (!xDataColumn || !yDataColumn) {
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -148,7 +148,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("Number of x and y data points must be equal.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -176,7 +176,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -263,7 +263,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	transformResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
-	emit (q->dataChanged());
+	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

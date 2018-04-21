@@ -299,7 +299,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectN
 
 				//remove the path of the current child folder
 				QStringList pathesToLoadNew;
-				for (auto path : folder->pathesToLoad()) {
+				for (const auto& path : folder->pathesToLoad()) {
 					if (path.startsWith(curFolderPath))
 						pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 				}
@@ -549,7 +549,6 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			QDateTime dt = QDateTime::fromTime_t(originNote.creationDate);
 			aspect->setCreationTime(QDateTime::fromTime_t(originNote.creationDate));
 		}
 	}
@@ -1837,7 +1836,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 
 	//replace \l(...) and %(...) tags
 	QRegExp rxline("\\\\\\s*l\\s*\\(\\s*\\d+\\s*\\)");
-	QRegExp rxcol("\\%\\(\\d+\\)");
+// 	QRegExp rxcol("\\%\\(\\d+\\)");
 	int pos = rxline.indexIn(line);
 	while (pos > -1) {
 		QString value = rxline.cap(0);

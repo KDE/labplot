@@ -1510,7 +1510,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1531,7 +1531,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1541,7 +1541,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Number of x and y data points must be equal.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1551,7 +1551,7 @@ void XYFitCurvePrivate::recalculate() {
 			fitResult.available = true;
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
-			emit (q->dataChanged());
+			emit q->dataChanged();
 			sourceDataChangedSinceLastRecalc = false;
 			return;
 		}
@@ -1605,7 +1605,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1614,7 +1614,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
-		emit (q->dataChanged());
+		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1942,7 +1942,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
-	emit (q->dataChanged());
+	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

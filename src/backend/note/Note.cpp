@@ -86,7 +86,7 @@ const QString& Note::note() const {
 
 void Note::setBackgroundColor(const QColor& color) {
 	m_backgroundColor = color;
-	emit (backgroundColorChanged(color));
+	emit backgroundColorChanged(color);
 }
 
 const QColor& Note::backgroundColor() const {
@@ -95,7 +95,7 @@ const QColor& Note::backgroundColor() const {
 
 void Note::setTextColor(const QColor& color) {
 	m_textColor = color;
-	emit (textColorChanged(color));
+	emit textColorChanged(color);
 }
 
 const QColor& Note::textColor() const{
@@ -104,7 +104,7 @@ const QColor& Note::textColor() const{
 
 void Note::setTextFont(const QFont& font) {
 	m_textFont = font;
-	emit (textFontChanged(font));
+	emit textFontChanged(font);
 }
 
 const QFont& Note::textFont() const {

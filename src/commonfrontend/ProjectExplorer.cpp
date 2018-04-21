@@ -640,7 +640,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	QList<int> selected;
 	QList<int> expanded;
 	QList<int> withView;
-	QList<ViewState> viewStates;
+	QVector<ViewState> viewStates;
 
 	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
 	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
@@ -721,7 +721,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QModelIndex currentIndex;
 	QString str;
 	int row;
-	QList<QModelIndex> selected;
+	QVector<QModelIndex> selected;
 	QList<QModelIndex> expanded;
 	QXmlStreamAttributes attribs;
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
