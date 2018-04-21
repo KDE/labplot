@@ -2437,7 +2437,7 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 	fitData.modelType = nsl_fit_model_polynomial;
 	fitData.degree = 1;
 	XYFitCurve::initFitData(fitData);
-//	fitData.eps = 1.e-12;
+	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
 	fitData.xErrorsType = nsl_fit_error_direct;
@@ -2454,14 +2454,14 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 
 	QCOMPARE(np, 2);
 
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result:
-//TODO	FuzzyCompare(fitResult.paramValues.at(0), 5.39749958415886, 1.e-10);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.424059452104775
-//TODO	FuzzyCompare(fitResult.errorValues.at(0), 0.424059452104785, 1.e-11);
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.610812956583933
-//TODO	FuzzyCompare(fitResult.paramValues.at(1), -0.610812956537254, 1.e-10);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0623409539388997
-//TODO	FuzzyCompare(fitResult.errorValues.at(1), 0.0623409539389024, 1.e-11);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 5.3960522989993
+	FuzzyCompare(fitResult.paramValues.at(0), 5.39749958415886, 3.e-4);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.361458387983792
+	FuzzyCompare(fitResult.errorValues.at(0), 0.361439886824914, 1.e-4);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.463448925094435
+	FuzzyCompare(fitResult.paramValues.at(1), -0.463744669606207, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0706627287153768
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0706637562101211, 1.e-4);	// -""-
 
 //TODO	QCOMPARE(fitResult.rms, 4.29315093729054);
 //TODO	QCOMPARE(fitResult.rsd, 2.07199202153158);

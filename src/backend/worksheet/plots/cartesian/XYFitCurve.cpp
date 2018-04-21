@@ -739,7 +739,7 @@ struct data {
  * \param f vector with the weighted residuals weight[i]*(Yi - y[i])
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
-	DEBUG("func_f");
+	//DEBUG("func_f");
 	size_t n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -794,7 +794,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	DEBUG("func_df");
+	//DEBUG("func_df");
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
@@ -1460,7 +1460,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
-	DEBUG("func_fdf");
+	//DEBUG("func_fdf");
 	func_f(x, params, f);
 	func_df(x, params, J);
 
@@ -1645,17 +1645,17 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_statistical_fit:
 	case nsl_fit_weight_relative_fit:
 		break;
-	case nsl_fit_weight_instrumental:
+	case nsl_fit_weight_instrumental:	// yerror are sigmas
 		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = 1./gsl_pow_2(yerror[i]);
 		break;
-	case nsl_fit_weight_direct:
+	case nsl_fit_weight_direct:		// yerror are weights
 		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = yerror[i];
 		break;
-	case nsl_fit_weight_inverse:
+	case nsl_fit_weight_inverse:		// yerror are inverse weights
 		for(int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = 1./yerror[i];
@@ -1717,7 +1717,7 @@ void XYFitCurvePrivate::recalculate() {
 	do {
 		iter++;
 
-		// update weights for Y-depending weights
+		// update weights for Y-depending weights	(TODO: check correct residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
 			for (size_t i = 0; i < n; i++)
 				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
@@ -1739,86 +1739,81 @@ void XYFitCurvePrivate::recalculate() {
 	if (xerrorVector.size() > 0) {
 		DEBUG("Rerun fit with x errors");
 
-		// y'(x)
-		double *yd = new double[n];
-		for (size_t i = 0; i < n; i++) {
-			size_t index = i-1;
-			if (index == 0)
-				index = i;
-			if (index == n-1)
-				index = n-2;
-			yd[i] = gsl_vector_get(s->f, index+1) + ydata[index+1] - gsl_vector_get(s->f, index) - ydata[index];
-			yd[i] /= (xdata[index+1] - xdata[index]);
-		}
-
-		switch (fitData.yWeightsType) {
-		case nsl_fit_weight_no:
-			break;
-		case nsl_fit_weight_instrumental:
-			for (size_t i = 0; i < n; i++) {
-				double sigma;
-				if (yerrorVector.size() > 0)	// x- and y-error
-					// sigma = sqrt(sigma_y^2 + (y'(x)*sigma_x)^2)
-					sigma = sqrt(gsl_pow_2(yerror[i]) + gsl_pow_2(yd[i] * xerror[i]));
-				else	// only x-error
-					sigma = fabs(yd[i]) * xerror[i];
-				weight[i] = 1./gsl_pow_2(sigma);
-			}
-			break;
-		// TODO: other weight types: y'(x) considered correctly?
-		case nsl_fit_weight_direct:
-			double sigma2;
-			for (size_t i = 0; i < n; i++) {
-				sigma2 = yd[i]*yd[i]*xerror[i]*xerror[i];
-				if (yerrorVector.size() > 0)
-					sigma2 += yerror[i]*yerror[i];
-				weight[i] = 1./sigma2;
-				//printf("sigma^2[%d] = %g\n", (int)i, sigma2);
-			}
-			break;
-		case nsl_fit_weight_inverse:
-			for (size_t i = 0; i < n; i++) {
-				weight[i] = fabs(yd[i])/xerror[i];
-				if (yerrorVector.size() > 0)
-					weight[i] += 1./yerror[i];
-			}
-			break;
-		case nsl_fit_weight_statistical:
-		case nsl_fit_weight_relative:
-			break;
-		case nsl_fit_weight_statistical_fit:
-			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
-			break;
-		case nsl_fit_weight_relative_fit:
-			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
-			break;
-		}
-
-		for (size_t i = 0; i < n; i++) {
-			//DEBUG("y'[" << i << "] = " << yd[i]);
-			//DEBUG("weight[" << i << "] = " << weight[i]);
-			//TEST: weight[i]=1.;
-		}
-		delete[] yd;
-
-	//	params.weight = weight;
-		// update weights
-		gsl_multifit_fdfsolver_set(s, &f, &x.vector);
-
-		writeSolverState(s);
+		unsigned int iter2 = 0;
+		double chi = 0, chiOld = 0;
+		double *fun = new double[n];
 		do {
-			DEBUG("second run with iter = " << iter);
-			iter++;
-			status = gsl_multifit_fdfsolver_iterate(s);
-			writeSolverState(s);
-			if (status) {
-				DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
-				break;
+			iter2++;
+			chiOld = chi;
+			//TODO: Debug
+			printf("iter2 = %d\n", iter2);
+			// calculate df[i]
+			for (size_t i = 0; i < n; i++)
+				fun[i] = gsl_vector_get(s->f, i) * 1./sqrt(weight[i]) + ydata[i];
+
+			// calculate weight[i]
+			for (size_t i = 0; i < n; i++) {
+				// calculate df[i]
+				int index = i-1;
+				if (i == 0)
+					index = i;
+				if (i == n-1)
+					index = i-2;
+				double df = (fun[index+1] - fun[index])/(xdata[index+1] - xdata[index]);
+				//TODO: Debug
+				printf("df = %g\n", df);
+
+				// direct x-error	TODO: others
+				double sigmasq = df*df/xerror[i];
+				if (yerrorVector.size() > 0) {
+					switch (fitData.yWeightsType) {	// y-error types
+					case nsl_fit_weight_no:
+						break;
+					case nsl_fit_weight_direct:	// direct	s^2 = 1/w
+						sigmasq += 1./yerror[i];
+						break;
+					case nsl_fit_weight_instrumental:	// instrumental	s^2 = s*s
+						sigmasq += yerror[i]*yerror[i];
+						break;
+					case nsl_fit_weight_inverse:	// inverse	s^2 = 1/w
+						sigmasq += yerror[i];
+						break;
+					case nsl_fit_weight_statistical:
+					case nsl_fit_weight_relative:
+						break;
+					case nsl_fit_weight_statistical_fit:	// 1/Y_i
+						sigmasq += fun[i];
+						break;
+					case nsl_fit_weight_relative_fit:	// 1/Y_i^2
+						sigmasq += fun[i]*fun[i];
+						break;
+					}
+				}
+				//TODO: Debug
+				printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
+				weight[i] = 1./sigmasq;
 			}
-			status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
-		} while (status == GSL_CONTINUE && iter < maxIters);
+
+			// update weights
+			gsl_multifit_fdfsolver_set(s, &f, &x.vector);
+
+			do {	// fit
+				iter++;
+				writeSolverState(s);
+				status = gsl_multifit_fdfsolver_iterate (s);
+				printf ("status = %s\n", gsl_strerror (status));
+				if (status) {
+					DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
+					break;
+				}
+				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
+			} while (status == GSL_CONTINUE && iter < maxIters);
+			chi = gsl_blas_dnrm2(s->f);
+			// TODO: Debug
+			printf("chi = %.12g (dchi = %g)\n", chi, fabs(chi-chiOld));
+		} while (iter2 < maxIters && fabs(chi-chiOld) > fitData.eps);
+
+		delete[] fun;
 	}
 
 	delete[] weight;
