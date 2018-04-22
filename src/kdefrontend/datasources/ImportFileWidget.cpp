@@ -775,64 +775,60 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::LocalSocket: {
-
 					QLocalSocket lsocket{this};
 					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
-					bool localSocketConnected = lsocket.waitForConnected(2000);
-
-					if (localSocketConnected) {
-						DEBUG("connected to local socket");
+					if (lsocket.waitForConnected(20000)) {
+						QDEBUG("connected to local socket " << fileName);
 						bool canread = lsocket.waitForReadyRead(500);
+						DEBUG(canread);
 						if (canread)
 							importedStrings = filter->preview(lsocket);
 
 						lsocket.disconnectFromServer();
 						connect(&lsocket, SIGNAL(disconnected()), &lsocket, SLOT(deleteLater()));
+					} else {
+						QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
 					}
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
-					QTcpSocket tsocket{this};
-					tsocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-					bool tcpSocketConnected = tsocket.waitForConnected(2000);
-
-					if (tcpSocketConnected) {
-						bool canread = tsocket.waitForReadyRead(500);
+					QTcpSocket tcpSocket{this};
+					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
+					if (tcpSocket.waitForConnected(2000)) {
+						bool canread = tcpSocket.waitForReadyRead(500);
 						DEBUG("connected to TCP socket");
 						if (canread) {
-							importedStrings = filter->preview(tsocket);
+							importedStrings = filter->preview(tcpSocket);
 						}
-						tsocket.disconnectFromHost();
-						connect(&tsocket, SIGNAL(disconnected()), &tsocket, SLOT(deleteLater()));
+						tcpSocket.disconnectFromHost();
+						connect(&tcpSocket, SIGNAL(disconnected()), &tcpSocket, SLOT(deleteLater()));
+					} else {
+						QDEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString());
 					}
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
-					QUdpSocket usocket{this};
-					usocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
-					bool udpSocketConnected = usocket.waitForConnected(2000);
-
-					if (udpSocketConnected) {
-						bool canread = usocket.waitForReadyRead(500);
+					QUdpSocket udpSocket{this};
+					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
+					if (udpSocket.waitForConnected(2000)) {
 						DEBUG("connected to UDP socket");
+						bool canread = udpSocket.waitForReadyRead(500);
 						if (canread)
-							importedStrings = filter->preview(usocket);
+							importedStrings = filter->preview(udpSocket);
 
-						qDebug()<<"can read " << canread << "  " << importedStrings;
-						usocket.disconnectFromHost();
-						connect(&usocket, SIGNAL(disconnected()), &usocket, SLOT(deleteLater()));
+						udpSocket.disconnectFromHost();
+						connect(&udpSocket, SIGNAL(disconnected()), &udpSocket, SLOT(deleteLater()));
+					} else {
+						QDEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString());
 					}
 
 					break;
 				}
 			case LiveDataSource::SourceType::SerialPort: {
 					QSerialPort sPort{this};
-
 					sPort.setBaudRate(baudRate());
 					sPort.setPortName(serialPort());
-
-					bool serialPortOpened = sPort.open(QIODevice::ReadOnly);
-					if (serialPortOpened) {
+					if (sPort.open(QIODevice::ReadOnly)) {
 						bool canread = sPort.waitForReadyRead(500);
 						if (canread)
 							importedStrings = filter->preview(sPort);
