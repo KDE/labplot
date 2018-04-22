@@ -36,7 +36,7 @@ private slots:
 	// compare floats with given delta (could be useful for other tests too)
 	// delta - relative error (set to 1. if expected == 0.)
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << "<=" << expected << "<=" << actual + fabs(actual)*delta);
+		DEBUG(std::setprecision(15) << actual - fabs(actual)*delta << " <= " << expected << " <= " << actual + fabs(actual)*delta);
 		QVERIFY(actual - fabs(actual)*delta <= expected && actual + fabs(actual)*delta >=expected);
 	}
 
@@ -80,6 +80,8 @@ private slots:
 	void testNonLinearRat43();
 	void testNonLinearRat43_2();	// second set of start values
 	void testNonLinearRat43_3();	// third set of start values
+
+	void testNonLinearMichaelis_Menten();
 
 	//fits with weights
 	void testNonLinearGP_lcdemo();

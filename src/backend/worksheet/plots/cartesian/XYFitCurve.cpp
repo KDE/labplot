@@ -1439,14 +1439,16 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				assign_variable(name, value);
 				const double f_p = parse(func);
 
-				const double eps = 1.e-9 * std::abs(f_p);	// adapt step size to value
+				double eps = 1.e-9;
+				if (std::abs(f_p) > 0)
+					eps *= std::abs(f_p);	// scale step size with function value
 				value += eps;
 				assign_variable(name, value);
 				const double f_pdp = parse(func);
 
-//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
-//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
-//		qDebug()<<"	deriv = "<<QString::number((f_pdp-f_p)/eps/sigma, 'g', 15);
+//				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
+//				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
+//				DEBUG("	deriv = "<<QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15).toStdString());
 
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
