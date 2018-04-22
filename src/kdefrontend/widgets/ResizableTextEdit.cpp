@@ -36,6 +36,7 @@ GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(paren
 	m_pressed(false),
 	m_vertResizeOnly(vertResizeOnly) {
 
+	resize(20,10);
 }
 
 QSize GrabBar::sizeHint() const {
