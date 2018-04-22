@@ -2463,20 +2463,22 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0706627287153768
 	FuzzyCompare(fitResult.errorValues.at(1), 0.0706637562101211, 1.e-4);	// -""-
 
-//TODO	QCOMPARE(fitResult.rms, 4.29315093729054);
-//TODO	QCOMPARE(fitResult.rsd, 2.07199202153158);
-//TODO	QCOMPARE(fitResult.sse, 34.3452074983243);
-	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.000101015996328551
-//TODO	QCOMPARE(fitResult.fdist_p, 3.51725605201025e-05);
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 1.49455608152396
+	FuzzyCompare(fitResult.rms, 1.49417194665446, 1.e-3);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 1.22252038082151
+	FuzzyCompare(fitResult.rsd, 1.22236326296828, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 11.9564486521917
+	FuzzyCompare(fitResult.sse, 11.9533755732357, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.00441031749154456
+//TODO	QCOMPARE(fitResult.fdist_p, 0.153296328355244);
 }
 
 // see http://gnuplot.sourceforge.net/demo_5.2/fit.html
 void FitTest::testLinearGP_PY_xyerror_custom() {
-//	qFatal("TODO");
 	// Pearson's data and York's weights
 	QVector<double> xData = {0.0,0.9,1.8,2.6,3.3,4.4,5.2,6.1,6.5,7.4};
 	QVector<double> yData = {5.9,5.4,4.4,4.6,3.5,3.7,2.8,2.8,2.4,1.5};
-//	QVector<double> xError = {1000.,1000.,500.,800.,200.,80.,60.,20.,1.8,1.0};
+	QVector<double> xError = {1000.,1000.,500.,800.,200.,80.,60.,20.,1.8,1.0};
 	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
@@ -2486,12 +2488,16 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 	Column yDataColumn("y", AbstractColumn::Numeric);
 	yDataColumn.replaceValues(0, yData);
 
+	Column xErrorColumn("xerr", AbstractColumn::Numeric);
+	xErrorColumn.replaceValues(0, xError);
+
 	Column yErrorColumn("yerr", AbstractColumn::Numeric);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
+	fitCurve.setXErrorColumn(&xErrorColumn);
 	fitCurve.setYErrorColumn(&yErrorColumn);
 
 	//prepare the fit
@@ -2500,7 +2506,7 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 	XYFitCurve::initFitData(fitData);
 	fitData.model = "a1 + a2 * x";
 	fitData.paramNames << "a1" << "a2";
-//	fitData.eps = 1.e-12;
+	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
 	for (int i = 0; i < np; i++) {
@@ -2522,20 +2528,183 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 
 	QCOMPARE(np, 2);
 
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 6.10010932451396
-//TODO	FuzzyCompare(fitResult.paramValues.at(0), 6.10010931635002, 1.e-8);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.424059453530443
-//TODO	FuzzyCompare(fitResult.errorValues.at(0), 0.424059452104785, 1.e-8);
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.610812957040808
-//TODO	FuzzyCompare(fitResult.paramValues.at(1), -0.610812956537254, 1.e-9);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0623409543258892
-//TODO	FuzzyCompare(fitResult.errorValues.at(1), 0.0623409539389024, 1.e-8);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 5.39605223831693
+	FuzzyCompare(fitResult.paramValues.at(0), 5.39749958415886, 3.e-4);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.361458369696386
+	FuzzyCompare(fitResult.errorValues.at(0), 0.361439886824914, 1.e-4);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.463448913528306
+	FuzzyCompare(fitResult.paramValues.at(1), -0.463744669606207, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0706627257036884
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0706637562101211, 1.e-4);	// -""-
 
-//TODO	QCOMPARE(fitResult.rms, 4.29315093729054);
-//TODO	QCOMPARE(fitResult.rsd, 2.07199202153158);
-//TODO	QCOMPARE(fitResult.sse, 34.3452074983243);
-	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.000101015996328551
-//TODO	QCOMPARE(fitResult.fdist_p, 3.51725605201025e-05);
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 1.49455596317092
+	FuzzyCompare(fitResult.rms, 1.49417194665446, 1.e-3);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 1.22252033241616
+	FuzzyCompare(fitResult.rsd, 1.22236326296828, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 11.9564477053674
+	FuzzyCompare(fitResult.sse, 11.9533755732357, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.00441031645455255
+//TODO	QCOMPARE(fitResult.fdist_p, 0.153296328355244);
+}
+
+// see http://gnuplot.sourceforge.net/demo_5.2/fit.html
+void FitTest::testLinearGP_PY_xyerror_custom_instrumental_weight() {
+	// Pearson's data and York's weights
+	QVector<double> xData = {0.0,0.9,1.8,2.6,3.3,4.4,5.2,6.1,6.5,7.4};
+	QVector<double> yData = {5.9,5.4,4.4,4.6,3.5,3.7,2.8,2.8,2.4,1.5};
+	QVector<double> xError = {1000.,1000.,500.,800.,200.,80.,60.,20.,1.8,1.0};
+	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
+
+	// w_i -> s_i
+	for (int i = 0; i < xError.size(); i++) {
+		xError[i] = 1./sqrt(xError[i]);
+		yError[i] = 1./sqrt(yError[i]);
+	}
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column xErrorColumn("xerr", AbstractColumn::Numeric);
+	xErrorColumn.replaceValues(0, xError);
+
+	Column yErrorColumn("yerr", AbstractColumn::Numeric);
+	yErrorColumn.replaceValues(0, yError);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+	fitCurve.setXErrorColumn(&xErrorColumn);
+	fitCurve.setYErrorColumn(&yErrorColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "a1 + a2 * x";
+	fitData.paramNames << "a1" << "a2";
+//	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 5. << -0.5;
+	for (int i = 0; i < np; i++) {
+		fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	}
+
+	fitData.xWeightsType = nsl_fit_weight_instrumental;
+	fitData.yWeightsType = nsl_fit_weight_instrumental;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 5.3960521880058
+	FuzzyCompare(fitResult.paramValues.at(0), 5.39749958415886, 3.e-4);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.361458367406729
+	FuzzyCompare(fitResult.errorValues.at(0), 0.361439886824914, 1.e-4);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.463448904801834
+	FuzzyCompare(fitResult.paramValues.at(1), -0.463744669606207, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0706627229337577
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0706637562101211, 1.e-4);	// -""-
+
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 1.49455610878403
+	FuzzyCompare(fitResult.rms, 1.49417194665446, 1.e-3);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 1.22252039197063
+	FuzzyCompare(fitResult.rsd, 1.22236326296828, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 11.9564488702722
+	FuzzyCompare(fitResult.sse, 11.9533755732357, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.00441031773039329
+//TODO	QCOMPARE(fitResult.fdist_p, 0.153296328355244);
+}
+
+// see http://gnuplot.sourceforge.net/demo_5.2/fit.html
+void FitTest::testLinearGP_PY_xyerror_custom_inverse_weight() {
+	// Pearson's data and York's weights
+	QVector<double> xData = {0.0,0.9,1.8,2.6,3.3,4.4,5.2,6.1,6.5,7.4};
+	QVector<double> yData = {5.9,5.4,4.4,4.6,3.5,3.7,2.8,2.8,2.4,1.5};
+	QVector<double> xError = {1000.,1000.,500.,800.,200.,80.,60.,20.,1.8,1.0};
+	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
+
+	// w_i -> 1/w_i
+	for (int i = 0; i < xError.size(); i++) {
+		xError[i] = 1./xError[i];
+		yError[i] = 1./yError[i];
+	}
+
+	//data source columns
+	Column xDataColumn("x", AbstractColumn::Numeric);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn("y", AbstractColumn::Numeric);
+	yDataColumn.replaceValues(0, yData);
+
+	Column xErrorColumn("xerr", AbstractColumn::Numeric);
+	xErrorColumn.replaceValues(0, xError);
+
+	Column yErrorColumn("yerr", AbstractColumn::Numeric);
+	yErrorColumn.replaceValues(0, yError);
+
+	XYFitCurve fitCurve("fit");
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+	fitCurve.setXErrorColumn(&xErrorColumn);
+	fitCurve.setYErrorColumn(&yErrorColumn);
+
+	//prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = "a1 + a2 * x";
+	fitData.paramNames << "a1" << "a2";
+//	fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	fitData.paramStartValues << 5. << -0.5;
+	for (int i = 0; i < np; i++) {
+		fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	}
+
+	fitData.xWeightsType = nsl_fit_weight_inverse;
+	fitData.yWeightsType = nsl_fit_weight_inverse;
+	fitCurve.setFitData(fitData);
+
+	//perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	//check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 2);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 5.39605219384715
+	FuzzyCompare(fitResult.paramValues.at(0), 5.39749958415886, 3.e-4);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.361458367208767
+	FuzzyCompare(fitResult.errorValues.at(0), 0.361439886824914, 1.e-4);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.463448906090293
+	FuzzyCompare(fitResult.paramValues.at(1), -0.463744669606207, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0706627222052917
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0706637562101211, 1.e-4);	// -""-
+
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result: 1.49455610679827
+	FuzzyCompare(fitResult.rms, 1.49417194665446, 1.e-3);	// gnuplot result ("effective variance" method)
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result: 1.22252039115847
+	FuzzyCompare(fitResult.rsd, 1.22236326296828, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result: 11.9564488543861
+	FuzzyCompare(fitResult.sse, 11.9533755732357, 1.e-3);	// -""-
+	DEBUG(std::setprecision(15) << fitResult.fdist_p);	// result: 0.00441031771299435
+//TODO	QCOMPARE(fitResult.fdist_p, 0.153296328355244);
 }
 
 QTEST_MAIN(FitTest)

@@ -1735,8 +1735,8 @@ void XYFitCurvePrivate::recalculate() {
 		do {
 			iter2++;
 			chiOld = chi;
-			//TODO: Debug
-			printf("iter2 = %d\n", iter2);
+			//printf("iter2 = %d\n", iter2);
+
 			// calculate df[i]
 			for (size_t i = 0; i < n; i++)
 				fun[i] = gsl_vector_get(s->f, i) * 1./sqrt(weight[i]) + ydata[i];
@@ -1750,8 +1750,7 @@ void XYFitCurvePrivate::recalculate() {
 				if (i == n-1)
 					index = i-2;
 				double df = (fun[index+1] - fun[index])/(xdata[index+1] - xdata[index]);
-				//TODO: Debug
-				printf("df = %g\n", df);
+				//printf("df = %g\n", df);
 
 				double sigmasq = 1.;
 				switch (fitData.xWeightsType) {	// x-error type: f'(x)^2*s_x^2 = f'(x)/w_x
@@ -1761,10 +1760,10 @@ void XYFitCurvePrivate::recalculate() {
 					sigmasq = df*df/xerror[i];
 					break;
 				case nsl_fit_weight_instrumental:	// xerror = s_x
-					sigmasq = gsl_pow_2(df*xerror[i]);
+					sigmasq = df*df*xerror[i]*xerror[i];
 					break;
 				case nsl_fit_weight_inverse:	// xerror = 1/w_x = s_x^2
-					sigmasq = gsl_pow_2(df)*xerror[i];
+					sigmasq = df*df*xerror[i];
 					break;
 				case nsl_fit_weight_statistical:	// s_x^2 = 1/w_x = x
 					sigmasq = xdata[i];
@@ -1785,9 +1784,9 @@ void XYFitCurvePrivate::recalculate() {
 						sigmasq += 1./yerror[i];
 						break;
 					case nsl_fit_weight_instrumental:	// yerror = s_y
-						sigmasq += 1./gsl_pow_2(yerror[i]);
+						sigmasq += yerror[i]*yerror[i];
 						break;
-					case nsl_fit_weight_inverse:	// yerror = 1/w
+					case nsl_fit_weight_inverse:	// yerror = 1/w_y
 						sigmasq += yerror[i];
 						break;
 					case nsl_fit_weight_statistical:	// unused
@@ -1801,8 +1800,8 @@ void XYFitCurvePrivate::recalculate() {
 						break;
 					}
 				}
-				//TODO: Debug
-				printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
+
+				//printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
 				weight[i] = 1./sigmasq;
 			}
 
@@ -1813,16 +1812,16 @@ void XYFitCurvePrivate::recalculate() {
 				iter++;
 				writeSolverState(s);
 				status = gsl_multifit_fdfsolver_iterate (s);
-				printf ("status = %s\n", gsl_strerror (status));
+				//printf ("status = %s\n", gsl_strerror (status));
 				if (status) {
 					DEBUG("iter " << iter << ", status = " << gsl_strerror(status));
 					break;
 				}
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 			} while (status == GSL_CONTINUE && iter < maxIters);
+
 			chi = gsl_blas_dnrm2(s->f);
-			// TODO: Debug
-			printf("chi = %.12g (dchi = %g)\n", chi, fabs(chi-chiOld));
+			//printf("chi = %.12g (dchi = %g)\n", chi, fabs(chi-chiOld));
 		} while (iter2 < maxIters && fabs(chi-chiOld) > fitData.eps);
 
 		delete[] fun;

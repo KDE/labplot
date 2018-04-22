@@ -88,4 +88,6 @@ private slots:
 	void testLinearGP_PY_yerror_custom();
 	void testLinearGP_PY_xyerror_polynomial();
 	void testLinearGP_PY_xyerror_custom();
+	void testLinearGP_PY_xyerror_custom_instrumental_weight();
+	void testLinearGP_PY_xyerror_custom_inverse_weight();
 };
