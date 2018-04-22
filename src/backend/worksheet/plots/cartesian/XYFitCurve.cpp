@@ -1744,7 +1744,7 @@ void XYFitCurvePrivate::recalculate() {
 			// calculate weight[i]
 			for (size_t i = 0; i < n; i++) {
 				// calculate df[i]
-				int index = i-1;
+				size_t index = i-1;
 				if (i == 0)
 					index = i;
 				if (i == n-1)
