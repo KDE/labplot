@@ -83,7 +83,7 @@ public:
 	struct FitResult {
 		FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
 			dof(0), sse(0), sst(0), rms(0), rsd(0), mse(0), rmse(0), mae(0), rsquare(0), rsquareAdj(0),
-			chisq_p(0), fdist_F(0), fdist_p(0), aic(0), bic(0) {};
+			chisq_p(0), fdist_F(0), fdist_p(0), logLik(0), aic(0), bic(0) {};
 
 		bool available;
 		bool valid;

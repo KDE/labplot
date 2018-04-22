@@ -218,6 +218,7 @@ double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version) {
 	case 2:
 		if (np > 1)	// scale accourding R
 			sst /= np;
+		break;
 	default:
 		if (np > 2)     // scale according NIST reference
 			sst /= (np-1);
@@ -257,6 +258,7 @@ double nsl_stats_aicc(double sse, size_t n, size_t np, int version) {
 	switch (version) {
 	case 2:
 		aic = n * log(sse/n) + 2. * np;
+		break;
 	default:
 		aic = n * log(sse/n) + 2. * (np+1) + n*log(2.*M_PI) + n;
 	}
