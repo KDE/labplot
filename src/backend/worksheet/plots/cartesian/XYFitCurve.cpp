@@ -1707,13 +1707,13 @@ void XYFitCurvePrivate::recalculate() {
 	do {
 		iter++;
 
-		// update weights for Y-depending weights	(TODO: check correct residuals)
+		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
 			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i
+				weight[i] = 1./(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i
 		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
 			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i) + ydata[i]);	// 1/Y_i^2
+				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i^2
 		}
 
 		status = gsl_multifit_fdfsolver_iterate(s);
@@ -1737,7 +1737,7 @@ void XYFitCurvePrivate::recalculate() {
 			chiOld = chi;
 			//printf("iter2 = %d\n", iter2);
 
-			// calculate df[i]
+			// calculate function from residuals
 			for (size_t i = 0; i < n; i++)
 				fun[i] = gsl_vector_get(s->f, i) * 1./sqrt(weight[i]) + ydata[i];
 
@@ -1864,7 +1864,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mae = gsl_blas_dasum(s->f)/n;
 	// SST needed for coefficient of determination, R-squared
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
-	// for a linear model without intercept R-squared is calculated different
+	// for a linear model without intercept R-squared is calculated differently
 	// see https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
 	if (fitData.modelCategory == nsl_fit_model_basic && fitData.modelType == nsl_fit_model_polynomial && fitData.degree == 1 && x_init[0] == 0) {
 		DEBUG("Using alternative R^2 for linear model without intercept");
