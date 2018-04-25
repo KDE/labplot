@@ -45,14 +45,20 @@
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="QLineEdit" name="leComment">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
+	<widget class="ResizableTextEdit" name="teComment">
+	<property name="sizePolicy">
+		<sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+		<horstretch>0</horstretch>
+		<verstretch>0</verstretch>
+		</sizepolicy>
+	</property>
+	<property name="maximumSize">
+		<size>
+		<width>16777215</width>
+		<height>16777215</height>
+		</size>
+	</property>
+	</widget>
    </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer_3">
@@ -178,6 +184,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

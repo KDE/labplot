@@ -46,7 +46,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadshee
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::returnPressed, this, &SpreadsheetDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::returnPressed, this, &SpreadsheetDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
 	connect(ui.sbColumnCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::stateChanged, this, &SpreadsheetDock::commentsShownChanged);
@@ -69,17 +69,17 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_spreadsheet->name());
-		ui.leComment->setText(m_spreadsheet->comment());
+		ui.teComment->setText(m_spreadsheet->comment());
 	} else {
 		//disable the fields "Name" and "Comment" if there are more then one spreadsheet
 		ui.leName->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText("");
-		ui.leComment->setText("");
+		ui.teComment->setText("");
   	}
 
 	//show the properties of the first Spreadsheet in the list
@@ -109,7 +109,7 @@ void SpreadsheetDock::commentChanged() {
 	if (m_initializing)
 		return;
 
-	m_spreadsheet->setComment(ui.leComment->text());
+	m_spreadsheet->setComment(ui.teComment->document()->toPlainText());
 }
 
 void SpreadsheetDock::rowCountChanged(int rows) {
@@ -144,11 +144,11 @@ void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
-	}
+	else if (aspect->comment() != ui.teComment->toPlainText())
+		ui.teComment->document()->setPlainText(aspect->comment());
+
 	m_initializing = false;
 }
 
