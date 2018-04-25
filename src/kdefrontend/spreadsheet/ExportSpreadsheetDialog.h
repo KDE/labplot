@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2018 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,8 +34,10 @@
 namespace Ui {
 	class ExportSpreadsheetWidget;
 }
+
 class QPushButton;
 class QAbstractButton;
+
 class ExportSpreadsheetDialog : public QDialog {
 	Q_OBJECT
 
@@ -81,8 +83,8 @@ private:
 	QPushButton* m_cancelButton;
 
 private slots:
-	void setFormat(Format format);
-	void slotButtonClicked(QAbstractButton *);
+	void setFormat(ExportSpreadsheetDialog::Format);
+	void slotButtonClicked(QAbstractButton*);
 	void okClicked();
 	void toggleOptions();
 	void selectFile();

@@ -2076,7 +2076,7 @@ void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update();
 	}
 }
@@ -2085,7 +2085,7 @@ void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update();
 	}
 }
@@ -2093,6 +2093,7 @@ void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void XYCurvePrivate::setPrinting(bool on) {
 	m_printing = on;
 }
+
 void XYCurvePrivate::suppressRetransform(bool on) {
 	m_suppressRetransform = on;
 }

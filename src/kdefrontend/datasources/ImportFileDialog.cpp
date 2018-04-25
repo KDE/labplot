@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -313,7 +313,7 @@ void ImportFileDialog::checkOkButton() {
 
 	QString fileName = m_importFileWidget->fileName();
 #ifndef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
+	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 

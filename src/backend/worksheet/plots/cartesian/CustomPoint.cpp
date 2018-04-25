@@ -350,7 +350,7 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
 	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	emit q->setPosition(cSystem->mapSceneToLogical(pos()));
+	q->setPosition(cSystem->mapSceneToLogical(pos()));
 	suppressRetransform = false;
 
 	QGraphicsItem::mouseReleaseEvent(event);

@@ -3,7 +3,7 @@ File                 : DatabaseManagerWidget.cpp
 Project              : LabPlot
 Description          : widget for managing database connections
 --------------------------------------------------------------------
-Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -48,7 +48,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
 	m_initializing(false), m_initConnName(conn) {
 
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first() +  "sql_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
 	ui.setupUi(this);
 
@@ -198,7 +198,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	if (isFileDB(ui.cbDriver->currentText())) {
 #ifndef HAVE_WINDOWS
 		// make relative path
-		if ( !dbName.isEmpty() && dbName.left(1) != QDir::separator())
+		if ( !dbName.isEmpty() && dbName.at(0) != QDir::separator())
 			dbName = QDir::homePath() + QDir::separator() + dbName;
 #endif
 
@@ -318,7 +318,7 @@ void DatabaseManagerWidget::loadConnections() {
 	m_initializing = true;
 
 	KConfig config(m_configPath, KConfig::SimpleConfig);
-	for (auto groupName : config.groupList()) {
+	for (const auto& groupName : config.groupList()) {
 		const KConfigGroup& group = config.group(groupName);
 		SQLConnection conn;
 		conn.name = groupName;
@@ -338,7 +338,7 @@ void DatabaseManagerWidget::loadConnections() {
 	//show the first connection if available, create a new connection otherwise
 	if (m_connections.size()) {
 		if (!m_initConnName.isEmpty()) {
-			QListWidgetItem* item = ui.lwConnections->findItems(m_initConnName, Qt::MatchExactly).first();
+			QListWidgetItem* item = ui.lwConnections->findItems(m_initConnName, Qt::MatchExactly).constFirst();
 			if (item)
 				ui.lwConnections->setCurrentItem(item);
 			else
@@ -363,11 +363,11 @@ void DatabaseManagerWidget::saveConnections() {
 	QDEBUG("Saving connections to " + m_configPath);
 	//delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
-	for (auto group : config.groupList())
+	for (const auto& group : config.groupList())
 		config.deleteGroup(group);
 
 	//save connections
-	for (auto conn : m_connections) {
+	for (const auto& conn : m_connections) {
 		KConfigGroup group = config.group(conn.name);
 		group.writeEntry("Driver", conn.driver);
 		group.writeEntry("DatabaseName", conn.dbName);
@@ -390,7 +390,7 @@ void DatabaseManagerWidget::testConnection() {
 		QString fileName = ui.leDatabase->text();
 #ifndef HAVE_WINDOWS
 		// make relative path
-		if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
+		if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
@@ -445,7 +445,7 @@ QString DatabaseManagerWidget::uniqueName() {
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");
 
-	int new_nr = name.right(name.size() - base.size()).toInt();
+	int new_nr = name.rightRef(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);

@@ -1321,7 +1321,7 @@ void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update();
 	}
 }
@@ -1330,13 +1330,15 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update();
 	}
 }
+
 void HistogramPrivate::recalculate() {
-	emit (q->HistogramdataChanged());
+	emit q->HistogramdataChanged();
 }
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

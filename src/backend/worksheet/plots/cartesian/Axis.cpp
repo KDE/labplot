@@ -1543,7 +1543,6 @@ void AxisPrivate::retransformTickLabelPositions() {
 	QFontMetrics fm(labelsFont);
 	float width = 0;
 	float height = fm.ascent();
-	QString label;
 	QPointF pos;
 	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
@@ -1884,7 +1883,7 @@ void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		q->hovered();
+		emit q->hovered();
 		update(axisShape.boundingRect());
 	}
 }
@@ -1892,7 +1891,7 @@ void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		q->unhovered();
+		emit q->unhovered();
 		update(axisShape.boundingRect());
 	}
 }

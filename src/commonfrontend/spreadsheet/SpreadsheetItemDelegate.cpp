@@ -87,7 +87,7 @@ void SpreadsheetItemDelegate::setEditorData ( QWidget * editor, const QModelInde
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Return) {
 			emit commitData((QWidget*)editor);
-			closeEditor((QWidget*)editor, QAbstractItemDelegate::EditNextItem);
+			emit closeEditor((QWidget*)editor, QAbstractItemDelegate::EditNextItem);
 			return true;
 		}
 	}

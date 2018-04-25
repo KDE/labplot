@@ -92,7 +92,7 @@ Q_SIGNALS:
     void lowerPositionChanged(int lower);
     void upperPositionChanged(int upper);
 
-    void sliderPressed(SpanHandle handle);
+    void sliderPressed(QxtSpanSlider::SpanHandle handle);
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);
