@@ -99,7 +99,8 @@ Source: "{#CraftRoot}\plugins\printsupport\windowsprintersupport.dll"; DestDir: 
 ;Source: "{#CraftRoot}\dev-utils\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; cantor
 Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\cantor"; Flags: recursesubdirs ignoreversion
+Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignoreversion
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}";Flags: ignoreversion
 ; misc
