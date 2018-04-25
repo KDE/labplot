@@ -579,7 +579,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	}
 
 	this->updateModelEquation();
-	enableRecalculate();
 }
 
 /*!
@@ -655,6 +654,8 @@ void XYFitCurveDock::updateModelEquation() {
 		uiGeneralTab.lFuncPic->show();
 		uiGeneralTab.teEquation->hide();
 	}
+
+	enableRecalculate();
 }
 
 void XYFitCurveDock::showConstants() {
