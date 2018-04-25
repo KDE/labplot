@@ -536,6 +536,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 
 	// default settings
 	uiGeneralTab.lDegree->setText(i18n("Degree"));
+	uiGeneralTab.sbDegree->setValue(1);
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
