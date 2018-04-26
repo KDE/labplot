@@ -1,5 +1,12 @@
-mkdir build
-cd build
+#!/bin/bash
+
+BUILDDIR=build
+
+if [ ! -d $BUILDDIR ]; then
+	mkdir $BUILDDIR
+fi
+
+cd $BUILDDIR
 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
