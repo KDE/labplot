@@ -37,6 +37,7 @@
   <summary xml:lang="el">Το LabPlot είναι μια εφαρμογή του KDE για διαδραστική αναπαράσταση και ανάλυση επιστημονικών δεδομένων</summary>
   <summary xml:lang="en-GB">LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos</summary>
+  <summary xml:lang="gl">LabPlot2 é un aplicativo de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</summary>
   <summary xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici</summary>
   <summary xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens</summary>
   <summary xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych</summary>
@@ -108,6 +109,7 @@
       <caption xml:lang="ca">Exemple d'ajust</caption>
       <caption xml:lang="ca-valencia">Exemple d'ajust</caption>
       <caption xml:lang="en-GB">Fit example</caption>
+      <caption xml:lang="gl">Exemplo de axuste.</caption>
       <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
@@ -122,6 +124,7 @@
       <caption xml:lang="ca-valencia">Funció matemàtica</caption>
       <caption xml:lang="cs">Matematická funkce</caption>
       <caption xml:lang="en-GB">Mathematical function</caption>
+      <caption xml:lang="gl">Función matemática.</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
       <caption xml:lang="pt">Função matemática</caption>
@@ -135,6 +138,7 @@
       <caption xml:lang="ca">Full de treball CAS</caption>
       <caption xml:lang="ca-valencia">Full de treball CAS</caption>
       <caption xml:lang="en-GB">CAS worksheet</caption>
+      <caption xml:lang="gl">Folla de traballo de CAS.</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
