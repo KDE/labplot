@@ -554,7 +554,7 @@ void MainWin::initMenus() {
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
 	if (settingsMenu)
-		settingsMenu->insertMenu(settingsMenu->actions().first(), schemesMenu->menu());
+		settingsMenu->insertMenu(settingsMenu->actions().constFirst(), schemesMenu->menu());
 
 	//set the action for the current color scheme checked
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");

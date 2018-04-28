@@ -575,18 +575,18 @@ public:
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
 	void finalize() override {
 		m_target->updatePageRect();
-		m_target->q->pageRectChanged(m_target->*m_field);
+		emit m_target->q->pageRectChanged(m_target->*m_field);
 	}
 	void finalizeUndo() override {
 		m_target->m_scene->setSceneRect(m_target->*m_field);
-		m_target->q->pageRectChanged(m_target->*m_field);
+		emit m_target->q->pageRectChanged(m_target->*m_field);
 	}
 };
 
 void Worksheet::setPageRect(const QRectF& rect) {
 	//don't allow any rectangulars of width/height equal to zero
 	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)) {
-		pageRectChanged(d->pageRect);
+		emit pageRectChanged(d->pageRect);
 		return;
 	}
 
@@ -598,7 +598,7 @@ void Worksheet::setPageRect(const QRectF& rect) {
 		} else {
 			d->pageRect = rect;
 			d->updatePageRect();
-			pageRectChanged(d->pageRect);
+			emit pageRectChanged(d->pageRect);
 		}
 	}
 }

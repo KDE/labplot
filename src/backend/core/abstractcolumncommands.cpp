@@ -123,7 +123,7 @@ void AbstractColumnClearMasksCmd::undo()
 /**
  * \brief Ctor
  */
-AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, Interval<int> interval, bool masked, QUndoCommand * parent )
+AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, const Interval<int>& interval, bool masked, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
 {
 	if(masked)

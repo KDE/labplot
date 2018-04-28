@@ -53,9 +53,6 @@ public:
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Text; }
 
-signals:
-	void formatChanged();
-
 private:
 	friend class DateTime2StringFilterSetFormatCmd;
 	//! The format string.

@@ -49,7 +49,7 @@ private:
 
 class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, Interval<int> interval, bool masked, QUndoCommand* parent = 0);
+	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, const Interval<int>& interval, bool masked, QUndoCommand* parent = 0);
 	~AbstractColumnSetMaskedCmd() override;
 
 	void redo() override;

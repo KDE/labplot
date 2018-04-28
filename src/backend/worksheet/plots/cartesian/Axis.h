@@ -61,7 +61,7 @@ class Axis: public WorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 
-		explicit Axis(const QString&, const AxisOrientation& orientation = AxisHorizontal);
+		explicit Axis(const QString&, AxisOrientation orientation = AxisHorizontal);
 		~Axis() override;
 
 		void finalizeAdd() override;
@@ -145,7 +145,7 @@ class Axis: public WorksheetElement {
 
 	protected:
 		AxisPrivate* const d_ptr;
-		Axis(const QString&, const AxisOrientation&, AxisPrivate*);
+		Axis(const QString&, AxisOrientation, AxisPrivate*);
 		TextLabel* m_title;
 
 	private:

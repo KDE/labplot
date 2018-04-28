@@ -64,9 +64,6 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	//@}
 
-signals:
-	void formatChanged();
-
 private:
 	friend class String2DateTimeFilterSetFormatCmd;
 	//! The format string.

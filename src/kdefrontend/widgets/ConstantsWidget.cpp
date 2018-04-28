@@ -121,5 +121,5 @@ void ConstantsWidget::insertClicked() {
 	int index = names.indexOf(name);
 	const QString& constant = constants.at(index);
 
-	emit(constantSelected(constant));
+	emit constantSelected(constant);
 }

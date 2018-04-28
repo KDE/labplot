@@ -109,13 +109,13 @@ class AxisGrid : public QGraphicsItem {
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, const AxisOrientation& orientation)
+Axis::Axis(const QString& name, AxisOrientation orientation)
 		: WorksheetElement(name), d_ptr(new AxisPrivate(this)), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString& name, const AxisOrientation& orientation, AxisPrivate* dd)
+Axis::Axis(const QString& name, AxisOrientation orientation, AxisPrivate* dd)
 		: WorksheetElement(name), d_ptr(dd), m_menusInitialized(false) {
 	d_ptr->orientation = orientation;
 	init();
