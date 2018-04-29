@@ -355,7 +355,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
-	
+
 	// set model dependent start values from new data
 	XYFitCurve::initStartValues(m_fitData, m_curve);
 }
@@ -824,7 +824,7 @@ void XYFitCurveDock::enableRecalculate() const {
 }
 
 void XYFitCurveDock::resultCopySelection() {
-	QTableWidget* tw = nullptr;
+	QTableWidget* tw{nullptr};
 	int currentTab = uiGeneralTab.twResults->currentIndex();
 	DEBUG("current tab = " << currentTab);
 	if (currentTab == 0)
@@ -836,7 +836,7 @@ void XYFitCurveDock::resultCopySelection() {
 	else
 		return;
 
-	QTableWidgetSelectionRange range = tw->selectedRanges().first();
+	const QTableWidgetSelectionRange& range = tw->selectedRanges().constFirst();
 	QString str;
 	for (int i = 0; i < range.rowCount(); ++i) {
 		if (i > 0)

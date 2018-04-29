@@ -174,7 +174,7 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	if (aspect->parentAspect() == m_datapicker) {
 		//datapicker curve was renamed
 		index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-		name = aspect->name() + ": " + aspect->children<Spreadsheet>().first()->name();
+		name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
 		//data spreadsheet was renamed or one of its columns, which is not relevant here
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
