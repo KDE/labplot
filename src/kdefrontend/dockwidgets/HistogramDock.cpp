@@ -961,8 +961,8 @@ void HistogramDock::setupGeneral() {
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	//General
-	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &HistogramDock::commentChanged);
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );

@@ -37,8 +37,8 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_wo
 
 	//SLOTs
 	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
 	connect( ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()) );
 	connect( ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()) );
 }

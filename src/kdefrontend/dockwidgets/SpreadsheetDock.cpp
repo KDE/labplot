@@ -45,7 +45,7 @@
 SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadsheet(0), m_initializing(false) {
 	ui.setupUi(this);
 
-	connect(ui.leName, &QLineEdit::returnPressed, this, &SpreadsheetDock::nameChanged);
+	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
 	connect(ui.sbColumnCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);

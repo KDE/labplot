@@ -36,8 +36,8 @@
 NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(0) {
 	ui.setupUi(this);
 
-	connect(ui.leName, &QLineEdit::returnPressed, this, [this]() { nameChanged(ui.leName->text()); });
-	connect(ui.leComment, &QLineEdit::returnPressed, this, [this]() { commentChanged(ui.leComment->text()); });
+	connect(ui.leName, &QLineEdit::textChanged, this, [this]() { nameChanged(ui.leName->text()); });
+	connect(ui.leComment, &QLineEdit::textChanged, this, [this]() { commentChanged(ui.leComment->text()); });
 
 	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);

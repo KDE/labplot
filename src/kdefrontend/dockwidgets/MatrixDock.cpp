@@ -59,8 +59,8 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initial
 	ui.leYStart->setValidator( new QDoubleValidator(ui.leYStart) );
 	ui.leYEnd->setValidator( new QDoubleValidator(ui.leYEnd) );
 
-	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
+	connect(ui.leName, &QLineEdit::textChanged, this, &MatrixDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &MatrixDock::commentChanged);
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.leXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));

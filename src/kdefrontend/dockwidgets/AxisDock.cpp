@@ -82,8 +82,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &AxisDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &AxisDock::commentChanged);
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );

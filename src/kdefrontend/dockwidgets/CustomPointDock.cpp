@@ -57,8 +57,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 
 	//SLOTS
 	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &CustomPointDock::commentChanged);
 	connect( ui.lePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
 	connect( ui.lePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );

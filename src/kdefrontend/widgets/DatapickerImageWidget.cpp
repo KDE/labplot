@@ -222,8 +222,8 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 
 	//SLOTS
 	//general
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.leFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.leFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );

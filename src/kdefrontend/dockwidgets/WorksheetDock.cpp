@@ -109,8 +109,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
 	//SLOTs
 
 	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
+	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
 	connect( ui.cbSize, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
