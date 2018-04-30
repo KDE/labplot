@@ -199,7 +199,7 @@ template<> class IntervalAttribute<bool>
 {
 	public:
 		IntervalAttribute<bool>() {}
-		IntervalAttribute<bool>(QVector< Interval<int> > intervals) : m_intervals(intervals) {}
+		IntervalAttribute<bool>(const QVector< Interval<int> >& intervals) : m_intervals(intervals) {}
 		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other)
 		{
 			m_intervals.clear();
@@ -208,7 +208,7 @@ template<> class IntervalAttribute<bool>
 			return *this;
 		}
 
-		void setValue(Interval<int> i, bool value=true)
+		void setValue(const Interval<int>& i, bool value=true)
 		{
 			if(value)
 			{
@@ -235,7 +235,7 @@ template<> class IntervalAttribute<bool>
 			return false;
 		}
 
-		bool isSet(Interval<int> i) const
+		bool isSet(const Interval<int>& i) const
 		{
 			foreach(Interval<int> iv, m_intervals)
 				if(iv.contains(i))
