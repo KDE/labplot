@@ -42,25 +42,40 @@
  * The value type needs to support copy construction and assignment.
  */
 
-template<class T> class PropertyChangeCommand : public QUndoCommand
-{
-	public:
-		PropertyChangeCommand(const QString &text, T *property, const T &new_value)
-			: m_property(property), m_other_value(new_value) {
-				setText(text);
-			}
+template<class T> class PropertyChangeCommand : public QUndoCommand {
 
-		void redo() override {
-			T tmp = *m_property;
-			*m_property = m_other_value;
-			m_other_value = tmp;
+public:
+	PropertyChangeCommand(const QString &text, T *property, const T &new_value)
+		: m_property(property), m_other_value(new_value) {
+			setText(text);
 		}
 
-		void undo() override { redo(); }
+	void redo() override {
+		T tmp = *m_property;
+		*m_property = m_other_value;
+		m_other_value = tmp;
+	}
 
-	private:
-		T *m_property;
-		T m_other_value;
+	void undo() override {
+		redo();
+	}
+
+	int id() const override {
+		return reinterpret_cast<std::intptr_t>(m_property);
+	}
+
+	bool mergeWith(const QUndoCommand* other) override {
+		if (other->id() != id())
+			return false;
+
+		*m_property += *(static_cast<const PropertyChangeCommand*>(other)->m_property);
+		return true;
+	}
+
+	T *m_property;
+
+private:
+	T m_other_value;
 };
 
 #endif // ifndef PROPERTY_CHANGE_COMMAND_H
