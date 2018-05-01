@@ -4,7 +4,7 @@
     Description          : widget for editing advanced fit options
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -54,8 +54,8 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 	ui.cbAutoRange->setChecked(m_fitData->autoRange);
-	ui.sbMin->setValue(m_fitData->xRange.first());
-	ui.sbMax->setValue(m_fitData->xRange.last());
+	ui.sbMin->setValue(m_fitData->fitRange.first());
+	ui.sbMax->setValue(m_fitData->fitRange.last());
 	this->autoRangeChanged();
 
 	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
@@ -72,8 +72,8 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
-	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::xRangeMinChanged);
-	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::xRangeMaxChanged);
+	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMinChanged);
+	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMaxChanged);
 }
 
 void FitOptionsWidget::autoRangeChanged() {
@@ -104,17 +104,17 @@ void FitOptionsWidget::autoRangeChanged() {
 	}
 
 }
-void FitOptionsWidget::xRangeMinChanged() {
+void FitOptionsWidget::fitRangeMinChanged() {
 	const double xMin = ui.sbMin->value();
 
-	m_fitData->xRange.first() = xMin;
+	m_fitData->fitRange.first() = xMin;
 	changed();
 }
 
-void FitOptionsWidget::xRangeMaxChanged() {
+void FitOptionsWidget::fitRangeMaxChanged() {
 	const double xMax = ui.sbMax->value();
 
-	m_fitData->xRange.last() = xMax;
+	m_fitData->fitRange.last() = xMax;
 	changed();
 }
 

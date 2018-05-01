@@ -1569,8 +1569,8 @@ void XYFitCurvePrivate::recalculate() {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
-		xmin = fitData.xRange.first();
-		xmax = fitData.xRange.last();
+		xmin = fitData.fitRange.first();
+		xmax = fitData.fitRange.last();
 	}
 
 	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
@@ -2001,8 +2001,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->fitData.xRange.first(), 'g', 15));
-	writer->writeAttribute("xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15));
+	writer->writeAttribute("xRangeMin", QString::number(d->fitData.fitRange.first(), 'g', 15));
+	writer->writeAttribute("xRangeMax", QString::number(d->fitData.fitRange.last(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
 	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
@@ -2134,8 +2134,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yErrorColumn);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", fitData.xRange.first());
-			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
+			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
 			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);

@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -54,7 +54,7 @@ public:
 				evaluateFullRange(true),
 				useDataErrors(true),
 				useResults(true),
-				autoRange(true), xRange(2) {};
+				autoRange(true), fitRange(2) {};
 
 		nsl_fit_model_category modelCategory;
 		int modelType;
@@ -77,7 +77,7 @@ public:
 		bool useResults;		// use results as new start values (default)
 
 		bool autoRange;		// use all data?
-		QVector<double> xRange;		// x range for integration
+		QVector<double> fitRange;		// x fit range
 	};
 
 	struct FitResult {

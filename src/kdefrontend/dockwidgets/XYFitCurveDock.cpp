@@ -912,7 +912,7 @@ void XYFitCurveDock::resultCopyAll() {
 			str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + '\n';
 		str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + '\n';
 		str += i18n("number of parameters:") + ' ' + QString::number(fitResult.paramValues.size()) + '\n';
-		str += i18n("X range:") + ' ' + QString::number(m_fitData.xRange.first()) + " .. " + QString::number(m_fitData.xRange.last()) + '\n';
+		str += i18n("fit range:") + ' ' + QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) + '\n';
 
 		str += i18n("Iterations:") + '\n';
 		for (const auto &s: m_fitData.paramNamesUtf8)
@@ -985,7 +985,7 @@ void XYFitCurveDock::showFitResult() {
 
 	uiGeneralTab.twLog->item(4, 1)->setText(QString::number(fitResult.dof));
 	uiGeneralTab.twLog->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
-	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(m_fitData.xRange.first()) + " .. " + QString::number(m_fitData.xRange.last()) );
+	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) );
 
 	// show all iterations
 	QString str;

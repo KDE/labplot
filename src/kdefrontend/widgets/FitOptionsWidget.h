@@ -4,7 +4,7 @@
     Description          : widget for editing advanced fit parameters
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -50,8 +50,11 @@ signals:
 
 private slots:
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
+//	void autoEvalRangeChanged();
+	void fitRangeMinChanged();
+	void fitRangeMaxChanged();
+//	void evalRangeMinChanged();
+//	void evalRangeMaxChanged();
 	void applyClicked();
 	void changed();
 };
