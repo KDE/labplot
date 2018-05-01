@@ -1468,7 +1468,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 				                             keyword.comment.size() - keyword.comment.indexOf(QChar(']'))-1);
 				commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + comment;
 			} else {
-				if (keyword.comment.at(0) == QLatin1String("["))
+				if (keyword.comment.at(0) == QLatin1Char('['))
 					commentFieldText = keyword.comment;
 				else
 					commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + keyword.comment;
