@@ -1572,6 +1572,7 @@ void XYFitCurvePrivate::recalculate() {
 		xmin = fitData.fitRange.first();
 		xmax = fitData.fitRange.last();
 	}
+	DEBUG("fit range = " << xmin << " .. " << xmax);
 
 	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y and errors, if given) are valid
@@ -1911,8 +1912,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(tmpXDataColumn->rowCount());
-	//TODO: use evalRange
-	if (fitData.autoEvalRange) {	// evaluate full range of residuals
+	if (fitData.autoRange) {	// evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
 			(*xVector)[i] = tmpXDataColumn->valueAt(i);
@@ -1939,16 +1939,22 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_matrix_free(covar);
 
 	//calculate the fit function (vectors)
-	//TODO: use evalRange
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	if (fitData.autoEvalRange) { // evaluate fit on full data range if selected
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
+	} else {	// use selected range for evaluation
+		xmin = fitData.evalRange.first();
+		xmax = fitData.evalRange.last();
 	}
+	DEBUG("eval range = " << xmin << " .. " << xmax);
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints, xVector, yVector,
 						fitData.paramNames, fitResult.paramValues);
+	for (int i = 0; i < (int)fitData.evaluatedPoints; i++)
+		DEBUG(" x["<< i << "] = " << xVector->at(i));
+
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();

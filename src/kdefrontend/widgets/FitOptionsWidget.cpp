@@ -54,11 +54,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 	ui.cbAutoRange->setChecked(m_fitData->autoRange);
+	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
 	ui.sbMin->setValue(m_fitData->fitRange.first());
 	ui.sbMax->setValue(m_fitData->fitRange.last());
+	ui.sbEvalMin->setValue(m_fitData->evalRange.first());
+	ui.sbEvalMax->setValue(m_fitData->evalRange.last());
 	this->autoRangeChanged();
+	this->autoEvalRangeChanged();
 
-	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 
@@ -66,14 +69,16 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
 	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
-	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
+	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoEvalRangeChanged) ;
 	connect(ui.sbMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMinChanged);
 	connect(ui.sbMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::fitRangeMaxChanged);
+	connect(ui.sbEvalMin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::evalRangeMinChanged);
+	connect(ui.sbEvalMax, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::evalRangeMaxChanged);
 }
 
 void FitOptionsWidget::autoRangeChanged() {
@@ -123,8 +128,8 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			ui.sbMin->setValue(xDataColumn->minimum());
-			ui.sbMax->setValue(xDataColumn->maximum());
+			ui.sbEvalMin->setValue(xDataColumn->minimum());
+			ui.sbEvalMax->setValue(xDataColumn->maximum());
 		}
 	} else {
 		ui.sbEvalMin->setEnabled(true);
@@ -164,7 +169,6 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
 	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
-	//m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 
