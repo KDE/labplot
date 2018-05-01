@@ -1505,7 +1505,7 @@ void XYCurvePrivate::updateFilling() {
 
 		//start point
 		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
-			if (plot->yMax()>0) {
+			if (plot->yMax() > 0) {
 				if (first.x() < plot->xMin())
 					start = edge;
 				else if (first.x() > plot->xMax())
@@ -1524,7 +1524,7 @@ void XYCurvePrivate::updateFilling() {
 
 		//end point
 		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
-			if (plot->yMax()>0) {
+			if (plot->yMax() > 0) {
 				if (last.x() < plot->xMin())
 					end = edge;
 				else if (last.x() > plot->xMax())

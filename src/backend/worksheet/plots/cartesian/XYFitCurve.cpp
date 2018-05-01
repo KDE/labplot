@@ -1952,9 +1952,6 @@ void XYFitCurvePrivate::recalculate() {
 	yVector->resize((int)fitData.evaluatedPoints);
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints, xVector, yVector,
 						fitData.paramNames, fitResult.paramValues);
-	for (int i = 0; i < (int)fitData.evaluatedPoints; i++)
-		DEBUG(" x["<< i << "] = " << xVector->at(i));
-
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();

@@ -1316,7 +1316,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	const double xMax = parse(xmaxba.constData());
 
 	const double step = (xMax - xMin)/(double)(count - 1);
-	DEBUG("step = " << step);
 
 	QByteArray funcba = expr.toLatin1();
 	const char* func = funcba.constData();
@@ -1331,7 +1330,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	for (int i = 0; i < count; i++) {
 		x = xMin + step * i;
-		DEBUG(" x = " << x);
 		assign_variable("x", x);
 		y = parse(func);
 
