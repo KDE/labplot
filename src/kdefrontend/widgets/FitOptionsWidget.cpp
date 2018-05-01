@@ -58,7 +58,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.sbMax->setValue(m_fitData->fitRange.last());
 	this->autoRangeChanged();
 
-	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
+	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 
@@ -66,7 +66,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
 	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed) ;
-	connect(ui.cbEvaluateFullRange, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
+	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed) ;
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
@@ -104,13 +104,42 @@ void FitOptionsWidget::autoRangeChanged() {
 	}
 
 }
+
+void FitOptionsWidget::autoEvalRangeChanged() {
+	const bool autoRange = ui.cbAutoEvalRange->isChecked();
+	m_fitData->autoEvalRange = autoRange;
+
+	if (autoRange) {
+		ui.sbEvalMin->setEnabled(false);
+		ui.lEvalRange->setEnabled(false);
+		ui.sbEvalMax->setEnabled(false);
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+			xDataColumn = m_fitCurve->xDataColumn();
+		else {
+			if (m_fitCurve->dataSourceCurve())
+				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+		}
+
+		if (xDataColumn) {
+			ui.sbMin->setValue(xDataColumn->minimum());
+			ui.sbMax->setValue(xDataColumn->maximum());
+		}
+	} else {
+		ui.sbEvalMin->setEnabled(true);
+		ui.lEvalRange->setEnabled(true);
+		ui.sbEvalMax->setEnabled(true);
+	}
+
+}
+
 void FitOptionsWidget::fitRangeMinChanged() {
 	const double xMin = ui.sbMin->value();
 
 	m_fitData->fitRange.first() = xMin;
 	changed();
 }
-
 void FitOptionsWidget::fitRangeMaxChanged() {
 	const double xMax = ui.sbMax->value();
 
@@ -118,12 +147,24 @@ void FitOptionsWidget::fitRangeMaxChanged() {
 	changed();
 }
 
+void FitOptionsWidget::evalRangeMinChanged() {
+	const double xMin = ui.sbEvalMin->value();
+
+	m_fitData->evalRange.first() = xMin;
+	changed();
+}
+void FitOptionsWidget::evalRangeMaxChanged() {
+	const double xMax = ui.sbEvalMax->value();
+
+	m_fitData->evalRange.last() = xMax;
+	changed();
+}
 
 void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
 	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
-	m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
+	//m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 

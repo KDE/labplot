@@ -1911,7 +1911,8 @@ void XYFitCurvePrivate::recalculate() {
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(tmpXDataColumn->rowCount());
-	if (fitData.evaluateFullRange) {	// evaluate full range of residuals
+	//TODO: use evalRange
+	if (fitData.autoEvalRange) {	// evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
 			(*xVector)[i] = tmpXDataColumn->valueAt(i);
@@ -1938,8 +1939,9 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_matrix_free(covar);
 
 	//calculate the fit function (vectors)
+	//TODO: use evalRange
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	if (fitData.evaluateFullRange) { // evaluate fit on full data range if selected
+	if (fitData.autoEvalRange) { // evaluate fit on full data range if selected
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	}
@@ -2001,8 +2003,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->fitData.fitRange.first(), 'g', 15));
-	writer->writeAttribute("xRangeMax", QString::number(d->fitData.fitRange.last(), 'g', 15));
+	writer->writeAttribute("fitRangeMin", QString::number(d->fitData.fitRange.first(), 'g', 15));
+	writer->writeAttribute("fitRangeMax", QString::number(d->fitData.fitRange.last(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
 	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
@@ -2013,7 +2015,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("maxIterations", QString::number(d->fitData.maxIterations));
 	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
-	writer->writeAttribute("evaluateFullRange", QString::number(d->fitData.evaluateFullRange));
+	writer->writeAttribute("autoEvalRange", QString::number(d->fitData.autoEvalRange));
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
 
@@ -2134,8 +2136,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yErrorColumn);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.first());
-			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.last());
+			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.first());	// old name
+			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.last());	// old name
+			READ_DOUBLE_VALUE("fitRangeMin", fitData.fitRange.first());
+			READ_DOUBLE_VALUE("fitRangeMax", fitData.fitRange.last());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, unsigned int);
 			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
@@ -2149,7 +2153,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("eps", fitData.eps);
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
-			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
+			READ_INT_VALUE("evaluateFullRange", fitData.autoEvalRange, bool);	// old name
+			READ_INT_VALUE("autoEvalRange", fitData.autoEvalRange, bool);
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 

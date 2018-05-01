@@ -50,11 +50,11 @@ signals:
 
 private slots:
 	void autoRangeChanged();
-//	void autoEvalRangeChanged();
+	void autoEvalRangeChanged();
 	void fitRangeMinChanged();
 	void fitRangeMaxChanged();
-//	void evalRangeMinChanged();
-//	void evalRangeMaxChanged();
+	void evalRangeMinChanged();
+	void evalRangeMaxChanged();
 	void applyClicked();
 	void changed();
 };

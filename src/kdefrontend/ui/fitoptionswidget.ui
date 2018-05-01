@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
-    <height>364</height>
+    <width>251</width>
+    <height>402</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -150,7 +150,7 @@
        </widget>
       </item>
       <item row="6" column="0" colspan="3">
-       <widget class="QCheckBox" name="cbEvaluateFullRange">
+       <widget class="QCheckBox" name="cbAutoEvalRange">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If selected, the fit function is evaluated for the full range of data points and not only for the given x-range.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>

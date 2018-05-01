@@ -51,10 +51,12 @@ public:
 				maxIterations(500),
 				eps(1e-4),
 				evaluatedPoints(100),
-				evaluateFullRange(true),
 				useDataErrors(true),
 				useResults(true),
-				autoRange(true), fitRange(2) {};
+				autoRange(true),
+				autoEvalRange(true),
+				fitRange(2),
+				evalRange(2) {};
 
 		nsl_fit_model_category modelCategory;
 		int modelType;
@@ -72,12 +74,13 @@ public:
 		int maxIterations;
 		double eps;
 		size_t evaluatedPoints;
-		bool evaluateFullRange;		// evaluate fit function on full data range (default)
 		bool useDataErrors;		// use given data errors when fitting (default)
 		bool useResults;		// use results as new start values (default)
 
-		bool autoRange;		// use all data?
-		QVector<double> fitRange;		// x fit range
+		bool autoRange;			// use all data points? (default)
+		bool autoEvalRange;		// evaluate fit function on full data range (default)
+		QVector<double> fitRange;	// x fit range
+		QVector<double> evalRange;	// x evaluation range
 	};
 
 	struct FitResult {
