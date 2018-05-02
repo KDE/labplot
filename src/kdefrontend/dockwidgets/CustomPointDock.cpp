@@ -365,7 +365,7 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void CustomPointDock::pointPositionChanged(const QPointF& position) {
+void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
 	ui.lePositionX->setText(QString::number(position.x()));
 	ui.lePositionY->setText(QString::number(position.y()));
@@ -397,7 +397,7 @@ void CustomPointDock::pointSymbolOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void CustomPointDock::pointSymbolBrushChanged(QBrush brush) {
+void CustomPointDock::pointSymbolBrushChanged(const QBrush& brush) {
 	m_initializing = true;
 	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbSymbolFillingColor->setColor(brush.color());

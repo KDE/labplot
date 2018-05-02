@@ -929,19 +929,19 @@ void XYFitCurveDock::resultCopyAll() {
 	DEBUG(QApplication::clipboard()->text().toStdString());
 }
 
-void XYFitCurveDock::resultParametersContextMenuRequest(const QPoint &pos) {
+void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
 	QMenu *contextMenu = new QMenu;
 	contextMenu->addAction("Copy selection", this, SLOT(resultCopySelection()));
 	contextMenu->addAction("Copy all", this, SLOT(resultCopyAll()));
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
-void XYFitCurveDock::resultGoodnessContextMenuRequest(const QPoint &pos) {
+void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
 	QMenu *contextMenu = new QMenu;
 	contextMenu->addAction("Copy selection", this, SLOT(resultCopySelection()));
 	contextMenu->addAction("Copy all", this, SLOT(resultCopyAll()));
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
-void XYFitCurveDock::resultLogContextMenuRequest(const QPoint &pos) {
+void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
 	QMenu *contextMenu = new QMenu;
 	contextMenu->addAction("Copy selection", this, SLOT(resultCopySelection()));
 	contextMenu->addAction("Copy all", this, SLOT(resultCopyAll()));

@@ -92,9 +92,9 @@ private slots:
 	void updateModelEquation();
 	void expressionChanged();
 	void enableRecalculate() const;
-	void resultParametersContextMenuRequest(const QPoint &);
-	void resultGoodnessContextMenuRequest(const QPoint &);
-	void resultLogContextMenuRequest(const QPoint &);
+	void resultParametersContextMenuRequest(QPoint);
+	void resultGoodnessContextMenuRequest(QPoint);
+	void resultLogContextMenuRequest(QPoint);
 	void resultCopySelection();
 	void resultCopyAll();
 

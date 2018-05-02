@@ -1816,7 +1816,7 @@ void XYCurveDock::curveSymbolsOpacityChanged(qreal opacity) {
 	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
-void XYCurveDock::curveSymbolsBrushChanged(QBrush brush) {
+void XYCurveDock::curveSymbolsBrushChanged(const QBrush& brush) {
 	m_initializing = true;
 	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbSymbolFillingColor->setColor(brush.color());
@@ -1863,12 +1863,12 @@ void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
 	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
-void XYCurveDock::curveValuesPrefixChanged(QString prefix) {
+void XYCurveDock::curveValuesPrefixChanged(const QString& prefix) {
 	m_initializing = true;
 	ui.leValuesPrefix->setText(prefix);
 	m_initializing = false;
 }
-void XYCurveDock::curveValuesSuffixChanged(QString suffix) {
+void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
 	m_initializing = true;
 	ui.leValuesSuffix->setText(suffix);
 	m_initializing = false;
@@ -1975,7 +1975,7 @@ void XYCurveDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
 	ui.cbErrorBarsType->setCurrentIndex( (int) type);
 	m_initializing = false;
 }
-void XYCurveDock::curveErrorBarsPenChanged(QPen pen) {
+void XYCurveDock::curveErrorBarsPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbErrorBarsStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbErrorBarsColor->setColor( pen.color());

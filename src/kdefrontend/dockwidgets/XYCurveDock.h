@@ -178,7 +178,7 @@ private slots:
 	void curveSymbolsSizeChanged(qreal);
 	void curveSymbolsRotationAngleChanged(qreal);
 	void curveSymbolsOpacityChanged(qreal);
-	void curveSymbolsBrushChanged(QBrush);
+	void curveSymbolsBrushChanged(const QBrush&);
 	void curveSymbolsPenChanged(const QPen&);
 
 	//Values-Tab
@@ -188,8 +188,8 @@ private slots:
 	void curveValuesDistanceChanged(qreal);
 	void curveValuesOpacityChanged(qreal);
 	void curveValuesRotationAngleChanged(qreal);
-	void curveValuesPrefixChanged(QString);
-	void curveValuesSuffixChanged(QString);
+	void curveValuesPrefixChanged(const QString&);
+	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
 
@@ -213,7 +213,7 @@ private slots:
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
 	void curveErrorBarsCapSizeChanged(qreal);
 	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(QPen);
+	void curveErrorBarsPenChanged(const QPen&);
 	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save

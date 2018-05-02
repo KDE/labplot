@@ -76,7 +76,7 @@ class CustomPointDock : public QWidget {
 		//SLOTs for changes triggered in CustomPoint
 		//General-Tab
 		void pointDescriptionChanged(const AbstractAspect*);
-		void pointPositionChanged(const QPointF&);
+		void pointPositionChanged(QPointF);
 		void pointVisibilityChanged(bool);
 
 		//Symbol-Tab
@@ -84,7 +84,7 @@ class CustomPointDock : public QWidget {
 		void pointSymbolSizeChanged(qreal);
 		void pointSymbolRotationAngleChanged(qreal);
 		void pointSymbolOpacityChanged(qreal);
-		void pointSymbolBrushChanged(QBrush);
+		void pointSymbolBrushChanged(const QBrush&);
 		void pointSymbolPenChanged(const QPen&);
 
 		//load and save

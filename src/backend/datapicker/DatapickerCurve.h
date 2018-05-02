@@ -56,8 +56,8 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void setPrinting(bool);
-	void setSelectedInView(const bool);
-	void addDatasheet(const DatapickerImage::GraphType&);
+	void setSelectedInView(bool);
+	void addDatasheet(DatapickerImage::GraphType);
 	void updateData(const DatapickerPoint*);
 
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)

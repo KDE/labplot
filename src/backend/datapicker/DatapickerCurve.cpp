@@ -184,7 +184,7 @@ QString& DatapickerCurve::minusDeltaYColumnPath() const {
 //##############################################################################
 //#########################  setter methods  ###################################
 //##############################################################################
-void DatapickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
+void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
 	m_datasheet = new Spreadsheet(0, i18n("Data"));
@@ -384,7 +384,7 @@ void DatapickerCurve::setPrinting(bool on) {
     Selects or deselects the Datapicker/Curve in the project explorer.
     This function is called in \c DatapickerImageView.
 */
-void DatapickerCurve::setSelectedInView(const bool b) {
+void DatapickerCurve::setSelectedInView(bool b) {
 	if (b)
 		emit childAspectSelectedInView(this);
 	else

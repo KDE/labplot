@@ -33,7 +33,7 @@
 class ResizableTextEdit;
 
 class GrabBar : public QWidget {
-
+	Q_OBJECT
 public:
 	GrabBar(ResizableTextEdit*, bool vertResizeOnly);
 	QSize sizeHint() const override;
@@ -54,7 +54,7 @@ private:
 };
 
 class ResizableTextEdit : public QTextEdit {
-
+	Q_OBJECT
 public:
 	ResizableTextEdit(QWidget*, bool vertResizeOnly = true);
 	void addSize(const QSize&);

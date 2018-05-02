@@ -39,7 +39,7 @@ class String2DoubleFilter : public AbstractSimpleFilter {
 
 public:
 	String2DoubleFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
+	void setNumericLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
 	double valueAt(int row) const override {

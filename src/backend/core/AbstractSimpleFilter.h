@@ -55,7 +55,7 @@ public:
 	virtual int integerAt(int row) const;
 
 	virtual int rowCount() const;
-	virtual QList<Interval<int>> dependentRows(Interval<int> inputRange) const;
+	virtual QList<Interval<int>> dependentRows(const Interval<int>& inputRange) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

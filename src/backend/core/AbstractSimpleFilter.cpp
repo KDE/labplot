@@ -237,7 +237,7 @@ int AbstractSimpleFilter::rowCount() const {
  * This implementation assumes a 1:1 correspondence between input and output rows, but can be
  * overridden in subclasses.
  */
-QList< Interval<int> > AbstractSimpleFilter::dependentRows(Interval<int> inputRange) const {
+QList< Interval<int> > AbstractSimpleFilter::dependentRows(const Interval<int>& inputRange) const {
 	return QList< Interval<int> >() << inputRange;
 }
 
