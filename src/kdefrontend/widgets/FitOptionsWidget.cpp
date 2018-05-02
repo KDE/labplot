@@ -55,9 +55,13 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 	ui.cbAutoRange->setChecked(m_fitData->autoRange);
 	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
+	ui.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	ui.sbMin->setValue(m_fitData->fitRange.first());
+	ui.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	ui.sbMax->setValue(m_fitData->fitRange.last());
+	ui.sbEvalMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	ui.sbEvalMin->setValue(m_fitData->evalRange.first());
+	ui.sbEvalMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	ui.sbEvalMax->setValue(m_fitData->evalRange.last());
 	this->autoRangeChanged();
 	this->autoEvalRangeChanged();
