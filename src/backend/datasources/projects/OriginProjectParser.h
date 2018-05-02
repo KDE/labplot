@@ -55,7 +55,7 @@ public:
 	bool hasUnusedObjects();
 
 private:
-	bool loadFolder(Folder*, const tree<Origin::ProjectNode>::iterator&, bool preview);
+	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
 	bool loadSpreadsheet(Spreadsheet*, bool preview, const QString& wbName = QString(), int sheetIndex = -1);
 	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
@@ -67,16 +67,16 @@ private:
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
 
-	unsigned int findSpreadByName(QString name);
-	unsigned int findMatrixByName(QString name);
-	unsigned int findExcelByName(QString name);
-	unsigned int findGraphByName(QString name);
-	unsigned int findNoteByName(QString name);
-	QString parseOriginText(const QString &str) const;
-	QString parseOriginTags(const QString &str) const;
-	QDateTime creationTime(const tree<Origin::ProjectNode>::iterator&) const;
-	QColor color(const Origin::Color&) const;
-	PlotArea::BackgroundColorStyle backgroundColorStyle(const Origin::ColorGradientDirection&) const;
+	unsigned int findSpreadByName(const QString&);
+	unsigned int findMatrixByName(const QString&);
+	unsigned int findExcelByName(const QString&);
+	unsigned int findGraphByName(const QString&);
+	unsigned int findNoteByName(const QString&);
+	QString parseOriginText(const QString&) const;
+	QString parseOriginTags(const QString&) const;
+	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
+	QColor color(Origin::Color) const;
+	PlotArea::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
 
 	OriginFile* m_originFile;
 	QStringList m_spreadNameList;

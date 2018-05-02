@@ -45,7 +45,7 @@ class String2DateTimeFilter : public AbstractSimpleFilter {
 
 public:
 	//! Standard constructor.
-	explicit String2DateTimeFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
+	explicit String2DateTimeFilter(const QString& format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
 	//! Set the format string to be used for conversion.
 	void setFormat(const QString& format);
 	//! Return the format string

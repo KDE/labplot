@@ -394,7 +394,7 @@ namespace Origin
 		:	text(_text)
 		{};
 
-		TextBox(const string& _text, const Rect& _clientRect, const Color& _color, unsigned short _fontSize, int _rotation, int _tab, BorderType _borderType, Attach _attach)
+		TextBox(const string& _text, Rect _clientRect, Color _color, unsigned short _fontSize, int _rotation, int _tab, BorderType _borderType, Attach _attach)
 		:	text(_text)
 		,	clientRect(_clientRect)
 		,	color(_color)

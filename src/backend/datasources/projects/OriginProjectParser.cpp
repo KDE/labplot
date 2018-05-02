@@ -104,7 +104,7 @@ QString OriginProjectParser::supportedExtensions() {
 	return extensions;
 }
 
-unsigned int OriginProjectParser::findSpreadByName(QString name) {
+unsigned int OriginProjectParser::findSpreadByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
 		const Origin::SpreadSheet& spread = m_originFile->spread(i);
 		if (spread.name == name.toStdString()) {
@@ -114,7 +114,7 @@ unsigned int OriginProjectParser::findSpreadByName(QString name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findMatrixByName(QString name) {
+unsigned int OriginProjectParser::findMatrixByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
 		if (originMatrix.name == name.toStdString()) {
@@ -124,7 +124,7 @@ unsigned int OriginProjectParser::findMatrixByName(QString name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findExcelByName(QString name) {
+unsigned int OriginProjectParser::findExcelByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		const Origin::Excel& excel = m_originFile->excel(i);
 		if (excel.name == name.toStdString()) {
@@ -134,7 +134,7 @@ unsigned int OriginProjectParser::findExcelByName(QString name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findGraphByName(QString name) {
+unsigned int OriginProjectParser::findGraphByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
 		const Origin::Graph& graph = m_originFile->graph(i);
 		if (graph.name == name.toStdString()) {
@@ -144,7 +144,7 @@ unsigned int OriginProjectParser::findGraphByName(QString name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findNoteByName(QString name) {
+unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
 		const Origin::Note& originNote = m_originFile->note(i);
 		if (originNote.name == name.toStdString()) {
@@ -255,7 +255,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	return true;
 }
 
-bool OriginProjectParser::loadFolder(Folder* folder, const tree<Origin::ProjectNode>::iterator& baseIt, bool preview) {
+bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
 	DEBUG("OriginProjectParser::loadFolder()\n--------------------------------");
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
@@ -1704,7 +1704,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 //##############################################################################
 //########################### Helper functions  ################################
 //##############################################################################
-QDateTime OriginProjectParser::creationTime(const tree<Origin::ProjectNode>::iterator& it) const {
+QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator it) const {
 	//this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
 	char time_str[21];
 	strftime(time_str, sizeof(time_str), "%F %T", gmtime(&(*it).creationDate));
@@ -1724,7 +1724,7 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	return text;
 }
 
-QColor OriginProjectParser::color(const Origin::Color& color) const {
+QColor OriginProjectParser::color(Origin::Color color) const {
 	switch (color.type) {
 		case Origin::Color::ColorType::Regular:
 			switch (color.regular) {
@@ -1794,7 +1794,7 @@ QColor OriginProjectParser::color(const Origin::Color& color) const {
 	return QColor(Qt::white);
 }
 
-PlotArea::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(const Origin::ColorGradientDirection& colorGradient) const {
+PlotArea::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
 	switch (colorGradient) {
 		case Origin::ColorGradientDirection::NoGradient:
 			return PlotArea::BackgroundColorStyle::SingleColor;

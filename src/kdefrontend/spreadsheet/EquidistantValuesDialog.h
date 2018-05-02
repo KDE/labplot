@@ -40,7 +40,7 @@ Q_OBJECT
 
 public:
 	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
-	void setColumns(QVector<Column*>);
+	void setColumns(const QVector<Column*>&);
 
 private:
 	Ui::EquidistantValuesWidget ui;
