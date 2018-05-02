@@ -93,6 +93,9 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
 		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 
+	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+
 	uiGeneralTab.pbRecalculate->setIcon( QIcon::fromTheme("run-build") );
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);

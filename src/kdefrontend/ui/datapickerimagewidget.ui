@@ -208,7 +208,7 @@
        <item row="9" column="5" rowspan="3">
         <layout class="QGridLayout" name="gridLayout">
          <item row="2" column="4">
-          <widget class="QDoubleSpinBox" name="sbPoisitionY3">
+          <widget class="QDoubleSpinBox" name="sbPositionY3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -224,7 +224,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="sbPoisitionX1">
+          <widget class="QDoubleSpinBox" name="sbPositionX1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
           </widget>
          </item>
          <item row="1" column="4">
-          <widget class="QDoubleSpinBox" name="sbPoisitionY2">
+          <widget class="QDoubleSpinBox" name="sbPositionY2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -259,7 +259,7 @@
           </widget>
          </item>
          <item row="2" column="3">
-          <widget class="QLabel" name="lPoisitionY3">
+          <widget class="QLabel" name="lPositionY3">
            <property name="text">
             <string>y=</string>
            </property>
@@ -269,7 +269,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="lPoisitionX2">
+          <widget class="QLabel" name="lPositionX2">
            <property name="text">
             <string>x=</string>
            </property>
@@ -279,7 +279,7 @@
           </widget>
          </item>
          <item row="0" column="6">
-          <widget class="QLabel" name="lPoisitionZ1">
+          <widget class="QLabel" name="lPositionZ1">
            <property name="text">
             <string>z=</string>
            </property>
@@ -289,7 +289,7 @@
           </widget>
          </item>
          <item row="1" column="7">
-          <widget class="QDoubleSpinBox" name="sbPoisitionZ2">
+          <widget class="QDoubleSpinBox" name="sbPositionZ2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -305,7 +305,7 @@
           </widget>
          </item>
          <item row="2" column="7">
-          <widget class="QDoubleSpinBox" name="sbPoisitionZ3">
+          <widget class="QDoubleSpinBox" name="sbPositionZ3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -321,7 +321,7 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QLabel" name="lPoisitionY1">
+          <widget class="QLabel" name="lPositionY1">
            <property name="text">
             <string>y=</string>
            </property>
@@ -331,7 +331,7 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QDoubleSpinBox" name="sbPoisitionY1">
+          <widget class="QDoubleSpinBox" name="sbPositionY1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -347,7 +347,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="sbPoisitionX3">
+          <widget class="QDoubleSpinBox" name="sbPositionX3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -363,7 +363,7 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="lPoisitionX1">
+          <widget class="QLabel" name="lPositionX1">
            <property name="text">
             <string>x=</string>
            </property>
@@ -399,7 +399,7 @@
           </spacer>
          </item>
          <item row="1" column="6">
-          <widget class="QLabel" name="lPoisitionZ2">
+          <widget class="QLabel" name="lPositionZ2">
            <property name="text">
             <string>z=</string>
            </property>
@@ -409,7 +409,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="sbPoisitionX2">
+          <widget class="QDoubleSpinBox" name="sbPositionX2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -425,7 +425,7 @@
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QLabel" name="lPoisitionY2">
+          <widget class="QLabel" name="lPositionY2">
            <property name="text">
             <string>y=</string>
            </property>
@@ -448,7 +448,7 @@
           </spacer>
          </item>
          <item row="0" column="7">
-          <widget class="QDoubleSpinBox" name="sbPoisitionZ1">
+          <widget class="QDoubleSpinBox" name="sbPositionZ1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -464,7 +464,7 @@
           </widget>
          </item>
          <item row="2" column="6">
-          <widget class="QLabel" name="lPoisitionZ3">
+          <widget class="QLabel" name="lPositionZ3">
            <property name="text">
             <string>z=</string>
            </property>
@@ -474,7 +474,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="lPoisitionX3">
+          <widget class="QLabel" name="lPositionX3">
            <property name="text">
             <string>x=</string>
            </property>
@@ -1077,12 +1077,12 @@
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>
-  <tabstop>sbPoisitionX1</tabstop>
-  <tabstop>sbPoisitionY1</tabstop>
-  <tabstop>sbPoisitionX2</tabstop>
-  <tabstop>sbPoisitionY2</tabstop>
-  <tabstop>sbPoisitionX3</tabstop>
-  <tabstop>sbPoisitionY3</tabstop>
+  <tabstop>sbPositionX1</tabstop>
+  <tabstop>sbPositionY1</tabstop>
+  <tabstop>sbPositionX2</tabstop>
+  <tabstop>sbPositionY2</tabstop>
+  <tabstop>sbPositionX3</tabstop>
+  <tabstop>sbPositionY3</tabstop>
   <tabstop>cbPlotImageType</tabstop>
   <tabstop>lIntensity</tabstop>
   <tabstop>lForeground</tabstop>

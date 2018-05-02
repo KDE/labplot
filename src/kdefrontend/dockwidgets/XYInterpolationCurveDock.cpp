@@ -111,6 +111,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
 	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
 
+	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);

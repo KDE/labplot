@@ -174,12 +174,12 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 
 	ui.lTernaryScale->setHidden(true);
 	ui.sbTernaryScale->setHidden(true);
-	ui.lPoisitionZ1->setHidden(true);
-	ui.lPoisitionZ2->setHidden(true);
-	ui.lPoisitionZ3->setHidden(true);
-	ui.sbPoisitionZ1->setHidden(true);
-	ui.sbPoisitionZ2->setHidden(true);
-	ui.sbPoisitionZ3->setHidden(true);
+	ui.lPositionZ1->setHidden(true);
+	ui.lPositionZ2->setHidden(true);
+	ui.lPositionZ3->setHidden(true);
+	ui.sbPositionZ1->setHidden(true);
+	ui.sbPositionZ2->setHidden(true);
+	ui.sbPositionZ3->setHidden(true);
 
 	ui.cbPlotImageType->addItem(i18n("No Image"));
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
@@ -242,15 +242,15 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	//axis point
 	connect( ui.cbGraphType, SIGNAL(currentIndexChanged(int)), this, SLOT(graphTypeChanged()) );
 	connect( ui.sbTernaryScale, SIGNAL(valueChanged(double)), this, SLOT(ternaryScaleChanged(double)) );
-	connect( ui.sbPoisitionX1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionY1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionX2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionY2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionX3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionZ1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionZ2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
-	connect( ui.sbPoisitionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionX1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionY1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionX2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionY2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionX3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionZ1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionZ2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+	connect( ui.sbPositionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 
 	//SYMBOL
 	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsStyleChanged(int)) );
@@ -349,12 +349,12 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.tEdit->setEnabled(b);
 	ui.cbGraphType->setEnabled(b);
 	ui.sbRotation->setEnabled(b);
-	ui.sbPoisitionX1->setEnabled(b);
-	ui.sbPoisitionX2->setEnabled(b);
-	ui.sbPoisitionX3->setEnabled(b);
-	ui.sbPoisitionY1->setEnabled(b);
-	ui.sbPoisitionY2->setEnabled(b);
-	ui.sbPoisitionY3->setEnabled(b);
+	ui.sbPositionX1->setEnabled(b);
+	ui.sbPositionX2->setEnabled(b);
+	ui.sbPositionX3->setEnabled(b);
+	ui.sbPositionY1->setEnabled(b);
+	ui.sbPositionY2->setEnabled(b);
+	ui.sbPositionY3->setEnabled(b);
 	ui.sbMinSegmentLength->setEnabled(b);
 	ui.sbPointSeparation->setEnabled(b);
 
@@ -433,21 +433,21 @@ void DatapickerImageWidget::graphTypeChanged() {
 	if (points.type != DatapickerImage::Ternary) {
 		ui.lTernaryScale->setHidden(true);
 		ui.sbTernaryScale->setHidden(true);
-		ui.lPoisitionZ1->setHidden(true);
-		ui.lPoisitionZ2->setHidden(true);
-		ui.lPoisitionZ3->setHidden(true);
-		ui.sbPoisitionZ1->setHidden(true);
-		ui.sbPoisitionZ2->setHidden(true);
-		ui.sbPoisitionZ3->setHidden(true);
+		ui.lPositionZ1->setHidden(true);
+		ui.lPositionZ2->setHidden(true);
+		ui.lPositionZ3->setHidden(true);
+		ui.sbPositionZ1->setHidden(true);
+		ui.sbPositionZ2->setHidden(true);
+		ui.sbPositionZ3->setHidden(true);
 	} else {
 		ui.lTernaryScale->setHidden(false);
 		ui.sbTernaryScale->setHidden(false);
-		ui.lPoisitionZ1->setHidden(false);
-		ui.lPoisitionZ2->setHidden(false);
-		ui.lPoisitionZ3->setHidden(false);
-		ui.sbPoisitionZ1->setHidden(false);
-		ui.sbPoisitionZ2->setHidden(false);
-		ui.sbPoisitionZ3->setHidden(false);
+		ui.lPositionZ1->setHidden(false);
+		ui.lPositionZ2->setHidden(false);
+		ui.lPositionZ3->setHidden(false);
+		ui.sbPositionZ1->setHidden(false);
+		ui.sbPositionZ2->setHidden(false);
+		ui.sbPositionZ3->setHidden(false);
 	}
 
 	for (auto* image : m_imagesList)
@@ -470,15 +470,15 @@ void DatapickerImageWidget::logicalPositionChanged() {
 		return;
 
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
-	points.logicalPos[0].setX(ui.sbPoisitionX1->value());
-	points.logicalPos[0].setY(ui.sbPoisitionY1->value());
-	points.logicalPos[1].setX(ui.sbPoisitionX2->value());
-	points.logicalPos[1].setY(ui.sbPoisitionY2->value());
-	points.logicalPos[2].setX(ui.sbPoisitionX3->value());
-	points.logicalPos[2].setY(ui.sbPoisitionY3->value());
-	points.logicalPos[0].setZ(ui.sbPoisitionZ1->value());
-	points.logicalPos[1].setZ(ui.sbPoisitionZ2->value());
-	points.logicalPos[2].setZ(ui.sbPoisitionZ3->value());
+	points.logicalPos[0].setX(ui.sbPositionX1->value());
+	points.logicalPos[0].setY(ui.sbPositionY1->value());
+	points.logicalPos[1].setX(ui.sbPositionX2->value());
+	points.logicalPos[1].setY(ui.sbPositionY2->value());
+	points.logicalPos[2].setX(ui.sbPositionX3->value());
+	points.logicalPos[2].setY(ui.sbPositionY3->value());
+	points.logicalPos[0].setZ(ui.sbPositionZ1->value());
+	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
+	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
 
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
@@ -743,15 +743,15 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 	m_initializing = true;
 	ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
-	ui.sbPoisitionX1->setValue(axisPoints.logicalPos[0].x());
-	ui.sbPoisitionY1->setValue(axisPoints.logicalPos[0].y());
-	ui.sbPoisitionX2->setValue(axisPoints.logicalPos[1].x());
-	ui.sbPoisitionY2->setValue(axisPoints.logicalPos[1].y());
-	ui.sbPoisitionX3->setValue(axisPoints.logicalPos[2].x());
-	ui.sbPoisitionY3->setValue(axisPoints.logicalPos[2].y());
-	ui.sbPoisitionZ1->setValue(axisPoints.logicalPos[0].z());
-	ui.sbPoisitionZ2->setValue(axisPoints.logicalPos[1].z());
-	ui.sbPoisitionZ3->setValue(axisPoints.logicalPos[2].z());
+	ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
+	ui.sbPositionY1->setValue(axisPoints.logicalPos[0].y());
+	ui.sbPositionX2->setValue(axisPoints.logicalPos[1].x());
+	ui.sbPositionY2->setValue(axisPoints.logicalPos[1].y());
+	ui.sbPositionX3->setValue(axisPoints.logicalPos[2].x());
+	ui.sbPositionY3->setValue(axisPoints.logicalPos[2].y());
+	ui.sbPositionZ1->setValue(axisPoints.logicalPos[0].z());
+	ui.sbPositionZ2->setValue(axisPoints.logicalPos[1].z());
+	ui.sbPositionZ3->setValue(axisPoints.logicalPos[2].z());
 	m_initializing = false;
 }
 
@@ -842,15 +842,15 @@ void DatapickerImageWidget::load() {
 	ui.leFileName->setText( m_image->fileName() );
 	ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
-	ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());
-	ui.sbPoisitionY1->setValue(m_image->axisPoints().logicalPos[0].y());
-	ui.sbPoisitionX2->setValue(m_image->axisPoints().logicalPos[1].x());
-	ui.sbPoisitionY2->setValue(m_image->axisPoints().logicalPos[1].y());
-	ui.sbPoisitionX3->setValue(m_image->axisPoints().logicalPos[2].x());
-	ui.sbPoisitionY3->setValue(m_image->axisPoints().logicalPos[2].y());
-	ui.sbPoisitionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
-	ui.sbPoisitionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
-	ui.sbPoisitionZ3->setValue(m_image->axisPoints().logicalPos[2].z());
+	ui.sbPositionX1->setValue(m_image->axisPoints().logicalPos[0].x());
+	ui.sbPositionY1->setValue(m_image->axisPoints().logicalPos[0].y());
+	ui.sbPositionX2->setValue(m_image->axisPoints().logicalPos[1].x());
+	ui.sbPositionY2->setValue(m_image->axisPoints().logicalPos[1].y());
+	ui.sbPositionX3->setValue(m_image->axisPoints().logicalPos[2].x());
+	ui.sbPositionY3->setValue(m_image->axisPoints().logicalPos[2].y());
+	ui.sbPositionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
+	ui.sbPositionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
+	ui.sbPositionZ3->setValue(m_image->axisPoints().logicalPos[2].z());
 	ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType());
 	ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
 	ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);

@@ -95,6 +95,11 @@ void XYDataReductionCurveDock::setupGeneral() {
 		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
 	uiGeneralTab.cbType->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
 
+	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.sbTolerance->setRange(0.0, std::numeric_limits<double>::max());
+	uiGeneralTab.sbTolerance2->setRange(0.0, std::numeric_limits<double>::max());
+
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
