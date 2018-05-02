@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>402</height>
+    <width>255</width>
+    <height>413</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -45,13 +45,33 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="7" column="2">
-       <widget class="QDoubleSpinBox" name="sbEvalMax"/>
+       <widget class="QDoubleSpinBox" name="sbEvalMax">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-999999999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>999999999.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
        <widget class="QLineEdit" name="leEps"/>
       </item>
       <item row="5" column="0">
-       <widget class="QDoubleSpinBox" name="sbMin"/>
+       <widget class="QDoubleSpinBox" name="sbMin">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-999999999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>999999999.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="0" column="2">
        <widget class="QComboBox" name="cbRobust"/>
@@ -111,10 +131,30 @@
        </widget>
       </item>
       <item row="7" column="0">
-       <widget class="QDoubleSpinBox" name="sbEvalMin"/>
+       <widget class="QDoubleSpinBox" name="sbEvalMin">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-999999999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>999999999.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="5" column="2">
-       <widget class="QDoubleSpinBox" name="sbMax"/>
+       <widget class="QDoubleSpinBox" name="sbMax">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-999999999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>999999999.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QCheckBox" name="cbAutoRange">
