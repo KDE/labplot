@@ -108,7 +108,7 @@ void ThemeHandler::setCurrentTheme(const QString& name) {
 }
 
 void ThemeHandler::loadSelected(QString name) {
-	emit (loadThemeRequested(name));
+	emit loadThemeRequested(name);
 	this->setCurrentTheme(name);
 
 	if (!name.isEmpty())
@@ -205,7 +205,7 @@ void ThemeHandler::showPanel() {
 
 // void ThemeHandler::saveNewSelected(const QString& filename) {
 // 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
-// 	emit (saveThemeRequested(config));
+// 	emit saveThemeRequested(config);
 // 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 //
 // 	m_currentLocalTheme = filename;

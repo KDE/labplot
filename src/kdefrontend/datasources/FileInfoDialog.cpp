@@ -84,7 +84,7 @@ FileInfoDialog::~FileInfoDialog() {
 void FileInfoDialog::setFiles(QStringList& files) {
 	QString infoString;
 
-	for (const auto fileName: files) {
+	for (const auto& fileName: files) {
 		if(fileName.isEmpty())
 			continue;
 

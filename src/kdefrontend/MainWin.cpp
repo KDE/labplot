@@ -308,7 +308,7 @@ void MainWin::initGUI(const QString& fileName) {
 		} else if (load == 3) { //open last used project
 			if (!m_recentProjectsAction->urls().isEmpty()) {
 				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
-				openRecentProject( m_recentProjectsAction->urls().first() );
+				openRecentProject( m_recentProjectsAction->urls().constFirst() );
 			}
 		}
 	}
