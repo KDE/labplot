@@ -141,12 +141,12 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twGoodness->setContextMenuPolicy(Qt::CustomContextMenu);
 	uiGeneralTab.twLog->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiGeneralTab.twParameters, SIGNAL(customContextMenuRequested(const QPoint &)), this,
-			SLOT(resultParametersContextMenuRequest(const QPoint &)) );
-	connect(uiGeneralTab.twGoodness, SIGNAL(customContextMenuRequested(const QPoint &)), this,
-			SLOT(resultGoodnessContextMenuRequest(const QPoint &)) );
-	connect(uiGeneralTab.twLog, SIGNAL(customContextMenuRequested(const QPoint &)), this,
-			SLOT(resultLogContextMenuRequest(const QPoint &)) );
+	connect(uiGeneralTab.twParameters, SIGNAL(customContextMenuRequested(QPoint)), this,
+			SLOT(resultParametersContextMenuRequest(QPoint)) );
+	connect(uiGeneralTab.twGoodness, SIGNAL(customContextMenuRequested(QPoint)), this,
+			SLOT(resultGoodnessContextMenuRequest(QPoint)) );
+	connect(uiGeneralTab.twLog, SIGNAL(customContextMenuRequested(QPoint)), this,
+			SLOT(resultLogContextMenuRequest(QPoint)) );
 
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);

@@ -56,7 +56,7 @@ private:
 	bool m_initializing;
 
 private  slots:
-	void showTabContextMenu(const QPoint&);
+	void showTabContextMenu(QPoint);
 	void itemSelected(int);
 	void tabChanged(int);
 	void tabMoved(int,int);

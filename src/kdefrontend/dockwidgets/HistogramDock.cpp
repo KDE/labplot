@@ -464,12 +464,12 @@ void HistogramDock::curveValuesOpacityChanged(qreal opacity) {
 	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
-void HistogramDock::curveValuesPrefixChanged(QString prefix) {
+void HistogramDock::curveValuesPrefixChanged(const QString& prefix) {
 	m_initializing = true;
   	ui.leValuesPrefix->setText(prefix);
 	m_initializing = false;
 }
-void HistogramDock::curveValuesSuffixChanged(QString suffix) {
+void HistogramDock::curveValuesSuffixChanged(const QString& suffix) {
 	m_initializing = true;
   	ui.leValuesSuffix->setText(suffix);
 	m_initializing = false;
@@ -1080,7 +1080,7 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void HistogramDock::curveHistogramDataChanged(const Histogram::HistogramData& data) {
+void HistogramDock::curveHistogramDataChanged(Histogram::HistogramData data) {
 	m_initializing = true;
 	uiGeneralTab.cbHistogramType->setCurrentIndex(data.type);
 	uiGeneralTab.cbBins->setCurrentIndex(data.binsOption);

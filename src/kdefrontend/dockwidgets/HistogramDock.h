@@ -131,8 +131,8 @@ private slots:
 	void curveValuesDistanceChanged(qreal);
 	void curveValuesOpacityChanged(qreal);
 	void curveValuesRotationAngleChanged(qreal);
-	void curveValuesPrefixChanged(QString);
-	void curveValuesSuffixChanged(QString);
+	void curveValuesPrefixChanged(const QString&);
+	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
 
@@ -148,7 +148,7 @@ private slots:
 	void curveFillingOpacityChanged(float);
 
 	void curveDescriptionChanged(const AbstractAspect*);
-	void curveHistogramDataChanged(const Histogram::HistogramData&);
+	void curveHistogramDataChanged(Histogram::HistogramData);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

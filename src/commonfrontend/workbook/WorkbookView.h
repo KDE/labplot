@@ -71,7 +71,7 @@ class WorkbookView : public QWidget {
 
 	private  slots:
 		void createContextMenu(QMenu*) const;
-		void showTabContextMenu(const QPoint&);
+		void showTabContextMenu(QPoint);
 		void addSpreadsheet();
 		void addMatrix();
 		void itemSelected(int);

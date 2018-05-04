@@ -158,7 +158,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 }
 
-void WorkbookView::showTabContextMenu(const QPoint& point) {
+void WorkbookView::showTabContextMenu(QPoint point) {
 	QMenu* menu = 0;
 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(m_tabWidget->currentIndex());
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);

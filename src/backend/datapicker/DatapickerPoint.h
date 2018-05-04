@@ -105,16 +105,16 @@ private:
 
 signals:
 	friend class DatapickerPointSetPositionCmd;
-	void positionChanged(const QPointF&);
+	void positionChanged(QPointF);
 
 	friend class DatapickerPointSetPlusDeltaXPosCmd;
 	friend class DatapickerPointSetMinusDeltaXPosCmd;
 	friend class DatapickerPointSetPlusDeltaYPosCmd;
 	friend class DatapickerPointSetMinusDeltaYPosCmd;
-	void plusDeltaXPosChanged(const QPointF&);
-	void minusDeltaXPosChanged(const QPointF&);
-	void plusDeltaYPosChanged(const QPointF&);
-	void minusDeltaYPosChanged(const QPointF&);
+	void plusDeltaXPosChanged(QPointF);
+	void minusDeltaXPosChanged(QPointF);
+	void plusDeltaYPosChanged(QPointF);
+	void minusDeltaYPosChanged(QPointF);
 };
 
 #endif

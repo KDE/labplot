@@ -249,7 +249,7 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 /*!
 	sets the position without undo/redo-stuff
 */
-void TextLabel::setPosition(const QPointF& point) {
+void TextLabel::setPosition(QPointF point) {
 	Q_D(TextLabel);
 	if (point != d->position.point) {
 		d->position.point = point;
@@ -591,7 +591,7 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 /*!
  *	converts label's position to GraphicsItem's position.
  */
-QPointF TextLabelPrivate::positionFromItemPosition(const QPointF& itemPos) {
+QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
 	float x = itemPos.x();
 	float y = itemPos.y();
 	float w, h;

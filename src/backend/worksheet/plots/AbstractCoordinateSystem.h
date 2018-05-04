@@ -49,10 +49,10 @@ class AbstractCoordinateSystem {
 		virtual ~AbstractCoordinateSystem();
 
 		virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
-		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const = 0;
+		virtual QPointF mapLogicalToScene(QPointF, const MappingFlags& flags = DefaultMapping) const = 0;
 		virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
-		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QPointF mapSceneToLogical(QPointF, const MappingFlags &flags = DefaultMapping) const = 0;
 
 		class LineClipResult {
 			public:

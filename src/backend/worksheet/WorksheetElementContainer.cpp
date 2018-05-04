@@ -120,8 +120,8 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	if (isLoading())
-		return;
+// 	if (isLoading())
+// 		return;
 
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
@@ -236,6 +236,9 @@ void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 }
 
 void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
+// 	if (q->isLoading())
+// 		return;
+
 	boundingRectangle = QRectF();
 	containerShape = QPainterPath();
 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);

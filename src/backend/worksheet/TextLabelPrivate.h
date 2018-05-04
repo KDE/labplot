@@ -62,7 +62,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		bool swapVisible(bool on);
 		virtual void recalcShapeAndBoundingRect();
 		void updatePosition();
-		QPointF positionFromItemPosition(const QPointF&);
+		QPointF positionFromItemPosition(QPointF);
 		void updateText();
 		void updateTeXImage();
 		QStaticText staticText;

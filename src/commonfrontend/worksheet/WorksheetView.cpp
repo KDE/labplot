@@ -824,7 +824,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-bool WorksheetView::isPlotAtPos(const QPoint& pos) const {
+bool WorksheetView::isPlotAtPos(QPoint pos) const {
 	bool plot = false;
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
@@ -836,7 +836,7 @@ bool WorksheetView::isPlotAtPos(const QPoint& pos) const {
 	return plot;
 }
 
-CartesianPlot* WorksheetView::plotAt(const QPoint& pos) const {
+CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 	QGraphicsItem* item = itemAt(pos);
 	if (!item)
 		return nullptr;

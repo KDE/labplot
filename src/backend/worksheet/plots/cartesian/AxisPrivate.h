@@ -144,7 +144,7 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
-	void addArrow(const QPointF& point, int direction);
+	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int);
 	int lowerLabelsPrecision(int);
 	double roundP(double value, int precision);

@@ -1020,7 +1020,7 @@ void AxisPrivate::retransformArrow() {
 	recalcShapeAndBoundingRect();
 }
 
-void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
+void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 	static const double cos_phi = cos(M_PI/6.);
 
 	if (orientation == Axis::AxisHorizontal) {

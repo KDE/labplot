@@ -179,7 +179,7 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
  * \brief Modifies the number of samples to keep in each of the live data sources
  * \param keepNvalues
  */
-void LiveDataDock::keepNvaluesChanged(QString keepNvalues) {
+void LiveDataDock::keepNvaluesChanged(const QString& keepNvalues) {
 	for (auto* source : m_liveDataSources)
 		source->setKeepNvalues(keepNvalues.toInt());
 }

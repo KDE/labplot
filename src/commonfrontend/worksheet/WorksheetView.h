@@ -77,8 +77,8 @@ private:
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
-	bool isPlotAtPos(const QPoint&) const;
-	CartesianPlot* plotAt(const QPoint&) const;
+	bool isPlotAtPos(QPoint) const;
+	CartesianPlot* plotAt(QPoint) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 

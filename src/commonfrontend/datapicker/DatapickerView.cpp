@@ -152,7 +152,7 @@ void DatapickerView::itemSelected(int index) {
 	m_initializing = false;
 }
 
-void DatapickerView::showTabContextMenu(const QPoint& point) {
+void DatapickerView::showTabContextMenu(QPoint point) {
 	QMenu* menu = 0;
 	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
