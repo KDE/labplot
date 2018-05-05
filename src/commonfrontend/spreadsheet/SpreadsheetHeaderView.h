@@ -65,7 +65,7 @@ private slots:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 
 protected:
-	virtual void paintSection(QPainter*, QRect, int logicalIndex) const;
+	virtual void paintSection(QPainter*, const QRect&, int logicalIndex) const;
 };
 
 #endif
