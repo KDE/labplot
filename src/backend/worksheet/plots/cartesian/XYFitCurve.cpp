@@ -197,49 +197,49 @@ void XYFitCurve::initFitData(PlotDataDialog::AnalysisAction action) {
 	if (action == PlotDataDialog::FitLinear) {
 		//Linear
 		fitData.modelCategory = nsl_fit_model_basic;
-		fitData.modelType = nsl_fit_model_polynomial;
+		fitData.modelType = (int)nsl_fit_model_polynomial;
 		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitPower) {
 		//Power
 		fitData.modelCategory = nsl_fit_model_basic;
-		fitData.modelType = nsl_fit_model_power;
+		fitData.modelType = (int)nsl_fit_model_power;
 		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitExp1) {
 		//Exponential (degree 1)
 		fitData.modelCategory = nsl_fit_model_basic;
-		fitData.modelType = nsl_fit_model_exponential;
+		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitExp2) {
 		//Exponential (degree 2)
 		fitData.modelCategory = nsl_fit_model_basic;
-		fitData.modelType = nsl_fit_model_exponential;
+		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 2;
 	} else if (action == PlotDataDialog::FitInvExp) {
 		//Inverse exponential
 		fitData.modelCategory = nsl_fit_model_basic;
-		fitData.modelType = nsl_fit_model_inverse_exponential;
+		fitData.modelType = (int)nsl_fit_model_inverse_exponential;
 	} else if (action == PlotDataDialog::FitGauss) {
 		//Gauss
 		fitData.modelCategory = nsl_fit_model_peak;
-		fitData.modelType = nsl_fit_model_gaussian;
+		fitData.modelType = (int)nsl_fit_model_gaussian;
 		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitCauchyLorentz) {
 		//Cauchy-Lorentz
 		fitData.modelCategory = nsl_fit_model_peak;
-		fitData.modelType = nsl_fit_model_lorentz;
+		fitData.modelType = (int)nsl_fit_model_lorentz;
 		fitData.degree = 1;
 	} else if (action == PlotDataDialog::FitTan) {
 		//Arc tangent
 		fitData.modelCategory = nsl_fit_model_growth;
-		fitData.modelType = nsl_fit_model_atan;
+		fitData.modelType = (int)nsl_fit_model_atan;
 	} else if (action == PlotDataDialog::FitTanh) {
 		//Hyperbolic tangent
 		fitData.modelCategory = nsl_fit_model_growth;
-		fitData.modelType = nsl_fit_model_tanh;
+		fitData.modelType = (int)nsl_fit_model_tanh;
 	} else if (action == PlotDataDialog::FitErrFunc) {
 		//Error function
 		fitData.modelCategory = nsl_fit_model_growth;
-		fitData.modelType = nsl_fit_model_erf;
+		fitData.modelType = (int)nsl_fit_model_erf;
 	} else {
 		//Custom
 		fitData.modelCategory = nsl_fit_model_custom;
@@ -630,15 +630,14 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 		// set some model-dependent start values
 		if (modelCategory == nsl_fit_model_distribution) {
-			nsl_sf_stats_distribution type = (nsl_sf_stats_distribution)modelType;
-			if (type == nsl_sf_stats_flat)
+			if (modelType == nsl_sf_stats_flat)
 				paramStartValues[0] = -1.0;
-			else if (type == nsl_sf_stats_frechet || type == nsl_sf_stats_levy || type == nsl_sf_stats_exponential_power)
+			else if (modelType == nsl_sf_stats_frechet || modelType == nsl_sf_stats_levy || modelType == nsl_sf_stats_exponential_power)
 				paramStartValues[1] = 0.0;
-			else if (type == nsl_sf_stats_weibull || type == nsl_sf_stats_gumbel2)
+			else if (modelType == nsl_sf_stats_weibull || modelType == nsl_sf_stats_gumbel2)
 				paramStartValues[2] = 0.0;
-			else if (type == nsl_sf_stats_binomial || type == nsl_sf_stats_negative_binomial || type == nsl_sf_stats_pascal
-				|| type == nsl_sf_stats_geometric || type == nsl_sf_stats_logarithmic)
+			else if (modelType == nsl_sf_stats_binomial || modelType == nsl_sf_stats_negative_binomial || modelType == nsl_sf_stats_pascal
+				|| modelType == nsl_sf_stats_geometric || modelType == nsl_sf_stats_logarithmic)
 				paramStartValues[0] = 0.5;
 		}
 	}
@@ -971,46 +970,46 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		}
 		break;
-	case nsl_fit_model_growth:
-		switch (modelType) {
-		case nsl_fit_model_atan:
-		case nsl_fit_model_tanh:
-		case nsl_fit_model_algebraic_sigmoid:
-		case nsl_fit_model_sigmoid: 		// Y(x) = a/(1+exp(-k*(x-mu)))
-		case nsl_fit_model_erf:
-		case nsl_fit_model_hill:
-		case nsl_fit_model_gompertz:		// Y(x) = a*exp(-b*exp(-c*x));
-		case nsl_fit_model_gudermann: {
-			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
+	case nsl_fit_model_growth: {
+		const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 
-				for (unsigned int j = 0; j < 3; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-					else {
-						if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_atan)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_tanh)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_algebraic_sigmoid)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_sigmoid)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_erf)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_hill)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_gompertz)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gompertz_param_deriv(j, x, s, mu, a, weight[i]));
-						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_gudermann)
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gudermann_param_deriv(j, x, s, mu, a, weight[i]));
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+
+			for (unsigned int j = 0; j < 3; j++) {
+				if (fixed[j]) {
+					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+				} else {
+					switch (modelType) {
+					case nsl_fit_model_atan:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_tanh:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_algebraic_sigmoid:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_sigmoid:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_erf:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_hill:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_gompertz:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gompertz_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
+					case nsl_fit_model_gudermann:
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gudermann_param_deriv(j, x, s, mu, a, weight[i]));
+						break;
 					}
 				}
 			}
-			break;
 		}
 		}
 		break;
