@@ -46,6 +46,7 @@
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
 	: AbstractPart(name), scripted(engine),
+	m_view(nullptr),
 	m_activeCurve(nullptr),
 	m_transform(new Transform()),
 	m_image(nullptr) {

@@ -34,6 +34,8 @@
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 	: statisticsAvailable(false),
+	hasValues(false),
+	hasValuesAvailable(false),
 	m_column_mode(mode),
 	m_plot_designation(AbstractColumn::NoDesignation),
 	m_width(0),

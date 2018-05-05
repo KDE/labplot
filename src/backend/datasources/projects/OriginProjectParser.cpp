@@ -590,9 +590,6 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	// alternative: int rows = excel.maxRows;
 	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
 
-	if (rows < 0 || (int)cols < 0)
-		return false;
-
 	//TODO QLocale locale = mw->locale();
 
 	spreadsheet->setRowCount(rows);
