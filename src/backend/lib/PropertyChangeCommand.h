@@ -68,7 +68,11 @@ public:
 		if (other->id() != id())
 			return false;
 
-		*m_property += *(static_cast<const PropertyChangeCommand*>(other)->m_property);
+		if (std::is_same<T, bool>::value)
+			*m_property = *(static_cast<const PropertyChangeCommand*>(other)->m_property);
+		else
+			*m_property += *(static_cast<const PropertyChangeCommand*>(other)->m_property);
+
 		return true;
 	}
 
