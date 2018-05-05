@@ -31,6 +31,9 @@
 
 OriginAnyParser::OriginAnyParser(const string& fileName)
 :	file(fileName.c_str(),ios::binary),
+	logfile(NULL),
+	d_file_size(0),
+	curpos(0),
 	objectIndex(0),
 	parseError(0),
 	ispread(-1),

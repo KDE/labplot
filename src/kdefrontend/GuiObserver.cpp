@@ -96,7 +96,7 @@
   \ingroup kdefrontend
 */
 
-GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0) {
+GuiObserver::GuiObserver(MainWin* mainWin) {
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)),
 	        this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
 	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)),
