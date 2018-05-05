@@ -177,7 +177,7 @@ private:
 
 class ColumnSetFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetFormulaCmd(ColumnPrivate* col, Interval<int> interval, const QString& formula, QUndoCommand* parent = 0);
+	explicit ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent = 0);
 
 	void redo() override;
 	void undo() override;

@@ -74,13 +74,13 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		explicit CartesianCoordinateSystem(CartesianPlot*);
 		~CartesianCoordinateSystem() override;
 
-		QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const override;
-		void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
-		QPointF mapLogicalToScene(QPointF, const MappingFlags& flags = DefaultMapping) const override;
-		QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, const MappingFlags &flags = DefaultMapping) const override;
+		QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const override;
+		void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags = DefaultMapping) const;
+		QPointF mapLogicalToScene(QPointF, MappingFlags flags = DefaultMapping) const override;
+		QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = DefaultMapping) const override;
 
-		QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, const MappingFlags &flags = DefaultMapping) const override;
-		QPointF mapSceneToLogical(QPointF, const MappingFlags &flags = DefaultMapping) const override;
+		QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = DefaultMapping) const override;
+		QPointF mapSceneToLogical(QPointF, MappingFlags flags = DefaultMapping) const override;
 
 		int xDirection() const;
 		int yDirection() const;
@@ -91,7 +91,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 
 	private:
 		void init();
-		bool rectContainsPoint(const QRectF&, const QPointF&) const;
+		bool rectContainsPoint(const QRectF&, QPointF) const;
 		CartesianCoordinateSystemPrivate* d;
 };
 

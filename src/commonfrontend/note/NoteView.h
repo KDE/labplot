@@ -4,7 +4,7 @@
     Description          : Notes View for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,24 +37,23 @@ class QTextEdit;
 class QPrinter;
 
 class NoteView : public QWidget {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit NoteView(Note* notes);
+public:
+	explicit NoteView(Note* notes);
 
-	public slots:
-		void print(QPrinter*) const;
+public slots:
+	void print(QPrinter*) const;
 
-	private slots:
-		void backgroundColorChanged(QColor);
-		void textColorChanged(QColor);
-		void textFontChanged(QFont);
-		void textChanged();
+private slots:
+	void backgroundColorChanged(QColor);
+	void textColorChanged(QColor);
+	void textFontChanged(const QFont&);
+	void textChanged();
 
-	private:
-		Note* m_notes;
-		QTextEdit* m_textEdit;
-
+private:
+	Note* m_notes;
+	QTextEdit* m_textEdit;
 };
 
 #endif // NOTEVIEW_H

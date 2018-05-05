@@ -83,11 +83,11 @@ private slots:
     void symbolSizeChanged(qreal);
     void symbolRotationAngleChanged(qreal);
     void symbolOpacityChanged(qreal);
-    void symbolBrushChanged(QBrush);
+    void symbolBrushChanged(const QBrush&);
     void symbolPenChanged(const QPen&);
     void symbolVisibleChanged(bool);
     void symbolErrorBarSizeChanged(qreal);
-    void symbolErrorBarBrushChanged(QBrush);
+    void symbolErrorBarBrushChanged(const QBrush&);
 };
 
 #endif // DATAPICKERCURVEWIDGET_H

@@ -80,8 +80,8 @@ public:
 
 	QString formula(int) const  override;
 	QVector< Interval<int> > formulaIntervals() const override;
-	void setFormula(Interval<int>, QString) override;
-	void setFormula(int, QString) override;
+	void setFormula(const Interval<int>&, const QString&) override;
+	void setFormula(int, const QString&) override;
 	void clearFormulas() override;
 
 	const AbstractColumn::ColumnStatistics& statistics();
@@ -92,9 +92,9 @@ public:
 	void setTextAt(int, const QString&) override;
 	void replaceTexts(int, const QVector<QString>&) override;
 	QDate dateAt(int) const override;
-	void setDateAt(int, const QDate&) override;
+	void setDateAt(int, QDate) override;
 	QTime timeAt(int) const override;
-	void setTimeAt(int, const QTime&) override;
+	void setTimeAt(int, QTime) override;
 	QDateTime dateTimeAt(int) const override;
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;

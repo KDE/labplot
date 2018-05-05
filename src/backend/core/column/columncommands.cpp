@@ -706,7 +706,7 @@ void ColumnSetGlobalFormulaCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, Interval<int> interval, const QString& formula, QUndoCommand* parent)
+ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false) {
 	setText(i18n("%1: set cell formula", col->name()));
 }

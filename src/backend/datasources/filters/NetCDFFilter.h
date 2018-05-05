@@ -50,7 +50,7 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
-	void setCurrentVarName(const QString);
+	void setCurrentVarName(const QString&);
 	const QString currentVarName() const;
 
 	void setStartRow(const int);

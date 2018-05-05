@@ -91,7 +91,7 @@ public:
 	bool removeQuotesEnabled() const;
 	void setCreateIndexEnabled(const bool);
 
-	void setVectorNames(const QString);
+	void setVectorNames(const QString&);
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
 

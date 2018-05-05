@@ -97,7 +97,7 @@ void NetCDFFilter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 
-void NetCDFFilter::setCurrentVarName(QString ds) {
+void NetCDFFilter::setCurrentVarName(const QString& ds) {
 	d->currentVarName = ds;
 }
 
@@ -149,7 +149,7 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
 }
 
 #ifdef HAVE_NETCDF
-void NetCDFFilterPrivate::handleError(int err, QString function) {
+void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	if (err != NC_NOERR)
 		qDebug() << "NETCDF ERROR:" << function << "() - " << nc_strerror(m_status);
 }

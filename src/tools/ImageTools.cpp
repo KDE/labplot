@@ -32,7 +32,7 @@
 	\brief Provides static functions implementing different image processing algorithms.
 	\ingroup tools
 */
-QImage ImageTools::blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly) {
+QImage ImageTools::blurred(const QImage& image, QRect rect, int radius, bool alphaOnly) {
 	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
 	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
 

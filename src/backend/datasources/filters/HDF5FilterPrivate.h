@@ -63,7 +63,7 @@ private:
 	QList<unsigned long> m_multiLinkList;	// used to find hard links
 
 #ifdef HAVE_HDF5
-	void handleError(int err, QString function, QString arg=QString());
+	void handleError(int err, const QString& function, const QString& arg = QString());
 	QString translateHDF5Order(H5T_order_t);
 	QString translateHDF5Type(hid_t);
 	QString translateHDF5Class(H5T_class_t);

@@ -58,7 +58,7 @@ private:
 #ifdef HAVE_NETCDF
 	int m_status;
 
-	void handleError(int status, QString function);
+	void handleError(int status, const QString& function);
 	QString translateDataType(nc_type type);
 	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
 	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);

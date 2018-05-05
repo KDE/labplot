@@ -57,7 +57,7 @@ class ThemeHandler : public QWidget {
 // 		QPushButton* pbPublishTheme;
 
 	private slots:
-		void loadSelected(QString);
+		void loadSelected(const QString&);
 		void showPanel();
 // 		void saveMenu();
 // 		void saveNewSelected(const QString&);

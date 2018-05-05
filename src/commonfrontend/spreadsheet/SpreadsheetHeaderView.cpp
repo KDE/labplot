@@ -101,7 +101,7 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(headerDataChanged(Qt::Orientation,int,int)));
 }
 
-void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
+void SpreadsheetHeaderView::paintSection(QPainter* painter, QRect rect, int logicalIndex) const {
 	QRect master_rect = rect;
 	if(m_showComments)
 		master_rect = rect.adjusted(0, 0, 0, -m_slave->sizeHint().height());

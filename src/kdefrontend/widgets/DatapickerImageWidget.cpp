@@ -808,7 +808,7 @@ void DatapickerImageWidget::symbolOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void DatapickerImageWidget::symbolBrushChanged(QBrush brush) {
+void DatapickerImageWidget::symbolBrushChanged(const QBrush& brush) {
 	m_initializing = true;
 	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbSymbolFillingColor->setColor(brush.color());

@@ -73,7 +73,7 @@ public:
 	void replaceData(void*);
 
 	IntervalAttribute<QString> formulaAttribute() const;
-	void replaceFormulas(IntervalAttribute<QString> formulas);
+	void replaceFormulas(const IntervalAttribute<QString>& formulas);
 
 	QString formula() const;
 	const QStringList& formulaVariableNames() const;
@@ -90,9 +90,9 @@ public:
 	void replaceTexts(int first, const QVector<QString>&);
 
 	QDate dateAt(int row) const;
-	void setDateAt(int row, const QDate&);
+	void setDateAt(int row, QDate);
 	QTime timeAt(int row) const;
-	void setTimeAt(int row, const QTime&);
+	void setTimeAt(int row, QTime);
 	QDateTime dateTimeAt(int row) const;
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);

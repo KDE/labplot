@@ -213,7 +213,7 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 //##############################################################################
 //######################### logical to scene mappers ###########################
 //##############################################################################
-QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, const MappingFlags &flags) const {
+QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
@@ -260,7 +260,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
 												  QVector<QPointF>& scenePoints,
 												  std::vector<bool>& visiblePoints,
-												  const MappingFlags& flags) const{
+												  MappingFlags flags) const{
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -297,7 +297,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	}
 }
 
-QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, const MappingFlags& flags) const{
+QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const{
 	const QRectF pageRect = d->plot->dataRect();
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -331,7 +331,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, const
 	return QPointF();
 }
 
-QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, const MappingFlags &flags) const{
+QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const{
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QLineF> result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
@@ -488,7 +488,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 //##############################################################################
 //######################### scene to logical mappers ###########################
 //##############################################################################
-QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF> &points, const MappingFlags &flags) const{
+QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF>& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
@@ -538,7 +538,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 	return result;
 }
 
-QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, const MappingFlags& flags) const {
+QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QPointF result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
@@ -631,7 +631,7 @@ QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
  * comparison of float numbers correctly.
  * TODO: check whether the newer versions of Qt do the comparison correctly.
  */
-bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, const QPointF& point) const{
+bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF point) const {
 	qreal l = rect.x();
 	qreal r = rect.x();
 	qreal w = rect.width();

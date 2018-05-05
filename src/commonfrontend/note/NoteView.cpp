@@ -38,7 +38,7 @@ NoteView::NoteView(Note* notes) : m_notes(notes) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
-	
+
 	m_textEdit = new QTextEdit(this);
 
 	QPalette palette = m_textEdit->palette();
@@ -51,7 +51,7 @@ NoteView::NoteView(Note* notes) : m_notes(notes) {
 	m_textEdit->setText(m_notes->note());
 
 	layout->addWidget(m_textEdit);
-	
+
 	connect(m_notes, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(backgroundColorChanged(QColor)));
 	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
 	connect(m_notes, SIGNAL(textFontChanged(QFont)), this, SLOT(textFontChanged(QFont)));
@@ -72,7 +72,7 @@ void NoteView::backgroundColorChanged(QColor color) {
 	m_textEdit->setPalette(palette);
 }
 
-void NoteView::textFontChanged(QFont font) {
+void NoteView::textFontChanged(const QFont& font) {
 	m_textEdit->setFont(font);
 }
 

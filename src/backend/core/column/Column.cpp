@@ -319,14 +319,14 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
 /**
  * \brief Set a formula string for an interval of rows
  */
-void Column::setFormula(Interval<int> i, QString formula) {
+void Column::setFormula(const Interval<int>& i, const QString& formula) {
 	exec(new ColumnSetFormulaCmd(d, i, formula));
 }
 
 /**
  * \brief Overloaded function for convenience
  */
-void Column::setFormula(int row, QString formula) {
+void Column::setFormula(int row, const QString& formula) {
 	setFormula(Interval<int>(row, row), formula);
 }
 
@@ -375,7 +375,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::setDateAt(int row, const QDate& new_value) {
+void Column::setDateAt(int row, QDate new_value) {
 	d->statisticsAvailable = false;;
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
@@ -385,7 +385,7 @@ void Column::setDateAt(int row, const QDate& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::setTimeAt(int row, const QTime& new_value) {
+void Column::setTimeAt(int row, QTime new_value) {
 	d->statisticsAvailable = false;;
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }

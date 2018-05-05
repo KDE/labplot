@@ -37,7 +37,7 @@ class String2IntegerFilter : public AbstractSimpleFilter {
 
 public:
 	String2IntegerFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(QLocale locale) { m_numeric_locale = locale; m_use_default_locale = false; }
+	void setNumericLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
 	void setNumericLocaleToDefault() { m_use_default_locale = true; }
 
 	int integerAt(int row) const override {

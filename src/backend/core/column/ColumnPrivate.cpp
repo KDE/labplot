@@ -1076,7 +1076,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void ColumnPrivate::setDateAt(int row, const QDate& new_value) {
+void ColumnPrivate::setDateAt(int row, QDate new_value) {
 	if (m_column_mode != AbstractColumn::DateTime &&
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
@@ -1090,7 +1090,7 @@ void ColumnPrivate::setDateAt(int row, const QDate& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void ColumnPrivate::setTimeAt(int row, const QTime& new_value) {
+void ColumnPrivate::setTimeAt(int row, QTime new_value) {
 	if (m_column_mode != AbstractColumn::DateTime &&
 	        m_column_mode != AbstractColumn::Month &&
 	        m_column_mode != AbstractColumn::Day)
@@ -1236,6 +1236,6 @@ IntervalAttribute<QString> ColumnPrivate::formulaAttribute() const {
 /**
  * \brief Replace the interval attribute for the formula strings
  */
-void ColumnPrivate::replaceFormulas(IntervalAttribute<QString> formulas) {
+void ColumnPrivate::replaceFormulas(const IntervalAttribute<QString>& formulas) {
 	m_formulas = formulas;
 }

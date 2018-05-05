@@ -107,7 +107,7 @@ void ThemeHandler::setCurrentTheme(const QString& name) {
 	m_currentTheme = name;
 }
 
-void ThemeHandler::loadSelected(QString name) {
+void ThemeHandler::loadSelected(const QString& name) {
 	emit loadThemeRequested(name);
 	this->setCurrentTheme(name);
 

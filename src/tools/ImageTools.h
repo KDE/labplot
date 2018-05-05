@@ -33,7 +33,7 @@
 class ImageTools {
 
 public:
-	static QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false);
+	static QImage blurred(const QImage& image, QRect rect, int radius, bool alphaOnly = false);
 };
 
 #endif

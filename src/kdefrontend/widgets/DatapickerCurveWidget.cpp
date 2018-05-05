@@ -462,7 +462,7 @@ void DatapickerCurveWidget::symbolOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void DatapickerCurveWidget::symbolBrushChanged(QBrush brush) {
+void DatapickerCurveWidget::symbolBrushChanged(const QBrush& brush) {
 	m_initializing = true;
 	ui.cbFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbFillingColor->setColor(brush.color());
@@ -470,7 +470,7 @@ void DatapickerCurveWidget::symbolBrushChanged(QBrush brush) {
 	m_initializing = false;
 }
 
-void DatapickerCurveWidget::symbolErrorBarBrushChanged(QBrush brush) {
+void DatapickerCurveWidget::symbolErrorBarBrushChanged(const QBrush& brush) {
 	m_initializing = true;
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());

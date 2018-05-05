@@ -298,7 +298,7 @@ bool AsciiFilter::removeQuotesEnabled() const {
 	return d->removeQuotesEnabled;
 }
 
-void AsciiFilter::setVectorNames(const QString s) {
+void AsciiFilter::setVectorNames(const QString& s) {
 	d->vectorNames.clear();
 	if (!s.simplified().isEmpty())
 		d->vectorNames = s.simplified().split(' ');

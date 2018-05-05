@@ -104,7 +104,7 @@ ResizableTextEdit::ResizableTextEdit(QWidget* parent, bool vertResizeOnly) : QTe
 
 }
 
-void ResizableTextEdit::addSize(const QSize& size) {
+void ResizableTextEdit::addSize(QSize size) {
 	m_size = QSize(m_size.width(), m_size.height() + size.height());
 	updateGeometry();
 }

@@ -157,25 +157,25 @@ public:
 	bool isValid(int row) const;
 
 	bool isMasked(int row) const;
-	bool isMasked(Interval<int> i) const;
+	bool isMasked(const Interval<int>& i) const;
 	QVector< Interval<int> > maskedIntervals() const;
 	void clearMasks();
-	void setMasked(Interval<int> i, bool mask = true);
+	void setMasked(const Interval<int>& i, bool mask = true);
 	void setMasked(int row, bool mask = true);
 
 	virtual QString formula(int row) const;
 	virtual QVector< Interval<int> > formulaIntervals() const;
-	virtual void setFormula(Interval<int> i, QString formula);
-	virtual void setFormula(int row, QString formula);
+	virtual void setFormula(const Interval<int>& i, const QString& formula);
+	virtual void setFormula(int row, const QString& formula);
 	virtual void clearFormulas();
 
 	virtual QString textAt(int row) const;
 	virtual void setTextAt(int row, const QString& new_value);
 	virtual void replaceTexts(int first, const QVector<QString>& new_values);
 	virtual QDate dateAt(int row) const;
-	virtual void setDateAt(int row, const QDate& new_value);
+	virtual void setDateAt(int row, QDate new_value);
 	virtual QTime timeAt(int row) const;
-	virtual void setTimeAt(int row, const QTime& new_value);
+	virtual void setTimeAt(int row, QTime new_value);
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
 	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
@@ -202,8 +202,8 @@ signals:
 	void aboutToBeDestroyed(const AbstractColumn* source);
 
 protected:
-	bool XmlReadMask(XmlStreamReader* reader);
-	void XmlWriteMask(QXmlStreamWriter* writer) const;
+	bool XmlReadMask(XmlStreamReader*);
+	void XmlWriteMask(QXmlStreamWriter*) const;
 
 	virtual void handleRowInsertion(int before, int count);
 	virtual void handleRowRemoval(int first, int count);

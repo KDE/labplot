@@ -95,7 +95,7 @@ void HDF5Filter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 
-void HDF5Filter::setCurrentDataSetName(QString ds) {
+void HDF5Filter::setCurrentDataSetName(const QString& ds) {
 	d->currentDataSetName = ds;
 }
 
@@ -147,7 +147,7 @@ HDF5FilterPrivate::HDF5FilterPrivate(HDF5Filter* owner) :
 }
 
 #ifdef HAVE_HDF5
-void HDF5FilterPrivate::handleError(int err, QString function, QString arg) {
+void HDF5FilterPrivate::handleError(int err, const QString& function, const QString& arg) {
 #ifdef NDEBUG
 	Q_UNUSED(err)
 	Q_UNUSED(function)

@@ -301,7 +301,7 @@ bool AbstractColumn::isMasked(int row) const {
 /**
  * \brief Return whether a certain interval of rows is fully masked
  */
-bool AbstractColumn::isMasked(Interval<int> i) const {
+bool AbstractColumn::isMasked(const Interval<int>& i) const {
 	return d->m_masking.isSet(i);
 }
 
@@ -326,7 +326,7 @@ void AbstractColumn::clearMasks() {
  * \param i the interval
  * \param mask true: mask, false: unmask
  */
-void AbstractColumn::setMasked(Interval<int> i, bool mask) {
+void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
 	exec(new AbstractColumnSetMaskedCmd(d, i, mask),
 	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
@@ -375,14 +375,14 @@ QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
 /**
  * \brief Set a formula string for an interval of rows
  */
-void AbstractColumn::setFormula(Interval<int> i, QString formula) {
+void AbstractColumn::setFormula(const Interval<int>& i, const QString& formula) {
 	Q_UNUSED(i) Q_UNUSED(formula)
 }
 
 /**
  * \brief Overloaded function for convenience
  */
-void AbstractColumn::setFormula(int row, QString formula) {
+void AbstractColumn::setFormula(int row, const QString& formula) {
 	Q_UNUSED(row) Q_UNUSED(formula)
 }
 
@@ -443,7 +443,7 @@ QDate AbstractColumn::dateAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setDateAt(int row, const QDate& new_value) {
+void AbstractColumn::setDateAt(int row, QDate new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
 };
 
@@ -462,7 +462,7 @@ QTime AbstractColumn::timeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setTimeAt(int row, const QTime& new_value) {
+void AbstractColumn::setTimeAt(int row, QTime new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
 }
 
