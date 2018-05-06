@@ -1243,7 +1243,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				break;
 				case 'F': {
 					Origin::Function function;
-					const vector<Origin::Function>::size_type funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
+					const vector<Origin::Function>::difference_type funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
+					if (funcIndex < 0) {
+						++curveIndex;
+						continue;
+					}
+
 					function = m_originFile->function(funcIndex);
 
 					XYEquationCurve* xyEqCurve = new XYEquationCurve(function.name.c_str());

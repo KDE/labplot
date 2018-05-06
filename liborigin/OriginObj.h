@@ -798,7 +798,7 @@ namespace Origin
 		:	attach(Frame)
 		,	size(0)
 		,	windowName(_name)
-		,	borderType(Origin::None)
+		,	borderType(BlackLine)
 		,	data(0)
 		{
 		};
@@ -837,7 +837,7 @@ namespace Origin
 		,	reverseOrder(false)
 		,	labelGap(5)
 		,	colorBarThickness(3)
-		,	labelsColor({Color::Regular, {Color::White}})
+		,	labelsColor({Color::Regular, Color::Black})
 		{};
 	};
 
@@ -893,7 +893,12 @@ namespace Origin
 		bool orthographic3D;
 
 		GraphLayer()
-		:	xAngle(0)
+		:	backgroundColor({Color::Regular, Color::White})
+		,	borderType(BlackLine)
+		,	histogramBin(0.5)
+		,	histogramBegin(0.0)
+		,	histogramEnd(10.0)
+		,	xAngle(0)
 		,	yAngle(0)
 		,	zAngle(0)
 		,	xLength(10)

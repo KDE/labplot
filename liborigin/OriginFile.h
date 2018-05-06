@@ -59,12 +59,12 @@ public:
 	Origin::Matrix& matrix(vector<Origin::Matrix>::size_type m) const;					//!< get matrix m
 
 	vector<Origin::Function>::size_type functionCount() const;							//!< get number of functions
-	vector<Origin::Function>::size_type functionIndex(const string& name) const;		//!< get name of function s
+	vector<Origin::Function>::difference_type functionIndex(const string& name) const;  //!< get index (or -1) of function named name
 	Origin::Function& function(vector<Origin::Function>::size_type f) const;			//!< get function f
 
 	vector<Origin::Graph>::size_type graphCount() const;								//!< get number of graphs
 	Origin::Graph& graph(vector<Origin::Graph>::size_type g) const;						//!< get graph g
-	
+
 	vector<Origin::Note>::size_type noteCount() const;									//!< get number of notes
 	Origin::Note& note(vector<Origin::Note>::size_type n) const;						//!< get note n
 

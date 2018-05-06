@@ -202,7 +202,7 @@ vector<Origin::Function>::size_type OriginFile::functionCount() const
 	return parser->functions.size();
 }
 
-vector<Origin::Function>::size_type OriginFile::functionIndex(const string& name) const
+vector<Origin::Function>::difference_type OriginFile::functionIndex(const string& name) const
 {
 	return parser->findFunctionByName(name);
 }
