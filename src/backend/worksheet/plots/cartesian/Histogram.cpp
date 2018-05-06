@@ -1056,7 +1056,7 @@ void HistogramPrivate::updateFilling() {
 		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
 			//the first point of the current line is not equal to the last point of the previous line
 			//->check whether we have a break in between.
-			bool gap = false; //TODO
+			const bool gap = false; //TODO
 			if (!gap) {
 				//-> we have no break in the curve -> connect the points by a horizontal/vertical line
 				pol << fillLines.at(i-1).p2() << p1;
