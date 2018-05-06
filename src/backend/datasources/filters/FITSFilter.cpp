@@ -282,6 +282,7 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
+	DEBUG("FITSFilterPrivate::readCHDU()");
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
@@ -307,14 +308,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 	bool noDataSource = (dataSource == NULL);
 
 	if(chduType == IMAGE_HDU) {
+		DEBUG("IMAGE_HDU");
+		int maxdim = 2;
 		int bitpix;
 		int naxis;
-		int maxdim = 2;
 		long naxes[2];
 
-		long pixelCount;
-		double* data;
-		if (fits_get_img_param(m_fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
+		if (fits_get_img_param(m_fitsFile, maxdim, &bitpix, &naxis, naxes, &status)) {
 			printError(status);
 			return dataStrings;
 		}
@@ -329,21 +329,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			if (lines > actualRows)
 				lines = actualRows;
 		}
-
-		pixelCount = lines * actualCols;
-		data = new double[pixelCount];
-
-		if (!data) {
-			qDebug() << i18n("Not enough memory for data");
-			return dataStrings;
-		}
-
-		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, NULL, data, NULL, &status)) {
-			printError(status);
-			return dataStrings << (QStringList() << QString("Error"));
-		}
-
-		QVector<void*> dataPointers;
 
 		if (endRow != -1) {
 			if (!noDataSource)
@@ -363,26 +348,47 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		const int jstart = j;
 
+		//TODO: support other modes
+		QVector<AbstractColumn::ColumnMode> columnModes;
+		columnModes.resize(actualCols - j);
+		QStringList vectorNames;
+
+		DEBUG("	prepare import");
+		QVector<void*> dataContainer;
 		if (!noDataSource) {
-			dataPointers.reserve(actualCols - j);
-			columnOffset = dataSource->prepareImport(dataPointers, importMode, lines - i, actualCols - j);
+			dataContainer.reserve(actualCols - j);
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
 		}
+
+		long pixelCount = lines * actualCols;
+		double* data = new double[pixelCount];
+
+		if (!data) {
+			qDebug() << i18n("Not enough memory for data");
+			return dataStrings;
+		}
+
+		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, NULL, data, NULL, &status)) {
+			printError(status);
+			return dataStrings << (QStringList() << QString("Error"));
+		}
+
 		int ii = 0;
+		DEBUG("	Import " << lines << " lines");
 		for (; i < lines; ++i) {
 			int jj = 0;
 			QStringList line;
-			line.reserve(actualCols);
+			line.reserve(actualCols - j);
 			for (; j < actualCols; ++j) {
 				if (noDataSource)
 					line << QString::number(data[i*naxes[0] +j]);
 				else
-					((double*)dataPointers[jj++])[ii] = data[i* naxes[0] + j];
+					static_cast<QVector<double>*>(dataContainer[jj++])->operator[](ii) = data[i* naxes[0] + j];
 			}
 			dataStrings << line;
 			j = jstart;
 			ii++;
 		}
-
 		delete[] data;
 
 		if (dataSource)
@@ -393,6 +399,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		return dataStrings;
 
 	} else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
+		DEBUG("ASCII_TBL or BINARY_TBL");
 
 		if (endColumn != -1)
 			actualCols = endColumn;
@@ -501,6 +508,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		if (noDataSource)
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
 		if (!noDataSource) {
+			DEBUG("HAS DataSource");
 			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if(spreadsheet) {
 				numericDataPointers.reserve(actualCols - startCol);
@@ -516,6 +524,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 					if (spreadsheet->rowCount() < (lines - startRrow))
 						spreadsheet->setRowCount(lines - startRrow);
 				}
+				DEBUG("Reading columns ...");
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
@@ -531,6 +540,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 							list->clear();
 					}
 				}
+				DEBUG("	... DONE");
 				stringDataPointers.squeeze();
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());

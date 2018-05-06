@@ -630,10 +630,8 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	free(dimids);
 
-	if (!dataSource)
-		return dataStrings;
-
-	dataSource->finalizeImport(columnOffset, 1, actualCols, "", mode);
+	if (dataSource)
+		dataSource->finalizeImport(columnOffset, 1, actualCols, "", mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

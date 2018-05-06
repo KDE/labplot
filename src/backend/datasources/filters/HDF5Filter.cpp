@@ -1511,11 +1511,11 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			H5T_order_t order = H5Tget_order(dtype);
 			handleError((int)order, "H5Tget_order");
 #endif
-			QDEBUG(translateHDF5Class(dclass)<<'('<<typeSize<<')'<<translateHDF5Order(order)<<","<<rows<<"x"<<cols);
-			DEBUG("startRow/endRow"<<startRow<<endRow);
-			DEBUG("startColumn/endColumn"<<startColumn<<endColumn);
-			DEBUG("actual rows/cols"<<actualRows<<actualCols);
-			DEBUG("lines"<<lines);
+			QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << "," << rows << "x" << cols);
+			DEBUG("startRow/endRow" << startRow << endRow);
+			DEBUG("startColumn/endColumn" << startColumn << endColumn);
+			DEBUG("actual rows/cols" << actualRows << actualCols);
+			DEBUG("lines" << lines);
 
 			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;

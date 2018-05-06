@@ -155,12 +155,12 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportFileDialog::importTo()");
-	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		DEBUG("ERROR in importTo(): No aspect available");
-		DEBUG("cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
-		DEBUG("cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
+		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
+		DEBUG("	cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
 		return;
 	}
 
@@ -190,7 +190,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
+		DEBUG("to Spreadsheet");
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		DEBUG(" Calling readDataFromFile()");
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);

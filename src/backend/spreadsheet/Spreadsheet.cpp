@@ -108,7 +108,7 @@ bool Spreadsheet::printPreview() const {
 }
 
 /*!
-  Returns the total number of rows in the spreadsheet.
+  Returns the maximum number of rows in the spreadsheet.
  */
 int Spreadsheet::rowCount() const {
 	int col_rows, result = 0;
@@ -755,7 +755,8 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	DEBUG("create() rows = " << actualRows << " cols = " << actualCols);
+	DEBUG("Spreadsheet::prepareImport()");
+	DEBUG("	create() rows = " << actualRows << " cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -775,10 +776,16 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 			setRowCount(actualRows);
 	}
 
+	if (columnMode.size() < actualCols) {
+		qWarning("columnMode[] size is too small! Giving up.");
+		return -1;
+	}
+
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset+n);
+		DEBUG(" column " << n << " columnMode = " << columnMode[n]);
 		column->setColumnMode(columnMode[n]);
 
 		//in the most cases the first imported column is meant to be used as x-data.
@@ -790,40 +797,40 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>*>(column->data());
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataContainer[n] = static_cast<void*>(vector);
-				break;
-			}
+			QVector<double>* vector = static_cast<QVector<double>*>(column->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
 		case AbstractColumn::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>*>(column->data());
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataContainer[n] = static_cast<void*>(vector);
-				break;
-			}
+			QVector<int>* vector = static_cast<QVector<int>*>(column->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
 		case AbstractColumn::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(column->data());
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataContainer[n] = static_cast<void*>(vector);
-				break;
-			}
+			QVector<QString>* vector = static_cast<QVector<QString>*>(column->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(column->data());
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataContainer[n] = static_cast<void*>(vector);
-				break;
-			}
+			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(column->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataContainer[n] = static_cast<void*>(vector);
+			break;
+		}
 		}
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
 
-
+	DEBUG("Spreadsheet::prepareImport() DONE");
 
 	return columnOffset;
 }
@@ -884,13 +891,15 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 }
 
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+	DEBUG("Spreadsheet::finalizeImport()");
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
 		Column* column = this->column(columnOffset + n - startColumn);
-		QString comment;
+		//DEBUG("	column " << n << " of type " << column->columnMode());
 
+		QString comment;
 		switch (column->columnMode()) {
 		case AbstractColumn::Numeric:
 			comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
