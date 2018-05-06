@@ -630,14 +630,14 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 		// set some model-dependent start values
 		if (modelCategory == nsl_fit_model_distribution) {
-			if (modelType == nsl_sf_stats_flat)
+			if (modelType == (int)nsl_sf_stats_flat)
 				paramStartValues[0] = -1.0;
-			else if (modelType == nsl_sf_stats_frechet || modelType == nsl_sf_stats_levy || modelType == nsl_sf_stats_exponential_power)
+			else if (modelType == (int)nsl_sf_stats_frechet || modelType == (int)nsl_sf_stats_levy || modelType == (int)nsl_sf_stats_exponential_power)
 				paramStartValues[1] = 0.0;
-			else if (modelType == nsl_sf_stats_weibull || modelType == nsl_sf_stats_gumbel2)
+			else if (modelType == (int)nsl_sf_stats_weibull || modelType == (int)nsl_sf_stats_gumbel2)
 				paramStartValues[2] = 0.0;
-			else if (modelType == nsl_sf_stats_binomial || modelType == nsl_sf_stats_negative_binomial || modelType == nsl_sf_stats_pascal
-				|| modelType == nsl_sf_stats_geometric || modelType == nsl_sf_stats_logarithmic)
+			else if (modelType == (int)nsl_sf_stats_binomial || modelType == (int)nsl_sf_stats_negative_binomial || modelType == (int)nsl_sf_stats_pascal
+				|| modelType == (int)nsl_sf_stats_geometric || modelType == (int)nsl_sf_stats_logarithmic)
 				paramStartValues[0] = 0.5;
 		}
 	}
