@@ -937,4 +937,6 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	if (m_partView != nullptr)
 		m_view->resizeHeader();
+
+	DEBUG("Spreadsheet::finalizeImport() DONE");
 }

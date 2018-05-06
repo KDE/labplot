@@ -353,7 +353,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
-		DEBUG("	prepare import");
 		QVector<void*> dataContainer;
 		if (!noDataSource) {
 			dataContainer.reserve(actualCols - j);
@@ -544,6 +543,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				stringDataPointers.squeeze();
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());
+
 				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
 			}
 			numericDataPointers.squeeze();
@@ -587,16 +587,16 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				if (!noDataSource) {
 					const QString& str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
-						if (columnNumericTypes.at(col-1))
+						if (columnNumericTypes.at(col - 1))
 							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(0);
 						else
 							stringDataPointers[stringidx++]->append(QLatin1String("NULL"));
 					} else {
-						if (columnNumericTypes.at(col-1))
+						if (columnNumericTypes.at(col - 1))
 							static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(str.toDouble());
 						else {
 							if (!stringDataPointers.isEmpty())
-								stringDataPointers[stringidx++]->operator <<( str.simplified());
+								stringDataPointers[stringidx++]->operator<<(str.simplified());
 						}
 
 					}
