@@ -173,8 +173,8 @@ namespace Origin
 		,	creationDate(0)
 		,	modificationDate(0)
 		,	windowBackgroundColorGradient(NoGradient)
-		,	windowBackgroundColorBase({Color::Regular, Color::White})
-		,	windowBackgroundColorEnd({Color::Regular, Color::White})
+		,	windowBackgroundColorBase({Color::Regular, {Color::White}})
+		,	windowBackgroundColorEnd({Color::Regular, {Color::White}})
 		{};
 	};
 
@@ -400,7 +400,7 @@ namespace Origin
 
 		TextBox(const string& _text = "")
 		:	text(_text)
-		,	color({Color::Regular, Color::Black})
+		,	color({Color::Regular, {Color::Black}})
 		,	fontSize(20)
 		,	rotation(0)
 		,	tab(8)
@@ -477,7 +477,7 @@ namespace Origin
 		int constMagnitude;
 
 		VectorProperties()
-		:	color({Color::Regular, Color::Black})
+		:	color({Color::Regular, {Color::Black}})
 		,	width(2.0)
 		,	arrowLength(45)
 		,	arrowAngle(30)
@@ -561,8 +561,8 @@ namespace Origin
 		,	meanSymbolType(3)
 		,	p1SymbolType(4)
 		,	minSymbolType(5)
-		,	symbolColor({Color::Regular, Color::Black})
-		,	symbolFillColor({Color::Regular, Color::White})
+		,	symbolColor({Color::Regular, {Color::Black}})
+		,	symbolFillColor({Color::Regular, {Color::White}})
 		,	symbolSize(5)
 		,	boxRange(25)
 		,	whiskersRange(5)
@@ -745,12 +745,12 @@ namespace Origin
 		Figure(FigureType _type = Rectangle)
 		:	type(_type)
 		,	attach(Frame)
-		,	color({Color::Regular, Color::Black})
+		,	color({Color::Regular, {Color::Black}})
 		,	style(0)
 		,	width(1.0)
-		,	fillAreaColor({Color::Regular, Color::LightGray})
+		,	fillAreaColor({Color::Regular, {Color::LightGray}})
 		,	fillAreaPattern(FillPattern::NoFill)
-		,	fillAreaPatternColor({Color::Regular, Color::Black})
+		,	fillAreaPatternColor({Color::Regular, {Color::Black}})
 		,	fillAreaPatternWidth(1)
 		,	useBorderColor(false)
 		{
@@ -837,7 +837,7 @@ namespace Origin
 		,	reverseOrder(false)
 		,	labelGap(5)
 		,	colorBarThickness(3)
-		,	labelsColor({Color::Regular, Color::White})
+		,	labelsColor({Color::Regular, {Color::White}})
 		{};
 	};
 
