@@ -38,7 +38,6 @@ class DatapickerImage;
 class Segment {
 public:
 	explicit Segment(DatapickerImage*);
-	~Segment();
 
 	QList<QLine*> path;
 	int yLast;
@@ -55,7 +54,6 @@ public:
 
 private:
 	Q_DECLARE_PRIVATE(Segment)
-	void init();
 	DatapickerImage* m_image;
 
 protected:

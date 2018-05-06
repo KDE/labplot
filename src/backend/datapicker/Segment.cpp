@@ -45,15 +45,6 @@
 Segment::Segment(DatapickerImage* image):
 	yLast(0), length(0), m_image(image), d_ptr(new SegmentPrivate(this)) {
 	m_image->scene()->addItem(this->graphicsItem());
-	init();
-}
-
-Segment::~Segment() {
-}
-
-void Segment::init() {
-	Q_D(Segment);
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
 }
 
 QGraphicsItem* Segment::graphicsItem() const {
@@ -83,9 +74,11 @@ void Segment::setVisible(bool on) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-SegmentPrivate::SegmentPrivate(Segment *owner)
-	: m_hovered(false),
-	  q(owner) {
+SegmentPrivate::SegmentPrivate(Segment *owner) :
+	scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Inch)/QApplication::desktop()->physicalDpiX()),
+	m_hovered(false),
+	q(owner) {
+
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);

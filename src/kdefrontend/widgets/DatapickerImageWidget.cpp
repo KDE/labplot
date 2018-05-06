@@ -125,7 +125,7 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
+DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : QWidget(parent), m_image(nullptr) {
 	ui.setupUi(this);
 
 	ui.leFileName->setClearButtonEnabled(true);

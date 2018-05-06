@@ -213,10 +213,13 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 	byteOrder(BinaryFilter::LittleEndian),
 	startRow(1),
 	endRow(-1),
+	numRows(0),
 	skipStartBytes(0),
 	skipBytes(0),
 	createIndexEnabled(false),
-	autoModeEnabled(true) {
+	autoModeEnabled(true),
+	m_actualRows(0),
+	m_actualCols(0) {
 }
 
 /*!

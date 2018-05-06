@@ -63,9 +63,12 @@
 ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
 	vLayout(new QVBoxLayout(this)),
 	okButton(nullptr),
+	lPosition(nullptr),
 	cbPosition(nullptr),
 	cbAddTo(nullptr),
 	m_mainWin(parent),
+	frameAddTo(nullptr),
+	tbNewDataContainer(nullptr),
 	m_newDataContainerMenu(nullptr),
 	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 

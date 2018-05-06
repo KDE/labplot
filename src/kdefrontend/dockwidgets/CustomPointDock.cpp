@@ -37,7 +37,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
+CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent), m_point(nullptr) {
 	ui.setupUi(this);
 
 	//Validators

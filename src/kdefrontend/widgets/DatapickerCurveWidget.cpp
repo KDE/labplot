@@ -37,7 +37,10 @@
 
 #include <cmath>
 
-DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent), m_suppressTypeChange(false) {
+DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : QWidget(parent),
+	m_curve(nullptr),
+	m_suppressTypeChange(false) {
+
 	ui.setupUi(this);
 
 	ui.cbXErrorType->addItem(i18n("No Error"));
