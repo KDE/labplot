@@ -170,7 +170,11 @@ namespace Origin
 		,	hidden(_hidden)
 		,	state(Normal)
 		,	title(Both)
+		,	creationDate(0)
+		,	modificationDate(0)
 		,	windowBackgroundColorGradient(NoGradient)
+		,	windowBackgroundColorBase({Color::Regular, Color::White})
+		,	windowBackgroundColorEnd({Color::Regular, Color::White})
 		{};
 	};
 
@@ -263,6 +267,7 @@ namespace Origin
 
 		SpreadColumn(const string& _name = "", unsigned int _index = 0)
 		:	name(_name)
+		,	type(ColumnType::Y)
 		,	valueType(Numeric)
 		,	valueTypeSpecification(0)
 		,	significantDigits(6)
@@ -289,6 +294,7 @@ namespace Origin
 
 		SpreadSheet(const string& _name = "")
 		:	Window(_name)
+		,	maxRows(30)
 		,	loose(true)
 		,	sheets(1)
 		{};
@@ -329,6 +335,8 @@ namespace Origin
 
 		MatrixSheet(const string& _name = "", unsigned int _index = 0)
 		:	name(_name)
+		,	rowCount(8)
+		,	columnCount(8)
 		,	valueTypeSpecification(0)
 		,	significantDigits(6)
 		,	decimalPlaces(6)
@@ -392,6 +400,12 @@ namespace Origin
 
 		TextBox(const string& _text = "")
 		:	text(_text)
+		,	color({Color::Regular, Color::Black})
+		,	fontSize(20)
+		,	rotation(0)
+		,	tab(8)
+		,	borderType(BlackLine)
+		,	attach(Frame)
 		{};
 
 		TextBox(const string& _text, Rect _clientRect, Color _color, unsigned short _fontSize, int _rotation, int _tab, BorderType _borderType, Attach _attach)
@@ -426,12 +440,20 @@ namespace Origin
 		unsigned short distance;
 
 		PieProperties()
-		:	clockwiseRotation(false)
+		:	viewAngle(33)
+		,	thickness(33)
+		,	clockwiseRotation(false)
+		,	rotation(33)
+		,	radius(70)
+		,	horizontalOffset(0)
+		,	displacedSectionCount(0)
+		,	displacement(25)
 		,	formatAutomatic(false)
 		,	formatValues(false)
 		,	formatPercentages(false)
 		,	formatCategories(false)
 		,	positionAssociate(false)
+		,	distance(25)
 		{};
 	};
 
@@ -441,7 +463,7 @@ namespace Origin
 
 		Color color;
 		double width;
-		unsigned short arrowLenght;
+		unsigned short arrowLength;
 		unsigned char arrowAngle;
 		bool arrowClosed;
 		string endXColumnName;
@@ -455,7 +477,11 @@ namespace Origin
 		int constMagnitude;
 
 		VectorProperties()
-		:	arrowClosed(false)
+		:	color({Color::Regular, Color::Black})
+		,	width(2.0)
+		,	arrowLength(45)
+		,	arrowAngle(30)
+		,	arrowClosed(false)
 		,	position(Tail)
 		,	multiplier(1.0)
 		,	constAngle(0)
@@ -529,6 +555,22 @@ namespace Origin
 		double whiskersCoeff;
 		bool diamondBox;
 		unsigned char labels;
+		PercentileProperties()
+		:	maxSymbolType(1)
+		,	p99SymbolType(2)
+		,	meanSymbolType(3)
+		,	p1SymbolType(4)
+		,	minSymbolType(5)
+		,	symbolColor({Color::Regular, Color::Black})
+		,	symbolFillColor({Color::Regular, Color::White})
+		,	symbolSize(5)
+		,	boxRange(25)
+		,	whiskersRange(5)
+		,	boxCoeff(1.0)
+		,	whiskersCoeff(1.5)
+		,	diamondBox(true)
+		,	labels(0)
+		{};
 	};
 
 	struct GraphCurve
@@ -615,6 +657,14 @@ namespace Origin
 
 		GraphAxisBreak()
 		:	show(false)
+		,	log10(false)
+		,	from(4.)
+		,	to(6.)
+		,	position(50.)
+		,	scaleIncrementBefore(5)
+		,	scaleIncrementAfter(5)
+		,	minorTicksBefore(1)
+		,	minorTicksAfter(1)
 		{};
 	};
 
@@ -694,6 +744,15 @@ namespace Origin
 
 		Figure(FigureType _type = Rectangle)
 		:	type(_type)
+		,	attach(Frame)
+		,	color({Color::Regular, Color::Black})
+		,	style(0)
+		,	width(1.0)
+		,	fillAreaColor({Color::Regular, Color::LightGray})
+		,	fillAreaPattern(FillPattern::NoFill)
+		,	fillAreaPatternColor({Color::Regular, Color::Black})
+		,	fillAreaPatternWidth(1)
+		,	useBorderColor(false)
 		{
 		};
 	};
@@ -736,7 +795,8 @@ namespace Origin
 		unsigned char* data;
 
 		Bitmap(const string& _name = "")
-		:	size(0)
+		:	attach(Frame)
+		,	size(0)
 		,	windowName(_name)
 		,	borderType(Origin::None)
 		,	data(0)
@@ -749,6 +809,7 @@ namespace Origin
 		,	size(bitmap.size)
 		,	windowName(bitmap.windowName)
 		,	borderType(bitmap.borderType)
+		,	data(0)
 		{
 			if(size > 0)
 			{
@@ -771,6 +832,13 @@ namespace Origin
 		unsigned short labelGap;
 		unsigned short colorBarThickness;
 		Color labelsColor;
+		ColorScale()
+		:	visible(true)
+		,	reverseOrder(false)
+		,	labelGap(5)
+		,	colorBarThickness(3)
+		,	labelsColor({Color::Regular, Color::White})
+		{};
 	};
 
 	struct GraphLayer
@@ -825,8 +893,18 @@ namespace Origin
 		bool orthographic3D;
 
 		GraphLayer()
-		:	imageProfileTool(0)
+		:	xAngle(0)
+		,	yAngle(0)
+		,	zAngle(0)
+		,	xLength(10)
+		,	yLength(10)
+		,	zLength(10)
+		,	imageProfileTool(0)
+		,	vLine(0.0)
+		,	hLine(0.0)
 		,	isWaterfall(false)
+		,	xOffset(10)
+		,	yOffset(10)
 		,	gridOnTop(false)
 		,	exchangedAxes(false)
 		,	isXYY3D(false)
@@ -884,6 +962,8 @@ namespace Origin
 
 		Graph(const string& _name = "")
 		:	Window(_name)
+		,	width(400)
+		,	height(300)
 		,	is3D(false)
 		,	isLayout(false)
 		,	connectMissingData(false)

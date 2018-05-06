@@ -2265,7 +2265,7 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 				curve.vector.constMagnitude = (int)curve.symbolSize;
 
 			stmp.str(cvehd.substr(0x66));
-			GET_SHORT(stmp, curve.vector.arrowLenght)
+			GET_SHORT(stmp, curve.vector.arrowLength)
 			curve.vector.arrowAngle = cvehd[0x68];
 
 			h = cvehd[0x69];
