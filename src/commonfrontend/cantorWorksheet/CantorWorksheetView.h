@@ -42,11 +42,11 @@ class ReadWritePart;
 
 class CantorWorksheetView : public QWidget {
 	Q_OBJECT
-    
+
 	public:
-		CantorWorksheetView(CantorWorksheet*);
+		explicit CantorWorksheetView(CantorWorksheet*);
 		~CantorWorksheetView() override;
-	
+
 	public slots:
 		void createContextMenu(QMenu*) const;
 		void fillToolBar(QToolBar*);

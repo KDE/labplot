@@ -204,7 +204,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
 			if (spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = spreadsheet->parentAspect()->path() + "/" + curve->xColumnPath();
+				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->xColumnPath();
 				curve->setXColumnPath(newPath);
 
 				for (auto* column : columns) {
@@ -223,7 +223,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		spreadsheetName = curve->yColumnPath().left(curve->yColumnPath().indexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
 			if (spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = spreadsheet->parentAspect()->path() + "/" + curve->yColumnPath();
+				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->yColumnPath();
 				curve->setYColumnPath(newPath);
 
 				for (auto* column : columns) {
@@ -767,7 +767,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format="M/d";
 				break;
 			case Origin::DATE_D:
-				format="d";
+				format='d';
 				break;
 			case Origin::DATE_DDD:
 			case Origin::DATE_DAY_LETTER:
@@ -814,7 +814,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format = "MMMM";
 				break;
 			case Origin::MONTH_LETTER:
-				format = "M";
+				format = 'M';
 				break;
 			}
 
@@ -835,7 +835,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format = "dddd";
 				break;
 			case Origin::DAY_LETTER:
-				format = "d";
+				format = 'd';
 				break;
 			}
 
@@ -1222,8 +1222,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						//XYCurve* xyCurve = new XYCurve(curveText);
 						XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
 						const QString& tableName = data.right(data.length() - 2);
-						curve->setXColumnPath(tableName + "/" + originCurve.xColumnName.c_str());
-						curve->setYColumnPath(tableName + "/" + originCurve.yColumnName.c_str());
+						curve->setXColumnPath(tableName + '/' + originCurve.xColumnName.c_str());
+						curve->setYColumnPath(tableName + '/' + originCurve.yColumnName.c_str());
 
 						curve->suppressRetransform(true);
 						if (!preview)

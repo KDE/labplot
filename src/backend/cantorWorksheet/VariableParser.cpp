@@ -62,7 +62,7 @@ void VariableParser::parseMaximaValues() {
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
 	m_string = m_string.trimmed();
-	if (m_string.startsWith("array")) {
+	if (m_string.startsWith(QStringLiteral("array"))) {
 		//parse numpy arrays, string representation like array([1,2,3,4,5])
 		m_string = m_string.replace(QStringLiteral("array(["), QStringLiteral(""));
 		m_string = m_string.replace(QStringLiteral("])"), QStringLiteral(""));

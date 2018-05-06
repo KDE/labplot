@@ -28,7 +28,7 @@
 #ifndef CANTORWORKSHEETDOCK_H
 #define CANTORWORKSHEETDOCK_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 #include <QPair>
 
 #include <cantor/panelplugin.h>

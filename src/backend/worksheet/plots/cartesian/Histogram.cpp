@@ -750,7 +750,7 @@ void HistogramPrivate::updateValues() {
 				if (valuesType == Histogram::ValuesY)
 					valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram, i)) + valuesSuffix;
 				else
-					valuesStrings << valuesPrefix + "(" + QString::number(gsl_histogram_get(histogram, i)) + ")" + valuesSuffix;
+					valuesStrings << valuesPrefix + '(' + QString::number(gsl_histogram_get(histogram, i)) + ')' + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
@@ -761,7 +761,7 @@ void HistogramPrivate::updateValues() {
 					if (valuesType == Histogram::ValuesY)
 						valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
 					else
-						valuesStrings << valuesPrefix + "(" + QString::number(value) + ")" + valuesSuffix;
+						valuesStrings << valuesPrefix + '(' + QString::number(value) + ')' + valuesSuffix;
 				}
 				break;
 			}

@@ -56,7 +56,7 @@ private:
 class ResizableTextEdit : public QTextEdit {
 	Q_OBJECT
 public:
-	ResizableTextEdit(QWidget*, bool vertResizeOnly = true);
+	explicit ResizableTextEdit(QWidget*, bool vertResizeOnly = true);
 	void addSize(QSize);
 	QSize sizeHint() const override;
 

@@ -208,8 +208,8 @@ void Project::navigateTo(const QString& path) {
 }
 
 bool Project::isLabPlotProject(const QString& fileName) {
-	return fileName.endsWith(".lml", Qt::CaseInsensitive) || fileName.endsWith(".lml.gz", Qt::CaseInsensitive)
-		|| fileName.endsWith(".lml.bz2", Qt::CaseInsensitive) || fileName.endsWith(".lml.xz", Qt::CaseInsensitive);
+	return fileName.endsWith(QStringLiteral(".lml"), Qt::CaseInsensitive) || fileName.endsWith(QStringLiteral(".lml.gz"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QStringLiteral(".lml.bz2"), Qt::CaseInsensitive) || fileName.endsWith(QStringLiteral(".lml.xz"), Qt::CaseInsensitive);
 }
 
 QString Project::supportedExtensions() {

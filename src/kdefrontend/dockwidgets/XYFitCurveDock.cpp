@@ -613,9 +613,9 @@ void XYFitCurveDock::updateModelEquation() {
 		// formula pic depends on degree
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
-			numSuffix = "4";
+			numSuffix = '4';
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
-			numSuffix = "2";
+			numSuffix = '2';
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".png");
 		break;
@@ -624,7 +624,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// formula pic depends on number of peaks
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
-			numSuffix = "4";
+			numSuffix = '4';
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
 			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".png");
 		break;
@@ -840,14 +840,14 @@ void XYFitCurveDock::resultCopySelection() {
 	QString str;
 	for (int i = 0; i < range.rowCount(); ++i) {
 		if (i > 0)
-			str += "\n";
+			str += '\n';
 		for (int j = 0; j < range.columnCount(); ++j) {
 			if (j > 0)
-				str += "\t";
+				str += '\t';
 			str += tw->item(range.topRow() + i, range.leftColumn() + j)->text();
 		}
 	}
-	str += "\n";
+	str += '\n';
 	QApplication::clipboard()->setText(str);
 	DEBUG(QApplication::clipboard()->text().toStdString());
 }
@@ -857,12 +857,12 @@ void XYFitCurveDock::resultCopyAll() {
 	int currentTab = uiGeneralTab.twResults->currentIndex();
 	QString str;
 	if (currentTab == 0) {
-		str = i18n("Parameters:") + "\n";
+		str = i18n("Parameters:") + '\n';
 
 		const int np = fitResult.paramValues.size();
 		for (int i = 0; i < np; i++) {
 			if (m_fitData.paramFixed.at(i))
-				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i)) + "\n";
+				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i)) + '\n';
 			else {
 				str += m_fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 					+ UTF8_QSTRING("±") + QString::number(fitResult.errorValues.at(i))
@@ -886,11 +886,11 @@ void XYFitCurveDock::resultCopyAll() {
 			}
 		}
 	} else if (currentTab == 1) {
-		str = i18n("Goodness of fit:") + "\n";
-		str += i18n("sum of squared residuals") + " (" + UTF8_QSTRING("χ²") + "): " + QString::number(fitResult.sse) + "\n";
+		str = i18n("Goodness of fit:") + '\n';
+		str += i18n("sum of squared residuals") + " (" + UTF8_QSTRING("χ²") + "): " + QString::number(fitResult.sse) + '\n';
 		if (fitResult.dof != 0) {
 			str += i18n("reduced") + ' ' + UTF8_QSTRING("χ²") + ": " + QString::number(fitResult.rms) + '\n';
-			str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + "\n";
+			str += i18n("root mean square error") + " (RMSE): " + QString::number(fitResult.rsd) + '\n';
 			str += i18n("coefficient of determination") + " (" + UTF8_QSTRING("R²") + "): " + QString::number(fitResult.rsquare, 'g', 15) + '\n';
 			str += i18n("adj. coefficient of determination")+ " (" + UTF8_QSTRING("R̄²")
 				+ "): " + QString::number(fitResult.rsquareAdj, 'g', 15) + "\n\n";

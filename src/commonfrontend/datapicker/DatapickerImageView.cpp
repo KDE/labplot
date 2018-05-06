@@ -451,10 +451,10 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			QString xLabel('x');
 			QString yLabel('y');
 			if (m_image->axisPoints().type == DatapickerImage::PolarInDegree) {
-				xLabel = "r";
+				xLabel = 'r';
 				yLabel = "y(deg)";
 			} else if (m_image->axisPoints().type == DatapickerImage::PolarInRadians) {
-				xLabel = "r";
+				xLabel = 'r';
 				yLabel = "y(rad)";
 			}
 

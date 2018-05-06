@@ -293,8 +293,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				for (int i = 2; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+c" + numStr + "*x^" + numStr;
-					paramNames << "c" + numStr;
-					paramNamesUtf8 << "c" + indices[i-1];
+					paramNames << 'c' + numStr;
+					paramNamesUtf8 << 'c' + indices[i-1];
 				}
 			}
 			break;
@@ -316,8 +316,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model = "a1*exp(b1*x)";
 					else
 						model += " + a" + numStr + "*exp(b" + numStr + "*x)";
-					paramNames << "a" + numStr << "b" + numStr;
-					paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
+					paramNames << 'a' + numStr << 'b' + numStr;
+					paramNamesUtf8 << 'a' + indices[i-1] << 'b' + indices[i-1];
 				}
 			}
 			break;
@@ -332,8 +332,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-					paramNames << "a" + numStr << "b" + numStr;
-					paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
+					paramNames << 'a' + numStr << 'b' + numStr;
+					paramNamesUtf8 << 'a' + indices[i-1] << 'b' + indices[i-1];
 				}
 			}
 			break;
@@ -368,11 +368,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					if (i > 1)
 						model += " + ";
 					model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
-					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					paramNames << 's' + numStr << "mu" + numStr << 'a' + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
-						<< "A" + indices[i-1];
+						<< 'A' + indices[i-1];
 				}
-				model += ")";
+				model += ')';
 			}
 			break;
 		case nsl_fit_model_lorentz:
@@ -400,12 +400,12 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
-					model += "a" + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
-					paramNames << "g" + numStr << "mu" + numStr << "a" + numStr;
+					model += 'a' + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
+					paramNames << 'g' + numStr << "mu" + numStr << "a" + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("γ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
-						<< "A" + indices[i-1];
+						<< 'A' + indices[i-1];
 				}
-				model += ")";
+				model += ')';
 			}
 			break;
 		case nsl_fit_model_sech:
@@ -433,12 +433,12 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
-					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
+					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ')';
 					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
-						<< "A" + indices[i-1];
+						<< 'A' + indices[i-1];
 				}
-				model += ")";
+				model += ')';
 			}
 			break;
 		case nsl_fit_model_logistic:
@@ -466,12 +466,12 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
-					model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
-					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
+					paramNames << 's' + numStr << "mu" + numStr << 'a' + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
-						<< "A" + indices[i-1];
+						<< 'A' + indices[i-1];
 				}
-				model += ")";
+				model += ')';
 			}
 			break;
 		}

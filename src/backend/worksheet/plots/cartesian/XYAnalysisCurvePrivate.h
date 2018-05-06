@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYANALYSISPRIVATE_H
-#define XYANALYSISPRIVATE_H
+#ifndef XYANALYSISCURVEPRIVATE_H
+#define XYANALYSISCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 

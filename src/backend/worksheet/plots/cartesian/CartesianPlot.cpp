@@ -847,7 +847,7 @@ void CartesianPlot::setRangeFirstValues(int values) {
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
 public:
 	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
-		m_private(private_obj), m_autoScale(autoScale), m_minOld(0.0), m_maxOld(0.0) {
+		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_minOld(0.0), m_maxOld(0.0) {
 		setText(i18n("%1: change x-range auto scaling", m_private->name()));
 	};
 
@@ -923,7 +923,7 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
 public:
 	CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
-		m_private(private_obj), m_autoScale(autoScale), m_minOld(0.0), m_maxOld(0.0) {
+		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_minOld(0.0), m_maxOld(0.0) {
 		setText(i18n("%1: change y-range auto scaling", m_private->name()));
 	};
 
