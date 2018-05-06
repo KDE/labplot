@@ -837,7 +837,7 @@ namespace Origin
 		,	reverseOrder(false)
 		,	labelGap(5)
 		,	colorBarThickness(3)
-		,	labelsColor({Color::Regular, Color::Black})
+		,	labelsColor({Color::Regular, {Color::Black}})
 		{};
 	};
 
@@ -893,7 +893,7 @@ namespace Origin
 		bool orthographic3D;
 
 		GraphLayer()
-		:	backgroundColor({Color::Regular, Color::White})
+		:	backgroundColor({Color::Regular, {Color::White}})
 		,	borderType(BlackLine)
 		,	histogramBin(0.5)
 		,	histogramBegin(0.0)
