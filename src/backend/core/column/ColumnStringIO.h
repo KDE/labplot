@@ -36,7 +36,7 @@ class ColumnStringIO : public AbstractColumn {
 	Q_OBJECT
 
 public:
-	ColumnStringIO(Column* owner);
+	explicit ColumnStringIO(Column* owner);
 	AbstractColumn::ColumnMode columnMode() const override;
 	AbstractColumn::PlotDesignation plotDesignation() const override;
 	int rowCount() const override;

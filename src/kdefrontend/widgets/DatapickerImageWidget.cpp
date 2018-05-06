@@ -226,7 +226,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.leFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.leFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged()) );
+	connect( ui.leFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
 
 	// edit image
 	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );

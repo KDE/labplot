@@ -10,7 +10,7 @@ LIVE_DATA_DEBUG = True
 fileName = "out.txt" # name of the output file
 sleepInterval = 1 # sleep interval in seconds
 itersTotal = 100000 # total number of iterations to compute
-iters = 1000 # number of iterations done befor the results are written out to the file
+iters = 1000 # number of iterations done before the results are written out to the file
 pathes = 2 # Number of pathes to compute
 delta = 0.25
 dt = 0.1
@@ -42,7 +42,7 @@ for k in range(itersTotal):
 			outh += "\tx" + str(p+1)
 
 		datafile = open(fileName, "w")
-		
+
 		datafile.write(outh)
 		datafile.write('\n')
 		datafile.write(out)

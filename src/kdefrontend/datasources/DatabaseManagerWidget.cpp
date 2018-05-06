@@ -73,7 +73,7 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& con
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT(selectFile()) );
 	connect( ui.cbDriver, SIGNAL(currentIndexChanged(int)), SLOT(driverChanged()) );
 
-	connect( ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(nameChanged(const QString&)) );
+	connect( ui.leName, SIGNAL(textChanged(QString)), this, SLOT(nameChanged(QString)) );
 	connect( ui.leDatabase, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged()) );
 	connect( ui.leHost, SIGNAL(textChanged(QString)), this, SLOT(hostChanged()) );
 	connect( ui.sbPort, SIGNAL(valueChanged(int)), this, SLOT(portChanged()) );

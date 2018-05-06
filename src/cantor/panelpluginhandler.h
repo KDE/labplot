@@ -40,7 +40,7 @@ class CANTOR_EXPORT PanelPluginHandler : public QObject
 {
   Q_OBJECT
   public:
-    PanelPluginHandler(QObject* parent);
+    explicit PanelPluginHandler(QObject* parent);
     ~PanelPluginHandler() override;
 
     QList<PanelPlugin*> plugins();

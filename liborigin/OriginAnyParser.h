@@ -32,7 +32,7 @@ using namespace Origin;
 class OriginAnyParser : public OriginParser
 {
 public:
-	OriginAnyParser(const string& fileName);
+	explicit OriginAnyParser(const string& fileName);
 	bool parse();
 
 protected:

@@ -33,7 +33,7 @@
 
 class PerfTracer {
 public:
-	PerfTracer(const char* m) {
+	explicit PerfTracer(const char* m) {
 		msg = m;
 		start = std::chrono::high_resolution_clock::now();
 	};

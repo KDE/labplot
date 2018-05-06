@@ -45,7 +45,7 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
      * Create a new PanelPlugin
      * @param parent the parent Object @see QObject
      **/
-    PanelPlugin( QObject* parent );
+    explicit PanelPlugin( QObject* parent );
     /**
      * Destructor
      */

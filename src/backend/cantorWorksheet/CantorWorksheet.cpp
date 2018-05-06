@@ -85,8 +85,8 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//variable model
 		m_variableModel = m_session->variableModel();
-		connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
-		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
+		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex, int, int)), this, SLOT(rowsInserted(QModelIndex, int, int)));
+		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int)));
 		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 
 		//available plugins

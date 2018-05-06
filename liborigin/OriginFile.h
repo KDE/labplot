@@ -44,7 +44,7 @@ using namespace std;
 class OriginFile
 {
 public:
-	OriginFile(const string& fileName);
+	explicit OriginFile(const string& fileName);
 
 	bool parse();																		//!< parse Origin file
 	double version() const;																//!< get version of Origin file
