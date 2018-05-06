@@ -942,7 +942,7 @@ void OriginAnyParser::readAttachmentList() {
 	return;
 }
 
-bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_header_size, string col_data, unsigned int col_data_size) {
+bool OriginAnyParser::getColumnInfoAndData(const string& col_header, unsigned int col_header_size, const string& col_data, unsigned int col_data_size) {
 	istringstream stmp(ios_base::binary);
 	short data_type;
 	char data_type_u;
@@ -1153,7 +1153,7 @@ bool OriginAnyParser::getColumnInfoAndData(string col_header, unsigned int col_h
 	return true;
 }
 
-void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_size, short data_type, char data_type_u, char valuesize, vector<Origin::Matrix>::difference_type mIndex) {
+void OriginAnyParser::getMatrixValues(const string& col_data, unsigned int col_data_size, short data_type, char data_type_u, char valuesize, vector<Origin::Matrix>::difference_type mIndex) {
 	if (matrixes.empty())
 		return;
 
@@ -1238,7 +1238,7 @@ void OriginAnyParser::getMatrixValues(string col_data, unsigned int col_data_siz
 	}
 }
 
-void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_header, unsigned int wde_header_size) {
+void OriginAnyParser::getWindowProperties(Origin::Window& window, const string& wde_header, unsigned int wde_header_size) {
 	window.objectID = objectIndex;
 	++objectIndex;
 
@@ -1333,7 +1333,7 @@ void OriginAnyParser::getWindowProperties(Origin::Window& window, string wde_hea
 	}
 }
 
-void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_header_size) {
+void OriginAnyParser::getLayerProperties(const string& lye_header, unsigned int lye_header_size) {
 	istringstream stmp;
 
 	if (ispread != -1) { // spreadsheet
@@ -1425,7 +1425,7 @@ void OriginAnyParser::getLayerProperties(string lye_header, unsigned int lye_hea
 	}
 }
 
-Origin::Color OriginAnyParser::getColor(string strbincolor) {
+Origin::Color OriginAnyParser::getColor(const string& strbincolor) {
 	/* decode a color value from a 4 byte binary string */
 	Origin::Color result;
 	unsigned char sbincolor[4];
@@ -1479,7 +1479,7 @@ Origin::Color OriginAnyParser::getColor(string strbincolor) {
 	return result;
 }
 
-void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, string andt1, unsigned int andt1sz, string andt2, unsigned int andt2sz, string andt3, unsigned int andt3sz) {
+void OriginAnyParser::getAnnotationProperties(const string& anhd, unsigned int anhdsz, const string& andt1, unsigned int andt1sz, const string& andt2, unsigned int andt2sz, const string& andt3, unsigned int andt3sz) {
 	istringstream stmp;
 	(void) anhdsz; (void) andt3; (void) andt3sz;
 
@@ -1912,7 +1912,7 @@ void OriginAnyParser::getAnnotationProperties(string anhd, unsigned int anhdsz, 
 	return;
 }
 
-void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, string cvedt, unsigned int cvedtsz) {
+void OriginAnyParser::getCurveProperties(const string& cvehd, unsigned int cvehdsz, const string& cvedt, unsigned int cvedtsz) {
 	istringstream stmp;
 
 	if (ispread != -1) { // spreadsheet: curves are columns
@@ -2461,7 +2461,7 @@ void OriginAnyParser::getCurveProperties(string cvehd, unsigned int cvehdsz, str
 	}
 }
 
-void OriginAnyParser::getAxisBreakProperties(string abdata, unsigned int abdatasz) {
+void OriginAnyParser::getAxisBreakProperties(const string& abdata, unsigned int abdatasz) {
 	istringstream stmp;
 	(void) abdatasz;
 
@@ -2506,7 +2506,7 @@ void OriginAnyParser::getAxisBreakProperties(string abdata, unsigned int abdatas
 	}
 }
 
-void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apdatasz, int naxis) {
+void OriginAnyParser::getAxisParameterProperties(const string& apdata, unsigned int apdatasz, int naxis) {
 	istringstream stmp;
 	static int iaxispar = 0;
 
@@ -2733,7 +2733,7 @@ void OriginAnyParser::getAxisParameterProperties(string apdata, unsigned int apd
 	}
 }
 
-void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, string nwelb, unsigned int nwelbsz, string nwect, unsigned int nwectsz) {
+void OriginAnyParser::getNoteProperties(const string& nwehd, unsigned int nwehdsz, const string& nwelb, unsigned int nwelbsz, const string& nwect, unsigned int nwectsz) {
 	LOG_PRINT(logfile, "OriginAnyParser::getNoteProperties()");
 	istringstream stmp;
 	(void) nwehdsz; (void) nwelbsz; (void) nwectsz;
@@ -2808,7 +2808,7 @@ void OriginAnyParser::getNoteProperties(string nwehd, unsigned int nwehdsz, stri
 	}
 }
 
-void OriginAnyParser::getColorMap(ColorMap& cmap, string cmapdata, unsigned int cmapdatasz) {
+void OriginAnyParser::getColorMap(ColorMap& cmap, const string& cmapdata, unsigned int cmapdatasz) {
 	istringstream stmp;
 	unsigned int cmoffset = 0;
 	// color maps for matrix annotations have a different offset than graph curve's colormaps
@@ -2868,7 +2868,7 @@ void OriginAnyParser::getColorMap(ColorMap& cmap, string cmapdata, unsigned int 
 
 }
 
-void OriginAnyParser::getZcolorsMap(ColorMap& colorMap, string cmapdata, unsigned int cmapdatasz) {
+void OriginAnyParser::getZcolorsMap(ColorMap& colorMap, const string& cmapdata, unsigned int cmapdatasz) {
 	istringstream stmp;
 	(void) cmapdatasz;
 
@@ -2939,7 +2939,7 @@ void OriginAnyParser::getZcolorsMap(ColorMap& colorMap, string cmapdata, unsigne
 	colorMap.levels.push_back(make_pair(zmax, level));
 }
 
-void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator current_folder, string ptldt, unsigned int ptldtsz) {
+void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator current_folder, const string& ptldt, unsigned int ptldtsz) {
 	LOG_PRINT(logfile,"OriginAnyParser::getProjectLeafProperties()\n");
 	istringstream stmp;
 	(void) ptldtsz;
@@ -2964,7 +2964,7 @@ void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator curre
 	}
 }
 
-void OriginAnyParser::getProjectFolderProperties(tree<ProjectNode>::iterator current_folder, string flehd, unsigned int flehdsz) {
+void OriginAnyParser::getProjectFolderProperties(tree<ProjectNode>::iterator current_folder, const string& flehd, unsigned int flehdsz) {
 	istringstream stmp;
 	(void) flehdsz;
 

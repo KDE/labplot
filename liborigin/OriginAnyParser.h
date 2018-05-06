@@ -54,20 +54,20 @@ protected:
 	unsigned int readFolderTree(tree<ProjectNode>::iterator, unsigned int);
 	void readProjectLeaf(tree<ProjectNode>::iterator);
 	void readAttachmentList();
-	bool getColumnInfoAndData(string, unsigned int, string, unsigned int);
-	void getMatrixValues(string, unsigned int, short, char, char, vector<Origin::Matrix>::difference_type);
-	void getWindowProperties(Origin::Window&, string, unsigned int);
-	void getLayerProperties(string, unsigned int);
-	Origin::Color getColor(string);
-	void getAnnotationProperties(string, unsigned int, string, unsigned int, string, unsigned int, string, unsigned int);
-	void getCurveProperties(string, unsigned int, string, unsigned int);
-	void getAxisBreakProperties(string, unsigned int);
-	void getAxisParameterProperties(string, unsigned int, int);
-	void getNoteProperties(string, unsigned int, string, unsigned int, string, unsigned int);
-	void getColorMap(ColorMap&, string, unsigned int);
-	void getZcolorsMap(ColorMap&, string, unsigned int);
-	void getProjectLeafProperties(tree<ProjectNode>::iterator, string, unsigned int);
-	void getProjectFolderProperties(tree<ProjectNode>::iterator, string, unsigned int);
+	bool getColumnInfoAndData(const string&, unsigned int, const string&, unsigned int);
+	void getMatrixValues(const string&, unsigned int, short, char, char, vector<Origin::Matrix>::difference_type);
+	void getWindowProperties(Origin::Window&, const string&, unsigned int);
+	void getLayerProperties(const string&, unsigned int);
+	Origin::Color getColor(const string&);
+	void getAnnotationProperties(const string&, unsigned int, const string&, unsigned int, const string&, unsigned int, const string&, unsigned int);
+	void getCurveProperties(const string&, unsigned int, const string&, unsigned int);
+	void getAxisBreakProperties(const string&, unsigned int);
+	void getAxisParameterProperties(const string&, unsigned int, int);
+	void getNoteProperties(const string&, unsigned int, const string&, unsigned int, const string&, unsigned int);
+	void getColorMap(ColorMap&, const string&, unsigned int);
+	void getZcolorsMap(ColorMap&, const string&, unsigned int);
+	void getProjectLeafProperties(tree<ProjectNode>::iterator, const string&, unsigned int);
+	void getProjectFolderProperties(tree<ProjectNode>::iterator, const string&, unsigned int);
 	void outputProjectTree();
 
 	inline time_t doubleToPosixTime(double jdt)
