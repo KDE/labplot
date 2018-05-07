@@ -367,7 +367,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					QString numStr = QString::number(i);
 					if (i > 1)
 						model += " + ";
-					model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+					model += 'a' + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
 					paramNames << 's' + numStr << "mu" + numStr << 'a' + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
 						<< 'A' + indices[i-1];
@@ -401,7 +401,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					if (i > 1)
 						model += " + ";
 					model += 'a' + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
-					paramNames << 'g' + numStr << "mu" + numStr << "a" + numStr;
+					paramNames << 'g' + numStr << "mu" + numStr << 'a' + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("γ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
 						<< 'A' + indices[i-1];
 				}
@@ -434,7 +434,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					if (i > 1)
 						model += " + ";
 					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ')';
-					paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					paramNames << "s" + numStr << "mu" + numStr << 'a' + numStr;
 					paramNamesUtf8 << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1]
 						<< 'A' + indices[i-1];
 				}

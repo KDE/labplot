@@ -151,7 +151,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->item(0, 1)->setText(UTF8_QSTRING("χ²"));
-	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + UTF8_QSTRING("χ²")
+	uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + ' ' + UTF8_QSTRING("χ²")
 		+ " (" + UTF8_QSTRING("χ²") + "/dof)");
 	uiGeneralTab.twGoodness->item(3, 1)->setText(UTF8_QSTRING("R²"));
 	uiGeneralTab.twGoodness->item(4, 1)->setText(UTF8_QSTRING("R̄²"));

@@ -238,7 +238,7 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		static const QStringList& names = ExpressionParser::getInstance()->constantsNames();
 		static const QStringList& values = ExpressionParser::getInstance()->constantsValues();
 		static const QStringList& units = ExpressionParser::getInstance()->constantsUnits();
-		setToolTip(names.at(index) + ": " + constants.at(index) + " = " + values.at(index) + " " + units.at(index));
+		setToolTip(names.at(index) + ": " + constants.at(index) + " = " + values.at(index) + ' ' + units.at(index));
 	} else {
 		//text token was not found in the list of constants -> check functions as next
 		static const QStringList& functions = ExpressionParser::getInstance()->functions();

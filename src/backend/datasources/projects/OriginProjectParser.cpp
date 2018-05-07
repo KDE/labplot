@@ -65,7 +65,7 @@ OriginProjectParser::OriginProjectParser() : ProjectParser(), m_originFile(nullp
 
 bool OriginProjectParser::isOriginProject(const QString& fileName) {
 	//TODO add opju later when liborigin supports it
-	return fileName.endsWith(".opj", Qt::CaseInsensitive);
+	return fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive);
 }
 
 void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
@@ -1715,7 +1715,7 @@ QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator 
 
 QString OriginProjectParser::parseOriginText(const QString &str) const {
 	DEBUG("parseOriginText()");
-	QStringList lines = str.split("\n");
+	QStringList lines = str.split('\n');
 	QString text = "";
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
@@ -1844,7 +1844,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 		QString value = rxline.cap(0);
 		int len = value.length();
 		value.replace(QRegExp(" "),"");
-		value = "\\c{" + value.mid(3, value.length()-4) + "}";
+		value = "\\c{" + value.mid(3, value.length()-4) + '}';
 		line.replace(pos, len, value);
 		pos = rxline.indexIn(line);
 	}
