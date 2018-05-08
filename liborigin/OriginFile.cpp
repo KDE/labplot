@@ -124,14 +124,17 @@ OriginFile::OriginFile(const string& fileName)
 	} else if (buildVersion < 3228) { // 2017.1 (9.4.1.354), 2017.2 (9.4.2.380) SR1, SR2 3227
 		fileVersion = 941;
 		newFileVersion = 20171;
-	} else if (buildVersion < 3269) { // 2018.0 (9.5.0.193) SR0 3268
+	} else if (buildVersion < 3269) { // 2018.0 (9.5.0.193), 2018.1 (9.5.1.195) SR0, SR1 3268
 		fileVersion = 950;
 		newFileVersion = 20180;
+	} else if (buildVersion < 3296) { // 2018b.0 (9.5.5.409) SR0, SR1 3295
+		fileVersion = 955;
+		newFileVersion = 20185;
 	} else {
-		// > 2018.0
-		fileVersion = 951;
-		newFileVersion = 20181;
-		LOG_PRINT(logfile, "Found project version 2018.1 (9.5.1) or newer\n")
+		// > 2018bSR0
+		fileVersion = 956;
+		newFileVersion = 20186;
+		LOG_PRINT(logfile, "Found project version 2018b.1 (9.5.6) or newer\n")
 	}
 
 	if (newFileVersion == 0) {
