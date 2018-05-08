@@ -701,23 +701,24 @@ void XYFitCurveDock::updateParameterList() {
 	m_fitData.paramNames = m_fitData.paramNamesUtf8 = parser->getParameter(m_fitData.model, vars);
 
 	// if number of parameter changed
-	bool moreParameter = false;
-	if (m_fitData.paramNames.size() > m_fitData.paramStartValues.size())
-		moreParameter = true;
-	if (m_fitData.paramNames.size() != m_fitData.paramStartValues.size()) {
-		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
-		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
-		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
+	int oldNumberOfParameter = m_fitData.paramStartValues.size();
+	int numberOfParameter = m_fitData.paramNames.size();
+	DEBUG(" old number of parameter: " << oldNumberOfParameter << " new number of parameter: " << numberOfParameter);
+	if (numberOfParameter != oldNumberOfParameter) {
+		m_fitData.paramStartValues.resize(numberOfParameter);
+		m_fitData.paramFixed.resize(numberOfParameter);
+		m_fitData.paramLowerLimits.resize(numberOfParameter);
+		m_fitData.paramUpperLimits.resize(numberOfParameter);
 	}
-	if (moreParameter) {
-		for (int i = m_fitData.paramStartValues.size() - 1; i < m_fitData.paramNames.size(); ++i) {
+	if (numberOfParameter > oldNumberOfParameter) {
+		for (int i = oldNumberOfParameter; i < numberOfParameter; ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
 			m_fitData.paramFixed[i] = false;
 			m_fitData.paramLowerLimits[i] = -std::numeric_limits<double>::max();
 			m_fitData.paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
 	}
+
 	parametersChanged();
 }
 
