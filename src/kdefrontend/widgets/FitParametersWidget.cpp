@@ -41,7 +41,7 @@
 	\ingroup kdefrontend
  */
 FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent),
-	m_fitData(data), m_changed(false), m_rehighlighting(false) {
+	m_fitData(data), m_changed(false), m_rehighlighting(false), m_invalidRanges(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -336,11 +336,14 @@ void FitParametersWidget::startValueChanged() {
 
 	const bool invalid = (value < lowerLimit || value > upperLimit);
 	highlightInvalid(row, 1, invalid);
+	if (invalid)
+		m_invalidRanges = true;
 
 	if (m_rehighlighting)
 		return;
 
 	//start value was changed -> check whether the lower and upper limits are valid and highlight them if not
+	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	lowerLimitChanged();
 	upperLimitChanged();
@@ -367,11 +370,14 @@ void FitParametersWidget::lowerLimitChanged() {
 
 	const bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
 	highlightInvalid(row, 3, invalid);
+	if (invalid)
+		m_invalidRanges = true;
 
 	if (m_rehighlighting)
 		return;
 
 	//lower limit was changed -> check whether the start value and the upper limit are valid and highlight them if not
+	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	startValueChanged();
 	upperLimitChanged();
@@ -398,11 +404,14 @@ void FitParametersWidget::upperLimitChanged() {
 
 	const bool invalid = (upperLimit < value || upperLimit < lowerLimit);
 	highlightInvalid(row, 4, invalid);
+	if (invalid)
+		m_invalidRanges = true;
 
 	if (m_rehighlighting)
 		return;
 
 	//upper limit was changed -> check whether the start value and the lower limit are valid and highlight them if not
+	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	startValueChanged();
 	lowerLimitChanged();
@@ -474,4 +483,9 @@ void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const
 		le->setStyleSheet("QLineEdit{background: red;}");
 	else
 		le->setStyleSheet("");
+
+	if (m_invalidRanges)
+		ui.pbApply->setEnabled(false);
+	else
+		ui.pbApply->setEnabled(true);
 }

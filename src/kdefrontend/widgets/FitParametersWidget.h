@@ -45,6 +45,7 @@ private:
 	XYFitCurve::FitData* m_fitData;
 	bool m_changed;
 	bool m_rehighlighting;
+	bool m_invalidRanges;
 
 	bool eventFilter(QObject*, QEvent*);
 	void highlightInvalid(int row, int col, bool invalid) const;
