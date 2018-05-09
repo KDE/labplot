@@ -88,14 +88,14 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
-	connect( ui.lePosition, SIGNAL(returnPressed()), this, SLOT(positionChanged()) );
+	connect( ui.lePosition, SIGNAL(textChanged(QString)), this, SLOT(positionChanged()) );
 	connect( ui.cbScale, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleChanged(int)) );
 
 	connect( ui.chkAutoScale, SIGNAL(stateChanged(int)), this, SLOT(autoScaleChanged(int)) );
-	connect( ui.leStart, SIGNAL(returnPressed()), this, SLOT(startChanged()) );
-	connect( ui.leEnd, SIGNAL(returnPressed()), this, SLOT(endChanged()) );
-	connect( ui.leZeroOffset, SIGNAL(returnPressed()), this, SLOT(zeroOffsetChanged()) );
-	connect( ui.leScalingFactor, SIGNAL(returnPressed()), this, SLOT(scalingFactorChanged()) );
+	connect( ui.leStart, SIGNAL(textChanged(QString)), this, SLOT(startChanged()) );
+	connect( ui.leEnd, SIGNAL(textChanged(QString)), this, SLOT(endChanged()) );
+	connect( ui.leZeroOffset, SIGNAL(textChanged(QString)), this, SLOT(zeroOffsetChanged()) );
+	connect( ui.leScalingFactor, SIGNAL(textChanged(QString)), this, SLOT(scalingFactorChanged()) );
 
 	//"Line"-tab
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
@@ -110,7 +110,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
 	connect( ui.cbMajorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksTypeChanged(int)) );
 	connect( ui.sbMajorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(majorTicksNumberChanged(int)) );
-	connect( ui.leMajorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(majorTicksIncrementChanged()) );
+	connect( ui.leMajorTicksIncrement, SIGNAL(textChanged(QString)), this, SLOT(majorTicksIncrementChanged()) );
 	connect( cbMajorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(majorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMajorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMajorTicksColor, SIGNAL(changed(QColor)), this, SLOT(majorTicksColorChanged(QColor)) );
@@ -122,7 +122,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.cbMinorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksDirectionChanged(int)) );
 	connect( ui.cbMinorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksTypeChanged(int)) );
 	connect( ui.sbMinorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(minorTicksNumberChanged(int)) );
-	connect( ui.leMinorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(minorTicksIncrementChanged()) );
+	connect( ui.leMinorTicksIncrement, SIGNAL(textChanged(QString)), this, SLOT(minorTicksIncrementChanged()) );
 	connect( cbMinorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(minorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMinorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMinorTicksColor, SIGNAL(changed(QColor)), this, SLOT(minorTicksColorChanged(QColor)) );
@@ -141,8 +141,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
 	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelsFontChanged(QFont)) );
 	connect( ui.kcbLabelsFontColor, SIGNAL(changed(QColor)), this, SLOT(labelsFontColorChanged(QColor)) );
-	connect( ui.leLabelsPrefix, SIGNAL(returnPressed()), this, SLOT(labelsPrefixChanged()) );
-	connect( ui.leLabelsSuffix, SIGNAL(returnPressed()), this, SLOT(labelsSuffixChanged()) );
+	connect( ui.leLabelsPrefix, SIGNAL(textChanged(QString)), this, SLOT(labelsPrefixChanged()) );
+	connect( ui.leLabelsSuffix, SIGNAL(textChanged(QString)), this, SLOT(labelsSuffixChanged()) );
 	connect( ui.sbLabelsOpacity, SIGNAL(valueChanged(int)), this, SLOT(labelsOpacityChanged(int)) );
 
 	/*

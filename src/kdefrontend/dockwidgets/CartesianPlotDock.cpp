@@ -123,13 +123,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( rangeButtonsGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(rangeTypeChanged()) );
 
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
-	connect( ui.leXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
-	connect( ui.leXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
+	connect( ui.leXMin, SIGNAL(textChanged(QString)), this, SLOT(xMinChanged()) );
+	connect( ui.leXMax, SIGNAL(textChanged(QString)), this, SLOT(xMaxChanged()) );
 	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
 
 	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
-	connect( ui.leYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
-	connect( ui.leYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
+	connect( ui.leYMin, SIGNAL(textChanged(QString)), this, SLOT(yMinChanged()) );
+	connect( ui.leYMax, SIGNAL(textChanged(QString)), this, SLOT(yMaxChanged()) );
 	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
 
 	//Range breaks
@@ -137,8 +137,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.bAddXBreak, SIGNAL(clicked()), this, SLOT(addXBreak()) );
 	connect( ui.bRemoveXBreak, SIGNAL(clicked()), this, SLOT(removeXBreak()) );
 	connect( ui.cbXBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentXBreakChanged(int)) );
-	connect( ui.leXBreakStart, SIGNAL(returnPressed()), this, SLOT(xBreakStartChanged()) );
-	connect( ui.leXBreakEnd, SIGNAL(returnPressed()), this, SLOT(xBreakEndChanged()) );
+	connect( ui.leXBreakStart, SIGNAL(textChanged(QString)), this, SLOT(xBreakStartChanged()) );
+	connect( ui.leXBreakEnd, SIGNAL(textChanged(QString)), this, SLOT(xBreakEndChanged()) );
 	connect( ui.sbXBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(xBreakPositionChanged(int)) );
 	connect( ui.cbXBreakStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(xBreakStyleChanged(int)) );
 
@@ -146,8 +146,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.bAddYBreak, SIGNAL(clicked()), this, SLOT(addYBreak()) );
 	connect( ui.bRemoveYBreak, SIGNAL(clicked()), this, SLOT(removeYBreak()) );
 	connect( ui.cbYBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentYBreakChanged(int)) );
-	connect( ui.leYBreakStart, SIGNAL(returnPressed()), this, SLOT(yBreakStartChanged()) );
-	connect( ui.leYBreakEnd, SIGNAL(returnPressed()), this, SLOT(yBreakEndChanged()) );
+	connect( ui.leYBreakStart, SIGNAL(textChanged(QString)), this, SLOT(yBreakStartChanged()) );
+	connect( ui.leYBreakEnd, SIGNAL(textChanged(QString)), this, SLOT(yBreakEndChanged()) );
 	connect( ui.sbYBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(yBreakPositionChanged(int)) );
 	connect( ui.cbYBreakStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(yBreakStyleChanged(int)) );
 
@@ -157,7 +157,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
-	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.leBackgroundFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
 	connect( ui.leBackgroundFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
