@@ -50,7 +50,7 @@ public:
 				degree(1),
 				maxIterations(500),
 				eps(1e-4),
-				evaluatedPoints(100),
+				evaluatedPoints(1000),
 				useDataErrors(true),
 				useResults(true),
 				autoRange(true),
