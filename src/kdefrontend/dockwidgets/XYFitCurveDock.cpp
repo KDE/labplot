@@ -843,7 +843,7 @@ void XYFitCurveDock::enableRecalculate() const {
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-//	if (hasSourceData)
+//TODO	if (hasSourceData)
 //		m_fitCurve->evaluate(true);
 }
 

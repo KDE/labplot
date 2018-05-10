@@ -1998,6 +1998,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	//redraw the curve
 	emit q->dataChanged();
+	//TODO: this should be already done by dataChanged()
+	q->retransform();
 }
 
 /*!
