@@ -61,6 +61,7 @@ public:
 	XYFitCurve* const q;
 
 private:
+	void evaluate();
 	void writeSolverState(gsl_multifit_fdfsolver*);
 };
 

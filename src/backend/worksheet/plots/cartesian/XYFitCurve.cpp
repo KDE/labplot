@@ -1938,7 +1938,32 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_matrix_free(covar);
 
 	//calculate the fit function (vectors)
+	evaluate();
+
+	fitResult.elapsedTime = timer.elapsed();
+
+	//redraw the curve
+	emit q->dataChanged();
+	sourceDataChangedSinceLastRecalc = false;
+}
+
+/* evaluate fit function */
+void XYFitCurvePrivate::evaluate() {
+	DEBUG("XYFitCurvePrivate::evaluate()");
+
+	const AbstractColumn* tmpXDataColumn = 0;
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+		//spreadsheet columns as data source
+		DEBUG("	spreadsheet columns as data source");
+		tmpXDataColumn = xDataColumn;
+	} else {
+		//curve columns as data source
+		DEBUG("	curve columns as data source");
+		tmpXDataColumn = dataSourceCurve->xColumn();
+	}
+
 	ExpressionParser* parser = ExpressionParser::getInstance();
+	double xmin, xmax;
 	if (fitData.autoEvalRange) { // evaluate fit on full data range if selected
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
@@ -1946,21 +1971,15 @@ void XYFitCurvePrivate::recalculate() {
 		xmin = fitData.evalRange.first();
 		xmax = fitData.evalRange.last();
 	}
-	DEBUG("eval range = " << xmin << " .. " << xmax);
+	DEBUG("	eval range = " << xmin << " .. " << xmax);
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints, xVector, yVector,
-						fitData.paramNames, fitResult.paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
+						xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
 	}
-
-	fitResult.elapsedTime = timer.elapsed();
-
-	//redraw the curve
-	emit q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
 }
 
 /*!
