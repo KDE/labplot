@@ -96,6 +96,8 @@ Source: "{#CraftRoot}\bin\Qt5SerialPort.dll"; DestDir: "{app}"; Flags: ignorever
 Source: "{#CraftRoot}\bin\Qt5TextToSpeech.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\printsupport"; Flags: ignoreversion
+; fix https://stackoverflow.com/questions/20495620/qt-5-1-1-application-failed-to-start-because-platform-plugin-windows-is-missi
+Source: "{#CraftRoot}\bin\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#CraftRoot}\dev-utils\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; cantor
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -104,7 +106,6 @@ Source: "{#CraftRoot}\bin\libcantorlibs.dll"; DestDir: "{app}"; Flags: ignorever
 Source: "{#CraftRoot}\bin\libcantor_config.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CraftRoot}\plugins\cantor\*"; DestDir: "{app}\plugins\cantor"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\libKF5NewStuffCore.dll"; DestDir: "{app}";Flags: ignoreversion
-Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}";Flags: ignoreversion
 ; misc
 Source: "{#CraftRoot}\bin\libfftw3.dll"; DestDir: "{app}"; DestName: "libfftw3-3.dll"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\netcdf.dll"; DestDir: "{app}"; Flags: ignoreversion
