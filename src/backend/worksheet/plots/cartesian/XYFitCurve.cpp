@@ -699,10 +699,11 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData);
+// TODO: do not recalculate
+STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
-	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options")));
+	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
 }
 
 //##############################################################################
