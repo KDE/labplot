@@ -161,51 +161,51 @@ double nsl_fit_model_fourier_param_deriv(unsigned int param, unsigned int degree
 }
 
 /* peak */
-double nsl_fit_model_gaussian_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_gaussian_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double s2 = s*s, norm = sqrt(weight)/sqrt(2.*M_PI)/s, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
 	if (param == 0)
-		return A * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
-	if (param == 1)
-		return A * norm/s2 * (x-mu) * efactor;
-	if (param == 2)
 		return norm * efactor;
+	if (param == 1)
+		return A * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
+	if (param == 2)
+		return A * norm/s2 * (x-mu) * efactor;
 
 	return 0;
 }
-double nsl_fit_model_lorentz_param_deriv(unsigned int param, double x, double s, double t, double A, double weight) {
+double nsl_fit_model_lorentz_param_deriv(unsigned int param, double x, double A, double s, double t, double weight) {
 	double norm = sqrt(weight)/M_PI, denom = s*s+(x-t)*(x-t);
 
 	if (param == 0)
-		return A * norm * ((x-t)*(x-t) - s*s)/(denom*denom);
-	if (param == 1)
-		return A * norm * 2.*s*(x-t)/(denom*denom);
-	if (param == 2)
 		return norm * s/denom;
+	if (param == 1)
+		return A * norm * ((x-t)*(x-t) - s*s)/(denom*denom);
+	if (param == 2)
+		return A * norm * 2.*s*(x-t)/(denom*denom);
 
 	return 0;
 }
-double nsl_fit_model_sech_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_sech_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double y = (x-mu)/s, norm = sqrt(weight)/M_PI/s;
 
 	if (param == 0)
-		return A/s * norm * (y*tanh(y)-1.)/cosh(y);
-	if (param == 1)
-		return A/s * norm * tanh(y)/cosh(y);
-	if (param == 2)
 		return norm/cosh(y);
+	if (param == 1)
+		return A/s * norm * (y*tanh(y)-1.)/cosh(y);
+	if (param == 2)
+		return A/s * norm * tanh(y)/cosh(y);
 
 	return 0;
 }
-double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double y = (x-mu)/2./s, norm = sqrt(weight)/4./s;
 
 	if (param == 0)
-		return A/s * norm * (2.*y*tanh(y)-1.)/cosh(y);
-	if (param == 1)
-		return A/s * norm * tanh(y)/cosh(y)/cosh(y);
-	if (param == 2)
 		return norm/cosh(y)/cosh(y);
+	if (param == 1)
+		return A/s * norm * (2.*y*tanh(y)-1.)/cosh(y);
+	if (param == 2)
+		return A/s * norm * tanh(y)/cosh(y)/cosh(y);
 
 	return 0;
 }
