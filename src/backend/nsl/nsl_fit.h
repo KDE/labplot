@@ -96,7 +96,7 @@ double nsl_fit_model_gaussian_tail_param_deriv(unsigned int param, double x, dou
 double nsl_fit_model_exponential_param_deriv(unsigned int param, double x, double a, double l, double mu, double weight);
 double nsl_fit_model_laplace_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
 double nsl_fit_model_exp_pow_param_deriv(unsigned int param, double x, double a, double s, double b, double mu, double weight);
-double nsl_fit_model_poisson_param_deriv(unsigned int param, double x, double l, double a, double weight);
+double nsl_fit_model_poisson_param_deriv(unsigned int param, double x, double a, double l, double weight);
 double nsl_fit_model_lognormal_param_deriv(unsigned int param, double x, double a, double b, double mu, double weight);
 double nsl_fit_model_gamma_param_deriv(unsigned int param, double x, double a, double k, double t, double weight);
 double nsl_fit_model_flat_param_deriv(unsigned int param, double x, double A, double b, double a, double weight);
@@ -108,19 +108,19 @@ double nsl_fit_model_students_t_param_deriv(unsigned int param, double x, double
 double nsl_fit_model_fdist_param_deriv(unsigned int param, double x, double a, double n1, double n2, double weight);
 double nsl_fit_model_beta_param_deriv(unsigned int param, double x, double A, double a, double b, double weight);
 double nsl_fit_model_pareto_param_deriv(unsigned int param, double x, double A, double a, double b, double weight);
-double nsl_fit_model_weibull_param_deriv(unsigned int param, double x, double k, double l, double mu, double a, double weight);
-double nsl_fit_model_gumbel1_param_deriv(unsigned int param, double x, double s, double b, double mu, double a, double weight);
-double nsl_fit_model_gumbel2_param_deriv(unsigned int param, double x, double a, double b, double mu, double A, double weight);
-double nsl_fit_model_binomial_param_deriv(unsigned int param, double x, double p, double n, double A, double weight);
-double nsl_fit_model_negative_binomial_param_deriv(unsigned int param, double k, double p, double n, double A, double weight);
-double nsl_fit_model_pascal_param_deriv(unsigned int param, double k, double p, double n, double A, double weight);
-double nsl_fit_model_geometric_param_deriv(unsigned int param, double k, double p, double A, double weight);
-double nsl_fit_model_hypergeometric_param_deriv(unsigned int param, double k, double n1, double n2, double t, double A, double weight);
-double nsl_fit_model_logarithmic_param_deriv(unsigned int param, double k, double p, double A, double weight);
+double nsl_fit_model_weibull_param_deriv(unsigned int param, double x, double a, double k, double l, double mu, double weight);
+double nsl_fit_model_gumbel1_param_deriv(unsigned int param, double x, double a, double s, double mu, double b, double weight);
+double nsl_fit_model_gumbel2_param_deriv(unsigned int param, double x, double A, double a, double b, double mu, double weight);
+double nsl_fit_model_binomial_param_deriv(unsigned int param, double x, double A, double p, double n, double weight);
+double nsl_fit_model_negative_binomial_param_deriv(unsigned int param, double k, double A, double p, double n, double weight);
+double nsl_fit_model_pascal_param_deriv(unsigned int param, double k, double A, double p, double n, double weight);
+double nsl_fit_model_geometric_param_deriv(unsigned int param, double k, double A, double p, double weight);
+double nsl_fit_model_hypergeometric_param_deriv(unsigned int param, double k, double A, double n1, double n2, double t, double weight);
+double nsl_fit_model_logarithmic_param_deriv(unsigned int param, double k, double A, double p, double weight);
 
-double nsl_fit_model_maxwell_param_deriv(unsigned int param, double x, double a, double c, double weight);
+double nsl_fit_model_maxwell_param_deriv(unsigned int param, double x, double a, double s, double weight);
 double nsl_fit_model_sech_dist_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
 double nsl_fit_model_levy_param_deriv(unsigned int param, double x, double a, double g, double mu, double weight);
-double nsl_fit_model_frechet_param_deriv(unsigned int param, double x, double a, double mu, double s, double c, double weight);
+double nsl_fit_model_frechet_param_deriv(unsigned int param, double x, double A, double g, double s, double mu, double weight);
 
 #endif /* NSL_FIT_H */
