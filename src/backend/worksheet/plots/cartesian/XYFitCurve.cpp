@@ -176,8 +176,8 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
 			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
-			paramStartValues[1] = (xmin+xmax)/2.;
-			paramStartValues[0] = xrange/10.;
+			paramStartValues[2] = (xmin+xmax)/2.;
+			paramStartValues[1] = xrange/10.;
 			break;
 		//TODO: other types
 		default:
@@ -510,16 +510,16 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
-			paramNames << "s" << "mu" << "a";
-			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
+			paramNames << "a" << "s" << "mu";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_gaussian_tail:
 			paramNames << "s" << "mu" << "A" << "a";
 			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A" << "a";
 			break;
 		case nsl_sf_stats_exponential:
-			paramNames << "l" << "mu" << "a";
-			paramNamesUtf8 << UTF8_QSTRING("λ") << UTF8_QSTRING("μ") << "A";
+			paramNames << "a" << "l" << "mu";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_exponential_power:
 			paramNames << "s" << "mu" << "b" << "a";
@@ -527,8 +527,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
-			paramNames << "g" << "mu" << "a";
-			paramNamesUtf8 << UTF8_QSTRING("γ") << UTF8_QSTRING("μ") << "A";
+			paramNames << "a" << "g" << "mu";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_rayleigh:
 			paramNames << "s" << "a";
@@ -633,9 +633,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		if (modelCategory == nsl_fit_model_distribution) {
 			if (modelType == (int)nsl_sf_stats_flat)
 				paramStartValues[0] = -1.0;
-			else if (modelType == (int)nsl_sf_stats_frechet || modelType == (int)nsl_sf_stats_levy || modelType == (int)nsl_sf_stats_exponential_power)
+			else if (modelType == (int)nsl_sf_stats_frechet || modelType == (int)nsl_sf_stats_exponential_power)
 				paramStartValues[1] = 0.0;
-			else if (modelType == (int)nsl_sf_stats_weibull || modelType == (int)nsl_sf_stats_gumbel2)
+			else if (modelType == (int)nsl_sf_stats_levy || modelType == (int)nsl_sf_stats_weibull || modelType == (int)nsl_sf_stats_gumbel2)
 				paramStartValues[2] = 0.0;
 			else if (modelType == (int)nsl_sf_stats_binomial || modelType == (int)nsl_sf_stats_negative_binomial || modelType == (int)nsl_sf_stats_pascal
 				|| modelType == (int)nsl_sf_stats_geometric || modelType == (int)nsl_sf_stats_logarithmic)
@@ -1026,9 +1026,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
 		case nsl_sf_stats_levy: {
-			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -1038,34 +1038,34 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					else {
 						switch (modelType) {
 						case nsl_sf_stats_gaussian:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gaussian_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gaussian_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_exponential:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_exponential_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_exponential_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_laplace:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_laplace_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_laplace_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_cauchy_lorentz:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_lorentz_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_lorentz_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_rayleigh_tail:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_rayleigh_tail_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_rayleigh_tail_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_lognormal:
 							if (x > 0)
-								gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_lognormal_param_deriv(j, x, s, mu, a, weight[i]));
+								gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_lognormal_param_deriv(j, x, a, s, mu, weight[i]));
 							else
 								gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 							break;
 						case nsl_sf_stats_logistic:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_logistic_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_logistic_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_sech:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sech_dist_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sech_dist_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						case nsl_sf_stats_levy:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_levy_param_deriv(j, x, s, mu, a, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_levy_param_deriv(j, x, a, s, mu, weight[i]));
 							break;
 						}
 					}

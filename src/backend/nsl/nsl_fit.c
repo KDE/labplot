@@ -316,29 +316,29 @@ double nsl_fit_model_gaussian_tail_param_deriv(unsigned int param, double x, dou
 
 	return 0;
 }
-double nsl_fit_model_exponential_param_deriv(unsigned int param, double x, double l, double mu, double A, double weight) {
+double nsl_fit_model_exponential_param_deriv(unsigned int param, double x, double A, double l, double mu, double weight) {
 	if (x < mu)
 		return 0;
 	double y = l*(x-mu), efactor = exp(-y);
 
 	if (param == 0)
-		return sqrt(weight) * A * (1. - y) * efactor;
-	if (param == 1)
-		return sqrt(weight) * A * gsl_pow_2(l) * efactor;
-	if (param == 2)
 		return sqrt(weight) * l * efactor;
+	if (param == 1)
+		return sqrt(weight) * A * (1. - y) * efactor;
+	if (param == 2)
+		return sqrt(weight) * A * gsl_pow_2(l) * efactor;
 
 	return 0;
 }
-double nsl_fit_model_laplace_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_laplace_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double norm = sqrt(weight)/(2.*s), y = fabs((x-mu)/s), efactor = exp(-y);
 
 	if (param == 0)
-		return A/s*norm * (y-1.) * efactor;
-	if (param == 1)
-		return A/(s*s)*norm * (x-mu)/y * efactor;
-	if (param == 2)
 		return norm * efactor;
+	if (param == 1)
+		return A/s*norm * (y-1.) * efactor;
+	if (param == 2)
+		return A/(s*s)*norm * (x-mu)/y * efactor;
 
 	return 0;
 }
@@ -376,15 +376,15 @@ double nsl_fit_model_poisson_param_deriv(unsigned int param, double x, double l,
 
 	return 0;
 }
-double nsl_fit_model_lognormal_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_lognormal_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double norm = sqrt(weight)/sqrt(2.*M_PI)/(x*s), y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
 
 	if (param == 0)
-		return A * norm * (y*y - s*s) * efactor;
-	if (param == 1)
-		return A * norm * y/(s*s) * efactor;
-	if (param == 2)
 		return norm * efactor;
+	if (param == 1)
+		return A * norm * (y*y - s*s) * efactor;
+	if (param == 2)
+		return A * norm * y/(s*s) * efactor;
 
 	return 0;
 }
@@ -423,27 +423,27 @@ double nsl_fit_model_rayleigh_param_deriv(unsigned int param, double x, double s
 
 	return 0;
 }
-double nsl_fit_model_rayleigh_tail_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_rayleigh_tail_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double norm = sqrt(weight)*x/(s*s), y = (mu*mu - x*x)/2./(s*s);
 
 	if (param == 0)
-		return -2. * A * norm/s * (1. + y) * exp(y);
-	if (param == 1)
-		return A * mu * norm/(s*s) * exp(y);
-	if (param == 2)
 		return norm * exp(y);
+	if (param == 1)
+		return -2. * A * norm/s * (1. + y) * exp(y);
+	if (param == 2)
+		return A * mu * norm/(s*s) * exp(y);
 
 	return 0;	
 }
-double nsl_fit_model_levy_param_deriv(unsigned int param, double x, double g, double mu, double A, double weight) {
+double nsl_fit_model_levy_param_deriv(unsigned int param, double x, double A, double g, double mu, double weight) {
 	double y=x-mu, norm = sqrt(weight)*sqrt(g/(2.*M_PI))/pow(y, 1.5), efactor = exp(-g/2./y);
 
 	if (param == 0)
-		return A/2.*norm/g/y * (y - g) * efactor;
-	if (param == 1)
-		return A/2.*norm/y/y * (3.*y - g) * efactor;
-	if (param == 2)
 		return norm * efactor;
+	if (param == 1)
+		return A/2.*norm/g/y * (y - g) * efactor;
+	if (param == 2)
+		return A/2.*norm/y/y * (3.*y - g) * efactor;
 
 	return 0;
 }
@@ -632,15 +632,15 @@ double nsl_fit_model_logarithmic_param_deriv(unsigned int param, double k, doubl
 
 	return 0;
 }
-double nsl_fit_model_sech_dist_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_sech_dist_param_deriv(unsigned int param, double x, double A, double s, double mu, double weight) {
 	double norm = sqrt(weight)/2./s, y = M_PI/2.*(x-mu)/s;
 
 	if (param == 0)
-		return -A/s * norm * (y*tanh(y)+1.)/cosh(y);
-	if (param == 1)
-		return A*M_PI/2./s * norm * tanh(y)/cosh(y);
-	if (param == 2)
 		return norm * 1./cosh(y);
+	if (param == 1)
+		return -A/s * norm * (y*tanh(y)+1.)/cosh(y);
+	if (param == 2)
+		return A*M_PI/2./s * norm * tanh(y)/cosh(y);
 
 	return 0;
 }
