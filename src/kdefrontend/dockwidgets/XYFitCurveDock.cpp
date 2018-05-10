@@ -725,11 +725,12 @@ void XYFitCurveDock::updateParameterList() {
 
 void XYFitCurveDock::showParameters() {
 	DEBUG("XYFitCurveDock::showParameters()");
-//	if (m_fitData.modelCategory == nsl_fit_model_custom)
-//		updateParameterList();
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		updateParameterList();
 
-	// update fit data
-	m_fitData = m_fitCurve->fitData();
+//TODO update fit data
+//	m_fitData = m_fitCurve->fitData();
+
 	for (auto value: m_fitData.paramStartValues)
 		DEBUG(" param start value = " << value);
 
@@ -763,10 +764,11 @@ void XYFitCurveDock::parametersChanged() {
 		return;
 	for (auto value: m_fitData.paramStartValues)
 		DEBUG(" param start value = " << value);
-	// update start values
-	if (m_fitData.paramStartValues.size() > 0)
-		for (XYCurve* curve: m_curvesList)
-			dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+//TODO: update start values
+//	if (m_fitData.paramStartValues.size() > 0)
+//		for (XYCurve* curve: m_curvesList) {
+//			dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+//		}
 	enableRecalculate();
 }
 
@@ -803,8 +805,8 @@ void XYFitCurveDock::recalculateClicked() {
 		updateParameterList();
 
 	for (XYCurve* curve: m_curvesList) {
-		//dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
-		dynamic_cast<XYFitCurve*>(curve)->recalculate();
+		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+//TODO		dynamic_cast<XYFitCurve*>(curve)->recalculate();
 	}
 
 	this->showFitResult();
@@ -841,8 +843,8 @@ void XYFitCurveDock::enableRecalculate() const {
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-	if (hasSourceData)
-		m_fitCurve->evaluate(true);
+//	if (hasSourceData)
+//		m_fitCurve->evaluate(true);
 }
 
 void XYFitCurveDock::resultCopySelection() {
