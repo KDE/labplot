@@ -175,7 +175,7 @@ void ExpressionTextEdit::focusInEvent(QFocusEvent* e) {
 }
 
 void ExpressionTextEdit::focusOutEvent(QFocusEvent* e) {
-	//when loosing focus, rehighlight to remove potential highlighting of openning and closing brackets
+	//when loosing focus, rehighlight to remove potential highlighting of opening and closing brackets
 	m_highlighter->rehighlight();
 	QTextEdit::focusOutEvent(e);
 }

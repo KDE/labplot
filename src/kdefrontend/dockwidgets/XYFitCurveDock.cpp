@@ -587,6 +587,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
  * Called when the model type or the degree of the model were changed.
  */
 void XYFitCurveDock::updateModelEquation() {
+	DEBUG("XYFitCurveDock::updateModelEquation()");
 	if (m_fitData.modelCategory == nsl_fit_model_custom) {
 		DEBUG("XYFitCurveDock::updateModelEquation() category = nsl_fit_model_custom, type = " << m_fitData.modelType);
 	} else {
@@ -723,8 +724,14 @@ void XYFitCurveDock::updateParameterList() {
 }
 
 void XYFitCurveDock::showParameters() {
-	if (m_fitData.modelCategory == nsl_fit_model_custom)
-		updateParameterList();
+	DEBUG("XYFitCurveDock::showParameters()");
+//	if (m_fitData.modelCategory == nsl_fit_model_custom)
+//		updateParameterList();
+
+	// update fit data
+	m_fitData = m_fitCurve->fitData();
+	for (auto value: m_fitData.paramStartValues)
+		DEBUG(" param start value = " << value);
 
 	QMenu menu;
 	FitParametersWidget w(&menu, &m_fitData);
@@ -748,8 +755,18 @@ void XYFitCurveDock::showParameters() {
  */
 void XYFitCurveDock::parametersChanged() {
 	DEBUG("XYFitCurveDock::parametersChanged()");
+
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
+
+	if (m_initializing)
+		return;
+	for (auto value: m_fitData.paramStartValues)
+		DEBUG(" param start value = " << value);
+	// update start values
+	if (m_fitData.paramStartValues.size() > 0)
+		for (XYCurve* curve: m_curvesList)
+			dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 	enableRecalculate();
 }
 
@@ -785,8 +802,10 @@ void XYFitCurveDock::recalculateClicked() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
 
-	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+	for (XYCurve* curve: m_curvesList) {
+		//dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+		dynamic_cast<XYFitCurve*>(curve)->recalculate();
+	}
 
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -818,10 +837,12 @@ void XYFitCurveDock::enableRecalculate() const {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != 0 && aspectY != 0);
 	} else {
-		 hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
+	if (hasSourceData)
+		m_fitCurve->evaluate(true);
 }
 
 void XYFitCurveDock::resultCopySelection() {
@@ -1154,11 +1175,11 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 }
 
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
+	DEBUG("XYFitCurveDock::curveFitDataChanged()");
 	m_initializing = true;
 	m_fitData = fitData;
-	if (m_fitData.modelCategory == nsl_fit_model_custom)
-		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
-	else
+
+	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);

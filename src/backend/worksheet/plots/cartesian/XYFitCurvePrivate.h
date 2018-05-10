@@ -45,6 +45,7 @@ public:
 	~XYFitCurvePrivate() override;
 
 	void recalculate();
+	void evaluate(bool preview = false);
 
 	const AbstractColumn* xErrorColumn; //<! column storing the values for the x-error to be used in the fit
 	const AbstractColumn* yErrorColumn; //<! column storing the values for the y-error to be used in the fit
@@ -61,7 +62,6 @@ public:
 	XYFitCurve* const q;
 
 private:
-	void evaluate();
 	void writeSolverState(gsl_multifit_fdfsolver*);
 };
 

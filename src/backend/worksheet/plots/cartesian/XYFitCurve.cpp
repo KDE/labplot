@@ -78,6 +78,11 @@ void XYFitCurve::recalculate() {
 	d->recalculate();
 }
 
+void XYFitCurve::evaluate(bool preview) {
+	Q_D(XYFitCurve);
+	d->evaluate(preview);
+}
+
 void XYFitCurve::initStartValues(const XYCurve* curve) {
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
@@ -694,10 +699,10 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
+STD_SETTER_CMD_IMPL_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData);
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
-	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
+	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options")));
 }
 
 //##############################################################################
@@ -1942,25 +1947,28 @@ void XYFitCurvePrivate::recalculate() {
 
 	fitResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
-	emit q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 
 /* evaluate fit function */
-void XYFitCurvePrivate::evaluate() {
-	DEBUG("XYFitCurvePrivate::evaluate()");
+void XYFitCurvePrivate::evaluate(bool preview) {
+	DEBUG("XYFitCurvePrivate::evaluate() preview = " << preview);
 
 	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		DEBUG("	spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
 	} else {
 		//curve columns as data source
 		DEBUG("	curve columns as data source");
 		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
+	if (!tmpXDataColumn || ! tmpYDataColumn || !xVector || !yVector)
+		return;
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	double xmin, xmax;
@@ -1974,12 +1982,21 @@ void XYFitCurvePrivate::evaluate() {
 	DEBUG("	eval range = " << xmin << " .. " << xmax);
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
+
+	QVector<double> paramValues = fitResult.paramValues;
+	if (preview)
+		paramValues = fitData.paramStartValues;
+	for (auto value: paramValues)
+		DEBUG("	param value = " << value);
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
-						xVector, yVector, fitData.paramNames, fitResult.paramValues);
+						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
 	}
+
+	//redraw the curve
+	emit q->dataChanged();
 }
 
 /*!

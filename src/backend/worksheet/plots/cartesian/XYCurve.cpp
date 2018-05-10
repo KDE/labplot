@@ -869,6 +869,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
+	DEBUG("XYCurvePrivate::retransform()");
 	if (m_suppressRetransform || !plot)
 		return;
 

@@ -123,6 +123,7 @@ public:
 	~XYFitCurve() override;
 
 	void recalculate() override;
+	void evaluate(bool preview);
 	void initFitData(PlotDataDialog::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
 	void initStartValues(const XYCurve*);
