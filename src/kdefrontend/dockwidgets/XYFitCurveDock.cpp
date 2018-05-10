@@ -538,6 +538,8 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	uiGeneralTab.lDegree->setText(i18n("Degree"));
 	uiGeneralTab.sbDegree->setValue(1);
 
+	// TODO: reset start values
+
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		switch (type) {
@@ -691,6 +693,10 @@ void XYFitCurveDock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
+/*!
+ * Update parameter by parsing expression
+ * Only called for custom fit model
+ */
 void XYFitCurveDock::updateParameterList() {
 	DEBUG("XYFitCurveDock::updateParameterList()");
 	// use current model function
@@ -723,6 +729,9 @@ void XYFitCurveDock::updateParameterList() {
 	parametersChanged();
 }
 
+/*!
+ * open parameter dialog to change parameter settings
+ */
 void XYFitCurveDock::showParameters() {
 	DEBUG("XYFitCurveDock::showParameters()");
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -731,8 +740,8 @@ void XYFitCurveDock::showParameters() {
 //TODO update fit data
 //	m_fitData = m_fitCurve->fitData();
 
-	for (auto value: m_fitData.paramStartValues)
-		DEBUG(" param start value = " << value);
+//	for (auto value: m_fitData.paramStartValues)
+//		DEBUG(" param start value = " << value);
 
 	QMenu menu;
 	FitParametersWidget w(&menu, &m_fitData);
@@ -752,7 +761,8 @@ void XYFitCurveDock::showParameters() {
 }
 
 /*!
- * called when parameter names and/or start values for the custom model were changed
+ * called when parameter names and/or start values for the model were changed
+ * also called from parameter widget
  */
 void XYFitCurveDock::parametersChanged() {
 	DEBUG("XYFitCurveDock::parametersChanged()");
@@ -762,8 +772,8 @@ void XYFitCurveDock::parametersChanged() {
 
 	if (m_initializing)
 		return;
-	for (auto value: m_fitData.paramStartValues)
-		DEBUG(" param start value = " << value);
+//	for (auto value: m_fitData.paramStartValues)
+//		DEBUG(" param start value = " << value);
 //TODO: update start values
 //	if (m_fitData.paramStartValues.size() > 0)
 //		for (XYCurve* curve: m_curvesList) {
@@ -1176,6 +1186,9 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
+/*!
+ * called when fit data of fit curve changes
+ */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 	DEBUG("XYFitCurveDock::curveFitDataChanged()");
 	m_initializing = true;
