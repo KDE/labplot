@@ -211,69 +211,69 @@ double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double A
 }
 
 /* growth */
-double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
 	double norm = sqrt(weight), y = (x-mu)/s;
 	if (param == 0)
-		return -A/s * norm * y/(1.+y*y);
+		return norm * atan(y);
 	if (param == 1)
 		return -A/s * norm * 1./(1+y*y);
 	if (param == 2)
-		return norm * atan(y);
+		return -A/s * norm * y/(1.+y*y);
 
 	return 0;
 }
-double nsl_fit_model_tanh_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_tanh_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
 	double norm = sqrt(weight), y = (x-mu)/s;
 	if (param == 0)
-		return -A/s * norm * y/cosh(y)/cosh(y);
+		return norm * tanh(y);
 	if (param == 1)
 		return -A/s * norm * 1./cosh(y)/cosh(y);
 	if (param == 2)
-		return norm * tanh(y);
+		return -A/s * norm * y/cosh(y)/cosh(y);
 
 	return 0;
 }
-double nsl_fit_model_algebraic_sigmoid_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_algebraic_sigmoid_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
 	double norm = sqrt(weight), y = (x-mu)/s, y2 = y*y;
 	if (param == 0)
-		return -A/s * norm * y/pow(1.+y2, 1.5);
+		return norm * y/sqrt(1.+y2);
 	if (param == 1)
 		return -A/s * norm * 1./pow(1.+y2, 1.5);
 	if (param == 2)
-		return norm * y/sqrt(1.+y2);
+		return -A/s * norm * y/pow(1.+y2, 1.5);
 
 	return 0;
 }
-double nsl_fit_model_sigmoid_param_deriv(unsigned int param, double x, double k, double mu, double A, double weight) {
+double nsl_fit_model_sigmoid_param_deriv(unsigned int param, double x, double A, double mu, double k, double weight) {
 	double norm = sqrt(weight), y = k*(x-mu);
 	if (param == 0)
-		return A/k * norm * y*exp(-y)/gsl_pow_2(1. + exp(-y));
+		return norm/(1. + exp(-y));
 	if (param == 1)
 		return -A*k * norm * exp(-y)/gsl_pow_2(1. + exp(-y));
 	if (param == 2)
-		return norm/(1. + exp(-y));
+		return A/k * norm * y*exp(-y)/gsl_pow_2(1. + exp(-y));
 
 	return 0;
 }
-double nsl_fit_model_erf_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_erf_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
 	double norm = sqrt(weight), y = (x-mu)/(sqrt(2.)*s);
 	if (param == 0)
-		return -A/sqrt(M_PI)/s * norm * y*exp(-y*y);
+		return norm/2. * gsl_sf_erf(y);
 	if (param == 1)
 		return -A/sqrt(2.*M_PI)/s * norm * exp(-y*y);
 	if (param == 2)
-		return norm/2. * gsl_sf_erf(y);
+		return -A/sqrt(M_PI)/s * norm * y*exp(-y*y);
 
 	return 0;
 }
-double nsl_fit_model_hill_param_deriv(unsigned int param, double x, double s, double n, double A, double weight) {
+double nsl_fit_model_hill_param_deriv(unsigned int param, double x, double A, double n, double s, double weight) {
 	double norm = sqrt(weight), y = x/s;
 	if (param == 0)
-		return -A*n/s * norm * pow(y, n)/gsl_pow_2(1.+pow(y, n));
+		return norm * pow(y, n)/(1.+pow(y, n));
 	if (param == 1)
 		return A * norm * log(y)*pow(y, n)/gsl_pow_2(1.+pow(y, n));
 	if (param == 2)
-		return norm * pow(y, n)/(1.+pow(y, n));
+		return -A*n/s * norm * pow(y, n)/gsl_pow_2(1.+pow(y, n));
 
 	return 0;
 }
@@ -287,14 +287,14 @@ double nsl_fit_model_gompertz_param_deriv(unsigned int param, double x, double a
 
 	return 0;
 }
-double nsl_fit_model_gudermann_param_deriv(unsigned int param, double x, double s, double mu, double A, double weight) {
+double nsl_fit_model_gudermann_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
 	double norm = sqrt(weight), y = (x-mu)/s;
 	if (param == 0)
-		return -A/s * norm * y/cosh(y);
+		return -asin(tanh(y));
 	if (param == 1)
 		return -A/s * norm * 1./cosh(y);
 	if (param == 2)
-		return -asin(tanh(y));
+		return -A/s * norm * y/cosh(y);
 
 	return 0;
 }

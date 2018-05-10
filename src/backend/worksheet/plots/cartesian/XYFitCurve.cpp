@@ -155,10 +155,10 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_sigmoid:
 			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
 			paramStartValues[1] = (xmax+xmin)/2.;
-			paramStartValues[0] = xrange/10.;
+			paramStartValues[2] = xrange/10.;
 			break;
 		case nsl_fit_model_hill:
-			paramStartValues[0] = xrange/10.;
+			paramStartValues[2] = xrange/10.;
 			break;
 		case nsl_fit_model_gompertz:
 			//TODO
@@ -485,16 +485,16 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
-			paramNames << "s" << "mu" << "a";
-			paramNamesUtf8 << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << "A";
+			paramNames << "a" << "mu" << "s";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_sigmoid:
-			paramNames << "k" << "mu" << "a";
-			paramNamesUtf8 << "k" << UTF8_QSTRING("μ") << "A";
+			paramNames << "a" << "mu" << "k";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << "k";
 			break;
 		case nsl_fit_model_hill:
-			paramNames << "s" << "n" << "a";
-			paramNamesUtf8 << UTF8_QSTRING("σ") << "n" << "A";
+			paramNames << "a" << "n" << "a";
+			paramNamesUtf8 << "A" << "n" << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_gompertz:
 			paramNames << "a" << "b" << "c";
@@ -973,9 +973,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_growth: {
-		const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+		const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
@@ -986,28 +986,28 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				} else {
 					switch (modelType) {
 					case nsl_fit_model_atan:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_atan_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_tanh:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_tanh_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_algebraic_sigmoid:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_sigmoid:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sigmoid_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_sigmoid_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_erf:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_erf_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_hill:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_hill_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_gompertz:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gompertz_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gompertz_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					case nsl_fit_model_gudermann:
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gudermann_param_deriv(j, x, s, mu, a, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_gudermann_param_deriv(j, x, a, mu, s, weight[i]));
 						break;
 					}
 				}
