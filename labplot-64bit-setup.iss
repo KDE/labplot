@@ -99,7 +99,7 @@ Source: "{#CraftRoot}\plugins\printsupport\windowsprintersupport.dll"; DestDir: 
 ; fix https://stackoverflow.com/questions/20495620/qt-5-1-1-application-failed-to-start-because-platform-plugin-windows-is-missi
 Source: "{#CraftRoot}\bin\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; missing lib on minimal Windows 10
-Source: "{#CraftRoot}\bin\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Python36\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#CraftRoot}\dev-utils\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; cantor
 Source: "{#CraftRoot}\bin\cantor.exe"; DestDir: "{app}"; Flags: ignoreversion
