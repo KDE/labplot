@@ -300,19 +300,19 @@ double nsl_fit_model_gudermann_param_deriv(unsigned int param, double x, double 
 }
 
 /* distributions */
-double nsl_fit_model_gaussian_tail_param_deriv(unsigned int param, double x, double s, double mu, double A, double a, double weight) {
+double nsl_fit_model_gaussian_tail_param_deriv(unsigned int param, double x, double A, double s, double a, double mu, double weight) {
 	if (x < a)
 		return 0;
 	double s2 = s*s, N = erfc(a/s/M_SQRT2)/2., norm = sqrt(weight)/sqrt(2.*M_PI)/s/N, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
 	if (param == 0)
-		return A * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
-	if (param == 1)
-		return A * norm/s2 * (x-mu) * efactor;
-	if (param == 2)
 		return norm * efactor;
-	if (param == 3)
+	if (param == 1)
+		return A * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
+	if (param == 2)
 		return A/norm/norm * efactor * exp(-a*a/(2.*s2));
+	if (param == 3)
+		return A * norm/s2 * (x-mu) * efactor;
 
 	return 0;
 }
@@ -342,17 +342,17 @@ double nsl_fit_model_laplace_param_deriv(unsigned int param, double x, double A,
 
 	return 0;
 }
-double nsl_fit_model_exp_pow_param_deriv(unsigned int param, double x, double s, double mu, double b, double a, double weight) {
+double nsl_fit_model_exp_pow_param_deriv(unsigned int param, double x, double a, double s, double b, double mu, double weight) {
 	double norm = sqrt(weight)/2./s/gsl_sf_gamma(1.+1./b), y = (x-mu)/s, efactor = exp(-pow(fabs(y), b));
 
 	if (param == 0)
-		return norm * a/s * efactor * (b * y * pow(fabs(1./y), 1.-b) * GSL_SIGN(y) - 1.);
+		return norm * efactor;
 	if (param == 1)
-		return norm * a*b/s * efactor * pow(fabs(y), b-1.) * GSL_SIGN(y);
+		return norm * a/s * efactor * (b * y * pow(fabs(1./y), 1.-b) * GSL_SIGN(y) - 1.);
 	if (param == 2)
 		return norm * a/b * gsl_sf_gamma(1.+1./b)/gsl_sf_gamma(1./b) * efactor * (gsl_sf_psi(1.+1./b) - gsl_pow_2(b) * pow(fabs(y), b) * log(fabs(y)));
 	if (param == 3)
-		return norm * efactor;
+		return norm * a*b/s * efactor * pow(fabs(y), b-1.) * GSL_SIGN(y);
 
 	return 0;
 }
@@ -388,38 +388,38 @@ double nsl_fit_model_lognormal_param_deriv(unsigned int param, double x, double 
 
 	return 0;
 }
-double nsl_fit_model_gamma_param_deriv(unsigned int param, double x, double t, double k, double A, double weight) {
+double nsl_fit_model_gamma_param_deriv(unsigned int param, double x, double A, double k, double t, double weight) {
 	double factor = sqrt(weight)*pow(x, k-1.)/pow(t, k)/gsl_sf_gamma(k), efactor = exp(-x/t);
 
 	if (param == 0)
-		return A * factor/t * (x/t-k) * efactor;
+		return factor * efactor;
 	if (param == 1)
 		return A * factor * (log(x/t) - gsl_sf_psi(k)) * efactor;
 	if (param == 2)
-		return factor * efactor;
+		return A * factor/t * (x/t-k) * efactor;
 
 	return 0;
 }
-double nsl_fit_model_flat_param_deriv(unsigned int param, double x, double a, double b, double A, double weight) {
+double nsl_fit_model_flat_param_deriv(unsigned int param, double x, double A, double b, double a, double weight) {
 	if (x < a || x > b)
 		return 0;
 
 	if (param == 0)
-		return sqrt(weight) * A/gsl_pow_2(a-b);
+		return sqrt(weight)/(b-a);
 	if (param == 1)
 		return - sqrt(weight) * A/gsl_pow_2(a-b);
 	if (param == 2)
-		return sqrt(weight)/(b-a);
+		return sqrt(weight) * A/gsl_pow_2(a-b);
 
 	return 0;
 }
-double nsl_fit_model_rayleigh_param_deriv(unsigned int param, double x, double s, double A, double weight) {
+double nsl_fit_model_rayleigh_param_deriv(unsigned int param, double x, double A, double s, double weight) {
 	double y=x/s, norm = sqrt(weight)*y/s, efactor = exp(-y*y/2.);
 
 	if (param == 0)
-		return A*y/(s*s) * (y*y-2.)*efactor;
-	if (param == 1)
 		return norm * efactor;
+	if (param == 1)
+		return A*y/(s*s) * (y*y-2.)*efactor;
 
 	return 0;
 }
@@ -453,35 +453,35 @@ double nsl_fit_model_landau_param_deriv(unsigned int param, double x, double wei
 
 	return 0;
 }
-double nsl_fit_model_chi_square_param_deriv(unsigned int param, double x, double n, double A, double weight) {
+double nsl_fit_model_chi_square_param_deriv(unsigned int param, double x, double A, double n, double weight) {
 	double y=n/2., norm = sqrt(weight)*pow(x, y-1.)/pow(2., y)/gsl_sf_gamma(y), efactor = exp(-x/2.);
 
 	if (param == 0)
-		return A/2. * norm * (log(x/2.) - gsl_sf_psi(y)) * efactor;
-	if (param == 1)
 		return norm * efactor;
+	if (param == 1)
+		return A/2. * norm * (log(x/2.) - gsl_sf_psi(y)) * efactor;
 
 	return 0;
 }
-double nsl_fit_model_students_t_param_deriv(unsigned int param, double x, double n, double A, double weight) {
+double nsl_fit_model_students_t_param_deriv(unsigned int param, double x, double A, double n, double weight) {
 	if (param == 0)
+		return sqrt(weight) * gsl_ran_tdist_pdf(x, n);
+	if (param == 1)
 		return sqrt(weight) * A * gsl_sf_gamma((n+1.)/2.)/2./pow(n, 1.5)/sqrt(M_PI)/gsl_sf_gamma(n/2.) * pow(1.+x*x/n, - (n+3.)/2.)
 			* (x*x - 1. - (n+x*x)*log(1.+x*x/n)  + (n+x*x)*(gsl_sf_psi((n+1.)/2.) - gsl_sf_psi(n/2.)) ) ;
-	if (param == 1)
-		return sqrt(weight) * gsl_ran_tdist_pdf(x, n);
 
 	return 0;
 }
-double nsl_fit_model_fdist_param_deriv(unsigned int param, double x, double n1, double n2, double A, double weight) {
+double nsl_fit_model_fdist_param_deriv(unsigned int param, double x, double A, double n1, double n2, double weight) {
 	double norm = sqrt(weight) * gsl_sf_gamma((n1+n2)/2.)/gsl_sf_gamma(n1/2.)/gsl_sf_gamma(n2/2.) * pow(n1, n1/2.) * pow(n2, n2/2.) * pow(x, n1/2.-1.);
 	double y = n2+n1*x;
 
 	if (param == 0)
-		return A/2. * norm * pow(y, -(n1+n2+2.)/2.) * (n2*(1.-x) + y*(log(n1) + log(x) - log(y) + gsl_sf_psi((n1+n2)/2.) - gsl_sf_psi(n1/2.)));
-	if (param == 1)
-		return A/2. * norm * pow(y, -(n1+n2+2.)/2.) * (n1*(x-1.) + y*(log(n2) - log(y) + gsl_sf_psi((n1+n2)/2.) - gsl_sf_psi(n2/2.)));
-	if (param == 2)
 		return sqrt(weight) * gsl_ran_fdist_pdf(x, n1, n2);
+	if (param == 1)
+		return A/2. * norm * pow(y, -(n1+n2+2.)/2.) * (n2*(1.-x) + y*(log(n1) + log(x) - log(y) + gsl_sf_psi((n1+n2)/2.) - gsl_sf_psi(n1/2.)));
+	if (param == 2)
+		return A/2. * norm * pow(y, -(n1+n2+2.)/2.) * (n1*(x-1.) + y*(log(n2) - log(y) + gsl_sf_psi((n1+n2)/2.) - gsl_sf_psi(n2/2.)));
 
 	return 0;
 }
