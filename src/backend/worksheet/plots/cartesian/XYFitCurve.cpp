@@ -563,7 +563,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			break;
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto:
-			paramNames << "a" << "b" << "A";
+			paramNames << "A" << "a" << "b";
 			break;
 		case nsl_sf_stats_weibull:
 			paramNames << "k" << "l" << "mu" << "a";
@@ -1204,9 +1204,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto: {
-			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			const double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -1216,10 +1216,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					else {
 						switch (modelType) {
 						case nsl_sf_stats_beta:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_beta_param_deriv(j, x, a, b, A, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_beta_param_deriv(j, x, A, a, b, weight[i]));
 							break;
 						case nsl_sf_stats_pareto:
-							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_pareto_param_deriv(j, x, a, b, A, weight[i]));
+							gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_pareto_param_deriv(j, x, A, a, b, weight[i]));
 							break;
 						}
 					}

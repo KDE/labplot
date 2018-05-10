@@ -485,29 +485,29 @@ double nsl_fit_model_fdist_param_deriv(unsigned int param, double x, double A, d
 
 	return 0;
 }
-double nsl_fit_model_beta_param_deriv(unsigned int param, double x, double a, double b, double A, double weight) {
+double nsl_fit_model_beta_param_deriv(unsigned int param, double x, double A, double a, double b, double weight) {
 	double norm = sqrt(weight) * A * gsl_sf_gamma(a+b)/gsl_sf_gamma(a)/gsl_sf_gamma(b) * pow(x, a-1.) * pow(1.-x, b-1.);
 
 	if (param == 0)
-		return norm * (log(x) - gsl_sf_psi(a) + gsl_sf_psi(a+b));
-	if (param == 1)
-		return norm * (log(1.-x) - gsl_sf_psi(b) + gsl_sf_psi(a+b));
-	if (param == 2)
 		return sqrt(weight) * gsl_ran_beta_pdf(x, a, b);
+	if (param == 1)
+		return norm * (log(x) - gsl_sf_psi(a) + gsl_sf_psi(a+b));
+	if (param == 2)
+		return norm * (log(1.-x) - gsl_sf_psi(b) + gsl_sf_psi(a+b));
 
 	return 0;
 }
-double nsl_fit_model_pareto_param_deriv(unsigned int param, double x, double a, double b, double A, double weight) {
+double nsl_fit_model_pareto_param_deriv(unsigned int param, double x, double A, double a, double b, double weight) {
 	if (x < b)
 		return 0;
 
 	double norm = sqrt(weight) * A;
 	if (param == 0)
-		return norm * pow(b/x, a) * (1. + a * log(b/x))/x;
-	if (param == 1)
-		return norm * a*a * pow(b/x, a-1.)/x/x;
-	if (param == 2)
 		return sqrt(weight) * gsl_ran_pareto_pdf(x, a, b);
+	if (param == 1)
+		return norm * pow(b/x, a) * (1. + a * log(b/x))/x;
+	if (param == 2)
+		return norm * a*a * pow(b/x, a-1.)/x/x;
 
 	return 0;
 }
