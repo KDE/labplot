@@ -17,6 +17,7 @@
   <name xml:lang="fi">LabPlot</name>
   <name xml:lang="fr">LabPlot</name>
   <name xml:lang="gl">LabPlot</name>
+  <name xml:lang="id">LabPlot</name>
   <name xml:lang="it">LabPlot</name>
   <name xml:lang="nl">LabPlot</name>
   <name xml:lang="pl">LabPlot</name>
@@ -38,6 +39,7 @@
   <summary xml:lang="en-GB">LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos</summary>
   <summary xml:lang="gl">LabPlot2 é un aplicativo de KDE para a xeración interactiva de gráficos e a análise de datos científicos</summary>
+  <summary xml:lang="id">LabPlot adalah aplikasi KDE untuk penggrafikan interaktif dan analisis data ilmiah</summary>
   <summary xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici</summary>
   <summary xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens</summary>
   <summary xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych</summary>
@@ -64,6 +66,7 @@
     <p xml:lang="fi">LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen ja analysointiin</p>
     <p xml:lang="fr">LabPlot est une application KDE pour le tracé interactif de courbes et l'analyse de données scientifiques.</p>
     <p xml:lang="gl">LabPlot2 é un aplicativo de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</p>
+    <p xml:lang="id">LabPlot adalah aplikasi KDE untuk penggrafikan interaktif dan analisis data ilmiah.</p>
     <p xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici.</p>
     <p xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
     <p xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
@@ -89,6 +92,7 @@
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes basées sur des données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
+    <p xml:lang="id">LabPlot menyediakan cara mudah untuk menciptakan, mengelola, dan mengedit plot. Ini membolehkanmu menghasilkan plot berdasarkan data dari spreadsheet atau data yang diimpor dari file eksternal. Plot bisa diekspor ke beberapa format grafik pixmap dan vector.</p>
     <p xml:lang="it">LabPlot fornisce una modalità semplice per creare, gestire e modificare i grafici. Ti permette di generare grafici basati sui dati di un foglio elettronico, oppure importati da file esterni. I grafici possono essere esportati in diverse immagini e in diversi formati grafici vettoriali.</p>
     <p xml:lang="nl">Met LabPlot is het eenvoudig plots te maken, te beheren en te bewerken. U kunt er plots mee maken op basis van gegevens in een werkblad (spreadsheet), of van gegevens die uit externe bestanden zijn geïmporteerd. Plots kunnen worden geëxporteerd in diverse pixmap- of vector-grafische bestanden.</p>
     <p xml:lang="pl">LabPlot zapewnia łatwy sposób do tworzenia, zarządzania i edytowania wykresów. Umożliwia tworzenie wykresów na podstawie danych z arkusza kalkulacyjnego lub danych zaimportowanych z plików zewnętrznych. Wykresy można eksportować do kilku formatów graficznych map pikselowych i wektorowych.</p>
@@ -110,6 +114,7 @@
       <caption xml:lang="ca-valencia">Exemple d'ajust</caption>
       <caption xml:lang="en-GB">Fit example</caption>
       <caption xml:lang="gl">Exemplo de axuste.</caption>
+      <caption xml:lang="id">Contoh pas</caption>
       <caption xml:lang="it">Adatta esempio</caption>
       <caption xml:lang="nl">Voorbeeld aanpassing</caption>
       <caption xml:lang="pt">Exemplo de ajuste</caption>
@@ -125,6 +130,7 @@
       <caption xml:lang="cs">Matematická funkce</caption>
       <caption xml:lang="en-GB">Mathematical function</caption>
       <caption xml:lang="gl">Función matemática.</caption>
+      <caption xml:lang="id">Fungsi matematika</caption>
       <caption xml:lang="it">Funzioni matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
       <caption xml:lang="pt">Função matemática</caption>
@@ -139,6 +145,7 @@
       <caption xml:lang="ca-valencia">Full de treball CAS</caption>
       <caption xml:lang="en-GB">CAS worksheet</caption>
       <caption xml:lang="gl">Folla de traballo de CAS.</caption>
+      <caption xml:lang="id">Lembar kerja CAS</caption>
       <caption xml:lang="it">Foglio di lavoro CAS</caption>
       <caption xml:lang="nl">CAS werkblad</caption>
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
