@@ -290,6 +290,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 
 	m_initializing = false;
+	// enable/disable "recalculate"
+	enableRecalculate();
 }
 
 //*************************************************************
@@ -853,8 +855,13 @@ void XYFitCurveDock::enableRecalculate() const {
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-//TODO	if (hasSourceData)
-//		m_fitCurve->evaluate(true);
+	if (hasSourceData) {
+		DEBUG("	enable");
+//TODO		m_fitCurve->evaluate(true);
+	}
+	else {
+		DEBUG("	disable");
+	}
 }
 
 void XYFitCurveDock::resultCopySelection() {
