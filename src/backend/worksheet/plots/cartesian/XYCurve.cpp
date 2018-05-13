@@ -883,6 +883,7 @@ void XYCurvePrivate::retransform() {
 	connectedPointsLogical.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ) {
+		DEBUG("	xColumn or yColumn == NULL");
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
 		symbolsPath = QPainterPath();
@@ -968,6 +969,7 @@ void XYCurvePrivate::updateLines() {
 	linePath = QPainterPath();
 	lines.clear();
 	if (lineType == XYCurve::NoLine) {
+		DEBUG("	nothing to do, since line type is XYCurve::NoLine");
 		updateFilling();
 		recalcShapeAndBoundingRect();
 		return;
@@ -975,7 +977,7 @@ void XYCurvePrivate::updateLines() {
 
 	unsigned int count = (unsigned int)symbolPointsLogical.count();
 	if (count <= 1) {
-		//nothing to do, if no data points available
+		DEBUG("	nothing to do, since no data points available");
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1286,6 +1288,7 @@ void XYCurvePrivate::updateSymbols() {
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues() {
+	DEBUG("XYCurvePrivate::updateValues()");
 	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
@@ -1877,13 +1880,16 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
-    if (m_suppressRecalc)
-        return;
+	DEBUG("XYCurvePrivate::updatePixmap() m_suppressRecalc = " << m_suppressRecalc);
+	if (m_suppressRecalc)
+		return;
+
 	WAIT_CURSOR;
 
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
+	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+		DEBUG("	boundingRectangle.width() == 0");
 		m_pixmap = QPixmap();
 		RESET_CURSOR;
 		return;

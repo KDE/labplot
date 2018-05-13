@@ -104,7 +104,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		return;
 	}
 
-	DEBUG(" x data rows = " << tmpXDataColumn->rowCount());
+	DEBUG("	x data rows = " << tmpXDataColumn->rowCount());
 
 	nsl_fit_model_category modelCategory = fitData.modelCategory;
 	int modelType = fitData.modelType;
@@ -1953,10 +1953,10 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate the fit function (vectors)
 	evaluate();
+	fitResult.elapsedTime = timer.elapsed();
+
 	//redraw the curve
 	emit q->dataChanged();
-
-	fitResult.elapsedTime = timer.elapsed();
 
 	sourceDataChangedSinceLastRecalc = false;
 }
@@ -2020,7 +2020,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 // TODO PREVIEW redraw the curve	(this breaks context menu fit!)
 	if (preview) {
 //		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
+//		sourceDataChangedSinceLastRecalc = false;
 	}
 
 }
