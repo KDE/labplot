@@ -5,7 +5,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -1471,13 +1471,10 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 	return GSL_SUCCESS;
 }
 
-void XYFitCurvePrivate::recalculate() {
-	DEBUG("XYFitCurvePrivate::recalculate()");
-	QElapsedTimer timer;
-	timer.start();
-
+/* prepare the fit result columns */
+void XYFitCurvePrivate::prepareResultColumns() {
 	//create fit result columns if not available yet, clear them otherwise
-	if (!xColumn) {
+	if (!xColumn) {	// all columns are treated together
 		xColumn = new Column("x", AbstractColumn::Numeric);
 		yColumn = new Column("y", AbstractColumn::Numeric);
 		residualsColumn = new Column("residuals", AbstractColumn::Numeric);
@@ -1502,6 +1499,33 @@ void XYFitCurvePrivate::recalculate() {
 		yVector->clear();
 		residualsVector->clear();
 	}
+}
+
+
+void XYFitCurvePrivate::recalculate() {
+	DEBUG("XYFitCurvePrivate::recalculate()");
+	QElapsedTimer timer;
+	timer.start();
+
+	// prepare source data columns
+	const AbstractColumn* tmpXDataColumn = 0;
+	const AbstractColumn* tmpYDataColumn = 0;
+	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+		DEBUG("	spreadsheet columns as data source");
+		tmpXDataColumn = xDataColumn;
+		tmpYDataColumn = yDataColumn;
+	} else {
+		DEBUG("	curve columns as data source");
+		tmpXDataColumn = dataSourceCurve->xColumn();
+		tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
+		DEBUG("ERROR: Preparing source data columns failed!");
+		return;
+	}
+
+	prepareResultColumns();
 
 	// clear the previous result
 	fitResult = XYFitCurve::FitResult();
@@ -1520,19 +1544,6 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//determine the data source columns
-	const AbstractColumn* tmpXDataColumn = 0;
-	const AbstractColumn* tmpYDataColumn = 0;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
-		//spreadsheet columns as data source
-		DEBUG("	spreadsheet columns as data source");
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		//curve columns as data source
-		DEBUG("	curve columns as data source");
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		emit q->dataChanged();
@@ -1942,6 +1953,8 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate the fit function (vectors)
 	evaluate();
+	//redraw the curve
+	emit q->dataChanged();
 
 	fitResult.elapsedTime = timer.elapsed();
 
@@ -1952,37 +1965,44 @@ void XYFitCurvePrivate::recalculate() {
 void XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG("XYFitCurvePrivate::evaluate() preview = " << preview);
 
+	// prepare source data columns
 	const AbstractColumn* tmpXDataColumn = 0;
-	const AbstractColumn* tmpYDataColumn = 0;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
-		//spreadsheet columns as data source
 		DEBUG("	spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
 	} else {
-		//curve columns as data source
 		DEBUG("	curve columns as data source");
 		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
-	if (!tmpXDataColumn || ! tmpYDataColumn || !xVector || !yVector)
+
+	if (!tmpXDataColumn) {
+		DEBUG("ERROR: Preparing source data column failed!");
 		return;
+	}
+
+	prepareResultColumns();
+
+	if (!xVector || !yVector) {
+		DEBUG(" xVector or yVector not defined!");
+		return;
+	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	double xmin, xmax;
-	if (fitData.autoEvalRange) { // evaluate fit on full data range if selected
+	if (fitData.autoEvalRange) { // evaluate fit on full data range
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
-	} else {	// use selected range for evaluation
+	} else {	// use given range for evaluation
 		xmin = fitData.evalRange.first();
 		xmax = fitData.evalRange.last();
 	}
 	DEBUG("	eval range = " << xmin << " .. " << xmax);
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
+	DEBUG("	vector size = " << xVector->size());
 
 	QVector<double> paramValues = fitResult.paramValues;
-	if (preview)
+	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
 	for (auto value: paramValues)
 		DEBUG("	param value = " << value);
@@ -1991,12 +2011,18 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
+		residualsVector->clear();
 	}
 
-	//redraw the curve
-	emit q->dataChanged();
-	//TODO: this should be already done by dataChanged()
+//TODO: this should be already done by dataChanged()
 	q->retransform();
+
+// TODO PREVIEW redraw the curve	(this breaks context menu fit!)
+	if (preview) {
+//		emit q->dataChanged();
+		sourceDataChangedSinceLastRecalc = false;
+	}
+
 }
 
 /*!

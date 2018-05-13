@@ -4,7 +4,7 @@
     Description          : Private members of XYCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************

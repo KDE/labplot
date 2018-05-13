@@ -816,10 +816,8 @@ void XYFitCurveDock::recalculateClicked() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
 
-	for (XYCurve* curve: m_curvesList) {
+	for (XYCurve* curve: m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
-//TODO		dynamic_cast<XYFitCurve*>(curve)->recalculate();
-	}
 
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -841,6 +839,9 @@ void XYFitCurveDock::expressionChanged() {
 
 void XYFitCurveDock::enableRecalculate() const {
 	DEBUG("XYFitCurveDock::enableRecalculate()");
+	if (m_initializing) {
+		DEBUG("	initializing");
+	}
 	if (m_initializing || m_fitCurve == nullptr)
 		return;
 
@@ -856,8 +857,9 @@ void XYFitCurveDock::enableRecalculate() const {
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 	if (hasSourceData) {
-		DEBUG("	enable");
-//TODO		m_fitCurve->evaluate(true);
+		DEBUG("	enable and preview");
+		// PREVIEW as soon as recalculate is enabled
+		m_fitCurve->evaluate(true);
 	}
 	else {
 		DEBUG("	disable");
