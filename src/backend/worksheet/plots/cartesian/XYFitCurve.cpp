@@ -2004,8 +2004,12 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	QVector<double> paramValues = fitResult.paramValues;
 	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
+// Debug
+/*	if (paramValues.size() == 0)
+		DEBUG("	ERROR: No parameter defined!");
 	for (auto value: paramValues)
 		DEBUG("	param value = " << value);
+*/
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
@@ -2013,11 +2017,16 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		yVector->clear();
 		residualsVector->clear();
 	}
+// Debug
+/*	DEBUG("	x | y");
+	for (int i = 0; i < qMin(10, xVector->size()); i++)
+		DEBUG("	" << (*xVector)[i] << " | " << (*yVector)[i]);
+*/
+// TODO: do we weed to do something to make preview work?
+// this should be already done by dataChanged()
+//	q->retransform();
 
-//TODO: this should be already done by dataChanged()
-	q->retransform();
-
-// TODO PREVIEW redraw the curve	(this breaks context menu fit!)
+// PREVIEW redraw the curve	(this breaks context menu fit!)
 	if (preview) {
 //		emit q->dataChanged();
 //		sourceDataChangedSinceLastRecalc = false;

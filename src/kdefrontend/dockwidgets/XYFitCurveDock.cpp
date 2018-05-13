@@ -277,6 +277,7 @@ void XYFitCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
+	DEBUG("XYFitCurveDock::setCurves()");
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
@@ -739,12 +740,6 @@ void XYFitCurveDock::showParameters() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
 
-//TODO update fit data
-//	m_fitData = m_fitCurve->fitData();
-
-//	for (auto value: m_fitData.paramStartValues)
-//		DEBUG(" param start value = " << value);
-
 	QMenu menu;
 	FitParametersWidget w(&menu, &m_fitData);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
@@ -767,20 +762,14 @@ void XYFitCurveDock::showParameters() {
  * also called from parameter widget
  */
 void XYFitCurveDock::parametersChanged() {
-	DEBUG("XYFitCurveDock::parametersChanged()");
+	DEBUG("XYFitCurveDock::parametersChanged() m_initializing = " << m_initializing);
 
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
 
 	if (m_initializing)
 		return;
-//	for (auto value: m_fitData.paramStartValues)
-//		DEBUG(" param start value = " << value);
-//TODO: update start values
-//	if (m_fitData.paramStartValues.size() > 0)
-//		for (XYCurve* curve: m_curvesList) {
-//			dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
-//		}
+
 	enableRecalculate();
 }
 
@@ -857,9 +846,12 @@ void XYFitCurveDock::enableRecalculate() const {
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 	if (hasSourceData) {
+
 		DEBUG("	enable and preview");
 		// PREVIEW as soon as recalculate is enabled
 		m_fitCurve->evaluate(true);
+		//TODO: Test	(breaks context menu fit)
+//		m_fitCurve->dataChanged();
 	}
 	else {
 		DEBUG("	disable");

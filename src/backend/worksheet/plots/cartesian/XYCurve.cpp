@@ -869,8 +869,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	DEBUG("XYCurvePrivate::retransform() name = " << name().toStdString());
-	DEBUG("	m_suppressRetransform = " << m_suppressRetransform);
+	DEBUG("\nXYCurvePrivate::retransform() name = " << name().toStdString() << ", m_suppressRetransform = " << m_suppressRetransform);
 	DEBUG("	plot = " << plot);
 	if (m_suppressRetransform || !plot)
 		return;
@@ -1788,6 +1787,7 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect() m_suppressRecalc = " << m_suppressRecalc);
 	if (m_suppressRecalc)
 		return;
 
@@ -1822,6 +1822,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	//search for an alternative.
 	//curveShape = curveShape.simplified();
 
+	DEBUG("	Calling updatePixmap()");
 	updatePixmap();
 }
 
@@ -1889,7 +1890,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
-		DEBUG("	boundingRectangle.width() == 0");
+		DEBUG("	boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
 		RESET_CURSOR;
 		return;
