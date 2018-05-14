@@ -139,6 +139,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
+	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
+
 	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 	ui.gbOptions->hide();
 	ui.gbUpdateOptions->hide();
@@ -531,7 +533,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.cbFilter->setEnabled(fileExists);
 	ui.cbFileType->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
-	ui.chbLinkFile->setEnabled(fileExists);
+	ui.gbUpdateOptions->setEnabled(fileExists);
 	if (!fileExists) {
 		//file doesn't exist -> delete the content preview that is still potentially
 		//available from the previously selected file
@@ -760,14 +762,14 @@ void ImportFileWidget::refreshPreview() {
 	int lines = ui.sbPreviewLines->value();
 
 	bool ok = true;
-	QTableWidget *tmpTableWidget = nullptr;
+	QTableWidget* tmpTableWidget{nullptr};
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	switch (fileType) {
 	case LiveDataSource::Ascii: {
 			ui.tePreview->clear();
 
-			AsciiFilter *filter = static_cast<AsciiFilter*>(this->currentFileFilter());
+			AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
 			switch (currentSourceType()) {
 			case LiveDataSource::SourceType::FileOrPipe: {
@@ -779,32 +781,26 @@ void ImportFileWidget::refreshPreview() {
 					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
 					if (lsocket.waitForConnected(20000)) {
 						QDEBUG("connected to local socket " << fileName);
-						bool canread = lsocket.waitForReadyRead(500);
-						DEBUG(canread);
-						if (canread)
+						if ( lsocket.waitForReadyRead(500) )
 							importedStrings = filter->preview(lsocket);
-
-						lsocket.disconnectFromServer();
-						connect(&lsocket, SIGNAL(disconnected()), &lsocket, SLOT(deleteLater()));
-					} else {
+					} else
 						QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
-					}
+
+					//TODO: lsocket.disconnectFromServer();
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
 					QTcpSocket tcpSocket{this};
 					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 					if (tcpSocket.waitForConnected(2000)) {
-						bool canread = tcpSocket.waitForReadyRead(500);
 						DEBUG("connected to TCP socket");
-						if (canread) {
+						if ( tcpSocket.waitForReadyRead(500) )
 							importedStrings = filter->preview(tcpSocket);
-						}
+
 						tcpSocket.disconnectFromHost();
-						connect(&tcpSocket, SIGNAL(disconnected()), &tcpSocket, SLOT(deleteLater()));
-					} else {
+					} else
 						QDEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString());
-					}
+
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
@@ -812,15 +808,13 @@ void ImportFileWidget::refreshPreview() {
 					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
 					if (udpSocket.waitForConnected(2000)) {
 						DEBUG("connected to UDP socket");
-						bool canread = udpSocket.waitForReadyRead(500);
-						if (canread)
+						if ( udpSocket.waitForReadyRead(500) )
 							importedStrings = filter->preview(udpSocket);
 
 						udpSocket.disconnectFromHost();
 						connect(&udpSocket, SIGNAL(disconnected()), &udpSocket, SLOT(deleteLater()));
-					} else {
+					} else
 						QDEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString());
-					}
 
 					break;
 				}
@@ -971,9 +965,8 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
-    int itemIdx = -1;
 	switch (type) {
-	case LiveDataSource::SourceType::FileOrPipe:
+	case LiveDataSource::SourceType::FileOrPipe: {
 		ui.lFileName->show();
 		ui.leFileName->show();
 		ui.bFileInfo->show();
@@ -991,17 +984,18 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		fileNameChanged(m_fileName);
 
-        itemIdx = -1;
-        for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx == -1) {
-            ui.cbReadType->addItem(QLatin1String("Read whole file"));
-        }
+		int itemIdx = -1;
+		for (int i = 0; i < ui.cbReadType->count(); ++i) {
+			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile) {
+				itemIdx = i;
+				break;
+			}
+		}
+		if (itemIdx == -1)
+			ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
+
 		break;
+	}
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
 		ui.leFileName->show();
@@ -1023,17 +1017,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
 
-        itemIdx = -1;
-        for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx != -1) {
-            ui.cbReadType->removeItem(itemIdx);
-        }
-
+		for (int i = 0; i < ui.cbReadType->count(); ++i) {
+			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
+				ui.cbReadType->removeItem(i);
+		}
     break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -1058,16 +1045,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
 
-        itemIdx = -1;
-        for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx != -1) {
-            ui.cbReadType->removeItem(itemIdx);
-        }
+		for (int i = 0; i < ui.cbReadType->count(); ++i) {
+			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
+				ui.cbReadType->removeItem(i);
+		}
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -1090,21 +1071,19 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 
-        itemIdx = -1;
-        for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx != -1) {
-            ui.cbReadType->removeItem(itemIdx);
-        }
-
+		for (int i = 0; i < ui.cbReadType->count(); ++i) {
+			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
+				ui.cbReadType->removeItem(i);
+		}
 		break;
 	default:
 		break;
 	}
+
+	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
+	//Activate the groupbox when switching from "file and pipe" to a different sourcy type.
+	if (type != LiveDataSource::SourceType::FileOrPipe)
+		ui.gbUpdateOptions->setEnabled(true);
 
 	emit sourceTypeChanged();
 	refreshPreview();
