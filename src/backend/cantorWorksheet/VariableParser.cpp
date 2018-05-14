@@ -29,11 +29,13 @@
 
 #include "VariableParser.h"
 #include <QStringList>
+#include "backend/lib/trace.h"
 #include <cmath>
 
 VariableParser::VariableParser(const QString& name, const QString& value)
 	: m_backendName(name), m_string(value), m_parsed(false) {
 
+	PERFTRACE("parsing variable");
 	if(m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
 	else if(m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
@@ -104,6 +106,7 @@ QVector< double > VariableParser::values() {
 }
 
 void VariableParser::parseValues(const QStringList& values) {
+	PERFTRACE("parsing variable values string list");
 	for(const QString& v : values) {
 		bool isNumber = false;
 		double value = v.trimmed().toDouble(&isNumber);
