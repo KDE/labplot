@@ -1,5 +1,7 @@
-mkdir build
-cd build
+$BUILDDIR = "build"
+
+mkdir $BUILDDIR
+cd $BUILDDIR
 
 cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:\CraftRoot  ..
 
