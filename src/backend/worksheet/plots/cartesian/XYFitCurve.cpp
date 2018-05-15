@@ -2024,7 +2024,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 */
 // TODO: do we weed to do something to make preview work?
 // this should be already done by dataChanged()
-//	q->retransform();
+	q->retransform();
 
 // PREVIEW redraw the curve	(this breaks context menu fit!)
 	if (preview) {
