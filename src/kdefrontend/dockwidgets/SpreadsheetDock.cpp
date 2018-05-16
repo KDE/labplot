@@ -132,6 +132,9 @@ void SpreadsheetDock::columnCountChanged(int columns) {
   switches on/off  the comment header in the views of the selected spreadsheets.
 */
 void SpreadsheetDock::commentsShownChanged(int state) {
+	if (m_initializing)
+		return;
+
 	for (auto* spreadsheet: m_spreadsheetList)
 		qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
