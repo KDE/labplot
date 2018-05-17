@@ -982,7 +982,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
-		fileNameChanged(m_fileName);
+		fileNameChanged(ui.leFileName->text());
 
 		int itemIdx = -1;
 		for (int i = 0; i < ui.cbReadType->count(); ++i) {
