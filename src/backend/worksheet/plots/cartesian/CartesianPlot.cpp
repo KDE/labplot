@@ -132,6 +132,12 @@ void CartesianPlot::init() {
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChildFast(m_plotArea);
 
+	//Plot title
+	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
+	addChild(m_title);
+	m_title->setHidden(true);
+	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
+
 	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
@@ -357,12 +363,6 @@ void CartesianPlot::initDefault(Type type) {
 	d->xMaxPrev = d->xMax;
 	d->yMinPrev = d->yMin;
 	d->yMaxPrev = d->yMax;
-
-	//Plot title
-	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
-	addChild(m_title);
-	m_title->setHidden(true);
-	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
@@ -2740,14 +2740,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			d->yRangeBreaks.list << b;
 		} else if (reader->name() == "textLabel") {
-			m_title = new TextLabel("");
-			if (m_title->load(reader, preview))
-				addChildFast(m_title);
-			else {
-				delete m_title;
-				m_title=0;
-				return false;
-			}
+			m_title->load(reader, preview);
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
@@ -2872,11 +2865,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	d->retransform();
-
-	if (m_title) {
-		m_title->setHidden(true);
-		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
-	}
 
 	//if a theme was used, initialize the color palette
 	if (!d->theme.isEmpty()) {
