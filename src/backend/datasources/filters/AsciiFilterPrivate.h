@@ -75,6 +75,7 @@ public:
 private:
 	static const unsigned int m_dataTypeLines = 10;	// lines to read for determining data types
 	QString m_separator;
+	int m_actualStartRow;
 	int m_actualRows;
 	int m_actualCols;
 	int m_prepared;

@@ -357,6 +357,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endRow(-1),
 	startColumn(1),
 	endColumn(-1),
+	m_actualStartRow(1),
 	m_actualRows(0),
 	m_actualCols(0),
 	m_prepared(false),
@@ -472,8 +473,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (headerEnabled) {	// use first line to name vectors
 		vectorNames = firstLineStringList;
 		QDEBUG("vector names =" << vectorNames);
-		startRow++;
-	}
+		m_actualStartRow = startRow + 1;
+	} else
+		m_actualStartRow = startRow;
 
 	// set range to read
 	if (endColumn == -1) {
@@ -562,7 +564,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
-	DEBUG("start/end row: " << startRow << ' ' << actualEndRow);
+	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
 	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
@@ -1107,7 +1109,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				(c != mode) ? c = mode : 0;
 		}
 
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - startRow + 1,
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - m_actualStartRow + 1,
 		                 m_actualCols, vectorNames, columnModes);
 
 		m_prepared = true;
@@ -1126,8 +1128,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		QString line = device.readLine();
 
 		// skip start lines
-		if (startRow > 1) {
-			startRow--;
+		if (m_actualStartRow > 1) {
+			m_actualStartRow--;
 			continue;
 		}
 
@@ -1350,8 +1352,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		QString line = device.readLine();
 
 		// skip start lines
-		if (startRow > 1) {
-			startRow--;
+		if (m_actualStartRow > 1) {
+			m_actualStartRow--;
 			continue;
 		}
 
