@@ -1463,7 +1463,15 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	//TODO: handle ValueType valueType member in GraphAxisTick
 	//TODO: handle int valueTypeSpecification in GraphAxisTick
-	axis->setLabelsPrecision(tickAxis.decimalPlaces);
+
+	//precision
+	if (tickAxis.decimalPlaces == -1)
+		axis->setLabelsAutoPrecision(true);
+	else {
+		axis->setLabelsPrecision(tickAxis.decimalPlaces);
+		axis->setLabelsAutoPrecision(false);
+	}
+
 	QFont font;
 	//TODO: font family?
 	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Point) );
