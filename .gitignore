@@ -1,4 +1,5 @@
 *.user
 .gitignore
+.gitconfig
 build*
 TODO

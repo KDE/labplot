@@ -57,6 +57,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTcpSocket>
 #include <QTimer>
 #include <QUdpSocket>
+#include <QCheckBox>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -161,6 +162,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+    connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
+    connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -982,7 +985,29 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
+<<<<<<< Updated upstream
 		fileNameChanged(ui.leFileName->text());
+=======
+        ui.leID->hide();
+        ui.lMqttID->hide();
+        ui.lePassword->hide();
+        ui.lPassword->hide();
+        ui.leUsername->hide();
+        ui.lUsername->hide();
+        ui.cbQos->hide();
+        ui.lQos->hide();
+        ui.cbTopic->hide();
+        ui.lTopic->hide();
+        ui.lwSubscriptions->hide();
+        ui.lSubscriptions->hide();
+        ui.chbAuthentication->hide();
+        ui.chbID->hide();
+        ui.bSubscribe->hide();
+        ui.bConnect->hide();
+
+
+		fileNameChanged(m_fileName);
+>>>>>>> Stashed changes
 
 		int itemIdx = -1;
 		for (int i = 0; i < ui.cbReadType->count(); ++i) {
@@ -1012,6 +1037,23 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
 
+        ui.leID->hide();
+        ui.lMqttID->hide();
+        ui.lePassword->hide();
+        ui.lPassword->hide();
+        ui.leUsername->hide();
+        ui.lUsername->hide();
+        ui.cbQos->hide();
+        ui.lQos->hide();
+        ui.cbTopic->hide();
+        ui.lTopic->hide();
+        ui.lwSubscriptions->hide();
+        ui.lSubscriptions->hide();
+        ui.chbAuthentication->hide();
+        ui.chbID->hide();
+        ui.bSubscribe->hide();
+        ui.bConnect->hide();
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1033,6 +1075,23 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->hide();
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
+
+        ui.leID->hide();
+        ui.lMqttID->hide();
+        ui.lePassword->hide();
+        ui.lPassword->hide();
+        ui.leUsername->hide();
+        ui.lUsername->hide();
+        ui.cbQos->hide();
+        ui.lQos->hide();
+        ui.cbTopic->hide();
+        ui.lTopic->hide();
+        ui.lwSubscriptions->hide();
+        ui.lSubscriptions->hide();
+        ui.chbAuthentication->hide();
+        ui.chbID->hide();
+        ui.bSubscribe->hide();
+        ui.bConnect->hide();
 
 		ui.lFileName->hide();
 		ui.leFileName->hide();
@@ -1067,6 +1126,23 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbLinkFile->hide();
 		ui.cbFileType->setEnabled(true);
 
+        ui.leID->hide();
+        ui.lMqttID->hide();
+        ui.lePassword->hide();
+        ui.lPassword->hide();
+        ui.leUsername->hide();
+        ui.lUsername->hide();
+        ui.cbQos->hide();
+        ui.lQos->hide();
+        ui.cbTopic->hide();
+        ui.lTopic->hide();
+        ui.lwSubscriptions->hide();
+        ui.lSubscriptions->hide();
+        ui.chbAuthentication->hide();
+        ui.chbID->hide();
+        ui.bSubscribe->hide();
+        ui.bConnect->hide();
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1076,6 +1152,56 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 				ui.cbReadType->removeItem(i);
 		}
 		break;
+    case LiveDataSource::SourceType::Mqtt:
+        ui.lBaudRate->hide();
+        ui.cbBaudRate->hide();
+        ui.lSerialPort->hide();
+        ui.cbSerialPort->hide();
+
+        ui.lHost->show();
+        ui.leHost->show();
+        ui.lePort->show();
+        ui.lPort->show();
+        ui.lFileName->hide();
+        ui.leFileName->hide();
+        ui.bFileInfo->hide();
+        ui.bOpen->hide();
+        ui.chbLinkFile->hide();
+        ui.cbFileType->setEnabled(true);
+
+        ui.leID->hide();
+        ui.lMqttID->hide();
+        ui.lePassword->hide();
+        ui.lPassword->hide();
+        ui.leUsername->hide();
+        ui.lUsername->hide();
+        ui.cbQos->show();
+        ui.lQos->show();
+        ui.cbTopic->show();
+        ui.lTopic->show();
+        ui.lwSubscriptions->show();
+        ui.lSubscriptions->show();
+        ui.chbAuthentication->show();
+        ui.chbID->show();
+        ui.bSubscribe->show();
+        ui.bConnect->show();
+
+        ui.gbOptions->setEnabled(true);
+        ui.bManageFilters->setEnabled(true);
+        ui.cbFilter->setEnabled(true);
+
+        itemIdx = -1;
+        for (int i = 0; i < ui.cbReadType->count(); ++i) {
+            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
+                itemIdx = i;
+                break;
+            }
+        }
+        if (itemIdx != -1) {
+            ui.cbReadType->removeItem(itemIdx);
+        }
+
+        break;
 	default:
 		break;
 	}
@@ -1114,4 +1240,36 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 
 	ui.leKeepLastValues->setValidator(new QIntValidator(2, 100000));
 	ui.tabWidget->removeTab(2);
+}
+
+void ImportFileWidget::idChecked(int state)
+{
+    if (state == 2)
+    {
+        ui.leID->show();
+        ui.lMqttID->show();
+    }
+    else if (state == 0)
+    {
+        ui.leID->hide();
+        ui.lMqttID->hide();
+    }
+}
+
+void ImportFileWidget::authenticationChecked(int state)
+{
+    if(state == 2)
+    {
+        ui.leUsername->show();
+        ui.lePassword->show();
+        ui.lPassword->show();
+        ui.lUsername->show();
+    }
+    else if (state == 0)
+    {
+        ui.leUsername->hide();
+        ui.lePassword->hide();
+        ui.lUsername->hide();
+        ui.lPassword->hide();
+    }
 }

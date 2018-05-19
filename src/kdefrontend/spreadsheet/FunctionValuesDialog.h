@@ -30,6 +30,7 @@
 
 #include "ui_functionvalueswidget.h"
 #include <QDialog>
+#include <QLineEdit>
 
 #include <memory>
 

@@ -29,6 +29,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "backend/datasources/filters/FITSFilter.h"
 #include "ui_fitsheadereditnewkeywordwidget.h"
+#include <QAbstractButton>
 
 #include <QDialog>
 

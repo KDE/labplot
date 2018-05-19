@@ -99,6 +99,8 @@ private slots:
 	void fileInfoDialog();
 	void refreshPreview();
 	void loadSettings();
+    void idChecked(int);
+    void authenticationChecked(int);
 
 signals:
 	void fileNameChanged();
