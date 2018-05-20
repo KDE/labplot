@@ -281,6 +281,7 @@ void SpreadsheetView::initActions() {
 
 	//Analyze and plot menu actions
 	addDataOperationAction = new QAction(i18n("Data operation"), this);
+	addDataOperationAction->setEnabled(false);
 	addDataReductionAction = new QAction(i18n("Reduce data"), this);
 	addDataReductionAction->setData(PlotDataDialog::DataReduction);
 	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
