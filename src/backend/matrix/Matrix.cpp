@@ -431,8 +431,10 @@ void Matrix::setCell(int row, int col, T value) {
 	if(col < 0 || col >= columnCount()) return;
 	exec(new MatrixSetCellValueCmd<T>(d, row, col, value));
 }
-// TODO: other modes
 template void Matrix::setCell<double>(int row, int col, double value);
+template void Matrix::setCell<int>(int row, int col, int value);
+template void Matrix::setCell<QDateTime>(int row, int col, QDateTime value);
+template void Matrix::setCell<QString>(int row, int col, QString value);
 
 void Matrix::clearCell(int row, int col) {
 	switch (d->mode) {
