@@ -299,47 +299,47 @@ void SpreadsheetView::initActions() {
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
 	addSmoothAction->setData(PlotDataDialog::Smoothing);
 
-	QAction* fitAction = new QAction(i18n("Linear"), this);
+	QAction* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Power"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Power"), this);
 	fitAction->setData(PlotDataDialog::FitPower);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 1)"), this);
 	fitAction->setData(PlotDataDialog::FitExp1);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 2)"), this);
 	fitAction->setData(PlotDataDialog::FitExp2);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Inverse exponential"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse exponential"), this);
 	fitAction->setData(PlotDataDialog::FitInvExp);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Gauss"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Gauss"), this);
 	fitAction->setData(PlotDataDialog::FitGauss);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Cauchy-Lorentz"), this);
 	fitAction->setData(PlotDataDialog::FitCauchyLorentz);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Arc Tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Arc Tangent"), this);
 	fitAction->setData(PlotDataDialog::FitTan);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Hyperbolic tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic tangent"), this);
 	fitAction->setData(PlotDataDialog::FitTanh);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Error function"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error function"), this);
 	fitAction->setData(PlotDataDialog::FitErrFunc);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Custom"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Custom"), this);
 	fitAction->setData(PlotDataDialog::FitCustom);
 	addFitAction.append(fitAction);
 
