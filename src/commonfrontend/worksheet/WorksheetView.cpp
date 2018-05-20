@@ -310,14 +310,14 @@ void WorksheetView::initActions() {
 	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
-	// TODO: no icons yet
-	addDataOperationCurveAction = new QAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
+	// TODO: no own icons yet
+	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 //	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
-	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
+	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
 //	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
 //	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
-	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
+	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
 //	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
@@ -331,14 +331,14 @@ void WorksheetView::initActions() {
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), cartesianPlotAddNewActionGroup);
 
 	// Analysis menu
-	// TODO: no icons yet
-	addDataOperationAction = new QAction(i18n("Data operation"), cartesianPlotAddNewActionGroup);
+	// TODO: no own icons yet
+	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data operation"), cartesianPlotAddNewActionGroup);
 //	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data operation"), cartesianPlotAddNewActionGroup);
-	addDataReductionAction = new QAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
+	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data reduction"), cartesianPlotAddNewActionGroup);
 //	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentiationAction = new QAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	addIntegrationAction = new QAction(i18n("Integration"), cartesianPlotAddNewActionGroup);
+	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);

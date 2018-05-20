@@ -280,18 +280,18 @@ void SpreadsheetView::initActions() {
 	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 
 	//Analyze and plot menu actions
-	//TODO: no icons yet
-	addDataOperationAction = new QAction(i18n("Data operation"), this);
+	//TODO: no own icons yet
+	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data operation"), this);
 //	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data operation"), this);
 	//TODO: enable when available
 	addDataOperationAction->setEnabled(false);
-	addDataReductionAction = new QAction(i18n("Reduce data"), this);
+	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce data"), this);
 //	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce data"), this);
 	addDataReductionAction->setData(PlotDataDialog::DataReduction);
-	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
+	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiate"), this);
 	addDifferentiationAction->setData(PlotDataDialog::Differentiation);
-	addIntegrationAction = new QAction(i18n("Integrate"), this);
+	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integrate"), this);
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integrate"), this);
 	addIntegrationAction->setData(PlotDataDialog::Integration);
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolate"), this);
