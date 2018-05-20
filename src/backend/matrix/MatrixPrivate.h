@@ -46,7 +46,8 @@ public:
 	QString name() const { return q->name(); }
 
 	// get value of cell at row/col (must be defined in header)
-	template <typename T> T cell(int row, int col) const {
+	template <typename T>
+	T cell(int row, int col) const {
 		Q_ASSERT(row >= 0 && row < rowCount);
 		Q_ASSERT(col >= 0 && col < columnCount);
 
@@ -54,7 +55,8 @@ public:
 	}
 
 	// Set value of cell at row/col (must be defined in header)
-	template <typename T> void setCell(int row, int col, T value) {
+	template <typename T>
+	void setCell(int row, int col, T value) {
 		Q_ASSERT(row >= 0 && row < rowCount);
 		Q_ASSERT(col >= 0 && col < columnCount);
 
@@ -64,7 +66,8 @@ public:
 			emit q->dataChanged(row, col, row, col);
 	}
 	// get column cells (must be defined in header)
-	template <typename T> QVector<T> columnCells(int col, int first_row, int last_row) {
+	template <typename T>
+	QVector<T> columnCells(int col, int first_row, int last_row) {
 		Q_ASSERT(first_row >= 0 && first_row < rowCount);
 		Q_ASSERT(last_row >= 0 && last_row < rowCount);
 
@@ -77,7 +80,8 @@ public:
 		return result;
 	}
 	// set column cells (must be defined in header)
-	template <typename T> void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
+	template <typename T>
+	void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
 		Q_ASSERT(first_row >= 0 && first_row < rowCount);
 		Q_ASSERT(last_row >= 0 && last_row < rowCount);
 		Q_ASSERT(values.count() > last_row - first_row);
@@ -97,7 +101,8 @@ public:
 			emit q->dataChanged(first_row, col, last_row, col);
 	}
 	// get row cells (must be defined in header)
-	template <typename T> QVector<T> rowCells(int row, int first_column, int last_column) {
+	template <typename T>
+	QVector<T> rowCells(int row, int first_column, int last_column) {
 		Q_ASSERT(first_column >= 0 && first_column < columnCount);
 		Q_ASSERT(last_column >= 0 && last_column < columnCount);
 
@@ -107,7 +112,8 @@ public:
 		return result;
 	}
 	// set row cells (must be defined in header)
-	template <typename T> void setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
+	template <typename T>
+	void setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 		Q_ASSERT(first_column >= 0 && first_column < columnCount);
 		Q_ASSERT(last_column >= 0 && last_column < columnCount);
 		Q_ASSERT(values.count() > last_column - first_column);
