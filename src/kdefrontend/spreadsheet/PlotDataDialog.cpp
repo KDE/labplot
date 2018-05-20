@@ -331,10 +331,10 @@ void PlotDataDialog::plot() {
 		worksheet->endMacro();
 	} else {
 		//add curves to a new plot(s) in a new worksheet
-		Project* project = m_spreadsheet->project();
-		project->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+		AbstractAspect* parent = m_spreadsheet->parentAspect();
+		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
-		project->addChild(worksheet);
+		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
@@ -369,7 +369,7 @@ void PlotDataDialog::plot() {
 			addCurvesToPlots(worksheet);
 		}
 
-		project->endMacro();
+		parent->endMacro();
 	}
 	RESET_CURSOR;
 }
