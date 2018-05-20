@@ -132,6 +132,7 @@ option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
+option(ENABLE_TESTS "Build with tests" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -282,10 +283,10 @@ IF (ENABLE_LIBORIGIN)
 	add_subdirectory(liborigin)
 ENDIF ()
 
-# if (BUILD_TESTS)
+if (ENABLE_TESTS)
     enable_testing(true)
     add_subdirectory(tests)
-# endif()
+endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
