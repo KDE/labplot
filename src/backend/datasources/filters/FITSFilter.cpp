@@ -282,14 +282,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU()");
+	DEBUG("FITSFilterPrivate::readCHDU() file name = " << fileName.toStdString());
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if(fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		qDebug() << fileName;
+		DEBUG("	ERROR opening file " << fileName.toStdString());
 		printError(status);
 		return dataStrings;
 	}
