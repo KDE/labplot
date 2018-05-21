@@ -48,6 +48,10 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
+
 /**
  * \class AxisGrid
  * \brief Helper class to get the axis grid drawn with the z-Value=0.
@@ -1476,7 +1480,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( roundP(tickLabelValues[i], precision) );
+		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1503,7 +1507,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( roundP(tickLabelValues[i], precision-1) );
+		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
