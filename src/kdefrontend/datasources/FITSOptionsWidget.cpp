@@ -62,6 +62,7 @@ void FITSOptionsWidget::updateContent(FITSFilter *filter, const QString& fileNam
 	DEBUG("FITSOptionsWidget::updateContent() file name = " << fileName.toStdString());
 	ui.twExtensions->clear();
 	filter->parseExtensions(fileName, ui.twExtensions, true);
+	DEBUG("FITSOptionsWidget::updateContent() DONE");
 }
 
 /*!

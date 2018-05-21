@@ -995,6 +995,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
+	DEBUG("FITSFilterPrivate::extensionNames() file name = " << fileName.toStdString());
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
@@ -1545,12 +1546,14 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
  * if it's \c true and if the primary array it's empty, then the item won't be added to the tree
  */
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
+	DEBUG("FITSFilterPrivate::parseExtensions()");
 #ifdef HAVE_FITS
 	const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
 	const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
 	const QStringList& tableExtensions = extensions.values(QLatin1String("TABLES"));
 
 	QTreeWidgetItem* root = tw->invisibleRootItem();
+	//TODO: fileName may contain any data type: check if it's a FITS file
 	QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << fileName);
 	root->addChild(treeNameItem);
 	treeNameItem->setExpanded(true);
@@ -1601,6 +1604,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	Q_UNUSED(tw)
 	Q_UNUSED(checkPrimary)
 #endif
+	DEBUG("FITSFilterPrivate::parseExtensions() DONE");
 }
 
 /*!

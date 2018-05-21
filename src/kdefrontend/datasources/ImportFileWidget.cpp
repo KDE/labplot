@@ -875,7 +875,7 @@ void ImportFileWidget::refreshPreview() {
 			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 			lines = m_fitsOptionsWidget->lines();
 
-			// update file name
+			// update file name (may be any file type)
 			m_fitsOptionsWidget->updateContent(filter, fileName);
 			QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
 			if (!extensionName.isEmpty()) {
