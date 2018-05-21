@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2013-2018 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
