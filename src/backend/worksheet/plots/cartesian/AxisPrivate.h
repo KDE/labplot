@@ -147,7 +147,6 @@ private:
 	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int);
 	int lowerLabelsPrecision(int);
-	double roundP(double value, int precision);
 	bool transformAnchor(QPointF*);
 
 	QPainterPath arrowPath;

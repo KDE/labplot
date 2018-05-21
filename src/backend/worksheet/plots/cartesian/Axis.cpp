@@ -1528,13 +1528,6 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 		return lowerLabelsPrecision(precision - 1);
 }
 
-double AxisPrivate::roundP(double value, int precision) {
-	//DEBUG("AxisPrivate::round() value =" << value << "precision =" << precision);
-	double result = round(value * pow(10, precision)) / pow(10, precision);
-	//DEBUG("	result =" << result);
-	return result;
-}
-
 /*!
 	recalculates the position of the tick labels.
 	Called when the geometry related properties (position, offset, font size, suffix, prefix) of the labels are changed.
