@@ -1489,6 +1489,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	}
 
 	//no duplicates for the current precision found: return the current value
+	DEBUG("	upper precision = " << precision);
 	return precision;
 }
 
@@ -1510,6 +1511,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 			if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate found for the reduced precision
 				//-> current precision cannot be reduced, return the current value
+				DEBUG("	lower precision = " << precision);
 				return precision;
 			}
 		}
