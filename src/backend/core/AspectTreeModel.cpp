@@ -339,11 +339,15 @@ void AspectTreeModel::aspectAdded(const AbstractAspect *aspect) {
 	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
 
 	connect(aspect, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
-	for (const auto* child : aspect->children<AbstractAspect>())
-		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
-
 	connect(aspect, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
+
+	//add signal-slot connects for all children, too
+	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::Recursive)) {
+		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
+		connect(child, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
+		connect(child, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
+	}
 }
 
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect *aspect) {
