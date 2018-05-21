@@ -179,6 +179,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	m_noteNameList.clear();
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
+	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
 		project->setName(name);
@@ -252,6 +253,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	emit project->loaded();
+	project->setIsLoading(false);
 	return true;
 }
 
@@ -1083,7 +1085,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					Axis* axis = new Axis("x", Axis::AxisHorizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisBottom);
-					plot->addChild(axis);
+					plot->addChildFast(axis);
 					loadAxis(originXAxis, axis, 0, QString::fromLatin1(originCurve.xColumnName.c_str()));
 					axis->setSuppressRetransform(false);
 				}
@@ -1093,7 +1095,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					Axis* axis = new Axis("x top", Axis::AxisHorizontal);
 					axis->setPosition(Axis::AxisTop);
 					axis->setSuppressRetransform(true);
-					plot->addChild(axis);
+					plot->addChildFast(axis);
 					loadAxis(originXAxis, axis, 1, QString::fromLatin1(originCurve.xColumnName.c_str()));
 					axis->setSuppressRetransform(false);
 				}
@@ -1103,7 +1105,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					Axis* axis = new Axis("y", Axis::AxisVertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisLeft);
-					plot->addChild(axis);
+					plot->addChildFast(axis);
 					loadAxis(originYAxis, axis, 0, QString::fromLatin1(originCurve.yColumnName.c_str()));
 					axis->setSuppressRetransform(false);
 				}
@@ -1113,7 +1115,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					Axis* axis = new Axis("y right", Axis::AxisVertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisRight);
-					plot->addChild(axis);
+					plot->addChildFast(axis);
 					loadAxis(originYAxis, axis, 1, QString::fromLatin1(originCurve.yColumnName.c_str()));
 					axis->setSuppressRetransform(false);
 				}
@@ -1185,7 +1187,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				else
 					legend->setBackgroundFirstColor(Qt::white);
 
-				plot->addChild(legend);
+				plot->addChildFast(legend);
 			}
 
 			//add texts
@@ -1228,7 +1230,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						curve->suppressRetransform(true);
 						if (!preview)
 							loadCurve(originCurve, curve);
-						plot->addChild(curve);
+						plot->addChildFast(curve);
 						curve->suppressRetransform(false);
 					} else if (originCurve.type == Origin::GraphCurve::Column) {
 						//vertical bars
@@ -1276,7 +1278,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					xyEqCurve->setEquationData(eqData);
 					if (!preview)
 						loadCurve(originCurve, xyEqCurve);
-					plot->addChild(xyEqCurve);
+					plot->addChildFast(xyEqCurve);
 					xyEqCurve->suppressRetransform(false);
 				}
 				}

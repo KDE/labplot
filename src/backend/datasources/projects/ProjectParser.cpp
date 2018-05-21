@@ -69,7 +69,7 @@ QList<const char*> ProjectParser::topLevelClasses() const {
 QAbstractItemModel* ProjectParser::model() {
 	WAIT_CURSOR;
 	PERFTRACE("project model for preview created");
-	if (m_project == nullptr)
+	if (!m_project)
 		m_project = new Project();
 
 	AspectTreeModel* model = nullptr;
