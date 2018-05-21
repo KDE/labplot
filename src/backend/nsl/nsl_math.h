@@ -32,4 +32,7 @@
 /* round double value to n decimal places */
 double nsl_math_round_places(double value, unsigned int n); 
 
+/* round double value to precision p */
+double nsl_math_round_precision(double value, unsigned int p);
+
 #endif /* NSL_MATH_H */

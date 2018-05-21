@@ -30,16 +30,37 @@
 #include <gsl/gsl_math.h>
 
 double nsl_math_round_places(double value, unsigned int n) {
-        // no need to round
-        if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
-                return value;
+	// no need to round
+	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
+		return value;
 
-        double scale = gsl_pow_uint(10., n);
-        double scaled_value = value*scale;
-        if (fabs(scaled_value) > 1.e16)
-                return value;
-        if (fabs(scaled_value) < .5)
-                return 0.;
+	double scale = gsl_pow_uint(10., n);
+	double scaled_value = value*scale;
+	if (fabs(scaled_value) > 1.e16)
+		return value;
+	if (fabs(scaled_value) < .5)
+		return 0.;
 
-        return round(scaled_value)/scale;
+	return round(scaled_value)/scale;
+}
+
+double nsl_math_round_precision(double value, unsigned int p) {
+	// no need to round
+	if (value == 0. || p > 16 || isnan(value) || isinf(value))
+		return value;
+
+	int e = 0;
+	while (fabs(value) > 10.) {
+		value /= 10.;
+		e++;
+	}
+	while (fabs(value) < 1.) {
+		value *= 10.;
+		e--;
+	}
+
+	double scale = gsl_pow_uint(10., p);
+	double scaled_value = value*scale;
+
+	return round(scaled_value)/scale * gsl_pow_int(10., e);
 }
