@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -399,6 +399,7 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("labplot-text-label"), i18n("text label"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
@@ -415,6 +416,7 @@ void CartesianPlot::initActions() {
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+	connect(addTextLabelAction, SIGNAL(triggered()), SLOT(addTextLabel()));
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
 
 	//Analysis menu actions
@@ -536,6 +538,8 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
+	addNewMenu->addSeparator();
+	addNewMenu->addAction(addTextLabelAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 
@@ -1224,6 +1228,12 @@ void CartesianPlot::addLegend() {
 	//only one legend is allowed -> disable the action
 	if (m_menusInitialized)
 		addLegendAction->setEnabled(false);
+}
+
+void CartesianPlot::addTextLabel() {
+	TextLabel* label = new TextLabel("text label");
+	this->addChild(label);
+	label->setParentGraphicsItem(m_plotArea->graphicsItem());
 }
 
 void CartesianPlot::addCustomPoint() {
@@ -2586,6 +2596,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool titleLabelRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -2782,7 +2793,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			d->yRangeBreaks.list << b;
 		} else if (reader->name() == "textLabel") {
-			m_title->load(reader, preview);
+			if (!titleLabelRead) {
+				//the first text label is always the title label
+				m_title->load(reader, preview);
+				titleLabelRead = true;
+			} else {
+				TextLabel* label = new TextLabel("text label");
+				if (label->load(reader, preview))
+					addChildFast(label);
+				else {
+					delete label;
+					return false;
+				}
+			}
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
@@ -2905,6 +2928,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 	if (preview)
 		return true;
+
+	for (auto* label : children<TextLabel>())
+		label->setParentGraphicsItem(m_plotArea->graphicsItem());
 
 	d->retransform();
 

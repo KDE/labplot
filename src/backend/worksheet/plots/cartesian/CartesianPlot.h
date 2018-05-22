@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -161,6 +161,7 @@ private:
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
+	QAction* addTextLabelAction;
 	QAction* addCustomPointAction;
 
 	//scaling, zooming, navigation actions
@@ -210,6 +211,7 @@ public slots:
 	void addFourierFilterCurve();
 	void addFourierTransformCurve();
 	void addLegend();
+	void addTextLabel();
 	void addCustomPoint();
 	void scaleAuto();
 	void scaleAutoX();
