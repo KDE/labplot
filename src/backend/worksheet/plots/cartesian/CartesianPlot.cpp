@@ -1265,12 +1265,54 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 	}
 
-	//if a theme was selected, apply the theme settings for newly added children, too
-	if (!d->theme.isEmpty() && !isLoading()) {
-		const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
-		if (el) {
-			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-			const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+	if (!isLoading()) {
+		//if a theme was selected, apply the theme settings for newly added children, too
+		if (!d->theme.isEmpty()) {
+			const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
+			if (el) {
+				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+				const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+			}
+		} else {
+			//no theme is available, apply the default colors for curves only, s.a. XYCurve::loadThemeConfig()
+			const XYCurve* curve = dynamic_cast<const XYCurve*>(child);
+			if (curve) {
+				int index = indexOfChild<XYCurve>(curve);
+				QColor themeColor;
+				if (index < m_themeColorPalette.size())
+					themeColor = m_themeColorPalette.at(index);
+				else {
+					if (m_themeColorPalette.size())
+						themeColor = m_themeColorPalette.last();
+				}
+
+				XYCurve* c = const_cast<XYCurve*>(curve);
+
+				//Line
+				QPen p = curve->linePen();
+				p.setColor(themeColor);
+				c->setLinePen(p);
+
+				//Drop line
+				p = curve->dropLinePen();
+				p.setColor(themeColor);
+				c->setDropLinePen(p);
+
+				//Symbol
+				QBrush brush = c->symbolsBrush();
+				brush.setColor(themeColor);
+				c->setSymbolsBrush(brush);
+				p = c->symbolsPen();
+				p.setColor(themeColor);
+				c->setSymbolsPen(p);
+
+				//Filling
+				c->setFillingFirstColor(themeColor);
+
+				//Error bars
+				p.setColor(themeColor);
+				c->setErrorBarsPen(p);
+			}
 		}
 	}
 }
@@ -2871,6 +2913,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		//TODO: check whether the theme config really exists
 		KConfig config( ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig );
 		this->setColorPalette(config);
+	} else {
+		//initialize the color palette with default colors
+		this->setColorPalette(KConfig());
 	}
 
 	return true;
@@ -2915,15 +2960,25 @@ void CartesianPlot::saveTheme(KConfig &config) {
 
 //Generating colors from 5-color theme palette
 void CartesianPlot::setColorPalette(const KConfig& config) {
-	KConfigGroup group = config.group("Theme");
+	if (config.hasGroup(QLatin1String("Theme"))) {
+		KConfigGroup group = config.group(QLatin1String("Theme"));
 
-	//read the five colors defining the palette
-	m_themeColorPalette.clear();
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+		//read the five colors defining the palette
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+	} else {
+		//no theme is available, provide 5 "default colors"
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(QColor(25, 25, 25));
+		m_themeColorPalette.append(QColor(0, 0, 127));
+		m_themeColorPalette.append(QColor(127 ,0, 0));
+		m_themeColorPalette.append(QColor(0, 127, 0));
+		m_themeColorPalette.append(QColor(85, 0, 127));
+	}
 
 	//generate 30 additional shades if the color palette contains more than one color
 	if (m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {
