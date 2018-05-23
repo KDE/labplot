@@ -41,7 +41,7 @@ New features:
 	* Allow to change the theme from within the application
 	* Smooth and animated zooming in the worksheet view
 	* Allow to add text labels to plots
-	* Improved building with MSVC and ICC
+	* Improved building with MSVC, Intel and PGI compiler
 
 Performance improvements:
 	* Faster copy&paste in the spreadsheet
