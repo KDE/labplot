@@ -137,6 +137,7 @@ option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
+option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 
@@ -267,6 +268,30 @@ IF (CFITSIO_FOUND)
 	include_directories (${CFITSIO_INCLUDE_DIR})
 ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
+ENDIF ()
+ENDIF ()
+
+### LIBCERF (optional) #############################
+IF (ENABLE_LIBCERF)
+FIND_LIBRARY (LIBCERF_LIBRARY cerf
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (LIBCERF_INCLUDE_DIR cerf.h
+	/usr/include
+	/usr/local/include
+)
+IF (LIBCERF_LIBRARY AND LIBCERF_INCLUDE_DIR)
+	SET (LIBCERF_FOUND TRUE)
+ELSE ()
+	SET (LIBCERF_FOUND FALSE)
+ENDIF ()
+IF (LIBCERF_FOUND)
+	MESSAGE (STATUS "Found libcerf Library: ${LIBCERF_INCLUDE_DIR} ${LIBCERF_LIBRARY}")
+	add_definitions (-DHAVE_LIBCERF)
+ELSE ()
+	MESSAGE (STATUS "libcerf Library not found.")
 ENDIF ()
 ENDIF ()
 
