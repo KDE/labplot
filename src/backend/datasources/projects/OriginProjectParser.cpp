@@ -1190,13 +1190,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->addChildFast(legend);
 			}
 
-			//add texts
-			// TODO: not supported yet...
-	/*			for (const auto &s: layer.texts) {
+			//texts
+			for (const auto& s: layer.texts) {
 				DEBUG("EXTRA TEXT =" << s.text.c_str());
-			//	plot->newLegend(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+				TextLabel* label = new TextLabel("text label");
+				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+				plot->addChild(label);
+				label->setParentGraphicsItem(plot->plotArea()->graphicsItem());
+
+				//TODO: positioning
 			}
-	*/
 
 			//curves
 			int curveIndex = 1;
