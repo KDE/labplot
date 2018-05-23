@@ -1,0 +1,14 @@
+#!/bin/bash
+
+BUILDDIR=build-pgi
+
+if [ ! -d $BUILDDIR ]; then
+	mkdir -p $BUILDDIR
+fi
+
+cd $BUILDDIR
+
+export CC=pgcc
+export CXX=pgc++
+
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
