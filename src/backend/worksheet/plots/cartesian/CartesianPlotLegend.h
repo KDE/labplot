@@ -70,7 +70,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
-	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)

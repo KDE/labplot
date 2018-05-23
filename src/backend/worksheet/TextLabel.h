@@ -81,16 +81,16 @@ class TextLabel : public WorksheetElement {
 		void loadThemeConfig(const KConfig& config) override;
 		void saveThemeConfig(const KConfig& config) override;
 
-		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
-		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
-		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor);
-		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
-		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
+		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
+		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
+		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
+		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 		void setPosition(QPointF);
 		void setPositionInvalid(bool);
-		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
-		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
-		BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle);
+		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
+		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+		BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 		void setVisible(bool on) override;
 		bool isVisible() const override;
