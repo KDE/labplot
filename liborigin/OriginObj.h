@@ -933,7 +933,6 @@ namespace Origin
 					case GraphCurve::XYZContour:
 					case GraphCurve::XYZTriangular:
 						return true;
-						break;
 					default:
 						break;
 				}

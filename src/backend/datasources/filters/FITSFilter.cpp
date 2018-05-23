@@ -700,7 +700,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			tunit.resize(tfields);
 			tunit.reserve(tfields);
 			//TODO: mode
-			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>* const>(matrix->data());
+			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
@@ -775,7 +775,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		return;
 	}
 
-	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet* const>(dataSource);
+	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//FITS image
 		if (exportTo == 0) {
@@ -862,7 +862,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 								maxSize = QString::number(column->valueAt(row)).size();
 						}
 
-						const Double2StringFilter* const filter = static_cast<Double2StringFilter* const>(column->outputFilter());
+						const Double2StringFilter* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
 						bool decimals = false;
 						for (int ii = 0; ii < nrows; ++ii) {
 							bool ok;
