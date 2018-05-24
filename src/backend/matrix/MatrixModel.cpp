@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -84,9 +85,26 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 	switch(role) {
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
-		case Qt::DisplayRole:
-			//TODO: mode
-			return QVariant(m_matrix->text<double>(row, col));
+		case Qt::DisplayRole: {
+			AbstractColumn::ColumnMode mode = m_matrix->mode();
+			//DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
+			switch (mode) {
+			case AbstractColumn::Numeric:
+				return QVariant(m_matrix->text<double>(row, col));
+			case AbstractColumn::Integer:
+				return QVariant(m_matrix->text<int>(row, col));
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				return QVariant(m_matrix->text<QDateTime>(row, col));
+			case AbstractColumn::Text:	// should not happen
+				return QVariant(m_matrix->text<QString>(row, col));
+			default:
+				DEBUG("	unknown column mode " << mode << " found");
+				break;
+			}
+			break;
+		}
 		case Qt::BackgroundRole:
 			//use bluish background color to distinguish Matrix from Spreadsheet
 			return QVariant(QBrush(QColor(192,255,255)));

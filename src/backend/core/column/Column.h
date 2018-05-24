@@ -48,7 +48,7 @@ public:
 	explicit Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric)
 		: AbstractColumn(name), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
 		init();
-	};
+	}
 	void init();
 	~Column() override;
 

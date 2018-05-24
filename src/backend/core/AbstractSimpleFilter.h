@@ -50,7 +50,7 @@ public:
 	virtual QString textAt(int row) const;
 	virtual QDate dateAt(int row) const;
 	virtual QTime timeAt(int row) const;
-	virtual QDateTime dateTimeAt(int row) const;;
+	virtual QDateTime dateTimeAt(int row) const;
 	virtual double valueAt(int row) const;
 	virtual int integerAt(int row) const;
 

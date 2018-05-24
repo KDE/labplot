@@ -1104,9 +1104,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		// matrix data has only one column mode (which is not text)
 		if (dynamic_cast<Matrix*>(dataSource)) {
 			auto mode = columnModes[0];
-			(mode == AbstractColumn::Text) ? mode = AbstractColumn::Numeric : 0;
+			if (mode == AbstractColumn::Text)
+				mode = AbstractColumn::Numeric;
 			for (auto& c: columnModes)
-				(c != mode) ? c = mode : 0;
+				if (c != mode)
+					c = mode;
 		}
 
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - m_actualStartRow + 1,

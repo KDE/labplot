@@ -187,14 +187,16 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 	if (aspect->inherits("Matrix")) {
+		DEBUG("	to Matrix");
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
-		DEBUG("to Spreadsheet");
+		DEBUG("	to Spreadsheet");
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG(" Calling readDataFromFile()");
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
+		DEBUG("	to Workbook");
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 

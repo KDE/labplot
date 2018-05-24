@@ -744,7 +744,6 @@ void ImportFileWidget::refreshPreview() {
 	if (m_suppressRefresh)
 		return;
 
-	DEBUG("refreshPreview()");
 	WAIT_CURSOR;
 
 	QString fileName = ui.leFileName->text();
@@ -752,6 +751,7 @@ void ImportFileWidget::refreshPreview() {
 	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
+	DEBUG("refreshPreview() file name = " << fileName.toStdString());
 
 	QVector<QStringList> importedStrings;
 	LiveDataSource::FileType fileType = (LiveDataSource::FileType)ui.cbFileType->currentIndex();
@@ -858,6 +858,7 @@ void ImportFileWidget::refreshPreview() {
 			return;
 		}
 	case LiveDataSource::HDF5: {
+			DEBUG("	HDF5");
 			HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
 			lines = m_hdf5OptionsWidget->lines();
 			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
@@ -865,6 +866,7 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::NETCDF: {
+			DEBUG("	NETCDF");
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			lines = m_netcdfOptionsWidget->lines();
 			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
@@ -872,12 +874,18 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::FITS: {
+			DEBUG("	FITS");
 			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 			lines = m_fitsOptionsWidget->lines();
 
+			// update file name (may be any file type)
+			m_fitsOptionsWidget->updateContent(filter, fileName);
 			QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
-			if (!extensionName.isEmpty())
+			if (!extensionName.isEmpty()) {
+				DEBUG("	extension name = " << extensionName.toStdString());
 				fileName = extensionName;
+			}
+			DEBUG("	file name = " << fileName.toStdString());
 
 			bool readFitsTableToMatrix;
 			importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
@@ -892,7 +900,7 @@ void ImportFileWidget::refreshPreview() {
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
 	if( !importedStrings.isEmpty() ) {
-		QDEBUG("importedStrings =" << importedStrings);
+		//QDEBUG("importedStrings =" << importedStrings);
 		if (!ok) {
 			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);

@@ -215,6 +215,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
 	${BACKEND_DIR}/nsl/nsl_int.c
 	${BACKEND_DIR}/nsl/nsl_interp.c
+	${BACKEND_DIR}/nsl/nsl_math.c
+	${BACKEND_DIR}/nsl/nsl_sf_basic.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
 	${BACKEND_DIR}/nsl/nsl_sf_stats.c
@@ -309,7 +311,7 @@ set(GENERATED_SOURCES
 )
 
 ##############################################################################
-INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
 set( LABPLOT_SRCS ${GUI_SOURCES} )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 

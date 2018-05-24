@@ -131,6 +131,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Nonnegative square root");
 	m_functionsNames << i18n("Sign function");
 	m_functionsNames << i18n("Heavyside theta function");
+	m_functionsNames << i18n("Harmonic number function");
 
 #ifndef HAVE_WINDOWS
 	m_functionsNames << i18n("Cube root");
@@ -152,9 +153,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << QString("x^9");
 
 #ifndef HAVE_WINDOWS
-	for (int i = 0; i < 26; i++)
+	for (int i = 0; i < 27; i++)
 #else
-	for (int i = 0; i < 21; i++)
+	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
 

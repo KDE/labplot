@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : nsl_sf_kernel.h
+    File                 : nsl_math.c
     Project              : LabPlot
-    Description          : NSL special kernel functions
+    Description          : NSL math functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,41 +26,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NSL_SF_KERNEL_H
-#define NSL_SF_KERNEL_H
+#include "nsl_math.h"
+#include <gsl/gsl_math.h>
 
-/* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
+double nsl_math_round_places(double value, unsigned int n) {
+	// no need to round
+	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
+		return value;
 
-/* kernel on [-1:1] */
-/* uniform */
-double nsl_sf_kernel_uniform(double u);
-/* triangular */
-double nsl_sf_kernel_triangular(double u);
-/* parabolic (Epanechnikov) */
-double nsl_sf_kernel_parabolic(double u);
-/* quartic (biweight) */
-double nsl_sf_kernel_quartic(double u);
-/* triweight */
-double nsl_sf_kernel_triweight(double u);
-/* tricube */
-double nsl_sf_kernel_tricube(double u);
-/* cosine */
-double nsl_sf_kernel_cosine(double u);
-/* semi circle */
-double nsl_sf_kernel_semicircle(double u);
+	double scale = gsl_pow_uint(10., n);
+	double scaled_value = value*scale;
+	if (fabs(scaled_value) > 1.e16)
+		return value;
+	if (fabs(scaled_value) < .5)
+		return 0.;
 
-/* kernel on (-inf,inf) */
-/* Gaussian */
-double nsl_sf_kernel_gaussian(double u);
-/* Cauchy */
-double nsl_sf_kernel_cauchy(double u);
-/* Logistic */
-double nsl_sf_kernel_logistic(double u);
-/* Picard */
-double nsl_sf_kernel_picard(double u);
-/* Sigmoid */
-double nsl_sf_kernel_sigmoid(double u);
-/* Silverman */
-double nsl_sf_kernel_silverman(double u);
+	return round(scaled_value)/scale;
+}
 
-#endif /* NSL_SF_KERNEL_H */
+double nsl_math_round_precision(double value, unsigned int p) {
+	// no need to round
+	if (value == 0. || p > 16 || isnan(value) || isinf(value))
+		return value;
+
+	int e = 0;
+	while (fabs(value) > 10.) {
+		value /= 10.;
+		e++;
+	}
+	while (fabs(value) < 1.) {
+		value *= 10.;
+		e--;
+	}
+
+	double scale = gsl_pow_uint(10., p);
+	double scaled_value = value*scale;
+
+	return round(scaled_value)/scale * gsl_pow_int(10., e);
+}

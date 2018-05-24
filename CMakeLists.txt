@@ -82,6 +82,9 @@ elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
 elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
 	message(STATUS "Intel C compiler detected, adding compile flags")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 ${GENERIC_C_FLAGS}")
+elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "PGI")
+	message(STATUS "PGI C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -Minform=inform -Mbounds -Mchkstk")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
@@ -102,6 +105,9 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
 	#-std=c++0x comes with cmake's general flags, depricated in icc, remove it
 	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
+	message(STATUS "PGI C++ compiler detected, adding compile flags")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE -O3 -std=c++11 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -Minform=inform -Mbounds -Mchkstk")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
@@ -132,7 +138,9 @@ option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
+option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
+option(ENABLE_TESTS "Build with tests" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -264,6 +272,30 @@ ELSE ()
 ENDIF ()
 ENDIF ()
 
+### LIBCERF (optional) #############################
+IF (ENABLE_LIBCERF)
+FIND_LIBRARY (LIBCERF_LIBRARY cerf
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (LIBCERF_INCLUDE_DIR cerf.h
+	/usr/include
+	/usr/local/include
+)
+IF (LIBCERF_LIBRARY AND LIBCERF_INCLUDE_DIR)
+	SET (LIBCERF_FOUND TRUE)
+ELSE ()
+	SET (LIBCERF_FOUND FALSE)
+ENDIF ()
+IF (LIBCERF_FOUND)
+	MESSAGE (STATUS "Found libcerf Library: ${LIBCERF_INCLUDE_DIR} ${LIBCERF_LIBRARY}")
+	add_definitions (-DHAVE_LIBCERF)
+ELSE ()
+	MESSAGE (STATUS "libcerf Library not found.")
+ENDIF ()
+ENDIF ()
+
 #################################################
 FIND_PATH (XLOCALE_INCLUDE_DIR xlocale.h
 	/usr/include
@@ -283,10 +315,10 @@ IF (ENABLE_LIBORIGIN)
 	add_subdirectory(liborigin)
 ENDIF ()
 
-# if (BUILD_TESTS)
+if (ENABLE_TESTS)
     enable_testing(true)
     add_subdirectory(tests)
-# endif()
+endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)

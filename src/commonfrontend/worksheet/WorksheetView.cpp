@@ -310,40 +310,42 @@ void WorksheetView::initActions() {
 	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
-	addDataOperationCurveAction = new QAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
-	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
-	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
-// no icons yet
-	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
-	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
-//	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
-//	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
+	// TODO: no own icons yet
+	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
+//	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
+	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
+//	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+//	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
+//	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
+
+	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
-//	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
-//	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
+	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
+	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), cartesianPlotAddNewActionGroup);
 
 	// Analysis menu
-	addDataOperationAction = new QAction(i18n("Data operation"), cartesianPlotAddNewActionGroup);
-	addDataReductionAction = new QAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentiationAction = new QAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	addIntegrationAction = new QAction(i18n("Integration"), cartesianPlotAddNewActionGroup);
-// no icons yet
-	addInterpolationAction = new QAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothAction = new QAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
+	// TODO: no own icons yet
+	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data operation"), cartesianPlotAddNewActionGroup);
+//	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data operation"), cartesianPlotAddNewActionGroup);
+	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data reduction"), cartesianPlotAddNewActionGroup);
+//	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+//	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
+//	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
+
+	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
-	addFourierFilterAction = new QAction(i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformAction = new QAction(i18n("Fourier transform"), cartesianPlotAddNewActionGroup);
-//	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-//	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
-//	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
-//	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("Fourier transform"), cartesianPlotAddNewActionGroup);
+	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
+	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier transform"), cartesianPlotAddNewActionGroup);
 
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 

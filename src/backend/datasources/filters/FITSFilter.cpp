@@ -282,14 +282,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU()");
+	DEBUG("FITSFilterPrivate::readCHDU() file name = " << fileName.toStdString());
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if(fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		qDebug() << fileName;
+		DEBUG("	ERROR opening file " << fileName.toStdString());
 		printError(status);
 		return dataStrings;
 	}
@@ -700,7 +700,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			tunit.resize(tfields);
 			tunit.reserve(tfields);
 			//TODO: mode
-			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>* const>(matrix->data());
+			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			QVector<double> column;
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
@@ -775,7 +775,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 		return;
 	}
 
-	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet* const>(dataSource);
+	Spreadsheet* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		//FITS image
 		if (exportTo == 0) {
@@ -862,7 +862,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 								maxSize = QString::number(column->valueAt(row)).size();
 						}
 
-						const Double2StringFilter* const filter = static_cast<Double2StringFilter* const>(column->outputFilter());
+						const Double2StringFilter* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
 						bool decimals = false;
 						for (int ii = 0; ii < nrows; ++ii) {
 							bool ok;
@@ -995,6 +995,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
+	DEBUG("FITSFilterPrivate::extensionNames() file name = " << fileName.toStdString());
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
@@ -1545,12 +1546,14 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
  * if it's \c true and if the primary array it's empty, then the item won't be added to the tree
  */
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
+	DEBUG("FITSFilterPrivate::parseExtensions()");
 #ifdef HAVE_FITS
 	const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
 	const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
 	const QStringList& tableExtensions = extensions.values(QLatin1String("TABLES"));
 
 	QTreeWidgetItem* root = tw->invisibleRootItem();
+	//TODO: fileName may contain any data type: check if it's a FITS file
 	QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << fileName);
 	root->addChild(treeNameItem);
 	treeNameItem->setExpanded(true);
@@ -1601,6 +1604,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	Q_UNUSED(tw)
 	Q_UNUSED(checkPrimary)
 #endif
+	DEBUG("FITSFilterPrivate::parseExtensions() DONE");
 }
 
 /*!

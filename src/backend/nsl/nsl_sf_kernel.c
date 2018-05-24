@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "nsl_sf_kernel.h"
+#include <stdlib.h>
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>	/* Gaussian and Cauchy */

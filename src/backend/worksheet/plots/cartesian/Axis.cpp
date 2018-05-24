@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2013-2018 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -47,6 +47,10 @@
 
 #include <KConfigGroup>
 #include <KLocale>
+
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
 
 /**
  * \class AxisGrid
@@ -1476,7 +1480,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( roundP(tickLabelValues[i], precision) );
+		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1489,6 +1493,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	}
 
 	//no duplicates for the current precision found: return the current value
+	DEBUG("	upper precision = " << precision);
 	return precision;
 }
 
@@ -1502,7 +1507,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
 	for (int i = 0; i < tickLabelValues.size(); ++i)
-		tempValues.append( roundP(tickLabelValues[i], precision-1) );
+		tempValues.append( nsl_math_round_places(tickLabelValues[i], precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1510,6 +1515,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 			if (tempValues.at(i) == tempValues.at(j)) {
 				//duplicate found for the reduced precision
 				//-> current precision cannot be reduced, return the current value
+				DEBUG("	lower precision = " << precision);
 				return precision;
 			}
 		}
@@ -1520,13 +1526,6 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 		return 0;
 	else
 		return lowerLabelsPrecision(precision - 1);
-}
-
-double AxisPrivate::roundP(double value, int precision) {
-	//DEBUG("AxisPrivate::round() value =" << value << "precision =" << precision);
-	double result = round(value * pow(10, precision)) / pow(10, precision);
-	//DEBUG("	result =" << result);
-	return result;
 }
 
 /*!

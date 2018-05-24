@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -399,6 +399,7 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("labplot-text-label"), i18n("text label"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
@@ -415,6 +416,7 @@ void CartesianPlot::initActions() {
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+	connect(addTextLabelAction, SIGNAL(triggered()), SLOT(addTextLabel()));
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
 
 	//Analysis menu actions
@@ -536,6 +538,8 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
+	addNewMenu->addSeparator();
+	addNewMenu->addAction(addTextLabelAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 
@@ -1226,6 +1230,12 @@ void CartesianPlot::addLegend() {
 		addLegendAction->setEnabled(false);
 }
 
+void CartesianPlot::addTextLabel() {
+	TextLabel* label = new TextLabel("text label");
+	this->addChild(label);
+	label->setParentGraphicsItem(m_plotArea->graphicsItem());
+}
+
 void CartesianPlot::addCustomPoint() {
 	CustomPoint* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
@@ -1265,12 +1275,54 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 	}
 
-	//if a theme was selected, apply the theme settings for newly added children, too
-	if (!d->theme.isEmpty() && !isLoading()) {
-		const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
-		if (el) {
-			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-			const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+	if (!isLoading()) {
+		//if a theme was selected, apply the theme settings for newly added children, too
+		if (!d->theme.isEmpty()) {
+			const WorksheetElement* el = dynamic_cast<const WorksheetElement*>(child);
+			if (el) {
+				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+				const_cast<WorksheetElement*>(el)->loadThemeConfig(config);
+			}
+		} else {
+			//no theme is available, apply the default colors for curves only, s.a. XYCurve::loadThemeConfig()
+			const XYCurve* curve = dynamic_cast<const XYCurve*>(child);
+			if (curve) {
+				int index = indexOfChild<XYCurve>(curve);
+				QColor themeColor;
+				if (index < m_themeColorPalette.size())
+					themeColor = m_themeColorPalette.at(index);
+				else {
+					if (m_themeColorPalette.size())
+						themeColor = m_themeColorPalette.last();
+				}
+
+				XYCurve* c = const_cast<XYCurve*>(curve);
+
+				//Line
+				QPen p = curve->linePen();
+				p.setColor(themeColor);
+				c->setLinePen(p);
+
+				//Drop line
+				p = curve->dropLinePen();
+				p.setColor(themeColor);
+				c->setDropLinePen(p);
+
+				//Symbol
+				QBrush brush = c->symbolsBrush();
+				brush.setColor(themeColor);
+				c->setSymbolsBrush(brush);
+				p = c->symbolsPen();
+				p.setColor(themeColor);
+				c->setSymbolsPen(p);
+
+				//Filling
+				c->setFillingFirstColor(themeColor);
+
+				//Error bars
+				p.setColor(themeColor);
+				c->setErrorBarsPen(p);
+			}
 		}
 	}
 }
@@ -2544,6 +2596,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool titleLabelRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -2740,7 +2793,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			d->yRangeBreaks.list << b;
 		} else if (reader->name() == "textLabel") {
-			m_title->load(reader, preview);
+			if (!titleLabelRead) {
+				//the first text label is always the title label
+				m_title->load(reader, preview);
+				titleLabelRead = true;
+			} else {
+				TextLabel* label = new TextLabel("text label");
+				if (label->load(reader, preview))
+					addChildFast(label);
+				else {
+					delete label;
+					return false;
+				}
+			}
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
@@ -2864,6 +2929,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
+	for (auto* label : children<TextLabel>())
+		label->setParentGraphicsItem(m_plotArea->graphicsItem());
+
 	d->retransform();
 
 	//if a theme was used, initialize the color palette
@@ -2871,6 +2939,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		//TODO: check whether the theme config really exists
 		KConfig config( ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig );
 		this->setColorPalette(config);
+	} else {
+		//initialize the color palette with default colors
+		this->setColorPalette(KConfig());
 	}
 
 	return true;
@@ -2915,15 +2986,25 @@ void CartesianPlot::saveTheme(KConfig &config) {
 
 //Generating colors from 5-color theme palette
 void CartesianPlot::setColorPalette(const KConfig& config) {
-	KConfigGroup group = config.group("Theme");
+	if (config.hasGroup(QLatin1String("Theme"))) {
+		KConfigGroup group = config.group(QLatin1String("Theme"));
 
-	//read the five colors defining the palette
-	m_themeColorPalette.clear();
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
-	m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+		//read the five colors defining the palette
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
+		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+	} else {
+		//no theme is available, provide 5 "default colors"
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(QColor(25, 25, 25));
+		m_themeColorPalette.append(QColor(0, 0, 127));
+		m_themeColorPalette.append(QColor(127 ,0, 0));
+		m_themeColorPalette.append(QColor(0, 127, 0));
+		m_themeColorPalette.append(QColor(85, 0, 127));
+	}
 
 	//generate 30 additional shades if the color palette contains more than one color
 	if (m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {

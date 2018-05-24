@@ -6,7 +6,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2015-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -403,13 +403,26 @@ T Matrix::cell(int row, int col) const {
 	return d->cell<T>(row, col);
 }
 template double Matrix::cell<double>(int row, int col) const;
+template int Matrix::cell<int>(int row, int col) const;
+template QDateTime Matrix::cell<QDateTime>(int row, int col) const;
+template QString Matrix::cell<QString>(int row, int col) const;
 
 //! Return the text displayed in the given cell (needs explicit instantiation)
 template <typename T>
 QString Matrix::text(int row, int col) {
+	return QLocale().toString(cell<T>(row,col));
+}
+// special cases
+template <>
+QString Matrix::text<double>(int row, int col) {
 	return QLocale().toString(cell<double>(row,col), d->numericFormat, d->precision);
 }
-template QString Matrix::text<double>(int row, int col);
+template <>
+QString Matrix::text<QString>(int row, int col) {
+	return cell<QString>(row,col);
+}
+template QString Matrix::text<int>(int row, int col);
+template QString Matrix::text<QDateTime>(int row, int col);
 
 //! Set the value of the cell (needs explicit instantiation)
 template <typename T>
@@ -419,6 +432,9 @@ void Matrix::setCell(int row, int col, T value) {
 	exec(new MatrixSetCellValueCmd<T>(d, row, col, value));
 }
 template void Matrix::setCell<double>(int row, int col, double value);
+template void Matrix::setCell<int>(int row, int col, int value);
+template void Matrix::setCell<QDateTime>(int row, int col, QDateTime value);
+template void Matrix::setCell<QString>(int row, int col, QString value);
 
 void Matrix::clearCell(int row, int col) {
 	switch (d->mode) {
@@ -1224,6 +1240,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
+		d->mode = AbstractColumn::Numeric;
 		break;
 	case AbstractColumn::Integer:
 		for (int n = 0; n < actualCols; n++) {
@@ -1232,6 +1249,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
+		d->mode = AbstractColumn::Integer;
 		break;
 	case AbstractColumn::Text:
 		for (int n = 0; n < actualCols; n++) {
@@ -1240,6 +1258,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
+		d->mode = AbstractColumn::Text;
 		break;
 	case AbstractColumn::Day:
 	case AbstractColumn::Month:
@@ -1250,6 +1269,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
+		d->mode = AbstractColumn::DateTime;
 		break;
 	}
 
@@ -1257,6 +1277,7 @@ int Matrix::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::Imp
 }
 
 void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+	DEBUG("Matrix::finalizeImport()");
 	Q_UNUSED(columnOffset);
 	Q_UNUSED(startColumn);
 	Q_UNUSED(endColumn);
@@ -1266,4 +1287,5 @@ void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, co
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);
+	DEBUG("Matrix::finalizeImport() DONE");
 }
