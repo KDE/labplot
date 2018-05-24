@@ -1198,6 +1198,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->plotArea()->graphicsItem());
 
+
 				//TODO: positioning
 			}
 
@@ -1613,17 +1614,37 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			curve->setSymbolsStyle(Symbol::NoSymbols);
 		}
 
-		//Color symbolColor;
-		//Color symbolFillColor;
-		//TODO: doesn't work
-		QBrush brush = curve->symbolsBrush();
-		brush.setColor(color(originCurve.symbolColor));
-		curve->setSymbolsBrush(brush);
-
+		//symbol size
 		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Point));
 
+		//symbol fill color
+		QBrush brush = curve->symbolsBrush();
+		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
+			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			if (curve->lineType() != XYCurve::NoLine)
+				brush.setColor(curve->linePen().color());
+			else
+				brush.setColor(Qt::black);
+		} else
+			brush.setColor(color(originCurve.symbolFillColor));
+
+		curve->setSymbolsBrush(brush);
+
+		//symbol border/edge color and width
 		QPen pen = curve->symbolsPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.symbolThickness, Worksheet::Point));
+		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			if (curve->lineType() != XYCurve::NoLine)
+				pen.setColor(curve->linePen().color());
+			else
+				pen.setColor(Qt::black);
+		} else
+			pen.setColor(color(originCurve.symbolColor));
+
+		//border width (edge thickness in Origin) is given by percentage of the symbol radius
+		pen.setWidthF(originCurve.symbolThickness/100.*curve->symbolsSize()/2.);
+
+		curve->setSymbolsPen(pen);
 
 		//handle unsigned char pointOffset member
 		//handle bool connectSymbols member
