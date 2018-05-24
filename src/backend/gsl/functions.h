@@ -56,6 +56,7 @@ struct func _functions[] = {
 	{"sqrt", (func_t)sqrt},
 	{"sgn", (func_t)nsl_sf_sgn},
 	{"theta", (func_t)nsl_sf_theta},
+	{"harmonic", (func_t)nsl_sf_harmonic},
 #ifndef _WIN32
 	{"cbrt", (func_t)cbrt},
 	{"logb", (func_t)logb},
