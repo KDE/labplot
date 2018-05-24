@@ -1174,6 +1174,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				int count = bytes.size()/sizeof(QString);
 				QVector<QString> column;
 				column.resize(count);
+				//TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
 				memcpy(column.data(), bytes.data(), count*sizeof(QString));
 				static_cast<QVector<QVector<QString>>*>(d->data)->append(column);
 				break;
@@ -1192,6 +1193,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 				int count = bytes.size()/sizeof(QDateTime);
 				QVector<QDateTime> column;
 				column.resize(count);
+				//TODO: warning (GCC8): writing to an object of type 'class QDateTime' with no trivial copy-assignment; use copy-assignment or copy-initialization instead
 				memcpy(column.data(), bytes.data(), count*sizeof(QDateTime));
 				static_cast<QVector<QVector<QDateTime>>*>(d->data)->append(column);
 				break;
