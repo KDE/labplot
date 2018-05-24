@@ -14,6 +14,7 @@ optional
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher (including the devel-package, cfitsio-devel or similar)
+	* libcerf version 1.0 or higher (including the devel-package, libcerf-devel or similar)
 	* Cantor version 16.04 or higher (including the devel package, cantor-devel or similar)
 
 
@@ -35,6 +36,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_HDF5=OFF
 -DENABLE_NETCDF=OFF
 -DENABLE_FITS=OFF
+-DENABLE_LIBCERF=OFF
 -DENABLE_CANTOR=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
