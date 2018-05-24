@@ -55,6 +55,9 @@ double nsl_sf_asech(double x);
 double nsl_sf_acsch(double x);
 double nsl_sf_acoth(double x);
 
+/* harmonic numbers (extended to non-integers) */
+double nsl_sf_harmonic(double x);
+
 /* wrapper for GSL functions with integer parameters */
 /* mathematical functions */
 double nsl_sf_ldexp(double x, double expo);
