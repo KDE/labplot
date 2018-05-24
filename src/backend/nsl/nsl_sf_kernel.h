@@ -29,8 +29,6 @@
 #ifndef NSL_SF_KERNEL_H
 #define NSL_SF_KERNEL_H
 
-#include <stdlib.h>
-
 /* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
 
 /* kernel on [-1:1] */
