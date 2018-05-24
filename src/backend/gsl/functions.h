@@ -4,7 +4,7 @@
     Description          : definition of functions
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -35,6 +35,9 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
+#ifdef HAVE_LIBCERF
+#include <cerf.h>
+#endif
 #include "backend/nsl/nsl_sf_basic.h"
 
 #ifdef _MSC_VER
@@ -168,6 +171,13 @@ struct func _functions[] = {
 	{"erf_Z", (func_t)gsl_sf_erf_Z},
 	{"erf_Q", (func_t)gsl_sf_erf_Q},
 	{"hazard", (func_t)gsl_sf_hazard},
+#ifdef HAVE_LIBCERF
+	{"erfcx", (func_t)erfcx},
+	{"erfi", (func_t)erfi},
+	{"im_w_of_x", (func_t)im_w_of_x},
+	{"dawson", (func_t)dawson},
+	{"voigt", (func_t)voigt},
+#endif
 	/* Exponential Functions */
 	{"exp", (func_t)gsl_sf_exp},
 	{"exp_mult", (func_t)gsl_sf_exp_mult},

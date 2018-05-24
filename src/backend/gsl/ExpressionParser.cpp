@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2014-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2014-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : C++ wrapper for the bison generated parser.
 
  ***************************************************************************/
@@ -34,6 +34,9 @@
 #include <QDebug>
 
 #include <cmath>
+#ifdef HAVE_LIBCERF
+#include <cerf.h>
+#endif
 extern "C" {
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_errno.h>
@@ -69,7 +72,11 @@ void ExpressionParser::initFunctions() {
 //	m_functionsGroups << i18n("Elementary Operations");
 	m_functionsGroups << i18n("Elliptic Integrals");
 //	m_functionsGroups << i18n("Elliptic Functions (Jacobi)");
+#ifdef HAVE_LIBCERF
+	m_functionsGroups << i18n("Error Functions and Related Functions");
+#else
 	m_functionsGroups << i18n("Error Functions");
+#endif
 	m_functionsGroups << i18n("Exponential Functions");
 	m_functionsGroups << i18n("Exponential Integrals");
 	m_functionsGroups << i18n("Fermi-Dirac Function");
@@ -290,9 +297,20 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Gaussian probability density function Z");
 	m_functionsNames << i18n("Upper tail of the Gaussian probability function Q");
 	m_functionsNames << i18n("Hazard function for the normal distribution Z/Q");
+#ifdef HAVE_LIBCERF
+	m_functionsNames << i18n("Underflow-compensating function exp(x^2) erfc(x) for real x");
+	m_functionsNames << i18n("Imaginary error function erfi(x) = -i erf(ix) for real x");
+	m_functionsNames << i18n("Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) erfc(-ix) for real x");
+	m_functionsNames << i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)");
+	m_functionsNames << i18n("Voigt profile");
+#endif
 
 	index++;
+#ifdef HAVE_LIBCERF
+	for (int i = 0; i < 11; i++)
+#else
 	for (int i = 0; i < 6; i++)
+#endif
 		m_functionsGroupIndex << index;
 
 	// Exponential Functions
