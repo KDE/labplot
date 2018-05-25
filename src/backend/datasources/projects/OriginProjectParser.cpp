@@ -1192,7 +1192,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//texts
 			for (const auto& s: layer.texts) {
-				DEBUG("EXTRA TEXT =" << s.text.c_str());
+				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
 				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
 				plot->addChild(label);
@@ -1753,9 +1753,11 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	QString text = "";
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
-			text.append("\n");
+			text.append("<br>");
 		text.append(parseOriginTags(lines[i]));
 	}
+
+	DEBUG(" PARSED TEXT = " << text.toStdString());
 
 	return text;
 }
