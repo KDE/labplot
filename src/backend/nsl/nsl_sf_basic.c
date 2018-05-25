@@ -93,7 +93,11 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 #ifdef HAVE_LIBCERF
 	return voigt(x, sigma, gamma);
 #else
+#ifdef _MSC_VER
+	cpmlx z = {(const double)(x/(sqrt(2.)*sigma)), (const double)(gamma/(sqrt(2.)*sigma))};
+#else
 	cmplx z = (x + I*gamma)/(sqrt(2.)*sigma);
+#endif
 	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
 #endif
 }

@@ -266,7 +266,7 @@ static inline cmplx cpolar(double r, double t)
 #endif
   } else {
 #ifdef _MSC_VER
-    cpmlx z = {(const double)(r * cos(t)), (const double)(r * sin(t))};
+    cmplx z = {(const double)(r * cos(t)), (const double)(r * sin(t))};
 #else
     return C(r * cos(t), r * sin(t));
 #endif
@@ -281,7 +281,12 @@ static inline cmplx cpolar(double r, double t)
 // compute erfcx(z) = exp(z^2) erfz(z)
 cmplx FADDEEVA(erfcx)(cmplx z, double relerr)
 {
+#ifdef _MSC_VER
+  cmplx z = {(const double)(-cimag(z)), (const double)(creal(z))};
+  return FADDEEVA(w)(z, relerr);
+#else
   return FADDEEVA(w)(C(-cimag(z), creal(z)), relerr);
+#endif
 }
 
 // compute the error function erf(x)
