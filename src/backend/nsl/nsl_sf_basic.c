@@ -34,7 +34,7 @@
 #include <gsl/gsl_randist.h>
 #ifdef HAVE_LIBCERF
 #include <cerf.h>
-#elif !defined(_WIN32)
+#else
 #include "Faddeeva.h"
 #endif
 

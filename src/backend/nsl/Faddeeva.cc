@@ -257,10 +257,20 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 
 static inline cmplx cpolar(double r, double t)
 {
-  if (r == 0.0 && !isnan(t))
+  if (r == 0.0 && !isnan(t)) {
+#ifdef _MSC_VER
+    cmplx z = {0., 0.};
+    return z;
+#else
     return 0.0;
-  else
+#endif
+  } else {
+#ifdef _MSC_VER
+    cpmlx z = {(const double)(r * cos(t)), (const double)(r * sin(t))};
+#else
     return C(r * cos(t), r * sin(t));
+#endif
+  }
 }
 
 #endif // !__cplusplus, i.e. pure C (requires C99 features)
