@@ -1884,6 +1884,40 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 		line.replace(pos, len, value);
 		pos = rxline.indexIn(line);
 	}
+
+	// replace umlauts etc.
+	// TODO: probably missed some. Is there any generic method?
+	line.replace("ä", "&auml;");
+	line.replace("ö", "&ouml;");
+	line.replace("ü", "&uuml;");
+	line.replace("Ä", "&Auml;");
+	line.replace("Ö", "&Ouml;");
+	line.replace("Ü", "&Uuml;");
+	line.replace("ß", "&szlig;");
+	line.replace("€", "&euro;");
+	line.replace("£", "&pound;");
+	line.replace("¥", "&yen;");
+	line.replace("§", "&sect;");
+	line.replace("µ", "&micro;");
+	line.replace("¹", "&sup1;");
+	line.replace("²", "&sup2;");
+	line.replace("³", "&sup3;");
+	line.replace("¶", "&para;");
+	line.replace("ø", "&oslash;");
+	line.replace("æ", "&aelig;");
+	line.replace("ð", "&eth;");
+	line.replace("ħ", "&hbar;");
+	line.replace("ĸ", "&kappa;");
+	line.replace("¢", "&cent;");
+	line.replace("¼", "&frac14;");
+	line.replace("½", "&frac12;");
+	line.replace("¾", "&frac34;");
+	line.replace("¬", "&not;");
+	line.replace("©", "&copy;");
+	line.replace("±", "&plusmn;");
+	line.replace("¿", "&iquest;");
+	line.replace("×", "&times;");
+
 	//Lookbehind conditions are not supported - so need to reverse string
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
 	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
@@ -1922,7 +1956,6 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	linerev.replace(rtagBracket, ")");
 
 	line = strreverse(linerev);
-
 
 	//replace \b(...), \i(...), \u(...), \g(...), \+(...), \-(...), \f:font(...) tags
 	const QString rxstr[] = { "\\\\\\s*b\\s*\\(", "\\\\\\s*i\\s*\\(", "\\\\\\s*u\\s*\\(", "\\\\\\s*g\\s*\\(", "\\\\\\s*\\+\\s*\\(", "\\\\\\s*\\-\\s*\\(", "\\\\\\s*f\\:[^\\(]*\\("};
