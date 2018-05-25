@@ -1976,6 +1976,10 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	line.replace("&lbracket;", "(");
 	line.replace("&rbracket;", ")");
 
+	// special characters
+	QRegExp rxs("\\\\\\((\\d+)\\)");
+	line.replace(rxs, "&#\\1;");
+
 	DEBUG("	result: " << line.toStdString());
 
 	return line;
