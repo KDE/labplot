@@ -1,5 +1,3 @@
-//  -*- mode:c++; tab-width:2; indent-tabs-mode:nil;  -*-
-
 /* Copyright (c) 2012 Massachusetts Institute of Technology
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
