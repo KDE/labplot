@@ -92,11 +92,10 @@ double nsl_sf_harmonic(double x) {
 double nsl_sf_voigt(double x, double sigma, double gamma) {
 #ifdef HAVE_LIBCERF
 	return voigt(x, sigma, gamma);
-#endif
-#ifdef _MSC_VER
+#elif defined(_MSC_VER)
 	return 0.;	// not supported yet
 #else
-	cmplx z = (x + I*gamma)/(sqrt(2.)*sigma);
+	double complex z = (x + I*gamma)/(sqrt(2.)*sigma);
 	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
 #endif
 }
