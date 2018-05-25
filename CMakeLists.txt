@@ -20,6 +20,7 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Mqtt
 )
 
+
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
@@ -322,3 +323,4 @@ endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
+

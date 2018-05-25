@@ -33,6 +33,13 @@
 #include "ui_importfilewidget.h"
 #include "backend/datasources/LiveDataSource.h"
 #include <memory>
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/qmqttclient.h>
+#include <QtMqtt/QMqttSubscription>
+#include <QtMqtt/qmqttsubscription.h>
+#include <QtMqtt/QMqttTopicName>
+#include <QtMqtt/QMqttTopicFilter>
+#include <vector>
 
 class AbstractFileFilter;
 class AsciiOptionsWidget;
@@ -82,7 +89,11 @@ private:
 	const QString& m_fileName;
 	bool m_fileEmpty;
 	bool m_liveDataSource;
-	bool m_suppressRefresh;
+    bool m_suppressRefresh;
+    QMqttClient *m_client;
+    QMqttSubscription *m_mainSubscription;
+    QMqttTopicFilter *m_filter;
+    std::vector<QMqttSubscription*> m_mqttSubscriptions;
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -101,6 +112,10 @@ private slots:
 	void loadSettings();
     void idChecked(int);
     void authenticationChecked(int);
+    void mqttConnection();
+    void onmqttconnect();
+    void mqttSubscribe();
+    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 
 signals:
 	void fileNameChanged();

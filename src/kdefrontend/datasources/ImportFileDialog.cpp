@@ -430,7 +430,14 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
 		}
-	}
+    }
+    case LiveDataSource::SourceType::Mqtt: {
+        const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
+        if (enable)
+        {
+
+        }
+    }
 	}
 }
 

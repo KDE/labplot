@@ -62,6 +62,14 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/qmqttclient.h>
+#include <QtMqtt/QMqttSubscription>
+#include <QtMqtt/qmqttsubscription.h>
+#include <QMessageBox>
+#include <QtMqtt/QMqttTopicFilter>
+#include <QtMqtt/QMqttMessage>
+
 
 /*!
    \class ImportFileWidget
@@ -152,6 +160,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
+    m_client = new QMqttClient(this);
+
 	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
@@ -164,6 +174,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
     connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
+    connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
+    connect(m_client, SIGNAL(connected()), this, SLOT(onmqttconnect()) );
+    connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
+    connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
+
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -977,7 +992,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
 	switch (type) {
-	case LiveDataSource::SourceType::FileOrPipe: {
+    case LiveDataSource::SourceType::FileOrPipe:{
 		ui.lFileName->show();
 		ui.leFileName->show();
 		ui.bFileInfo->show();
@@ -993,9 +1008,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
-<<<<<<< Updated upstream
+
 		fileNameChanged(ui.leFileName->text());
-=======
+
         ui.leID->hide();
         ui.lMqttID->hide();
         ui.lePassword->hide();
@@ -1015,7 +1030,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 
 		fileNameChanged(m_fileName);
->>>>>>> Stashed changes
+
 
 		int itemIdx = -1;
 		for (int i = 0; i < ui.cbReadType->count(); ++i) {
@@ -1028,7 +1043,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 			ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
 		break;
-	}
+    }
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
 		ui.leFileName->show();
@@ -1198,15 +1213,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.bManageFilters->setEnabled(true);
         ui.cbFilter->setEnabled(true);
 
-        itemIdx = -1;
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx != -1) {
-            ui.cbReadType->removeItem(itemIdx);
+            if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
+                ui.cbReadType->removeItem(i);
         }
 
         break;
@@ -1280,4 +1289,69 @@ void ImportFileWidget::authenticationChecked(int state)
         ui.lUsername->hide();
         ui.lPassword->hide();
     }
+}
+
+void ImportFileWidget::mqttConnection()
+{
+    const bool valid = !ui.leHost->text().isEmpty() && !ui.lePort->text().isEmpty() &&
+            !(ui.chbID->isChecked() && ui.leID->text().isEmpty()) &&
+            !(ui.chbAuthentication->isChecked() && ( ui.leUsername->text().isEmpty() || ui.lePassword->text().isEmpty()));
+    if(valid)
+    {
+        if(m_client->state()==QMqttClient::ClientState::Disconnected)
+        {
+            m_client->setHostname(ui.leHost->text());
+            m_client->setPort(ui.lePort->text().toUInt());
+            if(ui.chbID->isChecked())
+                m_client->setClientId(ui.leID->text());
+            if(ui.chbAuthentication->isChecked())
+            {
+                m_client->setUsername(ui.leUsername->text());
+                m_client->setPassword(ui.lePassword->text());
+            }
+            qDebug()<<m_client->hostname()<<"   "<<m_client->port();
+            qDebug()<<"Trying to cennct";
+            m_client->connectToHost();
+        }
+    }
+}
+
+void ImportFileWidget::onmqttconnect()
+{
+    QMessageBox::information(this, "Title", "Connection established");
+    QMqttTopicFilter globalFilter{"#"};
+    m_mainSubscription = m_client->subscribe(globalFilter, 1);
+    if(!m_mainSubscription)
+        QMessageBox::information(this, "Title", "no subscribe");
+}
+
+void ImportFileWidget::mqttSubscribe()
+{
+    if(ui.lwSubscriptions->findItems(ui.cbTopic->currentText(), Qt::MatchExactly).isEmpty())
+    {
+        QMqttTopicFilter filter {ui.cbTopic->currentText()};
+        QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+        if(temp_subscription)
+        {
+            m_mqttSubscriptions.push_back(temp_subscription);
+            ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
+        }
+    }
+    else
+        QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+}
+
+void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic)
+{
+    bool known_topic = false;
+    for(int i = 0; i < ui.cbTopic->count() ; ++i)
+    {
+        if(QString::compare(ui.cbTopic->itemText(i), topic.name(), Qt::CaseInsensitive) == 0)
+        {
+            known_topic = true;
+            break;
+        }
+    }
+    if (known_topic == false)
+        ui.cbTopic->addItem(topic.name());
 }

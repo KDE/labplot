@@ -319,12 +319,14 @@ ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 # TODO: remove KF5::KDELibs4Support
-target_link_libraries( labplot2lib KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg Qt5::Core ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
+target_link_libraries( labplot2lib KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg Qt5::Core  ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )
 ENDIF ()
-
+IF (Qt5Mqtt_FOUND)
+	target_link_libraries( labplot2lib Qt5::Mqtt )
+ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
 ENDIF ()
