@@ -182,6 +182,8 @@ IF (CANTOR_LIBS_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Cantor Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Cantor Library DISABLED.")
 ENDIF ()
 
 ### FFTW (optional) #####################################
@@ -206,6 +208,8 @@ IF (FFTW_FOUND)
 ELSE ()
 	MESSAGE (STATUS "FFTW 3 Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "FFTW 3 Library DISABLED.")
 ENDIF ()
 
 ### HDF5 (optional) ##############################
@@ -217,6 +221,8 @@ IF (HDF5_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library DISABLED.")
 ENDIF ()
 
 ### NETCDF (optional) #############################
@@ -241,6 +247,8 @@ IF (NETCDF_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED.")
 ENDIF ()
 
 ### FITS (optional) ###############################
@@ -269,6 +277,8 @@ IF (CFITSIO_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library DISABLED.")
 ENDIF ()
 
 ### LIBCERF (optional) #############################
@@ -293,6 +303,8 @@ IF (LIBCERF_FOUND)
 ELSE ()
 	MESSAGE (STATUS "libcerf Library not found.")
 ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "libcerf Library DISABLED.")
 ENDIF ()
 
 #################################################
