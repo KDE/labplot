@@ -250,7 +250,11 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 #      define NaN (0./0.) // NaN
 #    endif
 #  else
+#ifdef _MSC_VER
+#    define C(a,b) (cmplx tmpz = {(const double)(a), (const double)(b)})
+#else
 #    define C(a,b) ((a) + I*(b))
+#endif
 #    define Inf (1./0.) 
 #    define NaN (0./0.) 
 #  endif
@@ -282,8 +286,8 @@ static inline cmplx cpolar(double r, double t)
 cmplx FADDEEVA(erfcx)(cmplx z, double relerr)
 {
 #ifdef _MSC_VER
-  cmplx z = {(const double)(-cimag(z)), (const double)(creal(z))};
-  return FADDEEVA(w)(z, relerr);
+  cmplx x = {(const double)(-cimag(z)), (const double)(creal(z))};
+  return FADDEEVA(w)(x, relerr);
 #else
   return FADDEEVA(w)(C(-cimag(z), creal(z)), relerr);
 #endif
