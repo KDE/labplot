@@ -357,12 +357,13 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
   double mIm_z2 = -2*x*y; // Im(-z^2)
   if (mRe_z2 < -750) // underflow
 #ifdef _MSC_VER
-    cmplx tmpz;
-    if (x >= 0)
-	tmpz = {1., 0.};
-    else
-	tmpz = {-1., 0.};
-    return tmpz;
+    if (x >= 0) {
+	cmplx tmpz = {1., 0.};
+	return tmpz;
+    } else {
+	cmplx tmpz = {-1., 0.};
+	return tmpz;
+    }
 #else
     return (x >= 0 ? 1.0 : -1.0);
 #endif
@@ -398,8 +399,14 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
       else if (fabs(mIm_z2) < 5e-3 && x > -5e-3)
         goto taylor_erfi;
     }
-    else if (isnan(x))
+    else if (isnan(x)) {
+#ifdef _MSC_VER
+      cmplx tmpz = {NaN, y == 0 ? 0 : NaN};
+      return tmpz;
+#else
       return C(NaN, y == 0 ? 0 : NaN);
+#endif
+    }
     /* don't use complex exp function, since that will produce spurious NaN
        values when multiplying w in an overflow situation. */
 #ifdef _MSC_VER

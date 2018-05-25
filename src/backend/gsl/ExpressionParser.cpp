@@ -305,7 +305,10 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)");
 	count += 4;
 #endif
+#ifndef _MSC_VER
 	m_functionsNames << i18n("Voigt profile");
+	count++;
+#endif
 
 	index++;
 	for (int i = 0; i < count; i++)

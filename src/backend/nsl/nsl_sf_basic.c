@@ -34,7 +34,7 @@
 #include <gsl/gsl_randist.h>
 #ifdef HAVE_LIBCERF
 #include <cerf.h>
-#else
+#elif !defined(_MSC_VER)
 #include "Faddeeva.h"
 #endif
 
@@ -92,12 +92,11 @@ double nsl_sf_harmonic(double x) {
 double nsl_sf_voigt(double x, double sigma, double gamma) {
 #ifdef HAVE_LIBCERF
 	return voigt(x, sigma, gamma);
-#else
+#endif
 #ifdef _MSC_VER
-	cmplx z = {(const double)(x/(sqrt(2.)*sigma)), (const double)(gamma/(sqrt(2.)*sigma))};
+	return 0.;	// not supported yet
 #else
 	cmplx z = (x + I*gamma)/(sqrt(2.)*sigma);
-#endif
 	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
 #endif
 }
