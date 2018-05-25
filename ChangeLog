@@ -25,7 +25,8 @@ New features:
 	* Much better support for Windows and macOS
 	* Syntax highlighting for LaTeX in the text label
 	* Allow to set the background color for LaTeX labels
-	* support Hermite polynomials from GSL 2.4
+	* Support Hermite polynomials from GSL 2.4
+	* Support error functions and related functions from libcerf
 	* "Used in" sub-menu in column contex menu for faster navigation to the curves consuming the column
 	* Direct application of analysis functions (smoothing, interpolating, etc.) on the ploted data via curve's context menu
 	* Direct application of analysis functions  on the data in the spreadsheet and plotting of the results via spreadsheet's context menu

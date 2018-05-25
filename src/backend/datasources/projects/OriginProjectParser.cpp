@@ -1192,11 +1192,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//texts
 			for (const auto& s: layer.texts) {
-				DEBUG("EXTRA TEXT =" << s.text.c_str());
+				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
 				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->plotArea()->graphicsItem());
+
 
 				//TODO: positioning
 			}
@@ -1613,17 +1614,37 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			curve->setSymbolsStyle(Symbol::NoSymbols);
 		}
 
-		//Color symbolColor;
-		//Color symbolFillColor;
-		//TODO: doesn't work
-		QBrush brush = curve->symbolsBrush();
-		brush.setColor(color(originCurve.symbolColor));
-		curve->setSymbolsBrush(brush);
-
+		//symbol size
 		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Point));
 
+		//symbol fill color
+		QBrush brush = curve->symbolsBrush();
+		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
+			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			if (curve->lineType() != XYCurve::NoLine)
+				brush.setColor(curve->linePen().color());
+			else
+				brush.setColor(Qt::black);
+		} else
+			brush.setColor(color(originCurve.symbolFillColor));
+
+		curve->setSymbolsBrush(brush);
+
+		//symbol border/edge color and width
 		QPen pen = curve->symbolsPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.symbolThickness, Worksheet::Point));
+		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			if (curve->lineType() != XYCurve::NoLine)
+				pen.setColor(curve->linePen().color());
+			else
+				pen.setColor(Qt::black);
+		} else
+			pen.setColor(color(originCurve.symbolColor));
+
+		//border width (edge thickness in Origin) is given by percentage of the symbol radius
+		pen.setWidthF(originCurve.symbolThickness/100.*curve->symbolsSize()/2.);
+
+		curve->setSymbolsPen(pen);
 
 		//handle unsigned char pointOffset member
 		//handle bool connectSymbols member
@@ -1732,9 +1753,11 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 	QString text = "";
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
-			text.append("\n");
+			text.append("<br>");
 		text.append(parseOriginTags(lines[i]));
 	}
+
+	DEBUG(" PARSED TEXT = " << text.toStdString());
 
 	return text;
 }
@@ -1861,6 +1884,41 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 		line.replace(pos, len, value);
 		pos = rxline.indexIn(line);
 	}
+
+	// replace umlauts etc.
+	// TODO: probably missed some. Is there any generic method?
+	line.replace("ä", "&auml;");
+	line.replace("ö", "&ouml;");
+	line.replace("ü", "&uuml;");
+	line.replace("Ä", "&Auml;");
+	line.replace("Ö", "&Ouml;");
+	line.replace("Ü", "&Uuml;");
+	line.replace("ß", "&szlig;");
+	line.replace("€", "&euro;");
+	line.replace("£", "&pound;");
+	line.replace("¥", "&yen;");
+	line.replace("§", "&sect;");
+	line.replace("µ", "&micro;");
+	line.replace("¹", "&sup1;");
+	line.replace("²", "&sup2;");
+	line.replace("³", "&sup3;");
+	line.replace("¶", "&para;");
+	line.replace("ø", "&oslash;");
+	line.replace("æ", "&aelig;");
+	line.replace("ð", "&eth;");
+	line.replace("ħ", "&hbar;");
+	line.replace("ĸ", "&kappa;");
+	line.replace("¢", "&cent;");
+	line.replace("¼", "&frac14;");
+	line.replace("½", "&frac12;");
+	line.replace("¾", "&frac34;");
+	line.replace("¬", "&not;");
+	line.replace("©", "&copy;");
+	line.replace("±", "&plusmn;");
+	line.replace("¿", "&iquest;");
+	line.replace("×", "&times;");
+	line.replace("°", "&deg;");
+
 	//Lookbehind conditions are not supported - so need to reverse string
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
 	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
@@ -1899,7 +1957,6 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	linerev.replace(rtagBracket, ")");
 
 	line = strreverse(linerev);
-
 
 	//replace \b(...), \i(...), \u(...), \g(...), \+(...), \-(...), \f:font(...) tags
 	const QString rxstr[] = { "\\\\\\s*b\\s*\\(", "\\\\\\s*i\\s*\\(", "\\\\\\s*u\\s*\\(", "\\\\\\s*g\\s*\\(", "\\\\\\s*\\+\\s*\\(", "\\\\\\s*\\-\\s*\\(", "\\\\\\s*f\\:[^\\(]*\\("};
@@ -1954,6 +2011,10 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 
 	line.replace("&lbracket;", "(");
 	line.replace("&rbracket;", ")");
+
+	// special characters
+	QRegExp rxs("\\\\\\((\\d+)\\)");
+	line.replace(rxs, "&#\\1;");
 
 	DEBUG("	result: " << line.toStdString());
 

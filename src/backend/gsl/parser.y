@@ -229,9 +229,13 @@ double parse(const char *str) {
 	/* leave space to terminate string by "\n\0" */
 	size_t slen = strlen(str) + 2;
 	p.string = (char *) malloc(slen * sizeof(char));
+	if (p.string == NULL) {
+		printf("ERROR: out of memory for parsing string\n");
+		return 0.;
+	}
 
-	strncpy(p.string, str, slen);
-	p.string[strlen(p.string)] = '\n';
+	strncpy(p.string, str, slen);	// fills with '\0'
+	p.string[strlen(str)] = '\n';
 	pdebug("\nPARSER: yyparse(\"%s\") len=%d\n", p.string, (int)strlen(p.string));
 
 	/* parameter for yylex */
