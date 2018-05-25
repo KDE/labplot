@@ -330,16 +330,27 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
 {
   double x = creal(z), y = cimag(z);
 
-  if (y == 0)
-    return C(FADDEEVA_RE(erf)(x),
-             y); // preserve sign of 0
-  if (x == 0) // handle separately for speed & handling of y = Inf or NaN
+  if (y == 0) {
+#ifdef _MSC_VER
+    cmplx x = {(const double)(FADDEEVA_RE(erf)(x)), (const double)(y)};
+    return x;
+#else
+    return C(FADDEEVA_RE(erf)(x), y); // preserve sign of 0
+#endif
+  }
+  if (x == 0) { // handle separately for speed & handling of y = Inf or NaN
+#ifdef _MSC_VER
+   cmplx x = {(const double)(x), (const double)(y*y > 720 ? (y > 0 ? Inf : -Inf)
+             : exp(y*y) * FADDEEVA(w_im)(y))};
+#else
     return C(x, // preserve sign of 0
              /* handle y -> Inf limit manually, since
                 exp(y^2) -> Inf but Im[w(y)] -> 0, so
                 IEEE will give us a NaN when it should be Inf */
              y*y > 720 ? (y > 0 ? Inf : -Inf)
              : exp(y*y) * FADDEEVA(w_im)(y));
+#endif
+  }
   
   double mRe_z2 = (y - x) * (x + y); // Re(-z^2), being careful of overflow
   double mIm_z2 = -2*x*y; // Im(-z^2)
@@ -358,9 +369,16 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
     }
     /* don't use complex exp function, since that will produce spurious NaN
        values when multiplying w in an overflow situation. */
+
+#ifdef _MSC_VER
+    return 1.0 - exp(mRe_z2) *
+      ((cmplx tmpz = {cos(mIm_z2), sin(mIm_z2)})
+       * FADDEEVA(w)(cmplx tmpz = {-y,x}, relerr));
+#else
     return 1.0 - exp(mRe_z2) *
       (C(cos(mIm_z2), sin(mIm_z2))
        * FADDEEVA(w)(C(-y,x), relerr));
+#endif
   }
   else { // x < 0
     if (x > -8e-2) { // duplicate from above to avoid fabs(x) call

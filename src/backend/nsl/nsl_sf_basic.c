@@ -94,7 +94,7 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 	return voigt(x, sigma, gamma);
 #else
 #ifdef _MSC_VER
-	cpmlx z = {(const double)(x/(sqrt(2.)*sigma)), (const double)(gamma/(sqrt(2.)*sigma))};
+	cmplx z = {(const double)(x/(sqrt(2.)*sigma)), (const double)(gamma/(sqrt(2.)*sigma))};
 #else
 	cmplx z = (x + I*gamma)/(sqrt(2.)*sigma);
 #endif
