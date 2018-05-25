@@ -1917,6 +1917,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	line.replace("±", "&plusmn;");
 	line.replace("¿", "&iquest;");
 	line.replace("×", "&times;");
+	line.replace("°", "&deg;");
 
 	//Lookbehind conditions are not supported - so need to reverse string
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
