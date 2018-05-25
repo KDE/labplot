@@ -218,7 +218,9 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 
 #  include "Faddeeva.h"
 
+# ifndef  _GNU_SOURCE
 #  define _GNU_SOURCE // enable GNU libc NAN extension if possible
+# endif
 
 #  include <float.h>
 #  include <math.h>
@@ -281,7 +283,7 @@ double FADDEEVA_RE(erf)(double x)
 {
 #if !defined(__cplusplus)
   return erf(x); // C99 supplies erf in math.h
-#elif (__cplusplus >= 201103L) || defined(HAVE_ERF)
+#elif (defined(__cplusplus) && __cplusplus >= 201103L) || defined(HAVE_ERF)
   return ::erf(x); // C++11 supplies std::erf in cmath
 #else
   double mx2 = -x*x;
@@ -419,7 +421,7 @@ double FADDEEVA_RE(erfc)(double x)
 {
 #if !defined(__cplusplus)
   return erfc(x); // C99 supplies erfc in math.h
-#elif (__cplusplus >= 201103L) || defined(HAVE_ERFC)
+#elif (defined(__cplusplus) && __cplusplus >= 201103L) || defined(HAVE_ERFC)
   return ::erfc(x); // C++11 supplies std::erfc in cmath
 #else
   if (x*x > 750) // underflow
