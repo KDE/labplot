@@ -297,20 +297,21 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Gaussian probability density function Z");
 	m_functionsNames << i18n("Upper tail of the Gaussian probability function Q");
 	m_functionsNames << i18n("Hazard function for the normal distribution Z/Q");
+	int count = 6;
 #ifdef HAVE_LIBCERF
 	m_functionsNames << i18n("Underflow-compensating function exp(x^2) erfc(x) for real x");
 	m_functionsNames << i18n("Imaginary error function erfi(x) = -i erf(ix) for real x");
 	m_functionsNames << i18n("Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) erfc(-ix) for real x");
 	m_functionsNames << i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)");
+	count += 4;
 #endif
+#ifndef _WIN32
 	m_functionsNames << i18n("Voigt profile");
+	count++;
+#endif
 
 	index++;
-#ifdef HAVE_LIBCERF
-	for (int i = 0; i < 11; i++)
-#else
-	for (int i = 0; i < 7; i++)
-#endif
+	for (int i = 0; i < count; i++)
 		m_functionsGroupIndex << index;
 
 	// Exponential Functions
