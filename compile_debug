@@ -8,4 +8,4 @@ fi
 
 cd $BUILDDIR
 
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_LIBCERF=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
