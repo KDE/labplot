@@ -137,7 +137,7 @@ Project::~Project() {
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
-	for (auto* w : children<Worksheet>())
+	for (auto* w : children<Worksheet>(AbstractAspect::Recursive))
 		w->setIsClosing();
 
 	d->undo_stack.clear();
