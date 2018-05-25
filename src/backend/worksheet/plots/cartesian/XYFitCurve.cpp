@@ -1501,7 +1501,6 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 }
 
-
 void XYFitCurvePrivate::recalculate() {
 	DEBUG("XYFitCurvePrivate::recalculate()");
 	QElapsedTimer timer;

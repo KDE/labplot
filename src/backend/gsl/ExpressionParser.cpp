@@ -302,14 +302,14 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Imaginary error function erfi(x) = -i erf(ix) for real x");
 	m_functionsNames << i18n("Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) erfc(-ix) for real x");
 	m_functionsNames << i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)");
-	m_functionsNames << i18n("Voigt profile");
 #endif
+	m_functionsNames << i18n("Voigt profile");
 
 	index++;
 #ifdef HAVE_LIBCERF
 	for (int i = 0; i < 11; i++)
 #else
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 7; i++)
 #endif
 		m_functionsGroupIndex << index;
 

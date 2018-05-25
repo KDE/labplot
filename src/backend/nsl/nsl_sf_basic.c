@@ -32,6 +32,11 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
+#ifdef HAVE_LIBCERF
+#include <cerf.h>
+#else
+#include "Faddeeva.h"
+#endif
 
 /* stdlib.h */
 double nsl_sf_rand(void) { return rand(); }
@@ -82,6 +87,15 @@ double nsl_sf_harmonic(double x) {
 		return GSL_POSINF;
 
 	return gsl_sf_psi(x + 1) + M_EULER;
+}
+
+double nsl_sf_voigt(double x, double sigma, double gamma) {
+#ifdef HAVE_LIBCERF
+	return voigt(x, sigma, gamma);
+#else
+	double complex z = (x + I*gamma)/(sqrt(2.)*sigma);
+	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
+#endif
 }
 
 /* wrapper for GSL functions with integer parameters */

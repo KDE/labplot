@@ -176,8 +176,8 @@ struct func _functions[] = {
 	{"erfi", (func_t)erfi},
 	{"im_w_of_x", (func_t)im_w_of_x},
 	{"dawson", (func_t)dawson},
-	{"voigt", (func_t)voigt},
 #endif
+	{"voigt", (func_t)nsl_sf_voigt},
 	/* Exponential Functions */
 	{"exp", (func_t)gsl_sf_exp},
 	{"exp_mult", (func_t)gsl_sf_exp_mult},
