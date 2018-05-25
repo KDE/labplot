@@ -177,9 +177,7 @@ struct func _functions[] = {
 	{"im_w_of_x", (func_t)im_w_of_x},
 	{"dawson", (func_t)dawson},
 #endif
-#ifndef _WIN32
 	{"voigt", (func_t)nsl_sf_voigt},
-#endif
 	/* Exponential Functions */
 	{"exp", (func_t)gsl_sf_exp},
 	{"exp_mult", (func_t)gsl_sf_exp_mult},

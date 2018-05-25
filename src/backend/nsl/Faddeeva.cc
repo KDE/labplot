@@ -216,10 +216,6 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 
 #  include "Faddeeva.h"
 
-# ifndef  _GNU_SOURCE
-#  define _GNU_SOURCE // enable GNU libc NAN extension if possible
-# endif
-
 #  include <float.h>
 #  include <math.h>
 
