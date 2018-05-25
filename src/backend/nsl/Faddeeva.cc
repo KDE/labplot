@@ -216,12 +216,14 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 
 #  include "Faddeeva.h"
 
-# ifndef  _GNU_SOURCE
+# ifndef _GNU_SOURCE
 #  define _GNU_SOURCE // enable GNU libc NAN extension if possible
 # endif
 
 #  include <float.h>
 #  include <math.h>
+
+typedef double complex cmplx;
 
 #  define FADDEEVA(name) Faddeeva_ ## name
 #  define FADDEEVA_RE(name) Faddeeva_ ## name ## _re
@@ -250,31 +252,17 @@ static inline double my_copysign(double x, double y) { return x<0 != y<0 ? -x : 
 #      define NaN (0./0.) // NaN
 #    endif
 #  else
-#ifdef _MSC_VER
-#    define C(a,b) (cmplx tmpz = {(const double)(a), (const double)(b)})
-#else
 #    define C(a,b) ((a) + I*(b))
-#endif
 #    define Inf (1./0.) 
 #    define NaN (0./0.) 
 #  endif
 
 static inline cmplx cpolar(double r, double t)
 {
-  if (r == 0.0 && !isnan(t)) {
-#ifdef _MSC_VER
-    cmplx z = {0., 0.};
-    return z;
-#else
+  if (r == 0.0 && !isnan(t))
     return 0.0;
-#endif
-  } else {
-#ifdef _MSC_VER
-    cmplx z = {(const double)(r * cos(t)), (const double)(r * sin(t))};
-#else
+  else
     return C(r * cos(t), r * sin(t));
-#endif
-  }
 }
 
 #endif // !__cplusplus, i.e. pure C (requires C99 features)
@@ -285,12 +273,7 @@ static inline cmplx cpolar(double r, double t)
 // compute erfcx(z) = exp(z^2) erfz(z)
 cmplx FADDEEVA(erfcx)(cmplx z, double relerr)
 {
-#ifdef _MSC_VER
-  cmplx x = {(const double)(-cimag(z)), (const double)(creal(z))};
-  return FADDEEVA(w)(x, relerr);
-#else
   return FADDEEVA(w)(C(-cimag(z), creal(z)), relerr);
-#endif
 }
 
 // compute the error function erf(x)
@@ -330,43 +313,21 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
 {
   double x = creal(z), y = cimag(z);
 
-  if (y == 0) {
-#ifdef _MSC_VER
-    cmplx tmpz = {(const double)(FADDEEVA_RE(erf)(x)), (const double)(y)};
-    return tmpz;
-#else
-    return C(FADDEEVA_RE(erf)(x), y); // preserve sign of 0
-#endif
-  }
-  if (x == 0) { // handle separately for speed & handling of y = Inf or NaN
-#ifdef _MSC_VER
-   cmplx tmpz = {(const double)(x), (const double)(y*y > 720 ? (y > 0 ? Inf : -Inf)
-             : exp(y*y) * FADDEEVA(w_im)(y))};
-   return tmpz;
-#else
+  if (y == 0)
+    return C(FADDEEVA_RE(erf)(x),
+             y); // preserve sign of 0
+  if (x == 0) // handle separately for speed & handling of y = Inf or NaN
     return C(x, // preserve sign of 0
              /* handle y -> Inf limit manually, since
                 exp(y^2) -> Inf but Im[w(y)] -> 0, so
                 IEEE will give us a NaN when it should be Inf */
              y*y > 720 ? (y > 0 ? Inf : -Inf)
              : exp(y*y) * FADDEEVA(w_im)(y));
-#endif
-  }
   
   double mRe_z2 = (y - x) * (x + y); // Re(-z^2), being careful of overflow
   double mIm_z2 = -2*x*y; // Im(-z^2)
   if (mRe_z2 < -750) // underflow
-#ifdef _MSC_VER
-    if (x >= 0) {
-	cmplx tmpz = {1., 0.};
-	return tmpz;
-    } else {
-	cmplx tmpz = {-1., 0.};
-	return tmpz;
-    }
-#else
     return (x >= 0 ? 1.0 : -1.0);
-#endif
 
   /* Handle positive and negative x via different formulas,
      using the mirror symmetries of w, to avoid overflow/underflow
@@ -380,17 +341,9 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
     }
     /* don't use complex exp function, since that will produce spurious NaN
        values when multiplying w in an overflow situation. */
-
-#ifdef _MSC_VER
-    cmplx tmpz1 = {cos(mIm_z2), sin(mIm_z2)};
-    cmplx tmpz2 = {-y, x};
-    return 1.0 - exp(mRe_z2) * tmpz1
-       * FADDEEVA(w)(tmpz2, relerr);
-#else
     return 1.0 - exp(mRe_z2) *
       (C(cos(mIm_z2), sin(mIm_z2))
        * FADDEEVA(w)(C(-y,x), relerr));
-#endif
   }
   else { // x < 0
     if (x > -8e-2) { // duplicate from above to avoid fabs(x) call
@@ -399,37 +352,20 @@ cmplx FADDEEVA(erf)(cmplx z, double relerr)
       else if (fabs(mIm_z2) < 5e-3 && x > -5e-3)
         goto taylor_erfi;
     }
-    else if (isnan(x)) {
-#ifdef _MSC_VER
-      cmplx tmpz = {NaN, y == 0 ? 0 : NaN};
-      return tmpz;
-#else
+    else if (isnan(x))
       return C(NaN, y == 0 ? 0 : NaN);
-#endif
-    }
     /* don't use complex exp function, since that will produce spurious NaN
        values when multiplying w in an overflow situation. */
-#ifdef _MSC_VER
-    cmplx tmpz1 = {cos(mIm_z2), sin(mIm_z2)};
-    cmplx tmpz2 = {y, -x};
-    return exp(mRe_z2) *
-      (tmpz1 * FADDEEVA(w)(tmpz2, relerr)) - 1.0;
-#else
     return exp(mRe_z2) *
       (C(cos(mIm_z2), sin(mIm_z2))
        * FADDEEVA(w)(C(y,-x), relerr)) - 1.0;
-#endif
   }
 
   // Use Taylor series for small |z|, to avoid cancellation inaccuracy
   //   erf(z) = 2/sqrt(pi) * z * (1 - z^2/3 + z^4/10 - z^6/42 + z^8/216 + ...)
  taylor:
   {
-#ifdef _MSC_VER
-    cmplx mz2 = {mRe_z2, mIm_z2}; // -z^2
-#else
     cmplx mz2 = C(mRe_z2, mIm_z2); // -z^2
-#endif
     return z * (1.1283791670955125739
                 + mz2 * (0.37612638903183752464
                          + mz2 * (0.11283791670955125739
