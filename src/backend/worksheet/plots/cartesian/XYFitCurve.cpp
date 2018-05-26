@@ -140,9 +140,16 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		break;
 	case nsl_fit_model_peak:
 		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
-		for (int d = 0; d < degree; d++) {
-			paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);
-			paramStartValues[3*d+1] = xrange/(10.*degree);
+		if (modelType == nsl_fit_model_voigt) {
+			for (int d = 0; d < 1; d++) {  //TODO: degree
+				paramStartValues[3*d+1] = xmin + (d+1.)*xrange/(degree+1.);
+				paramStartValues[3*d+2] = xrange/(10.*degree);
+			}
+		} else {
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);
+				paramStartValues[3*d+1] = xrange/(10.*degree);
+			}
 		}
 		break;
 	case nsl_fit_model_growth:
@@ -475,6 +482,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				model += ')';
 			}
 			break;
+		case nsl_fit_model_voigt:
+			paramNames << "a" << "mu" << "s" << "g";
+			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+			//TODO: degree
+			break;
 		}
 		break;
 	case nsl_fit_model_growth:
@@ -630,6 +642,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		}
 
 		// set some model-dependent start values
+		// TODO: see initStartValues()
 		if (modelCategory == nsl_fit_model_distribution) {
 			if (modelType == (int)nsl_sf_stats_flat)
 				paramStartValues[2] = -1.0;
