@@ -35,9 +35,6 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
-#ifdef HAVE_LIBCERF
-#include <cerf.h>
-#endif
 #include "backend/nsl/nsl_sf_basic.h"
 
 #ifdef _MSC_VER
@@ -171,13 +168,11 @@ struct func _functions[] = {
 	{"erf_Z", (func_t)gsl_sf_erf_Z},
 	{"erf_Q", (func_t)gsl_sf_erf_Q},
 	{"hazard", (func_t)gsl_sf_hazard},
-#ifdef HAVE_LIBCERF
-	{"erfcx", (func_t)erfcx},
-	{"erfi", (func_t)erfi},
-	{"im_w_of_x", (func_t)im_w_of_x},
-	{"dawson", (func_t)dawson},
-#endif
 #ifndef _MSC_VER
+	{"erfcx", (func_t)nsl_sf_erfcx},
+	{"erfi", (func_t)nsl_sf_erfi},
+	{"im_w_of_x", (func_t)nsl_sf_im_w_of_x},
+	{"dawson", (func_t)nsl_sf_dawson},
 	{"voigt", (func_t)nsl_sf_voigt},
 #endif
 	/* Exponential Functions */

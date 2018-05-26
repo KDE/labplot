@@ -59,6 +59,10 @@ double nsl_sf_acoth(double x);
 double nsl_sf_harmonic(double x);
 
 /* error function and related wrapper */
+double nsl_sf_erfcx(double x);
+double nsl_sf_erfi(double x);
+double nsl_sf_im_w_of_x(double x);
+double nsl_sf_dawson(double x);
 double nsl_sf_voigt(double x, double sigma, double gamma);
 
 /* wrapper for GSL functions with integer parameters */

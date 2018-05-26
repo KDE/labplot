@@ -89,6 +89,47 @@ double nsl_sf_harmonic(double x) {
 	return gsl_sf_psi(x + 1) + M_EULER;
 }
 
+/* error functions and related */
+double nsl_sf_erfcx(double x) {
+#ifdef HAVE_LIBCERF
+	return erfcx(x);
+#elif defined(_MSC_VER)
+	return 0.;	// not supported yet
+#else
+	return Faddeeva_erfcx_re(x);
+#endif
+}
+
+double nsl_sf_erfi(double x) {
+#ifdef HAVE_LIBCERF
+	return erfi(x);
+#elif defined(_MSC_VER)
+	return 0.;	// not supported yet
+#else
+	return Faddeeva_erfi_re(x);
+#endif
+}
+
+double nsl_sf_im_w_of_x(double x) {
+#ifdef HAVE_LIBCERF
+	return im_w_of_x(x);
+#elif defined(_MSC_VER)
+	return 0.;	// not supported yet
+#else
+	return Faddeeva_w_im(x);
+#endif
+}
+
+double nsl_sf_dawson(double x) {
+#ifdef HAVE_LIBCERF
+	return dawson(x);
+#elif defined(_MSC_VER)
+	return 0.;	// not supported yet
+#else
+	return Faddeeva_Dawson_re(x);
+#endif
+}
+
 double nsl_sf_voigt(double x, double sigma, double gamma) {
 #ifdef HAVE_LIBCERF
 	return voigt(x, sigma, gamma);
