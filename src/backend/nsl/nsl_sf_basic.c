@@ -120,6 +120,16 @@ double nsl_sf_im_w_of_x(double x) {
 #endif
 }
 
+#if !defined(_MSC_VER)
+double nsl_sf_im_w_of_z(complex double z) {
+#ifdef HAVE_LIBCERF
+	return cimag(w_of_z(z));
+#else
+	return cimag(Faddeeva_w(z));
+#endif
+}
+#endif
+
 double nsl_sf_dawson(double x) {
 #ifdef HAVE_LIBCERF
 	return dawson(x);
