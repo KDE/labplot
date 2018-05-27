@@ -125,7 +125,7 @@ double nsl_sf_im_w_of_z(complex double z) {
 #ifdef HAVE_LIBCERF
 	return cimag(w_of_z(z));
 #else
-	return cimag(Faddeeva_w(z));
+	return cimag(Faddeeva_w(z, 0));
 #endif
 }
 #endif
