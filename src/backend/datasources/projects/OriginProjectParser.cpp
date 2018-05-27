@@ -324,6 +324,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			DEBUG("	top level graph");
 			Worksheet* worksheet = new Worksheet(0, name);
 			worksheet->setIsLoading(true);
+			worksheet->setTheme("");
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 			break;
@@ -1200,6 +1201,17 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 
 				//TODO: positioning
+
+				//rotation
+				label->setRotationAngle(s.rotation);
+
+				//TODO:
+// 				Color color;
+// 				unsigned short fontSize;
+// 				int tab;
+// 				BorderType borderType;
+// 				Attach attach;
+
 			}
 
 			//curves
