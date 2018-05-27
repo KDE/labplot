@@ -27,6 +27,7 @@
 
 #include "nsl_fit.h"
 #include "nsl_common.h"
+#include "nsl_sf_basic.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_sf_gamma.h>
@@ -211,7 +212,23 @@ double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double A
 }
 
 double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, double mu, double s, double g, double weight) {
-	//TODO
+	if (s <= 0 || g < 0)
+		return 0;
+
+	double y = x - mu, norm = a * sqrt(weight/2./M_PI)/(s*s*s);
+
+#if !defined(_MSC_VER)
+	double v = nsl_sf_voigt(y, s, g), im_w = nsl_sf_im_w_of_z(y);
+	if (param == 0)
+		return sqrt(weight) * v;
+	if (param == 1)
+		return a*sqrt(weight)*y/(s*s) * v - norm * g * im_w;
+	if (param == 2)
+//		return a*sqrt(weight)*g/M_PI/(s*s*s) + norm*sqrt(2.*M_PI)*v * (y*y+mu*mu-s*s) - norm/s*im_w*2.*g*y;
+		return a/(s*s*s)*sqrt(weight)*(g/M_PI + v*(y*y -g*g -s*s) + im_w*2*g*y/s);
+	if (param == 3)
+		return -a*sqrt(weight)/M_PI/(s*s) + norm*sqrt(2.*M_PI)*s*v*g + im_w;
+#endif
 
 	return 0;
 }

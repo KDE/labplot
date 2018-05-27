@@ -480,6 +480,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 	case nsl_fit_model_peak:
 		for(int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
+		//TODO: disable voigt when _MSC_VER
 		break;
 	case nsl_fit_model_growth:
 		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)

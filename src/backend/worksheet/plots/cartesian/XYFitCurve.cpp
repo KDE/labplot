@@ -139,11 +139,12 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		}
 		break;
 	case nsl_fit_model_peak:
-		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma
+		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma(, gamma)
 		if (modelType == nsl_fit_model_voigt) {
 			for (int d = 0; d < 1; d++) {  //TODO: degree
 				paramStartValues[3*d+1] = xmin + (d+1.)*xrange/(degree+1.);
 				paramStartValues[3*d+2] = xrange/(10.*degree);
+				paramStartValues[3*d+3] = xrange/(10.*degree);
 			}
 		} else {
 			for (int d = 0; d < degree; d++) {
@@ -483,9 +484,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_voigt:
+			//TODO: degree
 			paramNames << "a" << "mu" << "s" << "g";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
-			//TODO: degree
 			break;
 		}
 		break;
@@ -945,7 +946,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_gaussian:
 		case nsl_fit_model_lorentz:
 		case nsl_fit_model_sech:
-		case nsl_fit_model_logistic: {
+		case nsl_fit_model_logistic:
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
@@ -983,7 +984,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
 			break;
-		}
+		case nsl_fit_model_voigt:
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				//TODO: degree
+
+				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+				const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+				const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+				const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+				for (unsigned int j = 0; j < 4; j++)
+					if (fixed[j])
+						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+					else
+						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_voigt_param_deriv(j, x, a, mu, s, g, weight[i]));
+			}
 		}
 		break;
 	case nsl_fit_model_growth: {
