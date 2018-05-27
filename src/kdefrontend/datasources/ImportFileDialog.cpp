@@ -90,6 +90,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+    connect(m_importFileWidget, &ImportFileWidget::subscriptionMade, this, &ImportFileDialog::checkOkButton);
 	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -135,7 +136,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-	connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+    connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -432,11 +433,16 @@ void ImportFileDialog::checkOkButton() {
 		}
     }
     case LiveDataSource::SourceType::Mqtt: {
-        const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
-        if (enable)
-        {
-
+        const bool enable = m_importFileWidget->isMqttValid();
+        if (enable) {
+            okButton->setEnabled(true);
+            okButton->setToolTip(i18n("Close the dialog and import the data."));
         }
+        else {
+            okButton->setEnabled(false);
+            okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made."));
+        }
+        break;
     }
 	}
 }

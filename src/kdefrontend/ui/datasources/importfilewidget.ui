@@ -281,7 +281,11 @@
        <widget class="QLineEdit" name="leUsername"/>
       </item>
       <item row="11" column="2">
-       <widget class="QComboBox" name="cbTopic"/>
+       <widget class="QComboBox" name="cbTopic">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="8" column="2">
        <widget class="QCheckBox" name="chbAuthentication">

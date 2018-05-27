@@ -39,7 +39,10 @@
 #include <QtMqtt/qmqttsubscription.h>
 #include <QtMqtt/QMqttTopicName>
 #include <QtMqtt/QMqttTopicFilter>
-#include <vector>
+#include <QVector>
+#include <QCompleter>
+#include <QStringList>
+#include <QTimer>
 
 class AbstractFileFilter;
 class AsciiOptionsWidget;
@@ -75,7 +78,7 @@ public:
     QString serialPort() const;
     int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
-
+    bool isMqttValid();
 private:
 	Ui::ImportFileWidget ui;
 
@@ -93,7 +96,12 @@ private:
     QMqttClient *m_client;
     QMqttSubscription *m_mainSubscription;
     QMqttTopicFilter *m_filter;
-    std::vector<QMqttSubscription*> m_mqttSubscriptions;
+    QVector <QMqttSubscription*> m_mqttSubscriptions;
+    QCompleter *m_completer;
+    QStringList m_topicList;
+    bool m_editing;
+    QTimer *m_timer;
+
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -113,15 +121,20 @@ private slots:
     void idChecked(int);
     void authenticationChecked(int);
     void mqttConnection();
-    void onmqttconnect();
+    void onMqttConnect();
     void mqttSubscribe();
     void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+    void setCompleter(QString);
+    void topicBeingTyped(const QString);
+    void topicTimeout();
 
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
+    void newTopic(QString);
+    void subscriptionMade();
 
 	void checkedFitsTableToMatrix(const bool enable);
 

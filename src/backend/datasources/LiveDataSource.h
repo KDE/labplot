@@ -35,6 +35,10 @@
 #include <QSerialPort>
 #include <QtNetwork/QLocalSocket>
 #include <QTimer>
+#include <QVector>
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/QMqttTopicName>
+#include <QMap>
 
 class QString;
 class AbstractFileFilter;
@@ -135,6 +139,14 @@ public:
 	void setLocalSocketName(const QString&);
 	QString localSocketName() const;
 
+    void setMqttClient(const QString&, const quint16&);
+    void setMqttClientAuthentication(const QString&, const QString&);
+    void setMqttClientId(const QString&);
+    QMqttClient mqttClient() const;
+
+    void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
+    QVector<QMqttTopicName> mqttSubscribtions() const;
+
 	void updateNow();
 	void pauseReading();
 	void continueReading();
@@ -195,6 +207,9 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
+    QMqttClient* m_client;
+    QMap<QMqttTopicFilter, quint8> m_topicMap;
+
 public slots:
 	void read();
 
@@ -208,6 +223,8 @@ private slots:
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
+
+    void onMqttConnect();
 };
 
 #endif

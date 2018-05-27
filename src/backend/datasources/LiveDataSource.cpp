@@ -80,10 +80,12 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_tcpSocket(nullptr),
 	  m_udpSocket(nullptr),
 	  m_serialPort(nullptr),
+      m_client(new QMqttClient(this)),
 	  m_device(nullptr) {
 
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
+    connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
 }
 
 LiveDataSource::~LiveDataSource() {
@@ -536,6 +538,13 @@ void LiveDataSource::read() {
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			break;
+        case Mqtt:{
+            qDebug()<<"Trying to connect 1";
+            /*if(m_client->state() == QMqttClient::ClientState::Connected)
+                m_client->disconnectFromHost();*/
+            m_client->connectToHost();
+            break;
+        }
 		}
 		m_prepared = true;
 	}
@@ -598,6 +607,13 @@ void LiveDataSource::read() {
 		m_device = m_serialPort;
 		//TODO
 		break;
+    case Mqtt:{
+        qDebug()<<"Trying to connect 1";
+        if(m_client->state() == QMqttClient::ClientState::Connected)
+            m_client->disconnectFromHost();
+        m_client->connectToHost();
+        break;
+    }
 	}
 }
 
@@ -1038,4 +1054,33 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 		this->read();
 
 	return !reader->hasError();
+}
+
+void LiveDataSource::setMqttClient(const QString& host, const quint16& port) {
+    m_client->setHostname(host);
+    m_client->setPort(port);
+}
+
+void LiveDataSource::setMqttClientAuthentication(const QString& username, const QString& password) {
+    m_client->setUsername(username);
+    m_client->setPassword(password);
+}
+
+void LiveDataSource::setMqttClientId(const QString &Id){
+    m_client->setClientId(Id);
+}
+
+void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const quint8& qos) {
+    m_topicMap[filter] = qos;
+}
+
+void LiveDataSource::onMqttConnect() {
+    QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+    while(i.hasNext()) {
+        qDebug()<<"connection made in live data source";
+        i.next();
+        QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+        if(temp)
+            qDebug()<<temp->topic()<<"  "<<temp->qos();
+    }
 }

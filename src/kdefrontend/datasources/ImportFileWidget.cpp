@@ -81,8 +81,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fileName(fileName),
 	m_fileEmpty(false),
 	m_liveDataSource(true),
+    m_editing(false),
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
+
+    m_timer = new QTimer(this);
+    m_timer->setInterval(10000);
 
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
@@ -175,10 +179,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
     connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
     connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
     connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
-    connect(m_client, SIGNAL(connected()), this, SLOT(onmqttconnect()) );
+    connect(m_client, SIGNAL(connected()), this, SLOT(onMqttConnect()) );
     connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
     connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
-
+    connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
+    connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::topicBeingTyped);
+    connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -391,6 +397,18 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
+    case LiveDataSource::SourceType::Mqtt:{
+        qDebug()<<"Saving mqtt";
+        source->setMqttClient(m_client->hostname(), m_client->port());
+        if(ui.chbAuthentication->isChecked())
+            source->setMqttClientAuthentication(m_client->username(), m_client->password());
+        if(ui.chbID->isChecked())
+            source->setMqttClientId(m_client->clientId());
+        for(int i=0; i<m_mqttSubscriptions.count(); i++) {
+            source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+        }
+        break;
+    }
 	default:
 		break;
 	}
@@ -1293,10 +1311,17 @@ void ImportFileWidget::authenticationChecked(int state)
 
 void ImportFileWidget::mqttConnection()
 {
-    const bool valid = !ui.leHost->text().isEmpty() && !ui.lePort->text().isEmpty() &&
-            !(ui.chbID->isChecked() && ui.leID->text().isEmpty()) &&
-            !(ui.chbAuthentication->isChecked() && ( ui.leUsername->text().isEmpty() || ui.lePassword->text().isEmpty()));
-    if(valid)
+    const bool host_set = !ui.leHost->text().isEmpty();
+    const bool port_set = !ui.lePort->text().isEmpty();
+    const bool id_used = ui.chbID->isChecked();
+    const bool id_set = !ui.leID->text().isEmpty();
+    const bool id_valid = !(id_used && !id_set);
+    const bool authentication_used = ui.chbAuthentication->isChecked();
+    const bool username_set = !ui.leUsername->text().isEmpty();
+    const bool password_set = !ui.lePassword->text().isEmpty();
+    const bool authentication_valid = ! (authentication_used && ( !username_set || !password_set) );
+    const bool valid =host_set && port_set && id_valid && authentication_valid;
+    if (valid)
     {
         if(m_client->state()==QMqttClient::ClientState::Disconnected)
         {
@@ -1316,7 +1341,7 @@ void ImportFileWidget::mqttConnection()
     }
 }
 
-void ImportFileWidget::onmqttconnect()
+void ImportFileWidget::onMqttConnect()
 {
     QMessageBox::information(this, "Title", "Connection established");
     QMqttTopicFilter globalFilter{"#"};
@@ -1335,6 +1360,7 @@ void ImportFileWidget::mqttSubscribe()
         {
             m_mqttSubscriptions.push_back(temp_subscription);
             ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
+            emit subscriptionMade();
         }
     }
     else
@@ -1353,5 +1379,49 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
         }
     }
     if (known_topic == false)
+    {
         ui.cbTopic->addItem(topic.name());
+        emit newTopic(topic.name());
+    }
+}
+
+void ImportFileWidget::setCompleter(QString topic)
+{
+    if(!m_editing)
+    {
+        m_topicList.append(topic);
+        m_completer = new QCompleter(m_topicList, this);
+        m_completer->setCompletionMode(QCompleter::PopupCompletion);
+        m_completer->setCaseSensitivity(Qt::CaseSensitive);
+        ui.cbTopic->setCompleter(m_completer);
+    }
+}
+
+void ImportFileWidget::topicBeingTyped(const QString topic) {
+    if(!m_editing)
+    {
+        bool found = false;
+        for (int i=0; i<ui.cbTopic->count(); i++)
+        {
+            if(QString::compare(ui.cbTopic->itemText(i), topic, Qt::CaseSensitive) == 0)
+                found = true;
+        }
+        if(!found)
+        {
+            qDebug() << topic;
+            m_editing = true;
+            m_timer->start();
+        }
+    }
+}
+
+void ImportFileWidget::topicTimeout() {
+    qDebug()<<"lejart ido";
+    m_editing = false;
+}
+
+bool ImportFileWidget::isMqttValid(){
+    bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+    bool subscribed = !m_topicList.isEmpty();
+    return connected && subscribed;
 }
