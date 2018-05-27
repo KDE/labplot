@@ -324,6 +324,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			DEBUG("	top level graph");
 			Worksheet* worksheet = new Worksheet(0, name);
 			worksheet->setIsLoading(true);
+			worksheet->setTheme("");
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 			break;
@@ -1196,10 +1197,21 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				TextLabel* label = new TextLabel("text label");
 				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
 				plot->addChild(label);
-				label->setParentGraphicsItem(plot->plotArea()->graphicsItem());
+				label->setParentGraphicsItem(plot->graphicsItem());
 
 
 				//TODO: positioning
+
+				//rotation
+				label->setRotationAngle(s.rotation);
+
+				//TODO:
+// 				Color color;
+// 				unsigned short fontSize;
+// 				int tab;
+// 				BorderType borderType;
+// 				Attach attach;
+
 			}
 
 			//curves

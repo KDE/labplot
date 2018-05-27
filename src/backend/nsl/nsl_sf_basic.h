@@ -30,6 +30,9 @@
 #define NSL_SF_BASIC_H
 
 #include <gsl/gsl_version.h>
+#if !defined(_MSC_VER)
+#include <complex.h>
+#endif
 
 /* random functions */
 double nsl_sf_rand(void);
@@ -57,6 +60,16 @@ double nsl_sf_acoth(double x);
 
 /* harmonic numbers (extended to non-integers) */
 double nsl_sf_harmonic(double x);
+
+/* error function and related wrapper */
+double nsl_sf_erfcx(double x);
+double nsl_sf_erfi(double x);
+double nsl_sf_im_w_of_x(double x);
+#if !defined(_MSC_VER)
+double nsl_sf_im_w_of_z(complex double z);
+#endif
+double nsl_sf_dawson(double x);
+double nsl_sf_voigt(double x, double sigma, double gamma);
 
 /* wrapper for GSL functions with integer parameters */
 /* mathematical functions */

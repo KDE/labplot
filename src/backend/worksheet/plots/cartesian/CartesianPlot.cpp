@@ -1233,7 +1233,7 @@ void CartesianPlot::addLegend() {
 void CartesianPlot::addTextLabel() {
 	TextLabel* label = new TextLabel("text label");
 	this->addChild(label);
-	label->setParentGraphicsItem(m_plotArea->graphicsItem());
+	label->setParentGraphicsItem(graphicsItem());
 }
 
 void CartesianPlot::addCustomPoint() {
@@ -2799,9 +2799,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				titleLabelRead = true;
 			} else {
 				TextLabel* label = new TextLabel("text label");
-				if (label->load(reader, preview))
+				if (label->load(reader, preview)) {
 					addChildFast(label);
-				else {
+					label->setParentGraphicsItem(graphicsItem());
+				} else {
 					delete label;
 					return false;
 				}
@@ -2928,9 +2929,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 	if (preview)
 		return true;
-
-	for (auto* label : children<TextLabel>())
-		label->setParentGraphicsItem(m_plotArea->graphicsItem());
 
 	d->retransform();
 

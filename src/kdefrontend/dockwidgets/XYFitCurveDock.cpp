@@ -477,10 +477,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_basic_name[i]);
 		break;
-	case nsl_fit_model_peak:
+	case nsl_fit_model_peak: {
 		for(int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
+#if defined(_MSC_VER)
+		// disable voigt model
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		QStandardItem* item = model->item(nsl_fit_model_voigt);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+#endif
 		break;
+	}
 	case nsl_fit_model_growth:
 		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_growth_name[i]);

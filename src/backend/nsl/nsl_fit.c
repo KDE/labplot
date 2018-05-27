@@ -27,6 +27,7 @@
 
 #include "nsl_fit.h"
 #include "nsl_common.h"
+#include "nsl_sf_basic.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_sf_gamma.h>
@@ -40,10 +41,10 @@ const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
 const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential", "inv_exponential", "fourier"};
 
-const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)")};
+const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)"), i18n("Voigt profile")};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * g/(g^2+(x-mu)^2)", "a/pi/s * sech((x-mu)/s)",
-	"a/4/s * sech((x-mu)/2/s)**2"};
-const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic"};
+	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)"};
+const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt"};
 
 const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
 	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
@@ -209,6 +210,29 @@ double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double A
 
 	return 0;
 }
+
+double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, double mu, double s, double g, double weight) {
+	if (s <= 0 || g < 0)
+		return 0;
+
+	double y = x - mu, norm = a * sqrt(weight/2./M_PI)/(s*s*s);
+
+#if !defined(_MSC_VER)
+	double v = nsl_sf_voigt(y, s, g), im_w = nsl_sf_im_w_of_z(y);
+	if (param == 0)
+		return sqrt(weight) * v;
+	if (param == 1)
+		return a*sqrt(weight)*y/(s*s) * v - norm * g * im_w;
+	if (param == 2)
+//		return a*sqrt(weight)*g/M_PI/(s*s*s) + norm*sqrt(2.*M_PI)*v * (y*y+mu*mu-s*s) - norm/s*im_w*2.*g*y;
+		return a/(s*s*s)*sqrt(weight)*(g/M_PI + v*(y*y -g*g -s*s) + im_w*2*g*y/s);
+	if (param == 3)
+		return -a*sqrt(weight)/M_PI/(s*s) + norm*sqrt(2.*M_PI)*s*v*g + im_w;
+#endif
+
+	return 0;
+}
+
 
 /* growth */
 double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {

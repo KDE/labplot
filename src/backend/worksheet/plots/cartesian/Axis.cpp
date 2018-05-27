@@ -602,7 +602,6 @@ void Axis::setMajorTicksType(const TicksType majorTicksType) {
 	if (majorTicksType!= d->majorTicksType)
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, i18n("%1: set major ticks type")));
 }
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
 	Q_D(Axis);
@@ -2315,7 +2314,6 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
 	this->setMajorTicksPen(p);
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
-	this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
 
 	//Minor ticks
 	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
@@ -2328,7 +2326,6 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
-	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
 	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	for (auto* child : childElements)

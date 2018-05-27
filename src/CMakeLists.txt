@@ -207,23 +207,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
- 	${BACKEND_DIR}/nsl/nsl_dft.c
- 	${BACKEND_DIR}/nsl/nsl_diff.c
-	${BACKEND_DIR}/nsl/nsl_filter.c
-	${BACKEND_DIR}/nsl/nsl_fit.c
-	${BACKEND_DIR}/nsl/nsl_geom.c
-	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
-	${BACKEND_DIR}/nsl/nsl_int.c
-	${BACKEND_DIR}/nsl/nsl_interp.c
-	${BACKEND_DIR}/nsl/nsl_math.c
-	${BACKEND_DIR}/nsl/nsl_sf_basic.c
-	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
-	${BACKEND_DIR}/nsl/nsl_sf_poly.c
-	${BACKEND_DIR}/nsl/nsl_sf_stats.c
-	${BACKEND_DIR}/nsl/nsl_sf_window.c
-	${BACKEND_DIR}/nsl/nsl_smooth.c
-	${BACKEND_DIR}/nsl/nsl_sort.c
-	${BACKEND_DIR}/nsl/nsl_stats.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -266,6 +249,34 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
+set(NSL_SOURCES
+	${BACKEND_DIR}/nsl/nsl_dft.c
+	${BACKEND_DIR}/nsl/nsl_diff.c
+	${BACKEND_DIR}/nsl/nsl_filter.c
+	${BACKEND_DIR}/nsl/nsl_fit.c
+	${BACKEND_DIR}/nsl/nsl_geom.c
+	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
+	${BACKEND_DIR}/nsl/nsl_int.c
+	${BACKEND_DIR}/nsl/nsl_interp.c
+	${BACKEND_DIR}/nsl/nsl_math.c
+	${BACKEND_DIR}/nsl/nsl_sf_basic.c
+	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
+	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+	${BACKEND_DIR}/nsl/nsl_sf_stats.c
+	${BACKEND_DIR}/nsl/nsl_sf_window.c
+	${BACKEND_DIR}/nsl/nsl_smooth.c
+	${BACKEND_DIR}/nsl/nsl_sort.c
+	${BACKEND_DIR}/nsl/nsl_stats.c
+)
+
+IF (NOT MSVC_FOUND)
+IF (NOT LIBCERF_FOUND)
+	list(APPEND NSL_SOURCES
+		${BACKEND_DIR}/nsl/Faddeeva.c
+	)
+ENDIF ()
+ENDIF ()
+
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
@@ -292,9 +303,9 @@ IF (${CANTOR_LIBS_FOUND})
 	)
 	set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
 	set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
-ELSE (${CANTOR_LIBS_FOUND})
+ELSE ()
 	set(CANTOR_SOURCES "")
-ENDIF (${CANTOR_LIBS_FOUND})
+ENDIF ()
 
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
@@ -316,7 +327,7 @@ set( LABPLOT_SRCS ${GUI_SOURCES} )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 
 # static library
-add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
+add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 # TODO: remove KF5::KDELibs4Support
 target_link_libraries( labplot2lib KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg Qt5::Core  ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )

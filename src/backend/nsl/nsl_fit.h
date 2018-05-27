@@ -36,8 +36,8 @@ typedef enum {nsl_fit_model_basic, nsl_fit_model_peak, nsl_fit_model_growth, nsl
 typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_exponential, nsl_fit_model_inverse_exponential,
 	nsl_fit_model_fourier} nsl_fit_model_type_basic;
 extern const char* nsl_fit_model_basic_pic_name[];
-#define NSL_FIT_MODEL_PEAK_COUNT 4
-typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic} nsl_fit_model_type_peak;
+#define NSL_FIT_MODEL_PEAK_COUNT 5
+typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic, nsl_fit_model_voigt} nsl_fit_model_type_peak;
 extern const char* nsl_fit_model_peak_pic_name[];
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
 typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
@@ -82,6 +82,7 @@ double nsl_fit_model_gaussian_param_deriv(unsigned int param, double x, double a
 double nsl_fit_model_lorentz_param_deriv(unsigned int param, double x, double a, double s, double t, double weight);
 double nsl_fit_model_sech_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
 double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
+double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, double mu, double s, double g, double weight);
 /* growth */
 double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double a, double mu, double s, double weight);
 double nsl_fit_model_tanh_param_deriv(unsigned int param, double x, double a, double mu, double s, double weight);
