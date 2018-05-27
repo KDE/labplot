@@ -480,7 +480,11 @@ void XYFitCurveDock::categoryChanged(int index) {
 	case nsl_fit_model_peak:
 		for(int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
-		//TODO: disable voigt when _MSC_VER
+#if defined(_MSC_VER)
+		// disable voigt model
+		QStandardItem* item = model->item(nsl_sf_model_voigt);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+#endif
 		break;
 	case nsl_fit_model_growth:
 		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
