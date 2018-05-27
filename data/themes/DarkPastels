@@ -20,7 +20,6 @@ MajorGridWidth=1.76389
 MajorTicksColor=220,220,204
 MajorTicksLineStyle=1
 MajorTicksOpacity=1
-MajorTicksType=0
 MajorTicksWidth=3.52778
 MinorGridColor=220,220,204
 MinorGridOpacity=0.3
@@ -29,7 +28,6 @@ MinorGridWidth=1.76389
 MinorTicksColor=0,0,0
 MinorTicksLineStyle=0
 MinorTicksOpacity=1
-MinorTicksType=0
 MinorTicksWidth=0.283465
 
 [CartesianPlot]
