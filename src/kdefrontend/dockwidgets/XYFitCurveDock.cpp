@@ -482,7 +482,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
 #if defined(_MSC_VER)
 		// disable voigt model
-		QStandardItem* item = model->item(nsl_fit_model_voigt);
+		QStandardItem* item = uiGeneralTab.cbModel->model()->item(nsl_fit_model_voigt);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 		break;
