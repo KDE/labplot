@@ -292,12 +292,6 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-	if (currentFileType() == LiveDataSource::FITS) {
-		QString extensionName = m_fitsOptionsWidget->currentExtensionName();
-		if (!extensionName.isEmpty())
-			return ui.leFileName->text() + QLatin1String("[") + extensionName + QLatin1String("]");
-	}
-
 	return ui.leFileName->text();
 }
 
