@@ -295,6 +295,35 @@ QString ImportFileWidget::fileName() const {
 	return ui.leFileName->text();
 }
 
+QString ImportFileWidget::selectedObject() const {
+	const QString& path = ui.leFileName->text();
+
+	//determine the file name only
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	//strip away the extension if available
+	if (name.indexOf('.') != -1)
+		name = name.left(name.lastIndexOf('.'));
+
+	//for multi-dimensinal formats like HDF, netCDF and FITS add the currently selected object
+	const auto format = currentFileType();
+	if (format == LiveDataSource::HDF5) {
+		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedHDF5Names();
+		if (hdf5Names.size())
+			name += hdf5Names.first(); //the names of the selected HDF5 objects already have '/'
+	} else if (format == LiveDataSource::NETCDF) {
+		const QStringList& names = m_netcdfOptionsWidget->selectedNetCDFNames();
+		if (names.size())
+			name += QLatin1Char('/') + names.first();
+	} else if (format == LiveDataSource::FITS) {
+		const QString& extensionName = m_fitsOptionsWidget->currentExtensionName();
+		if (!extensionName.isEmpty())
+			name += QLatin1Char('/') + extensionName;
+	}
+
+	return name;
+}
+
 /*!
  * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
  * returns \c false otherwise.

@@ -435,13 +435,5 @@ void ImportFileDialog::checkOkButton() {
 }
 
 QString ImportFileDialog::selectedObject() const {
-	QString path = m_importFileWidget->fileName();
-
-	//determine the file name only
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	//strip away the extension if available
-	if (name.indexOf('.') != -1)
-		name = name.left(name.lastIndexOf('.'));
-	return name;
+	return m_importFileWidget->selectedObject();
 }
