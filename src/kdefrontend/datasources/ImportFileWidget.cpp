@@ -237,6 +237,9 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
+	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
+	ui.leID->setText(conf.readEntry("mqttId",""));
 
 	m_suppressRefresh = false;
 	refreshPreview();
@@ -267,6 +270,9 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+	conf.writeEntry("mqttUsername", ui.leUsername->text());
+	conf.writeEntry("mqttPassword", ui.lePassword->text());
+	conf.writeEntry("mqttId", ui.leID->text());
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();

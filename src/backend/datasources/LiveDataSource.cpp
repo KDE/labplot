@@ -944,6 +944,19 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		break;
 	case LocalSocket:
 		break;
+	case Mqtt:{
+		writer->writeAttribute("host", m_client->hostname());
+		writer->writeAttribute("port", QString::number(m_client->port()));
+		writer->writeAttribute("username", m_client->username());
+		writer->writeAttribute("pasword", m_client->password());
+		writer->writeAttribute("clientId", m_client->clientId());
+		writer->writeAttribute("subscriptionNumber", QString::number(m_subscriptions.count()) );
+		for(int i=0; i<m_subscriptions.count(); i++) {
+			writer->writeAttribute("subscription"+QString::number(i), m_subscriptions[i]);
+			writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_topicMap[m_subscriptions[i]]));
+		}
+		break;
+	}
 	default:
 		break;
 	}
@@ -1074,6 +1087,56 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				else
 					m_host = str;
 				break;
+			case Mqtt: {
+				str =attribs.value("host").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'host'"));
+				else
+					m_client->setHostname(str);
+
+				str =attribs.value("port").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'port'"));
+				else
+					m_client->setPort(str.toUInt());
+
+				str =attribs.value("username").toString();
+				if(!str.isEmpty())
+					m_client->setUsername(str);
+
+				str =attribs.value("password").toString();
+				if(!str.isEmpty())
+					m_client->setPassword(str);
+
+				str =attribs.value("clientId").toString();
+				if(!str.isEmpty())
+					m_client->setClientId(str);
+
+				int subscribtions;
+				str =attribs.value("subscriptionNumber").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'subscriptionNumber'"));
+				else
+					subscribtions = str.toInt();
+
+				for (int i = 0; i < subscribtions; i++) {
+					str =attribs.value("subscription"+QString::number(i)).toString();
+					if(!str.isEmpty())
+						reader->raiseWarning(attributeWarning.arg("'subscription"+QString::number(i)+"'"));
+					else {
+						m_subscriptions.push_back(str);
+					}
+
+					str =attribs.value("subscription"+QString::number(i)+"Qos").toString();
+					if(!str.isEmpty())
+						reader->raiseWarning(attributeWarning.arg("'subscription"+QString::number(i)+"Qos'"));
+					else {
+						m_topicMap[m_subscriptions[i]] = str.toUInt();
+					}
+
+				}
+
+			}
 			case FileOrPipe:
 				break;
 			case LocalSocket:
