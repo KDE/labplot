@@ -66,6 +66,7 @@ public:
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
+	QString selectedObject() const;
 	bool isFileEmpty() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;

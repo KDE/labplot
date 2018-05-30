@@ -316,13 +316,36 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-	if (currentFileType() == LiveDataSource::FITS) {
-		QString extensionName = m_fitsOptionsWidget->currentExtensionName();
+	return ui.leFileName->text();
+}
+
+QString ImportFileWidget::selectedObject() const {
+	const QString& path = ui.leFileName->text();
+
+	//determine the file name only
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	//strip away the extension if available
+	if (name.indexOf('.') != -1)
+		name = name.left(name.lastIndexOf('.'));
+
+	//for multi-dimensinal formats like HDF, netCDF and FITS add the currently selected object
+	const auto format = currentFileType();
+	if (format == LiveDataSource::HDF5) {
+		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedHDF5Names();
+		if (hdf5Names.size())
+			name += hdf5Names.first(); //the names of the selected HDF5 objects already have '/'
+	} else if (format == LiveDataSource::NETCDF) {
+		const QStringList& names = m_netcdfOptionsWidget->selectedNetCDFNames();
+		if (names.size())
+			name += QLatin1Char('/') + names.first();
+	} else if (format == LiveDataSource::FITS) {
+		const QString& extensionName = m_fitsOptionsWidget->currentExtensionName();
 		if (!extensionName.isEmpty())
-			return ui.leFileName->text() + QLatin1String("[") + extensionName + QLatin1String("]");
+			name += QLatin1Char('/') + extensionName;
 	}
 
-	return ui.leFileName->text();
+	return name;
 }
 
 /*!

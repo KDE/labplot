@@ -1931,6 +1931,9 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	line.replace("×", "&times;");
 	line.replace("°", "&deg;");
 
+	// replace tabs	(not really supported)
+	line.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
 	//Lookbehind conditions are not supported - so need to reverse string
 	QRegExp rx("\\)[^\\)\\(]*\\((?!\\s*[buig\\+\\-]\\s*\\\\)");
 	QRegExp rxfont("\\)[^\\)\\(]*\\((?![^\\:]*\\:f\\s*\\\\)");
