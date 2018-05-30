@@ -68,6 +68,8 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
+    void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
+
 	void setCommentCharacter(const QString&);
 	QString commentCharacter() const;
 	void setSeparatingCharacter(const QString&);
@@ -106,6 +108,8 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
+
+    int isPrepared();
 
 private:
 	std::unique_ptr<AsciiFilterPrivate> const d;

@@ -52,6 +52,9 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
 
+    int readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
+    int prepareMqttToRead(const QString&,  const QString&);
+
 	const AsciiFilter* q;
 
 	QString commentCharacter;
@@ -71,6 +74,9 @@ public:
 	int endRow;
 	int startColumn;
 	int endColumn;
+    bool indexCreated;
+
+    int isPrepared();
 
 private:
 	static const unsigned int m_dataTypeLines = 10;	// lines to read for determining data types

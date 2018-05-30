@@ -56,6 +56,7 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLocale>
 
 #include <QDebug>
+#include <QtWebSockets/QWebSocket>
 
 /*!
   \class LiveDataSource
@@ -81,11 +82,14 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_udpSocket(nullptr),
 	  m_serialPort(nullptr),
       m_client(new QMqttClient(this)),
+      m_mqttTest (false),
 	  m_device(nullptr) {
 
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
-    connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
+    connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);    
+    connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived );
+    //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::mqttMessageReceived);
 }
 
 LiveDataSource::~LiveDataSource() {
@@ -542,7 +546,13 @@ void LiveDataSource::read() {
             qDebug()<<"Trying to connect 1";
             /*if(m_client->state() == QMqttClient::ClientState::Connected)
                 m_client->disconnectFromHost();*/
-            m_client->connectToHost();
+            //m_fileName = m_client->hostname();
+            //m_file = new QFile(m_client->hostname());
+           // m_file->open(QIODevice::ReadWrite | QIODevice::Append);
+            //m_file->close();
+            //m_device = m_file;
+            m_client->connectToHost();            
+            //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
             break;
         }
 		}
@@ -608,10 +618,35 @@ void LiveDataSource::read() {
 		//TODO
 		break;
     case Mqtt:{
-        qDebug()<<"Trying to connect 1";
-        if(m_client->state() == QMqttClient::ClientState::Connected)
+        /*if (m_client->state() == QMqttClient::ClientState::Connected) {
+        switch (m_fileType) {
+        case Ascii:
+            qDebug() << "Reading live ascii file.." ;
+            if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
+                dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
+            } else {
+                if(dynamic_cast<AsciiFilter*>(m_filter)->isPrepared())
+                    m_file->open(QIODevice::ReadOnly);
+                bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+                m_bytesRead += bytes;
+            }
+            qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
+
+            break;
+        case Binary:
+            //bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+            m_bytesRead += bytes;
+        case Image:
+        case HDF5:
+        case NETCDF:
+        case FITS:
+            break;
+        } }*/
+
+        qDebug()<<"Trying to connect 2";
+        /*if(m_client->state() == QMqttClient::ClientState::Connected)
             m_client->disconnectFromHost();
-        m_client->connectToHost();
+        m_client->connectToHost();*/
         break;
     }
 	}
@@ -625,7 +660,23 @@ void LiveDataSource::read() {
 void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
 	qDebug()<< "Got new data from the device";
-
+    if(m_sourceType == Mqtt)
+    {/*
+        qDebug()<<"mqtt m_device";
+        //qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"   "<<m_device->openMode();
+        if(m_mqttTest || m_device->open(QIODevice::ReadWrite))
+        {
+            m_mqttTest = true;
+            qDebug() << m_device->bytesAvailable();
+            char line[5000];
+            int ok = qobject_cast<QTcpSocket*>(m_device)->readLine(line, sizeof(line));
+            //int ok = m_device->read(line, sizeof(line));
+            qDebug() << ok;
+            if(ok != -1)
+                qDebug()<<line;
+        }*/
+    }
+    else{
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 // 	else if (m_fileType == Binary)
@@ -634,7 +685,7 @@ void LiveDataSource::readyRead() {
 	//since we won't have the timer to call read() where we create new connections
 	//for sequencial devices in read() we just request data/connect to servers
 	if (m_updateType == NewData)
-		read();
+        read(); }
 }
 
 void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
@@ -1075,12 +1126,99 @@ void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const 
 }
 
 void LiveDataSource::onMqttConnect() {
+    qDebug()<<"connection made in live data source";
+    /*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
+    m_device = m_mqttTcp;
+    qDebug()<<m_device->objectName()<<"  "<<m_device->openMode();
+    qDebug() <<m_device<< "     "<<qobject_cast<QTcpSocket *>(m_device)->state();
+    if(m_device)
+        //connect(m_mqttTcp, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+        connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
+    qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"  "<<m_device->objectName();*/
     QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
     while(i.hasNext()) {
-        qDebug()<<"connection made in live data source";
         i.next();
         QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
-        if(temp)
+        if(temp) {
             qDebug()<<temp->topic()<<"  "<<temp->qos();
+            m_messageArrived[temp->topic().filter()] = false;
+            m_subscriptions.push_back(temp->topic().filter());
+            m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
+            connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+        }
     }
+    //qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
+}
+
+void LiveDataSource::mqttMessageReceived(const QByteArray& msg, const QMqttTopicName& topic) {
+    /*qDebug()<<"mqtt irok file";
+    if(m_file->isOpen())
+        m_file->close();
+    m_file->open(QIODevice::ReadWrite | QIODevice::Append );
+    const char *data = msg.data();
+    QTextStream out(m_file);
+    out<<data<<"\n";
+    m_file->close();*/
+}
+
+void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
+    qDebug()<<"message received from "<<msg.topic().name();
+    if(m_messageArrived[msg.topic()] == false) {
+        m_messageArrived[msg.topic()] = true;
+        m_messagePuffer[msg.topic()]->push_back(msg);
+    }
+    else
+        m_messagePuffer[msg.topic()]->push_back(msg);
+
+    bool check = true;
+    QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+    while(i.hasNext()) {
+        i.next();
+        if(i.value() == false )
+        {
+            check = false;
+            break;
+        }
+    }
+    if (check == true)
+        emit mqttAllArrived();
+}
+
+void LiveDataSource::onAllArrived() {
+    qDebug()<<"all arrived";
+    if (m_fileType == Ascii) {
+        qDebug()<<"Ascii ok";
+        QMapIterator<QMqttTopicName, QVector<QMqttMessage>*> k(m_messagePuffer);
+        qDebug()<<"first iterator created";
+        bool ok = true;
+        while(k.hasNext()){
+            k.next();
+            qDebug()<<"investigating"<<k.key();
+            if(k.value()->isEmpty()) {
+                ok = false;
+                qDebug()<<k.key()<<" has no messages";
+            }
+        }
+        if(ok){
+            qDebug()<<"topics ok start read";
+            QMapIterator<QMqttTopicName, QVector<QMqttMessage>*> i(m_messagePuffer);
+            while(i.hasNext()) {
+                i.next();
+                if(!i.value()->isEmpty()) {
+                    QMqttMessage temp_msg = i.value()->takeFirst();
+                    dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(QString::fromStdString(temp_msg.payload().data()), temp_msg.topic().name(), this);
+                    qDebug()<<"readfrommqtt occured";
+                }
+            }
+        }
+        QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
+        while(j.hasNext()) {
+            j.next();
+            m_messageArrived[j.key()] = false;
+        }
+    }
+}
+
+int LiveDataSource::topicNumber() {
+    return m_subscriptions.count();
 }

@@ -149,7 +149,7 @@ public:
 
 	void updateNow();
 	void pauseReading();
-	void continueReading();
+	void continueReading();    
 
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
@@ -160,6 +160,8 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+
+    int topicNumber();
 
 private:
 	void initActions();
@@ -200,6 +202,7 @@ private:
 	QUdpSocket* m_udpSocket;
 	QSerialPort* m_serialPort;
 	QIODevice* m_device;
+    QTcpSocket* m_mqttTcp;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -209,6 +212,10 @@ private:
 
     QMqttClient* m_client;
     QMap<QMqttTopicFilter, quint8> m_topicMap;
+    QMap<QMqttTopicName, bool> m_messageArrived;
+    QMap<QMqttTopicName, QVector<QMqttMessage>* > m_messagePuffer;
+    QVector<QString> m_subscriptions;
+    bool m_mqttTest;
 
 public slots:
 	void read();
@@ -225,6 +232,13 @@ private slots:
 	void serialPortError(QSerialPort::SerialPortError);
 
     void onMqttConnect();
+    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+    void mqttSubscribtionMessageReceived(const QMqttMessage&);
+    void onAllArrived();
+
+signals:
+    void mqttAllArrived();
+
 };
 
 #endif
