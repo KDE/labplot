@@ -162,6 +162,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
     int topicNumber();
+	int topicIndex(const QString&);
 
 private:
 	void initActions();
@@ -213,7 +214,7 @@ private:
     QMqttClient* m_client;
     QMap<QMqttTopicFilter, quint8> m_topicMap;
     QMap<QMqttTopicName, bool> m_messageArrived;
-    QMap<QMqttTopicName, QVector<QMqttMessage>* > m_messagePuffer;
+	QMap<QMqttTopicName, QVector<QMqttMessage>> m_messagePuffer;
     QVector<QString> m_subscriptions;
     bool m_mqttTest;
 

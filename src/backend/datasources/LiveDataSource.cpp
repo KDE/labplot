@@ -1143,7 +1143,7 @@ void LiveDataSource::onMqttConnect() {
             qDebug()<<temp->topic()<<"  "<<temp->qos();
             m_messageArrived[temp->topic().filter()] = false;
             m_subscriptions.push_back(temp->topic().filter());
-            m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
+			//m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
             connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
         }
     }
@@ -1165,10 +1165,10 @@ void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
     qDebug()<<"message received from "<<msg.topic().name();
     if(m_messageArrived[msg.topic()] == false) {
         m_messageArrived[msg.topic()] = true;
-        m_messagePuffer[msg.topic()]->push_back(msg);
+		m_messagePuffer[msg.topic()].push_back(msg);
     }
     else
-        m_messagePuffer[msg.topic()]->push_back(msg);
+		m_messagePuffer[msg.topic()].push_back(msg);
 
     bool check = true;
     QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
@@ -1188,37 +1188,43 @@ void LiveDataSource::onAllArrived() {
     qDebug()<<"all arrived";
     if (m_fileType == Ascii) {
         qDebug()<<"Ascii ok";
-        QMapIterator<QMqttTopicName, QVector<QMqttMessage>*> k(m_messagePuffer);
+		QMapIterator<QMqttTopicName, QVector<QMqttMessage>> k(m_messagePuffer);
         qDebug()<<"first iterator created";
         bool ok = true;
         while(k.hasNext()){
             k.next();
             qDebug()<<"investigating"<<k.key();
-            if(k.value()->isEmpty()) {
+			if(k.value().isEmpty()) {
                 ok = false;
                 qDebug()<<k.key()<<" has no messages";
             }
         }
         if(ok){
             qDebug()<<"topics ok start read";
-            QMapIterator<QMqttTopicName, QVector<QMqttMessage>*> i(m_messagePuffer);
+			QMapIterator<QMqttTopicName, QVector<QMqttMessage>> i(m_messagePuffer);
             while(i.hasNext()) {
                 i.next();
-                if(!i.value()->isEmpty()) {
-                    QMqttMessage temp_msg = i.value()->takeFirst();
+				if(!i.value().isEmpty()) {
+					QMqttMessage temp_msg = m_messagePuffer[i.key()].takeFirst();
                     dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(QString::fromStdString(temp_msg.payload().data()), temp_msg.topic().name(), this);
                     qDebug()<<"readfrommqtt occured";
                 }
             }
         }
+		qDebug()<<"start checking";
         QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
         while(j.hasNext()) {
             j.next();
             m_messageArrived[j.key()] = false;
         }
+		qDebug()<<"end checking";
     }
 }
 
 int LiveDataSource::topicNumber() {
     return m_subscriptions.count();
+}
+
+int LiveDataSource::topicIndex(const QString& topic) {
+	return m_subscriptions.indexOf(topic, 0);
 }

@@ -1334,16 +1334,16 @@ void ImportFileWidget::authenticationChecked(int state)
 
 void ImportFileWidget::mqttConnection()
 {
-    const bool host_set = !ui.leHost->text().isEmpty();
-    const bool port_set = !ui.lePort->text().isEmpty();
-    const bool id_used = ui.chbID->isChecked();
-    const bool id_set = !ui.leID->text().isEmpty();
-    const bool id_valid = !(id_used && !id_set);
-    const bool authentication_used = ui.chbAuthentication->isChecked();
-    const bool username_set = !ui.leUsername->text().isEmpty();
-    const bool password_set = !ui.lePassword->text().isEmpty();
-    const bool authentication_valid = ! (authentication_used && ( !username_set || !password_set) );
-    const bool valid =host_set && port_set && id_valid && authentication_valid;
+	const bool hostSet = !ui.leHost->text().isEmpty();
+	const bool portSet = !ui.lePort->text().isEmpty();
+	const bool idUsed = ui.chbID->isChecked();
+	const bool idSet = !ui.leID->text().isEmpty();
+	const bool idValid = !(idUsed && !idSet);
+	const bool authenticationUsed = ui.chbAuthentication->isChecked();
+	const bool usernameSet = !ui.leUsername->text().isEmpty();
+	const bool passwordSet = !ui.lePassword->text().isEmpty();
+	const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
+	const bool valid =hostSet && portSet && idValid && authenticationValid;
     if (valid)
     {
         if(m_client->state()==QMqttClient::ClientState::Disconnected)
