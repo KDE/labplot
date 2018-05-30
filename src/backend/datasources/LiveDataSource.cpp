@@ -1108,121 +1108,121 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 }
 
 void LiveDataSource::setMqttClient(const QString& host, const quint16& port) {
-    m_client->setHostname(host);
-    m_client->setPort(port);
+	m_client->setHostname(host);
+	m_client->setPort(port);
 }
 
 void LiveDataSource::setMqttClientAuthentication(const QString& username, const QString& password) {
-    m_client->setUsername(username);
-    m_client->setPassword(password);
+	m_client->setUsername(username);
+	m_client->setPassword(password);
 }
 
 void LiveDataSource::setMqttClientId(const QString &Id){
-    m_client->setClientId(Id);
+	m_client->setClientId(Id);
 }
 
 void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const quint8& qos) {
-    m_topicMap[filter] = qos;
+	m_topicMap[filter] = qos;
 }
 
 void LiveDataSource::onMqttConnect() {
-    qDebug()<<"connection made in live data source";
-    /*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
-    m_device = m_mqttTcp;
-    qDebug()<<m_device->objectName()<<"  "<<m_device->openMode();
-    qDebug() <<m_device<< "     "<<qobject_cast<QTcpSocket *>(m_device)->state();
-    if(m_device)
-        //connect(m_mqttTcp, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
-        connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
-    qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"  "<<m_device->objectName();*/
-    QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
-    while(i.hasNext()) {
-        i.next();
-        QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
-        if(temp) {
-            qDebug()<<temp->topic()<<"  "<<temp->qos();
-            m_messageArrived[temp->topic().filter()] = false;
-            m_subscriptions.push_back(temp->topic().filter());
+	qDebug()<<"connection made in live data source";
+	/*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
+	m_device = m_mqttTcp;
+	qDebug()<<m_device->objectName()<<"  "<<m_device->openMode();
+	qDebug() <<m_device<< "     "<<qobject_cast<QTcpSocket *>(m_device)->state();
+	if(m_device)
+		//connect(m_mqttTcp, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
+	qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"  "<<m_device->objectName();*/
+	QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+	while(i.hasNext()) {
+		i.next();
+		QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+		if(temp) {
+			qDebug()<<temp->topic()<<"  "<<temp->qos();
+			m_messageArrived[temp->topic().filter()] = false;
+			m_subscriptions.push_back(temp->topic().filter());
 			//m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
-            connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
-        }
-    }
-    //qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
+			connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+		}
+	}
+	//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
 }
 
 void LiveDataSource::mqttMessageReceived(const QByteArray& msg, const QMqttTopicName& topic) {
-    /*qDebug()<<"mqtt irok file";
-    if(m_file->isOpen())
-        m_file->close();
-    m_file->open(QIODevice::ReadWrite | QIODevice::Append );
-    const char *data = msg.data();
-    QTextStream out(m_file);
-    out<<data<<"\n";
-    m_file->close();*/
+	/*qDebug()<<"mqtt irok file";
+	if(m_file->isOpen())
+		m_file->close();
+	m_file->open(QIODevice::ReadWrite | QIODevice::Append );
+	const char *data = msg.data();
+	QTextStream out(m_file);
+	out<<data<<"\n";
+	m_file->close();*/
 }
 
 void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
-    qDebug()<<"message received from "<<msg.topic().name();
-    if(m_messageArrived[msg.topic()] == false) {
-        m_messageArrived[msg.topic()] = true;
+	qDebug()<<"message received from "<<msg.topic().name();
+	if(m_messageArrived[msg.topic()] == false) {
+		m_messageArrived[msg.topic()] = true;
 		m_messagePuffer[msg.topic()].push_back(msg);
-    }
-    else
+	}
+	else
 		m_messagePuffer[msg.topic()].push_back(msg);
 
-    bool check = true;
-    QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-    while(i.hasNext()) {
-        i.next();
-        if(i.value() == false )
-        {
-            check = false;
-            break;
-        }
-    }
-    if (check == true)
-        emit mqttAllArrived();
+	bool check = true;
+	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+	while(i.hasNext()) {
+		i.next();
+		if(i.value() == false )
+		{
+			check = false;
+			break;
+		}
+	}
+	if (check == true)
+		emit mqttAllArrived();
 }
 
 void LiveDataSource::onAllArrived() {
-    qDebug()<<"all arrived";
-    if (m_fileType == Ascii) {
-        qDebug()<<"Ascii ok";
+	qDebug()<<"all arrived";
+	if (m_fileType == Ascii) {
+		qDebug()<<"Ascii ok";
 		QMapIterator<QMqttTopicName, QVector<QMqttMessage>> k(m_messagePuffer);
-        qDebug()<<"first iterator created";
-        bool ok = true;
-        while(k.hasNext()){
-            k.next();
-            qDebug()<<"investigating"<<k.key();
+		qDebug()<<"first iterator created";
+		bool ok = true;
+		while(k.hasNext()){
+			k.next();
+			qDebug()<<"investigating"<<k.key();
 			if(k.value().isEmpty()) {
-                ok = false;
-                qDebug()<<k.key()<<" has no messages";
-            }
-        }
-        if(ok){
-            qDebug()<<"topics ok start read";
+				ok = false;
+				qDebug()<<k.key()<<" has no messages";
+			}
+		}
+		if(ok){
+			qDebug()<<"topics ok start read";
 			QMapIterator<QMqttTopicName, QVector<QMqttMessage>> i(m_messagePuffer);
-            while(i.hasNext()) {
-                i.next();
+			while(i.hasNext()) {
+				i.next();
 				if(!i.value().isEmpty()) {
 					QMqttMessage temp_msg = m_messagePuffer[i.key()].takeFirst();
-                    dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(QString::fromStdString(temp_msg.payload().data()), temp_msg.topic().name(), this);
-                    qDebug()<<"readfrommqtt occured";
-                }
-            }
-        }
+					dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(QString::fromStdString(temp_msg.payload().data()), temp_msg.topic().name(), this);
+					qDebug()<<"readfrommqtt occured";
+				}
+			}
+		}
 		qDebug()<<"start checking";
-        QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
-        while(j.hasNext()) {
-            j.next();
-            m_messageArrived[j.key()] = false;
-        }
+		QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
+		while(j.hasNext()) {
+			j.next();
+			m_messageArrived[j.key()] = false;
+		}
 		qDebug()<<"end checking";
-    }
+	}
 }
 
 int LiveDataSource::topicNumber() {
-    return m_subscriptions.count();
+	return m_subscriptions.count();
 }
 
 int LiveDataSource::topicIndex(const QString& topic) {

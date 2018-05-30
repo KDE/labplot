@@ -432,18 +432,18 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setToolTip(i18n("Serial port number is missing."));
 		}
     }
-    case LiveDataSource::SourceType::Mqtt: {
-        const bool enable = m_importFileWidget->isMqttValid();
-        if (enable) {
-            okButton->setEnabled(true);
-            okButton->setToolTip(i18n("Close the dialog and import the data."));
-        }
-        else {
-            okButton->setEnabled(false);
-            okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made."));
-        }
-        break;
-    }
+	case LiveDataSource::SourceType::Mqtt: {
+		const bool enable = m_importFileWidget->isMqttValid();
+		if (enable) {
+			okButton->setEnabled(true);
+			okButton->setToolTip(i18n("Close the dialog and import the data."));
+		}
+		else {
+			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made."));
+		}
+		break;
+	}
 	}
 }
 
