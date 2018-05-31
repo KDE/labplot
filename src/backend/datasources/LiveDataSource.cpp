@@ -88,7 +88,7 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
     connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);    
-    connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived );
+	//connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived );
     //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::mqttMessageReceived);
 }
 
@@ -177,12 +177,22 @@ QStringList LiveDataSource::supportedBaudRates() {
  * \brief Updates this data source at this moment
  */
 void LiveDataSource::updateNow() {
-	m_updateTimer->stop();
-	read();
+	if(m_sourceType != SourceType::Mqtt) {
+		m_updateTimer->stop();
+		read();
 
-	//restart the timer after update
-	if (m_updateType == TimeInterval)
-		m_updateTimer->start(m_updateInterval);
+		//restart the timer after update
+		if (m_updateType == TimeInterval)
+			m_updateTimer->start(m_updateInterval);
+	}
+	else {
+		m_updateTimer->stop();
+		read();
+		/*if(checkAllArrived())
+			onAllArrived();*/
+		if (m_updateType == TimeInterval)
+			m_updateTimer->start(m_updateInterval);
+	}
 }
 
 /*!
@@ -192,8 +202,12 @@ void LiveDataSource::continueReading() {
 	m_paused = false;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
-	else if (m_updateType == NewData)
+	else if (m_updateType == NewData) {
+		if(m_sourceType != LiveDataSource::SourceType::Mqtt)
 		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		else
+		connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
+	}
 }
 
 /*!
@@ -203,8 +217,12 @@ void LiveDataSource::pauseReading() {
 	m_paused = true;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
-	else if (m_updateType == NewData)
+	else if (m_updateType == NewData) {
+		if(m_sourceType != LiveDataSource::SourceType::Mqtt)
 		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		else
+		disconnect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
+	}
 }
 
 /*!
@@ -399,13 +417,24 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
 void LiveDataSource::setUpdateType(UpdateType updatetype) {
 	if (updatetype == NewData) {
 		m_updateTimer->stop();
-		if (m_fileSystemWatcher == nullptr)
-			watch();
-		else
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		if (m_sourceType != SourceType::Mqtt) {
+			if (m_fileSystemWatcher == nullptr)
+				watch();
+			else
+				connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		}
+		else if (m_sourceType == SourceType::Mqtt) {
+			connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived)	;
+		}
 	} else {
-		if (m_fileSystemWatcher)
-			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		if (m_sourceType != SourceType::Mqtt) {
+			if (m_fileSystemWatcher)
+				disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		}
+		else if (m_sourceType == SourceType::Mqtt) {
+			if (m_updateType == UpdateType::NewData)
+				disconnect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived)	;
+		}
 	}
 	m_updateType = updatetype;
 }
@@ -543,16 +572,8 @@ void LiveDataSource::read() {
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			break;
         case Mqtt:{
-            qDebug()<<"Trying to connect 1";
-            /*if(m_client->state() == QMqttClient::ClientState::Connected)
-                m_client->disconnectFromHost();*/
-            //m_fileName = m_client->hostname();
-            //m_file = new QFile(m_client->hostname());
-           // m_file->open(QIODevice::ReadWrite | QIODevice::Append);
-            //m_file->close();
-            //m_device = m_file;
-            m_client->connectToHost();            
-            //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
+            qDebug()<<"Trying to connect 1";            
+			m_client->connectToHost();
             break;
         }
 		}
@@ -617,36 +638,10 @@ void LiveDataSource::read() {
 		m_device = m_serialPort;
 		//TODO
 		break;
-    case Mqtt:{
-        /*if (m_client->state() == QMqttClient::ClientState::Connected) {
-        switch (m_fileType) {
-        case Ascii:
-            qDebug() << "Reading live ascii file.." ;
-            if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-                dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
-            } else {
-                if(dynamic_cast<AsciiFilter*>(m_filter)->isPrepared())
-                    m_file->open(QIODevice::ReadOnly);
-                bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
-                m_bytesRead += bytes;
-            }
-            qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
-
-            break;
-        case Binary:
-            //bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
-            m_bytesRead += bytes;
-        case Image:
-        case HDF5:
-        case NETCDF:
-        case FITS:
-            break;
-        } }*/
-
-        qDebug()<<"Trying to connect 2";
-        /*if(m_client->state() == QMqttClient::ClientState::Connected)
-            m_client->disconnectFromHost();
-        m_client->connectToHost();*/
+	case Mqtt:{
+		qDebug()<<"Trying to connect 2";
+		if(checkAllArrived())
+			onAllArrived();
         break;
     }
 	}
@@ -951,7 +946,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("pasword", m_client->password());
 		writer->writeAttribute("clientId", m_client->clientId());
 		writer->writeAttribute("subscriptionNumber", QString::number(m_subscriptions.count()) );
-		for(int i=0; i<m_subscriptions.count(); i++) {
+		for(int i = 0; i<m_subscriptions.count(); i++) {
 			writer->writeAttribute("subscription"+QString::number(i), m_subscriptions[i]);
 			writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_topicMap[m_subscriptions[i]]));
 		}
@@ -1088,7 +1083,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 					m_host = str;
 				break;
 			case Mqtt: {
-				str =attribs.value("host").toString();
+				str = attribs.value("host").toString();
 				if(str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'host'"));
 				else
@@ -1278,7 +1273,8 @@ void LiveDataSource::onAllArrived() {
 		QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
 		while(j.hasNext()) {
 			j.next();
-			m_messageArrived[j.key()] = false;
+			if(m_messagePuffer[j.key()].isEmpty())
+				m_messageArrived[j.key()] = false;
 		}
 		qDebug()<<"end checking";
 	}
@@ -1290,4 +1286,18 @@ int LiveDataSource::topicNumber() {
 
 int LiveDataSource::topicIndex(const QString& topic) {
 	return m_subscriptions.indexOf(topic, 0);
+}
+
+bool LiveDataSource::checkAllArrived() {
+	bool check = true;
+	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+	while(i.hasNext()) {
+		i.next();
+		if(i.value() == false )
+		{
+			check = false;
+			break;
+		}
+	}
+	return check;
 }

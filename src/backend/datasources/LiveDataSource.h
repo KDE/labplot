@@ -163,6 +163,7 @@ public:
 
     int topicNumber();
 	int topicIndex(const QString&);
+	bool checkAllArrived();
 
 private:
 	void initActions();
