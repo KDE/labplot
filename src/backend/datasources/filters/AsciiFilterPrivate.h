@@ -54,7 +54,7 @@ public:
 
     int readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
     int prepareMqttToRead(const QString&,  const QString&);
-	QVector<QStringList> mqttPreview(QVector<QStringList>, const QString&, const QString&);
+	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 
 	const AsciiFilter* q;
 

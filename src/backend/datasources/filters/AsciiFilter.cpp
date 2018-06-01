@@ -2287,16 +2287,17 @@ int AsciiFilterPrivate::prepareMqttToRead(const QString& message,  const QString
 	return 0;
 }
 
-QVector<QStringList> AsciiFilter::mqttPreview(QVector<QStringList> list, const QString& message, const QString& topic) {
-	return d->mqttPreview(list, message, topic);
+void AsciiFilter::mqttPreview(QVector<QStringList>& list, const QString& message, const QString& topic) {
+	d->mqttPreview(list, message, topic);
 }
 
-QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, const QString& message, const QString& topic) {
+void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& message, const QString& topic) {
 	QVector<QStringList> dataStrings;
 
 	if (message.isEmpty()) {
 		DEBUG("No new data available");
-		return dataStrings;
+		list = dataStrings;
+		return;
 	}
 	qDebug()<<"ascii mqtt preview" <<message<< "  " <<topic;
 
@@ -2305,7 +2306,7 @@ QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, 
 	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 	for (auto& valueString: newDataList) {
 		QStringList splitString = static_cast<QString>(valueString).split(' ', QString::SkipEmptyParts);
-		for (auto& valueString2: splitString) {
+		for ( const auto& valueString2: splitString) {
 			if (!static_cast<QString>(valueString2).isEmpty() && !static_cast<QString>(valueString2).startsWith(commentCharacter) ) {
 				linesToRead++;
 				newData.push_back(valueString2);
@@ -2314,7 +2315,10 @@ QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, 
 	}
 	qDebug() <<" data investigated, lines to read: "<<linesToRead;
 
-	if (linesToRead == 0) return dataStrings;
+	if (linesToRead == 0) {
+		list = dataStrings;
+		return;
+	}
 
 	int colSize = 0;
 	if(list.isEmpty())
@@ -2340,7 +2344,7 @@ QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, 
 
 	qDebug()<<"column mode "<<colSize - 1 << "set on: " << topic << "while column mode size: " <<columnModes.size();
 
-	for(int i=0; i<linesToRead/2; i++)
+	for(int i = 0; i < linesToRead / 2; i++)
 	{
 		QString temp_line = newData[i];
 		if (simplifyWhitespacesEnabled)
@@ -2353,7 +2357,7 @@ QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, 
 			qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
 		}
 		// text: non text -> text
-		if (mode == AbstractColumn::Text && columnModes[colSize - 1] != AbstractColumn::Text) {
+		if ( (mode == AbstractColumn::Text) && (columnModes[colSize - 1] != AbstractColumn::Text) ) {
 			columnModes[colSize - 1] = mode;
 			qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
 		}
@@ -2450,5 +2454,5 @@ QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, 
 			}
 		}
 	}
-	return dataStrings;
+	list = dataStrings;
 }

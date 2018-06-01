@@ -905,9 +905,9 @@ void ImportFileWidget::refreshPreview() {
 					QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
 					while(i.hasNext()) {
 						i.next();
-						  qDebug()<<"calling ascii mqtt preview"<< importedStrings << "  "<<QString::fromStdString(i.value().payload().data())
+						  qDebug()<<"calling ascii mqtt preview"<< importedStrings << "  "<<QString(i.value().payload().data())
 								 << "    "<< i.key().name();
-						importedStrings = filter->mqttPreview(importedStrings, QString::fromStdString(i.value().payload().data()), i.key().name() );
+						filter->mqttPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
 						if(importedStrings.isEmpty())
 							break;
 					}
@@ -1491,16 +1491,14 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 	while(i.hasNext()) {
 		i.next();
-		if(i.value() == false )
-		{
+		if(i.value() == false ) {
 			check = false;
 			break;
 		}
 	}
 	if (check == true)
 		m_mqttReadyForPreview = true;
-	if(m_mqttReadyForPreview && !m_mqttNewTopic.isEmpty() && m_messageArrived[m_mqttNewTopic])
-	{
+	if(m_mqttReadyForPreview && !m_mqttNewTopic.isEmpty() && m_messageArrived[m_mqttNewTopic]) {
 		qDebug() << "New topic for preview:  " << m_mqttNewTopic;
 		m_mqttNewTopic.clear();
 		refreshPreview();
