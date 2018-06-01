@@ -2286,3 +2286,169 @@ int AsciiFilterPrivate::prepareMqttToRead(const QString& message,  const QString
 
 	return 0;
 }
+
+QVector<QStringList> AsciiFilter::mqttPreview(QVector<QStringList> list, const QString& message, const QString& topic) {
+	return d->mqttPreview(list, message, topic);
+}
+
+QVector<QStringList> AsciiFilterPrivate::mqttPreview(QVector<QStringList> list, const QString& message, const QString& topic) {
+	QVector<QStringList> dataStrings;
+
+	if (message.isEmpty()) {
+		DEBUG("No new data available");
+		return dataStrings;
+	}
+	qDebug()<<"ascii mqtt preview" <<message<< "  " <<topic;
+
+	int linesToRead = 0;
+	QVector<QString> newData;
+	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
+	for (auto& valueString: newDataList) {
+		QStringList splitString = static_cast<QString>(valueString).split(' ', QString::SkipEmptyParts);
+		for (auto& valueString2: splitString) {
+			if (!static_cast<QString>(valueString2).isEmpty() && !static_cast<QString>(valueString2).startsWith(commentCharacter) ) {
+				linesToRead++;
+				newData.push_back(valueString2);
+			}
+		}
+	}
+	qDebug() <<" data investigated, lines to read: "<<linesToRead;
+
+	if (linesToRead == 0) return dataStrings;
+
+	int colSize = 0;
+	if(list.isEmpty())
+		if (createIndexEnabled)
+			colSize = 2;
+		else colSize = 1;
+	else
+		colSize = columnModes.size() + 1;
+	columnModes.resize(colSize);
+	qDebug() << "Column modes resized: " << colSize;
+
+	if(list.isEmpty())
+		if (createIndexEnabled) {
+			columnModes[0] = AbstractColumn::ColumnMode::Integer;
+			vectorNames.prepend("index");
+		}
+
+	vectorNames.append( topic);
+
+	qDebug()<<"vector name set on : " << topic;
+
+	columnModes[colSize - 1] = AbstractFileFilter::columnMode(newData[0], dateTimeFormat, numberFormat);
+
+	qDebug()<<"column mode "<<colSize - 1 << "set on: " << topic << "while column mode size: " <<columnModes.size();
+
+	for(int i=0; i<linesToRead/2; i++)
+	{
+		QString temp_line = newData[i];
+		if (simplifyWhitespacesEnabled)
+			temp_line = temp_line.simplified();
+		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(temp_line, dateTimeFormat, numberFormat);
+
+		// numeric: integer -> numeric
+		if (mode == AbstractColumn::Numeric && columnModes[colSize - 1] == AbstractColumn::Integer) {
+			columnModes[colSize - 1] = mode;
+			qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
+		}
+		// text: non text -> text
+		if (mode == AbstractColumn::Text && columnModes[colSize - 1] != AbstractColumn::Text) {
+			columnModes[colSize - 1] = mode;
+			qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
+		}
+	}
+
+
+	if (list.isEmpty())
+	{
+		for (int i = 0; i < linesToRead; ++i) {
+			QString line = newData[i];
+
+			if (simplifyWhitespacesEnabled)
+				line = line.simplified();
+
+			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+				continue;
+
+			QLocale locale(numberFormat);
+
+			QStringList lineString;
+			if (createIndexEnabled)
+				lineString += QString::number(i);
+
+			switch (columnModes[colSize - 1]) {
+			case AbstractColumn::Numeric: {
+				bool isNumber;
+				const double value = locale.toDouble(line, &isNumber);
+				lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
+				break;
+			}
+			case AbstractColumn::Integer: {
+				bool isNumber;
+				const int value = locale.toInt(line, &isNumber);
+				lineString += QString::number(isNumber ? value : 0);
+				break;
+			}
+			case AbstractColumn::DateTime: {
+				const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
+				lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+				break;
+			}
+			case AbstractColumn::Text:
+				if (removeQuotesEnabled)
+					line.remove(QRegExp("[\"\']"));
+				lineString += line;
+				break;
+			case AbstractColumn::Month:	// never happens
+			case AbstractColumn::Day:
+				break;
+			}
+			dataStrings << lineString;
+		}
+	}
+	else
+	{
+		dataStrings = list;
+		for (int i = 0; i < dataStrings.size(); ++i) {
+			QString line = newData[i];
+
+			if (simplifyWhitespacesEnabled)
+				line = line.simplified();
+
+			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+				continue;
+
+			QLocale locale(numberFormat);
+
+			switch (columnModes[colSize - 1]) {
+			case AbstractColumn::Numeric: {
+				bool isNumber;
+				const double value = locale.toDouble(line, &isNumber);
+				dataStrings[i] += QString::number(isNumber ? value : nanValue, 'g', 16);
+				break;
+			}
+			case AbstractColumn::Integer: {
+				bool isNumber;
+				const int value = locale.toInt(line, &isNumber);
+				dataStrings[i]  += QString::number(isNumber ? value : 0);
+				break;
+			}
+			case AbstractColumn::DateTime: {
+				const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
+				dataStrings[i]  += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+				break;
+			}
+			case AbstractColumn::Text:
+				if (removeQuotesEnabled)
+					line.remove(QRegExp("[\"\']"));
+				dataStrings[i]  += line;
+				break;
+			case AbstractColumn::Month:	// never happens
+			case AbstractColumn::Day:
+				break;
+			}
+		}
+	}
+	return dataStrings;
+}

@@ -101,7 +101,11 @@ private:
     QCompleter *m_completer;
     QStringList m_topicList;
     bool m_editing;
-    QTimer *m_timer;
+	QTimer *m_timer;
+	QMap<QMqttTopicName, bool> m_messageArrived;
+	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
+	bool m_mqttReadyForPreview;
+	QString m_mqttNewTopic;
 
 
 private slots:
@@ -128,6 +132,7 @@ private slots:
     void setCompleter(QString);
     void topicBeingTyped(const QString);
     void topicTimeout();
+	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 
 signals:
 	void fileNameChanged();

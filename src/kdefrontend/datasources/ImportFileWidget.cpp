@@ -82,6 +82,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fileEmpty(false),
 	m_liveDataSource(true),
     m_editing(false),
+	m_mqttReadyForPreview (false),
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
@@ -896,6 +897,29 @@ void ImportFileWidget::refreshPreview() {
 					}
 					break;
 				}
+			case LiveDataSource::SourceType::Mqtt: {
+				qDebug()<<"preview mqtt, is it ready:"<<m_mqttReadyForPreview;
+				if(m_mqttReadyForPreview)
+				{
+					filter->vectorNames().clear();
+					QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
+					while(i.hasNext()) {
+						i.next();
+						  qDebug()<<"calling ascii mqtt preview"<< importedStrings << "  "<<QString::fromStdString(i.value().payload().data())
+								 << "    "<< i.key().name();
+						importedStrings = filter->mqttPreview(importedStrings, QString::fromStdString(i.value().payload().data()), i.key().name() );
+						if(importedStrings.isEmpty())
+							break;
+					}
+
+					QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
+					while(j.hasNext()) {
+						j.next();
+						m_messageArrived[j.key()] = false;
+					}
+					m_mqttReadyForPreview = false;
+				}
+			}
 			}
 
 			tmpTableWidget = m_twPreview;
@@ -1389,6 +1413,9 @@ void ImportFileWidget::mqttSubscribe()
 		{
 			m_mqttSubscriptions.push_back(temp_subscription);
 			ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
+			connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+			m_mqttNewTopic = temp_subscription->topic().filter();
+			m_messageArrived[temp_subscription->topic().filter()] = false;
 			emit subscriptionMade();
 		}
 	}
@@ -1453,4 +1480,29 @@ bool ImportFileWidget::isMqttValid(){
 	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
 	bool subscribed = !m_topicList.isEmpty();
 	return connected && subscribed;
+}
+
+void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
+	if(m_messageArrived[msg.topic()] == false) {
+		m_messageArrived[msg.topic()] = true;
+	}
+	m_lastMessage[msg.topic()]= msg;
+	bool check = true;
+	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+	while(i.hasNext()) {
+		i.next();
+		if(i.value() == false )
+		{
+			check = false;
+			break;
+		}
+	}
+	if (check == true)
+		m_mqttReadyForPreview = true;
+	if(m_mqttReadyForPreview && !m_mqttNewTopic.isEmpty() && m_messageArrived[m_mqttNewTopic])
+	{
+		qDebug() << "New topic for preview:  " << m_mqttNewTopic;
+		m_mqttNewTopic.clear();
+		refreshPreview();
+	}
 }
