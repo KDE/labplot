@@ -33,6 +33,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDialog>
 
 class QPushButton;
+class QAbstractButton;
 class FITSHeaderEditNewKeywordDialog : public QDialog {
 	Q_OBJECT
 
