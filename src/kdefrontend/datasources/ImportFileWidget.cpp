@@ -178,14 +178,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-    connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
-    connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
-    connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
-    connect(m_client, SIGNAL(connected()), this, SLOT(onMqttConnect()) );
-    connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
-    connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
-    connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
-    connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::topicBeingTyped);
+	connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
+	connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
+	connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
+	connect(m_client, SIGNAL(connected()), this, SLOT(onMqttConnect()) );
+	connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
+	connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
+	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
+	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::topicBeingTyped);
 	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::mqttButtonSubscribe);
 	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &ImportFileWidget::mqttButtonUnsubscribe);
@@ -1444,7 +1444,7 @@ void ImportFileWidget::mqttSubscribe() {
 			qDebug()<<"unsubscribe occured";
 
 			for(int i = 0; i< m_mqttSubscriptions.count(); i++)
-				if(QString::compare(m_mqttSubscriptions[i]->topic().filter(), m_mqttUnsubscribeTopic) == 0) {
+				if(m_mqttSubscriptions[i]->topic().filter() == m_mqttUnsubscribeTopic) {
 					qDebug()<<"1 subscription found at  "<<i <<"and removed";
 					m_mqttSubscriptions.remove(i);
 					break;
@@ -1452,14 +1452,14 @@ void ImportFileWidget::mqttSubscribe() {
 
 			m_topicList.removeAll(m_mqttUnsubscribeTopic);
 
-			if(QString::compare(m_mqttNewTopic, m_mqttUnsubscribeTopic) == 0)
+			if(m_mqttNewTopic == m_mqttUnsubscribeTopic)
 				m_mqttNewTopic.clear();
 			m_mqttReadyForPreview = false;
 
 			QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 			while(i.hasNext()) {
 				i.next();
-				if(QString::compare(i.key().name(), m_mqttUnsubscribeTopic) == 0 ) {
+				if(i.key().name() == m_mqttUnsubscribeTopic) {
 					m_messageArrived.remove(i.key());
 					qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
 					break;
@@ -1469,21 +1469,20 @@ void ImportFileWidget::mqttSubscribe() {
 			QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 			while(j.hasNext()) {
 				j.next();
-				if(QString::compare(j.key().name(), m_mqttUnsubscribeTopic) == 0) {
+				if(j.key().name() == m_mqttUnsubscribeTopic) {
 					m_lastMessage.remove(j.key());
 					qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
 					break;
 				}
 			}
 
-			for(int row1 = 0; row1<ui.lwSubscriptions->count(); row1++)  {
-				if(QString::compare(ui.lwSubscriptions->item(row1)->text(), m_mqttUnsubscribeTopic) == 0) {
-					qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row1)->text() <<"and removed";
-					delete ui.lwSubscriptions->item(row1);
-					//for(int row2 = row1; row2 <ui.lwSubscriptions->count(); row2++);
+			for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
+				if(ui.lwSubscriptions->item(row)->text() == m_mqttUnsubscribeTopic) {
+					qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
+					delete ui.lwSubscriptions->item(row);
+					//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
 				}
 			}
-
 			refreshPreview();
 		}
 	}
