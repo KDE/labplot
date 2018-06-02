@@ -83,6 +83,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_liveDataSource(true),
     m_editing(false),
 	m_mqttReadyForPreview (false),
+	m_mqttSubscribeButton (true),
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
@@ -185,7 +186,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
     connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
     connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
     connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::topicBeingTyped);
-    connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
+	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
+	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::mqttButtonSubscribe);
+	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &ImportFileWidget::mqttButtonUnsubscribe);
+
+	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -1364,38 +1369,44 @@ void ImportFileWidget::authenticationChecked(int state)
 
 void ImportFileWidget::mqttConnection()
 {
-	const bool hostSet = !ui.leHost->text().isEmpty();
-	const bool portSet = !ui.lePort->text().isEmpty();
-	const bool idUsed = ui.chbID->isChecked();
-	const bool idSet = !ui.leID->text().isEmpty();
-	const bool idValid = !(idUsed && !idSet);
-	const bool authenticationUsed = ui.chbAuthentication->isChecked();
-	const bool usernameSet = !ui.leUsername->text().isEmpty();
-	const bool passwordSet = !ui.lePassword->text().isEmpty();
-	const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
-	const bool valid =hostSet && portSet && idValid && authenticationValid;
-	if (valid)
-	{
-		if(m_client->state()==QMqttClient::ClientState::Disconnected)
-		{
+	if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
+		const bool hostSet = !ui.leHost->text().isEmpty();
+		const bool portSet = !ui.lePort->text().isEmpty();
+		const bool idUsed = ui.chbID->isChecked();
+		const bool idSet = !ui.leID->text().isEmpty();
+		const bool idValid = !(idUsed && !idSet);
+		const bool authenticationUsed = ui.chbAuthentication->isChecked();
+		const bool usernameSet = !ui.leUsername->text().isEmpty();
+		const bool passwordSet = !ui.lePassword->text().isEmpty();
+		const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
+		const bool valid =hostSet && portSet && idValid && authenticationValid;
+		if (valid) {
 			m_client->setHostname(ui.leHost->text());
 			m_client->setPort(ui.lePort->text().toUInt());
 			if(ui.chbID->isChecked())
 				m_client->setClientId(ui.leID->text());
-			if(ui.chbAuthentication->isChecked())
-			{
+			if(ui.chbAuthentication->isChecked()) {
 				m_client->setUsername(ui.leUsername->text());
 				m_client->setPassword(ui.lePassword->text());
 			}
-			qDebug()<<m_client->hostname()<<"   "<<m_client->port();
-			qDebug()<<"Trying to cennct";
+			qDebug()<<m_client->hostname() << "   " << m_client->port();
+			qDebug()<<"Trying to connect";
 			m_client->connectToHost();
 		}
 	}
+	else if (m_client->state() == QMqttClient::ClientState::Connected) {
+		qDebug()<<"Disconnecting from mqtt broker"	;
+		m_client->disconnectFromHost();
+	}
 }
 
-void ImportFileWidget::onMqttConnect()
-{
+void ImportFileWidget::onMqttConnect() {
+	ui.bConnect->setText("Disconnect");
+	ui.leHost->setEnabled(false);
+	ui.lePort->setEnabled(false);
+	ui.lePassword->setEnabled(false);
+	ui.leUsername->setEnabled(false);
+	ui.leID->setEnabled(false);
 	QMessageBox::information(this, "Title", "Connection established");
 	QMqttTopicFilter globalFilter{"#"};
 	m_mainSubscription = m_client->subscribe(globalFilter, 1);
@@ -1403,48 +1414,97 @@ void ImportFileWidget::onMqttConnect()
 		QMessageBox::information(this, "Title", "no subscribe");
 }
 
-void ImportFileWidget::mqttSubscribe()
-{
-	if(ui.lwSubscriptions->findItems(ui.cbTopic->currentText(), Qt::MatchExactly).isEmpty())
-	{
-		QMqttTopicFilter filter {ui.cbTopic->currentText()};
-		QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-		if(temp_subscription)
-		{
-			m_mqttSubscriptions.push_back(temp_subscription);
-			ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
-			connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-			m_mqttNewTopic = temp_subscription->topic().filter();
-			m_messageArrived[temp_subscription->topic().filter()] = false;
-			emit subscriptionMade();
+void ImportFileWidget::mqttSubscribe() {
+	if(m_mqttSubscribeButton) {
+		if(ui.lwSubscriptions->findItems(ui.cbTopic->currentText(), Qt::MatchExactly).isEmpty()) {
+			if(ui.cbTopic->findText( ui.cbTopic->currentText() ) != -1){
+				QMqttTopicFilter filter {ui.cbTopic->currentText()};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					m_mqttNewTopic = temp_subscription->topic().filter();
+					m_messageArrived[temp_subscription->topic().filter()] = false;
+					emit subscriptionMade();
+				}
+			}
+			else
+				QMessageBox::warning(this, "Warning", "There is no such topic listed in the combo box");
+		}
+		else
+			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+	}
+	else {
+		if(!m_mqttUnsubscribeTopic.isEmpty()) {
+			QMqttTopicFilter filter{m_mqttUnsubscribeTopic};
+			m_client->unsubscribe(filter);
+
+			qDebug()<<"unsubscribe occured";
+
+			for(int i = 0; i< m_mqttSubscriptions.count(); i++)
+				if(QString::compare(m_mqttSubscriptions[i]->topic().filter(), m_mqttUnsubscribeTopic) == 0) {
+					qDebug()<<"1 subscription found at  "<<i <<"and removed";
+					m_mqttSubscriptions.remove(i);
+					break;
+				}
+
+			m_topicList.removeAll(m_mqttUnsubscribeTopic);
+
+			if(QString::compare(m_mqttNewTopic, m_mqttUnsubscribeTopic) == 0)
+				m_mqttNewTopic.clear();
+			m_mqttReadyForPreview = false;
+
+			QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+			while(i.hasNext()) {
+				i.next();
+				if(QString::compare(i.key().name(), m_mqttUnsubscribeTopic) == 0 ) {
+					m_messageArrived.remove(i.key());
+					qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
+					break;
+				}
+			}
+
+			QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+			while(j.hasNext()) {
+				j.next();
+				if(QString::compare(j.key().name(), m_mqttUnsubscribeTopic) == 0) {
+					m_lastMessage.remove(j.key());
+					qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
+					break;
+				}
+			}
+
+			for(int row1 = 0; row1<ui.lwSubscriptions->count(); row1++)  {
+				if(QString::compare(ui.lwSubscriptions->item(row1)->text(), m_mqttUnsubscribeTopic) == 0) {
+					qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row1)->text() <<"and removed";
+					delete ui.lwSubscriptions->item(row1);
+					//for(int row2 = row1; row2 <ui.lwSubscriptions->count(); row2++);
+				}
+			}
+
+			refreshPreview();
 		}
 	}
-	else
-		QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
 }
 
-void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic)
-{
+void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
 	bool known_topic = false;
-	for(int i = 0; i < ui.cbTopic->count() ; ++i)
-	{
-		if(QString::compare(ui.cbTopic->itemText(i), topic.name(), Qt::CaseInsensitive) == 0)
-		{
+	for(int i = 0; i < ui.cbTopic->count() ; ++i) {
+		if(QString::compare(ui.cbTopic->itemText(i), topic.name(), Qt::CaseInsensitive) == 0) {
 			known_topic = true;
 			break;
 		}
 	}
-	if (known_topic == false)
-	{
+	if (known_topic == false) {
 		ui.cbTopic->addItem(topic.name());
 		emit newTopic(topic.name());
 	}
 }
 
-void ImportFileWidget::setCompleter(QString topic)
-{
-	if(!m_editing)
-	{
+void ImportFileWidget::setCompleter(QString topic) {
+	if(!m_editing) {
 		m_topicList.append(topic);
 		m_completer = new QCompleter(m_topicList, this);
 		m_completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -1454,16 +1514,13 @@ void ImportFileWidget::setCompleter(QString topic)
 }
 
 void ImportFileWidget::topicBeingTyped(const QString topic) {
-	if(!m_editing)
-	{
+	if(!m_editing) {
 		bool found = false;
-		for (int i=0; i<ui.cbTopic->count(); i++)
-		{
+		for (int i=0; i<ui.cbTopic->count(); i++) {
 			if(QString::compare(ui.cbTopic->itemText(i), topic, Qt::CaseSensitive) == 0)
 				found = true;
 		}
-		if(!found)
-		{
+		if(!found) {
 			qDebug() << topic;
 			m_editing = true;
 			m_timer->start();
@@ -1503,4 +1560,54 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 		m_mqttNewTopic.clear();
 		refreshPreview();
 	}
+}
+
+void ImportFileWidget::onMqttDisconnect() {
+	ui.bConnect->setText("Connect");
+
+	ui.leHost->setEnabled(true);
+	ui.leHost->clear();
+
+	ui.lePort->setEnabled(true);
+	ui.lePort->clear();
+
+	ui.lePassword->setEnabled(true);
+	ui.lePassword->clear();
+
+	ui.leUsername->setEnabled(true);
+	ui.leUsername->clear();
+
+	ui.leID->setEnabled(true);
+	ui.leID->clear();
+
+	ui.cbTopic->clear();
+	ui.lwSubscriptions->clear();
+
+	m_mqttNewTopic.clear();
+	m_mqttReadyForPreview = false;
+	m_mqttSubscriptions.clear();
+
+	delete m_completer;
+	m_completer = new QCompleter;
+
+	m_topicList.clear();
+	m_editing = false;
+	m_timer->stop();
+	m_messageArrived.clear();
+	m_lastMessage.clear();
+}
+
+void ImportFileWidget::mqttButtonSubscribe(const QString& text) {
+	if(!m_mqttSubscribeButton) {
+		ui.bSubscribe->setText("Subscribe");
+		m_mqttSubscribeButton = true;
+	}
+}
+
+void ImportFileWidget::mqttButtonUnsubscribe(const QString& item) {
+	qDebug()<< "trying to set unsubscribe, mqttSubscribeButton's value: "<<m_mqttSubscribeButton;
+	ui.bSubscribe->setText("Unsubscribe");
+	m_mqttSubscribeButton = false;
+	m_mqttUnsubscribeTopic = item;
+	qDebug()<<"Unsubscribe from:"<<m_mqttUnsubscribeTopic;
 }

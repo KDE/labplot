@@ -106,6 +106,8 @@ private:
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
 	QString m_mqttNewTopic;
+	bool m_mqttSubscribeButton;
+	QString m_mqttUnsubscribeTopic;
 
 
 private slots:
@@ -133,6 +135,9 @@ private slots:
     void topicBeingTyped(const QString);
     void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
+	void onMqttDisconnect();
+	void mqttButtonSubscribe(const QString&);
+	void mqttButtonUnsubscribe(const QString&);
 
 signals:
 	void fileNameChanged();

@@ -190,7 +190,7 @@ void LiveDataSource::updateNow() {
 		read();
 		/*if(checkAllArrived())
 			onAllArrived();*/
-		if (m_updateType == TimeInterval)
+		if (m_updateType == TimeInterval && !m_paused)
 			m_updateTimer->start(m_updateInterval);
 	}
 }
