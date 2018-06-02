@@ -30,6 +30,7 @@
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <KParts/ReadWritePart>
+#include <QAction>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_worksheet(nullptr), m_initializing(false) {
 	ui.setupUi(this);
