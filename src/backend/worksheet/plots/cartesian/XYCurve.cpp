@@ -2106,6 +2106,7 @@ void XYCurvePrivate::setPrinting(bool on) {
 
 void XYCurvePrivate::suppressRetransform(bool on) {
 	m_suppressRetransform = on;
+	m_suppressRecalc = on;
 }
 
 //##############################################################################
