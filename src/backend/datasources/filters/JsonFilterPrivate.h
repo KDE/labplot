@@ -14,7 +14,6 @@ public:
 
 	int checkRow(QJsonValueRef value, int &countCols);
 	int parseColumnModes(QJsonValue value);
-	QString getEmptyValue(AbstractColumn::ColumnMode);
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, QString value);
 

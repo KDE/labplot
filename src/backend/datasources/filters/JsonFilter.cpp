@@ -271,21 +271,6 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row) {
 	return 0;
 }
 
-QString JsonFilterPrivate::getEmptyValue(AbstractColumn::ColumnMode mode){
-	switch (mode) {
-		case AbstractColumn::Numeric:
-			return QString::number(nanValue, 'g', 16);
-		case AbstractColumn::Integer:
-			return QString::number(0);
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Text:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		default:
-			return QString();
-	}
-}
-
 void JsonFilterPrivate::setEmptyValue(int column, int row){
 	switch (columnModes[column]) {
 		case AbstractColumn::Numeric:
@@ -443,22 +428,23 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 		m_prepared = true;
 	}
 
+	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
 		QJsonValue row;
 		switch (containerType) {
 			case JsonFilter::Array: {
 				if (containerName.isEmpty())
-					row = *(m_preparedDoc.array().begin() + startRow + i);
+					row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				else
-					row = *(m_preparedDoc.object()[containerName].toArray().begin() + startRow + i);
+					row = *(m_preparedDoc.object()[containerName].toArray().begin() + rowOffset + i);
 				break;
 			}
 			case JsonFilter::Object: {
 				if (containerName.isEmpty())
-					row = *(m_preparedDoc.object().begin() + startRow + i);
+					row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				else
-					row = *(m_preparedDoc.object()[containerName].toObject().begin() + startRow + i);
+					row = *(m_preparedDoc.object()[containerName].toObject().begin() + rowOffset + i);
 				break;
 			}
 		}
@@ -474,9 +460,11 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 				//TODO: implement other value types
 				case QJsonValue::Array: {
 					value = *(row.toArray().begin() + colIndex);
+					break;
 				}
 				case QJsonValue::Object: {
 					value = *(row.toObject().begin() + colIndex);
+					break;
 				}
 				case QJsonValue::Double:
 				case QJsonValue::String:
@@ -554,9 +542,11 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
 			switch(rowType){
 				case QJsonValue::Object: {
 					value = *(row.toObject().begin() + colIndex);
+					break;
 				}
 				case QJsonValue::Array: {
 					value = *(row.toArray().begin() + colIndex);
+					break;
 				}
 				//TODO: implement other value types
 				case QJsonValue::Double:
