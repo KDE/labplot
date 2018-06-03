@@ -289,7 +289,7 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
 
 	if (!fileName.isEmpty()) {
-		if (Project::isLabPlotProject(fileName)) {
+		if (Project::isLabPlotProject(fileName) || OriginProjectParser::isOriginProject(fileName)) {
 			openProject(fileName);
 		} else {
 			newProject();
