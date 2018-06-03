@@ -364,7 +364,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_prepared(false),
     indexCreated (false),
 	m_lastRowNum (0),
-	mqttPreviewFirstColumnEmpty (false),
+	mqttPreviewFirstEmptyColCount (0),
 	m_columnOffset(0) {
 }
 
@@ -2318,12 +2318,14 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 		}
 
 		int colSize = 0;
-		if(list.isEmpty())
+		if(list.isEmpty()) {
 			if (createIndexEnabled)
 				colSize = 2;
 			else colSize = 1;
+		}
 		else
 			colSize = columnModes.size() + 1;
+
 		columnModes.resize(colSize);
 		qDebug() << "Column modes resized: " << colSize;
 
@@ -2341,118 +2343,39 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 
 		qDebug()<<"column mode "<<colSize - 1 << "set on: " << topic << "while column mode size: " <<columnModes.size();
 
-		for(int i = 0; i < linesToRead / 2; i++)
-		{
-			QString temp_line = newData[i];
+		for(int i = 0; i < linesToRead; i++) {
+			QString tempLine = newData[i];
 			if (simplifyWhitespacesEnabled)
-				temp_line = temp_line.simplified();
-			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(temp_line, dateTimeFormat, numberFormat);
+				tempLine = tempLine.simplified();
+			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(tempLine, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
 			if (mode == AbstractColumn::Numeric && columnModes[colSize - 1] == AbstractColumn::Integer) {
 				columnModes[colSize - 1] = mode;
-				qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
+				qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << tempLine;
 			}
 			// text: non text -> text
 			if ( (mode == AbstractColumn::Text) && (columnModes[colSize - 1] != AbstractColumn::Text) ) {
 				columnModes[colSize - 1] = mode;
-				qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << temp_line;
+				qDebug()<<"-----setting column mode" << "   "<<columnModes[colSize - 1]<< "based on value  " << tempLine;
 			}
 		}
+		int forStart = 0;
+		int forEnd = 0;
 
-
-		if (list.isEmpty())
-		{
-			for (int i = 0; i < linesToRead; ++i) {
-				QString line = newData[i];
-
-				if (simplifyWhitespacesEnabled)
-					line = line.simplified();
-
-				if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
-					continue;
-
-				QLocale locale(numberFormat);
-
-				QStringList lineString;
-				if (createIndexEnabled)
-					lineString += QString::number(i);
-
-				switch (columnModes[colSize - 1]) {
-				case AbstractColumn::Numeric: {
-					bool isNumber;
-					const double value = locale.toDouble(line, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
-					break;
-				}
-				case AbstractColumn::Integer: {
-					bool isNumber;
-					const int value = locale.toInt(line, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::DateTime: {
-					const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
-					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-					break;
-				}
-				case AbstractColumn::Text:
-					if (removeQuotesEnabled)
-						line.remove(QRegExp("[\"\']"));
-					lineString += line;
-					break;
-				case AbstractColumn::Month:	// never happens
-				case AbstractColumn::Day:
-					break;
-				}
-				dataStrings << lineString;
-			}
+		if (list.isEmpty()) {
+			forStart = 0;
+			forEnd = linesToRead;
 		}
-		else
-		{
-			if (!mqttPreviewFirstColumnEmpty) {
+		else {
+			if (mqttPreviewFirstEmptyColCount == 0) {
 				dataStrings = list;
-				for (int i = 0; i < dataStrings.size(); ++i) {
-					QString line = newData[i];
-
-					if (simplifyWhitespacesEnabled)
-						line = line.simplified();
-
-					if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
-						continue;
-
-					QLocale locale(numberFormat);
-
-					switch (columnModes[colSize - 1]) {
-					case AbstractColumn::Numeric: {
-						bool isNumber;
-						const double value = locale.toDouble(line, &isNumber);
-						dataStrings[i] += QString::number(isNumber ? value : nanValue, 'g', 16);
-						break;
-					}
-					case AbstractColumn::Integer: {
-						bool isNumber;
-						const int value = locale.toInt(line, &isNumber);
-						dataStrings[i]  += QString::number(isNumber ? value : 0);
-						break;
-					}
-					case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
-						dataStrings[i]  += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-						break;
-					}
-					case AbstractColumn::Text:
-						if (removeQuotesEnabled)
-							line.remove(QRegExp("[\"\']"));
-						dataStrings[i]  += line;
-						break;
-					case AbstractColumn::Month:	// never happens
-					case AbstractColumn::Day:
-						break;
-					}
-				}
+				forStart = 0;
+				forEnd = dataStrings.size();
 			}
-			else{
+			else {
+				forStart = 1;
+				forEnd = linesToRead;
 				dataStrings = list;
 				qDebug() << "first column empty";
 				QLocale locale(numberFormat);
@@ -2484,51 +2407,109 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 				case AbstractColumn::Day:
 					break;
 				}
-				for (int i = 1; i < linesToRead; ++i) {
-					QString line = newData[i];
-
-					if (simplifyWhitespacesEnabled)
-						line = line.simplified();
-
-					if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
-						continue;
-
-					QStringList lineString;
-					if (createIndexEnabled)
-						lineString += QString::number(i);
-					lineString += QString::number(nanValue, 'g', 16);
-
-					switch (columnModes[colSize - 1]) {
-					case AbstractColumn::Numeric: {
-						bool isNumber;
-						const double value = locale.toDouble(line, &isNumber);
-						lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
-						break;
-					}
-					case AbstractColumn::Integer: {
-						bool isNumber;
-						const int value = locale.toInt(line, &isNumber);
-						lineString += QString::number(isNumber ? value : 0);
-						break;
-					}
-					case AbstractColumn::DateTime: {
-						const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
-						lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-						break;
-					}
-					case AbstractColumn::Text:
-						if (removeQuotesEnabled)
-							line.remove(QRegExp("[\"\']"));
-						lineString += line;
-						break;
-					case AbstractColumn::Month:	// never happens
-					case AbstractColumn::Day:
-						break;
-					}
-					dataStrings << lineString;
-				}
-				mqttPreviewFirstColumnEmpty = false;
+				qDebug()<<"Column after first column empty done";
 			}
+		}
+		for (int i = forStart; i < forEnd; ++i) {
+			qDebug()<<"line = newData[i]";
+			QString line = newData[i];
+
+			if (simplifyWhitespacesEnabled)
+				line = line.simplified();
+
+			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+				continue;
+
+			QLocale locale(numberFormat);
+
+			QStringList lineString;
+			if(!list.isEmpty() &&  mqttPreviewFirstEmptyColCount == 0)
+				lineString = dataStrings[i];
+
+			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) )
+				if (createIndexEnabled)
+					lineString += QString::number(i);
+
+			if(!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0){
+				for(int j = 0; j < mqttPreviewFirstEmptyColCount; j++) {
+					lineString += QString::number(nanValue, 'g', 16);
+					qDebug()<<"first column updated with nan";
+				}
+			}
+
+			switch (columnModes[colSize - 1]) {
+			case AbstractColumn::Numeric: {
+				bool isNumber;
+				const double value = locale.toDouble(line, &isNumber);
+				lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
+				break;
+			}
+			case AbstractColumn::Integer: {
+				bool isNumber;
+				const int value = locale.toInt(line, &isNumber);
+				lineString += QString::number(isNumber ? value : 0);
+				break;
+			}
+			case AbstractColumn::DateTime: {
+				const QDateTime valueDateTime = QDateTime::fromString(line, dateTimeFormat);
+				lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+				break;
+			}
+			case AbstractColumn::Text:
+				if (removeQuotesEnabled)
+					line.remove(QRegExp("[\"\']"));
+				lineString += line;
+				break;
+			case AbstractColumn::Month:	// never happens
+			case AbstractColumn::Day:
+				break;
+			}
+			qDebug()<<"column updated with value";
+
+			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0))
+				dataStrings << lineString;
+			if (!list.isEmpty() && mqttPreviewFirstEmptyColCount == 0)
+				dataStrings[i] = lineString;
+		}
+		if(mqttPreviewFirstEmptyColCount > 0) {
+			mqttPreviewFirstEmptyColCount = 0;
+		}
+	}
+	else if (list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) ) {
+		mqttPreviewFirstEmptyColCount ++;
+		qDebug()<<"first column empty: "<< mqttPreviewFirstEmptyColCount;
+		int colSize;
+		if (mqttPreviewFirstEmptyColCount == 1){
+			if (createIndexEnabled)
+				colSize = 2;
+			else colSize = 1;
+		}
+		else
+			colSize = columnModes.size() + 1;
+		columnModes.resize(colSize);
+
+		if (mqttPreviewFirstEmptyColCount == 1)
+			if (createIndexEnabled) {
+				columnModes[0] = AbstractColumn::ColumnMode::Integer;
+				vectorNames.prepend("index");
+			}
+
+		vectorNames.append( topic);
+		columnModes[colSize-1] = AbstractColumn::ColumnMode::Numeric;
+		qDebug()<<"Column mode set for empty column";
+
+		QStringList lineString;
+		if (mqttPreviewFirstEmptyColCount == 1) {
+			if(createIndexEnabled)
+				lineString += QString::number(0);
+			lineString += QString::number(nanValue, 'g', 16);
+			dataStrings << lineString;
+			qDebug()<<"new line added with nan";
+		}
+		else {
+			dataStrings = list;
+			dataStrings[0] += QString::number(nanValue, 'g', 16);
+			qDebug()<<"line expanded with nan";
 		}
 	}
 	else if(!list.isEmpty()) {
@@ -2543,27 +2524,6 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 		for (int i = 0; i < dataStrings.size(); ++i) {
 			dataStrings[i] += QString::number(nanValue, 'g', 16);
 		}
-
-	}
-	else if (list.isEmpty()) {
-		mqttPreviewFirstColumnEmpty = true;
-		int colSize;
-		if (createIndexEnabled)
-			colSize = 2;
-		else colSize = 1;
-		columnModes.resize(colSize);
-		if (createIndexEnabled) {
-			columnModes[0] = AbstractColumn::ColumnMode::Integer;
-			vectorNames.prepend("index");
-		}
-		vectorNames.append( topic);
-		columnModes[colSize-1] = AbstractColumn::ColumnMode::Numeric;
-
-		QStringList lineString;
-		if(createIndexEnabled)
-			lineString += QString::number(0);
-		lineString += QString::number(nanValue, 'g', 16);
-		dataStrings << lineString;
 	}
 	list = dataStrings;
 }

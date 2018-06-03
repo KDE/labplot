@@ -76,7 +76,7 @@ public:
 	int startColumn;
 	int endColumn;
 	bool indexCreated;
-	bool mqttPreviewFirstColumnEmpty;
+	int mqttPreviewFirstEmptyColCount;
 
     int isPrepared();
 
