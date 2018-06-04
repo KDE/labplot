@@ -1407,6 +1407,9 @@ void ImportFileWidget::onMqttConnect() {
 	ui.lePassword->setEnabled(false);
 	ui.leUsername->setEnabled(false);
 	ui.leID->setEnabled(false);
+	ui.cbSourceType->setEnabled(false);
+	ui.chbAuthentication->setEnabled(false);
+	ui.chbID->setEnabled(false);
 	QMessageBox::information(this, "Title", "Connection established");
 	QMqttTopicFilter globalFilter{"#"};
 	m_mainSubscription = m_client->subscribe(globalFilter, 1);
@@ -1581,6 +1584,10 @@ void ImportFileWidget::onMqttDisconnect() {
 
 	ui.cbTopic->clear();
 	ui.lwSubscriptions->clear();
+
+	ui.cbSourceType->setEnabled(true);
+	ui.chbAuthentication->setEnabled(true);
+	ui.chbID->setEnabled(true);
 
 	m_mqttNewTopic.clear();
 	m_mqttReadyForPreview = false;

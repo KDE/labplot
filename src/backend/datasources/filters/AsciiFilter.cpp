@@ -1585,6 +1585,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (!m_prepared) {
+		qDebug()<<"Start prepare mqtt";
 		const int mqttPrepareError = prepareMqttToRead(message, topic);
 		if (mqttPrepareError != 0) {
 			DEBUG("Mqtt Prepare Error = " << mqttPrepareError);
@@ -1592,9 +1593,9 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 			return 0;
 		}
 
-		qDebug()<<"prepare mqtt kesz";
+		qDebug()<<"prepare mqtt done";
 
-		if(dynamic_cast<LiveDataSource*>(dataSource)->topicIndex(topic) == 0)
+		if(spreadsheet->topicIndex(topic) == 0)
 			m_maxActualRows = 0;
 
 		// prepare import for spreadsheet
@@ -1703,6 +1704,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	}
 
 	int newDataIdx = 0;
+	bool sampleRateReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
@@ -1721,13 +1723,19 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 					if (readingType != LiveDataSource::ReadingType::TillEnd) {
 						newLinesForSampleRateNotTillEnd++;
 						//for Continous reading and FromEnd we read sample rate number of lines if possible
-						if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
+						qDebug()<<"new lines for sample rate: "<<newLinesForSampleRateNotTillEnd;
+						if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate()) {
+							sampleRateReached = true;
 							break;
+						}
 					}
 				}
 			}
+			if(sampleRateReached)
+				break;
 		}
 	}
+	qDebug()<<"Processing message done";
 	//now we reset the readingType
 	if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
 		readingType = spreadsheet->readingType();
@@ -1742,7 +1750,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	else
 		topicToCol = static_cast<LiveDataSource*> (dataSource)->topicIndex(topic);
 
-	if(dynamic_cast<LiveDataSource*>(dataSource)->topicIndex(topic) == 0)
+	if(spreadsheet->topicIndex(topic) == 0)
 		m_lastRowNum = spreadsheet->rowCount();
 	const int spreadsheetRowCountBeforeResize = m_lastRowNum;
 
@@ -1886,6 +1894,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	}
 
 
+	qDebug()<<"starting m_actual rows calculated" << m_actualRows <<"new data size: "<<newData.size();
 
 	int currentRow = 0; // indexes the position in the vector(column)
 	int linesToRead = 0;
@@ -1933,7 +1942,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		if (linesToRead == 0)
 			return 0;
 		//feri
-		qDebug()<<"linestoread nem 0";
+		qDebug()<<"linestoread = "<<linesToRead;
 	} else
 		linesToRead = newLinesTillEnd;
 
