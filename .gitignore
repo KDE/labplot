@@ -3,3 +3,5 @@
 .gitconfig
 build*
 TODO
+.kdev4
+labplot.kdev4
