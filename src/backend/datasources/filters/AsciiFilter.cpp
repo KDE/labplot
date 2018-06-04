@@ -1736,12 +1736,155 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		qDebug() << "Removed empty lines: " << newData.removeAll("");
 
+	int topicToCol;
+	if (createIndexEnabled)
+		topicToCol = static_cast<LiveDataSource*> (dataSource)->topicIndex(topic) + 1;
+	else
+		topicToCol = static_cast<LiveDataSource*> (dataSource)->topicIndex(topic);
 
 	if(dynamic_cast<LiveDataSource*>(dataSource)->topicIndex(topic) == 0)
 		m_lastRowNum = spreadsheet->rowCount();
 	const int spreadsheetRowCountBeforeResize = m_lastRowNum;
-	if(m_prepared)
-		m_actualRows = m_lastRowNum;
+
+	if(m_prepared ) {
+		if (!spreadsheet->keepLastValues())
+			m_actualRows = m_lastRowNum;
+		else {
+			if( (m_actualRows != spreadsheet->keepNvalues()) &&
+					( (topicToCol == 0 && !createIndexEnabled) || (topicToCol == 1 && createIndexEnabled) ) ) {
+				if(m_actualRows < spreadsheet->keepNvalues())
+					spreadsheet->setRowCount(spreadsheet->keepNvalues());
+
+				int rowDiff = 0;
+				if(m_actualRows > spreadsheet->keepNvalues()) {
+					rowDiff = m_actualRows -  spreadsheet->keepNvalues();
+				}
+				if(m_actualRows < spreadsheet->keepNvalues()) {
+					rowDiff =spreadsheet->keepNvalues() - m_actualRows;
+				}
+				qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNvalues()<<"   "<<rowDiff;
+
+				for (int n = 0; n < columnModes.size(); ++n) {
+					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+					qDebug()<<"modifying column: "<<n;
+					switch (columnModes[n]) {
+					case AbstractColumn::Numeric: {
+						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
+						m_dataContainer[n] = static_cast<void *>(vector);
+
+						if(m_actualRows > spreadsheet->keepNvalues()) {
+							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (i) =
+										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+							}
+						}
+
+						if(m_actualRows < spreadsheet->keepNvalues()) {
+							vector->reserve( spreadsheet->keepNvalues());
+							vector->resize( spreadsheet->keepNvalues());
+							qDebug()<<"actual rows < keepn";
+							for(int i = 1; i <= m_actualRows; i++) {
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
+										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								qDebug()<< "overwrite row"<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
+							}
+							for(int i = 0; i < rowDiff; i++) {
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
+								qDebug()<<i<<"row = null";
+							}
+						}
+						break;
+					}
+					case AbstractColumn::Integer: {
+						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
+						m_dataContainer[n] = static_cast<void *>(vector);
+
+						if(m_actualRows > spreadsheet->keepNvalues()) {
+							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (i) =
+										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+							}
+						}
+						if(m_actualRows < spreadsheet->keepNvalues()) {
+							vector->reserve( spreadsheet->keepNvalues());
+							vector->resize( spreadsheet->keepNvalues());
+							for(int i = 1; i <= m_actualRows; i++) {
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
+										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								qDebug()<< "overwrite row"<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
+							}
+							for(int i = 0; i < rowDiff; i++){
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = 0;
+								qDebug()<<i<<"row = null";
+							}
+
+						}
+						break;
+					}
+					case AbstractColumn::Text: {
+						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
+						m_dataContainer[n] = static_cast<void *>(vector);
+
+						if(m_actualRows > spreadsheet->keepNvalues()) {
+							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (i) =
+										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+							}
+						}
+
+						if(m_actualRows < spreadsheet->keepNvalues()) {
+							vector->reserve( spreadsheet->keepNvalues());
+							vector->resize( spreadsheet->keepNvalues());
+							for(int i = 1; i <= m_actualRows; i++) {
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
+										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+							}
+							for(int i = 0; i < rowDiff; i++)
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](i) = "";
+						}
+						break;
+					}
+					case AbstractColumn::DateTime: {
+						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
+						m_dataContainer[n] = static_cast<void *>(vector);
+
+						if(m_actualRows > spreadsheet->keepNvalues()) {
+							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (i) =
+										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+							}
+						}
+
+						if(m_actualRows < spreadsheet->keepNvalues()) {
+							vector->reserve( spreadsheet->keepNvalues());
+							vector->resize( spreadsheet->keepNvalues());
+							for(int i = 1; i <= m_actualRows; i++) {
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
+										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+							}
+							for(int i = 0; i < rowDiff; i++)
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](i) = QDateTime();
+						}
+						break;
+					}
+						//TODO
+					case AbstractColumn::Month:
+					case AbstractColumn::Day:
+						break;
+					}
+				}
+				if(m_actualRows > spreadsheet->keepNvalues())
+					spreadsheet->setRowCount(spreadsheet->keepNvalues());
+				m_actualRows = spreadsheet->keepNvalues();
+				qDebug()<<"actual rows: "<<m_actualRows;
+			}
+		}
+	}
+
 
 
 	int currentRow = 0; // indexes the position in the vector(column)
@@ -1793,14 +1936,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		qDebug()<<"linestoread nem 0";
 	} else
 		linesToRead = newLinesTillEnd;
-
-
-
-	int topicToCol;
-	if (createIndexEnabled)
-		topicToCol = static_cast<LiveDataSource*> (dataSource)->topicIndex(topic) + 1;
-	else
-		topicToCol = static_cast<LiveDataSource*> (dataSource)->topicIndex(topic);
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
@@ -1893,38 +2028,38 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 			PERFTRACE("AsciiLiveDataImportPopping: ");
 #endif
 			for (int row = 0; row < linesToRead; ++row) {
-				for (int col = 0; col <= topicToCol; ++col) {
-					switch (columnModes[col]) {
+				//for (int col = 0; col <= topicToCol; ++col) {
+					switch (columnModes[topicToCol]) {
 					case AbstractColumn::Numeric: {
-						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
+						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(topicToCol)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
-						m_dataContainer[col] = static_cast<void *>(vector);
+						m_dataContainer[topicToCol] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::Integer: {
-						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
+						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(topicToCol)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
-						m_dataContainer[col] = static_cast<void *>(vector);
+						m_dataContainer[topicToCol] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::Text: {
-						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
+						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(topicToCol)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
-						m_dataContainer[col] = static_cast<void *>(vector);
+						m_dataContainer[topicToCol] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::DateTime: {
-						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
+						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(topicToCol)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
-						m_dataContainer[col] = static_cast<void *>(vector);
+						m_dataContainer[topicToCol] = static_cast<void *>(vector);
 						break;
 					}
 						//TODO
@@ -1932,7 +2067,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 					case AbstractColumn::Day:
 						break;
 					}
-				}
+				//}
 			}
 		}
 	}
@@ -2027,8 +2162,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 					break;
 				}
 			}
-
-
 
 			QString valueString = line;
 			qDebug()<<"putting in this line" << valueString<< "    "<<currentRow;
