@@ -38,6 +38,7 @@ class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 class QPushButton;
+class QLineEdit;
 class FunctionValuesDialog : public QDialog {
 	Q_OBJECT
 

@@ -56,6 +56,7 @@
 #include <QThreadPool>
 #include <QMutex>
 #include <QProcess>
+#include <QHeaderView>
 
 #include <KLocale>
 #include <QIcon>
