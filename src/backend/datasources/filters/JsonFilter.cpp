@@ -80,10 +80,17 @@ QStringList JsonFilter::dataTypes() {
 }
 
 /*!
+returns the list of all predefined data row types.
+*/
+QStringList JsonFilter::dataRowTypes() {
+	return (QStringList() << "Array" << "Object");
+}
+
+/*!
 returns the list of all predefined data container types.
 */
 QStringList JsonFilter::dataContainerTypes() {
-	return (QStringList() << "Object" << "Array");
+	return (QStringList() << "Array" << "Object");
 }
 
 void JsonFilter::setDataContainerName(const QString name) {
@@ -511,22 +518,23 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
 		return dataStrings;
 	}
 
+	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
 		QJsonValue row;
 		switch (containerType) {
 			case JsonFilter::Object: {
 				if (containerName.isEmpty())
-					row = *(m_preparedDoc.object().begin() + startRow + i);
+					row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				else
-					row = *(m_preparedDoc.object()[containerName].toObject().begin() + startRow + i);
+					row = *(m_preparedDoc.object()[containerName].toObject().begin() + rowOffset + i);
 				break;
 			}
 			case JsonFilter::Array: {
 				if (containerName.isEmpty())
-					row = *(m_preparedDoc.array().begin() + startRow + i);
+					row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				else
-					row = *(m_preparedDoc.object()[containerName].toArray().begin() + startRow + i);
+					row = *(m_preparedDoc.object()[containerName].toArray().begin() + rowOffset + i);
 				break;
 			}
 		}

@@ -34,6 +34,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
@@ -107,6 +108,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui

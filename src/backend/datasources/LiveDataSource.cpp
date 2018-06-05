@@ -213,6 +213,7 @@ QStringList LiveDataSource::fileTypes() {
 	        << i18n("Network Common Data Format (NetCDF)")
 //		<< "CDF"
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
+	        << i18n("JSON data")
 //		<< i18n("Sound")
 	       );
 }
@@ -563,6 +564,7 @@ void LiveDataSource::read() {
 		case HDF5:
 		case NETCDF:
 		case FITS:
+		case Json:
 			break;
 		}
 		break;

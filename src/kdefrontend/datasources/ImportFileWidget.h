@@ -41,6 +41,8 @@ class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
+class JsonOptionsWidget;
+
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -79,6 +81,7 @@ private:
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
+	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 	bool m_fileEmpty;

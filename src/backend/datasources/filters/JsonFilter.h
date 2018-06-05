@@ -19,6 +19,7 @@ public:
 	~JsonFilter() override;
 
 	static QStringList dataTypes();
+	static QStringList dataRowTypes();
 	static QStringList dataContainerTypes();
 
 	// read data from any device

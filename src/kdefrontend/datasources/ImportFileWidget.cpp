@@ -36,12 +36,14 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/JsonFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
+#include "JsonOptionsWidget.h"
 
 #include <QCompleter>
 #include <QDir>
@@ -108,6 +110,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	QWidget* fitsw = new QWidget();
 	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(LiveDataSource::FITS, fitsw);
+
+	QWidget* jsonw = new QWidget();
+	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw));
+	ui.swOptions->insertWidget(LiveDataSource::Json, jsonw);
 
 	// the table widget for preview
 	m_twPreview = new QTableWidget(ui.tePreview);
@@ -190,6 +196,7 @@ void ImportFileWidget::loadSettings() {
 	m_asciiOptionsWidget->loadSettings();
 	m_binaryOptionsWidget->loadSettings();
 	m_imageOptionsWidget->loadSettings();
+	m_jsonOptionsWidget->loadSettings();
 
 	//read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
@@ -500,6 +507,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setEndColumn( ui.sbEndColumn->value());
 			return filter;
 		}
+	case LiveDataSource::Json: {
+			JsonFilter* filter = new JsonFilter();
+			m_jsonOptionsWidget->applyFilterSettings(filter);
+
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value());
+			filter->setEndColumn( ui.sbEndColumn->value());
+
+			return filter;
+		}
 	}
 
 	return 0;
@@ -610,9 +628,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update FITS tree widget using current selected file
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
-		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
+		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
-		else
+		} else if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
+			ui.cbFileType->setCurrentIndex(LiveDataSource::Json);
+		} else
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Binary);
 	}
 
@@ -694,6 +714,10 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
+	case LiveDataSource::Json:
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
+		break;
 	default:
 		DEBUG("unknown file type");
 	}
@@ -742,7 +766,8 @@ void ImportFileWidget::fileInfoDialog() {
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
 	if (ui.cbFileType->currentIndex() == LiveDataSource::HDF5 || ui.cbFileType->currentIndex() == LiveDataSource::NETCDF
-	        || ui.cbFileType->currentIndex() == LiveDataSource::Image || ui.cbFileType->currentIndex() == LiveDataSource::FITS) {
+	        || ui.cbFileType->currentIndex() == LiveDataSource::Image || ui.cbFileType->currentIndex() == LiveDataSource::FITS
+			|| ui.cbFileType->currentIndex() == LiveDataSource::Json) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -777,7 +802,7 @@ void ImportFileWidget::refreshPreview() {
 	LiveDataSource::FileType fileType = (LiveDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
-	if (fileType == LiveDataSource::Ascii || fileType == LiveDataSource::Binary)
+	if (fileType == LiveDataSource::Ascii || fileType == LiveDataSource::Binary || fileType == LiveDataSource::Json)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -912,6 +937,14 @@ void ImportFileWidget::refreshPreview() {
 			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 			tmpTableWidget = m_fitsOptionsWidget->previewWidget();
+			break;
+		}
+	case LiveDataSource::Json: {
+			ui.tePreview->clear();
+			JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
+			importedStrings = filter->preview(fileName);
+			tmpTableWidget = m_twPreview;
+			columnModes = filter->columnModes();
 			break;
 		}
 	}
