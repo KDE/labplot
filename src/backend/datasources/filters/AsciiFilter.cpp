@@ -1574,10 +1574,10 @@ void AsciiFilter::readFromMqtt(const QString& message, const QString& topic, Abs
 	d->readFromMqtt(message, topic, dataSource);
 }
 
-int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topic, AbstractDataSource* dataSource) {
+void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topic, AbstractDataSource* dataSource) {
 	if (message.isEmpty()) {
 		DEBUG("No new data available");
-		return 0;
+		return;
 	}
 
 	qDebug()<<"kezdem read";
@@ -1590,7 +1590,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		if (mqttPrepareError != 0) {
 			DEBUG("Mqtt Prepare Error = " << mqttPrepareError);
 			qDebug()<<mqttPrepareError<<"  itt van baj mqttPrepareError";
-			return 0;
+			return;
 		}
 
 		qDebug()<<"prepare mqtt done";
@@ -1668,7 +1668,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		qDebug() << "prepared!";
 	}
 
-	qint64 bytesread = 0;
 
 #ifdef PERFTRACE_LIVE_IMPORT
 	PERFTRACE("AsciiLiveDataImportTotal: ");
@@ -1681,11 +1680,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		//so we set readingType to TillEnd
 		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
 			readingType = LiveDataSource::ReadingType::TillEnd;
-		//if we read the whole file we just start from the beginning of it
-		//and read till end
-		else if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-			readingType = LiveDataSource::ReadingType::TillEnd;
-		}
 		else
 			readingType = spreadsheet->readingType();
 	}
@@ -1908,12 +1902,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
 				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
 			else {
-				//we don't increase it if we reread the whole file, we reset it
-				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)) {
-					m_actualRows += newData.size();
-				} else {
-					m_actualRows = newData.size();
-				}
+				m_actualRows += newData.size();
 			}
 		}
 
@@ -1933,16 +1922,11 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 			}
 		} else {
-			//appending
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-				linesToRead = m_actualRows;
-			} else {
-				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
-			}
+			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 		}
 
 		if (linesToRead == 0)
-			return 0;
+			return;
 		//feri
 		qDebug()<<"linestoread = "<<linesToRead;
 	} else
@@ -1961,11 +1945,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 			currentRow = 0;
 		else {
 			// indexes the position in the vector(column)
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-				currentRow = 0;
-			} else {
-				currentRow = spreadsheetRowCountBeforeResize;
-			}
+			currentRow = spreadsheetRowCountBeforeResize;
 		}
 
 		// if we have fixed size, we do this only once in preparation, here we can use
@@ -2012,20 +1992,13 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		//when we have a fixed size we have to pop sampleRate number of lines if specified
 		//here popping, setting currentRow
 		if (!m_prepared)
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-				currentRow = 0;
-			} else
-				currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
+			currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
 		else {
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
 				if (newLinesTillEnd > m_actualRows)
 					currentRow = 0;
 				else {
-					if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-						currentRow = 0;
-					} else {
-						currentRow = m_actualRows - newLinesTillEnd;
-					}
+					currentRow = m_actualRows - newLinesTillEnd;
 				}
 			} else {
 				//we read max sample rate number of lines when the reading mode
@@ -2097,9 +2070,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		if (m_prepared) {
 			if (newData.size() > spreadsheet->sampleRate())
 				newDataIdx = newData.size() - spreadsheet->sampleRate();
-			//since we skip a couple of lines, we need to count those bytes too
-			for (int i = 0; i < newDataIdx; ++i)
-				bytesread += newData.at(i).size();
 		}
 	}
 	qDebug() << "newDataIdx: " << newDataIdx;
@@ -2110,10 +2080,6 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 		PERFTRACE("AsciiLiveDataImportFillingContainers: ");
 #endif
 		int row = 0;
-		//skip the header
-		if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-			row = 1;
-		}
 		for (; row < linesToRead; ++row) {
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
@@ -2144,7 +2110,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 				if (spreadsheet->keepLastValues())
 					tempIndex = QString::number(indexColumnIdx++);
 				else
-					tempIndex =QString::number(currentRow);
+					tempIndex = QString::number(currentRow);
 				switch (columnModes[0]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
@@ -2220,7 +2186,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 
 
 			currentRow++;
-			qDebug()<<"putting ok current row increment";
+			qDebug()<<"adding data is ok, current row increment";
 		}
 	}
 
@@ -2255,10 +2221,10 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 			plot->dataChanged();
 		}
 	}
-	qDebug()<<"check m_prepared";
 
+	qDebug()<<"check m_prepared";
 	if(createIndexEnabled) {
-		if(m_actualCols == spreadsheet->topicNumber() + 1)
+		if(m_actualCols == (spreadsheet->topicNumber() + 1) )
 			m_prepared = true;
 	}
 	else {
@@ -2267,7 +2233,7 @@ int AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& topi
 	}
 
 	qDebug()<<"return , comes end";
-	return bytesread;
+	return;
 }
 
 int AsciiFilterPrivate::prepareMqttToRead(const QString& message,  const QString& topic) {

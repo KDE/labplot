@@ -204,9 +204,9 @@ void LiveDataSource::continueReading() {
 		m_updateTimer->start(m_updateInterval);
 	else if (m_updateType == NewData) {
 		if(m_sourceType != LiveDataSource::SourceType::Mqtt)
-		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 		else
-		connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
+			connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
 	}
 }
 
@@ -219,9 +219,9 @@ void LiveDataSource::pauseReading() {
 		m_updateTimer->stop();
 	else if (m_updateType == NewData) {
 		if(m_sourceType != LiveDataSource::SourceType::Mqtt)
-		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 		else
-		disconnect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
+			disconnect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived);
 	}
 }
 
@@ -318,8 +318,9 @@ int LiveDataSource::baudRate() const {
  * \param interval
  */
 void LiveDataSource::setUpdateInterval(int interval) {
-	m_updateInterval = interval;
-	m_updateTimer->start(m_updateInterval);
+	m_updateInterval = interval;	
+	if(!m_paused)
+		m_updateTimer->start(m_updateInterval);
 }
 
 int LiveDataSource::updateInterval() const {
