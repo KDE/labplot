@@ -1162,7 +1162,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//const Origin::Color& originColor = originLegend.color;
 
 				//position
-				//TODO: for the first release with OPJ support we put the leget to the bottom left corner,
+				//TODO: for the first release with OPJ support we put the legend to the bottom left corner,
 				//in the next release we'll evaluate originLegend.clientRect giving the position inside of the whole page in Origin.
 				//In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
 				//To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
@@ -1198,7 +1198,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
-
 
 				//TODO: positioning
 
