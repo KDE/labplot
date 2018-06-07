@@ -1000,6 +1000,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					else
 						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_voigt_param_deriv(j, x, a, mu, s, g, weight[i]));
 			}
+			break;
 		}
 		break;
 	case nsl_fit_model_growth: {
