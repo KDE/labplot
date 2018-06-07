@@ -1919,7 +1919,10 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinouslyFixed or FromEnd
-				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				if(spreadsheet->sampleRate() <= spreadsheet->keepNvalues())
+					linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				else
+					linesToRead = qMin(spreadsheet->keepNvalues(), newLinesTillEnd);
 			}
 		} else {
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
@@ -1928,9 +1931,15 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 		if (linesToRead == 0)
 			return;
 		//feri
-		qDebug()<<"linestoread = "<<linesToRead;
-	} else
-		linesToRead = newLinesTillEnd;
+
+	} else {
+		if(spreadsheet->keepLastValues()) {
+			linesToRead = newLinesTillEnd > m_actualRows ? m_actualRows : newLinesTillEnd;
+		}
+		else
+			linesToRead = newLinesTillEnd;
+	}
+	qDebug()<<"linestoread = "<<linesToRead;
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
@@ -2003,7 +2012,7 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinouslyFixed or FromEnd
-				currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				currentRow = m_actualRows - linesToRead;
 			}
 		}
 

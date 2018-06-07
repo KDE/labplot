@@ -1410,11 +1410,11 @@ void ImportFileWidget::onMqttConnect() {
 	ui.cbSourceType->setEnabled(false);
 	ui.chbAuthentication->setEnabled(false);
 	ui.chbID->setEnabled(false);
-	QMessageBox::information(this, "Title", "Connection established");
+	QMessageBox::information(this, "Connection successful", "Connection established");
 	QMqttTopicFilter globalFilter{"#"};
 	m_mainSubscription = m_client->subscribe(globalFilter, 1);
 	if(!m_mainSubscription)
-		QMessageBox::information(this, "Title", "no subscribe");
+		QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
 }
 
 void ImportFileWidget::mqttSubscribe() {

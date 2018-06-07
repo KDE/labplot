@@ -572,11 +572,11 @@ void LiveDataSource::read() {
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			break;
-        case Mqtt:{
-            qDebug()<<"Trying to connect 1";            
+		case Mqtt:{
+			qDebug()<<"Trying to connect 1";
 			m_client->connectToHost();
-            break;
-        }
+			break;
+		}
 		}
 		m_prepared = true;
 	}
@@ -588,12 +588,12 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case Ascii:
 			qDebug() << "Reading live ascii file.." ;
-            if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-                dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
-            } else {
-                bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
-                m_bytesRead += bytes;
-            }
+			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
+				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
+			} else {
+				bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+				m_bytesRead += bytes;
+			}
 			qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
 
 			break;
@@ -639,12 +639,13 @@ void LiveDataSource::read() {
 		m_device = m_serialPort;
 		//TODO
 		break;
-	case Mqtt:{
+	case Mqtt: {
 		qDebug()<<"Trying to connect 2";
-		if(checkAllArrived())
-			onAllArrived();
-        break;
-    }
+		if(m_client->state() == QMqttClient::ClientState::Connected)
+			while(checkAllArrived())
+				onAllArrived();
+		break;
+	}
 	}
 }
 
@@ -1265,6 +1266,7 @@ void LiveDataSource::onAllArrived() {
 				i.next();
 				if(!i.value().isEmpty()) {
 					QMqttMessage temp_msg = m_messagePuffer[i.key()].takeFirst();
+					qDebug()<<"Start reading from "<<i.key();
 					dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(QString::fromStdString(temp_msg.payload().data()), temp_msg.topic().name(), this);
 					qDebug()<<"readfrommqtt occured";
 				}
@@ -1274,8 +1276,9 @@ void LiveDataSource::onAllArrived() {
 		QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
 		while(j.hasNext()) {
 			j.next();
-			if(m_messagePuffer[j.key()].isEmpty())
+			if(m_messagePuffer[j.key()].isEmpty()) {
 				m_messageArrived[j.key()] = false;
+			}
 		}
 		qDebug()<<"end checking";
 	}
