@@ -4,7 +4,7 @@
     Description          : definition of mathematical and physical constants
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -36,10 +36,12 @@
 
 #include "parser.h"
 
+/* sync with ExpressionParser.cpp */
 struct con _constants[] = {
 	/* Mathematical constants */
 	{"e", M_E},
 	{"pi", M_PI},
+	{"euler", M_EULER},
 
 	/* Physical constants: http://www.gnu.org/software/gsl/manual/html_node/Physical-Constants.html */
 	/* Physical constants in MKSA system */
