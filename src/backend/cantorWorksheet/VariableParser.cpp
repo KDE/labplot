@@ -89,7 +89,6 @@ void VariableParser::parsePythonValues() {
 }
 
 void VariableParser::parseRValues() {
-	m_string = "[1] 1 2 3 4 5 6";
 	m_string = m_string.remove( QRegExp("\\[.*\\]"));
 	m_string = m_string.trimmed();
 

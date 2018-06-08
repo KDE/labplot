@@ -246,7 +246,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	if (!preview) {
-		for (auto* plot : project->children<WorksheetElementContainer>(AbstractAspect::Recursive)) {
+		for (auto* plot : project->children<CartesianPlot>(AbstractAspect::Recursive)) {
 			plot->setIsLoading(false);
 			plot->retransform();
 		}
@@ -971,8 +971,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 1) Window.frameRect gives Rect-corner coordinates (in pixels) of the Window object
 	// 2) GraphLayer.clientRect gives Rect-corner coordinates (pixels) of the Layer inside the (printer?) page.
 	// 3) Graph.width, Graph.height give the (printer?) page size in pixels.
+// 	const QRectF size(0, 0,
+// 					  Worksheet::convertToSceneUnits(graph.width/600., Worksheet::Inch),
+// 					  Worksheet::convertToSceneUnits(graph.height/600., Worksheet::Inch));
+// 	worksheet->setPageRect(size);
 	worksheet->setUseViewSize(true);
 
+	QMap<TextLabel*, QSizeF> textLabelPositions;
 
 	// worksheet background color
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
@@ -1005,6 +1010,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	for (const auto& layer: graph.layers) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
+			worksheet->addChildFast(plot);
 			plot->setIsLoading(true);
 			//TODO: width, height
 
@@ -1199,7 +1205,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
 
-				//TODO: positioning
+				//position
+				//determine the relative position inside of the layer rect
+				const float horRatio = (float)(s.clientRect.left-layer.clientRect.left)/(layer.clientRect.right-layer.clientRect.left);
+				const float vertRatio = (float)(s.clientRect.top-layer.clientRect.top)/(layer.clientRect.bottom-layer.clientRect.top);
+				textLabelPositions[label] = QSizeF(horRatio, vertRatio);
+				DEBUG("horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
 
 				//rotation
 				label->setRotationAngle(s.rotation);
@@ -1210,7 +1221,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 // 				int tab;
 // 				BorderType borderType;
 // 				Attach attach;
-
 			}
 
 			//curves
@@ -1300,8 +1310,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				++curveIndex;
 			}
-
-			worksheet->addChildFast(plot);
 		} else {
 			//no support for 3D plots yet
 			//TODO: add an "UnsupportedAspect" here
@@ -1310,8 +1318,26 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		++index;
 	}
 
-	if (!preview)
+	if (!preview) {
 		worksheet->updateLayout();
+
+		//worksheet and plots got their sizes,
+		//-> position all text labels inside the plots correctly by converting
+		//the relative positions determined above to the absolute values
+		QMap<TextLabel*, QSizeF>::const_iterator it = textLabelPositions.constBegin();
+		while (it != textLabelPositions.constEnd()) {
+			TextLabel* label = it.key();
+			const QSizeF& ratios = it.value();
+			const CartesianPlot* plot = static_cast<const CartesianPlot*>(label->parentAspect());
+
+			TextLabel::PositionWrapper position = label->position();
+			position.point.setX(plot->dataRect().width()*(ratios.width()-0.5));
+			position.point.setY(plot->dataRect().height()*(ratios.height()-0.5));
+			label->setPosition(position);
+
+			++it;
+		}
+	}
 
 	return true;
 }

@@ -848,14 +848,17 @@ void ExpressionParser::initConstants() {
 	m_constantsGroups << i18n("Force and Energy");
 
 	//Mathematical constants
-	m_constantsNames << i18n("Euler constant");
+	m_constantsNames << i18n("Base of exponentials");
 	m_constantsValues << QString::number(M_E,'g',15);
 	m_constantsUnits << "";
 	m_constantsNames << i18n("Pi");
 	m_constantsValues << QString::number(M_PI,'g',15);
 	m_constantsUnits << "";
+	m_constantsNames << i18n("Euler's constant");
+	m_constantsValues << QString::number(M_EULER,'g',15);
+	m_constantsUnits << "";
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 		m_constantsGroupIndex << 0;
 
 	//Fundamental constants

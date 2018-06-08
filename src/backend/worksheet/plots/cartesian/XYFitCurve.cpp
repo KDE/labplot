@@ -141,15 +141,15 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	case nsl_fit_model_peak:
 		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma(, gamma)
 		if (modelType == nsl_fit_model_voigt) {
-			for (int d = 0; d < 1; d++) {  //TODO: degree
-				paramStartValues[3*d+1] = xmin + (d+1.)*xrange/(degree+1.);
-				paramStartValues[3*d+2] = xrange/(10.*degree);
-				paramStartValues[3*d+3] = xrange/(10.*degree);
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[4*d+1] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
+				paramStartValues[4*d+3] = xrange/(10.*degree);	// gamma
 			}
 		} else {
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);
-				paramStartValues[3*d+1] = xrange/(10.*degree);
+				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
 			}
 		}
 		break;
@@ -484,9 +484,22 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_voigt:
-			//TODO: degree
-			paramNames << "a" << "mu" << "s" << "g";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+			switch(degree) {
+			case 1:
+				paramNames << "a" << "mu" << "s" << "g";
+				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+				break;
+			default:
+				model = "";
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += 'a' + numStr + "*voigt(x-mu" + numStr + ",s" + numStr + ",g" + numStr + ')';
+					paramNames << "a" + numStr << "mu" + numStr << "s" + numStr << "g" + numStr;
+					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("γ") + indices[i-1];
+				}
+			}
 			break;
 		}
 		break;
@@ -622,6 +635,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	case nsl_fit_model_custom:
 		break;
 	}
+	DEBUG("model: " << model.toStdString());
 
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
@@ -988,18 +1002,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				//TODO: degree
+				for (unsigned int j = 0; j < degree; ++j) {
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
+					const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
 
-				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-				for (unsigned int j = 0; j < 4; j++)
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, mu, s, g, weight[i]));
+				}
+				for (unsigned int j = 0; j < 4*degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-					else
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_voigt_param_deriv(j, x, a, mu, s, g, weight[i]));
 			}
+				break;
 		}
 		break;
 	case nsl_fit_model_growth: {
