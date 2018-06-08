@@ -1207,9 +1207,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				//position
 				//determine the relative position inside of the layer rect
-				const float horRatio = (float)s.clientRect.left/(layer.clientRect.right-layer.clientRect.left);
-				const float vertRatio = (float)s.clientRect.top/(layer.clientRect.bottom-layer.clientRect.top);
+				const float horRatio = (float)(s.clientRect.left-layer.clientRect.left)/(layer.clientRect.right-layer.clientRect.left);
+				const float vertRatio = (float)(s.clientRect.top-layer.clientRect.top)/(layer.clientRect.bottom-layer.clientRect.top);
 				textLabelPositions[label] = QSizeF(horRatio, vertRatio);
+				DEBUG("horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
 
 				//rotation
 				label->setRotationAngle(s.rotation);
