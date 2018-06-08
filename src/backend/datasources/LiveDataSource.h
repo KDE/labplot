@@ -75,6 +75,12 @@ public:
         WholeFile
 	};
 
+	enum WillMessageType {
+		OwnMessage = 0,
+		AverageData,
+		LastMessage
+	};
+
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~LiveDataSource() override;
 
@@ -163,7 +169,26 @@ public:
 
     int topicNumber();
 	int topicIndex(const QString&);
+	QVector<QString> topicVector() const;
 	bool checkAllArrived();
+
+	void setMqttWillUse(bool);
+	bool mqttWillUse();
+
+	void setWillTopic(const QString&);
+	QString willTopic();
+
+	void setWillRetain(bool);
+	bool willRetain();
+
+	void setWillQoS(quint8);
+	quint8 willQoS();
+
+	void setWillMessageType(WillMessageType);
+	WillMessageType willMessageType();
+
+	void setWillOwnMessage(const QString&);
+	QString willOwnMessage();
 
 private:
 	void initActions();
@@ -218,6 +243,13 @@ private:
 	QMap<QMqttTopicName, QVector<QMqttMessage>> m_messagePuffer;
     QVector<QString> m_subscriptions;
     bool m_mqttTest;
+	bool m_mqttUseWill;
+	QString m_willMessage;
+	QString m_willTopic;
+	bool m_willRetain;
+	quint8 m_willQoS;
+	WillMessageType m_willMessageType;
+	QString m_willOwnMessage;
 
 public slots:
 	void read();
@@ -240,6 +272,7 @@ private slots:
 
 signals:
     void mqttAllArrived();
+	void mqttSubscribed();
 
 };
 

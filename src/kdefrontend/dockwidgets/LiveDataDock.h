@@ -59,6 +59,16 @@ private slots:
 
 	void updateNow();
 	void pauseContinueReading();
+
+	void useWillMessage(int);
+	void willQoSChanged(int);
+	void willRetainChanged(int);
+	void willTopicChanged(const QString &);
+	void willMessageTypeChanged(int);
+	void willOwnMessageChanged(const QString&);
+	void updateTopics();
+	void willUpdateChanged(int);
+
 public slots:
 
 signals:

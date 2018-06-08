@@ -83,6 +83,7 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_serialPort(nullptr),
       m_client(new QMqttClient(this)),
       m_mqttTest (false),
+	  m_mqttUseWill (false),
 	  m_device(nullptr) {
 
 	initActions();
@@ -1208,6 +1209,7 @@ void LiveDataSource::onMqttConnect() {
 		}
 	}
 	//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
+	emit mqttSubscribed();
 }
 
 void LiveDataSource::mqttMessageReceived(const QByteArray& msg, const QMqttTopicName& topic) {
@@ -1304,4 +1306,54 @@ bool LiveDataSource::checkAllArrived() {
 		}
 	}
 	return check;
+}
+
+void LiveDataSource::setMqttWillUse(bool use) {
+	m_mqttUseWill = use;
+}
+
+bool LiveDataSource::mqttWillUse() {
+	return m_mqttUseWill;
+}
+
+void  LiveDataSource::setWillTopic(const QString& topic) {
+	m_willTopic = topic;
+}
+
+QString LiveDataSource::willTopic() {
+	return m_willTopic;
+}
+
+void LiveDataSource::setWillRetain(bool retain) {
+	m_willRetain = retain;
+}
+bool LiveDataSource::willRetain() {
+	return m_willRetain;
+}
+
+void LiveDataSource::setWillQoS(quint8 QoS) {
+	m_willQoS = QoS;
+}
+quint8 LiveDataSource::willQoS() {
+	return m_willQoS;
+}
+
+void LiveDataSource::setWillMessageType(WillMessageType messageType) {
+	m_willMessageType = messageType;
+}
+
+LiveDataSource::WillMessageType LiveDataSource::willMessageType() {
+	return m_willMessageType;
+}
+
+void LiveDataSource::setWillOwnMessage(const QString& ownMessage) {
+	m_willOwnMessage = ownMessage;
+}
+
+QString LiveDataSource::willOwnMessage() {
+	return m_willOwnMessage;
+}
+
+QVector<QString> LiveDataSource::topicVector() const {
+	return m_subscriptions;
 }

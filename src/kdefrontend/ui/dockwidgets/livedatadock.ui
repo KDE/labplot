@@ -7,13 +7,23 @@
     <x>0</x>
     <y>0</y>
     <width>423</width>
-    <height>252</height>
+    <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="14" column="1">
+    <widget class="QComboBox" name="cbWillTopic"/>
+   </item>
+   <item row="11" column="0" colspan="3">
+    <widget class="QCheckBox" name="chbWill">
+     <property name="text">
+      <string>Set will message for the client</string>
+     </property>
+    </widget>
+   </item>
    <item row="5" column="0" colspan="3">
     <widget class="QPushButton" name="bUpdateNow">
      <property name="text">
@@ -140,6 +150,133 @@
      </property>
      <property name="value">
       <number>1000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="1">
+    <widget class="QLineEdit" name="leWillUpdateInterval"/>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="lWillOwnMessage">
+     <property name="text">
+      <string>Own message</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QLabel" name="lWillTopic">
+     <property name="text">
+      <string>Will topic</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="1">
+    <widget class="QComboBox" name="cbWillQoS">
+     <item>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="15" column="0">
+    <widget class="QLabel" name="lWillQos">
+     <property name="text">
+      <string>Will QoS</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="lWillMessageType">
+     <property name="text">
+      <string>Message type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="1">
+    <widget class="QComboBox" name="cbWillUpdate">
+     <item>
+      <property name="text">
+       <string>Time interval</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>On click</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="13" column="1">
+    <widget class="QLineEdit" name="leWillOwnMessage"/>
+   </item>
+   <item row="16" column="0" colspan="2">
+    <widget class="QCheckBox" name="chbWillRetain">
+     <property name="text">
+      <string>Set will message as retain</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="lWillUpdate">
+     <property name="text">
+      <string>Will Update Type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1">
+    <widget class="QComboBox" name="cbWillMessageType">
+     <item>
+      <property name="text">
+       <string>Own message</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Average of data</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Last message received</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="19" column="0" colspan="2">
+    <widget class="QPushButton" name="bWillUpdateNow">
+     <property name="text">
+      <string>Update will message</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="0">
+    <widget class="QLabel" name="lWillUpdateInterval">
+     <property name="text">
+      <string>Time interval</string>
      </property>
     </widget>
    </item>

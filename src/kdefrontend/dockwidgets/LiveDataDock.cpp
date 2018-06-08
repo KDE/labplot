@@ -42,6 +42,14 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
+	connect(ui.chbWill, &QCheckBox::stateChanged, this, &LiveDataDock::useWillMessage);
+	connect(ui.cbWillQoS, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willQoSChanged);
+	connect(ui.chbWillRetain, &QCheckBox::stateChanged, this, &LiveDataDock::willRetainChanged);
+	connect(ui.cbWillTopic, &QComboBox::currentTextChanged, this, &LiveDataDock::willTopicChanged);
+	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willMessageTypeChanged);
+	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, this, &LiveDataDock::willOwnMessageChanged);
+	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willUpdateChanged);
+
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -101,6 +109,27 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 
     } else
 		ui.sbSampleRate->setValue(fds->sampleRate());
+
+	ui.chbWill->hide();
+	ui.chbWillRetain->hide();
+	ui.cbWillQoS->hide();
+	ui.cbWillMessageType->hide();
+	ui.cbWillTopic->hide();
+	ui.cbWillUpdate->hide();
+	ui.leWillOwnMessage->hide();
+	ui.leWillUpdateInterval->hide();
+	ui.lWillMessageType->hide();
+	ui.lWillOwnMessage->hide();
+	ui.lWillQos->hide();
+	ui.lWillTopic->hide();
+	ui.lWillUpdate->hide();
+	ui.lWillUpdateInterval->hide();
+	ui.bWillUpdateNow->hide();
+
+	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
+		ui.chbWill->show();
+		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
+	}
 }
 
 /*!
@@ -216,3 +245,132 @@ void LiveDataDock::pauseContinueReading() {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }
+
+void LiveDataDock::useWillMessage(int state) {
+	if(state == Qt::Checked) {
+		for (auto* source: m_liveDataSources)
+			source->setMqttWillUse(true);
+
+		ui.chbWillRetain->show();
+		ui.cbWillQoS->show();
+		ui.cbWillMessageType->show();
+		ui.cbWillTopic->show();
+		ui.cbWillUpdate->show();
+		ui.lWillMessageType->show();
+		ui.lWillQos->hide();
+		ui.lWillTopic->show();
+		ui.lWillUpdate->show();
+
+		if (ui.cbWillMessageType->currentIndex() == 0) {
+			ui.leWillOwnMessage->show();
+			ui.lWillOwnMessage->show();
+		}
+
+
+		if(ui.cbWillUpdate->currentIndex() == 0) {
+			ui.leWillUpdateInterval->show();
+			ui.lWillUpdateInterval->show();
+		}
+		else if (ui.cbWillUpdate->currentIndex() == 1)
+			ui.bWillUpdateNow->show();
+
+		for (auto* source: m_liveDataSources) {
+			source->setWillRetain(ui.chbWillRetain->isChecked());
+			source->setWillQoS(ui.cbWillQoS->currentIndex());
+
+			source->setWillMessageType(static_cast<LiveDataSource::WillMessageType> (ui.cbWillMessageType->currentIndex()) );
+			if(static_cast<LiveDataSource::WillMessageType> (ui.cbWillMessageType->currentIndex())
+					== LiveDataSource::WillMessageType::OwnMessage)
+				source->setWillOwnMessage(ui.leWillOwnMessage->text());
+			if(ui.cbWillTopic->count() > 0)
+				source->setWillTopic(ui.cbWillTopic->currentText());
+		}
+	}
+	else if (state == Qt::Unchecked) {
+		for (auto* source: m_liveDataSources)
+			source->setMqttWillUse(false);
+
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.bWillUpdateNow->hide();
+	}
+}
+
+void LiveDataDock::willQoSChanged(int QoS) {
+	for (auto* source: m_liveDataSources)
+		source->setWillQoS(QoS);
+}
+
+void LiveDataDock::willRetainChanged(int state) {
+	if(state == Qt::Checked) {
+		for (auto* source: m_liveDataSources)
+			source->setWillRetain(true);
+	}
+	else if (state == Qt::Unchecked) {
+		for (auto* source: m_liveDataSources)
+			source->setWillRetain(false);
+	}
+}
+
+void LiveDataDock::willTopicChanged(const QString& topic) {
+	for (auto* source: m_liveDataSources)
+		source->setWillTopic(topic);
+}
+
+void LiveDataDock::willMessageTypeChanged(int type) {
+	for (auto* source: m_liveDataSources)
+		source->setWillMessageType(static_cast<LiveDataSource::WillMessageType> (type));
+	if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::OwnMessage) {
+		ui.leWillOwnMessage->show();
+		ui.lWillOwnMessage->show();
+	}
+	else {
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
+	}
+}
+
+void LiveDataDock::willOwnMessageChanged(const QString& message) {
+	for (auto* source: m_liveDataSources)
+		source->setWillOwnMessage(message);
+}
+
+void LiveDataDock::updateTopics() {
+	const LiveDataSource* const fds = m_liveDataSources.at(0);
+	QVector<QString> topics = fds->topicVector();
+
+	if(!topics.isEmpty()) {
+		for(int i = 0; i < topics.count(); i++) {
+			ui.cbWillTopic->addItem(topics[i]);
+		}
+		for (auto* source: m_liveDataSources)
+			source->setWillTopic(ui.cbWillTopic->currentText());
+	}
+	else
+		qDebug()<<"Topic Vector Empty";
+}
+
+void LiveDataDock::willUpdateChanged(int update) {
+	if(update == 0) {
+		ui.bWillUpdateNow->hide();
+		ui.leWillUpdateInterval->show();
+		ui.lWillUpdateInterval->show();
+	}
+	else if (update == 1) {
+		ui.bWillUpdateNow->show();
+		ui.leWillUpdateInterval->hide();
+		ui.lWillUpdateInterval->hide();
+	}
+}
+
