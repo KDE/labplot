@@ -361,19 +361,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
-			case 2:
-				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
-				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
 				for (int i = 1; i <= degree; ++i) {
@@ -392,19 +379,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			case 1:
 				paramNames << "a" << "g" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
-				break;
-			case 2:
-				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2))";
-				paramNames << "a1" << "g1" << "mu1" << "a2" << "g2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("γ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("γ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2) + a3 * g3/(g3^2+(x-mu3)^2))";
-				paramNames << "a1" << "g1" << "mu1" << "a2" << "g2" << "mu2" << "a3" << "g3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("γ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("γ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("γ₃") << UTF8_QSTRING("μ₃");
 				break;
 			default:
 				model = "1./pi * (";
@@ -425,19 +399,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
-			case 2:
-				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
-				break;
 			default:
 				model = "1/pi * (";
 				for (int i = 1; i <= degree; ++i) {
@@ -456,19 +417,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			case 1:
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
-				break;
-			case 2:
-				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
 				break;
 			default:
 				model = "1/4 * (";
