@@ -1309,8 +1309,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				++curveIndex;
 			}
-
-			worksheet->addChildFast(plot);
 		} else {
 			//no support for 3D plots yet
 			//TODO: add an "UnsupportedAspect" here
