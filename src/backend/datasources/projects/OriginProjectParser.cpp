@@ -1201,7 +1201,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& s: layer.texts) {
 				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
-				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+				//TODO: fromLocal8Bit?
+				label->setText(parseOriginText(QString::fromLatin1(s.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
 
@@ -1477,11 +1478,12 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
 	axis->setMinorTicksPen(pen);
 
-
-	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
+	//TODO: fromLocal8Bit?
+	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << titleText.toStdString());
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
+	//TODO: convert special character here too
 	DEBUG("	curve name = " << axisTitle.toStdString());
 	titleText.replace("%(?X)", axisTitle);
 	titleText.replace("%(?Y)", axisTitle);
@@ -1907,6 +1909,9 @@ QString strreverse(const QString &str) {	//QString reversing
 QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	DEBUG("parseOriginTags()");
 	DEBUG("	string: " << str.toStdString());
+	QDEBUG("	string: " << str.toLocal8Bit());
+	QDEBUG("	string: " << str.toUtf8());
+	QDEBUG("	string: " << str.toUcs4());
 	QString line = str;
 
 	//replace \l(...) and %(...) tags
