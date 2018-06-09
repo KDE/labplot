@@ -399,7 +399,12 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 
 QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, int column) const {
 	AbstractAspect* parent = aspect->parentAspect();
-	return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
+	if (!parent)
+		//should never happen since every aspect has a parent.
+		//but just in case we have some errors somewhere, return empty index
+		return QModelIndex();
+	else
+		return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
 	                   column, const_cast<AbstractAspect*>(aspect));
 }
 
