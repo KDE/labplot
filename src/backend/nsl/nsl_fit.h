@@ -83,7 +83,7 @@ double nsl_fit_model_lorentz_param_deriv(unsigned int param, double x, double a,
 double nsl_fit_model_sech_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
 double nsl_fit_model_logistic_param_deriv(unsigned int param, double x, double a, double s, double mu, double weight);
 double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, double mu, double s, double g, double weight);
-double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double w, double mu, double weight);
+double nsl_fit_model_pseudovoigtA_param_deriv(unsigned int param, double x, double a, double eta, double w, double mu, double weight);
 /* growth */
 double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double a, double mu, double s, double weight);
 double nsl_fit_model_tanh_param_deriv(unsigned int param, double x, double a, double mu, double s, double weight);

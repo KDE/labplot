@@ -235,7 +235,17 @@ double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, d
 }
 
 double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double w, double mu, double weight) {
-	//TODO
+	double y = x - mu, norm = sqrt(weight);
+	double sigma = w/sqrt(2.*log(2.));
+
+	if (param == 0)
+		return norm * nsl_sf_pseudovoigt1(y, eta, w);
+	if (param == 1)
+		return a * norm * (gsl_ran_cauchy_pdf(x, w) - gsl_ran_gaussian_pdf(x, sigma));
+	if (param == 2)
+		return a/w * norm * (eta*(1.-2.*w*w)*gsl_ran_cauchy_pdf(x, w) + (eta-1.)*gsl_ran_gaussian_pdf(x, sigma)*(1.-2.*M_LN2*y*y/w/w));
+	if (param == 3)
+		return 2.*a*y/w/w * norm * (eta*M_PI*w*gsl_pow_2(gsl_ran_cauchy_pdf(x, w)) + (1.-eta)*M_LN2*gsl_ran_gaussian_pdf(x, sigma));
 
 	return 0;
 }
