@@ -140,17 +140,30 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		break;
 	case nsl_fit_model_peak:
 		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma(, gamma)
-		if (modelType == nsl_fit_model_voigt) {
+		switch (modelType) {
+		case nsl_fit_model_gaussian:
+		case nsl_fit_model_lorentz:
+		case nsl_fit_model_sech:
+		case nsl_fit_model_logistic:
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
+			}
+			break;
+		case nsl_fit_model_voigt:
 			for (int d = 0; d < degree; d++) {
 				paramStartValues[4*d+1] = xmin + (d+1.)*xrange/(degree+1.);	// mu
 				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
 				paramStartValues[4*d+3] = xrange/(10.*degree);	// gamma
 			}
-		} else {
+			break;
+		case nsl_fit_model_pseudovoigt1:
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
-				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
+				paramStartValues[4*d+1] = 0.5;	// eta
+				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
+				paramStartValues[4*d+3] = xmin + (d+1.)*xrange/(degree+1.);	// mu
 			}
+			break;
 		}
 		break;
 	case nsl_fit_model_growth:
@@ -447,6 +460,17 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					paramNames << "a" + numStr << "mu" + numStr << "s" + numStr << "g" + numStr;
 					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("γ") + indices[i-1];
 				}
+			}
+			break;
+		case nsl_fit_model_pseudovoigt1:
+			switch(degree) {
+			case 1:
+				paramNames << "a" << "eta" << "s" << "mu";
+				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+				break;
+			default:
+				model="";
+				//TODO
 			}
 			break;
 		}
@@ -965,7 +989,27 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
-				break;
+			break;
+		case nsl_fit_model_pseudovoigt1:
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (unsigned int j = 0; j < degree; ++j) {
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
+					const double eta = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
+
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, eta, s, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, eta, s, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, eta, s, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, eta, s, mu, weight[i]));
+				}
+				for (unsigned int j = 0; j < 4*degree; j++)
+					if (fixed[j])
+						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+			}
+			break;
 		}
 		break;
 	case nsl_fit_model_growth: {

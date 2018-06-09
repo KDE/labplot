@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL (non)linear fit functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,10 +41,11 @@ const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
 const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential", "inv_exponential", "fourier"};
 
-const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)"), i18n("Voigt profile")};
+const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)"),
+	i18n("Voigt profile"), i18n("Pseudo-Voigt (same width)")};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * g/(g^2+(x-mu)^2)", "a/pi/s * sech((x-mu)/s)",
-	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)"};
-const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt"};
+	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*((1-eta)*sqrt(log(2))/sqrt(pi)/s * exp(-log(2)*(x-mu)^2/s^2) + eta/pi * s/((x-mu)^2+s^2))"};
+const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt", "pseudovoigt1"};
 
 const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
 	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
@@ -233,6 +234,11 @@ double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, d
 	return 0;
 }
 
+double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double s, double mu, double weight) {
+	//TODO
+
+	return 0;
+}
 
 /* growth */
 double nsl_fit_model_atan_param_deriv(unsigned int param, double x, double A, double mu, double s, double weight) {
