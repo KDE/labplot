@@ -1201,7 +1201,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& s: layer.texts) {
 				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
-				//TODO: fromLocal8Bit?
 				label->setText(parseOriginText(QString::fromLatin1(s.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
@@ -1478,7 +1477,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
 	axis->setMinorTicksPen(pen);
 
-	//TODO: fromLocal8Bit?
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << titleText.toStdString());
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
@@ -1905,13 +1903,58 @@ QString strreverse(const QString &str) {	//QString reversing
 	return QString(ba);
 }
 
+QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {
+	QList<QPair<QString, QString>> replacements;
+
+	replacements << qMakePair(QString("ä"), QString("&auml;"));
+	replacements << qMakePair(QString("ö"), QString("&ouml;"));
+	replacements << qMakePair(QString("ü"), QString("&uuml;"));
+	replacements << qMakePair(QString("Ä"), QString("&Auml;"));
+	replacements << qMakePair(QString("Ö"), QString("&Ouml;"));
+	replacements << qMakePair(QString("Ü"), QString("&Uuml;"));
+	replacements << qMakePair(QString("ß"), QString("&szlig;"));
+	replacements << qMakePair(QString("€"), QString("&euro;"));
+	replacements << qMakePair(QString("£"), QString("&pound;"));
+	replacements << qMakePair(QString("¥"), QString("&yen;"));
+	replacements << qMakePair(QString("§"), QString("&sect;"));
+	replacements << qMakePair(QString("µ"), QString("&micro;"));
+	replacements << qMakePair(QString("¹"), QString("&sup1;"));
+	replacements << qMakePair(QString("²"), QString("&sup2;"));
+	replacements << qMakePair(QString("³"), QString("&sup3;"));
+	replacements << qMakePair(QString("¶"), QString("&para;"));
+	replacements << qMakePair(QString("ø"), QString("&oslash;"));
+	replacements << qMakePair(QString("æ"), QString("&aelig;"));
+	replacements << qMakePair(QString("ð"), QString("&eth;"));
+	replacements << qMakePair(QString("ħ"), QString("&hbar;"));
+	replacements << qMakePair(QString("ĸ"), QString("&kappa;"));
+	replacements << qMakePair(QString("¢"), QString("&cent;"));
+	replacements << qMakePair(QString("¼"), QString("&frac14;"));
+	replacements << qMakePair(QString("½"), QString("&frac12;"));
+	replacements << qMakePair(QString("¾"), QString("&frac34;"));
+	replacements << qMakePair(QString("¬"), QString("&not;"));
+	replacements << qMakePair(QString("©"), QString("&copy;"));
+	replacements << qMakePair(QString("±"), QString("&plusmn;"));
+	replacements << qMakePair(QString("¿"), QString("&iquest;"));
+	replacements << qMakePair(QString("×"), QString("&times;"));
+	replacements << qMakePair(QString("°"), QString("&deg;"));
+	// TODO: probably missed some. Is there any generic method?
+//	replacements << qMakePair(QString(""), QString(""));
+
+	return replacements;
+}
+
+QString OriginProjectParser::replaceSpecialChars(QString text) const {
+	QString t = text;
+        for (auto const &r : charReplacementList())
+                t.replace(r.first, r.second);
+	return t;
+}
+
 // taken from SciDAVis
 QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	DEBUG("parseOriginTags()");
 	DEBUG("	string: " << str.toStdString());
-	QDEBUG("	string: " << str.toLocal8Bit());
-	QDEBUG("	string: " << str.toUtf8());
-	QDEBUG("	string: " << str.toUcs4());
+	QDEBUG("	UTF8 string: " << str.toUtf8());
 	QString line = str;
 
 	//replace \l(...) and %(...) tags
@@ -1928,38 +1971,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	}
 
 	// replace umlauts etc.
-	// TODO: probably missed some. Is there any generic method?
-	line.replace("ä", "&auml;");
-	line.replace("ö", "&ouml;");
-	line.replace("ü", "&uuml;");
-	line.replace("Ä", "&Auml;");
-	line.replace("Ö", "&Ouml;");
-	line.replace("Ü", "&Uuml;");
-	line.replace("ß", "&szlig;");
-	line.replace("€", "&euro;");
-	line.replace("£", "&pound;");
-	line.replace("¥", "&yen;");
-	line.replace("§", "&sect;");
-	line.replace("µ", "&micro;");
-	line.replace("¹", "&sup1;");
-	line.replace("²", "&sup2;");
-	line.replace("³", "&sup3;");
-	line.replace("¶", "&para;");
-	line.replace("ø", "&oslash;");
-	line.replace("æ", "&aelig;");
-	line.replace("ð", "&eth;");
-	line.replace("ħ", "&hbar;");
-	line.replace("ĸ", "&kappa;");
-	line.replace("¢", "&cent;");
-	line.replace("¼", "&frac14;");
-	line.replace("½", "&frac12;");
-	line.replace("¾", "&frac34;");
-	line.replace("¬", "&not;");
-	line.replace("©", "&copy;");
-	line.replace("±", "&plusmn;");
-	line.replace("¿", "&iquest;");
-	line.replace("×", "&times;");
-	line.replace("°", "&deg;");
+	line = replaceSpecialChars(line);
 
 	// replace tabs	(not really supported)
 	line.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
