@@ -175,6 +175,7 @@ struct func _functions[] = {
 	{"dawson", (func_t)nsl_sf_dawson},
 	{"voigt", (func_t)nsl_sf_voigt},
 #endif
+	{"pseudovoigt1", (func_t)nsl_sf_pseudovoigt1},
 	/* Exponential Functions */
 	{"exp", (func_t)gsl_sf_exp},
 	{"exp_mult", (func_t)gsl_sf_exp_mult},

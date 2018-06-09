@@ -1086,14 +1086,20 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//axes
 			//x bottom
-			if (layer.curves.size()){
+			if (layer.curves.size()) {
 				Origin::GraphCurve originCurve = layer.curves[0];
+				QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+				//TODO: "Partikelgrö"
+				DEBUG("	xColumnName = " << xColumnName.toStdString());
+				QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
+				QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+
 				if (!originXAxis.formatAxis[0].hidden) {
 					Axis* axis = new Axis("x", Axis::AxisHorizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisBottom);
 					plot->addChildFast(axis);
-					loadAxis(originXAxis, axis, 0, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					loadAxis(originXAxis, axis, 0, xColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1103,7 +1109,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setPosition(Axis::AxisTop);
 					axis->setSuppressRetransform(true);
 					plot->addChildFast(axis);
-					loadAxis(originXAxis, axis, 1, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					loadAxis(originXAxis, axis, 1, xColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1113,7 +1119,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisLeft);
 					plot->addChildFast(axis);
-					loadAxis(originYAxis, axis, 0, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					loadAxis(originYAxis, axis, 0, yColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1123,7 +1129,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisRight);
 					plot->addChildFast(axis);
-					loadAxis(originYAxis, axis, 1, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					loadAxis(originYAxis, axis, 1, yColumnName);
 					axis->setSuppressRetransform(false);
 				}
 			} else {
@@ -1201,7 +1207,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& s: layer.texts) {
 				DEBUG("EXTRA TEXT = " << s.text.c_str());
 				TextLabel* label = new TextLabel("text label");
-				label->setText(parseOriginText(QString::fromLocal8Bit(s.text.c_str())));
+				label->setText(parseOriginText(QString::fromLatin1(s.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
 
@@ -1477,11 +1483,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->setMinorTicksDirection( (Axis::TicksFlags) axisFormat.minorTicksType);
 	axis->setMinorTicksPen(pen);
 
-
-	QString titleText = parseOriginText(QString::fromLocal8Bit(axisFormat.label.text.c_str()));
+	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << titleText.toStdString());
 	//TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 	//TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
+	//TODO: convert special character here too
 	DEBUG("	curve name = " << axisTitle.toStdString());
 	titleText.replace("%(?X)", axisTitle);
 	titleText.replace("%(?Y)", axisTitle);
@@ -1903,10 +1909,128 @@ QString strreverse(const QString &str) {	//QString reversing
 	return QString(ba);
 }
 
+QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {
+	QList<QPair<QString, QString>> replacements;
+
+	// TODO: probably missed some. Is there any generic method?
+	replacements << qMakePair(QString("ä"), QString("&auml;"));
+	replacements << qMakePair(QString("ö"), QString("&ouml;"));
+	replacements << qMakePair(QString("ü"), QString("&uuml;"));
+	replacements << qMakePair(QString("Ä"), QString("&Auml;"));
+	replacements << qMakePair(QString("Ö"), QString("&Ouml;"));
+	replacements << qMakePair(QString("Ü"), QString("&Uuml;"));
+	replacements << qMakePair(QString("ß"), QString("&szlig;"));
+	replacements << qMakePair(QString("€"), QString("&euro;"));
+	replacements << qMakePair(QString("£"), QString("&pound;"));
+	replacements << qMakePair(QString("¥"), QString("&yen;"));
+	replacements << qMakePair(QString("¤"), QString("&curren;"));
+	replacements << qMakePair(QString("¦"), QString("&brvbar;"));
+	replacements << qMakePair(QString("§"), QString("&sect;"));
+	replacements << qMakePair(QString("µ"), QString("&micro;"));
+	replacements << qMakePair(QString("¹"), QString("&sup1;"));
+	replacements << qMakePair(QString("²"), QString("&sup2;"));
+	replacements << qMakePair(QString("³"), QString("&sup3;"));
+	replacements << qMakePair(QString("¶"), QString("&para;"));
+	replacements << qMakePair(QString("ø"), QString("&oslash;"));
+	replacements << qMakePair(QString("æ"), QString("&aelig;"));
+	replacements << qMakePair(QString("ð"), QString("&eth;"));
+	replacements << qMakePair(QString("ħ"), QString("&hbar;"));
+	replacements << qMakePair(QString("ĸ"), QString("&kappa;"));
+	replacements << qMakePair(QString("¢"), QString("&cent;"));
+	replacements << qMakePair(QString("¼"), QString("&frac14;"));
+	replacements << qMakePair(QString("½"), QString("&frac12;"));
+	replacements << qMakePair(QString("¾"), QString("&frac34;"));
+	replacements << qMakePair(QString("¬"), QString("&not;"));
+	replacements << qMakePair(QString("©"), QString("&copy;"));
+	replacements << qMakePair(QString("®"), QString("&reg;"));
+	replacements << qMakePair(QString("ª"), QString("&ordf;"));
+	replacements << qMakePair(QString("º"), QString("&ordm;"));
+	replacements << qMakePair(QString("±"), QString("&plusmn;"));
+	replacements << qMakePair(QString("¿"), QString("&iquest;"));
+	replacements << qMakePair(QString("×"), QString("&times;"));
+	replacements << qMakePair(QString("°"), QString("&deg;"));
+	replacements << qMakePair(QString("«"), QString("&laquo;"));
+	replacements << qMakePair(QString("»"), QString("&raquo;"));
+	replacements << qMakePair(QString("¯"), QString("&macr;"));
+	replacements << qMakePair(QString("¸"), QString("&cedil;"));
+	replacements << qMakePair(QString("À"), QString("&Agrave;"));
+	replacements << qMakePair(QString("Á"), QString("&Aacute;"));
+	replacements << qMakePair(QString("Â"), QString("&Acirc;"));
+	replacements << qMakePair(QString("Ã"), QString("&Atilde;"));
+	replacements << qMakePair(QString("Å"), QString("&Aring;"));
+	replacements << qMakePair(QString("Æ"), QString("&AElig;"));
+	replacements << qMakePair(QString("Ç"), QString("&Ccedil;"));
+	replacements << qMakePair(QString("È"), QString("&Egrave;"));
+	replacements << qMakePair(QString("É"), QString("&Eacute;"));
+	replacements << qMakePair(QString("Ê"), QString("&Ecirc;"));
+	replacements << qMakePair(QString("Ë"), QString("&Euml;"));
+	replacements << qMakePair(QString("Ì"), QString("&Igrave;"));
+	replacements << qMakePair(QString("Í"), QString("&Iacute;"));
+	replacements << qMakePair(QString("Î"), QString("&Icirc;"));
+	replacements << qMakePair(QString("Ï"), QString("&Iuml;"));
+	replacements << qMakePair(QString("Ð"), QString("&ETH;"));
+	replacements << qMakePair(QString("Ñ"), QString("&Ntilde;"));
+	replacements << qMakePair(QString("Ò"), QString("&Ograve;"));
+	replacements << qMakePair(QString("Ó"), QString("&Oacute;"));
+	replacements << qMakePair(QString("Ô"), QString("&Ocirc;"));
+	replacements << qMakePair(QString("Õ"), QString("&Otilde;"));
+	replacements << qMakePair(QString("Ù"), QString("&Ugrave;"));
+	replacements << qMakePair(QString("Ú"), QString("&Uacute;"));
+	replacements << qMakePair(QString("Û"), QString("&Ucirc;"));
+	replacements << qMakePair(QString("Ý"), QString("&Yacute;"));
+	replacements << qMakePair(QString("Þ"), QString("&THORN;"));
+	replacements << qMakePair(QString("à"), QString("&agrave;"));
+	replacements << qMakePair(QString("á"), QString("&aacute;"));
+	replacements << qMakePair(QString("â"), QString("&acirc;"));
+	replacements << qMakePair(QString("ã"), QString("&atilde;"));
+	replacements << qMakePair(QString("å"), QString("&aring;"));
+	replacements << qMakePair(QString("ç"), QString("&ccedil;"));
+	replacements << qMakePair(QString("è"), QString("&egrave;"));
+	replacements << qMakePair(QString("é"), QString("&eacute;"));
+	replacements << qMakePair(QString("ê"), QString("&ecirc;"));
+	replacements << qMakePair(QString("ë"), QString("&euml;"));
+	replacements << qMakePair(QString("ì"), QString("&igrave;"));
+	replacements << qMakePair(QString("í"), QString("&iacute;"));
+	replacements << qMakePair(QString("î"), QString("&icirc;"));
+	replacements << qMakePair(QString("ï"), QString("&iuml;"));
+	replacements << qMakePair(QString("ñ"), QString("&ntilde;"));
+	replacements << qMakePair(QString("ò"), QString("&ograve;"));
+	replacements << qMakePair(QString("ó"), QString("&oacute;"));
+	replacements << qMakePair(QString("ô"), QString("&ocirc;"));
+	replacements << qMakePair(QString("õ"), QString("&otilde;"));
+	replacements << qMakePair(QString("÷"), QString("&divide;"));
+	replacements << qMakePair(QString("ù"), QString("&ugrave;"));
+	replacements << qMakePair(QString("ú"), QString("&uacute;"));
+	replacements << qMakePair(QString("û"), QString("&ucirc;"));
+	replacements << qMakePair(QString("ý"), QString("&yacute;"));
+	replacements << qMakePair(QString("þ"), QString("&thorn;"));
+	replacements << qMakePair(QString("ÿ"), QString("&yuml;"));
+	replacements << qMakePair(QString("Œ"), QString("&#338;"));
+	replacements << qMakePair(QString("œ"), QString("&#339;"));
+	replacements << qMakePair(QString("Š"), QString("&#352;"));
+	replacements << qMakePair(QString("š"), QString("&#353;"));
+	replacements << qMakePair(QString("Ÿ"), QString("&#376;"));
+	replacements << qMakePair(QString("†"), QString("&#8224;"));
+	replacements << qMakePair(QString("‡"), QString("&#8225;"));
+	replacements << qMakePair(QString("…"), QString("&#8230;"));
+	replacements << qMakePair(QString("‰"), QString("&#8240;"));
+	replacements << qMakePair(QString("™"), QString("&#8482;"));
+
+	return replacements;
+}
+
+QString OriginProjectParser::replaceSpecialChars(QString text) const {
+	QString t = text;
+        for (auto const &r : charReplacementList())
+                t.replace(r.first, r.second);
+	return t;
+}
+
 // taken from SciDAVis
 QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	DEBUG("parseOriginTags()");
 	DEBUG("	string: " << str.toStdString());
+	QDEBUG("	UTF8 string: " << str.toUtf8());
 	QString line = str;
 
 	//replace \l(...) and %(...) tags
@@ -1923,38 +2047,7 @@ QString OriginProjectParser::parseOriginTags(const QString &str) const {
 	}
 
 	// replace umlauts etc.
-	// TODO: probably missed some. Is there any generic method?
-	line.replace("ä", "&auml;");
-	line.replace("ö", "&ouml;");
-	line.replace("ü", "&uuml;");
-	line.replace("Ä", "&Auml;");
-	line.replace("Ö", "&Ouml;");
-	line.replace("Ü", "&Uuml;");
-	line.replace("ß", "&szlig;");
-	line.replace("€", "&euro;");
-	line.replace("£", "&pound;");
-	line.replace("¥", "&yen;");
-	line.replace("§", "&sect;");
-	line.replace("µ", "&micro;");
-	line.replace("¹", "&sup1;");
-	line.replace("²", "&sup2;");
-	line.replace("³", "&sup3;");
-	line.replace("¶", "&para;");
-	line.replace("ø", "&oslash;");
-	line.replace("æ", "&aelig;");
-	line.replace("ð", "&eth;");
-	line.replace("ħ", "&hbar;");
-	line.replace("ĸ", "&kappa;");
-	line.replace("¢", "&cent;");
-	line.replace("¼", "&frac14;");
-	line.replace("½", "&frac12;");
-	line.replace("¾", "&frac34;");
-	line.replace("¬", "&not;");
-	line.replace("©", "&copy;");
-	line.replace("±", "&plusmn;");
-	line.replace("¿", "&iquest;");
-	line.replace("×", "&times;");
-	line.replace("°", "&deg;");
+	line = replaceSpecialChars(line);
 
 	// replace tabs	(not really supported)
 	line.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
