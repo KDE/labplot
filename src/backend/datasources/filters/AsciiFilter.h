@@ -70,6 +70,8 @@ public:
 
     void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
+	double mqttColumnAverage(const QString&,  AbstractDataSource*);
+	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*);
 
 	void setCommentCharacter(const QString&);
 	QString commentCharacter() const;

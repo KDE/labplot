@@ -81,6 +81,11 @@ public:
 		LastMessage
 	};
 
+	enum WillUpdateType {
+		UpdateTimeInterval = 0,
+		OnClick
+	};
+
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~LiveDataSource() override;
 
@@ -190,6 +195,14 @@ public:
 	void setWillOwnMessage(const QString&);
 	QString willOwnMessage();
 
+	WillUpdateType willUpdateType();
+	void setWillUpdateType(WillUpdateType);
+
+	int willTimeInterval();
+	void setWillTimeInterval(int);
+
+	void setWillForMqtt();
+
 private:
 	void initActions();
 	void watch();
@@ -250,6 +263,10 @@ private:
 	quint8 m_willQoS;
 	WillMessageType m_willMessageType;
 	QString m_willOwnMessage;
+	QString m_willLastMessage;
+	QTimer* m_willTimer;
+	int m_willTimeInterval;
+	WillUpdateType m_willUpdateType;
 
 public slots:
 	void read();

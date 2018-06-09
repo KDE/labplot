@@ -49,7 +49,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willMessageTypeChanged);
 	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, this, &LiveDataDock::willOwnMessageChanged);
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willUpdateChanged);
-
+	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
+	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -128,7 +129,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
 		ui.chbWill->show();
-		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
+		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);		
 	}
 }
 
@@ -284,6 +285,9 @@ void LiveDataDock::useWillMessage(int state) {
 				source->setWillOwnMessage(ui.leWillOwnMessage->text());
 			if(ui.cbWillTopic->count() > 0)
 				source->setWillTopic(ui.cbWillTopic->currentText());
+
+			source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(ui.cbWillUpdate->currentIndex()));
+			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
 		}
 	}
 	else if (state == Qt::Unchecked) {
@@ -361,16 +365,32 @@ void LiveDataDock::updateTopics() {
 		qDebug()<<"Topic Vector Empty";
 }
 
-void LiveDataDock::willUpdateChanged(int update) {
-	if(update == 0) {
+void LiveDataDock::willUpdateChanged(int updateType) {
+	for (auto* source: m_liveDataSources)
+		source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(updateType));
+
+	if(static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::UpdateTimeInterval) {
 		ui.bWillUpdateNow->hide();
 		ui.leWillUpdateInterval->show();
 		ui.lWillUpdateInterval->show();
+
+		for (auto* source: m_liveDataSources)
+			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
 	}
-	else if (update == 1) {
+	else if (static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::OnClick) {
 		ui.bWillUpdateNow->show();
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
 	}
+
 }
 
+void LiveDataDock::willUpdateNow() {
+	for (auto* source: m_liveDataSources)
+		source->setWillForMqtt();
+}
+
+void LiveDataDock::willUpdateIntervalChanged(const QString& interval) {
+	for (auto* source: m_liveDataSources)
+		source->setWillTimeInterval(interval.toInt());
+}

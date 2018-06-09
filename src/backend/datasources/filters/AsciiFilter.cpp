@@ -2648,3 +2648,65 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 	}
 	list = dataStrings;
 }
+
+double AsciiFilter::mqttColumnAverage(const QString& topic,  AbstractDataSource* dataSource) {
+	return d->mqttColumnAverage(topic, dataSource);
+}
+
+double AsciiFilterPrivate::mqttColumnAverage(const QString& topic,  AbstractDataSource* dataSource) {
+	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+
+	int topicToCol;
+	if (createIndexEnabled)
+		topicToCol = spreadsheet->topicIndex(topic) + 1;
+	else
+		topicToCol = spreadsheet->topicIndex(topic);
+	double sum = 0;
+	int count = 0;
+
+	switch (columnModes[topicToCol]) {
+	case AbstractColumn::Numeric: {
+		QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(topicToCol)->data());
+		for(int i = 0; i < vector->count(); i++){
+			sum += vector->operator [](i);
+			count++;
+		}
+		break;
+	}
+	case AbstractColumn::Integer: {
+		QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(topicToCol)->data());
+		for(int i = 0; i < vector->count(); i++){
+			sum += vector->operator [](i);
+			count++;
+		}
+		break;
+	}
+	case AbstractColumn::Text:
+		break;
+	case AbstractColumn::DateTime:
+		break;
+		//TODO
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		break;
+	}
+
+	return sum/count;
+}
+
+
+AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource){
+	return d->mqttColumnMode(topic, dataSource);
+}
+
+AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource){
+	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+
+	int topicToCol;
+	if (createIndexEnabled)
+		topicToCol = spreadsheet->topicIndex(topic) + 1;
+	else
+		topicToCol = spreadsheet->topicIndex(topic);
+
+	return columnModes[topicToCol]	;
+}

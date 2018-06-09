@@ -75,6 +75,7 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_bytesRead(0),
 	  m_filter(nullptr),
 	  m_updateTimer(new QTimer(this)),
+	  m_willTimer(new QTimer(this)),
 	  m_fileSystemWatcher(nullptr),
 	  m_file(nullptr),
 	  m_localSocket(nullptr),
@@ -88,7 +89,8 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
-    connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);    
+	connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
+	connect(m_willTimer, &QTimer::timeout, this, &LiveDataSource::setWillForMqtt);
 	//connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived );
     //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::mqttMessageReceived);
 }
@@ -1187,8 +1189,9 @@ void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const 
 }
 
 void LiveDataSource::onMqttConnect() {
-	qDebug()<<"connection made in live data source";
-	/*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
+	if(!m_mqttUseWill) {
+		qDebug()<<"connection made in live data source";
+		/*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
 	m_device = m_mqttTcp;
 	qDebug()<<m_device->objectName()<<"  "<<m_device->openMode();
 	qDebug() <<m_device<< "     "<<qobject_cast<QTcpSocket *>(m_device)->state();
@@ -1196,20 +1199,35 @@ void LiveDataSource::onMqttConnect() {
 		//connect(m_mqttTcp, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
 		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
 	qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"  "<<m_device->objectName();*/
-	QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
-	while(i.hasNext()) {
-		i.next();
-		QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
-		if(temp) {
-			qDebug()<<temp->topic()<<"  "<<temp->qos();
-			m_messageArrived[temp->topic().filter()] = false;
-			m_subscriptions.push_back(temp->topic().filter());
-			//m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
-			connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+		QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+		while(i.hasNext()) {
+			i.next();
+			QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+			if(temp) {
+				qDebug()<<temp->topic()<<"  "<<temp->qos();
+				m_messageArrived[temp->topic().filter()] = false;
+				m_subscriptions.push_back(temp->topic().filter());
+				//m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
+				connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+			}
+		}
+		//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
+		emit mqttSubscribed();
+	}
+	else {
+		qDebug() << "Resubscribing after will set";
+		QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+		while(i.hasNext()) {
+			i.next();
+			QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+			if(temp) {
+				qDebug()<<temp->topic()<<"  "<<temp->qos();
+				connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+			}
+			else
+				qDebug()<<"Couldn't subscribe after will change";
 		}
 	}
-	//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
-	emit mqttSubscribed();
 }
 
 void LiveDataSource::mqttMessageReceived(const QByteArray& msg, const QMqttTopicName& topic) {
@@ -1231,6 +1249,9 @@ void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
 	}
 	else
 		m_messagePuffer[msg.topic()].push_back(msg);
+
+	if(msg.topic().name() == m_willTopic)
+		m_willLastMessage = QString(msg.payload());
 
 	bool check = true;
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
@@ -1310,6 +1331,8 @@ bool LiveDataSource::checkAllArrived() {
 
 void LiveDataSource::setMqttWillUse(bool use) {
 	m_mqttUseWill = use;
+	if(use == false)
+		m_willTimer->stop();
 }
 
 bool LiveDataSource::mqttWillUse() {
@@ -1318,6 +1341,7 @@ bool LiveDataSource::mqttWillUse() {
 
 void  LiveDataSource::setWillTopic(const QString& topic) {
 	m_willTopic = topic;
+	m_willLastMessage.clear();
 }
 
 QString LiveDataSource::willTopic() {
@@ -1356,4 +1380,67 @@ QString LiveDataSource::willOwnMessage() {
 
 QVector<QString> LiveDataSource::topicVector() const {
 	return m_subscriptions;
+}
+
+void LiveDataSource::setWillForMqtt() {
+	if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
+		qDebug() << "Disconnecting from host";
+		m_client->disconnectFromHost();
+
+		m_client->setWillQoS(m_willQoS);
+		qDebug()<<"Will QoS" << m_willQoS;
+
+		m_client->setWillRetain(m_willRetain);
+		qDebug()<<"Will retain" << m_willRetain;
+
+		m_client->setWillTopic(m_willTopic);
+		qDebug()<<"Will Topic" << m_willTopic;
+
+		switch (m_willMessageType) {
+		case WillMessageType::OwnMessage:
+			m_client->setWillMessage(m_willOwnMessage.toUtf8());
+			qDebug()<<"Will own message" << m_willOwnMessage;
+			break;
+		case WillMessageType::AverageData:
+			if(dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Integer ||
+					dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Numeric) {
+				m_client->setWillMessage(QString::number(dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnAverage(m_willTopic, this)).toUtf8() );
+				qDebug() << "Will average message: "<< QString(m_client->willMessage());
+			}
+			else {
+				m_client->setWillMessage(QString("").toUtf8());
+				qDebug() << "Will average message: "<< QString(m_client->willMessage());
+			}
+			break;
+		case WillMessageType::LastMessage:
+			m_client->setWillMessage(m_willLastMessage.toUtf8());
+			qDebug()<<"Will last message:\n" << m_willLastMessage;
+			break;
+		default:
+			break;
+		}
+
+		m_client->connectToHost();
+		qDebug()<< "Reconnect to host";
+	}
+}
+
+LiveDataSource::WillUpdateType LiveDataSource::willUpdateType(){
+	return m_willUpdateType;
+}
+
+void LiveDataSource::setWillUpdateType(WillUpdateType updateType) {
+	m_willUpdateType = updateType;
+	if (updateType == WillUpdateType::OnClick)
+		m_willTimer->stop();
+}
+
+int LiveDataSource::willTimeInterval() {
+	return m_willTimeInterval;
+}
+
+void LiveDataSource::setWillTimeInterval(int interval) {
+	m_willTimeInterval = interval;
+	if(m_willUpdateType == WillUpdateType::UpdateTimeInterval)
+		m_willTimer->start(interval);
 }

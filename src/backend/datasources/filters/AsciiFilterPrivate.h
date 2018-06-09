@@ -55,6 +55,8 @@ public:
 	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
     int prepareMqttToRead(const QString&,  const QString&);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
+	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*);
+	double mqttColumnAverage(const QString&,  AbstractDataSource*);
 
 	const AsciiFilter* q;
 

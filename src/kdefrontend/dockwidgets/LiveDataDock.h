@@ -68,6 +68,8 @@ private slots:
 	void willOwnMessageChanged(const QString&);
 	void updateTopics();
 	void willUpdateChanged(int);
+	void willUpdateNow();
+	void willUpdateIntervalChanged(const QString&);
 
 public slots:
 
