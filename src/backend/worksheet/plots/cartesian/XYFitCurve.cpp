@@ -470,7 +470,14 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				break;
 			default:
 				model="";
-				//TODO
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += 'a' + numStr + "*pseudovoigt1(x-mu" + numStr + ",eta" + numStr + ",w" + numStr + ')';
+					paramNames << "a" + numStr << "eta" + numStr << "w" + numStr << "mu" + numStr;
+					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("η") + indices[i-1] << 'w' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+				}
 			}
 			break;
 		}

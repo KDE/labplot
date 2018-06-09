@@ -151,17 +151,17 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 #endif
 }
 
-double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma, double mu) {
+double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma) {
 	if (sigma == 0 || gamma == 0)
 		return 0;
 	//TODO: what if eta < 0 or > 1?
 
-	return (1. - eta) * gsl_ran_gaussian_pdf(x - mu, sigma) + eta * gsl_ran_cauchy_pdf(x - mu, gamma);
+	return (1. - eta) * gsl_ran_gaussian_pdf(x, sigma) + eta * gsl_ran_cauchy_pdf(x, gamma);
 }
 
-double nsl_sf_pseudovoigt1(double x, double eta, double w, double mu) {
+double nsl_sf_pseudovoigt1(double x, double eta, double w) {
 	// 2w - FWHM, sigma_G = w/sqrt(2ln(2))
-	return nsl_sf_pseudovoigt(x, eta, w/sqrt(2.*log(2.)), w, mu);
+	return nsl_sf_pseudovoigt(x, eta, w/sqrt(2.*log(2.)), w);
 }
 
 /* wrapper for GSL functions with integer parameters */

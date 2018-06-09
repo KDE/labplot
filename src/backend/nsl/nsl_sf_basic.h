@@ -70,8 +70,8 @@ double nsl_sf_im_w_of_z(complex double z);
 #endif
 double nsl_sf_dawson(double x);
 double nsl_sf_voigt(double x, double sigma, double gamma);
-double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma, double mu);
-double nsl_sf_pseudovoigt1(double x, double eta, double w, double mu);
+double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma);
+double nsl_sf_pseudovoigt1(double x, double eta, double w);
 
 /* wrapper for GSL functions with integer parameters */
 /* mathematical functions */
