@@ -44,7 +44,7 @@ const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential",
 const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)"),
 	i18n("Voigt profile"), i18n("Pseudo-Voigt (same width)")};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * g/(g^2+(x-mu)^2)", "a/pi/s * sech((x-mu)/s)",
-	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*((1-eta)*sqrt(log(2))/sqrt(pi)/s * exp(-log(2)*(x-mu)^2/s^2) + eta/pi * s/((x-mu)^2+s^2))"};
+	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*pseudovoigt1(x, eta, w, mu)"};
 const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt", "pseudovoigt1"};
 
 const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
@@ -234,7 +234,7 @@ double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, d
 	return 0;
 }
 
-double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double s, double mu, double weight) {
+double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double w, double mu, double weight) {
 	//TODO
 
 	return 0;
