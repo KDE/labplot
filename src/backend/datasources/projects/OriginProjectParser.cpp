@@ -1906,6 +1906,7 @@ QString strreverse(const QString &str) {	//QString reversing
 QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {
 	QList<QPair<QString, QString>> replacements;
 
+	// TODO: probably missed some. Is there any generic method?
 	replacements << qMakePair(QString("ä"), QString("&auml;"));
 	replacements << qMakePair(QString("ö"), QString("&ouml;"));
 	replacements << qMakePair(QString("ü"), QString("&uuml;"));
@@ -1916,6 +1917,8 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 	replacements << qMakePair(QString("€"), QString("&euro;"));
 	replacements << qMakePair(QString("£"), QString("&pound;"));
 	replacements << qMakePair(QString("¥"), QString("&yen;"));
+	replacements << qMakePair(QString("¤"), QString("&curren;"));
+	replacements << qMakePair(QString("¦"), QString("&brvbar;"));
 	replacements << qMakePair(QString("§"), QString("&sect;"));
 	replacements << qMakePair(QString("µ"), QString("&micro;"));
 	replacements << qMakePair(QString("¹"), QString("&sup1;"));
@@ -1933,12 +1936,79 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 	replacements << qMakePair(QString("¾"), QString("&frac34;"));
 	replacements << qMakePair(QString("¬"), QString("&not;"));
 	replacements << qMakePair(QString("©"), QString("&copy;"));
+	replacements << qMakePair(QString("®"), QString("&reg;"));
+	replacements << qMakePair(QString("ª"), QString("&ordf;"));
+	replacements << qMakePair(QString("º"), QString("&ordm;"));
 	replacements << qMakePair(QString("±"), QString("&plusmn;"));
 	replacements << qMakePair(QString("¿"), QString("&iquest;"));
 	replacements << qMakePair(QString("×"), QString("&times;"));
 	replacements << qMakePair(QString("°"), QString("&deg;"));
-	// TODO: probably missed some. Is there any generic method?
-//	replacements << qMakePair(QString(""), QString(""));
+	replacements << qMakePair(QString("«"), QString("&laquo;"));
+	replacements << qMakePair(QString("»"), QString("&raquo;"));
+	replacements << qMakePair(QString("¯"), QString("&macr;"));
+	replacements << qMakePair(QString("¸"), QString("&cedil;"));
+	replacements << qMakePair(QString("À"), QString("&Agrave;"));
+	replacements << qMakePair(QString("Á"), QString("&Aacute;"));
+	replacements << qMakePair(QString("Â"), QString("&Acirc;"));
+	replacements << qMakePair(QString("Ã"), QString("&Atilde;"));
+	replacements << qMakePair(QString("Å"), QString("&Aring;"));
+	replacements << qMakePair(QString("Æ"), QString("&AElig;"));
+	replacements << qMakePair(QString("Ç"), QString("&Ccedil;"));
+	replacements << qMakePair(QString("È"), QString("&Egrave;"));
+	replacements << qMakePair(QString("É"), QString("&Eacute;"));
+	replacements << qMakePair(QString("Ê"), QString("&Ecirc;"));
+	replacements << qMakePair(QString("Ë"), QString("&Euml;"));
+	replacements << qMakePair(QString("Ì"), QString("&Igrave;"));
+	replacements << qMakePair(QString("Í"), QString("&Iacute;"));
+	replacements << qMakePair(QString("Î"), QString("&Icirc;"));
+	replacements << qMakePair(QString("Ï"), QString("&Iuml;"));
+	replacements << qMakePair(QString("Ð"), QString("&ETH;"));
+	replacements << qMakePair(QString("Ñ"), QString("&Ntilde;"));
+	replacements << qMakePair(QString("Ò"), QString("&Ograve;"));
+	replacements << qMakePair(QString("Ó"), QString("&Oacute;"));
+	replacements << qMakePair(QString("Ô"), QString("&Ocirc;"));
+	replacements << qMakePair(QString("Õ"), QString("&Otilde;"));
+	replacements << qMakePair(QString("Ù"), QString("&Ugrave;"));
+	replacements << qMakePair(QString("Ú"), QString("&Uacute;"));
+	replacements << qMakePair(QString("Û"), QString("&Ucirc;"));
+	replacements << qMakePair(QString("Ý"), QString("&Yacute;"));
+	replacements << qMakePair(QString("Þ"), QString("&THORN;"));
+	replacements << qMakePair(QString("à"), QString("&agrave;"));
+	replacements << qMakePair(QString("á"), QString("&aacute;"));
+	replacements << qMakePair(QString("â"), QString("&acirc;"));
+	replacements << qMakePair(QString("ã"), QString("&atilde;"));
+	replacements << qMakePair(QString("å"), QString("&aring;"));
+	replacements << qMakePair(QString("ç"), QString("&ccedil;"));
+	replacements << qMakePair(QString("è"), QString("&egrave;"));
+	replacements << qMakePair(QString("é"), QString("&eacute;"));
+	replacements << qMakePair(QString("ê"), QString("&ecirc;"));
+	replacements << qMakePair(QString("ë"), QString("&euml;"));
+	replacements << qMakePair(QString("ì"), QString("&igrave;"));
+	replacements << qMakePair(QString("í"), QString("&iacute;"));
+	replacements << qMakePair(QString("î"), QString("&icirc;"));
+	replacements << qMakePair(QString("ï"), QString("&iuml;"));
+	replacements << qMakePair(QString("ñ"), QString("&ntilde;"));
+	replacements << qMakePair(QString("ò"), QString("&ograve;"));
+	replacements << qMakePair(QString("ó"), QString("&oacute;"));
+	replacements << qMakePair(QString("ô"), QString("&ocirc;"));
+	replacements << qMakePair(QString("õ"), QString("&otilde;"));
+	replacements << qMakePair(QString("÷"), QString("&divide;"));
+	replacements << qMakePair(QString("ù"), QString("&ugrave;"));
+	replacements << qMakePair(QString("ú"), QString("&uacute;"));
+	replacements << qMakePair(QString("û"), QString("&ucirc;"));
+	replacements << qMakePair(QString("ý"), QString("&yacute;"));
+	replacements << qMakePair(QString("þ"), QString("&thorn;"));
+	replacements << qMakePair(QString("ÿ"), QString("&yuml;"));
+	replacements << qMakePair(QString("Œ"), QString("&#338;"));
+	replacements << qMakePair(QString("œ"), QString("&#339;"));
+	replacements << qMakePair(QString("Š"), QString("&#352;"));
+	replacements << qMakePair(QString("š"), QString("&#353;"));
+	replacements << qMakePair(QString("Ÿ"), QString("&#376;"));
+	replacements << qMakePair(QString("†"), QString("&#8224;"));
+	replacements << qMakePair(QString("‡"), QString("&#8225;"));
+	replacements << qMakePair(QString("…"), QString("&#8230;"));
+	replacements << qMakePair(QString("‰"), QString("&#8240;"));
+	replacements << qMakePair(QString("™"), QString("&#8482;"));
 
 	return replacements;
 }
