@@ -1086,14 +1086,20 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			//axes
 			//x bottom
-			if (layer.curves.size()){
+			if (layer.curves.size()) {
 				Origin::GraphCurve originCurve = layer.curves[0];
+				QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+				//TODO: "Partikelgrö"
+				DEBUG("	xColumnName = " << xColumnName.toStdString());
+				QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
+				QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+
 				if (!originXAxis.formatAxis[0].hidden) {
 					Axis* axis = new Axis("x", Axis::AxisHorizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisBottom);
 					plot->addChildFast(axis);
-					loadAxis(originXAxis, axis, 0, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					loadAxis(originXAxis, axis, 0, xColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1103,7 +1109,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setPosition(Axis::AxisTop);
 					axis->setSuppressRetransform(true);
 					plot->addChildFast(axis);
-					loadAxis(originXAxis, axis, 1, QString::fromLatin1(originCurve.xColumnName.c_str()));
+					loadAxis(originXAxis, axis, 1, xColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1113,7 +1119,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisLeft);
 					plot->addChildFast(axis);
-					loadAxis(originYAxis, axis, 0, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					loadAxis(originYAxis, axis, 0, yColumnName);
 					axis->setSuppressRetransform(false);
 				}
 
@@ -1123,7 +1129,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::AxisRight);
 					plot->addChildFast(axis);
-					loadAxis(originYAxis, axis, 1, QString::fromLatin1(originCurve.yColumnName.c_str()));
+					loadAxis(originYAxis, axis, 1, yColumnName);
 					axis->setSuppressRetransform(false);
 				}
 			} else {
