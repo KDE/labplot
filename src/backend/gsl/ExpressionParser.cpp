@@ -303,6 +303,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Voigt profile");
 	count += 5;
 #endif
+	m_functionsNames << i18n("Pseudo-Voigt profile (same width)");
+	count += 1;
 
 	index++;
 	for (int i = 0; i < count; i++)

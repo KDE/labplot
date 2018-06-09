@@ -44,7 +44,7 @@ const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential",
 const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)"),
 	i18n("Voigt profile"), i18n("Pseudo-Voigt (same width)")};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * g/(g^2+(x-mu)^2)", "a/pi/s * sech((x-mu)/s)",
-	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*pseudovoigt1(x - mu, eta, w)"};
+	"a/4/s * sech((x-mu)/2/s)**2", "a*voigt(x - mu, s, g)", "a*pseudovoigt1(x - mu, et, w)"};	// eta is already used as function
 const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt", "pseudovoigt1"};
 
 const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
@@ -236,16 +236,16 @@ double nsl_fit_model_voigt_param_deriv(unsigned int param, double x, double a, d
 
 double nsl_fit_model_pseudovoigt1_param_deriv(unsigned int param, double x, double a, double eta, double w, double mu, double weight) {
 	double y = x - mu, norm = sqrt(weight);
-	double sigma = w/sqrt(2.*log(2.));
+	double sigma = w/sqrt(2.*M_LN2);
 
 	if (param == 0)
 		return norm * nsl_sf_pseudovoigt1(y, eta, w);
 	if (param == 1)
-		return a * norm * (gsl_ran_cauchy_pdf(x, w) - gsl_ran_gaussian_pdf(x, sigma));
+		return a * norm * (gsl_ran_cauchy_pdf(y, w) - gsl_ran_gaussian_pdf(y, sigma));
 	if (param == 2)
-		return a/w * norm * (eta*(1.-2.*w*w)*gsl_ran_cauchy_pdf(x, w) + (eta-1.)*gsl_ran_gaussian_pdf(x, sigma)*(1.-2.*M_LN2*y*y/w/w));
+		return a/w * norm * (eta*(1.-2.*w*w)*gsl_ran_cauchy_pdf(y, w) + (eta-1.)*gsl_ran_gaussian_pdf(y, sigma)*(1.-2.*M_LN2*y*y/w/w));
 	if (param == 3)
-		return 2.*a*y/w/w * norm * (eta*M_PI*w*gsl_pow_2(gsl_ran_cauchy_pdf(x, w)) + (1.-eta)*M_LN2*gsl_ran_gaussian_pdf(x, sigma));
+		return 2.*a*y/w/w * norm * (eta*M_PI*w*gsl_pow_2(gsl_ran_cauchy_pdf(y, w)) + (1.-eta)*M_LN2*gsl_ran_gaussian_pdf(y, sigma));
 
 	return 0;
 }

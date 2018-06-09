@@ -465,7 +465,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_pseudovoigt1:
 			switch(degree) {
 			case 1:
-				paramNames << "a" << "eta" << "w" << "mu";
+				paramNames << "a" << "et" << "w" << "mu";	// eta function exists!
 				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
 				break;
 			default:
