@@ -77,13 +77,13 @@
  *
  */
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
-	m_legend(0), m_zoomFactor(1.2), m_menusInitialized(false),
+	m_legend(nullptr), m_zoomFactor(1.2), m_menusInitialized(false),
 	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
 	init();
 }
 
 CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
-	m_legend(0), m_zoomFactor(1.2),
+	m_legend(nullptr), m_zoomFactor(1.2),
 	addNewMenu(nullptr), zoomMenu(nullptr), dataAnalysisMenu(nullptr), themeMenu(nullptr) {
 	init();
 }
@@ -1214,6 +1214,14 @@ void CartesianPlot::addFourierFilterCurve() {
 void CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
+}
+
+/*!
+ * public helper function to set a legend object created outside of CartesianPlot, e.g. in \c OriginProjectParser.
+ */
+void CartesianPlot::addLegend(CartesianPlotLegend* legend) {
+	m_legend = legend;
+	this->addChild(legend);
 }
 
 void CartesianPlot::addLegend() {

@@ -1200,7 +1200,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				else
 					legend->setBackgroundFirstColor(Qt::white);
 
-				plot->addChildFast(legend);
+				plot->addLegend(legend);
 			}
 
 			//texts
