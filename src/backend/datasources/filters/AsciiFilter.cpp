@@ -2649,11 +2649,11 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 	list = dataStrings;
 }
 
-double AsciiFilter::mqttColumnAverage(const QString& topic,  AbstractDataSource* dataSource) {
-	return d->mqttColumnAverage(topic, dataSource);
+QString AsciiFilter::mqttColumnStatistics(const QString& topic,  AbstractDataSource* dataSource) const{
+	return d->mqttColumnStatistics(topic, dataSource);
 }
 
-double AsciiFilterPrivate::mqttColumnAverage(const QString& topic,  AbstractDataSource* dataSource) {
+QString AsciiFilterPrivate::mqttColumnStatistics(const QString& topic,  AbstractDataSource* dataSource) const{
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	int topicToCol;
@@ -2661,52 +2661,78 @@ double AsciiFilterPrivate::mqttColumnAverage(const QString& topic,  AbstractData
 		topicToCol = spreadsheet->topicIndex(topic) + 1;
 	else
 		topicToCol = spreadsheet->topicIndex(topic);
-	double sum = 0;
-	int count = 0;
 
-	switch (columnModes[topicToCol]) {
-	case AbstractColumn::Numeric: {
-		QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(topicToCol)->data());
-		for(int i = 0; i < vector->count(); i++){
-			sum += vector->operator [](i);
-			count++;
-		}
-		break;
-	}
-	case AbstractColumn::Integer: {
-		QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(topicToCol)->data());
-		for(int i = 0; i < vector->count(); i++){
-			sum += vector->operator [](i);
-			count++;
-		}
-		break;
-	}
-	case AbstractColumn::Text:
-		break;
-	case AbstractColumn::DateTime:
-		break;
-		//TODO
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-		break;
-	}
+	QString statistics;
+	Column* tempColumn = spreadsheet->child<Column>(topicToCol);
 
-	return sum/count;
+	QVector<LiveDataSource::WillStatistics> willStatistics = spreadsheet->willStatistics();
+	for(int i = 0; i <= willStatistics.count(); i++) {
+		switch (static_cast<LiveDataSource::WillStatistics>(willStatistics[i]) ) {
+		case LiveDataSource::WillStatistics::ArithmeticMean:
+			statistics += "Arithmetic mean: " + QString::number(tempColumn->statistics().arithmeticMean)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::ContraharmonicMean:
+			statistics += "Contraharmonic mean: "+QString::number(tempColumn->statistics().contraharmonicMean)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Entropy:
+			statistics += "Entropy: "+QString::number(tempColumn->statistics().entropy)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::GeometricMean:
+			statistics += "Geometric mean: "+QString::number(tempColumn->statistics().geometricMean)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::HarmonicMean:
+			statistics += "Harmonic mean: "+QString::number(tempColumn->statistics().harmonicMean)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Kurtosis:
+			statistics += "Kurtosis: "+QString::number(tempColumn->statistics().kurtosis)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Maximum:
+			statistics += "Maximum: "+QString::number(tempColumn->statistics().maximum)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::MeanDeviation:
+			statistics += "Mean deviation: "+QString::number(tempColumn->statistics().meanDeviation)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::MeanDeviationAroundMedian:
+			statistics += "Mean deviation around median: "+QString::number(tempColumn->statistics().meanDeviationAroundMedian)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Median:
+			statistics += "Median: "+QString::number(tempColumn->statistics().median)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::MedianDeviation:
+			statistics += "Median deviation: "+QString::number(tempColumn->statistics().medianDeviation)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Minimum:
+			statistics += "Minimum: "+QString::number(tempColumn->statistics().minimum)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Skewness:
+			statistics += "Skewness: "+QString::number(tempColumn->statistics().skewness)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::StandardDeviation:
+			statistics += "Standard deviation: "+QString::number(tempColumn->statistics().standardDeviation)+"\n";
+			break;
+		case LiveDataSource::WillStatistics::Variance:
+			statistics += "Variance: "+QString::number(tempColumn->statistics().variance)+"\n";
+			break;
+		default:
+			break;
+		}
+	}
+	return statistics;
 }
 
 
-AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource){
+AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource) const{
 	return d->mqttColumnMode(topic, dataSource);
 }
 
-AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource){
+AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource) const{
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	int topicToCol;
 	if (createIndexEnabled)
 		topicToCol = spreadsheet->topicIndex(topic) + 1;
 	else
-		topicToCol = spreadsheet->topicIndex(topic);
+		topicToCol = spreadsheet->topicIndex(topic);	
 
 	return columnModes[topicToCol]	;
 }

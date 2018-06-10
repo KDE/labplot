@@ -77,14 +77,33 @@ public:
 
 	enum WillMessageType {
 		OwnMessage = 0,
-		AverageData,
+		Statistics,
 		LastMessage
 	};
 
 	enum WillUpdateType {
-		UpdateTimeInterval = 0,
+		TimePeriod = 0,
 		OnClick
 	};
+
+	enum WillStatistics {
+		Minimum = 0,
+		Maximum,
+		ArithmeticMean,
+		GeometricMean,
+		HarmonicMean,
+		ContraharmonicMean,
+		Median,
+		Variance,
+		StandardDeviation,
+		MeanDeviation,
+		MeanDeviationAroundMedian,
+		MedianDeviation,
+		Skewness,
+		Kurtosis,
+		Entropy
+	};
+
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~LiveDataSource() override;
@@ -178,30 +197,35 @@ public:
 	bool checkAllArrived();
 
 	void setMqttWillUse(bool);
-	bool mqttWillUse();
+	bool mqttWillUse() const;
 
 	void setWillTopic(const QString&);
-	QString willTopic();
+	QString willTopic() const;
 
 	void setWillRetain(bool);
-	bool willRetain();
+	bool willRetain() const;
 
 	void setWillQoS(quint8);
-	quint8 willQoS();
+	quint8 willQoS() const;
 
 	void setWillMessageType(WillMessageType);
-	WillMessageType willMessageType();
+	WillMessageType willMessageType() const;
 
 	void setWillOwnMessage(const QString&);
-	QString willOwnMessage();
+	QString willOwnMessage() const;
 
-	WillUpdateType willUpdateType();
+	WillUpdateType willUpdateType() const;
 	void setWillUpdateType(WillUpdateType);
 
-	int willTimeInterval();
+	int willTimeInterval() const;
 	void setWillTimeInterval(int);
 
-	void setWillForMqtt();
+	void setWillForMqtt() ;
+
+	void clearLastMessage();
+	void addWillStatistics(WillStatistics);
+	void removeWillStatistics(WillStatistics);
+	QVector<WillStatistics> willStatistics() const;
 
 private:
 	void initActions();
@@ -267,6 +291,7 @@ private:
 	QTimer* m_willTimer;
 	int m_willTimeInterval;
 	WillUpdateType m_willUpdateType;
+	QVector<WillStatistics> m_willStatistics;
 
 public slots:
 	void read();

@@ -1335,30 +1335,29 @@ void LiveDataSource::setMqttWillUse(bool use) {
 		m_willTimer->stop();
 }
 
-bool LiveDataSource::mqttWillUse() {
+bool LiveDataSource::mqttWillUse() const{
 	return m_mqttUseWill;
 }
 
 void  LiveDataSource::setWillTopic(const QString& topic) {
-	m_willTopic = topic;
-	m_willLastMessage.clear();
+	m_willTopic = topic;	
 }
 
-QString LiveDataSource::willTopic() {
+QString LiveDataSource::willTopic() const{
 	return m_willTopic;
 }
 
 void LiveDataSource::setWillRetain(bool retain) {
 	m_willRetain = retain;
 }
-bool LiveDataSource::willRetain() {
+bool LiveDataSource::willRetain() const {
 	return m_willRetain;
 }
 
 void LiveDataSource::setWillQoS(quint8 QoS) {
 	m_willQoS = QoS;
 }
-quint8 LiveDataSource::willQoS() {
+quint8 LiveDataSource::willQoS() const {
 	return m_willQoS;
 }
 
@@ -1366,7 +1365,7 @@ void LiveDataSource::setWillMessageType(WillMessageType messageType) {
 	m_willMessageType = messageType;
 }
 
-LiveDataSource::WillMessageType LiveDataSource::willMessageType() {
+LiveDataSource::WillMessageType LiveDataSource::willMessageType() const {
 	return m_willMessageType;
 }
 
@@ -1374,7 +1373,7 @@ void LiveDataSource::setWillOwnMessage(const QString& ownMessage) {
 	m_willOwnMessage = ownMessage;
 }
 
-QString LiveDataSource::willOwnMessage() {
+QString LiveDataSource::willOwnMessage() const {
 	return m_willOwnMessage;
 }
 
@@ -1401,17 +1400,19 @@ void LiveDataSource::setWillForMqtt() {
 			m_client->setWillMessage(m_willOwnMessage.toUtf8());
 			qDebug()<<"Will own message" << m_willOwnMessage;
 			break;
-		case WillMessageType::AverageData:
-			if(dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Integer ||
-					dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Numeric) {
-				m_client->setWillMessage(QString::number(dynamic_cast<AsciiFilter*>(m_filter)->mqttColumnAverage(m_willTopic, this)).toUtf8() );
-				qDebug() << "Will average message: "<< QString(m_client->willMessage());
-			}
+		case WillMessageType::Statistics: {
+			AsciiFilter * asciiFilter = dynamic_cast<AsciiFilter*>(m_filter);
+			if(asciiFilter->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Integer ||
+					asciiFilter->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Numeric) {
+				m_client->setWillMessage(asciiFilter->mqttColumnStatistics(m_willTopic, this).toUtf8());
+				qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
+			}		
 			else {
 				m_client->setWillMessage(QString("").toUtf8());
-				qDebug() << "Will average message: "<< QString(m_client->willMessage());
+				qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 			}
 			break;
+		}
 		case WillMessageType::LastMessage:
 			m_client->setWillMessage(m_willLastMessage.toUtf8());
 			qDebug()<<"Will last message:\n" << m_willLastMessage;
@@ -1425,7 +1426,7 @@ void LiveDataSource::setWillForMqtt() {
 	}
 }
 
-LiveDataSource::WillUpdateType LiveDataSource::willUpdateType(){
+LiveDataSource::WillUpdateType LiveDataSource::willUpdateType() const{
 	return m_willUpdateType;
 }
 
@@ -1435,12 +1436,28 @@ void LiveDataSource::setWillUpdateType(WillUpdateType updateType) {
 		m_willTimer->stop();
 }
 
-int LiveDataSource::willTimeInterval() {
+int LiveDataSource::willTimeInterval() const{
 	return m_willTimeInterval;
 }
 
 void LiveDataSource::setWillTimeInterval(int interval) {
 	m_willTimeInterval = interval;
-	if(m_willUpdateType == WillUpdateType::UpdateTimeInterval)
+	if(m_willUpdateType == WillUpdateType::TimePeriod)
 		m_willTimer->start(interval);
+}
+
+void LiveDataSource::clearLastMessage() {
+	m_willLastMessage.clear();
+}
+
+void LiveDataSource::addWillStatistics(WillStatistics statistic){
+	m_willStatistics.append(statistic);
+}
+
+void LiveDataSource::removeWillStatistics(WillStatistics statistic) {
+	m_willStatistics.removeAll(statistic);
+}
+
+QVector<LiveDataSource::WillStatistics> LiveDataSource::willStatistics() const{
+	return m_willStatistics;
 }

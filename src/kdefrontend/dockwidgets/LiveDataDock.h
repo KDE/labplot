@@ -70,6 +70,7 @@ private slots:
 	void willUpdateChanged(int);
 	void willUpdateNow();
 	void willUpdateIntervalChanged(const QString&);
+	void statisticsChanged(QListWidgetItem *);
 
 public slots:
 

@@ -51,6 +51,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willUpdateChanged);
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
+	connect(ui.lwWillStatistics, &QListWidget::itemChanged, this, &LiveDataDock::statisticsChanged);
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -118,6 +119,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.cbWillTopic->hide();
 	ui.cbWillUpdate->hide();
 	ui.leWillOwnMessage->hide();
+	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
 	ui.leWillUpdateInterval->hide();
 	ui.lWillMessageType->hide();
 	ui.lWillOwnMessage->hide();
@@ -126,10 +128,42 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lWillUpdate->hide();
 	ui.lWillUpdateInterval->hide();
 	ui.bWillUpdateNow->hide();
+	ui.lwWillStatistics->hide();
+	ui.lwWillStatistics->hide();
+
 
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
 		ui.chbWill->show();
 		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);		
+
+		if(fds->mqttWillUse()) {
+			ui.chbWillRetain->show();
+			ui.cbWillQoS->show();
+			ui.cbWillMessageType->show();
+			ui.cbWillTopic->show();
+			ui.cbWillUpdate->show();
+			ui.lWillMessageType->show();
+			ui.lWillQos->hide();
+			ui.lWillTopic->show();
+			ui.lWillUpdate->show();
+
+			if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
+				ui.leWillOwnMessage->show();
+				ui.lWillOwnMessage->show();
+			}
+			else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+				ui.lWillStatistics->show();
+				ui.lwWillStatistics->show();
+			}
+
+
+			if(ui.cbWillUpdate->currentIndex() == 0) {
+				ui.leWillUpdateInterval->show();
+				ui.lWillUpdateInterval->show();
+			}
+			else if (ui.cbWillUpdate->currentIndex() == 1)
+				ui.bWillUpdateNow->show();
+		}
 	}
 }
 
@@ -262,9 +296,13 @@ void LiveDataDock::useWillMessage(int state) {
 		ui.lWillTopic->show();
 		ui.lWillUpdate->show();
 
-		if (ui.cbWillMessageType->currentIndex() == 0) {
+		if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
 			ui.leWillOwnMessage->show();
 			ui.lWillOwnMessage->show();
+		}
+		else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+			ui.lWillStatistics->show();
+			ui.lwWillStatistics->show();
 		}
 
 
@@ -283,8 +321,10 @@ void LiveDataDock::useWillMessage(int state) {
 			if(static_cast<LiveDataSource::WillMessageType> (ui.cbWillMessageType->currentIndex())
 					== LiveDataSource::WillMessageType::OwnMessage)
 				source->setWillOwnMessage(ui.leWillOwnMessage->text());
-			if(ui.cbWillTopic->count() > 0)
+			if(ui.cbWillTopic->count() > 0) {
 				source->setWillTopic(ui.cbWillTopic->currentText());
+				source->clearLastMessage();
+			}
 
 			source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(ui.cbWillUpdate->currentIndex()));
 			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
@@ -308,6 +348,8 @@ void LiveDataDock::useWillMessage(int state) {
 		ui.lWillUpdate->hide();
 		ui.lWillUpdateInterval->hide();
 		ui.bWillUpdateNow->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
 	}
 }
 
@@ -328,8 +370,11 @@ void LiveDataDock::willRetainChanged(int state) {
 }
 
 void LiveDataDock::willTopicChanged(const QString& topic) {
-	for (auto* source: m_liveDataSources)
-		source->setWillTopic(topic);
+	for (auto* source: m_liveDataSources) {
+		if(source->willTopic() != topic)
+			source->clearLastMessage();
+		source->setWillTopic(topic);		
+	}
 }
 
 void LiveDataDock::willMessageTypeChanged(int type) {
@@ -338,10 +383,18 @@ void LiveDataDock::willMessageTypeChanged(int type) {
 	if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::OwnMessage) {
 		ui.leWillOwnMessage->show();
 		ui.lWillOwnMessage->show();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
 	}
-	else {
+	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::LastMessage) {
 		ui.leWillOwnMessage->hide();
 		ui.lWillOwnMessage->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	}
+	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::Statistics) {
+		ui.lWillStatistics->show();
+		ui.lwWillStatistics->show();
 	}
 }
 
@@ -358,8 +411,10 @@ void LiveDataDock::updateTopics() {
 		for(int i = 0; i < topics.count(); i++) {
 			ui.cbWillTopic->addItem(topics[i]);
 		}
-		for (auto* source: m_liveDataSources)
+		for (auto* source: m_liveDataSources) {
 			source->setWillTopic(ui.cbWillTopic->currentText());
+			source->clearLastMessage();
+		}
 	}
 	else
 		qDebug()<<"Topic Vector Empty";
@@ -369,7 +424,7 @@ void LiveDataDock::willUpdateChanged(int updateType) {
 	for (auto* source: m_liveDataSources)
 		source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(updateType));
 
-	if(static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::UpdateTimeInterval) {
+	if(static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::TimePeriod) {
 		ui.bWillUpdateNow->hide();
 		ui.leWillUpdateInterval->show();
 		ui.lWillUpdateInterval->show();
@@ -393,4 +448,26 @@ void LiveDataDock::willUpdateNow() {
 void LiveDataDock::willUpdateIntervalChanged(const QString& interval) {
 	for (auto* source: m_liveDataSources)
 		source->setWillTimeInterval(interval.toInt());
+}
+
+void LiveDataDock::statisticsChanged(QListWidgetItem *item) {
+	int idx = -1;
+	for(int i =  0; i < ui.lwWillStatistics->count(); i++)
+		if(item->text() == ui.lwWillStatistics->item(i)->text()) {
+			idx = i;
+			break;
+		}
+
+	if(item->checkState() == Qt::Checked) {
+		if(idx >= 0) {
+			for (auto* source: m_liveDataSources)
+				source->addWillStatistics(static_cast<LiveDataSource::WillStatistics>(idx) );
+		}
+	}
+	else {
+		if(idx >= 0){
+			for (auto* source: m_liveDataSources)
+				source->removeWillStatistics(static_cast<LiveDataSource::WillStatistics>(idx) );
+		}
+	}
 }
