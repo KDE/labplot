@@ -290,7 +290,7 @@ void MainWin::initGUI(const QString& fileName) {
 
 	if (!fileName.isEmpty()) {
 		if (Project::isLabPlotProject(fileName) || OriginProjectParser::isOriginProject(fileName)) {
-			openProject(fileName);
+			QTimer::singleShot(0, this, [=] () { openProject(fileName); });
 		} else {
 			newProject();
 			QTimer::singleShot(0, this, [=] () { importFileDialog(fileName); });

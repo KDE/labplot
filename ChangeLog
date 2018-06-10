@@ -12,7 +12,6 @@ New features:
 	* Improved theming
 		* Apply themes to worksheet and to all its children
 		* Respect theme settings also in plot legends and labels
-		* Application option to set the default theme for new worksheets
 		* Allow to disable theming in worksheets and plots after a theme was selected
 		* Show currently active theme in the "Apply theme" button
 		* New application option in the settings for the default theme used for new worksheets.
@@ -39,7 +38,7 @@ New features:
 	* Show tooltips for the supported mathematical functions and constants in the expression text field
 	* Automaticaly switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
 	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog
-	* Allow to change the theme from within the application
+	* Allow to change the color scheme for the application
 	* Smooth and animated zooming in the worksheet view
 	* Allow to add text labels to plots
 	* Improved building with MSVC, Intel and PGI compiler
