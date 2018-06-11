@@ -856,7 +856,9 @@ void XYFitCurveDock::enableRecalculate() const {
 
 		DEBUG("	enable and preview");
 		// PREVIEW as soon as recalculate is enabled
-		m_fitCurve->evaluate(true);
+		//TODO: this breaks loading a project with fit curve
+		//	(sets starting values again!)
+		//m_fitCurve->evaluate(true);
 		//TODO: Test	(breaks context menu fit)
 //		m_fitCurve->dataChanged();
 	}

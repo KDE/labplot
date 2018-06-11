@@ -120,7 +120,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	ui->chkCreateDataCurve->setVisible(false);
 
 	//SIGNALs/SLOTs
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::plot);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() { hide();  plot(); });
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &PlotDataDialog::reject);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::accept);
 	connect(ui->rbCurvePlacement1, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
@@ -188,7 +188,8 @@ void PlotDataDialog::processColumns() {
 		//use all spreadsheet columns if no columns are selected
 		//skip error columns
 		for (Column* col : m_spreadsheet->children<Column>())
-			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
+				|| col->plotDesignation() == AbstractColumn::NoDesignation)
 				m_columns << col;
 
 		//disable everything if the spreadsheet doesn't have any columns
@@ -201,7 +202,8 @@ void PlotDataDialog::processColumns() {
 	} else {
 		//use selected columns, skip error columns
 		for (Column* col : selectedColumns)
-			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
+				|| col->plotDesignation() == AbstractColumn::NoDesignation)
 				m_columns << col;
 	}
 

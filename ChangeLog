@@ -36,7 +36,7 @@ New features:
 	* Allow drag&drop of projects files (LabPlot and Origin) on the main window to load the project
 	* Allow drag&drop of data files on the main window to import the data
 	* Show tooltips for the supported mathematical functions and constants in the expression text field
-	* Automaticaly switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
+	* Automatically switch to the scientific representation for numbers bigger than 10^4 on the axis tick labels
 	* Automatically allow the latex typesetting in the application after the latex environment was installed later without making the user to go to the settings dialog
 	* Allow to change the color scheme for the application
 	* Smooth and animated zooming in the worksheet view
