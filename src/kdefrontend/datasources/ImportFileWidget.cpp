@@ -189,8 +189,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::mqttButtonSubscribe);
 	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &ImportFileWidget::mqttButtonUnsubscribe);
-
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+
+	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
+	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
+	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateChanged);
+	connect(this, &ImportFileWidget::subscriptionMade, this, &ImportFileWidget::updateWillTopics);
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -242,7 +246,7 @@ void ImportFileWidget::loadSettings() {
 	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
-	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());	
 	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
 	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
 	ui.leID->setText(conf.readEntry("mqttId",""));
@@ -1084,7 +1088,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
-
 		fileNameChanged(ui.leFileName->text());
 
         ui.leID->hide();
@@ -1104,6 +1107,24 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.bSubscribe->hide();
         ui.bConnect->hide();
 
+		ui.gbMqttWill->hide();
+		ui.chbWill->hide();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
 
 		fileNameChanged(m_fileName);
 
@@ -1153,6 +1174,25 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.bSubscribe->hide();
         ui.bConnect->hide();
 
+		ui.gbMqttWill->hide();
+		ui.chbWill->hide();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1191,6 +1231,25 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.chbID->hide();
         ui.bSubscribe->hide();
         ui.bConnect->hide();
+
+		ui.gbMqttWill->hide();
+		ui.chbWill->hide();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
 
 		ui.lFileName->hide();
 		ui.leFileName->hide();
@@ -1242,6 +1301,25 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.bSubscribe->hide();
         ui.bConnect->hide();
 
+		ui.gbMqttWill->hide();
+		ui.chbWill->hide();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1292,7 +1370,58 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         for (int i = 0; i < ui.cbReadType->count(); ++i) {
             if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
                 ui.cbReadType->removeItem(i);
-        }
+		}
+
+		ui.gbMqttWill->show();
+		ui.chbWill->show();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
+
+		if(ui.chbWill->isChecked()) {
+			ui.chbWillRetain->show();
+			ui.cbWillQoS->show();
+			ui.cbWillMessageType->show();
+			ui.cbWillTopic->show();
+			ui.cbWillUpdate->show();
+			ui.lWillMessageType->show();
+			ui.lWillQos->hide();
+			ui.lWillTopic->show();
+			ui.lWillUpdate->show();
+
+			if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
+				ui.leWillOwnMessage->show();
+				ui.lWillOwnMessage->show();
+			}
+			else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+				ui.lWillStatistics->show();
+				ui.lwWillStatistics->show();
+			}
+
+
+			if(ui.cbWillUpdate->currentIndex() == 0) {
+				ui.leWillUpdateInterval->show();
+				ui.lWillUpdateInterval->show();
+			}
+			else if (ui.cbWillUpdate->currentIndex() == 1)
+			{
+				ui.leWillUpdateInterval->hide();
+				ui.lWillUpdateInterval->hide();
+			}
+		}
 
         break;
 	default:
@@ -1616,4 +1745,91 @@ void ImportFileWidget::mqttButtonUnsubscribe(const QString& item) {
 	m_mqttSubscribeButton = false;
 	m_mqttUnsubscribeTopic = item;
 	qDebug()<<"Unsubscribe from:"<<m_mqttUnsubscribeTopic;
+}
+
+void ImportFileWidget::useWillMessage(int state) {
+	if(state == Qt::Checked) {
+		ui.chbWillRetain->show();
+		ui.cbWillQoS->show();
+		ui.cbWillMessageType->show();
+		ui.cbWillTopic->show();
+		ui.cbWillUpdate->show();
+		ui.lWillMessageType->show();
+		ui.lWillQos->hide();
+		ui.lWillTopic->show();
+		ui.lWillUpdate->show();
+
+		if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
+			ui.leWillOwnMessage->show();
+			ui.lWillOwnMessage->show();
+		}
+		else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+			ui.lWillStatistics->show();
+			ui.lwWillStatistics->show();
+		}
+
+
+		if(ui.cbWillUpdate->currentIndex() == 0) {
+			ui.leWillUpdateInterval->show();
+			ui.lWillUpdateInterval->show();
+		}
+	}
+	else if (state == Qt::Unchecked) {
+
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	}
+}
+
+void ImportFileWidget::willMessageTypeChanged(int type) {
+	if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::OwnMessage) {
+		ui.leWillOwnMessage->show();
+		ui.lWillOwnMessage->show();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	}
+	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::LastMessage) {
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	}
+	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::Statistics) {
+		ui.lWillStatistics->show();
+		ui.lwWillStatistics->show();
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
+	}
+}
+
+void ImportFileWidget::updateWillTopics() {
+	for(int i = 0; i < ui.lwSubscriptions->count(); i++) {
+		QListWidgetItem* item = ui.lwSubscriptions->item(i);
+		if(ui.cbWillTopic->findText(item->text()) < 0)
+			ui.cbWillTopic->addItem(item->text());
+	}
+}
+
+void ImportFileWidget::willUpdateChanged(int updateType) {
+	if(static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::TimePeriod) {
+		ui.leWillUpdateInterval->show();
+		ui.lWillUpdateInterval->show();
+	}
+	else if (static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::OnClick) {
+		ui.leWillUpdateInterval->hide();
+		ui.lWillUpdateInterval->hide();
+	}
 }

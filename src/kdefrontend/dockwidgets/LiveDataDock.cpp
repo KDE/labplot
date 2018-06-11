@@ -129,7 +129,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lWillUpdateInterval->hide();
 	ui.bWillUpdateNow->hide();
 	ui.lwWillStatistics->hide();
-	ui.lwWillStatistics->hide();
+	ui.lWillStatistics->hide();
 
 
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
@@ -395,6 +395,8 @@ void LiveDataDock::willMessageTypeChanged(int type) {
 	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::Statistics) {
 		ui.lWillStatistics->show();
 		ui.lwWillStatistics->show();
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
 	}
 }
 

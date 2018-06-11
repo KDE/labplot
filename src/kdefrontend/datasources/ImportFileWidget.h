@@ -139,6 +139,12 @@ private slots:
 	void mqttButtonSubscribe(const QString&);
 	void mqttButtonUnsubscribe(const QString&);
 
+	void useWillMessage(int);
+	void willMessageTypeChanged(int);
+	void updateWillTopics();
+	void willUpdateChanged(int);
+
+
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
