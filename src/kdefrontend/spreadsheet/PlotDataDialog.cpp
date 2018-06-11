@@ -120,7 +120,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	ui->chkCreateDataCurve->setVisible(false);
 
 	//SIGNALs/SLOTs
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::plot);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() { hide();  plot(); });
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &PlotDataDialog::reject);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::accept);
 	connect(ui->rbCurvePlacement1, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
