@@ -87,6 +87,9 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 }
 
 LiveDataSource::~LiveDataSource() {
+	//stop reading before deleting the objects
+	pauseReading();
+
 	if (m_filter)
 		delete m_filter;
 
