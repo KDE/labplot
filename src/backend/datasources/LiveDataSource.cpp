@@ -498,35 +498,27 @@ void LiveDataSource::read() {
 			break;
 		case NetworkTcpSocket:
 			m_tcpSocket = new QTcpSocket(this);
-			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 			m_device = m_tcpSocket;
+			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
-			qDebug() << "socket state before preparing: " << m_tcpSocket->state();
 			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
-			qDebug() << "socket state after preparing: " << m_tcpSocket->state();
 
 			break;
 		case NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
-
-			m_udpSocket->bind(QHostAddress(m_host), m_port);
-			qDebug() << "socket state before preparing: " << m_udpSocket->state();
+			m_device = m_udpSocket;
 			m_udpSocket->connectToHost(m_host, m_port);
 
-			m_device = m_udpSocket;
 			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
-			qDebug() << "socket state after preparing: " << m_udpSocket->state();
 
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket(this);
-			qDebug() << "socket state before preparing: " << m_localSocket->state();
-			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-			qDebug() << "socket state after preparing: " << m_localSocket->state();
-
 			m_device = m_localSocket;
+			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+
 			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LiveDataSource::localSocketError);
 
@@ -581,9 +573,7 @@ void LiveDataSource::read() {
 		DEBUG("reading from a UDP socket");
 		qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
 		m_udpSocket->abort();
-		m_udpSocket->bind(QHostAddress(m_host), m_port);
 		m_udpSocket->connectToHost(m_host, m_port);
-
 		qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
 
 		break;
@@ -593,6 +583,7 @@ void LiveDataSource::read() {
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 		qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
+
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
