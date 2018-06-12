@@ -212,6 +212,7 @@ void FunctionValuesDialog::showFunctions() {
 }
 
 void FunctionValuesDialog::insertFunction(const QString& str) {
+	//TODO: not all functions have only one argument
 	ui.teEquation->insertPlainText(str + "(x)");
 }
 

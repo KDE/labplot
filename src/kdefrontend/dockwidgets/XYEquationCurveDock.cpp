@@ -310,6 +310,7 @@ void XYEquationCurveDock::showFunctions() {
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& str) {
+	//TODO: not all functions have only one argument
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
 	if (type==XYEquationCurve::Cartesian)
 		uiGeneralTab.teEquation1->insertPlainText(str + "(x)");
@@ -324,6 +325,7 @@ void XYEquationCurveDock::insertConstant1(const QString& str) {
 }
 
 void XYEquationCurveDock::insertFunction2(const QString& str) {
+	//TODO: not all functions have only one argument
 	uiGeneralTab.teEquation2->insertPlainText(str + "(t)");
 }
 
