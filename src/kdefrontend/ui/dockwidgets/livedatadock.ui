@@ -435,6 +435,17 @@
      </item>
      <item>
       <property name="text">
+       <string>Median deviation</string>
+      </property>
+      <property name="checkState">
+       <enum>Unchecked</enum>
+      </property>
+      <property name="flags">
+       <set>ItemIsUserCheckable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Skewness</string>
       </property>
       <property name="checkState">

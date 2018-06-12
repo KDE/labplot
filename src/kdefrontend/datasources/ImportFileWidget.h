@@ -60,6 +60,7 @@ public:
 	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
 	~ImportFileWidget();
 
+	void loadSettings();
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
 	LiveDataSource::FileType currentFileType() const;
@@ -108,6 +109,7 @@ private:
 	QString m_mqttNewTopic;
 	bool m_mqttSubscribeButton;
 	QString m_mqttUnsubscribeTopic;
+	void hideMQTT();
 
 
 private slots:
@@ -124,7 +126,6 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
-	void loadSettings();
     void idChecked(int);
     void authenticationChecked(int);
     void mqttConnection();
@@ -143,7 +144,6 @@ private slots:
 	void willMessageTypeChanged(int);
 	void updateWillTopics();
 	void willUpdateChanged(int);
-
 
 signals:
 	void fileNameChanged();

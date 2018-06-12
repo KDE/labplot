@@ -135,6 +135,7 @@ void MatrixFunctionDialog::showFunctions() {
 }
 
 void MatrixFunctionDialog::insertFunction(const QString& str) {
+	//TODO: not all functions have only one argument
 	ui.teEquation->insertPlainText(str + "(x)");
 }
 

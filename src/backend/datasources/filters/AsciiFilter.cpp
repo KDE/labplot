@@ -2665,56 +2665,58 @@ QString AsciiFilterPrivate::mqttColumnStatistics(const QString& topic,  Abstract
 	QString statistics;
 	Column* tempColumn = spreadsheet->child<Column>(topicToCol);
 
-	QVector<LiveDataSource::WillStatistics> willStatistics = spreadsheet->willStatistics();
+	QVector<bool> willStatistics = spreadsheet->willStatistics();
 	for(int i = 0; i <= willStatistics.count(); i++) {
-		switch (static_cast<LiveDataSource::WillStatistics>(willStatistics[i]) ) {
-		case LiveDataSource::WillStatistics::ArithmeticMean:
-			statistics += "Arithmetic mean: " + QString::number(tempColumn->statistics().arithmeticMean)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::ContraharmonicMean:
-			statistics += "Contraharmonic mean: "+QString::number(tempColumn->statistics().contraharmonicMean)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Entropy:
-			statistics += "Entropy: "+QString::number(tempColumn->statistics().entropy)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::GeometricMean:
-			statistics += "Geometric mean: "+QString::number(tempColumn->statistics().geometricMean)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::HarmonicMean:
-			statistics += "Harmonic mean: "+QString::number(tempColumn->statistics().harmonicMean)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Kurtosis:
-			statistics += "Kurtosis: "+QString::number(tempColumn->statistics().kurtosis)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Maximum:
-			statistics += "Maximum: "+QString::number(tempColumn->statistics().maximum)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::MeanDeviation:
-			statistics += "Mean deviation: "+QString::number(tempColumn->statistics().meanDeviation)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::MeanDeviationAroundMedian:
-			statistics += "Mean deviation around median: "+QString::number(tempColumn->statistics().meanDeviationAroundMedian)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Median:
-			statistics += "Median: "+QString::number(tempColumn->statistics().median)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::MedianDeviation:
-			statistics += "Median deviation: "+QString::number(tempColumn->statistics().medianDeviation)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Minimum:
-			statistics += "Minimum: "+QString::number(tempColumn->statistics().minimum)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Skewness:
-			statistics += "Skewness: "+QString::number(tempColumn->statistics().skewness)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::StandardDeviation:
-			statistics += "Standard deviation: "+QString::number(tempColumn->statistics().standardDeviation)+"\n";
-			break;
-		case LiveDataSource::WillStatistics::Variance:
-			statistics += "Variance: "+QString::number(tempColumn->statistics().variance)+"\n";
-			break;
-		default:
-			break;
+		if(willStatistics[i]) {
+			switch (static_cast<LiveDataSource::WillStatistics>(i) ) {
+			case LiveDataSource::WillStatistics::ArithmeticMean:
+				statistics += "Arithmetic mean: " + QString::number(tempColumn->statistics().arithmeticMean)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::ContraharmonicMean:
+				statistics += "Contraharmonic mean: "+QString::number(tempColumn->statistics().contraharmonicMean)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Entropy:
+				statistics += "Entropy: "+QString::number(tempColumn->statistics().entropy)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::GeometricMean:
+				statistics += "Geometric mean: "+QString::number(tempColumn->statistics().geometricMean)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::HarmonicMean:
+				statistics += "Harmonic mean: "+QString::number(tempColumn->statistics().harmonicMean)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Kurtosis:
+				statistics += "Kurtosis: "+QString::number(tempColumn->statistics().kurtosis)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Maximum:
+				statistics += "Maximum: "+QString::number(tempColumn->statistics().maximum)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::MeanDeviation:
+				statistics += "Mean deviation: "+QString::number(tempColumn->statistics().meanDeviation)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::MeanDeviationAroundMedian:
+				statistics += "Mean deviation around median: "+QString::number(tempColumn->statistics().meanDeviationAroundMedian)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Median:
+				statistics += "Median: "+QString::number(tempColumn->statistics().median)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::MedianDeviation:
+				statistics += "Median deviation: "+QString::number(tempColumn->statistics().medianDeviation)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Minimum:
+				statistics += "Minimum: "+QString::number(tempColumn->statistics().minimum)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Skewness:
+				statistics += "Skewness: "+QString::number(tempColumn->statistics().skewness)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::StandardDeviation:
+				statistics += "Standard deviation: "+QString::number(tempColumn->statistics().standardDeviation)+"\n";
+				break;
+			case LiveDataSource::WillStatistics::Variance:
+				statistics += "Variance: "+QString::number(tempColumn->statistics().variance)+"\n";
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	return statistics;

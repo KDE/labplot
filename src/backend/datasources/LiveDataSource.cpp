@@ -85,9 +85,11 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
       m_client(new QMqttClient(this)),
       m_mqttTest (false),
 	  m_mqttUseWill (false),
+	  m_mqttFirstConnectEstablished(false),
 	  m_device(nullptr) {
 
 	initActions();
+	m_willStatistics.fill(false, 15);
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 	connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &LiveDataSource::setWillForMqtt);
@@ -537,35 +539,27 @@ void LiveDataSource::read() {
 			break;
 		case NetworkTcpSocket:
 			m_tcpSocket = new QTcpSocket(this);
-			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 			m_device = m_tcpSocket;
+			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
-			qDebug() << "socket state before preparing: " << m_tcpSocket->state();
 			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
-			qDebug() << "socket state after preparing: " << m_tcpSocket->state();
 
 			break;
 		case NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
-
-			m_udpSocket->bind(QHostAddress(m_host), m_port);
-			qDebug() << "socket state before preparing: " << m_udpSocket->state();
+			m_device = m_udpSocket;
 			m_udpSocket->connectToHost(m_host, m_port);
 
-			m_device = m_udpSocket;
 			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
-			qDebug() << "socket state after preparing: " << m_udpSocket->state();
 
 			break;
 		case LocalSocket:
 			m_localSocket = new QLocalSocket(this);
-			qDebug() << "socket state before preparing: " << m_localSocket->state();
-			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-			qDebug() << "socket state after preparing: " << m_localSocket->state();
-
 			m_device = m_localSocket;
+			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+
 			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LiveDataSource::localSocketError);
 
@@ -625,9 +619,7 @@ void LiveDataSource::read() {
 		DEBUG("reading from a UDP socket");
 		qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
 		m_udpSocket->abort();
-		m_udpSocket->bind(QHostAddress(m_host), m_port);
 		m_udpSocket->connectToHost(m_host, m_port);
-
 		qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
 
 		break;
@@ -637,6 +629,7 @@ void LiveDataSource::read() {
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 		qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
+
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
@@ -958,6 +951,17 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 			writer->writeAttribute("subscription"+QString::number(i), m_subscriptions[i]);
 			writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_topicMap[m_subscriptions[i]]));
 		}
+		writer->writeAttribute("useWill", QString::number(m_mqttUseWill));
+		writer->writeAttribute("willTopic", m_willTopic);
+		writer->writeAttribute("willOwnMessage", m_willOwnMessage);
+		writer->writeAttribute("willQoS", QString::number(m_willQoS));
+		writer->writeAttribute("willRetain", QString::number(m_willRetain));
+		writer->writeAttribute("willMessageType", QString::number(static_cast<int>(m_willMessageType)));
+		writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_willUpdateType)));
+		writer->writeAttribute("willTimeInterval", QString::number(m_willTimeInterval));
+		for( int i = 0; i < m_willStatistics.count(); ++i){
+			writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_willStatistics[i]));
+		}
 		break;
 	}
 	default:
@@ -1139,6 +1143,61 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 				}
 
+				str =attribs.value("useWill").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'useWill'"));
+				else
+					m_mqttUseWill = str.toInt();
+
+				str =attribs.value("willTopic").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willTopic'"));
+				else
+					m_willTopic = str;
+
+				str =attribs.value("willOwnMessage").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willOwnMessage'"));
+				else
+					m_willOwnMessage = str;
+
+				str =attribs.value("willQoS").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willQoS'"));
+				else
+					m_willQoS = str.toUInt();
+
+				str =attribs.value("willRetain").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willRetain'"));
+				else
+					m_willRetain = str.toInt();
+
+				str =attribs.value("willMessageType").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willMessageType'"));
+				else
+					m_willMessageType = static_cast<LiveDataSource::WillMessageType>(str.toInt());
+
+				str =attribs.value("willUpdateType").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willUpdateType'"));
+				else
+					m_willUpdateType = static_cast<LiveDataSource::WillUpdateType>(str.toInt());
+
+				str =attribs.value("willTimeInterval").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+				else
+					m_willTimeInterval = str.toInt();
+
+				for( int i = 0; i < m_willStatistics.count(); ++i){
+					str =attribs.value("willStatistics"+QString::number(i)).toString();
+					if(str.isEmpty())
+						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+					else
+						m_willStatistics[i] = str.toInt();
+				}
 			}
 			case FileOrPipe:
 				break;
@@ -1192,7 +1251,7 @@ void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const 
 }
 
 void LiveDataSource::onMqttConnect() {
-	if(!m_mqttUseWill) {
+	if(!m_mqttFirstConnectEstablished) {
 		qDebug()<<"connection made in live data source";
 		/*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
 	m_device = m_mqttTcp;
@@ -1215,6 +1274,7 @@ void LiveDataSource::onMqttConnect() {
 			}
 		}
 		//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
+		m_mqttFirstConnectEstablished = true;
 		emit mqttSubscribed();
 	}
 	else {
@@ -1435,8 +1495,6 @@ LiveDataSource::WillUpdateType LiveDataSource::willUpdateType() const{
 
 void LiveDataSource::setWillUpdateType(WillUpdateType updateType) {
 	m_willUpdateType = updateType;
-	if (updateType == WillUpdateType::OnClick)
-		m_willTimer->stop();
 }
 
 int LiveDataSource::willTimeInterval() const{
@@ -1445,8 +1503,6 @@ int LiveDataSource::willTimeInterval() const{
 
 void LiveDataSource::setWillTimeInterval(int interval) {
 	m_willTimeInterval = interval;
-	if(m_willUpdateType == WillUpdateType::TimePeriod)
-		m_willTimer->start(interval);
 }
 
 void LiveDataSource::clearLastMessage() {
@@ -1454,13 +1510,21 @@ void LiveDataSource::clearLastMessage() {
 }
 
 void LiveDataSource::addWillStatistics(WillStatistics statistic){
-	m_willStatistics.append(statistic);
+	m_willStatistics[static_cast<int>(statistic)] = true;
 }
 
 void LiveDataSource::removeWillStatistics(WillStatistics statistic) {
-	m_willStatistics.removeAll(statistic);
+	m_willStatistics[static_cast<int>(statistic)] = false;
 }
 
-QVector<LiveDataSource::WillStatistics> LiveDataSource::willStatistics() const{
+QVector<bool> LiveDataSource::willStatistics() const{
 	return m_willStatistics;
+}
+
+void LiveDataSource::startWillTimer() {
+	if(m_willUpdateType == WillUpdateType::TimePeriod)
+		m_willTimer->start(m_willTimeInterval);
+}
+void LiveDataSource::stopWillTimer() {
+	m_willTimer->stop();
 }

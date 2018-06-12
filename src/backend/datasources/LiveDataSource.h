@@ -220,12 +220,15 @@ public:
 	int willTimeInterval() const;
 	void setWillTimeInterval(int);
 
+	void startWillTimer();
+	void stopWillTimer();
+
 	void setWillForMqtt() ;
 
 	void clearLastMessage();
 	void addWillStatistics(WillStatistics);
 	void removeWillStatistics(WillStatistics);
-	QVector<WillStatistics> willStatistics() const;
+	QVector<bool> willStatistics() const;
 
 private:
 	void initActions();
@@ -291,7 +294,8 @@ private:
 	QTimer* m_willTimer;
 	int m_willTimeInterval;
 	WillUpdateType m_willUpdateType;
-	QVector<WillStatistics> m_willStatistics;
+	QVector<bool> m_willStatistics;
+	bool m_mqttFirstConnectEstablished;
 
 public slots:
 	void read();

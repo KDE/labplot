@@ -207,6 +207,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
+	hideMQTT();
 }
 
 void ImportFileWidget::loadSettings() {
@@ -246,11 +247,30 @@ void ImportFileWidget::loadSettings() {
 	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
-	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());	
+	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
+	ui.chbAuthentication->setChecked(conf.readEntry("mqttUseAuthentication").toInt());
 	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
 	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
 	ui.leID->setText(conf.readEntry("mqttId",""));
-
+	ui.chbWillRetain->setChecked(conf.readEntry("mqttWillRetain").toInt());
+	ui.cbWillUpdate->setCurrentIndex(conf.readEntry("mqttWillUpdateType").toInt());
+	ui.cbWillQoS->setCurrentIndex(conf.readEntry("mqttWillQoS").toInt());
+	ui.leWillOwnMessage->setText(conf.readEntry("mqttWillOwnMessage",""));
+	ui.leWillUpdateInterval->setText(conf.readEntry("mqttWillUpdateInterval",""));
+	QString willStatistics = conf.readEntry("mqttWillStatistics","");
+	QStringList statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
+	for(auto value : statisticsList) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(value.toInt());
+		item->setCheckState(Qt::Checked);
+	}
+	ui.cbWillMessageType->setCurrentIndex(conf.readEntry("mqttWillMessageType").toInt());
+	ui.chbWill->setChecked(conf.readEntry("mqttWillUse").toInt());
+	//chbWill is unchecked by deafult, so if false is loaded it doesn't emit state changed signal, we have to force it
+	if(!ui.chbWill->isChecked()) {
+		ui.chbWill->setChecked(true);
+		ui.chbWill->setChecked(false);
+	}
 	m_suppressRefresh = false;
 	refreshPreview();
 }
@@ -283,6 +303,22 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttUsername", ui.leUsername->text());
 	conf.writeEntry("mqttPassword", ui.lePassword->text());
 	conf.writeEntry("mqttId", ui.leID->text());
+	conf.writeEntry("mqttWillMessageType", ui.cbWillMessageType->currentIndex());
+	conf.writeEntry("mqttWillUpdateType", ui.cbWillUpdate->currentIndex());
+	conf.writeEntry("mqttWillQoS", ui.cbWillQoS->currentIndex());
+	conf.writeEntry("mqttWillOwnMessage", ui.leWillOwnMessage->text());
+	conf.writeEntry("mqttWillUpdateInterval", ui.leWillUpdateInterval->text());
+	QString willStatistics;
+	for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(i);
+		if (item->checkState() == Qt::Checked)
+			willStatistics += QString::number(i)+"|";
+	}
+	conf.writeEntry("mqttWillStatistics", willStatistics);
+	conf.writeEntry("mqttWillRetain", static_cast<int>(ui.chbWillRetain->isChecked()));
+	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
+	conf.writeEntry("mqttUseId", static_cast<int>(ui.chbID->isChecked()));
+	conf.writeEntry("mqttUseAuthentication", static_cast<int>(ui.chbAuthentication->isChecked()));
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
@@ -436,18 +472,31 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
-    case LiveDataSource::SourceType::Mqtt:{
-        qDebug()<<"Saving mqtt";
-        source->setMqttClient(m_client->hostname(), m_client->port());
-        if(ui.chbAuthentication->isChecked())
-            source->setMqttClientAuthentication(m_client->username(), m_client->password());
-        if(ui.chbID->isChecked())
-            source->setMqttClientId(m_client->clientId());
-        for(int i=0; i<m_mqttSubscriptions.count(); i++) {
-            source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-        }
-        break;
-    }
+	case LiveDataSource::SourceType::Mqtt:{
+		qDebug()<<"Saving mqtt";
+		source->setMqttClient(m_client->hostname(), m_client->port());
+		if(ui.chbAuthentication->isChecked())
+			source->setMqttClientAuthentication(m_client->username(), m_client->password());
+		if(ui.chbID->isChecked())
+			source->setMqttClientId(m_client->clientId());
+		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
+			source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+		}
+		source->setWillMessageType(static_cast<LiveDataSource::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
+		source->setWillOwnMessage(ui.leWillOwnMessage->text());
+		source->setWillQoS(ui.cbWillQoS->currentIndex() );
+		source->setWillRetain(ui.chbWillRetain->isChecked());
+		source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
+		source->setWillTopic(ui.cbWillTopic->currentText());
+		source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
+		source->setMqttWillUse(ui.chbWill->isChecked());
+		for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+			QListWidgetItem* item = ui.lwWillStatistics->item(i);
+			if (item->checkState() == Qt::Checked)
+				source->addWillStatistics(static_cast<LiveDataSource::WillStatistics> (i));
+		}
+		break;
+	}
 	default:
 		break;
 	}
@@ -858,10 +907,10 @@ void ImportFileWidget::refreshPreview() {
 						QDEBUG("connected to local socket " << fileName);
 						if ( lsocket.waitForReadyRead(500) )
 							importedStrings = filter->preview(lsocket);
+						lsocket.disconnectFromServer();
 					} else
 						QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
 
-					//TODO: lsocket.disconnectFromServer();
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
@@ -887,7 +936,6 @@ void ImportFileWidget::refreshPreview() {
 							importedStrings = filter->preview(udpSocket);
 
 						udpSocket.disconnectFromHost();
-						connect(&udpSocket, SIGNAL(disconnected()), &udpSocket, SLOT(deleteLater()));
 					} else
 						QDEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString());
 
@@ -1088,43 +1136,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
+		hideMQTT();
+
 		fileNameChanged(ui.leFileName->text());
-
-        ui.leID->hide();
-        ui.lMqttID->hide();
-        ui.lePassword->hide();
-        ui.lPassword->hide();
-        ui.leUsername->hide();
-        ui.lUsername->hide();
-        ui.cbQos->hide();
-        ui.lQos->hide();
-        ui.cbTopic->hide();
-        ui.lTopic->hide();
-        ui.lwSubscriptions->hide();
-        ui.lSubscriptions->hide();
-        ui.chbAuthentication->hide();
-        ui.chbID->hide();
-        ui.bSubscribe->hide();
-        ui.bConnect->hide();
-
-		ui.gbMqttWill->hide();
-		ui.chbWill->hide();
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lwWillStatistics->hide();
-		ui.lWillStatistics->hide();
 
 		fileNameChanged(m_fileName);
 
@@ -1157,41 +1171,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
 
-        ui.leID->hide();
-        ui.lMqttID->hide();
-        ui.lePassword->hide();
-        ui.lPassword->hide();
-        ui.leUsername->hide();
-        ui.lUsername->hide();
-        ui.cbQos->hide();
-        ui.lQos->hide();
-        ui.cbTopic->hide();
-        ui.lTopic->hide();
-        ui.lwSubscriptions->hide();
-        ui.lSubscriptions->hide();
-        ui.chbAuthentication->hide();
-        ui.chbID->hide();
-        ui.bSubscribe->hide();
-        ui.bConnect->hide();
-
-		ui.gbMqttWill->hide();
-		ui.chbWill->hide();
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lwWillStatistics->hide();
-		ui.lWillStatistics->hide();
+		hideMQTT();
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -1284,41 +1264,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbLinkFile->hide();
 		ui.cbFileType->setEnabled(true);
 
-        ui.leID->hide();
-        ui.lMqttID->hide();
-        ui.lePassword->hide();
-        ui.lPassword->hide();
-        ui.leUsername->hide();
-        ui.lUsername->hide();
-        ui.cbQos->hide();
-        ui.lQos->hide();
-        ui.cbTopic->hide();
-        ui.lTopic->hide();
-        ui.lwSubscriptions->hide();
-        ui.lSubscriptions->hide();
-        ui.chbAuthentication->hide();
-        ui.chbID->hide();
-        ui.bSubscribe->hide();
-        ui.bConnect->hide();
-
-		ui.gbMqttWill->hide();
-		ui.chbWill->hide();
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lwWillStatistics->hide();
-		ui.lWillStatistics->hide();
+		hideMQTT();
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -1398,15 +1344,16 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 			ui.cbWillTopic->show();
 			ui.cbWillUpdate->show();
 			ui.lWillMessageType->show();
-			ui.lWillQos->hide();
+			ui.lWillQos->show();
 			ui.lWillTopic->show();
 			ui.lWillUpdate->show();
 
-			if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
+			if (ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::OwnMessage) ) {
 				ui.leWillOwnMessage->show();
 				ui.lWillOwnMessage->show();
 			}
-			else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+			else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::Statistics) ){
+				qDebug()<<"source type changed show statistics";
 				ui.lWillStatistics->show();
 				ui.lwWillStatistics->show();
 			}
@@ -1575,7 +1522,7 @@ void ImportFileWidget::mqttSubscribe() {
 
 			qDebug()<<"unsubscribe occured";
 
-			for(int i = 0; i< m_mqttSubscriptions.count(); i++)
+			for(int i = 0; i< m_mqttSubscriptions.count(); ++i)
 				if(m_mqttSubscriptions[i]->topic().filter() == m_mqttUnsubscribeTopic) {
 					qDebug()<<"1 subscription found at  "<<i <<"and removed";
 					m_mqttSubscriptions.remove(i);
@@ -1647,7 +1594,7 @@ void ImportFileWidget::setCompleter(QString topic) {
 void ImportFileWidget::topicBeingTyped(const QString topic) {
 	if(!m_editing) {
 		bool found = false;
-		for (int i=0; i<ui.cbTopic->count(); i++) {
+		for (int i=0; i<ui.cbTopic->count(); ++i) {
 			if(QString::compare(ui.cbTopic->itemText(i), topic, Qt::CaseSensitive) == 0)
 				found = true;
 		}
@@ -1755,15 +1702,16 @@ void ImportFileWidget::useWillMessage(int state) {
 		ui.cbWillTopic->show();
 		ui.cbWillUpdate->show();
 		ui.lWillMessageType->show();
-		ui.lWillQos->hide();
+		ui.lWillQos->show();
 		ui.lWillTopic->show();
 		ui.lWillUpdate->show();
 
-		if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
+		if (ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::OwnMessage) ) {
 			ui.leWillOwnMessage->show();
 			ui.lWillOwnMessage->show();
 		}
-		else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
+		else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::Statistics) ){
+			qDebug()<<"will use checked show statistics";
 			ui.lWillStatistics->show();
 			ui.lwWillStatistics->show();
 		}
@@ -1776,6 +1724,7 @@ void ImportFileWidget::useWillMessage(int state) {
 	}
 	else if (state == Qt::Unchecked) {
 
+		qDebug()<<"will use unchecked";
 		ui.chbWillRetain->hide();
 		ui.cbWillQoS->hide();
 		ui.cbWillMessageType->hide();
@@ -1808,6 +1757,7 @@ void ImportFileWidget::willMessageTypeChanged(int type) {
 		ui.lwWillStatistics->hide();
 	}
 	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::Statistics) {
+		qDebug()<<"will message type changed show statistics";
 		ui.lWillStatistics->show();
 		ui.lwWillStatistics->show();
 		ui.leWillOwnMessage->hide();
@@ -1816,7 +1766,7 @@ void ImportFileWidget::willMessageTypeChanged(int type) {
 }
 
 void ImportFileWidget::updateWillTopics() {
-	for(int i = 0; i < ui.lwSubscriptions->count(); i++) {
+	for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
 		QListWidgetItem* item = ui.lwSubscriptions->item(i);
 		if(ui.cbWillTopic->findText(item->text()) < 0)
 			ui.cbWillTopic->addItem(item->text());
@@ -1832,4 +1782,42 @@ void ImportFileWidget::willUpdateChanged(int updateType) {
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
 	}
+}
+
+void ImportFileWidget::hideMQTT() {
+	ui.leID->hide();
+	ui.lMqttID->hide();
+	ui.lePassword->hide();
+	ui.lPassword->hide();
+	ui.leUsername->hide();
+	ui.lUsername->hide();
+	ui.cbQos->hide();
+	ui.lQos->hide();
+	ui.cbTopic->hide();
+	ui.lTopic->hide();
+	ui.lwSubscriptions->hide();
+	ui.lSubscriptions->hide();
+	ui.chbAuthentication->hide();
+	ui.chbID->hide();
+	ui.bSubscribe->hide();
+	ui.bConnect->hide();
+
+	ui.gbMqttWill->hide();
+	ui.chbWill->hide();
+	ui.chbWillRetain->hide();
+	ui.cbWillQoS->hide();
+	ui.cbWillMessageType->hide();
+	ui.cbWillTopic->hide();
+	ui.cbWillUpdate->hide();
+	ui.leWillOwnMessage->hide();
+	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+	ui.leWillUpdateInterval->hide();
+	ui.lWillMessageType->hide();
+	ui.lWillOwnMessage->hide();
+	ui.lWillQos->hide();
+	ui.lWillTopic->hide();
+	ui.lWillUpdate->hide();
+	ui.lWillUpdateInterval->hide();
+	ui.lwWillStatistics->hide();
+	ui.lWillStatistics->hide();
 }

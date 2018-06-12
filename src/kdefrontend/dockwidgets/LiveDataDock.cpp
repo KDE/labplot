@@ -134,36 +134,32 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
 		ui.chbWill->show();
-		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);		
-
-		if(fds->mqttWillUse()) {
-			ui.chbWillRetain->show();
-			ui.cbWillQoS->show();
-			ui.cbWillMessageType->show();
-			ui.cbWillTopic->show();
-			ui.cbWillUpdate->show();
-			ui.lWillMessageType->show();
-			ui.lWillQos->hide();
-			ui.lWillTopic->show();
-			ui.lWillUpdate->show();
-
-			if (ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::OwnMessage) {
-				ui.leWillOwnMessage->show();
-				ui.lWillOwnMessage->show();
+		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
+		ui.leWillOwnMessage->setText(fds->willOwnMessage());
+		ui.leWillUpdateInterval->setText(QString::number(fds->willTimeInterval()));
+		qDebug()<<"update type at setup "<<static_cast<int>(fds->willUpdateType()) <<"  start index "<<ui.cbWillUpdate->currentIndex();
+		ui.cbWillUpdate->setCurrentIndex(static_cast<int>(fds->willUpdateType()) );
+		fds->startWillTimer();
+		ui.cbWillMessageType->setCurrentIndex(static_cast<int>(fds->willMessageType()) );
+		ui.cbWillQoS->setCurrentIndex(fds->willQoS());
+		ui.cbWillTopic->addItem(fds->willTopic());
+		ui.cbWillTopic->setCurrentText(fds->willTopic());
+		ui.chbWillRetain->setChecked(fds->willRetain());
+		QVector<bool> statitics = fds->willStatistics();
+		for(int i = 0; i < statitics.count(); ++i) {
+			QListWidgetItem* item = ui.lwWillStatistics->item(static_cast<int>(i));
+			if(statitics[i]) {
+				item->setCheckState(Qt::Checked);
 			}
-			else if(ui.cbWillMessageType->currentIndex() == (int)LiveDataSource::WillMessageType::Statistics){
-				ui.lWillStatistics->show();
-				ui.lwWillStatistics->show();
+			else {
+				item->setCheckState(Qt::Unchecked);
 			}
-
-
-			if(ui.cbWillUpdate->currentIndex() == 0) {
-				ui.leWillUpdateInterval->show();
-				ui.lWillUpdateInterval->show();
-			}
-			else if (ui.cbWillUpdate->currentIndex() == 1)
-				ui.bWillUpdateNow->show();
 		}
+		qDebug()<<"chbWill is set to: "<<fds->mqttWillUse();
+		//when chbWill's isChecked corresponds with source's m_mqttWillUse it doesn't emit state changed signal, we have to force it
+		bool checked = fds->mqttWillUse();
+		ui.chbWill->setChecked(!checked);
+		ui.chbWill->setChecked(checked);
 	}
 }
 
@@ -282,6 +278,7 @@ void LiveDataDock::pauseContinueReading() {
 }
 
 void LiveDataDock::useWillMessage(int state) {
+	qDebug()<<"will checkstate changed" <<state;
 	if(state == Qt::Checked) {
 		for (auto* source: m_liveDataSources)
 			source->setMqttWillUse(true);
@@ -306,29 +303,12 @@ void LiveDataDock::useWillMessage(int state) {
 		}
 
 
-		if(ui.cbWillUpdate->currentIndex() == 0) {
+		if(ui.cbWillUpdate->currentIndex() == static_cast<int>(LiveDataSource::WillUpdateType::TimePeriod)) {
 			ui.leWillUpdateInterval->show();
 			ui.lWillUpdateInterval->show();
 		}
-		else if (ui.cbWillUpdate->currentIndex() == 1)
-			ui.bWillUpdateNow->show();
-
-		for (auto* source: m_liveDataSources) {
-			source->setWillRetain(ui.chbWillRetain->isChecked());
-			source->setWillQoS(ui.cbWillQoS->currentIndex());
-
-			source->setWillMessageType(static_cast<LiveDataSource::WillMessageType> (ui.cbWillMessageType->currentIndex()) );
-			if(static_cast<LiveDataSource::WillMessageType> (ui.cbWillMessageType->currentIndex())
-					== LiveDataSource::WillMessageType::OwnMessage)
-				source->setWillOwnMessage(ui.leWillOwnMessage->text());
-			if(ui.cbWillTopic->count() > 0) {
-				source->setWillTopic(ui.cbWillTopic->currentText());
-				source->clearLastMessage();
-			}
-
-			source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(ui.cbWillUpdate->currentIndex()));
-			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
-		}
+		else if (ui.cbWillUpdate->currentIndex() == static_cast<int>(LiveDataSource::WillUpdateType::OnClick))
+			ui.bWillUpdateNow->show();		
 	}
 	else if (state == Qt::Unchecked) {
 		for (auto* source: m_liveDataSources)
@@ -370,6 +350,7 @@ void LiveDataDock::willRetainChanged(int state) {
 }
 
 void LiveDataDock::willTopicChanged(const QString& topic) {
+	qDebug()<<"topic  changed" << topic;
 	for (auto* source: m_liveDataSources) {
 		if(source->willTopic() != topic)
 			source->clearLastMessage();
@@ -378,6 +359,7 @@ void LiveDataDock::willTopicChanged(const QString& topic) {
 }
 
 void LiveDataDock::willMessageTypeChanged(int type) {
+	qDebug()<<"message type changed" << type;
 	for (auto* source: m_liveDataSources)
 		source->setWillMessageType(static_cast<LiveDataSource::WillMessageType> (type));
 	if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::OwnMessage) {
@@ -401,6 +383,7 @@ void LiveDataDock::willMessageTypeChanged(int type) {
 }
 
 void LiveDataDock::willOwnMessageChanged(const QString& message) {
+	qDebug()<<"own message changed" << message;
 	for (auto* source: m_liveDataSources)
 		source->setWillOwnMessage(message);
 }
@@ -411,18 +394,18 @@ void LiveDataDock::updateTopics() {
 
 	if(!topics.isEmpty()) {
 		for(int i = 0; i < topics.count(); i++) {
-			ui.cbWillTopic->addItem(topics[i]);
+			if(ui.cbWillTopic->findText(topics[i]) < 0)
+				ui.cbWillTopic->addItem(topics[i]);
 		}
-		for (auto* source: m_liveDataSources) {
-			source->setWillTopic(ui.cbWillTopic->currentText());
-			source->clearLastMessage();
-		}
+		ui.cbWillTopic->setCurrentText(fds->willTopic());
 	}
 	else
 		qDebug()<<"Topic Vector Empty";
 }
 
 void LiveDataDock::willUpdateChanged(int updateType) {
+	qDebug()<<"Update type changed" << updateType;
+
 	for (auto* source: m_liveDataSources)
 		source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(updateType));
 
@@ -431,13 +414,18 @@ void LiveDataDock::willUpdateChanged(int updateType) {
 		ui.leWillUpdateInterval->show();
 		ui.lWillUpdateInterval->show();
 
-		for (auto* source: m_liveDataSources)
+		for (auto* source: m_liveDataSources) {
 			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
+			source->startWillTimer();
+		}
 	}
 	else if (static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::OnClick) {
 		ui.bWillUpdateNow->show();
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
+
+		for (auto* source: m_liveDataSources)
+			source->stopWillTimer();
 	}
 
 }
@@ -448,8 +436,11 @@ void LiveDataDock::willUpdateNow() {
 }
 
 void LiveDataDock::willUpdateIntervalChanged(const QString& interval) {
-	for (auto* source: m_liveDataSources)
+	qDebug()<<"Update interval changed " <<interval;
+	for (auto* source: m_liveDataSources) {
 		source->setWillTimeInterval(interval.toInt());
+		source->startWillTimer();
+	}
 }
 
 void LiveDataDock::statisticsChanged(QListWidgetItem *item) {
