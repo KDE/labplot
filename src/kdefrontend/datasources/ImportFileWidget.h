@@ -50,6 +50,7 @@ public:
 	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
 	~ImportFileWidget();
 
+	void loadSettings();
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
 	LiveDataSource::FileType currentFileType() const;
@@ -99,14 +100,12 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
-	void loadSettings();
 
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
-
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()

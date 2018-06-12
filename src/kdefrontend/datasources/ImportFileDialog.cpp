@@ -85,12 +85,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
 	//Signals/Slots
-	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
-	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
-	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
-	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -111,7 +105,19 @@ void ImportFileDialog::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
+
 	m_importFileWidget->showOptions(m_showOptions);
+	m_importFileWidget->loadSettings();
+
+	//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
+	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
+	connect(m_importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
+
+	checkOkButton();
 
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
@@ -337,23 +343,19 @@ void ImportFileDialog::checkOkButton() {
 	case LiveDataSource::SourceType::LocalSocket: {
 		const bool enable = QFile::exists(fileName);
 		if (enable) {
-			QLocalSocket* socket = new QLocalSocket(this);
-			socket->connectToServer(fileName, QLocalSocket::ReadOnly);
-			bool localSocketConnected = socket->waitForConnected(2000);
-
-			okButton->setEnabled(localSocketConnected);
-			if (localSocketConnected)
+			QLocalSocket lsocket{this};
+			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
+			if (lsocket.waitForConnected(20000)) {
+				QDEBUG("connected to local socket " << fileName);
+				lsocket.waitForReadyRead(500);
+				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
-			else
+				lsocket.disconnectFromServer();
+			} else {
+				QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
+				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Couldn't connect to the provided local socket."));
-
-			if (socket->state() == QLocalSocket::ConnectedState) {
-				socket->disconnectFromServer();
-				socket->waitForDisconnected(1000);
-				connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-			} else
-				delete socket;
-
+			}
 		} else {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Selected local socket doesn't exist."));

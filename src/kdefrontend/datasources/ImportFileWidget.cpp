@@ -806,10 +806,10 @@ void ImportFileWidget::refreshPreview() {
 						QDEBUG("connected to local socket " << fileName);
 						if ( lsocket.waitForReadyRead(500) )
 							importedStrings = filter->preview(lsocket);
+						lsocket.disconnectFromServer();
 					} else
 						QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
 
-					//TODO: lsocket.disconnectFromServer();
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
@@ -835,7 +835,6 @@ void ImportFileWidget::refreshPreview() {
 							importedStrings = filter->preview(udpSocket);
 
 						udpSocket.disconnectFromHost();
-						connect(&udpSocket, SIGNAL(disconnected()), &udpSocket, SLOT(deleteLater()));
 					} else
 						QDEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString());
 
