@@ -95,13 +95,13 @@ private:
 	bool m_fileEmpty;
 	bool m_liveDataSource;
     bool m_suppressRefresh;
-    QMqttClient *m_client;
-    QMqttSubscription *m_mainSubscription;
-    QMqttTopicFilter *m_filter;
-    QVector <QMqttSubscription*> m_mqttSubscriptions;
-    QCompleter *m_completer;
-    QStringList m_topicList;
-    bool m_editing;
+	QMqttClient *m_client;
+	QMqttSubscription *m_mainSubscription;
+	QMqttTopicFilter *m_filter;
+	QVector <QMqttSubscription*> m_mqttSubscriptions;
+	QCompleter *m_completer;
+	QStringList m_topicList;
+	bool m_editing;
 	QTimer *m_timer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
@@ -139,19 +139,19 @@ private slots:
 	void onMqttDisconnect();
 	void mqttButtonSubscribe(const QString&);
 	void mqttButtonUnsubscribe(const QString&);
-
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
 	void updateWillTopics();
 	void willUpdateChanged(int);
+	void mqttErrorChanged(QMqttClient::ClientError);
 
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
-    void newTopic(QString);
-    void subscriptionMade();
+	void newTopic(QString);
+	void subscriptionMade();
 
 	void checkedFitsTableToMatrix(const bool enable);
 

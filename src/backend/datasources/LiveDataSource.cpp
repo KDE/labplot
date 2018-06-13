@@ -83,8 +83,9 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_udpSocket(nullptr),
 	  m_serialPort(nullptr),
       m_client(new QMqttClient(this)),
-      m_mqttTest (false),
-	  m_mqttUseWill (false),
+	  m_mqttTest(false),
+	  m_mqttRetain(false),
+	  m_mqttUseWill(false),
 	  m_mqttFirstConnectEstablished(false),
 	  m_device(nullptr) {
 
@@ -93,8 +94,8 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 	connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &LiveDataSource::setWillForMqtt);
+	connect(m_client, &QMqttClient::errorChanged, this, &LiveDataSource::mqttErrorChanged);
 	//connect(this, &LiveDataSource::mqttAllArrived, this, &LiveDataSource::onAllArrived );
-    //connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::mqttMessageReceived);
 }
 
 LiveDataSource::~LiveDataSource() {
@@ -196,8 +197,6 @@ void LiveDataSource::updateNow() {
 	else {
 		m_updateTimer->stop();
 		read();
-		/*if(checkAllArrived())
-			onAllArrived();*/
 		if (m_updateType == TimeInterval && !m_paused)
 			m_updateTimer->start(m_updateInterval);
 	}
@@ -656,32 +655,15 @@ void LiveDataSource::read() {
 void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
 	qDebug()<< "Got new data from the device";
-    if(m_sourceType == Mqtt)
-    {/*
-        qDebug()<<"mqtt m_device";
-        //qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"   "<<m_device->openMode();
-        if(m_mqttTest || m_device->open(QIODevice::ReadWrite))
-        {
-            m_mqttTest = true;
-            qDebug() << m_device->bytesAvailable();
-            char line[5000];
-            int ok = qobject_cast<QTcpSocket*>(m_device)->readLine(line, sizeof(line));
-            //int ok = m_device->read(line, sizeof(line));
-            qDebug() << ok;
-            if(ok != -1)
-                qDebug()<<line;
-        }*/
-    }
-    else{
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-// 	else if (m_fileType == Binary)
+	// 	else if (m_fileType == Binary)
 	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
 	//for sequencial devices in read() we just request data/connect to servers
 	if (m_updateType == NewData)
-        read(); }
+		read();
 }
 
 void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError) {
@@ -951,6 +933,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 			writer->writeAttribute("subscription"+QString::number(i), m_subscriptions[i]);
 			writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_topicMap[m_subscriptions[i]]));
 		}
+		writer->writeAttribute("useRetain", QString::number(m_mqttRetain));
 		writer->writeAttribute("useWill", QString::number(m_mqttUseWill));
 		writer->writeAttribute("willTopic", m_willTopic);
 		writer->writeAttribute("willOwnMessage", m_willOwnMessage);
@@ -1143,6 +1126,12 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 				}
 
+				str =attribs.value("useRetain").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'useRetain'"));
+				else
+					m_mqttRetain = str.toInt();
+
 				str =attribs.value("useWill").toString();
 				if(str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'useWill'"));
@@ -1251,83 +1240,67 @@ void LiveDataSource::addMqttSubscriptions(const QMqttTopicFilter& filter, const 
 }
 
 void LiveDataSource::onMqttConnect() {
-	if(!m_mqttFirstConnectEstablished) {
-		qDebug()<<"connection made in live data source";
-		/*m_mqttTcp = qobject_cast<QTcpSocket *>(m_client->transport());
-	m_device = m_mqttTcp;
-	qDebug()<<m_device->objectName()<<"  "<<m_device->openMode();
-	qDebug() <<m_device<< "     "<<qobject_cast<QTcpSocket *>(m_device)->state();
-	if(m_device)
-		//connect(m_mqttTcp, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
-		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataSource::readyRead);
-	qDebug()<< m_device->isOpen()<<"  "<<m_device->isReadable()<<"  "<<m_device->objectName();*/
-		QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
-		while(i.hasNext()) {
-			i.next();
-			QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
-			if(temp) {
-				qDebug()<<temp->topic()<<"  "<<temp->qos();
-				m_messageArrived[temp->topic().filter()] = false;
-				m_subscriptions.push_back(temp->topic().filter());
-				//m_messagePuffer[temp->topic().filter()] = new QVector<QMqttMessage>;
-				connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
-			}
-		}
-		//qobject_cast<QTcpSocket *>(m_device)->waitForReadyRead();
-		m_mqttFirstConnectEstablished = true;
-		emit mqttSubscribed();
-	}
-	else {
-		qDebug() << "Resubscribing after will set";
-		QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
-		while(i.hasNext()) {
-			i.next();
-			QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
-			if(temp) {
-				qDebug()<<temp->topic()<<"  "<<temp->qos();
-				connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
-			}
-			else
-				qDebug()<<"Couldn't subscribe after will change";
-		}
-	}
-}
+	if(m_client->error() == QMqttClient::NoError) {
+		if(!m_mqttFirstConnectEstablished) {
+			qDebug()<<"connection made in live data source";
 
-void LiveDataSource::mqttMessageReceived(const QByteArray& msg, const QMqttTopicName& topic) {
-	/*qDebug()<<"mqtt irok file";
-	if(m_file->isOpen())
-		m_file->close();
-	m_file->open(QIODevice::ReadWrite | QIODevice::Append );
-	const char *data = msg.data();
-	QTextStream out(m_file);
-	out<<data<<"\n";
-	m_file->close();*/
+			QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+			while(i.hasNext()) {
+				i.next();
+				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+				if(temp) {
+					qDebug()<<temp->topic()<<"  "<<temp->qos();
+					m_messageArrived[temp->topic().filter()] = false;
+					m_subscriptions.push_back(temp->topic().filter());
+					connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+				}
+			}
+			m_mqttFirstConnectEstablished = true;
+			emit mqttSubscribed();
+		}
+		else {
+			qDebug() << "Resubscribing after will set";
+			QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+			while(i.hasNext()) {
+				i.next();
+				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+				if(temp) {
+					qDebug()<<temp->topic()<<"  "<<temp->qos();
+					connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+				}
+				else
+					qDebug()<<"Couldn't subscribe after will change";
+			}
+		}
+	}
 }
 
 void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
-	qDebug()<<"message received from "<<msg.topic().name();
-	if(m_messageArrived[msg.topic()] == false) {
-		m_messageArrived[msg.topic()] = true;
-		m_messagePuffer[msg.topic()].push_back(msg);
-	}
-	else
-		m_messagePuffer[msg.topic()].push_back(msg);
-
-	if(msg.topic().name() == m_willTopic)
-		m_willLastMessage = QString(msg.payload());
-
-	bool check = true;
-	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while(i.hasNext()) {
-		i.next();
-		if(i.value() == false )
-		{
-			check = false;
-			break;
+	if(!msg.retain() || (msg.retain() && m_mqttRetain) ) {
+		qDebug()<<"message received from "<<msg.topic().name();
+		if(m_messageArrived[msg.topic()] == false) {
+			m_messageArrived[msg.topic()] = true;
+			m_messagePuffer[msg.topic()].push_back(msg);
 		}
+		else
+			m_messagePuffer[msg.topic()].push_back(msg);
+
+		if(msg.topic().name() == m_willTopic)
+			m_willLastMessage = QString(msg.payload());
+
+		bool check = true;
+		QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+		while(i.hasNext()) {
+			i.next();
+			if(i.value() == false )
+			{
+				check = false;
+				break;
+			}
+		}
+		if (check == true)
+			emit mqttAllArrived();
 	}
-	if (check == true)
-		emit mqttAllArrived();
 }
 
 void LiveDataSource::onAllArrived() {
@@ -1403,7 +1376,7 @@ bool LiveDataSource::mqttWillUse() const{
 }
 
 void  LiveDataSource::setWillTopic(const QString& topic) {
-	m_willTopic = topic;	
+	m_willTopic = topic;
 }
 
 QString LiveDataSource::willTopic() const{
@@ -1469,7 +1442,7 @@ void LiveDataSource::setWillForMqtt() {
 					asciiFilter->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Numeric) {
 				m_client->setWillMessage(asciiFilter->mqttColumnStatistics(m_willTopic, this).toUtf8());
 				qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
-			}		
+			}
 			else {
 				m_client->setWillMessage(QString("").toUtf8());
 				qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
@@ -1521,10 +1494,40 @@ QVector<bool> LiveDataSource::willStatistics() const{
 	return m_willStatistics;
 }
 
-void LiveDataSource::startWillTimer() {
+void LiveDataSource::startWillTimer() const{
 	if(m_willUpdateType == WillUpdateType::TimePeriod)
 		m_willTimer->start(m_willTimeInterval);
 }
-void LiveDataSource::stopWillTimer() {
+void LiveDataSource::stopWillTimer() const{
 	m_willTimer->stop();
+}
+
+void LiveDataSource::setMqttRetain(bool retain) {
+	m_mqttRetain = retain;
+}
+
+bool LiveDataSource::mqttRetain() const {
+	return m_mqttRetain;
+}
+
+void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
+	switch (clientError) {
+	case QMqttClient::BadUsernameOrPassword:
+		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
+		break;
+	case QMqttClient::IdRejected:
+		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
+		break;
+	case QMqttClient::ServerUnavailable:
+		QMessageBox::warning(this, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
+		break;
+	case QMqttClient::NotAuthorized:
+		QMessageBox::warning(this, "Couldn't connect", "The client is not authorized to connect.");
+		break;
+	case QMqttClient::UnknownError:
+		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		break;
+	default:
+		break;
+	}
 }

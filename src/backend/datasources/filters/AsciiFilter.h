@@ -68,7 +68,7 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
-    void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
+	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
 	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;

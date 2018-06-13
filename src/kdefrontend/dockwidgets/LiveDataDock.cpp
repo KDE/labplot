@@ -131,7 +131,6 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
 
-
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
 		ui.chbWill->show();
 		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
@@ -308,7 +307,7 @@ void LiveDataDock::useWillMessage(int state) {
 			ui.lWillUpdateInterval->show();
 		}
 		else if (ui.cbWillUpdate->currentIndex() == static_cast<int>(LiveDataSource::WillUpdateType::OnClick))
-			ui.bWillUpdateNow->show();		
+			ui.bWillUpdateNow->show();
 	}
 	else if (state == Qt::Unchecked) {
 		for (auto* source: m_liveDataSources)
@@ -354,7 +353,7 @@ void LiveDataDock::willTopicChanged(const QString& topic) {
 	for (auto* source: m_liveDataSources) {
 		if(source->willTopic() != topic)
 			source->clearLastMessage();
-		source->setWillTopic(topic);		
+		source->setWillTopic(topic);
 	}
 }
 

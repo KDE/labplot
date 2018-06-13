@@ -195,6 +195,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateChanged);
 	connect(this, &ImportFileWidget::subscriptionMade, this, &ImportFileWidget::updateWillTopics);
+	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
@@ -250,6 +252,7 @@ void ImportFileWidget::loadSettings() {
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
 	ui.chbAuthentication->setChecked(conf.readEntry("mqttUseAuthentication").toInt());
+	ui.chbRetain->setChecked(conf.readEntry("mqttUseRetain").toInt());
 	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
 	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
 	ui.leID->setText(conf.readEntry("mqttId",""));
@@ -319,6 +322,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
 	conf.writeEntry("mqttUseId", static_cast<int>(ui.chbID->isChecked()));
 	conf.writeEntry("mqttUseAuthentication", static_cast<int>(ui.chbAuthentication->isChecked()));
+	conf.writeEntry("mqttUseRetain", static_cast<int>(ui.chbRetain->isChecked()));
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
@@ -482,6 +486,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
 			source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 		}
+		source->setMqttRetain(ui.chbRetain->isChecked());
 		source->setWillMessageType(static_cast<LiveDataSource::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
 		source->setWillOwnMessage(ui.leWillOwnMessage->text());
 		source->setWillQoS(ui.cbWillQoS->currentIndex() );
@@ -1477,20 +1482,22 @@ void ImportFileWidget::mqttConnection()
 }
 
 void ImportFileWidget::onMqttConnect() {
-	ui.bConnect->setText("Disconnect");
-	ui.leHost->setEnabled(false);
-	ui.lePort->setEnabled(false);
-	ui.lePassword->setEnabled(false);
-	ui.leUsername->setEnabled(false);
-	ui.leID->setEnabled(false);
-	ui.cbSourceType->setEnabled(false);
-	ui.chbAuthentication->setEnabled(false);
-	ui.chbID->setEnabled(false);
-	QMessageBox::information(this, "Connection successful", "Connection established");
-	QMqttTopicFilter globalFilter{"#"};
-	m_mainSubscription = m_client->subscribe(globalFilter, 1);
-	if(!m_mainSubscription)
-		QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+	if(m_client->error() == QMqttClient::NoError) {
+		ui.bConnect->setText("Disconnect");
+		ui.leHost->setEnabled(false);
+		ui.lePort->setEnabled(false);
+		ui.lePassword->setEnabled(false);
+		ui.leUsername->setEnabled(false);
+		ui.leID->setEnabled(false);
+		ui.cbSourceType->setEnabled(false);
+		ui.chbAuthentication->setEnabled(false);
+		ui.chbID->setEnabled(false);
+		QMessageBox::information(this, "Connection successful", "Connection established");
+		QMqttTopicFilter globalFilter{"#"};
+		m_mainSubscription = m_client->subscribe(globalFilter, 1);
+		if(!m_mainSubscription)
+			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+	}
 }
 
 void ImportFileWidget::mqttSubscribe() {
@@ -1820,4 +1827,26 @@ void ImportFileWidget::hideMQTT() {
 	ui.lWillUpdateInterval->hide();
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
+}
+
+void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
+	switch (clientError) {
+	case QMqttClient::BadUsernameOrPassword:
+		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
+		break;
+	case QMqttClient::IdRejected:
+		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
+		break;
+	case QMqttClient::ServerUnavailable:
+		QMessageBox::warning(this, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
+		break;
+	case QMqttClient::NotAuthorized:
+		QMessageBox::warning(this, "Couldn't connect", "The client is not authorized to connect.");
+		break;
+	case QMqttClient::UnknownError:
+		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		break;
+	default:
+		break;
+	}
 }

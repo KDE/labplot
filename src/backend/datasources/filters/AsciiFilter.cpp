@@ -2402,8 +2402,7 @@ int AsciiFilterPrivate::prepareMqttToRead(const QString& message,  const QString
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
 	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
 
-	/*if (m_actualRows == 0 && !device.isSequential())
-		return 1;*/
+
 	qDebug()<<"-----final column mode" << "   "<<columnModes[m_actualCols-1];
 
 	return 0;
@@ -2721,7 +2720,6 @@ QString AsciiFilterPrivate::mqttColumnStatistics(const QString& topic,  Abstract
 	}
 	return statistics;
 }
-
 
 AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode(const QString& topic,  AbstractDataSource* dataSource) const{
 	return d->mqttColumnMode(topic, dataSource);

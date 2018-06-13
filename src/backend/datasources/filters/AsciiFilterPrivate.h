@@ -53,7 +53,7 @@ public:
 	QVector<QStringList> preview(QIODevice& device);
 
 	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
-    int prepareMqttToRead(const QString&,  const QString&);
+	int prepareMqttToRead(const QString&,  const QString&);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
 	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;

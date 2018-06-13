@@ -169,13 +169,13 @@ public:
 	void setLocalSocketName(const QString&);
 	QString localSocketName() const;
 
-    void setMqttClient(const QString&, const quint16&);
-    void setMqttClientAuthentication(const QString&, const QString&);
-    void setMqttClientId(const QString&);
-    QMqttClient mqttClient() const;
+	void setMqttClient(const QString&, const quint16&);
+	void setMqttClientAuthentication(const QString&, const QString&);
+	void setMqttClientId(const QString&);
+	QMqttClient mqttClient() const;
 
-    void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
-    QVector<QMqttTopicName> mqttSubscribtions() const;
+	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
+	QVector<QMqttTopicName> mqttSubscribtions() const;
 
 	void updateNow();
 	void pauseReading();
@@ -191,7 +191,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-    int topicNumber();
+	int topicNumber();
 	int topicIndex(const QString&);
 	QVector<QString> topicVector() const;
 	bool checkAllArrived();
@@ -220,10 +220,13 @@ public:
 	int willTimeInterval() const;
 	void setWillTimeInterval(int);
 
-	void startWillTimer();
-	void stopWillTimer();
+	void startWillTimer() const;
+	void stopWillTimer() const;
 
 	void setWillForMqtt() ;
+
+	void setMqttRetain(bool);
+	bool mqttRetain() const;
 
 	void clearLastMessage();
 	void addWillStatistics(WillStatistics);
@@ -277,12 +280,12 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
-    QMqttClient* m_client;
-    QMap<QMqttTopicFilter, quint8> m_topicMap;
-    QMap<QMqttTopicName, bool> m_messageArrived;
+	QMqttClient* m_client;
+	QMap<QMqttTopicFilter, quint8> m_topicMap;
+	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QVector<QMqttMessage>> m_messagePuffer;
-    QVector<QString> m_subscriptions;
-    bool m_mqttTest;
+	QVector<QString> m_subscriptions;
+	bool m_mqttTest;
 	bool m_mqttUseWill;
 	QString m_willMessage;
 	QString m_willTopic;
@@ -296,6 +299,7 @@ private:
 	WillUpdateType m_willUpdateType;
 	QVector<bool> m_willStatistics;
 	bool m_mqttFirstConnectEstablished;
+	bool m_mqttRetain;
 
 public slots:
 	void read();
@@ -311,13 +315,13 @@ private slots:
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
 
-    void onMqttConnect();
-    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-    void mqttSubscribtionMessageReceived(const QMqttMessage&);
-    void onAllArrived();
+	void onMqttConnect();
+	void mqttSubscribtionMessageReceived(const QMqttMessage&);
+	void onAllArrived();
+	void mqttErrorChanged(QMqttClient::ClientError);
 
 signals:
-    void mqttAllArrived();
+	void mqttAllArrived();
 	void mqttSubscribed();
 
 };
