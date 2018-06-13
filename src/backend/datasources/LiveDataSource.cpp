@@ -1513,19 +1513,19 @@ bool LiveDataSource::mqttRetain() const {
 void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
+		QMessageBox::warning(0, "Couldn't connect", "Bad username or password");
 		break;
 	case QMqttClient::IdRejected:
-		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
+		QMessageBox::warning(0, "Couldn't connect", "The client ID wasn't accepted");
 		break;
 	case QMqttClient::ServerUnavailable:
-		QMessageBox::warning(this, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
+		QMessageBox::warning(0, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
 		break;
 	case QMqttClient::NotAuthorized:
-		QMessageBox::warning(this, "Couldn't connect", "The client is not authorized to connect.");
+		QMessageBox::warning(0, "Couldn't connect", "The client is not authorized to connect.");
 		break;
 	case QMqttClient::UnknownError:
-		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		QMessageBox::warning(0, "Unknown MQTT error", "An unknown error occurred.");
 		break;
 	default:
 		break;
