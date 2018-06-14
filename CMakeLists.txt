@@ -257,7 +257,7 @@ ENDIF ()
 
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS	
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS	
 	Mqtt
 )
 IF (Qt5Mqtt_FOUND)
