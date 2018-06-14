@@ -56,7 +56,6 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLocale>
 
 #include <QDebug>
-#include <QtWebSockets/QWebSocket>
 
 /*!
   \class LiveDataSource
