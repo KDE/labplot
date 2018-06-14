@@ -18,6 +18,7 @@ public:
 	void setValueFromString(int column, int row, QString value);
 
 	int prepareDeviceToRead(QIODevice&);
+	int prepareDocumentToRead(QJsonDocument&);
 	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
 	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
@@ -25,6 +26,8 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName);
 	QVector<QStringList> preview(QIODevice& device);
+	QVector<QStringList> preview(QJsonDocument& doc);
+	QVector<QStringList> preview();
 
 	const JsonFilter* q;
 

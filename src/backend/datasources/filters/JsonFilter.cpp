@@ -40,8 +40,12 @@ QVector<QStringList> JsonFilter::preview(const QString& fileName) {
 	return d->preview(fileName);
 }
 
-QVector<QStringList> JsonFilter::preview(QIODevice &device) {
+QVector<QStringList> JsonFilter::preview(QIODevice& device) {
 	return d->preview(device);
+}
+
+QVector<QStringList> JsonFilter::preview(QJsonDocument& doc) {
+	return d->preview(doc);
 }
 
 /*!
@@ -192,7 +196,7 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	m_actualCols(0),
 	m_prepared(false),
 	m_columnOffset(0) {
-
+	DEBUG("JsonFilterPrivate constructor");
 }
 
 int JsonFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
@@ -329,8 +333,7 @@ void JsonFilterPrivate::setValueFromString(int column, int row, QString valueStr
 }
 
 /*!
-returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end,
-2 if a parse error has occurred and 0 otherwise.
+returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end
 */
 int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("device is sequential = " << device.isSequential());
@@ -346,6 +349,20 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	if(err.error != QJsonParseError::NoError || doc.isEmpty())
 		return 1;
+
+	if(prepareDocumentToRead(doc) != 0)
+		return 2;
+	// reset to start of file
+	if (!device.isSequential())
+		device.seek(0);
+
+	return 0;
+}
+
+/*!
+returns 2 if a parse error has occurred and 0 otherwise.
+*/
+int JsonFilterPrivate::prepareDocumentToRead(QJsonDocument& doc) {
 
 	int countRows = 0;
 	int countCols = -1;
@@ -399,9 +416,6 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	if(parseColumnModes(firstRow) != 0)
 		return 2;
-	// reset to start of file
-	if (!device.isSequential())
-		device.seek(0);
 
 	DEBUG("start/end column: = " << startColumn << ' ' << endColumn);
 	DEBUG("start/end rows = " << startRow << ' ' << endRow);
@@ -423,14 +437,15 @@ reads the content of device \c device to the data source \c dataSource. Uses the
 */
 void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	Q_UNUSED(lines)
-
+	//TODO:Fix reading from preview
 	if(!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
-		if(deviceError != 0){
-			DEBUG("Device error = " << deviceError);
-			return;
-		}
+		//const int deviceError = prepareDeviceToRead(device);
+		//if(deviceError != 0){
+		//	DEBUG("Device error = " << deviceError);
+		//	return;
+		//}
 		//TODO: support other modes and vector names
+		QDEBUG(QString::fromUtf8(m_preparedDoc.toJson()));
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, QStringList(), columnModes);
 		m_prepared = true;
 	}
@@ -508,16 +523,40 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 }
 
 /*!
+generates the preview for the file \c fileName.
+*/
+QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName) {
+	KFilterDev device(fileName);
+	return preview(device);
+}
+
+/*!
 generates the preview for device \c device.
 */
 QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
-	QVector<QStringList> dataStrings;
 	const int deviceError = prepareDeviceToRead(device);
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
-		return dataStrings;
+		return QVector<QStringList>();
 	}
 
+	return preview();
+}
+
+/*!
+generates the preview for document \c doc.
+*/
+QVector<QStringList> JsonFilterPrivate::preview(QJsonDocument &doc) {
+	if(prepareDocumentToRead(doc) != 0)
+		return QVector<QStringList>();
+	return preview();
+}
+
+/*!
+generates the preview for document \c m_preparedDoc.
+*/
+QVector<QStringList> JsonFilterPrivate::preview() {
+	QVector<QStringList> dataStrings;
 	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
@@ -556,7 +595,7 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
 					value = *(row.toArray().begin() + colIndex);
 					break;
 				}
-				//TODO: implement other value types
+					//TODO: implement other value types
 				case QJsonValue::Double:
 				case QJsonValue::String:
 				case QJsonValue::Bool:
@@ -593,14 +632,6 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice &device) {
 }
 
 /*!
-generates the preview for the file \c fileName.
-*/
-QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName) {
-	KFilterDev device(fileName);
-	return preview(device);
-}
-
-/*!
 writes the content of \c dataSource to the file \c fileName.
 */
 void JsonFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
@@ -631,6 +662,7 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("endColumn", QString::number(d->endColumn));
 
 	writer->writeEndElement();
+	DEBUG("JsonFilter save params");
 }
 
 /*!
@@ -710,5 +742,6 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 	else
 		d->endColumn = str.toInt();
 
-	 return true;
+	DEBUG("JsonFilter load params");
+	return true;
 }

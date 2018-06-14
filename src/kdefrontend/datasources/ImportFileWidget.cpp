@@ -59,10 +59,12 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTcpSocket>
 #include <QTimer>
 #include <QUdpSocket>
+#include <QBuffer>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
+#include <QtCore/QJsonDocument>
 
 /*!
    \class ImportFileWidget
@@ -112,7 +114,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.swOptions->insertWidget(LiveDataSource::FITS, fitsw);
 
 	QWidget* jsonw = new QWidget();
-	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw));
+	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 	ui.swOptions->insertWidget(LiveDataSource::Json, jsonw);
 
 	// the table widget for preview
@@ -632,6 +634,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
 		} else if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Json);
+			// update Json tree widget using current selected file
 		} else
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Binary);
 	}
@@ -717,6 +720,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	case LiveDataSource::Json:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
+		m_jsonOptionsWidget->updateContent();
 		break;
 	default:
 		DEBUG("unknown file type");
@@ -942,7 +946,9 @@ void ImportFileWidget::refreshPreview() {
 	case LiveDataSource::Json: {
 			ui.tePreview->clear();
 			JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
-			importedStrings = filter->preview(fileName);
+			m_jsonOptionsWidget->applyFilterSettings(filter);
+			QJsonDocument doc = m_jsonOptionsWidget->selectedJson();
+			importedStrings = filter->preview(doc);
 			tmpTableWidget = m_twPreview;
 			columnModes = filter->columnModes();
 			break;

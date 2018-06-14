@@ -115,6 +115,7 @@ signals:
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 	friend class FITSOptionsWidget;
+	friend class JsonOptionsWidget;
 };
 
 #endif

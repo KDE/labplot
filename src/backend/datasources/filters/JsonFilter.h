@@ -3,10 +3,12 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
+#include <QAbstractItemModel>
 #include <QJsonValue>
 
 class QStringList;
 class QIODevice;
+class QJsonDocument;
 class JsonFilterPrivate;
 
 class JsonFilter : public AbstractFileFilter {
@@ -32,6 +34,7 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName);
 	QVector<QStringList> preview(QIODevice& device);
+	QVector<QStringList> preview(QJsonDocument& doc);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;

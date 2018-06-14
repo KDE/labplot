@@ -1,8 +1,11 @@
+#include "ImportFileWidget.h"
 #include "JsonOptionsWidget.h"
+#include "QJsonModel.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 
 #include <KLocale>
+#include <KFilterDev>
 #include <KSharedConfig>
 #include <KConfigGroup>
 /*!
@@ -11,22 +14,30 @@
 
 \ingroup kdefrontend
 */
-JsonOptionsWidget::JsonOptionsWidget(QWidget* parent) : QWidget(parent) {
+JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
+	m_model = new QJsonModel();
+	m_lastItem = nullptr;
 
-	ui.cbDataContainerType->addItems(JsonFilter::dataContainerTypes());
+	ui.tvJson->setModel(m_model);
+
 	ui.cbDataRowType->addItems(JsonFilter::dataRowTypes());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
+	connect(ui.chbUseRootEl, &QCheckBox::stateChanged, [=](int state) {
+		ui.tvJson->setEnabled(state == 0);
+	});
+	connect(ui.tvJson, &QAbstractItemView::clicked, this, &JsonOptionsWidget::indexChanged);
+
+	connect(m_fileWidget, SIGNAL(fileNameChanged()), this, SLOT(updateContent()));
 	setTooltips();
 }
 
 void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter) const {
 	Q_ASSERT(filter);
 
-	filter->setDataContainerName(ui.leDataContainerName->text());
-	filter->setDataContainerType(JsonFilter::DataContainerType(ui.cbDataContainerType->currentIndex()));
+	filter->setDataContainerType(getCurrentType());
 	//TODO: change this after implementation other row types
 	filter->setDataRowType(ui.cbDataRowType->currentIndex() == 0 ? QJsonValue::Array : QJsonValue::Object);
 	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()));
@@ -35,11 +46,15 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter) const {
 	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
 }
 
+void JsonOptionsWidget::clear() {
+	m_model->clear();
+}
+
 void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	ui.leDataContainerName->setText(conf.readEntry("DataContainerName", ""));
-	ui.cbDataContainerType->setCurrentIndex(conf.readEntry("DataContainerType", (int)JsonFilter::Array));
+	//ui.leDataContainerName->setText(conf.readEntry("DataContainerName", ""));
+	//ui.cbDataContainerType->setCurrentIndex(conf.readEntry("DataContainerType", (int)JsonFilter::Array));
 	//TODO: change this after implementation other row types
 	ui.cbDataRowType->setCurrentIndex(conf.readEntry("DataRowType", 0));
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
@@ -51,8 +66,8 @@ void JsonOptionsWidget::loadSettings() const {
 void JsonOptionsWidget::saveSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	conf.writeEntry("DataContainerName", ui.leDataContainerName->text());
-	conf.writeEntry("DataContainerType", ui.cbDataContainerType->currentIndex());
+//	conf.writeEntry("DataContainerName", ui.leDataContainerName->text());
+//	conf.writeEntry("DataContainerType", ui.cbDataContainerType->currentIndex());
 	conf.writeEntry("DataRowType", ui.cbDataRowType->currentIndex());
 	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
@@ -60,7 +75,39 @@ void JsonOptionsWidget::saveSettings() {
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
 }
 
-void JsonOptionsWidget::setTooltips(){
+void JsonOptionsWidget::updateContent() {
+	if(m_fileWidget->currentFileType() == LiveDataSource::Json){
+		KFilterDev device(m_fileWidget->fileName());
+		if (!device.open(QIODevice::ReadOnly))
+			return;
+
+		if (device.atEnd() && !device.isSequential()) // empty file
+			return;
+
+		m_model->loadJson(device.readAll());
+	}
+}
+
+QJsonDocument JsonOptionsWidget::selectedJson() const {
+	if(ui.chbUseRootEl->isChecked() || ui.tvJson->currentIndex().internalPointer() == nullptr)
+		return m_model->json();
+	else {
+		QJsonDocument data = QJsonDocument::fromVariant(m_model->genJsonByIndex(ui.tvJson->currentIndex()).toVariant());
+		if (data.isEmpty())
+			data = m_model->json();
+		return data;
+	}
+}
+
+void JsonOptionsWidget::indexChanged() {
+	if(ui.tvJson->currentIndex().internalPointer() != nullptr)
+		m_lastItem = static_cast<QJsonTreeItem*>(ui.tvJson->currentIndex().internalPointer());
+	else
+		m_lastItem = nullptr;
+	m_fileWidget->refreshPreview();
+}
+
+void JsonOptionsWidget::setTooltips() {
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
 	const QString textNumberFormat = textNumberFormatShort + "<br><br>" + i18n(
 			"For 'C Format', a period is used for the decimal point character and comma is used for the thousands group separator. "
@@ -125,4 +172,25 @@ void JsonOptionsWidget::setTooltips(){
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
+}
+
+JsonFilter::DataContainerType JsonOptionsWidget::getCurrentType() const {
+	if(ui.chbUseRootEl->isChecked() || m_lastItem == nullptr) {
+		QJsonDocument doc = m_model->json();
+		if(doc.isArray())
+			return JsonFilter::Array;
+		else
+			return JsonFilter::Object;
+	}
+	else{
+		switch(m_lastItem->type()){
+			case QJsonValue::Array:
+				return JsonFilter::Array;
+			case QJsonValue::Object:
+				return JsonFilter::Object;
+			default:
+				DEBUG("Undefined value type: " << m_lastItem->type());
+				return JsonFilter::Object;
+		}
+	}
 }
