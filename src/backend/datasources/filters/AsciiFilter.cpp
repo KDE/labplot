@@ -1673,18 +1673,17 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 	PERFTRACE("AsciiLiveDataImportTotal: ");
 #endif
 	LiveDataSource::ReadingType readingType;
-	if (!m_prepared)
+	if (!m_prepared) {
 		readingType = LiveDataSource::ReadingType::TillEnd;
-	else {
+	} else {
 		//we have to read all the data when reading from end
 		//so we set readingType to TillEnd
-		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
+		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd) {
 			readingType = LiveDataSource::ReadingType::TillEnd;
-		else
+		} else {
 			readingType = spreadsheet->readingType();
+		}
 	}
-
-
 
 	//count the new lines, increase actualrows on each
 	//now we read all the new lines, if we want to use sample rate
@@ -1705,8 +1704,8 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 #endif
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 		for (auto& valueString: newDataList) {
-			QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-			for (auto& valueString2: splitString) {
+			QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
+			for (const auto& valueString2: splitString) {
 				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
 					if (readingType != LiveDataSource::ReadingType::TillEnd)
 						newData[newDataIdx++] = valueString2;
@@ -1791,11 +1790,11 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 							for(int i = 1; i <= m_actualRows; i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
 										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
-								qDebug()<< "overwrite row"<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
+								qDebug()<< "overwrite row "<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
 							}
 							for(int i = 0; i < rowDiff; i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
-								qDebug()<<i<<"row = null";
+								qDebug()<<i<<" row = null";
 							}
 						}
 						break;
@@ -1808,7 +1807,7 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (i) =
 										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
-								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+								qDebug()<< "overwrite row "<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
 							}
 						}
 						if(m_actualRows < spreadsheet->keepNvalues()) {
@@ -1930,14 +1929,14 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 
 		if (linesToRead == 0)
 			return;
-		//feri
 
 	} else {
 		if(spreadsheet->keepLastValues()) {
 			linesToRead = newLinesTillEnd > m_actualRows ? m_actualRows : newLinesTillEnd;
 		}
-		else
+		else {
 			linesToRead = newLinesTillEnd;
+		}
 	}
 	qDebug()<<"linestoread = "<<linesToRead;
 
@@ -2224,7 +2223,7 @@ void AsciiFilterPrivate::readFromMqtt(const QString& message, const QString& top
 		}
 
 		//loop over all affected plots and retransform them
-		for (auto* plot: plots) {
+		for (auto* const plot: plots) {
 			//TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
 			// 				plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
