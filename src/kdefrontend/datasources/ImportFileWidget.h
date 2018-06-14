@@ -33,12 +33,16 @@
 #include "ui_importfilewidget.h"
 #include "backend/datasources/LiveDataSource.h"
 #include <memory>
+
+#ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/qmqttsubscription.h>
 #include <QtMqtt/QMqttTopicName>
 #include <QtMqtt/QMqttTopicFilter>
+#endif
+
 #include <QVector>
 #include <QCompleter>
 #include <QStringList>
@@ -80,7 +84,11 @@ public:
     QString serialPort() const;
     int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
-    bool isMqttValid();
+#ifdef HAVE_MQTT
+    bool isMqttValid();	
+#endif
+	void hideMQTT();
+
 private:
 	Ui::ImportFileWidget ui;
 
@@ -95,6 +103,7 @@ private:
 	bool m_fileEmpty;
 	bool m_liveDataSource;
     bool m_suppressRefresh;
+#ifdef HAVE_MQTT
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
 	QMqttTopicFilter *m_filter;
@@ -109,7 +118,7 @@ private:
 	QString m_mqttNewTopic;
 	bool m_mqttSubscribeButton;
 	QString m_mqttUnsubscribeTopic;
-	void hideMQTT();
+#endif
 
 
 private slots:
@@ -126,6 +135,7 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
+#ifdef HAVE_MQTT
     void idChecked(int);
     void authenticationChecked(int);
     void mqttConnection();
@@ -144,14 +154,18 @@ private slots:
 	void updateWillTopics();
 	void willUpdateChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
+#endif
 
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
+
+#ifdef HAVE_MQTT
 	void newTopic(QString);
 	void subscriptionMade();
+#endif
 
 	void checkedFitsTableToMatrix(const bool enable);
 

@@ -60,6 +60,7 @@ private slots:
 	void updateNow();
 	void pauseContinueReading();
 
+#ifdef HAVE_MQTT
 	void useWillMessage(int);
 	void willQoSChanged(int);
 	void willRetainChanged(int);
@@ -71,6 +72,7 @@ private slots:
 	void willUpdateNow();
 	void willUpdateIntervalChanged(const QString&);
 	void statisticsChanged(QListWidgetItem *);
+#endif
 
 public slots:
 

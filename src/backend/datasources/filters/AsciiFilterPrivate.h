@@ -52,11 +52,13 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
 
+#ifdef HAVE_MQTT
 	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMqttToRead(const QString&,  const QString&);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
 	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
+#endif
 
 	const AsciiFilter* q;
 

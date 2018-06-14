@@ -1570,6 +1570,7 @@ int AsciiFilter::isPrepared() {
     return d->isPrepared();
 }
 
+#ifdef HAVE_MQTT
 void AsciiFilter::readFromMqtt(const QString& message, const QString& topic, AbstractDataSource* dataSource) {
 	d->readFromMqtt(message, topic, dataSource);
 }
@@ -2735,3 +2736,4 @@ AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode(const QString& top
 
 	return columnModes[topicToCol]	;
 }
+#endif

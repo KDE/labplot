@@ -62,6 +62,8 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
+
+#ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
@@ -69,6 +71,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
+#endif
 
 
 /*!
@@ -82,8 +85,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fileEmpty(false),
 	m_liveDataSource(true),
     m_editing(false),
+#ifdef HAVE_MQTT
 	m_mqttReadyForPreview (false),
 	m_mqttSubscribeButton (true),
+#endif
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
@@ -165,8 +170,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
-
+#ifdef HAVE_MQTT
     m_client = new QMqttClient(this);
+#endif
 
 	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -178,6 +184,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+#ifdef HAVE_MQTT
 	connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
 	connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
 	connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
@@ -196,8 +203,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateChanged);
 	connect(this, &ImportFileWidget::subscriptionMade, this, &ImportFileWidget::updateWillTopics);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+#endif
 
-
+#ifndef HAVE_MQTT
+	ui.cbSourceType->removeItem(LiveDataSource::SourceType::Mqtt);
+#endif
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
 
@@ -250,6 +260,7 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+#ifdef HAVE_MQTT
 	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
 	ui.chbAuthentication->setChecked(conf.readEntry("mqttUseAuthentication").toInt());
 	ui.chbRetain->setChecked(conf.readEntry("mqttUseRetain").toInt());
@@ -274,6 +285,7 @@ void ImportFileWidget::loadSettings() {
 		ui.chbWill->setChecked(true);
 		ui.chbWill->setChecked(false);
 	}
+#endif
 	m_suppressRefresh = false;
 	refreshPreview();
 }
@@ -303,6 +315,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+#ifdef HAVE_MQTT
 	conf.writeEntry("mqttUsername", ui.leUsername->text());
 	conf.writeEntry("mqttPassword", ui.lePassword->text());
 	conf.writeEntry("mqttId", ui.leID->text());
@@ -323,6 +336,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttUseId", static_cast<int>(ui.chbID->isChecked()));
 	conf.writeEntry("mqttUseAuthentication", static_cast<int>(ui.chbAuthentication->isChecked()));
 	conf.writeEntry("mqttUseRetain", static_cast<int>(ui.chbRetain->isChecked()));
+#endif
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
@@ -356,6 +370,10 @@ void ImportFileWidget::hideDataSource() {
 
 	ui.sbUpdateInterval->hide();
 	ui.lUpdateInterval->hide();
+
+#ifdef HAVE_MQTT
+	hideMQTT();
+#endif
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -476,6 +494,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
+#ifdef HAVE_MQTT
 	case LiveDataSource::SourceType::Mqtt:{
 		qDebug()<<"Saving mqtt";
 		source->setMqttClient(m_client->hostname(), m_client->port());
@@ -502,6 +521,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		}
 		break;
 	}
+#endif
 	default:
 		break;
 	}
@@ -959,6 +979,7 @@ void ImportFileWidget::refreshPreview() {
 					}
 					break;
 				}
+#ifdef HAVE_MQTT
 			case LiveDataSource::SourceType::Mqtt: {
 				qDebug()<<"preview mqtt, is it ready:"<<m_mqttReadyForPreview;
 				if(m_mqttReadyForPreview)
@@ -981,7 +1002,9 @@ void ImportFileWidget::refreshPreview() {
 					}
 					m_mqttReadyForPreview = false;
 				}
+				break;
 			}
+#endif
 			}
 
 			tmpTableWidget = m_twPreview;
@@ -1280,6 +1303,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 				ui.cbReadType->removeItem(i);
 		}
 		break;
+#ifdef HAVE_MQTT
     case LiveDataSource::SourceType::Mqtt:
         ui.lBaudRate->hide();
         ui.cbBaudRate->hide();
@@ -1376,6 +1400,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		}
 
         break;
+#endif
 	default:
 		break;
 	}
@@ -1416,6 +1441,7 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 	ui.tabWidget->removeTab(2);
 }
 
+#ifdef HAVE_MQTT
 void ImportFileWidget::idChecked(int state)
 {
 	if (state == 2)
@@ -1790,6 +1816,7 @@ void ImportFileWidget::willUpdateChanged(int updateType) {
 		ui.lWillUpdateInterval->hide();
 	}
 }
+#endif
 
 void ImportFileWidget::hideMQTT() {
 	ui.leID->hide();
@@ -1829,6 +1856,7 @@ void ImportFileWidget::hideMQTT() {
 	ui.lWillStatistics->hide();
 }
 
+#ifdef HAVE_MQTT
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
@@ -1850,3 +1878,4 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		break;
 	}
 }
+#endif

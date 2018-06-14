@@ -36,8 +36,12 @@
 #include <QtNetwork/QLocalSocket>
 #include <QTimer>
 #include <QVector>
+
+#ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttTopicName>
+#endif
+
 #include <QMap>
 
 class QString;
@@ -75,6 +79,7 @@ public:
         WholeFile
 	};
 
+#ifdef HAVE_MQTT
 	enum WillMessageType {
 		OwnMessage = 0,
 		Statistics,
@@ -103,6 +108,7 @@ public:
 		Kurtosis,
 		Entropy
 	};
+#endif
 
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
@@ -169,6 +175,7 @@ public:
 	void setLocalSocketName(const QString&);
 	QString localSocketName() const;
 
+#ifdef HAVE_MQTT
 	void setMqttClient(const QString&, const quint16&);
 	void setMqttClientAuthentication(const QString&, const QString&);
 	void setMqttClientId(const QString&);
@@ -176,6 +183,7 @@ public:
 
 	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
 	QVector<QMqttTopicName> mqttSubscribtions() const;
+#endif
 
 	void updateNow();
 	void pauseReading();
@@ -191,6 +199,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+#ifdef HAVE_MQTT
 	int topicNumber();
 	int topicIndex(const QString&);
 	QVector<QString> topicVector() const;
@@ -232,6 +241,7 @@ public:
 	void addWillStatistics(WillStatistics);
 	void removeWillStatistics(WillStatistics);
 	QVector<bool> willStatistics() const;
+#endif
 
 private:
 	void initActions();
@@ -272,7 +282,6 @@ private:
 	QUdpSocket* m_udpSocket;
 	QSerialPort* m_serialPort;
 	QIODevice* m_device;
-    QTcpSocket* m_mqttTcp;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -280,6 +289,7 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
+#ifdef HAVE_MQTT
 	QMqttClient* m_client;
 	QMap<QMqttTopicFilter, quint8> m_topicMap;
 	QMap<QMqttTopicName, bool> m_messageArrived;
@@ -300,6 +310,7 @@ private:
 	QVector<bool> m_willStatistics;
 	bool m_mqttFirstConnectEstablished;
 	bool m_mqttRetain;
+#endif
 
 public slots:
 	void read();
@@ -315,14 +326,19 @@ private slots:
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
 
+#ifdef HAVE_MQTT
 	void onMqttConnect();
 	void mqttSubscribtionMessageReceived(const QMqttMessage&);
 	void onAllArrived();
 	void mqttErrorChanged(QMqttClient::ClientError);
+#endif
 
 signals:
+
+#ifdef HAVE_MQTT
 	void mqttAllArrived();
 	void mqttSubscribed();
+#endif
 
 };
 

@@ -42,6 +42,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
+#ifdef HAVE_MQTT
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &LiveDataDock::useWillMessage);
 	connect(ui.cbWillQoS, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willQoSChanged);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, this, &LiveDataDock::willRetainChanged);
@@ -52,6 +53,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, this, &LiveDataDock::statisticsChanged);
+#endif
 }
 
 LiveDataDock::~LiveDataDock() {
@@ -131,6 +133,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
 
+#ifdef HAVE_MQTT
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
 		ui.chbWill->show();
 		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
@@ -160,6 +163,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.chbWill->setChecked(!checked);
 		ui.chbWill->setChecked(checked);
 	}
+#endif
 }
 
 /*!
@@ -276,6 +280,7 @@ void LiveDataDock::pauseContinueReading() {
 	}
 }
 
+#ifdef HAVE_MQTT
 void LiveDataDock::useWillMessage(int state) {
 	qDebug()<<"will checkstate changed" <<state;
 	if(state == Qt::Checked) {
@@ -463,3 +468,4 @@ void LiveDataDock::statisticsChanged(QListWidgetItem *item) {
 		}
 	}
 }
+#endif
