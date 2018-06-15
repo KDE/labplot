@@ -789,8 +789,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		if (linesToRead == 0)
 			return 0;
-	} else
+	} else {
 		linesToRead = newLinesTillEnd;
+	}
 
 
 	//new rows/resize columns if we don't have a fixed size
@@ -855,16 +856,17 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	} else {
 		//when we have a fixed size we have to pop sampleRate number of lines if specified
 		//here popping, setting currentRow
-		if (!m_prepared)
+		if (!m_prepared) {
             if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
                 currentRow = 0;
-            } else
+			} else {
                 currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
-		else {
+			}
+		} else {
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
-				if (newLinesTillEnd > m_actualRows)
+				if (newLinesTillEnd > m_actualRows) {
 					currentRow = 0;
-                else {
+				} else {
                     if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
                         currentRow = 0;
                     } else {
