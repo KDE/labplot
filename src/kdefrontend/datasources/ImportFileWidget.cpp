@@ -991,6 +991,14 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 		ui.lSampleRate->show();
 		ui.sbSampleRate->show();
 	}
+
+	if (type == LiveDataSource::ReadingType::WholeFile) {
+		ui.lKeepLastValues->hide();
+		ui.leKeepLastValues->hide();
+	} else {
+		ui.lKeepLastValues->show();
+		ui.leKeepLastValues->show();
+	}
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
