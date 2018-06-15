@@ -108,6 +108,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_plotsModel->setSelectableAspects(list);
 	cbExistingPlots->setModel(m_plotsModel);
 
+	//select the first available plot, if available
+	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::Recursive);
+	if (!plots.isEmpty()) {
+		const auto plot = plots.first();
+		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
+	}
+
 	list.clear();
 	list<<"Folder"<<"Worksheet";
 	cbExistingWorksheets->setTopLevelClasses(list);
