@@ -1076,8 +1076,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		//loop over all affected plots and retransform them
 		for (auto* plot: plots) {
-			//TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
-// 				plot->setSuppressDataChangedSignal(false);
+			plot->setSuppressDataChangedSignal(false);
 			plot->dataChanged();
 		}
 	}
