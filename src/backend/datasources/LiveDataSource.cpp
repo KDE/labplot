@@ -88,14 +88,15 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_mqttTest(false),
 	  m_mqttRetain(false),
 	  m_mqttUseWill(false),
-	  m_mqttFirstConnectEstablished(false),
+	  m_mqttFirstConnectEstablished(false),	  
 #endif
 	  m_device(nullptr) {
 
 	initActions();
-	m_willStatistics.fill(false, 15);
+
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 #ifdef HAVE_MQTT
+	m_willStatistics.fill(false, 15);
 	connect(m_client, &QMqttClient::connected, this, &LiveDataSource::onMqttConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &LiveDataSource::setWillForMqtt);
 	connect(m_client, &QMqttClient::errorChanged, this, &LiveDataSource::mqttErrorChanged);	

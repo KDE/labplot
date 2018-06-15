@@ -85,9 +85,9 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
 	//Signals/Slots
-    	connect(m_importFileWidget, &ImportFileWidget::subscriptionMade, this, &ImportFileDialog::checkOkButton);
-	
-
+#ifdef HAVE_MQTT
+	connect(m_importFileWidget, &ImportFileWidget::subscriptionMade, this, &ImportFileDialog::checkOkButton);
+#endif
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 

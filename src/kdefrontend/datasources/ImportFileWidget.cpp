@@ -83,17 +83,19 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent),
 	m_fileName(fileName),
 	m_fileEmpty(false),
-	m_liveDataSource(true),
-    m_editing(false),
+	m_liveDataSource(true),   
 #ifdef HAVE_MQTT
 	m_mqttReadyForPreview (false),
 	m_mqttSubscribeButton (true),
+	m_editing(false),
 #endif
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
+#ifdef HAVE_MQTT
     m_timer = new QTimer(this);
     m_timer->setInterval(10000);
+#endif
 
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
