@@ -723,7 +723,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
 				newLinesForSampleRateNotTillEnd++;
-				//for Continous reading and FromEnd we read sample rate number of lines if possible
+				//for Continuous reading and FromEnd we read sample rate number of lines if possible
+				//here TillEnd and Whole file behave the same
 				if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
 					break;
 			}
@@ -775,7 +776,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					linesToRead = newLinesTillEnd;
 			} else {
 				//we read max sample rate number of lines when the reading mode
-				//is ContinouslyFixed or FromEnd
+				//is ContinuouslyFixed or FromEnd, WholeFile is disabled
 				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 			}
 		} else {
@@ -875,7 +876,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
                 }
 			} else {
 				//we read max sample rate number of lines when the reading mode
-				//is ContinouslyFixed or FromEnd
+				//is ContinuouslyFixed or FromEnd
 				currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
 			}
 		}
@@ -950,10 +951,21 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		PERFTRACE("AsciiLiveDataImportFillingContainers: ");
 #endif
         int row = 0;
-        //skip the header
-        if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-            row = 1;
-        }
+
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe) {
+			if (readingType == LiveDataSource::ReadingType::TillEnd || (readingType == LiveDataSource::ReadingType::ContinuousFixed)) {
+				if (headerEnabled) {
+					if (!m_prepared) {
+						row = 1;
+					}
+				}
+			} else if (readingType == LiveDataSource::ReadingType::WholeFile) {
+				if (headerEnabled) {
+					row = 1;
+				}
+			}
+		}
+
         for (; row < linesToRead; ++row) {
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
