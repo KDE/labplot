@@ -1224,6 +1224,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 }
 
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
+	DEBUG("AsciiFilterPrivate::preview() bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
 	QVector<QStringList> dataStrings;
 
 	if (!(device.bytesAvailable() > 0)) {

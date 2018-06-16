@@ -823,29 +823,33 @@ void ImportFileWidget::refreshPreview() {
 					DEBUG("	TCPSocket");
 					QTcpSocket tcpSocket{this};
 					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-					if (tcpSocket.waitForConnected(2000)) {
+					if (tcpSocket.waitForConnected()) {
 						DEBUG("connected to TCP socket");
-						if ( tcpSocket.waitForReadyRead(500) )
+						if ( tcpSocket.waitForReadyRead() )
 							importedStrings = filter->preview(tcpSocket);
 
 						tcpSocket.disconnectFromHost();
 					} else
-						QDEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString());
+						DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
 
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
 					DEBUG("	UDPSocket");
-					QUdpSocket udpSocket{this};
+					QUdpSocket udpSocket(this);
+					DEBUG("CONNECT PREVIEW");
 					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
-					if (udpSocket.waitForConnected(2000)) {
-						DEBUG("connected to UDP socket");
-						if ( udpSocket.waitForReadyRead(500) )
+					if (udpSocket.waitForConnected()) {
+						DEBUG("connected to UDP socket " << host().toStdString() << ':' << port().toInt());
+						if ( udpSocket.waitForReadyRead(5000) )
 							importedStrings = filter->preview(udpSocket);
+						else
+							DEBUG("	ERROR: not ready for read");
 
+						DEBUG("DISCONNECT PREVIEW");
 						udpSocket.disconnectFromHost();
 					} else
-						QDEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString());
+						DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
 
 					break;
 				}

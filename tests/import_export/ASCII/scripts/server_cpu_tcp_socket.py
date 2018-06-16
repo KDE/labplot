@@ -8,9 +8,6 @@ PORT = 1027
 ADDR = (HOST,PORT)
 serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-BUFSIZE = 4096
-
-
 serv.bind(ADDR)
 serv.listen(1)
 
