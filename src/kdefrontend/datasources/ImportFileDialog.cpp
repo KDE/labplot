@@ -341,21 +341,24 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::LocalSocket: {
+		DEBUG("	Local Socket");
 		const bool enable = QFile::exists(fileName);
 		if (enable) {
 			QLocalSocket lsocket{this};
+			DEBUG("CONNECT");
 			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
-			if (lsocket.waitForConnected(20000)) {
+			if (lsocket.waitForConnected()) {
 
-				//TODO: this waitForReady seems to be required here, otherwise the socket gets broken.
-				//works for me only for this value for the timeout, maybe doesn't work on other hardware...
-				lsocket.waitForReadyRead(1000);
+				// this is required for server that send data as soon as connected
+				lsocket.waitForReadyRead();
 
+				DEBUG("DISCONNECT");
 				lsocket.disconnectFromServer();
+				// read-only socket is disconnected immediately (no waitForDisconnected())
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 			} else {
-				QDEBUG("failed to connect to the local socket - " << lsocket.errorString());
+				DEBUG("failed connect to local socket - " << lsocket.errorString().toStdString());
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Couldn't connect to the provided local socket."));
 			}

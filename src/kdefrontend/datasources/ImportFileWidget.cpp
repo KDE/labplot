@@ -790,29 +790,37 @@ void ImportFileWidget::refreshPreview() {
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	switch (fileType) {
 	case LiveDataSource::Ascii: {
+			DEBUG("ASCII");
 			ui.tePreview->clear();
 
 			AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
 			switch (currentSourceType()) {
 			case LiveDataSource::SourceType::FileOrPipe: {
+					DEBUG("	FileOrPipe");
 					importedStrings = filter->preview(fileName, lines);
 					break;
 				}
 			case LiveDataSource::SourceType::LocalSocket: {
+					DEBUG("	LocalSocket");
 					QLocalSocket lsocket{this};
+					DEBUG("CONNECT PREVIEW");
 					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
-					if (lsocket.waitForConnected(20000)) {
-						QDEBUG("connected to local socket " << fileName);
-						if ( lsocket.waitForReadyRead(500) )
+					if (lsocket.waitForConnected()) {
+						DEBUG("connected to local socket " << fileName.toStdString());
+						if (lsocket.waitForReadyRead())
 							importedStrings = filter->preview(lsocket);
+						DEBUG("DISCONNECT PREVIEW");
 						lsocket.disconnectFromServer();
-					} else
-						QDEBUG("failed to connect to local socket " << fileName << " - " << lsocket.errorString());
+						// read-only socket is disconnected immediately (no waitForDisconnected())
+					} else {
+						DEBUG("failed connect to local socket " << fileName.toStdString() << " - " << lsocket.errorString().toStdString());
+					}
 
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
+					DEBUG("	TCPSocket");
 					QTcpSocket tcpSocket{this};
 					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 					if (tcpSocket.waitForConnected(2000)) {
@@ -827,6 +835,7 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
+					DEBUG("	UDPSocket");
 					QUdpSocket udpSocket{this};
 					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
 					if (udpSocket.waitForConnected(2000)) {
@@ -841,6 +850,7 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::SerialPort: {
+					DEBUG("	SerialPort");
 					QSerialPort sPort{this};
 					sPort.setBaudRate(baudRate());
 					sPort.setPortName(serialPort());
@@ -861,6 +871,7 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::Binary: {
+			DEBUG("Binary");
 			ui.tePreview->clear();
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 			importedStrings = filter->preview(fileName, lines);
@@ -868,6 +879,7 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::Image: {
+			DEBUG("Image");
 			ui.tePreview->clear();
 
 			QImage image(fileName);
