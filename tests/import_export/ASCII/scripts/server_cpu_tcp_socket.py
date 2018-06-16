@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import socket
-import psutil
+import socket, psutil
 
 HOST = 'localhost'
 PORT = 1027
