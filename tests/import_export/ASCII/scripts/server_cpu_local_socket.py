@@ -1,12 +1,11 @@
 #!/usr/bin/python
 
-import socket, psutil, os, stat
+import socket, psutil, os
 
 ADDR = './local_socket'
 serv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
-st = os.stat(ADDR)
-if stat.S_ISSOCK(st.st_mode):
+if os.path.exists(ADDR):
   print 'socket exists. Removing it'
   os.remove(ADDR)
 
