@@ -398,7 +398,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		DEBUG("WARNING: device does not support readLine()!");
 		QDEBUG("column modes = " << columnModes);
 		m_actualRows = 0;
-		return 0;
+//TODO:		return 0;
 	}
 
 /////////////////////////////////////////////////////////////////
