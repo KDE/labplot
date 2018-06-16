@@ -756,9 +756,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
             else {
                 //we don't increase it if we reread the whole file, we reset it
-                if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)) {
+				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)) {
                     m_actualRows += newData.size();
-                } else {
+				} else {
                     m_actualRows = newData.size();
                 }
             }
@@ -792,6 +792,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			return 0;
 	} else {
 		linesToRead = newLinesTillEnd;
+		if (headerEnabled) {
+			--m_actualRows;
+		}
 	}
 
 
@@ -950,18 +953,21 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportFillingContainers: ");
 #endif
-        int row = 0;
+		int row = 0;
 
-		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			if (readingType == LiveDataSource::ReadingType::TillEnd || (readingType == LiveDataSource::ReadingType::ContinuousFixed)) {
-				if (headerEnabled) {
-					if (!m_prepared) {
-						row = 1;
-					}
+		if (readingType == LiveDataSource::ReadingType::TillEnd || (readingType == LiveDataSource::ReadingType::ContinuousFixed)) {
+			if (headerEnabled) {
+				if (!m_prepared) {
+					row = 1;
+					bytesread += newData.at(0).size();
 				}
-			} else if (readingType == LiveDataSource::ReadingType::WholeFile) {
+			}
+		}
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe) {
+			if (readingType == LiveDataSource::ReadingType::WholeFile) {
 				if (headerEnabled) {
 					row = 1;
+					bytesread += newData.at(0).size();
 				}
 			}
 		}
