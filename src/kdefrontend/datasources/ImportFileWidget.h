@@ -50,7 +50,6 @@ public:
 	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
 	~ImportFileWidget();
 
-	void loadSettings();
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
 	LiveDataSource::FileType currentFileType() const;
@@ -85,6 +84,8 @@ private:
 	bool m_fileEmpty;
 	bool m_liveDataSource;
 	bool m_suppressRefresh;
+public slots:
+	void loadSettings();
 
 private slots:
 	void fileNameChanged(const QString&);
