@@ -1,12 +1,14 @@
 #!/usr/bin/python
 
-import socket
-import psutil
+import socket, psutil, os, stat
 
 ADDR = './local_socket'
 serv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
-BUFSIZE = 4096
+st = os.stat(ADDR)
+if stat.S_ISSOCK(st.st_mode):
+  print 'socket exists. Removing it'
+  os.remove(ADDR)
 
 serv.bind(ADDR)
 serv.listen(1)
