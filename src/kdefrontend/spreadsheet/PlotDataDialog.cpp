@@ -123,6 +123,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
+	//select the first available worksheet, if available
+	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::Recursive);
+	if (!worksheets.isEmpty()) {
+		const auto worksheet = worksheets.first();
+		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
+	}
+
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
 	ui->chkCreateDataCurve->setVisible(false);
 
