@@ -8,18 +8,24 @@
 #include <KFilterDev>
 #include <KSharedConfig>
 #include <KConfigGroup>
+
 /*!
 \class JsonOptionsWidget
 \brief Widget providing options for the import of json data
 
 \ingroup kdefrontend
 */
-JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent),
+	m_fileWidget(fileWidget),
+	m_model(new QJsonModel()),
+	m_lastItem(nullptr) {
+
 	ui.setupUi(parent);
-	m_model = new QJsonModel();
-	m_lastItem = nullptr;
 
 	ui.tvJson->setModel(m_model);
+
+	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	ui.tvJson->setAlternatingRowColors(true);
 
 	ui.cbDataRowType->addItems(JsonFilter::dataRowTypes());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
