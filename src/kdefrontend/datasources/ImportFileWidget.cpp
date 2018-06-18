@@ -606,7 +606,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 		QByteArray imageFormat = QImageReader::imageFormat(fileName);
-		if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
+		if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
+			//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
+			ui.cbFileType->setCurrentIndex(LiveDataSource::Json);
+			// update Json tree widget using current selected file
+		} else if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
 		        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
 			//probably ascii data
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
@@ -632,9 +636,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
 		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
-		} else if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
-			ui.cbFileType->setCurrentIndex(LiveDataSource::Json);
-			// update Json tree widget using current selected file
 		} else
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Binary);
 	}
