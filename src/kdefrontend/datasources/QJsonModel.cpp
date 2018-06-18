@@ -227,12 +227,18 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
         if (index.column() == 1) {
             return QString("%1").arg(item->value());
         }
-    }
-
+	} else if (role == Qt::DecorationRole) {
+		//TODO: add icons for array and object
+		if (item->type() == QJsonValue::Array)
+			return QIcon();
+		else if (item->type() == QJsonValue::Object)
+			return QIcon();
+		else
+			return QIcon();
+	}
 
 
     return QVariant();
-
 }
 
 bool QJsonModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -249,7 +255,6 @@ bool QJsonModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     return false;
 }
-
 
 
 QVariant QJsonModel::headerData(int section, Qt::Orientation orientation, int role) const
