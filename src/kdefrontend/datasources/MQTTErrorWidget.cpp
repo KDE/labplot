@@ -1,4 +1,4 @@
-#include "MqttErrorWidget.h"
+#include "MQTTErrorWidget.h"
 
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
@@ -8,9 +8,9 @@
 #include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
-#endif
 
-MqttErrorWidget::MqttErrorWidget(QWidget *parent, int errorType, LiveDataSource * source) : QWidget(parent),
+
+MQTTErrorWidget::MQTTErrorWidget(QWidget *parent, QMqttClient::ClientError errorType, LiveDataSource * source) : QWidget(parent),
 	m_source(source),
 	#ifdef HAVE_MQTT
 	m_error (static_cast<QMqttClient::ClientError>(errorType))
@@ -38,13 +38,13 @@ MqttErrorWidget::MqttErrorWidget(QWidget *parent, int errorType, LiveDataSource 
 	default:
 		break;
 	}
-	connect(ui.bChange, &QPushButton::clicked, this, &MqttErrorWidget::makeChange);
+	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::makeChange);
 }
 
-MqttErrorWidget::~MqttErrorWidget() {
+MQTTErrorWidget::~MQTTErrorWidget() {
 }
 
-void MqttErrorWidget::makeChange(){
+void MQTTErrorWidget::makeChange(){
 	bool ok = false;
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
@@ -74,3 +74,4 @@ void MqttErrorWidget::makeChange(){
 	if (ok)
 		this->close();
 }
+#endif

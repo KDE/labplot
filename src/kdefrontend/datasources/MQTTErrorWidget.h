@@ -13,18 +13,18 @@
 #include <QtMqtt/qmqttsubscription.h>
 #include <QtMqtt/QMqttTopicName>
 #include <QtMqtt/QMqttTopicFilter>
-#endif
 
-class MqttErrorWidget : public QWidget {
+
+class MQTTErrorWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	MqttErrorWidget(QWidget* parent = 0, int errorType = 0, LiveDataSource * source = 0);
-	~MqttErrorWidget();
+	MQTTErrorWidget(QWidget* parent = 0, QMqttClient::ClientError errorType = QMqttClient::NoError, LiveDataSource * source = 0);
+	~MQTTErrorWidget();
 
 
 private:
-	Ui::MqttErrorWidget ui;
+	Ui::MQTTErrorWidget ui;
 #ifdef HAVE_MQTT
 	QMqttClient::ClientError m_error;
 #endif
@@ -36,4 +36,6 @@ private slots:
 signals:
 
 };
+#endif
+
 #endif // MQTTERRORWIDGET_H

@@ -71,7 +71,6 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
-#include "MqttErrorWidget.h"
 #endif
 
 

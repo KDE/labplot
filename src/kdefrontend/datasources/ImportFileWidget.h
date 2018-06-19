@@ -101,6 +101,7 @@ private:
 	const QString& m_fileName;
 	bool m_fileEmpty;
 	bool m_liveDataSource;
+	bool m_suppressRefresh;
 
 #ifdef HAVE_MQTT
 	QMqttClient *m_client;
@@ -119,9 +120,10 @@ private:
 	QString m_mqttUnsubscribeTopic;
 #endif
 
+public slots:
+	void loadSettings();
 
 private slots:
-	void loadSettings();
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 

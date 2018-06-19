@@ -34,7 +34,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MqttErrorWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
