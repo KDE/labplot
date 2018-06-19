@@ -64,7 +64,6 @@ public:
 	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
 	~ImportFileWidget();
 
-	void loadSettings();
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
 	LiveDataSource::FileType currentFileType() const;
@@ -102,7 +101,7 @@ private:
 	const QString& m_fileName;
 	bool m_fileEmpty;
 	bool m_liveDataSource;
-    bool m_suppressRefresh;
+
 #ifdef HAVE_MQTT
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
@@ -122,6 +121,7 @@ private:
 
 
 private slots:
+	void loadSettings();
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 

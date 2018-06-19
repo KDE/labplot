@@ -108,6 +108,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_plotsModel->setSelectableAspects(list);
 	cbExistingPlots->setModel(m_plotsModel);
 
+	//select the first available plot, if available
+	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::Recursive);
+	if (!plots.isEmpty()) {
+		const auto plot = plots.first();
+		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
+	}
+
 	list.clear();
 	list<<"Folder"<<"Worksheet";
 	cbExistingWorksheets->setTopLevelClasses(list);
@@ -115,6 +122,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	list<<"Worksheet";
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
+
+	//select the first available worksheet, if available
+	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::Recursive);
+	if (!worksheets.isEmpty()) {
+		const auto worksheet = worksheets.first();
+		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
+	}
 
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
 	ui->chkCreateDataCurve->setVisible(false);

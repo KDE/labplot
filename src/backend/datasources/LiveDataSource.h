@@ -73,7 +73,7 @@ public:
 	};
 
 	enum ReadingType {
-		ContinousFixed = 0,
+		ContinuousFixed = 0,
 		FromEnd,
         TillEnd,
         WholeFile

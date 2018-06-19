@@ -344,21 +344,24 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::LocalSocket: {
+		DEBUG("	Local Socket");
 		const bool enable = QFile::exists(fileName);
 		if (enable) {
 			QLocalSocket lsocket{this};
+			DEBUG("CONNECT");
 			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
-			if (lsocket.waitForConnected(20000)) {
+			if (lsocket.waitForConnected()) {
 
-				//TODO: this waitForReady seems to be required here, otherwise the socket gets broken.
-				//works for me only for this value for the timeout, maybe doesn't work on other hardware...
-				lsocket.waitForReadyRead(1000);
+				// this is required for server that send data as soon as connected
+				lsocket.waitForReadyRead();
 
+				DEBUG("DISCONNECT");
 				lsocket.disconnectFromServer();
+				// read-only socket is disconnected immediately (no waitForDisconnected())
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 			} else {
-				QDEBUG("failed to connect to the local socket - " << lsocket.errorString());
+				DEBUG("failed connect to local socket - " << lsocket.errorString().toStdString());
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Couldn't connect to the provided local socket."));
 			}
@@ -370,16 +373,17 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkTcpSocket: {
+		DEBUG("	TCP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket socket(this);
 			socket.connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QTcpSocket::ReadOnly);
-			if (socket.waitForConnected(2000)) {
+			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				socket.disconnectFromHost();
 			} else {
-				QDEBUG("failed to connect to the TCP socket - " << socket.errorString());
+				DEBUG("failed to connect to TCP socket - " << socket.errorString().toStdString());
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Couldn't connect to the provided TCP socket."));
 			}
@@ -390,16 +394,20 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkUdpSocket: {
+		DEBUG("	UDP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);
+			DEBUG("CONNECT");
 			socket.connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QUdpSocket::ReadOnly);
-			if (socket.waitForConnected(2000)) {
+			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
+				DEBUG("DISCONNECT");
 				socket.disconnectFromHost();
+				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
-				QDEBUG("failed to connect to the UDP socket - " << socket.errorString());
+				DEBUG("failed to connect to UDP socket - " << socket.errorString().toStdString());
 				okButton->setEnabled(false);
 				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
 			}
