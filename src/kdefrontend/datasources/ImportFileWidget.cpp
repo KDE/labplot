@@ -71,6 +71,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
+#include "MqttErrorWidget.h"
 #endif
 
 
@@ -1886,8 +1887,8 @@ void ImportFileWidget::hideMQTT() {
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
-		break;
+		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");		
+		break;	
 	case QMqttClient::IdRejected:
 		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
 		break;

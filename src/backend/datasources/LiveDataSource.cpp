@@ -36,6 +36,8 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+#include "kdefrontend/datasources/MqttErrorWidget.h"
+
 #include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
@@ -1543,18 +1545,24 @@ bool LiveDataSource::mqttRetain() const {
 
 void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
-	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::warning(0, "Couldn't connect", "Bad username or password");
+	case QMqttClient::BadUsernameOrPassword:{
+		MqttErrorWidget* errorWidget = new MqttErrorWidget(0, static_cast<int>(clientError), this);
+		errorWidget->show();
 		break;
-	case QMqttClient::IdRejected:
-		QMessageBox::warning(0, "Couldn't connect", "The client ID wasn't accepted");
+	}
+	case QMqttClient::IdRejected:{
+		MqttErrorWidget* errorWidget = new MqttErrorWidget(0, static_cast<int>(clientError), this);
+		errorWidget->show();
 		break;
+	}
 	case QMqttClient::ServerUnavailable:
 		QMessageBox::warning(0, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
 		break;
-	case QMqttClient::NotAuthorized:
-		QMessageBox::warning(0, "Couldn't connect", "The client is not authorized to connect.");
+	case QMqttClient::NotAuthorized:{
+		MqttErrorWidget* errorWidget = new MqttErrorWidget(0, static_cast<int>(clientError), this);
+		errorWidget->show();
 		break;
+	}
 	case QMqttClient::UnknownError:
 		QMessageBox::warning(0, "Unknown MQTT error", "An unknown error occurred.");
 		break;
