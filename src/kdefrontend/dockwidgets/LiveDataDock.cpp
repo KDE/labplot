@@ -28,6 +28,10 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLocale>
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
+#ifdef HAVE_MQTT
+	m_client(new QMqttClient()),
+	m_editing(true),
+#endif
 	QWidget(parent), m_paused(false) {
 	ui.setupUi(this);
 
@@ -132,9 +136,49 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.bWillUpdateNow->hide();
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
+	ui.bTopics->hide();
+	ui.cbTopics->hide();
+	ui.lSubscriptions->hide();
+	ui.lwSubscriptions->hide();
+	ui.lQoS->hide();
+	ui.cbQoS->hide();
+
 
 #ifdef HAVE_MQTT
 	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
+		ui.bTopics->show();
+		ui.cbTopics->show();
+		ui.lSubscriptions->show();
+		ui.lwSubscriptions->show();
+		ui.lQoS->show();
+		ui.cbQoS->show();
+
+		if(m_client->state() == QMqttClient::Connected)
+			m_client->disconnectFromHost();
+
+		m_timer = new QTimer();
+		m_timer->setInterval(10000);
+
+		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
+		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
+		connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::topicBeingTyped);
+		connect(m_timer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
+
+		m_client->setHostname(fds->clientHostName());
+		m_client->setPort(fds->clientPort());
+
+		if(fds->mqttUseAuthentication()) {
+			m_client->setUsername(fds->clientUserName());
+			m_client->setPassword(fds->clientPassword());
+		}
+
+		if(fds->mqttUseID()) {
+			m_client->setClientId(fds->clientID());
+		}
+		m_client->connectToHost();
+
 		ui.chbWill->show();
 		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
 		ui.leWillOwnMessage->setText(fds->willOwnMessage());
@@ -467,5 +511,81 @@ void LiveDataDock::statisticsChanged(QListWidgetItem *item) {
 				source->removeWillStatistics(static_cast<LiveDataSource::WillStatistics>(idx) );
 		}
 	}
+}
+
+void LiveDataDock::onMQTTConnect() {
+	QMqttTopicFilter globalFilter{"#"};
+	QMqttSubscription * subscription = m_client->subscribe(globalFilter, 1);
+	if(!subscription)
+		qDebug()<<"Couldn't make global subscription in LiveDataDock";
+}
+
+void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
+	bool known_topic = false;
+	for(int i = 0; i < ui.cbTopics->count() ; ++i) {
+		if(QString::compare(ui.cbTopics->itemText(i), topic.name(), Qt::CaseInsensitive) == 0) {
+			known_topic = true;
+			break;
+		}
+	}
+
+	for (int i = 0; i<ui.lwSubscriptions->count(); ++i) {
+		QListWidgetItem* item = ui.lwSubscriptions->item(i);
+		if(item->text() == topic) {
+			known_topic = true;
+			break;
+		}
+	}
+	if (!known_topic) {
+		ui.cbTopics->addItem(topic.name());
+		emit newTopic(topic.name());
+	}
+}
+
+void LiveDataDock::setCompleter(const QString& topic) {
+	if(!m_editing) {
+		m_topicList.append(topic);
+		m_completer = new QCompleter(m_topicList, this);
+		m_completer->setCompletionMode(QCompleter::PopupCompletion);
+		m_completer->setCaseSensitivity(Qt::CaseSensitive);
+		ui.cbTopics->setCompleter(m_completer);
+	}
+}
+
+void LiveDataDock::topicBeingTyped(const QString& topic) {
+	if(!m_editing) {
+		bool found = false;
+		for (int i=0; i<ui.cbTopics->count(); ++i) {
+			if(ui.cbTopics->itemText(i) == topic) {
+				found = true;
+				break;
+			}
+		}
+
+		if(!found) {
+			qDebug() << topic;
+			m_editing = true;
+			m_timer->start();
+		}
+	}
+}
+
+void LiveDataDock::topicTimeout() {
+	qDebug()<<"lejart ido";
+	m_editing = false;
+	m_timer->stop();
+}
+
+void LiveDataDock::addSubscription(const QString&, quint16){
+
+}
+
+void LiveDataDock::fillSubscriptions() {
+	const LiveDataSource* const fds = m_liveDataSources.at(0);
+	QVector<QString> subscriptions = fds->mqttSubscribtions();
+	for (int i = 0; i < subscriptions.count(); ++i) {
+		ui.lwSubscriptions->addItem(subscriptions[i]);
+	}
+	m_editing = false;
 }
 #endif

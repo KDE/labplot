@@ -500,10 +500,15 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	case LiveDataSource::SourceType::Mqtt:{
 		qDebug()<<"Saving mqtt";
 		source->setMqttClient(m_client->hostname(), m_client->port());
+
+		source->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
 		if(ui.chbAuthentication->isChecked())
 			source->setMqttClientAuthentication(m_client->username(), m_client->password());
+
+		source->setMQTTUseID(ui.chbID->isChecked());
 		if(ui.chbID->isChecked())
 			source->setMqttClientId(m_client->clientId());
+
 		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
 			source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 		}
@@ -1668,6 +1673,7 @@ void ImportFileWidget::topicBeingTyped(const QString topic) {
 void ImportFileWidget::topicTimeout() {
 	qDebug()<<"lejart ido";
 	m_editing = false;
+	m_timer->stop();
 }
 
 bool ImportFileWidget::isMqttValid(){

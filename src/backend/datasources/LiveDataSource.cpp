@@ -86,11 +86,13 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_udpSocket(nullptr),
 	  m_serialPort(nullptr),
 #ifdef HAVE_MQTT
-      m_client(new QMqttClient(this)),
+	  m_client(new QMqttClient(this)),
 	  m_mqttTest(false),
 	  m_mqttRetain(false),
 	  m_mqttUseWill(false),
-	  m_mqttFirstConnectEstablished(false),	  
+	  m_mqttUseID(false),
+	  m_mqttUseAuthentication(false),
+	  m_mqttFirstConnectEstablished(false),
 #endif
 	  m_device(nullptr) {
 
@@ -973,6 +975,8 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		for( int i = 0; i < m_willStatistics.count(); ++i){
 			writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_willStatistics[i]));
 		}
+		writer->writeAttribute("useID", QString::number(m_mqttUseID));
+		writer->writeAttribute("useAuthentication", QString::number(m_mqttUseAuthentication));
 #endif
 		break;
 	}
@@ -1120,17 +1124,33 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				else
 					m_client->setPort(str.toUInt());
 
-				str =attribs.value("username").toString();
-				if(!str.isEmpty())
-					m_client->setUsername(str);
+				str = attribs.value("useAuthentication").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'useAuthentication"));
+				else
+					m_mqttUseAuthentication = str.toInt();
 
-				str =attribs.value("password").toString();
-				if(!str.isEmpty())
-					m_client->setPassword(str);
+				if(m_mqttUseAuthentication) {
+					str =attribs.value("username").toString();
+					if(!str.isEmpty())
+						m_client->setUsername(str);
 
-				str =attribs.value("clientId").toString();
-				if(!str.isEmpty())
-					m_client->setClientId(str);
+					str =attribs.value("password").toString();
+					if(!str.isEmpty())
+						m_client->setPassword(str);
+				}
+
+				str = attribs.value("useID").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'useID"));
+				else
+					m_mqttUseID = str.toInt();
+
+				if(m_mqttUseID) {
+					str =attribs.value("clientId").toString();
+					if(!str.isEmpty())
+						m_client->setClientId(str);
+				}
 
 				int subscribtions;
 				str =attribs.value("subscriptionNumber").toString();
@@ -1547,4 +1567,42 @@ void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
 	errorWidget->show();
 }
+
+QString LiveDataSource::clientHostName() const{
+	return m_client->hostname();
+}
+quint16 LiveDataSource::clientPort() const {
+	return m_client->port();
+}
+
+QString LiveDataSource::clientPassword() const{
+	return m_client->password();
+}
+
+QString LiveDataSource::clientUserName() const{
+	return m_client->username();
+}
+
+QString LiveDataSource::clientID () const{
+	return m_client->clientId();
+}
+
+void LiveDataSource::setMQTTUseID(bool use) {
+	m_mqttUseID = use;
+}
+bool LiveDataSource::mqttUseID() const {
+	return m_mqttUseID;
+}
+
+void LiveDataSource::setMQTTUseAuthentication(bool use) {
+	m_mqttUseAuthentication = use;
+}
+bool LiveDataSource::mqttUseAuthentication() const {
+	return m_mqttUseAuthentication;
+}
+
+QVector<QString> LiveDataSource::mqttSubscribtions() const {
+	return m_subscriptions;
+}
+
 #endif
