@@ -145,7 +145,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 
 
 #ifdef HAVE_MQTT
-	if(fds->sourceType() == LiveDataSource::SourceType::Mqtt) {
+	if(fds->sourceType() == LiveDataSource::SourceType::MQTT) {
 		ui.bTopics->show();
 		ui.cbTopics->show();
 		ui.lSubscriptions->show();

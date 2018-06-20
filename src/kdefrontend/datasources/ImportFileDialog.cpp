@@ -438,7 +438,7 @@ void ImportFileDialog::checkOkButton() {
 		}
     }
 #ifdef HAVE_MQTT
-	case LiveDataSource::SourceType::Mqtt: {
+	case LiveDataSource::SourceType::MQTT: {
 		const bool enable = m_importFileWidget->isMqttValid();
 		if (enable) {
 			okButton->setEnabled(true);
