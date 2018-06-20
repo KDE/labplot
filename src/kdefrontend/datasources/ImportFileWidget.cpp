@@ -163,7 +163,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #ifndef HAVE_MQTT
 	// disable MQTT item
 	QStandardItem* item4 = model->item(LiveDataSource::MQTT);
-	item3->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	item4->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
 	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
