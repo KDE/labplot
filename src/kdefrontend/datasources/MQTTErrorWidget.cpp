@@ -5,7 +5,6 @@
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
-#include <QMessageBox>
 
 MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, LiveDataSource * source, QWidget *parent) : QWidget(parent),
 	m_source(source),
@@ -29,6 +28,21 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, LiveDataSource 
 		ui.lId->hide();
 		ui.leId->hide();
 		ui.lErrorType->setText("The client is not authorized to connect.");
+		break;
+	case QMqttClient::ClientError::ServerUnavailable:
+		ui.lePassword->hide();
+		ui.lPassword->hide();
+		ui.leUserName->hide();
+		ui.lUserName->hide();
+		ui.lErrorType->setText("The network connection has been established, but the service is unavailable on the broker side.");
+		break;
+	case QMqttClient::ClientError::UnknownError:
+		ui.lePassword->hide();
+		ui.lPassword->hide();
+		ui.leUserName->hide();
+		ui.lUserName->hide();
+		ui.lErrorType->setText("An unknown error occurred.");
+
 		break;
 	default:
 		break;
