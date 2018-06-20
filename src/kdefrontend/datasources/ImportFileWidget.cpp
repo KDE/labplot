@@ -1633,16 +1633,31 @@ void ImportFileWidget::mqttSubscribe() {
 }
 
 void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
-	bool known_topic = false;
-	for(int i = 0; i < ui.cbTopic->count() ; ++i) {
-		if(QString::compare(ui.cbTopic->itemText(i), topic.name(), Qt::CaseInsensitive) == 0) {
-			known_topic = true;
-			break;
+	QString topicName = topic.name();
+	if(ui.cbTopic->findText(topicName) == -1) {
+		QStringList topicList = topicName.split('/', QString::SkipEmptyParts);
+		for(int i = topicList.count() - 1; i >= 0; --i) {
+			QString tempTopic = "";
+			for(int j = 0; j <= i; ++j) {
+				tempTopic = tempTopic + topicList.at(j) + "/";
+			}
+			if(i < topicList.count() - 1) {
+				tempTopic = tempTopic + "#";
+			}
+			else
+				tempTopic.remove(tempTopic.size()-1, 1);
+
+			//qDebug()<<"checking topic: " << tempTopic;
+			if (ui.cbTopic->findText(tempTopic) == -1) {
+				//qDebug()<<"Adding: "<<tempTopic;
+				ui.cbTopic->addItem(tempTopic);
+				emit newTopic(tempTopic);
+			}
+			else {
+				//qDebug() << "Not adding " + tempTopic;
+				break;
+			}
 		}
-	}
-	if (known_topic == false) {
-		ui.cbTopic->addItem(topic.name());
-		emit newTopic(topic.name());
 	}
 }
 

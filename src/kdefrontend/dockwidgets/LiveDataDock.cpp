@@ -522,24 +522,31 @@ void LiveDataDock::onMQTTConnect() {
 }
 
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	bool known_topic = false;
-	for(int i = 0; i < ui.cbTopics->count() ; ++i) {
-		if(QString::compare(ui.cbTopics->itemText(i), topic.name(), Qt::CaseInsensitive) == 0) {
-			known_topic = true;
-			break;
-		}
-	}
+	QString topicName = topic.name();
+	if(ui.cbTopics->findText(topicName) == -1) {
+		QStringList topicList = topicName.split('/', QString::SkipEmptyParts);
+		for(int i = topicList.count() - 1; i >= 0; --i) {
+			QString tempTopic = "";
+			for(int j = 0; j <= i; ++j) {
+				tempTopic = tempTopic + topicList.at(j) + "/";
+			}
+			if(i < topicList.count() - 1) {
+				tempTopic = tempTopic + "#";
+			}
+			else
+				tempTopic.remove(tempTopic.size()-1, 1);
 
-	for (int i = 0; i<ui.lwSubscriptions->count(); ++i) {
-		QListWidgetItem* item = ui.lwSubscriptions->item(i);
-		if(item->text() == topic) {
-			known_topic = true;
-			break;
+			//qDebug()<<"checking topic: " << tempTopic;
+			if (ui.cbTopics->findText(tempTopic) == -1) {
+				//qDebug()<<"Adding: "<<tempTopic;
+				ui.cbTopics->addItem(tempTopic);
+				emit newTopic(tempTopic);
+			}
+			else {
+				//qDebug() << "Not adding " + tempTopic;
+				break;
+			}
 		}
-	}
-	if (!known_topic) {
-		ui.cbTopics->addItem(topic.name());
-		emit newTopic(topic.name());
 	}
 }
 

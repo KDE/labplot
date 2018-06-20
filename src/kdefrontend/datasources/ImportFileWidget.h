@@ -84,7 +84,7 @@ public:
     int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 #ifdef HAVE_MQTT
-    bool isMqttValid();	
+	bool isMqttValid();
 #endif
 	void hideMQTT();
 
