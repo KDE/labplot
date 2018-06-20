@@ -240,10 +240,7 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
 			return QIcon();
 	}
 
-
-
     return QVariant();
-
 }
 
 bool QJsonModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -386,5 +383,10 @@ QJsonDocument QJsonModel::genJsonByIndex(const QModelIndex &index) const
 		return QJsonDocument();
 
 	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
+<<<<<<< HEAD:src/backend/datasources/filters/QJsonModel.cpp
 	return QJsonDocument::fromVariant(genJson(item).toVariant());
 }
+=======
+	return genJson(item);
+}
+>>>>>>> 3c486aa9bea8b90e164b0b1965f870de345ac151:src/kdefrontend/datasources/QJsonModel.cpp

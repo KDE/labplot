@@ -8,6 +8,7 @@
 #include <KFilterDev>
 #include <KSharedConfig>
 #include <KConfigGroup>
+
 /*!
 \class JsonOptionsWidget
 \brief Widget providing options for the import of json data
@@ -17,6 +18,7 @@
 JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent),
 	m_fileWidget(fileWidget),
 	m_model(new QJsonModel()) {
+
 	ui.setupUi(parent);
 
 	ui.tvJson->setModel(m_model);
