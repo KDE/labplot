@@ -1,20 +1,15 @@
-#include "MQTTErrorWidget.h"
+#include "src/kdefrontend/datasources/MQTTErrorWidget.h"
 
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
-#include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/qmqttsubscription.h>
-#include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
+#include <QMessageBox>
 
-
-MQTTErrorWidget::MQTTErrorWidget(QWidget *parent, QMqttClient::ClientError errorType, LiveDataSource * source) : QWidget(parent),
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, LiveDataSource * source, QWidget *parent) : QWidget(parent),
 	m_source(source),
-	#ifdef HAVE_MQTT
-	m_error (static_cast<QMqttClient::ClientError>(errorType))
-  #endif
+	m_error(error)
 {
 	ui.setupUi(this);
 	switch (m_error) {
@@ -39,9 +34,8 @@ MQTTErrorWidget::MQTTErrorWidget(QWidget *parent, QMqttClient::ClientError error
 		break;
 	}
 	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::makeChange);
-}
 
-MQTTErrorWidget::~MQTTErrorWidget() {
+	setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void MQTTErrorWidget::makeChange(){

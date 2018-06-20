@@ -1546,12 +1546,12 @@ bool LiveDataSource::mqttRetain() const {
 void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:{
-		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(0, clientError, this);
+		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
 		break;
 	}
 	case QMqttClient::IdRejected:{
-		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(0, clientError, this);
+		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
 		break;
 	}
@@ -1559,7 +1559,7 @@ void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		QMessageBox::warning(0, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
 		break;
 	case QMqttClient::NotAuthorized:{
-		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(0, clientError, this);
+		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
 		break;
 	}
