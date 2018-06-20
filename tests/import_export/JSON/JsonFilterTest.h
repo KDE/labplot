@@ -8,11 +8,9 @@ class JsonFilterTest : public QObject {
 
 private slots:
 	void initTestCase();
-
-	void testArrayWithNameImport();
-	void testArrayWithoutNameImport();
-	void testObjectWithNameImport();
-	void testObjectWithoutNameImport();
+	
+	void testArrayImport();
+	void testObjectImport();
 private:
 	QString m_dataDir;
 };

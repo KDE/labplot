@@ -184,27 +184,30 @@ bool QJsonModel::load(QIODevice *device)
 bool QJsonModel::loadJson(const QByteArray &json)
 {
     auto const& jdoc = QJsonDocument::fromJson(json);
-
-    if (!jdoc.isNull())
-    {
-        beginResetModel();
-        delete mRootItem;
-        if (jdoc.isArray()) {
-            mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()));
-            mRootItem->setType(QJsonValue::Array);
-
-        } else {
-            mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.object()));
-            mRootItem->setType(QJsonValue::Object);
-        }
-        endResetModel();
-        return true;
-    }
-
-    qDebug()<<Q_FUNC_INFO<<"cannot load json";
-    return false;
+    return loadJson(jdoc);
 }
 
+bool QJsonModel::loadJson(const QJsonDocument &jdoc)
+{
+	if (!jdoc.isNull())
+	{
+		beginResetModel();
+		delete mRootItem;
+		if (jdoc.isArray()) {
+			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()));
+			mRootItem->setType(QJsonValue::Array);
+
+		} else {
+			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.object()));
+			mRootItem->setType(QJsonValue::Object);
+		}
+		endResetModel();
+		return true;
+	}
+
+	qDebug()<<Q_FUNC_INFO<<"cannot load json";
+	return false;
+}
 
 QVariant QJsonModel::data(const QModelIndex &index, int role) const
 {
@@ -227,7 +230,15 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
         if (index.column() == 1) {
             return QString("%1").arg(item->value());
         }
-    }
+	} else if (role == Qt::DecorationRole) {
+		//TODO: add icons for array and object
+		if (item->type() == QJsonValue::Array)
+			return QIcon();
+		else if (item->type() == QJsonValue::Object)
+			return QIcon();
+		else
+			return QIcon();
+	}
 
 
 
@@ -249,7 +260,6 @@ bool QJsonModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
     return false;
 }
-
 
 
 QVariant QJsonModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -370,11 +380,11 @@ QJsonValue  QJsonModel::genJson(QJsonTreeItem * item) const
 
 }
 
-QJsonValue QJsonModel::genJsonByIndex(const QModelIndex &index) const
+QJsonDocument QJsonModel::genJsonByIndex(const QModelIndex &index) const
 {
 	if (!index.isValid())
-		return QJsonValue();
+		return QJsonDocument();
 
 	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
-	return genJson(item);
+	return QJsonDocument::fromVariant(genJson(item).toVariant());
 }

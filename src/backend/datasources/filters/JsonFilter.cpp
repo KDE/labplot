@@ -90,32 +90,19 @@ QStringList JsonFilter::dataRowTypes() {
 	return (QStringList() << "Array" << "Object");
 }
 
-/*!
-returns the list of all predefined data container types.
-*/
-QStringList JsonFilter::dataContainerTypes() {
-	return (QStringList() << "Array" << "Object");
-}
-
-void JsonFilter::setDataContainerName(const QString name) {
-	d->containerName = name;
-}
-QString JsonFilter::dataContainerName() const {
-	return d->containerName;
-}
-
-void JsonFilter::setDataContainerType(const JsonFilter::DataContainerType type) {
-	d->containerType = type;
-}
-JsonFilter::DataContainerType JsonFilter::dataContainerType() const {
-	return d->containerType;
-}
-
 void JsonFilter::setDataRowType(QJsonValue::Type type) {
 	d->rowType = type;
 }
 QJsonValue::Type JsonFilter::dataRowType() const {
 	return d->rowType;
+}
+
+void JsonFilter::setModelRows(QVector<int> rows){
+	d->modelRows = rows;
+}
+
+QVector<int> JsonFilter::modelRows() const {
+	return d->modelRows;
 }
 
 void JsonFilter::setDateTimeFormat(const QString &f) {
@@ -147,6 +134,7 @@ bool JsonFilter::NaNValueToZeroEnabled() const {
 void JsonFilter::setCreateIndexEnabled(bool b){
 	d->createIndexEnabled = b;
 }
+
 QVector<AbstractColumn::ColumnMode> JsonFilter::columnModes() {
 	return d->columnModes;
 }
@@ -183,7 +171,7 @@ int JsonFilter::endColumn() const {
 //################### Private implementation ##########################
 //#####################################################################
 JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
-	containerName(),
+	model(new QJsonModel()),
 	containerType(JsonFilter::Object),
 	rowType(QJsonValue::Object),
 	numberFormat(QLocale::C),
@@ -196,9 +184,12 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	m_actualCols(0),
 	m_prepared(false),
 	m_columnOffset(0) {
-	DEBUG("JsonFilterPrivate constructor");
 }
+//TODO: delete model from memory
 
+/*!
+returns 1 if row is invalid and 0 otherwise.
+*/
 int JsonFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 	switch(rowType){
 		//TODO: implement other value types
@@ -225,6 +216,7 @@ int JsonFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 	}
 	return 0;
 }
+
 /*!
 returns -1 if a parse error has occurred, 1 if the current row type not supported and 0 otherwise.
 */
@@ -362,18 +354,36 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /*!
 returns 2 if a parse error has occurred and 0 otherwise.
 */
-int JsonFilterPrivate::prepareDocumentToRead(QJsonDocument& doc) {
+int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
+	model->loadJson(doc);
+
+	if(modelRows.isEmpty())
+		m_preparedDoc = doc;
+	else {
+		QModelIndex index;
+		for(auto it = modelRows.begin(); it != modelRows.end(); ++it){
+			index = model->index(*it, 0, index);
+		}
+		m_preparedDoc = model->genJsonByIndex(index);
+	}
+
+	if(!m_preparedDoc.isEmpty()){
+		if(m_preparedDoc.isArray())
+			containerType = JsonFilter::Array;
+		else if(m_preparedDoc.isObject())
+			containerType = JsonFilter::Object;
+		else
+			return 2;
+	}
+	else
+		return 2;
 
 	int countRows = 0;
 	int countCols = -1;
 	QJsonValue firstRow;
 	switch(containerType) {
 		case JsonFilter::Array: {
-			QJsonArray arr;
-			if(!containerName.isEmpty())
-				arr = doc.object()[containerName].toArray();
-			else
-				arr = doc.array();
+			QJsonArray arr = m_preparedDoc.array();
 
 			if(arr.count() < startRow)
 				return 2;
@@ -388,9 +398,7 @@ int JsonFilterPrivate::prepareDocumentToRead(QJsonDocument& doc) {
 			break;
 		}
 		case JsonFilter::Object: {
-			QJsonObject obj = doc.object();
-			if(!containerName.isEmpty())
-				obj = obj[containerName].toObject();
+			QJsonObject obj = m_preparedDoc.object();
 
 			if(obj.count() < startRow)
 				return 2;
@@ -412,7 +420,6 @@ int JsonFilterPrivate::prepareDocumentToRead(QJsonDocument& doc) {
 
 	m_actualRows = countRows;
 	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled;
-	m_preparedDoc = doc;
 
 	if(parseColumnModes(firstRow) != 0)
 		return 2;
@@ -436,39 +443,52 @@ void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	Q_UNUSED(lines)
-	//TODO:Fix reading from preview
 	if(!m_prepared) {
-		//const int deviceError = prepareDeviceToRead(device);
-		//if(deviceError != 0){
-		//	DEBUG("Device error = " << deviceError);
-		//	return;
-		//}
+		const int deviceError = prepareDeviceToRead(device);
+		if(deviceError != 0){
+			DEBUG("Device error = " << deviceError);
+			return;
+		}
 		//TODO: support other modes and vector names
-		QDEBUG(QString::fromUtf8(m_preparedDoc.toJson()));
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, QStringList(), columnModes);
 		m_prepared = true;
 	}
+	importData(dataSource, importMode, lines);
+}
 
+/*!
+reads the content of document \c doc to the data source \c dataSource. Uses the settings defined in the data source.
+*/
+void JsonFilterPrivate::readDataFromDocument(const QJsonDocument& doc, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	if(!m_prepared) {
+		const int docError = prepareDocumentToRead(doc);
+		if(docError != 0){
+			DEBUG("Document parse error = " << docError);
+			return;
+		}
+		//TODO: support other modes and vector names
+		m_prepared = true;
+	}
+	importData(dataSource, importMode, lines);
+}
+
+/*!
+import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
+*/
+void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	Q_UNUSED(lines)
+
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, QStringList(), columnModes);
 	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
 		QJsonValue row;
 		switch (containerType) {
-			case JsonFilter::Array: {
-				if (containerName.isEmpty())
-					row = *(m_preparedDoc.array().begin() + rowOffset + i);
-				else
-					row = *(m_preparedDoc.object()[containerName].toArray().begin() + rowOffset + i);
+			case JsonFilter::Array:
+				row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				break;
-			}
-			case JsonFilter::Object: {
-				if (containerName.isEmpty())
-					row = *(m_preparedDoc.object().begin() + rowOffset + i);
-				else
-					row = *(m_preparedDoc.object()[containerName].toObject().begin() + rowOffset + i);
+			case JsonFilter::Object:
+				row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				break;
-			}
 		}
 
 		int colIndex = 0;
@@ -562,20 +582,12 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 	for(int i = 0; i < m_actualRows; ++i) {
 		QJsonValue row;
 		switch (containerType) {
-			case JsonFilter::Object: {
-				if (containerName.isEmpty())
-					row = *(m_preparedDoc.object().begin() + rowOffset + i);
-				else
-					row = *(m_preparedDoc.object()[containerName].toObject().begin() + rowOffset + i);
+			case JsonFilter::Object:
+				row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				break;
-			}
-			case JsonFilter::Array: {
-				if (containerName.isEmpty())
-					row = *(m_preparedDoc.array().begin() + rowOffset + i);
-				else
-					row = *(m_preparedDoc.object()[containerName].toArray().begin() + rowOffset + i);
+			case JsonFilter::Array:
+				row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				break;
-			}
 		}
 
 		QStringList lineString;
@@ -649,8 +661,6 @@ Saves as XML.
 */
 void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("jsonFilter");
-	writer->writeAttribute("containerName", d->containerName);
-	writer->writeAttribute("containerType", QString::number(d->containerType));
 	writer->writeAttribute("rowType", QString::number(d->rowType));
 	writer->writeAttribute("dateTimeFormat", d->dateTimeFormat);
 	writer->writeAttribute("numberFormat", QString::number(d->numberFormat));
@@ -660,6 +670,12 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("endRow", QString::number(d->endRow));
 	writer->writeAttribute("startColumn", QString::number(d->startColumn));
 	writer->writeAttribute("endColumn", QString::number(d->endColumn));
+
+	QStringList list;
+	for(auto it = modelRows().begin(); it != modelRows().end(); ++it){
+		list.append(QString::number(*it));
+	}
+	writer->writeAttribute("modelRows", list.join(';'));
 
 	writer->writeEndElement();
 	DEBUG("JsonFilter save params");
@@ -676,19 +692,7 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
-	QString str = attribs.value("containerName").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'containerName'"));
-	else
-		d->containerName = str;
-
-	str = attribs.value("containerType").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'containerType'"));
-	else
-		d->containerType = static_cast<JsonFilter::DataContainerType>(str.toInt());
-
-	str = attribs.value("rowType").toString();
+	QString str = attribs.value("rowType").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'rowType'"));
 	else
@@ -741,6 +745,15 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
 	else
 		d->endColumn = str.toInt();
+
+	QStringList list = attribs.value("modelRows").toString().split(';');
+	if (list.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'modelRows'"));
+	else{
+		d->modelRows = QVector<int>();
+		for(auto it = list.begin(); it !=list.end(); ++it)
+			d->modelRows.append((*it).toInt());
+	}
 
 	DEBUG("JsonFilter load params");
 	return true;

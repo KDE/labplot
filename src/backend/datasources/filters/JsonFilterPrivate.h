@@ -2,7 +2,7 @@
 #define JSONFILTERPRIVATE_H
 
 #include <QJsonDocument>
-
+#include "QJsonModel.h"
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
@@ -10,7 +10,7 @@ class AbstractColumn;
 class JsonFilterPrivate {
 
 public:
-	JsonFilterPrivate ( JsonFilter* owner );
+	JsonFilterPrivate (JsonFilter* owner);
 
 	int checkRow(QJsonValueRef value, int &countCols);
 	int parseColumnModes(QJsonValue value);
@@ -18,11 +18,18 @@ public:
 	void setValueFromString(int column, int row, QString value);
 
 	int prepareDeviceToRead(QIODevice&);
-	int prepareDocumentToRead(QJsonDocument&);
+	int prepareDocumentToRead(const QJsonDocument&);
+
 	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
 	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 	                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void readDataFromDocument(const QJsonDocument& doc, AbstractDataSource* = nullptr,
+	                          AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+
+	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace,
+	                int lines = -1);
+
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName);
 	QVector<QStringList> preview(QIODevice& device);
@@ -30,15 +37,16 @@ public:
 	QVector<QStringList> preview();
 
 	const JsonFilter* q;
+	QJsonModel* model;
 
-	QString containerName;
 	JsonFilter::DataContainerType containerType;
 	QJsonValue::Type rowType;
+	QVector<int> modelRows;
 
 	QString dateTimeFormat;
 	QLocale::Language numberFormat;
 	double nanValue;
-    bool createIndexEnabled;
+	bool createIndexEnabled;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
 	int startRow;		// start row

@@ -9,6 +9,7 @@
 class QStringList;
 class QIODevice;
 class QJsonDocument;
+class QJsonModel;
 class JsonFilterPrivate;
 
 class JsonFilter : public AbstractFileFilter {
@@ -22,7 +23,6 @@ public:
 
 	static QStringList dataTypes();
 	static QStringList dataRowTypes();
-	static QStringList dataContainerTypes();
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*,
@@ -39,12 +39,10 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
-    void setDataContainerName(const QString);
-    QString dataContainerName() const;
-	void setDataContainerType(const JsonFilter::DataContainerType);
-	JsonFilter::DataContainerType dataContainerType() const;
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
+	void setModelRows(const QVector<int>);
+	QVector<int> modelRows() const;
 
 	void setDateTimeFormat(const QString&);
 	QString dateTimeFormat() const;

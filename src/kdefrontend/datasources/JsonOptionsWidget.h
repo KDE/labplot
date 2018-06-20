@@ -18,19 +18,19 @@ public:
 	void clear();
 	void loadSettings() const;
 	void saveSettings();
-	QJsonDocument selectedJson() const;
+	void loadDocument(QString filename);
 
-public slots:
-	void updateContent();
 private slots:
 	void indexChanged();
+
 private:
 	void setTooltips();
-	JsonFilter::DataContainerType getCurrentType() const;
+	QVector<int> getIndexRows(const QModelIndex&) const;
+
+	QString m_filename;
 	Ui::JsonOptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 	QJsonModel* m_model;
-	QJsonTreeItem* m_lastItem;
 };
 
 #endif

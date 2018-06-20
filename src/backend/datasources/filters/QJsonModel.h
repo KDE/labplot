@@ -80,6 +80,7 @@ public:
 	bool load(const QString& fileName);
 	bool load(QIODevice * device);
 	bool loadJson(const QByteArray& json);
+	bool loadJson(const QJsonDocument& jdoc);
 	QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) Q_DECL_OVERRIDE;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const Q_DECL_OVERRIDE;
@@ -89,7 +90,7 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 	Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 	QJsonDocument json() const;
-	QJsonValue genJsonByIndex(const QModelIndex &index) const;
+	QJsonDocument genJsonByIndex(const QModelIndex &index) const;
 
 private:
 	QJsonValue genJson(QJsonTreeItem *) const;

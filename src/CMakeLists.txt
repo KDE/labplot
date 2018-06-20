@@ -35,7 +35,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/QJsonModel.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
@@ -204,6 +203,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp
