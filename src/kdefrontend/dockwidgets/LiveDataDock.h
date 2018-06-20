@@ -32,6 +32,13 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ui_livedatadock.h"
 #include "backend/datasources/LiveDataSource.h"
 #include <QList>
+#ifdef HAVE_MQTT
+#include <QtMqtt>
+#include <QCompleter>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
+#endif
 
 class LiveDataDock : public QWidget {
 	Q_OBJECT
@@ -49,6 +56,15 @@ private:
 
 	void pauseReading();
 	void continueReading();
+
+#ifdef HAVE_MQTT
+	QMqttClient* m_client;
+	QCompleter *m_completer;
+	QStringList m_topicList;
+	bool m_editing;
+	QTimer *m_timer;
+#endif
+
 private slots:
 
 	void updateTypeChanged(int);
@@ -72,12 +88,21 @@ private slots:
 	void willUpdateNow();
 	void willUpdateIntervalChanged(const QString&);
 	void statisticsChanged(QListWidgetItem *);
+	void addSubscription(const QString&, quint16);
+	void onMQTTConnect();
+	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+	void setCompleter(const QString&);
+	void topicBeingTyped(const QString&);
+	void topicTimeout();
+	void fillSubscriptions();
 #endif
 
 public slots:
 
 signals:
-
+#ifdef HAVE_MQTT
+	void newTopic(const QString&);
+#endif
 
 };
 

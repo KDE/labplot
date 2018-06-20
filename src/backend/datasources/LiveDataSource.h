@@ -182,7 +182,13 @@ public:
 	QMqttClient mqttClient() const;
 
 	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
-	QVector<QMqttTopicName> mqttSubscribtions() const;
+	QVector<QString> mqttSubscribtions() const;
+
+	QString clientHostName() const;
+	quint16 clientPort() const;
+	QString clientPassword() const;
+	QString clientUserName() const;
+	QString clientID () const;
 #endif
 
 	void updateNow();
@@ -236,6 +242,12 @@ public:
 
 	void setMqttRetain(bool);
 	bool mqttRetain() const;
+
+	void setMQTTUseID(bool);
+	bool mqttUseID() const;
+
+	void setMQTTUseAuthentication(bool);
+	bool mqttUseAuthentication() const;
 
 	void clearLastMessage();
 	void addWillStatistics(WillStatistics);
@@ -310,6 +322,8 @@ private:
 	QVector<bool> m_willStatistics;
 	bool m_mqttFirstConnectEstablished;
 	bool m_mqttRetain;
+	bool m_mqttUseID;
+	bool m_mqttUseAuthentication;
 #endif
 
 public slots:
