@@ -73,6 +73,7 @@ public:
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
 	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
+	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
 #endif
 
 	void setCommentCharacter(const QString&);

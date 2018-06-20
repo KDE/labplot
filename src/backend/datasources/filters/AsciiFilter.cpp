@@ -2757,4 +2757,171 @@ AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode(const QString& top
 
 	return columnModes[topicToCol]	;
 }
+
+void AsciiFilter::addMQTTColumn(const QString & message, const QString & topic, AbstractDataSource* dataSource){
+	d->addMQTTColumn(message, topic, dataSource);
+}
+
+void AsciiFilterPrivate::addMQTTColumn(const QString & message, const QString & topic, AbstractDataSource* dataSource) {
+	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
+
+	if (headerEnabled) {	// use topic name to name vectors
+		vectorNames.append(topic);
+		endColumn++;
+	}
+
+	m_actualCols = endColumn - startColumn + 1;
+	qDebug()<<"actual cols"<<m_actualCols;
+
+	QStringList lineList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
+	QString firstLine = lineList.takeFirst();
+	firstLine.remove(QRegExp("[\\n\\r]"));	// remove any newline
+	if (simplifyWhitespacesEnabled)
+		firstLine = firstLine.simplified();
+	DEBUG("First line: \'" << firstLine.toStdString() << '\'');
+
+	// determine separator and split first line
+	QStringList firstLineStringList;
+	firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+
+	columnModes.resize(m_actualCols);
+	int col = 0;
+
+	auto firstValue = firstLineStringList.takeFirst();//use first value to identify column mode
+	while(firstValue.isEmpty() || firstValue.startsWith(commentCharacter) )
+		firstValue = firstLineStringList.takeFirst();
+	if (simplifyWhitespacesEnabled)
+		firstValue = firstValue.simplified();
+	columnModes[m_actualCols-1] = AbstractFileFilter::columnMode(firstValue, dateTimeFormat, numberFormat);
+	qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << firstValue;
+
+	for (auto& valueString : firstLineStringList) {
+		if(!valueString.isEmpty() && !valueString.startsWith(commentCharacter) ){
+			if (createIndexEnabled)
+				col = 1;
+			else
+				col = 0;
+
+			if (simplifyWhitespacesEnabled)
+				valueString = valueString.simplified();
+			AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+
+			// numeric: integer -> numeric
+			if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer) {
+				columnModes[m_actualCols-1] = mode;
+				qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << valueString;
+			}
+			// text: non text -> text
+			if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text) {
+				columnModes[m_actualCols-1] = mode;
+				qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << valueString;
+			}
+		}
+	}
+	for (auto& valueString: lineList) {
+		QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+		for (auto& valueString2: splitString) {
+			if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
+				if (createIndexEnabled)
+					col = 1;
+				else
+					col = 0;
+
+				if (simplifyWhitespacesEnabled)
+					valueString2 = valueString2.simplified();
+				AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString2, dateTimeFormat, numberFormat);
+
+				// numeric: integer -> numeric
+				if (mode == AbstractColumn::Numeric && columnModes[m_actualCols-1] == AbstractColumn::Integer) {
+					columnModes[m_actualCols-1] = mode;
+					qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << valueString;
+				}
+				// text: non text -> text
+				if (mode == AbstractColumn::Text && columnModes[m_actualCols-1] != AbstractColumn::Text) {
+					columnModes[m_actualCols-1] = mode;
+					qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << valueString;
+				}
+			}
+		}
+	}
+	QDEBUG("column modes = " << columnModes);
+	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
+	qDebug()<<"-----final column mode" << "   "<<columnModes[m_actualCols-1];
+
+	spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
+	qDebug() << "fds resized to col: " << m_actualCols;
+	qDebug() << "fds rowCount: " << spreadsheet->rowCount();
+
+	spreadsheet->child<Column>(m_actualCols - 1)->setUndoAware(false);
+	spreadsheet->child<Column>(m_actualCols - 1)->setSuppressDataChangedSignal(true);
+
+	m_dataContainer.resize(m_actualCols);
+
+
+
+	spreadsheet->child<Column>(m_actualCols - 1)->setColumnMode(columnModes[m_actualCols - 1]);
+	switch (columnModes[m_actualCols - 1]) {
+	case AbstractColumn::Numeric: {
+		QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(m_actualCols - 1)->data());
+		vector->reserve(m_actualRows);
+		vector->resize(m_actualRows);
+		m_dataContainer[m_actualCols - 1] = static_cast<void *>(vector);
+		break;
+	}
+	case AbstractColumn::Integer: {
+		QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(m_actualCols - 1)->data());
+		vector->reserve(m_actualRows);
+		vector->resize(m_actualRows);
+		m_dataContainer[m_actualCols - 1] = static_cast<void *>(vector);
+		break;
+	}
+	case AbstractColumn::Text: {
+		QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(m_actualCols - 1)->data());
+		vector->reserve(m_actualRows);
+		vector->resize(m_actualRows);
+		m_dataContainer[m_actualCols - 1] = static_cast<void *>(vector);
+		break;
+	}
+	case AbstractColumn::DateTime: {
+		QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(m_actualCols - 1)->data());
+		vector->reserve(m_actualRows);
+		vector->resize(m_actualRows);
+		m_dataContainer[m_actualCols - 1] = static_cast<void *>(vector);
+		break;
+	}
+		//TODO
+	case AbstractColumn::Month:
+	case AbstractColumn::Day:
+		break;
+	}
+
+	for(int row = 0; row < m_actualRows; ++row) {
+		switch (columnModes[m_actualCols - 1]) {
+		case AbstractColumn::Numeric: {
+			static_cast<QVector<double>*>(m_dataContainer[m_actualCols - 1])->operator[](row) = (nanValue);
+			break;
+		}
+		case AbstractColumn::Integer: {
+			static_cast<QVector<int>*>(m_dataContainer[m_actualCols - 1])->operator[](row) = (0);
+			//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+
+			break;
+		}
+		case AbstractColumn::DateTime: {
+			static_cast<QVector<QDateTime>*>(m_dataContainer[m_actualCols - 1])->operator[](row) = QDateTime();
+			break;
+		}
+		case AbstractColumn::Text:
+			static_cast<QVector<QString>*>(m_dataContainer[m_actualCols - 1])->operator[](row) = QString();
+			break;
+		case AbstractColumn::Month:
+			//TODO
+			break;
+		case AbstractColumn::Day:
+			//TODO
+			break;
+		}
+	}
+}
+
 #endif

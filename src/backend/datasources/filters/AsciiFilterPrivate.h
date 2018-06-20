@@ -58,6 +58,7 @@ public:
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
 	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
+	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
 #endif
 
 	const AsciiFilter* q;

@@ -38,6 +38,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include "backend/datasources/filters/AsciiFilter.h"
 #endif
 
 class LiveDataDock : public QWidget {
@@ -88,7 +89,7 @@ private slots:
 	void willUpdateNow();
 	void willUpdateIntervalChanged(const QString&);
 	void statisticsChanged(QListWidgetItem *);
-	void addSubscription(const QString&, quint16);
+	void addSubscription();
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);

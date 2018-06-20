@@ -165,6 +165,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
 		connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::topicBeingTyped);
 		connect(m_timer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
+		connect(ui.bTopics, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
 
 		m_client->setHostname(fds->clientHostName());
 		m_client->setPort(fds->clientPort());
@@ -576,8 +577,24 @@ void LiveDataDock::topicTimeout() {
 	m_timer->stop();
 }
 
-void LiveDataDock::addSubscription(const QString&, quint16){
+void LiveDataDock::addSubscription(){
+	if(ui.lwSubscriptions->findItems(ui.cbTopics->currentText(), Qt::MatchExactly).isEmpty()) {
+		if(ui.cbTopics->findText( ui.cbTopics->currentText() ) != -1) {
 
+			for (auto* source: m_liveDataSources) {
+				if(source->fileType() == LiveDataSource::FileType::Ascii)
+					if(dynamic_cast<AsciiFilter*>(source->filter())->isPrepared()) {
+						source->newMQTTTopic(ui.cbTopics->currentText(), ui.cbQoS->currentIndex());
+					}
+			}
+
+			ui.lwSubscriptions->addItem(ui.cbTopics->currentText());
+		}
+		else
+			qDebug()<< "There is no such topic listed in the combo box";
+	}
+	else
+		qDebug()<< "You already subscribed to this topic";
 }
 
 void LiveDataDock::fillSubscriptions() {

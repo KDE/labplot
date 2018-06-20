@@ -1329,6 +1329,13 @@ void LiveDataSource::onMqttConnect() {
 void LiveDataSource::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
 	if(!msg.retain() || (msg.retain() && m_mqttRetain) ) {
 		qDebug()<<"message received from "<<msg.topic().name();
+		if(!m_newTopic.isEmpty() && (msg.topic().name() == m_newTopic)) {
+			if(m_fileType == Ascii)
+				dynamic_cast<AsciiFilter*>(m_filter)->addMQTTColumn(QString(msg.payload()), msg.topic().name(), this);
+			m_newTopic.clear();
+			m_messageArrived[msg.topic()] = false;
+			m_subscriptions.push_back(msg.topic().name());
+		}
 		if(m_messageArrived[msg.topic()] == false) {
 			m_messageArrived[msg.topic()] = true;
 			m_messagePuffer[msg.topic()].push_back(msg);
@@ -1562,8 +1569,10 @@ bool LiveDataSource::mqttRetain() const {
 }
 
 void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
-	MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
-	errorWidget->show();
+	if(clientError != QMqttClient::ClientError::NoError) {
+		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
+		errorWidget->show();
+	}
 }
 
 QString LiveDataSource::clientHostName() const{
@@ -1603,4 +1612,18 @@ QVector<QString> LiveDataSource::mqttSubscribtions() const {
 	return m_subscriptions;
 }
 
+void LiveDataSource::newMQTTTopic(const QString& topic, quint8 QoS) {
+	if (m_fileType == Ascii)
+		if (dynamic_cast<AsciiFilter*>(m_filter)->isPrepared()) {
+			m_newTopic = topic;
+			QMqttTopicFilter filter {topic};
+			QMqttSubscription* temp = m_client->subscribe(filter, QoS);
+			if (temp) {
+				qDebug()<<temp->topic()<<"  "<<temp->qos();
+				connect(temp, &QMqttSubscription::messageReceived, this, &LiveDataSource::mqttSubscribtionMessageReceived);
+			}
+		}
+}
+
 #endif
+

@@ -253,6 +253,8 @@ public:
 	void addWillStatistics(WillStatistics);
 	void removeWillStatistics(WillStatistics);
 	QVector<bool> willStatistics() const;
+
+	void newMQTTTopic(const QString&, quint8);
 #endif
 
 private:
@@ -324,6 +326,7 @@ private:
 	bool m_mqttRetain;
 	bool m_mqttUseID;
 	bool m_mqttUseAuthentication;
+	QString m_newTopic;
 #endif
 
 public slots:
