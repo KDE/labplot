@@ -160,6 +160,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	QStandardItem* item3 = model->item(LiveDataSource::FITS);
 	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
+#ifndef HAVE_MQTT
+	// disable MQTT item
+	QStandardItem* item4 = model->item(LiveDataSource::MQTT);
+	item3->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+#endif
 
 	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
@@ -207,9 +212,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 #endif
 
-#ifndef HAVE_MQTT
-	ui.cbSourceType->removeItem(LiveDataSource::SourceType::Mqtt);
-#endif
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
 
@@ -496,8 +498,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
+	case LiveDataSource::SourceType::MQTT:{
 #ifdef HAVE_MQTT
-	case LiveDataSource::SourceType::Mqtt:{
 		qDebug()<<"Saving mqtt";
 		source->setMqttClient(m_client->hostname(), m_client->port());
 
@@ -526,9 +528,9 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 			if (item->checkState() == Qt::Checked)
 				source->addWillStatistics(static_cast<LiveDataSource::WillStatistics> (i));
 		}
+#endif
 		break;
 	}
-#endif
 	default:
 		break;
 	}
@@ -1000,8 +1002,8 @@ void ImportFileWidget::refreshPreview() {
 					}
 					break;
 				}
+			case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
-			case LiveDataSource::SourceType::Mqtt: {
 				qDebug()<<"preview mqtt, is it ready:"<<m_mqttReadyForPreview;
 				if(m_mqttReadyForPreview)
 				{
@@ -1023,9 +1025,9 @@ void ImportFileWidget::refreshPreview() {
 					}
 					m_mqttReadyForPreview = false;
 				}
+#endif
 				break;
 			}
-#endif
 			}
 
 			tmpTableWidget = m_twPreview;
@@ -1334,8 +1336,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 				ui.cbReadType->removeItem(i);
 		}
 		break;
+	case LiveDataSource::SourceType::MQTT:
 #ifdef HAVE_MQTT
-    case LiveDataSource::SourceType::Mqtt:
+
         ui.lBaudRate->hide();
         ui.cbBaudRate->hide();
         ui.lSerialPort->hide();
@@ -1418,7 +1421,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 				ui.lwWillStatistics->show();
 			}
 
-
 			if(ui.cbWillUpdate->currentIndex() == 0) {
 				ui.leWillUpdateInterval->show();
 				ui.lWillUpdateInterval->show();
@@ -1429,9 +1431,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 				ui.lWillUpdateInterval->hide();
 			}
 		}
-
-        break;
 #endif
+        break;
 	default:
 		break;
 	}

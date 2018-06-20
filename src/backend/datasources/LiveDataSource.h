@@ -64,7 +64,7 @@ public:
 		NetworkUdpSocket,
 		LocalSocket,
         SerialPort,
-        Mqtt
+		MQTT
 	};
 
 	enum UpdateType {
