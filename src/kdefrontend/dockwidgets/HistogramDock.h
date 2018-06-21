@@ -86,12 +86,12 @@ private slots:
 	void visibilityChanged(bool);
 	//Histogram-types
 	void histogramTypeChanged(int);
+	//Bars-types
+	void barsTypeChanged(int);
 	//bins setting
 	void binsOptionChanged(int);
 	void binValueChanged(int);
 
-	void recalculateClicked();
-	void enableRecalculate() const;
 	//Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);

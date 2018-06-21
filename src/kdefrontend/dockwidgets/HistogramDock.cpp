@@ -396,9 +396,7 @@ void HistogramDock::initGeneralTab(){
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 
-	uiGeneralTab.pbRecalculate->setEnabled(m_curve->isSourceDataChangedSinceLastPlot());
 	//Slots
-
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(histogramDataChanged(Histogram::HistogramData)),
@@ -410,25 +408,6 @@ void HistogramDock::initGeneralTab(){
 //**** SLOTs for changes triggered in HistogramDock *****
 //*************************************************************
 
-void HistogramDock::recalculateClicked() {
-	Histogram::HistogramData data;
-	if( data.type != (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex())
-		data.type = (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex();
-
-	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
-	data.binValue = uiGeneralTab.sbBins->value();
-// 	m_curve->retransform();
-	for (auto* curve : m_curvesList)
-		dynamic_cast<Histogram*>(curve)->setHistogramData(data);
-
-	uiGeneralTab.pbRecalculate->setEnabled(false);
-}
-
-void HistogramDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
-}
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
 	uiGeneralTab.kcbLineColor->setColor( pen.color());
@@ -959,7 +938,9 @@ void HistogramDock::setupGeneral() {
 	uiGeneralTab.cbHistogramType->addItem(i18n("Cumulative Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	// Bars types
+	uiGeneralTab.cbBarsType->addItem(i18n("Vertical"));
+	uiGeneralTab.cbBarsType->addItem(i18n("Horizontal"));
 
 	//General
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
@@ -969,28 +950,31 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
+	connect( uiGeneralTab.cbBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(barsTypeChanged(int)));
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
 	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
 }
 
 void HistogramDock::histogramTypeChanged(int index) {
 	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
-	m_curve->setHistrogramType(histogramType);
-	enableRecalculate();
+	m_curve->setHistogramType(histogramType);
+}
+
+void HistogramDock::barsTypeChanged(int index) {
+	Histogram::BarsType barsType = Histogram::BarsType(index);
+	m_curve->setBarsType(barsType);
 }
 
 void HistogramDock::binValueChanged(int value) {
-		m_curve->setBinValue(value);
-		enableRecalculate();
+	m_curve->setBinValue(value);
 }
 
 void HistogramDock::binsOptionChanged(int index){
 	Histogram::BinsOption binsOption = Histogram::BinsOption(index);
 	m_curve->setbinsOption(binsOption);
-	enableRecalculate();
 }
+
 void HistogramDock::lineColorChanged(const QColor& color){
 	if (m_initializing)
 		return;

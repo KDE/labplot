@@ -70,6 +70,7 @@ class HistogramPrivate : public QGraphicsItem {
 		double getYMaximum();
 		bool autoScaleX, autoScaleY;
 		Histogram::HistogramType histogramType;
+		Histogram::BarsType m_barsType;
 		Histogram::BinsOption binsOption;
 
 		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
@@ -79,7 +80,7 @@ class HistogramPrivate : public QGraphicsItem {
 		QString xColumnPath;
 		QString yColumnPath;
 
-		void recalculate();
+        void recalculate();
 		Histogram::HistogramData histogramData;
 
 		//line
@@ -139,8 +140,8 @@ class HistogramPrivate : public QGraphicsItem {
 		bool sourceDataChangedSinceLastPlot; //<! \c true if the data in the source columns (x, or bins) was changed, \c false otherwise
 
 	private:
-		gsl_histogram * histogram;
-		size_t bins;
+		gsl_histogram * m_histogram;
+		size_t m_bins;
 
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;

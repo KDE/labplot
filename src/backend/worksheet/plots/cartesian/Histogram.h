@@ -45,6 +45,7 @@ public:
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
+	enum BarsType {Vertical, Horizontal};
 
 	struct HistogramData {
 		HistogramData() : type(Ordinary),binsOption(Number), binValue(10) {};
@@ -102,8 +103,10 @@ public:
 	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 	double getYMaximum() const;
-	void setHistrogramType(Histogram::HistogramType);
+	void setHistogramType(Histogram::HistogramType);
+	void setBarsType(Histogram::BarsType);
 	Histogram::HistogramType getHistrogramType();
+	Histogram::BarsType getBarsType();
 	void setbinsOption(Histogram::BinsOption);
 	void setBinValue(int);
 
@@ -136,7 +139,7 @@ private:
 
 signals:
 	//General-Tab
-	void HistogramdataChanged();
+	void HistogramDataChanged();
 	void xHistogramDataChanged();
 	void yHistogramDataChanged();
 	void visibilityChanged(bool);
