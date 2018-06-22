@@ -835,18 +835,20 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
-					DEBUG("	UDPSocket");
 					QUdpSocket udpSocket(this);
-					DEBUG("CONNECT PREVIEW");
+					DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
 					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
 					if (udpSocket.waitForConnected()) {
-						DEBUG("connected to UDP socket " << host().toStdString() << ':' << port().toInt());
-						if ( udpSocket.waitForReadyRead(5000) )
-							importedStrings = filter->preview(udpSocket);
+						DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
+						if (!udpSocket.waitForReadyRead(2000) )
+							DEBUG("	ERROR: not ready for read after 2 sec");
+						if (udpSocket.hasPendingDatagrams())
+							DEBUG("	has pending data");
 						else
-							DEBUG("	ERROR: not ready for read");
+							DEBUG("	has no pending data");
+						importedStrings = filter->preview(udpSocket);
 
-						DEBUG("DISCONNECT PREVIEW");
+						DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 						udpSocket.disconnectFromHost();
 					} else
 						DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
