@@ -208,8 +208,8 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 size_t AsciiFilter::lineNumber(QIODevice &device) {
 	if (device.isSequential())
 		return 0;
-//TODO	if (!device.canReadLine())
-//		return -1;
+	if (!device.canReadLine())
+		DEBUG("WARNING in AsciiFilter::lineNumber(): device cannot 'readLine()' but using it anyway.");
 
 	size_t lineCount = 0;
 	device.seek(0);
@@ -373,10 +373,10 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	QString line;
 	do {	// skip comment lines in data lines
-//TODO		if (device.canReadLine())
-			line = device.readLine();
-//		else
+		if (!device.canReadLine())
+			DEBUG("WARNING in AsciiFilterPrivate::getLineString(): device cannot 'readLine()' but using it anyway.");
 //			line = device.readAll();
+		line = device.readLine();
 	} while (line.startsWith(commentCharacter));
 
 	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
@@ -402,15 +402,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
 
-// if device does not support readLine() like TCP socket
-	if (!device.canReadLine()) {
-		DEBUG("WARNING: device does not support readLine()!");
-		QDEBUG("	column modes = " << columnModes);
-		// TODO: set rows and cols ?
-//		m_actualRows = 0;
-		//TODO: set column mode ?
-		//TODO: this breaks tests
-//		return 0;
+	if (!device.canReadLine())  {
+		DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+		// TODO: set rows and cols?	(see readFromLiveDevice())
+//		m_actualRows = m_actualCols = 1;
+//		columnMode.resize(m_actualCols);
 	}
 
 /////////////////////////////////////////////////////////////////
@@ -418,10 +414,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("	Skipping " << startRow - 1 << " lines");
 	for (int i = 0; i < startRow - 1; ++i) {
 		QString line;
-//TODO		if (device.canReadLine())
-		 	line = device.readLine();
-//		else
-//		 	line = device.readAll();
+		if (!device.canReadLine())
+			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+		line = device.readLine();
 		DEBUG("	line = " << line.toStdString());
 
 		if (device.atEnd()) {
@@ -440,10 +435,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
 	do {	// skip comment lines
-//TODO		if (device.canReadLine())
-			firstLine = device.readLine();
-//		else
-//			firstLine = device.readAll();
+		if (!device.canReadLine())
+			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+
+		firstLine = device.readLine();
+
 		if (device.atEnd()) {
 			if (device.isSequential())
 				break;
