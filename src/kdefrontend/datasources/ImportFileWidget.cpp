@@ -842,8 +842,8 @@ void ImportFileWidget::refreshPreview() {
 					udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
 					if (udpSocket.waitForConnected()) {
 						DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
-						if (!udpSocket.waitForReadyRead(10000) )
-							DEBUG("	ERROR: not ready for read after 10 sec");
+						if (!udpSocket.waitForReadyRead(2000) )
+							DEBUG("	ERROR: not ready for read after 2 sec");
 						if (udpSocket.hasPendingDatagrams()) {
 							DEBUG("	has pending data");
 						} else {

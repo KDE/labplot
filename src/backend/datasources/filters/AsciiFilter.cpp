@@ -627,8 +627,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			DEBUG("Device error = " << deviceError);
 			return 0;
 		}*/
-		//TODO: FileOrPipe, NetworkUdpSocket, SerialPort
+		//TODO: FileOrPipe, SerialPort
 		if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket
+			|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket
 			|| spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket) {
 			m_actualCols = 1;
 			m_actualRows = 1;
@@ -1298,9 +1299,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	QVector<QString> newData;
 
 	while (!device.atEnd()) {
-		newData.push_back(device.readLine());
+		if (device.canReadLine())
+			newData.push_back(device.readLine());
+		else	// UDP fails otherwise
+			newData.push_back(device.readAll());
 		linesToRead++;
 	}
+	QDEBUG("	data = " << newData);
 
 	if (linesToRead == 0) return dataStrings;
 
