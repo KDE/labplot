@@ -625,12 +625,18 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	if (!m_prepared) {
 		DEBUG("	not prepared");
-		//TODO: do we need to prepare live devices?
+		//TODO: do we need to prepare live devices?	(maybe only FileOrPipe)
 		/*const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
 			DEBUG("Device error = " << deviceError);
 			return 0;
 		}*/
+		//TODO: FileOrPipe, NetworkUdpSocket, LocalSocket, SerialPort
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket) {
+			m_actualCols = 1;
+			m_actualRows = 1;
+			columnModes.resize(m_actualCols);
+		}
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
@@ -964,7 +970,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	// from the last row we read the new data in the spreadsheet
 	qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
-	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
+	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows << ", actual cols: " << m_actualCols;
 	newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
 		if (m_prepared) {
@@ -1002,6 +1008,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		for (; row < linesToRead; ++row) {
+			DEBUG("	row = " << row);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -1025,8 +1032,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			QLocale locale(numberFormat);
 
-			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-			QDEBUG(" line = " << lineStringList);
+			QStringList lineStringList;
+			if (m_actualCols > 1)	// TODO: check
+				lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+			else
+				lineStringList << line;
+			QDEBUG(" line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
 			if (createIndexEnabled) {
 				if (spreadsheet->keepLastValues())
