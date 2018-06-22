@@ -631,8 +631,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			DEBUG("Device error = " << deviceError);
 			return 0;
 		}*/
-		//TODO: FileOrPipe, NetworkUdpSocket, LocalSocket, SerialPort
-		if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket) {
+		//TODO: FileOrPipe, NetworkUdpSocket, SerialPort
+		if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket
+			|| spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket) {
 			m_actualCols = 1;
 			m_actualRows = 1;
 			columnModes.resize(m_actualCols);
