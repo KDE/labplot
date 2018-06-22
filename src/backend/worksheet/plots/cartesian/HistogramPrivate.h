@@ -58,6 +58,12 @@ class HistogramPrivate : public QGraphicsItem {
 
 		void retransform();
 		void updateLines();
+		void verticalOrdinaryHistogram();
+		void verticalCumulativeHistogram();
+		void verticalHistogram();
+		void horizontalOrdinaryHistogram();
+		void horizontalCumulativeHistogram();
+		void horizontalHistogram();
 		void updateValues();
 		void updateFilling();
 		bool swapVisible(bool on);
@@ -68,8 +74,12 @@ class HistogramPrivate : public QGraphicsItem {
 		void draw(QPainter*);
 		void updatePixmap();
 		double getYMaximum();
+		double getYMinimum();
+		double getXMinimum();
+		double getXMaximum();
+		double getMaximumOccuranceofHistogram();
 		bool autoScaleX, autoScaleY;
-		Histogram::HistogramType histogramType;
+		Histogram::HistogramType m_histogramType;
 		Histogram::BarsType m_barsType;
 		Histogram::BinsOption binsOption;
 

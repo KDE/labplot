@@ -103,6 +103,9 @@ public:
 	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 	double getYMaximum() const;
+	double getYMinimum() const;
+	double getXMaximum() const;
+	double getXMinimum() const;
 	void setHistogramType(Histogram::HistogramType);
 	void setBarsType(Histogram::BarsType);
 	Histogram::HistogramType getHistrogramType();

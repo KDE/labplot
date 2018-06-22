@@ -1,10 +1,11 @@
 /***************************************************************************
-File                 : Histogram.cpp
-Project              : LabPlot
-Description          : Histogram
---------------------------------------------------------------------
-Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
+	File                 : Histogram.cpp
+	Project              : LabPlot
+	Description          : Histogram
+	--------------------------------------------------------------------
+	Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+	Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -77,7 +78,7 @@ void Histogram::init() {
 
 	d->xColumn = NULL;
 
-	d->histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
+	d->m_histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
 	d->m_barsType = (Histogram::BarsType) group.readEntry("barsType", (int)Histogram::Vertical);
 	d->binsOption = (Histogram::BinsOption) group.readEntry("binOption", (int)Histogram::Number);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
@@ -154,7 +155,7 @@ void Histogram::setPrinting(bool on) {
 }
 
 void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
-	d_ptr->histogramType = histogramType;
+	d_ptr->m_histogramType = histogramType;
 	emit HistogramDataChanged();
 	DEBUG(histogramType);
 }
@@ -167,7 +168,7 @@ void Histogram::setBarsType(Histogram::BarsType barsType) {
 }
 
 Histogram::HistogramType Histogram::getHistrogramType() {
-	return d_ptr->histogramType;
+	return d_ptr->m_histogramType;
 }
 
 Histogram::BarsType Histogram::getBarsType() {
@@ -219,9 +220,22 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 	CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
 
-	double Histogram::getYMaximum() const {
-		return d_ptr->getYMaximum();
-	}
+double Histogram::getYMaximum() const {
+	return d_ptr->getYMaximum();
+}
+
+double Histogram::getYMinimum() const {
+	return d_ptr->getYMinimum();
+}
+
+double Histogram::getXMaximum() const {
+	return d_ptr->getXMaximum();
+}
+
+double Histogram::getXMinimum() const {
+	return d_ptr->getXMinimum();
+}
+
 bool Histogram::isSourceDataChangedSinceLastPlot() const {
 	Q_D(const Histogram);
 	return d->sourceDataChangedSinceLastPlot;
@@ -476,10 +490,10 @@ QRectF HistogramPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-double HistogramPrivate::getYMaximum() {
+double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
-		double yMaxRange = 0.0;
-		switch(histogramType) {
+		double yMaxRange = -INFINITY;
+		switch(m_histogramType) {
 			case Histogram::Ordinary: {
 				size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 				yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
@@ -495,7 +509,9 @@ double HistogramPrivate::getYMaximum() {
 						yMaxRange = point;
 					}
 				}
-				std::cout << "checking y max " << maxYAddes << " " <<yMaxRange << "\n";
+				std::cout << "*************here***************";
+				std::cout << yMaxRange;
+				std::cout << "*************here***************";
 				//yMaxRange = xColumn->rowCount();
 				break;
 			}
@@ -503,11 +519,59 @@ double HistogramPrivate::getYMaximum() {
 				//TODO
 			}
 		}
-		std::cout << "checking y max " << " " <<yMaxRange << "\n";
 		return yMaxRange;
 	}
 
 	return -INFINITY;
+
+}
+
+double HistogramPrivate::getXMinimum() {
+	switch(m_barsType) {
+		case Histogram::Vertical: {
+			return xColumn->minimum();
+		}
+		case Histogram::Horizontal: {
+			return 0;
+		}
+	}
+	return INFINITY;
+}
+
+double HistogramPrivate::getXMaximum() {
+	switch(m_barsType) {
+		case Histogram::Vertical: {
+			return xColumn->maximum();
+		}
+		case Histogram::Horizontal: {
+			return getMaximumOccuranceofHistogram();
+		}
+	}
+	return -INFINITY;
+}
+
+double HistogramPrivate::getYMinimum() {
+	switch(m_barsType) {
+		case Histogram::Vertical: {
+			return 0;
+		}
+		case Histogram::Horizontal: {
+			return xColumn->minimum();
+		}
+	}
+	return INFINITY;
+}
+
+double HistogramPrivate::getYMaximum() {
+	switch(m_barsType) {
+		case Histogram::Vertical: {
+			return getMaximumOccuranceofHistogram();
+		}
+		case Histogram::Horizontal: {
+			return xColumn->maximum();
+		}
+	}
+	return INFINITY;
 }
 
 /*!
@@ -596,6 +660,208 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = false;
 }
 
+void HistogramPrivate::verticalOrdinaryHistogram() {
+	QPointF tempPoint,tempPoint1;
+	double xAxisMin = xColumn->minimum();
+	double xAxisMax = xColumn->maximum();
+	double width = (xAxisMax-xAxisMin)/m_bins;
+	for(size_t i=0; i < m_bins; ++i) {
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(gsl_histogram_get(m_histogram,i));
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(gsl_histogram_get(m_histogram,i));
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(gsl_histogram_get(m_histogram,i));
+
+		lines.append(QLineF(tempPoint,tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(gsl_histogram_get(m_histogram,i));
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+		xAxisMin+= width;
+	}
+}
+
+void HistogramPrivate::verticalCumulativeHistogram() {
+	double point =0.0;
+	double xAxisMin = xColumn->minimum();
+	double xAxisMax = xColumn->maximum();
+	QPointF tempPoint,tempPoint1;
+	double width = (xAxisMax-xAxisMin)/m_bins;
+	for(size_t i=0; i < m_bins; ++i) {
+		point+= gsl_histogram_get(m_histogram,i);
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(point);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(point);
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(point);
+
+		lines.append(QLineF(tempPoint,tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(point);
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+		xAxisMin+= width;
+	}
+}
+
+void HistogramPrivate::verticalHistogram() {
+	switch(m_histogramType) {
+		case Histogram::Ordinary: {
+			verticalOrdinaryHistogram();
+			break;
+		}
+		case Histogram::Cumulative: {
+			verticalCumulativeHistogram();
+			break;
+		}
+		case Histogram::AvgShift: {
+			//TODO
+			break;
+		}
+	}
+}
+
+void HistogramPrivate::horizontalOrdinaryHistogram() {
+	QPointF tempPoint,tempPoint1;
+	double yAxisMin = xColumn->minimum();
+	double yAxisMax = xColumn->maximum();
+	double width = (yAxisMax-yAxisMin)/m_bins;
+	for(size_t i = 0; i < m_bins; ++i) {
+		tempPoint.setY(yAxisMin);
+		tempPoint.setX(0.0);
+
+		tempPoint1.setY(yAxisMin);
+		tempPoint1.setX(gsl_histogram_get(m_histogram,i));
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setY(yAxisMin);
+		tempPoint.setX(gsl_histogram_get(m_histogram,i));
+
+		tempPoint1.setY(yAxisMin + width);
+		tempPoint1.setX(gsl_histogram_get(m_histogram,i));
+
+		lines.append(QLineF(tempPoint,tempPoint1));
+
+		tempPoint.setY(yAxisMin+width);
+		tempPoint.setX(gsl_histogram_get(m_histogram,i));
+
+		tempPoint1.setY(yAxisMin + width);
+		tempPoint1.setX(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setY(yAxisMin + width);
+		tempPoint.setX(0.0);
+
+		tempPoint1.setY(yAxisMin);
+		tempPoint1.setX(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+		yAxisMin += width;
+	}
+}
+
+void HistogramPrivate::horizontalCumulativeHistogram() {
+	double point =0.0;
+	double yAxisMin = xColumn->minimum();
+	double yAxisMax = xColumn->maximum();
+	QPointF tempPoint,tempPoint1;
+	double width = (yAxisMax-yAxisMin)/m_bins;
+	for(size_t i=0; i < m_bins; ++i) {
+		point+= gsl_histogram_get(m_histogram,i);
+		tempPoint.setY(yAxisMin);
+		tempPoint.setX(0.0);
+
+		tempPoint1.setY(yAxisMin);
+		tempPoint1.setX(point);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setY(yAxisMin);
+		tempPoint.setX(point);
+
+		tempPoint1.setY(yAxisMin+width);
+		tempPoint1.setX(point);
+
+		lines.append(QLineF(tempPoint,tempPoint1));
+
+		tempPoint.setY(yAxisMin+width);
+		tempPoint.setX(point);
+
+		tempPoint1.setY(yAxisMin+width);
+		tempPoint1.setX(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setY(yAxisMin+width);
+		tempPoint.setX(0.0);
+
+		tempPoint1.setY(yAxisMin);
+		tempPoint1.setX(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+		yAxisMin+= width;
+	}
+}
+
+void HistogramPrivate::horizontalHistogram() {
+	switch(m_histogramType) {
+		case Histogram::Ordinary: {
+			horizontalOrdinaryHistogram();
+			break;
+		}
+		case Histogram::Cumulative: {
+			horizontalCumulativeHistogram();
+			break;
+		}
+		case Histogram::AvgShift: {
+			//TODO
+			break;
+		}
+	}
+}
+
 /*!
   recalculates the painter path for the lines connecting the data points.
   Called each time when the type of this connection is changed.
@@ -611,9 +877,6 @@ void HistogramPrivate::updateLines() {
 		recalcShapeAndBoundingRect();
 		return;
 	}
-	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
-	QPointF tempPoint,tempPoint1;
 
 	double xAxisMin = xColumn->minimum();
 	double xAxisMax = xColumn->maximum();
@@ -635,112 +898,24 @@ void HistogramPrivate::updateLines() {
 			break;
 	}
 
-	double width = (xAxisMax-xAxisMin)/m_bins;
 	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
 	gsl_histogram_set_ranges_uniform (m_histogram, xAxisMin,xAxisMax+1);
 
-    std::cout << "let's see if this called or not?\n";
+	int startRow = 0;
+	int endRow = xColumn->rowCount() - 1;
+	for (int row = startRow; row <= endRow; row++ ) {
+		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
+			gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
+	}
+
 	switch(m_barsType) {
-		case Histogram::Vertical:
-		{
-			std::cout << "Vertically painting histogram\n";
-			qDebug() << "let's see if this printef";
-			switch(histogramType) {
-				case Histogram::Ordinary: {
-					for (int row = startRow; row <= endRow; row++ ) {
-						if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-							gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
-					}
-					for(size_t i=0; i < m_bins; ++i) {
-						tempPoint.setX(xAxisMin);
-						tempPoint.setY(0.0);
-
-						tempPoint1.setX(xAxisMin);
-						tempPoint1.setY(gsl_histogram_get(m_histogram,i));
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-
-						tempPoint.setX(xAxisMin);
-						tempPoint.setY(gsl_histogram_get(m_histogram,i));
-
-						tempPoint1.setX(xAxisMin+width);
-						tempPoint1.setY(gsl_histogram_get(m_histogram,i));
-
-						lines.append(QLineF(tempPoint,tempPoint1));
-
-						tempPoint.setX(xAxisMin+width);
-						tempPoint.setY(gsl_histogram_get(m_histogram,i));
-
-						tempPoint1.setX(xAxisMin+width);
-						tempPoint1.setY(0.0);
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-
-						tempPoint.setX(xAxisMin+width);
-						tempPoint.setY(0.0);
-
-						tempPoint1.setX(xAxisMin);
-						tempPoint1.setY(0.0);
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-						xAxisMin+= width;
-					}
-					break;
-				}
-				case Histogram::Cumulative: {
-					double point =0.0;
-					for (int row = startRow; row <= endRow; row++ ) {
-						if ( xColumn->isValid(row) && !xColumn->isMasked(row))
-							gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
-					}
-					for(size_t i=0; i < m_bins; ++i) {
-						point+= gsl_histogram_get(m_histogram,i);
-						tempPoint.setX(xAxisMin);
-						tempPoint.setY(0.0);
-
-						tempPoint1.setX(xAxisMin);
-						tempPoint1.setY(point);
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-
-						tempPoint.setX(xAxisMin);
-						tempPoint.setY(point);
-
-						tempPoint1.setX(xAxisMin+width);
-						tempPoint1.setY(point);
-
-						lines.append(QLineF(tempPoint,tempPoint1));
-
-						tempPoint.setX(xAxisMin+width);
-						tempPoint.setY(point);
-
-						tempPoint1.setX(xAxisMin+width);
-						tempPoint1.setY(0.0);
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-
-						tempPoint.setX(xAxisMin+width);
-						tempPoint.setY(0.0);
-
-						tempPoint1.setX(xAxisMin);
-						tempPoint1.setY(0.0);
-
-						lines.append(QLineF(tempPoint, tempPoint1));
-						xAxisMin+= width;
-					}
-					break;
-				}
-				case Histogram::AvgShift: {
-					//TODO
-					break;
-				}
-			}
+		case Histogram::Vertical: {
+			verticalHistogram();
 			break;
 		}
-		case Histogram::Horizontal:
-		{
-			qDebug() << "horizonal trying";
-			std::cout << "tying horizontal\n";
+		case Histogram::Horizontal: {
+			horizontalHistogram();
+			break;
 		}
 	}
 
@@ -779,7 +954,7 @@ void HistogramPrivate::updateValues() {
 
 	//determine the value string for all points that are currently visible in the plot
 	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
-		switch(histogramType) {
+		switch(m_histogramType) {
 			case Histogram::Ordinary:
 				for(size_t i=0; i<m_bins; ++i) {
 					if (!visiblePoints[i]) continue;
@@ -1372,7 +1547,6 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void HistogramPrivate::recalculate() {
-    std::cout << "yaha to aya hai fir dikkat kya hai?\n";
 	emit q->HistogramDataChanged();
 }
 
@@ -1485,7 +1659,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
-				d->histogramType = (Histogram::HistogramType)str.toInt();
+				d->m_histogramType = (Histogram::HistogramType)str.toInt();
 
 			str = attribs.value("BinsOption").toString();
 			d->binsOption = (Histogram::BinsOption)str.toInt();
