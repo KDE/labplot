@@ -3,7 +3,7 @@ File                 : AsciiFilter.cpp
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
@@ -175,9 +175,11 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 size_t AsciiFilter::lineNumber(const QString& fileName) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << fileName.toStdString() << " for determining number of lines");
+		DEBUG("Could not open file " << fileName.toStdString() << " to determine number of lines");
 		return 0;
 	}
+	if (!device.canReadLine())
+		return -1;
 
 	size_t lineCount = 0;
 	while (!device.atEnd()) {
@@ -200,13 +202,14 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 }
 
 /*!
-  returns the number of lines in the device \c device or 0 if not available.
+  returns the number of lines in the device \c device and 0 if sequential.
   resets the position to 0!
 */
 size_t AsciiFilter::lineNumber(QIODevice &device) {
-	// device.hasReadLine() always returns 0 for KFilterDev!
 	if (device.isSequential())
 		return 0;
+//TODO	if (!device.canReadLine())
+//		return -1;
 
 	size_t lineCount = 0;
 	device.seek(0);
@@ -364,10 +367,16 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_columnOffset(0) {
 }
 
+/*!
+ * get a single line from device
+ */
 QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	QString line;
 	do {	// skip comment lines in data lines
-		line = device.readLine();
+//TODO		if (device.canReadLine())
+			line = device.readLine();
+//		else
+//			line = device.readAll();
 	} while (line.startsWith(commentCharacter));
 
 	line.remove(QRegExp("[\\n\\r]"));	// remove any newline
@@ -385,7 +394,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
-	DEBUG("device is sequential = " << device.isSequential());
+	DEBUG("AsciiFilterPrivate::prepareDeviceToRead(): is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
@@ -396,16 +405,24 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 // if device does not support readLine() like TCP socket
 	if (!device.canReadLine()) {
 		DEBUG("WARNING: device does not support readLine()!");
-		QDEBUG("column modes = " << columnModes);
-		m_actualRows = 0;
-//TODO:		return 0;
+		QDEBUG("	column modes = " << columnModes);
+		// TODO: set rows and cols ?
+//		m_actualRows = 0;
+		//TODO: set column mode ?
+		//TODO: this breaks tests
+//		return 0;
 	}
 
 /////////////////////////////////////////////////////////////////
 	// Find first data line (ignoring comment lines)
-	DEBUG("Skipping " << startRow - 1 << " lines");
+	DEBUG("	Skipping " << startRow - 1 << " lines");
 	for (int i = 0; i < startRow - 1; ++i) {
-		QString line = device.readLine();
+		QString line;
+//TODO		if (device.canReadLine())
+		 	line = device.readLine();
+//		else
+//		 	line = device.readAll();
+		DEBUG("	line = " << line.toStdString());
 
 		if (device.atEnd()) {
 			if (device.isSequential())
@@ -414,17 +431,19 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 				return 1;
 		}
 
-		//TOOD: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independen of any comments
+		//TOOD: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
 		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
 			i--;
 	}
-
 
 	// Parse the first line:
 	// Determine the number of columns, create the columns and use (if selected) the first row to name them
 	QString firstLine;
 	do {	// skip comment lines
-		firstLine = device.readLine();
+//TODO		if (device.canReadLine())
+			firstLine = device.readLine();
+//		else
+//			firstLine = device.readAll();
 		if (device.atEnd()) {
 			if (device.isSequential())
 				break;
@@ -563,13 +582,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /////////////////////////////////////////////////////////////////
 
 	int actualEndRow = endRow;
-	DEBUG("endRow = " << endRow);
+	DEBUG("endRow(actualEndRow) = " << endRow << ", m_actualRows = " << m_actualRows);
 	if (endRow == -1 || endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
 	if (m_actualRows > actualEndRow)
 		m_actualRows = actualEndRow;
-
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
@@ -593,8 +611,9 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
+	DEBUG("AsciiFilterPrivate::readFromLiveDevice(): bytes available = " << device.bytesAvailable());
 	if (!(device.bytesAvailable() > 0)) {
-		DEBUG("No new data available");
+		DEBUG("	No new data available");
 		return 0;
 	}
 
@@ -605,17 +624,19 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			return 0;
 
 	if (!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
+		DEBUG("	not prepared");
+		//TODO: do we need to prepare live devices?
+		/*const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
 			DEBUG("Device error = " << deviceError);
 			return 0;
-		}
+		}*/
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
-		qDebug() << "fds resized to col: " << m_actualCols;
-		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
+		DEBUG("	data source resized to col: " << m_actualCols);
+		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
 
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -674,7 +695,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		qDebug() << "prepared!";
+		DEBUG("prepared!");
 	}
 
 	qint64 bytesread = 0;
@@ -702,7 +723,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	//since the other source types are sequencial we cannot seek on them
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
-	qDebug() <<"available bytes: " << device.bytesAvailable();
+	DEBUG("	bytes available: " << device.bytesAvailable());
 
 	//count the new lines, increase actualrows on each
 	//now we read all the new lines, if we want to use sample rate
@@ -710,10 +731,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	int newLinesForSampleRateNotTillEnd = 0;
 	int newLinesTillEnd = 0;
 	QVector<QString> newData;
-	if (readingType != LiveDataSource::ReadingType::TillEnd) {
-		newData.reserve(spreadsheet->sampleRate());
+	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		newData.resize(spreadsheet->sampleRate());
-	}
 
 	int newDataIdx = 0;
 	{
@@ -722,11 +741,17 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #endif
 
 		while (!device.atEnd()) {
-			//TODO: what if device does not support readLine()?
-			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				newData[newDataIdx++] = device.readLine();
-			else
-				newData.push_back(device.readLine());
+			if (readingType != LiveDataSource::ReadingType::TillEnd) {
+				if (device.canReadLine())
+					newData[newDataIdx++] = device.readLine();
+				else
+					newData[newDataIdx++] = device.readAll();
+			} else {
+				if (device.canReadLine())
+					newData.push_back(device.readLine());
+				else
+					newData.push_back(device.readAll());
+			}
 			newLinesTillEnd++;
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
@@ -737,6 +762,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					break;
 			}
 		}
+		QDEBUG("	data read: " << newData);
 	}
 	//now we reset the readingType
 	if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
@@ -1245,7 +1271,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 }
 
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
-	DEBUG("AsciiFilterPrivate::preview() bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
+	DEBUG("AsciiFilterPrivate::preview(): bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
 	QVector<QStringList> dataStrings;
 
 	if (!(device.bytesAvailable() > 0)) {
