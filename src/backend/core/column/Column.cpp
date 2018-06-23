@@ -49,7 +49,7 @@ extern "C" {
 #include <QMenu>
 #include <QThreadPool>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class Column

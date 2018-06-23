@@ -32,7 +32,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QLayout>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QDialog>
 #include <QDialogButtonBox>

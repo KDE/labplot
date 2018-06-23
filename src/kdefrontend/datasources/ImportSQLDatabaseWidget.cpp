@@ -34,7 +34,7 @@
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>

@@ -47,7 +47,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 /*!

@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "backend/lib/XmlStreamReader.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class XmlStreamReader

@@ -30,7 +30,7 @@
 
 #include <QStringList>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AbstractScriptingEngine

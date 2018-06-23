@@ -49,7 +49,7 @@
 #include <QMenu>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 extern "C" {
 #include <gsl/gsl_histogram.h>

@@ -46,7 +46,7 @@
 
 #include <liborigin/OriginFile.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QDir>
 #include <QDateTime>

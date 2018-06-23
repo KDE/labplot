@@ -37,7 +37,7 @@
 #include <QIcon>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
   \class Spreadsheet

@@ -37,7 +37,7 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/lib/trace.h"
 
 #include <QTextStream>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KFilterDev>
 #include <QProcess>
 #include <QDateTime>

@@ -29,7 +29,7 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
 

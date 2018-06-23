@@ -47,7 +47,7 @@
 #include <QIcon>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class TextLabel

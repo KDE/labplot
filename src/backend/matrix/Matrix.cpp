@@ -45,7 +45,7 @@
 #include <QPrintPreviewDialog>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 	This class manages matrix based data (i.e., mathematically

@@ -39,7 +39,7 @@
 #include <QMenu>
 #include <QTabWidget>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
     \class DatapickerView

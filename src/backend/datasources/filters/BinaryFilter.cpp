@@ -31,7 +31,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/core/column/Column.h"
 
 #include <QDataStream>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KFilterDev>
 #include <cmath>
 

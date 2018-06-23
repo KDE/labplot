@@ -45,7 +45,7 @@
 #include <QPrintPreviewDialog>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class DatapickerImage

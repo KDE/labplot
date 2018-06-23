@@ -30,7 +30,7 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QDebug>
 
 #include <cmath>

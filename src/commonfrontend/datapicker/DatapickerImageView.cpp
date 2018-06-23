@@ -46,7 +46,7 @@
 #include <QToolButton>
 #include <QApplication>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class DatapickerImageView

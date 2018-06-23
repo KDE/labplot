@@ -38,7 +38,7 @@
 #include <QApplication>
 #include <QFontMetrics>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AspectTreeModel

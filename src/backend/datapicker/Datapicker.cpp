@@ -37,7 +37,7 @@
 
 #include <QGraphicsScene>
 #include "QIcon"
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class Datapicker

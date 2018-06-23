@@ -37,7 +37,7 @@
 #include <QHBoxLayout>
 #include <QMenu>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 	\class WorkbookView

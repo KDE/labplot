@@ -54,7 +54,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <QIcon>
 #include <QAction>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QDebug>
 

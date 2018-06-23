@@ -46,7 +46,7 @@
 #include <QTextDocument>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"

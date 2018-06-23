@@ -46,7 +46,7 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>

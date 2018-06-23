@@ -35,7 +35,7 @@
 #include <QPainter>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class PlotArea

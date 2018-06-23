@@ -38,7 +38,7 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class WorksheetElementContainer

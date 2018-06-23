@@ -34,7 +34,7 @@
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class Workbook

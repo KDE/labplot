@@ -58,7 +58,7 @@
 #include <QProcess>
 #include <QHeaderView>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 
 #include <cfloat>

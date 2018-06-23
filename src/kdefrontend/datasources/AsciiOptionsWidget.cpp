@@ -32,7 +32,7 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
 

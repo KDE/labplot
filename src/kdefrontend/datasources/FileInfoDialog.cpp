@@ -30,7 +30,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QFileInfo>
 #include <QProcess>
 #include <QDialogButtonBox>

@@ -56,7 +56,7 @@
 #include <QWidgetAction>
 
 #include <KColorScheme>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KConfigGroup>
 

@@ -33,7 +33,7 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QTabWidget>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <KWindowConfig>

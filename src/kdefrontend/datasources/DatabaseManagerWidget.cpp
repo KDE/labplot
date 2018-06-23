@@ -31,7 +31,7 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QFileDialog>

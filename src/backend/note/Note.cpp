@@ -39,7 +39,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 Note::Note(const QString& name) : AbstractPart(name), m_view(nullptr) {
 	KConfig config;

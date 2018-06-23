@@ -40,7 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 XYAnalysisCurve::XYAnalysisCurve(const QString& name)
 		: XYCurve(name, new XYAnalysisCurvePrivate(this)) {

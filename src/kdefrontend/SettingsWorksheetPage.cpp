@@ -30,7 +30,7 @@
 #include "tools/TeXRenderer.h"
 #include "kdefrontend/widgets/ThemesComboBox.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
 

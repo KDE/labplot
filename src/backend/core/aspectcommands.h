@@ -33,7 +33,7 @@
 
 #include "AspectPrivate.h"
 #include <QUndoCommand>
-#include <KLocale>
+#include <KLocalizedString>
 
 class AspectChildRemoveCmd : public QUndoCommand {
 public:

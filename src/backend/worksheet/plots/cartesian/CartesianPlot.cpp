@@ -68,7 +68,7 @@
 #include <QWidgetAction>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class CartesianPlot

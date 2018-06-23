@@ -37,7 +37,7 @@
 #include <QMenu>
 #include <QVector3D>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KConfigGroup>
 
 /**

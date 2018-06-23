@@ -31,7 +31,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QApplication>
-#include <KLocale>
+#include <KLocalizedString>
 
 SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFrame(parent) {
 	setAttribute(Qt::WA_DeleteOnClose);

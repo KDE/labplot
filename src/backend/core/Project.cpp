@@ -53,7 +53,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KFilterDev>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 /**

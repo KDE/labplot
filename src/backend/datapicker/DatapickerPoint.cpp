@@ -38,7 +38,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 QPen DatapickerPoint::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
 float DatapickerPoint::selectedOpacity = 0.3f;

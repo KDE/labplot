@@ -41,7 +41,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>

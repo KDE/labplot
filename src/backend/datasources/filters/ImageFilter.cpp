@@ -30,7 +30,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/column/Column.h"
 
 #include <QImage>
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 \class ImageFilter

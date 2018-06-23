@@ -35,7 +35,7 @@
 #include <QGraphicsScene>
 #include <QDesktopWidget>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class Segment

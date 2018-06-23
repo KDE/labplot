@@ -30,7 +30,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/lib/macros.h"
 #include <QDateTime>
 #include <QLocale>
-#include <KLocale>
+#include <KLocalizedString>
 
 bool AbstractFileFilter::isNan(QString s) {
 	QStringList nanStrings;

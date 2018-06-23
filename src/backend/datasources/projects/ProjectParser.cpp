@@ -31,7 +31,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 \class ProjectParser

@@ -59,7 +59,7 @@
 #include <QProcess>
 
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"

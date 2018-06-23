@@ -50,7 +50,7 @@
 
 #include <KConfigGroup>
 #include <KInputDialog>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 /*!

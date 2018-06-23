@@ -32,7 +32,7 @@
 #include <QXmlStreamWriter>
 #include <QUndoCommand>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 class Double2StringFilterSetFormatCmd : public QUndoCommand {
 public:

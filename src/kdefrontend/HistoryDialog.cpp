@@ -27,7 +27,7 @@
  ***************************************************************************/
 #include "HistoryDialog.h"
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QDialogButtonBox>

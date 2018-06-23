@@ -34,7 +34,7 @@
 #include <QSpinBox>
 #include <QGridLayout>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KColorButton>
 
 //TODO:

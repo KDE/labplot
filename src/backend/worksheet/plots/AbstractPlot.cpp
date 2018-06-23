@@ -34,7 +34,7 @@
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AbstractPlot
