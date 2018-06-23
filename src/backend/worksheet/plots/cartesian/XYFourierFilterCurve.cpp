@@ -97,7 +97,7 @@ const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() c
 STD_SETTER_CMD_IMPL_F_S(XYFourierFilterCurve, SetFilterData, XYFourierFilterCurve::FilterData, filterData, recalculate);
 void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData& filterData) {
 	Q_D(XYFourierFilterCurve);
-	exec(new XYFourierFilterCurveSetFilterDataCmd(d, filterData, i18n("%1: set filter options and perform the Fourier filter")));
+	exec(new XYFourierFilterCurveSetFilterDataCmd(d, filterData, ki18n("%1: set filter options and perform the Fourier filter")));
 }
 
 //##############################################################################

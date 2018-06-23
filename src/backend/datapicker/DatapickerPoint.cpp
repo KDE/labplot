@@ -210,7 +210,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retrans
 void DatapickerPoint::setPosition(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos!=d->position)
-		exec(new DatapickerPointSetPositionCmd(d, pos, i18n("%1: set position")));
+		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
@@ -223,10 +223,10 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set +delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 			setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
 		} else
-			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 		endMacro();
 	}
 }
@@ -241,10 +241,10 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set -delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
 		} else
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 		endMacro();
 	}
 }
@@ -259,10 +259,10 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set +delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
 		} else
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 		endMacro();
 	}
 }
@@ -277,10 +277,10 @@ void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set -delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
 		} else
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 		endMacro();
 	}
 }

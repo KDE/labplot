@@ -269,7 +269,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateF
 void DatapickerImage::setFileName(const QString& fileName) {
 	if (fileName!= d->fileName) {
 		beginMacro(i18n("%1: upload new image", name()));
-		exec(new DatapickerImageSetFileNameCmd(d, fileName, i18n("%1: upload image")));
+		exec(new DatapickerImageSetFileNameCmd(d, fileName, ki18n("%1: upload image")));
 		endMacro();
 	}
 }
@@ -277,68 +277,68 @@ void DatapickerImage::setFileName(const QString& fileName) {
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
 void DatapickerImage::setRotationAngle(float angle) {
 	if (angle != d->rotationAngle)
-		exec(new DatapickerImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
+		exec(new DatapickerImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
 	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
-		exec(new DatapickerImageSetAxisPointsCmd(d, points, i18n("%1: set Axis points")));
+		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetSettings, DatapickerImage::EditorSettings, settings, discretize)
 void DatapickerImage::setSettings(const DatapickerImage::EditorSettings& editorSettings) {
 	if (memcmp(&editorSettings, &d->settings, sizeof(editorSettings)) != 0)
-		exec(new DatapickerImageSetSettingsCmd(d, editorSettings, i18n("%1: set editor settings")));
+		exec(new DatapickerImageSetSettingsCmd(d, editorSettings, ki18n("%1: set editor settings")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetMinSegmentLength, int, minSegmentLength, makeSegments)
 void DatapickerImage::setminSegmentLength(const int value) {
 	if (d->minSegmentLength != value)
-		exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
+		exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, ki18n("%1: set minimum segment length")));        ;
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointStyle, Symbol::Style, pointStyle, retransform)
 void DatapickerImage::setPointStyle(Symbol::Style newStyle) {
 	if (newStyle != d->pointStyle)
-		exec(new DatapickerImageSetPointStyleCmd(d, newStyle, i18n("%1: set point's style")));
+		exec(new DatapickerImageSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
 }
 
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointSize, qreal, pointSize, retransform)
 void DatapickerImage::setPointSize(qreal value) {
 	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))
-		exec(new DatapickerImageSetPointSizeCmd(d, value, i18n("%1: set point's size")));
+		exec(new DatapickerImageSetPointSizeCmd(d, value, ki18n("%1: set point's size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointRotationAngle, qreal, pointRotationAngle, retransform)
 void DatapickerImage::setPointRotationAngle(qreal angle) {
 	if (!qFuzzyCompare(1 + angle, 1 + d->pointRotationAngle))
-		exec(new DatapickerImageSetPointRotationAngleCmd(d, angle, i18n("%1: rotate point")));
+		exec(new DatapickerImageSetPointRotationAngleCmd(d, angle, ki18n("%1: rotate point")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointBrush, QBrush, pointBrush, retransform)
 void DatapickerImage::setPointBrush(const QBrush& newBrush) {
 	if (newBrush != d->pointBrush)
-		exec(new DatapickerImageSetPointBrushCmd(d, newBrush, i18n("%1: set point's filling")));
+		exec(new DatapickerImageSetPointBrushCmd(d, newBrush, ki18n("%1: set point's filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointPen, QPen, pointPen, retransform)
 void DatapickerImage::setPointPen(const QPen &newPen) {
 	if (newPen != d->pointPen)
-		exec(new DatapickerImageSetPointPenCmd(d, newPen, i18n("%1: set outline style")));
+		exec(new DatapickerImageSetPointPenCmd(d, newPen, ki18n("%1: set outline style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointOpacity, qreal, pointOpacity, retransform)
 void DatapickerImage::setPointOpacity(qreal newOpacity) {
 	if (newOpacity != d->pointOpacity)
-		exec(new DatapickerImageSetPointOpacityCmd(d, newOpacity, i18n("%1: set point's opacity")));
+		exec(new DatapickerImageSetPointOpacityCmd(d, newOpacity, ki18n("%1: set point's opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointVisibility, bool, pointVisibility, retransform)
 void DatapickerImage::setPointVisibility(const bool on) {
 	if (on != d->pointVisibility)
-		exec(new DatapickerImageSetPointVisibilityCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+		exec(new DatapickerImageSetPointVisibilityCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 void DatapickerImage::setPrinting(bool on) const {

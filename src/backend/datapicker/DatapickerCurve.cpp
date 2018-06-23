@@ -221,7 +221,7 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 	Q_D(DatapickerCurve);
 	if (d->curveErrorTypes.x != errors.x || d->curveErrorTypes.y != errors.y) {
 		beginMacro(i18n("%1: set xy-error type", name()));
-		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
+		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, ki18n("%1: set xy-error type")));
 
 		if ( errors.x != NoError && !d->plusDeltaXColumn )
 			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
@@ -259,56 +259,56 @@ STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosXColumn, AbstractColumn*, posXColum
 void DatapickerCurve::setPosXColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->posXColumn != column)
-		exec(new DatapickerCurveSetPosXColumnCmd(d, column, i18n("%1: set position X column")));
+		exec(new DatapickerCurveSetPosXColumnCmd(d, column, ki18n("%1: set position X column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosYColumn, AbstractColumn*, posYColumn)
 void DatapickerCurve::setPosYColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->posYColumn != column)
-		exec(new DatapickerCurveSetPosYColumnCmd(d, column, i18n("%1: set position Y column")));
+		exec(new DatapickerCurveSetPosYColumnCmd(d, column, ki18n("%1: set position Y column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosZColumn, AbstractColumn*, posZColumn)
 void DatapickerCurve::setPosZColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->posZColumn != column)
-		exec(new DatapickerCurveSetPosZColumnCmd(d, column, i18n("%1: set position Z column")));
+		exec(new DatapickerCurveSetPosZColumnCmd(d, column, ki18n("%1: set position Z column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPlusDeltaXColumn, AbstractColumn*, plusDeltaXColumn)
 void DatapickerCurve::setPlusDeltaXColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->plusDeltaXColumn != column)
-		exec(new DatapickerCurveSetPlusDeltaXColumnCmd(d, column, i18n("%1: set +delta_X column")));
+		exec(new DatapickerCurveSetPlusDeltaXColumnCmd(d, column, ki18n("%1: set +delta_X column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetMinusDeltaXColumn, AbstractColumn*, minusDeltaXColumn)
 void DatapickerCurve::setMinusDeltaXColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->minusDeltaXColumn != column)
-		exec(new DatapickerCurveSetMinusDeltaXColumnCmd(d, column, i18n("%1: set -delta_X column")));
+		exec(new DatapickerCurveSetMinusDeltaXColumnCmd(d, column, ki18n("%1: set -delta_X column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPlusDeltaYColumn, AbstractColumn*, plusDeltaYColumn)
 void DatapickerCurve::setPlusDeltaYColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->plusDeltaYColumn != column)
-		exec(new DatapickerCurveSetPlusDeltaYColumnCmd(d, column, i18n("%1: set +delta_Y column")));
+		exec(new DatapickerCurveSetPlusDeltaYColumnCmd(d, column, ki18n("%1: set +delta_Y column")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetMinusDeltaYColumn, AbstractColumn*, minusDeltaYColumn)
 void DatapickerCurve::setMinusDeltaYColumn(AbstractColumn* column) {
 	Q_D(DatapickerCurve);
 	if (d->minusDeltaYColumn != column)
-		exec(new DatapickerCurveSetMinusDeltaYColumnCmd(d, column, i18n("%1: set -delta_Y column")));
+		exec(new DatapickerCurveSetMinusDeltaYColumnCmd(d, column, ki18n("%1: set -delta_Y column")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointStyle, Symbol::Style, pointStyle, retransform)
 void DatapickerCurve::setPointStyle(Symbol::Style newStyle) {
 	Q_D(DatapickerCurve);
 	if (newStyle != d->pointStyle)
-		exec(new DatapickerCurveSetPointStyleCmd(d, newStyle, i18n("%1: set point's style")));
+		exec(new DatapickerCurveSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
 }
 
 
@@ -316,63 +316,63 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointSize, qreal, pointSize, retrans
 void DatapickerCurve::setPointSize(qreal value) {
 	Q_D(DatapickerCurve);
 	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))
-		exec(new DatapickerCurveSetPointSizeCmd(d, value, i18n("%1: set point's size")));
+		exec(new DatapickerCurveSetPointSizeCmd(d, value, ki18n("%1: set point's size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointRotationAngle, qreal, pointRotationAngle, retransform)
 void DatapickerCurve::setPointRotationAngle(qreal angle) {
 	Q_D(DatapickerCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->pointRotationAngle))
-		exec(new DatapickerCurveSetPointRotationAngleCmd(d, angle, i18n("%1: rotate point")));
+		exec(new DatapickerCurveSetPointRotationAngleCmd(d, angle, ki18n("%1: rotate point")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointBrush, QBrush, pointBrush, retransform)
 void DatapickerCurve::setPointBrush(const QBrush& newBrush) {
 	Q_D(DatapickerCurve);
 	if (newBrush != d->pointBrush)
-		exec(new DatapickerCurveSetPointBrushCmd(d, newBrush, i18n("%1: set point's filling")));
+		exec(new DatapickerCurveSetPointBrushCmd(d, newBrush, ki18n("%1: set point's filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointPen, QPen, pointPen, retransform)
 void DatapickerCurve::setPointPen(const QPen &newPen) {
 	Q_D(DatapickerCurve);
 	if (newPen != d->pointPen)
-		exec(new DatapickerCurveSetPointPenCmd(d, newPen, i18n("%1: set outline style")));
+		exec(new DatapickerCurveSetPointPenCmd(d, newPen, ki18n("%1: set outline style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointOpacity, qreal, pointOpacity, retransform)
 void DatapickerCurve::setPointOpacity(qreal newOpacity) {
 	Q_D(DatapickerCurve);
 	if (newOpacity != d->pointOpacity)
-		exec(new DatapickerCurveSetPointOpacityCmd(d, newOpacity, i18n("%1: set point's opacity")));
+		exec(new DatapickerCurveSetPointOpacityCmd(d, newOpacity, ki18n("%1: set point's opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointErrorBarSize, qreal, pointErrorBarSize, retransform)
 void DatapickerCurve::setPointErrorBarSize(qreal size) {
 	Q_D(DatapickerCurve);
 	if (size != d->pointErrorBarSize)
-		exec(new DatapickerCurveSetPointErrorBarSizeCmd(d, size, i18n("%1: set error bar size")));
+		exec(new DatapickerCurveSetPointErrorBarSizeCmd(d, size, ki18n("%1: set error bar size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointErrorBarBrush, QBrush, pointErrorBarBrush, retransform)
 void DatapickerCurve::setPointErrorBarBrush(const QBrush &brush) {
 	Q_D(DatapickerCurve);
 	if (brush != d->pointErrorBarBrush)
-		exec(new DatapickerCurveSetPointErrorBarBrushCmd(d, brush, i18n("%1: set error bar filling")));
+		exec(new DatapickerCurveSetPointErrorBarBrushCmd(d, brush, ki18n("%1: set error bar filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointErrorBarPen, QPen, pointErrorBarPen, retransform)
 void DatapickerCurve::setPointErrorBarPen(const QPen &pen) {
 	Q_D(DatapickerCurve);
 	if (pen != d->pointErrorBarPen)
-		exec(new DatapickerCurveSetPointErrorBarPenCmd(d, pen, i18n("%1: set error bar outline style")));
+		exec(new DatapickerCurveSetPointErrorBarPenCmd(d, pen, ki18n("%1: set error bar outline style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointVisibility, bool, pointVisibility, retransform)
 void DatapickerCurve::setPointVisibility(bool on) {
 	Q_D(DatapickerCurve);
 	if (on != d->pointVisibility)
-		exec(new DatapickerCurveSetPointVisibilityCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+		exec(new DatapickerCurveSetPointVisibilityCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 void DatapickerCurve::setPrinting(bool on) {

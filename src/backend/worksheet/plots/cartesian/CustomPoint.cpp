@@ -142,7 +142,7 @@ STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform
 void CustomPoint::setPosition(const QPointF& position) {
 	Q_D(CustomPoint);
 	if (position != d->position)
-		exec(new CustomPointSetPositionCmd(d, position, i18n("%1: set position")));
+		exec(new CustomPointSetPositionCmd(d, position, ki18n("%1: set position")));
 }
 
 //Symbol
@@ -150,48 +150,48 @@ STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle,
 void CustomPoint::setSymbolStyle(Symbol::Style style) {
 	Q_D(CustomPoint);
 	if (style != d->symbolStyle)
-		exec(new CustomPointSetSymbolStyleCmd(d, style, i18n("%1: set symbol style")));
+		exec(new CustomPointSetSymbolStyleCmd(d, style, ki18n("%1: set symbol style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, retransform)
 void CustomPoint::setSymbolSize(qreal size) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
-		exec(new CustomPointSetSymbolSizeCmd(d, size, i18n("%1: set symbol size")));
+		exec(new CustomPointSetSymbolSizeCmd(d, size, ki18n("%1: set symbol size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, retransform)
 void CustomPoint::setSymbolRotationAngle(qreal angle) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
-		exec(new CustomPointSetSymbolRotationAngleCmd(d, angle, i18n("%1: rotate symbols")));
+		exec(new CustomPointSetSymbolRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolBrush, QBrush, symbolBrush, update)
 void CustomPoint::setSymbolBrush(const QBrush &brush) {
 	Q_D(CustomPoint);
 	if (brush != d->symbolBrush)
-		exec(new CustomPointSetSymbolBrushCmd(d, brush, i18n("%1: set symbol filling")));
+		exec(new CustomPointSetSymbolBrushCmd(d, brush, ki18n("%1: set symbol filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, update)
 void CustomPoint::setSymbolPen(const QPen &pen) {
 	Q_D(CustomPoint);
 	if (pen != d->symbolPen)
-		exec(new CustomPointSetSymbolPenCmd(d, pen, i18n("%1: set symbol outline style")));
+		exec(new CustomPointSetSymbolPenCmd(d, pen, ki18n("%1: set symbol outline style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolOpacity, qreal, symbolOpacity, update)
 void CustomPoint::setSymbolOpacity(qreal opacity) {
 	Q_D(CustomPoint);
 	if (opacity != d->symbolOpacity)
-		exec(new CustomPointSetSymbolOpacityCmd(d, opacity, i18n("%1: set symbol opacity")));
+		exec(new CustomPointSetSymbolOpacityCmd(d, opacity, ki18n("%1: set symbol opacity")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, retransform);
 void CustomPoint::setVisible(bool on) {
 	Q_D(CustomPoint);
-	exec(new CustomPointSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new CustomPointSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool CustomPoint::isVisible() const {

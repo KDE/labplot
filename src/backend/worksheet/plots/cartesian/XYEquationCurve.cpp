@@ -107,7 +107,7 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 		|| (equationData.min != d->equationData.min)
 		|| (equationData.max != d->equationData.max)
 		|| (equationData.count != d->equationData.count) )
-		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, i18n("%1: set equation")));
+		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
 //##############################################################################

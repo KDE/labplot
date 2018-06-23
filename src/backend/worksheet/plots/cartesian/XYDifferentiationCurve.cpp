@@ -91,7 +91,7 @@ const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::dif
 STD_SETTER_CMD_IMPL_F_S(XYDifferentiationCurve, SetDifferentiationData, XYDifferentiationCurve::DifferentiationData, differentiationData, recalculate);
 void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
 	Q_D(XYDifferentiationCurve);
-	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, i18n("%1: set options and perform the differentiation")));
+	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, ki18n("%1: set options and perform the differentiation")));
 }
 
 //##############################################################################

@@ -830,21 +830,21 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, r
 void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
-		exec(new CartesianPlotSetRangeTypeCmd(d, type, i18n("%1: set range type")));
+		exec(new CartesianPlotSetRangeTypeCmd(d, type, ki18n("%1: set range type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
 void CartesianPlot::setRangeLastValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeLastValues)
-		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, i18n("%1: set range")));
+		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, ki18n("%1: set range")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, rangeChanged);
 void CartesianPlot::setRangeFirstValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeFirstValues)
-		exec(new CartesianPlotSetRangeFirstValuesCmd(d, values, i18n("%1: set range")));
+		exec(new CartesianPlotSetRangeFirstValuesCmd(d, values, ki18n("%1: set range")));
 }
 
 
@@ -894,34 +894,34 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, double, xMin, retransformScales)
 void CartesianPlot::setXMin(double xMin) {
 	Q_D(CartesianPlot);
 	if (xMin != d->xMin)
-		exec(new CartesianPlotSetXMinCmd(d, xMin, i18n("%1: set min x")));
+		exec(new CartesianPlotSetXMinCmd(d, xMin, ki18n("%1: set min x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, double, xMax, retransformScales)
 void CartesianPlot::setXMax(double xMax) {
 	Q_D(CartesianPlot);
 	if (xMax != d->xMax)
-		exec(new CartesianPlotSetXMaxCmd(d, xMax, i18n("%1: set max x")));
+		exec(new CartesianPlotSetXMaxCmd(d, xMax, ki18n("%1: set max x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales)
 void CartesianPlot::setXScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
-		exec(new CartesianPlotSetXScaleCmd(d, scale, i18n("%1: set x scale")));
+		exec(new CartesianPlotSetXScaleCmd(d, scale, ki18n("%1: set x scale")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales)
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
-		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-range breaking enabled")));
+		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales)
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: x-range breaks changed")));
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
@@ -970,34 +970,34 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, double, yMin, retransformScales)
 void CartesianPlot::setYMin(double yMin) {
 	Q_D(CartesianPlot);
 	if (yMin != d->yMin)
-		exec(new CartesianPlotSetYMinCmd(d, yMin, i18n("%1: set min y")));
+		exec(new CartesianPlotSetYMinCmd(d, yMin, ki18n("%1: set min y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, double, yMax, retransformScales)
 void CartesianPlot::setYMax(double yMax) {
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
-		exec(new CartesianPlotSetYMaxCmd(d, yMax, i18n("%1: set max y")));
+		exec(new CartesianPlotSetYMaxCmd(d, yMax, ki18n("%1: set max y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales)
 void CartesianPlot::setYScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)
-		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
+		exec(new CartesianPlotSetYScaleCmd(d, scale, ki18n("%1: set y scale")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales)
 void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->yRangeBreakingEnabled)
-		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, i18n("%1: y-range breaking enabled")));
+		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales)
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
+	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
@@ -1006,11 +1006,11 @@ void CartesianPlot::setTheme(const QString& theme) {
 	if (theme != d->theme) {
 		if (!theme.isEmpty()) {
 			beginMacro( i18n("%1: load theme %2", name(), theme) );
-			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: set theme")));
+			exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
 			loadTheme(theme);
 			endMacro();
 		} else
-			exec(new CartesianPlotSetThemeCmd(d, theme, i18n("%1: disable theming")));
+			exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: disable theming")));
 	}
 }
 

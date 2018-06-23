@@ -215,35 +215,35 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper,
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
-		exec(new TextLabelSetTextCmd(d, textWrapper, i18n("%1: set label text")));
+		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFont, QFont, teXFont, updateText);
 void TextLabel::setTeXFont(const QFont& font) {
 	Q_D(TextLabel);
 	if (font != d->teXFont)
-		exec(new TextLabelSetTeXFontCmd(d, font, i18n("%1: set TeX main font")));
+		exec(new TextLabelSetTeXFontCmd(d, font, ki18n("%1: set TeX main font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
 void TextLabel::setTeXFontColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->teXFontColor)
-		exec(new TextLabelSetTeXFontColorCmd(d, color, i18n("%1: set TeX font color")));
+		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set TeX font color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, teXBackgroundColor, updateText);
 void TextLabel::setTeXBackgroundColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->teXBackgroundColor)
-		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, i18n("%1: set TeX background color")));
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set TeX background color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
 void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
 	if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
-		exec(new TextLabelSetPositionCmd(d, pos, i18n("%1: set position")));
+		exec(new TextLabelSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 /*!
@@ -272,27 +272,27 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, qreal, rotationAngle, recal
 void TextLabel::setRotationAngle(qreal angle) {
 	Q_D(TextLabel);
 	if (angle != d->rotationAngle)
-		exec(new TextLabelSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
+		exec(new TextLabelSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
 void TextLabel::setHorizontalAlignment(const TextLabel::HorizontalAlignment hAlign) {
 	Q_D(TextLabel);
 	if (hAlign != d->horizontalAlignment)
-		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, i18n("%1: set horizontal alignment")));
+		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
 void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign) {
 	Q_D(TextLabel);
 	if (vAlign != d->verticalAlignment)
-		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, i18n("%1: set vertical alignment")));
+		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
 void TextLabel::setVisible(bool on) {
 	Q_D(TextLabel);
-	exec(new TextLabelSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new TextLabelSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool TextLabel::isVisible() const {

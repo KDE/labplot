@@ -241,37 +241,37 @@ void Matrix::setColumnCount(int count) {
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
 void Matrix::setXStart(double xStart) {
 	if (xStart != d->xStart)
-		exec(new MatrixSetXStartCmd(d, xStart, i18n("%1: x-start changed")));
+		exec(new MatrixSetXStartCmd(d, xStart, ki18n("%1: x-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXEnd, double, xEnd, updateViewHeader)
 void Matrix::setXEnd(double xEnd) {
 	if (xEnd != d->xEnd)
-		exec(new MatrixSetXEndCmd(d, xEnd, i18n("%1: x-end changed")));
+		exec(new MatrixSetXEndCmd(d, xEnd, ki18n("%1: x-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYStart, double, yStart, updateViewHeader)
 void Matrix::setYStart(double yStart) {
 	if (yStart != d->yStart)
-		exec(new MatrixSetYStartCmd(d, yStart, i18n("%1: y-start changed")));
+		exec(new MatrixSetYStartCmd(d, yStart, ki18n("%1: y-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYEnd, double, yEnd, updateViewHeader)
 void Matrix::setYEnd(double yEnd) {
 	if (yEnd != d->yEnd)
-		exec(new MatrixSetYEndCmd(d, yEnd, i18n("%1: y-end changed")));
+		exec(new MatrixSetYEndCmd(d, yEnd, ki18n("%1: y-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
 void Matrix::setNumericFormat(char format) {
 	if (format != d->numericFormat)
-		exec(new MatrixSetNumericFormatCmd(d, format, i18n("%1: numeric format changed")));
+		exec(new MatrixSetNumericFormatCmd(d, format, ki18n("%1: numeric format changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetPrecision, int, precision)
 void Matrix::setPrecision(int precision) {
 	if (precision != d->precision)
-		exec(new MatrixSetPrecisionCmd(d, precision, i18n("%1: precision changed")));
+		exec(new MatrixSetPrecisionCmd(d, precision, ki18n("%1: precision changed")));
 }
 
 //TODO: make this undoable?

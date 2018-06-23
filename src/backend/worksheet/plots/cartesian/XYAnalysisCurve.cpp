@@ -96,14 +96,14 @@ STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetDataSourceType, XYAnalysisCurve::DataS
 void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 	Q_D(XYAnalysisCurve);
 	if (type != d->dataSourceType)
-		exec(new XYAnalysisCurveSetDataSourceTypeCmd(d, type, i18n("%1: data source type changed")));
+		exec(new XYAnalysisCurveSetDataSourceTypeCmd(d, type, ki18n("%1: data source type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, retransform)
 void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 	Q_D(XYAnalysisCurve);
 	if (curve != d->dataSourceCurve) {
-		exec(new XYAnalysisCurveSetDataSourceCurveCmd(d, curve, i18n("%1: data source curve changed")));
+		exec(new XYAnalysisCurveSetDataSourceCurveCmd(d, curve, ki18n("%1: data source curve changed")));
 		handleSourceDataChanged();
 
 		//handle the changes when different columns were provided for the source curve
@@ -122,7 +122,7 @@ STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetXDataColumn, const AbstractColumn*, xD
 void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYAnalysisCurve);
 	if (column != d->xDataColumn) {
-		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
+		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
@@ -135,7 +135,7 @@ STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetYDataColumn, const AbstractColumn*, yD
 void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYAnalysisCurve);
 	if (column != d->yDataColumn) {
-		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
+		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));

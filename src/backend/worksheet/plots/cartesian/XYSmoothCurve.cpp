@@ -92,7 +92,7 @@ const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
 STD_SETTER_CMD_IMPL_F_S(XYSmoothCurve, SetSmoothData, XYSmoothCurve::SmoothData, smoothData, recalculate);
 void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 	Q_D(XYSmoothCurve);
-	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, i18n("%1: set options and perform the smooth")));
+	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, ki18n("%1: set options and perform the smooth")));
 }
 
 //##############################################################################

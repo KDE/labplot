@@ -435,56 +435,56 @@ void Worksheet::setUseViewSize(bool useViewSize) {
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
 void Worksheet::setScaleContent(bool scaleContent) {
 	if (scaleContent != d->scaleContent)
-		exec(new WorksheetSetScaleContentCmd(d, scaleContent, i18n("%1: change \"rescale the content\" property")));
+		exec(new WorksheetSetScaleContentCmd(d, scaleContent, ki18n("%1: change \"rescale the content\" property")));
 }
 
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void Worksheet::setBackgroundType(PlotArea::BackgroundType type) {
 	if (type != d->backgroundType)
-		exec(new WorksheetSetBackgroundTypeCmd(d, type, i18n("%1: background type changed")));
+		exec(new WorksheetSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void Worksheet::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
 	if (style != d->backgroundColorStyle)
-		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, i18n("%1: background color style changed")));
+		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	if (style != d->backgroundImageStyle)
-		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, i18n("%1: background image style changed")));
+		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void Worksheet::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	if (style != d->backgroundBrushStyle)
-		exec(new WorksheetSetBackgroundBrushStyleCmd(d, style, i18n("%1: background brush style changed")));
+		exec(new WorksheetSetBackgroundBrushStyleCmd(d, style, ki18n("%1: background brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void Worksheet::setBackgroundFirstColor(const QColor &color) {
 	if (color!= d->backgroundFirstColor)
-		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, i18n("%1: set background first color")));
+		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, ki18n("%1: set background first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void Worksheet::setBackgroundSecondColor(const QColor &color) {
 	if (color!= d->backgroundSecondColor)
-		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, i18n("%1: set background second color")));
+		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, ki18n("%1: set background second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update)
 void Worksheet::setBackgroundFileName(const QString& fileName) {
 	if (fileName!= d->backgroundFileName)
-		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, i18n("%1: set background image")));
+		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundOpacity, float, backgroundOpacity, update)
 void Worksheet::setBackgroundOpacity(float opacity) {
 	if (opacity != d->backgroundOpacity)
-		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, i18n("%1: set opacity")));
+		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set opacity")));
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
@@ -492,7 +492,7 @@ STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateL
 void Worksheet::setLayout(Worksheet::Layout layout) {
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
-		exec(new WorksheetSetLayoutCmd(d, layout, i18n("%1: set layout")));
+		exec(new WorksheetSetLayoutCmd(d, layout, ki18n("%1: set layout")));
 		endMacro();
 	}
 }
@@ -501,7 +501,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin,
 void Worksheet::setLayoutTopMargin(float margin) {
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
-		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, i18n("%1: set layout top margin")));
+		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
 		endMacro();
 	}
 }
@@ -510,7 +510,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, float, layoutBottomM
 void Worksheet::setLayoutBottomMargin(float margin) {
 	if (margin != d->layoutBottomMargin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
-		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, i18n("%1: set layout bottom margin")));
+		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
 		endMacro();
 	}
 }
@@ -519,7 +519,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargi
 void Worksheet::setLayoutLeftMargin(float margin) {
 	if (margin != d->layoutLeftMargin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
-		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, i18n("%1: set layout left margin")));
+		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
 		endMacro();
 	}
 }
@@ -528,7 +528,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, float, layoutRightMar
 void Worksheet::setLayoutRightMargin(float margin) {
 	if (margin != d->layoutRightMargin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
-		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, i18n("%1: set layout right margin")));
+		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
 		endMacro();
 	}
 }
@@ -537,7 +537,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, float, layoutVert
 void Worksheet::setLayoutVerticalSpacing(float spacing) {
 	if (spacing != d->layoutVerticalSpacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
-		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, i18n("%1: set layout vertical spacing")));
+		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
 		endMacro();
 	}
 }
@@ -546,7 +546,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, float, layoutHo
 void Worksheet::setLayoutHorizontalSpacing(float spacing) {
 	if (spacing != d->layoutHorizontalSpacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
-		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, i18n("%1: set layout horizontal spacing")));
+		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
 		endMacro();
 	}
 }
@@ -555,7 +555,7 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, upd
 void Worksheet::setLayoutRowCount(int count) {
 	if (count != d->layoutRowCount) {
 		beginMacro(i18n("%1: set layout row count", name()));
-		exec(new WorksheetSetLayoutRowCountCmd(d, count, i18n("%1: set layout row count")));
+		exec(new WorksheetSetLayoutRowCountCmd(d, count, ki18n("%1: set layout row count")));
 		endMacro();
 	}
 }
@@ -564,14 +564,14 @@ STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCoun
 void Worksheet::setLayoutColumnCount(int count) {
 	if (count != d->layoutColumnCount) {
 		beginMacro(i18n("%1: set layout column count", name()));
-		exec(new WorksheetSetLayoutColumnCountCmd(d, count, i18n("%1: set layout column count")));
+		exec(new WorksheetSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
 		endMacro();
 	}
 }
 
 class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private, QRectF> {
 public:
-	WorksheetSetPageRectCmd(Worksheet::Private* target, QRectF newValue, const QString& description)
+	WorksheetSetPageRectCmd(Worksheet::Private* target, QRectF newValue, const KLocalizedString& description)
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
 	void finalize() override {
 		m_target->updatePageRect();
@@ -593,7 +593,7 @@ void Worksheet::setPageRect(const QRectF& rect) {
 	if (rect != d->pageRect) {
 		if (!d->useViewSize) {
 			beginMacro(i18n("%1: set page size", name()));
-			exec(new WorksheetSetPageRectCmd(d, rect, i18n("%1: set page size")));
+			exec(new WorksheetSetPageRectCmd(d, rect, ki18n("%1: set page size")));
 			endMacro();
 		} else {
 			d->pageRect = rect;
@@ -614,11 +614,11 @@ void Worksheet::setTheme(const QString& theme) {
 	if (theme != d->theme) {
 		if (!theme.isEmpty()) {
 			beginMacro( i18n("%1: load theme %2", name(), theme) );
-			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: set theme")));
+			exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: set theme")));
 			loadTheme(theme);
 			endMacro();
 		} else {
-			exec(new WorksheetSetThemeCmd(d, theme, i18n("%1: disable theming")));
+			exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: disable theming")));
 		}
 	}
 }

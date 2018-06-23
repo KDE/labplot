@@ -137,7 +137,7 @@ QGraphicsItem* Histogram::graphicsItem() const {
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Histogram, SetVisible, bool, swapVisible)
 void Histogram::setVisible(bool on) {
 	Q_D(Histogram);
-	exec(new HistogramSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new HistogramSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool Histogram::isVisible() const {
@@ -218,14 +218,14 @@ void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) 
 	Q_D(Histogram);
 	if ((histogramData.binValue != d->histogramData.binValue)
 	        || (histogramData.binsOption != d->histogramData.binsOption) )
-		exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
+		exec(new HistogramSetHistogramDataCmd(d, histogramData, ki18n("%1: set equation")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void Histogram::setXColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->xColumn) {
-		exec(new HistogramSetXColumnCmd(d, column, i18n("%1: assign x values")));
+		exec(new HistogramSetXColumnCmd(d, column, ki18n("%1: assign x values")));
 		emit sourceDataChangedSinceLastPlot();
 
 		//emit xHistogramDataChanged() in order to notify the plot about the changes
@@ -245,21 +245,21 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoun
 void Histogram::setLinePen(const QPen &pen) {
 	Q_D(Histogram);
 	if (pen != d->linePen)
-		exec(new HistogramSetLinePenCmd(d, pen, i18n("%1: set line style")));
+		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
 //Values-Tab
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
 void Histogram::setValuesType(Histogram::ValuesType type) {
 	Q_D(Histogram);
 	if (type != d->valuesType)
-		exec(new HistogramSetValuesTypeCmd(d, type, i18n("%1: set values type")));
+		exec(new HistogramSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
 void Histogram::setValuesColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->valuesColumn) {
-		exec(new HistogramSetValuesColumnCmd(d, column, i18n("%1: set values column")));
+		exec(new HistogramSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateValues);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
@@ -272,28 +272,28 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPosition, Histogram::ValuesPosition,
 void Histogram::setValuesPosition(ValuesPosition position) {
 	Q_D(Histogram);
 	if (position != d->valuesPosition)
-		exec(new HistogramSetValuesPositionCmd(d, position, i18n("%1: set values position")));
+		exec(new HistogramSetValuesPositionCmd(d, position, ki18n("%1: set values position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDistance, qreal, valuesDistance, updateValues)
 void Histogram::setValuesDistance(qreal distance) {
 	Q_D(Histogram);
 	if (distance != d->valuesDistance)
-		exec(new HistogramSetValuesDistanceCmd(d, distance, i18n("%1: set values distance")));
+		exec(new HistogramSetValuesDistanceCmd(d, distance, ki18n("%1: set values distance")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
 void Histogram::setValuesRotationAngle(qreal angle) {
 	Q_D(Histogram);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
-		exec(new HistogramSetValuesRotationAngleCmd(d, angle, i18n("%1: rotate values")));
+		exec(new HistogramSetValuesRotationAngleCmd(d, angle, ki18n("%1: rotate values")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesOpacity, qreal, valuesOpacity, updatePixmap)
 void Histogram::setValuesOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->valuesOpacity)
-		exec(new HistogramSetValuesOpacityCmd(d, opacity, i18n("%1: set values opacity")));
+		exec(new HistogramSetValuesOpacityCmd(d, opacity, ki18n("%1: set values opacity")));
 }
 
 //TODO: Format, Precision
@@ -302,28 +302,28 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrefix, QString, valuesPrefix, updat
 void Histogram::setValuesPrefix(const QString& prefix) {
 	Q_D(Histogram);
 	if (prefix!= d->valuesPrefix)
-		exec(new HistogramSetValuesPrefixCmd(d, prefix, i18n("%1: set values prefix")));
+		exec(new HistogramSetValuesPrefixCmd(d, prefix, ki18n("%1: set values prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void Histogram::setValuesSuffix(const QString& suffix) {
 	Q_D(Histogram);
 	if (suffix!= d->valuesSuffix)
-		exec(new HistogramSetValuesSuffixCmd(d, suffix, i18n("%1: set values suffix")));
+		exec(new HistogramSetValuesSuffixCmd(d, suffix, ki18n("%1: set values suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesFont, QFont, valuesFont, updateValues)
 void Histogram::setValuesFont(const QFont& font) {
 	Q_D(Histogram);
 	if (font!= d->valuesFont)
-		exec(new HistogramSetValuesFontCmd(d, font, i18n("%1: set values font")));
+		exec(new HistogramSetValuesFontCmd(d, font, ki18n("%1: set values font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColor, QColor, valuesColor, updatePixmap)
 void Histogram::setValuesColor(const QColor& color) {
 	Q_D(Histogram);
 	if (color != d->valuesColor)
-		exec(new HistogramSetValuesColorCmd(d, color, i18n("%1: set values color")));
+		exec(new HistogramSetValuesColorCmd(d, color, ki18n("%1: set values color")));
 }
 
 //Filling
@@ -331,63 +331,63 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingPosition, Histogram::FillingPositio
 void Histogram::setFillingPosition(FillingPosition position) {
 	Q_D(Histogram);
 	if (position != d->fillingPosition)
-		exec(new HistogramSetFillingPositionCmd(d, position, i18n("%1: filling position changed")));
+		exec(new HistogramSetFillingPositionCmd(d, position, ki18n("%1: filling position changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
 void Histogram::setFillingType(PlotArea::BackgroundType type) {
 	Q_D(Histogram);
 	if (type != d->fillingType)
-		exec(new HistogramSetFillingTypeCmd(d, type, i18n("%1: filling type changed")));
+		exec(new HistogramSetFillingTypeCmd(d, type, ki18n("%1: filling type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
 void Histogram::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
 	Q_D(Histogram);
 	if (style != d->fillingColorStyle)
-		exec(new HistogramSetFillingColorStyleCmd(d, style, i18n("%1: filling color style changed")));
+		exec(new HistogramSetFillingColorStyleCmd(d, style, ki18n("%1: filling color style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
 void Histogram::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(Histogram);
 	if (style != d->fillingImageStyle)
-		exec(new HistogramSetFillingImageStyleCmd(d, style, i18n("%1: filling image style changed")));
+		exec(new HistogramSetFillingImageStyleCmd(d, style, ki18n("%1: filling image style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
 void Histogram::setFillingBrushStyle(Qt::BrushStyle style) {
 	Q_D(Histogram);
 	if (style != d->fillingBrushStyle)
-		exec(new HistogramSetFillingBrushStyleCmd(d, style, i18n("%1: filling brush style changed")));
+		exec(new HistogramSetFillingBrushStyleCmd(d, style, ki18n("%1: filling brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
 void Histogram::setFillingFirstColor(const QColor& color) {
 	Q_D(Histogram);
 	if (color!= d->fillingFirstColor)
-		exec(new HistogramSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
+		exec(new HistogramSetFillingFirstColorCmd(d, color, ki18n("%1: set filling first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
 void Histogram::setFillingSecondColor(const QColor& color) {
 	Q_D(Histogram);
 	if (color!= d->fillingSecondColor)
-		exec(new HistogramSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
+		exec(new HistogramSetFillingSecondColorCmd(d, color, ki18n("%1: set filling second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingFileName, QString, fillingFileName, updatePixmap)
 void Histogram::setFillingFileName(const QString& fileName) {
 	Q_D(Histogram);
 	if (fileName!= d->fillingFileName)
-		exec(new HistogramSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
+		exec(new HistogramSetFillingFileNameCmd(d, fileName, ki18n("%1: set filling image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
 void Histogram::setFillingOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->fillingOpacity)
-		exec(new HistogramSetFillingOpacityCmd(d, opacity, i18n("%1: set filling opacity")));
+		exec(new HistogramSetFillingOpacityCmd(d, opacity, ki18n("%1: set filling opacity")));
 }
 
 //##############################################################################
