@@ -49,7 +49,6 @@
 #include <QVBoxLayout>
 
 #include <KConfigGroup>
-#include <KInputDialog>
 #include <KLocalizedString>
 #include <KMessageBox>
 

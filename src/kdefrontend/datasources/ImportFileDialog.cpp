@@ -41,7 +41,6 @@
 #include "kdefrontend/MainWin.h"
 
 #include <KMessageBox>
-#include <KInputDialog>
 #include <KSharedConfig>
 #include <KWindowConfig>
 #include <KLocalizedString>
