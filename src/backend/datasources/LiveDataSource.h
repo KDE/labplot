@@ -66,8 +66,8 @@ public:
 	enum ReadingType {
 		ContinuousFixed = 0,
 		FromEnd,
-        TillEnd,
-        WholeFile
+		TillEnd,
+		WholeFile
 	};
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);

@@ -428,7 +428,7 @@ void ImportFileDialog::checkOkButton() {
 			if (serialPortOpened)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 			else
-				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
+				okButton->setToolTip(i18n("Couldn't connect to the provided serial port."));
 		} else {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
