@@ -2214,7 +2214,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -2235,7 +2235,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "lines") {
@@ -2291,37 +2291,37 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->fillingFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->fillingFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->fillingFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->fillingSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->fillingSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
 

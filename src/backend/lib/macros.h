@@ -257,19 +257,19 @@ writer->writeAttribute( "color_b", QString::number(color.blue()) ); 		\
 do {																		\
 str = attribs.value("color_r").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_r'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_r").toString());				\
 else																		\
 	color.setRed( str.toInt() );											\
 																			\
 str = attribs.value("color_g").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_g'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_g").toString());				\
 else																		\
 	color.setGreen( str.toInt() );											\
 																			\
 str = attribs.value("color_b").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_b'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_b").toString());				\
 else																		\
 	color.setBlue( str.toInt() );											\
 } while(0)
@@ -288,26 +288,26 @@ writer->writeAttribute( "width", QString::number(pen.widthF()) ); 			\
 do {																		\
 str = attribs.value("style").toString(); 									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'style'"));					\
+	reader->raiseWarning(attributeWarning.subs("style").toString());					\
 else																		\
 	pen.setStyle( (Qt::PenStyle)str.toInt() );								\
 																			\
 QColor color;																\
 str = attribs.value("color_r").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_r'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_r").toString());				\
 else																		\
 	color.setRed( str.toInt() );											\
 																			\
 str = attribs.value("color_g").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_g'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_g").toString());				\
 else																		\
 	color.setGreen( str.toInt() );											\
 																			\
 str = attribs.value("color_b").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'color_b'"));				\
+	reader->raiseWarning(attributeWarning.subs("color_b").toString());				\
 else																		\
 	color.setBlue( str.toInt() );											\
 																			\
@@ -315,7 +315,7 @@ pen.setColor(color);														\
 																			\
 str = attribs.value("width").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'width'"));					\
+	reader->raiseWarning(attributeWarning.subs("width").toString());					\
 else																		\
 	pen.setWidthF( str.toDouble() );										\
 } while(0)
@@ -334,13 +334,13 @@ writer->writeAttribute( "fontItalic", QString::number(font.italic()) );		\
 do {																		\
 str = attribs.value("fontFamily").toString();								\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'fontFamily'"));				\
+	reader->raiseWarning(attributeWarning.subs("fontFamily").toString());				\
 else																		\
 	font.setFamily( str );													\
 																			\
 str = attribs.value("fontSize").toString();									\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'fontSize'"));				\
+	reader->raiseWarning(attributeWarning.subs("fontSize").toString());				\
 else {																		\
 	int size = str.toInt();													\
 	if (size != -1)															\
@@ -349,7 +349,7 @@ else {																		\
 																			\
 str = attribs.value("fontPointSize").toString();							\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'fontPointSize'"));			\
+	reader->raiseWarning(attributeWarning.subs("fontPointSize").toString());			\
 else {																		\
 	int size = str.toInt();													\
 	if (size != -1)															\
@@ -358,13 +358,13 @@ else {																		\
 																			\
 str = attribs.value("fontWeight").toString();								\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'fontWeight'"));				\
+	reader->raiseWarning(attributeWarning.subs("fontWeight").toString());				\
 else																		\
 	font.setWeight( str.toInt() );											\
 																			\
 str = attribs.value("fontItalic").toString();								\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'fontItalic'"));				\
+	reader->raiseWarning(attributeWarning.subs("fontItalic").toString());				\
 else																		\
 	font.setItalic( str.toInt() );											\
 } while(0)
@@ -382,26 +382,26 @@ writer->writeAttribute("brush_color_b", QString::number(brush.color().blue()));	
 do {																		\
 str = attribs.value("brush_style").toString();								\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'brush_style'"));			\
+	reader->raiseWarning(attributeWarning.subs("brush_style").toString());			\
 else																		\
 	brush.setStyle( (Qt::BrushStyle)str.toInt() );							\
 																			\
 QColor color;																\
 str = attribs.value("brush_color_r").toString();							\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'brush_color_r'"));			\
+	reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());			\
 else																		\
 	color.setRed( str.toInt() );											\
 																			\
 str = attribs.value("brush_color_g").toString();							\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'brush_color_g'"));			\
+	reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());			\
 else																		\
 	color.setGreen( str.toInt() );											\
 																			\
 str = attribs.value("brush_color_b").toString();							\
 if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.arg("'brush_color_b'"));			\
+	reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());			\
 else																		\
 	color.setBlue( str.toInt() );											\
 																			\
@@ -431,21 +431,21 @@ do {																				\
 #define READ_INT_VALUE(name, var, type) \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
-	reader->raiseWarning(attributeWarning.arg(name)); \
+	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = (type)str.toInt();
 
 #define READ_DOUBLE_VALUE(name, var) \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
-	reader->raiseWarning(attributeWarning.arg(name)); \
+	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = str.toDouble();
 
 #define READ_STRING_VALUE(name, var) \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
-	reader->raiseWarning(attributeWarning.arg(name)); \
+	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = str;
 

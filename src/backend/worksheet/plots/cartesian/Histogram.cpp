@@ -1418,7 +1418,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1439,14 +1439,14 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "typeChanged") {
 			attribs = reader->attributes();
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->histogramType = (Histogram::HistogramType)str.toInt();
 
@@ -1460,7 +1460,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->valuesType = (Histogram::ValuesType)str.toInt();
 
@@ -1468,25 +1468,25 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("position").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->valuesPosition = (Histogram::ValuesPosition)str.toInt();
 
 			str = attribs.value("distance").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'distance'"));
+				reader->raiseWarning(attributeWarning.subs("distance").toString());
 			else
 				d->valuesDistance = str.toDouble();
 
 			str = attribs.value("rotation").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+				reader->raiseWarning(attributeWarning.subs("rotation").toString());
 			else
 				d->valuesRotationAngle = str.toDouble();
 
 			str = attribs.value("opacity").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->valuesOpacity = str.toDouble();
 
@@ -1499,7 +1499,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->valuesOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "filling") {
@@ -1507,67 +1507,67 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("position").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("position"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->fillingPosition = Histogram::FillingPosition(str.toInt());
 
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->fillingType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
 			else
 				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
 			else
 				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
 			else
 				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->fillingFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->fillingFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->fillingFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->fillingSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->fillingSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
 
@@ -1576,7 +1576,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->fillingOpacity = str.toDouble();
 

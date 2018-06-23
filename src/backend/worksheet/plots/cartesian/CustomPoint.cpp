@@ -419,7 +419,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -438,19 +438,19 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.setY(str.toDouble());
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "symbol") {
@@ -458,25 +458,25 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("symbolStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'symbolStyle'"));
+				reader->raiseWarning(attributeWarning.subs("symbolStyle").toString());
 			else
 				d->symbolStyle = (Symbol::Style)str.toInt();
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->symbolOpacity = str.toDouble();
 
 			str = attribs.value("rotation").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+				reader->raiseWarning(attributeWarning.subs("rotation").toString());
 			else
 				d->symbolRotationAngle = str.toDouble();
 
 			str = attribs.value("size").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'size'"));
+				reader->raiseWarning(attributeWarning.subs("size").toString());
 			else
 				d->symbolSize = str.toDouble();
 

@@ -886,7 +886,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -906,50 +906,50 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("fileName").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileName'"));
+				reader->raiseWarning(attributeWarning.subs("fileName").toString());
 			else
 				m_fileName = str;
 
 			str = attribs.value("fileType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileType'"));
+				reader->raiseWarning(attributeWarning.subs("fileType").toString());
 			else
 				m_fileType = (FileType)str.toInt();
 
 			str = attribs.value("fileWatched").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileWatched'"));
+				reader->raiseWarning(attributeWarning.subs("fileWatched").toString());
 			else
 				m_fileWatched = str.toInt();
 
 			str = attribs.value("fileLinked").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileLinked'"));
+				reader->raiseWarning(attributeWarning.subs("fileLinked").toString());
 			else
 				m_fileLinked = str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'updateType'"));
+				reader->raiseWarning(attributeWarning.subs("updateType").toString());
 			else
 				m_updateType =  static_cast<UpdateType>(str.toInt());
 
 			str = attribs.value("sourceType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'sourceType'"));
+				reader->raiseWarning(attributeWarning.subs("sourceType").toString());
 			else
 				m_sourceType =  static_cast<SourceType>(str.toInt());
 
 			str = attribs.value("readingType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'readingType'"));
+				reader->raiseWarning(attributeWarning.subs("readingType").toString());
 			else
 				m_readingType =  static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == TimeInterval) {
 				str = attribs.value("updateInterval").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
+					reader->raiseWarning(attributeWarning.subs("updateInterval").toString());
 				else
 					m_updateInterval = str.toInt();
 			}
@@ -957,7 +957,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			if (m_readingType != TillEnd) {
 				str = attribs.value("sampleRate").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'sampleRate'"));
+					reader->raiseWarning(attributeWarning.subs("sampleRate").toString());
 				else
 					m_sampleRate = str.toInt();
 			}
@@ -966,13 +966,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SerialPort:
 				str = attribs.value("baudRate").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'baudRate'"));
+					reader->raiseWarning(attributeWarning.subs("baudRate").toString());
 				else
 					m_baudRate = str.toInt();
 
 				str = attribs.value("serialPortName").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'serialPortName'"));
+					reader->raiseWarning(attributeWarning.subs("serialPortName").toString());
 				else
 					m_serialPortName = str;
 
@@ -981,13 +981,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case NetworkUdpSocket:
 				str = attribs.value("host").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'host'"));
+					reader->raiseWarning(attributeWarning.subs("host").toString());
 				else
 					m_host = str;
 
 				str = attribs.value("port").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'port'"));
+					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
 					m_host = str;
 				break;

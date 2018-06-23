@@ -440,7 +440,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if ( !readBasicAttributes(reader) )
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -459,61 +459,61 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
 			else
 				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
 			else
 				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
 			else
 				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->backgroundFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->backgroundFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->backgroundFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->backgroundSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->backgroundSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->backgroundSecondColor.setBlue(str.toInt());
 
@@ -522,7 +522,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->backgroundOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "border") {
@@ -532,13 +532,13 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("borderOpacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
 			else
 				d->borderOpacity = str.toDouble();
 
 			str = attribs.value("borderCornerRadius").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
+				reader->raiseWarning(attributeWarning.subs("borderCornerRadius").toString());
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element

@@ -812,24 +812,24 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("designation").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'designation'"));
+		reader->raiseWarning(attributeWarning.subs("designation").toString());
 	else
 		d->setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
 
 	str = attribs.value("mode").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'mode'"));
+		reader->raiseWarning(attributeWarning.subs("mode").toString());
 	else
 		setColumnModeFast( AbstractColumn::ColumnMode(str.toInt()) );
 
 	str = attribs.value("width").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'width'"));
+		reader->raiseWarning(attributeWarning.subs("width").toString());
 	else
 		d->setWidth(str.toInt());
 

@@ -467,7 +467,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -486,13 +486,13 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.setY(str.toDouble());
 		} else if (!preview && reader->name() == "errorBar") {
@@ -500,49 +500,49 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("plusDeltaXPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_x").toString());
 			else
 				d->plusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaXPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_y").toString());
 			else
 				d->plusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_x").toString());
 			else
 				d->minusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_y").toString());
 			else
 				d->minusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_x").toString());
 			else
 				d->plusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_y").toString());
 			else
 				d->plusDeltaYPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_x").toString());
 			else
 				d->minusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_y").toString());
 			else
 				d->minusDeltaYPos.setY(str.toDouble());
 		} else { // unknown element

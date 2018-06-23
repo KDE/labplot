@@ -2601,7 +2601,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool titleLabelRead = false;
@@ -2625,31 +2625,31 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->rect.setX( str.toDouble() );
 
 			str = attribs.value("y").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->rect.setY( str.toDouble() );
 
 			str = attribs.value("width").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'width'"));
+				reader->raiseWarning(attributeWarning.subs("width").toString());
 			else
 				d->rect.setWidth( str.toDouble() );
 
 			str = attribs.value("height").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'height'"));
+				reader->raiseWarning(attributeWarning.subs("height").toString());
 			else
 				d->rect.setHeight( str.toDouble() );
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "coordinateSystem") {
@@ -2657,19 +2657,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("autoScaleX").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
+				reader->raiseWarning(attributeWarning.subs("autoScaleX").toString());
 			else
 				d->autoScaleX = bool(str.toInt());
 
 			str = attribs.value("autoScaleY").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
+				reader->raiseWarning(attributeWarning.subs("autoScaleY").toString());
 			else
 				d->autoScaleY = bool(str.toInt());
 
 			str = attribs.value("xMin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xMin'"));
+				reader->raiseWarning(attributeWarning.subs("xMin").toString());
 			else {
 				d->xMin = str.toDouble();
 				d->xMinPrev = d->xMin;
@@ -2677,7 +2677,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("xMax").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xMax'"));
+				reader->raiseWarning(attributeWarning.subs("xMax").toString());
 			else {
 				d->xMax = str.toDouble();
 				d->xMaxPrev = d->xMax;
@@ -2685,7 +2685,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("yMin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'yMin'"));
+				reader->raiseWarning(attributeWarning.subs("yMin").toString());
 			else {
 				d->yMin = str.toDouble();
 				d->yMinPrev = d->yMin;
@@ -2693,7 +2693,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("yMax").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'yMax'"));
+				reader->raiseWarning(attributeWarning.subs("yMax").toString());
 			else {
 				d->yMax = str.toDouble();
 				d->yMaxPrev = d->yMax;
@@ -2701,25 +2701,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("xScale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xScale'"));
+				reader->raiseWarning(attributeWarning.subs("xScale").toString());
 			else
 				d->xScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("yScale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'yScale'"));
+				reader->raiseWarning(attributeWarning.subs("yScale").toString());
 			else
 				d->yScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("horizontalPadding").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
+				reader->raiseWarning(attributeWarning.subs("horizontalPadding").toString());
 			else
 				d->horizontalPadding = str.toDouble();
 
 			str = attribs.value("verticalPadding").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
+				reader->raiseWarning(attributeWarning.subs("verticalPadding").toString());
 			else
 				d->verticalPadding = str.toDouble();
 		} else if (!preview && reader->name() == "xRangeBreaks") {
@@ -2729,7 +2729,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'enabled'"));
+				reader->raiseWarning(attributeWarning.subs("enabled").toString());
 			else
 				d->xRangeBreakingEnabled = str.toInt();
 		} else if (!preview && reader->name() == "xRangeBreak") {
@@ -2738,25 +2738,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value("start").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'start'"));
+				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
 				b.start = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'end'"));
+				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
 				b.end = str.toDouble();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value("style").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'style'"));
+				reader->raiseWarning(attributeWarning.subs("style").toString());
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
@@ -2768,7 +2768,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'enabled'"));
+				reader->raiseWarning(attributeWarning.subs("enabled").toString());
 			else
 				d->yRangeBreakingEnabled = str.toInt();
 		} else if (!preview && reader->name() == "yRangeBreak") {
@@ -2777,25 +2777,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value("start").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'start'"));
+				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
 				b.start = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'end'"));
+				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
 				b.end = str.toDouble();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value("style").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'style'"));
+				reader->raiseWarning(attributeWarning.subs("style").toString());
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 

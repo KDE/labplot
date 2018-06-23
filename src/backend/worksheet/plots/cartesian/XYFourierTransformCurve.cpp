@@ -312,7 +312,7 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

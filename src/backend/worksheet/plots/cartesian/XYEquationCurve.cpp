@@ -200,7 +200,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	}
 
-	QString attributeWarning = i18n( "Attribute '%1' missing or empty, default value is used" );
+	KLocalizedString attributeWarning = ki18n( "Attribute '%1' missing or empty, default value is used" );
 	QXmlStreamAttributes attribs;
 	QString str;
 

@@ -724,7 +724,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QVector<QModelIndex> selected;
 	QList<QModelIndex> expanded;
 	QXmlStreamAttributes attribs;
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -781,7 +781,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				str = attribs.value("state").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'state'"));
+					reader->raiseWarning(attributeWarning.subs("state").toString());
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -793,25 +793,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				QRect geometry;
 				str = attribs.value("x").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'x'"));
+					reader->raiseWarning(attributeWarning.subs("x").toString());
 				else
 					geometry.setX(str.toInt());
 
 				str = attribs.value("y").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'y'"));
+					reader->raiseWarning(attributeWarning.subs("y").toString());
 				else
 					geometry.setY(str.toInt());
 
 				str = attribs.value("width").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'width'"));
+					reader->raiseWarning(attributeWarning.subs("width").toString());
 				else
 					geometry.setWidth(str.toInt());
 
 				str = attribs.value("height").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'height'"));
+					reader->raiseWarning(attributeWarning.subs("height").toString());
 				else
 					geometry.setHeight(str.toInt());
 

@@ -525,7 +525,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -544,13 +544,13 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("curveErrorType_X").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("curveErrorType_X"));
+				reader->raiseWarning(attributeWarning.subs("curveErrorType_X").toString());
 			else
 				d->curveErrorTypes.x = ErrorType(str.toInt());
 
 			str = attribs.value("curveErrorType_Y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("curveErrorType_Y"));
+				reader->raiseWarning(attributeWarning.subs("curveErrorType_Y").toString());
 			else
 				d->curveErrorTypes.y = ErrorType(str.toInt());
 
@@ -566,31 +566,31 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("pointRotationAngle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointRotationAngle"));
+				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
 			else
 				d->pointRotationAngle = str.toFloat();
 
 			str = attribs.value("pointOpacity").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointOpacity"));
+				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
 			else
 				d->pointOpacity = str.toFloat();
 
 			str = attribs.value("pointSize").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointSize"));
+				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
 			else
 				d->pointSize = str.toFloat();
 
 			str = attribs.value("pointStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointStyle"));
+				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
 			else
 				d->pointStyle = (Symbol::Style)str.toInt();
 
 			str = attribs.value("pointVisibility").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointVisibility"));
+				reader->raiseWarning(attributeWarning.subs("pointVisibility").toString());
 			else
 				d->pointVisibility = (bool)str.toInt();
 
@@ -601,7 +601,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("pointErrorBarSize").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("pointErrorBarSize"));
+				reader->raiseWarning(attributeWarning.subs("pointErrorBarSize").toString());
 			else
 				d->pointErrorBarSize = str.toFloat();
 

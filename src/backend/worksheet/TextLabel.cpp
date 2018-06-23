@@ -712,7 +712,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	Q_D(TextLabel);
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool teXImageFound = false;
@@ -732,49 +732,49 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.point.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.point.setY(str.toDouble());
 
 			str = attribs.value("horizontalPosition").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
+				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
 			else
 				d->position.horizontalPosition = (TextLabel::HorizontalPosition)str.toInt();
 
 			str = attribs.value("verticalPosition").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
+				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
 			else
 				d->position.verticalPosition = (TextLabel::VerticalPosition)str.toInt();
 
 			str = attribs.value("horizontalAlignment").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'horizontalAlignment'"));
+				reader->raiseWarning(attributeWarning.subs("horizontalAlignment").toString());
 			else
 				d->horizontalAlignment = (TextLabel::HorizontalAlignment)str.toInt();
 
 			str = attribs.value("verticalAlignment").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'verticalAlignment'"));
+				reader->raiseWarning(attributeWarning.subs("verticalAlignment").toString());
 			else
 				d->verticalAlignment = (TextLabel::VerticalAlignment)str.toInt();
 
 			str = attribs.value("rotationAngle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotationAngle'"));
+				reader->raiseWarning(attributeWarning.subs("rotationAngle").toString());
 			else
 				d->rotationAngle = str.toInt();
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "text") {
@@ -784,7 +784,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("teXUsed").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'teXUsed'"));
+				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
 			else
 				d->textWrapper.teXUsed = str.toInt();
 
@@ -792,19 +792,19 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("teXFontColor_r").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'teXFontColor_r'"));
+				reader->raiseWarning(attributeWarning.subs("teXFontColor_r").toString());
 			else
 				d->teXFontColor.setRed( str.toInt() );
 
 			str = attribs.value("teXFontColor_g").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'teXFontColor_g'"));
+				reader->raiseWarning(attributeWarning.subs("teXFontColor_g").toString());
 			else
 				d->teXFontColor.setGreen( str.toInt() );
 
 			str = attribs.value("teXFontColor_b").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
+				reader->raiseWarning(attributeWarning.subs("teXFontColor_b").toString());
 			else
 				d->teXFontColor.setBlue( str.toInt() );
 		} else if (!preview && reader->name() == "teXImage") {

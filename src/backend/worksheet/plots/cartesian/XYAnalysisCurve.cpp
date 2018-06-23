@@ -197,7 +197,7 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYAnalysisCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

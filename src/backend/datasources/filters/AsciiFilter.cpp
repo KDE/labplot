@@ -1527,36 +1527,36 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("commentCharacter").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
+		reader->raiseWarning(attributeWarning.subs("commentCharacter").toString());
 	else
 		d->commentCharacter = str;
 
 	str = attribs.value("separatingCharacter").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
+		reader->raiseWarning(attributeWarning.subs("separatingCharacter").toString());
 	else
 		d->separatingCharacter = str;
 
 	str = attribs.value("createIndex").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
+		reader->raiseWarning(attributeWarning.subs("createIndex").toString());
 	else
 		d->createIndexEnabled = str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
+		reader->raiseWarning(attributeWarning.subs("autoMode").toString());
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("header").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'header'"));
+		reader->raiseWarning(attributeWarning.subs("header").toString());
 	else
 		d->headerEnabled = str.toInt();
 
@@ -1565,49 +1565,49 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 
 	str = attribs.value("simplifyWhitespaces").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
+		reader->raiseWarning(attributeWarning.subs("simplifyWhitespaces").toString());
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
 
 	str = attribs.value("nanValue").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'nanValue'"));
+		reader->raiseWarning(attributeWarning.subs("nanValue").toString());
 	else
 		d->nanValue = str.toDouble();
 
 	str = attribs.value("removeQuotes").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'removeQuotes'"));
+		reader->raiseWarning(attributeWarning.subs("removeQuotes").toString());
 	else
 		d->removeQuotesEnabled = str.toInt();
 
 	str = attribs.value("skipEmptyParts").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
+		reader->raiseWarning(attributeWarning.subs("skipEmptyParts").toString());
 	else
 		d->skipEmptyParts = str.toInt();
 
 	str = attribs.value("startRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startRow'"));
+		reader->raiseWarning(attributeWarning.subs("startRow").toString());
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endRow'"));
+		reader->raiseWarning(attributeWarning.subs("endRow").toString());
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value("startColumn").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
+		reader->raiseWarning(attributeWarning.subs("startColumn").toString());
 	else
 		d->startColumn = str.toInt();
 
 	str = attribs.value("endColumn").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
+		reader->raiseWarning(attributeWarning.subs("endColumn").toString());
 	else
 		d->endColumn = str.toInt();
 

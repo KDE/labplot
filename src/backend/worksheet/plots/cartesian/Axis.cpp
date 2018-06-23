@@ -2004,7 +2004,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -2023,72 +2023,72 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("autoScale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoScale'"));
+				reader->raiseWarning(attributeWarning.subs("autoScale").toString());
 			else
 				d->autoScale = (bool)str.toInt();
 
 			str = attribs.value("orientation").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'orientation'"));
+				reader->raiseWarning(attributeWarning.subs("orientation").toString());
 			else
 				d->orientation = (Axis::AxisOrientation)str.toInt();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->position = (Axis::AxisPosition)str.toInt();
 
 			str = attribs.value("scale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'scale'"));
+				reader->raiseWarning(attributeWarning.subs("scale").toString());
 			else
 				d->scale = (Axis::AxisScale)str.toInt();
 
 			str = attribs.value("offset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'offset'"));
+				reader->raiseWarning(attributeWarning.subs("offset").toString());
 			else
 				d->offset = str.toDouble();
 
 			str = attribs.value("start").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'start'"));
+				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
 				d->start = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'end'"));
+				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
 				d->end = str.toDouble();
 
 			str = attribs.value("scalingFactor").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
+				reader->raiseWarning(attributeWarning.subs("scalingFactor").toString());
 			else
 				d->scalingFactor = str.toDouble();
 
 			str = attribs.value("zeroOffset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
+				reader->raiseWarning(attributeWarning.subs("zeroOffset").toString());
 			else
 				d->zeroOffset = str.toDouble();
 
 			str = attribs.value("titleOffsetX").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'titleOffsetX'"));
+				reader->raiseWarning(attributeWarning.subs("titleOffsetX").toString());
 			else
 				d->titleOffsetX = str.toDouble();
 			str = attribs.value("titleOffsetY").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'titleOffsetY'"));
+				reader->raiseWarning(attributeWarning.subs("titleOffsetY").toString());
 			else
 				d->titleOffsetY = str.toDouble();
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
@@ -2100,25 +2100,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->lineOpacity = str.toDouble();
 
 			str = attribs.value("arrowType").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowType'"));
+				reader->raiseWarning(attributeWarning.subs("arrowType").toString());
 			else
 				d->arrowType = (Axis::ArrowType)str.toInt();
 
 			str = attribs.value("arrowPosition").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowPosition'"));
+				reader->raiseWarning(attributeWarning.subs("arrowPosition").toString());
 			else
 				d->arrowPosition = (Axis::ArrowPosition)str.toInt();
 
 			str = attribs.value("arrowSize").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
+				reader->raiseWarning(attributeWarning.subs("arrowSize").toString());
 			else
 				d->arrowSize = str.toDouble();
 		} else if (!preview && reader->name() == "majorTicks") {
@@ -2126,25 +2126,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("direction").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'direction'"));
+				reader->raiseWarning(attributeWarning.subs("direction").toString());
 			else
 				d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->majorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'number'"));
+				reader->raiseWarning(attributeWarning.subs("number").toString());
 			else
 				d->majorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'increment'"));
+				reader->raiseWarning(attributeWarning.subs("increment").toString());
 			else
 				d->majorTicksIncrement = str.toDouble();
 
@@ -2152,7 +2152,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("length").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'length'"));
+				reader->raiseWarning(attributeWarning.subs("length").toString());
 			else
 				d->majorTicksLength = str.toDouble();
 
@@ -2160,7 +2160,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->majorTicksOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "minorTicks") {
@@ -2168,25 +2168,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("direction").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'direction'"));
+				reader->raiseWarning(attributeWarning.subs("direction").toString());
 			else
 				d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->minorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'number'"));
+				reader->raiseWarning(attributeWarning.subs("number").toString());
 			else
 				d->minorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'increment'"));
+				reader->raiseWarning(attributeWarning.subs("increment").toString());
 			else
 				d->minorTicksIncrement = str.toDouble();
 
@@ -2194,7 +2194,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("length").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'length'"));
+				reader->raiseWarning(attributeWarning.subs("length").toString());
 			else
 				d->minorTicksLength = str.toDouble();
 
@@ -2202,7 +2202,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->minorTicksOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "labels") {
@@ -2210,37 +2210,37 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->labelsPosition = (Axis::LabelsPosition)str.toInt();
 
 			str = attribs.value("offset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'offset'"));
+				reader->raiseWarning(attributeWarning.subs("offset").toString());
 			else
 				d->labelsOffset = str.toDouble();
 
 			str = attribs.value("rotation").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+				reader->raiseWarning(attributeWarning.subs("rotation").toString());
 			else
 				d->labelsRotationAngle = str.toDouble();
 
 			str = attribs.value("format").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'format'"));
+				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				d->labelsFormat = (Axis::LabelsFormat)str.toInt();
 
 			str = attribs.value("precision").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'precision'"));
+				reader->raiseWarning(attributeWarning.subs("precision").toString());
 			else
 				d->labelsPrecision = str.toInt();
 
 			str = attribs.value("autoPrecision").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoPrecision'"));
+				reader->raiseWarning(attributeWarning.subs("autoPrecision").toString());
 			else
 				d->labelsAutoPrecision = str.toInt();
 
@@ -2253,7 +2253,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->labelsOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "majorGrid") {
@@ -2263,7 +2263,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->majorGridOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "minorGrid") {
@@ -2273,7 +2273,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->minorGridOpacity = str.toDouble();
 		} else { // unknown element
