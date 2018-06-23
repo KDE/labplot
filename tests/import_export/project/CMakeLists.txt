@@ -1,6 +1,6 @@
 add_executable (projectimporttest ProjectImportTest.cpp)
 
-target_link_libraries(projectimporttest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} ${QT_QTSQL_LIBRARIES})
+target_link_libraries(projectimporttest Qt5::Test)
 target_link_libraries(projectimporttest KF5::KDELibs4Support KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 
 IF (Qt5SerialPort_FOUND)
