@@ -47,8 +47,6 @@
 #include <KMessageBox>
 // #include <KNS3/UploadDialog>
 
-#include <unistd.h>
-
 /*!
   \class ThemeHandler
   \brief Provides a widget with buttons for loading of themes.
