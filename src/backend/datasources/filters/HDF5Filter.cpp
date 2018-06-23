@@ -39,6 +39,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <KLocalizedString>
 #include <QTreeWidgetItem>
 #include <QDebug>
+#include <QFile>
 
 /*!
 	\class HDF5Filter

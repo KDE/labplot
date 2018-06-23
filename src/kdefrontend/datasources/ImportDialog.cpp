@@ -51,6 +51,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 /*!
 	\class ImportDialog

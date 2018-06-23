@@ -38,6 +38,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 /*!
   \class Spreadsheet

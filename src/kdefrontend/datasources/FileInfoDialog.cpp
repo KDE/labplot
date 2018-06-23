@@ -38,6 +38,7 @@
 #include <QVBoxLayout>
 
 #include <KWindowConfig>
+#include <KSharedConfig>
 
 /*!
 \class ImportWidget

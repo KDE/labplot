@@ -67,6 +67,7 @@
 #include <QToolBar>
 #include <QWidgetAction>
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 

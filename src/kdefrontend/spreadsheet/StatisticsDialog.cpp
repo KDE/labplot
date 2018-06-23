@@ -39,6 +39,7 @@
 #include <KWindowConfig>
 #include <QPushButton>
 #include <cmath>
+#include <KSharedConfig>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	QDialog(parent) {

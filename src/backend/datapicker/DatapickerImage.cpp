@@ -44,6 +44,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 

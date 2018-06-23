@@ -43,6 +43,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!

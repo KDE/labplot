@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <KWindowConfig>
+#include <KSharedConfig>
 /*!
 	\class HistoryDialog
 	\brief Display the content of project's undo stack.

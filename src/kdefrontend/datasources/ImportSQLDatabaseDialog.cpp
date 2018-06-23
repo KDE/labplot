@@ -42,6 +42,7 @@
 #include <QStatusBar>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!

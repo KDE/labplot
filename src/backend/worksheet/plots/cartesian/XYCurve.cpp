@@ -53,8 +53,10 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 extern "C" {
 #include <gsl/gsl_spline.h>

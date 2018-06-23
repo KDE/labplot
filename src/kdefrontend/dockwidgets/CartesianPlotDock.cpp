@@ -47,6 +47,8 @@
 #include <QButtonGroup>
 #include <QIntValidator>
 
+#include <KSharedConfig>
+
 /*!
   \class CartesianPlotDock
   \brief  Provides a widget for editing the properties of the cartesian plot currently selected in the project explorer.

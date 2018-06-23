@@ -45,6 +45,7 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 

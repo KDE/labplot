@@ -33,6 +33,7 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 #include <QFileDialog>
 #include <QTimer>

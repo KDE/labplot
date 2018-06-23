@@ -40,6 +40,7 @@
 #include <QImageReader>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 /*!
   \class CartesianPlotLegendDock

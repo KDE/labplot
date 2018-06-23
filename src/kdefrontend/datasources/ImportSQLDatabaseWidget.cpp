@@ -33,9 +33,11 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Definition>
