@@ -395,7 +395,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
 		dynamic_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Integration status: ") + m_integrationCurve->integrationResult().status);
+	emit info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -426,7 +426,7 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + integrationResult.status + "<br>";
+	QString str = i18n("status: %1", integrationResult.status) + "<br>";
 
 	if (!integrationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -434,11 +434,11 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 	}
 
 	if (integrationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(integrationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(integrationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(integrationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(integrationResult.elapsedTime)) + "<br>";
 
-	str += i18n("value: ") + QString::number(integrationResult.value) + "<br>";
+	str += i18n("value: %1", QString::number(integrationResult.value)) + "<br>";
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);

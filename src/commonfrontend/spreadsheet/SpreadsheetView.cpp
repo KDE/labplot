@@ -277,16 +277,16 @@ void SpreadsheetView::initActions() {
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
 
 	//plot data action
-	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+	action_plot_data = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot Data"), this);
 
 	//Analyze and plot menu actions
 	//TODO: no own icons yet
-	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data operation"), this);
-//	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data operation"), this);
+	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Operation"), this);
+//	addDataOperationAction = new QAction(QIcon::fromTheme("labplot-xy-data-operation-curve"), i18n("Data Operation"), this);
 	//TODO: enable when available
 	addDataOperationAction->setEnabled(false);
-	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce data"), this);
-//	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce data"), this);
+	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
+//	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce Data"), this);
 	addDataReductionAction->setData(PlotDataDialog::DataReduction);
 	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiate"), this);
@@ -315,7 +315,7 @@ void SpreadsheetView::initActions() {
 	fitAction->setData(PlotDataDialog::FitExp2);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse exponential"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse Exponential"), this);
 	fitAction->setData(PlotDataDialog::FitInvExp);
 	addFitAction.append(fitAction);
 
@@ -331,11 +331,11 @@ void SpreadsheetView::initActions() {
 	fitAction->setData(PlotDataDialog::FitTan);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic Tangent"), this);
 	fitAction->setData(PlotDataDialog::FitTanh);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error function"), this);
+	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error Function"), this);
 	fitAction->setData(PlotDataDialog::FitErrFunc);
 	addFitAction.append(fitAction);
 
@@ -343,7 +343,7 @@ void SpreadsheetView::initActions() {
 	fitAction->setData(PlotDataDialog::FitCustom);
 	addFitAction.append(fitAction);
 
-	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier filter"), this);
+	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierFilterAction->setData(PlotDataDialog::FourierFilter);
 
 	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(plotData()));
@@ -362,7 +362,7 @@ void SpreadsheetView::initMenus() {
 	QMenu* submenu = nullptr;
 
 	if (!m_readOnly) {
-		submenu= new QMenu(i18n("Fi&ll Selection with"), this);
+		submenu= new QMenu(i18n("Fi&ll Selection With"), this);
 		submenu->addAction(action_fill_sel_row_numbers);
 		submenu->addAction(action_fill_const);
 		m_selectionMenu->addMenu(submenu);
@@ -411,7 +411,7 @@ void SpreadsheetView::initMenus() {
 	dataFitMenu->addAction(addFitAction.at(10));
 
 	//analyze and plot data menu
-	m_analyzePlotMenu = new QMenu(i18n("Analyze and plot data"));
+	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"));
 	m_analyzePlotMenu->insertMenu(0, dataManipulationMenu);
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDifferentiationAction);
@@ -504,7 +504,7 @@ void SpreadsheetView::initMenus() {
 	//Row menu
 	m_rowMenu = new QMenu(this);
 	if (!m_readOnly) {
-		submenu = new QMenu(i18n("Fi&ll Selection with"), this);
+		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
 		submenu->addAction(action_fill_sel_row_numbers);
 		submenu->addAction(action_fill_const);
 		m_rowMenu->addMenu(submenu);
@@ -2131,7 +2131,7 @@ bool SpreadsheetView::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, this);
 	bool ret;
-	dlg->setWindowTitle(i18n("Print Spreadsheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		print(&printer);
 	}

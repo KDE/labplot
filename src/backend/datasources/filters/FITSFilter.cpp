@@ -363,7 +363,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		double* data = new double[pixelCount];
 
 		if (!data) {
-			qDebug() << i18n("Not enough memory for data");
+			qDebug() << "Not enough memory for data";
 			return dataStrings;
 		}
 
@@ -620,7 +620,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;
 	} else
-		qDebug() << i18n("Incorrect header type");
+		qDebug() << "Incorrect header type";
 
 	fits_close_file(m_fitsFile, &status);
 
@@ -1042,13 +1042,13 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 					if (imageCount == 1)
 						extName = i18n("Primary header");
 					else
-						extName = i18n("IMAGE #%1").arg(imageCount);
+						extName = i18n("IMAGE #%1", imageCount);
 					break;
 				case ASCII_TBL:
-					extName = i18n("ASCII_TBL #%1").arg(asciiTableCount);
+					extName = i18n("ASCII_TBL #%1", asciiTableCount);
 					break;
 				case BINARY_TBL:
-					extName = i18n("BINARY_TBL #%1").arg(binaryTableCount);
+					extName = i18n("BINARY_TBL #%1", binaryTableCount);
 					break;
 				}
 			}

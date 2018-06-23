@@ -89,8 +89,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->cbSeparator->addItem(";SPACE");
 	ui->cbSeparator->addItem(":SPACE");
 
-	ui->cbLaTeXExport->addItem(i18n("Export spreadsheet"));
-	ui->cbLaTeXExport->addItem(i18n("Export selection"));
+	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
+	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
 	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
 
@@ -105,7 +105,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
 	connect(ui->cbExportToFITS, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
 
-	setWindowTitle(i18n("Export spreadsheet"));
+	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	QTimer::singleShot(0, this, &ExportSpreadsheetDialog::loadSettings);
@@ -175,7 +175,7 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 	if (b) {
-		setWindowTitle(i18n("Export matrix"));
+		setWindowTitle(i18nc("@title:window", "Export Matrix"));
 		ui->lExportHeader->hide();
 		ui->chkExportHeader->hide();
 		ui->lEmptyRows->hide();

@@ -622,7 +622,7 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + dataReductionResult.status + "<br>";
+	QString str = i18n("status: %1", dataReductionResult.status) + "<br>";
 
 	if (!dataReductionResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -630,15 +630,15 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 	}
 
 	if (dataReductionResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(dataReductionResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(dataReductionResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(dataReductionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(dataReductionResult.elapsedTime)) + "<br>";
 
 	str += "<br>";
 
-	str += i18n("number of points: %1").arg(QString::number(dataReductionResult.npoints)) + "<br>";
-	str += i18n("positional squared error: %1").arg(QString::number(dataReductionResult.posError)) + "<br>";
-	str += i18n("area error: %1").arg(QString::number(dataReductionResult.areaError)) + "<br>";
+	str += i18n("number of points: %1", QString::number(dataReductionResult.npoints)) + "<br>";
+	str += i18n("positional squared error: %1", QString::number(dataReductionResult.posError)) + "<br>";
+	str += i18n("area error: %1", QString::number(dataReductionResult.areaError)) + "<br>";
 
 	uiGeneralTab.teResult->setText(str);
 }

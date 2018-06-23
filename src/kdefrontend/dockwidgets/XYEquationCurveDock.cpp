@@ -83,10 +83,10 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions2->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
-	uiGeneralTab.cbType->addItem(i18n("cartesian"));
-	uiGeneralTab.cbType->addItem(i18n("polar"));
-	uiGeneralTab.cbType->addItem(i18n("parametric"));
-// 	uiGeneralTab.cbType->addItem(i18n("implicit"));
+	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
+	uiGeneralTab.cbType->addItem(i18n("Polar"));
+	uiGeneralTab.cbType->addItem(i18n("Parametric"));
+// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 

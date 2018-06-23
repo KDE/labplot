@@ -113,35 +113,35 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_columnToHide(0),
 }
 
 void ProjectExplorer::createActions() {
-	caseSensitiveAction = new QAction(i18n("case sensitive"), this);
+	caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
 	caseSensitiveAction->setCheckable(true);
 	caseSensitiveAction->setChecked(false);
 	connect(caseSensitiveAction, SIGNAL(triggered()), this, SLOT(toggleFilterCaseSensitivity()));
 
-	matchCompleteWordAction = new QAction(i18n("match complete word"), this);
+	matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 	matchCompleteWordAction->setCheckable(true);
 	matchCompleteWordAction->setChecked(false);
 	connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
 
-	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("expand all"), this);
+	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand All"), this);
 	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
-	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("expand selected"), this);
+	expandSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Expand Selected"), this);
 	connect(expandSelectedTreeAction, SIGNAL(triggered()), this, SLOT(expandSelected()));
 
-	collapseTreeAction = new QAction(i18n("collapse all"), this);
+	collapseTreeAction = new QAction(i18n("Collapse All"), this);
 	connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
 
-	collapseSelectedTreeAction = new QAction(i18n("collapse selected"), this);
+	collapseSelectedTreeAction = new QAction(i18n("Collapse Selected"), this);
 	connect(collapseSelectedTreeAction, SIGNAL(triggered()), this, SLOT(collapseSelected()));
 
-	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("delete selected"), this);
+	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Selected"), this);
 	connect(deleteSelectedTreeAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
 
-	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("hide search/filter options"), this);
+	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Hide Search/Filter Options"), this);
 	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
 
-	showAllColumnsAction = new QAction(i18n("show all"),this);
+	showAllColumnsAction = new QAction(i18n("Show All"),this);
 	showAllColumnsAction->setCheckable(true);
 	showAllColumnsAction->setChecked(true);
 	showAllColumnsAction->setEnabled(false);
@@ -180,7 +180,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 			menu->addAction(toggleFilterAction);
 
 			//Menu for showing/hiding the columns in the tree view
-			QMenu* columnsMenu = menu->addMenu(i18n("show/hide columns"));
+			QMenu* columnsMenu = menu->addMenu(i18n("Show/Hide columns"));
 			columnsMenu->addAction(showAllColumnsAction);
 			columnsMenu->addSeparator();
 			for (int i=0; i<list_showColumnActions.size(); i++)
@@ -188,7 +188,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 
 			//TODO
 			//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-			// QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
+			// QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 		}
 	}
 	menu->exec(event->globalPos());
@@ -459,10 +459,10 @@ void ProjectExplorer::showAllColumns() {
 void ProjectExplorer::toggleFilterWidgets() {
 	if (m_frameFilter->isVisible()) {
 		m_frameFilter->hide();
-		toggleFilterAction->setText(i18n("show search/filter options"));
+		toggleFilterAction->setText(i18n("Show Search/Filter Options"));
 	} else {
 		m_frameFilter->show();
-		toggleFilterAction->setText(i18n("hide search/filter options"));
+		toggleFilterAction->setText(i18n("Hide Search/Filter Options"));
 	}
 }
 

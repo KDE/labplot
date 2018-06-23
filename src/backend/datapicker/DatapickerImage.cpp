@@ -171,7 +171,7 @@ bool DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
-	dlg->setWindowTitle(i18n("Print Datapicker Image"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Datapicker Image"));
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);
 

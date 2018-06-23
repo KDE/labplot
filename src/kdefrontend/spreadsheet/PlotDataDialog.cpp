@@ -73,7 +73,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_analysisMode(false) {
 
 	setAttribute(Qt::WA_DeleteOnClose);
-	setWindowTitle(i18n("Plot spreadsheet data"));
+	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
 	QWidget* mainWidget = new QWidget(this);

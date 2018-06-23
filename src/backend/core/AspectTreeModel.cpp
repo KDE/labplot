@@ -188,9 +188,9 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			if (column) {
 				QString name = aspect->name();
 				if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
-					name += QLatin1String("   (") + i18n("non-numeric data") + QLatin1Char(')');
+					name = i18n("%1   (non-numeric data)", name);
 				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
-					name += QLatin1String("   (") + i18n("no values") + QLatin1Char(')');
+					name = i18n("%1   (no values)", name);
 
 				if (m_showPlotDesignation) {
 					QString designation;

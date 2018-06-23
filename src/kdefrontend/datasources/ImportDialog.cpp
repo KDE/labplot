@@ -74,9 +74,9 @@ ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
 
 	//menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("New Workbook") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("New Spreadsheet") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("New Matrix") );
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
 }
 

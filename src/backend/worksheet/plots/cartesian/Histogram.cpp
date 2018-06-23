@@ -110,7 +110,7 @@ void Histogram::init() {
 }
 
 void Histogram::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Histogram::visibilityChangedSlot);
 }

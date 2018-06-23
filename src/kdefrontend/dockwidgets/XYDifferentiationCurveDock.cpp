@@ -512,7 +512,7 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + differentiationResult.status + "<br>";
+	QString str = i18n("status: %1", differentiationResult.status) + "<br>";
 
 	if (!differentiationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -520,9 +520,9 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 	}
 
 	if (differentiationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(differentiationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(differentiationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(differentiationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(differentiationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

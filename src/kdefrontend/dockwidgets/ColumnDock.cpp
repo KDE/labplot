@@ -227,7 +227,7 @@ void ColumnDock::retranslateUi() {
 	ui.cbType->addItem(i18n("Date and time"), QVariant(int(AbstractColumn::DateTime)));
 
 	ui.cbPlotDesignation->clear();
-	ui.cbPlotDesignation->addItem(i18n("none"));
+	ui.cbPlotDesignation->addItem(i18n("None"));
 	ui.cbPlotDesignation->addItem(i18n("X"));
 	ui.cbPlotDesignation->addItem(i18n("Y"));
 	ui.cbPlotDesignation->addItem(i18n("Z"));

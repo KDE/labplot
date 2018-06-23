@@ -39,7 +39,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_okButton->setText(i18n("&Add"));
 
-	setWindowTitle(i18n("Add New Unit"));
+	setWindowTitle(i18nc("@title:window", "Add New Unit"));
 	setWindowIcon(QIcon::fromTheme("document-new"));
 	m_okButton->setEnabled(false);
 

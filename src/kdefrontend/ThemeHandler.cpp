@@ -66,16 +66,16 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
     m_pbLoadTheme = new QPushButton(this);
     horizontalLayout->addWidget(m_pbLoadTheme);
-    m_pbLoadTheme->setText(i18n("Apply theme"));
+    m_pbLoadTheme->setText(i18n("Apply Theme"));
 
 // 	pbSaveTheme = new QPushButton(this);
 // 	horizontalLayout->addWidget(pbSaveTheme);
-// 	pbSaveTheme->setText(i18n("Save theme"));
+// 	pbSaveTheme->setText(i18n("Save Theme"));
 
 /*
 	pbPublishTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbPublishTheme);
-	pbPublishTheme->setText("Publish theme");
+	pbPublishTheme->setText("Publish Theme");
 	pbPublishTheme->setEnabled(false);
 */
 
@@ -97,10 +97,10 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
-        m_pbLoadTheme->setText(i18n("Apply theme [active '%1']").arg(name));
-        m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.").arg(name));
+        m_pbLoadTheme->setText(i18n("Apply theme [active '%1']", name));
+        m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.", name));
 	} else {
-        m_pbLoadTheme->setText(i18n("Apply theme"));
+        m_pbLoadTheme->setText(i18n("Apply Theme"));
         m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
 	}
 
@@ -180,7 +180,7 @@ void ThemeHandler::showPanel() {
 
 // void ThemeHandler::saveMenu() {
 // 	QMenu menu;
-// 	menu.addSection(i18n("Save as"));
+// 	menu.addSection(i18n("Save As"));
 //
 // 	// add editable action
 // 	QWidgetAction* widgetAction = new QWidgetAction(this);
@@ -222,7 +222,7 @@ void ThemeHandler::showPanel() {
  */
 // void ThemeHandler::publishThemes() {
 // 	int ret = KMessageBox::questionYesNo(this,
-// 			i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
+// 			i18n("Do you want to upload your theme %1 to public web server?", m_currentLocalTheme),
 // 			i18n("Publish Theme"));
 // 	if (ret != KMessageBox::Yes)
 // 		return;

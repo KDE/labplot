@@ -160,7 +160,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 	if (m_activeCurve) {
 		//if one of the curves is currently selected, select the image with the plot (the very first child)
 		index = 0;
-		emit statusInfo(this->name() + ", " + i18n("active curve") + " \"" + m_activeCurve->name() + "\"");
+		emit statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
 		emit requestUpdateActions();
 	} else {
 		const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();

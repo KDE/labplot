@@ -632,7 +632,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 		break;
 	default:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-		                      i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
+		                      i18n("The following error occurred: %1.", m_localSocket->errorString()));
 	}*/
 }
 
@@ -653,7 +653,7 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 		break;
 	default:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-		                      i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
+		                      i18n("The following error occurred: %1.", m_tcpSocket->errorString()));
 	}*/
 }
 
@@ -691,7 +691,7 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
 		QMessageBox::critical(0, i18n("Serial Port Error"),
-			i18n("The following error occurred: %1.").arg(m_serialPort->errorString()));
+			i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
 	case QSerialPort::NoError:
 		break;

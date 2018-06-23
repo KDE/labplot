@@ -277,7 +277,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addAction(action_mirror_vertically);
 	m_matrixMenu->addSeparator();
 
-	m_headerFormatMenu = new QMenu(i18n("Header format"), this);
+	m_headerFormatMenu = new QMenu(i18n("Header Format"), this);
 	m_headerFormatMenu->addAction(action_header_format_1);
 	m_headerFormatMenu->addAction(action_header_format_2);
 	m_headerFormatMenu->addAction(action_header_format_3);

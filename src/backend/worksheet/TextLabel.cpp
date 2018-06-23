@@ -188,7 +188,7 @@ QMenu* TextLabel::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 
 	if (!visibilityAction) {
-		visibilityAction = new QAction(i18n("visible"), this);
+		visibilityAction = new QAction(i18n("Visible"), this);
 		visibilityAction->setCheckable(true);
 		connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
 	}

@@ -106,7 +106,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	}
 
 	//move all children from the temp project to the target folder
-	targetFolder->beginMacro(i18n("%1: Import from %2").arg(targetFolder->name(), m_projectFileName));
+	targetFolder->beginMacro(i18n("%1: Import from %2", targetFolder->name(), m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
 		Folder* folder = dynamic_cast<Folder*>(child);
 		if (folder) {

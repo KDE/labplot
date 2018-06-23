@@ -50,7 +50,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	                            "Select an item in the list to navigate to the corresponding step."));
 
 	setWindowIcon( QIcon::fromTheme("view-history") );
-	setWindowTitle(i18n("Undo/Redo History"));
+	setWindowTitle(i18nc("@title:window", "Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
@@ -96,7 +96,7 @@ HistoryDialog::~HistoryDialog() {
 void HistoryDialog::clearUndoStack() {
 	if (KMessageBox::questionYesNo( this,
 	                                i18n("Do you really want to clear the undo history?"),
-	                                i18n("Clear history")
+	                                i18n("Clear History")
 	                              ) == KMessageBox::Yes)
 		m_undoStack->clear();
 }

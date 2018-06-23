@@ -151,7 +151,7 @@ void XYCurve::init() {
 }
 
 void XYCurve::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 
@@ -1100,7 +1100,7 @@ void XYCurvePrivate::updateLines() {
 				if ( (lineType == XYCurve::SplineAkimaNatural || lineType == XYCurve::SplineAkimaPeriodic) && count < 5)
 					msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 				else
-					msg = i18n("Error: Couldn't initialize the spline function.");
+					msg = i18n("Error: Could not initialize the spline function.");
 				emit q->info(msg);
 
 				recalcShapeAndBoundingRect();
@@ -1118,7 +1118,7 @@ void XYCurvePrivate::updateLines() {
 					gslError = i18n("x values must be monotonically increasing.");
 				else
 					gslError = gslErrorToString(status);
-				emit q->info( i18n("Error: %1").arg(gslError) );
+				emit q->info( i18n("Error: %1", gslError) );
 
 				recalcShapeAndBoundingRect();
 				delete[] x;

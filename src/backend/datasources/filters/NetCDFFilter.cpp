@@ -337,7 +337,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			else {
 				char varName[NC_MAX_NAME + 1];
 				m_status = nc_inq_varname(ncid, varid, varName);
-				typeName = QString(varName) + ' ' + i18n("attribute");
+				typeName = i18n("%1 attribute", QString(varName));
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
@@ -624,7 +624,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			break;
 		}
 	default:
-		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet").arg(ndims).arg(translateDataType(type)));
+		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
 		qDebug() << dataStrings;
 	}
 

@@ -169,7 +169,7 @@ bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
-	dlg->setWindowTitle(i18n("Print Matrix"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Matrix"));
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);
 

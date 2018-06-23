@@ -224,18 +224,18 @@ void XYCurveDock::init() {
 	m_initializing = true;
 
 	//Line
-	ui.cbLineType->addItem(i18n("none"));
-	ui.cbLineType->addItem(i18n("line"));
-	ui.cbLineType->addItem(i18n("horiz. start"));
-	ui.cbLineType->addItem(i18n("vert. start"));
-	ui.cbLineType->addItem(i18n("horiz. midpoint"));
-	ui.cbLineType->addItem(i18n("vert. midpoint"));
+	ui.cbLineType->addItem(i18n("None"));
+	ui.cbLineType->addItem(i18n("Line"));
+	ui.cbLineType->addItem(i18n("Horiz. Start"));
+	ui.cbLineType->addItem(i18n("Vert. Start"));
+	ui.cbLineType->addItem(i18n("Horiz. Midpoint"));
+	ui.cbLineType->addItem(i18n("Vert. Midpoint"));
 	ui.cbLineType->addItem(i18n("2-segments"));
 	ui.cbLineType->addItem(i18n("3-segments"));
-	ui.cbLineType->addItem(i18n("cubic spline (natural)"));
-	ui.cbLineType->addItem(i18n("cubic spline (periodic)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (natural)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (periodic)"));
+	ui.cbLineType->addItem(i18n("Cubic Spline (Natural)"));
+	ui.cbLineType->addItem(i18n("Cubic Spline (Periodic)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
 
 	QPainter pa;
 	//TODO size of the icon depending on the actuall height of the combobox?
@@ -360,13 +360,13 @@ void XYCurveDock::init() {
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 
 	//Drop lines
-	ui.cbDropLineType->addItem(i18n("no drop lines"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X"));
-	ui.cbDropLineType->addItem(i18n("drop lines, Y"));
-	ui.cbDropLineType->addItem(i18n("drop lines, XY"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, zero baseline"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, min baseline"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, max baseline"));
+	ui.cbDropLineType->addItem(i18n("No Drop Lines"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, Y"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, XY"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Zero Baseline"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Min Baseline"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Max Baseline"));
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 
 	//Symbols
@@ -376,7 +376,7 @@ void XYCurveDock::init() {
 	QTransform trafo;
 	trafo.scale(15, 15);
 
-	ui.cbSymbolStyle->addItem(i18n("none"));
+	ui.cbSymbolStyle->addItem(i18n("None"));
 	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
 		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
@@ -393,47 +393,47 @@ void XYCurveDock::init() {
 	m_initializing = false;
 
 	//Values
-	ui.cbValuesType->addItem(i18n("no values"));
+	ui.cbValuesType->addItem(i18n("No Values"));
 	ui.cbValuesType->addItem("x");
 	ui.cbValuesType->addItem("y");
 	ui.cbValuesType->addItem("x, y");
 	ui.cbValuesType->addItem("(x, y)");
-	ui.cbValuesType->addItem(i18n("custom column"));
+	ui.cbValuesType->addItem(i18n("Custom Column"));
 
-	ui.cbValuesPosition->addItem(i18n("above"));
-	ui.cbValuesPosition->addItem(i18n("below"));
-	ui.cbValuesPosition->addItem(i18n("left"));
-	ui.cbValuesPosition->addItem(i18n("right"));
+	ui.cbValuesPosition->addItem(i18n("Above"));
+	ui.cbValuesPosition->addItem(i18n("Below"));
+	ui.cbValuesPosition->addItem(i18n("Left"));
+	ui.cbValuesPosition->addItem(i18n("Right"));
 
 	//Filling
 	ui.cbFillingPosition->clear();
-	ui.cbFillingPosition->addItem(i18n("none"));
-	ui.cbFillingPosition->addItem(i18n("above"));
-	ui.cbFillingPosition->addItem(i18n("below"));
-	ui.cbFillingPosition->addItem(i18n("zero baseline"));
-	ui.cbFillingPosition->addItem(i18n("left"));
-	ui.cbFillingPosition->addItem(i18n("right"));
+	ui.cbFillingPosition->addItem(i18n("None"));
+	ui.cbFillingPosition->addItem(i18n("Above"));
+	ui.cbFillingPosition->addItem(i18n("Below"));
+	ui.cbFillingPosition->addItem(i18n("Zero Baseline"));
+	ui.cbFillingPosition->addItem(i18n("Left"));
+	ui.cbFillingPosition->addItem(i18n("Right"));
 
 	ui.cbFillingType->clear();
-	ui.cbFillingType->addItem(i18n("color"));
-	ui.cbFillingType->addItem(i18n("image"));
-	ui.cbFillingType->addItem(i18n("pattern"));
+	ui.cbFillingType->addItem(i18n("Color"));
+	ui.cbFillingType->addItem(i18n("Image"));
+	ui.cbFillingType->addItem(i18n("Pattern"));
 
 	ui.cbFillingColorStyle->clear();
-	ui.cbFillingColorStyle->addItem(i18n("single color"));
-	ui.cbFillingColorStyle->addItem(i18n("horizontal gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("vertical gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("diag. gradient (from top left)"));
-	ui.cbFillingColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
-	ui.cbFillingColorStyle->addItem(i18n("radial gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Single Color"));
+	ui.cbFillingColorStyle->addItem(i18n("Horizontal Gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Vertical Gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
+	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
+	ui.cbFillingColorStyle->addItem(i18n("Radial Gradient"));
 
 	ui.cbFillingImageStyle->clear();
-	ui.cbFillingImageStyle->addItem(i18n("scaled and cropped"));
-	ui.cbFillingImageStyle->addItem(i18n("scaled"));
-	ui.cbFillingImageStyle->addItem(i18n("scaled, keep proportions"));
-	ui.cbFillingImageStyle->addItem(i18n("centered"));
-	ui.cbFillingImageStyle->addItem(i18n("tiled"));
-	ui.cbFillingImageStyle->addItem(i18n("center tiled"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbFillingImageStyle->addItem(i18n("Centered"));
+	ui.cbFillingImageStyle->addItem(i18n("Tiled"));
+	ui.cbFillingImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
 
 	//Error-bars
@@ -443,7 +443,7 @@ void XYCurveDock::init() {
 	pa.drawLine(3,10,17,10);//vert. line
 	pa.drawLine(10,3,10,17);//hor. line
 	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("bars"));
+	ui.cbErrorBarsType->addItem(i18n("Bars"));
 	ui.cbErrorBarsType->setItemIcon(0, pm);
 
 	pm.fill(Qt::transparent);
@@ -457,16 +457,16 @@ void XYCurveDock::init() {
 	pa.drawLine(3,7,3,13); //left cap
 	pa.drawLine(17,7,17,13); //right cap
 	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("bars with ends"));
+	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
 	ui.cbErrorBarsType->setItemIcon(1, pm);
 
-	ui.cbXErrorType->addItem(i18n("no"));
-	ui.cbXErrorType->addItem(i18n("symmetric"));
-	ui.cbXErrorType->addItem(i18n("asymmetric"));
+	ui.cbXErrorType->addItem(i18n("No"));
+	ui.cbXErrorType->addItem(i18n("Symmetric"));
+	ui.cbXErrorType->addItem(i18n("Asymmetric"));
 
-	ui.cbYErrorType->addItem(i18n("no"));
-	ui.cbYErrorType->addItem(i18n("symmetric"));
-	ui.cbYErrorType->addItem(i18n("asymmetric"));
+	ui.cbYErrorType->addItem(i18n("No"));
+	ui.cbYErrorType->addItem(i18n("Symmetric"));
+	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }

@@ -393,14 +393,14 @@ void CartesianPlot::initActions() {
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
-	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
+	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size()>0)
 		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
 
-	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
-	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
-	addTextLabelAction = new QAction(QIcon::fromTheme("labplot-text-label"), i18n("text label"), this);
-	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
+	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
+	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("labplot-text-label"), i18n("Text Label"), this);
+	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addHistogramPlot,SIGNAL(triggered()), SLOT(addHistogram()));
@@ -420,8 +420,8 @@ void CartesianPlot::initActions() {
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
 
 	//Analysis menu actions
-	addDataOperationAction = new QAction(i18n("Data operation"), this);
-	addDataReductionAction = new QAction(i18n("Reduce data"), this);
+	addDataOperationAction = new QAction(i18n("Data Operation"), this);
+	addDataReductionAction = new QAction(i18n("Reduce Data"), this);
 	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
 	addIntegrationAction = new QAction(i18n("Integrate"), this);
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
@@ -459,11 +459,11 @@ void CartesianPlot::initActions() {
 	fitAction->setData(PlotDataDialog::FitTan);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Hyperbolic tangent"), this);
+	fitAction = new QAction(i18n("Hyperbolic Tangent"), this);
 	fitAction->setData(PlotDataDialog::FitTanh);
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(i18n("Error function"), this);
+	fitAction = new QAction(i18n("Error Function"), this);
 	fitAction->setData(PlotDataDialog::FitErrFunc);
 	addFitAction.append(fitAction);
 
@@ -471,7 +471,7 @@ void CartesianPlot::initActions() {
 	fitAction->setData(PlotDataDialog::FitCustom);
 	addFitAction.append(fitAction);
 
-	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
+	addFourierFilterAction = new QAction(i18n("Fourier Filter"), this);
 
 	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
 	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
@@ -483,19 +483,19 @@ void CartesianPlot::initActions() {
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 
 	//zoom/navigate actions
-	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
-	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("auto scale X"), this);
-	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("auto scale Y"), this);
-	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
-	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
-	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("zoom in X"), this);
-	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("zoom out X"), this);
-	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("zoom in Y"), this);
-	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("zoom out Y"), this);
-	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("shift left X"), this);
-	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("shift right X"), this);
-	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("shift up Y"), this);
-	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("shift down Y"), this);
+	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
+	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), this);
+	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("Auto Scale Y"), this);
+	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), this);
+	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), this);
+	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("Zoom In X"), this);
+	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("Zoom Out X"), this);
+	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("Zoom In Y"), this);
+	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("Zoom Out Y"), this);
+	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("Shift Left X"), this);
+	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), this);
+	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
+	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
 
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
@@ -520,7 +520,7 @@ void CartesianPlot::initActions() {
 void CartesianPlot::initMenus() {
 	initActions();
 
-	addNewMenu = new QMenu(i18n("Add new"));
+	addNewMenu = new QMenu(i18n("Add New"));
 	addNewMenu->addAction(addCurveAction);
 // 	addNewMenu->addAction(addHistogramPlot);
 	addNewMenu->addAction(addEquationCurveAction);

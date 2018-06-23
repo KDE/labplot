@@ -56,7 +56,7 @@ extern "C" {
  */
 
 RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
-	setWindowTitle(i18n("Random values"));
+	setWindowTitle(i18nc("@title:window", "Random Values"));
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);

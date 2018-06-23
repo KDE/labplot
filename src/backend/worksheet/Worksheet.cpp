@@ -215,7 +215,7 @@ bool Worksheet::exportView() const {
 bool Worksheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-	dlg->setWindowTitle(i18n("Print Worksheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);

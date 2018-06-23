@@ -220,7 +220,7 @@ void Axis::init() {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
 
@@ -229,10 +229,10 @@ void Axis::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &Axis::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(i18n("horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(i18n("vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	//Line
@@ -258,10 +258,10 @@ void Axis::initMenus() {
 
 	//Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineStyleMenu = new QMenu(i18n("style"), lineMenu);
+	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
 	lineMenu->addMenu( lineStyleMenu );
 
-	lineColorMenu = new QMenu(i18n("color"), lineMenu);
+	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
 

@@ -285,44 +285,44 @@ void HistogramDock::valuesColorChanged(const QColor& color){
 }
 void HistogramDock::init(){
 	//Values
-	ui.cbValuesType->addItem(i18n("no values"));
+	ui.cbValuesType->addItem(i18n("No values"));
 	ui.cbValuesType->addItem("y");
-	ui.cbValuesType->addItem(i18n("custom column"));
+	ui.cbValuesType->addItem(i18n("Custom Column"));
 
-	ui.cbValuesPosition->addItem(i18n("above"));
-	ui.cbValuesPosition->addItem(i18n("below"));
-	ui.cbValuesPosition->addItem(i18n("left"));
-	ui.cbValuesPosition->addItem(i18n("right"));
+	ui.cbValuesPosition->addItem(i18n("Above"));
+	ui.cbValuesPosition->addItem(i18n("Below"));
+	ui.cbValuesPosition->addItem(i18n("Left"));
+	ui.cbValuesPosition->addItem(i18n("Right"));
 
 	//Filling
 	ui.cbFillingPosition->clear();
-	ui.cbFillingPosition->addItem(i18n("none"));
-	ui.cbFillingPosition->addItem(i18n("above"));
-	ui.cbFillingPosition->addItem(i18n("below"));
-	ui.cbFillingPosition->addItem(i18n("zero baseline"));
-	ui.cbFillingPosition->addItem(i18n("left"));
-	ui.cbFillingPosition->addItem(i18n("right"));
+	ui.cbFillingPosition->addItem(i18n("None"));
+	ui.cbFillingPosition->addItem(i18n("Above"));
+	ui.cbFillingPosition->addItem(i18n("Below"));
+	ui.cbFillingPosition->addItem(i18n("Zero Baseline"));
+	ui.cbFillingPosition->addItem(i18n("Left"));
+	ui.cbFillingPosition->addItem(i18n("Right"));
 
 	ui.cbFillingType->clear();
-	ui.cbFillingType->addItem(i18n("color"));
-	ui.cbFillingType->addItem(i18n("image"));
-	ui.cbFillingType->addItem(i18n("pattern"));
+	ui.cbFillingType->addItem(i18n("Color"));
+	ui.cbFillingType->addItem(i18n("Image"));
+	ui.cbFillingType->addItem(i18n("Pattern"));
 
 	ui.cbFillingColorStyle->clear();
-	ui.cbFillingColorStyle->addItem(i18n("single color"));
-	ui.cbFillingColorStyle->addItem(i18n("horizontal linear gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("vertical linear gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
-	ui.cbFillingColorStyle->addItem(i18n("radial gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Single Color"));
+	ui.cbFillingColorStyle->addItem(i18n("Horizontal Linear Gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Vertical Linear Gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("Diagonal Linear Gradient (Start From Top Left)"));
+	ui.cbFillingColorStyle->addItem(i18n("Diagonal Linear Gradient (Start From Bottom Left)"));
+	ui.cbFillingColorStyle->addItem(i18n("Radial Gradient"));
 
 	ui.cbFillingImageStyle->clear();
-	ui.cbFillingImageStyle->addItem(i18n("scaled and cropped"));
-	ui.cbFillingImageStyle->addItem(i18n("scaled"));
-	ui.cbFillingImageStyle->addItem(i18n("scaled, keep proportions"));
-	ui.cbFillingImageStyle->addItem(i18n("centered"));
-	ui.cbFillingImageStyle->addItem(i18n("tiled"));
-	ui.cbFillingImageStyle->addItem(i18n("center tiled"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled"));
+	ui.cbFillingImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbFillingImageStyle->addItem(i18n("Centered"));
+	ui.cbFillingImageStyle->addItem(i18n("Tiled"));
+	ui.cbFillingImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
 
 }

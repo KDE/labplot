@@ -487,7 +487,7 @@ void XYSmoothCurveDock::recalculateClicked() {
 		dynamic_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Smoothing status: ") +  m_smoothCurve->smoothResult().status);
+	emit info(i18n("Smoothing status: %1", m_smoothCurve->smoothResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -519,7 +519,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	//const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status:") + ' ' + smoothResult.status + "<br>";
+	QString str = i18n("status: %1", smoothResult.status) + "<br>";
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -527,9 +527,9 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	if (smoothResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(smoothResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(smoothResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(smoothResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(smoothResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

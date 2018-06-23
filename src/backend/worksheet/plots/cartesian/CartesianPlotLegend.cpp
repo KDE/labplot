@@ -125,7 +125,7 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChanged);
 }

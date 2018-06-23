@@ -44,12 +44,12 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : QWidget(parent),
 	ui.setupUi(this);
 
 	ui.cbXErrorType->addItem(i18n("No Error"));
-	ui.cbXErrorType->addItem(i18n("symmetric"));
-	ui.cbXErrorType->addItem(i18n("asymmetric"));
+	ui.cbXErrorType->addItem(i18n("Symmetric"));
+	ui.cbXErrorType->addItem(i18n("Asymmetric"));
 
 	ui.cbYErrorType->addItem(i18n("No Error"));
-	ui.cbYErrorType->addItem(i18n("symmetric"));
-	ui.cbYErrorType->addItem(i18n("asymmetric"));
+	ui.cbYErrorType->addItem(i18n("Symmetric"));
+	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);

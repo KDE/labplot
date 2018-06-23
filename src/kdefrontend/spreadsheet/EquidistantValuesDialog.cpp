@@ -44,7 +44,7 @@
 
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 
-	setWindowTitle(i18n("Equidistant values"));
+	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
 	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);

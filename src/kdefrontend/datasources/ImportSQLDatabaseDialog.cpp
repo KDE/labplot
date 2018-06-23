@@ -55,7 +55,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	vLayout->addWidget(importSQLDatabaseWidget);
 
-	setWindowTitle(i18n("Import Data to Spreadsheet or Matrix"));
+	setWindowTitle(i18nc("@title:window", "Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
 	setModel();
 
