@@ -44,7 +44,7 @@
 	\ingroup kdefrontend
  */
 
-DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
+DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) : QDialog(parent),
 	m_spreadsheet(s), m_mask(mask) {
 
 	setWindowTitle(i18nc("@title:window", "Drop Values"));

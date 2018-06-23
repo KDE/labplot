@@ -54,7 +54,7 @@ extern "C" {
 	\ingroup kdefrontend
  */
 
-MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_matrix(m) {
+MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog(parent), m_matrix(m) {
 	Q_ASSERT(m_matrix);
 	setWindowTitle(i18nc("@title:window", "Function values"));
 

@@ -39,7 +39,7 @@ class DropValuesDialog : public QDialog {
 	Q_OBJECT
 
 	public:
-		explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = 0, Qt::WFlags fl = 0);
+		explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = 0);
 		void setColumns(QVector<Column*>);
 
 	private:

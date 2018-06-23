@@ -64,7 +64,7 @@
 
 	\ingroup kdefrontend
  */
-PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
+PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent),
 	ui(new Ui::PlotDataWidget()),
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),

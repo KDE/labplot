@@ -45,7 +45,7 @@
 	\ingroup kdefrontend
  */
 
-SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl ){
+SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ){
 
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));

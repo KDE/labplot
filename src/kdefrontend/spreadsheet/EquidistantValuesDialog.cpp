@@ -42,7 +42,7 @@
 	\ingroup kdefrontend
  */
 
-EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
+EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
 
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
