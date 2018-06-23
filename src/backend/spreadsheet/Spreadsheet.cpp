@@ -40,6 +40,8 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
+#include <algorithm>
+
 /*!
   \class Spreadsheet
   \brief Aspect providing a spreadsheet table with column logic.
@@ -407,9 +409,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 						map.append(QPair<double, int>(col->valueAt(j), j));
 
 					if(ascending)
-						qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 					else
-						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
 					QVectorIterator< QPair<double, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -434,9 +436,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 						map.append(QPair<int, int>(col->valueAt(j), j));
 
 					if (ascending)
-						qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 					else
-						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
 					QVectorIterator<QPair<int, int>> it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
@@ -461,9 +463,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 						map.append(QPair<QString, int>(col->textAt(j), j));
 
 					if (ascending)
-						qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
 					else
-						qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
 					QVectorIterator< QPair<QString, int> > it(map);
 					Column* temp_col = new Column("temp", col->columnMode());
@@ -490,9 +492,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 						map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
 
 					if(ascending)
-						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 					else
-						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
 					QVectorIterator< QPair<QDateTime, int> > it(map);
 					Column *temp_col = new Column("temp", col->columnMode());
@@ -521,9 +523,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					map.append(QPair<double, int>(leading->valueAt(i), i));
 
 				if (ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
 				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 				QVectorIterator<QPair<double, int>> it(map);
 
 				for (auto* col: cols) {
@@ -550,9 +552,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					map.append(QPair<int, int>(leading->valueAt(i), i));
 
 				if (ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::integerLess);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
 				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::integerGreater);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 				QVectorIterator<QPair<int, int>> it(map);
 
 				for (auto* col: cols) {
@@ -579,9 +581,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					map.append(QPair<QString, int>(leading->textAt(i), i));
 
 				if(ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
 				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 				QVectorIterator<QPair<QString, int>> it(map);
 
 				for (auto* col: cols) {
@@ -610,9 +612,9 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 					map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
 
 				if (ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 				QVectorIterator<QPair<QDateTime, int>> it(map);
 
 				for (auto* col: cols) {
