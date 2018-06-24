@@ -635,9 +635,17 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		case LiveDataSource::SourceType::NetworkUdpSocket:
 		case LiveDataSource::SourceType::LocalSocket:
 		case LiveDataSource::SourceType::SerialPort:
-			m_actualCols = 1;
 			m_actualRows = 1;
-			columnModes.resize(m_actualCols);
+			if (createIndexEnabled) {
+				m_actualCols = 2;
+				columnModes << AbstractColumn::Integer << AbstractColumn::Numeric;
+				vectorNames << i18n("Index") << i18n("Value");
+			} else {
+				m_actualCols = 1;
+				columnModes << AbstractColumn::Numeric;
+				vectorNames << i18n("Value");
+			}
+			QDEBUG("	vector names = " << vectorNames);
 		}
 
 		// prepare import for spreadsheet
@@ -665,15 +673,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		m_dataContainer.resize(m_actualCols);
 
 		DEBUG("	Setting data ..");
-		//TODO: initial import not working?
-		QDEBUG("	column modes = " << columnModes);
 		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
 			case AbstractColumn::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				QDEBUG("	Numeric, rows = " << m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
@@ -756,7 +761,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					newData[newDataIdx++] = device.readAll();
 				else {
 					if (!device.canReadLine())
-						DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
 					newData[newDataIdx++] = device.readLine();
 				}
 			} else {
@@ -764,7 +769,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					newData.push_back(device.readAll());
 				else {
 					if (!device.canReadLine())
-						DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
 					newData.push_back(device.readLine());
 				}
 			}
@@ -877,7 +882,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 			case AbstractColumn::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				DEBUG("actual rows = " << m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
@@ -1035,7 +1039,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QLocale locale(numberFormat);
 
 			QStringList lineStringList;
-			if (m_actualCols > 1)	// TODO: check
+			// only FileOrPipe support multiple columns
+			if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 				lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 			else
 				lineStringList << line;
