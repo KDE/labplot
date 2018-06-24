@@ -394,12 +394,11 @@ void ImportFileDialog::checkOkButton() {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);
-			DEBUG("CONNECT");
-			socket.connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QUdpSocket::ReadOnly);
+			socket.bind(QHostAddress(m_importFileWidget->host()), m_importFileWidget->port().toUShort());
+			socket.connectToHost(m_importFileWidget->host(), 0, QUdpSocket::ReadOnly);
 			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
-				DEBUG("DISCONNECT");
 				socket.disconnectFromHost();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {

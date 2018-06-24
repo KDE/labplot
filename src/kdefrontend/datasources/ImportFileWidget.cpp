@@ -802,15 +802,14 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::LocalSocket: {
-					DEBUG("	LocalSocket");
 					QLocalSocket lsocket{this};
-					DEBUG("CONNECT PREVIEW");
+					DEBUG("Local socket: CONNECT PREVIEW");
 					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
 					if (lsocket.waitForConnected()) {
 						DEBUG("connected to local socket " << fileName.toStdString());
 						if (lsocket.waitForReadyRead())
 							importedStrings = filter->preview(lsocket);
-						DEBUG("DISCONNECT PREVIEW");
+						DEBUG("Local socket: DISCONNECT PREVIEW");
 						lsocket.disconnectFromServer();
 						// read-only socket is disconnected immediately (no waitForDisconnected())
 					} else {
