@@ -621,16 +621,20 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	if (!m_prepared) {
 		DEBUG("	not prepared");
-		//TODO: do we need to prepare live devices?	(maybe only FileOrPipe)
-		/*const int deviceError = prepareDeviceToRead(device);
-		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
-			return 0;
-		}*/
-		//TODO: FileOrPipe, SerialPort
-		if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket
-			|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket
-			|| spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket) {
+
+		switch (spreadsheet->sourceType()) {
+		case LiveDataSource::SourceType::FileOrPipe: {
+			const int deviceError = prepareDeviceToRead(device);
+			if (deviceError != 0) {
+				DEBUG("Device error = " << deviceError);
+				return 0;
+			}
+			break;
+		}
+		case LiveDataSource::SourceType::NetworkTcpSocket:
+		case LiveDataSource::SourceType::NetworkUdpSocket:
+		case LiveDataSource::SourceType::LocalSocket:
+		case LiveDataSource::SourceType::SerialPort:
 			m_actualCols = 1;
 			m_actualRows = 1;
 			columnModes.resize(m_actualCols);
