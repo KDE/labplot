@@ -750,12 +750,23 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		while (!device.atEnd()) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				if (LiveDataSource::SourceType::LocalSocket)
-				//newData[newDataIdx++] = device.readLine();
-				newData[newDataIdx++] = device.readAll();
+				// local socket needs readAll(), all other need readLine()
+				//TODO: check serial port
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket)
+					newData[newDataIdx++] = device.readAll();
+				else {
+					if (!device.canReadLine())
+						DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+					newData[newDataIdx++] = device.readLine();
+				}
 			} else {
-				//newData.push_back(device.readLine());
-				newData.push_back(device.readAll());
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket)
+					newData.push_back(device.readAll());
+				else {
+					if (!device.canReadLine())
+						DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+					newData.push_back(device.readLine());
+				}
 			}
 			newLinesTillEnd++;
 
