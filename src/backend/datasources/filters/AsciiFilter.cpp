@@ -1440,7 +1440,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		for (int n = 0; n < m_actualCols; ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
-				DEBUG(" valueString = " << valueString.toStdString());
+				//DEBUG(" valueString = " << valueString.toStdString());
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
@@ -1449,7 +1449,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				case AbstractColumn::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
+					lineString += QString::number(isNumber ? value : nanValue, 'g', 15);
 					break;
 				}
 				case AbstractColumn::Integer: {
