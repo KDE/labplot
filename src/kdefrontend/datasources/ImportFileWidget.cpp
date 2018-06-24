@@ -299,7 +299,7 @@ QString ImportFileWidget::selectedObject() const {
 	const QString& path = ui.leFileName->text();
 
 	//determine the file name only
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	QString name = path.right(path.length() - path.lastIndexOf(QDir::separator()) - 1);
 
 	//strip away the extension if available
 	if (name.indexOf('.') != -1)

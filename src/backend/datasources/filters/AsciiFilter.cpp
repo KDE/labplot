@@ -402,13 +402,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
 
-	if (!device.canReadLine())  {
-		DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
-		// TODO: set rows and cols?	(see readFromLiveDevice())
-//		m_actualRows = m_actualCols = 1;
-//		columnMode.resize(m_actualCols);
-	}
-
 /////////////////////////////////////////////////////////////////
 	// Find first data line (ignoring comment lines)
 	DEBUG("	Skipping " << startRow - 1 << " lines");
@@ -509,7 +502,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			endColumn = qMin(vectorNames.size(), firstLineStringList.size());
 	}
 	if (createIndexEnabled) {
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 		endColumn++;
 	}
 	m_actualCols = endColumn - startColumn + 1;
@@ -755,9 +748,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		while (!device.atEnd()) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				// local socket needs readAll(), all other need readLine()
+				// local socket and UDP socket needs readAll(), all other need readLine()
 				//TODO: check serial port
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket)
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
+					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
 					newData[newDataIdx++] = device.readAll();
 				else {
 					if (!device.canReadLine())
@@ -765,7 +759,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					newData[newDataIdx++] = device.readLine();
 				}
 			} else {
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket)
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
+					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
 					newData.push_back(device.readAll());
 				else {
 					if (!device.canReadLine())
@@ -1326,7 +1321,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	if (createIndexEnabled) {
 		columnModes[0] = AbstractColumn::ColumnMode::Integer;
 		col = 1;
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 	}
 
 	if (headerEnabled) {

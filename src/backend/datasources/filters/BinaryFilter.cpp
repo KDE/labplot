@@ -311,7 +311,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	QStringList vectorNames;
 
 	if (createIndexEnabled)
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 
 	if (lines == -1)
 		lines = m_actualRows;
@@ -426,7 +426,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	QStringList vectorNames;
 
 	if (createIndexEnabled) {
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 		columnModes[0] = AbstractColumn::Integer;
 	}
 
