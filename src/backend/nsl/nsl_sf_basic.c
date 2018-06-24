@@ -40,7 +40,11 @@
 
 /* stdlib.h */
 double nsl_sf_rand(void) { return rand(); }
+#if defined(_MSC_VER)	// MSVC has no random() function
+double nsl_sf_random(void) { return rand(); }
+#else
 double nsl_sf_random(void) { return random(); }
+#endif
 double nsl_sf_drand(void) { return random()/(double)RAND_MAX; }
 
 double nsl_sf_sgn(double x) {
