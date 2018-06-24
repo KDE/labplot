@@ -493,6 +493,7 @@ void LiveDataSource::read() {
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
+		DEBUG("	preparing device");
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -544,7 +545,7 @@ void LiveDataSource::read() {
 	case FileOrPipe:
 		switch (m_fileType) {
 		case Ascii:
-			DEBUG("Reading live ascii file..");
+			DEBUG("Reading live ascii file ..");
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {

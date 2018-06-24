@@ -607,7 +607,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
-	DEBUG("AsciiFilterPrivate::readFromLiveDevice(): bytes available = " << device.bytesAvailable());
+	DEBUG("AsciiFilterPrivate::readFromLiveDevice(): bytes available = " << device.bytesAvailable() << ", from = " << from);
 	if (!(device.bytesAvailable() > 0)) {
 		DEBUG("	No new data available");
 		return 0;
@@ -620,7 +620,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			return 0;
 
 	if (!m_prepared) {
-		DEBUG("	not prepared");
+		DEBUG("	Preparing ..");
 
 		switch (spreadsheet->sourceType()) {
 		case LiveDataSource::SourceType::FileOrPipe: {
@@ -664,34 +664,34 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		m_dataContainer.resize(m_actualCols);
 
+		DEBUG("	Setting data ..");
+		//TODO: initial import not working?
+		QDEBUG("	column modes = " << columnModes);
 		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 			switch (columnModes[n]) {
 			case AbstractColumn::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
+				QDEBUG("	Numeric, rows = " << m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			case AbstractColumn::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			case AbstractColumn::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			case AbstractColumn::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
@@ -712,9 +712,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	PERFTRACE("AsciiLiveDataImportTotal: ");
 #endif
 	LiveDataSource::ReadingType readingType;
-	if (!m_prepared)
+	if (!m_prepared) {
 		readingType = LiveDataSource::ReadingType::TillEnd;
-	else {
+	} else {
 		//we have to read all the data when reading from end
 		//so we set readingType to TillEnd
 		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
@@ -750,15 +750,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		while (!device.atEnd()) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				if (device.canReadLine())
-					newData[newDataIdx++] = device.readLine();
-				else
-					newData[newDataIdx++] = device.readAll();
+				if (LiveDataSource::SourceType::LocalSocket)
+				//newData[newDataIdx++] = device.readLine();
+				newData[newDataIdx++] = device.readAll();
 			} else {
-				if (device.canReadLine())
-					newData.push_back(device.readLine());
-				else
-					newData.push_back(device.readAll());
+				//newData.push_back(device.readLine());
+				newData.push_back(device.readAll());
 			}
 			newLinesTillEnd++;
 
@@ -863,7 +860,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			switch (columnModes[n]) {
 			case AbstractColumn::Numeric: {
 				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
@@ -871,21 +867,18 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			case AbstractColumn::Integer: {
 				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 				DEBUG("actual rows = " << m_actualRows);
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			case AbstractColumn::Text: {
 				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
 			}
 			case AbstractColumn::DateTime: {
 				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
 				vector->resize(m_actualRows);
 				m_dataContainer[n] = static_cast<void *>(vector);
 				break;
@@ -925,13 +918,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE("AsciiLiveDataImportPopping: ");
 #endif
-            for (int row = 0; row < linesToRead; ++row) {
+			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
 					case AbstractColumn::Numeric: {
 						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
-						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
@@ -939,7 +931,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					case AbstractColumn::Integer: {
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
-						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
@@ -947,7 +938,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					case AbstractColumn::Text: {
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
-						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
@@ -955,7 +945,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					case AbstractColumn::DateTime: {
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
-						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
