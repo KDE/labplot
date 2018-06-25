@@ -33,6 +33,8 @@
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
+class AbstractAspect;
+class Spreadsheet;
 
 class AsciiFilterPrivate {
 
@@ -56,9 +58,11 @@ public:
 	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMqttToRead(const QString&,  const QString&);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
-	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
+	AbstractColumn::ColumnMode mqttColumnMode() const;
+	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
 	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
+	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
+	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
 #endif
 
 	const AsciiFilter* q;

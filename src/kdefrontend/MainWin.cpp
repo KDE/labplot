@@ -45,6 +45,10 @@
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
 
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
+
 #include "commonfrontend/core/PartMdiView.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -1823,9 +1827,18 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
+		if(static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::MQTT) {
+#ifdef HAVE_MQTT
+			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
+			dlg->importToMQTT(mqttClient);
+			this->addAspectToProject(mqttClient);
+#endif
+		}
+		else {
 		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1), false);
 		dlg->importToLiveDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
+		}
 	}
 	delete dlg;
 }

@@ -6,8 +6,8 @@
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
 
-MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, LiveDataSource * source, QWidget *parent) : QWidget(parent),
-	m_source(source),
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
+	m_client(client),
 	m_error(error)
 {
 	ui.setupUi(this);
@@ -57,22 +57,22 @@ void MQTTErrorWidget::makeChange(){
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		if(!ui.leId->text().isEmpty()) {
-			m_source->setMqttClientId(ui.leId->text());
-			m_source->read();
+			m_client->setMqttClientId(ui.leId->text());
+			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::BadUsernameOrPassword:
 		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
-			m_source->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
-			m_source->read();
+			m_client->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
+			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::NotAuthorized:
 		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
-			m_source->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
-			m_source->read();
+			m_client->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
+			m_client->read();
 			ok = true;
 		}
 		break;

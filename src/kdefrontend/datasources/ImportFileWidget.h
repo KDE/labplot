@@ -35,6 +35,7 @@
 #include <memory>
 
 #ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
@@ -84,6 +85,7 @@ public:
     int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 #ifdef HAVE_MQTT
+	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
 #endif
 	void hideMQTT();

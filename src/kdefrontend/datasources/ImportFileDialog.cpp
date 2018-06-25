@@ -40,6 +40,10 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
+
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -134,6 +138,10 @@ ImportFileDialog::~ImportFileDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+int ImportFileDialog::sourceType() const {
+	return static_cast<int>(m_importFileWidget->currentSourceType());
+}
+
 /*!
   triggers data import to the live data source \c source
 */
@@ -158,6 +166,16 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	statusBar->removeWidget(progressBar);
 	source->ready();
 }
+
+#ifdef HAVE_MQTT
+void ImportFileDialog::importToMQTT(MQTTClient* client) const{
+	m_importFileWidget->saveMQTTSettings(client);
+	client->read();
+	client->ready();
+
+}
+#endif
+
 /*!
   triggers data import to the currently selected data container
 */

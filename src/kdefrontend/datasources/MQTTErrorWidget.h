@@ -10,18 +10,18 @@
 #include <QWidget>
 
 #include "ui_mqtterrorwidget.h"
-#include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/MQTTClient.h"
 
 class MQTTErrorWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, LiveDataSource * source = 0, QWidget* parent = 0);
+	MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, MQTTClient* client = 0, QWidget* parent = 0);
 
 private:
 	Ui::MQTTErrorWidget ui;
 	QMqttClient::ClientError m_error;
-	LiveDataSource * m_source;
+	MQTTClient* m_client ;
 
 private slots:
 	void makeChange();

@@ -36,6 +36,10 @@ class MainWin;
 class ImportFileWidget;
 class LiveDataSource;
 
+#ifdef HAVE_MQTT
+class MQTTClient;
+#endif
+
 class QStatusBar;
 class QMenu;
 
@@ -48,7 +52,14 @@ public:
 
 	virtual QString selectedObject() const;
 
+	int sourceType() const;
+
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
+
+#ifdef HAVE_MQTT
+	void importToMQTT(MQTTClient*) const;
+#endif
+
 	virtual void importTo(QStatusBar*) const;
 
 private:

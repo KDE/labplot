@@ -31,6 +31,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
 
+class Spreadsheet;
 class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
@@ -71,9 +72,10 @@ public:
 #ifdef HAVE_MQTT
 	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	QString mqttColumnStatistics(const QString&,  AbstractDataSource*) const;
-	AbstractColumn::ColumnMode mqttColumnMode(const QString&,  AbstractDataSource*) const;
+	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
+	AbstractColumn::ColumnMode mqttColumnMode() const;
 	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
+	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 #endif
 
 	void setCommentCharacter(const QString&);
@@ -98,6 +100,7 @@ public:
 	void setRemoveQuotesEnabled(const bool);
 	bool removeQuotesEnabled() const;
 	void setCreateIndexEnabled(const bool);
+	bool createIndexEnabled() const;
 
 	void setVectorNames(const QString&);
 	QStringList vectorNames() const;

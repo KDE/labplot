@@ -37,7 +37,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
-#include "kdefrontend/datasources/MQTTErrorWidget.h"
+
 
 #include <QFileInfo>
 #include <QDateTime>
@@ -1106,19 +1106,19 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 #ifdef HAVE_MQTT
 				str = attribs.value("host").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'host'"));
+					reader->raiseWarning(attributeWarning.subs("host").toString());
 				else
 					m_client->setHostname(str);
 
 				str =attribs.value("port").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'port'"));
+					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
 					m_client->setPort(str.toUInt());
 
 				str = attribs.value("useAuthentication").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'useAuthentication"));
+					reader->raiseWarning(attributeWarning.subs("useAuthentication").toString());
 				else
 					m_mqttUseAuthentication = str.toInt();
 
@@ -1134,7 +1134,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value("useID").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'useID"));
+					reader->raiseWarning(attributeWarning.subs("useID").toString());
 				else
 					m_mqttUseID = str.toInt();
 
@@ -1147,21 +1147,21 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				int subscribtions;
 				str =attribs.value("subscriptionNumber").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'subscriptionNumber'"));
+					reader->raiseWarning(attributeWarning.subs("subscriptionNumber").toString());
 				else
 					subscribtions = str.toInt();
 
 				for (int i = 0; i < subscribtions; i++) {
 					str =attribs.value("subscription"+QString::number(i)).toString();
 					if(!str.isEmpty())
-						reader->raiseWarning(attributeWarning.arg("'subscription"+QString::number(i)+"'"));
+						reader->raiseWarning(attributeWarning.subs("subscription"+QString::number(i)).toString());
 					else {
 						m_subscriptions.push_back(str);
 					}
 
 					str =attribs.value("subscription"+QString::number(i)+"Qos").toString();
 					if(!str.isEmpty())
-						reader->raiseWarning(attributeWarning.arg("'subscription"+QString::number(i)+"Qos'"));
+						reader->raiseWarning(attributeWarning.subs("subscription"+QString::number(i)+"Qos").toString());
 					else {
 						m_topicMap[m_subscriptions[i]] = str.toUInt();
 					}
@@ -1170,62 +1170,62 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 				str =attribs.value("useRetain").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'useRetain'"));
+					reader->raiseWarning(attributeWarning.subs("useRetain").toString());
 				else
 					m_mqttRetain = str.toInt();
 
 				str =attribs.value("useWill").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'useWill'"));
+					reader->raiseWarning(attributeWarning.subs("useWill").toString());
 				else
 					m_mqttUseWill = str.toInt();
 
 				str =attribs.value("willTopic").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTopic'"));
+					reader->raiseWarning(attributeWarning.subs("willTopic").toString());
 				else
 					m_willTopic = str;
 
 				str =attribs.value("willOwnMessage").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willOwnMessage'"));
+					reader->raiseWarning(attributeWarning.subs("willOwnMessage").toString());
 				else
 					m_willOwnMessage = str;
 
 				str =attribs.value("willQoS").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willQoS'"));
+					reader->raiseWarning(attributeWarning.subs("willQoS").toString());
 				else
 					m_willQoS = str.toUInt();
 
 				str =attribs.value("willRetain").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willRetain'"));
+					reader->raiseWarning(attributeWarning.subs("willRetain").toString());
 				else
 					m_willRetain = str.toInt();
 
 				str =attribs.value("willMessageType").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willMessageType'"));
+					reader->raiseWarning(attributeWarning.subs("willMessageType").toString());
 				else
 					m_willMessageType = static_cast<LiveDataSource::WillMessageType>(str.toInt());
 
 				str =attribs.value("willUpdateType").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willUpdateType'"));
+					reader->raiseWarning(attributeWarning.subs("willUpdateType").toString());
 				else
 					m_willUpdateType = static_cast<LiveDataSource::WillUpdateType>(str.toInt());
 
 				str =attribs.value("willTimeInterval").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+					reader->raiseWarning(attributeWarning.subs("willTimeInterval").toString());
 				else
 					m_willTimeInterval = str.toInt();
 
 				for( int i = 0; i < m_willStatistics.count(); ++i){
 					str =attribs.value("willStatistics"+QString::number(i)).toString();
 					if(str.isEmpty())
-						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+						reader->raiseWarning(attributeWarning.subs("willTimeInterval").toString());
 					else
 						m_willStatistics[i] = str.toInt();
 				}
@@ -1488,7 +1488,7 @@ void LiveDataSource::setWillForMqtt() {
 			m_client->setWillMessage(m_willOwnMessage.toUtf8());
 			qDebug()<<"Will own message" << m_willOwnMessage;
 			break;
-		case WillMessageType::Statistics: {
+		case WillMessageType::Statistics: {/*
 			AsciiFilter * asciiFilter = dynamic_cast<AsciiFilter*>(m_filter);
 			if((asciiFilter->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Integer) ||
 					(asciiFilter->mqttColumnMode(m_willTopic, this) == AbstractColumn::ColumnMode::Numeric)) {
@@ -1498,7 +1498,7 @@ void LiveDataSource::setWillForMqtt() {
 			else {
 				m_client->setWillMessage(QString("").toUtf8());
 				qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
-			}
+			}*/
 			break;
 		}
 		case WillMessageType::LastMessage:
@@ -1563,10 +1563,10 @@ bool LiveDataSource::mqttRetain() const {
 }
 
 void LiveDataSource::mqttErrorChanged(QMqttClient::ClientError clientError) {
-	if(clientError != QMqttClient::ClientError::NoError) {
+	/*if(clientError != QMqttClient::ClientError::NoError) {
 		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
-	}
+	}*/
 }
 
 QString LiveDataSource::clientHostName() const{

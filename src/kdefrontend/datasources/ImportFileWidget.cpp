@@ -536,6 +536,68 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	}
 }
 
+#ifdef HAVE_MQTT
+void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
+	qDebug()<<"Saving to MQTT Client";
+	MQTTClient::FileType fileType = static_cast<MQTTClient::FileType>(ui.cbFileType->currentIndex());
+	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
+	MQTTClient::SourceType sourceType = static_cast<MQTTClient::SourceType>(ui.cbSourceType->currentIndex());
+	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadType->currentIndex());
+
+	client->setComment( ui.leFileName->text() );
+	client->setFileType(fileType);
+	client->setFilter(this->currentFileFilter());
+
+	client->setReadingType(readingType);
+
+	if (updateType == MQTTClient::UpdateType::TimeInterval)
+		client->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	if (!ui.leKeepLastValues->text().isEmpty()) {
+		client->setKeepLastValues(true);
+		client->setKeepNvalues(ui.leKeepLastValues->text().toInt());
+	}
+
+	client->setUpdateType(updateType);
+
+	if (readingType != MQTTClient::ReadingType::TillEnd)
+		client->setSampleRate(ui.sbSampleRate->value());
+
+
+
+
+		qDebug()<<"Saving mqtt";
+		client->setMqttClient(m_client->hostname(), m_client->port());
+
+		client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
+		if(ui.chbAuthentication->isChecked())
+			client->setMqttClientAuthentication(m_client->username(), m_client->password());
+
+		client->setMQTTUseID(ui.chbID->isChecked());
+		if(ui.chbID->isChecked())
+			client->setMqttClientId(m_client->clientId());
+
+		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
+			client->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+		}
+		client->setMqttRetain(ui.chbRetain->isChecked());
+		client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
+		client->setWillOwnMessage(ui.leWillOwnMessage->text());
+		client->setWillQoS(ui.cbWillQoS->currentIndex() );
+		client->setWillRetain(ui.chbWillRetain->isChecked());
+		client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
+		client->setWillTopic(ui.cbWillTopic->currentText());
+		client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
+		client->setMqttWillUse(ui.chbWill->isChecked());
+		for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+			QListWidgetItem* item = ui.lwWillStatistics->item(i);
+			if (item->checkState() == Qt::Checked)
+				client->addWillStatistics(static_cast<MQTTClient::WillStatistics> (i));
+		}
+
+}
+#endif
+
 /*!
 	returns the currently used file type.
 */

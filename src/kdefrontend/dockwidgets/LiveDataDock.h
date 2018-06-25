@@ -39,6 +39,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QStringList>
 #include <QTimer>
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/MQTTClient.h"
 #endif
 
 class LiveDataDock : public QWidget {
@@ -47,6 +48,9 @@ class LiveDataDock : public QWidget {
 public:
 	explicit LiveDataDock(QWidget *parent = 0);
 	void setLiveDataSources(const QList<LiveDataSource*>& sources);
+#ifdef HAVE_MQTT
+	void setMQTTClients(const QList<MQTTClient*>& clients);
+#endif
 	~LiveDataDock();
 
 private:
@@ -59,11 +63,15 @@ private:
 	void continueReading();
 
 #ifdef HAVE_MQTT
+	QList<MQTTClient*> m_mqttClients;
 	QMqttClient* m_client;
 	QCompleter *m_completer;
 	QStringList m_topicList;
 	bool m_editing;
 	QTimer *m_timer;
+	QTimer *m_messageTimer;
+	bool m_interpretMessage;
+	const MQTTClient* m_previousMQTTClient;
 #endif
 
 private slots:
@@ -96,6 +104,7 @@ private slots:
 	void topicBeingTyped(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
+	void stopStartReceive();
 #endif
 
 public slots:

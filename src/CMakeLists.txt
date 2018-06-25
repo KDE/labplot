@@ -195,6 +195,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
+	${BACKEND_DIR}/datasources/MQTTClient.cpp
+	${BACKEND_DIR}/datasources/MQTTSubscriptions.cpp
+	${BACKEND_DIR}/datasources/MQTTTopic.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
