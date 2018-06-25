@@ -37,6 +37,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
+#include "backend/datasources/filters/QJsonModel.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
@@ -117,6 +118,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 	ui.swOptions->insertWidget(LiveDataSource::Json, jsonw);
 
+	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	ui.tvJson->setAlternatingRowColors(true);
+	ui.tvJson->setModel(m_jsonOptionsWidget->model());
+	showJsonModel(false);
+
 	// the table widget for preview
 	m_twPreview = new QTableWidget(ui.tePreview);
 	m_twPreview->verticalHeader()->hide();
@@ -174,6 +180,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
+
+	connect( ui.tvJson, SIGNAL(clicked(const QModelIndex&)), this, SLOT(refreshPreview()));
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -289,6 +297,11 @@ void ImportFileWidget::hideDataSource() {
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
 	m_asciiOptionsWidget->showAsciiHeaderOptions(b);
+}
+
+void ImportFileWidget::showJsonModel(bool b) {
+	ui.tvJson->setVisible(b);
+	ui.lField->setVisible(b);
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -511,7 +524,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		}
 	case LiveDataSource::Json: {
 			JsonFilter* filter = new JsonFilter();
-			m_jsonOptionsWidget->applyFilterSettings(filter);
+			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
 			filter->setStartRow( ui.sbStartRow->value() );
 			filter->setEndRow( ui.sbEndRow->value() );
@@ -584,6 +597,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		m_hdf5OptionsWidget->clear();
 		m_netcdfOptionsWidget->clear();
 		m_fitsOptionsWidget->clear();
+		m_jsonOptionsWidget->clearModel();
 
 		emit fileNameChanged();
 		return;
@@ -608,6 +622,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		if (fileInfo.contains(QLatin1String("JSON")) || fileName.endsWith(QLatin1String("json"), Qt::CaseInsensitive)) {
 			//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Json);
+			m_jsonOptionsWidget->loadDocument(fileName);
 			// update Json tree widget using current selected file
 		} else if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
 		        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
@@ -686,6 +701,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lEndColumn->show();
 	ui.sbEndColumn->show();
 
+	showJsonModel(false);
+
 	switch (fileType) {
 	case LiveDataSource::Ascii:
 		break;
@@ -720,6 +737,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	case LiveDataSource::Json:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
+		showJsonModel(true);
 		break;
 	default:
 		DEBUG("unknown file type");
@@ -946,7 +964,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 			m_jsonOptionsWidget->loadDocument(fileName);
 			JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
-			m_jsonOptionsWidget->applyFilterSettings(filter);
+			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 			importedStrings = filter->preview(fileName);
 			tmpTableWidget = m_twPreview;
 			columnModes = filter->columnModes();

@@ -47,6 +47,7 @@ public:
 	QLocale::Language numberFormat;
 	double nanValue;
 	bool createIndexEnabled;
+	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
 	int startRow;		// start row

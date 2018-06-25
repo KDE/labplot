@@ -135,6 +135,15 @@ void JsonFilter::setCreateIndexEnabled(bool b){
 	d->createIndexEnabled = b;
 }
 
+void JsonFilter::setVectorNames(const QString& s) {
+	d->vectorNames.clear();
+	if (!s.simplified().isEmpty())
+		d->vectorNames = s.simplified().split(' ');
+}
+QStringList JsonFilter::vectorNames() const {
+	return d->vectorNames;
+}
+
 QVector<AbstractColumn::ColumnMode> JsonFilter::columnModes() {
 	return d->columnModes;
 }
@@ -176,6 +185,7 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	rowType(QJsonValue::Object),
 	numberFormat(QLocale::C),
 	createIndexEnabled(false),
+	vectorNames(),
 	startRow(1),
 	endRow(-1),
 	startColumn(1),
@@ -244,6 +254,8 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row) {
 				QJsonObject obj = row.toObject();
 				if(obj.count() < colIndexInContainer + 1)
 					return -1;
+				if(vectorNames.count() == 0)
+					vectorNames = row.toObject().keys();
 				columnValue = *(row.toObject().begin() + colIndexInContainer);
 				break;
 			}
@@ -271,6 +283,10 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row) {
 		}
 		colIndexInContainer++;
 	}
+
+	if(createIndexEnabled)
+		vectorNames.prepend("index");
+
 	return 0;
 }
 
@@ -477,7 +493,7 @@ import the content of document \c m_preparedDoc to the data source \c dataSource
 void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	Q_UNUSED(lines)
 
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, QStringList(), columnModes);
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {

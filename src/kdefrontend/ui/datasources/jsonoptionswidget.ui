@@ -17,45 +17,47 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="lDateTimeFormat">
-     <property name="text">
-      <string>DateTime format</string>
+   <item row="1" column="2">
+    <widget class="KComboBox" name="cbDateTimeFormat">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="lNumberFormat">
-     <property name="text">
-      <string>Number format</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="lDataContainer">
-     <property name="text">
-      <string>Data container</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="5">
-    <widget class="QTreeView" name="tvJson">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-    </widget>
-   </item>
-   <item row="7" column="0">
+   <item row="2" column="0">
     <widget class="QCheckBox" name="chbCreateIndex">
      <property name="text">
       <string>Create index column</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item row="0" column="2">
+    <widget class="QComboBox" name="cbNumberFormat"/>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="lNumberFormat">
+     <property name="text">
+      <string>Number format</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QCheckBox" name="chbConvertNaNToZero">
+     <property name="text">
+      <string>Convert NaN to 0</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -71,64 +73,12 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="2">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="chbUseRootEl">
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>Use root element</string>
+      <string>DateTime format</string>
      </property>
     </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="QComboBox" name="cbNumberFormat"/>
-   </item>
-   <item row="7" column="2">
-    <widget class="QCheckBox" name="chbConvertNaNToZero">
-     <property name="text">
-      <string>Convert NaN to 0</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="KComboBox" name="cbDateTimeFormat">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lDataRowType">
-     <property name="text">
-      <string>Data row type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QComboBox" name="cbDataRowType"/>
    </item>
   </layout>
  </widget>

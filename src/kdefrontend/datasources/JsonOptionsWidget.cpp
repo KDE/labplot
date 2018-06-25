@@ -21,46 +21,36 @@ JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 
 	ui.setupUi(parent);
 
-	ui.tvJson->setModel(m_model);
-
-	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-	ui.tvJson->setAlternatingRowColors(true);
-
-	ui.cbDataRowType->addItems(JsonFilter::dataRowTypes());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
-	connect(ui.chbUseRootEl, &QCheckBox::stateChanged, [=](int state) {
-		ui.tvJson->setEnabled(state == 0);
-	});
-	connect(ui.tvJson, &QAbstractItemView::clicked, this, &JsonOptionsWidget::indexChanged);
 	setTooltips();
 }
 
-void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter) const {
+void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelIndex& index) const {
 	Q_ASSERT(filter);
-	if(ui.chbUseRootEl->isChecked())
-		filter->setModelRows(QVector<int>());
-	else
-		filter->setModelRows(getIndexRows(ui.tvJson->currentIndex()));
 
-	//TODO: change this after implementation other row types
-	filter->setDataRowType(ui.cbDataRowType->currentIndex() == 0 ? QJsonValue::Array : QJsonValue::Object);
+	filter->setModelRows(getIndexRows(index));
 	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()));
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
 	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
+
+	//TODO: change this after implementation other row types
+	filter->setDataRowType(QJsonValue::Array);
+	if(!index.isValid()) return;
+	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	if(item->childCount() < 1) return;
+	filter->setDataRowType(item->child(0)->type());
 }
 
-void JsonOptionsWidget::clear() {
+void JsonOptionsWidget::clearModel() {
 	m_model->clear();
 }
 
 void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	//TODO: change this after implementation other row types
-	ui.cbDataRowType->setCurrentIndex(conf.readEntry("DataRowType", 0));
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
@@ -70,7 +60,6 @@ void JsonOptionsWidget::loadSettings() const {
 void JsonOptionsWidget::saveSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	conf.writeEntry("DataRowType", ui.cbDataRowType->currentIndex());
 	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
@@ -88,11 +77,12 @@ void JsonOptionsWidget::loadDocument(QString filename) {
 
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return;
-	m_model->loadJson(device.readAll());
+	if(!m_model->loadJson(device.readAll()))
+		m_model->clear();
 }
 
-void JsonOptionsWidget::indexChanged() {
-	m_fileWidget->refreshPreview();
+QJsonModel* JsonOptionsWidget::model() {
+	return m_model;
 }
 
 void JsonOptionsWidget::setTooltips() {

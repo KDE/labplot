@@ -14,14 +14,12 @@ class JsonOptionsWidget : public QWidget {
 
 public:
 	explicit JsonOptionsWidget(QWidget*, ImportFileWidget*);
-	void applyFilterSettings(JsonFilter*) const;
-	void clear();
+	void applyFilterSettings(JsonFilter*, const QModelIndex&) const;
+	void clearModel();
 	void loadSettings() const;
 	void saveSettings();
 	void loadDocument(QString filename);
-
-private slots:
-	void indexChanged();
+	QJsonModel* model();
 
 private:
 	void setTooltips();

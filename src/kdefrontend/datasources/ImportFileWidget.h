@@ -65,6 +65,7 @@ public:
 	const QStringList selectedFITSExtensions() const;
 	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
+	void showJsonModel(bool);
 
 	QString host() const;
 	QString port() const;

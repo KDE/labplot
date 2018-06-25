@@ -143,7 +143,9 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 QJsonModel::QJsonModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    mRootItem = new QJsonTreeItem;
+	mHeadItem = new QJsonTreeItem;
+    mRootItem = new QJsonTreeItem(mHeadItem);
+    mHeadItem->appendChild(mRootItem);
     mHeaders.append("key");
     mHeaders.append("value");
 
@@ -152,14 +154,17 @@ QJsonModel::QJsonModel(QObject *parent) :
 
 QJsonModel::~QJsonModel()
 {
-    delete mRootItem;
+    //delete mRootItem;
+	delete mHeadItem;
 }
 
 void QJsonModel::clear()
 {
 	beginResetModel();
-	delete mRootItem;
-	mRootItem = new QJsonTreeItem;
+	delete mHeadItem;
+	mHeadItem = new QJsonTreeItem;
+	mRootItem = new QJsonTreeItem(mHeadItem);
+	mHeadItem->appendChild(mRootItem);
 	endResetModel();
 }
 
@@ -192,15 +197,21 @@ bool QJsonModel::loadJson(const QJsonDocument &jdoc)
 	if (!jdoc.isNull())
 	{
 		beginResetModel();
-		delete mRootItem;
+		delete mHeadItem;
+
+		mHeadItem = new QJsonTreeItem;
+
 		if (jdoc.isArray()) {
-			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()));
+			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()), mHeadItem);
 			mRootItem->setType(QJsonValue::Array);
 
 		} else {
-			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.object()));
+			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.object()), mHeadItem);
 			mRootItem->setType(QJsonValue::Object);
 		}
+
+		mHeadItem->appendChild(mRootItem);
+
 		endResetModel();
 		return true;
 	}
@@ -280,7 +291,7 @@ QModelIndex QJsonModel::index(int row, int column, const QModelIndex &parent) co
     QJsonTreeItem *parentItem;
 
     if (!parent.isValid())
-        parentItem = mRootItem;
+        parentItem = mHeadItem;
     else
         parentItem = static_cast<QJsonTreeItem*>(parent.internalPointer());
 
@@ -299,7 +310,7 @@ QModelIndex QJsonModel::parent(const QModelIndex &index) const
     QJsonTreeItem *childItem = static_cast<QJsonTreeItem*>(index.internalPointer());
     QJsonTreeItem *parentItem = childItem->parent();
 
-    if (parentItem == mRootItem)
+    if (parentItem == mHeadItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -312,7 +323,7 @@ int QJsonModel::rowCount(const QModelIndex &parent) const
         return 0;
 
     if (!parent.isValid())
-        parentItem = mRootItem;
+        parentItem = mHeadItem;
     else
         parentItem = static_cast<QJsonTreeItem*>(parent.internalPointer());
 
@@ -383,10 +394,5 @@ QJsonDocument QJsonModel::genJsonByIndex(const QModelIndex &index) const
 		return QJsonDocument();
 
 	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
-<<<<<<< HEAD:src/backend/datasources/filters/QJsonModel.cpp
 	return QJsonDocument::fromVariant(genJson(item).toVariant());
 }
-=======
-	return genJson(item);
-}
->>>>>>> 3c486aa9bea8b90e164b0b1965f870de345ac151:src/kdefrontend/datasources/QJsonModel.cpp

@@ -96,6 +96,7 @@ private:
 	QJsonValue genJson(QJsonTreeItem *) const;
 
 	QJsonTreeItem * mRootItem;
+	QJsonTreeItem * mHeadItem;
 	QStringList mHeaders;
 
 
