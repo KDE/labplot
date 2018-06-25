@@ -30,7 +30,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QDebug>
 
 /*!
@@ -337,7 +337,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			else {
 				char varName[NC_MAX_NAME + 1];
 				m_status = nc_inq_varname(ncid, varid, varName);
-				typeName = QString(varName) + ' ' + i18n("attribute");
+				typeName = i18n("%1 attribute", QString(varName));
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
@@ -624,7 +624,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 			break;
 		}
 	default:
-		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet").arg(ndims).arg(translateDataType(type)));
+		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
 		qDebug() << dataStrings;
 	}
 
@@ -689,7 +689,7 @@ bool NetCDFFilter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-// 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

@@ -39,7 +39,7 @@ class RandomValuesDialog : public QDialog {
 Q_OBJECT
 
 public:
-	explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+	explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0);
 	~RandomValuesDialog();
 	void setColumns(QVector<Column*>);
 

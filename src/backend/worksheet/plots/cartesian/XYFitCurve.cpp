@@ -140,17 +140,30 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		break;
 	case nsl_fit_model_peak:
 		// use equidistant mu's and (xmax-xmin)/(10*degree) as sigma(, gamma)
-		if (modelType == nsl_fit_model_voigt) {
-			for (int d = 0; d < 1; d++) {  //TODO: degree
-				paramStartValues[3*d+1] = xmin + (d+1.)*xrange/(degree+1.);
-				paramStartValues[3*d+2] = xrange/(10.*degree);
-				paramStartValues[3*d+3] = xrange/(10.*degree);
-			}
-		} else {
+		switch (modelType) {
+		case nsl_fit_model_gaussian:
+		case nsl_fit_model_lorentz:
+		case nsl_fit_model_sech:
+		case nsl_fit_model_logistic:
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);
-				paramStartValues[3*d+1] = xrange/(10.*degree);
+				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
 			}
+			break;
+		case nsl_fit_model_voigt:
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[4*d+1] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
+				paramStartValues[4*d+3] = xrange/(10.*degree);	// gamma
+			}
+			break;
+		case nsl_fit_model_pseudovoigt1:
+			for (int d = 0; d < degree; d++) {
+				paramStartValues[4*d+1] = 0.5;	// eta
+				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
+				paramStartValues[4*d+3] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+			}
+			break;
 		}
 		break;
 	case nsl_fit_model_growth:
@@ -361,19 +374,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
-			case 2:
-				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
-				break;
 			default:
 				model = "1./sqrt(2*pi) * (";
 				for (int i = 1; i <= degree; ++i) {
@@ -392,19 +392,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			case 1:
 				paramNames << "a" << "g" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
-				break;
-			case 2:
-				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2))";
-				paramNames << "a1" << "g1" << "mu1" << "a2" << "g2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("γ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("γ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2) + a3 * g3/(g3^2+(x-mu3)^2))";
-				paramNames << "a1" << "g1" << "mu1" << "a2" << "g2" << "mu2" << "a3" << "g3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("γ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("γ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("γ₃") << UTF8_QSTRING("μ₃");
 				break;
 			default:
 				model = "1./pi * (";
@@ -425,19 +412,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
-			case 2:
-				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
-				break;
 			default:
 				model = "1/pi * (";
 				for (int i = 1; i <= degree; ++i) {
@@ -457,19 +431,6 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNames << "a" << "s" << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
-			case 2:
-				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂");
-				break;
-			case 3:
-				model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
-				paramNames << "a1" << "s1" << "mu1" << "a2" << "s2" << "mu2" << "a3" << "s3" << "mu3";
-				paramNamesUtf8 << UTF8_QSTRING("A₁") << UTF8_QSTRING("σ₁") << UTF8_QSTRING("μ₁")
-					<< UTF8_QSTRING("A₂") << UTF8_QSTRING("σ₂") << UTF8_QSTRING("μ₂")
-					<< UTF8_QSTRING("A₃") << UTF8_QSTRING("σ₃") << UTF8_QSTRING("μ₃");
-				break;
 			default:
 				model = "1/4 * (";
 				for (int i = 1; i <= degree; ++i) {
@@ -484,9 +445,40 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			}
 			break;
 		case nsl_fit_model_voigt:
-			//TODO: degree
-			paramNames << "a" << "mu" << "s" << "g";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+			switch(degree) {
+			case 1:
+				paramNames << "a" << "mu" << "s" << "g";
+				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+				break;
+			default:
+				model = "";
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += 'a' + numStr + "*voigt(x-mu" + numStr + ",s" + numStr + ",g" + numStr + ')';
+					paramNames << "a" + numStr << "mu" + numStr << "s" + numStr << "g" + numStr;
+					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("γ") + indices[i-1];
+				}
+			}
+			break;
+		case nsl_fit_model_pseudovoigt1:
+			switch(degree) {
+			case 1:
+				paramNames << "a" << "et" << "w" << "mu";	// eta function exists!
+				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
+				break;
+			default:
+				model="";
+				for (int i = 1; i <= degree; ++i) {
+					QString numStr = QString::number(i);
+					if (i > 1)
+						model += " + ";
+					model += 'a' + numStr + "*pseudovoigt1(x-mu" + numStr + ",eta" + numStr + ",w" + numStr + ')';
+					paramNames << "a" + numStr << "eta" + numStr << "w" + numStr << "mu" + numStr;
+					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("η") + indices[i-1] << 'w' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+				}
+			}
 			break;
 		}
 		break;
@@ -622,6 +614,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	case nsl_fit_model_custom:
 		break;
 	}
+	DEBUG("model: " << model.toStdString());
 
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
@@ -688,7 +681,7 @@ STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXErrorColumn, const AbstractColumn*, xError
 void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->xErrorColumn) {
-		exec(new XYFitCurveSetXErrorColumnCmd(d, column, i18n("%1: assign x-error")));
+		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
@@ -701,7 +694,7 @@ STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYErrorColumn, const AbstractColumn*, yError
 void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->yErrorColumn) {
-		exec(new XYFitCurveSetYErrorColumnCmd(d, column, i18n("%1: assign y-error")));
+		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
@@ -714,7 +707,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
-	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
+	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
 
 //##############################################################################
@@ -988,18 +981,42 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				//TODO: degree
+				for (unsigned int j = 0; j < degree; ++j) {
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
+					const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
 
-				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-				const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-				const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-				const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-				for (unsigned int j = 0; j < 4; j++)
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, mu, s, g, weight[i]));
+				}
+				for (unsigned int j = 0; j < 4*degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-					else
-						gsl_matrix_set(J, (size_t)i, (size_t)j, nsl_fit_model_voigt_param_deriv(j, x, a, mu, s, g, weight[i]));
 			}
+			break;
+		case nsl_fit_model_pseudovoigt1:
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+
+				for (unsigned int j = 0; j < degree; ++j) {
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
+					const double eta = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
+					const double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
+
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, eta, w, mu, weight[i]));
+				}
+				for (unsigned int j = 0; j < 4*degree; j++)
+					if (fixed[j])
+						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+			}
+			break;
 		}
 		break;
 	case nsl_fit_model_growth: {
@@ -2215,7 +2232,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

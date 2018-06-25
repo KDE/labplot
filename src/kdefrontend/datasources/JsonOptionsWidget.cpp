@@ -4,7 +4,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KFilterDev>
 #include <KSharedConfig>
 #include <KConfigGroup>

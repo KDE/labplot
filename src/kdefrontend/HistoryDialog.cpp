@@ -27,13 +27,14 @@
  ***************************************************************************/
 #include "HistoryDialog.h"
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <KWindowConfig>
+#include <KSharedConfig>
 /*!
 	\class HistoryDialog
 	\brief Display the content of project's undo stack.
@@ -50,7 +51,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	                            "Select an item in the list to navigate to the corresponding step."));
 
 	setWindowIcon( QIcon::fromTheme("view-history") );
-	setWindowTitle(i18n("Undo/Redo History"));
+	setWindowTitle(i18nc("@title:window", "Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
@@ -96,7 +97,7 @@ HistoryDialog::~HistoryDialog() {
 void HistoryDialog::clearUndoStack() {
 	if (KMessageBox::questionYesNo( this,
 	                                i18n("Do you really want to clear the undo history?"),
-	                                i18n("Clear history")
+	                                i18n("Clear History")
 	                              ) == KMessageBox::Yes)
 		m_undoStack->clear();
 }

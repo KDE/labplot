@@ -35,7 +35,7 @@
 
 #include <QDateTime>
 #include <QIcon>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <cmath>
 

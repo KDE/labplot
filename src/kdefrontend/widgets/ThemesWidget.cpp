@@ -37,7 +37,7 @@
 #include <QStandardItemModel>
 #include <QStandardPaths>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 // #include <knewstuff3/downloaddialog.h>
 

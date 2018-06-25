@@ -33,9 +33,11 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
+#include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Definition>
@@ -186,7 +188,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 
 	if (!m_db.open()) {
 		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText()),
-								 i18n("Connection failed"));
+								 i18n("Connection Failed"));
 		setInvalid();
 		return;
 	}
@@ -225,7 +227,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	if (!q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to execute query"));
+			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
 
 		setInvalid();
 		return;
@@ -319,7 +321,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	if (!q.exec() || !q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to execute query"));
+			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
 
 		setInvalid();
 		return;

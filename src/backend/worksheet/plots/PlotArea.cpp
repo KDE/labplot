@@ -35,7 +35,7 @@
 #include <QPainter>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class PlotArea
@@ -94,7 +94,7 @@ QGraphicsItem *PlotArea::graphicsItem() const {
 STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible)
 void PlotArea::setVisible(bool on) {
 	Q_D(PlotArea);
-	exec(new PlotAreaSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new PlotAreaSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool PlotArea::isVisible() const {
@@ -142,7 +142,7 @@ void PlotArea::setClippingEnabled(bool on) {
 	Q_D(PlotArea);
 
 	if (d->clippingEnabled() != on)
-		exec(new PlotAreaSetClippingEnabledCmd(d, on, i18n("%1: toggle clipping")));
+		exec(new PlotAreaSetClippingEnabledCmd(d, on, ki18n("%1: toggle clipping")));
 }
 
 /*!
@@ -158,56 +158,56 @@ STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundType, PlotArea::BackgroundType, b
 void PlotArea::setBackgroundType(BackgroundType type) {
 	Q_D(PlotArea);
 	if (type != d->backgroundType)
-		exec(new PlotAreaSetBackgroundTypeCmd(d, type, i18n("%1: background type changed")));
+		exec(new PlotAreaSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void PlotArea::setBackgroundColorStyle(BackgroundColorStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundColorStyle)
-		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, i18n("%1: background color style changed")));
+		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundImageStyle)
-		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, i18n("%1: background image style changed")));
+		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundBrushStyle)
-		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, i18n("%1: background brush style changed")));
+		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, ki18n("%1: background brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void PlotArea::setBackgroundFirstColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color != d->backgroundFirstColor)
-		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, i18n("%1: set background first color")));
+		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, ki18n("%1: set background first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void PlotArea::setBackgroundSecondColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color != d->backgroundSecondColor)
-		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, i18n("%1: set background second color")));
+		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, ki18n("%1: set background second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
 void PlotArea::setBackgroundFileName(const QString& fileName) {
 	Q_D(PlotArea);
 	if (fileName != d->backgroundFileName)
-		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, i18n("%1: set background image")));
+		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update)
 void PlotArea::setBackgroundOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->backgroundOpacity)
-		exec(new PlotAreaSetBackgroundOpacityCmd(d, opacity, i18n("%1: set plot area opacity")));
+		exec(new PlotAreaSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set plot area opacity")));
 }
 
 //Border
@@ -215,21 +215,21 @@ STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderPen, QPen, borderPen, update)
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
-		exec(new PlotAreaSetBorderPenCmd(d, pen, i18n("%1: set plot area border")));
+		exec(new PlotAreaSetBorderPenCmd(d, pen, ki18n("%1: set plot area border")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderCornerRadius, qreal, borderCornerRadius, update)
 void PlotArea::setBorderCornerRadius(qreal radius) {
 	Q_D(PlotArea);
 	if (radius != d->borderCornerRadius)
-		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, i18n("%1: set plot area corner radius")));
+		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
 void PlotArea::setBorderOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->borderOpacity)
-		exec(new PlotAreaSetBorderOpacityCmd(d, opacity, i18n("%1: set plot area border opacity")));
+		exec(new PlotAreaSetBorderOpacityCmd(d, opacity, ki18n("%1: set plot area border opacity")));
 }
 
 //#####################################################################
@@ -440,7 +440,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if ( !readBasicAttributes(reader) )
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -459,61 +459,61 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
 			else
 				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
 			else
 				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
 			else
 				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->backgroundFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->backgroundFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->backgroundFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->backgroundSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->backgroundSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->backgroundSecondColor.setBlue(str.toInt());
 
@@ -522,7 +522,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->backgroundOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "border") {
@@ -532,13 +532,13 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("borderOpacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
 			else
 				d->borderOpacity = str.toDouble();
 
 			str = attribs.value("borderCornerRadius").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
+				reader->raiseWarning(attributeWarning.subs("borderCornerRadius").toString());
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element

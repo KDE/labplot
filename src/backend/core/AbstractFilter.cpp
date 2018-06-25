@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "AbstractFilter.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"

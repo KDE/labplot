@@ -88,6 +88,8 @@ private:
 	bool m_fileEmpty;
 	bool m_liveDataSource;
 	bool m_suppressRefresh;
+public slots:
+	void loadSettings();
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -103,14 +105,12 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
-	void loadSettings();
 
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
-
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()

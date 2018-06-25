@@ -83,10 +83,10 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions2->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
-	uiGeneralTab.cbType->addItem(i18n("cartesian"));
-	uiGeneralTab.cbType->addItem(i18n("polar"));
-	uiGeneralTab.cbType->addItem(i18n("parametric"));
-// 	uiGeneralTab.cbType->addItem(i18n("implicit"));
+	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
+	uiGeneralTab.cbType->addItem(i18n("Polar"));
+	uiGeneralTab.cbType->addItem(i18n("Parametric"));
+// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -310,6 +310,7 @@ void XYEquationCurveDock::showFunctions() {
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& str) {
+	//TODO: not all functions have only one argument
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
 	if (type==XYEquationCurve::Cartesian)
 		uiGeneralTab.teEquation1->insertPlainText(str + "(x)");
@@ -324,6 +325,7 @@ void XYEquationCurveDock::insertConstant1(const QString& str) {
 }
 
 void XYEquationCurveDock::insertFunction2(const QString& str) {
+	//TODO: not all functions have only one argument
 	uiGeneralTab.teEquation2->insertPlainText(str + "(t)");
 }
 

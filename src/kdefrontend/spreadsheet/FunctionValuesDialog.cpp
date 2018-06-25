@@ -54,9 +54,9 @@
 	\ingroup kdefrontend
  */
 
-FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
+FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
 	Q_ASSERT(s != nullptr);
-	setWindowTitle(i18n("Function values"));
+	setWindowTitle(i18nc("@title:window", "Function Values"));
 
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -212,6 +212,7 @@ void FunctionValuesDialog::showFunctions() {
 }
 
 void FunctionValuesDialog::insertFunction(const QString& str) {
+	//TODO: not all functions have only one argument
 	ui.teEquation->insertPlainText(str + "(x)");
 }
 

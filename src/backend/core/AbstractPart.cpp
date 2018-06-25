@@ -37,7 +37,7 @@
 #include <QMenu>
 #include <QStyle>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AbstractPart

@@ -33,7 +33,7 @@
 
 #include <QPainter>
 #include <QDir>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
 

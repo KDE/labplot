@@ -33,7 +33,7 @@
 
 #include <QUndoCommand>
 #include <QVector>
-#include <KLocale>
+#include <KLocalizedString>
 #include "Matrix.h"
 #include "MatrixPrivate.h"
 

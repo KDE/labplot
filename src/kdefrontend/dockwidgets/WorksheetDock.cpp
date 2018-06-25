@@ -41,6 +41,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
 const int numOfPaperSizes = 30;
@@ -266,11 +267,11 @@ void WorksheetDock::retranslateUi() {
 
 	//Geometry
 	ui.cbOrientation->clear();
-	ui.cbOrientation->addItem(i18n("portrait"));
-	ui.cbOrientation->addItem(i18n("landscape"));
+	ui.cbOrientation->addItem(i18n("Portrait"));
+	ui.cbOrientation->addItem(i18n("Landscape"));
 
 	ui.cbSize->clear();
-	ui.cbSize->addItem(i18n("view size"));
+	ui.cbSize->addItem(i18n("View Size"));
 	ui.cbSize->addItem(QString("A0"), QPrinter::A0);
 	ui.cbSize->addItem(QString("A1"), QPrinter::A1);
 	ui.cbSize->addItem(QString("A2"), QPrinter::A2);
@@ -306,25 +307,25 @@ void WorksheetDock::retranslateUi() {
 
 	//Background
 	ui.cbBackgroundType->clear();
-	ui.cbBackgroundType->addItem(i18n("color"));
-	ui.cbBackgroundType->addItem(i18n("image"));
-	ui.cbBackgroundType->addItem(i18n("pattern"));
+	ui.cbBackgroundType->addItem(i18n("Color"));
+	ui.cbBackgroundType->addItem(i18n("Image"));
+	ui.cbBackgroundType->addItem(i18n("Pattern"));
 
 	ui.cbBackgroundColorStyle->clear();
-	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Single Color"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Horizontal Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Vertical Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Radial Gradient"));
 
 	ui.cbBackgroundImageStyle->clear();
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
-	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
-	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Centered"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	m_initializing = false;

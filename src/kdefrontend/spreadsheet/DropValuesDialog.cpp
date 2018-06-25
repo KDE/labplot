@@ -44,20 +44,20 @@
 	\ingroup kdefrontend
  */
 
-DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
+DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) : QDialog(parent),
 	m_spreadsheet(s), m_mask(mask) {
 
-	setWindowTitle(i18n("Drop values"));
+	setWindowTitle(i18nc("@title:window", "Drop Values"));
 
 	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-	ui.cbOperator->addItem(i18n("equal to"));
-	ui.cbOperator->addItem(i18n("between (including end points)"));
-	ui.cbOperator->addItem(i18n("between (excluding end points)"));
-	ui.cbOperator->addItem(i18n("greater then"));
-	ui.cbOperator->addItem(i18n("greater then or equal to"));
-	ui.cbOperator->addItem(i18n("lesser then"));
-	ui.cbOperator->addItem(i18n("lesser then or equal to"));
+	ui.cbOperator->addItem(i18n("Equal To"));
+	ui.cbOperator->addItem(i18n("Between (Including End Points)"));
+	ui.cbOperator->addItem(i18n("Between (Excluding End Points)"));
+	ui.cbOperator->addItem(i18n("Greater Than"));
+	ui.cbOperator->addItem(i18n("Greater Than Or Equal To"));
+	ui.cbOperator->addItem(i18n("Lesser Than"));
+	ui.cbOperator->addItem(i18n("Lesser Than Or Equal To"));
 
 	ui.leValue1->setValidator( new QDoubleValidator(ui.leValue1) );
 	ui.leValue2->setValidator( new QDoubleValidator(ui.leValue2) );
@@ -73,7 +73,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 		m_okButton->setText(i18n("&Mask"));
 		m_okButton->setToolTip(i18n("Mask values in the specified region"));
 		ui.lMode->setText(i18n("Mask values"));
-		setWindowTitle(i18n("Mask values"));
+		setWindowTitle(i18nc("@title:window", "Mask Values"));
 	} else {
 		m_okButton->setText(i18n("&Drop"));
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));

@@ -54,9 +54,9 @@ extern "C" {
 	\ingroup kdefrontend
  */
 
-MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_matrix(m) {
+MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog(parent), m_matrix(m) {
 	Q_ASSERT(m_matrix);
-	setWindowTitle(i18n("Function values"));
+	setWindowTitle(i18nc("@title:window", "Function values"));
 
 	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -135,6 +135,7 @@ void MatrixFunctionDialog::showFunctions() {
 }
 
 void MatrixFunctionDialog::insertFunction(const QString& str) {
+	//TODO: not all functions have only one argument
 	ui.teEquation->insertPlainText(str + "(x)");
 }
 

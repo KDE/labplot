@@ -29,7 +29,7 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <KWindowConfig>
 
@@ -46,7 +46,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	mainWidget(new DatabaseManagerWidget(this, conn)), m_changed(false) {
 
 	setWindowIcon(QIcon::fromTheme("network-server-database"));
-	setWindowTitle(i18n("SQL Database Connections"));
+	setWindowTitle(i18nc("@title:window", "SQL Database Connections"));
 
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -81,7 +81,7 @@ DatabaseManagerDialog::~DatabaseManagerDialog() {
 }
 
 void DatabaseManagerDialog::changed() {
-	setWindowTitle(i18n("SQL Database Connections  [Changed]"));
+	setWindowTitle(i18nc("@title:window", "SQL Database Connections  [Changed]"));
 	m_changed = true;
 }
 

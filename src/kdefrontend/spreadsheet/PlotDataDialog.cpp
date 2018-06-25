@@ -64,7 +64,7 @@
 
 	\ingroup kdefrontend
  */
-PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl),
+PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent),
 	ui(new Ui::PlotDataWidget()),
 	m_spreadsheet(s),
 	m_plotsModel(new AspectTreeModel(m_spreadsheet->project())),
@@ -73,7 +73,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_analysisMode(false) {
 
 	setAttribute(Qt::WA_DeleteOnClose);
-	setWindowTitle(i18n("Plot spreadsheet data"));
+	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
 	QWidget* mainWidget = new QWidget(this);
@@ -108,6 +108,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_plotsModel->setSelectableAspects(list);
 	cbExistingPlots->setModel(m_plotsModel);
 
+	//select the first available plot, if available
+	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::Recursive);
+	if (!plots.isEmpty()) {
+		const auto plot = plots.first();
+		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
+	}
+
 	list.clear();
 	list<<"Folder"<<"Worksheet";
 	cbExistingWorksheets->setTopLevelClasses(list);
@@ -116,11 +123,18 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) :
 	m_worksheetsModel->setSelectableAspects(list);
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
+	//select the first available worksheet, if available
+	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::Recursive);
+	if (!worksheets.isEmpty()) {
+		const auto worksheet = worksheets.first();
+		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
+	}
+
 	//hide the check box for creation of original data, only shown if analysis curves are to be created
 	ui->chkCreateDataCurve->setVisible(false);
 
 	//SIGNALs/SLOTs
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::plot);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() { hide();  plot(); });
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &PlotDataDialog::reject);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::accept);
 	connect(ui->rbCurvePlacement1, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
@@ -188,7 +202,8 @@ void PlotDataDialog::processColumns() {
 		//use all spreadsheet columns if no columns are selected
 		//skip error columns
 		for (Column* col : m_spreadsheet->children<Column>())
-			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
+				|| col->plotDesignation() == AbstractColumn::NoDesignation)
 				m_columns << col;
 
 		//disable everything if the spreadsheet doesn't have any columns
@@ -201,7 +216,8 @@ void PlotDataDialog::processColumns() {
 	} else {
 		//use selected columns, skip error columns
 		for (Column* col : selectedColumns)
-			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y)
+			if (col->plotDesignation() == AbstractColumn::X || col->plotDesignation() == AbstractColumn::Y
+				|| col->plotDesignation() == AbstractColumn::NoDesignation)
 				m_columns << col;
 	}
 

@@ -33,7 +33,7 @@
 #include <QRegExp>
 #include <QUndoCommand>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 class DateTime2StringFilterSetFormatCmd : public QUndoCommand {
 public:

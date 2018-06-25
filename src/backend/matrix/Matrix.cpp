@@ -44,8 +44,9 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
+#include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -169,7 +170,7 @@ bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
-	dlg->setWindowTitle(i18n("Print Matrix"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Matrix"));
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);
 
@@ -241,37 +242,37 @@ void Matrix::setColumnCount(int count) {
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
 void Matrix::setXStart(double xStart) {
 	if (xStart != d->xStart)
-		exec(new MatrixSetXStartCmd(d, xStart, i18n("%1: x-start changed")));
+		exec(new MatrixSetXStartCmd(d, xStart, ki18n("%1: x-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXEnd, double, xEnd, updateViewHeader)
 void Matrix::setXEnd(double xEnd) {
 	if (xEnd != d->xEnd)
-		exec(new MatrixSetXEndCmd(d, xEnd, i18n("%1: x-end changed")));
+		exec(new MatrixSetXEndCmd(d, xEnd, ki18n("%1: x-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYStart, double, yStart, updateViewHeader)
 void Matrix::setYStart(double yStart) {
 	if (yStart != d->yStart)
-		exec(new MatrixSetYStartCmd(d, yStart, i18n("%1: y-start changed")));
+		exec(new MatrixSetYStartCmd(d, yStart, ki18n("%1: y-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYEnd, double, yEnd, updateViewHeader)
 void Matrix::setYEnd(double yEnd) {
 	if (yEnd != d->yEnd)
-		exec(new MatrixSetYEndCmd(d, yEnd, i18n("%1: y-end changed")));
+		exec(new MatrixSetYEndCmd(d, yEnd, ki18n("%1: y-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
 void Matrix::setNumericFormat(char format) {
 	if (format != d->numericFormat)
-		exec(new MatrixSetNumericFormatCmd(d, format, i18n("%1: numeric format changed")));
+		exec(new MatrixSetNumericFormatCmd(d, format, ki18n("%1: numeric format changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetPrecision, int, precision)
 void Matrix::setPrecision(int precision) {
 	if (precision != d->precision)
-		exec(new MatrixSetPrecisionCmd(d, precision, i18n("%1: precision changed")));
+		exec(new MatrixSetPrecisionCmd(d, precision, ki18n("%1: precision changed")));
 }
 
 //TODO: make this undoable?
@@ -1056,7 +1057,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1079,19 +1080,19 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("mode").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'mode'"));
+				reader->raiseWarning(attributeWarning.subs("mode").toString());
 			else
 				d->mode = AbstractColumn::ColumnMode(str.toInt());
 
 			str = attribs.value("headerFormat").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'headerFormat'"));
+				reader->raiseWarning(attributeWarning.subs("headerFormat").toString());
 			else
 				d->headerFormat = Matrix::HeaderFormat(str.toInt());
 
 			str = attribs.value("numericFormat").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'numericFormat'"));
+				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
 			else {
 				QByteArray formatba = str.toLatin1();
 				d->numericFormat = *formatba.data();
@@ -1099,7 +1100,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("precision").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'precision'"));
+				reader->raiseWarning(attributeWarning.subs("precision").toString());
 			else
 				d->precision = str.toInt();
 
@@ -1108,37 +1109,37 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("columns").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'columns'"));
+				reader->raiseWarning(attributeWarning.subs("columns").toString());
 			else
 				d->columnCount = str.toInt();
 
 			str = attribs.value("rows").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rows'"));
+				reader->raiseWarning(attributeWarning.subs("rows").toString());
 			else
 				d->rowCount = str.toInt();
 
 			str = attribs.value("x_start").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x_start'"));
+				reader->raiseWarning(attributeWarning.subs("x_start").toString());
 			else
 				d->xStart = str.toDouble();
 
 			str = attribs.value("x_end").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x_end'"));
+				reader->raiseWarning(attributeWarning.subs("x_end").toString());
 			else
 				d->xEnd = str.toDouble();
 
 			str = attribs.value("y_start").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y_start'"));
+				reader->raiseWarning(attributeWarning.subs("y_start").toString());
 			else
 				d->yStart = str.toDouble();
 
 			str = attribs.value("y_end").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y_end'"));
+				reader->raiseWarning(attributeWarning.subs("y_end").toString());
 			else
 				d->yEnd = str.toDouble();
 		} else if (!preview && reader->name() == "row_heights") {

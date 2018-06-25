@@ -63,8 +63,8 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 	comboBox->setIconSize( QSize(w,h) );
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	static QString list[6] = { i18n("no line"), i18n("solid line"), i18n("dash line"),
-							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
+	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
+							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
 	for (int i=0;i<6;i++){
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
@@ -89,8 +89,8 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	QPixmap pm( w, h );
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	static QString list[6] = { i18n("no line"), i18n("solid line"), i18n("dash line"),
-							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
+	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
+							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
 
 	QAction* action;
 	if (actionGroup->actions().isEmpty()){
@@ -148,11 +148,11 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	QPen pen(Qt::SolidPattern, 1);
 	pa.setPen( pen );
 
-	static QString list[15] = { i18n("none"), i18n("uniform"), i18n("extremely dense"),
-								i18n("very dense"), i18n("somewhat dense"), i18n("half dense"),
-								i18n("somewhat sparse"), i18n("very sparse"), i18n("extremely sparse"),
-								i18n("horiz. lines"), i18n("vert. lines"), i18n("crossing lines"),
-								i18n("backward diag. lines"), i18n("forward diag. lines"), i18n("crossing diag. lines") };
+	static QString list[15] = { i18n("None"), i18n("Uniform"), i18n("Extremely Dense"),
+								i18n("Very Dense"), i18n("Somewhat Dense"), i18n("Half Dense"),
+								i18n("Somewhat Sparse"), i18n("Very Sparse"), i18n("Extremely Sparse"),
+								i18n("Horiz. Lines"), i18n("Vert. Lines"), i18n("Crossing Lines"),
+								i18n("Backward Diag. Lines"), i18n("Forward Diag. Lines"), i18n("Crossing Diag. Lines") };
 	const QColor& borderColor = (qApp->palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
 	for (int i=0;i<15;i++) {
 		pm.fill(Qt::transparent);
@@ -169,15 +169,15 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 }
 
 void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
-	static const QString colorNames[colorsCount] = {i18n("white"), i18n("black"),
-							i18n("dark red"), i18n("red"), i18n("light red"),
-							i18n("dark green"), i18n("green"), i18n("light green"),
-							i18n("dark blue"), i18n("blue"), i18n("light blue"),
-							i18n("dark yellow"), i18n("yellow"), i18n("light yellow"),
-							i18n("dark cyan"), i18n("cyan"), i18n("light cyan"),
-							i18n("dark magenta"), i18n("magenta"), i18n("light magenta"),
-							i18n("dark orange"), i18n("orange"), i18n("light orange"),
-							i18n("dark grey"), i18n("grey"), i18n("light grey")
+	static const QString colorNames[colorsCount] = {i18n("White"), i18n("Black"),
+							i18n("Dark Red"), i18n("Red"), i18n("Light Red"),
+							i18n("Dark Green"), i18n("Green"), i18n("Light Green"),
+							i18n("Dark Blue"), i18n("Blue"), i18n("Light Blue"),
+							i18n("Dark Yellow"), i18n("Yellow"), i18n("Light Yellow"),
+							i18n("Dark Cyan"), i18n("Cyan"), i18n("Light Cyan"),
+							i18n("Dark Magenta"), i18n("Magenta"), i18n("Light Magenta"),
+							i18n("Dark Orange"), i18n("Orange"), i18n("Light Orange"),
+							i18n("Dark Grey"), i18n("Grey"), i18n("Light Grey")
 							};
 
 	QPixmap pix(16,16);

@@ -34,7 +34,7 @@
 #include <QSpinBox>
 #include <QGridLayout>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KColorButton>
 
 //TODO:
@@ -47,7 +47,7 @@
  * \ingroup kdefrontend
  */
 GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
-	setWindowTitle(i18n("Custom grid"));
+	setWindowTitle(i18nc("@title:window", "Custom Grid"));
 
 	QWidget* widget = new QWidget;
 	QGridLayout* layout = new QGridLayout(widget);
@@ -56,8 +56,8 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	layout->addWidget(label, 0, 0);
 
 	cbStyle = new QComboBox(this);
-	cbStyle->addItem(i18n("lines"));
-	cbStyle->addItem(i18n("dots"));
+	cbStyle->addItem(i18n("Lines"));
+	cbStyle->addItem(i18n("Dots"));
 	cbStyle->setCurrentIndex(0);
 	layout->addWidget(cbStyle, 0, 1);
 

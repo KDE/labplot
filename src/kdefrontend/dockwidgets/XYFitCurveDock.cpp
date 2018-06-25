@@ -817,7 +817,7 @@ void XYFitCurveDock::recalculateClicked() {
 
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Fit status: ") + m_fitCurve->fitResult().status);
+	emit info(i18n("Fit status: %1", m_fitCurve->fitResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -856,7 +856,9 @@ void XYFitCurveDock::enableRecalculate() const {
 
 		DEBUG("	enable and preview");
 		// PREVIEW as soon as recalculate is enabled
-		m_fitCurve->evaluate(true);
+		//TODO: this breaks loading a project with fit curve
+		//	(sets starting values again!)
+		//m_fitCurve->evaluate(true);
 		//TODO: Test	(breaks context menu fit)
 //		m_fitCurve->dataChanged();
 	}

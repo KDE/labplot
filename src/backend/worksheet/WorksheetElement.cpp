@@ -35,7 +35,7 @@
 #include <QGraphicsItem>
 #include <QMenu>
 #include <QPen>
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class WorksheetElement

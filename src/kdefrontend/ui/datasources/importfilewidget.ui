@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>679</width>
-    <height>1219</height>
+    <height>847</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
@@ -35,60 +41,6 @@
       <string>Data source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="8" column="3">
-       <widget class="QPushButton" name="bSaveFilter">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Save the current filter settings</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QLabel" name="lFileName">
-        <property name="text">
-         <string>Name</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QComboBox" name="cbSerialPort"/>
-      </item>
-      <item row="8" column="2">
-       <widget class="KComboBox" name="cbFilter">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="lFileType">
-        <property name="text">
-         <string>Type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lHost">
-        <property name="text">
-         <string>Host</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lPort">
-        <property name="text">
-         <string>Port</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="2">
        <widget class="QComboBox" name="cbSourceType">
         <item>
@@ -118,8 +70,35 @@
         </item>
        </widget>
       </item>
-      <item row="5" column="2">
-       <widget class="QComboBox" name="cbBaudRate"/>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="lSourceType">
+        <property name="text">
+         <string>Source</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QPushButton" name="bSaveFilter">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Save the current filter settings</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="KComboBox" name="cbFilter">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
       <item row="8" column="4">
        <widget class="QPushButton" name="bManageFilters">
@@ -140,13 +119,27 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="leFileName">
-        <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lHost">
+        <property name="text">
+         <string>Host</string>
         </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="KComboBox" name="cbFileType">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="lePort"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="lFileType">
+        <property name="text">
+         <string>Type</string>
         </property>
        </widget>
       </item>
@@ -166,28 +159,38 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lSerialPort">
+      <item row="1" column="0" colspan="2">
+       <widget class="QLabel" name="lFileName">
+        <property name="text">
+         <string>Name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lPort">
         <property name="text">
          <string>Port</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="2">
-       <widget class="KComboBox" name="cbFileType">
-        <property name="enabled">
-         <bool>false</bool>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="leFileName">
+        <property name="toolTip">
+         <string>Specify the name of the file to import.</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="lSourceType">
+      <item row="8" column="0">
+       <widget class="QLabel" name="lFilter">
         <property name="text">
-         <string>Source</string>
+         <string>Filter</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="1">
+      <item row="9" column="1">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -203,35 +206,11 @@
         </property>
        </spacer>
       </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="lFilter">
-        <property name="text">
-         <string>Filter</string>
-        </property>
-       </widget>
+      <item row="4" column="2">
+       <widget class="QComboBox" name="cbSerialPort"/>
       </item>
-      <item row="6" column="1">
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>13</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="5" column="0" colspan="2">
-       <widget class="QLabel" name="lBaudRate">
-        <property name="text">
-         <string>Baud rate</string>
-        </property>
-       </widget>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="leHost"/>
       </item>
       <item row="1" column="4">
        <widget class="QPushButton" name="bFileInfo">
@@ -252,32 +231,50 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="leHost"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLineEdit" name="lePort"/>
-      </item>
-      <item row="9" column="2">
-       <widget class="QTreeView" name="tvJson">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="6" column="1">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>13</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="5" column="2">
+       <widget class="QComboBox" name="cbBaudRate"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lSerialPort">
+        <property name="text">
+         <string>Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QLabel" name="lBaudRate">
+        <property name="text">
+         <string>Baud rate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="QTreeView" name="tvJson">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
         <property name="showDropIndicator" stdset="0">
          <bool>false</bool>
         </property>
-        <attribute name="headerDefaultSectionSize">
-         <number>150</number>
-        </attribute>
        </widget>
       </item>
-      <item row="9" column="0">
+      <item row="10" column="0">
        <widget class="QLabel" name="lField">
         <property name="text">
          <string>Field</string>
@@ -293,7 +290,7 @@
       <bool>false</bool>
      </property>
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -320,19 +317,51 @@
          <number>0</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <attribute name="title">
           <string>Data format</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QStackedWidget" name="swOptions">
-            <widget class="QWidget" name="page"/>
-            <widget class="QWidget" name="page_2"/>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <widget class="QWidget" name="page">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+            <widget class="QWidget" name="page_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </widget>
           </item>
          </layout>
         </widget>
         <widget class="QWidget" name="tabDataPreview">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <attribute name="title">
           <string>Preview</string>
          </attribute>
@@ -399,79 +428,20 @@
          </layout>
         </widget>
         <widget class="QWidget" name="tabDataPortion">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <attribute name="title">
           <string>Data portion to read</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="3" column="0">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>172</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="lStartRow">
             <property name="text">
              <string>Start row:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="sbStartRow">
-            <property name="toolTip">
-             <string>Specify the start row for import</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>2147483647</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="5">
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>108</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="lEndRow">
-            <property name="text">
-             <string>End row:</string>
             </property>
            </widget>
           </item>
@@ -527,6 +497,51 @@
             </property>
            </spacer>
           </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="sbStartRow">
+            <property name="toolTip">
+             <string>Specify the start row for import</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>2147483647</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>108</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="1" column="3">
            <widget class="QLabel" name="lEndColumn">
             <property name="text">
@@ -559,6 +574,26 @@
              <size>
               <width>108</width>
               <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="lEndRow">
+            <property name="text">
+             <string>End row:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
              </size>
             </property>
            </spacer>

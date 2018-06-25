@@ -34,7 +34,7 @@
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AbstractPlot
@@ -99,14 +99,14 @@ STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, float, horizontalPad
 void AbstractPlot::setHorizontalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->horizontalPadding)
-		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, i18n("%1: set horizontal padding")));
+		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, ki18n("%1: set horizontal padding")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
 void AbstractPlot::setVerticalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
-		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, i18n("%1: set vertical padding")));
+		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, ki18n("%1: set vertical padding")));
 }
 
 //################################################################

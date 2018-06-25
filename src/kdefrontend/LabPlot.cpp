@@ -95,7 +95,7 @@ int main (int argc, char *argv[]) {
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
 					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-					i18n("Failed to open")) == KMessageBox::Cancel) {
+					i18n("Failed to Open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
 				filename = ""; //Wrong file -> clear the file name and continue

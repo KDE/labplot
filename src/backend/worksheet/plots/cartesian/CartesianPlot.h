@@ -103,6 +103,7 @@ public:
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(QDropEvent*);
 	bool isPanningActive() const;
+	void addLegend(CartesianPlotLegend*);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

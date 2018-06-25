@@ -39,7 +39,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 Note::Note(const QString& name) : AbstractPart(name), m_view(nullptr) {
 	KConfig config;
@@ -57,7 +57,7 @@ QIcon Note::icon() const {
 bool Note::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-	dlg->setWindowTitle(i18n("Print Worksheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
     if ( (ret = (dlg->exec() == QDialog::Accepted)) )
 		m_view->print(&printer);
@@ -150,7 +150,7 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

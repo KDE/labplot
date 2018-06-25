@@ -126,7 +126,7 @@ void TemplateHandler::retranslateUi(){
 //##############################################################################
 void TemplateHandler::loadMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Load from"));
+	menu.addSection(i18n("Load From"));
 
     QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
@@ -149,7 +149,7 @@ void TemplateHandler::loadMenuSelected(QAction* action) {
 
 void TemplateHandler::saveMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Save as"));
+	menu.addSection(i18n("Save As"));
 
     QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ m_dirNames.at(m_className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
@@ -165,7 +165,7 @@ void TemplateHandler::saveMenu() {
 	QFrame* frame = new QFrame(this);
 	QHBoxLayout* layout = new QHBoxLayout(frame);
 
-	QLabel* label = new QLabel(i18n("new:"), frame);
+	QLabel* label = new QLabel(i18n("New:"), frame);
 	layout->addWidget(label);
 
 	QLineEdit* leFilename = new QLineEdit("", frame);

@@ -35,7 +35,7 @@
 #include <QTime>
 #include <QDate>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 class String2DateTimeFilterSetFormatCmd : public QUndoCommand {
 

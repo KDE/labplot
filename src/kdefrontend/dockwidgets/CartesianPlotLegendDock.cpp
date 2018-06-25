@@ -40,6 +40,7 @@
 #include <QImageReader>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 /*!
   \class CartesianPlotLegendDock
@@ -227,35 +228,35 @@ void CartesianPlotLegendDock::activateTitleTab() const{
 void CartesianPlotLegendDock::retranslateUi() {
 	m_initializing = true;
 
-	ui.cbBackgroundType->addItem(i18n("color"));
-	ui.cbBackgroundType->addItem(i18n("image"));
-	ui.cbBackgroundType->addItem(i18n("pattern"));
+	ui.cbBackgroundType->addItem(i18n("Color"));
+	ui.cbBackgroundType->addItem(i18n("Image"));
+	ui.cbBackgroundType->addItem(i18n("Pattern"));
 
-	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Single Color"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Horizontal Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Vertical Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Radial Gradient"));
 
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
-	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
-	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Centered"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
 
-	ui.cbOrder->addItem(i18n("column major"));
-	ui.cbOrder->addItem(i18n("row major"));
+	ui.cbOrder->addItem(i18n("Column Major"));
+	ui.cbOrder->addItem(i18n("Row Major"));
 
-	ui.cbPositionX->addItem(i18n("left"));
-	ui.cbPositionX->addItem(i18n("center"));
-	ui.cbPositionX->addItem(i18n("right"));
-	ui.cbPositionX->addItem(i18n("custom"));
-	ui.cbPositionY->addItem(i18n("top"));
-	ui.cbPositionY->addItem(i18n("center"));
-	ui.cbPositionY->addItem(i18n("bottom"));
-	ui.cbPositionY->addItem(i18n("custom"));
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+	ui.cbPositionX->addItem(i18n("Custom"));
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+	ui.cbPositionY->addItem(i18n("Custom"));
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);

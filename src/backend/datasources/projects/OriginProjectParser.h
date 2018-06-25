@@ -78,6 +78,9 @@ private:
 	QColor color(Origin::Color) const;
 	PlotArea::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
 
+	QList<QPair<QString, QString>> charReplacementList() const;
+	QString replaceSpecialChars(QString text) const;
+
 	OriginFile* m_originFile;
 	QStringList m_spreadNameList;
 	QStringList m_excelNameList;

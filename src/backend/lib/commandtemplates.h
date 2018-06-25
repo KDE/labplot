@@ -31,12 +31,14 @@
 
 #include <QUndoCommand>
 
+#include <KLocalizedString>
+
 template <class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:
-	StandardSetterCmd(target_class* target, value_type target_class::* field, value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+	StandardSetterCmd(target_class* target, value_type target_class::* field, value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
 		: m_target(target), m_field(field), m_otherValue(newValue)  {
-			setText(description.arg(m_target->name()));
+			setText(description.subs(m_target->name()).toString());
 		}
 
 	virtual void initialize() {};
@@ -61,9 +63,9 @@ protected:
 template <class target_class, typename value_type>
 class StandardMacroSetterCmd : public QUndoCommand {
 public:
-	StandardMacroSetterCmd(target_class* target, value_type target_class::*field, value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+	StandardMacroSetterCmd(target_class* target, value_type target_class::*field, value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
 		: m_target(target), m_field(field), m_otherValue(newValue)  {
-			setText(description.arg(m_target->name()));
+			setText(description.subs(m_target->name()).toString());
 		}
 
 	virtual void initialize() {};
@@ -98,9 +100,9 @@ protected:
 template <class target_class, typename value_type>
 class StandardSwapMethodSetterCmd : public QUndoCommand {
 public:
-	StandardSwapMethodSetterCmd(target_class* target, value_type (target_class::*method)(value_type), value_type newValue, const QString& description) // use i18n("%1: ...") for last arg
+	StandardSwapMethodSetterCmd(target_class* target, value_type (target_class::*method)(value_type), value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
 		: m_target(target), m_method(method), m_otherValue(newValue) {
-			setText(description.arg(m_target->name()));
+			setText(description.subs(m_target->name()).toString());
 		}
 
 	virtual void initialize() {};

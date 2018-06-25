@@ -78,7 +78,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbExportArea->addItem(i18n("Current selection"));
 	ui->cbExportArea->addItem(i18n("Complete worksheet"));
 
-	ui->cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ')');
+	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::desktop()->physicalDpiX())));
 	ui->cbResolution->addItem(QLatin1String("100"));
 	ui->cbResolution->addItem(QLatin1String("150"));
 	ui->cbResolution->addItem(QLatin1String("200"));
@@ -92,7 +92,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportWorksheetDialog::toggleOptions);
 	ui->leFileName->setFocus();
 
-	setWindowTitle(i18n("Export worksheet"));
+	setWindowTitle(i18nc("@title:window", "Export Worksheet"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
 	QTimer::singleShot(0, this, &ExportWorksheetDialog::loadSettings);

@@ -658,10 +658,13 @@ void FitTest::testLinearWampler4() {
 	const int np = fitData.paramNames.size();
 	QCOMPARE(np, 6);
 
-	for (int i = 0; i < np; i++) {
-		const double paramValue = fitResult.paramValues.at(i);
-		QCOMPARE(paramValue, 1.0);
-	}
+	FuzzyCompare(fitResult.paramValues.at(0), 1.0, 3.e-9);	// i386: 1.00000000223515
+	FuzzyCompare(fitResult.paramValues.at(1), 1.0, 5.e-9);	// i386: 0.999999995021441
+	FuzzyCompare(fitResult.paramValues.at(2), 1.0, 2.e-9);	// i386: 1.00000000188395
+	FuzzyCompare(fitResult.paramValues.at(3), 1.0, 1.e-9);	// i386: 0.999999999743725
+	FuzzyCompare(fitResult.paramValues.at(4), 1.0, 2.e-11);	// i386: 1.00000000001441
+	FuzzyCompare(fitResult.paramValues.at(5), 1.0);		// i386: 0.999999999999714
+
 	QCOMPARE(fitResult.errorValues.at(0), 215232.624678170);
 	QCOMPARE(fitResult.errorValues.at(1), 236355.173469681);
 	QCOMPARE(fitResult.errorValues.at(2), 77934.3524331583);
@@ -2382,12 +2385,12 @@ void FitTest::testLinearGP_PY_yerror_polynomial() {
 
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));	// result: 6.10010931666575
 	FuzzyCompare(fitResult.paramValues.at(0), 6.10010931635002, 1.e-10);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.424059452104775
-	FuzzyCompare(fitResult.errorValues.at(0), 0.424059452104785, 1.e-11);
-	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.610812956583933
-	FuzzyCompare(fitResult.paramValues.at(1), -0.610812956537254, 1.e-10);
-	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0623409539388997
-	FuzzyCompare(fitResult.errorValues.at(1), 0.0623409539389024, 1.e-11);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));	// result: 0.424059452104775, i386: 0.424059429083679
+	FuzzyCompare(fitResult.errorValues.at(0), 0.424059452104785, 1.e-10);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));	// result: -0.610812956583933, i386: -0.610812954591566
+	FuzzyCompare(fitResult.paramValues.at(1), -0.610812956537254, 1.e-9);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));	// result: 0.0623409539388997, i386: 0.0623409508171503
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0623409539389024, 1.e-10);
 
 	QCOMPARE(fitResult.rms, 4.29315093729054);
 	QCOMPARE(fitResult.rsd, 2.07199202153158);

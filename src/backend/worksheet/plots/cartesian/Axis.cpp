@@ -45,8 +45,9 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"
@@ -220,7 +221,7 @@ void Axis::init() {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
 
@@ -229,10 +230,10 @@ void Axis::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &Axis::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(i18n("horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(i18n("vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	//Line
@@ -258,10 +259,10 @@ void Axis::initMenus() {
 
 	//Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineStyleMenu = new QMenu(i18n("style"), lineMenu);
+	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
 	lineMenu->addMenu( lineStyleMenu );
 
-	lineColorMenu = new QMenu(i18n("color"), lineMenu);
+	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
 
@@ -436,7 +437,7 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
 	if (autoScale != d->autoScale) {
-		exec(new AxisSetAutoScaleCmd(d, autoScale, i18n("%1: set axis auto scaling")));
+		exec(new AxisSetAutoScaleCmd(d, autoScale, ki18n("%1: set axis auto scaling")));
 
 		if (autoScale) {
 			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
@@ -460,7 +461,7 @@ void Axis::setAutoScale(bool autoScale) {
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
 void Axis::setVisible(bool on) {
 	Q_D(Axis);
-	exec(new AxisSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new AxisSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool Axis::isVisible() const {
@@ -477,21 +478,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation
 void Axis::setOrientation( AxisOrientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
-		exec(new AxisSetOrientationCmd(d, orientation, i18n("%1: set axis orientation")));
+		exec(new AxisSetOrientationCmd(d, orientation, ki18n("%1: set axis orientation")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::AxisPosition, position, retransform);
 void Axis::setPosition(AxisPosition position) {
 	Q_D(Axis);
 	if (position != d->position)
-		exec(new AxisSetPositionCmd(d, position, i18n("%1: set axis position")));
+		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransformTicks);
 void Axis::setScale(AxisScale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
-		exec(new AxisSetScalingCmd(d, scale, i18n("%1: set axis scale")));
+		exec(new AxisSetScalingCmd(d, scale, ki18n("%1: set axis scale")));
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetOffset, double, offset, retransform);
@@ -499,7 +500,7 @@ void Axis::setOffset(double offset, bool undo) {
 	Q_D(Axis);
 	if (offset != d->offset) {
 		if (undo) {
-			exec(new AxisSetOffsetCmd(d, offset, i18n("%1: set axis offset")));
+			exec(new AxisSetOffsetCmd(d, offset, ki18n("%1: set axis offset")));
 		} else {
 			d->offset = offset;
 			//don't need to call retransform() afterward
@@ -513,28 +514,28 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, double, start, retransform);
 void Axis::setStart(double start) {
 	Q_D(Axis);
 	if (start != d->start)
-		exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
+		exec(new AxisSetStartCmd(d, start, ki18n("%1: set axis start")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, double, end, retransform);
 void Axis::setEnd(double end) {
 	Q_D(Axis);
 	if (end != d->end)
-		exec(new AxisSetEndCmd(d, end, i18n("%1: set axis end")));
+		exec(new AxisSetEndCmd(d, end, ki18n("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
-		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, i18n("%1: set axis zero offset")));
+		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
 void Axis::setScalingFactor(qreal scalingFactor) {
 	Q_D(Axis);
 	if (scalingFactor != d->scalingFactor)
-		exec(new AxisSetScalingFactorCmd(d, scalingFactor, i18n("%1: set axis scaling factor")));
+		exec(new AxisSetScalingFactorCmd(d, scalingFactor, ki18n("%1: set axis scaling factor")));
 }
 
 //Title
@@ -542,14 +543,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetX, qreal, titleOffsetX, retransform)
 void Axis::setTitleOffsetX(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetX)
-		exec(new AxisSetTitleOffsetXCmd(d, offset, i18n("%1: set title offset")));
+		exec(new AxisSetTitleOffsetXCmd(d, offset, ki18n("%1: set title offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, qreal, titleOffsetY, retransform);
 void Axis::setTitleOffsetY(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetY)
-		exec(new AxisSetTitleOffsetYCmd(d, offset, i18n("%1: set title offset")));
+		exec(new AxisSetTitleOffsetYCmd(d, offset, ki18n("%1: set title offset")));
 }
 
 //Line
@@ -557,35 +558,35 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingR
 void Axis::setLinePen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->linePen)
-		exec(new AxisSetLinePenCmd(d, pen, i18n("%1: set line style")));
+		exec(new AxisSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLineOpacity, qreal, lineOpacity, update);
 void Axis::setLineOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->lineOpacity)
-		exec(new AxisSetLineOpacityCmd(d, opacity, i18n("%1: set line opacity")));
+		exec(new AxisSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowType, Axis::ArrowType, arrowType, retransformArrow);
 void Axis::setArrowType(ArrowType type) {
 	Q_D(Axis);
 	if (type != d->arrowType)
-		exec(new AxisSetArrowTypeCmd(d, type, i18n("%1: set arrow type")));
+		exec(new AxisSetArrowTypeCmd(d, type, ki18n("%1: set arrow type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowPosition, Axis::ArrowPosition, arrowPosition, retransformArrow);
 void Axis::setArrowPosition(ArrowPosition position) {
 	Q_D(Axis);
 	if (position != d->arrowPosition)
-		exec(new AxisSetArrowPositionCmd(d, position, i18n("%1: set arrow position")));
+		exec(new AxisSetArrowPositionCmd(d, position, ki18n("%1: set arrow position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, qreal, arrowSize, retransformArrow);
 void Axis::setArrowSize(qreal arrowSize) {
 	Q_D(Axis);
 	if (arrowSize != d->arrowSize)
-		exec(new AxisSetArrowSizeCmd(d, arrowSize, i18n("%1: set arrow size")));
+		exec(new AxisSetArrowSizeCmd(d, arrowSize, ki18n("%1: set arrow size")));
 }
 
 //Major ticks
@@ -593,34 +594,34 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majo
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
 	Q_D(Axis);
 	if (majorTicksDirection != d->majorTicksDirection)
-		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, i18n("%1: set major ticks direction")));
+		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, ki18n("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
 void Axis::setMajorTicksType(const TicksType majorTicksType) {
 	Q_D(Axis);
 	if (majorTicksType!= d->majorTicksType)
-		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, i18n("%1: set major ticks type")));
+		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, ki18n("%1: set major ticks type")));
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
 	Q_D(Axis);
 	if (majorTicksNumber != d->majorTicksNumber)
-		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, i18n("%1: set the total number of the major ticks")));
+		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
 void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
 	Q_D(Axis);
 	if (majorTicksIncrement != d->majorTicksIncrement)
-		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, i18n("%1: set the increment for the major ticks")));
+		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, ki18n("%1: set the increment for the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
 void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 	Q_D(Axis);
 	if (column != d->majorTicksColumn) {
-		exec(new AxisSetMajorTicksColumnCmd(d, column, i18n("%1: assign major ticks' values")));
+		exec(new AxisSetMajorTicksColumnCmd(d, column, ki18n("%1: assign major ticks' values")));
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
@@ -635,21 +636,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShape
 void Axis::setMajorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorTicksPen)
-		exec(new AxisSetMajorTicksPenCmd(d, pen, i18n("%1: set major ticks style")));
+		exec(new AxisSetMajorTicksPenCmd(d, pen, ki18n("%1: set major ticks style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
 void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
-		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, i18n("%1: set major ticks length")));
+		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, ki18n("%1: set major ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update);
 void Axis::setMajorTicksOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->majorTicksOpacity)
-		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, i18n("%1: set major ticks opacity")));
+		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, ki18n("%1: set major ticks opacity")));
 }
 
 //Minor ticks
@@ -657,35 +658,35 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksDirection, Axis::TicksDirection, mino
 void Axis::setMinorTicksDirection(const TicksDirection minorTicksDirection) {
 	Q_D(Axis);
 	if (minorTicksDirection != d->minorTicksDirection)
-		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, i18n("%1: set minor ticks direction")));
+		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, ki18n("%1: set minor ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
 void Axis::setMinorTicksType(const TicksType minorTicksType) {
 	Q_D(Axis);
 	if (minorTicksType!= d->minorTicksType)
-		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, i18n("%1: set minor ticks type")));
+		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, ki18n("%1: set minor ticks type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksNumber, int, minorTicksNumber, retransformTicks);
 void Axis::setMinorTicksNumber(int minorTicksNumber) {
 	Q_D(Axis);
 	if (minorTicksNumber != d->minorTicksNumber)
-		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, i18n("%1: set the total number of the minor ticks")));
+		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, ki18n("%1: set the total number of the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
 void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
 	Q_D(Axis);
 	if (minorTicksIncrement != d->minorTicksIncrement)
-		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, i18n("%1: set the increment for the minor ticks")));
+		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, ki18n("%1: set the increment for the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
 void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 	Q_D(Axis);
 	if (column != d->minorTicksColumn) {
-		exec(new AxisSetMinorTicksColumnCmd(d, column, i18n("%1: assign minor ticks' values")));
+		exec(new AxisSetMinorTicksColumnCmd(d, column, ki18n("%1: assign minor ticks' values")));
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
@@ -700,21 +701,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShape
 void Axis::setMinorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->minorTicksPen)
-		exec(new AxisSetMinorTicksPenCmd(d, pen, i18n("%1: set minor ticks style")));
+		exec(new AxisSetMinorTicksPenCmd(d, pen, ki18n("%1: set minor ticks style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
 void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
-		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, i18n("%1: set minor ticks length")));
+		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, ki18n("%1: set minor ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update);
 void Axis::setMinorTicksOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->minorTicksOpacity)
-		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, i18n("%1: set minor ticks opacity")));
+		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, ki18n("%1: set minor ticks opacity")));
 }
 
 //Labels
@@ -722,7 +723,7 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat,
 void Axis::setLabelsFormat(const LabelsFormat labelsFormat) {
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat) {
-		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, i18n("%1: set labels format")));
+		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 
 		//TODO: this part is not undo/redo-aware
 		if (d->labelsFormatAutoChanged && labelsFormat == Axis::FormatDecimal)
@@ -736,70 +737,70 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision,
 void Axis::setLabelsAutoPrecision(const bool labelsAutoPrecision) {
 	Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
-		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, i18n("%1: set labels precision")));
+		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
 void Axis::setLabelsPrecision(const int labelsPrecision) {
 	Q_D(Axis);
 	if (labelsPrecision != d->labelsPrecision)
-		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, i18n("%1: set labels precision")));
+		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, ki18n("%1: set labels precision")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabelPositions);
 void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
-		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, i18n("%1: set labels position")));
+		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, ki18n("%1: set labels position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, double, labelsOffset, retransformTickLabelPositions);
 void Axis::setLabelsOffset(double offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
-		exec(new AxisSetLabelsOffsetCmd(d, offset, i18n("%1: set label offset")));
+		exec(new AxisSetLabelsOffsetCmd(d, offset, ki18n("%1: set label offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, recalcShapeAndBoundingRect);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
-		exec(new AxisSetLabelsRotationAngleCmd(d, angle, i18n("%1: set label rotation angle")));
+		exec(new AxisSetLabelsRotationAngleCmd(d, angle, ki18n("%1: set label rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsColor, QColor, labelsColor, update);
 void Axis::setLabelsColor(const QColor &color) {
 	Q_D(Axis);
 	if (color != d->labelsColor)
-		exec(new AxisSetLabelsColorCmd(d, color, i18n("%1: set label color")));
+		exec(new AxisSetLabelsColorCmd(d, color, ki18n("%1: set label color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabelStrings);
 void Axis::setLabelsFont(const QFont &font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
-		exec(new AxisSetLabelsFontCmd(d, font, i18n("%1: set label font")));
+		exec(new AxisSetLabelsFontCmd(d, font, ki18n("%1: set label font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabelStrings);
 void Axis::setLabelsPrefix(const QString& prefix) {
 	Q_D(Axis);
 	if (prefix != d->labelsPrefix)
-		exec(new AxisSetLabelsPrefixCmd(d, prefix, i18n("%1: set label prefix")));
+		exec(new AxisSetLabelsPrefixCmd(d, prefix, ki18n("%1: set label prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabelStrings);
 void Axis::setLabelsSuffix(const QString& suffix) {
 	Q_D(Axis);
 	if (suffix != d->labelsSuffix)
-		exec(new AxisSetLabelsSuffixCmd(d, suffix, i18n("%1: set label suffix")));
+		exec(new AxisSetLabelsSuffixCmd(d, suffix, ki18n("%1: set label suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOpacity, qreal, labelsOpacity, update);
 void Axis::setLabelsOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->labelsOpacity)
-		exec(new AxisSetLabelsOpacityCmd(d, opacity, i18n("%1: set labels opacity")));
+		exec(new AxisSetLabelsOpacityCmd(d, opacity, ki18n("%1: set labels opacity")));
 }
 
 //Major grid
@@ -807,14 +808,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMa
 void Axis::setMajorGridPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorGridPen)
-		exec(new AxisSetMajorGridPenCmd(d, pen, i18n("%1: set major grid style")));
+		exec(new AxisSetMajorGridPenCmd(d, pen, ki18n("%1: set major grid style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
 void Axis::setMajorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->majorGridOpacity)
-		exec(new AxisSetMajorGridOpacityCmd(d, opacity, i18n("%1: set major grid opacity")));
+		exec(new AxisSetMajorGridOpacityCmd(d, opacity, ki18n("%1: set major grid opacity")));
 }
 
 //Minor grid
@@ -822,14 +823,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMi
 void Axis::setMinorGridPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->minorGridPen)
-		exec(new AxisSetMinorGridPenCmd(d, pen, i18n("%1: set minor grid style")));
+		exec(new AxisSetMinorGridPenCmd(d, pen, ki18n("%1: set minor grid style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
 void Axis::setMinorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)
-		exec(new AxisSetMinorGridOpacityCmd(d, opacity, i18n("%1: set minor grid opacity")));
+		exec(new AxisSetMinorGridOpacityCmd(d, opacity, ki18n("%1: set minor grid opacity")));
 }
 
 //##############################################################################
@@ -2004,7 +2005,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -2023,72 +2024,72 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("autoScale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoScale'"));
+				reader->raiseWarning(attributeWarning.subs("autoScale").toString());
 			else
 				d->autoScale = (bool)str.toInt();
 
 			str = attribs.value("orientation").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'orientation'"));
+				reader->raiseWarning(attributeWarning.subs("orientation").toString());
 			else
 				d->orientation = (Axis::AxisOrientation)str.toInt();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->position = (Axis::AxisPosition)str.toInt();
 
 			str = attribs.value("scale").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'scale'"));
+				reader->raiseWarning(attributeWarning.subs("scale").toString());
 			else
 				d->scale = (Axis::AxisScale)str.toInt();
 
 			str = attribs.value("offset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'offset'"));
+				reader->raiseWarning(attributeWarning.subs("offset").toString());
 			else
 				d->offset = str.toDouble();
 
 			str = attribs.value("start").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'start'"));
+				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
 				d->start = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'end'"));
+				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
 				d->end = str.toDouble();
 
 			str = attribs.value("scalingFactor").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
+				reader->raiseWarning(attributeWarning.subs("scalingFactor").toString());
 			else
 				d->scalingFactor = str.toDouble();
 
 			str = attribs.value("zeroOffset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
+				reader->raiseWarning(attributeWarning.subs("zeroOffset").toString());
 			else
 				d->zeroOffset = str.toDouble();
 
 			str = attribs.value("titleOffsetX").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'titleOffsetX'"));
+				reader->raiseWarning(attributeWarning.subs("titleOffsetX").toString());
 			else
 				d->titleOffsetX = str.toDouble();
 			str = attribs.value("titleOffsetY").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'titleOffsetY'"));
+				reader->raiseWarning(attributeWarning.subs("titleOffsetY").toString());
 			else
 				d->titleOffsetY = str.toDouble();
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
@@ -2100,25 +2101,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->lineOpacity = str.toDouble();
 
 			str = attribs.value("arrowType").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowType'"));
+				reader->raiseWarning(attributeWarning.subs("arrowType").toString());
 			else
 				d->arrowType = (Axis::ArrowType)str.toInt();
 
 			str = attribs.value("arrowPosition").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowPosition'"));
+				reader->raiseWarning(attributeWarning.subs("arrowPosition").toString());
 			else
 				d->arrowPosition = (Axis::ArrowPosition)str.toInt();
 
 			str = attribs.value("arrowSize").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
+				reader->raiseWarning(attributeWarning.subs("arrowSize").toString());
 			else
 				d->arrowSize = str.toDouble();
 		} else if (!preview && reader->name() == "majorTicks") {
@@ -2126,25 +2127,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("direction").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'direction'"));
+				reader->raiseWarning(attributeWarning.subs("direction").toString());
 			else
 				d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->majorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'number'"));
+				reader->raiseWarning(attributeWarning.subs("number").toString());
 			else
 				d->majorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'increment'"));
+				reader->raiseWarning(attributeWarning.subs("increment").toString());
 			else
 				d->majorTicksIncrement = str.toDouble();
 
@@ -2152,7 +2153,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("length").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'length'"));
+				reader->raiseWarning(attributeWarning.subs("length").toString());
 			else
 				d->majorTicksLength = str.toDouble();
 
@@ -2160,7 +2161,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->majorTicksOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "minorTicks") {
@@ -2168,25 +2169,25 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("direction").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'direction'"));
+				reader->raiseWarning(attributeWarning.subs("direction").toString());
 			else
 				d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->minorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'number'"));
+				reader->raiseWarning(attributeWarning.subs("number").toString());
 			else
 				d->minorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'increment'"));
+				reader->raiseWarning(attributeWarning.subs("increment").toString());
 			else
 				d->minorTicksIncrement = str.toDouble();
 
@@ -2194,7 +2195,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("length").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'length'"));
+				reader->raiseWarning(attributeWarning.subs("length").toString());
 			else
 				d->minorTicksLength = str.toDouble();
 
@@ -2202,7 +2203,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->minorTicksOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "labels") {
@@ -2210,37 +2211,37 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
+				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else
 				d->labelsPosition = (Axis::LabelsPosition)str.toInt();
 
 			str = attribs.value("offset").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'offset'"));
+				reader->raiseWarning(attributeWarning.subs("offset").toString());
 			else
 				d->labelsOffset = str.toDouble();
 
 			str = attribs.value("rotation").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+				reader->raiseWarning(attributeWarning.subs("rotation").toString());
 			else
 				d->labelsRotationAngle = str.toDouble();
 
 			str = attribs.value("format").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'format'"));
+				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				d->labelsFormat = (Axis::LabelsFormat)str.toInt();
 
 			str = attribs.value("precision").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'precision'"));
+				reader->raiseWarning(attributeWarning.subs("precision").toString());
 			else
 				d->labelsPrecision = str.toInt();
 
 			str = attribs.value("autoPrecision").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoPrecision'"));
+				reader->raiseWarning(attributeWarning.subs("autoPrecision").toString());
 			else
 				d->labelsAutoPrecision = str.toInt();
 
@@ -2253,7 +2254,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->labelsOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "majorGrid") {
@@ -2263,7 +2264,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->majorGridOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "minorGrid") {
@@ -2273,7 +2274,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->minorGridOpacity = str.toDouble();
 		} else { // unknown element

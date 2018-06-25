@@ -41,8 +41,9 @@
 #include <QProgressBar>
 #include <QStatusBar>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!

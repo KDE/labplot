@@ -44,7 +44,7 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -91,7 +91,7 @@ const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::dif
 STD_SETTER_CMD_IMPL_F_S(XYDifferentiationCurve, SetDifferentiationData, XYDifferentiationCurve::DifferentiationData, differentiationData, recalculate);
 void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
 	Q_D(XYDifferentiationCurve);
-	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, i18n("%1: set options and perform the differentiation")));
+	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, ki18n("%1: set options and perform the differentiation")));
 }
 
 //##############################################################################
@@ -298,7 +298,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDifferentiationCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

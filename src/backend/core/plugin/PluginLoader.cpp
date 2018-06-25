@@ -30,7 +30,7 @@
 #include "backend/core/plugin/PluginLoader.h"
 #include "backend/core/interfaces.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class PluginLoader

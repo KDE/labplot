@@ -40,7 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -92,7 +92,7 @@ const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
 STD_SETTER_CMD_IMPL_F_S(XYSmoothCurve, SetSmoothData, XYSmoothCurve::SmoothData, smoothData, recalculate);
 void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 	Q_D(XYSmoothCurve);
-	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, i18n("%1: set options and perform the smooth")));
+	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, ki18n("%1: set options and perform the smooth")));
 }
 
 //##############################################################################
@@ -310,7 +310,7 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYSmoothCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

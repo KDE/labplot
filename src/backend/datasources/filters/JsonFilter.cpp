@@ -8,7 +8,7 @@
 #include <QJsonArray>
 #include <QDataStream>
 #include <QDateTime>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KFilterDev>
 
 /*!

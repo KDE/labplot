@@ -31,7 +31,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QApplication>
-#include <KLocale>
+#include <KLocalizedString>
 
 SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFrame(parent) {
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -42,7 +42,7 @@ SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFra
 	nameFont.setBold(true);
 	m_worksheetName->setFont(nameFont);
 
-	m_quitPresentingMode = new QPushButton(i18n("Quit presentation"));
+	m_quitPresentingMode = new QPushButton(i18n("Quit Presentation"));
 	m_quitPresentingMode->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
 
 	QHBoxLayout* hlayout = new QHBoxLayout;

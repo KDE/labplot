@@ -282,10 +282,10 @@ bool FITSHeaderEditWidget::save() {
  * \brief Initializes the context menu's actions.
  */
 void FITSHeaderEditWidget::initActions() {
-	m_action_add_keyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add new keyword"), this);
-	m_action_remove_keyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove keyword"), this);
+	m_action_add_keyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add New Keyword"), this);
+	m_action_remove_keyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove Keyword"), this);
 	m_action_remove_extension = new QAction(i18n("Delete"), this);
-	m_action_addmodify_unit = new QAction(i18n("Add unit"), this);
+	m_action_addmodify_unit = new QAction(i18n("Add Unit"), this);
 }
 
 /*!
@@ -325,14 +325,14 @@ void FITSHeaderEditWidget::addKeyword() {
 
 		for(const FITSFilter::Keyword& keyword : currentKeywords) {
 			if (keyword.operator==(newKeyWord)) {
-				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot add keyword"));
+				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot Add Keyword"));
 				return;
 			}
 		}
 
 		for(const FITSFilter::Keyword& keyword : m_extensionDatas[m_seletedExtension].updates.newKeywords) {
 			if (keyword.operator==(newKeyWord)) {
-				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot add keyword"));
+				KMessageBox::information(this, i18n("Cannot add keyword, keyword already added"), i18n("Cannot Add Keyword"));
 				return;
 			}
 		}
@@ -340,7 +340,7 @@ void FITSHeaderEditWidget::addKeyword() {
 		for(const QString& keyword : mandatoryKeywords()) {
 			if (!keyword.compare(newKeyWord.key)) {
 				KMessageBox::information(this, i18n("Cannot add mandatory keyword, they are already present"),
-				                         i18n("Cannot add keyword"));
+				                         i18n("Cannot Add Keyword"));
 				return;
 			}
 		}
@@ -383,8 +383,8 @@ void FITSHeaderEditWidget::removeKeyword() {
 		return;
 
 	QString key = ui->twKeywordsTable->item(row, 0)->text();
-	const int rc = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?").arg(key),
-	               i18n("Confirm deletion"));
+	const int rc = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key),
+	               i18n("Confirm Deletion"));
 	if (rc == KMessageBox::Yes) {
 		bool remove = true;
 		for(const QString& k : mandatoryKeywords()) {
@@ -404,7 +404,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 			m_extensionDatas[m_seletedExtension].updates.removedKeywords.append(toRemove);
 			emit changed(true);
 		} else
-			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing keyword"));
+			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing Keyword"));
 	}
 
 	enableButtonAddUnit();

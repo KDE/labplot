@@ -45,7 +45,7 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -91,7 +91,7 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 STD_SETTER_CMD_IMPL_F_S(XYIntegrationCurve, SetIntegrationData, XYIntegrationCurve::IntegrationData, integrationData, recalculate);
 void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::IntegrationData& integrationData) {
 	Q_D(XYIntegrationCurve);
-	exec(new XYIntegrationCurveSetIntegrationDataCmd(d, integrationData, i18n("%1: set options and perform the integration")));
+	exec(new XYIntegrationCurveSetIntegrationDataCmd(d, integrationData, ki18n("%1: set options and perform the integration")));
 }
 
 //##############################################################################
@@ -297,7 +297,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

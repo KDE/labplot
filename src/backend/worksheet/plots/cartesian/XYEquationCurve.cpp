@@ -41,7 +41,7 @@
 #include "backend/gsl/ExpressionParser.h"
 
 #include <QIcon>
-#include <KLocale>
+#include <KLocalizedString>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
 		: XYCurve(name, new XYEquationCurvePrivate(this)) {
@@ -107,7 +107,7 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 		|| (equationData.min != d->equationData.min)
 		|| (equationData.max != d->equationData.max)
 		|| (equationData.count != d->equationData.count) )
-		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, i18n("%1: set equation")));
+		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
 //##############################################################################
@@ -200,7 +200,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	}
 
-	QString attributeWarning = i18n( "Attribute '%1' missing or empty, default value is used" );
+	KLocalizedString attributeWarning = ki18n( "Attribute '%1' missing or empty, default value is used" );
 	QXmlStreamAttributes attribs;
 	QString str;
 

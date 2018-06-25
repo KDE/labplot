@@ -40,8 +40,13 @@
 
 /* stdlib.h */
 double nsl_sf_rand(void) { return rand(); }
+#if defined(_MSC_VER)	// MSVC has no random() function
+double nsl_sf_random(void) { return rand(); }
+double nsl_sf_drand(void) { return rand()/(double)RAND_MAX; }
+#else
 double nsl_sf_random(void) { return random(); }
 double nsl_sf_drand(void) { return random()/(double)RAND_MAX; }
+#endif
 
 double nsl_sf_sgn(double x) {
 #ifndef _WIN32
@@ -149,6 +154,19 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 	double complex z = (x + I*gamma)/(sqrt(2.)*sigma);
 	return creal(Faddeeva_w(z, 0))/(sqrt(2.*M_PI)*sigma);
 #endif
+}
+
+double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma) {
+	if (sigma == 0 || gamma == 0)
+		return 0;
+	//TODO: what if eta < 0 or > 1?
+
+	return (1. - eta) * gsl_ran_gaussian_pdf(x, sigma) + eta * gsl_ran_cauchy_pdf(x, gamma);
+}
+
+double nsl_sf_pseudovoigt1(double x, double eta, double w) {
+	// 2w - FWHM, sigma_G = w/sqrt(2ln(2))
+	return nsl_sf_pseudovoigt(x, eta, w/sqrt(2.*log(2.)), w);
 }
 
 /* wrapper for GSL functions with integer parameters */
