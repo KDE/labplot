@@ -3,7 +3,7 @@ File                 : ImportFileWidget.cpp
 Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
