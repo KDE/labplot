@@ -401,7 +401,7 @@ QString ImportFileWidget::selectedObject() const {
 	const QString& path = ui.leFileName->text();
 
 	//determine the file name only
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	QString name = path.right(path.length() - path.lastIndexOf(QDir::separator()) - 1);
 
 	//strip away the extension if available
 	if (name.indexOf('.') != -1)
@@ -937,15 +937,14 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::LocalSocket: {
-					DEBUG("	LocalSocket");
 					QLocalSocket lsocket{this};
-					DEBUG("CONNECT PREVIEW");
+					DEBUG("Local socket: CONNECT PREVIEW");
 					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
 					if (lsocket.waitForConnected()) {
 						DEBUG("connected to local socket " << fileName.toStdString());
 						if (lsocket.waitForReadyRead())
 							importedStrings = filter->preview(lsocket);
-						DEBUG("DISCONNECT PREVIEW");
+						DEBUG("Local socket: DISCONNECT PREVIEW");
 						lsocket.disconnectFromServer();
 						// read-only socket is disconnected immediately (no waitForDisconnected())
 					} else {
@@ -964,27 +963,33 @@ void ImportFileWidget::refreshPreview() {
 							importedStrings = filter->preview(tcpSocket);
 
 						tcpSocket.disconnectFromHost();
-					} else
+					} else {
 						DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
+					}
 
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkUdpSocket: {
-					DEBUG("	UDPSocket");
-					QUdpSocket udpSocket(this);
-					DEBUG("CONNECT PREVIEW");
-					udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
+					QUdpSocket udpSocket{this};
+					DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
+					udpSocket.bind(QHostAddress(host()), port().toInt());
+					udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
 					if (udpSocket.waitForConnected()) {
-						DEBUG("connected to UDP socket " << host().toStdString() << ':' << port().toInt());
-						if ( udpSocket.waitForReadyRead(5000) )
-							importedStrings = filter->preview(udpSocket);
-						else
-							DEBUG("	ERROR: not ready for read");
+						DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
+						if (!udpSocket.waitForReadyRead(2000) )
+							DEBUG("	ERROR: not ready for read after 2 sec");
+						if (udpSocket.hasPendingDatagrams()) {
+							DEBUG("	has pending data");
+						} else {
+							DEBUG("	has no pending data");
+						}
+						importedStrings = filter->preview(udpSocket);
 
-						DEBUG("DISCONNECT PREVIEW");
+						DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 						udpSocket.disconnectFromHost();
-					} else
+					} else {
 						DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
+					}
 
 					break;
 				}

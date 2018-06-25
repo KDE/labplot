@@ -191,29 +191,29 @@ void AxisDock::init() {
 	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
 	//TODO move this stuff to retranslateUI()
-	ui.cbPosition->addItem(i18n("top"));
-	ui.cbPosition->addItem(i18n("bottom"));
-	ui.cbPosition->addItem(i18n("centered"));
-	ui.cbPosition->addItem(i18n("custom"));
+	ui.cbPosition->addItem(i18n("Top"));
+	ui.cbPosition->addItem(i18n("Bottom"));
+	ui.cbPosition->addItem(i18n("Centered"));
+	ui.cbPosition->addItem(i18n("Custom"));
 
-	ui.cbScale->addItem( i18n("linear") );
+	ui.cbScale->addItem( i18n("Linear") );
 	ui.cbScale->addItem( QLatin1String("log(x)") );
 	ui.cbScale->addItem( QLatin1String("log2(x)") );
 	ui.cbScale->addItem( QLatin1String("ln(x)") );
 	ui.cbScale->addItem( QLatin1String("sqrt(x)") );
 	ui.cbScale->addItem( QLatin1String("x^2") );
 
-	ui.cbOrientation->addItem( i18n("horizontal") );
-	ui.cbOrientation->addItem( i18n("vertical") );
+	ui.cbOrientation->addItem( i18n("Horizontal") );
+	ui.cbOrientation->addItem( i18n("Vertical") );
 
 	//Arrows
-	ui.cbArrowType->addItem( i18n("no arrow") );
-	ui.cbArrowType->addItem( i18n("simple, small") );
-	ui.cbArrowType->addItem( i18n("simple, big") );
-	ui.cbArrowType->addItem( i18n("filled, small") );
-	ui.cbArrowType->addItem( i18n("filled, big") );
-	ui.cbArrowType->addItem( i18n("semi-filled, small") );
-	ui.cbArrowType->addItem( i18n("semi-filled, big") );
+	ui.cbArrowType->addItem( i18n("No arrow") );
+	ui.cbArrowType->addItem( i18n("Simple, Small") );
+	ui.cbArrowType->addItem( i18n("Simple, Big") );
+	ui.cbArrowType->addItem( i18n("Filled, Small") );
+	ui.cbArrowType->addItem( i18n("Filled, Big") );
+	ui.cbArrowType->addItem( i18n("Semi-filled, Small") );
+	ui.cbArrowType->addItem( i18n("Semi-filled, Big") );
 
 	QPainter pa;
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
@@ -294,23 +294,23 @@ void AxisDock::init() {
 	pa.end();
 	ui.cbArrowType->setItemIcon(6, pm);
 
-	ui.cbArrowPosition->addItem( i18n("left") );
-	ui.cbArrowPosition->addItem( i18n("right") );
-	ui.cbArrowPosition->addItem( i18n("both") );
+	ui.cbArrowPosition->addItem( i18n("Left") );
+	ui.cbArrowPosition->addItem( i18n("Right") );
+	ui.cbArrowPosition->addItem( i18n("Both") );
 
-	ui.cbMajorTicksDirection->addItem( i18n("none") );
-	ui.cbMajorTicksDirection->addItem( i18n("in") );
-	ui.cbMajorTicksDirection->addItem( i18n("out") );
-	ui.cbMajorTicksDirection->addItem( i18n("in and out") );
+	ui.cbMajorTicksDirection->addItem( i18n("None") );
+	ui.cbMajorTicksDirection->addItem( i18n("In") );
+	ui.cbMajorTicksDirection->addItem( i18n("Out") );
+	ui.cbMajorTicksDirection->addItem( i18n("In and Out") );
 
 	ui.cbMajorTicksType->addItem( i18n("Number") );
 	ui.cbMajorTicksType->addItem( i18n("Increment") );
 	ui.cbMajorTicksType->addItem( i18n("Custom column") );
 
-	ui.cbMinorTicksDirection->addItem( i18n("none") );
-	ui.cbMinorTicksDirection->addItem( i18n("in") );
-	ui.cbMinorTicksDirection->addItem( i18n("out") );
-	ui.cbMinorTicksDirection->addItem( i18n("in and out") );
+	ui.cbMinorTicksDirection->addItem( i18n("None") );
+	ui.cbMinorTicksDirection->addItem( i18n("In") );
+	ui.cbMinorTicksDirection->addItem( i18n("Out") );
+	ui.cbMinorTicksDirection->addItem( i18n("In and Out") );
 
 	ui.cbMinorTicksType->addItem( i18n("Number") );
 	ui.cbMinorTicksType->addItem( i18n("Increment") );
@@ -321,9 +321,9 @@ void AxisDock::init() {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
 
 	//labels
-	ui.cbLabelsPosition->addItem(i18n("no labels"));
-	ui.cbLabelsPosition->addItem(i18n("top"));
-	ui.cbLabelsPosition->addItem(i18n("bottom"));
+	ui.cbLabelsPosition->addItem(i18n("No labels"));
+	ui.cbLabelsPosition->addItem(i18n("Top"));
+	ui.cbLabelsPosition->addItem(i18n("Bottom"));
 
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
@@ -487,10 +487,10 @@ void AxisDock::visibilityChanged(bool state) {
 void AxisDock::orientationChanged(int index) {
 	Axis::AxisOrientation orientation = (Axis::AxisOrientation)index;
 	if (orientation == Axis::AxisHorizontal) {
-		ui.cbPosition->setItemText(0, i18n("top") );
-		ui.cbPosition->setItemText(1, i18n("bottom") );
-		ui.cbLabelsPosition->setItemText(1, i18n("top") );
-		ui.cbLabelsPosition->setItemText(2, i18n("bottom") );
+		ui.cbPosition->setItemText(0, i18n("Top") );
+		ui.cbPosition->setItemText(1, i18n("Bottom") );
+		ui.cbLabelsPosition->setItemText(1, i18n("Top") );
+		ui.cbLabelsPosition->setItemText(2, i18n("Bottom") );
 
 		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(x)") );
@@ -498,10 +498,10 @@ void AxisDock::orientationChanged(int index) {
 		ui.cbScale->setItemText(4, QLatin1String("sqrt(x)") );
 		ui.cbScale->setItemText(5, QLatin1String("x^2") );
 	} else { //vertical
-		ui.cbPosition->setItemText(0, i18n("left") );
-		ui.cbPosition->setItemText(1, i18n("right") );
-		ui.cbLabelsPosition->setItemText(1, i18n("right") );
-		ui.cbLabelsPosition->setItemText(2, i18n("left") );
+		ui.cbPosition->setItemText(0, i18n("Left") );
+		ui.cbPosition->setItemText(1, i18n("Right") );
+		ui.cbLabelsPosition->setItemText(1, i18n("Right") );
+		ui.cbLabelsPosition->setItemText(2, i18n("Left") );
 
 		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(y)") );

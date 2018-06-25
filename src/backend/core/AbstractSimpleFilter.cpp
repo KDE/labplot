@@ -35,7 +35,7 @@
 #include <QDate>
 #include <QTime>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class AbstractSimpleFilter

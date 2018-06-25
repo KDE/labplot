@@ -75,8 +75,8 @@ public:
 	enum ReadingType {
 		ContinuousFixed = 0,
 		FromEnd,
-        TillEnd,
-        WholeFile
+		TillEnd,
+		WholeFile
 	};
 
 #ifdef HAVE_MQTT

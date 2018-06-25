@@ -30,7 +30,7 @@
 
 #include "columncommands.h"
 #include "ColumnPrivate.h"
-#include <KLocale>
+#include <KLocalizedString>
 #include <cmath>
 
 /** ***************************************************************************

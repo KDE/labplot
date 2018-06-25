@@ -41,7 +41,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -88,7 +88,7 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 STD_SETTER_CMD_IMPL_F_S(XYDataReductionCurve, SetDataReductionData, XYDataReductionCurve::DataReductionData, dataReductionData, recalculate);
 void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::DataReductionData& reductionData) {
 	Q_D(XYDataReductionCurve);
-	exec(new XYDataReductionCurveSetDataReductionDataCmd(d, reductionData, i18n("%1: set options and perform the data reduction")));
+	exec(new XYDataReductionCurveSetDataReductionDataCmd(d, reductionData, ki18n("%1: set options and perform the data reduction")));
 }
 
 //##############################################################################
@@ -344,7 +344,7 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

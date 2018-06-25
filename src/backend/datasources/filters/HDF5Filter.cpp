@@ -36,9 +36,10 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QTreeWidgetItem>
 #include <QDebug>
+#include <QFile>
 
 /*!
 	\class HDF5Filter
@@ -1077,7 +1078,7 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidge
 		             << QString::number(rows) << QLatin1String("x") << QString::number(cols) << QLatin1String("x") << QString::number(regs)
 		             << QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else
-		dataSetProps << QLatin1String(", ") << i18n("rank %1 not supported yet").arg(rank);
+		dataSetProps << QLatin1String(", ") << i18n("rank %1 not supported yet", rank);
 
 	hid_t pid = H5Dget_create_plist(did);
 	handleError((int)pid, "H5Dget_create_plist");
@@ -1101,7 +1102,7 @@ void HDF5FilterPrivate::scanHDF5Link(hid_t gid, char *linkName, QTreeWidgetItem*
 	m_status = H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
 	handleError(m_status, "H5Gget_linkval");
 
-	QTreeWidgetItem* linkItem = new QTreeWidgetItem(QStringList() << QString(linkName) << i18n("symbolic link") << i18n("link to") + QString(target));
+	QTreeWidgetItem* linkItem = new QTreeWidgetItem(QStringList() << QString(linkName) << i18n("symbolic link") << i18n("link to %1", QFile::decodeName(target)));
 	linkItem->setIcon(0, QIcon::fromTheme("emblem-symbolic-link"));
 	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
@@ -1308,7 +1309,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
 					ok = false;
-					dataStrings << (QStringList() << i18n("rank 0 not implemented yet for type %1").arg(translateHDF5Class(dclass)));
+					dataStrings << (QStringList() << i18n("rank 0 not implemented yet for type %1", translateHDF5Class(dclass)));
 					qDebug() << dataStrings;
 				}
 			default:
@@ -1476,7 +1477,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
 					ok = false;
-					dataString = (QStringList() << i18n("rank 1 not implemented yet for type %1").arg(translateHDF5Class(dclass)));
+					dataString = (QStringList() << i18n("rank 1 not implemented yet for type %1", translateHDF5Class(dclass)));
 					qDebug() << dataString;
 				}
 			default:
@@ -1614,8 +1615,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			case H5T_STRING: {
 					// TODO: implement this
 					ok = false;
-					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1").arg(translateHDF5Class(dclass))
-					                + ", " + i18n("size = %1").arg(typeSize));
+					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1, size = %2", translateHDF5Class(dclass), typeSize));
 					qDebug() << dataStrings;
 					break;
 				}
@@ -1629,7 +1629,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
 					ok = false;
-					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1").arg(translateHDF5Class(dclass)));
+					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1", translateHDF5Class(dclass)));
 					qDebug() << dataStrings;
 				}
 			default:
@@ -1639,7 +1639,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		}
 	default: {	// 3D or more data
 			ok = false;
-			dataStrings << (QStringList() << i18n("rank %1 not implemented yet for type %2").arg(rank).arg(translateHDF5Class(dclass)));
+			dataStrings << (QStringList() << i18n("rank %1 not implemented yet for type %2", rank, translateHDF5Class(dclass)));
 			qDebug() << dataStrings;
 		}
 	}
@@ -1715,7 +1715,7 @@ bool HDF5Filter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-// 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

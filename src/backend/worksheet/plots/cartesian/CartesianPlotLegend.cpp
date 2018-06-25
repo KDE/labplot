@@ -48,7 +48,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
 		: WorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
@@ -125,7 +125,7 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChanged);
 }
@@ -150,7 +150,7 @@ QIcon CartesianPlotLegend::icon() const{
 STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
 void CartesianPlotLegend::setVisible(bool on) {
 	Q_D(CartesianPlotLegend);
-	exec(new CartesianPlotLegendSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	exec(new CartesianPlotLegendSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 bool CartesianPlotLegend::isVisible() const{
@@ -224,28 +224,28 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelFont, QFont, labelFont, ret
 void CartesianPlotLegend::setLabelFont(const QFont& font) {
 	Q_D(CartesianPlotLegend);
 	if (font!= d->labelFont)
-		exec(new CartesianPlotLegendSetLabelFontCmd(d, font, i18n("%1: set font")));
+		exec(new CartesianPlotLegendSetLabelFontCmd(d, font, ki18n("%1: set font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColor, QColor, labelColor, update)
 void CartesianPlotLegend::setLabelColor(const QColor& color) {
 	Q_D(CartesianPlotLegend);
 	if (color!= d->labelColor)
-		exec(new CartesianPlotLegendSetLabelColorCmd(d, color, i18n("%1: set font color")));
+		exec(new CartesianPlotLegendSetLabelColorCmd(d, color, ki18n("%1: set font color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColumnMajor, bool, labelColumnMajor, retransform)
 void CartesianPlotLegend::setLabelColumnMajor(bool columnMajor) {
 	Q_D(CartesianPlotLegend);
 	if (columnMajor != d->labelColumnMajor)
-		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, i18n("%1: change column order")));
+		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, ki18n("%1: change column order")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, float, lineSymbolWidth, retransform)
 void CartesianPlotLegend::setLineSymbolWidth(float width) {
 	Q_D(CartesianPlotLegend);
 	if (width != d->lineSymbolWidth)
-		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, i18n("%1: change line+symbol width")));
+		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, updatePosition);
@@ -254,7 +254,7 @@ void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 	if (pos.point!=d->position.point
 		|| pos.horizontalPosition!=d->position.horizontalPosition
 		|| pos.verticalPosition!=d->position.verticalPosition)
-		exec(new CartesianPlotLegendSetPositionCmd(d, pos, i18n("%1: set position")));
+		exec(new CartesianPlotLegendSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 //Background
@@ -262,56 +262,56 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundType, PlotArea::Backgr
 void CartesianPlotLegend::setBackgroundType(PlotArea::BackgroundType type) {
 	Q_D(CartesianPlotLegend);
 	if (type != d->backgroundType)
-		exec(new CartesianPlotLegendSetBackgroundTypeCmd(d, type, i18n("%1: background type changed")));
+		exec(new CartesianPlotLegendSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void CartesianPlotLegend::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
 	Q_D(CartesianPlotLegend);
 	if (style != d->backgroundColorStyle)
-		exec(new CartesianPlotLegendSetBackgroundColorStyleCmd(d, style, i18n("%1: background color style changed")));
+		exec(new CartesianPlotLegendSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void CartesianPlotLegend::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(CartesianPlotLegend);
 	if (style != d->backgroundImageStyle)
-		exec(new CartesianPlotLegendSetBackgroundImageStyleCmd(d, style, i18n("%1: background image style changed")));
+		exec(new CartesianPlotLegendSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void CartesianPlotLegend::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	Q_D(CartesianPlotLegend);
 	if (style != d->backgroundBrushStyle)
-		exec(new CartesianPlotLegendSetBackgroundBrushStyleCmd(d, style, i18n("%1: background brush style changed")));
+		exec(new CartesianPlotLegendSetBackgroundBrushStyleCmd(d, style, ki18n("%1: background brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void CartesianPlotLegend::setBackgroundFirstColor(const QColor &color) {
 	Q_D(CartesianPlotLegend);
 	if (color!= d->backgroundFirstColor)
-		exec(new CartesianPlotLegendSetBackgroundFirstColorCmd(d, color, i18n("%1: set background first color")));
+		exec(new CartesianPlotLegendSetBackgroundFirstColorCmd(d, color, ki18n("%1: set background first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void CartesianPlotLegend::setBackgroundSecondColor(const QColor &color) {
 	Q_D(CartesianPlotLegend);
 	if (color!= d->backgroundSecondColor)
-		exec(new CartesianPlotLegendSetBackgroundSecondColorCmd(d, color, i18n("%1: set background second color")));
+		exec(new CartesianPlotLegendSetBackgroundSecondColorCmd(d, color, ki18n("%1: set background second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundFileName, QString, backgroundFileName, update)
 void CartesianPlotLegend::setBackgroundFileName(const QString& fileName) {
 	Q_D(CartesianPlotLegend);
 	if (fileName!= d->backgroundFileName)
-		exec(new CartesianPlotLegendSetBackgroundFileNameCmd(d, fileName, i18n("%1: set background image")));
+		exec(new CartesianPlotLegendSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundOpacity, float, backgroundOpacity, update)
 void CartesianPlotLegend::setBackgroundOpacity(float opacity) {
 	Q_D(CartesianPlotLegend);
 	if (opacity != d->backgroundOpacity)
-		exec(new CartesianPlotLegendSetBackgroundOpacityCmd(d, opacity, i18n("%1: set opacity")));
+		exec(new CartesianPlotLegendSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set opacity")));
 }
 
 //Border
@@ -319,21 +319,21 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderPen, QPen, borderPen, upda
 void CartesianPlotLegend::setBorderPen(const QPen &pen) {
 	Q_D(CartesianPlotLegend);
 	if (pen != d->borderPen)
-		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, i18n("%1: set border style")));
+		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, ki18n("%1: set border style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
 void CartesianPlotLegend::setBorderCornerRadius(float radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
-		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, i18n("%1: set border corner radius")));
+		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderOpacity, qreal, borderOpacity, update)
 void CartesianPlotLegend::setBorderOpacity(float opacity) {
 	Q_D(CartesianPlotLegend);
 	if (opacity != d->borderOpacity)
-		exec(new CartesianPlotLegendSetBorderOpacityCmd(d, opacity, i18n("%1: set border opacity")));
+		exec(new CartesianPlotLegendSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
 //Layout
@@ -341,49 +341,49 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, float, layoutTo
 void CartesianPlotLegend::setLayoutTopMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutTopMargin)
-		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, i18n("%1: set layout top margin")));
+		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, float, layoutBottomMargin, retransform)
 void CartesianPlotLegend::setLayoutBottomMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutBottomMargin)
-		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, i18n("%1: set layout bottom margin")));
+		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, float, layoutLeftMargin, retransform)
 void CartesianPlotLegend::setLayoutLeftMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutLeftMargin)
-		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, i18n("%1: set layout left margin")));
+		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, float, layoutRightMargin, retransform)
 void CartesianPlotLegend::setLayoutRightMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutRightMargin)
-		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, i18n("%1: set layout right margin")));
+		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, retransform)
 void CartesianPlotLegend::setLayoutVerticalSpacing(float spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutVerticalSpacing)
-		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, i18n("%1: set layout vertical spacing")));
+		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, retransform)
 void CartesianPlotLegend::setLayoutHorizontalSpacing(float spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutHorizontalSpacing)
-		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, i18n("%1: set layout horizontal spacing")));
+		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutColumnCount, int, layoutColumnCount, retransform)
 void CartesianPlotLegend::setLayoutColumnCount(int count) {
 	Q_D(CartesianPlotLegend);
 	if (count != d->layoutColumnCount)
-		exec(new CartesianPlotLegendSetLayoutColumnCountCmd(d, count, i18n("%1: set layout column count")));
+		exec(new CartesianPlotLegendSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
 }
 
 //##############################################################################
@@ -924,7 +924,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -946,19 +946,19 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("columnMajor").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'columnMajor'"));
+				reader->raiseWarning(attributeWarning.subs("columnMajor").toString());
 			else
 				d->labelColumnMajor = str.toInt();
 
 			str = attribs.value("lineSymbolWidth").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'lineSymbolWidth'"));
+				reader->raiseWarning(attributeWarning.subs("lineSymbolWidth").toString());
 			else
 				d->lineSymbolWidth = str.toDouble();
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'visible'"));
+				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "geometry") {
@@ -966,25 +966,25 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.point.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.point.setY(str.toDouble());
 
 			str = attribs.value("horizontalPosition").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
+				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
 			else
 				d->position.horizontalPosition = (CartesianPlotLegend::HorizontalPosition)str.toInt();
 
 			str = attribs.value("verticalPosition").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
+				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
 			else
 				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
 		} else if (reader->name() == "textLabel") {
@@ -998,61 +998,61 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
+				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
 				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
 			else
 				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
 			else
 				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
 			else
 				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
 			else
 				d->backgroundFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
 			else
 				d->backgroundFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
 			else
 				d->backgroundFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
 			else
 				d->backgroundSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
 			else
 				d->backgroundSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
 			else
 				d->backgroundSecondColor.setBlue(str.toInt());
 
@@ -1061,7 +1061,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("opacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
+				reader->raiseWarning(attributeWarning.subs("opacity").toString());
 			else
 				d->backgroundOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "border") {
@@ -1071,7 +1071,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("borderOpacity").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
 			else
 				d->borderOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "layout") {
@@ -1079,43 +1079,43 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("topMargin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("topMargin"));
+				reader->raiseWarning(attributeWarning.subs("topMargin").toString());
 			else
 				d->layoutTopMargin = str.toDouble();
 
 			str = attribs.value("bottomMargin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("bottomMargin"));
+				reader->raiseWarning(attributeWarning.subs("bottomMargin").toString());
 			else
 				d->layoutBottomMargin = str.toDouble();
 
 			str = attribs.value("leftMargin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("leftMargin"));
+				reader->raiseWarning(attributeWarning.subs("leftMargin").toString());
 			else
 				d->layoutLeftMargin = str.toDouble();
 
 			str = attribs.value("rightMargin").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("rightMargin"));
+				reader->raiseWarning(attributeWarning.subs("rightMargin").toString());
 			else
 				d->layoutRightMargin = str.toDouble();
 
 			str = attribs.value("verticalSpacing").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
+				reader->raiseWarning(attributeWarning.subs("verticalSpacing").toString());
 			else
 				d->layoutVerticalSpacing = str.toDouble();
 
 			str = attribs.value("horizontalSpacing").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
+				reader->raiseWarning(attributeWarning.subs("horizontalSpacing").toString());
 			else
 				d->layoutHorizontalSpacing = str.toDouble();
 
 			str = attribs.value("columnCount").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("columnCount"));
+				reader->raiseWarning(attributeWarning.subs("columnCount").toString());
 			else
 				d->layoutColumnCount = str.toInt();
 		}

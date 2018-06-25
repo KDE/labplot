@@ -115,7 +115,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
 
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 		return;
 	}
 
@@ -129,7 +129,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			if (m_mainWindow->stackedWidget->currentWidget())
 				m_mainWindow->stackedWidget->currentWidget()->hide();
 
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 			return;
 		}
 		prevClassName = className;
@@ -139,7 +139,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->stackedWidget->currentWidget()->show();
 
 	if (className == "Spreadsheet") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Spreadsheet"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Spreadsheet"));
 
 		if (!m_mainWindow->spreadsheetDock) {
 			m_mainWindow->spreadsheetDock = new SpreadsheetDock(m_mainWindow->stackedWidget);
@@ -154,7 +154,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->spreadsheetDock);
 	} else if (className == "Column") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Column"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
 
 		if (!m_mainWindow->columnDock) {
 			m_mainWindow->columnDock = new ColumnDock(m_mainWindow->stackedWidget);
@@ -169,7 +169,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->columnDock);
 	} else if (className == "Matrix") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Matrix"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Matrix"));
 
 		if (!m_mainWindow->matrixDock) {
 			m_mainWindow->matrixDock = new MatrixDock(m_mainWindow->stackedWidget);
@@ -184,7 +184,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->matrixDock);
 	} else if (className == "Worksheet") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Worksheet"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Worksheet"));
 
 		if (!m_mainWindow->worksheetDock) {
 			m_mainWindow->worksheetDock = new WorksheetDock(m_mainWindow->stackedWidget);
@@ -199,7 +199,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->worksheetDock);
 	} else if (className == "CartesianPlot") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
 
 		if (!m_mainWindow->cartesianPlotDock) {
 			m_mainWindow->cartesianPlotDock = new CartesianPlotDock(m_mainWindow->stackedWidget);
@@ -214,7 +214,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cartesianPlotDock);
 	} else if (className == "CartesianPlotLegend") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Legend"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Legend"));
 
 		if (!m_mainWindow->cartesianPlotLegendDock) {
 			m_mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(m_mainWindow->stackedWidget);
@@ -229,7 +229,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cartesianPlotLegendDock);
 	} else if (className == "Axis") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis"));
 
 		if (!m_mainWindow->axisDock) {
 			m_mainWindow->axisDock = new AxisDock(m_mainWindow->stackedWidget);
@@ -244,7 +244,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->axisDock);
 	} else if (className == "XYCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Curve"));
 
 		if (!m_mainWindow->xyCurveDock) {
 			m_mainWindow->xyCurveDock = new XYCurveDock(m_mainWindow->stackedWidget);
@@ -260,7 +260,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyCurveDock);
 	} else if (className == "XYEquationCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-Equation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Equation"));
 
 		if (!m_mainWindow->xyEquationCurveDock) {
 			m_mainWindow->xyEquationCurveDock = new XYEquationCurveDock(m_mainWindow->stackedWidget);
@@ -276,7 +276,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyEquationCurveDock);
 	} else if (className == "XYDataReductionCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Data reduction"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Reduction"));
 
 		if (!m_mainWindow->xyDataReductionCurveDock) {
 			m_mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
@@ -292,7 +292,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyDataReductionCurveDock);
 	} else if (className == "XYDifferentiationCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Differentiation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Differentiation"));
 
 		if (!m_mainWindow->xyDifferentiationCurveDock) {
 			m_mainWindow->xyDifferentiationCurveDock = new XYDifferentiationCurveDock(m_mainWindow->stackedWidget);
@@ -308,7 +308,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyDifferentiationCurveDock);
 	} else if (className == "XYIntegrationCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Integration"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Integration"));
 
 		if (!m_mainWindow->xyIntegrationCurveDock) {
 			m_mainWindow->xyIntegrationCurveDock = new XYIntegrationCurveDock(m_mainWindow->stackedWidget);
@@ -324,7 +324,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyIntegrationCurveDock);
 	} else if (className == "XYInterpolationCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Interpolation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Interpolation"));
 
 		if (!m_mainWindow->xyInterpolationCurveDock) {
 			m_mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(m_mainWindow->stackedWidget);
@@ -340,7 +340,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyInterpolationCurveDock);
 	} else if (className == "XYFitCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Fit"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fit"));
 
 		if (!m_mainWindow->xyFitCurveDock) {
 			m_mainWindow->xyFitCurveDock = new XYFitCurveDock(m_mainWindow->stackedWidget);
@@ -355,7 +355,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyFitCurveDock->setCurves(list);
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFitCurveDock);
 	} else if (className == "XYFourierTransformCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Transform"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Transform"));
 
 		if (!m_mainWindow->xyFourierTransformCurveDock) {
 			m_mainWindow->xyFourierTransformCurveDock = new XYFourierTransformCurveDock(m_mainWindow->stackedWidget);
@@ -372,7 +372,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierTransformCurveDock);
 	} else if (className == "XYFourierFilterCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Filter"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Filter"));
 
 		if (!m_mainWindow->xyFourierFilterCurveDock) {
 			m_mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(m_mainWindow->stackedWidget);
@@ -388,7 +388,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierFilterCurveDock);
 	} else if (className == "XYSmoothCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Smoothing"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Smoothing"));
 
 		if (!m_mainWindow->xySmoothCurveDock) {
 			m_mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(m_mainWindow->stackedWidget);
@@ -404,7 +404,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xySmoothCurveDock);
 	} else if (className=="Histogram") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Histogram properties"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 
 		if (!m_mainWindow->histogramDock) {
 			m_mainWindow->histogramDock = new HistogramDock(m_mainWindow->stackedWidget);
@@ -420,7 +420,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->histogramDock);
 	} else if (className == "TextLabel") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Text Label"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));
 
 		if (!m_mainWindow->textLabelDock) {
 			m_mainWindow->textLabelDock = new LabelWidget(m_mainWindow->stackedWidget);
@@ -434,7 +434,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->textLabelDock);
 	} else if (className == "CustomPoint") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom Point"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Custom Point"));
 
 		if (!m_mainWindow->customPointDock) {
 			m_mainWindow->customPointDock = new CustomPointDock(m_mainWindow->stackedWidget);
@@ -448,7 +448,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->customPointDock);
 	} else if (className == "DatapickerCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker Curve"));
 
 		if (!m_mainWindow->datapickerCurveDock) {
 			m_mainWindow->datapickerCurveDock = new DatapickerCurveWidget(m_mainWindow->stackedWidget);
@@ -462,7 +462,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->datapickerCurveDock);
 	} else if (className == "Datapicker") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker"));
 
 		if (!m_mainWindow->datapickerImageDock) {
 			m_mainWindow->datapickerImageDock = new DatapickerImageWidget(m_mainWindow->stackedWidget);
@@ -476,7 +476,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->datapickerImageDock);
 	} else if (className == "Project") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Project"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Project"));
 
 		if (!m_mainWindow->projectDock) {
 			m_mainWindow->projectDock = new ProjectDock(m_mainWindow->stackedWidget);
@@ -506,7 +506,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cantorWorksheetDock);
 #endif
 	} else if (className == "Notes") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notes"));
 
 		if (!m_mainWindow->notesDock) {
 			m_mainWindow->notesDock = new NoteDock(m_mainWindow->stackedWidget);
@@ -520,7 +520,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
 	} else if (className == "LiveDataSource") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
 			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
@@ -534,7 +534,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
 	} else {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
 	}

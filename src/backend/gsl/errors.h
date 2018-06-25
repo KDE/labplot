@@ -30,7 +30,7 @@
 #define GSL_ERRORS_H
 
 #include <gsl/gsl_errno.h>
-#include <KLocale>
+#include <KLocalizedString>
 
 namespace {
 QString gslErrorToString(int status) {

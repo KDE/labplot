@@ -628,7 +628,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
 		dynamic_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Interpolation status: ") + m_interpolationCurve->interpolationResult().status);
+	emit info(i18n("Interpolation status: %1", m_interpolationCurve->interpolationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -659,7 +659,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + interpolationResult.status + "<br>";
+	QString str = i18n("status: %1", interpolationResult.status) + "<br>";
 
 	if (!interpolationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -667,9 +667,9 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 	}
 
 	if (interpolationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(interpolationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(interpolationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(interpolationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(interpolationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

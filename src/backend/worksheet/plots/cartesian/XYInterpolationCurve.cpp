@@ -94,7 +94,7 @@ const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpola
 STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate);
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
-	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, i18n("%1: set options and perform the interpolation")));
+	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, ki18n("%1: set options and perform the interpolation")));
 }
 
 //##############################################################################
@@ -481,7 +481,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

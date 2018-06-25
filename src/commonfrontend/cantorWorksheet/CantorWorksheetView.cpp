@@ -51,7 +51,7 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 		connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 		connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
 	} else {
-		QLabel* label = new QLabel(i18n("Failed to initialize %1").arg(m_worksheet->backendName()));
+		QLabel* label = new QLabel(i18n("Failed to initialize %1", m_worksheet->backendName()));
 		label->setAlignment(Qt::AlignHCenter);
 		layout->addWidget(label);
 	}
@@ -78,7 +78,7 @@ void CantorWorksheetView::initActions() {
 	m_insertTextEntryAction = new QAction(i18n("Insert Text Entry"), cantorActionGroup);
 	m_insertTextEntryAction->setData("insert_text_entry");
 
-	m_insertLatexEntryAction = new QAction(i18n("Insert Latex Entry"), cantorActionGroup);
+	m_insertLatexEntryAction = new QAction(i18n("Insert LaTeX Entry"), cantorActionGroup);
 	m_insertLatexEntryAction->setData("insert_latex_entry");
 
 	m_insertPageBreakAction = new QAction(i18n("Insert Page Break"), cantorActionGroup);
@@ -108,11 +108,11 @@ void CantorWorksheetView::initActions() {
 	m_solveEquationsAction = new QAction(i18n("Solve Equations"), cantorActionGroup);
 	m_solveEquationsAction->setData("solve_assistant");
 
-	m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), cantorActionGroup);
+	m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cantorActionGroup);
 	m_zoomIn->setData("view_zoom_in");
 	m_zoomIn->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-	m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), cantorActionGroup);
+	m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), cantorActionGroup);
 	m_zoomOut->setData("view_zoom_out");
 	m_zoomOut->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
@@ -132,7 +132,7 @@ void CantorWorksheetView::initActions() {
 	m_animateWorksheet->setChecked(true);
 	m_animateWorksheet->setData("enable_animations");
 
-	m_latexTypesetting = new KToggleAction(i18n("Latex Typesetting"), cantorActionGroup);
+	m_latexTypesetting = new KToggleAction(i18n("LaTeX Typesetting"), cantorActionGroup);
 	m_latexTypesetting->setChecked(true);
 	m_latexTypesetting->setData("enable_typesetting");
 

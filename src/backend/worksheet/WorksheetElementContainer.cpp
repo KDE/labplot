@@ -38,7 +38,7 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class WorksheetElementContainer
@@ -83,7 +83,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 	//if visible is set true, change the visibility of the container first
 	if (on) {
 		beginMacro( i18n("%1: set visible", name()) );
-    	exec( new WorksheetElementContainerSetVisibleCmd(d, on, i18n("%1: set visible")) );
+    	exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
 	} else {
 		beginMacro( i18n("%1: set invisible", name()) );
 	}
@@ -95,7 +95,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-		exec(new WorksheetElementContainerSetVisibleCmd(d, false, i18n("%1: set invisible")));
+		exec(new WorksheetElementContainerSetVisibleCmd(d, false, ki18n("%1: set invisible")));
 
 	endMacro();
 }

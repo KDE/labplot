@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "backend/lib/XmlStreamReader.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class XmlStreamReader
@@ -58,13 +58,11 @@ bool XmlStreamReader::hasWarnings() const {
 }
 
 void XmlStreamReader::raiseError(const QString & message) {
-	QString prefix = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
-	QXmlStreamReader::raiseError(prefix+message);
+	QXmlStreamReader::raiseError(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), message));
 }
 
 void XmlStreamReader::raiseWarning(const QString & message) {
-	QString prefix = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
-	m_warnings.append(prefix+message);
+	m_warnings.append(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), message));
 }
 
 /*!

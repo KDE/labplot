@@ -30,7 +30,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/column/Column.h"
 
 #include <QImage>
-#include <KLocale>
+#include <KLocalizedString>
 
 /*!
 \class ImageFilter
@@ -288,7 +288,7 @@ bool ImageFilter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-// 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 
 	return true;

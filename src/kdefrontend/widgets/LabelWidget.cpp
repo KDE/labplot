@@ -78,23 +78,23 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.tbTexUsed->setIcon( QIcon::fromTheme(QLatin1String("labplot-TeX-logo")) );
 
 	//Positioning and alignment
-	ui.cbPositionX->addItem(i18n("left"));
-	ui.cbPositionX->addItem(i18n("center"));
-	ui.cbPositionX->addItem(i18n("right"));
-	ui.cbPositionX->addItem(i18n("custom"));
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+	ui.cbPositionX->addItem(i18n("Custom"));
 
-	ui.cbPositionY->addItem(i18n("top"));
-	ui.cbPositionY->addItem(i18n("center"));
-	ui.cbPositionY->addItem(i18n("bottom"));
-	ui.cbPositionY->addItem(i18n("custom"));
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+	ui.cbPositionY->addItem(i18n("Custom"));
 
-	ui.cbHorizontalAlignment->addItem(i18n("left"));
-	ui.cbHorizontalAlignment->addItem(i18n("center"));
-	ui.cbHorizontalAlignment->addItem(i18n("right"));
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
 
-	ui.cbVerticalAlignment->addItem(i18n("top"));
-	ui.cbVerticalAlignment->addItem(i18n("center"));
-	ui.cbVerticalAlignment->addItem(i18n("bottom"));
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
 	//check whether the used latex compiler is available.
 	//Following logic is implemented (s.a. LabelWidget::teXUsedChanged()):

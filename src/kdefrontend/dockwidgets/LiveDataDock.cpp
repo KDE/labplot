@@ -25,7 +25,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "LiveDataDock.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT

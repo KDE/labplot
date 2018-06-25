@@ -681,7 +681,7 @@ STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXErrorColumn, const AbstractColumn*, xError
 void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->xErrorColumn) {
-		exec(new XYFitCurveSetXErrorColumnCmd(d, column, i18n("%1: assign x-error")));
+		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
@@ -694,7 +694,7 @@ STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYErrorColumn, const AbstractColumn*, yError
 void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->yErrorColumn) {
-		exec(new XYFitCurveSetYErrorColumnCmd(d, column, i18n("%1: assign y-error")));
+		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
@@ -707,7 +707,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
-	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
+	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
 
 //##############################################################################
@@ -2232,7 +2232,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 

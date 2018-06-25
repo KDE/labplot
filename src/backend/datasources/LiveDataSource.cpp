@@ -4,7 +4,8 @@ Project		: LabPlot
 Description	: Represents live data source
 --------------------------------------------------------------------
 Copyright	: (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
-Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright	: (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 ***************************************************************************/
 
@@ -55,7 +56,7 @@ Copyright   : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QIcon>
 #include <QAction>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QDebug>
 
@@ -522,7 +523,7 @@ QMenu* LiveDataSource::createContextMenu() {
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
-	if (menu->actions().size()>1)
+	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
 	menu->insertAction(firstAction, m_plotDataAction);
@@ -549,11 +550,13 @@ QMenu* LiveDataSource::createContextMenu() {
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
+	DEBUG("LiveDataSource::read()");
 	if (m_filter == nullptr)
 		return;
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
+		DEBUG("	preparing device");
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -571,7 +574,8 @@ void LiveDataSource::read() {
 		case NetworkUdpSocket:
 			m_udpSocket = new QUdpSocket(this);
 			m_device = m_udpSocket;
-			m_udpSocket->connectToHost(m_host, m_port);
+			m_udpSocket->bind(QHostAddress(m_host), m_port);
+			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
 
 			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
@@ -611,14 +615,16 @@ void LiveDataSource::read() {
 	case FileOrPipe:
 		switch (m_fileType) {
 		case Ascii:
-			qDebug() << "Reading live ascii file.." ;
+			DEBUG("Reading live ascii file ..");
+
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
 				bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 				m_bytesRead += bytes;
 			}
-			qDebug() << "Read " << bytes << " bytes, in total: " << m_bytesRead;
+
+			DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 
 			break;
 		case Binary:
@@ -632,28 +638,23 @@ void LiveDataSource::read() {
 		}
 		break;
 	case NetworkTcpSocket:
-		DEBUG("reading from a TCP socket");
-		qDebug() << "reading from a TCP socket before abort: " << m_tcpSocket->state();
+		DEBUG("reading from TCP socket. state before abort = " << m_tcpSocket->state());
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-		qDebug() << "reading from a TCP socket after reconnect: " << m_tcpSocket->state();
-
+		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
 	case NetworkUdpSocket:
-		DEBUG("reading from a UDP socket");
-		qDebug() << "reading from a UDP socket before abort: " << m_udpSocket->state();
+		DEBUG("reading from UDP socket. state before abort = " << m_udpSocket->state());
 		m_udpSocket->abort();
-		m_udpSocket->connectToHost(m_host, m_port);
-		qDebug() << "reading from a UDP socket after reconnect: " << m_udpSocket->state();
-
+		m_udpSocket->bind(QHostAddress(m_host), m_port);
+		m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+		DEBUG("reading from UDP socket. state after reconnect = " << m_udpSocket->state());
 		break;
 	case LocalSocket:
-		DEBUG("reading from a local socket");
-		qDebug() << "reading from a local socket before abort: " << m_localSocket->state();
+		DEBUG("reading from local socket. state before abort = " << m_localSocket->state());
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-		qDebug() << "reading from a local socket after reconnect: " << m_localSocket->state();
-
+		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
@@ -681,7 +682,7 @@ void LiveDataSource::read() {
  */
 void LiveDataSource::readyRead() {
 	DEBUG("Got new data from the device");
-	qDebug()<< "Got new data from the device";
+
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 	// 	else if (m_fileType == Binary)
@@ -713,7 +714,7 @@ void LiveDataSource::localSocketError(QLocalSocket::LocalSocketError socketError
 		break;
 	default:
 		QMessageBox::critical(0, i18n("Local Socket Error"),
-		                      i18n("The following error occurred: %1.").arg(m_localSocket->errorString()));
+		                      i18n("The following error occurred: %1.", m_localSocket->errorString()));
 	}*/
 }
 
@@ -734,39 +735,33 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 		break;
 	default:
 		QMessageBox::critical(0, i18n("TCP Socket Error"),
-		                      i18n("The following error occurred: %1.").arg(m_tcpSocket->errorString()));
+		                      i18n("The following error occurred: %1.", m_tcpSocket->errorString()));
 	}*/
 }
 
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("Failed to open the device."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to open the device."));
 		break;
 	case QSerialPort::PermissionError:
 		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("Failed to open the device. Please check your permissions on this device."));
+			i18n("Failed to open the device. Please check your permissions on this device."));
 		break;
 	case QSerialPort::OpenError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("Device already opened."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Device already opened."));
 		break;
 	case QSerialPort::NotOpenError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("The device is not opened."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("The device is not opened."));
 		break;
 	case QSerialPort::ReadError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("Failed to read data."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to read data."));
 		break;
 	case QSerialPort::ResourceError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("Failed to read data. The device is removed."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
 		break;
 	case QSerialPort::TimeoutError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("The device timed out."));
+		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("The device timed out."));
 		break;
 #ifndef _MSC_VER
 	//MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
@@ -778,7 +773,7 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
 		QMessageBox::critical(0, i18n("Serial Port Error"),
-		                      i18n("The following error occurred: %1.").arg(m_serialPort->errorString()));
+			i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
 	case QSerialPort::NoError:
 		break;
@@ -825,11 +820,10 @@ QString LiveDataSource::fileInfoString(const QString &name) {
 
 	QString fileName;
 #ifdef Q_OS_WIN
-	if (name.at(1) != QLatin1Char(':')) {
+	if (name.at(1) != QLatin1Char(':'))
 		fileName = QDir::homePath() + name;
-	} else {
+	else
 		fileName = name;
-	}
 #else
 	if (name.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + name;
@@ -1003,7 +997,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1023,50 +1017,50 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("fileName").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileName'"));
+				reader->raiseWarning(attributeWarning.subs("fileName").toString());
 			else
 				m_fileName = str;
 
 			str = attribs.value("fileType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileType'"));
+				reader->raiseWarning(attributeWarning.subs("fileType").toString());
 			else
 				m_fileType = (FileType)str.toInt();
 
 			str = attribs.value("fileWatched").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileWatched'"));
+				reader->raiseWarning(attributeWarning.subs("fileWatched").toString());
 			else
 				m_fileWatched = str.toInt();
 
 			str = attribs.value("fileLinked").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileLinked'"));
+				reader->raiseWarning(attributeWarning.subs("fileLinked").toString());
 			else
 				m_fileLinked = str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'updateType'"));
+				reader->raiseWarning(attributeWarning.subs("updateType").toString());
 			else
 				m_updateType =  static_cast<UpdateType>(str.toInt());
 
 			str = attribs.value("sourceType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'sourceType'"));
+				reader->raiseWarning(attributeWarning.subs("sourceType").toString());
 			else
 				m_sourceType =  static_cast<SourceType>(str.toInt());
 
 			str = attribs.value("readingType").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'readingType'"));
+				reader->raiseWarning(attributeWarning.subs("readingType").toString());
 			else
 				m_readingType =  static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == TimeInterval) {
 				str = attribs.value("updateInterval").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
+					reader->raiseWarning(attributeWarning.subs("updateInterval").toString());
 				else
 					m_updateInterval = str.toInt();
 			}
@@ -1074,7 +1068,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			if (m_readingType != TillEnd) {
 				str = attribs.value("sampleRate").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'sampleRate'"));
+					reader->raiseWarning(attributeWarning.subs("sampleRate").toString());
 				else
 					m_sampleRate = str.toInt();
 			}
@@ -1083,13 +1077,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SerialPort:
 				str = attribs.value("baudRate").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'baudRate'"));
+					reader->raiseWarning(attributeWarning.subs("baudRate").toString());
 				else
 					m_baudRate = str.toInt();
 
 				str = attribs.value("serialPortName").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'serialPortName'"));
+					reader->raiseWarning(attributeWarning.subs("serialPortName").toString());
 				else
 					m_serialPortName = str;
 
@@ -1098,13 +1092,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case NetworkUdpSocket:
 				str = attribs.value("host").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'host'"));
+					reader->raiseWarning(attributeWarning.subs("host").toString());
 				else
 					m_host = str;
 
 				str = attribs.value("port").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'port'"));
+					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
 					m_host = str;
 				break;

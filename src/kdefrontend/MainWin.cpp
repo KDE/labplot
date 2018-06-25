@@ -189,7 +189,7 @@ void MainWin::showPresenter() {
 			view->presenterMode();
 		} else {
 			QMessageBox::information(this, i18n("Presenter Mode"),
-			                         i18n("No worksheets are available in the project. The presenter mode won't be started."));
+			                         i18n("No worksheets are available in the project. The presenter mode will not be started."));
 		}
 	}
 }
@@ -243,7 +243,7 @@ void MainWin::initGUI(const QString& fileName) {
 
 	QToolBar* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
 	if (!mainToolBar) {
-		QMessageBox::critical(this, i18n(" GUI configuration file not found"), i18n("labplot2ui.rc file was not found. Please check your installation."));
+		QMessageBox::critical(this, i18n("GUI configuration file not found"), i18n("labplot2ui.rc file was not found. Please check your installation."));
 		//TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
 		//the application because of the splash screen. We need to find another solution.
 // 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
@@ -470,12 +470,12 @@ void MainWin::initActions() {
 	QActionGroup * docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
 
-	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project explorer"), docksActions);
+	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project Explorer"), docksActions);
 	m_toggleProjectExplorerDockAction->setCheckable(true);
 	m_toggleProjectExplorerDockAction->setChecked(true);
 	actionCollection()->addAction("toggle_project_explorer_dock", m_toggleProjectExplorerDockAction);
 
-	m_togglePropertiesDockAction = new QAction(QIcon::fromTheme("view-list-details"), i18n("Properties explorer"), docksActions);
+	m_togglePropertiesDockAction = new QAction(QIcon::fromTheme("view-list-details"), i18n("Properties Explorer"), docksActions);
 	m_togglePropertiesDockAction->setCheckable(true);
 	m_togglePropertiesDockAction->setChecked(true);
 	actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
@@ -485,7 +485,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 	//menu for adding new aspects
-	m_newMenu = new QMenu(i18n("Add new"), this);
+	m_newMenu = new QMenu(i18n("Add New"), this);
 	m_newMenu->setIcon(QIcon::fromTheme("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
@@ -537,7 +537,7 @@ void MainWin::initMenus() {
 #endif
 
 	//menu subwindow visibility policy
-	m_visibilityMenu = new QMenu(i18n("Window visibility policy"), this);
+	m_visibilityMenu = new QMenu(i18n("Window Visibility Policy"), this);
 	m_visibilityMenu->setIcon(QIcon::fromTheme("window-duplicate"));
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
@@ -876,7 +876,7 @@ bool MainWin::newProject() {
 	if (m_projectExplorer == 0) {
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
-		m_projectExplorerDock->setWindowTitle(i18n("Project Explorer"));
+		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
 		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
 
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
@@ -889,7 +889,7 @@ bool MainWin::newProject() {
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
 		m_propertiesDock->setObjectName("aspect_properties_dock");
-		m_propertiesDock->setWindowTitle(i18n("Properties"));
+		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 
 		QScrollArea* sa = new QScrollArea(m_propertiesDock);
@@ -932,7 +932,7 @@ bool MainWin::newProject() {
 void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
+	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir,
 	                      i18n("LabPlot Projects (%1);;Origin Projects (%2)", Project::supportedExtensions(), OriginProjectParser::supportedExtensions()) );
 
 	if (path.isEmpty())// "Cancel" was clicked
@@ -951,7 +951,7 @@ void MainWin::openProject() {
 
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
-		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open project"));
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
 		return;
 	}
 
@@ -1045,7 +1045,7 @@ bool MainWin::saveProject() {
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	QString path  = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
+	QString path  = QFileDialog::getSaveFileName(this, i18n("Save Project As"), dir,
 	                i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked

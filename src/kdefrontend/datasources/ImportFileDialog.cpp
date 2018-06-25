@@ -41,7 +41,6 @@
 #include "kdefrontend/MainWin.h"
 
 #include <KMessageBox>
-#include <KInputDialog>
 #include <KSharedConfig>
 #include <KWindowConfig>
 #include <KLocalizedString>
@@ -92,10 +91,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (!liveDataSource) {
-		setWindowTitle(i18n("Import Data to Spreadsheet or Matrix"));
+		setWindowTitle(i18nc("@title:window", "Import Data to Spreadsheet or Matrix"));
 		m_importFileWidget->hideDataSource();
 	} else
-		setWindowTitle(i18n("Add new live data source"));
+		setWindowTitle(i18nc("@title:window", "Add New Live Data Source"));
 
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
@@ -363,11 +362,11 @@ void ImportFileDialog::checkOkButton() {
 			} else {
 				DEBUG("failed connect to local socket - " << lsocket.errorString().toStdString());
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Couldn't connect to the provided local socket."));
+				okButton->setToolTip(i18n("Could not connect to the provided local socket."));
 			}
 		} else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Selected local socket doesn't exist."));
+			okButton->setToolTip(i18n("Selected local socket does not exist."));
 		}
 
 		break;
@@ -385,7 +384,7 @@ void ImportFileDialog::checkOkButton() {
 			} else {
 				DEBUG("failed to connect to TCP socket - " << socket.errorString().toStdString());
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Couldn't connect to the provided TCP socket."));
+				okButton->setToolTip(i18n("Could not connect to the provided TCP socket."));
 			}
 		} else {
 			okButton->setEnabled(false);
@@ -398,18 +397,17 @@ void ImportFileDialog::checkOkButton() {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);
-			DEBUG("CONNECT");
-			socket.connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QUdpSocket::ReadOnly);
+			socket.bind(QHostAddress(m_importFileWidget->host()), m_importFileWidget->port().toUShort());
+			socket.connectToHost(m_importFileWidget->host(), 0, QUdpSocket::ReadOnly);
 			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
-				DEBUG("DISCONNECT");
 				socket.disconnectFromHost();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
 				DEBUG("failed to connect to UDP socket - " << socket.errorString().toStdString());
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
+				okButton->setToolTip(i18n("Could not connect to the provided UDP socket."));
 			}
 		} else {
 			okButton->setEnabled(false);
@@ -431,7 +429,7 @@ void ImportFileDialog::checkOkButton() {
 			if (serialPortOpened)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
 			else
-				okButton->setToolTip(i18n("Couldn't connect to the provided UDP socket."));
+				okButton->setToolTip(i18n("Could not connect to the provided serial port."));
 		} else {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));

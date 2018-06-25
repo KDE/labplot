@@ -53,11 +53,11 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-	m_okButton->setText(i18n("&Add keyword"));
+	m_okButton->setText(i18n("&Add Keyword"));
 
 	connect(btnBox, &QDialogButtonBox::clicked, this, &FITSHeaderEditNewKeywordDialog::slotButtonClicked);
 
-	setWindowTitle(i18n("Specify the new keyword"));
+	setWindowTitle(i18nc("@title:window", "Specify the New Keyword"));
 	setWindowIcon(QIcon::fromTheme("document-new"));
 
 	QCompleter* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
@@ -82,7 +82,7 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return QMessageBox::Ok;
 	} else {
-		const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
+		const int yesNo = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"),
 		                  i18n("Cannot add empty key"));
 		if (yesNo == KMessageBox::No)
 			return QMessageBox::Cancel;

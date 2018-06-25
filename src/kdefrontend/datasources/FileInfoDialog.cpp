@@ -30,7 +30,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QFileInfo>
 #include <QProcess>
 #include <QDialogButtonBox>
@@ -38,6 +38,7 @@
 #include <QVBoxLayout>
 
 #include <KWindowConfig>
+#include <KSharedConfig>
 
 /*!
 \class ImportWidget
@@ -61,7 +62,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 	layout->addWidget(buttonBox);
 
 	setWindowIcon(QIcon::fromTheme("help-about"));
-	setWindowTitle(i18n("File info"));
+	setWindowTitle(i18nc("@title:window", "File Information"));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	setLayout(layout);

@@ -47,6 +47,8 @@
 #include <QButtonGroup>
 #include <QIntValidator>
 
+#include <KSharedConfig>
+
 /*!
   \class CartesianPlotDock
   \brief  Provides a widget for editing the properties of the cartesian plot currently selected in the project explorer.
@@ -354,7 +356,7 @@ void CartesianPlotDock::retranslateUi() {
 	m_initializing = true;
 
 	//general
-	ui.cbXScaling->addItem( i18n("linear") );
+	ui.cbXScaling->addItem( i18n("Linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
 	ui.cbXScaling->addItem( i18n("log2(x)") );
 	ui.cbXScaling->addItem( i18n("ln(x)") );
@@ -365,32 +367,32 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYScaling->addItem( i18n("ln(y)") );
 
 	//scale breakings
-	ui.cbXBreakStyle->addItem( i18n("simple") );
-	ui.cbXBreakStyle->addItem( i18n("vertical") );
-	ui.cbXBreakStyle->addItem( i18n("sloped") );
+	ui.cbXBreakStyle->addItem( i18n("Simple") );
+	ui.cbXBreakStyle->addItem( i18n("Vertical") );
+	ui.cbXBreakStyle->addItem( i18n("Sloped") );
 
-	ui.cbYBreakStyle->addItem( i18n("simple") );
-	ui.cbYBreakStyle->addItem( i18n("vertical") );
-	ui.cbYBreakStyle->addItem( i18n("sloped") );
+	ui.cbYBreakStyle->addItem( i18n("Simple") );
+	ui.cbYBreakStyle->addItem( i18n("Vertical") );
+	ui.cbYBreakStyle->addItem( i18n("Sloped") );
 
 	//plot area
-	ui.cbBackgroundType->addItem(i18n("color"));
-	ui.cbBackgroundType->addItem(i18n("image"));
-	ui.cbBackgroundType->addItem(i18n("pattern"));
+	ui.cbBackgroundType->addItem(i18n("Color"));
+	ui.cbBackgroundType->addItem(i18n("Image"));
+	ui.cbBackgroundType->addItem(i18n("Pattern"));
 
-	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Single Color"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Horizontal Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Vertical Gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("Radial Gradient"));
 
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
-	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
-	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Centered"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);

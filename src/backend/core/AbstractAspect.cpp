@@ -391,7 +391,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: insert %2 before %3", name(), new_name, before ? before->name() : i18n("end")));
+	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);

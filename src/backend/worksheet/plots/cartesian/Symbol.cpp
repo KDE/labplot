@@ -34,7 +34,7 @@
 */
 
 #include "Symbol.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {

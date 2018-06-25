@@ -38,7 +38,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 
 QPen DatapickerPoint::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
 float DatapickerPoint::selectedOpacity = 0.3f;
@@ -210,7 +210,7 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, QPointF, position, retrans
 void DatapickerPoint::setPosition(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if (pos!=d->position)
-		exec(new DatapickerPointSetPositionCmd(d, pos, i18n("%1: set position")));
+		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
@@ -223,10 +223,10 @@ void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set +delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 			setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
 		} else
-			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 		endMacro();
 	}
 }
@@ -241,10 +241,10 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set -delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
 		} else
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 		endMacro();
 	}
 }
@@ -259,10 +259,10 @@ void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set +delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
 		} else
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 		endMacro();
 	}
 }
@@ -277,10 +277,10 @@ void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 
 		beginMacro(i18n("%1: set -delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::SymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
 		} else
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 		endMacro();
 	}
 }
@@ -467,7 +467,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -486,13 +486,13 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'x'"));
+				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'y'"));
+				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.setY(str.toDouble());
 		} else if (!preview && reader->name() == "errorBar") {
@@ -500,49 +500,49 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value("plusDeltaXPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_x").toString());
 			else
 				d->plusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaXPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaXPos_y").toString());
 			else
 				d->plusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_x").toString());
 			else
 				d->minusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaXPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaXPos_y").toString());
 			else
 				d->minusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_x").toString());
 			else
 				d->plusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("plusDeltaYPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("plusDeltaYPos_y").toString());
 			else
 				d->plusDeltaYPos.setY(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_x").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_x'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_x").toString());
 			else
 				d->minusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value("minusDeltaYPos_y").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_y'"));
+				reader->raiseWarning(attributeWarning.subs("minusDeltaYPos_y").toString());
 			else
 				d->minusDeltaYPos.setY(str.toDouble());
 		} else { // unknown element

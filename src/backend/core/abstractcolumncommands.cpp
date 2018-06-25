@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "abstractcolumncommands.h"
-#include <KLocale>
+#include <KLocalizedString>
 
 /** ***************************************************************************
  * \class AbstractColumnClearMasksCmd

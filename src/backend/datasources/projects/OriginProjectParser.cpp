@@ -46,7 +46,7 @@
 
 #include <liborigin/OriginFile.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QDir>
 #include <QDateTime>
@@ -1009,7 +1009,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	int index = 1;
 	for (const auto& layer: graph.layers) {
 		if (!layer.is3D()) {
-			CartesianPlot* plot = new CartesianPlot(i18n("Plot") + QString::number(index));
+			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
 			plot->setIsLoading(true);
 			//TODO: width, height
@@ -1250,7 +1250,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						curveText = curveText.trimmed();
 						DEBUG(" curve " << curveIndex << " text = " << curveText.toStdString());
 
-						//XYCurve* xyCurve = new XYCurve(i18n("Curve") + QString::number(curveIndex));
+						//XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
 						//TODO: curve (legend) does not support HTML text yet.
 						//XYCurve* xyCurve = new XYCurve(curveText);
 						XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));

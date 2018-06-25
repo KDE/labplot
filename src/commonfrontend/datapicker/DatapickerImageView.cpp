@@ -46,7 +46,7 @@
 #include <QToolButton>
 #include <QApplication>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 /**
  * \class DatapickerImageView
@@ -120,17 +120,17 @@ void DatapickerImageView::initActions() {
 	magnificationActionGroup = new QActionGroup(this);
 
 	//Zoom actions
-	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), zoomActionGroup);
+	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), zoomActionGroup);
 	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-	zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), zoomActionGroup);
+	zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), zoomActionGroup);
 	zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
-	zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original size"), zoomActionGroup);
+	zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), zoomActionGroup);
 	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
 
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Fit to Height"), zoomActionGroup);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to Width"), zoomActionGroup);
 
 	// Mouse mode actions
 	selectAndEditModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
@@ -459,8 +459,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			}
 
 			if (m_datapicker->activeCurve()) {
-				QString statusText = m_datapicker->name() + ", " + i18n("active curve") + " \"" + m_datapicker->activeCurve()->name() + '"';
-				statusText += ": " +  xLabel + '=' + QString::number(logicalPos.x()) + ", " + yLabel + '=' + QString::number(logicalPos.y());
+				QString statusText = i18n("%1, active curve \"%2\": %3=%4, %5=%6", m_datapicker->name(), m_datapicker->activeCurve()->name(), xLabel, QString::number(logicalPos.x()), yLabel, QString::number(logicalPos.y()));
 				emit statusInfo(statusText);
 			}
 		}

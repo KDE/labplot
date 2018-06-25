@@ -623,7 +623,7 @@ void XYFourierFilterCurveDock::showFilterResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + filterResult.status + "<br>";
+	QString str = i18n("status: %1", filterResult.status) + "<br>";
 
 	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -631,9 +631,9 @@ void XYFourierFilterCurveDock::showFilterResult() {
 	}
 
 	if (filterResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(filterResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(filterResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(filterResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(filterResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

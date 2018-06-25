@@ -31,7 +31,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/core/column/Column.h"
 
 #include <QDataStream>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KFilterDev>
 #include <cmath>
 
@@ -311,7 +311,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	QStringList vectorNames;
 
 	if (createIndexEnabled)
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 
 	if (lines == -1)
 		lines = m_actualRows;
@@ -426,7 +426,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	QStringList vectorNames;
 
 	if (createIndexEnabled) {
-		vectorNames.prepend("index");
+		vectorNames.prepend(i18n("Index"));
 		columnModes[0] = AbstractColumn::Integer;
 	}
 
@@ -560,61 +560,61 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
 	QString str = attribs.value("vectors").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'vectors'"));
+		reader->raiseWarning(attributeWarning.subs("vectors").toString());
 	else
 		d->vectors = (size_t)str.toULong();
 
 	str = attribs.value("dataType").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'dataType'"));
+		reader->raiseWarning(attributeWarning.subs("dataType").toString());
 	else
 		d->dataType = (BinaryFilter::DataType) str.toInt();
 
 	str = attribs.value("byteOrder").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'byteOrder'"));
+		reader->raiseWarning(attributeWarning.subs("byteOrder").toString());
 	else
 		d->byteOrder = (BinaryFilter::ByteOrder) str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
+		reader->raiseWarning(attributeWarning.subs("autoMode").toString());
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("startRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startRow'"));
+		reader->raiseWarning(attributeWarning.subs("startRow").toString());
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endRow'"));
+		reader->raiseWarning(attributeWarning.subs("endRow").toString());
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value("skipStartBytes").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'skipStartBytes'"));
+		reader->raiseWarning(attributeWarning.subs("skipStartBytes").toString());
 	else
 		d->skipStartBytes = (size_t)str.toULong();
 
 	str = attribs.value("skipBytes").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
+		reader->raiseWarning(attributeWarning.subs("skipBytes").toString());
 	else
 		d->skipBytes = (size_t)str.toULong();
 
 	str = attribs.value("createIndex").toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
+		reader->raiseWarning(attributeWarning.subs("createIndex").toString());
 	else
 		d->createIndexEnabled = str.toInt();
 

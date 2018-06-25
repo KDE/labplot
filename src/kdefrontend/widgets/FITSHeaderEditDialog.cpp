@@ -57,7 +57,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent), m
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FITSHeaderEditDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FITSHeaderEditDialog::reject);
 
-	setWindowTitle(i18n("FITS Metadata Editor"));
+	setWindowTitle(i18nc("@title:window", "FITS Metadata Editor"));
 	setWindowIcon(QIcon::fromTheme("document-edit"));
 
 	connect(m_okButton, &QPushButton::clicked, this, &FITSHeaderEditDialog::save);
@@ -84,10 +84,10 @@ FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 
 void FITSHeaderEditDialog::headersChanged(bool changed) {
 	if (changed) {
-		setWindowTitle(i18n("FITS Metadata Editor  [Changed]"));
+		setWindowTitle(i18nc("@title:window", "FITS Metadata Editor  [Changed]"));
 		m_okButton->setEnabled(true);
 	} else {
-		setWindowTitle(i18n("FITS Metadata Editor"));
+		setWindowTitle(i18nc("@title:window", "FITS Metadata Editor"));
 		m_okButton->setEnabled(false);
 	}
 }

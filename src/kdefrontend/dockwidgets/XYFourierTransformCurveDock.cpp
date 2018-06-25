@@ -351,7 +351,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 		return;
 	}
 
-	QString str = i18n("status:") + ' ' + transformResult.status + "<br>";
+	QString str = i18n("status: %1", transformResult.status) + "<br>";
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -359,9 +359,9 @@ void XYFourierTransformCurveDock::showTransformResult() {
 	}
 
 	if (transformResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(transformResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QString::number(transformResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(transformResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QString::number(transformResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

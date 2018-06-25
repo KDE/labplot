@@ -31,8 +31,9 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 #include <QFileDialog>
 #include <QTimer>
@@ -273,7 +274,7 @@ void DatabaseManagerWidget::addConnection() {
  */
 void DatabaseManagerWidget::deleteConnection() {
 	int ret = KMessageBox::questionYesNo(this,
-				i18n("Do you really want to delete the connection '%1'?").arg(ui.lwConnections->currentItem()->text()),
+				i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
 				i18n("Delete Connection"));
 	if (ret != KMessageBox::Yes)
 		return;
@@ -396,7 +397,7 @@ void DatabaseManagerWidget::testConnection() {
 
 		if (!QFile::exists(fileName)) {
 			KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
-								 i18n("Connection failed"));
+								 i18n("Connection Failed"));
 			return;
 		}
 	}
@@ -413,10 +414,10 @@ void DatabaseManagerWidget::testConnection() {
 	if (db.isValid() && db.open() && db.isOpen()) {
 		db.close();
 		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_connections[row].dbName),
-								 i18n("Connection successful"));
+								 i18n("Connection Successful"));
 	} else {
 		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
-								 i18n("Connection failed"));
+								 i18n("Connection Failed"));
 	}
 }
 

@@ -32,7 +32,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QLayout>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QIcon>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -45,10 +45,10 @@
 	\ingroup kdefrontend
  */
 
-SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl ){
+SortDialog::SortDialog( QWidget* parent ) : QDialog( parent ){
 
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
-	setWindowTitle(i18n("Sort columns"));
+	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
     setAttribute(Qt::WA_DeleteOnClose);
 

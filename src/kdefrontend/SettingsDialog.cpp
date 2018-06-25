@@ -48,7 +48,7 @@
  */
 SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
 	setFaceType(List);
-	setWindowTitle(i18n("Preferences"));
+	setWindowTitle(i18nc("@title:window", "Preferences"));
 	setWindowIcon(QIcon::fromTheme("preferences-other"));
 	setAttribute(Qt::WA_DeleteOnClose);
 
@@ -79,14 +79,14 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 	if ((button == buttonBox()->button(QDialogButtonBox::Ok)) || (button == buttonBox()->button(QDialogButtonBox::Apply))) {
 		if (m_changed){
 			applySettings();
-			setWindowTitle(i18n("Preferences"));
+			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
 		}
 	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
 		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
 			restoreDefaults();
-			setWindowTitle(i18n("Preferences"));
+			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
 		}
 	}
@@ -94,7 +94,7 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 
 void SettingsDialog::changed() {
 	m_changed = true;
-	setWindowTitle(i18n("Preferences    [Changed]"));
+	setWindowTitle(i18nc("@title:window", "Preferences    [Changed]"));
 	buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(true);
 }
 
