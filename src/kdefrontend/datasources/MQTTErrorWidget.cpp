@@ -11,6 +11,7 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 	m_error(error)
 {
 	ui.setupUi(this);
+	bool close = false;
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		ui.lePassword->hide();
@@ -42,14 +43,15 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 		ui.leUserName->hide();
 		ui.lUserName->hide();
 		ui.lErrorType->setText("An unknown error occurred.");
-
 		break;
 	default:
+		close = true;
 		break;
 	}
 	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::makeChange);
-
 	setAttribute(Qt::WA_DeleteOnClose);
+	if(close)
+		this->close();
 }
 
 void MQTTErrorWidget::makeChange(){

@@ -241,6 +241,7 @@ private:
 	bool m_mqttUseAuthentication;
 	QString m_newTopic;
 	QVector<MQTTSubscriptions*> m_mqttSubscriptions;
+	bool m_disconnectForWill;
 
 
 public slots:

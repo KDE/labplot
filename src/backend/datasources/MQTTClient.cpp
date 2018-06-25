@@ -50,6 +50,7 @@ MQTTClient::MQTTClient(const QString& name)
 	  m_mqttRetain(false),
 	  m_mqttUseWill(false),
 	  m_mqttUseID(false),
+	  m_disconnectForWill(false),
 	  m_mqttUseAuthentication(false),
 	  m_mqttFirstConnectEstablished(false) {
 
@@ -70,10 +71,12 @@ MQTTClient::~MQTTClient() {
 	qDebug()<<"destructor";
 	if (m_filter)
 		delete m_filter;
-
+	qDebug()<<"delete timers";
 	delete m_updateTimer;
 	delete m_willTimer;
+	qDebug()<<"disocnnect";
 	m_client->disconnectFromHost();
+	qDebug()<<"delete client";
 	delete m_client;
 
 }
@@ -813,9 +816,13 @@ QVector<QString> MQTTClient::topicNames() const {
 
 void MQTTClient::setWillForMqtt() {
 	if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
-		qDebug() << "Disconnecting from host";
-		m_client->disconnectFromHost();
-
+		if(!m_disconnectForWill) {
+			qDebug() << "Disconnecting from host";
+			m_client->disconnectFromHost();
+			m_disconnectForWill = true;
+		}
+		setWillForMqtt();
+	} else if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
 		m_client->setWillQoS(m_willQoS);
 		qDebug()<<"Will QoS" << m_willQoS;
 
@@ -865,7 +872,7 @@ void MQTTClient::setWillForMqtt() {
 		default:
 			break;
 		}
-
+		m_disconnectForWill = false;
 		m_client->connectToHost();
 		qDebug()<< "Reconnect to host";
 	}
@@ -970,6 +977,7 @@ void MQTTClient::newMQTTTopic(const QString& topic, quint8 QoS) {
 	if (temp) {
 		qDebug()<<temp->topic()<<"  "<<temp->qos();
 		m_subscriptions.push_back(temp->topic().filter());
+		m_topicMap[temp->topic().filter()] = temp->qos();
 
 		qDebug()<<"New MQTTSubscription";
 		MQTTSubscriptions* tempSubscription = new MQTTSubscriptions(temp->topic().filter());

@@ -12,10 +12,7 @@ MQTTSubscriptions::MQTTSubscriptions(const QString& name)
 	qDebug()<<"MQTTSubscriptions constructor";
 }
 
-MQTTSubscriptions::~MQTTSubscriptions() {
-	for(int i = 0; i < m_topics.count(); ++i) {
-		delete m_topics[i];
-	}
+MQTTSubscriptions::~MQTTSubscriptions() {	
 }
 
 void MQTTSubscriptions::addTopic(const QString& topicName) {
