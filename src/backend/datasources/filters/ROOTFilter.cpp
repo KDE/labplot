@@ -163,7 +163,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	setFile(fileName);
 
 	auto bins = readHistogram();
-	const int nbins = bins.size();
+	const int nbins = (int)bins.size();
 
 	// skip underflow and overflow bins by default
 	int first = qMax(startBin, 0);
@@ -179,7 +179,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	// read data
 	DEBUG("reading " << first - last + 1 << " lines");
 
-	size_t c = 0;
+	int c = 0;
 	if (columns & ROOTFilter::Center) {
 		QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
 		for (int i = first; i <= last; ++i)
@@ -230,7 +230,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentHistogram(const QString& f
 	setFile(fileName);
 
 	auto bins = readHistogram();
-	const int nbins = bins.size();
+	const int nbins = (int)bins.size();
 
 	last = qMin(nbins - 1, last);
 
@@ -487,7 +487,7 @@ ROOTHist::ROOTHist(const std::string& filename) : filename(filename) {
 					readNBins(it->second);
 			}
 		}
-		pos += lcdata;
+		pos += (int)lcdata;
 	}
 }
 
