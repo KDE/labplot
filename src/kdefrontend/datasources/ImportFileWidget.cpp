@@ -36,12 +36,14 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/ROOTFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
+#include "ROOTOptionsWidget.h"
 
 #include <QCompleter>
 #include <QDir>
@@ -109,6 +111,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(LiveDataSource::FITS, fitsw);
 
+	QWidget* rootw = new QWidget();
+	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
+	ui.swOptions->insertWidget(LiveDataSource::ROOT, rootw);
+
 	// the table widget for preview
 	m_twPreview = new QTableWidget(ui.tePreview);
 	m_twPreview->verticalHeader()->hide();
@@ -120,7 +126,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// default filter
 	ui.swOptions->setCurrentIndex(LiveDataSource::Ascii);
-#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS)
+#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS) || !defined(HAVE_ZIP)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
 #endif
 #ifndef HAVE_HDF5
@@ -137,6 +143,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	// disable FITS item
 	QStandardItem* item3 = model->item(LiveDataSource::FITS);
 	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+#endif
+#ifndef HAVE_ZIP
+	// disable ROOT item
+	QStandardItem* item4 = model->item(LiveDataSource::ROOT);
+	item4->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
 	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
@@ -319,6 +330,10 @@ QString ImportFileWidget::selectedObject() const {
 		const QString& extensionName = m_fitsOptionsWidget->currentExtensionName();
 		if (!extensionName.isEmpty())
 			name += QLatin1Char('/') + extensionName;
+	} else if (format == LiveDataSource::ROOT) {
+		const QStringList& names = m_rootOptionsWidget->selectedROOTNames();
+		if (names.size())
+			name += QLatin1Char('/') + names.first();
 	}
 
 	return name;
@@ -500,6 +515,18 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setEndColumn( ui.sbEndColumn->value());
 			return filter;
 		}
+	case LiveDataSource::ROOT: {
+			ROOTFilter* filter = new ROOTFilter();
+			QStringList names = selectedROOTNames();
+			if (!names.isEmpty())
+				filter->setCurrentHistogram(names.first());
+
+			filter->setStartBin( m_rootOptionsWidget->startBin() );
+			filter->setEndBin( m_rootOptionsWidget->endBin() );
+			filter->setColumns( m_rootOptionsWidget->columns() );
+
+			return filter;
+		}
 	}
 
 	return 0;
@@ -565,6 +592,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		m_hdf5OptionsWidget->clear();
 		m_netcdfOptionsWidget->clear();
 		m_fitsOptionsWidget->clear();
+		m_rootOptionsWidget->clear();
 
 		emit fileNameChanged();
 		return;
@@ -610,6 +638,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update FITS tree widget using current selected file
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
+		} else if (fileInfo.contains(QLatin1String("ROOT Data Format")) ||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) { // TODO find out file description
+			ui.cbFileType->setCurrentIndex(LiveDataSource::ROOT);
+
+			// update ROOT list widget using current selected file
+			m_rootOptionsWidget->updateContent((ROOTFilter*)this->currentFileFilter(), fileName);
 		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 			ui.cbFileType->setCurrentIndex(LiveDataSource::Image);
 		else
@@ -651,6 +684,10 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lFilter->show();
 	ui.cbFilter->show();
 
+	//if we switch from ROOT format (only two tabs available), add the data portion-tab again
+	if (ui.tabWidget->count() == 1) {
+		ui.tabWidget->insertTab(1, ui.tabDataPortion, i18n("Data portion to read"));
+	}
 	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
 	if (ui.tabWidget->count() == 2) {
 		ui.tabWidget->setTabText(0, i18n("Data format"));
@@ -672,6 +709,9 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lEndColumn->hide();
 		ui.sbEndColumn->hide();
 		break;
+	case LiveDataSource::ROOT:
+		ui.tabWidget->removeTab(1);
+		// falls through
 	case LiveDataSource::HDF5:
 	case LiveDataSource::NETCDF:
 		ui.lFilter->hide();
@@ -700,6 +740,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 
 	m_hdf5OptionsWidget->clear();
 	m_netcdfOptionsWidget->clear();
+	m_rootOptionsWidget->clear();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
@@ -726,6 +767,10 @@ const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	return m_fitsOptionsWidget->selectedFITSExtensions();
 }
 
+const QStringList ImportFileWidget::selectedROOTNames() const {
+	return m_rootOptionsWidget->selectedROOTNames();
+}
+
 /*!
 	shows the dialog with the information about the file(s) to be imported.
 */
@@ -741,8 +786,11 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	if (ui.cbFileType->currentIndex() == LiveDataSource::HDF5 || ui.cbFileType->currentIndex() == LiveDataSource::NETCDF
-	        || ui.cbFileType->currentIndex() == LiveDataSource::Image || ui.cbFileType->currentIndex() == LiveDataSource::FITS) {
+	if (ui.cbFileType->currentIndex() == LiveDataSource::HDF5 ||
+		ui.cbFileType->currentIndex() == LiveDataSource::NETCDF ||
+		ui.cbFileType->currentIndex() == LiveDataSource::Image ||
+		ui.cbFileType->currentIndex() == LiveDataSource::FITS ||
+		ui.cbFileType->currentIndex() == LiveDataSource::ROOT) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -932,6 +980,24 @@ void ImportFileWidget::refreshPreview() {
 			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 			tmpTableWidget = m_fitsOptionsWidget->previewWidget();
+			break;
+		}
+	case LiveDataSource::ROOT: {
+			DEBUG("	ROOT");
+			ROOTFilter *filter = (ROOTFilter *)this->currentFileFilter();
+			lines = m_rootOptionsWidget->lines();
+			m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
+			importedStrings = filter->previewCurrentHistogram(
+				fileName,
+				m_rootOptionsWidget->startBin(),
+				qMin(m_rootOptionsWidget->startBin() + m_rootOptionsWidget->lines() - 1,
+				     m_rootOptionsWidget->endBin())
+			);
+			tmpTableWidget = m_rootOptionsWidget->previewWidget();
+			// the last vector element contains the column names
+			vectorNameList = importedStrings.last();
+			importedStrings.removeLast();
+			columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::Numeric);
 			break;
 		}
 	}

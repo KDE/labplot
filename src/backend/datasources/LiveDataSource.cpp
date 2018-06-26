@@ -218,6 +218,7 @@ QStringList LiveDataSource::fileTypes() {
 //		<< "CDF"
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
 //		<< i18n("Sound")
+	        << i18n("ROOT (CERN) Histograms")
 	       );
 }
 
@@ -562,6 +563,7 @@ void LiveDataSource::read() {
 		case HDF5:
 		case NETCDF:
 		case FITS:
+		case ROOT:
 			break;
 		}
 		break;
