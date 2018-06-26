@@ -450,7 +450,10 @@ ROOTHist::ROOTHist(const std::string& filename) : filename(filename) {
 				// see root/io/io/src/TKey.cxx for reference
 				if (compression && ldata > 256) {
 #					ifdef HAVE_ZIP
-					if (compression / 100 <= 1) {
+					// Default: compression level
+					// ZLIB: 100 + compression level
+					// LZ4:  400 + compression level
+					if (compression / 100 <= 1 || compression / 100 == 4) {
 						// see root/core/zip/src/RZip.cxx -> R__unzip
 						std::string lib(2, 0);
 						is.read(&lib[0], 2);
