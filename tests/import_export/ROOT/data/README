@@ -1,0 +1,9 @@
+The ROOT script samplehists.C creates three test files
+
+- basic_lz4.root with 5 typical histograms, one of each data type
+  - compressed with the default LZ4 compression
+- advanced_zlib.root with two cycles of the same histogram
+  - variable bin borders
+  - compressed with the old default ZLIB compression
+- broken_basic.root the same as basic_lz4.root but only the first 3kBytes
+  - test ability to read broken files

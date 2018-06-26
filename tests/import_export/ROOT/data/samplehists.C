@@ -1,0 +1,55 @@
+void samplehists()
+{
+    TFile fBasic("basic_lz4.root", "RECREATE");
+    fBasic.SetCompressionAlgorithm(ROOT::kLZ4);
+
+    TH1D doubleHist("doubleHist", "", 100, -5., 5.);
+    doubleHist.Sumw2();
+    doubleHist.FillRandom("gaus", 10000);
+    doubleHist.Write();
+
+    TH1F floatHist("floatHist", "", 100, -5., 5.);
+    floatHist.Sumw2();
+    floatHist.FillRandom("gaus", 10000);
+    floatHist.Write();
+
+    TH1I intHist("intHist", "", 100, -5., 5.);
+    intHist.Sumw2();
+    intHist.FillRandom("gaus", 10000);
+    intHist.Write();
+
+    TH1S shortHist("shortHist", "", 100, -5., 5.);
+    shortHist.Sumw2();
+    shortHist.FillRandom("gaus", 10000);
+    shortHist.Write();
+
+    TH1C charHist("charHist", "", 100, -5., 5.);
+    charHist.Sumw2();
+    charHist.FillRandom("gaus", 1000);
+    charHist.Write();
+
+    fBasic.Close();
+
+    TFile fAdvanced("advanced_zlib.root", "RECREATE");
+    fAdvanced.SetCompressionAlgorithm(ROOT::kZLIB);
+
+    vector<double> borders;
+    for (size_t i = 0; i < 101; ++i)
+        borders.push_back(0.09 * i - 5. + 1.e-4 * i * i);
+
+    TH1D variableBinHist("variableBinHist", "", 100, borders.data());
+    variableBinHist.Sumw2();
+    variableBinHist.FillRandom("gaus", 10000);
+    variableBinHist.Write();
+    variableBinHist.FillRandom("gaus", 1000000);
+    variableBinHist.Write();
+
+    fAdvanced.Close();
+
+    ifstream infile("basic_lz4.root");
+    ofstream outfile("broken_basic.root");
+
+    char buffer[3000];
+    infile.read(buffer, 3000);
+    outfile.write(buffer, 3000);
+}
