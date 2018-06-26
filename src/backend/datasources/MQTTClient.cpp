@@ -878,6 +878,51 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 
 		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 		qDebug()<<"Added topic";
+
+		qDebug()<<"Check for inferior subscriptions";
+		bool found = false;
+		QVector<MQTTSubscriptions*> inferiorSubscriptions;
+		if(topic.contains('#') || topic.contains('+')) {
+			if(topic.contains('#')) {
+				for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+					if(m_mqttSubscriptions[i]->subscriptionName().startsWith(topic.left(topic.count() - 2))
+							&& m_mqttSubscriptions[i]->subscriptionName() != topic){
+						found = true;
+						inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
+					}
+				}
+			}
+			else if (topic.contains('+')) {
+				int pos = topic.indexOf('+');
+				QString start = topic.left(pos);
+				QString end = topic.right(topic.count() - pos);
+				for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+					if(m_mqttSubscriptions[i]->subscriptionName().startsWith(start)
+							&& m_mqttSubscriptions[i]->subscriptionName().endsWith(end)
+							&& m_mqttSubscriptions[i]->subscriptionName() != topic) {
+						found = true;
+						inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
+					}
+				}
+			}
+		}
+
+		if(found) {
+			for(int sub = 0; sub < inferiorSubscriptions.size(); ++sub) {
+				QVector<MQTTTopic*> topics = inferiorSubscriptions[sub]->topics();
+
+				for(int i = 0; i < topics.size() ; ++i) {
+					topics[i]->reparent(newSubscription);
+				}
+
+				QMqttTopicFilter unsubscribeFilter {inferiorSubscriptions[sub]->subscriptionName()};
+				m_client->unsubscribe(unsubscribeFilter);
+
+				removeChild(inferiorSubscriptions[sub]);
+
+			}
+		}
+
 		emit mqttSubscribed();
 	}
 }
@@ -902,7 +947,7 @@ void MQTTClient::removeMQTTSubscription(const QString &name) {
 				m_topicNames.removeAll(topics[j]->topicName());
 			}
 			qDebug()<<"Removed from topic names and subscription names";
-			this->removeChild(removeSubscription);
+			removeChild(removeSubscription);
 			qDebug()<<"removed child";
 			break;
 		}
@@ -920,6 +965,5 @@ void MQTTClient::removeMQTTSubscription(const QString &name) {
 
 	emit mqttSubscribed();
 	emit mqttNewTopicArrived();
-
 }
 #endif
