@@ -566,7 +566,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} /*else if (className == "MQTTTopic") {
+	} else if (className == "MQTTTopic") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
@@ -590,7 +590,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	}*/
+	}
 #endif
 	else if (className == "LiveDataSource") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));

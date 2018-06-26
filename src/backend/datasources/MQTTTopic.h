@@ -10,18 +10,18 @@ class MQTTSubscriptions;
 class MQTTClient;
 
 class MQTTTopic : public Spreadsheet{
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	MQTTTopic(AbstractScriptingEngine*, const QString& name, AbstractAspect* subscription, bool loading = false);
-    ~MQTTTopic() override;
+	~MQTTTopic() override;
 
-    void setFilter(AbstractFileFilter*);
-    AbstractFileFilter* filter() const;
+	void setFilter(AbstractFileFilter*);
+	AbstractFileFilter* filter() const;
 
-    QIcon icon() const override;
-    QMenu* createContextMenu() override;
-    QWidget* view() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QWidget* view() const override;
 
 	QString name() const;
 	AbstractAspect* mqttClient() const;
@@ -40,24 +40,24 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 private:
-    void initActions();
+	void initActions();
 
-    QString m_topicName;
-	AbstractAspect* m_client;
+	QString m_topicName;
+	AbstractAspect* m_MQTTClient;
 
 	AbstractFileFilter* m_filter;
 	QVector<QString> m_messagePuffer;
 
-    QAction* m_reloadAction;
-    QAction* m_showEditorAction;
-    QAction* m_showSpreadsheetAction;
-    QAction* m_plotDataAction;
+	QAction* m_reloadAction;
+	QAction* m_showEditorAction;
+	QAction* m_showSpreadsheetAction;
+	QAction* m_plotDataAction;
 
 
 public slots:
 
 private slots:
-    void plotData();
+	void plotData();
 	void removeMessage();
 
 signals:

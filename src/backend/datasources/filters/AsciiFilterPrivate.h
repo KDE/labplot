@@ -55,12 +55,9 @@ public:
 	QVector<QStringList> preview(QIODevice& device);
 
 #ifdef HAVE_MQTT
-	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
-	int prepareMqttToRead(const QString&,  const QString&);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	AbstractColumn::ColumnMode mqttColumnMode() const;
 	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
-	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
 #endif

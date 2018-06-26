@@ -38,7 +38,6 @@
 */
 MQTTClient::MQTTClient(const QString& name)
 	: Folder(name),
-	  m_fileType(Ascii),
 	  m_paused(false),
 	  m_prepared(false),
 	  m_keepLastValues(false),
@@ -121,9 +120,6 @@ void MQTTClient::continueReading() {
 	m_paused = false;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->start(m_updateInterval);
-	else if (m_updateType == NewData) {
-		connect(this, &MQTTClient::mqttAllArrived, this, &MQTTClient::onAllArrived);
-	}
 }
 
 /*!
@@ -134,34 +130,6 @@ void MQTTClient::pauseReading() {
 	m_paused = true;
 	if (m_updateType == TimeInterval)
 		m_updateTimer->stop();
-	else if (m_updateType == NewData) {
-		disconnect(this, &MQTTClient::mqttAllArrived, this, &MQTTClient::onAllArrived);
-	}
-}
-
-/*!
-  returns the list with all supported data file formats.
-*/
-QStringList MQTTClient::fileTypes() {
-	// see MQTTClient::FileType
-	return (QStringList()<< i18n("ASCII data")
-			<< i18n("Binary data")
-			<< i18n("Image")
-			<< i18n("Hierarchical Data Format 5 (HDF5)")
-			<< i18n("Network Common Data Format (NetCDF)")
-			//		<< "CDF"
-			<< i18n("Flexible Image Transport System Data Format (FITS)")
-			//		<< i18n("Sound")
-			);
-}
-
-
-void MQTTClient::setFileType(FileType type) {
-	m_fileType = type;
-}
-
-MQTTClient::FileType MQTTClient::fileType() const {
-	return m_fileType;
 }
 
 void MQTTClient::setFilter(AbstractFileFilter* f) {
@@ -251,10 +219,6 @@ void MQTTClient::setUpdateType(UpdateType updatetype) {
 	qDebug()<<"Update Type : " << static_cast<int>(updatetype);
 	if (updatetype == NewData) {
 		m_updateTimer->stop();
-		connect(this, &MQTTClient::mqttAllArrived, this, &MQTTClient::onAllArrived)	;
-	} else {
-		if (m_updateType == UpdateType::NewData)
-			disconnect(this, &MQTTClient::mqttAllArrived, this, &MQTTClient::onAllArrived)	;
 	}
 	m_updateType = updatetype;
 }
@@ -323,15 +287,6 @@ void MQTTClient::read() {
 
 	if((m_client->state() == QMqttClient::ClientState::Connected) && m_mqttFirstConnectEstablished) {
 		qDebug()<<"Read";
-		/*for(int i = 0; i <= m_mqttSubscriptions.count(); ++i) {
-			qDebug()<<"Uploading topics";
-			QVector<MQTTTopic*> topics = m_mqttSubscriptions[i]->topics();
-			qDebug()<<"reading from topics";
-			for(int j = 0; j < topics.count(); ++j)	{
-				qDebug()<<"Trying to read from topic: "<<j;
-				topics[j]->read();
-			}
-		}*/
 		emit readFromTopics();
 	}
 }
@@ -346,7 +301,6 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
-	writer->writeAttribute("fileType", QString::number(m_fileType));
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
@@ -365,7 +319,7 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("subscriptionNumber", QString::number(m_subscriptions.count()) );
 	for(int i = 0; i<m_subscriptions.count(); i++) {
 		writer->writeAttribute("subscription"+QString::number(i), m_subscriptions[i]);
-		writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_topicMap[m_subscriptions[i]]));
+		writer->writeAttribute("subscription"+QString::number(i)+"Qos", QString::number(m_subscribedTopicNameQoS[m_subscriptions[i]]));
 	}
 	writer->writeAttribute("useRetain", QString::number(m_mqttRetain));
 	writer->writeAttribute("useWill", QString::number(m_mqttUseWill));
@@ -414,23 +368,11 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
-			str = attribs.value("fileType").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fileType'"));
-			else
-				m_fileType = (FileType)str.toInt();
-
 			str = attribs.value("updateType").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'updateType'"));
 			else
 				m_updateType =  static_cast<UpdateType>(str.toInt());
-
-			str = attribs.value("sourceType").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'sourceType'"));
-			else
-				m_sourceType =  static_cast<SourceType>(str.toInt());
 
 			str = attribs.value("readingType").toString();
 			if(str.isEmpty())
@@ -513,7 +455,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 				if(!str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'subscription"+QString::number(i)+"Qos'"));
 				else {
-					m_topicMap[m_subscriptions[i]] = str.toUInt();
+					m_subscribedTopicNameQoS[m_subscriptions[i]] = str.toUInt();
 				}
 
 			}
@@ -594,7 +536,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 }
 
 
-void MQTTClient::setMqttClient(const QString& host, const quint16& port) {
+void MQTTClient::setMqttClientHostPort(const QString& host, const quint16& port) {
 	m_client->setHostname(host);
 	m_client->setPort(port);
 }
@@ -604,12 +546,12 @@ void MQTTClient::setMqttClientAuthentication(const QString& username, const QStr
 	m_client->setPassword(password);
 }
 
-void MQTTClient::setMqttClientId(const QString &Id){
-	m_client->setClientId(Id);
+void MQTTClient::setMqttClientId(const QString &id){
+	m_client->setClientId(id);
 }
 
 void MQTTClient::addMqttSubscriptions(const QMqttTopicFilter& filter, const quint8& qos) {
-	m_topicMap[filter] = qos;
+	m_subscribedTopicNameQoS[filter] = qos;
 }
 
 void MQTTClient::onMqttConnect() {
@@ -618,24 +560,23 @@ void MQTTClient::onMqttConnect() {
 		if(!m_mqttFirstConnectEstablished) {
 			qDebug()<<"connection made in MQTTClient";
 
-			QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while(i.hasNext()) {
 				i.next();
 				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
 				if(temp) {
 					qDebug()<<temp->topic()<<"  "<<temp->qos();
-					m_messageArrived[temp->topic().filter()] = false;
 					m_subscriptions.push_back(temp->topic().filter());
 
 					qDebug()<<"New MQTTSubscription";
-					MQTTSubscriptions* tempSubscription = new MQTTSubscriptions(temp->topic().filter());
-					tempSubscription->setMQTTClient(this);
+					MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+					newSubscription->setMQTTClient(this);
 
 					qDebug()<<"Add child";
-					addChild(tempSubscription);
+					addChild(newSubscription);
 
 					qDebug()<<"Add to vector";
-					m_mqttSubscriptions.push_back(tempSubscription);
+					m_mqttSubscriptions.push_back(newSubscription);
 
 					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 					qDebug()<<"Added topic";
@@ -646,7 +587,7 @@ void MQTTClient::onMqttConnect() {
 		}
 		else {
 			qDebug() << "Resubscribing after will set";
-			QMapIterator<QMqttTopicFilter, quint8> i(m_topicMap);
+			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while(i.hasNext()) {
 				i.next();
 				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
@@ -700,66 +641,12 @@ void MQTTClient::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
 	}
 }
 
-void MQTTClient::onAllArrived() {
-	qDebug()<<"all arrived";
-	if (m_fileType == Ascii) {
-		qDebug()<<"Ascii ok";
-		QMapIterator<QMqttTopicName, QVector<QMqttMessage>> k(m_messagePuffer);
-		qDebug()<<"first iterator created";
-		bool ok = true;
-		while(k.hasNext()){
-			k.next();
-			qDebug()<<"investigating"<<k.key();
-			if(k.value().isEmpty()) {
-				ok = false;
-				qDebug()<<k.key()<<" has no messages";
-			}
-		}
-		if(ok){
-			qDebug()<<"topics ok start read";
-			QMapIterator<QMqttTopicName, QVector<QMqttMessage>> i(m_messagePuffer);
-			while(i.hasNext()) {
-				i.next();
-				if(!i.value().isEmpty()) {
-					QMqttMessage temp_msg = m_messagePuffer[i.key()].takeFirst();
-					qDebug()<<"Start reading from "<<i.key();
-					//dynamic_cast<AsciiFilter*>(m_filter)->readFromMqtt(temp_msg.payload(), temp_msg.topic().name(), this);
-					qDebug()<<"readfrommqtt occured";
-				}
-			}
-		}
-		qDebug()<<"start checking";
-		QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
-		while(j.hasNext()) {
-			j.next();
-			if(m_messagePuffer[j.key()].isEmpty()) {
-				m_messageArrived[j.key()] = false;
-			}
-		}
-		qDebug()<<"end checking";
-	}
-}
-
 int MQTTClient::topicNumber() {
 	return m_subscriptions.count();
 }
 
 int MQTTClient::topicIndex(const QString& topic) {
 	return m_subscriptions.indexOf(topic, 0);
-}
-
-bool MQTTClient::checkAllArrived() {
-	bool check = true;
-	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-	while(i.hasNext()) {
-		i.next();
-		if(i.value() == false )
-		{
-			check = false;
-			break;
-		}
-	}
-	return check;
 }
 
 void MQTTClient::setMqttWillUse(bool use) {
@@ -977,17 +864,17 @@ void MQTTClient::newMQTTTopic(const QString& topic, quint8 QoS) {
 	if (temp) {
 		qDebug()<<temp->topic()<<"  "<<temp->qos();
 		m_subscriptions.push_back(temp->topic().filter());
-		m_topicMap[temp->topic().filter()] = temp->qos();
+		m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
 		qDebug()<<"New MQTTSubscription";
-		MQTTSubscriptions* tempSubscription = new MQTTSubscriptions(temp->topic().filter());
-		tempSubscription->setMQTTClient(this);
+		MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+		newSubscription->setMQTTClient(this);
 
 		qDebug()<<"Add child";
-		addChild(tempSubscription);
+		addChild(newSubscription);
 
 		qDebug()<<"Add to vector";
-		m_mqttSubscriptions.push_back(tempSubscription);
+		m_mqttSubscriptions.push_back(newSubscription);
 
 		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 		qDebug()<<"Added topic";

@@ -25,19 +25,8 @@ class QAction;
 
 class MQTTClient : public Folder{
 	Q_OBJECT
-	Q_ENUMS(FileType)
 
-public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS};
-	enum SourceType {
-		FileOrPipe = 0,
-		NetworkTcpSocket,
-		NetworkUdpSocket,
-		LocalSocket,
-		SerialPort,
-		MQTT
-	};
-
+public:	
 	enum UpdateType {
 		TimeInterval = 0,
 		NewData
@@ -86,11 +75,6 @@ public:
 
 	void ready();
 
-	static QStringList fileTypes();
-
-	void setFileType(const FileType);
-	FileType fileType() const;
-
 	UpdateType updateType() const;
 	void setUpdateType(UpdateType);
 
@@ -111,7 +95,7 @@ public:
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setMqttClient(const QString&, const quint16&);
+	void setMqttClientHostPort(const QString&, const quint16&);
 	void setMqttClientAuthentication(const QString&, const QString&);
 	void setMqttClientId(const QString&);
 	QMqttClient mqttClient() const;
@@ -192,10 +176,7 @@ public:
 private:
 	//void initActions();
 
-
-	FileType m_fileType;
 	UpdateType m_updateType;
-	SourceType m_sourceType;
 	ReadingType m_readingType;
 
 	bool m_paused;
@@ -217,9 +198,7 @@ private:
 		QAction* m_plotDataAction;*/
 
 	QMqttClient* m_client;
-	QMap<QMqttTopicFilter, quint8> m_topicMap;
-	QMap<QMqttTopicName, bool> m_messageArrived;
-	QMap<QMqttTopicName, QVector<QMqttMessage>> m_messagePuffer;
+	QMap<QMqttTopicFilter, quint8> m_subscribedTopicNameQoS;
 	QVector<QString> m_subscriptions;
 	QVector<QString> m_topicNames;
 	bool m_mqttTest;
@@ -250,12 +229,10 @@ public slots:
 private slots:
 	void onMqttConnect();
 	void mqttSubscribtionMessageReceived(const QMqttMessage&);
-	void onAllArrived();
 	void mqttErrorChanged(QMqttClient::ClientError);
 
 signals:
 
-	void mqttAllArrived();
 	void mqttSubscribed();
 	void mqttNewTopicArrived();
 	void readFromTopics();

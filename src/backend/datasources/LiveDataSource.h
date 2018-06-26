@@ -37,11 +37,6 @@
 #include <QTimer>
 #include <QVector>
 
-#ifdef HAVE_MQTT
-#include <QtMqtt/QMqttClient>
-#include <QtMqtt/QMqttTopicName>
-#endif
-
 #include <QMap>
 
 class QString;
@@ -78,38 +73,6 @@ public:
 		TillEnd,
 		WholeFile
 	};
-
-#ifdef HAVE_MQTT
-	enum WillMessageType {
-		OwnMessage = 0,
-		Statistics,
-		LastMessage
-	};
-
-	enum WillUpdateType {
-		TimePeriod = 0,
-		OnClick
-	};
-
-	enum WillStatistics {
-		Minimum = 0,
-		Maximum,
-		ArithmeticMean,
-		GeometricMean,
-		HarmonicMean,
-		ContraharmonicMean,
-		Median,
-		Variance,
-		StandardDeviation,
-		MeanDeviation,
-		MeanDeviationAroundMedian,
-		MedianDeviation,
-		Skewness,
-		Kurtosis,
-		Entropy
-	};
-#endif
-
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
 	~LiveDataSource() override;
@@ -175,22 +138,6 @@ public:
 	void setLocalSocketName(const QString&);
 	QString localSocketName() const;
 
-#ifdef HAVE_MQTT
-	void setMqttClient(const QString&, const quint16&);
-	void setMqttClientAuthentication(const QString&, const QString&);
-	void setMqttClientId(const QString&);
-	QMqttClient mqttClient() const;
-
-	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
-	QVector<QString> mqttSubscribtions() const;
-
-	QString clientHostName() const;
-	quint16 clientPort() const;
-	QString clientPassword() const;
-	QString clientUserName() const;
-	QString clientID () const;
-#endif
-
 	void updateNow();
 	void pauseReading();
 	void continueReading();    
@@ -204,58 +151,6 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-
-#ifdef HAVE_MQTT
-	int topicNumber();
-	int topicIndex(const QString&);
-	QVector<QString> topicVector() const;
-	bool checkAllArrived();
-
-	void setMqttWillUse(bool);
-	bool mqttWillUse() const;
-
-	void setWillTopic(const QString&);
-	QString willTopic() const;
-
-	void setWillRetain(bool);
-	bool willRetain() const;
-
-	void setWillQoS(quint8);
-	quint8 willQoS() const;
-
-	void setWillMessageType(WillMessageType);
-	WillMessageType willMessageType() const;
-
-	void setWillOwnMessage(const QString&);
-	QString willOwnMessage() const;
-
-	WillUpdateType willUpdateType() const;
-	void setWillUpdateType(WillUpdateType);
-
-	int willTimeInterval() const;
-	void setWillTimeInterval(int);
-
-	void startWillTimer() const;
-	void stopWillTimer() const;
-
-	void setWillForMqtt() ;
-
-	void setMqttRetain(bool);
-	bool mqttRetain() const;
-
-	void setMQTTUseID(bool);
-	bool mqttUseID() const;
-
-	void setMQTTUseAuthentication(bool);
-	bool mqttUseAuthentication() const;
-
-	void clearLastMessage();
-	void addWillStatistics(WillStatistics);
-	void removeWillStatistics(WillStatistics);
-	QVector<bool> willStatistics() const;
-
-	void newMQTTTopic(const QString&, quint8);
-#endif
 
 private:
 	void initActions();
@@ -303,32 +198,6 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
-#ifdef HAVE_MQTT
-	QMqttClient* m_client;
-	QMap<QMqttTopicFilter, quint8> m_topicMap;
-	QMap<QMqttTopicName, bool> m_messageArrived;
-	QMap<QMqttTopicName, QVector<QMqttMessage>> m_messagePuffer;
-	QVector<QString> m_subscriptions;
-	bool m_mqttTest;
-	bool m_mqttUseWill;
-	QString m_willMessage;
-	QString m_willTopic;
-	bool m_willRetain;
-	quint8 m_willQoS;
-	WillMessageType m_willMessageType;
-	QString m_willOwnMessage;
-	QString m_willLastMessage;
-	QTimer* m_willTimer;
-	int m_willTimeInterval;
-	WillUpdateType m_willUpdateType;
-	QVector<bool> m_willStatistics;
-	bool m_mqttFirstConnectEstablished;
-	bool m_mqttRetain;
-	bool m_mqttUseID;
-	bool m_mqttUseAuthentication;
-	QString m_newTopic;
-#endif
-
 public slots:
 	void read();
 
@@ -343,19 +212,7 @@ private slots:
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
 
-#ifdef HAVE_MQTT
-	void onMqttConnect();
-	void mqttSubscribtionMessageReceived(const QMqttMessage&);
-	void onAllArrived();
-	void mqttErrorChanged(QMqttClient::ClientError);
-#endif
-
 signals:
-
-#ifdef HAVE_MQTT
-	void mqttAllArrived();
-	void mqttSubscribed();
-#endif
 
 };
 

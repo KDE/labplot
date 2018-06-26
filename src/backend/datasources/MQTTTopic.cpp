@@ -11,13 +11,10 @@
 
 #include "backend/datasources/filters/AsciiFilter.h"
 
-#include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
 #include <QDir>
 #include <QMenu>
-#include <QFileSystemWatcher>
-#include <QFile>
 #include <QTimer>
 #include <QMessageBox>
 
@@ -29,12 +26,12 @@
 
 MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, AbstractAspect* subscription, bool loading)
 	: Spreadsheet(engine, name, loading),
-	  m_client(dynamic_cast<MQTTSubscriptions*> (subscription)->mqttClient()),
+	  m_MQTTClient(dynamic_cast<MQTTSubscriptions*> (subscription)->mqttClient()),
 	  m_topicName(name),
 	  m_filter(new AsciiFilter()) {
-	AsciiFilter * mainFilter = dynamic_cast<AsciiFilter*>(dynamic_cast<MQTTClient*>(m_client)->filter());
+	AsciiFilter * mainFilter = dynamic_cast<AsciiFilter*>(dynamic_cast<MQTTClient*>(m_MQTTClient)->filter());
 	dynamic_cast<AsciiFilter*> (m_filter)->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
-	if(!mainFilter->isAutoModeEnabled()) {		
+	if(!mainFilter->isAutoModeEnabled()) {
 		dynamic_cast<AsciiFilter*> (m_filter)->setCommentCharacter(mainFilter->commentCharacter());
 		dynamic_cast<AsciiFilter*> (m_filter)->setSeparatingCharacter(mainFilter->separatingCharacter());
 		dynamic_cast<AsciiFilter*> (m_filter)->setDateTimeFormat(mainFilter->dateTimeFormat());
@@ -58,7 +55,7 @@ MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, Abstr
 		dynamic_cast<AsciiFilter*> (m_filter)->setEndColumn( mainFilter->endColumn());
 	}
 
-	connect(dynamic_cast<MQTTClient*>(m_client), &MQTTClient::readFromTopics, this, &MQTTTopic::read);
+	connect(dynamic_cast<MQTTClient*>(m_MQTTClient), &MQTTClient::readFromTopics, this, &MQTTTopic::read);
 	initActions();
 }
 
@@ -118,27 +115,27 @@ void MQTTTopic::plotData() {
 }
 
 int MQTTTopic::readingType() const {
-	return static_cast<int> (dynamic_cast<MQTTClient*>(m_client)->readingType());
+	return static_cast<int> (dynamic_cast<MQTTClient*>(m_MQTTClient)->readingType());
 }
 
 int MQTTTopic::sampleRate() const {
-	return dynamic_cast<MQTTClient*>(m_client)->sampleRate();
+	return dynamic_cast<MQTTClient*>(m_MQTTClient)->sampleRate();
 }
 
 bool  MQTTTopic::isPaused() const {
-	return dynamic_cast<MQTTClient*>(m_client)->isPaused();
+	return dynamic_cast<MQTTClient*>(m_MQTTClient)->isPaused();
 }
 
 int MQTTTopic::updateInterval() const {
-	return dynamic_cast<MQTTClient*>(m_client)->updateInterval();
+	return dynamic_cast<MQTTClient*>(m_MQTTClient)->updateInterval();
 }
 
 int MQTTTopic::keepNvalues() const {
-	return dynamic_cast<MQTTClient*>(m_client)->keepNvalues();
+	return dynamic_cast<MQTTClient*>(m_MQTTClient)->keepNvalues();
 }
 
 bool MQTTTopic::keepLastValues() const {
-	return dynamic_cast<MQTTClient*>(m_client)->keepLastValues();
+	return dynamic_cast<MQTTClient*>(m_MQTTClient)->keepLastValues();
 }
 
 void MQTTTopic::newMessage(const QString& message) {
@@ -166,7 +163,7 @@ bool MQTTTopic::load(XmlStreamReader*, bool preview) {
 }
 
 AbstractAspect* MQTTTopic::mqttClient() const{
-	return m_client;
+	return m_MQTTClient;
 }
 
 void MQTTTopic::removeMessage() {

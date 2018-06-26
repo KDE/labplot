@@ -71,6 +71,7 @@ private:
 	QTimer *m_timer;
 	QTimer *m_messageTimer;
 	bool m_interpretMessage;
+	bool m_MQTTUsed;
 	const MQTTClient* m_previousMQTTClient;
 #endif
 

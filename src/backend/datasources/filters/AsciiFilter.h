@@ -70,11 +70,9 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 #ifdef HAVE_MQTT
-	void readFromMqtt(const QString&, const QString&, AbstractDataSource*dataSource);
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
 	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
 	AbstractColumn::ColumnMode mqttColumnMode() const;
-	void addMQTTColumn(const QString&, const QString&, AbstractDataSource*dataSource);
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 #endif
 

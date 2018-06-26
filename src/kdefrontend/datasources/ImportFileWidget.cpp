@@ -498,39 +498,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
-	case LiveDataSource::SourceType::MQTT:{
-#ifdef HAVE_MQTT
-		qDebug()<<"Saving mqtt";
-		source->setMqttClient(m_client->hostname(), m_client->port());
-
-		source->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
-		if(ui.chbAuthentication->isChecked())
-			source->setMqttClientAuthentication(m_client->username(), m_client->password());
-
-		source->setMQTTUseID(ui.chbID->isChecked());
-		if(ui.chbID->isChecked())
-			source->setMqttClientId(m_client->clientId());
-
-		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
-			source->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-		}
-		source->setMqttRetain(ui.chbRetain->isChecked());
-		source->setWillMessageType(static_cast<LiveDataSource::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
-		source->setWillOwnMessage(ui.leWillOwnMessage->text());
-		source->setWillQoS(ui.cbWillQoS->currentIndex() );
-		source->setWillRetain(ui.chbWillRetain->isChecked());
-		source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
-		source->setWillTopic(ui.cbWillTopic->currentText());
-		source->setWillUpdateType(static_cast<LiveDataSource::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
-		source->setMqttWillUse(ui.chbWill->isChecked());
-		for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
-			QListWidgetItem* item = ui.lwWillStatistics->item(i);
-			if (item->checkState() == Qt::Checked)
-				source->addWillStatistics(static_cast<LiveDataSource::WillStatistics> (i));
-		}
-#endif
-		break;
-	}
 	default:
 		break;
 	}
@@ -539,13 +506,10 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 #ifdef HAVE_MQTT
 void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	qDebug()<<"Saving to MQTT Client";
-	MQTTClient::FileType fileType = static_cast<MQTTClient::FileType>(ui.cbFileType->currentIndex());
 	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
-	MQTTClient::SourceType sourceType = static_cast<MQTTClient::SourceType>(ui.cbSourceType->currentIndex());
 	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadType->currentIndex());
 
 	client->setComment( ui.leFileName->text() );
-	client->setFileType(fileType);
 	client->setFilter(this->currentFileFilter());
 
 	client->setReadingType(readingType);
@@ -567,7 +531,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 
 
 		qDebug()<<"Saving mqtt";
-		client->setMqttClient(m_client->hostname(), m_client->port());
+		client->setMqttClientHostPort(m_client->hostname(), m_client->port());
 
 		client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
 		if(ui.chbAuthentication->isChecked())
@@ -1478,11 +1442,11 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 			ui.lWillTopic->show();
 			ui.lWillUpdate->show();
 
-			if (ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::OwnMessage) ) {
+			if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
 				ui.leWillOwnMessage->show();
 				ui.lWillOwnMessage->show();
 			}
-			else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::Statistics) ){
+			else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ){
 				qDebug()<<"source type changed show statistics";
 				ui.lWillStatistics->show();
 				ui.lwWillStatistics->show();
@@ -1762,7 +1726,10 @@ void ImportFileWidget::topicTimeout() {
 bool ImportFileWidget::isMqttValid(){
 	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
 	bool subscribed = !m_topicList.isEmpty();
-	return connected && subscribed;
+	bool fileTypeOk = false;
+	if(this->currentFileType() == LiveDataSource::FileType::Ascii)
+		fileTypeOk = true;
+	return connected && subscribed && fileTypeOk;
 }
 
 void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
@@ -1854,11 +1821,11 @@ void ImportFileWidget::useWillMessage(int state) {
 		ui.lWillTopic->show();
 		ui.lWillUpdate->show();
 
-		if (ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::OwnMessage) ) {
+		if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
 			ui.leWillOwnMessage->show();
 			ui.lWillOwnMessage->show();
 		}
-		else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(LiveDataSource::WillMessageType::Statistics) ){
+		else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ){
 			qDebug()<<"will use checked show statistics";
 			ui.lWillStatistics->show();
 			ui.lwWillStatistics->show();
@@ -1892,19 +1859,19 @@ void ImportFileWidget::useWillMessage(int state) {
 }
 
 void ImportFileWidget::willMessageTypeChanged(int type) {
-	if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::OwnMessage) {
+	if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::OwnMessage) {
 		ui.leWillOwnMessage->show();
 		ui.lWillOwnMessage->show();
 		ui.lWillStatistics->hide();
 		ui.lwWillStatistics->hide();
 	}
-	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::LastMessage) {
+	else if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::LastMessage) {
 		ui.leWillOwnMessage->hide();
 		ui.lWillOwnMessage->hide();
 		ui.lWillStatistics->hide();
 		ui.lwWillStatistics->hide();
 	}
-	else if(static_cast<LiveDataSource::WillMessageType> (type) == LiveDataSource::WillMessageType::Statistics) {
+	else if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::Statistics) {
 		qDebug()<<"will message type changed show statistics";
 		ui.lWillStatistics->show();
 		ui.lwWillStatistics->show();
@@ -1922,11 +1889,11 @@ void ImportFileWidget::updateWillTopics() {
 }
 
 void ImportFileWidget::willUpdateChanged(int updateType) {
-	if(static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::TimePeriod) {
+	if(static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
 		ui.leWillUpdateInterval->show();
 		ui.lWillUpdateInterval->show();
 	}
-	else if (static_cast<LiveDataSource::WillUpdateType>(updateType) == LiveDataSource::WillUpdateType::OnClick) {
+	else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
 	}

@@ -32,6 +32,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT
 	m_client(new QMqttClient()),
 	m_editing(true),
+	m_MQTTUsed(true),
 	m_previousMQTTClient(nullptr),
 	m_timer(new QTimer()),
 	m_messageTimer(new QTimer()),
@@ -83,10 +84,12 @@ LiveDataDock::~LiveDataDock() {
  * \param clients
  */
 void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
+	m_MQTTUsed = true;
 	m_liveDataSources.clear();
 	m_mqttClients.clear();
 	m_mqttClients = clients;
 	const MQTTClient* const fds = clients.at(0);
+
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(fds->readingType()));
@@ -214,7 +217,10 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
  * \param sources
  */
 void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
+#ifdef HAVE_MQTT
+	m_MQTTUsed = false;
 	m_mqttClients.clear();
+#endif
 	m_liveDataSources = sources;
 	const LiveDataSource* const fds = sources.at(0);
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
@@ -289,87 +295,23 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lwSubscriptions->hide();
 	ui.lQoS->hide();
 	ui.cbQoS->hide();
-
-
-#ifdef HAVE_MQTT
-	if(fds->sourceType() == LiveDataSource::SourceType::MQTT) {
-		ui.bTopics->show();
-		ui.cbTopics->show();
-		ui.lSubscriptions->show();
-		ui.lwSubscriptions->show();
-		ui.lQoS->show();
-		ui.cbQoS->show();
-
-		if(m_client->state() == QMqttClient::Connected)
-			m_client->disconnectFromHost();
-
-		m_timer = new QTimer();
-		m_timer->setInterval(10000);
-
-		connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
-		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
-		connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
-		connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::topicBeingTyped);
-		connect(m_timer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
-		connect(ui.bTopics, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
-
-		m_client->setHostname(fds->clientHostName());
-		m_client->setPort(fds->clientPort());
-
-		if(fds->mqttUseAuthentication()) {
-			m_client->setUsername(fds->clientUserName());
-			m_client->setPassword(fds->clientPassword());
-		}
-
-		if(fds->mqttUseID()) {
-			m_client->setClientId(fds->clientID());
-		}
-		m_client->connectToHost();
-
-		ui.chbWill->show();
-		//connect(fds, &LiveDataSource::mqttSubscribed, this, &LiveDataDock::updateTopics);
-		ui.leWillOwnMessage->setText(fds->willOwnMessage());
-		ui.leWillUpdateInterval->setText(QString::number(fds->willTimeInterval()));
-		qDebug()<<"update type at setup "<<static_cast<int>(fds->willUpdateType()) <<"  start index "<<ui.cbWillUpdate->currentIndex();
-		ui.cbWillUpdate->setCurrentIndex(static_cast<int>(fds->willUpdateType()) );
-		fds->startWillTimer();
-		ui.cbWillMessageType->setCurrentIndex(static_cast<int>(fds->willMessageType()) );
-		ui.cbWillQoS->setCurrentIndex(fds->willQoS());
-		ui.cbWillTopic->addItem(fds->willTopic());
-		ui.cbWillTopic->setCurrentText(fds->willTopic());
-		ui.chbWillRetain->setChecked(fds->willRetain());
-		QVector<bool> statitics = fds->willStatistics();
-		for(int i = 0; i < statitics.count(); ++i) {
-			QListWidgetItem* item = ui.lwWillStatistics->item(static_cast<int>(i));
-			if(statitics[i]) {
-				item->setCheckState(Qt::Checked);
-			}
-			else {
-				item->setCheckState(Qt::Unchecked);
-			}
-		}
-		qDebug()<<"chbWill is set to: "<<fds->mqttWillUse();
-		//when chbWill's isChecked corresponds with source's m_mqttWillUse it doesn't emit state changed signal, we have to force it
-		bool checked = fds->mqttWillUse();
-		ui.chbWill->setChecked(!checked);
-		ui.chbWill->setChecked(checked);
-	}
-#endif
 }
 
 /*!
- * \brief Modifies the sample rate of the live data sources
+ * \brief Modifies the sample rate of the live data sources or MQTTClient objects
  * \param sampleRate
  */
 void LiveDataDock::sampleRateChanged(int sampleRate) {
 	if(!m_liveDataSources.isEmpty()) {
 		for (auto* source : m_liveDataSources)
 			source->setSampleRate(sampleRate);
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->setSampleRate(sampleRate);
 	}
+#endif
 }
 
 /*!
@@ -379,10 +321,13 @@ void LiveDataDock::updateNow() {
 	if(!m_liveDataSources.isEmpty()) {
 		for (auto* source : m_liveDataSources)
 			source->updateNow();
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->updateNow();
 	}
+#endif
 }
 
 /*!
@@ -411,7 +356,9 @@ void LiveDataDock::updateTypeChanged(int idx) {
 				source->setUpdateType(type);
 			}
 		}
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
 
 		if (type == MQTTClient::UpdateType::TimeInterval) {
@@ -431,6 +378,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			}
 		}
 	}
+#endif
 }
 
 /*!
@@ -451,7 +399,9 @@ void LiveDataDock::readingTypeChanged(int idx) {
 
 		for (auto* source : m_liveDataSources)
 			source->setReadingType(type);
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
 
 		if (type == MQTTClient::ReadingType::TillEnd) {
@@ -465,6 +415,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 		for (auto* client : m_mqttClients)
 			client->setReadingType(type);
 	}
+#endif
 }
 
 /*!
@@ -475,10 +426,13 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
 	if(!m_liveDataSources.isEmpty())  {
 		for (auto* source : m_liveDataSources)
 			source->setUpdateInterval(updateInterval);
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->setUpdateInterval(updateInterval);
 	}
+#endif
 }
 
 /*!
@@ -489,10 +443,13 @@ void LiveDataDock::keepNvaluesChanged(const QString& keepNvalues) {
 	if(!m_liveDataSources.isEmpty())  {
 		for (auto* source : m_liveDataSources)
 			source->setKeepNvalues(keepNvalues.toInt());
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->setKeepNvalues(keepNvalues.toInt());
 	}
+#endif
 }
 
 /*!
@@ -502,10 +459,13 @@ void LiveDataDock::pauseReading() {
 	if(!m_liveDataSources.isEmpty())  {
 		for (auto* source: m_liveDataSources)
 			source->pauseReading();
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->pauseReading();
 	}
+#endif
 }
 
 /*!
@@ -515,10 +475,13 @@ void LiveDataDock::continueReading() {
 	if(!m_liveDataSources.isEmpty())  {
 		for (auto* source: m_liveDataSources)
 			source->continueReading();
-	} else if (!m_mqttClients.isEmpty()) {
+	}
+#ifdef HAVE_MQTT
+	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
 			client->continueReading();
 	}
+#endif
 }
 
 /*!
@@ -863,9 +826,11 @@ void LiveDataDock::stopStartReceive() {
 	}
 	else {
 		m_messageTimer->stop();
-		connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
-		m_interpretMessage = true;
-		m_messageTimer->start(3000);
+		if(m_MQTTUsed) {
+			connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+			m_interpretMessage = true;
+			m_messageTimer->start(3000);
+		}
 	}
 }
 #endif
