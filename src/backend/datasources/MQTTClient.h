@@ -171,7 +171,8 @@ public:
 	void removeWillStatistics(WillStatistics);
 	QVector<bool> willStatistics() const;
 
-	void newMQTTTopic(const QString&, quint8);
+	void newMQTTSubscription(const QString&, quint8);
+	void removeMQTTSubscription(const QString&);
 
 private:
 	//void initActions();

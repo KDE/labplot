@@ -150,7 +150,7 @@ void MQTTTopic::read() {
 	}
 }
 
-QString MQTTTopic::name() const{
+QString MQTTTopic::topicName() const{
 	return m_topicName;
 }
 

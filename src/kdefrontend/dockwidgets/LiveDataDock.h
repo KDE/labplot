@@ -73,6 +73,8 @@ private:
 	bool m_interpretMessage;
 	bool m_MQTTUsed;
 	const MQTTClient* m_previousMQTTClient;
+	bool m_mqttSubscribeButton;
+	QString m_mqttUnsubscribeName;
 #endif
 
 private slots:
@@ -106,6 +108,8 @@ private slots:
 	void topicTimeout();
 	void fillSubscriptions();
 	void stopStartReceive();
+	void mqttButtonSubscribe(const QString&);
+	void mqttButtonUnsubscribe(const QString&);
 #endif
 
 public slots:

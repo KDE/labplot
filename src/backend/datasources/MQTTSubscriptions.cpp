@@ -36,7 +36,7 @@ AbstractAspect* MQTTSubscriptions::mqttClient() const{
 void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){
 	bool found = false;
 	for(int i = 0; i < m_topics.count(); ++i) {
-		if(topicName == m_topics[i]->name()) {
+		if(topicName == m_topics[i]->topicName()) {
 			m_topics[i]->newMessage(message);
 			if(dynamic_cast<MQTTClient*> (m_MQTTClient)->updateType() == MQTTClient::UpdateType::NewData &&
 					!dynamic_cast<MQTTClient*> (m_MQTTClient)->isPaused())
@@ -57,7 +57,7 @@ void MQTTSubscriptions::messageArrived(const QString& message, const QString& to
 
 void MQTTSubscriptions::topicRead(const QString& topicName) {
 	for(int i = 0; i < m_topics.count(); ++i) {
-		if(topicName == m_topics[i]->name()) {
+		if(topicName == m_topics[i]->topicName()) {
 			m_topics[i]->read();
 			break;
 		}

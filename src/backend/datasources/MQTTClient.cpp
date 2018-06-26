@@ -731,7 +731,7 @@ void MQTTClient::setWillForMqtt() {
 			const MQTTTopic* tempTopic = nullptr;
 			qDebug()<<"Searching for topic";
 			for (int i = 0; i < topics.count(); ++i) {
-				if(topics[i]->name() == m_willTopic) {
+				if(topics[i]->topicName() == m_willTopic) {
 					asciiFilter = dynamic_cast<AsciiFilter*>(topics[i]->filter());
 					tempTopic = topics[i];
 					break;
@@ -857,7 +857,7 @@ QVector<QString> MQTTClient::mqttSubscribtions() const {
 	return m_subscriptions;
 }
 
-void MQTTClient::newMQTTTopic(const QString& topic, quint8 QoS) {
+void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 	QMqttTopicFilter filter {topic};
 	QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 
@@ -880,5 +880,46 @@ void MQTTClient::newMQTTTopic(const QString& topic, quint8 QoS) {
 		qDebug()<<"Added topic";
 		emit mqttSubscribed();
 	}
+}
+
+void MQTTClient::removeMQTTSubscription(const QString &name) {
+	qDebug()<<"Start to remove subscription in MQTTClient: "<<name;
+
+	QMqttTopicFilter filter{name};
+	m_client->unsubscribe(filter);
+	qDebug()<<"QMqttClient's unsubscribe occured";
+
+	m_subscriptions.removeAll(name);
+
+	for (int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+		if(m_mqttSubscriptions[i]->subscriptionName() == name) {
+			qDebug()<<"Subscription name"<<m_mqttSubscriptions[i]->subscriptionName() << "  "<<m_mqttSubscriptions[i]->name();
+			MQTTSubscriptions* removeSubscription = m_mqttSubscriptions[i];
+			m_mqttSubscriptions.remove(i);
+			QVector<MQTTTopic*> topics = removeSubscription->topics();
+			for (int j = 0; j < topics.size(); ++j) {
+				qDebug()<<"Removing topic name: "<<topics[j]->topicName();
+				m_topicNames.removeAll(topics[j]->topicName());
+			}
+			qDebug()<<"Removed from topic names and subscription names";
+			this->removeChild(removeSubscription);
+			qDebug()<<"removed child";
+			break;
+		}
+	}
+
+	QMapIterator<QMqttTopicFilter, quint8> j(m_subscribedTopicNameQoS);
+	while(j.hasNext()) {
+		j.next();
+		if(j.key().filter() == name) {
+			m_subscribedTopicNameQoS.remove(j.key());
+			qDebug()<<"Removed from TopicNameQoS map  "<<j.key();
+			break;
+		}
+	}
+
+	emit mqttSubscribed();
+	emit mqttNewTopicArrived();
+
 }
 #endif

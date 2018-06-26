@@ -23,7 +23,7 @@ public:
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 
-	QString name() const;
+	QString topicName() const;
 	AbstractAspect* mqttClient() const;
 
 	void newMessage(const QString&);

@@ -37,6 +37,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	m_timer(new QTimer()),
 	m_messageTimer(new QTimer()),
 	m_interpretMessage(true),
+	m_mqttSubscribeButton(true),
 #endif
 	m_paused(false) {
 	ui.setupUi(this);
@@ -72,6 +73,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, this, &LiveDataDock::statisticsChanged);
+	connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::mqttButtonSubscribe);
+	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &LiveDataDock::mqttButtonUnsubscribe);
 #endif
 }
 
@@ -765,46 +768,60 @@ void LiveDataDock::topicTimeout() {
 }
 
 void LiveDataDock::addSubscription() {
-	QString newTopicName = ui.cbTopics->currentText();
-	if(ui.lwSubscriptions->findItems(newTopicName, Qt::MatchExactly).isEmpty()) {
-		if(ui.cbTopics->findText( newTopicName ) != -1) {
-			QListWidgetItem* item;
-			bool noWildcard = true;
-			for(int i = 0; i < ui.lwSubscriptions->count(); ++i){
-				item = ui.lwSubscriptions->item(i);
-				QString subscriptionName = item->text();
-				if(subscriptionName.contains('#') || subscriptionName.contains('+')) {
-					if(subscriptionName.contains('#')) {
-						if(newTopicName.startsWith(subscriptionName.left(subscriptionName.count() - 2)) ){
-							noWildcard = false;
-							break;
+	if(m_mqttSubscribeButton) {
+		QString newTopicName = ui.cbTopics->currentText();
+		if(ui.lwSubscriptions->findItems(newTopicName, Qt::MatchExactly).isEmpty()) {
+			if(ui.cbTopics->findText( newTopicName ) != -1) {
+				QListWidgetItem* item;
+				bool noWildcard = true;
+				for(int i = 0; i < ui.lwSubscriptions->count(); ++i){
+					item = ui.lwSubscriptions->item(i);
+					QString subscriptionName = item->text();
+					if(subscriptionName.contains('#') || subscriptionName.contains('+')) {
+						if(subscriptionName.contains('#')) {
+							if(newTopicName.startsWith(subscriptionName.left(subscriptionName.count() - 2)) ){
+								noWildcard = false;
+								break;
+							}
 						}
-					}
-					else if (subscriptionName.contains('+')) {
-						int pos = subscriptionName.indexOf('+');
-						QString start = subscriptionName.left(pos);
-						QString end = subscriptionName.right(subscriptionName.count() - pos);
-						if(newTopicName.startsWith(start) && newTopicName.endsWith(end)) {
-							noWildcard = false;
-							break;
+						else if (subscriptionName.contains('+')) {
+							int pos = subscriptionName.indexOf('+');
+							QString start = subscriptionName.left(pos);
+							QString end = subscriptionName.right(subscriptionName.count() - pos);
+							if(newTopicName.startsWith(start) && newTopicName.endsWith(end)) {
+								noWildcard = false;
+								break;
+							}
 						}
 					}
 				}
-			}
-			if(noWildcard) {
-				for (auto* source: m_mqttClients) {
-					source->newMQTTTopic(newTopicName, ui.cbQoS->currentIndex());
+				if(noWildcard) {
+					for (auto* source: m_mqttClients) {
+						source->newMQTTSubscription(newTopicName, ui.cbQoS->currentIndex());
+					}
 				}
+				else
+					qDebug()<<"Another subscription, which includes wildcards, already contains this topic";
+
 			}
 			else
-				qDebug()<<"Another subscription, which includes wildcards, already contains this topic";
-
+				qDebug()<< "There is no such topic listed in the combo box";
 		}
 		else
-			qDebug()<< "There is no such topic listed in the combo box";
+			qDebug()<< "You already subscribed to this topic";
+	} else if (!m_mqttUnsubscribeName.isEmpty()) {
+		for (auto* source: m_mqttClients) {
+			source->removeMQTTSubscription(m_mqttUnsubscribeName);
+		}
+		m_mqttUnsubscribeName.clear();
+
+		for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
+			if(ui.lwSubscriptions->item(row)->text() == m_mqttUnsubscribeName) {
+				qDebug()<<"subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed in list widget";
+				delete ui.lwSubscriptions->item(row);
+			}
+		}
 	}
-	else
-		qDebug()<< "You already subscribed to this topic";
 }
 
 void LiveDataDock::fillSubscriptions() {
@@ -832,5 +849,20 @@ void LiveDataDock::stopStartReceive() {
 			m_messageTimer->start(3000);
 		}
 	}
+}
+
+void LiveDataDock::mqttButtonSubscribe(const QString& text) {
+	if(!m_mqttSubscribeButton) {
+		ui.bTopics->setText("Subscribe");
+		m_mqttSubscribeButton = true;
+	}
+}
+
+void LiveDataDock::mqttButtonUnsubscribe(const QString& item) {
+	qDebug()<< "trying to set unsubscribe, mqttSubscribeButton's value: "<<m_mqttSubscribeButton;
+	ui.bTopics->setText("Unsubscribe");
+	m_mqttSubscribeButton = false;
+	m_mqttUnsubscribeName = item;
+	qDebug()<<"LiveDataDock: Unsubscribe from:"<<m_mqttUnsubscribeName;
 }
 #endif
