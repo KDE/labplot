@@ -36,47 +36,12 @@
 #include <QDirModel>
 #include <QFileDialog>
 #include <QImageReader>
-#include <QPrinter>
+#include <QPageSize>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-
-// a couple of standard sizes in mm, taken from qprinter.cpp
-const int numOfPaperSizes = 30;
-const float qt_paperSizes[numOfPaperSizes][2] = {
-	{210, 297}, // A4
-	{176, 250}, // B5
-	{215.9f, 279.4f}, // Letter
-	{215.9f, 355.6f}, // Legal
-	{190.5f, 254}, // Executive
-	{841, 1189}, // A0
-	{594, 841}, // A1
-	{420, 594}, // A2
-	{297, 420}, // A3
-	{148, 210}, // A5
-	{105, 148}, // A6
-	{74, 105}, // A7
-	{52, 74}, // A8
-	{37, 52}, // A8
-	{1000, 1414}, // B0
-	{707, 1000}, // B1
-	{31, 44}, // B10
-	{500, 707}, // B2
-	{353, 500}, // B3
-	{250, 353}, // B4
-	{125, 176}, // B6
-	{88, 125}, // B7
-	{62, 88}, // B8
-	{33, 62}, // B9
-	{163, 229}, // C5E
-	{105, 241}, // US Common
-	{110, 220}, // DLE
-	{210, 330}, // Folio
-	{431.8f, 279.4f}, // Ledger
-	{279.4f, 431.8f} // Tabloid
-};
 
 /*!
   \class WorksheetDock
@@ -219,7 +184,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 }
 
 /*!
-	Checks whether the size is one of the QPrinter::PaperSize and
+	Checks whether the size is one of the QPageSize::PageSizeId and
 	updates Size and Orientation checkbox when width/height changes.
 */
 void WorksheetDock::updatePaperSize() {
@@ -228,32 +193,27 @@ void WorksheetDock::updatePaperSize() {
 		return;
 	}
 
-	int i=0;
-
-	//In UI we use cm, so we need to convert to mm first before we check with qt_paperSizes
+	//In UI we use cm, so we need to convert to mm first before we check with QPageSize
 	float w=(float)ui.sbWidth->value()*10;
 	float h=(float)ui.sbHeight->value()*10;
+	const QSizeF s = QSizeF(w, h);
+	const QSizeF st = s.transposed();
 
-	//check the portrait-orientation first
-	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) )
-		i++;
+	//determine the position of the QPageSize::PageSizeId in the combobox
+	for (int i = 0; i < ui.cbSize->count(); ++i) {
+		const QVariant v = ui.cbSize->itemData(i);
+		if (!v.isValid())
+			continue;
 
-	if (i!=numOfPaperSizes) {
-		ui.cbOrientation->setCurrentIndex(0);  //a QPrinter::PaperSize  in portrait-orientation was found
-	} else {
-		//check for the landscape-orientation
-		i=0;
-		while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) )
-			i++;
-
-		if (i!=numOfPaperSizes)
-			ui.cbOrientation->setCurrentIndex(1); //a QPrinter::PaperSize  in landscape-orientation was found
-	}
-
-	//determine the position of the QPrinter::PaperSize in the combobox
-	for (int index = 0; index < numOfPaperSizes+1; ++index) {
-		if (ui.cbSize->itemData(index+2).toInt() == i) {
-			ui.cbSize->setCurrentIndex(index+2);
+		const QPageSize::PageSizeId id = v.value<QPageSize::PageSizeId>();
+		const QSizeF ps = QPageSize::size(id, QPageSize::Millimeter);
+		if (s == ps) { //check the portrait-orientation first
+			ui.cbSize->setCurrentIndex(i);
+			ui.cbOrientation->setCurrentIndex(0);  //a QPageSize::PaperSize in portrait-orientation was found
+			break;
+		} else if (st == ps) { //check for the landscape-orientation
+			ui.cbSize->setCurrentIndex(i);
+			ui.cbOrientation->setCurrentIndex(1); //a QPageSize::PaperSize in landscape-orientation was found
 			break;
 		}
 	}
@@ -270,39 +230,44 @@ void WorksheetDock::retranslateUi() {
 	ui.cbOrientation->addItem(i18n("Portrait"));
 	ui.cbOrientation->addItem(i18n("Landscape"));
 
+	const QVector<QPageSize::PageSizeId> pageSizes = {
+		QPageSize::A0,
+		QPageSize::A1,
+		QPageSize::A2,
+		QPageSize::A3,
+		QPageSize::A4,
+		QPageSize::A5,
+		QPageSize::A6,
+		QPageSize::A7,
+		QPageSize::A8,
+		QPageSize::A9,
+		QPageSize::B0,
+		QPageSize::B1,
+		QPageSize::B2,
+		QPageSize::B3,
+		QPageSize::B4,
+		QPageSize::B5,
+		QPageSize::B6,
+		QPageSize::B7,
+		QPageSize::B8,
+		QPageSize::B9,
+		QPageSize::B10,
+		QPageSize::C5E,
+		QPageSize::DLE,
+		QPageSize::Executive,
+		QPageSize::Folio,
+		QPageSize::Ledger,
+		QPageSize::Legal,
+		QPageSize::Letter,
+		QPageSize::Tabloid,
+		QPageSize::Comm10E,
+		QPageSize::Custom,
+	};
 	ui.cbSize->clear();
 	ui.cbSize->addItem(i18n("View Size"));
-	ui.cbSize->addItem(QString("A0"), QPrinter::A0);
-	ui.cbSize->addItem(QString("A1"), QPrinter::A1);
-	ui.cbSize->addItem(QString("A2"), QPrinter::A2);
-	ui.cbSize->addItem(QString("A3"), QPrinter::A3);
-	ui.cbSize->addItem(QString("A4"), QPrinter::A4);
-	ui.cbSize->addItem(QString("A5"), QPrinter::A5);
-	ui.cbSize->addItem(QString("A6"), QPrinter::A6);
-	ui.cbSize->addItem(QString("A7"), QPrinter::A7);
-	ui.cbSize->addItem(QString("A8"), QPrinter::A8);
-	ui.cbSize->addItem(QString("A9"), QPrinter::A9);
-	ui.cbSize->addItem(QString("B0"), QPrinter::B0);
-	ui.cbSize->addItem(QString("B1"), QPrinter::B1);
-	ui.cbSize->addItem(QString("B2"), QPrinter::B2);
-	ui.cbSize->addItem(QString("B3"), QPrinter::B3);
-	ui.cbSize->addItem(QString("B4"), QPrinter::B4);
-	ui.cbSize->addItem(QString("B5"), QPrinter::B5);
-	ui.cbSize->addItem(QString("B6"), QPrinter::B6);
-	ui.cbSize->addItem(QString("B7"), QPrinter::B7);
-	ui.cbSize->addItem(QString("B8"), QPrinter::B8);
-	ui.cbSize->addItem(QString("B9"), QPrinter::B9);
-	ui.cbSize->addItem(QString("B10"), QPrinter::B10);
-	ui.cbSize->addItem(QString("C5E"), QPrinter::C5E);
-	ui.cbSize->addItem(QString("DLE"), QPrinter::DLE);
-	ui.cbSize->addItem(i18n("Executive"), QPrinter::Executive);
-	ui.cbSize->addItem(i18n("Folio"), QPrinter::Folio);
-	ui.cbSize->addItem(i18n("Ledger"), QPrinter::Ledger);
-	ui.cbSize->addItem(i18n("Legal"), QPrinter::Legal);
-	ui.cbSize->addItem(i18n("Letter"), QPrinter::Letter);
-	ui.cbSize->addItem(i18n("Tabloid"), QPrinter::Tabloid);
-	ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
-	ui.cbSize->addItem(i18n("Custom"), QPrinter::Custom);
+	for (QPageSize::PageSizeId id : pageSizes) {
+		ui.cbSize->addItem(QPageSize::name(id), id);
+	}
 	ui.cbSize->insertSeparator(1);
 
 	//Background
@@ -355,9 +320,9 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 }
 
 void WorksheetDock::sizeChanged(int i) {
-	int index = ui.cbSize->itemData(i).toInt();
+	const QPageSize::PageSizeId index = ui.cbSize->itemData(i).value<QPageSize::PageSizeId>();
 
-	if (index==QPrinter::Custom) {
+	if (index==QPageSize::Custom) {
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
 		ui.lOrientation->hide();
@@ -381,30 +346,26 @@ void WorksheetDock::sizeChanged(int i) {
 		//use the complete view size (first item in the combox is selected)
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
-	} else if (index==QPrinter::Custom) {
+	} else if (index==QPageSize::Custom) {
 		if (m_worksheet->useViewSize()) {
 			for (auto* worksheet : m_worksheetList)
 				worksheet->setUseViewSize(false);
 		}
 	} else {
 		//determine the width and the height of the to be used predefined layout
-		float w, h;
-		if (ui.cbOrientation->currentIndex() == 0) {
-			w=qt_paperSizes[index][0];
-			h=qt_paperSizes[index][1];
-		} else {
-			w=qt_paperSizes[index][1];
-			h=qt_paperSizes[index][0];
+		QSizeF s = QPageSize::size(index, QPageSize::Millimeter);
+		if (ui.cbOrientation->currentIndex() == 1) {
+			s.transpose();
 		}
 
 		m_initializing = true;
-		//w and h from qt_paperSizes above are in mm, in UI we show everything in cm
-		ui.sbWidth->setValue(w/10);
-		ui.sbHeight->setValue(h/10);
+		//s is in mm, in UI we show everything in cm
+		ui.sbWidth->setValue(s.width()/10);
+		ui.sbHeight->setValue(s.height()/10);
 		m_initializing=false;
 
-		w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
-		h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
+		float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Millimeter);
+		float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Millimeter);
 		for (auto* worksheet : m_worksheetList) {
 			worksheet->setUseViewSize(false);
 			worksheet->setPageRect(QRect(0,0,w,h));
