@@ -210,6 +210,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateChanged);
 	connect(this, &ImportFileWidget::subscriptionMade, this, &ImportFileWidget::updateWillTopics);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
@@ -1581,6 +1582,7 @@ void ImportFileWidget::onMqttConnect() {
 		ui.cbSourceType->setEnabled(false);
 		ui.chbAuthentication->setEnabled(false);
 		ui.chbID->setEnabled(false);
+		ui.chbRetain->setEnabled(false);
 		QMessageBox::information(this, "Connection successful", "Connection established");
 		QMqttTopicFilter globalFilter{"#"};
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
@@ -1658,6 +1660,7 @@ void ImportFileWidget::mqttSubscribe() {
 					//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
 				}
 			}
+			emit subscriptionMade();
 			refreshPreview();
 		}
 	}
@@ -1776,6 +1779,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.cbTopic->clear();
 	ui.lwSubscriptions->clear();
 
+	ui.chbRetain->setEnabled(true);
 	ui.cbSourceType->setEnabled(true);
 	ui.chbAuthentication->setEnabled(true);
 	ui.chbID->setEnabled(true);

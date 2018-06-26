@@ -90,6 +90,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	//Signals/Slots
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionMade, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
 #endif
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -462,7 +463,7 @@ void ImportFileDialog::checkOkButton() {
 		}
 		else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made."));
+			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made, or the file filter isn't Ascii."));
 		}
 #endif
 		break;

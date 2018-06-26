@@ -169,6 +169,7 @@ signals:
 #ifdef HAVE_MQTT
 	void newTopic(QString);
 	void subscriptionMade();
+	void checkFileType();
 #endif
 
 	void checkedFitsTableToMatrix(const bool enable);
