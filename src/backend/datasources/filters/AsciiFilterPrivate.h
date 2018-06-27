@@ -60,6 +60,8 @@ public:
 	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
+	void setPreparedForMQTT(bool, AbstractDataSource*, const QString&);
+	QString separator() const;
 #endif
 
 	const AsciiFilter* q;
@@ -81,7 +83,6 @@ public:
 	int endRow;
 	int startColumn;
 	int endColumn;
-	bool indexCreated;
 	int mqttPreviewFirstEmptyColCount;
 
     int isPrepared();

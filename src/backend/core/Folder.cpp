@@ -40,6 +40,9 @@
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
 #include "backend/worksheet/Worksheet.h"
 
 #include <QIcon>
@@ -220,6 +223,16 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(cantorWorksheet);
+#endif	
+#ifdef HAVE_MQTT
+	} else if (element_name == QLatin1String("MQTTClient")) {
+		qDebug()<<"Load MQTTClient";
+		MQTTClient* client = new MQTTClient("");
+		if (!client->load(reader, preview)) {
+			delete client;
+			return false;
+		}
+		addChildFast(client);
 #endif
 	} else if (element_name == QLatin1String("LiveDataSource")) {
 		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);

@@ -154,12 +154,117 @@ QString MQTTTopic::topicName() const{
 	return m_topicName;
 }
 
-void MQTTTopic::save(QXmlStreamWriter*) const {
+void MQTTTopic::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("MQTTTopic");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
+	//general
+	writer->writeStartElement("general");
+	writer->writeAttribute("topicName", m_topicName);
+	writer->writeAttribute("filterPrepared", QString::number(dynamic_cast<AsciiFilter*>(m_filter)->isPrepared()));
+	writer->writeAttribute("filterSeparator", dynamic_cast<AsciiFilter*>(m_filter)->separator());
+	writer->writeAttribute("messagePufferSize", QString::number(m_messagePuffer.size()));
+	for(int i = 0; i < m_messagePuffer.count(); ++i)
+		writer->writeAttribute("message"+QString::number(i), m_messagePuffer[i]);
+	writer->writeEndElement();
+
+	//filter
+	m_filter->save(writer);
+
+	//Columns
+	for (auto* col : children<Column>(IncludeHidden))
+		col->save(writer);
+
+	writer->writeEndElement(); //MQTTTopic
 }
 
-bool MQTTTopic::load(XmlStreamReader*, bool preview) {
-	return true;
+bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
+	qDebug()<<"Start loading MQTTTopic";
+	removeColumns(0, columnCount());
+	if (!readBasicAttributes(reader))
+		return false;
+
+	bool isFilterPrepared = false;
+	QString separator = "";
+
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "MQTTTopic")
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "general") {
+			qDebug()<<"MQTTTopic general";
+			attribs = reader->attributes();
+
+			str = attribs.value("topicName").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'topicName'"));
+			else {
+				m_topicName =  str;
+				setName(str);
+			}
+
+			str = attribs.value("filterPrepared").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'filterPrepared'"));
+			else {
+				isFilterPrepared =  str.toInt();
+			}
+
+			str = attribs.value("filterSeparator").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'filterSeparator'"));
+			else {
+				separator =  str;
+			}
+
+			int pufferSize = 0;
+			str = attribs.value("messagePufferSize").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'messagePufferSize'"));
+			else
+				pufferSize = str.toInt();
+			for(int i = 0; i < pufferSize; ++i)
+			{
+				str = attribs.value("message"+QString::number(i)).toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+"'"));
+				else
+					m_messagePuffer.push_back(str);
+			}
+		} else if (reader->name() == "asciiFilter") {
+			qDebug()<<"MQTTTopic filter load";
+			if (!m_filter->load(reader))
+				return false;
+		} else if(reader->name() == "column") {
+			qDebug()<<"MQTTTopic column load";
+			Column* column = new Column("", AbstractColumn::Text);
+			if (!column->load(reader, preview)) {
+				delete column;
+				setColumnCount(0);
+				return false;
+			}
+			addChild(column);
+		} else {// unknown element
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
+
+	dynamic_cast<AsciiFilter*>(m_filter)->setPreparedForMQTT(isFilterPrepared, this, separator);
+	qDebug()<<"End loading MQTTTopic";
+	return !reader->hasError();
 }
 
 AbstractAspect* MQTTTopic::mqttClient() const{

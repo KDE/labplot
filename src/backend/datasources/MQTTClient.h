@@ -222,6 +222,9 @@ private:
 	QString m_newTopic;
 	QVector<MQTTSubscriptions*> m_mqttSubscriptions;
 	bool m_disconnectForWill;
+	bool m_loaded;
+	int m_subscriptionsLoaded;
+	int m_subscriptionCount;
 
 
 public slots:
@@ -231,6 +234,7 @@ private slots:
 	void onMqttConnect();
 	void mqttSubscribtionMessageReceived(const QMqttMessage&);
 	void mqttErrorChanged(QMqttClient::ClientError);
+	void subscriptionLoaded(const QString&);
 
 signals:
 

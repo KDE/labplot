@@ -376,7 +376,6 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	m_maxActualRows (0),
 	m_actualCols(0),
 	m_prepared(false),
-    indexCreated (false),
 	m_lastRowNum (0),
 	mqttPreviewFirstEmptyColCount (0),
 	m_columnOffset(0) {
@@ -2003,11 +2002,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
 		}
 
-		if(m_actualRows > m_maxActualRows)
-			m_maxActualRows = m_actualRows;
-		else
-			m_actualRows = m_maxActualRows;
-
 		if (!spreadsheet->keepLastValues())
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
@@ -2134,7 +2128,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	if(m_prepared ) {
 		if (!spreadsheet->keepLastValues())
-			m_actualRows = m_lastRowNum;
+			m_actualRows = spreadsheetRowCountBeforeResize;
 		else {
 			if(m_actualRows != spreadsheet->keepNvalues()) {
 				if(m_actualRows < spreadsheet->keepNvalues())
@@ -2631,10 +2625,9 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	vectorNames.prepend("timestamp");
 	endColumn++;
 
-	if (createIndexEnabled && !indexCreated) {
+	if (createIndexEnabled) {
 		vectorNames.prepend("index");
 		endColumn++;
-		indexCreated = true;
 	}
 	m_actualCols = endColumn - startColumn + 1;
 	qDebug()<<"actual cols"<<m_actualCols;
@@ -2783,6 +2776,72 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	qDebug()<<"-----final column mode" << "   "<<columnModes[m_actualCols-1];
 
 	return 0;
+}
+
+void AsciiFilter::setPreparedForMQTT(bool prepared, AbstractDataSource* dataSource, const QString& separator) {
+	d->setPreparedForMQTT(prepared, dataSource, separator);
+}
+
+void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, AbstractDataSource* dataSource, const QString& separator) {
+	m_prepared = prepared;
+	if(prepared == true) {
+		m_separator = separator;
+		MQTTTopic* topic = dynamic_cast<MQTTTopic*>(dataSource);
+		//m_actualRows = endRow - startRow + 1;
+		m_actualCols = endColumn - startColumn + 1;
+		m_actualRows = topic->rowCount();
+		columnModes.resize(topic->columnCount());
+		for(int i = 0; i < topic->columnCount(); ++i) {
+			columnModes[i] = topic->column(i)->columnMode();
+		}
+		m_dataContainer.resize(m_actualCols);
+		for (int n = 0; n < m_actualCols; ++n) {
+			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+			topic->child<Column>(n)->setColumnMode(columnModes[n]);
+			switch (columnModes[n]) {
+			case AbstractColumn::Numeric: {
+				QVector<double>* vector = static_cast<QVector<double>* >(topic->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
+			case AbstractColumn::Integer: {
+				QVector<int>* vector = static_cast<QVector<int>* >(topic->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
+			case AbstractColumn::Text: {
+				QVector<QString>* vector = static_cast<QVector<QString>*>(topic->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
+			case AbstractColumn::DateTime: {
+				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(topic->child<Column>(n)->data());
+				vector->reserve(m_actualRows);
+				vector->resize(m_actualRows);
+				m_dataContainer[n] = static_cast<void *>(vector);
+				break;
+			}
+				//TODO
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				break;
+			}
+		}
+	}
+}
+
+QString AsciiFilter::separator() const {
+	return d->separator();
+}
+
+QString AsciiFilterPrivate::separator() const {
+	return m_separator;
 }
 
 #endif

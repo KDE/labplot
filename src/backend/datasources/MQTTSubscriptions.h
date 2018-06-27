@@ -40,6 +40,7 @@ public slots:
 private slots:
 
 signals:
+	void loaded(const QString &);
 
 };
 

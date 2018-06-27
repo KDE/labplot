@@ -74,6 +74,8 @@ public:
 	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
 	AbstractColumn::ColumnMode mqttColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
+	void setPreparedForMQTT(bool, AbstractDataSource*, const QString&);
+	QString separator() const;
 #endif
 
 	void setCommentCharacter(const QString&);
