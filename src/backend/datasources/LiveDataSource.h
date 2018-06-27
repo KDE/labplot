@@ -52,7 +52,7 @@ class LiveDataSource : public Spreadsheet {
 	Q_ENUMS(FileType)
 
 public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS};
+	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT};
 	enum SourceType {
 		FileOrPipe = 0,
 		NetworkTcpSocket,

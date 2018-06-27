@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>423</width>
-    <height>741</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="lUpdateInterval">
      <property name="text">
-      <string>Update interval:</string>
+      <string>Update interval</string>
      </property>
     </widget>
    </item>
@@ -80,7 +80,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="lUpdateType">
      <property name="text">
-      <string>Update type</string>
+      <string>Update</string>
      </property>
     </widget>
    </item>
@@ -110,14 +110,14 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lSampleRate">
      <property name="text">
-      <string>Sample rate: </string>
+      <string>Sample rate</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lReadingType">
      <property name="text">
-      <string>Reading type</string>
+      <string>Read</string>
      </property>
     </widget>
    </item>

@@ -139,6 +139,7 @@ option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
 option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
+option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 
@@ -322,6 +323,32 @@ ELSE ()
 ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "libcerf Library DISABLED.")
+ENDIF ()
+
+IF (ENABLE_ROOT)
+FIND_PACKAGE(ZLIB)
+FIND_LIBRARY(LZ4_LIBRARY lz4
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (LZ4_INCLUDE_DIR lz4.h
+	/usr/include
+	/usr/local/include
+)
+IF (LZ4_LIBRARY AND LZ4_INCLUDE_DIR)
+	SET (LZ4_FOUND TRUE)
+	MESSAGE (STATUS "Found LZ4 library: ${LZ4_INCLUDE_DIR} ${LZ4_LIBRARY}")
+ELSE ()
+	SET (LZ4_FOUND FALSE)
+ENDIF ()
+IF (ZLIB_FOUND AND LZ4_FOUND)
+	add_definitions (-DHAVE_ZIP)
+ELSE ()
+	MESSAGE (STATUS "ZIP libraries not found.")
+ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "ROOT (CERN) importer DISABLED.")
 ENDIF ()
 
 #################################################

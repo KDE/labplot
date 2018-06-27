@@ -56,6 +56,7 @@ class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
+class ROOTOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -76,6 +77,7 @@ public:
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
+	const QStringList selectedROOTNames() const;
 	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 
@@ -99,6 +101,7 @@ private:
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
+	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 	bool m_fileEmpty;
@@ -177,6 +180,7 @@ signals:
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 	friend class FITSOptionsWidget;
+	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
 };
 
 #endif

@@ -1298,6 +1298,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
 }
 
+/*!
+ * preview for special devices (local/UDP/TCP socket or serial port)
+ */
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	DEBUG("AsciiFilterPrivate::preview(): bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
 	QVector<QStringList> dataStrings;
@@ -1338,14 +1341,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		col = 1;
 		vectorNames.prepend(i18n("Index"));
 	}
-
-	if (headerEnabled) {
-		int i = 0;
-		if (createIndexEnabled)
-			i = 1;
-		for (; i < vectorNames.size(); ++i)
-			vectorNames[i] = "Column " + QString::number(i);
-	}
+	vectorNames.append(i18n("Value"));
+	QDEBUG("	vector names = " << vectorNames);
 
 	for (const auto& valueString: newData.at(0).split(' ', QString::SkipEmptyParts)) {
 		if (col == colMax)
@@ -1429,6 +1426,16 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	// Read the data
 	if (lines == -1)
 		lines = m_actualRows;
+
+	// set column names for preview
+	if (!headerEnabled) {
+		int start = 0;
+		if (createIndexEnabled)
+			start = 1;
+		for (int i=start;i<m_actualCols;i++)
+				vectorNames << "Column " + QString::number(i+1);
+	}
+	QDEBUG("	column names = " << vectorNames);
 
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
