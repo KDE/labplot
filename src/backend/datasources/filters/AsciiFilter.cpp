@@ -1677,6 +1677,19 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 			return;
 		}
 
+		if(!list.isEmpty()) {
+			if(linesToRead < list.size()) {
+				int oldSize = list.size();
+				for(int i = 0; i < oldSize - linesToRead; ++i)
+					list.removeLast();
+				qDebug()<<"Lines to read smaller: "	<<linesToRead;
+			}
+			else if (linesToRead > list.size()) {
+				linesToRead = list.size();
+				qDebug()<<"Lines to bigger: "	<<linesToRead;
+			}
+		}
+
 		int colSize = 0;
 		if(list.isEmpty()) {
 			if (createIndexEnabled)

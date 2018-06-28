@@ -89,6 +89,7 @@ public:
 #ifdef HAVE_MQTT
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
+	bool checkTopicContains(const QString&, const QString&)	;
 #endif
 	void hideMQTT();
 
@@ -123,6 +124,7 @@ private:
 	QString m_mqttNewTopic;
 	bool m_mqttSubscribeButton;
 	QString m_mqttUnsubscribeTopic;
+	QVector<QString> m_subscribedTopicNames;
 #endif
 
 public slots:
@@ -173,6 +175,7 @@ signals:
 	void newTopic(QString);
 	void subscriptionMade();
 	void checkFileType();
+	void newTopicForWill(QString);
 #endif
 
 	void checkedFitsTableToMatrix(const bool enable);

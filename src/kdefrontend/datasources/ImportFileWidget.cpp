@@ -219,7 +219,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
 	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateChanged);
-	connect(this, &ImportFileWidget::subscriptionMade, this, &ImportFileWidget::updateWillTopics);
+	connect(this, &ImportFileWidget::newTopicForWill, this, &ImportFileWidget::updateWillTopics);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 #endif
@@ -1101,6 +1101,7 @@ void ImportFileWidget::refreshPreview() {
 					QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
 					while(j.hasNext()) {
 						j.next();
+						qDebug()<<"Set false after preview: "<<j.key().name();
 						m_messageArrived[j.key()] = false;
 					}
 					m_mqttReadyForPreview = false;
@@ -1669,7 +1670,6 @@ void ImportFileWidget::mqttSubscribe() {
 					ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
 					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 					m_mqttNewTopic = temp_subscription->topic().filter();
-					m_messageArrived[temp_subscription->topic().filter()] = false;
 					emit subscriptionMade();
 				}
 			}
@@ -1693,8 +1693,6 @@ void ImportFileWidget::mqttSubscribe() {
 					break;
 				}
 
-			m_topicList.removeAll(m_mqttUnsubscribeTopic);
-
 			if(m_mqttNewTopic == m_mqttUnsubscribeTopic)
 				m_mqttNewTopic.clear();
 			m_mqttReadyForPreview = false;
@@ -1702,7 +1700,7 @@ void ImportFileWidget::mqttSubscribe() {
 			QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 			while(i.hasNext()) {
 				i.next();
-				if(i.key().name() == m_mqttUnsubscribeTopic) {
+				if(checkTopicContains(m_mqttUnsubscribeTopic, i.key().name())) {
 					m_messageArrived.remove(i.key());
 					qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
 					break;
@@ -1712,7 +1710,7 @@ void ImportFileWidget::mqttSubscribe() {
 			QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 			while(j.hasNext()) {
 				j.next();
-				if(j.key().name() == m_mqttUnsubscribeTopic) {
+				if(checkTopicContains(m_mqttUnsubscribeTopic, j.key().name())) {
 					m_lastMessage.remove(j.key());
 					qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
 					break;
@@ -1726,6 +1724,21 @@ void ImportFileWidget::mqttSubscribe() {
 					//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
 				}
 			}
+
+			for(int i = 0; i < m_subscribedTopicNames.size(); ++i) {
+				if(checkTopicContains(m_mqttUnsubscribeTopic, m_subscribedTopicNames[i])) {
+					m_subscribedTopicNames.remove(i);
+					i--;
+				}
+			}
+
+			for(int item = 0; item < ui.cbWillTopic->count(); ++item) {
+				if(checkTopicContains(m_mqttUnsubscribeTopic, ui.cbWillTopic->itemText(item))) {
+					ui.cbWillTopic->removeItem(item);
+					item--;
+				}
+			}
+
 			emit subscriptionMade();
 			refreshPreview();
 		}
@@ -1802,22 +1815,33 @@ bool ImportFileWidget::isMqttValid(){
 }
 
 void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
+	qDebug()<<"message received from: "<<msg.topic().name();
+	if(!m_subscribedTopicNames.contains(msg.topic().name())) {
+		m_messageArrived[msg.topic()] = true;
+		qDebug()<<msg.topic().name()<<"set true";
+		m_subscribedTopicNames.push_back(msg.topic().name());
+	}
+
 	if(m_messageArrived[msg.topic()] == false) {
+		qDebug()<<msg.topic().name()<<"set true";
 		m_messageArrived[msg.topic()] = true;
 	}
+
 	m_lastMessage[msg.topic()]= msg;
 	bool check = true;
 	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
 	while(i.hasNext()) {
 		i.next();
 		if(i.value() == false ) {
+			qDebug()<<"Found false: "<<i.key().name();
 			check = false;
 			break;
 		}
 	}
 	if (check == true)
 		m_mqttReadyForPreview = true;
-	if(m_mqttReadyForPreview && !m_mqttNewTopic.isEmpty() && m_messageArrived[m_mqttNewTopic]) {
+
+	if(m_mqttReadyForPreview && checkTopicContains(m_mqttNewTopic, msg.topic().name())) {
 		qDebug() << "New topic for preview:  " << m_mqttNewTopic;
 		m_mqttNewTopic.clear();
 		refreshPreview();
@@ -1951,10 +1975,9 @@ void ImportFileWidget::willMessageTypeChanged(int type) {
 }
 
 void ImportFileWidget::updateWillTopics() {
-	for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
-		QListWidgetItem* item = ui.lwSubscriptions->item(i);
-		if(ui.cbWillTopic->findText(item->text()) < 0)
-			ui.cbWillTopic->addItem(item->text());
+	ui.cbWillTopic->clear();
+	for(int i = 0; i < m_subscribedTopicNames.size(); ++i) {
+		ui.cbWillTopic->addItem(m_subscribedTopicNames[i]);
 	}
 }
 
@@ -2029,5 +2052,28 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	default:
 		break;
 	}
+}
+
+bool ImportFileWidget::checkTopicContains(const QString& superior, const QString& inferior) {
+	if(superior == inferior)
+		return true;
+
+	if(superior.contains('#') || superior.contains('+')) {
+		if(superior.contains('#')) {
+			if(inferior.startsWith(superior.left(superior.count() - 2)) ){
+				return true;
+			}
+		}
+		else if (superior.contains('+')) {
+			int pos = superior.indexOf('+');
+			QString start = superior.left(pos);
+			QString end = superior.right(superior.count() - pos);
+			if(inferior.startsWith(start) && inferior.endsWith(end)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 #endif
