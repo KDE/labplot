@@ -175,7 +175,7 @@ signals:
 	void newTopic(QString);
 	void subscriptionMade();
 	void checkFileType();
-	void newTopicForWill(QString);
+	void newTopicForWill();
 #endif
 
 	void checkedFitsTableToMatrix(const bool enable);

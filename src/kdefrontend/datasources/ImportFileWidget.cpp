@@ -1820,6 +1820,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 		m_messageArrived[msg.topic()] = true;
 		qDebug()<<msg.topic().name()<<"set true";
 		m_subscribedTopicNames.push_back(msg.topic().name());
+		emit newTopicForWill();
 	}
 
 	if(m_messageArrived[msg.topic()] == false) {
