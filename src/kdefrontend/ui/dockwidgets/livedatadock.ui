@@ -162,7 +162,7 @@
     <widget class="QComboBox" name="cbUpdateType">
      <item>
       <property name="text">
-       <string>Time interval</string>
+       <string>Periodically</string>
       </property>
      </item>
      <item>
@@ -170,19 +170,6 @@
        <string>On new data</string>
       </property>
      </item>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="QSpinBox" name="sbUpdateInterval">
-     <property name="minimum">
-      <number>20</number>
-     </property>
-     <property name="maximum">
-      <number>3600000</number>
-     </property>
-     <property name="value">
-      <number>1000</number>
-     </property>
     </widget>
    </item>
    <item row="22" column="1">
@@ -543,6 +530,32 @@
        <string>2</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="sbUpdateInterval">
+     <property name="minimum">
+      <number>20</number>
+     </property>
+     <property name="maximum">
+      <number>3600000</number>
+     </property>
+     <property name="value">
+      <number>1000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="lUnit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>ms</string>
+     </property>
     </widget>
    </item>
   </layout>
