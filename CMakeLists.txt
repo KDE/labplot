@@ -33,6 +33,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	XmlGui
 OPTIONAL_COMPONENTS
 	NewStuff
+	Service
 	SyntaxHighlighting
 )
 IF (Qt5SerialPort_FOUND)
@@ -170,7 +171,7 @@ FIND_PATH (CANTOR_INCLUDE_DIR cantor/worksheetaccess.h
 	/usr/include
 	/usr/local/include
 )
-IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR AND KF5Service_FOUND)
 	SET (CANTOR_LIBS_FOUND TRUE)
 ELSE ()
 	SET (CANTOR_LIBS_FOUND FALSE)
