@@ -60,6 +60,8 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTimer>
 #include <QUdpSocket>
 #include <QCheckBox>
+#include <QTreeWidgetItem>
+#include <QStringList>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -210,10 +212,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
 	connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
-	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::topicBeingTyped);
 	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
-	connect(ui.cbTopic, &QComboBox::currentTextChanged, this, &ImportFileWidget::mqttButtonSubscribe);
-	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &ImportFileWidget::mqttButtonUnsubscribe);
+	connect(ui.twTopics, &QTreeWidget::itemClicked, this, &ImportFileWidget::mqttButtonSubscribe);
+	connect(ui.lwSubscriptions, &QListWidget::itemClicked, this, &ImportFileWidget::mqttButtonUnsubscribe);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
@@ -222,6 +223,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(this, &ImportFileWidget::newTopicForWill, this, &ImportFileWidget::updateWillTopics);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
+	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::searchTreeItem);
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
@@ -1355,41 +1357,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
 
-        ui.leID->hide();
-        ui.lMqttID->hide();
-        ui.lePassword->hide();
-        ui.lPassword->hide();
-        ui.leUsername->hide();
-        ui.lUsername->hide();
-        ui.cbQos->hide();
-        ui.lQos->hide();
-        ui.cbTopic->hide();
-        ui.lTopic->hide();
-        ui.lwSubscriptions->hide();
-        ui.lSubscriptions->hide();
-        ui.chbAuthentication->hide();
-        ui.chbID->hide();
-        ui.bSubscribe->hide();
-        ui.bConnect->hide();
-
-		ui.gbMqttWill->hide();
-		ui.chbWill->hide();
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lwWillStatistics->hide();
-		ui.lWillStatistics->hide();
+		hideMQTT();
 
 		ui.lFileName->hide();
 		ui.leFileName->hide();
@@ -1462,8 +1430,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
         ui.lUsername->hide();
         ui.cbQos->show();
         ui.lQos->show();
-        ui.cbTopic->show();
-        ui.lTopic->show();
+		ui.twTopics->show();
+		ui.lTopicTree->show();
+		ui.lTopicSearch->show();
+		ui.leTopics->show();
         ui.lwSubscriptions->show();
         ui.lSubscriptions->show();
         ui.chbAuthentication->show();
@@ -1660,9 +1630,99 @@ void ImportFileWidget::onMqttConnect() {
 
 void ImportFileWidget::mqttSubscribe() {
 	if(m_mqttSubscribeButton) {
-		if(ui.lwSubscriptions->findItems(ui.cbTopic->currentText(), Qt::MatchExactly).isEmpty()) {
-			if(ui.cbTopic->findText( ui.cbTopic->currentText() ) != -1){
-				QMqttTopicFilter filter {ui.cbTopic->currentText()};
+		QString name;
+		QTreeWidgetItem *item = ui.twTopics->currentItem();
+		QTreeWidgetItem *tempItem = item;
+		name.prepend(item->text(0));
+		if(item->childCount() != 0)
+			name.append("/#");
+
+		while(tempItem->parent() != nullptr) {
+			tempItem = tempItem->parent();
+			name.prepend(tempItem->text(0) + "/");
+		}
+
+		if(ui.lwSubscriptions->findItems(name, Qt::MatchExactly).isEmpty()) {
+
+			qDebug() << name;
+			bool foundSuperior = false;
+			bool foundEqual = false;
+			for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
+				qDebug()<<i<<" "<<ui.lwSubscriptions->count();
+				if(checkTopicContains(name, ui.lwSubscriptions->item(i)->text())) {
+					qDebug()<<"1"<<name<<" "<< ui.lwSubscriptions->item(i)->text();
+					unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
+					qDebug()<<"After Delete";
+					i--;
+					continue;
+				}
+
+				if(checkTopicContains(ui.lwSubscriptions->item(i)->text(), name)) {
+					foundSuperior = true;
+					qDebug()<<"2"<<name<<" "<< ui.lwSubscriptions->item(i)->text();
+					break;
+				}
+				QString commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), name);
+				if(!commonTopic.isEmpty()) {
+					foundEqual = true;
+					unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
+					ui.lwSubscriptions->addItem(commonTopic);
+					QMqttTopicFilter filter {commonTopic};
+					QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+					if(temp_subscription) {
+						m_mqttSubscriptions.push_back(temp_subscription);
+						connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+						m_mqttNewTopic = temp_subscription->topic().filter();
+						emit subscriptionMade();
+					}
+					break;
+				}
+			}
+			if(!foundSuperior && !foundEqual) {
+				ui.lwSubscriptions->addItem(name);
+
+				QMqttTopicFilter filter {name};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					m_mqttNewTopic = temp_subscription->topic().filter();
+					emit subscriptionMade();
+				}
+			}
+
+			if(foundEqual) {
+				QString commonTopic;
+				do{
+					commonTopic = "";
+					for(int i = 0; i < ui.lwSubscriptions->count() - 1; ++i) {
+						commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), ui.lwSubscriptions->item(i+1)->text());
+						if(!commonTopic.isEmpty()) {
+							unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
+
+							if(ui.lwSubscriptions->findItems(commonTopic, Qt::MatchExactly).isEmpty()) {
+								ui.lwSubscriptions->addItem(commonTopic);
+
+								QMqttTopicFilter filter {commonTopic};
+								QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+								if(temp_subscription) {
+									qDebug()<<"subscriptionMade"<<filter;
+									m_mqttSubscriptions.push_back(temp_subscription);
+									connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+									m_mqttNewTopic = temp_subscription->topic().filter();
+									emit subscriptionMade();
+								}
+							}
+							break;
+						}
+					}
+				} while(!commonTopic.isEmpty());
+			}
+
+			/*QMqttTopicFilter filter {ui.cbTopic->currentText()};
 				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
 
 				if(temp_subscription) {
@@ -1671,81 +1731,76 @@ void ImportFileWidget::mqttSubscribe() {
 					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 					m_mqttNewTopic = temp_subscription->topic().filter();
 					emit subscriptionMade();
-				}
-			}
-			else
-				QMessageBox::warning(this, "Warning", "There is no such topic listed in the combo box");
+				}*/
 		}
 		else
 			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
 	}
 	else {
-		if(!m_mqttUnsubscribeTopic.isEmpty()) {
-			QMqttTopicFilter filter{m_mqttUnsubscribeTopic};
-			m_client->unsubscribe(filter);
-
-			qDebug()<<"unsubscribe occured";
-
-			for(int i = 0; i< m_mqttSubscriptions.count(); ++i)
-				if(m_mqttSubscriptions[i]->topic().filter() == m_mqttUnsubscribeTopic) {
-					qDebug()<<"1 subscription found at  "<<i <<"and removed";
-					m_mqttSubscriptions.remove(i);
-					break;
-				}
-
-			if(m_mqttNewTopic == m_mqttUnsubscribeTopic)
-				m_mqttNewTopic.clear();
-			m_mqttReadyForPreview = false;
-
-			QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
-			while(i.hasNext()) {
-				i.next();
-				if(checkTopicContains(m_mqttUnsubscribeTopic, i.key().name())) {
-					m_messageArrived.remove(i.key());
-					qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
-					break;
-				}
-			}
-
-			QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
-			while(j.hasNext()) {
-				j.next();
-				if(checkTopicContains(m_mqttUnsubscribeTopic, j.key().name())) {
-					m_lastMessage.remove(j.key());
-					qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
-					break;
-				}
-			}
-
-			for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
-				if(ui.lwSubscriptions->item(row)->text() == m_mqttUnsubscribeTopic) {
-					qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
-					delete ui.lwSubscriptions->item(row);
-					//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
-				}
-			}
-
-			for(int i = 0; i < m_subscribedTopicNames.size(); ++i) {
-				if(checkTopicContains(m_mqttUnsubscribeTopic, m_subscribedTopicNames[i])) {
-					m_subscribedTopicNames.remove(i);
-					i--;
-				}
-			}
-
-			for(int item = 0; item < ui.cbWillTopic->count(); ++item) {
-				if(checkTopicContains(m_mqttUnsubscribeTopic, ui.cbWillTopic->itemText(item))) {
-					ui.cbWillTopic->removeItem(item);
-					item--;
-				}
-			}
-
-			emit subscriptionMade();
-			refreshPreview();
-		}
+		unsubscribeFromTopic(m_mqttUnsubscribeTopic);
 	}
 }
 
 void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
+	if(!m_addedTopics.contains(topic.name())) {
+		m_addedTopics.push_back(topic.name());
+		QStringList name;
+		QChar sep = '/';
+		if(topic.name().contains(sep)) {
+			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
+
+			name.append(list.at(0));
+			QTreeWidgetItem* currentItem;
+			int topItemIdx = -1;
+			for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+				if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+					topItemIdx = i;
+					break;
+				}
+			}
+			if( topItemIdx < 0) {
+				currentItem = new QTreeWidgetItem(name);
+				ui.twTopics->addTopLevelItem(currentItem);
+				for(int i = 1; i < list.size(); ++i) {
+					name.clear();
+					name.append(list.at(i));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(0);
+				}
+			} else {
+				currentItem = ui.twTopics->topLevelItem(topItemIdx);
+				int listIdx = 1;
+				for(; listIdx < list.size(); ++listIdx) {
+					QTreeWidgetItem* childItem = nullptr;
+					bool found = false;
+					for(int j = 0; j < currentItem->childCount(); ++j) {
+						childItem = currentItem->child(j);
+						if(childItem->text(0) == list.at(listIdx)) {
+							found = true;
+							currentItem = childItem;
+							break;
+						}
+					}
+					if(!found)
+						break;
+				}
+
+				for(; listIdx < list.size(); ++listIdx) {
+					name.clear();
+					name.append(list.at(listIdx));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(currentItem->childCount() - 1);
+				}
+			}
+		}
+		else {
+			name.append(topic.name());
+			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
+		}
+		emit newTopic(name.at(0));
+	}
+
+	/*
 	QString topicName = topic.name();
 	if(ui.cbTopic->findText(topicName) == -1) {
 		QStringList topicList = topicName.split('/', QString::SkipEmptyParts);
@@ -1771,38 +1826,23 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 				break;
 			}
 		}
-	}
+	}*/
 }
 
 void ImportFileWidget::setCompleter(QString topic) {
-	if(!m_editing) {
+	if(!m_topicList.contains(topic)) {
 		m_topicList.append(topic);
 		m_completer = new QCompleter(m_topicList, this);
 		m_completer->setCompletionMode(QCompleter::PopupCompletion);
 		m_completer->setCaseSensitivity(Qt::CaseSensitive);
-		ui.cbTopic->setCompleter(m_completer);
-	}
-}
-
-void ImportFileWidget::topicBeingTyped(const QString topic) {
-	if(!m_editing) {
-		bool found = false;
-		for (int i=0; i<ui.cbTopic->count(); ++i) {
-			if(QString::compare(ui.cbTopic->itemText(i), topic, Qt::CaseSensitive) == 0)
-				found = true;
-		}
-		if(!found) {
-			qDebug() << topic;
-			m_editing = true;
-			m_timer->start();
-		}
+		ui.leTopics->setCompleter(m_completer);
 	}
 }
 
 void ImportFileWidget::topicTimeout() {
-	qDebug()<<"lejart ido";
+	/*qDebug()<<"lejart ido";
 	m_editing = false;
-	m_timer->stop();
+	m_timer->stop();*/
 }
 
 bool ImportFileWidget::isMqttValid(){
@@ -1867,8 +1907,8 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.leID->setEnabled(true);
 	ui.leID->clear();
 
-	ui.cbTopic->clear();
 	ui.lwSubscriptions->clear();
+	ui.twTopics->clear();
 
 	ui.chbRetain->setEnabled(true);
 	ui.cbSourceType->setEnabled(true);
@@ -1889,18 +1929,18 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_lastMessage.clear();
 }
 
-void ImportFileWidget::mqttButtonSubscribe(const QString& text) {
+void ImportFileWidget::mqttButtonSubscribe(QTreeWidgetItem *item, int column) {
 	if(!m_mqttSubscribeButton) {
 		ui.bSubscribe->setText("Subscribe");
 		m_mqttSubscribeButton = true;
 	}
 }
 
-void ImportFileWidget::mqttButtonUnsubscribe(const QString& item) {
+void ImportFileWidget::mqttButtonUnsubscribe(QListWidgetItem *item) {
 	qDebug()<< "trying to set unsubscribe, mqttSubscribeButton's value: "<<m_mqttSubscribeButton;
 	ui.bSubscribe->setText("Unsubscribe");
 	m_mqttSubscribeButton = false;
-	m_mqttUnsubscribeTopic = item;
+	m_mqttUnsubscribeTopic = ui.lwSubscriptions->currentItem()->text();
 	qDebug()<<"Unsubscribe from:"<<m_mqttUnsubscribeTopic;
 }
 
@@ -2003,8 +2043,10 @@ void ImportFileWidget::hideMQTT() {
 	ui.lUsername->hide();
 	ui.cbQos->hide();
 	ui.lQos->hide();
-	ui.cbTopic->hide();
-	ui.lTopic->hide();
+	ui.twTopics->hide();
+	ui.lTopicTree->hide();
+	ui.lTopicSearch->hide();
+	ui.leTopics->hide();
 	ui.lwSubscriptions->hide();
 	ui.lSubscriptions->hide();
 	ui.chbAuthentication->hide();
@@ -2076,5 +2118,125 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 	}
 
 	return false;
+}
+
+QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/');
+	QStringList secondtList = second.split('/');
+	QString commonTopic = "";
+
+	if(firstList.size() == secondtList.size() && (first != second))	{
+		int matchIndex = -1;
+		for(int i = 0; i < firstList.size(); ++i) {
+			if(firstList.at(i) != secondtList.at(i)) {
+				matchIndex = i;
+				break;
+			}
+		}
+		bool differ = false;
+		if(matchIndex > 0 && matchIndex < firstList.size() -1) {
+			for(int j = matchIndex +1; j < firstList.size(); ++j) {
+				if(firstList.at(j) != secondtList.at(j)) {
+					differ = true;
+					break;
+				}
+			}
+		}
+
+		if(!differ)
+		{
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(i != matchIndex)
+					commonTopic.append(firstList.at(i));
+				else
+					commonTopic.append("+");
+
+				if(i != firstList.size() - 1)
+					commonTopic.append("/");
+			}
+		}
+	}
+	return commonTopic;
+}
+
+void ImportFileWidget::searchTreeItem(const QString& rootName) {
+	qDebug()<<rootName;
+	int topItemIdx = -1;
+	for(int i = 0; i< ui.twTopics->topLevelItemCount(); ++i)
+		if(ui.twTopics->topLevelItem(i)->text(0) == rootName) {
+			topItemIdx = i;
+			break;
+		}
+
+	if(topItemIdx >= 0) {
+		qDebug() << "Scroll";
+		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+	}
+}
+
+void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
+	if(!topicName.isEmpty()) {
+		QMqttTopicFilter filter{topicName};
+		m_client->unsubscribe(filter);
+
+		qDebug()<<"unsubscribe occured";
+
+		for(int i = 0; i< m_mqttSubscriptions.count(); ++i)
+			if(m_mqttSubscriptions[i]->topic().filter() == topicName) {
+				qDebug()<<"1 subscription found at  "<<i <<"and removed";
+				m_mqttSubscriptions.remove(i);
+				break;
+			}
+
+		if(m_mqttNewTopic == topicName)
+			m_mqttNewTopic.clear();
+		m_mqttReadyForPreview = false;
+
+		QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+		while(i.hasNext()) {
+			i.next();
+			if(checkTopicContains(topicName, i.key().name())) {
+				m_messageArrived.remove(i.key());
+				qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
+				break;
+			}
+		}
+
+		QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+		while(j.hasNext()) {
+			j.next();
+			if(checkTopicContains(topicName, j.key().name())) {
+				m_lastMessage.remove(j.key());
+				qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
+				break;
+			}
+		}
+
+		for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
+			if(ui.lwSubscriptions->item(row)->text() == topicName) {
+				qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
+				delete ui.lwSubscriptions->item(row);
+				//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
+			}
+		}
+
+		for(int i = 0; i < m_subscribedTopicNames.size(); ++i) {
+			if(checkTopicContains(topicName, m_subscribedTopicNames[i])) {
+				m_subscribedTopicNames.remove(i);
+				i--;
+			}
+		}
+
+		for(int item = 0; item < ui.cbWillTopic->count(); ++item) {
+			if(checkTopicContains(topicName, ui.cbWillTopic->itemText(item))) {
+				ui.cbWillTopic->removeItem(item);
+				item--;
+			}
+		}
+
+		emit subscriptionMade();
+		refreshPreview();
+	}
 }
 #endif

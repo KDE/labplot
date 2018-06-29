@@ -48,6 +48,7 @@
 #include <QCompleter>
 #include <QStringList>
 #include <QTimer>
+#include <QTreeWidgetItem>
 
 class AbstractFileFilter;
 class AsciiOptionsWidget;
@@ -90,6 +91,8 @@ public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
 	bool checkTopicContains(const QString&, const QString&)	;
+	QString checkCommonLevel(const QString&, const QString&);
+	void unsubscribeFromTopic(const QString&);
 #endif
 	void hideMQTT();
 
@@ -125,6 +128,7 @@ private:
 	bool m_mqttSubscribeButton;
 	QString m_mqttUnsubscribeTopic;
 	QVector<QString> m_subscribedTopicNames;
+	QVector<QString> m_addedTopics;
 #endif
 
 public slots:
@@ -151,18 +155,18 @@ private slots:
     void onMqttConnect();
     void mqttSubscribe();
     void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-    void setCompleter(QString);
-    void topicBeingTyped(const QString);
+	void setCompleter(QString);
     void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
-	void mqttButtonSubscribe(const QString&);
-	void mqttButtonUnsubscribe(const QString&);
+	void mqttButtonSubscribe(QTreeWidgetItem *item, int column);
+	void mqttButtonUnsubscribe(QListWidgetItem *item);
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
 	void updateWillTopics();
 	void willUpdateChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
+	void searchTreeItem(const QString&);
 #endif
 
 signals:
