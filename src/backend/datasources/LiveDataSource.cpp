@@ -74,6 +74,8 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 	  m_paused(false),
 	  m_prepared(false),
 	  m_keepLastValues(false),
+	  m_updateInterval(1000),
+//TODO: m_keepNvalues, m_sampleRate, m_port, m_baudRate ?
 	  m_bytesRead(0),
 	  m_filter(nullptr),
 	  m_updateTimer(new QTimer(this)),
