@@ -59,7 +59,7 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
-void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource * dataSource) {
+void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource* dataSource) {
 	d->readFromLiveDevice(device, dataSource);
 }
 
