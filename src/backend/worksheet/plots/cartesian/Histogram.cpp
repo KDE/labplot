@@ -78,8 +78,8 @@ void Histogram::init() {
 
 	d->xColumn = NULL;
 
-	d->m_histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
-	d->m_barsType = (Histogram::BarsType) group.readEntry("barsType", (int)Histogram::Vertical);
+	d->histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
+	d->histogramOrientation = (Histogram::HistogramOrientation) group.readEntry("histogramOrientation", (int)Histogram::Vertical);
 	d->binsOption = (Histogram::BinsOption) group.readEntry("binOption", (int)Histogram::Number);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
@@ -154,33 +154,15 @@ void Histogram::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
-void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
-	d_ptr->m_histogramType = histogramType;
-	emit HistogramDataChanged();
-	DEBUG(histogramType);
-}
-
-void Histogram::setBarsType(Histogram::BarsType barsType) {
-    Q_D(Histogram);
-	d->m_barsType = barsType;
-	emit HistogramDataChanged();
-	DEBUG(barsType);
-}
-
-Histogram::HistogramType Histogram::getHistrogramType() {
-	return d_ptr->m_histogramType;
-}
-
-Histogram::BarsType Histogram::getBarsType() {
-	return d_ptr->m_barsType;
-}
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, histogramType, histogramType)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, histogramOrientation, histogramOrientation)
 
 void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
 	d_ptr->histogramData.binsOption = binsOption;
 	emit HistogramDataChanged();
 }
 void Histogram::setBinValue(int binValue) {
-	d_ptr->histogramData.binValue= binValue;
+	d_ptr->histogramData.binValue = binValue;
 	emit HistogramDataChanged();
 }
 
@@ -250,6 +232,22 @@ void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) 
 	exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, histogramType, retransform)
+void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
+	Q_D(Histogram);
+    exec(new HistogramSetHistogramTypeCmd(d, histogramType, i18n("%1: assign histogram type")));
+	emit HistogramDataChanged();
+	DEBUG(histogramType);
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, histogramOrientation, retransform)
+void Histogram::setHistogramOrientation(Histogram::HistogramOrientation histogramOrientation) {
+    Q_D(Histogram);
+    exec(new HistogramSetHistogramOrientationCmd(d, histogramOrientation, i18n("%1: assign histogram orientation")));
+	emit HistogramDataChanged();
+	DEBUG(histogramOrientation);
+}
+
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void Histogram::setXColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
@@ -257,7 +255,7 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 		exec(new HistogramSetXColumnCmd(d, column, i18n("%1: assign x values")));
 		emit sourceDataChangedSinceLastPlot();
 
-		//emit xHistogramDataChanged() in order to notify the plot about the changes
+		//emit HistogramDataChanged() in order to notify the plot about the changes
 		emit HistogramDataChanged();
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::xHistogramDataChanged);
@@ -277,6 +275,7 @@ void Histogram::setLinePen(const QPen &pen) {
 	if (pen != d->linePen)
 		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
+
 //Values-Tab
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
 void Histogram::setValuesType(Histogram::ValuesType type) {
@@ -493,7 +492,7 @@ QRectF HistogramPrivate::boundingRect() const {
 double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
 		double yMaxRange = -INFINITY;
-		switch(m_histogramType) {
+		switch(histogramType) {
 			case Histogram::Ordinary: {
 				size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 				yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
@@ -527,7 +526,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 }
 
 double HistogramPrivate::getXMinimum() {
-	switch(m_barsType) {
+	switch(histogramOrientation) {
 		case Histogram::Vertical: {
 			return xColumn->minimum();
 		}
@@ -539,7 +538,7 @@ double HistogramPrivate::getXMinimum() {
 }
 
 double HistogramPrivate::getXMaximum() {
-	switch(m_barsType) {
+	switch(histogramOrientation) {
 		case Histogram::Vertical: {
 			return xColumn->maximum();
 		}
@@ -551,7 +550,7 @@ double HistogramPrivate::getXMaximum() {
 }
 
 double HistogramPrivate::getYMinimum() {
-	switch(m_barsType) {
+	switch(histogramOrientation) {
 		case Histogram::Vertical: {
 			return 0;
 		}
@@ -563,7 +562,7 @@ double HistogramPrivate::getYMinimum() {
 }
 
 double HistogramPrivate::getYMaximum() {
-	switch(m_barsType) {
+	switch(histogramOrientation) {
 		case Histogram::Vertical: {
 			return getMaximumOccuranceofHistogram();
 		}
@@ -745,7 +744,7 @@ void HistogramPrivate::verticalCumulativeHistogram() {
 }
 
 void HistogramPrivate::verticalHistogram() {
-	switch(m_histogramType) {
+	switch(histogramType) {
 		case Histogram::Ordinary: {
 			verticalOrdinaryHistogram();
 			break;
@@ -846,7 +845,7 @@ void HistogramPrivate::horizontalCumulativeHistogram() {
 }
 
 void HistogramPrivate::horizontalHistogram() {
-	switch(m_histogramType) {
+	switch(histogramType) {
 		case Histogram::Ordinary: {
 			horizontalOrdinaryHistogram();
 			break;
@@ -908,7 +907,7 @@ void HistogramPrivate::updateLines() {
 			gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
 	}
 
-	switch(m_barsType) {
+	switch(histogramOrientation) {
 		case Histogram::Vertical: {
 			verticalHistogram();
 			break;
@@ -954,7 +953,7 @@ void HistogramPrivate::updateValues() {
 
 	//determine the value string for all points that are currently visible in the plot
 	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
-		switch(m_histogramType) {
+		switch(histogramType) {
 			case Histogram::Ordinary:
 				for(size_t i=0; i<m_bins; ++i) {
 					if (!visiblePoints[i]) continue;
@@ -1659,7 +1658,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
-				d->m_histogramType = (Histogram::HistogramType)str.toInt();
+				d->histogramType = (Histogram::HistogramType)str.toInt();
 
 			str = attribs.value("BinsOption").toString();
 			d->binsOption = (Histogram::BinsOption)str.toInt();

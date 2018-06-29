@@ -939,8 +939,8 @@ void HistogramDock::setupGeneral() {
 	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
 
 	// Bars types
-	uiGeneralTab.cbBarsType->addItem(i18n("Vertical"));
-	uiGeneralTab.cbBarsType->addItem(i18n("Horizontal"));
+	uiGeneralTab.cbHistogramOrientation->addItem(i18n("Vertical"));
+	uiGeneralTab.cbHistogramOrientation->addItem(i18n("Horizontal"));
 
 	//General
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
@@ -950,7 +950,7 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-	connect( uiGeneralTab.cbBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(barsTypeChanged(int)));
+	connect( uiGeneralTab.cbHistogramOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramOrientationChanged(int)));
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
 	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
 
@@ -961,9 +961,9 @@ void HistogramDock::histogramTypeChanged(int index) {
 	m_curve->setHistogramType(histogramType);
 }
 
-void HistogramDock::barsTypeChanged(int index) {
-	Histogram::BarsType barsType = Histogram::BarsType(index);
-	m_curve->setBarsType(barsType);
+void HistogramDock::histogramOrientationChanged(int index) {
+	Histogram::HistogramOrientation histogramOrientation = Histogram::HistogramOrientation(index);
+	m_curve->setHistogramOrientation(histogramOrientation);
 }
 
 void HistogramDock::binValueChanged(int value) {

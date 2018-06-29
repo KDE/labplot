@@ -179,6 +179,7 @@
 				</widget>
 			</item>
 			<item row="13" column="0">
+<<<<<<< HEAD
 				<widget class="QLabel" name="lBinSettings">
 					<property name="font">
 						<font>
@@ -192,14 +193,14 @@
 				</widget>
 			</item>
 			<item row="14" column="0">
-				<widget class="QLabel" name="lBarsType">
+				<widget class="QLabel" name="lHistogramOrientation">
 					<property name="text">
 						<string>Bars type:</string>
 					</property>
 				</widget>
 			</item>
 			<item row="14" column="2">
-				<widget class="QComboBox" name="cbBarsType"/>
+				<widget class="QComboBox" name="cbHistogramOrientation"/>
 			</item>
 			<item row="16" column="0">
 				<spacer name="verticalSpacerHT">

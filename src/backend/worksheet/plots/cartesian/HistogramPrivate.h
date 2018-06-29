@@ -79,8 +79,8 @@ class HistogramPrivate : public QGraphicsItem {
 		double getXMaximum();
 		double getMaximumOccuranceofHistogram();
 		bool autoScaleX, autoScaleY;
-		Histogram::HistogramType m_histogramType;
-		Histogram::BarsType m_barsType;
+		Histogram::HistogramType histogramType;
+		Histogram::HistogramOrientation histogramOrientation;
 		Histogram::BinsOption binsOption;
 
 		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;

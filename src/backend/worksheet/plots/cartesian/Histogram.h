@@ -45,7 +45,7 @@ public:
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
-	enum BarsType {Vertical, Horizontal};
+	enum HistogramOrientation {Vertical, Horizontal};
 
 	struct HistogramData {
 		HistogramData() : type(Ordinary),binsOption(Number), binValue(10) {};
@@ -65,6 +65,8 @@ public:
 
 	CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
 
+	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, histogramType, HistogramType)
+	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, histogramOrientation, HistogramOrientation)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	QString& xColumnPath() const;
@@ -106,10 +108,6 @@ public:
 	double getYMinimum() const;
 	double getXMaximum() const;
 	double getXMinimum() const;
-	void setHistogramType(Histogram::HistogramType);
-	void setBarsType(Histogram::BarsType);
-	Histogram::HistogramType getHistrogramType();
-	Histogram::BarsType getBarsType();
 	void setbinsOption(Histogram::BinsOption);
 	void setBinValue(int);
 
@@ -147,9 +145,13 @@ signals:
 	void yHistogramDataChanged();
 	void visibilityChanged(bool);
 
+	friend class HistogramSetHistogramTypeCmd;
+	friend class HistogramSetHistogramOrientationCmd;
 	friend class HistogramSetXColumnCmd;
 	friend class HistogramSetYColumnCmd;
 	friend class HistogramSetLinePenCmd;
+	void histogramTypeChanged(Histogram::HistogramType);
+	void histogramOrientationChanged(Histogram::HistogramOrientation);
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 
