@@ -346,7 +346,7 @@ ENDIF ()
 #TODO: KF5::NewStuff
 
 IF (CANTOR_LIBS_FOUND)
-	target_link_libraries( labplot2lib ${CANTOR_LIBS} KF5::Service )
+	target_link_libraries( labplot2lib ${CANTOR_LIBS} KF5::Service KF5::Parts)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
