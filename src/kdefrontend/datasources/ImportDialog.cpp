@@ -97,7 +97,7 @@ ImportDialog::~ImportDialog() {
 void ImportDialog::setModel() {
 	//Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
-	frameAddTo->setTitle(i18n("Import To"));
+	frameAddTo->setTitle(i18n("Import to"));
 	QGridLayout *grid = new QGridLayout(frameAddTo);
 	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
 

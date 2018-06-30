@@ -56,14 +56,14 @@
    <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>x-Range</string>
+      <string>x-Range:</string>
      </property>
     </widget>
    </item>
    <item row="15" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Output</string>
+      <string>Output:</string>
      </property>
     </widget>
    </item>
@@ -86,14 +86,14 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Name</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -119,21 +119,21 @@
       </font>
      </property>
      <property name="text">
-      <string>Data:</string>
+      <string>Data</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data</string>
+      <string>x-Data:</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data</string>
+      <string>y-Data:</string>
      </property>
     </widget>
    </item>
@@ -146,7 +146,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Options:</string>
+      <string>Options</string>
      </property>
     </widget>
    </item>
@@ -206,7 +206,7 @@
    <item row="25" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
-      <string>visible</string>
+      <string>Visible</string>
      </property>
     </widget>
    </item>
@@ -232,7 +232,7 @@
    <item row="19" column="0">
     <widget class="QLabel" name="lXScale">
      <property name="text">
-      <string>X axis scale</string>
+      <string>X axis scale:</string>
      </property>
     </widget>
    </item>
@@ -241,14 +241,14 @@
      <item>
       <widget class="QCheckBox" name="cbTwoSided">
        <property name="text">
-        <string>two sided</string>
+        <string>Two sided</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="cbShifted">
        <property name="text">
-        <string>shifted</string>
+        <string>Shifted</string>
        </property>
       </widget>
      </item>
@@ -257,7 +257,7 @@
    <item row="14" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Window</string>
+      <string>Window:</string>
      </property>
     </widget>
    </item>
@@ -297,7 +297,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Min</string>
+        <string>Minimum:</string>
        </property>
       </widget>
      </item>
@@ -327,7 +327,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Max</string>
+        <string>Maximum:</string>
        </property>
       </widget>
      </item>

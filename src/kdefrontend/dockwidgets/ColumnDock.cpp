@@ -167,16 +167,16 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 		ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
 		break;
 	case AbstractColumn::Month:
-		ui.cbFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
-		ui.cbFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
-		ui.cbFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
-		ui.cbFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
+		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
+		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
+		ui.cbFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
+		ui.cbFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
 		break;
 	case AbstractColumn::Day:
-		ui.cbFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
-		ui.cbFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
-		ui.cbFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
-		ui.cbFormat->addItem(i18n("Full day name"), QVariant("dddd"));
+		ui.cbFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
+		ui.cbFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
+		ui.cbFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
+		ui.cbFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime:
 		for (const auto& s: AbstractColumn::dateTimeFormats())
@@ -222,9 +222,9 @@ void ColumnDock::retranslateUi() {
 	ui.cbType->addItem(i18n("Numeric"), QVariant(int(AbstractColumn::Numeric)));
 	ui.cbType->addItem(i18n("Integer"), QVariant(int(AbstractColumn::Integer)));
 	ui.cbType->addItem(i18n("Text"), QVariant(int(AbstractColumn::Text)));
-	ui.cbType->addItem(i18n("Month names"), QVariant(int(AbstractColumn::Month)));
-	ui.cbType->addItem(i18n("Day names"), QVariant(int(AbstractColumn::Day)));
-	ui.cbType->addItem(i18n("Date and time"), QVariant(int(AbstractColumn::DateTime)));
+	ui.cbType->addItem(i18n("Month Names"), QVariant(int(AbstractColumn::Month)));
+	ui.cbType->addItem(i18n("Day Names"), QVariant(int(AbstractColumn::Day)));
+	ui.cbType->addItem(i18n("Date and Time"), QVariant(int(AbstractColumn::DateTime)));
 
 	ui.cbPlotDesignation->clear();
 	ui.cbPlotDesignation->addItem(i18n("None"));

@@ -27,7 +27,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lTheme">
      <property name="text">
-      <string>Theme</string>
+      <string>Theme:</string>
      </property>
     </widget>
    </item>
@@ -79,7 +79,7 @@
    <item row="4" column="0" colspan="3">
     <widget class="QCheckBox" name="chkPresenterModeInteractive">
      <property name="text">
-      <string>interactive</string>
+      <string>Interactive</string>
      </property>
     </widget>
    </item>
@@ -115,7 +115,7 @@
    <item row="7" column="0" colspan="4">
     <widget class="QCheckBox" name="chkDoubleBuffering">
      <property name="text">
-      <string>enable double-buffering</string>
+      <string>Enable double buffering</string>
      </property>
     </widget>
    </item>
@@ -151,7 +151,7 @@
    <item row="10" column="0" colspan="3">
     <widget class="QLabel" name="lTexEngine">
      <property name="text">
-      <string>Typesetting engine</string>
+      <string>Typesetting engine:</string>
      </property>
     </widget>
    </item>

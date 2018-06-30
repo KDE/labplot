@@ -26,7 +26,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lXColumn">
         <property name="text">
-         <string>X-data</string>
+         <string>X-data:</string>
         </property>
        </widget>
       </item>
@@ -82,8 +82,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>779</width>
-           <height>213</height>
+           <width>767</width>
+           <height>323</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -102,7 +102,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lYColumn">
             <property name="text">
-             <string>Y-data</string>
+             <string>Y-data:</string>
             </property>
            </widget>
           </item>
@@ -148,7 +148,7 @@
       <item>
        <widget class="QRadioButton" name="rbCurvePlacement1">
         <property name="text">
-         <string>&amp;all curves in one plot</string>
+         <string>&amp;All curves in one plot</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -158,7 +158,7 @@
       <item>
        <widget class="QRadioButton" name="rbCurvePlacement2">
         <property name="text">
-         <string>one p&amp;lot per curve</string>
+         <string>One p&amp;lot per curve</string>
         </property>
        </widget>
       </item>
@@ -168,13 +168,13 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="gbPlotPlacement">
      <property name="title">
-      <string>Add curves to</string>
+      <string>Add Curves to</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement1">
         <property name="text">
-         <string>e&amp;xisting plot</string>
+         <string>E&amp;xisting plot</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -184,14 +184,14 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement2">
         <property name="text">
-         <string>&amp;new plot in an existing worksheet</string>
+         <string>&amp;New plot in an existing worksheet</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement3">
         <property name="text">
-         <string>new plot in a new wor&amp;ksheet</string>
+         <string>New plot in a new wor&amp;ksheet</string>
         </property>
        </widget>
       </item>

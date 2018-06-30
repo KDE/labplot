@@ -53,7 +53,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Data source</string>
+          <string>Data Source</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="1" column="3">
@@ -75,7 +75,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="lPort">
             <property name="text">
-             <string>Port</string>
+             <string>Port:</string>
             </property>
            </widget>
           </item>
@@ -93,27 +93,27 @@
            <widget class="QComboBox" name="cbSourceType">
             <item>
              <property name="text">
-              <string>File or named pipe</string>
+              <string>File or Named Pipe</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Network TCP socket</string>
+              <string>Network TCP Socket</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Network UDP socket</string>
+              <string>Network UDP Socket</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Local socket</string>
+              <string>Local Socket</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Serial port</string>
+              <string>Serial Port</string>
              </property>
             </item>
             <item>
@@ -126,7 +126,7 @@
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="lSourceType">
             <property name="text">
-             <string>Source</string>
+             <string>Source:</string>
             </property>
            </widget>
           </item>
@@ -140,7 +140,7 @@
           <item row="23" column="0">
            <widget class="QLabel" name="lFilter">
             <property name="text">
-             <string>Filter</string>
+             <string>Filter:</string>
             </property>
            </widget>
           </item>
@@ -153,7 +153,7 @@
           <item row="22" column="0">
            <widget class="QLabel" name="lFileType">
             <property name="text">
-             <string>Type</string>
+             <string>Type:</string>
             </property>
            </widget>
           </item>
@@ -263,7 +263,7 @@
           <item row="5" column="0" colspan="2">
            <widget class="QLabel" name="lBaudRate">
             <property name="text">
-             <string>Baud rate</string>
+             <string>Baud rate:</string>
             </property>
            </widget>
           </item>
@@ -276,7 +276,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="lSerialPort">
             <property name="text">
-             <string>Port</string>
+             <string>Port:</string>
             </property>
            </widget>
           </item>
@@ -324,14 +324,14 @@
           <item row="2" column="0">
            <widget class="QLabel" name="lHost">
             <property name="text">
-             <string>Host</string>
+             <string>Host:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0" colspan="2">
            <widget class="QLabel" name="lFileName">
             <property name="text">
-             <string>Name</string>
+             <string>Name:</string>
             </property>
            </widget>
           </item>
@@ -761,7 +761,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lReadType">
             <property name="text">
-             <string>Read</string>
+             <string>Read:</string>
             </property>
            </widget>
           </item>
@@ -780,7 +780,7 @@
             </item>
             <item>
              <property name="text">
-              <string>On new data</string>
+              <string>On New Data</string>
              </property>
             </item>
            </widget>
@@ -801,21 +801,21 @@
           <item row="8" column="0">
            <widget class="QLabel" name="lKeepLastValues">
             <property name="text">
-             <string>Keep last N values</string>
+             <string>Keep last N values:</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lUpdateType">
             <property name="text">
-             <string>Update</string>
+             <string>Update:</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="lUpdateInterval">
             <property name="text">
-             <string>Update interval</string>
+             <string>Update interval:</string>
             </property>
            </widget>
           </item>
@@ -852,17 +852,17 @@
            <widget class="QComboBox" name="cbReadType">
             <item>
              <property name="text">
-              <string>Continuously fixed</string>
+              <string>Continuously Fixed</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>From end</string>
+              <string>From End</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Till the end</string>
+              <string>Till the End</string>
              </property>
             </item>
            </widget>
@@ -870,7 +870,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="lSampleRate">
             <property name="text">
-             <string>Sample rate</string>
+             <string>Sample rate:</string>
             </property>
            </widget>
           </item>

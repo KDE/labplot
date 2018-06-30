@@ -37,7 +37,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>DateTime format</string>
+      <string>DateTime format:</string>
      </property>
     </widget>
    </item>
@@ -90,7 +90,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="lNumberFormat">
      <property name="text">
-      <string>Number format</string>
+      <string>Number format:</string>
      </property>
     </widget>
    </item>
@@ -158,7 +158,7 @@
    <item row="1" column="0" colspan="3">
     <widget class="QLabel" name="lSeparatingCharacter">
      <property name="text">
-      <string>Separating string</string>
+      <string>Separating string:</string>
      </property>
     </widget>
    </item>
@@ -178,7 +178,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Comment character</string>
+      <string>Comment character:</string>
      </property>
     </widget>
    </item>
@@ -215,7 +215,7 @@
    <item row="8" column="3">
     <widget class="QCheckBox" name="chbRemoveQuotes">
      <property name="text">
-      <string>Remove Quotes</string>
+      <string>Remove quotes</string>
      </property>
     </widget>
    </item>

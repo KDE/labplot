@@ -155,16 +155,16 @@ void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode c
 		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
 		break;
 	case AbstractColumn::Month:
-		ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
-		ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
-		ui.cbValuesFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
+		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
+		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
+		ui.cbValuesFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
 		break;
 	case AbstractColumn::Day:
-		ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
-		ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
-		ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
+		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
+		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
+		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
 		break;
 	case AbstractColumn::DateTime:
 		for (const auto& s: AbstractColumn::dateFormats())
@@ -286,7 +286,7 @@ void HistogramDock::valuesColorChanged(const QColor& color){
 }
 void HistogramDock::init(){
 	//Values
-	ui.cbValuesType->addItem(i18n("No values"));
+	ui.cbValuesType->addItem(i18n("No Values"));
 	ui.cbValuesType->addItem("y");
 	ui.cbValuesType->addItem(i18n("Custom Column"));
 
@@ -749,11 +749,11 @@ void HistogramDock::fillingTypeChanged(int index){
 		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
-			ui.lFillingFirstColor->setText(i18n("Color"));
+			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
 		}else{
-			ui.lFillingFirstColor->setText(i18n("First Color"));
+			ui.lFillingFirstColor->setText(i18n("First color:"));
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
@@ -773,7 +773,7 @@ void HistogramDock::fillingTypeChanged(int index){
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
 	}else if(type == PlotArea::Pattern) {
-		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->hide();
@@ -801,11 +801,11 @@ void HistogramDock::fillingColorStyleChanged(int index){
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor){
-		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
 	} else {
-		ui.lFillingFirstColor->setText(i18n("First Color"));
+		ui.lFillingFirstColor->setText(i18n("First color:"));
 		ui.lFillingSecondColor->show();
 		ui.kcbFillingSecondColor->show();
 		ui.lFillingBrushStyle->hide();

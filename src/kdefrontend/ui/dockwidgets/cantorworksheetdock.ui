@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>331</width>
+    <width>351</width>
     <height>413</height>
    </rect>
   </property>
@@ -34,7 +34,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Name</string>
+              <string>Name:</string>
              </property>
             </widget>
            </item>
@@ -47,7 +47,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Comment</string>
+              <string>Comment:</string>
              </property>
             </widget>
            </item>
@@ -97,8 +97,7 @@
            </property>
            <property name="icon">
             <iconset theme="system-run">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -109,8 +108,7 @@
            </property>
            <property name="icon">
             <iconset theme="system-reboot">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>

@@ -30,7 +30,7 @@
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Name</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
@@ -50,7 +50,7 @@
        <item row="1" column="0" colspan="3">
         <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Comment</string>
+          <string>Comment:</string>
          </property>
         </widget>
        </item>
@@ -92,14 +92,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Plot:</string>
+          <string>Plot</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="lPlot">
          <property name="text">
-          <string>Image</string>
+          <string>Image:</string>
          </property>
         </widget>
        </item>
@@ -132,7 +132,7 @@
        <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="lPlotType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -146,7 +146,7 @@
        <item row="6" column="0" colspan="3">
         <widget class="QLabel" name="lRotation">
          <property name="text">
-          <string>Rotation</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
@@ -184,19 +184,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="8" column="0" colspan="3">
-        <widget class="QLabel" name="lRefPoint">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Ref. Points:</string>
-         </property>
-        </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lRefPoint1">
@@ -518,14 +505,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Segments:</string>
+          <string>Segments</string>
          </property>
         </widget>
        </item>
        <item row="16" column="0" colspan="2">
         <widget class="QLabel" name="lMinSegmentLength">
          <property name="text">
-          <string>Length</string>
+          <string>Length:</string>
          </property>
         </widget>
        </item>
@@ -545,7 +532,7 @@
        <item row="17" column="0" colspan="4">
         <widget class="QLabel" name="lPointSeparation">
          <property name="text">
-          <string>Point separation</string>
+          <string>Point separation:</string>
          </property>
         </widget>
        </item>
@@ -626,6 +613,19 @@
          </property>
         </spacer>
        </item>
+       <item row="8" column="0" colspan="4">
+        <widget class="QLabel" name="lRefPoint">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Reference Points</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tSymbol">
@@ -642,14 +642,14 @@
           </font>
          </property>
          <property name="text">
-          <string>General:</string>
+          <string>General</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lSymbolStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -682,7 +682,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lSymbolSize">
          <property name="text">
-          <string>Size</string>
+          <string>Size:</string>
          </property>
         </widget>
        </item>
@@ -702,7 +702,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lSymbolRotation">
          <property name="text">
-          <string>Rotation</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
@@ -737,7 +737,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lSymbolOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -794,14 +794,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Filling:</string>
+          <string>Filling</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lSymbolFillingStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -811,7 +811,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lSymbolFillingColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -850,14 +850,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Border:</string>
+          <string>Border</string>
          </property>
         </widget>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lSymbolBorderStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -867,7 +867,7 @@
        <item row="12" column="0">
         <widget class="QLabel" name="lSymbolBorderColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -884,7 +884,7 @@
        <item row="13" column="0">
         <widget class="QLabel" name="lSymbolBorderWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -914,7 +914,7 @@
        <item row="15" column="0">
         <widget class="QCheckBox" name="chbSymbolVisible">
          <property name="text">
-          <string>visible</string>
+          <string>Visible</string>
          </property>
         </widget>
        </item>
@@ -937,7 +937,7 @@
        <item row="9" column="0">
         <widget class="QLabel" name="lIntensity">
          <property name="text">
-          <string>Intensity</string>
+          <string>Intensity:</string>
          </property>
         </widget>
        </item>
@@ -985,14 +985,14 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lValue">
          <property name="text">
-          <string>Value</string>
+          <string>Value:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lHue">
          <property name="text">
-          <string>Hue</string>
+          <string>Hue:</string>
          </property>
         </widget>
        </item>
@@ -1012,7 +1012,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="lPlotImageType">
          <property name="text">
-          <string>Current Image</string>
+          <string>Current image:</string>
          </property>
         </widget>
        </item>
@@ -1025,14 +1025,14 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lSaturation">
          <property name="text">
-          <string>Saturation</string>
+          <string>Saturation:</string>
          </property>
         </widget>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lForeground">
          <property name="text">
-          <string>Foreground</string>
+          <string>Foreground:</string>
          </property>
         </widget>
        </item>

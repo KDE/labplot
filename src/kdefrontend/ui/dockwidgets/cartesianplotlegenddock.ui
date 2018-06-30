@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
+    <width>393</width>
     <height>605</height>
    </rect>
   </property>
@@ -104,14 +104,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Format:</string>
+          <string>Format</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lFont">
          <property name="text">
-          <string>Font</string>
+          <string>Font:</string>
          </property>
         </widget>
        </item>
@@ -121,7 +121,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lFontColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -144,14 +144,14 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lColumnCount">
          <property name="text">
-          <string>Columns</string>
+          <string>Columns:</string>
          </property>
         </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lOrder">
          <property name="text">
-          <string>Order</string>
+          <string>Order:</string>
          </property>
         </widget>
        </item>
@@ -193,14 +193,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Geometry:</string>
+          <string>Geometry</string>
          </property>
         </widget>
        </item>
        <item row="12" column="0">
         <widget class="QLabel" name="lPositionX">
          <property name="text">
-          <string>x</string>
+          <string>x:</string>
          </property>
         </widget>
        </item>
@@ -236,7 +236,7 @@
        <item row="13" column="0">
         <widget class="QLabel" name="lPositionY">
          <property name="text">
-          <string>y</string>
+          <string>y:</string>
          </property>
         </widget>
        </item>
@@ -275,14 +275,14 @@
        <item row="15" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
-          <string>visible</string>
+          <string>Visible</string>
          </property>
         </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lLineSymbolWidth">
          <property name="text">
-          <string>Line+Symbol width</string>
+          <string>Line+Symbol Width:</string>
          </property>
         </widget>
        </item>
@@ -327,14 +327,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Background:</string>
+          <string>Background</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lBackgroundType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -367,7 +367,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lBackgroundFileName">
          <property name="text">
-          <string>File name</string>
+          <string>File name:</string>
          </property>
         </widget>
        </item>
@@ -400,7 +400,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lBackgroundColorStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -410,7 +410,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -420,7 +420,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lBackgroundBrushStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -430,7 +430,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lBackgroundFirstColor">
          <property name="text">
-          <string>First color</string>
+          <string>First color:</string>
          </property>
         </widget>
        </item>
@@ -440,7 +440,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lBackgroundSecondColor">
          <property name="text">
-          <string>Second color</string>
+          <string>Second color:</string>
          </property>
         </widget>
        </item>
@@ -450,7 +450,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lBackgroundOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -507,14 +507,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Border:</string>
+          <string>Border</string>
          </property>
         </widget>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lBorderStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -524,7 +524,7 @@
        <item row="12" column="0">
         <widget class="QLabel" name="lBorderColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -534,7 +534,7 @@
        <item row="13" column="0">
         <widget class="QLabel" name="lBorderWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -551,14 +551,14 @@
        <item row="14" column="0">
         <widget class="QLabel" name="lBorderCornerRadius">
          <property name="text">
-          <string>Corner radius</string>
+          <string>Corner radius:</string>
          </property>
         </widget>
        </item>
        <item row="14" column="2">
         <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
          <property name="suffix">
-          <string>cm</string>
+          <string> cm</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -568,7 +568,7 @@
        <item row="15" column="0">
         <widget class="QLabel" name="lBorderOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -630,7 +630,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Spacing:</string>
+          <string>Spacing</string>
          </property>
         </widget>
        </item>
@@ -653,7 +653,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lTopMargin">
          <property name="text">
-          <string>Top margin</string>
+          <string>Top margin:</string>
          </property>
         </widget>
        </item>
@@ -679,7 +679,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lBottomMargin">
          <property name="text">
-          <string>Bottom margin</string>
+          <string>Bottom margin:</string>
          </property>
         </widget>
        </item>
@@ -699,14 +699,14 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lLeftMargin">
          <property name="text">
-          <string>Left margin</string>
+          <string>Left margin:</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lRightMargin">
          <property name="text">
-          <string>Right margin</string>
+          <string>Right margin:</string>
          </property>
         </widget>
        </item>
@@ -726,7 +726,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lHorizontalSpacing">
          <property name="text">
-          <string>Hor. spacing</string>
+          <string>Hor. spacing:</string>
          </property>
         </widget>
        </item>
@@ -746,7 +746,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lVerticalSpacing">
          <property name="text">
-          <string>Ver. spacing</string>
+          <string>Ver. spacing:</string>
          </property>
         </widget>
        </item>
@@ -788,7 +788,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Margin:</string>
+          <string>Margin</string>
          </property>
         </widget>
        </item>

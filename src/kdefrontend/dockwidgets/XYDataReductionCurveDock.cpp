@@ -592,7 +592,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Data reduction status: ") + m_dataReductionCurve->dataReductionResult().status);
+	emit info(i18n("Data reduction status: %1", m_dataReductionCurve->dataReductionResult().status));
 }
 
 void XYDataReductionCurveDock::enableRecalculate() const {

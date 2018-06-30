@@ -481,7 +481,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Differentiation status: ") +  m_differentiationCurve->differentiationResult().status);
+	emit info(i18n("Differentiation status: %1", m_differentiationCurve->differentiationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
