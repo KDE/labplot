@@ -10,41 +10,25 @@
     <height>288</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="1" colspan="2">
-    <widget class="QSpinBox" name="sbUpdateInterval">
-     <property name="minimum">
-      <number>20</number>
-     </property>
-     <property name="maximum">
-      <number>3600000</number>
-     </property>
-     <property name="value">
-      <number>1000</number>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lReadingType">
      <property name="text">
-      <string>Read</string>
+      <string>Read:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lSampleRate">
      <property name="text">
-      <string>Sample rate</string>
+      <string>Sample rate:</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="lUpdateInterval">
      <property name="text">
-      <string>Update interval</string>
+      <string>Update interval:</string>
      </property>
     </widget>
    </item>
@@ -64,41 +48,28 @@
    <item row="3" column="0">
     <widget class="QLabel" name="lUpdateType">
      <property name="text">
-      <string>Update</string>
+      <string>Update:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lKeepNvalues">
      <property name="text">
-      <string>Keep last N values</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="QLabel" name="lUnit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>ms</string>
+      <string>Keep last N values:</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0" colspan="4">
     <widget class="QPushButton" name="bUpdateNow">
      <property name="text">
-      <string>Update now</string>
+      <string>Update Now</string>
      </property>
     </widget>
    </item>
    <item row="9" column="0" colspan="4">
     <widget class="QPushButton" name="bPausePlayReading">
      <property name="text">
-      <string>Pause reading</string>
+      <string>Pause Reading</string>
      </property>
     </widget>
    </item>
@@ -111,7 +82,7 @@
      </item>
      <item>
       <property name="text">
-       <string>On new data</string>
+       <string>On New Data</string>
       </property>
      </item>
     </widget>
@@ -120,22 +91,22 @@
     <widget class="QComboBox" name="cbReadingType">
      <item>
       <property name="text">
-       <string>Continuously fixed</string>
+       <string>Continuously Fixed</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>From end</string>
+       <string>From End</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Till the end</string>
+       <string>Till the End</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Read whole file</string>
+       <string>Read Whole File</string>
       </property>
      </item>
     </widget>
@@ -155,6 +126,22 @@
    </item>
    <item row="2" column="1" colspan="3">
     <widget class="QLineEdit" name="leKeepNValues"/>
+   </item>
+   <item row="4" column="1" colspan="3">
+    <widget class="QSpinBox" name="sbUpdateInterval">
+     <property name="suffix">
+      <string> ms</string>
+     </property>
+     <property name="minimum">
+      <number>20</number>
+     </property>
+     <property name="maximum">
+      <number>3600000</number>
+     </property>
+     <property name="value">
+      <number>1000</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

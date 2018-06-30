@@ -513,7 +513,7 @@ void CartesianPlot::initActions() {
 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 
 	//visibility action
-	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }

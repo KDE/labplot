@@ -20,7 +20,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Name</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
@@ -43,7 +43,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -72,42 +72,42 @@
       </font>
      </property>
      <property name="text">
-      <string>Data:</string>
+      <string>Data</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="lDataSourceType">
      <property name="text">
-      <string>Source</string>
+      <string>Source:</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
-      <string>Curve</string>
+      <string>Curve:</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data</string>
+      <string>x-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data</string>
+      <string>y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>x-Range</string>
+      <string>x-Range:</string>
      </property>
     </widget>
    </item>
@@ -136,14 +136,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Interpolation:</string>
+      <string>Interpolation</string>
      </property>
     </widget>
    </item>
    <item row="13" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Type</string>
+      <string>Type:</string>
      </property>
     </widget>
    </item>
@@ -160,7 +160,7 @@
    <item row="14" column="0">
     <widget class="QLabel" name="lVariant">
      <property name="text">
-      <string>Variant</string>
+      <string>Variant:</string>
      </property>
     </widget>
    </item>
@@ -170,7 +170,7 @@
    <item row="15" column="0">
     <widget class="QLabel" name="lParameter">
      <property name="text">
-      <string>Parameter</string>
+      <string>Parameter:</string>
      </property>
     </widget>
    </item>
@@ -179,7 +179,7 @@
      <item>
       <widget class="QLabel" name="lTension">
        <property name="text">
-        <string>Tension</string>
+        <string>Tension:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -205,7 +205,7 @@
      <item>
       <widget class="QLabel" name="lContinuity">
        <property name="text">
-        <string>Continuity</string>
+        <string>Continuity:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -228,7 +228,7 @@
      <item>
       <widget class="QLabel" name="lBias">
        <property name="text">
-        <string>Bias</string>
+        <string>Bias:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -269,7 +269,7 @@
    <item row="17" column="0">
     <widget class="QLabel" name="lEval">
      <property name="text">
-      <string>Evaluate</string>
+      <string>Evaluate:</string>
      </property>
     </widget>
    </item>
@@ -279,7 +279,7 @@
    <item row="18" column="0">
     <widget class="QLabel" name="lPoints">
      <property name="text">
-      <string>Points</string>
+      <string>Points:</string>
      </property>
     </widget>
    </item>
@@ -404,7 +404,7 @@
    <item row="24" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
-      <string>visible</string>
+      <string>Visible</string>
      </property>
     </widget>
    </item>
@@ -431,7 +431,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Min</string>
+        <string>Minimum:</string>
        </property>
       </widget>
      </item>
@@ -461,7 +461,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Max</string>
+        <string>Maximum:</string>
        </property>
       </widget>
      </item>

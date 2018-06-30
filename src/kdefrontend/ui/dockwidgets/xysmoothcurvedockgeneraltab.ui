@@ -20,7 +20,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Name</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
@@ -46,7 +46,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -78,42 +78,42 @@
       </font>
      </property>
      <property name="text">
-      <string>Data:</string>
+      <string>Data</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="lDataSourceType">
      <property name="text">
-      <string>Source</string>
+      <string>Source:</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
-      <string>Curve</string>
+      <string>Curve:</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data</string>
+      <string>x-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data</string>
+      <string>y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>x-Range</string>
+      <string>x-Range:</string>
      </property>
     </widget>
    </item>
@@ -144,7 +144,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Min</string>
+        <string>Minimum:</string>
        </property>
       </widget>
      </item>
@@ -174,7 +174,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Max</string>
+        <string>Maximum:</string>
        </property>
       </widget>
      </item>
@@ -212,14 +212,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Smooth:</string>
+      <string>Smooth</string>
      </property>
     </widget>
    </item>
    <item row="13" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Type</string>
+      <string>Type:</string>
      </property>
     </widget>
    </item>
@@ -236,7 +236,7 @@
    <item row="14" column="0">
     <widget class="QLabel" name="lPoints">
      <property name="text">
-      <string>Points</string>
+      <string>Points:</string>
      </property>
     </widget>
    </item>
@@ -256,7 +256,7 @@
    <item row="15" column="0">
     <widget class="QLabel" name="lWeight">
      <property name="text">
-      <string>Weight</string>
+      <string>Weight:</string>
      </property>
     </widget>
    </item>
@@ -266,7 +266,7 @@
    <item row="16" column="0">
     <widget class="QLabel" name="lPercentile">
      <property name="text">
-      <string>Percentile</string>
+      <string>Percentile:</string>
      </property>
     </widget>
    </item>
@@ -286,7 +286,7 @@
    <item row="17" column="0">
     <widget class="QLabel" name="lOrder">
      <property name="text">
-      <string>Polynom order</string>
+      <string>Polynom order:</string>
      </property>
     </widget>
    </item>
@@ -306,7 +306,7 @@
    <item row="18" column="0">
     <widget class="QLabel" name="lMode">
      <property name="text">
-      <string>Padding mode</string>
+      <string>Padding mode:</string>
      </property>
     </widget>
    </item>
@@ -318,7 +318,7 @@
      <item>
       <widget class="QLabel" name="lLeftValue">
        <property name="text">
-        <string>Left value</string>
+        <string>Left value:</string>
        </property>
       </widget>
      </item>
@@ -338,7 +338,7 @@
      <item>
       <widget class="QLabel" name="lRightValue">
        <property name="text">
-        <string>Right value</string>
+        <string>Right value:</string>
        </property>
       </widget>
      </item>
@@ -442,7 +442,7 @@
    <item row="25" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
-      <string>visible</string>
+      <string>Visible</string>
      </property>
     </widget>
    </item>

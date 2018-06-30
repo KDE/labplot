@@ -20,7 +20,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lOutputFormat">
         <property name="text">
-         <string>Format</string>
+         <string>Format:</string>
         </property>
        </widget>
       </item>
@@ -30,7 +30,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lFileName">
         <property name="text">
-         <string>File name</string>
+         <string>File name:</string>
         </property>
        </widget>
       </item>
@@ -72,7 +72,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lExportArea">
         <property name="text">
-         <string>Area to export</string>
+         <string>Area to export:</string>
         </property>
        </widget>
       </item>
@@ -92,7 +92,7 @@
          <string>Check this option if the worksheet background should be exported.</string>
         </property>
         <property name="text">
-         <string>Export background</string>
+         <string>Export background:</string>
         </property>
        </widget>
       </item>
@@ -112,7 +112,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lResolution">
         <property name="text">
-         <string>Resolution</string>
+         <string>Resolution:</string>
         </property>
        </widget>
       </item>

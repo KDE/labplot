@@ -413,11 +413,11 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		PlotArea::BackgroundColorStyle style =
 		    (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
-			ui.lBackgroundFirstColor->setText(i18n("Color"));
+			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
 		} else {
-			ui.lBackgroundFirstColor->setText(i18n("First color"));
+			ui.lBackgroundFirstColor->setText(i18n("First color:"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
@@ -437,7 +437,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
 	} else if (type == PlotArea::Pattern) {
-		ui.lBackgroundFirstColor->setText(i18n("Color"));
+		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 		ui.lBackgroundSecondColor->hide();
@@ -465,11 +465,11 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor) {
-		ui.lBackgroundFirstColor->setText(i18n("Color"));
+		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 	} else {
-		ui.lBackgroundFirstColor->setText(i18n("First color"));
+		ui.lBackgroundFirstColor->setText(i18n("First color:"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 	}

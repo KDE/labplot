@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
+    <width>296</width>
     <height>417</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Name</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
@@ -65,7 +65,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Comment</string>
+          <string>Comment:</string>
          </property>
         </widget>
        </item>
@@ -104,14 +104,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Geometry:</string>
+          <string>Geometry</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lScaleContent">
          <property name="text">
-          <string>Scale content</string>
+          <string>Scale content:</string>
          </property>
         </widget>
        </item>
@@ -129,7 +129,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="5" column="0">
         <widget class="QLabel" name="lSize">
          <property name="text">
-          <string>Size</string>
+          <string>Size:</string>
          </property>
         </widget>
        </item>
@@ -139,7 +139,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="6" column="0">
         <widget class="QLabel" name="lOrientation">
          <property name="text">
-          <string>Orientation</string>
+          <string>Orientation:</string>
          </property>
         </widget>
        </item>
@@ -149,7 +149,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="7" column="0">
         <widget class="QLabel" name="lWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -166,7 +166,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="8" column="0">
         <widget class="QLabel" name="lHeight">
          <property name="text">
-          <string>Height</string>
+          <string>Height:</string>
          </property>
         </widget>
        </item>
@@ -203,7 +203,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="0" column="0">
         <widget class="QLabel" name="lBackgroundType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -236,7 +236,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="1" column="0">
         <widget class="QLabel" name="lBackgroundFileName">
          <property name="text">
-          <string>File name</string>
+          <string>File name:</string>
          </property>
         </widget>
        </item>
@@ -269,7 +269,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="2" column="0">
         <widget class="QLabel" name="lBackgroundColorStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -279,7 +279,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="3" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -289,7 +289,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="5" column="0">
         <widget class="QLabel" name="lBackgroundFirstColor">
          <property name="text">
-          <string>First color</string>
+          <string>First color:</string>
          </property>
         </widget>
        </item>
@@ -299,7 +299,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="6" column="0">
         <widget class="QLabel" name="lBackgroundSecondColor">
          <property name="text">
-          <string>Second color</string>
+          <string>Second color:</string>
          </property>
         </widget>
        </item>
@@ -309,7 +309,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="7" column="0">
         <widget class="QLabel" name="lBackgroundOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -357,7 +357,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="4" column="0">
         <widget class="QLabel" name="lBackgroundBrushStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -380,14 +380,14 @@ Note, the content is automatically rescaled if a layout is active.</string>
           </font>
          </property>
          <property name="text">
-          <string>Margin:</string>
+          <string>Margin</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lTopMargin">
          <property name="text">
-          <string>Top margin</string>
+          <string>Top margin:</string>
          </property>
         </widget>
        </item>
@@ -429,7 +429,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="2" column="0">
         <widget class="QLabel" name="lBottomMargin">
          <property name="text">
-          <string>Bottom margin</string>
+          <string>Bottom margin:</string>
          </property>
         </widget>
        </item>
@@ -449,7 +449,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="3" column="0">
         <widget class="QLabel" name="lLeftMargin">
          <property name="text">
-          <string>Left margin</string>
+          <string>Left margin:</string>
          </property>
         </widget>
        </item>
@@ -469,7 +469,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="4" column="0">
         <widget class="QLabel" name="lRightMargin">
          <property name="text">
-          <string>Right margin</string>
+          <string>Right margin:</string>
          </property>
         </widget>
        </item>
@@ -511,14 +511,14 @@ Note, the content is automatically rescaled if a layout is active.</string>
           </font>
          </property>
          <property name="text">
-          <string>Spacing:</string>
+          <string>Spacing</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lHorizontalSpacing">
          <property name="text">
-          <string>Hor. spacing</string>
+          <string>Hor. spacing:</string>
          </property>
         </widget>
        </item>
@@ -538,7 +538,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="8" column="0">
         <widget class="QLabel" name="lVerticalSpacing">
          <property name="text">
-          <string>Ver. spacing</string>
+          <string>Ver. spacing:</string>
          </property>
         </widget>
        </item>
@@ -580,14 +580,14 @@ Note, the content is automatically rescaled if a layout is active.</string>
           </font>
          </property>
          <property name="text">
-          <string>Grid:</string>
+          <string>Grid</string>
          </property>
         </widget>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lRowCount">
          <property name="text">
-          <string>Rows</string>
+          <string>Rows:</string>
          </property>
         </widget>
        </item>
@@ -601,7 +601,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="12" column="0">
         <widget class="QLabel" name="lColumnCount">
          <property name="text">
-          <string>Columns</string>
+          <string>Columns:</string>
          </property>
         </widget>
        </item>

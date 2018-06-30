@@ -67,7 +67,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lEps">
         <property name="text">
-         <string>Tolerance</string>
+         <string>Tolerance:</string>
         </property>
        </widget>
       </item>
@@ -77,14 +77,14 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Robust fit</string>
+         <string>Robust fit:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lMaxIterations">
         <property name="text">
-         <string>Max. iterations</string>
+         <string>Max. iterations:</string>
         </property>
        </widget>
       </item>
@@ -161,7 +161,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="lEvaluatedPoints">
         <property name="text">
-         <string>Evaluated points</string>
+         <string>Evaluated points:</string>
         </property>
        </widget>
       </item>

@@ -27,7 +27,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lImportFormat">
      <property name="text">
-      <string>Import as: </string>
+      <string>Import as:</string>
      </property>
     </widget>
    </item>

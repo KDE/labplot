@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Unit</string>
+      <string>Unit:</string>
      </property>
     </widget>
    </item>

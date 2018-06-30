@@ -14,7 +14,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Name</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
@@ -40,7 +40,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -66,7 +66,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="bgcolor">
      <property name="text">
-      <string>Background Color</string>
+      <string>Background color:</string>
      </property>
     </widget>
    </item>
@@ -76,7 +76,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="textcolor">
      <property name="text">
-      <string>Text Color</string>
+      <string>Text color:</string>
      </property>
     </widget>
    </item>
@@ -86,7 +86,7 @@
    <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="lLabelsFont">
      <property name="text">
-      <string>Font</string>
+      <string>Font:</string>
      </property>
     </widget>
    </item>

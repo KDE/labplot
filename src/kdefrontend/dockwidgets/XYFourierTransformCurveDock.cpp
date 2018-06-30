@@ -325,7 +325,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Fourier transformation status: ") + m_transformCurve->transformResult().status);
+	emit info(i18n("Fourier transformation status: %1", m_transformCurve->transformResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

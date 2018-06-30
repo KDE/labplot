@@ -64,10 +64,10 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	}
 
 	if (fds->isPaused()) {
-		ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
-		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setText(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
@@ -82,7 +82,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe) {
 		int itemIdx = -1;
 		for (int i = 0; i < ui.cbReadingType->count(); ++i) {
-			if (ui.cbReadingType->itemText(i) == QLatin1String("Read whole file")) {
+			if (ui.cbReadingType->itemText(i) == i18n("Read Whole File")) { // FIXME never ever compare to UI strings!
 				itemIdx = i;
 				break;
 			}
@@ -209,11 +209,11 @@ void LiveDataDock::pauseContinueReading() {
 
 	if (m_paused) {
 		pauseReading();
-		ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
 		continueReading();
-		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setText(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }

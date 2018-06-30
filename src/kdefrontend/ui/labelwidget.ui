@@ -207,7 +207,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lFont">
      <property name="text">
-      <string>Font</string>
+      <string>Font:</string>
      </property>
     </widget>
    </item>
@@ -217,7 +217,7 @@
    <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="lFontTeX">
      <property name="text">
-      <string>Main Font</string>
+      <string>Main font:</string>
      </property>
     </widget>
    </item>
@@ -227,7 +227,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="lFontSize">
      <property name="text">
-      <string>Size</string>
+      <string>Size:</string>
      </property>
     </widget>
    </item>
@@ -237,7 +237,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="lFontColor">
      <property name="text">
-      <string>Foreground color</string>
+      <string>Foreground color:</string>
      </property>
     </widget>
    </item>
@@ -260,7 +260,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="lBackgroundColor">
      <property name="text">
-      <string>Background color</string>
+      <string>Background color:</string>
      </property>
     </widget>
    </item>
@@ -308,7 +308,7 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
-      <string>Geometry:</string>
+      <string>Geometry</string>
      </property>
     </widget>
    </item>
@@ -318,7 +318,7 @@
       <string>Horizontal position relative to label's parent</string>
      </property>
      <property name="text">
-      <string>x</string>
+      <string>x:</string>
      </property>
     </widget>
    </item>
@@ -369,7 +369,7 @@
       <string>Vertical position relative to label's parent</string>
      </property>
      <property name="text">
-      <string>y</string>
+      <string>y:</string>
      </property>
     </widget>
    </item>
@@ -408,7 +408,7 @@
       <string>Distance to the axis tick labels</string>
      </property>
      <property name="text">
-      <string>Offset X</string>
+      <string>Offset X:</string>
      </property>
     </widget>
    </item>
@@ -434,7 +434,7 @@
       <string>Distance to the axis tick labels</string>
      </property>
      <property name="text">
-      <string>Offset Y</string>
+      <string>Offset Y:</string>
      </property>
     </widget>
    </item>
@@ -457,7 +457,7 @@
    <item row="12" column="0" colspan="2">
     <widget class="QLabel" name="lHorizontalAlignment">
      <property name="text">
-      <string>Hor. align.</string>
+      <string>Hor. align.:</string>
      </property>
     </widget>
    </item>
@@ -467,7 +467,7 @@
    <item row="13" column="0" colspan="2">
     <widget class="QLabel" name="lVerticalAlignment">
      <property name="text">
-      <string>Vert. align.</string>
+      <string>Vert. align.:</string>
      </property>
     </widget>
    </item>
@@ -477,7 +477,7 @@
    <item row="14" column="0" colspan="2">
     <widget class="QLabel" name="lRotation">
      <property name="text">
-      <string>Rotation</string>
+      <string>Rotation:</string>
      </property>
     </widget>
    </item>
@@ -497,7 +497,7 @@
    <item row="16" column="0" colspan="2">
     <widget class="QCheckBox" name="chbVisible">
      <property name="text">
-      <string>visible</string>
+      <string>Visible</string>
      </property>
     </widget>
    </item>
@@ -518,9 +518,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KFontRequester</class>
@@ -528,9 +528,9 @@
    <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>
