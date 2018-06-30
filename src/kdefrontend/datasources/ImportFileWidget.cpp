@@ -222,7 +222,7 @@ void ImportFileWidget::loadSettings() {
 	ui.leHost->setText(conf.readEntry("Host",""));
 	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
 	ui.lePort->setText(conf.readEntry("Port",""));
-	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
+	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 
 	m_suppressRefresh = false;
@@ -247,7 +247,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
 	conf.writeEntry("ReadType", ui.cbReadType->currentIndex());
-	conf.writeEntry("SampleRate", ui.sbSampleRate->value());
+	conf.writeEntry("SampleSize", ui.sbSampleSize->value());
 	conf.writeEntry("KeepLastNValues", ui.leKeepLastValues->text());
 	conf.writeEntry("BaudRate", ui.cbBaudRate->currentIndex());
 	conf.writeEntry("SerialPort", ui.cbSerialPort->currentIndex());
@@ -392,7 +392,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setUpdateType(updateType);
 
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		source->setSampleRate(ui.sbSampleRate->value());
+		source->setSampleSize(ui.sbSampleSize->value());
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -1058,26 +1058,26 @@ void ImportFileWidget::refreshPreview() {
 void ImportFileWidget::updateTypeChanged(int idx) {
 	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
 
-	if (type == LiveDataSource::UpdateType::TimeInterval) {
+	switch (type) {
+	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
-		ui.lUpdateIntervalUnit->show();
-	} else if (type == LiveDataSource::UpdateType::NewData) {
+		break;
+	case LiveDataSource::UpdateType::NewData:
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
-		ui.lUpdateIntervalUnit->hide();
 	}
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
-    if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+	if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else {
-		ui.lSampleRate->show();
-		ui.sbSampleRate->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 	}
 
 	if (type == LiveDataSource::ReadingType::WholeFile) {
@@ -1091,6 +1091,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
+
 	switch (type) {
 	case LiveDataSource::SourceType::FileOrPipe: {
 		ui.lFileName->show();

@@ -51,23 +51,23 @@ class LiveDataSource : public Spreadsheet {
 public:
 	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT};
 	enum SourceType {
-		FileOrPipe = 0,
-		NetworkTcpSocket,
-		NetworkUdpSocket,
-		LocalSocket,
-		SerialPort
+		FileOrPipe = 0,		// regular file or pipe
+		NetworkTcpSocket,	// TCP socket
+		NetworkUdpSocket,	// UDP socket
+		LocalSocket,		// local socket
+		SerialPort		// serial port
 	};
 
 	enum UpdateType {
-		TimeInterval = 0,
-		NewData
+		TimeInterval = 0,	// update periodically using given interval
+		NewData			// update when new data is available
 	};
 
 	enum ReadingType {
-		ContinuousFixed = 0,
-		FromEnd,
-		TillEnd,
-		WholeFile
+		ContinuousFixed = 0,	// read fixed number of samples (aka lines) using given sample size
+		FromEnd,		// ?
+		TillEnd,		// read until the end
+		WholeFile		// reread whole file
 	};
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
@@ -93,8 +93,8 @@ public:
 	ReadingType readingType() const;
 	void setReadingType(ReadingType);
 
-	int sampleRate() const;
-	void setSampleRate(int);
+	int sampleSize() const;
+	void setSampleSize(int);
 
 	void setBytesRead(qint64 bytes);
 	int bytesRead() const;
@@ -168,7 +168,7 @@ private:
 	bool m_prepared;
 	bool m_keepLastValues;
 
-	int m_sampleRate;
+	int m_sampleSize;
 	int m_keepNvalues;
 	int m_updateInterval;
 	quint16 m_port;

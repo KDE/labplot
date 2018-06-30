@@ -64,24 +64,25 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
-	  m_fileType(Ascii),
-	  m_fileWatched(false),
-	  m_fileLinked(false),
-	  m_paused(false),
-	  m_prepared(false),
-	  m_keepLastValues(false),
-	  m_updateInterval(1000),
-//TODO: m_keepNvalues, m_sampleRate, m_port, m_baudRate ?
-	  m_bytesRead(0),
-	  m_filter(nullptr),
-	  m_updateTimer(new QTimer(this)),
-	  m_fileSystemWatcher(nullptr),
-	  m_file(nullptr),
-	  m_localSocket(nullptr),
-	  m_tcpSocket(nullptr),
-	  m_udpSocket(nullptr),
-	  m_serialPort(nullptr),
-	  m_device(nullptr) {
+		m_fileType(Ascii),
+		m_fileWatched(false),
+		m_fileLinked(false),
+		m_paused(false),
+		m_prepared(false),
+		m_keepLastValues(false),
+		m_sampleSize(1),
+		m_updateInterval(1000),
+//TODO: m_keepNvalues, m_port, m_baudRate ?
+		m_bytesRead(0),
+		m_filter(nullptr),
+		m_updateTimer(new QTimer(this)),
+		m_fileSystemWatcher(nullptr),
+		m_file(nullptr),
+		m_localSocket(nullptr),
+		m_tcpSocket(nullptr),
+		m_udpSocket(nullptr),
+		m_serialPort(nullptr),
+		m_device(nullptr) {
 
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
@@ -368,15 +369,15 @@ bool LiveDataSource::isPaused() const {
 }
 
 /*!
- * \brief Sets the sample rate to samplerate
- * \param samplerate
+ * \brief Sets the sample size to size
+ * \param size
  */
-void LiveDataSource::setSampleRate(int samplerate) {
-	m_sampleRate = samplerate;
+void LiveDataSource::setSampleSize(int size) {
+	m_sampleSize = size;
 }
 
-int LiveDataSource::sampleRate() const {
-	return m_sampleRate;
+int LiveDataSource::sampleSize() const {
+	return m_sampleSize;
 }
 
 /*!
@@ -868,7 +869,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
-		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
+		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 
 	switch (m_sourceType) {
 	case SerialPort:
@@ -979,11 +980,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			if (m_readingType != TillEnd) {
-				str = attribs.value("sampleRate").toString();
+				str = attribs.value("sampleSize").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("sampleRate").toString());
+					reader->raiseWarning(attributeWarning.subs("sampleSize").toString());
 				else
-					m_sampleRate = str.toInt();
+					m_sampleSize = str.toInt();
 			}
 
 			switch (m_sourceType) {

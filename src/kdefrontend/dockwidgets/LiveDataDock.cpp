@@ -38,7 +38,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
 	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
-	connect(ui.sbSampleRate, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleRateChanged);
+	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
@@ -91,23 +91,20 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 			ui.cbReadingType->removeItem(itemIdx);
 	}
 
-	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
-	} else if (fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleRate->setValue(fds->sampleRate());
+		ui.sbSampleSize->setValue(fds->sampleSize());
 }
 
 /*!
  * \brief Modifies the sample rate of the live data sources
  * \param sampleRate
  */
-void LiveDataDock::sampleRateChanged(int sampleRate) {
+void LiveDataDock::sampleSizeChanged(int sampleSize) {
 	for (auto* source : m_liveDataSources)
-		source->setSampleRate(sampleRate);
+		source->setSampleSize(sampleSize);
 }
 
 /*!
@@ -156,11 +153,11 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
 	if (type == LiveDataSource::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else {
-		ui.lSampleRate->show();
-		ui.sbSampleRate->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 	}
 
 	for (auto* source : m_liveDataSources)
