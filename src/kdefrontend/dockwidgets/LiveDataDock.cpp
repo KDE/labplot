@@ -773,22 +773,9 @@ void LiveDataDock::addSubscription() {
 				for(int i = 0; i < ui.lwSubscriptions->count(); ++i){
 					item = ui.lwSubscriptions->item(i);
 					QString subscriptionName = item->text();
-					if(subscriptionName.contains('#') || subscriptionName.contains('+')) {
-						if(subscriptionName.contains('#')) {
-							if(newTopicName.startsWith(subscriptionName.left(subscriptionName.count() - 2)) ){
-								noWildcard = false;
-								break;
-							}
-						}
-						else if (subscriptionName.contains('+')) {
-							int pos = subscriptionName.indexOf('+');
-							QString start = subscriptionName.left(pos);
-							QString end = subscriptionName.right(subscriptionName.count() - pos);
-							if(newTopicName.startsWith(start) && newTopicName.endsWith(end)) {
-								noWildcard = false;
-								break;
-							}
-						}
+					if(checkTopicContains(subscriptionName, newTopicName)) {
+						noWildcard = false;
+						break;
 					}
 				}
 				if(noWildcard) {
@@ -860,5 +847,30 @@ void LiveDataDock::mqttButtonUnsubscribe(const QString& item) {
 	m_mqttSubscribeButton = false;
 	m_mqttUnsubscribeName = item;
 	qDebug()<<"LiveDataDock: Unsubscribe from:"<<m_mqttUnsubscribeName;
+}
+
+bool LiveDataDock::checkTopicContains(const QString &superior, const QString &inferior) {
+	if (superior == inferior)
+		return true;
+	else {
+		if(superior.contains("/")) {
+			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
+
+			bool ok = true;
+			for(int i = 0; i < superiorList.size(); ++i) {
+				if(superiorList.at(i) != inferiorList.at(i)) {
+					if((superiorList.at(i) != "+") &&
+							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						ok = false;
+						break;
+					}
+				}
+			}
+			return ok;
+		}
+		return false;
+	}
 }
 #endif

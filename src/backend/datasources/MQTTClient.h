@@ -103,6 +103,8 @@ public:
 	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
 	QVector<QString> mqttSubscribtions() const;
 
+	bool checkTopicContains(const QString& superior, const QString& inferior);
+
 	QString clientHostName() const;
 	quint16 clientPort() const;
 	QString clientPassword() const;

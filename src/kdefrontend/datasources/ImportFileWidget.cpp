@@ -2081,26 +2081,29 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 }
 
 bool ImportFileWidget::checkTopicContains(const QString& superior, const QString& inferior) {
-	if(superior == inferior)
+	if (superior == inferior)
 		return true;
+	else {
+		if(superior.contains("/")) {
+			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
 
-	if(superior.contains('#') || superior.contains('+')) {
-		if(superior.contains('#')) {
-			if(inferior.startsWith(superior.left(superior.count() - 2)) ){
-				return true;
+			bool ok = true;
+			for(int i = 0; i < superiorList.size(); ++i) {
+				if(superiorList.at(i) != inferiorList.at(i)) {
+					if((superiorList.at(i) != "+") &&
+							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						ok = false;
+						break;
+					}
+				}
 			}
+			return ok;
 		}
-		else if (superior.contains('+')) {
-			int pos = superior.indexOf('+');
-			QString start = superior.left(pos);
-			QString end = superior.right(superior.count() - pos);
-			if(inferior.startsWith(start) && inferior.endsWith(end)) {
-				return true;
-			}
-		}
+
+		return false;
 	}
-
-	return false;
 }
 
 QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {

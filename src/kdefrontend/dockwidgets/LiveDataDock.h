@@ -50,6 +50,7 @@ public:
 	void setLiveDataSources(const QList<LiveDataSource*>& sources);
 #ifdef HAVE_MQTT
 	void setMQTTClients(const QList<MQTTClient*>& clients);
+	bool checkTopicContains(const QString& superior, const QString& inferior);
 #endif
 	~LiveDataDock();
 

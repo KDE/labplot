@@ -900,28 +900,11 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 		qDebug()<<"Check for inferior subscriptions";
 		bool found = false;
 		QVector<MQTTSubscriptions*> inferiorSubscriptions;
-		if(topic.contains('#') || topic.contains('+')) {
-			if(topic.contains('#')) {
-				for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
-					if(m_mqttSubscriptions[i]->subscriptionName().startsWith(topic.left(topic.count() - 2))
-							&& m_mqttSubscriptions[i]->subscriptionName() != topic){
-						found = true;
-						inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
-					}
-				}
-			}
-			else if (topic.contains('+')) {
-				int pos = topic.indexOf('+');
-				QString start = topic.left(pos);
-				QString end = topic.right(topic.count() - pos);
-				for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
-					if(m_mqttSubscriptions[i]->subscriptionName().startsWith(start)
-							&& m_mqttSubscriptions[i]->subscriptionName().endsWith(end)
-							&& m_mqttSubscriptions[i]->subscriptionName() != topic) {
-						found = true;
-						inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
-					}
-				}
+
+		for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+			if(checkTopicContains(topic, m_mqttSubscriptions[i]->subscriptionName())) {
+				found = true;
+				inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
 			}
 		}
 
@@ -999,6 +982,31 @@ void MQTTClient::subscriptionLoaded(const QString &name) {
 			m_loaded = true;
 			read();
 		}
+	}
+}
+
+bool MQTTClient::checkTopicContains(const QString &superior, const QString& inferior) {
+	if (superior == inferior)
+		return true;
+	else {
+		if(superior.contains("/")) {
+			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
+
+			bool ok = true;
+			for(int i = 0; i < superiorList.size(); ++i) {
+				if(superiorList.at(i) != inferiorList.at(i)) {
+					if((superiorList.at(i) != "+") &&
+							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						ok = false;
+						break;
+					}
+				}
+			}
+			return ok;
+		}
+		return false;
 	}
 }
 #endif
