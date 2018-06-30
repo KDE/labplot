@@ -1723,16 +1723,9 @@ void ImportFileWidget::mqttSubscribe() {
 				} while(!commonTopic.isEmpty());
 			}
 
-			/*QMqttTopicFilter filter {ui.cbTopic->currentText()};
-				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-				if(temp_subscription) {
-					m_mqttSubscriptions.push_back(temp_subscription);
-					ui.lwSubscriptions->addItem(temp_subscription->topic().filter());
-					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					m_mqttNewTopic = temp_subscription->topic().filter();
-					emit subscriptionMade();
-				}*/
+			if(foundSuperior) {
+				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
+			}
 		}
 		else
 			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
@@ -1747,9 +1740,11 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 		m_addedTopics.push_back(topic.name());
 		QStringList name;
 		QChar sep = '/';
+		QString rootName;
 		if(topic.name().contains(sep)) {
 			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
 
+			rootName = list.at(0);
 			name.append(list.at(0));
 			QTreeWidgetItem* currentItem;
 			int topItemIdx = -1;
@@ -1795,10 +1790,11 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 			}
 		}
 		else {
+			rootName = topic.name();
 			name.append(topic.name());
 			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
 		}
-		emit newTopic(name.at(0));
+		emit newTopic(rootName);
 	}
 
 	/*
@@ -1830,20 +1826,22 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 	}*/
 }
 
-void ImportFileWidget::setCompleter(QString topic) {
-	if(!m_topicList.contains(topic)) {
-		m_topicList.append(topic);
-		m_completer = new QCompleter(m_topicList, this);
-		m_completer->setCompletionMode(QCompleter::PopupCompletion);
-		m_completer->setCaseSensitivity(Qt::CaseSensitive);
-		ui.leTopics->setCompleter(m_completer);
+void ImportFileWidget::setCompleter(const QString& topic) {
+	if(!m_editing) {
+		if(!m_topicList.contains(topic)) {
+			m_topicList.append(topic);
+			m_completer = new QCompleter(m_topicList, this);
+			m_completer->setCompletionMode(QCompleter::PopupCompletion);
+			m_completer->setCaseSensitivity(Qt::CaseSensitive);
+			ui.leTopics->setCompleter(m_completer);
+		}
 	}
 }
 
 void ImportFileWidget::topicTimeout() {
-	/*qDebug()<<"lejart ido";
+	qDebug()<<"lejart ido";
 	m_editing = false;
-	m_timer->stop();*/
+	m_timer->stop();
 }
 
 bool ImportFileWidget::isMqttValid(){
@@ -2162,6 +2160,9 @@ QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& 
 }
 
 void ImportFileWidget::searchTreeItem(const QString& rootName) {
+	m_editing = true;
+	m_timer->start();
+
 	qDebug()<<rootName;
 	int topItemIdx = -1;
 	for(int i = 0; i< ui.twTopics->topLevelItemCount(); ++i)

@@ -155,7 +155,7 @@ private slots:
     void onMqttConnect();
     void mqttSubscribe();
     void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void setCompleter(QString);
+	void setCompleter(const QString&);
     void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
