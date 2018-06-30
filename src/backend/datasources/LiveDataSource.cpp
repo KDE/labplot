@@ -503,7 +503,7 @@ QMenu* LiveDataSource::createContextMenu() {
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
-	DEBUG("LiveDataSource::read()");
+	DEBUG("\nLiveDataSource::read()");
 	if (m_filter == nullptr)
 		return;
 
