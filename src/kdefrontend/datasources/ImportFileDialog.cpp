@@ -148,6 +148,7 @@ int ImportFileDialog::sourceType() const {
   triggers data import to the live data source \c source
 */
 void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
+	DEBUG("ImportFileDialog::importToLiveDataSource()");
 	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
@@ -161,6 +162,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	QTime timer;
 	timer.start();
+	DEBUG("	Inital read()");
 	source->read();
 	statusBar->showMessage( i18n("Live data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 

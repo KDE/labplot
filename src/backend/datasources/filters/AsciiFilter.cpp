@@ -761,18 +761,19 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #endif
 
 		while (!device.atEnd()) {
+			DEBUG("	reading type = " << readingType);
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				// local socket and UDP socket needs readAll(), all other need readLine()
+				// local socket and UDP socket needs read(), all other need readLine()
 				//TODO: check serial port
 				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
 					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
-					newData[newDataIdx++] = device.readAll();
+					newData[newDataIdx++] = device.read(device.bytesAvailable());
 				else {
 					if (!device.canReadLine())
 						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
 					newData[newDataIdx++] = device.readLine();
 				}
-			} else {
+			} else {	// ReadingType::TillEnd
 				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
 					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
 					newData.push_back(device.readAll());
@@ -984,8 +985,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 
 	// from the last row we read the new data in the spreadsheet
-	qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
-	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows << ", actual cols: " << m_actualCols;
+	qDebug() << "reading from line"  << currentRow << " till end" << newLinesTillEnd;
+	qDebug() << "Lines to read:" << linesToRead <<", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols;
 	newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
 		if (m_prepared) {

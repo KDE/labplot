@@ -92,7 +92,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	sbOpacity->setValue(100);
 	layout->addWidget(sbOpacity, 4, 1);
 
-	label = new QLabel(i18n("%"), widget);
+	label = new QLabel(i18n(" %"), widget);
 	layout->addWidget(label, 4, 2);
 
 

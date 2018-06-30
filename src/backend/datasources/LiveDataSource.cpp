@@ -119,12 +119,15 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready()");
+	DEBUG("LiveDataSource::ready() update type = " << m_updateType << ", interval = " << m_updateInterval);
 	switch (m_updateType) {
 	case TimeInterval:
+		DEBUG("START TIMER");
 		m_updateTimer->start(m_updateInterval);
+		DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 		break;
 	case NewData:
+		DEBUG("START WATCHER");
 		watch();
 	}
 }
@@ -482,7 +485,7 @@ QMenu* LiveDataSource::createContextMenu() {
 	menu->insertAction(firstAction, m_plotDataAction);
 	menu->insertSeparator(firstAction);
 
-	//TODO: doesnt' always make sense...
+	//TODO: doesnt always make sense...
 // 	if (!m_fileWatched)
 // 		menu->insertAction(firstAction, m_reloadAction);
 //
@@ -509,7 +512,7 @@ void LiveDataSource::read() {
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	preparing device");
+		DEBUG("	preparing device. update type = " << m_updateType);
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -530,7 +533,9 @@ void LiveDataSource::read() {
 			m_udpSocket->bind(QHostAddress(m_host), m_port);
 			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
 
-			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+			// only connect to readyRead when update is on new data
+			if (m_updateType == NewData)
+				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
 
 			break;
@@ -561,10 +566,10 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
+		DEBUG("Reading FileOrPipe ..");
 		switch (m_fileType) {
 		case Ascii:
-			DEBUG("Reading live ascii file ..");
-
+			DEBUG("	type ASCII");
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
@@ -576,8 +581,10 @@ void LiveDataSource::read() {
 
 			break;
 		case Binary:
-			//bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			DEBUG("	type Binary");
+			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
+		//TODO:?
 		case Image:
 		case HDF5:
 		case NETCDF:
@@ -594,9 +601,9 @@ void LiveDataSource::read() {
 		break;
 	case NetworkUdpSocket:
 		DEBUG("reading from UDP socket. state before abort = " << m_udpSocket->state());
-		m_udpSocket->abort();
-		m_udpSocket->bind(QHostAddress(m_host), m_port);
-		m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+
+		// reading data here
+		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		DEBUG("reading from UDP socket. state after reconnect = " << m_udpSocket->state());
 		break;
 	case LocalSocket:
@@ -624,6 +631,7 @@ void LiveDataSource::read() {
  */
 void LiveDataSource::readyRead() {
 	DEBUG("LiveDataSource::readyRead() update type = " << m_updateType);
+	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);

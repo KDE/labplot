@@ -401,13 +401,13 @@ void SpreadsheetModel::updateHorizontalHeader() {
 				type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
 				break;
 			case AbstractColumn::Month:
-				type = QLatin1String(" {") + i18n("Month names") + QLatin1Char('}');
+				type = QLatin1String(" {") + i18n("Month Names") + QLatin1Char('}');
 				break;
 			case AbstractColumn::Day:
-				type = QLatin1String(" {") + i18n("Day names") + QLatin1Char('}');
+				type = QLatin1String(" {") + i18n("Day Names") + QLatin1Char('}');
 				break;
 			case AbstractColumn::DateTime:
-				type = QLatin1String(" {") + i18n("Date and time") + QLatin1Char('}');
+				type = QLatin1String(" {") + i18n("Date and Time") + QLatin1Char('}');
 				break;
 		}
 
