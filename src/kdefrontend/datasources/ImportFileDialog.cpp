@@ -228,6 +228,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				case LiveDataSource::Binary:
 				case LiveDataSource::Image:
 				case LiveDataSource::FITS:
+				case LiveDataSource::NgspiceRawAscii:
 					break; // never reached, omit warning
 			}
 
@@ -266,6 +267,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					case LiveDataSource::Binary:
 					case LiveDataSource::Image:
 					case LiveDataSource::FITS:
+					case LiveDataSource::NgspiceRawAscii:
 						break; // never reached, omit warning
 				}
 

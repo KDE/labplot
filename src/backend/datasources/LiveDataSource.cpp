@@ -582,6 +582,7 @@ void LiveDataSource::read() {
 		case NETCDF:
 		case FITS:
 		case ROOT:
+		case NgspiceRawAscii:
 			break;
 		}
 		break;
@@ -605,11 +606,11 @@ void LiveDataSource::read() {
 		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
+		//TODO: Test
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);
 		m_serialPort->setPortName(m_serialPortName);
 		m_device = m_serialPort;
-		//TODO
 		break;
 	}
 }
