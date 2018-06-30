@@ -342,7 +342,6 @@ void LiveDataDock::updateTypeChanged(int idx) {
 
 		switch (type) {
 		case LiveDataSource::UpdateType::TimeInterval:
-			DEBUG("	interval value = " << ui.sbUpdateInterval->value());
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
 

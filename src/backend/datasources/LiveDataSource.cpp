@@ -58,8 +58,6 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QAction>
 #include <KLocalizedString>
 
-#include <QDebug>
-
 /*!
   \class LiveDataSource
   \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
@@ -121,10 +119,14 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	if (m_updateType == TimeInterval)
+	DEBUG("LiveDataSource::ready()");
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
-	else
+		break;
+	case NewData:
 		watch();
+	}
 }
 
 void LiveDataSource::initActions() {
@@ -152,7 +154,7 @@ QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
-	for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
+	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
 
 		qDebug() << sp.description();
@@ -171,7 +173,7 @@ QStringList LiveDataSource::availablePorts() {
 QStringList LiveDataSource::supportedBaudRates() {
 	QStringList baudRates;
 
-	for(const auto& baud : QSerialPortInfo::standardBaudRates())
+	for (const auto& baud : QSerialPortInfo::standardBaudRates())
 		baudRates.append(QString::number(baud));
 	return baudRates;
 }
@@ -180,6 +182,7 @@ QStringList LiveDataSource::supportedBaudRates() {
  * \brief Updates this data source at this moment
  */
 void LiveDataSource::updateNow() {
+	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
 	m_updateTimer->stop();
 	read();
 
@@ -189,42 +192,44 @@ void LiveDataSource::updateNow() {
 }
 
 /*!
- * \brief Continue reading from the live data source after it was paused.
+ * \brief Continue reading from the live data source after it was paused
  */
 void LiveDataSource::continueReading() {
 	m_paused = false;
-	if (m_updateType == TimeInterval)
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
-	else if (m_updateType == NewData) {
-			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		break;
+	case  NewData:
+		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
 }
 
 /*!
- * \brief Pause the reading of the live data source.
+ * \brief Pause the reading of the live data source
  */
 void LiveDataSource::pauseReading() {
 	m_paused = true;
-	if (m_updateType == TimeInterval)
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->stop();
-	else if (m_updateType == NewData) {
-			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+		break;
+	case NewData:
+		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
 }
 
 /*!
-  returns the list with all supported data file formats.
+  returns the list of all supported data file formats
 */
 QStringList LiveDataSource::fileTypes() {
-// see LiveDataSource::FileType
-	return (QStringList()<< i18n("ASCII data")
+	// see LiveDataSource::FileType
+	return (QStringList() << i18n("ASCII data")
 	        << i18n("Binary data")
 	        << i18n("Image")
 	        << i18n("Hierarchical Data Format 5 (HDF5)")
 	        << i18n("Network Common Data Format (NetCDF)")
-//		<< "CDF"
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
-//		<< i18n("Sound")
 	        << i18n("ROOT (CERN) Histograms")
 	       );
 }
@@ -404,13 +409,15 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
  * \param updatetype
  */
 void LiveDataSource::setUpdateType(UpdateType updatetype) {
-	if (updatetype == NewData) {
+	switch (updatetype) {
+	case NewData:
 		m_updateTimer->stop();
 		if (m_fileSystemWatcher == nullptr)
 			watch();
 		else
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-	} else {
+		break;
+	case TimeInterval:
 		if (m_fileSystemWatcher)
 			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
@@ -616,11 +623,12 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("Got new data from the device");
+	DEBUG("LiveDataSource::readyRead() update type = " << m_updateType);
 
 	if (m_fileType == Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-	// 	else if (m_fileType == Binary)
+//TODO:	else if (m_fileType == Binary)
+
 	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
@@ -728,6 +736,7 @@ void LiveDataSource::linkToggled() {
 
 //watch the file upon reading for changes if required
 void LiveDataSource::watch() {
+	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
 	if (m_fileWatched) {
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;

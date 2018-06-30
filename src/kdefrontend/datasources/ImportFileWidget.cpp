@@ -595,11 +595,12 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	DEBUG("currentFileFilter()");
+	DEBUG("ImportFileWidget::currentFileFilter()");
 	LiveDataSource::FileType fileType = static_cast<LiveDataSource::FileType>(ui.cbFileType->currentIndex());
 
 	switch (fileType) {
 	case LiveDataSource::Ascii: {
+			DEBUG("	ASCII");
 //TODO			std::unique_ptr<AsciiFilter> filter(new AsciiFilter());
 			AsciiFilter* filter = new AsciiFilter();
 
