@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
     Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,8 +33,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 
-#include <QSerialPort>
 #include <QtNetwork/QLocalSocket>
+#include <QSerialPort>
 #include <QTimer>
 
 class QString;

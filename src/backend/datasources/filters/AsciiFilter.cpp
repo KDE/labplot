@@ -747,12 +747,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #endif
 
 		while (!device.atEnd()) {
-			DEBUG("	reading type = " << readingType);
+			DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
+			DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, spreadsheet->sourceType()));
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				// local socket and UDP socket needs read(), all other need readLine()
+				// local socket needs readAll(), UDP socket needs read(), all other need readLine()
 				//TODO: check serial port
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
-					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
+				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket)
+					newData[newDataIdx++] = device.readAll();
+				else if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
 				else {
 					if (!device.canReadLine())
