@@ -29,11 +29,8 @@
 #define SORTDIALOG_H
 
 #include "backend/core/column/Column.h"
+#include <ui_sortdialogwidget.h>
 #include <QDialog>
-
-class QPushButton;
-class QComboBox;
-class QLabel;
 
 class SortDialog : public QDialog {
 Q_OBJECT
@@ -53,13 +50,8 @@ signals:
 	void sort(Column*, QVector<Column*>, bool ascending);
 
 private:
+	Ui::SortDialogWidget ui;
 	QVector<Column*> m_columns;
-
-	QComboBox* m_cbOrdering;
-	QLabel* m_lType;
-	QComboBox* m_cbType;
-	QLabel* m_lColumns;
-	QComboBox* m_cbColumns;
 };
 
 #endif
