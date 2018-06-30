@@ -141,6 +141,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui

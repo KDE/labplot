@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SortDialogWidget</class>
+ <widget class="QWidget" name="SortDialogWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>258</width>
+    <height>147</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lOrdering">
+       <property name="text">
+        <string>Order:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="cbOrdering">
+       <item>
+        <property name="text">
+         <string>Ascending</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-sort-ascending">
+          <normaloff>.</normaloff>.</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Descending</string>
+        </property>
+        <property name="icon">
+         <iconset theme="view-sort-descending">
+          <normaloff>.</normaloff>.</iconset>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lType">
+       <property name="text">
+        <string>Sort columns:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cbType">
+       <item>
+        <property name="text">
+         <string>Separately</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Together</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lColumns">
+       <property name="text">
+        <string>Leading column:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="cbColumns"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>1</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
