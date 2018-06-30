@@ -26,6 +26,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #include "LiveDataDock.h"
 #include <KLocalizedString>
+#include <QStandardItemModel>
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent),
@@ -49,7 +50,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
 	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
-	connect(ui.sbSampleRate, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleRateChanged);
+	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
@@ -119,10 +120,10 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleRate->setValue(fds->sampleRate());
+		ui.sbSampleSize->setValue(fds->sampleRate());
 
 	int itemIdx = -1;
 	for (int i = 0; i < ui.cbReadingType->count(); ++i) {
@@ -251,26 +252,19 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
 	}
 
-	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe) {
-		int itemIdx = -1;
-		for (int i = 0; i < ui.cbReadingType->count(); ++i) {
-			if (ui.cbReadingType->itemText(i) == i18n("Read Whole File")) { // FIXME never ever compare to UI strings!
-				itemIdx = i;
-				break;
-			}
-		}
-		if (itemIdx != -1)
-			ui.cbReadingType->removeItem(itemIdx);
-	}
+	// disable "whole file" when having no file (i.e. socket or port)
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (fds->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	else
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
-	} else if (fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleRate->setValue(fds->sampleRate());
+		ui.sbSampleSize->setValue(fds->sampleSize());
 
 	ui.chbWill->hide();
 	ui.chbWillRetain->hide();
@@ -302,17 +296,18 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
  * \brief Modifies the sample rate of the live data sources or MQTTClient objects
  * \param sampleRate
  */
-void LiveDataDock::sampleRateChanged(int sampleRate) {
+void LiveDataDock::sampleSizeChanged(int sampleSize) {
 	if(!m_liveDataSources.isEmpty()) {
 		for (auto* source : m_liveDataSources)
-			source->setSampleRate(sampleRate);
+			source->setSampleSize(sampleSize);
 	}
 #ifdef HAVE_MQTT
 	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
-			client->setSampleRate(sampleRate);
+			client->setSampleRate(sampleSize);
 	}
 #endif
+
 }
 
 /*!
@@ -394,11 +389,11 @@ void LiveDataDock::readingTypeChanged(int idx) {
 		LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
 		if (type == LiveDataSource::ReadingType::TillEnd) {
-			ui.lSampleRate->hide();
-			ui.sbSampleRate->hide();
+			ui.lSampleSize->hide();
+			ui.sbSampleSize->hide();
 		} else {
-			ui.lSampleRate->show();
-			ui.sbSampleRate->show();
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
 		}
 
 		for (auto* source : m_liveDataSources)
@@ -409,11 +404,11 @@ void LiveDataDock::readingTypeChanged(int idx) {
 		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
 
 		if (type == MQTTClient::ReadingType::TillEnd) {
-			ui.lSampleRate->hide();
-			ui.sbSampleRate->hide();
+			ui.lSampleSize->hide();
+			ui.sbSampleSize->hide();
 		} else {
-			ui.lSampleRate->show();
-			ui.sbSampleRate->show();
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
 		}
 
 		for (auto* client : m_mqttClients)

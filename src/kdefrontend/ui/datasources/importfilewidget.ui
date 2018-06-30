@@ -17,18 +17,9 @@
    </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
+   <property name="margin">
     <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+   </property>   
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
@@ -38,7 +29,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-299</y>
+        <y>-767</y>
         <width>593</width>
         <height>1704</height>
        </rect>
@@ -84,7 +75,7 @@
             <property name="toolTip">
              <string>Specify the name of the file to import.</string>
             </property>
-            <property name="clearButtonEnabled">
+            <property name="clearButtonEnabled" stdset="0">
              <bool>true</bool>
             </property>
            </widget>
@@ -446,18 +437,9 @@
           <string>Format Options</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="leftMargin">
+          <property name="margin">
            <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
+          </property>          
           <item>
            <widget class="QTabWidget" name="tabWidget">
             <property name="currentIndex">
@@ -758,8 +740,15 @@
           <string>Update Options</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="8" column="0">
+           <widget class="QLabel" name="lKeepLastValues">
+            <property name="text">
+             <string>Keep last N values:</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="lReadType">
+           <widget class="QLabel" name="lReadingType">
             <property name="text">
              <string>Read:</string>
             </property>
@@ -798,13 +787,6 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="lKeepLastValues">
-            <property name="text">
-             <string>Keep last N values:</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lUpdateType">
             <property name="text">
@@ -830,6 +812,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="suffix">
+             <string> ms</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -841,15 +826,8 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="lUpdateIntervalUnit">
-            <property name="text">
-             <string>ms</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="cbReadType">
+           <widget class="QComboBox" name="cbReadingType">
             <item>
              <property name="text">
               <string>Continuously Fixed</string>
@@ -868,14 +846,14 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="lSampleRate">
+           <widget class="QLabel" name="lSampleSize">
             <property name="text">
              <string>Sample rate:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="sbSampleRate">
+           <widget class="QSpinBox" name="sbSampleSize">
             <property name="minimum">
              <number>1</number>
             </property>
@@ -883,7 +861,7 @@
              <number>10000</number>
             </property>
             <property name="value">
-             <number>5</number>
+             <number>1</number>
             </property>
            </widget>
           </item>

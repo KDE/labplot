@@ -36,6 +36,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
@@ -179,7 +180,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item5->setFlags(item5->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
-	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
+	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
 	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 	ui.gbOptions->hide();
@@ -201,7 +202,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
 	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect( ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 #ifdef HAVE_MQTT
@@ -270,13 +271,13 @@ void ImportFileWidget::loadSettings() {
 
 	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
-	ui.cbReadType->setCurrentIndex(conf.readEntry("ReadType").toInt());
+	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType").toInt());
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
 	ui.leHost->setText(conf.readEntry("Host",""));
 	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
 	ui.lePort->setText(conf.readEntry("Port",""));
-	ui.sbSampleRate->setValue(conf.readEntry("SampleRate").toInt());
+	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 #ifdef HAVE_MQTT
 	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
@@ -325,8 +326,8 @@ ImportFileWidget::~ImportFileWidget() {
 	//live data related settings
 	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
-	conf.writeEntry("ReadType", ui.cbReadType->currentIndex());
-	conf.writeEntry("SampleRate", ui.sbSampleRate->value());
+	conf.writeEntry("ReadingType", ui.cbReadingType->currentIndex());
+	conf.writeEntry("SampleSize", ui.sbSampleSize->value());
 	conf.writeEntry("KeepLastNValues", ui.leKeepLastValues->text());
 	conf.writeEntry("BaudRate", ui.cbBaudRate->currentIndex());
 	conf.writeEntry("SerialPort", ui.cbSerialPort->currentIndex());
@@ -475,7 +476,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	LiveDataSource::FileType fileType = static_cast<LiveDataSource::FileType>(ui.cbFileType->currentIndex());
 	LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
-	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadType->currentIndex());
+	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
 	source->setComment( ui.leFileName->text() );
 	source->setFileType(fileType);
@@ -497,7 +498,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setUpdateType(updateType);
 
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		source->setSampleRate(ui.sbSampleRate->value());
+		source->setSampleSize(ui.sbSampleSize->value());
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -525,7 +526,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	qDebug()<<"Saving to MQTT Client";
 	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
-	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadType->currentIndex());
+	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
 	client->setComment( ui.leFileName->text() );
 	client->setFilter(this->currentFileFilter());
@@ -543,7 +544,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	client->setUpdateType(updateType);
 
 	if (readingType != MQTTClient::ReadingType::TillEnd)
-		client->setSampleRate(ui.sbSampleRate->value());
+		client->setSampleRate(ui.sbSampleSize->value());
 
 
 
@@ -692,6 +693,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 			return filter;
 		}
+	case LiveDataSource::NgspiceRawAscii: {
+			NgspiceRawAsciiFilter* filter = new NgspiceRawAsciiFilter();
+// 			filter->setStartRow( ui.sbStartRow->value() );
+// 			filter->setEndRow( ui.sbEndRow->value() );
+			return filter;
+		}
 	}
 
 	return 0;
@@ -781,8 +788,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QByteArray imageFormat = QImageReader::imageFormat(fileName);
 		if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
 		        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
-			//probably ascii data
-			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
+			if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
+				ui.cbFileType->setCurrentIndex(LiveDataSource::NgspiceRawAscii);
+			else //probably ascii data
+				ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
 		} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
 		           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF5);
@@ -849,15 +858,16 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lFilter->show();
 	ui.cbFilter->show();
 
-	//if we switch from ROOT format (only two tabs available), add the data portion-tab again
-	if (ui.tabWidget->count() == 1) {
-		ui.tabWidget->insertTab(1, ui.tabDataPortion, i18n("Data portion to read"));
-	}
-	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
-	if (ui.tabWidget->count() == 2) {
-		ui.tabWidget->setTabText(0, i18n("Data format"));
-		ui.tabWidget->insertTab(1, ui.tabDataPreview, i18n("Preview"));
-	}
+	//different file types show different number of tabs ui.tabWidget.
+	//we switching from the previous file type we re-set the tab widget to it's original state
+	//and remove/add the required tabs further below
+	for (int i = 0; i<ui.tabWidget->count(); ++i)
+		ui.tabWidget->count();
+
+	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
+	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
+	ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
+
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
 	ui.lStartColumn->show();
@@ -879,6 +889,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		// falls through
 	case LiveDataSource::HDF5:
 	case LiveDataSource::NETCDF:
+	case LiveDataSource::FITS:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -892,13 +903,13 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		break;
-	case LiveDataSource::FITS:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
-		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
-		ui.tabWidget->removeTab(1);
+	case LiveDataSource::NgspiceRawAscii:
+		ui.lStartColumn->hide();
+		ui.sbStartColumn->hide();
+		ui.lEndColumn->hide();
+		ui.sbEndColumn->hide();
+		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
-		break;
 	default:
 		DEBUG("unknown file type");
 	}
@@ -1192,6 +1203,14 @@ void ImportFileWidget::refreshPreview() {
 			columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::Numeric);
 			break;
 		}
+	case LiveDataSource::NgspiceRawAscii: {
+			DEBUG("Ngspice RAW ASCII");
+			ui.tePreview->clear();
+			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
+			importedStrings = filter->preview(fileName, lines);
+			tmpTableWidget = m_twPreview;
+			break;
+		}
 	}
 
 	// fill the table widget
@@ -1249,26 +1268,26 @@ void ImportFileWidget::refreshPreview() {
 void ImportFileWidget::updateTypeChanged(int idx) {
 	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
 
-	if (type == LiveDataSource::UpdateType::TimeInterval) {
+	switch (type) {
+	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
-		ui.lUpdateIntervalUnit->show();
-	} else if (type == LiveDataSource::UpdateType::NewData) {
+		break;
+	case LiveDataSource::UpdateType::NewData:
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
-		ui.lUpdateIntervalUnit->hide();
 	}
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
-    if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+	if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else {
-		ui.lSampleRate->show();
-		ui.sbSampleRate->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 	}
 
 	if (type == LiveDataSource::ReadingType::WholeFile) {
@@ -1282,110 +1301,104 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
-	switch (type) {
-    case LiveDataSource::SourceType::FileOrPipe:{
-		ui.lFileName->show();
-		ui.leFileName->show();
-		ui.bFileInfo->show();
-		ui.bOpen->show();
-		ui.chbLinkFile->show();
 
-		ui.cbBaudRate->hide();
+		switch (type) {
+		case LiveDataSource::SourceType::FileOrPipe:
+			ui.lFileName->show();
+			ui.leFileName->show();
+			ui.bFileInfo->show();
+			ui.bOpen->show();
+			ui.chbLinkFile->show();
+
+			ui.cbBaudRate->hide();
+			ui.lBaudRate->hide();
+			ui.lHost->hide();
+			ui.leHost->hide();
+			ui.lPort->hide();
+			ui.lePort->hide();
+			ui.cbSerialPort->hide();
+			ui.lSerialPort->hide();
+
+			fileNameChanged(ui.leFileName->text());
+			break;
+		case LiveDataSource::SourceType::LocalSocket:
+			ui.lFileName->show();
+			ui.leFileName->show();
+			ui.bOpen->show();
+
+			ui.bFileInfo->hide();
+			ui.cbBaudRate->hide();
+			ui.lBaudRate->hide();
+			ui.lHost->hide();
+			ui.leHost->hide();
+			ui.lPort->hide();
+			ui.lePort->hide();
+			ui.cbSerialPort->hide();
+			ui.lSerialPort->hide();
+			ui.chbLinkFile->hide();
+
+			ui.gbOptions->setEnabled(true);
+			ui.bManageFilters->setEnabled(true);
+			ui.cbFilter->setEnabled(true);
+			ui.cbFileType->setEnabled(true);
+			break;
+		case LiveDataSource::SourceType::NetworkTcpSocket:
+		case LiveDataSource::SourceType::NetworkUdpSocket:
+			ui.lHost->show();
+			ui.leHost->show();
+			ui.lePort->show();
+			ui.lPort->show();
+
+			ui.lBaudRate->hide();
+			ui.cbBaudRate->hide();
+			ui.lSerialPort->hide();
+			ui.cbSerialPort->hide();
+
+			ui.lFileName->hide();
+			ui.leFileName->hide();
+			ui.bFileInfo->hide();
+			ui.bOpen->hide();
+			ui.chbLinkFile->hide();
+
+			ui.gbOptions->setEnabled(true);
+			ui.bManageFilters->setEnabled(true);
+			ui.cbFilter->setEnabled(true);
+			ui.cbFileType->setEnabled(true);
+			break;
+		case LiveDataSource::SourceType::SerialPort:
+			ui.lBaudRate->show();
+			ui.cbBaudRate->show();
+			ui.lSerialPort->show();
+			ui.cbSerialPort->show();
+
+			ui.lHost->hide();
+			ui.leHost->hide();
+			ui.lePort->hide();
+			ui.lPort->hide();
+			ui.lFileName->hide();
+			ui.leFileName->hide();
+			ui.bFileInfo->hide();
+			ui.bOpen->hide();
+			ui.chbLinkFile->hide();
+			ui.cbFileType->setEnabled(true);
+
+			ui.gbOptions->setEnabled(true);
+			ui.bManageFilters->setEnabled(true);
+			ui.cbFilter->setEnabled(true);
+			break;
+
+	case LiveDataSource::SourceType::MQTT:
+#ifdef HAVE_MQTT
+
 		ui.lBaudRate->hide();
-		ui.lHost->hide();
-		ui.leHost->hide();
-		ui.lPort->hide();
-		ui.lePort->hide();
-		ui.cbSerialPort->hide();
-		ui.lSerialPort->hide();
-
-		hideMQTT();
-
-		fileNameChanged(ui.leFileName->text());
-
-		fileNameChanged(m_fileName);
-
-
-		int itemIdx = -1;
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile) {
-				itemIdx = i;
-				break;
-			}
-		}
-		if (itemIdx == -1)
-			ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
-
-		break;
-    }
-	case LiveDataSource::SourceType::LocalSocket:
-		ui.lFileName->show();
-		ui.leFileName->show();
-		ui.bOpen->show();
-
-		ui.bFileInfo->hide();
 		ui.cbBaudRate->hide();
-		ui.lBaudRate->hide();
-		ui.lHost->hide();
-		ui.leHost->hide();
-		ui.lPort->hide();
-		ui.lePort->hide();
-		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
-		ui.chbLinkFile->hide();
+		ui.cbSerialPort->hide();
 
-		hideMQTT();
-
-		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
-		ui.cbFilter->setEnabled(true);
-		ui.cbFileType->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
-    break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
-
-		ui.lBaudRate->hide();
-		ui.cbBaudRate->hide();
-		ui.lSerialPort->hide();
-		ui.cbSerialPort->hide();
-
-		hideMQTT();
-
-		ui.lFileName->hide();
-		ui.leFileName->hide();
-		ui.bFileInfo->hide();
-		ui.bOpen->hide();
-		ui.chbLinkFile->hide();
-
-		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
-		ui.cbFilter->setEnabled(true);
-		ui.cbFileType->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
-		break;
-	case LiveDataSource::SourceType::SerialPort:
-		ui.lBaudRate->show();
-		ui.cbBaudRate->show();
-		ui.lSerialPort->show();
-		ui.cbSerialPort->show();
-
-		ui.lHost->hide();
-		ui.leHost->hide();
-		ui.lePort->hide();
-		ui.lPort->hide();
 		ui.lFileName->hide();
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
@@ -1393,63 +1406,28 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbLinkFile->hide();
 		ui.cbFileType->setEnabled(true);
 
-		hideMQTT();
-
-		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
-		ui.cbFilter->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
-		break;
-	case LiveDataSource::SourceType::MQTT:
-#ifdef HAVE_MQTT
-
-        ui.lBaudRate->hide();
-        ui.cbBaudRate->hide();
-        ui.lSerialPort->hide();
-        ui.cbSerialPort->hide();
-
-        ui.lHost->show();
-        ui.leHost->show();
-        ui.lePort->show();
-        ui.lPort->show();
-        ui.lFileName->hide();
-        ui.leFileName->hide();
-        ui.bFileInfo->hide();
-        ui.bOpen->hide();
-        ui.chbLinkFile->hide();
-        ui.cbFileType->setEnabled(true);
-
-        ui.leID->hide();
-        ui.lMqttID->hide();
-        ui.lePassword->hide();
-        ui.lPassword->hide();
-        ui.leUsername->hide();
-        ui.lUsername->hide();
-        ui.cbQos->show();
-        ui.lQos->show();
+		ui.leID->hide();
+		ui.lMqttID->hide();
+		ui.lePassword->hide();
+		ui.lPassword->hide();
+		ui.leUsername->hide();
+		ui.lUsername->hide();
+		ui.cbQos->show();
+		ui.lQos->show();
 		ui.twTopics->show();
 		ui.lTopicTree->show();
 		ui.lTopicSearch->show();
 		ui.leTopics->show();
-        ui.lwSubscriptions->show();
-        ui.lSubscriptions->show();
-        ui.chbAuthentication->show();
-        ui.chbID->show();
-        ui.bSubscribe->show();
-        ui.bConnect->show();
+		ui.lwSubscriptions->show();
+		ui.lSubscriptions->show();
+		ui.chbAuthentication->show();
+		ui.chbID->show();
+		ui.bSubscribe->show();
+		ui.bConnect->show();
 
-        ui.gbOptions->setEnabled(true);
-        ui.bManageFilters->setEnabled(true);
-        ui.cbFilter->setEnabled(true);
-
-        for (int i = 0; i < ui.cbReadType->count(); ++i) {
-            if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-                ui.cbReadType->removeItem(i);
-		}
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
 
 		ui.gbMqttWill->show();
 		ui.chbWill->show();
@@ -1502,13 +1480,19 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 			}
 		}
 #endif
-        break;
-	default:
 		break;
 	}
 
+	// "whole file" item
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (type == LiveDataSource::SourceType::FileOrPipe)
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	else
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
 	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
-	//Activate the groupbox when switching from "file and pipe" to a different sourcy type.
+	//Activate the groupbox when switching from "file and pipe" to a different source type.
 	if (type != LiveDataSource::SourceType::FileOrPipe)
 		ui.gbUpdateOptions->setEnabled(true);
 

@@ -66,24 +66,25 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
-	  m_fileType(Ascii),
-	  m_fileWatched(false),
-	  m_fileLinked(false),
-	  m_paused(false),
-	  m_prepared(false),
-	  m_keepLastValues(false),
-	  m_updateInterval(1000),
-//TODO: m_keepNvalues, m_sampleRate, m_port, m_baudRate ?
-	  m_bytesRead(0),
-	  m_filter(nullptr),
-	  m_updateTimer(new QTimer(this)),
-	  m_fileSystemWatcher(nullptr),
-	  m_file(nullptr),
-	  m_localSocket(nullptr),
-	  m_tcpSocket(nullptr),
-	  m_udpSocket(nullptr),
-	  m_serialPort(nullptr),
-	  m_device(nullptr) {
+		m_fileType(Ascii),
+		m_fileWatched(false),
+		m_fileLinked(false),
+		m_paused(false),
+		m_prepared(false),
+		m_keepLastValues(false),
+		m_sampleSize(1),
+		m_updateInterval(1000),
+//TODO: m_keepNvalues, m_port, m_baudRate ?
+		m_bytesRead(0),
+		m_filter(nullptr),
+		m_updateTimer(new QTimer(this)),
+		m_fileSystemWatcher(nullptr),
+		m_file(nullptr),
+		m_localSocket(nullptr),
+		m_tcpSocket(nullptr),
+		m_udpSocket(nullptr),
+		m_serialPort(nullptr),
+		m_device(nullptr) {
 
 	initActions();
 
@@ -119,15 +120,14 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready() update type = " << m_updateType << ", interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType) << ", interval = " << m_updateInterval);
 	switch (m_updateType) {
 	case TimeInterval:
-		DEBUG("START TIMER");
 		m_updateTimer->start(m_updateInterval);
-		DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
+		DEBUG("STARTED TIMER. REMAINING TIME = " << m_updateTimer->remainingTime());
 		break;
 	case NewData:
-		DEBUG("START WATCHER");
+		DEBUG("STARTING WATCHER");
 		watch();
 	}
 }
@@ -234,6 +234,7 @@ QStringList LiveDataSource::fileTypes() {
 	        << i18n("Network Common Data Format (NetCDF)")
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
 	        << i18n("ROOT (CERN) Histograms")
+			<< "Ngspice RAW ASCII"
 	       );
 }
 
@@ -372,15 +373,15 @@ bool LiveDataSource::isPaused() const {
 }
 
 /*!
- * \brief Sets the sample rate to samplerate
- * \param samplerate
+ * \brief Sets the sample size to size
+ * \param size
  */
-void LiveDataSource::setSampleRate(int samplerate) {
-	m_sampleRate = samplerate;
+void LiveDataSource::setSampleSize(int size) {
+	m_sampleSize = size;
 }
 
-int LiveDataSource::sampleRate() const {
-	return m_sampleRate;
+int LiveDataSource::sampleSize() const {
+	return m_sampleSize;
 }
 
 /*!
@@ -512,7 +513,7 @@ void LiveDataSource::read() {
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	preparing device. update type = " << m_updateType);
+		DEBUG("	preparing device. update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -566,10 +567,9 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
-		DEBUG("Reading FileOrPipe ..");
+		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(LiveDataSource,FileType,m_fileType));
 		switch (m_fileType) {
 		case Ascii:
-			DEBUG("	type ASCII");
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
@@ -581,7 +581,6 @@ void LiveDataSource::read() {
 
 			break;
 		case Binary:
-			DEBUG("	type Binary");
 			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
 		//TODO:?
@@ -590,6 +589,7 @@ void LiveDataSource::read() {
 		case NETCDF:
 		case FITS:
 		case ROOT:
+		case NgspiceRawAscii:
 			break;
 		}
 		break;
@@ -600,24 +600,24 @@ void LiveDataSource::read() {
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
 	case NetworkUdpSocket:
-		DEBUG("reading from UDP socket. state before abort = " << m_udpSocket->state());
+		DEBUG("reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
-		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-		DEBUG("reading from UDP socket. state after reconnect = " << m_udpSocket->state());
+		if (m_fileType == Ascii)
+			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case LocalSocket:
-		DEBUG("reading from local socket. state before abort = " << m_localSocket->state());
+		DEBUG("reading from local socket. state before abort = " << ENUM_TO_STRING(QLocalSocket, LocalSocketState, m_localSocket->state()));
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
+		//TODO: Test
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);
 		m_serialPort->setPortName(m_serialPortName);
 		m_device = m_serialPort;
-		//TODO
 		break;
 	case MQTT:
 		break;	
@@ -630,7 +630,7 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("LiveDataSource::readyRead() update type = " << m_updateType);
+	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == Ascii)
@@ -878,7 +878,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
-		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
+		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 
 	switch (m_sourceType) {
 	case SerialPort:
@@ -991,11 +991,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			if (m_readingType != TillEnd) {
-				str = attribs.value("sampleRate").toString();
+				str = attribs.value("sampleSize").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("sampleRate").toString());
+					reader->raiseWarning(attributeWarning.subs("sampleSize").toString());
 				else
-					m_sampleRate = str.toInt();
+					m_sampleSize = str.toInt();
 			}
 
 			switch (m_sourceType) {
