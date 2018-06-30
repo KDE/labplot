@@ -47,6 +47,9 @@ class QFile;
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
 	Q_ENUMS(FileType)
+	Q_ENUMS(SourceType)
+	Q_ENUMS(UpdateType)
+	Q_ENUMS(ReadingType)
 
 public:
 	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT, NgspiceRawAscii};

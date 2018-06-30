@@ -117,15 +117,14 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready() update type = " << m_updateType << ", interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType) << ", interval = " << m_updateInterval);
 	switch (m_updateType) {
 	case TimeInterval:
-		DEBUG("START TIMER");
 		m_updateTimer->start(m_updateInterval);
-		DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
+		DEBUG("STARTED TIMER. REMAINING TIME = " << m_updateTimer->remainingTime());
 		break;
 	case NewData:
-		DEBUG("START WATCHER");
+		DEBUG("STARTING WATCHER");
 		watch();
 	}
 }
@@ -510,7 +509,7 @@ void LiveDataSource::read() {
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	preparing device. update type = " << m_updateType);
+		DEBUG("	preparing device. update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -562,10 +561,9 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
-		DEBUG("Reading FileOrPipe ..");
+		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(LiveDataSource,FileType,m_fileType));
 		switch (m_fileType) {
 		case Ascii:
-			DEBUG("	type ASCII");
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
@@ -576,7 +574,6 @@ void LiveDataSource::read() {
 
 			break;
 		case Binary:
-			DEBUG("	type Binary");
 			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
 		//TODO:?
@@ -595,11 +592,11 @@ void LiveDataSource::read() {
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
 	case NetworkUdpSocket:
-		DEBUG("reading from UDP socket. state before abort = " << m_udpSocket->state());
+		DEBUG("reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
-		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-		DEBUG("reading from UDP socket. state after reconnect = " << m_udpSocket->state());
+		if (m_fileType == Ascii)
+			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case LocalSocket:
 		DEBUG("reading from local socket. state before abort = " << m_localSocket->state());
@@ -623,7 +620,7 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("LiveDataSource::readyRead() update type = " << m_updateType);
+	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == Ascii)

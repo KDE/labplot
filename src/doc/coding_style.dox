@@ -53,7 +53,7 @@ Very short classes can be bundled in one file which then is named using all lowe
     public:
         void doSomething();
 @endcode
-    “case” of switch is not indented. “default” should be present if type of condition is not an enum. Example:
+    “case” of switch is not indented. “default” should be present only if data type is not an enum. Example:
 @code
     switch (condition) {
     case 1:
