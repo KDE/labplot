@@ -232,6 +232,7 @@ QStringList LiveDataSource::fileTypes() {
 	        << i18n("Network Common Data Format (NetCDF)")
 	        << i18n("Flexible Image Transport System Data Format (FITS)")
 	        << i18n("ROOT (CERN) Histograms")
+			<< "Ngspice RAW ASCII"
 	       );
 }
 

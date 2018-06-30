@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : File data source
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -49,7 +49,7 @@ class LiveDataSource : public Spreadsheet {
 	Q_ENUMS(FileType)
 
 public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT};
+	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT, NgspiceRawAscii};
 	enum SourceType {
 		FileOrPipe = 0,		// regular file or pipe
 		NetworkTcpSocket,	// TCP socket

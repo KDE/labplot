@@ -36,6 +36,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
@@ -528,6 +529,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 			return filter;
 		}
+	case LiveDataSource::NgspiceRawAscii: {
+			NgspiceRawAsciiFilter* filter = new NgspiceRawAsciiFilter();
+// 			filter->setStartRow( ui.sbStartRow->value() );
+// 			filter->setEndRow( ui.sbEndRow->value() );
+			return filter;
+		}
 	}
 
 	return 0;
@@ -617,8 +624,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QByteArray imageFormat = QImageReader::imageFormat(fileName);
 		if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
 		        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
-			//probably ascii data
-			ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
+			if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
+				ui.cbFileType->setCurrentIndex(LiveDataSource::NgspiceRawAscii);
+			else //probably ascii data
+				ui.cbFileType->setCurrentIndex(LiveDataSource::Ascii);
 		} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
 		           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
 			ui.cbFileType->setCurrentIndex(LiveDataSource::HDF5);
@@ -685,15 +694,16 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lFilter->show();
 	ui.cbFilter->show();
 
-	//if we switch from ROOT format (only two tabs available), add the data portion-tab again
-	if (ui.tabWidget->count() == 1) {
-		ui.tabWidget->insertTab(1, ui.tabDataPortion, i18n("Data portion to read"));
-	}
-	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
-	if (ui.tabWidget->count() == 2) {
-		ui.tabWidget->setTabText(0, i18n("Data format"));
-		ui.tabWidget->insertTab(1, ui.tabDataPreview, i18n("Preview"));
-	}
+	//different file types show different number of tabs ui.tabWidget.
+	//we switching from the previous file type we re-set the tab widget to it's original state
+	//and remove/add the required tabs further below
+	for (int i = 0; i<ui.tabWidget->count(); ++i)
+		ui.tabWidget->count();
+
+	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
+	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
+	ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
+
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
 	ui.lStartColumn->show();
@@ -715,6 +725,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		// falls through
 	case LiveDataSource::HDF5:
 	case LiveDataSource::NETCDF:
+	case LiveDataSource::FITS:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -728,13 +739,13 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		break;
-	case LiveDataSource::FITS:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
-		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
-		ui.tabWidget->removeTab(1);
+	case LiveDataSource::NgspiceRawAscii:
+		ui.lStartColumn->hide();
+		ui.sbStartColumn->hide();
+		ui.lEndColumn->hide();
+		ui.sbEndColumn->hide();
+		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
-		break;
 	default:
 		DEBUG("unknown file type");
 	}
@@ -999,6 +1010,14 @@ void ImportFileWidget::refreshPreview() {
 			vectorNameList = importedStrings.last();
 			importedStrings.removeLast();
 			columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::Numeric);
+			break;
+		}
+	case LiveDataSource::NgspiceRawAscii: {
+			DEBUG("Ngspice RAW ASCII");
+			ui.tePreview->clear();
+			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
+			importedStrings = filter->preview(fileName, lines);
+			tmpTableWidget = m_twPreview;
 			break;
 		}
 	}

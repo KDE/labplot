@@ -201,6 +201,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/NgspiceRawAsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
