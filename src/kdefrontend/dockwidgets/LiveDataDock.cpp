@@ -26,6 +26,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #include "LiveDataDock.h"
 #include <KLocalizedString>
+#include <QStandardItemModel>
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent), m_paused(false) {
@@ -79,17 +80,13 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
 	}
 
-	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe) {
-		int itemIdx = -1;
-		for (int i = 0; i < ui.cbReadingType->count(); ++i) {
-			if (ui.cbReadingType->itemText(i) == i18n("Read Whole File")) { // FIXME never ever compare to UI strings!
-				itemIdx = i;
-				break;
-			}
-		}
-		if (itemIdx != -1)
-			ui.cbReadingType->removeItem(itemIdx);
-	}
+	// disable "whole file" when having no file (i.e. socket or port)
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (fds->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	else
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();

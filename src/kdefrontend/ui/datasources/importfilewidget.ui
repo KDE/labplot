@@ -629,7 +629,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="lReadType">
+       <widget class="QLabel" name="lReadingType">
         <property name="text">
          <string>Read:</string>
         </property>
@@ -683,7 +683,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="cbReadType">
+       <widget class="QComboBox" name="cbReadingType">
         <item>
          <property name="text">
           <string>Continuously Fixed</string>

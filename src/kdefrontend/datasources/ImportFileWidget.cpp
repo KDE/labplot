@@ -150,7 +150,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item4->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
-	ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
+	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
 	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 	ui.gbOptions->hide();
@@ -169,7 +169,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
 	connect( ui.cbUpdateType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeChanged(int)));
-	connect( ui.cbReadType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
+	connect( ui.cbReadingType, SIGNAL(currentIndexChanged(int)), this, SLOT(readingTypeChanged(int)));
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
@@ -216,7 +216,7 @@ void ImportFileWidget::loadSettings() {
 
 	//live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate").toInt());
-	ui.cbReadType->setCurrentIndex(conf.readEntry("ReadType").toInt());
+	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType").toInt());
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
 	ui.leHost->setText(conf.readEntry("Host",""));
@@ -246,7 +246,7 @@ ImportFileWidget::~ImportFileWidget() {
 	//live data related settings
 	conf.writeEntry("SourceType", ui.cbSourceType->currentIndex());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
-	conf.writeEntry("ReadType", ui.cbReadType->currentIndex());
+	conf.writeEntry("ReadingType", ui.cbReadingType->currentIndex());
 	conf.writeEntry("SampleSize", ui.sbSampleSize->value());
 	conf.writeEntry("KeepLastNValues", ui.leKeepLastValues->text());
 	conf.writeEntry("BaudRate", ui.cbBaudRate->currentIndex());
@@ -370,7 +370,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	LiveDataSource::FileType fileType = static_cast<LiveDataSource::FileType>(ui.cbFileType->currentIndex());
 	LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
-	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadType->currentIndex());
+	LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
 	source->setComment( ui.leFileName->text() );
 	source->setFileType(fileType);
@@ -1093,7 +1093,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
 
 	switch (type) {
-	case LiveDataSource::SourceType::FileOrPipe: {
+	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
 		ui.leFileName->show();
 		ui.bFileInfo->show();
@@ -1110,19 +1110,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 
 		fileNameChanged(ui.leFileName->text());
-
-		int itemIdx = -1;
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile) {
-				itemIdx = i;
-				break;
-			}
-		}
-		if (itemIdx == -1)
-			ui.cbReadType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
-
 		break;
-	}
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
 		ui.leFileName->show();
@@ -1143,12 +1131,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
-    break;
+		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.lHost->show();
@@ -1171,11 +1154,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -1197,18 +1175,19 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
-
-		for (int i = 0; i < ui.cbReadType->count(); ++i) {
-			if (ui.cbReadType->itemData(i).toInt() == LiveDataSource::WholeFile)
-				ui.cbReadType->removeItem(i);
-		}
-		break;
-	default:
 		break;
 	}
 
+	// "whole file" item
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (type == LiveDataSource::SourceType::FileOrPipe)
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	else
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
 	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
-	//Activate the groupbox when switching from "file and pipe" to a different sourcy type.
+	//Activate the groupbox when switching from "file and pipe" to a different source type.
 	if (type != LiveDataSource::SourceType::FileOrPipe)
 		ui.gbUpdateOptions->setEnabled(true);
 
