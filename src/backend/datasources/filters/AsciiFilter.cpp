@@ -810,12 +810,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	int currentRow = 0; // indexes the position in the vector(column)
 	int linesToRead = 0;
+	int keepNValues = spreadsheet->keepNValues();
 
 	DEBUG("Increase row count");
 	if (m_prepared) {
 		//increase row count if we don't have a fixed size
 		//but only after the preparation step
-		if (!spreadsheet->keepLastValues()) {
+		if (keepNValues == 0) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
 				m_actualRows += qMin(newData.size(), spreadsheet->sampleSize());
 			else {
@@ -867,7 +868,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
-	if (!spreadsheet->keepLastValues()) {
+	if (keepNValues == 0) {
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportResizing: ");
 #endif
@@ -1061,10 +1062,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QDEBUG(" line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
 			if (createIndexEnabled) {
-				if (spreadsheet->keepLastValues())
-					lineStringList.prepend(QString::number(indexColumnIdx++));
-				else
+				if (spreadsheet->keepNValues() == 0)
 					lineStringList.prepend(QString::number(currentRow));
+				else
+					lineStringList.prepend(QString::number(indexColumnIdx++));
 			}
 
 			QDEBUG("	column modes = " << columnModes);

@@ -170,7 +170,6 @@ private:
 	bool m_fileLinked;
 	bool m_paused;
 	bool m_prepared;
-	bool m_keepLastValues;
 
 	int m_sampleSize;
 	int m_keepNValues;	// number of values to keep (0 - all)

@@ -69,10 +69,9 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 		m_fileLinked(false),
 		m_paused(false),
 		m_prepared(false),
-		m_keepLastValues(false),
 		m_sampleSize(1),
-		m_updateInterval(1000),
 		m_keepNValues(0),
+		m_updateInterval(1000),
 //TODO: m_port, m_baudRate ?
 		m_bytesRead(0),
 		m_filter(nullptr),
@@ -282,18 +281,6 @@ void LiveDataSource::setFileWatched(bool b) {
 
 bool LiveDataSource::isFileWatched() const {
 	return m_fileWatched;
-}
-
-/*!
- * \brief Sets whether we'll keep only the last values or append to the previous ones
- * \param keepLastValues
- */
-void LiveDataSource::setKeepLastValues(bool keepLastValues) {
-	m_keepLastValues = keepLastValues;
-}
-
-bool LiveDataSource::keepLastValues() const {
-	return m_keepLastValues;
 }
 
 /*!
@@ -863,7 +850,6 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("sourceType", QString::number(m_sourceType));
-	writer->writeAttribute("keepLastValues", QString::number(m_keepLastValues));
 	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
 
 	if (m_updateType == TimeInterval)

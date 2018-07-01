@@ -221,7 +221,7 @@ void ImportFileWidget::loadSettings() {
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType").toInt());
 	ui.leHost->setText(conf.readEntry("Host",""));
-	ui.leKeepLastValues->setText(conf.readEntry("KeepLastNValues",""));
+	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues").toInt());
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
@@ -249,7 +249,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
 	conf.writeEntry("ReadingType", ui.cbReadingType->currentIndex());
 	conf.writeEntry("SampleSize", ui.sbSampleSize->value());
-	conf.writeEntry("KeepLastNValues", ui.leKeepLastValues->text());
+	conf.writeEntry("KeepNValues", ui.sbKeepNValues->value());
 	conf.writeEntry("BaudRate", ui.cbBaudRate->currentIndex());
 	conf.writeEntry("SerialPort", ui.cbSerialPort->currentIndex());
 	conf.writeEntry("Host", ui.leHost->text());
@@ -385,10 +385,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	else
 		source->setFileWatched(true);
 
-	if (!ui.leKeepLastValues->text().isEmpty()) {
-		source->setKeepLastValues(true);
-		source->setKeepNValues(ui.leKeepLastValues->text().toInt());
-	}
+	source->setKeepNValues(ui.sbKeepNValues->value());
 
 	source->setUpdateType(updateType);
 
@@ -1096,10 +1093,10 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 
 	if (type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lKeepLastValues->hide();
-		ui.leKeepLastValues->hide();
+		ui.sbKeepNValues->hide();
 	} else {
 		ui.lKeepLastValues->show();
-		ui.leKeepLastValues->show();
+		ui.sbKeepNValues->show();
 	}
 }
 
@@ -1232,6 +1229,5 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 	ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
 	ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
 
-	ui.leKeepLastValues->setValidator(new QIntValidator(2, 100000));
 	ui.tabWidget->removeTab(2);
 }
