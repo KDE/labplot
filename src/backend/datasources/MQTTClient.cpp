@@ -629,7 +629,11 @@ void MQTTClient::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
 		}
 
 		for(int i = 0; i < m_mqttSubscriptions.count(); ++i){
-			QString subscriptionName = m_mqttSubscriptions[i]->subscriptionName();
+			if(checkTopicContains(m_mqttSubscriptions[i]->subscriptionName(), msg.topic().name())) {
+				m_mqttSubscriptions[i]->messageArrived(QString(msg.payload()), msg.topic().name());
+				break;
+			}
+			/*QString subscriptionName = m_mqttSubscriptions[i]->subscriptionName();
 			if(subscriptionName.contains('#') || subscriptionName.contains('+')) {
 				if(subscriptionName.contains('#')) {
 					if(msg.topic().name().startsWith(subscriptionName.left(subscriptionName.count() - 2)) ){
@@ -650,7 +654,7 @@ void MQTTClient::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
 			else if(subscriptionName == msg.topic().name()) {
 				m_mqttSubscriptions[i]->messageArrived(QString(msg.payload()), msg.topic().name());
 				break;
-			}
+			}*/
 		}
 
 		if(msg.topic().name() == m_willTopic)
@@ -920,6 +924,12 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 				QMqttTopicFilter unsubscribeFilter {inferiorSubscriptions[sub]->subscriptionName()};
 				m_client->unsubscribe(unsubscribeFilter);
 
+				for (int j = 0; j < m_mqttSubscriptions.size(); ++j) {
+					if(m_mqttSubscriptions[j]->subscriptionName() ==
+							inferiorSubscriptions[sub]->subscriptionName()) {
+						m_mqttSubscriptions.remove(j);
+					}
+				}
 				m_subscriptions.removeAll(inferiorSubscriptions[sub]->subscriptionName());
 
 				removeChild(inferiorSubscriptions[sub]);

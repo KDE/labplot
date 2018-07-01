@@ -37,12 +37,25 @@ AbstractAspect* MQTTSubscriptions::mqttClient() const{
 
 void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){
 	bool found = false;
-	for(int i = 0; i < m_topics.count(); ++i) {
-		if(topicName == m_topics[i]->topicName()) {
-			m_topics[i]->newMessage(message);
+	QVector<MQTTTopic*> topics =  children<MQTTTopic>();
+	for(int i = 0; i < topics.count(); ++i) {
+		if(topicName == topics[i]->topicName()) {
+			topics[i]->newMessage(message);
 			if(dynamic_cast<MQTTClient*> (m_MQTTClient)->updateType() == MQTTClient::UpdateType::NewData &&
 					!dynamic_cast<MQTTClient*> (m_MQTTClient)->isPaused())
-				m_topics[i]->read();
+				topics[i]->read();
+
+			bool addKnown = true;
+
+			for(int j = 0; j < m_topics.size(); ++j) {
+				if(m_topics[j]->topicName() == topics[i]->topicName()) {
+					addKnown = false;
+					break;
+				}
+			}
+			if(addKnown)
+				m_topics.push_back(topics[i]);
+
 			found = true;
 			break;
 		}
