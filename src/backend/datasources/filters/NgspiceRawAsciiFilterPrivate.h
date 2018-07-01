@@ -42,6 +42,8 @@ public:
 
 	const NgspiceRawAsciiFilter* q;
 
+	QStringList vectorNames;
+	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow;
 	int endRow;
 	int startColumn;

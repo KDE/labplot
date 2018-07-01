@@ -141,6 +141,14 @@ int NgspiceRawAsciiFilter::endColumn() const {
 	return d->endColumn;
 }
 
+QStringList NgspiceRawAsciiFilter::vectorNames() const {
+	return d->vectorNames;
+}
+
+QVector<AbstractColumn::ColumnMode> NgspiceRawAsciiFilter::columnModes() {
+	return d->columnModes;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -191,22 +199,56 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	line = file.readLine();
 	int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 
-	QStringList lineString;
-
 	//add names of the variables
+	vectorNames.clear();
+	columnModes.clear();
 	file.readLine();
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
-		lineString << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		columnModes << AbstractColumn::Numeric;
 	}
-	dataStrings << lineString;
 
-	//check whether we have complex numbers
-	//TODO:
+	file.readLine(); //skip the line with "Values"
+
+	//read the first value to check whether we have complex numbers
+	qint64 pos = file.pos();
+	line = file.readLine();
+	bool hasComplexValues = (line.indexOf(QLatin1Char(',')) != -1);
+	if (hasComplexValues) {
+		//add column names and types for the imaginary parts
+		QStringList newVectorNames;
+		for (int i = 0; i<vars; ++i) {
+			columnModes << AbstractColumn::Numeric;
+			newVectorNames << vectorNames.at(i) + QLatin1String(" REAL");
+			newVectorNames << vectorNames.at(i) + QLatin1String(" IMAGINARY");
+		}
+		vectorNames = newVectorNames;
+	}
+	file.seek(pos);
 
 	//add the data points
-	//TODO:
+	QStringList lineString;
+	for (int i = 0; i< qMin(lines, points); ++i) {
+		lineString.clear();
+		for (int j = 0; j < vars; ++j) {
+			line = file.readLine();
+			QStringList tokens = line.split(QLatin1Char('\t'));
+			QString value = tokens.at(1).simplified(); //string containing the value(s)
+			if (hasComplexValues) {
+				QStringList realImgTokens = value.split(QLatin1Char(','));
+				if (realImgTokens.size() == 2) { //sanity check to make sure we really have both parts
+					lineString << realImgTokens.at(0); //real part
+					lineString << realImgTokens.at(0); //imaginary part
+				}
+			} else
+				lineString << value;
+		}
+
+		dataStrings << lineString;
+		file.readLine(); //skip the empty line after each value block
+	}
 
 	return dataStrings;
 }

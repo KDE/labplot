@@ -28,6 +28,7 @@ Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 #define NGSPICERAWASCIIFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/core/AbstractColumn.h"
 
 class QStringList;
 class NgspiceRawAsciiFilterPrivate;
@@ -49,6 +50,9 @@ public:
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
+
+	QStringList vectorNames() const;
+	QVector<AbstractColumn::ColumnMode> columnModes();
 
 	void setStartRow(const int);
 	int startRow() const;

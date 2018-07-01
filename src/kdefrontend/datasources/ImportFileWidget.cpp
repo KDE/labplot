@@ -691,8 +691,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lFilter->show();
 	ui.cbFilter->show();
 
-	//different file types show different number of tabs ui.tabWidget.
-	//we switching from the previous file type we re-set the tab widget to it's original state
+	//different file types show different number of tabs in ui.tabWidget.
+	//when switching from the previous file type we re-set the tab widget to its original state
 	//and remove/add the required tabs further below
 	for (int i = 0; i<ui.tabWidget->count(); ++i)
 		ui.tabWidget->count();
@@ -1007,6 +1007,8 @@ void ImportFileWidget::refreshPreview() {
 			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
 			importedStrings = filter->preview(fileName, lines);
 			tmpTableWidget = m_twPreview;
+			vectorNameList = filter->vectorNames();
+			columnModes = filter->columnModes();
 			break;
 		}
 	}
