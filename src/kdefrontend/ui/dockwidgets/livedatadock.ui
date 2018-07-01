@@ -53,7 +53,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="lKeepNvalues">
+    <widget class="QLabel" name="lKeepNValues">
      <property name="text">
       <string>Keep last N values:</string>
      </property>

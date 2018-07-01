@@ -655,12 +655,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
 		}
 
-		//also here we need a cheaper version of this
-		if (!spreadsheet->keepLastValues())
+		int keepNValues = spreadsheet->keepNValues();
+		if (keepNValues == 0)
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
-			spreadsheet->setRowCount(spreadsheet->keepNvalues());
-			m_actualRows = spreadsheet->keepNvalues();
+			spreadsheet->setRowCount(keepNValues);
+			m_actualRows = keepNValues;
 		}
 
 		m_dataContainer.resize(m_actualCols);
@@ -825,11 +825,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				else
 					m_actualRows = newData.size();
 			}
-		}
-		DEBUG("	actual row = " << m_actualRows);
 
-		//fixed size
-		if (spreadsheet->keepLastValues()) {
+			//appending
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+				linesToRead = m_actualRows;
+			else
+				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+		} else {	// fixed size
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
 				//we had more lines than the fixed size, so we read m_actualRows number of lines
 				if (newLinesTillEnd > m_actualRows) {
@@ -843,13 +845,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//is ContinuouslyFixed or FromEnd, WholeFile is disabled
 				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
-		} else {
-			//appending
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
-				linesToRead = m_actualRows;
-			else
-				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 		}
+		DEBUG("	actual row = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;

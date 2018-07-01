@@ -38,7 +38,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
-	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
+	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNValuesChanged);
 	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
@@ -74,10 +74,10 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 
 	if(!fds->keepLastValues()) {
 		ui.leKeepNValues->hide();
-		ui.lKeepNvalues->hide();
+		ui.lKeepNValues->hide();
 	} else {
 		ui.leKeepNValues->setValidator(new QIntValidator(2, 100000));
-		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
+		ui.leKeepNValues->setText(QString::number(fds->keepNValues()));
 	}
 
 	// disable "whole file" when having no file (i.e. socket or port)
@@ -174,9 +174,9 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
  * \brief Modifies the number of samples to keep in each of the live data sources
  * \param keepNvalues
  */
-void LiveDataDock::keepNvaluesChanged(const QString& keepNvalues) {
+void LiveDataDock::keepNValuesChanged(const QString& keepNValues) {
 	for (auto* source : m_liveDataSources)
-		source->setKeepNvalues(keepNvalues.toInt());
+		source->setKeepNValues(keepNValues.toInt());
 }
 
 /*!

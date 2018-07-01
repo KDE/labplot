@@ -387,7 +387,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 
 	if (!ui.leKeepLastValues->text().isEmpty()) {
 		source->setKeepLastValues(true);
-		source->setKeepNvalues(ui.leKeepLastValues->text().toInt());
+		source->setKeepNValues(ui.leKeepLastValues->text().toInt());
 	}
 
 	source->setUpdateType(updateType);
