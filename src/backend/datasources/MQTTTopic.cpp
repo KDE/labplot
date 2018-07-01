@@ -134,10 +134,6 @@ int MQTTTopic::keepNvalues() const {
 	return dynamic_cast<MQTTClient*>(m_MQTTClient)->keepNvalues();
 }
 
-bool MQTTTopic::keepLastValues() const {
-	return dynamic_cast<MQTTClient*>(m_MQTTClient)->keepLastValues();
-}
-
 void MQTTTopic::newMessage(const QString& message) {
 	m_messagePuffer.push_back(message);
 }

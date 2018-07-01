@@ -34,7 +34,7 @@ public:
 	bool isPaused() const;
 	int updateInterval() const;
 	int keepNvalues() const;
-	bool keepLastValues() const;
+	//bool keepLastValues() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

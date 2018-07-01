@@ -48,6 +48,9 @@ MQTTClient::MQTTClient(const QString& name)
 	  m_mqttUseWill(false),
 	  m_mqttUseID(false),
 	  m_loaded(false),
+	  m_sampleRate(1),
+	  m_keepNvalues(0),
+	  m_updateInterval(1000),
 	  m_disconnectForWill(false),
 	  m_mqttUseAuthentication(false),
 	  m_subscriptionsLoaded(0),
@@ -139,19 +142,6 @@ void MQTTClient::setFilter(AbstractFileFilter* f) {
 
 AbstractFileFilter* MQTTClient::filter() const {
 	return m_filter;
-}
-
-/*!
- * \brief Sets whether we'll keep the last values or append it to the previous ones
- * \param keepLastValues
- */
-void MQTTClient::setKeepLastValues(bool keepLastValues) {
-	qDebug()<<"KeepLastValues " << keepLastValues;
-	m_keepLastValues = keepLastValues;
-}
-
-bool MQTTClient::keepLastValues() const {
-	return m_keepLastValues;
 }
 
 /*!

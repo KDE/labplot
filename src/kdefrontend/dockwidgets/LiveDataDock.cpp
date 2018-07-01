@@ -116,12 +116,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	if(!fds->keepLastValues()) {
-		ui.sbKeepNValues->hide();
-		ui.lKeepNvalues->hide();
-	} else {
-		ui.sbKeepNValues->setValue(fds->keepNvalues());
-	}
+	ui.sbKeepNValues->setValue(fds->keepNvalues());
 
 	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();

@@ -533,8 +533,8 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	if (updateType == MQTTClient::UpdateType::TimeInterval)
 		client->setUpdateInterval(ui.sbUpdateInterval->value());
 
-
-		client->setKeepLastValues(true);
+		//if(ui.sbKeepNValues->value() != 0)
+			//client->setKeepLastValues(true);
 		client->setKeepNvalues(ui.sbKeepNValues->value());
 
 

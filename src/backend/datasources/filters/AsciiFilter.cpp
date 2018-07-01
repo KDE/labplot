@@ -2017,6 +2017,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	MQTTTopic* spreadsheet = dynamic_cast<MQTTTopic*>(dataSource);
 
+	int keepNValues = spreadsheet->keepNvalues();
+
 	if (!m_prepared) {
 		qDebug()<<"Start prepare mqtt";
 		const int mqttPrepareError = prepareMQTTTopicToRead(message, topic);
@@ -2042,7 +2044,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
 		}
 
-		if (!spreadsheet->keepLastValues())
+		if (keepNValues == 0)
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
 			spreadsheet->setRowCount(spreadsheet->keepNvalues());
@@ -2167,12 +2169,15 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();;
 
 	if(m_prepared ) {
-		if (!spreadsheet->keepLastValues())
+		if (keepNValues == 0)
 			m_actualRows = spreadsheetRowCountBeforeResize;
 		else {
 			if(m_actualRows != spreadsheet->keepNvalues()) {
-				if(m_actualRows < spreadsheet->keepNvalues())
+				if(m_actualRows < spreadsheet->keepNvalues()) {
+					qDebug()<<m_actualRows;
 					spreadsheet->setRowCount(spreadsheet->keepNvalues());
+					qDebug()<<"rowcount set to" << spreadsheet->keepNvalues();
+				}
 
 				int rowDiff = 0;
 				if(m_actualRows > spreadsheet->keepNvalues()) {
@@ -2186,6 +2191,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 					qDebug()<<"modifying column: "<<n;
+					qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNvalues();
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric: {
 						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
@@ -2313,7 +2319,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	if (m_prepared) {
 		//increase row count if we don't have a fixed size
 		//but only after the preparation step
-		if (!spreadsheet->keepLastValues()) {
+		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
 				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
 			else {
@@ -2322,7 +2328,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		}
 
 		//fixed size
-		if (spreadsheet->keepLastValues()) {
+		if (keepNValues != 0) {
 			if (readingType == MQTTClient::ReadingType::TillEnd) {
 				//we had more lines than the fixed size, so we read m_actualRows number of lines
 				if (newLinesTillEnd > m_actualRows) {
@@ -2347,7 +2353,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			return;
 
 	} else {
-		if(spreadsheet->keepLastValues()) {
+		if(keepNValues != 0) {
 			linesToRead = newLinesTillEnd > m_actualRows ? m_actualRows : newLinesTillEnd;
 		}
 		else {
@@ -2358,7 +2364,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
-	if (!spreadsheet->keepLastValues()) {
+	if (keepNValues == 0) {
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportResizing: ");
 #endif
@@ -2526,7 +2532,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			if (createIndexEnabled) {
 				col = 1;
 				QString tempIndex;
-				if (spreadsheet->keepLastValues())
+				if (keepNValues != 0)
 					tempIndex = QString::number(indexColumnIdx++);
 				else
 					tempIndex = QString::number(currentRow);
