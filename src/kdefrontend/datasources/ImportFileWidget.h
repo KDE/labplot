@@ -68,8 +68,8 @@ public:
 
 	QString host() const;
 	QString port() const;
-    QString serialPort() const;
-    int baudRate() const;
+	QString serialPort() const;
+	int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 
 private:
@@ -110,6 +110,7 @@ signals:
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
+	void previewRefreshed();
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()

@@ -547,8 +547,8 @@ void ImportFileWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
-	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+	if (path.isEmpty())	//cancel was clicked in the file-dialog
+		return;
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos != -1) {
@@ -832,7 +832,7 @@ void ImportFileWidget::refreshPreview() {
 	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
-	DEBUG("refreshPreview() file name = " << fileName.toStdString());
+	DEBUG("refreshPreview(): file name = " << fileName.toStdString());
 
 	QVector<QStringList> importedStrings;
 	LiveDataSource::FileType fileType = (LiveDataSource::FileType)ui.cbFileType->currentIndex();
@@ -1063,6 +1063,9 @@ void ImportFileWidget::refreshPreview() {
 	} else {
 		m_fileEmpty = true;
 	}
+
+	emit previewRefreshed();
+
 	RESET_CURSOR;
 }
 

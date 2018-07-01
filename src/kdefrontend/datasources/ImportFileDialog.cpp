@@ -115,6 +115,7 @@ void ImportFileDialog::loadSettings() {
 	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(previewRefreshed()), this, SLOT(checkOkButton()));
 	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
 
 	checkOkButton();
@@ -355,7 +356,7 @@ void ImportFileDialog::checkOkButton() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-
+	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
 		DEBUG("fileName = " << fileName.toUtf8().constData());
@@ -369,7 +370,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::LocalSocket: {
-		DEBUG("	Local Socket");
 		const bool enable = QFile::exists(fileName);
 		if (enable) {
 			QLocalSocket lsocket{this};
@@ -398,7 +398,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkTcpSocket: {
-		DEBUG("	TCP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket socket(this);
@@ -419,7 +418,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkUdpSocket: {
-		DEBUG("	UDP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);
