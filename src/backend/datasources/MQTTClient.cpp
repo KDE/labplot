@@ -902,7 +902,8 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 		QVector<MQTTSubscriptions*> inferiorSubscriptions;
 
 		for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
-			if(checkTopicContains(topic, m_mqttSubscriptions[i]->subscriptionName())) {
+			if(checkTopicContains(topic, m_mqttSubscriptions[i]->subscriptionName())
+					&& topic != m_mqttSubscriptions[i]->subscriptionName()) {
 				found = true;
 				inferiorSubscriptions.push_back(m_mqttSubscriptions[i]);
 			}
@@ -918,6 +919,8 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 
 				QMqttTopicFilter unsubscribeFilter {inferiorSubscriptions[sub]->subscriptionName()};
 				m_client->unsubscribe(unsubscribeFilter);
+
+				m_subscriptions.removeAll(inferiorSubscriptions[sub]->subscriptionName());
 
 				removeChild(inferiorSubscriptions[sub]);
 

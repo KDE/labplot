@@ -28,6 +28,11 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLocalizedString>
 #include <QStandardItemModel>
 
+#ifdef HAVE_MQTT
+#include <QMessageBox>
+#endif
+
+
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent),
 #ifdef HAVE_MQTT
@@ -60,7 +65,6 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
 	connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
-	connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::topicBeingTyped);
 	connect(m_timer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
 	connect(ui.bTopics, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
 	connect(m_messageTimer, &QTimer::timeout, this, &LiveDataDock::stopStartReceive);
@@ -74,8 +78,9 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, this, &LiveDataDock::statisticsChanged);
-	connect(ui.cbTopics, &QComboBox::currentTextChanged, this, &LiveDataDock::mqttButtonSubscribe);
-	connect(ui.lwSubscriptions, &QListWidget::currentTextChanged, this, &LiveDataDock::mqttButtonUnsubscribe);
+	connect(ui.twTopics, &QTreeWidget::itemClicked, this, &LiveDataDock::mqttButtonSubscribe);
+	connect(ui.lwSubscriptions, &QListWidget::itemClicked, this, &LiveDataDock::mqttButtonUnsubscribe);
+	connect(ui.leTopics, &QLineEdit::textChanged, this, &LiveDataDock::searchTreeItem);
 #endif
 }
 
@@ -155,7 +160,10 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
 	ui.bTopics->show();
-	ui.cbTopics->show();
+	ui.twTopics->show();
+	ui.leTopics->show();
+	ui.lTopicSearch->show();
+
 	ui.lSubscriptions->show();
 	ui.lwSubscriptions->show();
 	ui.lQoS->show();
@@ -285,7 +293,9 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
 	ui.bTopics->hide();
-	ui.cbTopics->hide();
+	ui.twTopics->hide();
+	ui.leTopics->hide();
+	ui.lTopicSearch->hide();
 	ui.lSubscriptions->hide();
 	ui.lwSubscriptions->hide();
 	ui.lQoS->hide();
@@ -701,58 +711,76 @@ void LiveDataDock::onMQTTConnect() {
 }
 
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	QString topicName = topic.name();
-	if(ui.cbTopics->findText(topicName) == -1) {
-		QStringList topicList = topicName.split('/', QString::SkipEmptyParts);
-		for(int i = topicList.count() - 1; i >= 0; --i) {
-			QString tempTopic = "";
-			for(int j = 0; j <= i; ++j) {
-				tempTopic = tempTopic + topicList.at(j) + "/";
-			}
-			if(i < topicList.count() - 1) {
-				tempTopic = tempTopic + "#";
-			}
-			else
-				tempTopic.remove(tempTopic.size()-1, 1);
+	if(!m_addedTopics.contains(topic.name())) {
+		m_addedTopics.push_back(topic.name());
+		QStringList name;
+		QChar sep = '/';
+		QString rootName;
+		if(topic.name().contains(sep)) {
+			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
 
-			//qDebug()<<"checking topic: " << tempTopic;
-			if (ui.cbTopics->findText(tempTopic) == -1) {
-				//qDebug()<<"Adding: "<<tempTopic;
-				ui.cbTopics->addItem(tempTopic);
-				emit newTopic(tempTopic);
+			rootName = list.at(0);
+			name.append(list.at(0));
+			QTreeWidgetItem* currentItem;
+			int topItemIdx = -1;
+			for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+				if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+					topItemIdx = i;
+					break;
+				}
 			}
-			else {
-				//qDebug() << "Not adding " + tempTopic;
-				break;
+			if( topItemIdx < 0) {
+				currentItem = new QTreeWidgetItem(name);
+				ui.twTopics->addTopLevelItem(currentItem);
+				for(int i = 1; i < list.size(); ++i) {
+					name.clear();
+					name.append(list.at(i));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(0);
+				}
+			} else {
+				currentItem = ui.twTopics->topLevelItem(topItemIdx);
+				int listIdx = 1;
+				for(; listIdx < list.size(); ++listIdx) {
+					QTreeWidgetItem* childItem = nullptr;
+					bool found = false;
+					for(int j = 0; j < currentItem->childCount(); ++j) {
+						childItem = currentItem->child(j);
+						if(childItem->text(0) == list.at(listIdx)) {
+							found = true;
+							currentItem = childItem;
+							break;
+						}
+					}
+					if(!found)
+						break;
+				}
+
+				for(; listIdx < list.size(); ++listIdx) {
+					name.clear();
+					name.append(list.at(listIdx));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(currentItem->childCount() - 1);
+				}
 			}
 		}
+		else {
+			rootName = topic.name();
+			name.append(topic.name());
+			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
+		}
+		emit newTopic(rootName);
 	}
 }
 
 void LiveDataDock::setCompleter(const QString& topic) {
 	if(!m_editing) {
-		m_topicList.append(topic);
-		m_completer = new QCompleter(m_topicList, this);
-		m_completer->setCompletionMode(QCompleter::PopupCompletion);
-		m_completer->setCaseSensitivity(Qt::CaseSensitive);
-		ui.cbTopics->setCompleter(m_completer);
-	}
-}
-
-void LiveDataDock::topicBeingTyped(const QString& topic) {
-	if(!m_editing) {
-		bool found = false;
-		for (int i=0; i<ui.cbTopics->count(); ++i) {
-			if(ui.cbTopics->itemText(i) == topic) {
-				found = true;
-				break;
-			}
-		}
-
-		if(!found) {
-			qDebug() << topic;
-			m_editing = true;
-			m_timer->start();
+		if(!m_topicList.contains(topic)) {
+			m_topicList.append(topic);
+			m_completer = new QCompleter(m_topicList, this);
+			m_completer->setCompletionMode(QCompleter::PopupCompletion);
+			m_completer->setCaseSensitivity(Qt::CaseSensitive);
+			ui.leTopics->setCompleter(m_completer);
 		}
 	}
 }
@@ -765,33 +793,43 @@ void LiveDataDock::topicTimeout() {
 
 void LiveDataDock::addSubscription() {
 	if(m_mqttSubscribeButton) {
-		QString newTopicName = ui.cbTopics->currentText();
-		if(ui.lwSubscriptions->findItems(newTopicName, Qt::MatchExactly).isEmpty()) {
-			if(ui.cbTopics->findText( newTopicName ) != -1) {
-				QListWidgetItem* item;
-				bool noWildcard = true;
-				for(int i = 0; i < ui.lwSubscriptions->count(); ++i){
-					item = ui.lwSubscriptions->item(i);
-					QString subscriptionName = item->text();
-					if(checkTopicContains(subscriptionName, newTopicName)) {
-						noWildcard = false;
-						break;
-					}
-				}
-				if(noWildcard) {
-					for (auto* source: m_mqttClients) {
-						source->newMQTTSubscription(newTopicName, ui.cbQoS->currentIndex());
-					}
-				}
-				else
-					qDebug()<<"Another subscription, which includes wildcards, already contains this topic";
+		QString name;
+		QTreeWidgetItem *item = ui.twTopics->currentItem();
+		QTreeWidgetItem *tempItem = item;
+		name.prepend(item->text(0));
+		if(item->childCount() != 0)
+			name.append("/#");
 
+		while(tempItem->parent() != nullptr) {
+			tempItem = tempItem->parent();
+			name.prepend(tempItem->text(0) + "/");
+		}
+
+		if(ui.lwSubscriptions->findItems(name, Qt::MatchExactly).isEmpty()) {
+
+			qDebug() << name;
+			bool foundSuperior = false;
+
+			for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
+				qDebug()<<i<<" "<<ui.lwSubscriptions->count();
+
+				if(checkTopicContains(ui.lwSubscriptions->item(i)->text(), name)) {
+					foundSuperior = true;
+					qDebug()<<name<<" "<< ui.lwSubscriptions->item(i)->text();
+					break;
+				}
 			}
-			else
-				qDebug()<< "There is no such topic listed in the combo box";
+			if(!foundSuperior) {
+				for (auto* source: m_mqttClients) {
+					source->newMQTTSubscription(name, ui.cbQoS->currentIndex());
+				}
+			}else {
+				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
+			}
 		}
 		else
-			qDebug()<< "You already subscribed to this topic";
+			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+
 	} else if (!m_mqttUnsubscribeName.isEmpty()) {
 		for (auto* source: m_mqttClients) {
 			source->removeMQTTSubscription(m_mqttUnsubscribeName);
@@ -834,18 +872,18 @@ void LiveDataDock::stopStartReceive() {
 	}
 }
 
-void LiveDataDock::mqttButtonSubscribe(const QString& text) {
+void LiveDataDock::mqttButtonSubscribe(QTreeWidgetItem *item, int column) {
 	if(!m_mqttSubscribeButton) {
 		ui.bTopics->setText("Subscribe");
 		m_mqttSubscribeButton = true;
 	}
 }
 
-void LiveDataDock::mqttButtonUnsubscribe(const QString& item) {
+void LiveDataDock::mqttButtonUnsubscribe(QListWidgetItem *item) {
 	qDebug()<< "trying to set unsubscribe, mqttSubscribeButton's value: "<<m_mqttSubscribeButton;
 	ui.bTopics->setText("Unsubscribe");
 	m_mqttSubscribeButton = false;
-	m_mqttUnsubscribeName = item;
+	m_mqttUnsubscribeName = ui.lwSubscriptions->currentItem()->text();
 	qDebug()<<"LiveDataDock: Unsubscribe from:"<<m_mqttUnsubscribeName;
 }
 
@@ -871,6 +909,24 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 			return ok;
 		}
 		return false;
+	}
+}
+
+void LiveDataDock::searchTreeItem(const QString& rootName) {
+	m_editing = true;
+	m_timer->start();
+
+	qDebug()<<rootName;
+	int topItemIdx = -1;
+	for(int i = 0; i< ui.twTopics->topLevelItemCount(); ++i)
+		if(ui.twTopics->topLevelItem(i)->text(0) == rootName) {
+			topItemIdx = i;
+			break;
+		}
+
+	if(topItemIdx >= 0) {
+		qDebug() << "Scroll";
+		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
 	}
 }
 #endif

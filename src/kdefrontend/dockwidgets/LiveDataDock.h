@@ -38,6 +38,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QTreeWidgetItem>
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/MQTTClient.h"
 #endif
@@ -76,6 +77,7 @@ private:
 	const MQTTClient* m_previousMQTTClient;
 	bool m_mqttSubscribeButton;
 	QString m_mqttUnsubscribeName;
+	QVector<QString> m_addedTopics;
 #endif
 
 private slots:
@@ -105,12 +107,12 @@ private slots:
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);
-	void topicBeingTyped(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
 	void stopStartReceive();
-	void mqttButtonSubscribe(const QString&);
-	void mqttButtonUnsubscribe(const QString&);
+	void mqttButtonSubscribe(QTreeWidgetItem *, int);
+	void mqttButtonUnsubscribe(QListWidgetItem *);
+	void searchTreeItem(const QString& rootName);
 #endif
 
 public slots:
