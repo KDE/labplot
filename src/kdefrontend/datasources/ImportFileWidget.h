@@ -84,8 +84,8 @@ public:
 
 	QString host() const;
 	QString port() const;
-    QString serialPort() const;
-    int baudRate() const;
+	QString serialPort() const;
+	int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 #ifdef HAVE_MQTT
 	void saveMQTTSettings(MQTTClient*) const;
@@ -181,7 +181,7 @@ signals:
 	void checkFileType();
 	void newTopicForWill();
 #endif
-
+	void previewRefreshed();
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()

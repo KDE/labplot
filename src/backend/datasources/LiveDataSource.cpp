@@ -71,10 +71,10 @@ LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& n
 		m_fileLinked(false),
 		m_paused(false),
 		m_prepared(false),
-		m_keepLastValues(false),
 		m_sampleSize(1),
+		m_keepNValues(0),
 		m_updateInterval(1000),
-//TODO: m_keepNvalues, m_port, m_baudRate ?
+//TODO: m_port, m_baudRate ?
 		m_bytesRead(0),
 		m_filter(nullptr),
 		m_updateTimer(new QTimer(this)),
@@ -287,18 +287,6 @@ bool LiveDataSource::isFileWatched() const {
 }
 
 /*!
- * \brief Sets whether we'll keep the last values or append it to the previous ones
- * \param keepLastValues
- */
-void LiveDataSource::setKeepLastValues(bool keepLastValues) {
-	m_keepLastValues = keepLastValues;
-}
-
-bool LiveDataSource::keepLastValues() const {
-	return m_keepLastValues;
-}
-
-/*!
  * \brief Sets the serial port's baud rate
  * \param baudrate
  */
@@ -325,15 +313,15 @@ int LiveDataSource::updateInterval() const {
 }
 
 /*!
- * \brief Sets how many values we should store
+ * \brief Sets how many values we should keep when keepLastValues is true
  * \param keepnvalues
  */
-void LiveDataSource::setKeepNvalues(int keepnvalues) {
-	m_keepNvalues = keepnvalues;
+void LiveDataSource::setKeepNValues(int keepnvalues) {
+	m_keepNValues = keepnvalues;
 }
 
-int LiveDataSource::keepNvalues() const {
-	return m_keepNvalues;
+int LiveDataSource::keepNValues() const {
+	return m_keepNValues;
 }
 
 /*!
@@ -872,7 +860,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("sourceType", QString::number(m_sourceType));
-	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
+	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
 
 	if (m_updateType == TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));

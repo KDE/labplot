@@ -743,7 +743,7 @@
           <item row="8" column="0">
            <widget class="QLabel" name="lKeepLastValues">
             <property name="text">
-             <string>Keep last N values:</string>
+             <string>Keep last values:</string>
             </property>
            </widget>
           </item>
@@ -802,7 +802,14 @@
            </widget>
           </item>
           <item row="8" column="1">
-           <widget class="QLineEdit" name="leKeepLastValues"/>
+           <widget class="QSpinBox" name="sbKeepNValues">
+            <property name="specialValueText">
+             <string>All</string>
+            </property>
+            <property name="maximum">
+             <number>999999</number>
+            </property>
+           </widget>
           </item>
           <item row="3" column="1">
            <widget class="QSpinBox" name="sbUpdateInterval">
@@ -1209,3 +1216,4 @@
  <resources/>
  <connections/>
 </ui>
+

@@ -86,7 +86,7 @@ private slots:
 	void readingTypeChanged(int);
 	void sampleSizeChanged(int);
 	void updateIntervalChanged(int);
-	void keepNvaluesChanged(const QString&);
+	void keepNValuesChanged(int);
 
 	void updateNow();
 	void pauseContinueReading();

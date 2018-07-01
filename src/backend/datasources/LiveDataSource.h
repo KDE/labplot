@@ -124,8 +124,8 @@ public:
 	void setUpdateInterval(int);
 	int updateInterval() const;
 
-	void setKeepNvalues(int);
-	int keepNvalues() const;
+	void setKeepNValues(int);
+	int keepNValues() const;
 
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
@@ -174,10 +174,9 @@ private:
 	bool m_fileLinked;
 	bool m_paused;
 	bool m_prepared;
-	bool m_keepLastValues;
 
 	int m_sampleSize;
-	int m_keepNvalues;
+	int m_keepNValues;	// number of values to keep (0 - all)
 	int m_updateInterval;
 	quint16 m_port;
 	int m_baudRate;

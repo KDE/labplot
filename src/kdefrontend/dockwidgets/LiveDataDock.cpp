@@ -54,7 +54,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
-	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
+	connect(ui.sbKeepNValues, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
 	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
@@ -117,11 +117,10 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	if(!fds->keepLastValues()) {
-		ui.leKeepNValues->hide();
+		ui.sbKeepNValues->hide();
 		ui.lKeepNvalues->hide();
 	} else {
-		ui.leKeepNValues->setValidator(new QIntValidator(2, 100000));
-		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
+		ui.sbKeepNValues->setValue(fds->keepNvalues());
 	}
 
 	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
@@ -252,13 +251,7 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	if(!fds->keepLastValues()) {
-		ui.leKeepNValues->hide();
-		ui.lKeepNvalues->hide();
-	} else {
-		ui.leKeepNValues->setValidator(new QIntValidator(2, 100000));
-		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
-	}
+	ui.sbKeepNValues->setValue(fds->keepNValues());
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
@@ -448,15 +441,15 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
  * \brief Modifies the number of samples to keep in each of the live data sources
  * \param keepNvalues
  */
-void LiveDataDock::keepNvaluesChanged(const QString& keepNvalues) {
+void LiveDataDock::keepNValuesChanged(const int keepNValues) {
 	if(!m_liveDataSources.isEmpty())  {
 		for (auto* source : m_liveDataSources)
-			source->setKeepNvalues(keepNvalues.toInt());
+			source->setKeepNValues(keepNValues);
 	}
 #ifdef HAVE_MQTT
 	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
-			client->setKeepNvalues(keepNvalues.toInt());
+			client->setKeepNvalues(keepNValues);
 	}
 #endif
 }

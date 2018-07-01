@@ -503,7 +503,7 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_opheim:	// min/max tol options
-		uiGeneralTab.lOption->setText(i18n("Minumum tolerance:"));
+		uiGeneralTab.lOption->setText(i18n("Minimum tolerance:"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
