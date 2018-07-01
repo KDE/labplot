@@ -910,6 +910,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.sbEndColumn->hide();
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
+		break;
 	default:
 		DEBUG("unknown file type");
 	}
