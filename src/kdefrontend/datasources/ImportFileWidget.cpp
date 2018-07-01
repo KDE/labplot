@@ -849,16 +849,16 @@ void ImportFileWidget::refreshPreview() {
 	QTableWidget* tmpTableWidget{nullptr};
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
+	DEBUG("Data File Type: " << ENUM_TO_STRING(LiveDataSource, FileType, fileType));
 	switch (fileType) {
 	case LiveDataSource::Ascii: {
-			DEBUG("ASCII");
 			ui.tePreview->clear();
 
 			AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
+			DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, currentSourceType()));
 			switch (currentSourceType()) {
 			case LiveDataSource::SourceType::FileOrPipe: {
-					DEBUG("	FileOrPipe");
 					importedStrings = filter->preview(fileName, lines);
 					break;
 				}
@@ -880,7 +880,6 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::NetworkTcpSocket: {
-					DEBUG("	TCPSocket");
 					QTcpSocket tcpSocket{this};
 					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 					if (tcpSocket.waitForConnected()) {
@@ -920,7 +919,6 @@ void ImportFileWidget::refreshPreview() {
 					break;
 				}
 			case LiveDataSource::SourceType::SerialPort: {
-					DEBUG("	SerialPort");
 					QSerialPort sPort{this};
 					sPort.setBaudRate(baudRate());
 					sPort.setPortName(serialPort());
@@ -941,7 +939,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::Binary: {
-			DEBUG("Binary");
 			ui.tePreview->clear();
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 			importedStrings = filter->preview(fileName, lines);
@@ -949,7 +946,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::Image: {
-			DEBUG("Image");
 			ui.tePreview->clear();
 
 			QImage image(fileName);
@@ -959,7 +955,6 @@ void ImportFileWidget::refreshPreview() {
 			return;
 		}
 	case LiveDataSource::HDF5: {
-			DEBUG("	HDF5");
 			HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
 			lines = m_hdf5OptionsWidget->lines();
 			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
@@ -967,7 +962,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::NETCDF: {
-			DEBUG("	NETCDF");
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			lines = m_netcdfOptionsWidget->lines();
 			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
@@ -975,7 +969,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::FITS: {
-			DEBUG("	FITS");
 			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 			lines = m_fitsOptionsWidget->lines();
 
@@ -996,7 +989,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::ROOT: {
-			DEBUG("	ROOT");
 			ROOTFilter *filter = (ROOTFilter *)this->currentFileFilter();
 			lines = m_rootOptionsWidget->lines();
 			m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
@@ -1014,7 +1006,6 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 	case LiveDataSource::NgspiceRawAscii: {
-			DEBUG("Ngspice RAW ASCII");
 			ui.tePreview->clear();
 			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
 			importedStrings = filter->preview(fileName, lines);
