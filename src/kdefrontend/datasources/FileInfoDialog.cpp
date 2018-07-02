@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -29,16 +29,19 @@
 
 #include "FileInfoDialog.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
-#include <KLocalizedString>
+#include <QDialogButtonBox>
+#include <QDir>
+#include <QIcon>
 #include <QFileInfo>
 #include <QProcess>
-#include <QDialogButtonBox>
-#include <QIcon>
 #include <QVBoxLayout>
 
-#include <KWindowConfig>
+#include <KLocalizedString>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 \class ImportWidget
@@ -92,8 +95,97 @@ void FileInfoDialog::setFiles(QStringList& files) {
 		if (!infoString.isEmpty())
 			infoString += "<br><br><br>";
 
-		infoString += LiveDataSource::fileInfoString(fileName);
+		infoString += fileInfoString(fileName);
 	}
 
 	m_textEditWidget.document()->setHtml(infoString);
+}
+
+/*!
+    returns a string containing the general information about the file \c name
+    and some content specific information
+    (number of columns and lines for ASCII, color-depth for images etc.).
+ */
+QString FileInfoDialog::fileInfoString(const QString& name) const {
+	QString infoString;
+	QFileInfo fileInfo;
+	QString fileTypeString;
+	QIODevice *file = new QFile(name);
+
+	QString fileName;
+#ifdef Q_OS_WIN
+	if (name.at(1) != QLatin1Char(':'))
+		fileName = QDir::homePath() + name;
+	else
+		fileName = name;
+#else
+	if (name.at(0) != QDir::separator())
+		fileName = QDir::homePath() + QDir::separator() + name;
+	else
+		fileName = name;
+#endif
+	if(file==0)
+		file = new QFile(fileName);
+
+	if (file->open(QIODevice::ReadOnly)) {
+		QStringList infoStrings;
+
+		// file type and type specific information about the file
+#ifdef Q_OS_LINUX
+		QProcess *proc = new QProcess();
+		QStringList args;
+		args<<"-b"<<fileName;
+		proc->start( "file", args);
+
+		if(proc->waitForReadyRead(1000) == false)
+			infoStrings << i18n("Could not open file %1 for reading.", fileName);
+		else {
+			fileTypeString = proc->readLine();
+			if( fileTypeString.contains(i18n("cannot open")) )
+				fileTypeString="";
+			else {
+				fileTypeString.remove(fileTypeString.length()-1,1);	// remove '\n'
+			}
+		}
+		infoStrings << i18n("File type: %1", fileTypeString);
+#endif
+
+		//TODO depending on the file type, generate additional information about the file:
+		//Number of lines for ASCII, color-depth for images etc. Use the specific filters here.
+		// port the old labplot1.6 code.
+		if( fileTypeString.contains("ASCII")) {
+			infoStrings << "<br/>";
+			//TODO: consider choosen separator
+			infoStrings << i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName));
+
+			infoStrings << i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+		}
+		infoString += infoStrings.join("<br/>");
+
+#ifdef HAVE_FITS
+		if (fileName.endsWith(QLatin1String(".fits"))) {
+			infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
+			infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
+		}
+#endif
+
+		//general information about the file
+		infoStrings << "<br><hline><br>";
+		infoStrings << "<u><b>" + fileName + "</b></u><br>";
+		fileInfo.setFile(fileName);
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+		infoStrings << i18n("Created: %1", fileInfo.created().toString());
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+	} else
+		infoString += i18n("Could not open file %1 for reading.", fileName);
+
+	return infoString;
 }

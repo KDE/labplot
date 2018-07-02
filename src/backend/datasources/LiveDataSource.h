@@ -56,7 +56,6 @@ class LiveDataSource : public Spreadsheet {
 	Q_ENUMS(ReadingType)
 
 public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, ROOT, NgspiceRawAscii};
 	enum SourceType {
 		FileOrPipe = 0,		// regular file or pipe
 		NetworkTcpSocket,	// TCP socket
@@ -86,11 +85,8 @@ public:
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
 
-	static QStringList fileTypes();
-	static QString fileInfoString(const QString&);
-
-	void setFileType(const FileType);
-	FileType fileType() const;
+	void setFileType(const AbstractFileFilter::FileType);
+	AbstractFileFilter::FileType fileType() const;
 
 	UpdateType updateType() const;
 	void setUpdateType(UpdateType);
@@ -165,7 +161,7 @@ private:
 	QString m_localSocketName;
 	QString m_host;
 
-	FileType m_fileType;
+	AbstractFileFilter::FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
 	ReadingType m_readingType;
