@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+#include "backend/lib/macros.h"
 #include "QJsonModel.h"
 #include <QFile>
 #include <QDebug>
@@ -244,9 +244,9 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
 	} else if (role == Qt::DecorationRole) {
 		//TODO: add icons for array and object
 		if (item->type() == QJsonValue::Array)
-			return QIcon();
+			return QIcon::fromTheme("labplot-json-array");
 		else if (item->type() == QJsonValue::Object)
-			return QIcon();
+			return QIcon::fromTheme("labplot-json-object");
 		else
 			return QIcon();
 	}

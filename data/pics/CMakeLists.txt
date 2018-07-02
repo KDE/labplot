@@ -16,6 +16,8 @@ sc-apps-labplot-editgrid.svg
 sc-apps-labplot-edithlayout.svg
 sc-apps-labplot-editvlayout.svg
 sc-apps-labplot-format-text-symbol.svg
+sc-apps-labplot-json-array.svg
+sc-apps-labplot-json-object.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
 sc-apps-labplot-plot-axis-points.svg
