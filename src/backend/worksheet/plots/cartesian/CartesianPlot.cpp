@@ -1,10 +1,11 @@
 /***************************************************************************
-    File                 : CartesianPlot.cpp
-    Project              : LabPlot
-    Description          : Cartesian plot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+	File                 : CartesianPlot.cpp
+	Project              : LabPlot
+	Description          : Cartesian plot
+	--------------------------------------------------------------------
+	Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -523,7 +524,7 @@ void CartesianPlot::initMenus() {
 
 	addNewMenu = new QMenu(i18n("Add New"));
 	addNewMenu->addAction(addCurveAction);
-// 	addNewMenu->addAction(addHistogramPlot);
+	addNewMenu->addAction(addHistogramPlot);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);
@@ -1277,7 +1278,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 		if (histo) {
-			connect(histo, SIGNAL(HistogramdataChanged()), this, SLOT(HistogramdataChanged()));
+			connect(histo, SIGNAL(HistogramDataChanged()), this, SLOT(HistogramDataChanged()));
 			connect(histo, SIGNAL(xHistogramDataChanged()), this, SLOT(xHistogramDataChanged()));
 			connect(histo, SIGNAL(yHistogramDataChanged()), this, SLOT(yHistogramDataChanged()));
 			connect(histo, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
@@ -1384,7 +1385,7 @@ void CartesianPlot::dataChanged() {
 	}
 }
 
-void CartesianPlot::HistogramdataChanged() {
+void CartesianPlot::HistogramDataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -1394,17 +1395,15 @@ void CartesianPlot::HistogramdataChanged() {
 		this->scaleAutoY();
 	else if (d->autoScaleY)
 		this->scaleAutoY();
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+	if (curve)
+		curve->retransform();
 	else {
-		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-		if (curve)
-			curve->retransform();
-		else {
-			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
-			//-> retransform all available curves since we don't know which curves are affected.
-			//TODO: this logic can be very expensive
-			for (auto c : children<Histogram>())
-				c->retransform();
-		}
+		//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+		//-> retransform all available curves since we don't know which curves are affected.
+		//TODO: this logic can be very expensive
+		for (auto c : children<Histogram>())
+			c->retransform();
 	}
 }
 
@@ -1438,9 +1437,9 @@ void CartesianPlot::xHistogramDataChanged() {
 		return;
 
 	d->curvesXMinMaxIsDirty = true;
-	if (d->autoScaleX)
+	if (d->autoScaleX) {
 		this->scaleAutoX();
-	else {
+	} else {
 		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
 		curve->retransform();
 	}
@@ -1566,11 +1565,11 @@ void CartesianPlot::scaleAutoX() {
 			if (!curve->xColumn())
 				continue;
 
-			const double min = curve->xColumn()->minimum(count);
-			if (min < d->curvesXMin)
+			const double min = curve->getXMinimum();
+			if (d->curvesXMin > min)
 				d->curvesXMin = min;
 
-			const double max = curve->xColumn()->maximum(count);
+			const double max = curve->getXMaximum();
 			if (max > d->curvesXMax)
 				d->curvesXMax = max;
 		}
@@ -1649,11 +1648,13 @@ void CartesianPlot::scaleAutoY() {
 			if (!curve->isVisible())
 				continue;
 
-			if (d->curvesYMin > 0.0)
-				d->curvesYMin = 0.0;
+			const double min = curve->getYMinimum();
+			if (d->curvesYMin > min)
+				d->curvesYMin = min;
 
-			if ( curve->getYMaximum() > d->curvesYMax)
-				d->curvesYMax = curve->getYMaximum();
+			const double max = curve->getYMaximum();
+			if (max > d->curvesYMax)
+				d->curvesYMax = max;
 		}
 
 		d->curvesYMinMaxIsDirty = false;
@@ -1670,7 +1671,6 @@ void CartesianPlot::scaleAutoY() {
 		d->yMax = d->curvesYMax;
 		update = true;
 	}
-
 	if (update) {
 		if (d->yMax == d->yMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
@@ -1734,13 +1734,14 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->xColumn())
 				continue;
 
-			const double min = curve->xColumn()->minimum(count);
-			if (min < d->curvesXMin)
+			const double min = curve->getXMinimum();
+			if (d->curvesXMin > min)
 				d->curvesXMin = min;
 
-			const double max = curve->xColumn()->maximum(count);
+			const double max = curve->getXMaximum();
 			if (max > d->curvesXMax)
 				d->curvesXMax = max;
+
 		}
 
 		d->curvesXMinMaxIsDirty = false;
@@ -1771,8 +1772,9 @@ void CartesianPlot::scaleAuto() {
 			if (!curve->isVisible())
 				continue;
 
-			if (d->curvesYMin > 0.0)
-				d->curvesYMin = 0.0;
+			const double min = curve->getYMinimum();
+			if (d->curvesYMin > min)
+				d->curvesYMin = min;
 
 			const double max = curve->getYMaximum();
 			if (max > d->curvesYMax)
