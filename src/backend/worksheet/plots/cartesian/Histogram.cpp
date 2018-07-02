@@ -229,13 +229,13 @@ bool Histogram::isSourceDataChangedSinceLastPlot() const {
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramData, Histogram::HistogramData, histogramData, recalculate);
 void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) {
 	Q_D(Histogram);
-	exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
+	exec(new HistogramSetHistogramDataCmd(d, histogramData, ki18n("%1: set equation")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, histogramType, retransform)
 void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
 	Q_D(Histogram);
-    exec(new HistogramSetHistogramTypeCmd(d, histogramType, i18n("%1: assign histogram type")));
+    exec(new HistogramSetHistogramTypeCmd(d, histogramType, ki18n("%1: assign histogram type")));
 	emit HistogramDataChanged();
 	DEBUG(histogramType);
 }
@@ -243,7 +243,7 @@ void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, histogramOrientation, retransform)
 void Histogram::setHistogramOrientation(Histogram::HistogramOrientation histogramOrientation) {
     Q_D(Histogram);
-    exec(new HistogramSetHistogramOrientationCmd(d, histogramOrientation, i18n("%1: assign histogram orientation")));
+    exec(new HistogramSetHistogramOrientationCmd(d, histogramOrientation, ki18n("%1: assign histogram orientation")));
 	emit HistogramDataChanged();
 	DEBUG(histogramOrientation);
 }
@@ -252,7 +252,7 @@ STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, r
 void Histogram::setXColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->xColumn) {
-		exec(new HistogramSetXColumnCmd(d, column, i18n("%1: assign x values")));
+		exec(new HistogramSetXColumnCmd(d, column, ki18n("%1: assign x values")));
 		emit sourceDataChangedSinceLastPlot();
 
 		//emit HistogramDataChanged() in order to notify the plot about the changes

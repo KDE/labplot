@@ -179,7 +179,6 @@
 				</widget>
 			</item>
 			<item row="13" column="0">
-<<<<<<< HEAD
 				<widget class="QLabel" name="lBinSettings">
 					<property name="font">
 						<font>
