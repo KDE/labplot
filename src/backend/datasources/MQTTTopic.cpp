@@ -56,11 +56,12 @@ MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, Abstr
 	}
 
 	connect(dynamic_cast<MQTTClient*>(m_MQTTClient), &MQTTClient::readFromTopics, this, &MQTTTopic::read);
+	qDebug()<<"MqttTopic constructor:"<<m_topicName;
 	initActions();
 }
 
 MQTTTopic::~MQTTTopic() {
-
+	qDebug()<<"MqttTopic destructor:"<<m_topicName;
 }
 
 void MQTTTopic::setFilter(AbstractFileFilter* f) {

@@ -843,10 +843,11 @@ void LiveDataDock::addSubscription() {
 							if(ui.lwSubscriptions->findItems(commonTopic, Qt::MatchExactly).isEmpty()) {
 
 								for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
-									if(ui.lwSubscriptions->item(row)->text() == ui.lwSubscriptions->item(i)->text()) {
+									if(ui.lwSubscriptions->item(row)->text() == ui.lwSubscriptions->item(i)->text()
+											||ui.lwSubscriptions->item(row)->text() == ui.lwSubscriptions->item(i+1)->text()) {
 										qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
 										delete ui.lwSubscriptions->item(row);
-										break;
+										row--;
 										//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
 									}
 								}

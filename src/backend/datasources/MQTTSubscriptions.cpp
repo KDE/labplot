@@ -15,6 +15,7 @@ MQTTSubscriptions::MQTTSubscriptions(const QString& name)
 }
 
 MQTTSubscriptions::~MQTTSubscriptions() {	
+	qDebug()<<"MQTTSubscriptions destructor";
 }
 
 void MQTTSubscriptions::addTopic(const QString& topicName) {
@@ -27,7 +28,7 @@ void MQTTSubscriptions::addTopic(const QString& topicName) {
 
 const QVector<MQTTTopic*> MQTTSubscriptions::topics() {
 	qDebug()<<"returning topics";
-	return m_topics;
+	return  children<MQTTTopic>();
 }
 
 AbstractAspect* MQTTSubscriptions::mqttClient() const{

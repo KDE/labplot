@@ -905,9 +905,12 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 
 		if(found) {
 			for(int sub = 0; sub < inferiorSubscriptions.size(); ++sub) {
+				qDebug()<<"Inferior subscription: "<<inferiorSubscriptions[sub]->subscriptionName();
 				QVector<MQTTTopic*> topics = inferiorSubscriptions[sub]->topics();
+				qDebug()<< topics.size();
 
 				for(int i = 0; i < topics.size() ; ++i) {
+					qDebug()<<topics[i]->topicName();
 					topics[i]->reparent(newSubscription);
 				}
 
@@ -989,6 +992,7 @@ void MQTTClient::subscriptionLoaded(const QString &name) {
 }
 
 bool MQTTClient::checkTopicContains(const QString &superior, const QString& inferior) {
+	qDebug()<<superior<<"  "<<inferior;
 	if (superior == inferior)
 		return true;
 	else {
