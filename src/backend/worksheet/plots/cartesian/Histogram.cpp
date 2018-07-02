@@ -508,9 +508,6 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 						yMaxRange = point;
 					}
 				}
-				std::cout << "*************here***************";
-				std::cout << yMaxRange;
-				std::cout << "*************here***************";
 				//yMaxRange = xColumn->rowCount();
 				break;
 			}
