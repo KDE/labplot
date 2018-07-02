@@ -209,27 +209,27 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
-		LiveDataSource::FileType fileType = m_importFileWidget->currentFileType();
+		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for HDF5, NetCDF and ROOT
-		if (fileType == LiveDataSource::HDF5 ||
-			fileType == LiveDataSource::NETCDF ||
-			fileType == LiveDataSource::ROOT) {
+		if (fileType == AbstractFileFilter::HDF5 ||
+			fileType == AbstractFileFilter::NETCDF ||
+			fileType == AbstractFileFilter::ROOT) {
 			QStringList names;
 			switch (fileType) {
-				case LiveDataSource::HDF5:
+				case AbstractFileFilter::HDF5:
 					names = m_importFileWidget->selectedHDF5Names();
 					break;
-				case LiveDataSource::NETCDF:
+				case AbstractFileFilter::NETCDF:
 					names = m_importFileWidget->selectedNetCDFNames();
 					break;
-				case LiveDataSource::ROOT:
+				case AbstractFileFilter::ROOT:
 					names = m_importFileWidget->selectedROOTNames();
 					break;
-				case LiveDataSource::Ascii:
-				case LiveDataSource::Binary:
-				case LiveDataSource::Image:
-				case LiveDataSource::FITS:
-				case LiveDataSource::NgspiceRawAscii:
+				case AbstractFileFilter::Ascii:
+				case AbstractFileFilter::Binary:
+				case AbstractFileFilter::Image:
+				case AbstractFileFilter::FITS:
+				case AbstractFileFilter::NgspiceRawAscii:
 					break; // never reached, omit warning
 			}
 
@@ -255,20 +255,20 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				switch (fileType) {
-					case LiveDataSource::HDF5:
+					case AbstractFileFilter::HDF5:
 						((HDF5Filter*) filter)->setCurrentDataSetName(names[i]);
 						break;
-					case LiveDataSource::NETCDF:
+					case AbstractFileFilter::NETCDF:
 						((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
 						break;
-					case LiveDataSource::ROOT:
+					case AbstractFileFilter::ROOT:
 						((ROOTFilter*) filter)->setCurrentHistogram(names[i]);
 						break;
-					case LiveDataSource::Ascii:
-					case LiveDataSource::Binary:
-					case LiveDataSource::Image:
-					case LiveDataSource::FITS:
-					case LiveDataSource::NgspiceRawAscii:
+					case AbstractFileFilter::Ascii:
+					case AbstractFileFilter::Binary:
+					case AbstractFileFilter::Image:
+					case AbstractFileFilter::FITS:
+					case AbstractFileFilter::NgspiceRawAscii:
 						break; // never reached, omit warning
 				}
 

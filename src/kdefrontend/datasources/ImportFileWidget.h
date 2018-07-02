@@ -53,7 +53,7 @@ public:
 
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
-	LiveDataSource::FileType currentFileType() const;
+	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;

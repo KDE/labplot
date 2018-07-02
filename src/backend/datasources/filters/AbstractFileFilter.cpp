@@ -27,8 +27,14 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/lib/macros.h"
+
 #include <QDateTime>
+#include <QImageReader>
+#ifndef HAVE_WINDOWS
+#include <QProcess>
+#endif
 #include <QLocale>
 #include <KLocalizedString>
 
@@ -84,4 +90,61 @@ QStringList AbstractFileFilter::numberFormats() {
 		formats << QLocale::languageToString((QLocale::Language)l);
 
 	return formats;
+}
+
+AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
+	QString fileInfo;
+#ifndef HAVE_WINDOWS
+	//check, if we can guess the file type by content
+	QProcess* proc = new QProcess();
+	QStringList args;
+	args << "-b" << fileName;
+	proc->start("file", args);
+	if (proc->waitForReadyRead(1000) == false) {
+		QDEBUG("ERROR: reading file type of file" << fileName);
+		return Binary;
+	}
+	fileInfo = proc->readLine();
+#endif
+
+	FileType fileType;
+	QByteArray imageFormat = QImageReader::imageFormat(fileName);
+	if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
+			fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
+		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
+			fileType = NgspiceRawAscii;
+		else //probably ascii data
+			fileType = Ascii;
+	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
+		fileType = HDF5;
+	else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
+		fileType = NETCDF;
+	else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
+				fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive))
+		fileType = FITS;
+	else if (fileInfo.contains(QLatin1String("ROOT Data Format")) ||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
+		fileType = ROOT;
+	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
+		fileType = Image;
+	else
+		fileType = Binary;
+
+	return fileType;
+}
+
+/*!
+  returns the list of all supported data file formats
+*/
+QStringList AbstractFileFilter::fileTypes() {
+	return (QStringList() << i18n("ASCII data")
+	        << i18n("Binary data")
+	        << i18n("Image")
+	        << i18n("Hierarchical Data Format 5 (HDF5)")
+	        << i18n("Network Common Data Format (NetCDF)")
+	        << i18n("Flexible Image Transport System Data Format (FITS)")
+	        << i18n("ROOT (CERN) Histograms")
+			<< "Ngspice RAW ASCII"
+	       );
 }

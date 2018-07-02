@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : file info dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -43,6 +43,7 @@ public:
 
 private:
 	QTextEdit m_textEditWidget;
+	QString fileInfoString(const QString&) const;
 
 private slots:
 	void loadSettings();
