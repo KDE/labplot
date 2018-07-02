@@ -1626,6 +1626,7 @@ void ImportFileWidget::mqttSubscribe() {
 						qDebug()<<"2"<<name<<" "<< ui.lwSubscriptions->item(i)->text();
 						break;
 					}
+
 					QString commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), name);
 					if(!commonTopic.isEmpty()) {
 						foundEqual = true;

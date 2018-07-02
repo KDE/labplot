@@ -784,6 +784,7 @@ void LiveDataDock::addSubscription() {
 		QString name;
 		QTreeWidgetItem *item = ui.twTopics->currentItem();
 		QTreeWidgetItem *tempItem = item;
+		QString commonLevelTopic;
 		name.prepend(item->text(0));
 		if(item->childCount() != 0)
 			name.append("/#");
@@ -797,6 +798,7 @@ void LiveDataDock::addSubscription() {
 
 			qDebug() << name;
 			bool foundSuperior = false;
+			bool foundEqual = false;
 
 			for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
 				qDebug()<<i<<" "<<ui.lwSubscriptions->count();
@@ -806,12 +808,63 @@ void LiveDataDock::addSubscription() {
 					qDebug()<<name<<" "<< ui.lwSubscriptions->item(i)->text();
 					break;
 				}
+
+				QString commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), name);
+				if(!commonTopic.isEmpty()) {
+					foundEqual = true;
+
+					for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
+						if(ui.lwSubscriptions->item(row)->text() == ui.lwSubscriptions->item(i)->text()) {
+							qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
+							delete ui.lwSubscriptions->item(row);
+							break;
+							//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
+						}
+					}
+					ui.lwSubscriptions->addItem(commonTopic);
+					commonLevelTopic = commonTopic;
+					break;
+				}
+
 			}
-			if(!foundSuperior) {
+			if(!foundSuperior && !foundEqual) {
 				for (auto* source: m_mqttClients) {
 					source->newMQTTSubscription(name, ui.cbQoS->currentIndex());
 				}
-			}else {
+			}
+
+			if(foundEqual) {
+				QString commonTopic;
+				do{
+					commonTopic = "";
+					for(int i = 0; i < ui.lwSubscriptions->count() - 1; ++i) {
+						commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), ui.lwSubscriptions->item(i+1)->text());
+						if(!commonTopic.isEmpty()) {
+							if(ui.lwSubscriptions->findItems(commonTopic, Qt::MatchExactly).isEmpty()) {
+
+								for(int row = 0; row<ui.lwSubscriptions->count(); row++)  {
+									if(ui.lwSubscriptions->item(row)->text() == ui.lwSubscriptions->item(i)->text()) {
+										qDebug()<<"4 subscription found at  "<<ui.lwSubscriptions->item(row)->text() <<"and removed";
+										delete ui.lwSubscriptions->item(row);
+										break;
+										//for(int row2 = row; row2 <ui.lwSubscriptions->count(); row2++);
+									}
+								}
+
+								ui.lwSubscriptions->addItem(commonTopic);
+								commonLevelTopic = commonTopic;
+							}
+							break;
+						}
+					}
+				} while(!commonTopic.isEmpty());
+
+				for (auto* source: m_mqttClients) {
+					source->newMQTTSubscription(commonLevelTopic, ui.cbQoS->currentIndex());
+				}
+			}
+
+			if(foundSuperior) {
 				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
 			}
 		}
@@ -916,5 +969,50 @@ void LiveDataDock::searchTreeItem(const QString& rootName) {
 		qDebug() << "Scroll";
 		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
 	}
+}
+
+QString LiveDataDock::checkCommonLevel(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/', QString::SkipEmptyParts);
+	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QString commonTopic = "";
+
+	if(!firstList.isEmpty()) {
+		if(firstList.size() == secondtList.size() && (first != second))	{
+			int matchIndex = -1;
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(firstList.at(i) != secondtList.at(i)) {
+					matchIndex = i;
+					break;
+				}
+			}
+			bool differ = false;
+			if(matchIndex > 0 && matchIndex < firstList.size() -1) {
+				for(int j = matchIndex +1; j < firstList.size(); ++j) {
+					if(firstList.at(j) != secondtList.at(j)) {
+						differ = true;
+						break;
+					}
+				}
+			}
+			else
+				differ = true;
+
+			if(!differ)
+			{
+				for(int i = 0; i < firstList.size(); ++i) {
+					if(i != matchIndex)
+						commonTopic.append(firstList.at(i));
+					else
+						commonTopic.append("+");
+
+					if(i != firstList.size() - 1)
+						commonTopic.append("/");
+				}
+			}
+		}
+	}
+	qDebug() << "Common topic: "<<commonTopic;
+	return commonTopic;
 }
 #endif

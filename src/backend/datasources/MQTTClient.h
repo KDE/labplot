@@ -104,6 +104,7 @@ public:
 	QVector<QString> mqttSubscribtions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
+	QString checkCommonLevel(const QString& first, const QString& second);
 
 	QString clientHostName() const;
 	quint16 clientPort() const;

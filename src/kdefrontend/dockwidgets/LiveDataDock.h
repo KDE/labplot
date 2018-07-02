@@ -52,6 +52,7 @@ public:
 #ifdef HAVE_MQTT
 	void setMQTTClients(const QList<MQTTClient*>& clients);
 	bool checkTopicContains(const QString& superior, const QString& inferior);
+	QString checkCommonLevel(const QString& first, const QString& second);
 #endif
 	~LiveDataDock();
 

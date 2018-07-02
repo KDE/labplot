@@ -1012,4 +1012,49 @@ bool MQTTClient::checkTopicContains(const QString &superior, const QString& infe
 		return false;
 	}
 }
+
+QString MQTTClient::checkCommonLevel(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/', QString::SkipEmptyParts);
+	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QString commonTopic = "";
+
+	if(!firstList.isEmpty()) {
+		if(firstList.size() == secondtList.size() && (first != second))	{
+			int matchIndex = -1;
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(firstList.at(i) != secondtList.at(i)) {
+					matchIndex = i;
+					break;
+				}
+			}
+			bool differ = false;
+			if(matchIndex > 0 && matchIndex < firstList.size() -1) {
+				for(int j = matchIndex +1; j < firstList.size(); ++j) {
+					if(firstList.at(j) != secondtList.at(j)) {
+						differ = true;
+						break;
+					}
+				}
+			}
+			else
+				differ = true;
+
+			if(!differ)
+			{
+				for(int i = 0; i < firstList.size(); ++i) {
+					if(i != matchIndex)
+						commonTopic.append(firstList.at(i));
+					else
+						commonTopic.append("+");
+
+					if(i != firstList.size() - 1)
+						commonTopic.append("/");
+				}
+			}
+		}
+	}
+	qDebug() << "Common topic: "<<commonTopic;
+	return commonTopic;
+}
 #endif
