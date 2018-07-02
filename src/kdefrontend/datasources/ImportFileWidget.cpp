@@ -1814,7 +1814,7 @@ bool ImportFileWidget::isMqttValid(){
 	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
 	bool subscribed = !m_topicList.isEmpty();
 	bool fileTypeOk = false;
-	if(this->currentFileType() == LiveDataSource::FileType::Ascii)
+	if(this->currentFileType() == AbstractFileFilter::FileType::Ascii)
 		fileTypeOk = true;
 	return connected && subscribed && fileTypeOk;
 }
