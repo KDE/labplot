@@ -50,21 +50,21 @@
    <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="lAutoSaveInterval">
      <property name="text">
-      <string>Time interval</string>
+      <string>Time interval:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Startup</string>
+      <string>Startup:</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QCheckBox" name="chkAutoSave">
      <property name="text">
-      <string>enabled</string>
+      <string>Enabled</string>
      </property>
     </widget>
    </item>
@@ -100,14 +100,14 @@
    <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="lTabPosition">
      <property name="text">
-      <string>Tab position</string>
+      <string>Tab position:</string>
      </property>
     </widget>
    </item>
    <item row="3" column="0" colspan="3">
     <widget class="QLabel" name="lMdiVisibility">
      <property name="text">
-      <string>Sub-Window visibility</string>
+      <string>Sub-window visibility:</string>
      </property>
     </widget>
    </item>
@@ -130,7 +130,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lInterface">
      <property name="text">
-      <string>Interface</string>
+      <string>Interface:</string>
      </property>
     </widget>
    </item>

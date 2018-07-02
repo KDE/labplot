@@ -3,7 +3,7 @@ File                 : AbstractFileFilter.h
 Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
@@ -43,6 +43,7 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
+	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, Json, ROOT, NgspiceRawAscii};
 	enum ImportMode {Append, Prepend, Replace};
 
 	AbstractFileFilter() {}
@@ -51,6 +52,8 @@ public:
 	static bool isNan(QString);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
 	static QStringList numberFormats();
+	static AbstractFileFilter::FileType fileType(const QString&);
+	static QStringList fileTypes();
 
 	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
         ImportMode = AbstractFileFilter::Replace, int lines = -1) = 0;

@@ -39,7 +39,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Name</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
@@ -72,7 +72,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Comment</string>
+          <string>Comment:</string>
          </property>
         </widget>
        </item>
@@ -105,19 +105,12 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lOrientation">
          <property name="text">
-          <string>Orientation</string>
+          <string>Orientation:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
         <widget class="KComboBox" name="cbOrientation"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lPosition">
-         <property name="text">
-          <string>Position</string>
-         </property>
-        </widget>
        </item>
        <item row="4" column="2">
         <widget class="KComboBox" name="cbPosition"/>
@@ -135,7 +128,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lScale">
          <property name="text">
-          <string>Scale</string>
+          <string>Scale:</string>
          </property>
         </widget>
        </item>
@@ -161,7 +154,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lAutoScale">
          <property name="text">
-          <string>Auto Fit</string>
+          <string>Auto fit:</string>
          </property>
         </widget>
        </item>
@@ -175,7 +168,7 @@
        <item row="9" column="0">
         <widget class="QLabel" name="lStart">
          <property name="text">
-          <string>Start</string>
+          <string>Start:</string>
          </property>
         </widget>
        </item>
@@ -185,7 +178,7 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lEnd">
          <property name="text">
-          <string>End</string>
+          <string>End:</string>
          </property>
         </widget>
        </item>
@@ -195,7 +188,7 @@
        <item row="11" column="0">
         <widget class="QLabel" name="lZeroOffset">
          <property name="text">
-          <string>Zero-offset</string>
+          <string>Zero-offset:</string>
          </property>
         </widget>
        </item>
@@ -205,7 +198,7 @@
        <item row="12" column="0">
         <widget class="QLabel" name="lScalingFactor">
          <property name="text">
-          <string>Scaling factor</string>
+          <string>Scaling factor:</string>
          </property>
         </widget>
        </item>
@@ -228,7 +221,14 @@
        <item row="14" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
-          <string>visible</string>
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lPosition">
+         <property name="text">
+          <string>Position:</string>
          </property>
         </widget>
        </item>
@@ -253,14 +253,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Line:</string>
+          <string>Line</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lLineStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -293,7 +293,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lLineColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -310,7 +310,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lLineWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -333,7 +333,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lLineOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -393,14 +393,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Arrow:</string>
+          <string>Arrow</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lArrowType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -417,7 +417,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lArrowPosition">
          <property name="text">
-          <string>Position</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
@@ -434,7 +434,7 @@
        <item row="9" column="0">
         <widget class="QLabel" name="lArrowSize">
          <property name="text">
-          <string>Size</string>
+          <string>Size:</string>
          </property>
         </widget>
        </item>
@@ -489,13 +489,6 @@
        <string>Ticks</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QLabel" name="lMajorTicksDirection">
-         <property name="text">
-          <string>Direction</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
@@ -518,7 +511,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lMajorTicksType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -528,7 +521,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lMajorTicksNumber">
          <property name="text">
-          <string>Number</string>
+          <string>Number:</string>
          </property>
         </widget>
        </item>
@@ -538,7 +531,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lMajorTicksIncrement">
          <property name="text">
-          <string>Increment</string>
+          <string>Increment:</string>
          </property>
         </widget>
        </item>
@@ -548,7 +541,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lMajorTicksColumn">
          <property name="text">
-          <string>Column</string>
+          <string>Column:</string>
          </property>
         </widget>
        </item>
@@ -571,7 +564,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lMajorTicksLineStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -588,7 +581,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lMajorTicksColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -605,7 +598,7 @@
        <item row="9" column="0">
         <widget class="QLabel" name="lMajorTicksWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -622,7 +615,7 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lMajorTicksLength">
          <property name="text">
-          <string>Length</string>
+          <string>Length:</string>
          </property>
         </widget>
        </item>
@@ -639,7 +632,7 @@
        <item row="11" column="0">
         <widget class="QLabel" name="lMajorTicksOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -693,7 +686,7 @@
        <item row="14" column="0">
         <widget class="QLabel" name="lMinorTicksDirection">
          <property name="text">
-          <string>Direction</string>
+          <string>Direction:</string>
          </property>
         </widget>
        </item>
@@ -703,7 +696,7 @@
        <item row="15" column="0">
         <widget class="QLabel" name="lMinorTicksType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -713,7 +706,7 @@
        <item row="16" column="0">
         <widget class="QLabel" name="lMinorTicksNumber">
          <property name="text">
-          <string>Number</string>
+          <string>Number:</string>
          </property>
         </widget>
        </item>
@@ -723,7 +716,7 @@
        <item row="17" column="0">
         <widget class="QLabel" name="lMinorTicksIncrement">
          <property name="text">
-          <string>Increment</string>
+          <string>Increment:</string>
          </property>
         </widget>
        </item>
@@ -733,7 +726,7 @@
        <item row="18" column="0">
         <widget class="QLabel" name="lMinorTicksColumn">
          <property name="text">
-          <string>Column</string>
+          <string>Column:</string>
          </property>
         </widget>
        </item>
@@ -756,7 +749,7 @@
        <item row="20" column="0">
         <widget class="QLabel" name="lMinorTicksLineStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -773,7 +766,7 @@
        <item row="21" column="0">
         <widget class="QLabel" name="lMinorTicksColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -790,7 +783,7 @@
        <item row="22" column="0">
         <widget class="QLabel" name="lMinorTicksWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -807,7 +800,7 @@
        <item row="23" column="0">
         <widget class="QLabel" name="lMinorTicksLength">
          <property name="text">
-          <string>Length</string>
+          <string>Length:</string>
          </property>
         </widget>
        </item>
@@ -824,7 +817,7 @@
        <item row="24" column="0">
         <widget class="QLabel" name="lMinorTicksOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -878,7 +871,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Major ticks:</string>
+          <string>Major ticks</string>
          </property>
         </widget>
        </item>
@@ -891,7 +884,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Minor ticks:</string>
+          <string>Minor ticks</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lMajorTicksDirection">
+         <property name="text">
+          <string>Direction:</string>
          </property>
         </widget>
        </item>
@@ -911,7 +911,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Position:</string>
+          <string>Position</string>
          </property>
         </widget>
        </item>
@@ -934,7 +934,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lLabelsOffset">
          <property name="text">
-          <string>Offset</string>
+          <string>Offset:</string>
          </property>
         </widget>
        </item>
@@ -973,14 +973,14 @@
        <item row="9" column="0">
         <widget class="QLabel" name="lLabelsFont">
          <property name="text">
-          <string>Font</string>
+          <string>Font:</string>
          </property>
         </widget>
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lLabelsFormat">
          <property name="text">
-          <string>Format</string>
+          <string>Format:</string>
          </property>
         </widget>
        </item>
@@ -1016,7 +1016,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lLabelsRotation">
          <property name="text">
-          <string>Rotation</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
@@ -1045,7 +1045,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Format:</string>
+          <string>Format</string>
          </property>
         </widget>
        </item>
@@ -1055,28 +1055,28 @@
           <string>Number of digits after the decimal point</string>
          </property>
          <property name="text">
-          <string>Precision</string>
+          <string>Precision:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lLabelsPosition">
          <property name="text">
-          <string>Position</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="lLabelsColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lLabelsPrefix">
          <property name="text">
-          <string>Prefix</string>
+          <string>Prefix:</string>
          </property>
         </widget>
        </item>
@@ -1093,7 +1093,7 @@
        <item row="12" column="0">
         <widget class="QLabel" name="lLabelsSuffix">
          <property name="text">
-          <string>Suffix</string>
+          <string>Suffix:</string>
          </property>
         </widget>
        </item>
@@ -1103,7 +1103,7 @@
        <item row="13" column="0">
         <widget class="QLabel" name="lLabelsOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -1205,7 +1205,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lMajorGridOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -1221,14 +1221,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Major grid:</string>
+          <string>Major grid</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lMajorGridStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -1261,7 +1261,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lMajorGridColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -1271,7 +1271,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lMajorGridWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -1338,14 +1338,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Minor grid:</string>
+          <string>Minor grid</string>
          </property>
         </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lMinorGridColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -1355,7 +1355,7 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lMinorGridWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -1372,7 +1372,7 @@
        <item row="11" column="0">
         <widget class="QLabel" name="lMinorGridOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -1420,7 +1420,7 @@
        <item row="7" column="0" rowspan="2">
         <widget class="QLabel" name="lMinorGridStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>

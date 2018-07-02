@@ -108,11 +108,11 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	switch (m_projectType) {
 	case (ProjectLabPlot):
 		m_projectParser = new LabPlotProjectParser();
-		title = i18n("Import LabPlot Project");
+		title = i18nc("@title:window", "Import LabPlot Project");
 		break;
 	case (ProjectOrigin):
 		m_projectParser = new OriginProjectParser();
-		title = i18n("Import Origin Project");
+		title = i18nc("@title:window", "Import Origin Project");
 		break;
 	}
 
@@ -344,12 +344,12 @@ void ImportProjectDialog::selectFile() {
 	QString lastDirConfEntryName;
 	switch (m_projectType) {
 	case (ProjectLabPlot):
-		title = i18n("Open LabPlot Project");
+		title = i18nc("@title:window", "Open LabPlot Project");
 		lastDirConfEntryName = QLatin1String("LastImportLabPlotProjectDir");
 		supportedFormats = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 		break;
 	case (ProjectOrigin):
-		title = i18n("Open Origin Project");
+		title = i18nc("@title:window", "Open Origin Project");
 		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
 		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
 		break;

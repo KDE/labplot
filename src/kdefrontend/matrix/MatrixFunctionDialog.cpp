@@ -56,7 +56,7 @@ extern "C" {
 
 MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog(parent), m_matrix(m) {
 	Q_ASSERT(m_matrix);
-	setWindowTitle(i18nc("@title:window", "Function values"));
+	setWindowTitle(i18nc("@title:window", "Function Values"));
 
 	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);

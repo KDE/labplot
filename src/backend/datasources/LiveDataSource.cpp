@@ -56,8 +56,6 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QAction>
 #include <KLocalizedString>
 
-#include <QDebug>
-
 /*!
   \class LiveDataSource
   \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
@@ -66,22 +64,25 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 */
 LiveDataSource::LiveDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: Spreadsheet(engine, name, loading),
-	  m_fileType(Ascii),
-	  m_fileWatched(false),
-	  m_fileLinked(false),
-	  m_paused(false),
-	  m_prepared(false),
-	  m_keepLastValues(false),
-	  m_bytesRead(0),
-	  m_filter(nullptr),
-	  m_updateTimer(new QTimer(this)),
-	  m_fileSystemWatcher(nullptr),
-	  m_file(nullptr),
-	  m_localSocket(nullptr),
-	  m_tcpSocket(nullptr),
-	  m_udpSocket(nullptr),
-	  m_serialPort(nullptr),
-	  m_device(nullptr) {
+		m_fileType(AbstractFileFilter::Ascii),
+		m_fileWatched(false),
+		m_fileLinked(false),
+		m_paused(false),
+		m_prepared(false),
+		m_sampleSize(1),
+		m_keepNValues(0),
+		m_updateInterval(1000),
+//TODO: m_port, m_baudRate ?
+		m_bytesRead(0),
+		m_filter(nullptr),
+		m_updateTimer(new QTimer(this)),
+		m_fileSystemWatcher(nullptr),
+		m_file(nullptr),
+		m_localSocket(nullptr),
+		m_tcpSocket(nullptr),
+		m_udpSocket(nullptr),
+		m_serialPort(nullptr),
+		m_device(nullptr) {
 
 	initActions();
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
@@ -116,10 +117,16 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	if (m_updateType == TimeInterval)
+	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType) << ", interval = " << m_updateInterval);
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
-	else
+		DEBUG("STARTED TIMER. REMAINING TIME = " << m_updateTimer->remainingTime());
+		break;
+	case NewData:
+		DEBUG("STARTING WATCHER");
 		watch();
+	}
 }
 
 void LiveDataSource::initActions() {
@@ -147,7 +154,7 @@ QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
-	for(const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
+	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
 
 		qDebug() << sp.description();
@@ -166,7 +173,7 @@ QStringList LiveDataSource::availablePorts() {
 QStringList LiveDataSource::supportedBaudRates() {
 	QStringList baudRates;
 
-	for(const auto& baud : QSerialPortInfo::standardBaudRates())
+	for (const auto& baud : QSerialPortInfo::standardBaudRates())
 		baudRates.append(QString::number(baud));
 	return baudRates;
 }
@@ -175,6 +182,7 @@ QStringList LiveDataSource::supportedBaudRates() {
  * \brief Updates this data source at this moment
  */
 void LiveDataSource::updateNow() {
+	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
 	m_updateTimer->stop();
 	read();
 
@@ -184,42 +192,31 @@ void LiveDataSource::updateNow() {
 }
 
 /*!
- * \brief Continue reading from the live data source after it was paused.
+ * \brief Continue reading from the live data source after it was paused
  */
 void LiveDataSource::continueReading() {
 	m_paused = false;
-	if (m_updateType == TimeInterval)
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
-	else if (m_updateType == NewData)
+		break;
+	case  NewData:
 		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
+	}
 }
 
 /*!
- * \brief Pause the reading of the live data source.
+ * \brief Pause the reading of the live data source
  */
 void LiveDataSource::pauseReading() {
 	m_paused = true;
-	if (m_updateType == TimeInterval)
+	switch (m_updateType) {
+	case TimeInterval:
 		m_updateTimer->stop();
-	else if (m_updateType == NewData)
+		break;
+	case NewData:
 		disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-}
-
-/*!
-  returns the list with all supported data file formats.
-*/
-QStringList LiveDataSource::fileTypes() {
-// see LiveDataSource::FileType
-	return (QStringList()<< i18n("ASCII data")
-	        << i18n("Binary data")
-	        << i18n("Image")
-	        << i18n("Hierarchical Data Format 5 (HDF5)")
-	        << i18n("Network Common Data Format (NetCDF)")
-//		<< "CDF"
-	        << i18n("Flexible Image Transport System Data Format (FITS)")
-	        << i18n("JSON data")
-//		<< i18n("Sound")
-	       );
+	}
 }
 
 void LiveDataSource::setFileName(const QString& name) {
@@ -242,11 +239,11 @@ QString LiveDataSource::localSocketName() const {
 	return m_localSocketName;
 }
 
-void LiveDataSource::setFileType(FileType type) {
+void LiveDataSource::setFileType(AbstractFileFilter::FileType type) {
 	m_fileType = type;
 }
 
-LiveDataSource::FileType LiveDataSource::fileType() const {
+AbstractFileFilter::FileType LiveDataSource::fileType() const {
 	return m_fileType;
 }
 
@@ -268,18 +265,6 @@ void LiveDataSource::setFileWatched(bool b) {
 
 bool LiveDataSource::isFileWatched() const {
 	return m_fileWatched;
-}
-
-/*!
- * \brief Sets whether we'll keep the last values or append it to the previous ones
- * \param keepLastValues
- */
-void LiveDataSource::setKeepLastValues(bool keepLastValues) {
-	m_keepLastValues = keepLastValues;
-}
-
-bool LiveDataSource::keepLastValues() const {
-	return m_keepLastValues;
 }
 
 /*!
@@ -308,15 +293,15 @@ int LiveDataSource::updateInterval() const {
 }
 
 /*!
- * \brief Sets how many values we should store
+ * \brief Sets how many values we should keep when keepLastValues is true
  * \param keepnvalues
  */
-void LiveDataSource::setKeepNvalues(int keepnvalues) {
-	m_keepNvalues = keepnvalues;
+void LiveDataSource::setKeepNValues(int keepnvalues) {
+	m_keepNValues = keepnvalues;
 }
 
-int LiveDataSource::keepNvalues() const {
-	return m_keepNvalues;
+int LiveDataSource::keepNValues() const {
+	return m_keepNValues;
 }
 
 /*!
@@ -356,15 +341,15 @@ bool LiveDataSource::isPaused() const {
 }
 
 /*!
- * \brief Sets the sample rate to samplerate
- * \param samplerate
+ * \brief Sets the sample size to size
+ * \param size
  */
-void LiveDataSource::setSampleRate(int samplerate) {
-	m_sampleRate = samplerate;
+void LiveDataSource::setSampleSize(int size) {
+	m_sampleSize = size;
 }
 
-int LiveDataSource::sampleRate() const {
-	return m_sampleRate;
+int LiveDataSource::sampleSize() const {
+	return m_sampleSize;
 }
 
 /*!
@@ -396,13 +381,15 @@ LiveDataSource::ReadingType LiveDataSource::readingType() const {
  * \param updatetype
  */
 void LiveDataSource::setUpdateType(UpdateType updatetype) {
-	if (updatetype == NewData) {
+	switch (updatetype) {
+	case NewData:
 		m_updateTimer->stop();
 		if (m_fileSystemWatcher == nullptr)
 			watch();
 		else
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
-	} else {
+		break;
+	case TimeInterval:
 		if (m_fileSystemWatcher)
 			disconnect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 	}
@@ -443,11 +430,11 @@ bool LiveDataSource::isFileLinked() const {
 
 QIcon LiveDataSource::icon() const {
 	QIcon icon;
-	if (m_fileType == LiveDataSource::Ascii)
+	if (m_fileType == AbstractFileFilter::Ascii)
 		icon = QIcon::fromTheme("text-plain");
-	else if (m_fileType == LiveDataSource::Binary)
+	else if (m_fileType == AbstractFileFilter::Binary)
 		icon = QIcon::fromTheme("application-octet-stream");
-	else if (m_fileType == LiveDataSource::Image)
+	else if (m_fileType == AbstractFileFilter::Image)
 		icon = QIcon::fromTheme("image-x-generic");
 	// TODO: HDF5, NetCDF, FITS, etc.
 
@@ -467,7 +454,7 @@ QMenu* LiveDataSource::createContextMenu() {
 	menu->insertAction(firstAction, m_plotDataAction);
 	menu->insertSeparator(firstAction);
 
-	//TODO: doesnt' always make sense...
+	//TODO: doesnt always make sense...
 // 	if (!m_fileWatched)
 // 		menu->insertAction(firstAction, m_reloadAction);
 //
@@ -488,13 +475,13 @@ QMenu* LiveDataSource::createContextMenu() {
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
-	DEBUG("LiveDataSource::read()");
+	DEBUG("\nLiveDataSource::read()");
 	if (m_filter == nullptr)
 		return;
 
 	//initialize the device (file, socket, serial port), when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	preparing device");
+		DEBUG("	preparing device. update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -515,7 +502,9 @@ void LiveDataSource::read() {
 			m_udpSocket->bind(QHostAddress(m_host), m_port);
 			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
 
-			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+			// only connect to readyRead when update is on new data
+			if (m_updateType == NewData)
+				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
 
 			break;
@@ -544,9 +533,9 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
+		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(LiveDataSource,FileType,m_fileType));
 		switch (m_fileType) {
-		case Ascii:
-			DEBUG("Reading live ascii file ..");
+		case AbstractFileFilter::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, 0);
 			} else {
@@ -556,14 +545,17 @@ void LiveDataSource::read() {
 			DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 
 			break;
-		case Binary:
-			//bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+		case AbstractFileFilter::Binary:
+			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
-		case Image:
-		case HDF5:
-		case NETCDF:
-		case FITS:
-		case Json:
+		//TODO:?
+		case AbstractFileFilter::Image:
+		case AbstractFileFilter::HDF5:
+		case AbstractFileFilter::NETCDF:
+		case AbstractFileFilter::FITS:
+		case AbstractFileFilter::Json:
+		case AbstractFileFilter::ROOT:
+		case AbstractFileFilter::NgspiceRawAscii:
 			break;
 		}
 		break;
@@ -574,24 +566,24 @@ void LiveDataSource::read() {
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
 	case NetworkUdpSocket:
-		DEBUG("reading from UDP socket. state before abort = " << m_udpSocket->state());
-		m_udpSocket->abort();
-		m_udpSocket->bind(QHostAddress(m_host), m_port);
-		m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
-		DEBUG("reading from UDP socket. state after reconnect = " << m_udpSocket->state());
+		DEBUG("reading from UDP socket. state = " << m_udpSocket->state());
+
+		// reading data here
+		if (m_fileType == AbstractFileFilter::Ascii)
+			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case LocalSocket:
-		DEBUG("reading from local socket. state before abort = " << m_localSocket->state());
+		DEBUG("reading from local socket. state before abort = " << ENUM_TO_STRING(QLocalSocket, LocalSocketState, m_localSocket->state()));
 		m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
+		//TODO: Test
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);
 		m_serialPort->setPortName(m_serialPortName);
 		m_device = m_serialPort;
-		//TODO
 		break;
 	}
 }
@@ -602,11 +594,12 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("Got new data from the device");
+	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
+	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
-	if (m_fileType == Ascii)
+	if (m_fileType == AbstractFileFilter::Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-// 	else if (m_fileType == Binary)
+//TODO:	else if (m_fileType == Binary)
 	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
@@ -714,6 +707,7 @@ void LiveDataSource::linkToggled() {
 
 //watch the file upon reading for changes if required
 void LiveDataSource::watch() {
+	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
 	if (m_fileWatched) {
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
@@ -726,94 +720,6 @@ void LiveDataSource::watch() {
 		if (m_fileSystemWatcher)
 			m_fileSystemWatcher->removePath(m_fileName);
 	}
-}
-
-/*!
-    returns a string containing the general information about the file \c name
-    and some content specific information
-    (number of columns and lines for ASCII, color-depth for images etc.).
- */
-QString LiveDataSource::fileInfoString(const QString &name) {
-	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
-	QIODevice *file = new QFile(name);
-
-	QString fileName;
-#ifdef Q_OS_WIN
-	if (name.at(1) != QLatin1Char(':'))
-		fileName = QDir::homePath() + name;
-	else
-		fileName = name;
-#else
-	if (name.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + name;
-	else
-		fileName = name;
-#endif
-	if(file==0)
-		file = new QFile(fileName);
-
-	if (file->open(QIODevice::ReadOnly)) {
-		QStringList infoStrings;
-
-		//general information about the file
-		infoStrings << "<u><b>" + fileName + "</b></u><br>";
-		fileInfo.setFile(fileName);
-
-		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
-		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
-		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
-
-		infoStrings << i18n("Created: %1", fileInfo.created().toString());
-		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
-		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
-		infoStrings << i18n("Owner: %1", fileInfo.owner());
-		infoStrings << i18n("Group: %1", fileInfo.group());
-		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
-
-#ifdef HAVE_FITS
-		if (fileName.endsWith(QLatin1String(".fits"))) {
-			infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
-			infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
-		}
-#endif
-
-		// file type and type specific information about the file
-#ifdef Q_OS_LINUX
-		QProcess *proc = new QProcess();
-		QStringList args;
-		args<<"-b"<<fileName;
-		proc->start( "file", args);
-
-		if(proc->waitForReadyRead(1000) == false)
-			infoStrings << i18n("Could not open file %1 for reading.", fileName);
-		else {
-			fileTypeString = proc->readLine();
-			if( fileTypeString.contains(i18n("cannot open")) )
-				fileTypeString="";
-			else {
-				fileTypeString.remove(fileTypeString.length()-1,1);	// remove '\n'
-			}
-		}
-		infoStrings << i18n("File type: %1", fileTypeString);
-#endif
-
-		//TODO depending on the file type, generate additional information about the file:
-		//Number of lines for ASCII, color-depth for images etc. Use the specific filters here.
-		// port the old labplot1.6 code.
-		if( fileTypeString.contains("ASCII")) {
-			infoStrings << "<br/>";
-			//TODO: consider choosen separator
-			infoStrings << i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName));
-
-			infoStrings << i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
-		}
-		infoString += infoStrings.join("<br/>");
-	} else
-		infoString += i18n("Could not open file %1 for reading.", fileName);
-
-	return infoString;
 }
 
 void LiveDataSource::plotData() {
@@ -841,13 +747,13 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("sourceType", QString::number(m_sourceType));
-	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
+	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
 
 	if (m_updateType == TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
-		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
+		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 
 	switch (m_sourceType) {
 	case SerialPort:
@@ -917,7 +823,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("fileType").toString());
 			else
-				m_fileType = (FileType)str.toInt();
+				m_fileType = (AbstractFileFilter::FileType)str.toInt();
 
 			str = attribs.value("fileWatched").toString();
 			if(str.isEmpty())
@@ -958,11 +864,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			if (m_readingType != TillEnd) {
-				str = attribs.value("sampleRate").toString();
+				str = attribs.value("sampleSize").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("sampleRate").toString());
+					reader->raiseWarning(attributeWarning.subs("sampleSize").toString());
 				else
-					m_sampleRate = str.toInt();
+					m_sampleSize = str.toInt();
 			}
 
 			switch (m_sourceType) {

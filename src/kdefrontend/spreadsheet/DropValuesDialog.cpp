@@ -51,13 +51,13 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 
 	ui.setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-	ui.cbOperator->addItem(i18n("Equal To"));
+	ui.cbOperator->addItem(i18n("Equal to"));
 	ui.cbOperator->addItem(i18n("Between (Including End Points)"));
 	ui.cbOperator->addItem(i18n("Between (Excluding End Points)"));
-	ui.cbOperator->addItem(i18n("Greater Than"));
-	ui.cbOperator->addItem(i18n("Greater Than Or Equal To"));
-	ui.cbOperator->addItem(i18n("Lesser Than"));
-	ui.cbOperator->addItem(i18n("Lesser Than Or Equal To"));
+	ui.cbOperator->addItem(i18n("Greater than"));
+	ui.cbOperator->addItem(i18n("Greater than or Equal to"));
+	ui.cbOperator->addItem(i18n("Lesser than"));
+	ui.cbOperator->addItem(i18n("Lesser than or Equal to"));
 
 	ui.leValue1->setValidator( new QDoubleValidator(ui.leValue1) );
 	ui.leValue2->setValidator( new QDoubleValidator(ui.leValue2) );

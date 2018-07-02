@@ -30,7 +30,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Name</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
@@ -66,7 +66,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Comment</string>
+          <string>Comment:</string>
          </property>
         </widget>
        </item>
@@ -121,7 +121,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>X-Error Type</string>
+          <string>X-error type:</string>
          </property>
         </widget>
        </item>
@@ -147,7 +147,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Y-Error Type</string>
+          <string>Y-error type:</string>
          </property>
         </widget>
        </item>
@@ -190,7 +190,7 @@
        <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="lSize">
          <property name="text">
-          <string>Size</string>
+          <string>Size:</string>
          </property>
         </widget>
        </item>
@@ -206,28 +206,28 @@
           </font>
          </property>
          <property name="text">
-          <string>Border:</string>
+          <string>Border</string>
          </property>
         </widget>
        </item>
        <item row="13" column="0" colspan="2">
         <widget class="QLabel" name="lBorderColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
        <item row="21" column="0" colspan="2">
         <widget class="QCheckBox" name="chbVisible">
          <property name="text">
-          <string>visible</string>
+          <string>Visible</string>
          </property>
         </widget>
        </item>
        <item row="18" column="0" colspan="2">
         <widget class="QLabel" name="lErrorBarFillingStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -273,7 +273,7 @@
        <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="lRotation">
          <property name="text">
-          <string>Rotation</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
@@ -306,7 +306,7 @@
        <item row="19" column="0" colspan="2">
         <widget class="QLabel" name="lErrorBarFillingColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -354,7 +354,7 @@
        <item row="14" column="0" colspan="2">
         <widget class="QLabel" name="lBorderWidth">
          <property name="text">
-          <string>Width</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
@@ -424,14 +424,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Error Bar:</string>
+          <string>Error Bar</string>
          </property>
         </widget>
        </item>
        <item row="8" column="0" colspan="2">
         <widget class="QLabel" name="lFillingStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -444,14 +444,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Filling:</string>
+          <string>Filling</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="lOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -464,14 +464,14 @@
           </font>
          </property>
          <property name="text">
-          <string>General:</string>
+          <string>General</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="lStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -488,7 +488,7 @@
        <item row="12" column="0" colspan="2">
         <widget class="QLabel" name="lBorderStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -498,14 +498,14 @@
        <item row="17" column="0" colspan="2">
         <widget class="QLabel" name="lErrorBarSize">
          <property name="text">
-          <string>Size</string>
+          <string>Size:</string>
          </property>
         </widget>
        </item>
        <item row="9" column="0" colspan="2">
         <widget class="QLabel" name="lFillingColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>

@@ -498,9 +498,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		for (auto* aspect: selectedAspects)
 			list << qobject_cast<CantorWorksheet *>(aspect);
 		if (list.size() == 1)
-			m_mainWindow->m_propertiesDock->setWindowTitle(list.first()->backendName() + " Properties");
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Properties", list.first()->backendName()));
 		else
-			m_mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
 		m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->cantorWorksheetDock);

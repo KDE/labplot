@@ -59,7 +59,7 @@ void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* data
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
-void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource * dataSource) {
+void AsciiFilter::readFromLiveDeviceNotFile(QIODevice &device, AbstractDataSource* dataSource) {
 	d->readFromLiveDevice(device, dataSource);
 }
 
@@ -613,7 +613,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			return 0;
 
 	if (!m_prepared) {
-		DEBUG("	Preparing ..");
+		DEBUG("Preparing ..");
 
 		switch (spreadsheet->sourceType()) {
 		case LiveDataSource::SourceType::FileOrPipe: {
@@ -655,12 +655,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
 		}
 
-		//also here we need a cheaper version of this
-		if (!spreadsheet->keepLastValues())
+		int keepNValues = spreadsheet->keepNValues();
+		if (keepNValues == 0)
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
-			spreadsheet->setRowCount(spreadsheet->keepNvalues());
-			m_actualRows = spreadsheet->keepNvalues();
+			spreadsheet->setRowCount(keepNValues);
+			m_actualRows = keepNValues;
 		}
 
 		m_dataContainer.resize(m_actualCols);
@@ -701,7 +701,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		DEBUG("prepared!");
+		DEBUG("Prepared!");
 	}
 
 	qint64 bytesread = 0;
@@ -724,45 +724,59 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		else
 			readingType = spreadsheet->readingType();
 	}
+	DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 
 	//move to the last read position, from == total bytes read
 	//since the other source types are sequencial we cannot seek on them
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
-	DEBUG("	bytes available: " << device.bytesAvailable());
+	DEBUG("	bytes available = " << device.bytesAvailable());
 
 	//count the new lines, increase actualrows on each
 	//now we read all the new lines, if we want to use sample rate
 	//then here we can do it, if we have actually sample rate number of lines :-?
-	int newLinesForSampleRateNotTillEnd = 0;
+	int newLinesForSampleSizeNotTillEnd = 0;
 	int newLinesTillEnd = 0;
 	QVector<QString> newData;
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		newData.resize(spreadsheet->sampleRate());
+		newData.resize(spreadsheet->sampleSize());
 
 	int newDataIdx = 0;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
-
 		while (!device.atEnd()) {
+			DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
+			DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, spreadsheet->sourceType()));
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				// local socket and UDP socket needs readAll(), all other need readLine()
-				//TODO: check serial port
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
-					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
+				switch (spreadsheet->sourceType()) {	// different sources need different read methods
+				case LiveDataSource::SourceType::LocalSocket:
 					newData[newDataIdx++] = device.readAll();
-				else {
+					break;
+				case LiveDataSource::SourceType::NetworkUdpSocket:
+					newData[newDataIdx++] = device.read(device.bytesAvailable());
+					break;
+				case LiveDataSource::SourceType::FileOrPipe:
+				case LiveDataSource::SourceType::NetworkTcpSocket:
+				//TODO: check serial port
+				case LiveDataSource::SourceType::SerialPort:
 					if (!device.canReadLine())
 						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
 					newData[newDataIdx++] = device.readLine();
 				}
-			} else {
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::LocalSocket
-					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket)
+			} else {	// ReadingType::TillEnd
+				switch (spreadsheet->sourceType()) {	// different sources need different read methods
+				case LiveDataSource::SourceType::LocalSocket:
 					newData.push_back(device.readAll());
-				else {
+					break;
+				case LiveDataSource::SourceType::NetworkUdpSocket:
+					newData.push_back(device.read(device.bytesAvailable()));
+					break;
+				case LiveDataSource::SourceType::FileOrPipe:
+				case LiveDataSource::SourceType::NetworkTcpSocket:
+				//TODO: check serial port
+				case LiveDataSource::SourceType::SerialPort:
 					if (!device.canReadLine())
 						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
 					newData.push_back(device.readLine());
@@ -771,10 +785,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			newLinesTillEnd++;
 
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				newLinesForSampleRateNotTillEnd++;
+				newLinesForSampleSizeNotTillEnd++;
 				//for Continuous reading and FromEnd we read sample rate number of lines if possible
 				//here TillEnd and Whole file behave the same
-				if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate())
+				if (newLinesForSampleSizeNotTillEnd == spreadsheet->sampleSize())
 					break;
 			}
 		}
@@ -784,10 +798,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
 		readingType = spreadsheet->readingType();
 
-	//we had less new lines than the sample rate specified
+	//we had less new lines than the sample size specified
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		qDebug() << "Removed empty lines: " << newData.removeAll("");
-
+		QDEBUG("Removed empty lines: " << newData.removeAll(""));
 
 	//back to the last read position before counting when reading from files
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
@@ -797,13 +810,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	int currentRow = 0; // indexes the position in the vector(column)
 	int linesToRead = 0;
+	int keepNValues = spreadsheet->keepNValues();
 
+	DEBUG("Increase row count");
 	if (m_prepared) {
 		//increase row count if we don't have a fixed size
 		//but only after the preparation step
-		if (!spreadsheet->keepLastValues()) {
+		if (keepNValues == 0) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
+				m_actualRows += qMin(newData.size(), spreadsheet->sampleSize());
 			else {
 				//we don't increase it if we reread the whole file, we reset it
 				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
@@ -811,10 +826,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				else
 					m_actualRows = newData.size();
 			}
-		}
 
-		//fixed size
-		if (spreadsheet->keepLastValues()) {
+			//appending
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+				linesToRead = m_actualRows;
+			else
+				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+		} else {	// fixed size
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
 				//we had more lines than the fixed size, so we read m_actualRows number of lines
 				if (newLinesTillEnd > m_actualRows) {
@@ -826,15 +844,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd, WholeFile is disabled
-				linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
-		} else {
-			//appending
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
-				linesToRead = m_actualRows;
-			else
-				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
 		}
+		DEBUG("	actual row = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;
@@ -843,11 +856,19 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (headerEnabled)
 			--m_actualRows;
 	}
+	DEBUG("	lines to read = " << linesToRead);
 
+	//TODO: check other source types
+	if (spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
+		if (m_actualRows < linesToRead) {
+			DEBUG("	SET actual rows to " << linesToRead);
+			m_actualRows = linesToRead;
+		}
+	}
 
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
-	if (!spreadsheet->keepLastValues()) {
+	if (keepNValues == 0) {
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportResizing: ");
 #endif
@@ -900,7 +921,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 	} else {
-		//when we have a fixed size we have to pop sampleRate number of lines if specified
+		//when we have a fixed size we have to pop sampleSize number of lines if specified
 		//here popping, setting currentRow
 		if (!m_prepared) {
 			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
@@ -920,7 +941,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd
-				currentRow = m_actualRows - qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				currentRow = m_actualRows - qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
 
@@ -970,13 +991,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 
 	// from the last row we read the new data in the spreadsheet
-	qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
-	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows << ", actual cols: " << m_actualCols;
+	qDebug() << "reading from line"  << currentRow << " till end" << newLinesTillEnd;
+	qDebug() << "Lines to read:" << linesToRead <<", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols;
 	newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
 		if (m_prepared) {
-			if (newData.size() > spreadsheet->sampleRate())
-				newDataIdx = newData.size() - spreadsheet->sampleRate();
+			if (newData.size() > spreadsheet->sampleSize())
+				newDataIdx = newData.size() - spreadsheet->sampleSize();
 			//since we skip a couple of lines, we need to count those bytes too
 			for (int i = 0; i < newDataIdx; ++i)
 				bytesread += newData.at(i).size();
@@ -1024,7 +1045,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 
 			//qDebug() << "line bytes: " << line.size() << " line: " << line;
-			//qDebug() << "reading in row: " << currentRow;
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
@@ -1042,30 +1062,36 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QDEBUG(" line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
 			if (createIndexEnabled) {
-				if (spreadsheet->keepLastValues())
-					lineStringList.prepend(QString::number(indexColumnIdx++));
-				else
+				if (spreadsheet->keepNValues() == 0)
 					lineStringList.prepend(QString::number(currentRow));
+				else
+					lineStringList.prepend(QString::number(indexColumnIdx++));
 			}
 
+			QDEBUG("	column modes = " << columnModes);
 			for (int n = 0; n < m_actualCols; ++n) {
+				DEBUG("	actual col = " << n);
 				if (n < lineStringList.size()) {
 					QString valueString = lineStringList.at(n);
+					DEBUG("	value string = " << valueString.toStdString());
 
 					// set value depending on data type
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric: {
+						DEBUG("	Numeric");
 						bool isNumber;
 						const double value = locale.toDouble(valueString, &isNumber);
 						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
-						//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
+						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
 						break;
 					}
 					case AbstractColumn::Integer: {
+						DEBUG("	Integer");
 						bool isNumber;
 						const int value = locale.toInt(valueString, &isNumber);
+						DEBUG("	container size = " << m_dataContainer.size() << ", current row = " << currentRow);
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-						//qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
+						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
 
 						break;
 					}
@@ -1086,7 +1112,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						//TODO
 						break;
 					}
-				} else {	// missing columns in this line
+				} else {
+					DEBUG("	missing columns in this line");
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric:
 						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
@@ -1283,6 +1310,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
 }
 
+/*!
+ * preview for special devices (local/UDP/TCP socket or serial port)
+ */
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	DEBUG("AsciiFilterPrivate::preview(): bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
 	QVector<QStringList> dataStrings;
@@ -1323,14 +1353,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		col = 1;
 		vectorNames.prepend(i18n("Index"));
 	}
-
-	if (headerEnabled) {
-		int i = 0;
-		if (createIndexEnabled)
-			i = 1;
-		for (; i < vectorNames.size(); ++i)
-			vectorNames[i] = "Column " + QString::number(i);
-	}
+	vectorNames.append(i18n("Value"));
+	QDEBUG("	vector names = " << vectorNames);
 
 	for (const auto& valueString: newData.at(0).split(' ', QString::SkipEmptyParts)) {
 		if (col == colMax)
@@ -1414,6 +1438,16 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	// Read the data
 	if (lines == -1)
 		lines = m_actualRows;
+
+	// set column names for preview
+	if (!headerEnabled) {
+		int start = 0;
+		if (createIndexEnabled)
+			start = 1;
+		for (int i=start;i<m_actualCols;i++)
+				vectorNames << "Column " + QString::number(i+1);
+	}
+	QDEBUG("	column names = " << vectorNames);
 
 	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {

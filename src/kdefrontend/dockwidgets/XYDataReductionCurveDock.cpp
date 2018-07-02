@@ -443,7 +443,7 @@ void XYDataReductionCurveDock::typeChanged() {
 	case nsl_geom_linesim_type_raddist:
 	case nsl_geom_linesim_type_interp:
 	case nsl_geom_linesim_type_reumann_witkam:
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
@@ -454,7 +454,7 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_douglas_peucker_variant:
-		uiGeneralTab.lOption->setText(i18n("Number of points"));
+		uiGeneralTab.lOption->setText(i18n("Number of points:"));
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(2);
 		uiGeneralTab.sbTolerance->setSingleStep(1);
@@ -465,7 +465,7 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_nthpoint:
-		uiGeneralTab.lOption->setText(i18n("Step size"));
+		uiGeneralTab.lOption->setText(i18n("Step size:"));
 		uiGeneralTab.sbTolerance->setValue(10);
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(1);
@@ -475,14 +475,14 @@ void XYDataReductionCurveDock::typeChanged() {
 		uiGeneralTab.sbTolerance2->hide();
 		break;
 	case nsl_geom_linesim_type_perpdist:	// repeat option
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
 		uiGeneralTab.sbTolerance2->show();
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
-		uiGeneralTab.lOption2->setText(i18n("Repeats"));
+		uiGeneralTab.lOption2->setText(i18n("Repeats:"));
 		uiGeneralTab.sbTolerance2->setDecimals(0);
 		uiGeneralTab.sbTolerance2->setMinimum(1);
 		uiGeneralTab.sbTolerance2->setSingleStep(1);
@@ -492,7 +492,7 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance2();
 		break;
 	case nsl_geom_linesim_type_visvalingam_whyatt:
-		uiGeneralTab.lOption->setText(i18n("Tolerance (area)"));
+		uiGeneralTab.lOption->setText(i18n("Tolerance (area):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
@@ -503,11 +503,11 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_opheim:	// min/max tol options
-		uiGeneralTab.lOption->setText(i18n(" Min. Tolerance"));
+		uiGeneralTab.lOption->setText(i18n("Minimum tolerance:"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
-		uiGeneralTab.lOption2->setText(i18n("Max. Tolerance"));
+		uiGeneralTab.lOption2->setText(i18n("Maximum tolerance:"));
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
 		uiGeneralTab.sbTolerance2->show();
@@ -520,11 +520,11 @@ void XYDataReductionCurveDock::typeChanged() {
 			updateTolerance2();
 		break;
 	case nsl_geom_linesim_type_lang:	// distance/region
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
-		uiGeneralTab.lOption2->setText(i18n("Search region"));
+		uiGeneralTab.lOption2->setText(i18n("Search region:"));
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
 		uiGeneralTab.sbTolerance2->show();
@@ -592,7 +592,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Data reduction status: ") + m_dataReductionCurve->dataReductionResult().status);
+	emit info(i18n("Data reduction status: %1", m_dataReductionCurve->dataReductionResult().status));
 }
 
 void XYDataReductionCurveDock::enableRecalculate() const {

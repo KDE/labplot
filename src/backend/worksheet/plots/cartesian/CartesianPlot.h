@@ -236,7 +236,7 @@ private slots:
 
 	void xDataChanged();
 	void yDataChanged();
-	void HistogramdataChanged();
+	void HistogramDataChanged();
 	void xHistogramDataChanged();
 	void yHistogramDataChanged();
 	void curveVisibilityChanged();

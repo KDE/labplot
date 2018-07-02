@@ -10,9 +10,6 @@
     <height>667</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="gbProject">
@@ -39,7 +36,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lFileName">
         <property name="text">
-         <string>File name</string>
+         <string>File name:</string>
         </property>
        </widget>
       </item>
@@ -59,7 +56,7 @@
    <item>
     <widget class="QGroupBox" name="gbObjects">
      <property name="title">
-      <string>Objects To Import</string>
+      <string>Objects to Import</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -68,7 +65,7 @@
       <item>
        <widget class="QCheckBox" name="chbUnusedObjects">
         <property name="text">
-         <string>import unused object</string>
+         <string>Import unused object</string>
         </property>
        </widget>
       </item>
@@ -78,7 +75,7 @@
    <item>
     <widget class="QGroupBox" name="gbImportTo">
      <property name="title">
-      <string>Import To</string>
+      <string>Import to</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>

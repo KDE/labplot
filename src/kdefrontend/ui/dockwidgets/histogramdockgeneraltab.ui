@@ -1,228 +1,261 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>HistogramDockGeneralTab</class>
- <widget class="QWidget" name="HistogramDockGeneralTab">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>367</width>
-    <height>291</height>
-   </rect>
-  </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
-   <property name="spacing">
-    <number>2</number>
-   </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
-     <property name="text">
-      <string>Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QComboBox" name="cbBins"/>
-   </item>
-   <item row="8" column="2">
-    <widget class="KColorButton" name="kcbLineColor">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <spacer name="verticalSpacerST">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>32</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="15" column="0">
-    <widget class="QCheckBox" name="chkVisible">
-     <property name="text">
-      <string>visible</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lHistogramColour">
-     <property name="text">
-      <string>Color</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
-    <widget class="QComboBox" name="cbHistogramType"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lBinCount">
-     <property name="text">
-      <string>Bins</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lXColumn">
-     <property name="text">
-      <string>x-data</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="2">
-    <widget class="QPushButton" name="pbRecalculate">
-     <property name="text">
-      <string>Recalculate</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLineEdit" name="leName"/>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="lType">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Histogram type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="3">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lBinSettings">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Bin Settings:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <spacer name="verticalSpacerHT">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>32</width>
-       <height>8</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLineEdit" name="leComment"/>
-   </item>
-   <item row="0" column="1">
-    <spacer name="hsName">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="14" column="0">
-    <spacer name="verticalSpacerGeneral">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>24</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="2">
-    <widget class="QSpinBox" name="sbBins">
-	<property name="maximum">
-      <number>30</number>
-     </property>
-	 <property name= "minimum">
-		<number>1</number>
-	</property>
-     <property name="value">
-      <number>10</number>
-     </property>
- </widget>
-   </item>
-  </layout>
- </widget>
- <customwidgets>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
- </customwidgets>
- <resources/>
- <connections/>
+	<class>HistogramDockGeneralTab</class>
+	<widget class="QWidget" name="HistogramDockGeneralTab">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>367</width>
+				<height>291</height>
+			</rect>
+		</property>
+		<layout class="QGridLayout" name="gridLayout">
+			<property name="leftMargin">
+				<number>2</number>
+			</property>
+			<property name="topMargin">
+				<number>2</number>
+			</property>
+			<property name="rightMargin">
+				<number>2</number>
+			</property>
+			<property name="bottomMargin">
+				<number>2</number>
+			</property>
+			<property name="spacing">
+				<number>2</number>
+			</property>
+			<item row="0" column="0">
+				<widget class="QLabel" name="lName">
+					<property name="text">
+						<string>Name</string>
+					</property>
+				</widget>
+			</item>
+			<item row="0" column="1">
+				<spacer name="hsName">
+					<property name="orientation">
+						<enum>Qt::Horizontal</enum>
+					</property>
+					<property name="sizeType">
+						<enum>QSizePolicy::Fixed</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>10</width>
+							<height>23</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+			<item row="0" column="2">
+				<widget class="QLineEdit" name="leName"/>
+			</item>
+			<item row="1" column="0">
+				<widget class="QLabel" name="lComment">
+					<property name="text">
+						<string>Comment</string>
+					</property>
+				</widget>
+			</item>
+			<item row="1" column="2">
+				<widget class="QLineEdit" name="leComment"/>
+			</item>
+			<item row="2" column="0">
+				<widget class="QLabel" name="lXColumn">
+					<property name="text">
+						<string>x-data</string>
+					</property>
+				</widget>
+			</item>
+			<item row="3" column="0">
+				<spacer name="verticalSpacerST">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+					<property name="sizeType">
+						<enum>QSizePolicy::Fixed</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>32</width>
+							<height>18</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+			<item row="4" column="0" colspan="3">
+				<widget class="Line" name="line">
+					<property name="orientation">
+						<enum>Qt::Horizontal</enum>
+					</property>
+				</widget>
+			</item>
+			<item row="5" column="0">
+				<widget class="QLabel" name="lBinSettings">
+					<property name="font">
+						<font>
+							<weight>75</weight>
+							<bold>true</bold>
+						</font>
+					</property>
+					<property name="text">
+						<string>Bin Settings:</string>
+					</property>
+				</widget>
+			</item>
+			<item row="6" column="0">
+				<widget class="QLabel" name="lBinCount">
+					<property name="text">
+						<string>Bins</string>
+					</property>
+				</widget>
+			</item>
+			<item row="6" column="2">
+				<widget class="QComboBox" name="cbBins"/>
+			</item>
+			<item row="7" column="2">
+				<widget class="QSpinBox" name="sbBins">
+					<property name="maximum">
+						<number>30</number>
+					</property>
+					<property name= "minimum">
+						<number>1</number>
+					</property>
+					<property name="value">
+						<number>10</number>
+					</property>
+				</widget>
+			</item>
+			<item row="8" column="0">
+				<widget class="QLabel" name="lHistogramColour">
+					<property name="text">
+						<string>Color</string>
+					</property>
+				</widget>
+			</item>
+			<item row="8" column="2">
+				<widget class="KColorButton" name="kcbLineColor">
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item row="10" column="0">
+				<widget class="QLabel" name="lType">
+					<property name="text">
+						<string>Histogram type:</string>
+					</property>
+				</widget>
+			</item>
+			<item row="10" column="2">
+				<widget class="QComboBox" name="cbHistogramType"/>
+			</item>
+			<item row="11" column="0">
+				<spacer name="verticalSpacerHT">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+					<property name="sizeType">
+						<enum>QSizePolicy::Fixed</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>32</width>
+							<height>8</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+			<item row="12" column="0" colspan="3">
+				<widget class="Line" name="line_2">
+					<property name="orientation">
+						<enum>Qt::Horizontal</enum>
+					</property>
+				</widget>
+			</item>
+			<item row="13" column="0">
+				<widget class="QLabel" name="lBinSettings">
+					<property name="font">
+						<font>
+							<weight>75</weight>
+							<bold>true</bold>
+						</font>
+					</property>
+					<property name="text">
+						<string>Bars Settings:</string>
+					</property>
+				</widget>
+			</item>
+			<item row="14" column="0">
+				<widget class="QLabel" name="lHistogramOrientation">
+					<property name="text">
+						<string>Bars type:</string>
+					</property>
+				</widget>
+			</item>
+			<item row="14" column="2">
+				<widget class="QComboBox" name="cbHistogramOrientation"/>
+			</item>
+			<item row="16" column="0">
+				<spacer name="verticalSpacerHT">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+					<property name="sizeType">
+						<enum>QSizePolicy::Fixed</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>32</width>
+							<height>8</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+			<item row="17" column="0" colspan="3">
+				<widget class="Line" name="line_2">
+					<property name="orientation">
+						<enum>Qt::Horizontal</enum>
+					</property>
+				</widget>
+			</item>
+			<item row="18" column="0">
+				<spacer name="verticalSpacerGeneral">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+					<property name="sizeType">
+						<enum>QSizePolicy::MinimumExpanding</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>24</width>
+							<height>18</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+			<item row="19" column="0">
+				<widget class="QCheckBox" name="chkVisible">
+					<property name="text">
+						<string>visible</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<customwidgets>
+		<customwidget>
+			<class>KColorButton</class>
+			<extends>QPushButton</extends>
+			<header>kcolorbutton.h</header>
+		</customwidget>
+	</customwidgets>
+	<resources/>
+	<connections/>
 </ui>

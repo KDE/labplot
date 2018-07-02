@@ -47,7 +47,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>File name</string>
+         <string>File name:</string>
         </property>
        </widget>
       </item>
@@ -119,13 +119,6 @@
         </property>
        </spacer>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Name</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="2">
        <widget class="QLineEdit" name="leName">
         <property name="enabled">
@@ -142,7 +135,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Author</string>
+         <string>Author:</string>
         </property>
        </widget>
       </item>
@@ -152,7 +145,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Created</string>
+         <string>Created:</string>
         </property>
        </widget>
       </item>
@@ -172,7 +165,7 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Last modified</string>
+         <string>Last modified:</string>
         </property>
        </widget>
       </item>
@@ -192,7 +185,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Notes</string>
+         <string>Notes:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -203,6 +196,13 @@
        <widget class="QTextBrowser" name="tbComment">
         <property name="readOnly">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Name:</string>
         </property>
        </widget>
       </item>

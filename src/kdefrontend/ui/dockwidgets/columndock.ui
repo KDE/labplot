@@ -14,7 +14,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Name</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
@@ -24,7 +24,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment</string>
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
@@ -63,14 +63,14 @@
       </font>
      </property>
      <property name="text">
-      <string>Format:</string>
+      <string>Format</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Data Type</string>
+      <string>Data type:</string>
      </property>
     </widget>
    </item>
@@ -80,7 +80,7 @@
    <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="lFormat">
      <property name="text">
-      <string>Format Type</string>
+      <string>Format type:</string>
      </property>
     </widget>
    </item>
@@ -90,7 +90,7 @@
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="lPrecision">
      <property name="text">
-      <string>Precision</string>
+      <string>Precision:</string>
      </property>
     </widget>
    </item>
@@ -120,7 +120,7 @@
    <item row="8" column="0" colspan="2">
     <widget class="QLabel" name="lPlotDesignation">
      <property name="text">
-      <string>Plot designation</string>
+      <string>Plot designation:</string>
      </property>
     </widget>
    </item>

@@ -32,7 +32,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lConnection">
         <property name="text">
-         <string>Connection</string>
+         <string>Connection:</string>
         </property>
        </widget>
       </item>
@@ -62,7 +62,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lImportFrom">
         <property name="text">
-         <string>Import from</string>
+         <string>Import from:</string>
         </property>
        </widget>
       </item>
@@ -88,14 +88,14 @@
       <item row="3" column="0">
        <widget class="QLabel" name="lNumberFormat">
         <property name="text">
-         <string>Number format</string>
+         <string>Number format:</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="lDateTimeFormat">
         <property name="text">
-         <string>DateTime format</string>
+         <string>DateTime format:</string>
         </property>
        </widget>
       </item>

@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : File data source
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,8 +33,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 
-#include <QSerialPort>
 #include <QtNetwork/QLocalSocket>
+#include <QSerialPort>
 #include <QTimer>
 
 class QString;
@@ -47,27 +48,29 @@ class QFile;
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
 	Q_ENUMS(FileType)
+	Q_ENUMS(SourceType)
+	Q_ENUMS(UpdateType)
+	Q_ENUMS(ReadingType)
 
 public:
-	enum FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, Json};
 	enum SourceType {
-		FileOrPipe = 0,
-		NetworkTcpSocket,
-		NetworkUdpSocket,
-		LocalSocket,
-		SerialPort
+		FileOrPipe = 0,		// regular file or pipe
+		NetworkTcpSocket,	// TCP socket
+		NetworkUdpSocket,	// UDP socket
+		LocalSocket,		// local socket
+		SerialPort		// serial port
 	};
 
 	enum UpdateType {
-		TimeInterval = 0,
-		NewData
+		TimeInterval = 0,	// update periodically using given interval
+		NewData			// update when new data is available
 	};
 
 	enum ReadingType {
-		ContinuousFixed = 0,
-		FromEnd,
-		TillEnd,
-		WholeFile
+		ContinuousFixed = 0,	// read fixed number of samples (aka lines) using given sample size
+		FromEnd,		// read from end, from line lastLine-sampleRate sampleRate number of lines
+		TillEnd,		// read until the end
+		WholeFile		// reread whole file
 	};
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
@@ -78,11 +81,8 @@ public:
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
 
-	static QStringList fileTypes();
-	static QString fileInfoString(const QString&);
-
-	void setFileType(const FileType);
-	FileType fileType() const;
+	void setFileType(const AbstractFileFilter::FileType);
+	AbstractFileFilter::FileType fileType() const;
 
 	UpdateType updateType() const;
 	void setUpdateType(UpdateType);
@@ -93,8 +93,8 @@ public:
 	ReadingType readingType() const;
 	void setReadingType(ReadingType);
 
-	int sampleRate() const;
-	void setSampleRate(int);
+	int sampleSize() const;
+	void setSampleSize(int);
 
 	void setBytesRead(qint64 bytes);
 	int bytesRead() const;
@@ -116,8 +116,8 @@ public:
 	void setUpdateInterval(int);
 	int updateInterval() const;
 
-	void setKeepNvalues(int);
-	int keepNvalues() const;
+	void setKeepNValues(int);
+	int keepNValues() const;
 
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
@@ -157,7 +157,7 @@ private:
 	QString m_localSocketName;
 	QString m_host;
 
-	FileType m_fileType;
+	AbstractFileFilter::FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
 	ReadingType m_readingType;
@@ -166,10 +166,9 @@ private:
 	bool m_fileLinked;
 	bool m_paused;
 	bool m_prepared;
-	bool m_keepLastValues;
 
-	int m_sampleRate;
-	int m_keepNvalues;
+	int m_sampleSize;
+	int m_keepNValues;	// number of values to keep (0 - all)
 	int m_updateInterval;
 	quint16 m_port;
 	int m_baudRate;

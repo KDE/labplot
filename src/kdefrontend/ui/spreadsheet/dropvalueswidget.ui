@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="lMode">
      <property name="text">
-      <string>Drop values</string>
+      <string>Drop values:</string>
      </property>
     </widget>
    </item>

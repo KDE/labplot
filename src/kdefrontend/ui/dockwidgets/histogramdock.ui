@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -38,14 +38,14 @@
           </font>
          </property>
          <property name="text">
-          <string>General:</string>
+          <string>General</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lValuesPosition_2">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -78,14 +78,14 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lValuesColumn">
          <property name="text">
-          <string>Dataset</string>
+          <string>Dataset:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lValuesPosition">
          <property name="text">
-          <string>Position</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
@@ -95,7 +95,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lValuesDistance">
          <property name="text">
-          <string>Distance</string>
+          <string>Distance:</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -115,7 +115,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lValuesRotation">
          <property name="text">
-          <string>Rotation</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
@@ -144,7 +144,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lValuesOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -201,14 +201,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Format:</string>
+          <string>Format</string>
          </property>
         </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lValuesFormat">
          <property name="text">
-          <string>Format</string>
+          <string>Format:</string>
          </property>
         </widget>
        </item>
@@ -218,7 +218,7 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lValuesPrecision">
          <property name="text">
-          <string>Precision</string>
+          <string>Precision:</string>
          </property>
         </widget>
        </item>
@@ -266,14 +266,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Text:</string>
+          <string>Text</string>
          </property>
         </widget>
        </item>
        <item row="13" column="0">
         <widget class="QLabel" name="lValuesPrefix">
          <property name="text">
-          <string>Prefix</string>
+          <string>Prefix:</string>
          </property>
         </widget>
        </item>
@@ -290,7 +290,7 @@
        <item row="14" column="0">
         <widget class="QLabel" name="lValuesSuffix">
          <property name="text">
-          <string>Suffix</string>
+          <string>Suffix:</string>
          </property>
         </widget>
        </item>
@@ -307,17 +307,17 @@
        <item row="15" column="0">
         <widget class="QLabel" name="lValuesFont">
          <property name="text">
-          <string>Font</string>
+          <string>Font:</string>
          </property>
         </widget>
        </item>
        <item row="15" column="2">
-        <widget class="KFontRequester" name="kfrValuesFont" native="true"/>
+        <widget class="KFontRequester" name="kfrValuesFont"/>
        </item>
        <item row="16" column="0">
         <widget class="QLabel" name="lValuesColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -354,7 +354,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="lFillingPosition">
          <property name="text">
-          <string>Direction</string>
+          <string>Direction:</string>
          </property>
         </widget>
        </item>
@@ -387,7 +387,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lFillingType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -404,7 +404,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lFillingFileName">
          <property name="text">
-          <string>File name</string>
+          <string>File name:</string>
          </property>
         </widget>
        </item>
@@ -437,7 +437,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lFillingColorStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -447,7 +447,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lFillingImageStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -457,7 +457,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lFillingBrushStyle">
          <property name="text">
-          <string>Style</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
@@ -467,7 +467,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lFillingFirstColor">
          <property name="text">
-          <string>First color</string>
+          <string>First color:</string>
          </property>
         </widget>
        </item>
@@ -477,7 +477,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lFillingSecondColor">
          <property name="text">
-          <string>Second color</string>
+          <string>Second color:</string>
          </property>
         </widget>
        </item>
@@ -487,7 +487,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="lFillingOpacity">
          <property name="text">
-          <string>Opacity</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>

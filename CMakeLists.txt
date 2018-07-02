@@ -33,6 +33,8 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	XmlGui
 OPTIONAL_COMPONENTS
 	NewStuff
+	Service
+	Parts
 	SyntaxHighlighting
 )
 IF (Qt5SerialPort_FOUND)
@@ -138,6 +140,7 @@ option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
 option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
+option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 
 ### OS macros ####################################
@@ -169,7 +172,7 @@ FIND_PATH (CANTOR_INCLUDE_DIR cantor/worksheetaccess.h
 	/usr/include
 	/usr/local/include
 )
-IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR AND KF5Service_FOUND AND KF5Parts_FOUND)
 	SET (CANTOR_LIBS_FOUND TRUE)
 ELSE ()
 	SET (CANTOR_LIBS_FOUND FALSE)
@@ -304,6 +307,32 @@ ELSE ()
 ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "libcerf Library DISABLED.")
+ENDIF ()
+
+IF (ENABLE_ROOT)
+FIND_PACKAGE(ZLIB)
+FIND_LIBRARY(LZ4_LIBRARY lz4
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (LZ4_INCLUDE_DIR lz4.h
+	/usr/include
+	/usr/local/include
+)
+IF (LZ4_LIBRARY AND LZ4_INCLUDE_DIR)
+	SET (LZ4_FOUND TRUE)
+	MESSAGE (STATUS "Found LZ4 library: ${LZ4_INCLUDE_DIR} ${LZ4_LIBRARY}")
+ELSE ()
+	SET (LZ4_FOUND FALSE)
+ENDIF ()
+IF (ZLIB_FOUND AND LZ4_FOUND)
+	add_definitions (-DHAVE_ZIP)
+ELSE ()
+	MESSAGE (STATUS "ZIP libraries not found.")
+ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "ROOT (CERN) importer DISABLED.")
 ENDIF ()
 
 #################################################

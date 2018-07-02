@@ -26,6 +26,7 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #include "LiveDataDock.h"
 #include <KLocalizedString>
+#include <QStandardItemModel>
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent), m_paused(false) {
@@ -37,8 +38,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
-	connect(ui.leKeepNValues, &QLineEdit::textChanged, this, &LiveDataDock::keepNvaluesChanged);
-	connect(ui.sbSampleRate, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleRateChanged);
+	connect(ui.sbKeepNValues, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
+	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
 	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
@@ -64,52 +65,37 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	}
 
 	if (fds->isPaused()) {
-		ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
-		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setText(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	if(!fds->keepLastValues()) {
-		ui.leKeepNValues->hide();
-		ui.lKeepNvalues->hide();
-	} else {
-		ui.leKeepNValues->setValidator(new QIntValidator(2, 100000));
-		ui.leKeepNValues->setText(QString::number(fds->keepNvalues()));
-	}
+	ui.sbKeepNValues->setValue(fds->keepNValues());
 
-    if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe) {
-        int itemIdx = -1;
-        for (int i = 0; i < ui.cbReadingType->count(); ++i) {
-            if (ui.cbReadingType->itemText(i) == QLatin1String("Read whole file")) {
-                itemIdx = i;
-                break;
-            }
-        }
-        if (itemIdx != -1) {
-            ui.cbReadingType->removeItem(itemIdx);
-        }
-    }
+	// disable "whole file" when having no file (i.e. socket or port)
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (fds->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	else
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
-    } else if (fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
-        ui.lSampleRate->hide();
-        ui.sbSampleRate->hide();
-
-    } else
-		ui.sbSampleRate->setValue(fds->sampleRate());
+	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
+	} else
+		ui.sbSampleSize->setValue(fds->sampleSize());
 }
 
 /*!
  * \brief Modifies the sample rate of the live data sources
  * \param sampleRate
  */
-void LiveDataDock::sampleRateChanged(int sampleRate) {
+void LiveDataDock::sampleSizeChanged(int sampleSize) {
 	for (auto* source : m_liveDataSources)
-		source->setSampleRate(sampleRate);
+		source->setSampleSize(sampleSize);
 }
 
 /*!
@@ -125,9 +111,11 @@ void LiveDataDock::updateNow() {
  * \param idx
  */
 void LiveDataDock::updateTypeChanged(int idx) {
+	DEBUG("LiveDataDock::updateTypeChanged()");
 	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
 
-	if (type == LiveDataSource::UpdateType::TimeInterval) {
+	switch (type) {
+	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
 
@@ -136,7 +124,8 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			source->setUpdateInterval(ui.sbUpdateInterval->value());
 			source->setFileWatched(false);
 		}
-	} else if (type == LiveDataSource::UpdateType::NewData) {
+		break;
+	case LiveDataSource::UpdateType::NewData:
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 
@@ -155,11 +144,11 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 
 	if (type == LiveDataSource::ReadingType::TillEnd) {
-		ui.lSampleRate->hide();
-		ui.sbSampleRate->hide();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	} else {
-		ui.lSampleRate->show();
-		ui.sbSampleRate->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 	}
 
 	for (auto* source : m_liveDataSources)
@@ -179,9 +168,9 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
  * \brief Modifies the number of samples to keep in each of the live data sources
  * \param keepNvalues
  */
-void LiveDataDock::keepNvaluesChanged(const QString& keepNvalues) {
+void LiveDataDock::keepNValuesChanged(const int keepNValues) {
 	for (auto* source : m_liveDataSources)
-		source->setKeepNvalues(keepNvalues.toInt());
+		source->setKeepNValues(keepNValues);
 }
 
 /*!
@@ -208,11 +197,11 @@ void LiveDataDock::pauseContinueReading() {
 
 	if (m_paused) {
 		pauseReading();
-		ui.bPausePlayReading->setText(i18n("Continue reading"));
+		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
 		continueReading();
-		ui.bPausePlayReading->setText(i18n("Pause reading"));
+		ui.bPausePlayReading->setText(i18n("Pause Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }

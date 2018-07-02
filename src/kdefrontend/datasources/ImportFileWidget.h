@@ -42,7 +42,7 @@ class ImageOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
 class JsonOptionsWidget;
-
+class ROOTOptionsWidget;
 class QTableWidget;
 
 class ImportFileWidget : public QWidget {
@@ -54,7 +54,7 @@ public:
 
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;
-	LiveDataSource::FileType currentFileType() const;
+	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
@@ -63,14 +63,15 @@ public:
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
+	const QStringList selectedROOTNames() const;
 	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 	void showJsonModel(bool);
 
 	QString host() const;
 	QString port() const;
-    QString serialPort() const;
-    int baudRate() const;
+	QString serialPort() const;
+	int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
 
 private:
@@ -83,6 +84,8 @@ private:
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
+	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
+
 	QTableWidget* m_twPreview;
 	const QString& m_fileName;
 	bool m_fileEmpty;
@@ -111,12 +114,14 @@ signals:
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
+	void previewRefreshed();
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
+	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
 };
 
 #endif

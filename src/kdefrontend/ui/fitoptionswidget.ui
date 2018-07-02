@@ -67,7 +67,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lEps">
         <property name="text">
-         <string>Tolerance</string>
+         <string>Tolerance:</string>
         </property>
        </widget>
       </item>
@@ -77,14 +77,14 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Robust fit</string>
+         <string>Robust fit:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lMaxIterations">
         <property name="text">
-         <string>Max. iterations</string>
+         <string>Max. iterations:</string>
         </property>
        </widget>
       </item>
@@ -98,7 +98,7 @@
       <item row="9" column="0" colspan="3">
        <widget class="QCheckBox" name="cbUseDataErrors">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This option can be used to turn on and off the usage of given data errors when fitting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>This option can be used to turn on and off the usage of given data errors when fitting.</string>
         </property>
         <property name="text">
          <string>Use given data errors</string>
@@ -148,7 +148,7 @@
       <item row="10" column="0" colspan="3">
        <widget class="QCheckBox" name="cbUseResults">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If selected, the resulting fit parameter are set as new start values. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>If selected, the resulting fit parameter are set as new start values.</string>
         </property>
         <property name="text">
          <string>Use results as new start values</string>
@@ -161,14 +161,14 @@
       <item row="3" column="0">
        <widget class="QLabel" name="lEvaluatedPoints">
         <property name="text">
-         <string>Evaluated points</string>
+         <string>Evaluated points:</string>
         </property>
        </widget>
       </item>
       <item row="6" column="0" colspan="3">
        <widget class="QCheckBox" name="cbAutoEvalRange">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If selected, the fit function is evaluated for the full range of data points and not only for the given x-range.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>If selected, the fit function is evaluated for the full range of data points and not only for the given x-range.</string>
         </property>
         <property name="text">
          <string>Auto evaluation range</string>

@@ -1,3 +1,8 @@
+-----2.6-----
+New features:
+	* Support import of ROOT (CERN) TH1 histograms
+Bug fixes:
+	* Fixed several problems in live data support (in progress)
 -----2.5-----
 New features:
 	* Support for reading and plotting of live-data

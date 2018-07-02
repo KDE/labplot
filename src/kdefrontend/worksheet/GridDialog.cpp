@@ -52,7 +52,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	QWidget* widget = new QWidget;
 	QGridLayout* layout = new QGridLayout(widget);
 
-	QLabel* label = new QLabel(i18n("Style"), widget);
+	QLabel* label = new QLabel(i18n("Style:"), widget);
 	layout->addWidget(label, 0, 0);
 
 	cbStyle = new QComboBox(this);
@@ -61,7 +61,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	cbStyle->setCurrentIndex(0);
 	layout->addWidget(cbStyle, 0, 1);
 
-	label = new QLabel(i18n("Horizontal spacing"), widget);
+	label = new QLabel(i18n("Horizontal spacing:"), widget);
 	layout->addWidget(label, 1, 0);
 
 	sbHorizontalSpacing = new QSpinBox(widget);
@@ -69,7 +69,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	sbHorizontalSpacing->setValue(10);
 	layout->addWidget(sbHorizontalSpacing, 1, 1);
 
-	label = new QLabel(i18n("Vertical spacing"), widget);
+	label = new QLabel(i18n("Vertical spacing:"), widget);
 	layout->addWidget(label, 2, 0);
 
 	sbVerticalSpacing = new QSpinBox(widget);
@@ -77,14 +77,14 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	sbVerticalSpacing->setValue(10);
 	layout->addWidget(sbVerticalSpacing, 2, 1);
 
-	label = new QLabel(i18n("Color"), widget);
+	label = new QLabel(i18n("Color:"), widget);
 	layout->addWidget(label, 3, 0);
 
 	kcbColor = new KColorButton(widget);
 	kcbColor->setColor(Qt::gray);
 	layout->addWidget(kcbColor , 3, 1);
 
-	label = new QLabel(i18n("Opacity"), widget);
+	label = new QLabel(i18n("Opacity:"), widget);
 	layout->addWidget(label, 4, 0);
 
 	sbOpacity = new QSpinBox(widget);
@@ -92,7 +92,7 @@ GridDialog::GridDialog(QWidget* parent) : QDialog(parent){
 	sbOpacity->setValue(100);
 	layout->addWidget(sbOpacity, 4, 1);
 
-	label = new QLabel("%", widget);
+	label = new QLabel(i18n(" %"), widget);
 	layout->addWidget(label, 4, 2);
 
 

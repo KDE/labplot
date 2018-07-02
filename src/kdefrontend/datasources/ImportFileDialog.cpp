@@ -34,6 +34,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
+#include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
@@ -114,6 +115,7 @@ void ImportFileDialog::loadSettings() {
 	connect(m_importFileWidget, SIGNAL(sourceTypeChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(hostChanged()), this, SLOT(checkOkButton()));
 	connect(m_importFileWidget, SIGNAL(portChanged()), this, SLOT(checkOkButton()));
+	connect(m_importFileWidget, SIGNAL(previewRefreshed()), this, SLOT(checkOkButton()));
 	connect(m_optionsButton, SIGNAL(clicked()), this, SLOT(toggleOptions()));
 
 	checkOkButton();
@@ -135,6 +137,7 @@ ImportFileDialog::~ImportFileDialog() {
   triggers data import to the live data source \c source
 */
 void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
+	DEBUG("ImportFileDialog::importToLiveDataSource()");
 	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
@@ -148,6 +151,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	QTime timer;
 	timer.start();
+	DEBUG("	Inital read()");
 	source->read();
 	statusBar->showMessage( i18n("Live data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 
@@ -205,17 +209,31 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QVector<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
-		QStringList names;
-		LiveDataSource::FileType fileType = m_importFileWidget->currentFileType();
-		if (fileType == LiveDataSource::HDF5)
-			names = m_importFileWidget->selectedHDF5Names();
-		else if (fileType == LiveDataSource::NETCDF)
-			names = m_importFileWidget->selectedNetCDFNames();
+		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
+		// multiple data sets/variables for HDF5, NetCDF and ROOT
+		if (fileType == AbstractFileFilter::HDF5 ||
+			fileType == AbstractFileFilter::NETCDF ||
+			fileType == AbstractFileFilter::ROOT) {
+			QStringList names;
+			switch (fileType) {
+				case AbstractFileFilter::HDF5:
+					names = m_importFileWidget->selectedHDF5Names();
+					break;
+				case AbstractFileFilter::NETCDF:
+					names = m_importFileWidget->selectedNetCDFNames();
+					break;
+				case AbstractFileFilter::ROOT:
+					names = m_importFileWidget->selectedROOTNames();
+					break;
+				case AbstractFileFilter::Ascii:
+				case AbstractFileFilter::Binary:
+				case AbstractFileFilter::Image:
+				case AbstractFileFilter::FITS:
+				case AbstractFileFilter::Json:
+				case AbstractFileFilter::NgspiceRawAscii:
+					break; // never reached, omit warning
+			}
 
-		//multiple extensions selected
-
-		// multiple data sets/variables for HDF5/NetCDF
-		if (fileType == LiveDataSource::HDF5 || fileType == LiveDataSource::NETCDF) {
 			int nrNames = names.size(), offset = sheets.size();
 
 			int start=0;
@@ -237,10 +255,24 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
-				if (fileType == LiveDataSource::HDF5)
-					((HDF5Filter*) filter)->setCurrentDataSetName(names[i]);
-				else
-					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
+				switch (fileType) {
+					case AbstractFileFilter::HDF5:
+						((HDF5Filter*) filter)->setCurrentDataSetName(names[i]);
+						break;
+					case AbstractFileFilter::NETCDF:
+						((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
+						break;
+					case AbstractFileFilter::ROOT:
+						((ROOTFilter*) filter)->setCurrentHistogram(names[i]);
+						break;
+					case AbstractFileFilter::Ascii:
+					case AbstractFileFilter::Binary:
+					case AbstractFileFilter::Image:
+					case AbstractFileFilter::FITS:
+					case AbstractFileFilter::Json:
+					case AbstractFileFilter::NgspiceRawAscii:
+						break; // never reached, omit warning
+				}
 
 				if (sheets[i+offset]->inherits("Matrix"))
 					filter->readDataFromFile(fileName, qobject_cast<Matrix*>(sheets[i+offset]));
@@ -326,7 +358,7 @@ void ImportFileDialog::checkOkButton() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-
+	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
 		DEBUG("fileName = " << fileName.toUtf8().constData());
@@ -340,7 +372,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::LocalSocket: {
-		DEBUG("	Local Socket");
 		const bool enable = QFile::exists(fileName);
 		if (enable) {
 			QLocalSocket lsocket{this};
@@ -369,7 +400,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkTcpSocket: {
-		DEBUG("	TCP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket socket(this);
@@ -390,7 +420,6 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::NetworkUdpSocket: {
-		DEBUG("	UDP Socket");
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);

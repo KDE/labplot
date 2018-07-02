@@ -38,7 +38,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Data source</string>
+      <string>Data Source</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="2">
@@ -73,7 +73,7 @@
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="lSourceType">
         <property name="text">
-         <string>Source</string>
+         <string>Source:</string>
         </property>
        </widget>
       </item>
@@ -122,7 +122,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lHost">
         <property name="text">
-         <string>Host</string>
+         <string>Host:</string>
         </property>
        </widget>
       </item>
@@ -139,7 +139,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="lFileType">
         <property name="text">
-         <string>Type</string>
+         <string>Type:</string>
         </property>
        </widget>
       </item>
@@ -162,14 +162,14 @@
       <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="lFileName">
         <property name="text">
-         <string>Name</string>
+         <string>Name:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lPort">
         <property name="text">
-         <string>Port</string>
+         <string>Port:</string>
         </property>
        </widget>
       </item>
@@ -186,7 +186,7 @@
       <item row="8" column="0">
        <widget class="QLabel" name="lFilter">
         <property name="text">
-         <string>Filter</string>
+         <string>Filter:</string>
         </property>
        </widget>
       </item>
@@ -260,7 +260,7 @@
       <item row="5" column="0" colspan="2">
        <widget class="QLabel" name="lBaudRate">
         <property name="text">
-         <string>Baud rate</string>
+         <string>Baud rate:</string>
         </property>
        </widget>
       </item>
@@ -283,7 +283,7 @@
       <item row="10" column="0">
        <widget class="QLabel" name="lField">
         <property name="text">
-         <string>Field</string>
+         <string>Field:</string>
         </property>
        </widget>
       </item>
@@ -617,7 +617,63 @@
       <string>Update Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="1">
+      <item row="3" column="0">
+       <widget class="QLabel" name="lUpdateInterval">
+        <property name="text">
+         <string>Update interval:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="sbUpdateInterval">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="suffix">
+         <string> ms</string>
+        </property>
+        <property name="minimum">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="sbSampleSize">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lSampleSize">
+        <property name="text">
+         <string>Sample rate:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lReadingType">
+        <property name="text">
+         <string>Read:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QComboBox" name="cbUpdateType">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -632,12 +688,12 @@
         </item>
         <item>
          <property name="text">
-          <string>On new data</string>
+          <string>On New Data</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="8" column="0" colspan="2">
+      <item row="10" column="0" colspan="2">
        <widget class="QCheckBox" name="chbLinkFile">
         <property name="toolTip">
          <string>If this option is checked, only the link to the file is stored in the project file but not it's content.</string>
@@ -650,99 +706,46 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lReadType">
-        <property name="text">
-         <string>Read</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="lKeepLastValues">
         <property name="text">
-         <string>Keep last N values</string>
+         <string>Keep last values:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="lUpdateType">
         <property name="text">
-         <string>Update</string>
+         <string>Update:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lSampleRate">
-        <property name="text">
-         <string>Sample rate</string>
-        </property>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cbReadingType">
+        <item>
+         <property name="text">
+          <string>Continuously Fixed</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>From End</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Till the End</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QSpinBox" name="sbSampleRate">
-        <property name="minimum">
-         <number>1</number>
+      <item row="8" column="1">
+       <widget class="QSpinBox" name="sbKeepNValues">
+        <property name="specialValueText">
+         <string>All</string>
         </property>
         <property name="maximum">
-         <number>10000</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="cbReadType">
-        <item>
-         <property name="text">
-          <string>Continuously fixed</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>From end</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Till the end</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lUpdateInterval">
-        <property name="text">
-         <string>Update interval</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="leKeepLastValues"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="sbUpdateInterval">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>60000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="lUpdateIntervalUnit">
-        <property name="text">
-         <string>ms</string>
+         <number>999999</number>
         </property>
        </widget>
       </item>

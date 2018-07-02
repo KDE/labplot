@@ -36,7 +36,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lName">
         <property name="text">
-         <string>Name</string>
+         <string>Name:</string>
         </property>
        </widget>
       </item>
@@ -46,7 +46,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lDriver">
         <property name="text">
-         <string>Driver</string>
+         <string>Driver:</string>
         </property>
        </widget>
       </item>
@@ -56,7 +56,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lHost">
         <property name="text">
-         <string>Host</string>
+         <string>Host:</string>
         </property>
        </widget>
       </item>
@@ -70,7 +70,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="lPort">
         <property name="text">
-         <string>Port</string>
+         <string>Port:</string>
         </property>
        </widget>
       </item>
@@ -90,7 +90,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="lDatabase">
         <property name="text">
-         <string>Database</string>
+         <string>Database:</string>
         </property>
        </widget>
       </item>
@@ -139,7 +139,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lUserName">
         <property name="text">
-         <string>User</string>
+         <string>User:</string>
         </property>
        </widget>
       </item>
@@ -153,7 +153,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lPassword">
         <property name="text">
-         <string>Password</string>
+         <string>Password:</string>
         </property>
        </widget>
       </item>

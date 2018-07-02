@@ -33,6 +33,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -107,6 +108,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
@@ -141,6 +143,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
@@ -202,8 +205,10 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/NgspiceRawAsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
+	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp
@@ -347,7 +352,7 @@ ENDIF ()
 #TODO: KF5::NewStuff
 
 IF (CANTOR_LIBS_FOUND)
-	target_link_libraries( labplot2lib ${CANTOR_LIBS} )
+	target_link_libraries( labplot2lib ${CANTOR_LIBS} KF5::Service KF5::Parts)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
@@ -363,6 +368,9 @@ IF (CFITSIO_FOUND)
 ENDIF ()
 IF (LIBCERF_FOUND)
 	target_link_libraries( labplot2lib ${LIBCERF_LIBRARY} )
+ENDIF ()
+IF (ZLIB_FOUND AND LZ4_FOUND)
+	target_link_libraries( labplot2lib ${ZLIB_LIBRARY} ${LZ4_LIBRARY} )
 ENDIF ()
 IF (ENABLE_LIBORIGIN)
 	target_link_libraries( labplot2lib liborigin-static )

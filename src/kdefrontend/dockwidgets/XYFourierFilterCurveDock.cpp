@@ -369,7 +369,7 @@ void XYFourierFilterCurveDock::typeChanged() {
 	switch (type) {
 	case nsl_filter_type_low_pass:
 	case nsl_filter_type_high_pass:
-		uiGeneralTab.lCutoff->setText(i18n("Cutoff"));
+		uiGeneralTab.lCutoff->setText(i18n("Cutoff:"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
 		uiGeneralTab.cbUnit2->setVisible(false);
@@ -377,14 +377,14 @@ void XYFourierFilterCurveDock::typeChanged() {
 	case nsl_filter_type_band_pass:
 	case nsl_filter_type_band_reject:
 		uiGeneralTab.lCutoff2->setVisible(true);
-		uiGeneralTab.lCutoff->setText(i18n("Lower Cutoff"));
-		uiGeneralTab.lCutoff2->setText(i18n("Upper Cutoff"));
+		uiGeneralTab.lCutoff->setText(i18n("Lower cutoff:"));
+		uiGeneralTab.lCutoff2->setText(i18n("Upper cutoff:"));
 		uiGeneralTab.sbCutoff2->setVisible(true);
 		uiGeneralTab.cbUnit2->setVisible(true);
 		break;
 //TODO
 /*	case nsl_filter_type_threshold:
-		uiGeneralTab.lCutoff->setText(i18n("Value"));
+		uiGeneralTab.lCutoff->setText(i18n("Value:"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
 		uiGeneralTab.cbUnit2->setVisible(false);
@@ -592,7 +592,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Fourier-Filter status: ") + m_filterCurve->filterResult().status);
+	emit info(i18n("Fourier-Filter status: %1", m_filterCurve->filterResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
