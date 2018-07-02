@@ -242,13 +242,13 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
             return QString("%1").arg(item->value());
         }
 	} else if (role == Qt::DecorationRole) {
-		//TODO: add icons for array and object
-		if (item->type() == QJsonValue::Array)
-			return QIcon::fromTheme("labplot-json-array");
-		else if (item->type() == QJsonValue::Object)
-			return QIcon::fromTheme("labplot-json-object");
-		else
-			return QIcon();
+		if (index.column() == 0) {
+			if (item->type() == QJsonValue::Array)
+				return QIcon::fromTheme("labplot-json-array");
+			else if (item->type() == QJsonValue::Object)
+				return QIcon::fromTheme("labplot-json-object");
+		}
+		return QIcon();
 	}
 
     return QVariant();
