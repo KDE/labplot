@@ -2213,6 +2213,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
 										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
 								qDebug()<< "overwrite row "<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
+								qDebug()<<static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
@@ -2239,9 +2240,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
 										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
 								qDebug()<< "overwrite row"<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
+								qDebug()<<static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++){
-								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = 0;
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = 0;
 								qDebug()<<i<<"row = null";
 							}
 
@@ -2365,6 +2367,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	//new rows/resize columns if we don't have a fixed size
 	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
 	if (keepNValues == 0) {
+		qDebug()<<"---- keepNValues == 0";
+
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportResizing: ");
 #endif
