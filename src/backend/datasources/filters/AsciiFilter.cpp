@@ -2577,6 +2577,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 			//setting timestamp on current time
 			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) =  QDateTime::currentDateTime();
+			static_cast<QVector<int>*>(m_dataContainer[col+1])->operator[](currentRow) =  QDateTime::currentDateTime().time().msecsSinceStartOfDay();
 
 
 			QString valueString = line;
@@ -2672,6 +2673,9 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		endColumn = 1;
 	else endColumn++;
 
+	vectorNames.prepend("timestamp for plot");
+	endColumn++;
+
 	vectorNames.prepend("timestamp");
 	endColumn++;
 
@@ -2731,6 +2735,9 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 
 	//set column mode for timestamp
 	columnModes[col] = AbstractColumn::DateTime;
+	col++;
+
+	columnModes[col] = AbstractColumn::Integer;
 	col++;
 
 
