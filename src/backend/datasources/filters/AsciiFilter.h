@@ -47,6 +47,7 @@ public:
 	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 
+	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
 	static size_t lineNumber(QIODevice&);	// calculate number of lines if device supports it
