@@ -51,6 +51,7 @@ public:
 	void setNaNValueToZero(const bool);
 	bool NaNValueToZeroEnabled() const;
     void setCreateIndexEnabled(const bool);
+	void setParseRowsName(const bool);
 
 	void setVectorNames(const QString&);
 	QStringList vectorNames() const;

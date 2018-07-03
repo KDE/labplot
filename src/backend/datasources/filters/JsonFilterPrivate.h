@@ -13,7 +13,7 @@ public:
 	JsonFilterPrivate (JsonFilter* owner);
 
 	int checkRow(QJsonValueRef value, int &countCols);
-	int parseColumnModes(QJsonValue value);
+	int parseColumnModes(QJsonValue row, QString rowName = "");
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, QString value);
 
@@ -47,6 +47,7 @@ public:
 	QLocale::Language numberFormat;
 	double nanValue;
 	bool createIndexEnabled;
+	bool parseRowsName;
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 

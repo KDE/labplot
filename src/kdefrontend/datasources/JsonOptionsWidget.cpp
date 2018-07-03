@@ -35,6 +35,7 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
 	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
+	filter->setParseRowsName(ui.chbParseRowsName->isChecked());
 
 	//TODO: change this after implementation other row types
 	filter->setDataRowType(QJsonValue::Array);
@@ -55,6 +56,7 @@ void JsonOptionsWidget::loadSettings() const {
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));
+	ui.chbParseRowsName->setChecked(conf.readEntry("ParseRowsName", false));
 }
 
 void JsonOptionsWidget::saveSettings() {
@@ -64,6 +66,7 @@ void JsonOptionsWidget::saveSettings() {
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
+	conf.writeEntry("ParseRowsName", ui.chbParseRowsName->isChecked());
 }
 
 void JsonOptionsWidget::loadDocument(QString filename) {

@@ -135,6 +135,10 @@ void JsonFilter::setCreateIndexEnabled(bool b){
 	d->createIndexEnabled = b;
 }
 
+void JsonFilter::setParseRowsName(bool b) {
+	d->parseRowsName = b;
+}
+
 void JsonFilter::setVectorNames(const QString& s) {
 	d->vectorNames.clear();
 	if (!s.simplified().isEmpty())
@@ -185,6 +189,7 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	rowType(QJsonValue::Object),
 	numberFormat(QLocale::C),
 	createIndexEnabled(false),
+	parseRowsName(false),
 	vectorNames(),
 	startRow(1),
 	endRow(-1),
@@ -230,13 +235,17 @@ int JsonFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 /*!
 returns -1 if a parse error has occurred, 1 if the current row type not supported and 0 otherwise.
 */
-int JsonFilterPrivate::parseColumnModes(QJsonValue row) {
+int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 	columnModes.resize(m_actualCols);
 
 	int colIndexInContainer = startColumn - 1;
-	for(int i = 0; i < m_actualCols; i++){
-		if(createIndexEnabled && i == 0){
-			columnModes[i] = AbstractColumn::Integer;
+	for(int i = 0; i < m_actualCols; ++i){
+		if((createIndexEnabled || parseRowsName) && i == 0){
+			if(createIndexEnabled)
+				columnModes[i] = AbstractColumn::Integer;
+			if(parseRowsName)
+				columnModes[i + createIndexEnabled] = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
+			i = i + createIndexEnabled + parseRowsName - 1;
 			continue;
 		}
 
@@ -284,6 +293,8 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row) {
 		colIndexInContainer++;
 	}
 
+	if(parseRowsName)
+		vectorNames.prepend("row name");
 	if(createIndexEnabled)
 		vectorNames.prepend("index");
 
@@ -397,6 +408,9 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	int countRows = 0;
 	int countCols = -1;
 	QJsonValue firstRow;
+	QString firstRowName = "";
+	parseRowsName = parseRowsName && rowType == QJsonValue::Object;
+
 	switch(containerType) {
 		case JsonFilter::Array: {
 			QJsonArray arr = m_preparedDoc.array();
@@ -422,6 +436,7 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 			int startRowOffset = startRow - 1;
 			int endRowOffset = (endRow == -1 || endRow > obj.count()) ? obj.count() : endRow;
 			firstRow = *(obj.begin() + startRowOffset);
+			firstRowName = (obj.begin() + startRowOffset).key();
 			for(QJsonObject::iterator it = obj.begin() + startRowOffset; it != obj.begin() + endRowOffset; ++it) {
 				if(checkRow(*it, countCols) != 0)
 					return 2;
@@ -435,9 +450,9 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 		endColumn = countCols;
 
 	m_actualRows = countRows;
-	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled;
+	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled + parseRowsName;
 
-	if(parseColumnModes(firstRow) != 0)
+	if(parseColumnModes(firstRow, firstRowName) != 0)
 		return 2;
 
 	DEBUG("start/end column: = " << startColumn << ' ' << endColumn);
@@ -497,20 +512,26 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
+		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
 			case JsonFilter::Array:
 				row = *(m_preparedDoc.array().begin() + rowOffset + i);
 				break;
 			case JsonFilter::Object:
+				rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
 				row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				break;
 		}
 
 		int colIndex = 0;
 		for(int n = 0; n < m_actualCols; ++n) {
-			if(createIndexEnabled && n == 0) {
-				static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = i + 1;
+			if((createIndexEnabled || parseRowsName) && n == 0) {
+				if(createIndexEnabled)
+					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = i + 1;
+				if(parseRowsName)
+					setValueFromString(n + createIndexEnabled, i, rowName);
+				n = n + createIndexEnabled + parseRowsName - 1;
 				continue;
 			}
 			QJsonValue value;
@@ -596,9 +617,11 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 	int rowOffset = startRow - 1;
 	DEBUG("reading " << m_actualRows << " lines");
 	for(int i = 0; i < m_actualRows; ++i) {
+		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
 			case JsonFilter::Object:
+				rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
 				row = *(m_preparedDoc.object().begin() + rowOffset + i);
 				break;
 			case JsonFilter::Array:
@@ -609,10 +632,15 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 		QStringList lineString;
 		int colIndex = 0;
 		for(int n = 0; n < m_actualCols; ++n) {
-			if(createIndexEnabled && n == 0) {
-				lineString += QString::number(i + 1);
+			if((createIndexEnabled || parseRowsName) && n == 0) {
+				if(createIndexEnabled)
+					lineString += QString::number(i + 1);
+				if(parseRowsName)
+					lineString += rowName;
+				n = n + createIndexEnabled + parseRowsName - 1;
 				continue;
 			}
+
 			QJsonValue value;
 			switch(rowType){
 				case QJsonValue::Object: {
@@ -681,6 +709,7 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("dateTimeFormat", d->dateTimeFormat);
 	writer->writeAttribute("numberFormat", QString::number(d->numberFormat));
 	writer->writeAttribute("createIndex", QString::number(d->createIndexEnabled));
+	writer->writeAttribute("parseRowsName", QString::number(d->parseRowsName));
 	writer->writeAttribute("nanValue", QString::number(d->nanValue));
 	writer->writeAttribute("startRow", QString::number(d->startRow));
 	writer->writeAttribute("endRow", QString::number(d->endRow));
@@ -731,6 +760,12 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
 	else
 		d->createIndexEnabled = str.toInt();
+
+	str = attribs.value("parseRowsName").toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'parseRowsName'"));
+	else
+		d->parseRowsName = str.toInt();
 
 	str = attribs.value("nanValue").toString();
 	if (str.isEmpty())
