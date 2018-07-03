@@ -31,6 +31,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -177,7 +178,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			//TODO infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::NgspiceRawAscii:
-			//TODO infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
+			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
 			break;
 		}
 
