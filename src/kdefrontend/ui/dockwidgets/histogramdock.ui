@@ -439,7 +439,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_15">
        <item row="0" column="0">
-        <widget class="QLabel" name="lSymbol_3">
+        <widget class="QLabel" name="lSymbol">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -452,7 +452,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lSymbolStyle_3">
+        <widget class="QLabel" name="lSymbolStyle">
          <property name="text">
           <string>Style:</string>
          </property>
@@ -475,7 +475,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbSymbolStyle_3">
+        <widget class="KComboBox" name="cbSymbolStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -485,14 +485,14 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="lSymbolSize_3">
+        <widget class="QLabel" name="lSymbolSize">
          <property name="text">
           <string>Size:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QDoubleSpinBox" name="sbSymbolSize_3">
+        <widget class="QDoubleSpinBox" name="sbSymbolSize">
          <property name="prefix">
           <string/>
          </property>
@@ -505,14 +505,14 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="lSymbolRotation_3">
+        <widget class="QLabel" name="lSymbolRotation">
          <property name="text">
           <string>Rotation:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QSpinBox" name="sbSymbolRotation_3">
+        <widget class="QSpinBox" name="sbSymbolRotation">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -540,14 +540,14 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lSymbolOpacity_3">
+        <widget class="QLabel" name="lSymbolOpacity">
          <property name="text">
           <string>Opacity:</string>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QSpinBox" name="sbSymbolOpacity_3">
+        <widget class="QSpinBox" name="sbSymbolOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -591,7 +591,7 @@
         </spacer>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lSymbolFilling_3">
+        <widget class="QLabel" name="lSymbolFilling">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -604,24 +604,24 @@
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="lSymbolFillingStyle_3">
+        <widget class="QLabel" name="lSymbolFillingStyle">
          <property name="text">
           <string>Style:</string>
          </property>
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="KComboBox" name="cbSymbolFillingStyle_3"/>
+        <widget class="KComboBox" name="cbSymbolFillingStyle"/>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="lSymbolFillingColor_3">
+        <widget class="QLabel" name="lSymbolFillingColor">
          <property name="text">
           <string>Color:</string>
          </property>
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="KColorButton" name="kcbSymbolFillingColor_3">
+        <widget class="KColorButton" name="kcbSymbolFillingColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -647,7 +647,7 @@
         </spacer>
        </item>
        <item row="10" column="0">
-        <widget class="QLabel" name="lSymbolBorder_3">
+        <widget class="QLabel" name="lSymbolBorder">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -660,24 +660,24 @@
         </widget>
        </item>
        <item row="11" column="0">
-        <widget class="QLabel" name="lSymbolBorderStyle_3">
+        <widget class="QLabel" name="lSymbolBorderStyle">
          <property name="text">
           <string>Style:</string>
          </property>
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="KComboBox" name="cbSymbolBorderStyle_3"/>
+        <widget class="KComboBox" name="cbSymbolBorderStyle"/>
        </item>
        <item row="12" column="0">
-        <widget class="QLabel" name="lSymbolBorderColor_3">
+        <widget class="QLabel" name="lSymbolBorderColor">
          <property name="text">
           <string>Color:</string>
          </property>
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="KColorButton" name="kcbSymbolBorderColor_3">
+        <widget class="KColorButton" name="kcbSymbolBorderColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -687,14 +687,14 @@
         </widget>
        </item>
        <item row="13" column="0">
-        <widget class="QLabel" name="lSymbolBorderWidth_3">
+        <widget class="QLabel" name="lSymbolBorderWidth">
          <property name="text">
           <string>Width:</string>
          </property>
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="QDoubleSpinBox" name="sbSymbolBorderWidth_3">
+        <widget class="QDoubleSpinBox" name="sbSymbolBorderWidth">
          <property name="suffix">
           <string> pt</string>
          </property>
@@ -725,7 +725,7 @@
       <attribute name="title">
        <string>Values</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QLabel" name="lValuesGeneral">
          <property name="font">
@@ -747,7 +747,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <spacer name="horizontalSpacer_3">
+        <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
