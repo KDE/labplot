@@ -79,6 +79,27 @@ bool NgspiceRawAsciiFilter::isNgspiceAsciiFile(const QString& fileName) {
 	return true;
 }
 
+QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
+	QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		return QString();
+
+	QString info;
+	while (!file.atEnd()) {
+		QString line = file.readLine();
+		if (line.simplified() == QLatin1String("Values:"))
+			break;
+
+		if (!info.isEmpty())
+			info += QLatin1String("<br>");
+
+		info += line;
+	}
+
+	return info;
+}
+
+
 /*!
   reads the content of the file \c fileName.
 */

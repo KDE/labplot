@@ -41,6 +41,7 @@ public:
 	~NgspiceRawAsciiFilter() override;
 
 	static bool isNgspiceAsciiFile(const QString& fileName);
+	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;

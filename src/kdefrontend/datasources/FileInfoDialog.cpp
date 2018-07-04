@@ -31,6 +31,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -129,6 +130,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 
 	if (file->open(QIODevice::ReadOnly)) {
 		QStringList infoStrings;
+		infoStrings << "<u><b>" + fileName + "</b></u><br>";
 
 		// file type and type specific information about the file
 #ifdef Q_OS_LINUX
@@ -150,28 +152,38 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		infoStrings << i18n("File type: %1", fileTypeString);
 #endif
 
-		//TODO depending on the file type, generate additional information about the file:
-		//Number of lines for ASCII, color-depth for images etc. Use the specific filters here.
-		// port the old labplot1.6 code.
-		if( fileTypeString.contains("ASCII")) {
-			infoStrings << "<br/>";
-			//TODO: consider choosen separator
-			infoStrings << i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName));
-
-			infoStrings << i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+		//depending on the file type, generate additional information about the file:
+		infoStrings << "<br>";
+		AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
+		switch(fileType) {
+		case AbstractFileFilter::Ascii:
+			infoStrings << AsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::Binary:
+			//TODO infoStrings << BinaryFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::Image:
+			//TODO infoStrings << ImageFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::HDF5:
+			//TODO infoStrings << HDF5Filter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::NETCDF:
+			//TODO infoStrings << NETCDFFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FITS:
+			infoStrings << FITSFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::ROOT:
+			//TODO infoStrings << ROOTFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::NgspiceRawAscii:
+			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
+			break;
 		}
-		infoString += infoStrings.join("<br/>");
-
-#ifdef HAVE_FITS
-		if (fileName.endsWith(QLatin1String(".fits"))) {
-			infoStrings << i18n("Images: %1", QString::number(FITSFilter::imagesCount(fileName) ));
-			infoStrings << i18n("Tables: %1", QString::number(FITSFilter::tablesCount(fileName) ));
-		}
-#endif
 
 		//general information about the file
-		infoStrings << "<br><hline><br>";
-		infoStrings << "<u><b>" + fileName + "</b></u><br>";
+		infoStrings << "<br>";
 		fileInfo.setFile(fileName);
 
 		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
@@ -184,6 +196,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		infoStrings << i18n("Owner: %1", fileInfo.owner());
 		infoStrings << i18n("Group: %1", fileInfo.group());
 		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+		infoString += infoStrings.join("<br>");
 	} else
 		infoString += i18n("Could not open file %1 for reading.", fileName);
 

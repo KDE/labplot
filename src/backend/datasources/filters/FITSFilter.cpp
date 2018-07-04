@@ -247,15 +247,17 @@ void FITSFilter::setExportTo(const int exportTo) {
 	d->exportTo = exportTo;
 }
 
+QString FITSFilter::fileInfoString(const QString& fileName) {
+	const int imagesCount = FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+	QString info(i18n("Images: %1", QString::number(imagesCount )));
 
-int FITSFilter::imagesCount(const QString &fileName)  {
-	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+	info += QLatin1String("<br>");
+
+	const int tablesCount = FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
+	info += i18n("Tables: %1", QString::number(tablesCount));
+
+	return info;
 }
-
-int FITSFilter::tablesCount(const QString &fileName) {
-	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
-}
-
 
 //#####################################################################
 //################### Private implementation ##########################

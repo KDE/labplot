@@ -154,6 +154,13 @@ QStringList AsciiFilter::dataTypes() {
 	return list;
 }
 
+QString AsciiFilter::fileInfoString(const QString& fileName) {
+	QString info(i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName)));
+	info += QLatin1String("<br>");
+	info += i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+	return info;
+}
+
 /*!
     returns the number of columns in the file \c fileName.
 */

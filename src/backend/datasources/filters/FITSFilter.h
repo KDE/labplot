@@ -81,8 +81,7 @@ public:
 		KeywordUpdate updates;
 	};
 
-	static int imagesCount(const QString& fileName);
-	static int tablesCount(const QString& fileName);
+	static QString fileInfoString(const QString&);
 	void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
 	void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
 	void addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords);
