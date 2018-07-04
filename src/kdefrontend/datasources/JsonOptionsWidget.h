@@ -30,7 +30,6 @@
 #ifndef JSONOPTIONSWIDGET_H
 #define JSONOPTIONSWIDGET_H
 
-#include <backend/datasources/filters/JsonFilter.h>
 #include "ui_jsonoptionswidget.h"
 
 class ImportFileWidget;

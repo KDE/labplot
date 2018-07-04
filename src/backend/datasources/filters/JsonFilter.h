@@ -32,7 +32,7 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
-#include <QAbstractItemModel>
+
 #include <QJsonValue>
 
 class QStringList;
