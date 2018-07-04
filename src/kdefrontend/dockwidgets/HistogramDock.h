@@ -32,7 +32,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "ui_histogramdock.h"
-#include "ui_histogramdockgeneraltab.h"
 
 class Histogram;
 class TreeViewComboBox;
@@ -47,17 +46,14 @@ public:
 	~HistogramDock();
 
 	void setCurves(QList<Histogram*>);
-	virtual void setupGeneral();
 
 private:
-	Ui::HistogramDockGeneralTab uiGeneralTab;
 	QStringList dateStrings;
 	QStringList timeStrings;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbValuesColumn;
 
-	virtual void initGeneralTab();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 
@@ -71,7 +67,6 @@ protected:
 	AspectTreeModel* m_aspectTreeModel;
 	bool m_initializing;
 
-	void initTabs();
 	virtual void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
