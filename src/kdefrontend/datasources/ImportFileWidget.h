@@ -92,6 +92,7 @@ public:
 	bool isMqttValid();
 	bool checkTopicContains(const QString&, const QString&)	;
 	QString checkCommonLevel(const QString&, const QString&);
+	int commonLevelIndex(const QString& first, const QString& second);
 	void unsubscribeFromTopic(const QString&);
 #endif
 	void hideMQTT();

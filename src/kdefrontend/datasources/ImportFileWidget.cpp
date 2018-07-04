@@ -1611,6 +1611,8 @@ void ImportFileWidget::mqttSubscribe() {
 				qDebug() << name;
 				bool foundSuperior = false;
 				bool foundEqual = false;
+				QVector<QString> equalTopics;
+
 				for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
 					qDebug()<<i<<" "<<ui.lwSubscriptions->count();
 					if(checkTopicContains(name, ui.lwSubscriptions->item(i)->text())) {
@@ -1629,21 +1631,53 @@ void ImportFileWidget::mqttSubscribe() {
 
 					QString commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), name);
 					if(!commonTopic.isEmpty()) {
-						foundEqual = true;
-						unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
-						ui.lwSubscriptions->addItem(commonTopic);
-						QMqttTopicFilter filter {commonTopic};
-						QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+						equalTopics.push_back(ui.lwSubscriptions->item(i)->text());
+						//foundEqual = true;
+						//unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
+						//ui.lwSubscriptions->addItem(commonTopic);
+						//QMqttTopicFilter filter {commonTopic};
+						//QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
 
-						if(temp_subscription) {
+						/*if(temp_subscription) {
 							m_mqttSubscriptions.push_back(temp_subscription);
 							connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 							m_mqttNewTopic = temp_subscription->topic().filter();
 							emit subscriptionMade();
 						}
-						break;
+						break;*/
 					}
 				}
+
+				if(!equalTopics.isEmpty()) {
+					int level = commonLevelIndex(name, equalTopics.first());
+					QStringList commonList = name.split('/', QString::SkipEmptyParts);
+					QTreeWidgetItem* currentItem;
+					for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+						if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+							currentItem = ui.twTopics->topLevelItem(i);
+							break;
+						}
+					}
+
+					int levelIdx = 1;
+					while(levelIdx < level) {
+						for(int j = 0; j < currentItem->childCount(); ++j) {
+							if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+								qDebug()<<"Child: "<<currentItem->child(j)->text(0);
+								currentItem = currentItem->child(j);
+								levelIdx++;
+								break;
+							}
+						}
+					}
+
+					qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
+					if(equalTopics.size() == currentItem->childCount() - 1) {
+						qDebug()<<"foundEqual set true";
+						foundEqual = true;
+					}
+				}
+
 				if(!foundSuperior && !foundEqual) {
 					ui.lwSubscriptions->addItem(name);
 
@@ -1660,31 +1694,93 @@ void ImportFileWidget::mqttSubscribe() {
 
 				if(foundEqual) {
 					QString commonTopic;
-					do{
-						commonTopic = "";
-						for(int i = 0; i < ui.lwSubscriptions->count() - 1; ++i) {
-							commonTopic = checkCommonLevel(ui.lwSubscriptions->item(i)->text(), ui.lwSubscriptions->item(i+1)->text());
-							if(!commonTopic.isEmpty()) {
-								unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
 
-								if(ui.lwSubscriptions->findItems(commonTopic, Qt::MatchExactly).isEmpty()) {
-									ui.lwSubscriptions->addItem(commonTopic);
-
-									QMqttTopicFilter filter {commonTopic};
-									QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-									if(temp_subscription) {
-										qDebug()<<"subscriptionMade"<<filter;
-										m_mqttSubscriptions.push_back(temp_subscription);
-										connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-										m_mqttNewTopic = temp_subscription->topic().filter();
-										emit subscriptionMade();
-									}
-								}
+					for(int i = 0; i < equalTopics.size(); ++i) {
+						for(int j = 0; j < ui.lwSubscriptions->count(); ++j){
+							if(ui.lwSubscriptions->item(j)->text() == equalTopics[i]) {
+								unsubscribeFromTopic(ui.lwSubscriptions->item(j)->text());
 								break;
 							}
 						}
-					} while(!commonTopic.isEmpty());
+					}
+
+					commonTopic = checkCommonLevel(equalTopics.first(), name);
+					ui.lwSubscriptions->addItem(commonTopic);
+					QMqttTopicFilter filter {commonTopic};
+					QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+					if(temp_subscription) {
+						m_mqttSubscriptions.push_back(temp_subscription);
+						connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+						m_mqttNewTopic = temp_subscription->topic().filter();
+						emit subscriptionMade();
+					}
+
+					bool foundNewEqual;
+					do{
+						foundNewEqual = false;
+						equalTopics.clear();
+
+						for(int i = 0; i < ui.lwSubscriptions->count(); ++i) {
+							if(!checkCommonLevel(ui.lwSubscriptions->item(i)->text(), commonTopic).isEmpty()) {
+								equalTopics.push_back(ui.lwSubscriptions->item(i)->text());
+							}
+						}
+
+						if(!equalTopics.isEmpty()) {
+							int level = commonLevelIndex(name, equalTopics.first());
+							QStringList commonList = name.split('/', QString::SkipEmptyParts);
+							QTreeWidgetItem* currentItem;
+							for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+								if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+									currentItem = ui.twTopics->topLevelItem(i);
+									break;
+								}
+							}
+
+							int levelIdx = 1;
+							while(levelIdx < level) {
+								for(int j = 0; j < currentItem->childCount(); ++j) {
+									if(currentItem->child(j)->text(0) == commonList[j]) {
+										currentItem = currentItem->child(j);
+										levelIdx++;
+										break;
+									}
+								}
+							}
+
+							qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
+							if(equalTopics.size() == currentItem->childCount() - 1) {
+								foundNewEqual = true;
+							}
+						}
+
+						if(foundNewEqual) {
+							unsubscribeFromTopic(commonTopic);
+
+							for(int i = 0; i < equalTopics.size(); ++i) {
+								for(int j = 0; j < ui.lwSubscriptions->count(); ++j){
+									if(ui.lwSubscriptions->item(j)->text() == equalTopics[i]) {
+										unsubscribeFromTopic(ui.lwSubscriptions->item(j)->text());
+										break;
+									}
+								}
+							}
+
+							commonTopic = checkCommonLevel(equalTopics.first(), commonTopic);
+							ui.lwSubscriptions->addItem(commonTopic);
+							QMqttTopicFilter filter {commonTopic};
+							QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+							if(temp_subscription) {
+								m_mqttSubscriptions.push_back(temp_subscription);
+								connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+								m_mqttNewTopic = temp_subscription->topic().filter();
+								emit subscriptionMade();
+							}
+						}
+
+					} while(foundNewEqual);
 				}
 
 				if(foundSuperior) {
@@ -2105,7 +2201,7 @@ QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& 
 				}
 			}
 			bool differ = false;
-			if(matchIndex > 0 && matchIndex < firstList.size() -1) {
+			if(matchIndex > 0) {
 				for(int j = matchIndex +1; j < firstList.size(); ++j) {
 					if(firstList.at(j) != secondtList.at(j)) {
 						differ = true;
@@ -2132,6 +2228,55 @@ QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& 
 	}
 	qDebug() << "Common topic: "<<commonTopic;
 	return commonTopic;
+}
+
+int ImportFileWidget::commonLevelIndex(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/', QString::SkipEmptyParts);
+	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QString commonTopic = "";
+	int matchIndex = -1;
+
+	if(!firstList.isEmpty()) {
+		if(firstList.size() == secondtList.size() && (first != second))	{
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(firstList.at(i) != secondtList.at(i)) {
+					matchIndex = i;
+					break;
+				}
+			}
+			bool differ = false;
+			if(matchIndex > 0) {
+				for(int j = matchIndex +1; j < firstList.size(); ++j) {
+					if(firstList.at(j) != secondtList.at(j)) {
+						differ = true;
+						break;
+					}
+				}
+			}
+			else
+				differ = true;
+
+			if(!differ)
+			{
+				for(int i = 0; i < firstList.size(); ++i) {
+					if(i != matchIndex)
+						commonTopic.append(firstList.at(i));
+					else
+						commonTopic.append("+");
+
+					if(i != firstList.size() - 1)
+						commonTopic.append("/");
+				}
+			}
+		}
+	}
+
+	qDebug() << "Common topic: "<<commonTopic;
+	if(!commonTopic.isEmpty())
+		return matchIndex;
+	else
+		return -1;
 }
 
 void ImportFileWidget::searchTreeItem(const QString& rootName) {
