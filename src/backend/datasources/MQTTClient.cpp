@@ -296,7 +296,6 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
-	writer->writeAttribute("keepLastValues", QString::number(m_keepLastValues));
 
 	if (m_updateType == TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
@@ -369,19 +368,11 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			else
 				m_subscriptionCount =  str.toInt();
 
-			str = attribs.value("keepLastValues").toString();
+			str = attribs.value("keepValues").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'keepLastValues'"));
+				reader->raiseWarning(attributeWarning.arg("'keepValues'"));
 			else
-				m_keepLastValues =  str.toInt();
-
-			if(m_keepLastValues) {
-				str = attribs.value("keepValues").toString();
-				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'keepValues'"));
-				else
-					m_keepNvalues =  str.toInt();
-			}
+				m_keepNvalues =  str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if(str.isEmpty())
