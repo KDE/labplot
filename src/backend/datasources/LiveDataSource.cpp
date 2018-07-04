@@ -553,6 +553,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
 		case AbstractFileFilter::FITS:
+		case AbstractFileFilter::Json:
 		case AbstractFileFilter::ROOT:
 		case AbstractFileFilter::NgspiceRawAscii:
 			break;

@@ -229,6 +229,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				case AbstractFileFilter::Binary:
 				case AbstractFileFilter::Image:
 				case AbstractFileFilter::FITS:
+				case AbstractFileFilter::Json:
 				case AbstractFileFilter::NgspiceRawAscii:
 					break; // never reached, omit warning
 			}
@@ -268,6 +269,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					case AbstractFileFilter::Binary:
 					case AbstractFileFilter::Image:
 					case AbstractFileFilter::FITS:
+					case AbstractFileFilter::Json:
 					case AbstractFileFilter::NgspiceRawAscii:
 						break; // never reached, omit warning
 				}
