@@ -52,10 +52,8 @@ PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(0), m_part(part) {
 	//resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
 
-	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect*)));
-	connect(m_part, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
+	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &PartMdiView::handleAspectAboutToBeRemoved);
 }
 
 AbstractPart* PartMdiView::part() const {

@@ -111,8 +111,8 @@ void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 		connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 
 		//handle the changes when the data inside of the source curve columns
-		connect(curve, SIGNAL(xDataChanged()), this, SLOT(handleSourceDataChanged()));
-		connect(curve, SIGNAL(yDataChanged()), this, SLOT(handleSourceDataChanged()));
+		connect(curve, &XYCurve::xDataChanged, this, &XYAnalysisCurve::handleSourceDataChanged);
+		connect(curve, &XYCurve::yDataChanged, this, &XYAnalysisCurve::handleSourceDataChanged);
 
 		//TODO: add disconnect in the undo-function
 	}

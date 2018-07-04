@@ -52,10 +52,10 @@ NoteView::NoteView(Note* notes) : m_notes(notes) {
 
 	layout->addWidget(m_textEdit);
 
-	connect(m_notes, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(backgroundColorChanged(QColor)));
-	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
-	connect(m_notes, SIGNAL(textFontChanged(QFont)), this, SLOT(textFontChanged(QFont)));
-	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
+	connect(m_notes, &Note::backgroundColorChanged, this, &NoteView::backgroundColorChanged);
+	connect(m_notes, &Note::textColorChanged, this, &NoteView::textColorChanged);
+	connect(m_notes, &Note::textFontChanged, this, &NoteView::textFontChanged);
+	connect(m_textEdit, &QTextEdit::textChanged, this, &NoteView::textChanged);
 }
 
 void NoteView::print(QPrinter* printer) const {

@@ -98,7 +98,7 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	m_slave->setModel(model);
 	QHeaderView::setModel(model);
-	connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(headerDataChanged(Qt::Orientation,int,int)));
+	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::headerDataChanged);
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
