@@ -26,8 +26,7 @@
 #include <QFile>
 #include <QDebug>
 
-QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) {
-	mParent = parent;
+QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {
 }
 
 QJsonTreeItem::~QJsonTreeItem() {
@@ -65,7 +64,7 @@ void QJsonTreeItem::setValue(const QString& value) {
 	mValue = value;
 }
 
-void QJsonTreeItem::setType(const QJsonValue::Type& type) {
+void QJsonTreeItem::setType(const QJsonValue::Type type) {
 	mType = type;
 }
 
@@ -115,10 +114,10 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 
 //=========================================================================
 
-QJsonModel::QJsonModel(QObject* parent) :
-	QAbstractItemModel(parent) {
-	mHeadItem = new QJsonTreeItem;
-	mRootItem = new QJsonTreeItem(mHeadItem);
+QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
+	mHeadItem(new QJsonTreeItem),
+	mRootItem(new QJsonTreeItem(mHeadItem)) {
+
 	mHeadItem->appendChild(mRootItem);
 	mHeaders.append("key");
 	mHeaders.append("value");
@@ -138,7 +137,7 @@ void QJsonModel::clear() {
 	endResetModel();
 }
 
-bool QJsonModel::load(const QString &fileName) {
+bool QJsonModel::load(const QString& fileName) {
 	QFile file(fileName);
 	bool success = false;
 	if (file.open(QIODevice::ReadOnly)) {
@@ -214,9 +213,8 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 }
 
 bool QJsonModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-	int col = index.column();
 	if (Qt::EditRole == role) {
-		if (col == 1) {
+		if (index.column() == 1) {
 			QJsonTreeItem* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 			item->setValue(value.toString());
 			emit dataChanged(index, index, {Qt::EditRole});
@@ -287,8 +285,7 @@ int QJsonModel::columnCount(const QModelIndex& parent) const {
 }
 
 Qt::ItemFlags QJsonModel::flags(const QModelIndex& index) const {
-	int col = index.column();
-	if (col == 1)
+	if (index.column() == 1)
 		return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 	else
 		return QAbstractItemModel::flags(index);
@@ -308,7 +305,7 @@ QJsonDocument QJsonModel::json() const {
 
 QJsonValue  QJsonModel::genJson(QJsonTreeItem* item) const {
 	auto type   = item->type();
-	int  nchild = item->childCount();
+	const int  nchild = item->childCount();
 
 	if (QJsonValue::Object == type) {
 		QJsonObject jo;

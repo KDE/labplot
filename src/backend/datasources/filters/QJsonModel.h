@@ -46,7 +46,7 @@ public:
 	int row() const;
 	void setKey(const QString& key);
 	void setValue(const QString& value);
-	void setType(const QJsonValue::Type& type);
+	void setType(const QJsonValue::Type type);
 	QString key() const;
 	QString value() const;
 	QJsonValue::Type type() const;
@@ -58,7 +58,7 @@ private:
 	QString mValue;
 	QJsonValue::Type mType;
 	QList<QJsonTreeItem*> mChilds;
-	QJsonTreeItem * mParent;
+	QJsonTreeItem* mParent;
 };
 
 
@@ -87,8 +87,8 @@ public:
 private:
 	QJsonValue genJson(QJsonTreeItem*) const;
 
-	QJsonTreeItem* mRootItem;
 	QJsonTreeItem* mHeadItem;
+	QJsonTreeItem* mRootItem;
 	QStringList mHeaders;
 };
 
