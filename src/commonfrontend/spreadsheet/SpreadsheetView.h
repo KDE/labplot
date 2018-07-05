@@ -93,7 +93,6 @@ private:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 	void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
 
-
 	QTableView* m_tableView;
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetItemDelegate* m_delegate;
@@ -172,7 +171,7 @@ private:
 	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
-	QVector <QAction*> addFitAction;
+	QVector<QAction*> addFitAction;
 	QAction* addFourierFilterAction;
 
 	//Menus
