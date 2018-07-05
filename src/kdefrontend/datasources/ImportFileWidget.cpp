@@ -36,6 +36,8 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/JsonFilter.h"
+#include "backend/datasources/filters/QJsonModel.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "AsciiOptionsWidget.h"
@@ -44,6 +46,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
+#include "JsonOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
 
 #include <QCompleter>
@@ -63,10 +66,13 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QCheckBox>
 #include <QTreeWidgetItem>
 #include <QStringList>
+#include <QBuffer>
+
 
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
+#include <QtCore/QJsonDocument>
 
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
@@ -139,6 +145,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	QWidget* rootw = new QWidget();
 	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
+
+	QWidget* jsonw = new QWidget();
+	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
+	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+
+	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	ui.tvJson->setAlternatingRowColors(true);
+	ui.tvJson->setModel(m_jsonOptionsWidget->model());
+	showJsonModel(false);
 
 	// the table widget for preview
 	m_twPreview = new QTableWidget(ui.tePreview);
@@ -232,6 +247,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 
+	connect( ui.tvJson, SIGNAL(clicked(const QModelIndex&)), this, SLOT(refreshPreview()));
+
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
@@ -256,6 +273,7 @@ void ImportFileWidget::loadSettings() {
 	m_asciiOptionsWidget->loadSettings();
 	m_binaryOptionsWidget->loadSettings();
 	m_imageOptionsWidget->loadSettings();
+	m_jsonOptionsWidget->loadSettings();
 
 	//read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
@@ -397,6 +415,11 @@ void ImportFileWidget::hideDataSource() {
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
 	m_asciiOptionsWidget->showAsciiHeaderOptions(b);
+}
+
+void ImportFileWidget::showJsonModel(bool b) {
+	ui.tvJson->setVisible(b);
+	ui.lField->setVisible(b);
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -678,6 +701,16 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setEndColumn( ui.sbEndColumn->value());
 			return filter;
 		}
+	case AbstractFileFilter::Json: {
+			JsonFilter* filter = new JsonFilter();
+			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value());
+			filter->setEndColumn( ui.sbEndColumn->value());
+			return filter;
+		}
 	case AbstractFileFilter::ROOT: {
 			ROOTFilter* filter = new ROOTFilter();
 			QStringList names = selectedROOTNames();
@@ -761,6 +794,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		m_hdf5OptionsWidget->clear();
 		m_netcdfOptionsWidget->clear();
 		m_fitsOptionsWidget->clear();
+		m_jsonOptionsWidget->clearModel();
 		m_rootOptionsWidget->clear();
 
 		emit fileNameChanged();
@@ -793,6 +827,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
 			break;
 #endif
+		case AbstractFileFilter::Json:
+			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Json);
+			m_jsonOptionsWidget->loadDocument(fileName);
+			break;
 		case AbstractFileFilter::ROOT:
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::ROOT);
 			m_rootOptionsWidget->updateContent((ROOTFilter*)this->currentFileFilter(), fileName);
@@ -857,6 +895,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lEndColumn->show();
 	ui.sbEndColumn->show();
 
+	showJsonModel(false);
+
 	switch (fileType) {
 	case AbstractFileFilter::Ascii:
 		break;
@@ -892,6 +932,11 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.sbEndColumn->hide();
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
+		break;
+	case AbstractFileFilter::Json:
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
+		showJsonModel(true);
 		break;
 	default:
 		DEBUG("unknown file type");
@@ -949,6 +994,7 @@ void ImportFileWidget::filterChanged(int index) {
 		ui.cbFileType->currentIndex() == AbstractFileFilter::NETCDF ||
 		ui.cbFileType->currentIndex() == AbstractFileFilter::Image ||
 		ui.cbFileType->currentIndex() == AbstractFileFilter::FITS ||
+		ui.cbFileType->currentIndex() == AbstractFileFilter::Json ||
 		ui.cbFileType->currentIndex() == AbstractFileFilter::ROOT) {
 		ui.swOptions->setEnabled(true);
 		return;
@@ -984,7 +1030,8 @@ void ImportFileWidget::refreshPreview() {
 	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
-	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary)
+	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
+		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1161,6 +1208,16 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget = m_fitsOptionsWidget->previewWidget();
 			break;
 		}
+	case AbstractFileFilter::Json: {
+			ui.tePreview->clear();
+			m_jsonOptionsWidget->loadDocument(fileName);
+			JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
+			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+			importedStrings = filter->preview(fileName);
+			tmpTableWidget = m_twPreview;
+			columnModes = filter->columnModes();
+			break;
+		}
 	case AbstractFileFilter::ROOT: {
 			ROOTFilter *filter = (ROOTFilter *)this->currentFileFilter();
 			lines = m_rootOptionsWidget->lines();
@@ -1208,7 +1265,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				QDEBUG(importedStrings[i]);
+// 				QDEBUG("imported string " << importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())

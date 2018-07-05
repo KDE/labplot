@@ -29,6 +29,7 @@
 #include "HistogramDock.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
@@ -319,6 +320,51 @@ void HistogramDock::init(){
 	//Orientation
 	ui.cbHistogramOrientation->addItem(i18n("Vertical"));
 	ui.cbHistogramOrientation->addItem(i18n("Horizontal"));
+
+	//Line
+	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
+
+	//Drop lines
+	ui.cbDropLineType->addItem(i18n("No Drop Lines"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, Y"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, XY"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Zero Baseline"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Min Baseline"));
+	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Max Baseline"));
+	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
+
+	//Symbols
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
+
+	QPainter pa;
+	//TODO size of the icon depending on the actuall height of the combobox?
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
+	QTransform trafo;
+	trafo.scale(15, 15);
+
+	QPen pen(Qt::SolidPattern, 0);
+	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
+	pa.setPen( pen );
+
+	ui.cbSymbolStyle->addItem(i18n("None"));
+	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
+		Symbol::Style style = (Symbol::Style)i;
+		pm.fill(Qt::transparent);
+		pa.begin(&pm);
+		pa.setPen(pen);
+		pa.setRenderHint(QPainter::Antialiasing);
+		pa.translate(iconSize/2,iconSize/2);
+		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
+		pa.end();
+        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
+	}
+
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
+	m_initializing = false;
 
 	//Values
 	ui.cbValuesType->addItem(i18n("No Values"));

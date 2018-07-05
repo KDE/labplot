@@ -67,7 +67,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 	vLayout->addWidget(buttonBox);
 
 	//Signals/Slots
-	connect(importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(checkOkButton()));
+	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::stateChanged, this, &ImportSQLDatabaseDialog::checkOkButton);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -101,7 +101,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
-	connect(importSQLDatabaseWidget, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);

@@ -684,7 +684,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractColumn::dataChanged, this, [=](){ handleSourceDataChanged(); });
 			//TODO disconnect on undo
 		}
 	}
@@ -697,14 +697,14 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			connect(column, &AbstractColumn::dataChanged, this, [=](){ handleSourceDataChanged(); });
 			//TODO disconnect on undo
 		}
 	}
 }
 
 // TODO: do not recalculate
-STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
+STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate)
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
 	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));

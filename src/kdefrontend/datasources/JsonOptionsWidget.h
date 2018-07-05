@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : TreeViewComboBox.h
+    File                 : JsonOptionsWidget.h
     Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
+    Description          : Widget providing options for the import of json data.
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    --------------------------------------------------------------------
+    Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
 
  ***************************************************************************/
 
@@ -26,53 +27,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TREEVIEWCOMBOBOX_H
-#define TREEVIEWCOMBOBOX_H
+#ifndef JSONOPTIONSWIDGET_H
+#define JSONOPTIONSWIDGET_H
 
-#include <QComboBox>
+#include "ui_jsonoptionswidget.h"
 
-class AbstractAspect;
-class QGroupBox;
-class QLineEdit;
-class QTreeView;
+class ImportFileWidget;
+class JsonFilter;
+class QJsonModel;
+class QJsonTreeItem;
 
-class TreeViewComboBox : public QComboBox {
+class JsonOptionsWidget : public QWidget {
 	Q_OBJECT
 
-	public:
-		explicit TreeViewComboBox(QWidget* parent = 0);
+public:
+	explicit JsonOptionsWidget(QWidget*, ImportFileWidget*);
+	void applyFilterSettings(JsonFilter*, const QModelIndex&) const;
+	void clearModel();
+	void loadSettings() const;
+	void saveSettings();
+	void loadDocument(QString filename);
+	QJsonModel* model();
 
-		void setModel(QAbstractItemModel*);
-		void setCurrentModelIndex(const QModelIndex&);
-		QModelIndex currentModelIndex() const;
+private:
+	void setTooltips();
+	QVector<int> getIndexRows(const QModelIndex&) const;
 
-		void setTopLevelClasses(const QList<const char *> &);
-		void setHiddenAspects(const QList<const AbstractAspect*>&);
-
-		virtual void showPopup();
-		virtual void hidePopup();
-
-	private:
-		QTreeView* m_treeView;
-		QGroupBox* m_groupBox;
-		QLineEdit* m_lineEdit;
-
-		QList<const char*> m_topLevelClasses;
-		QList<const char*> m_selectableClasses;
-		QList<const AbstractAspect*> m_hiddenAspects;
-
-		void showTopLevelOnly(const QModelIndex&);
-		bool eventFilter(QObject*, QEvent*);
-		bool filter(const QModelIndex&, const QString&);
-		bool isTopLevel(const AbstractAspect*) const;
-		bool isHidden(const AbstractAspect*) const;
-
-	private slots:
-		void treeViewIndexActivated(const QModelIndex&);
-		void filterChanged(const QString&);
-
-	signals:
-		void currentModelIndexChanged(const QModelIndex&);
+	QString m_filename;
+	Ui::JsonOptionsWidget ui;
+	ImportFileWidget* m_fileWidget;
+	QJsonModel* m_model;
 };
 
 #endif
