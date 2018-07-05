@@ -75,7 +75,7 @@ public:
 
 #ifdef HAVE_MQTT
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	QString mqttColumnStatistics(const MQTTTopic * topic, MQTTClient *client) const;
+	QString mqttColumnStatistics(const MQTTTopic * topic) const;
 	AbstractColumn::ColumnMode mqttColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);

@@ -72,6 +72,10 @@ qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* da
 	return d->readFromLiveDevice(device, dataSource, from);
 }
 
+void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {
+	d->readMQTTTopic(message, topic, dataSource);
+}
+
 /*!
   reads the content of the file \c fileName.
 */
@@ -1935,17 +1939,17 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 	list = dataStrings;
 }
 
-QString AsciiFilter::mqttColumnStatistics(const MQTTTopic* topic, MQTTClient* client) const{
-	return d->mqttColumnStatistics(topic, client);
+QString AsciiFilter::mqttColumnStatistics(const MQTTTopic* topic) const{
+	return d->mqttColumnStatistics(topic);
 }
 
-QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic, MQTTClient* client) const{
+QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic) const{
 	qDebug()<<"MQTT Column Statistics";
 
 	Column* tempColumn = topic->child<Column>(m_actualCols - 1);
 	QString statistics;
 
-	QVector<bool> willStatistics = client->willStatistics();
+	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
 	for(int i = 0; i <= willStatistics.size(); i++) {
 		if(willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatistics>(i) ) {
@@ -2009,10 +2013,6 @@ AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode() const{
 AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode() const{
 
 	return columnModes[m_actualCols - 1];
-}
-
-void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {
-	d->readMQTTTopic(message, topic, dataSource);
 }
 
 void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {

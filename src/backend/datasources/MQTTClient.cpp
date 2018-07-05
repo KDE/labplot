@@ -745,7 +745,7 @@ void MQTTClient::setWillForMqtt() {
 				qDebug()<<"Checking column mode";
 				if((asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Integer) ||
 						(asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-					m_client->setWillMessage(asciiFilter->mqttColumnStatistics(tempTopic, this).toUtf8());
+					m_client->setWillMessage(asciiFilter->mqttColumnStatistics(tempTopic).toUtf8());
 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 				}
 				else {
