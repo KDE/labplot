@@ -53,7 +53,6 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
-
 public slots:
 
 private slots:
@@ -65,5 +64,5 @@ signals:
 
 };
 
-#endif
+#endif // HAVE_MQTT
 #endif // MQTTTOPIC_H

@@ -29,34 +29,36 @@ MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, Abstr
 	  m_MQTTClient(dynamic_cast<MQTTSubscriptions*> (subscription)->mqttClient()),
 	  m_topicName(name),
 	  m_filter(new AsciiFilter()) {
-	AsciiFilter * mainFilter = dynamic_cast<AsciiFilter*>(dynamic_cast<MQTTClient*>(m_MQTTClient)->filter());
-	dynamic_cast<AsciiFilter*> (m_filter)->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
-	if(!mainFilter->isAutoModeEnabled()) {
-		dynamic_cast<AsciiFilter*> (m_filter)->setCommentCharacter(mainFilter->commentCharacter());
-		dynamic_cast<AsciiFilter*> (m_filter)->setSeparatingCharacter(mainFilter->separatingCharacter());
-		dynamic_cast<AsciiFilter*> (m_filter)->setDateTimeFormat(mainFilter->dateTimeFormat());
-		dynamic_cast<AsciiFilter*> (m_filter)->setCreateIndexEnabled(mainFilter->createIndexEnabled());
-		dynamic_cast<AsciiFilter*> (m_filter)->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
-		dynamic_cast<AsciiFilter*> (m_filter)->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
-		dynamic_cast<AsciiFilter*> (m_filter)->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
-		dynamic_cast<AsciiFilter*> (m_filter)->setSkipEmptyParts(mainFilter->skipEmptyParts());
-		dynamic_cast<AsciiFilter*> (m_filter)->setHeaderEnabled(mainFilter->isHeaderEnabled());
+	AsciiFilter* mainFilter = dynamic_cast<AsciiFilter*>(dynamic_cast<MQTTClient*>(m_MQTTClient)->filter());
+	AsciiFilter* myFilter = dynamic_cast<AsciiFilter*>(m_filter);
+
+	myFilter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
+	if (!mainFilter->isAutoModeEnabled()) {
+		myFilter->setCommentCharacter(mainFilter->commentCharacter());
+		myFilter->setSeparatingCharacter(mainFilter->separatingCharacter());
+		myFilter->setDateTimeFormat(mainFilter->dateTimeFormat());
+		myFilter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
+		myFilter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
+		myFilter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
+		myFilter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
+		myFilter->setSkipEmptyParts(mainFilter->skipEmptyParts());
+		myFilter->setHeaderEnabled(mainFilter->isHeaderEnabled());
 		QString vectorNames;
 		QStringList filterVectorNames = mainFilter->vectorNames();
-		for(int i = 0; i < vectorNames.size(); ++i) {
+		for(int i = 0; i < filterVectorNames.size(); ++i) {
 			vectorNames.append(filterVectorNames.at(i));
-			if(i != vectorNames.size() - 1)
+			if (i != vectorNames.size() - 1)
 				vectorNames.append(" ");
 		}
-		dynamic_cast<AsciiFilter*> (m_filter)->setVectorNames(vectorNames);
-		dynamic_cast<AsciiFilter*> (m_filter)->setStartRow( mainFilter->startRow());
-		dynamic_cast<AsciiFilter*> (m_filter)->setEndRow( mainFilter->endRow());
-		dynamic_cast<AsciiFilter*> (m_filter)->setStartColumn( mainFilter->startColumn());
-		dynamic_cast<AsciiFilter*> (m_filter)->setEndColumn( mainFilter->endColumn());
+		myFilter->setVectorNames(vectorNames);
+		myFilter->setStartRow(mainFilter->startRow());
+		myFilter->setEndRow(mainFilter->endRow());
+		myFilter->setStartColumn(mainFilter->startColumn());
+		myFilter->setEndColumn(mainFilter->endColumn());
 	}
 
 	connect(dynamic_cast<MQTTClient*>(m_MQTTClient), &MQTTClient::readFromTopics, this, &MQTTTopic::read);
-	qDebug()<<"MqttTopic constructor:"<<m_topicName;
+	qDebug()<<"MqttTopic constructor: " << m_topicName;
 	initActions();
 }
 
