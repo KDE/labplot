@@ -1935,65 +1935,64 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 	list = dataStrings;
 }
 
-QString AsciiFilter::mqttColumnStatistics(const Spreadsheet* spreadsheet, AbstractAspect* aspect) const{
-	return d->mqttColumnStatistics(spreadsheet, aspect);
+QString AsciiFilter::mqttColumnStatistics(const MQTTTopic* topic, MQTTClient* client) const{
+	return d->mqttColumnStatistics(topic, client);
 }
 
-QString AsciiFilterPrivate::mqttColumnStatistics(const Spreadsheet* spreadsheet, AbstractAspect* aspect) const{
+QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic, MQTTClient* client) const{
 	qDebug()<<"MQTT Column Statistics";
-	MQTTClient* client = dynamic_cast<MQTTClient*>(aspect);
 
+	Column* tempColumn = topic->child<Column>(m_actualCols - 1);
 	QString statistics;
-	Column* tempColumn = dynamic_cast<const MQTTTopic*>(spreadsheet)->child<Column>(m_actualCols - 1);
 
 	QVector<bool> willStatistics = client->willStatistics();
-	for(int i = 0; i <= willStatistics.count(); i++) {
+	for(int i = 0; i <= willStatistics.size(); i++) {
 		if(willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatistics>(i) ) {
 			case MQTTClient::WillStatistics::ArithmeticMean:
-				statistics += "Arithmetic mean: " + QString::number(tempColumn->statistics().arithmeticMean)+"\n";
+				statistics += QLatin1String("Arithmetic mean: ") + QString::number(tempColumn->statistics().arithmeticMean) + "\n";
 				break;
 			case MQTTClient::WillStatistics::ContraharmonicMean:
-				statistics += "Contraharmonic mean: "+QString::number(tempColumn->statistics().contraharmonicMean)+"\n";
+				statistics += QLatin1String("Contraharmonic mean: ") + QString::number(tempColumn->statistics().contraharmonicMean) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Entropy:
-				statistics += "Entropy: "+QString::number(tempColumn->statistics().entropy)+"\n";
+				statistics += QLatin1String("Entropy: ") + QString::number(tempColumn->statistics().entropy) + "\n";
 				break;
 			case MQTTClient::WillStatistics::GeometricMean:
-				statistics += "Geometric mean: "+QString::number(tempColumn->statistics().geometricMean)+"\n";
+				statistics += QLatin1String("Geometric mean: ") + QString::number(tempColumn->statistics().geometricMean) + "\n";
 				break;
 			case MQTTClient::WillStatistics::HarmonicMean:
-				statistics += "Harmonic mean: "+QString::number(tempColumn->statistics().harmonicMean)+"\n";
+				statistics += QLatin1String("Harmonic mean: ") + QString::number(tempColumn->statistics().harmonicMean) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Kurtosis:
-				statistics += "Kurtosis: "+QString::number(tempColumn->statistics().kurtosis)+"\n";
+				statistics += QLatin1String("Kurtosis: ") + QString::number(tempColumn->statistics().kurtosis) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Maximum:
-				statistics += "Maximum: "+QString::number(tempColumn->statistics().maximum)+"\n";
+				statistics += QLatin1String("Maximum: ") + QString::number(tempColumn->statistics().maximum) + "\n";
 				break;
 			case MQTTClient::WillStatistics::MeanDeviation:
-				statistics += "Mean deviation: "+QString::number(tempColumn->statistics().meanDeviation)+"\n";
+				statistics += QLatin1String("Mean deviation: ") + QString::number(tempColumn->statistics().meanDeviation) + "\n";
 				break;
 			case MQTTClient::WillStatistics::MeanDeviationAroundMedian:
-				statistics += "Mean deviation around median: "+QString::number(tempColumn->statistics().meanDeviationAroundMedian)+"\n";
+				statistics += QLatin1String("Mean deviation around median: ") + QString::number(tempColumn->statistics().meanDeviationAroundMedian) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Median:
-				statistics += "Median: "+QString::number(tempColumn->statistics().median)+"\n";
+				statistics += QLatin1String("Median: ") + QString::number(tempColumn->statistics().median) + "\n";
 				break;
 			case MQTTClient::WillStatistics::MedianDeviation:
-				statistics += "Median deviation: "+QString::number(tempColumn->statistics().medianDeviation)+"\n";
+				statistics += QLatin1String("Median deviation: ") + QString::number(tempColumn->statistics().medianDeviation) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Minimum:
-				statistics += "Minimum: "+QString::number(tempColumn->statistics().minimum)+"\n";
+				statistics += QLatin1String("Minimum: ") + QString::number(tempColumn->statistics().minimum) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Skewness:
-				statistics += "Skewness: "+QString::number(tempColumn->statistics().skewness)+"\n";
+				statistics += QLatin1String("Skewness: ") + QString::number(tempColumn->statistics().skewness) + "\n";
 				break;
 			case MQTTClient::WillStatistics::StandardDeviation:
-				statistics += "Standard deviation: "+QString::number(tempColumn->statistics().standardDeviation)+"\n";
+				statistics += QLatin1String("Standard deviation: ") + QString::number(tempColumn->statistics().standardDeviation) + "\n";
 				break;
 			case MQTTClient::WillStatistics::Variance:
-				statistics += "Variance: "+QString::number(tempColumn->statistics().variance)+"\n";
+				statistics += QLatin1String("Variance: ") + QString::number(tempColumn->statistics().variance) + "\n";
 				break;
 			default:
 				break;
@@ -2842,15 +2841,14 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	return 0;
 }
 
-void AsciiFilter::setPreparedForMQTT(bool prepared, AbstractDataSource* dataSource, const QString& separator) {
-	d->setPreparedForMQTT(prepared, dataSource, separator);
+void AsciiFilter::setPreparedForMQTT(bool prepared, MQTTTopic* topic, const QString& separator) {
+	d->setPreparedForMQTT(prepared, topic, separator);
 }
 
-void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, AbstractDataSource* dataSource, const QString& separator) {
+void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, const QString& separator) {
 	m_prepared = prepared;
 	if(prepared == true) {
 		m_separator = separator;
-		MQTTTopic* topic = dynamic_cast<MQTTTopic*>(dataSource);
 		//m_actualRows = endRow - startRow + 1;
 		m_actualCols = endColumn - startColumn + 1;
 		m_actualRows = topic->rowCount();

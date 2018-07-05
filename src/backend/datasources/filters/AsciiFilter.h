@@ -36,6 +36,9 @@ class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
 class QAbstractSocket;
+class MQTTTopic;
+class MQTTClient;
+
 class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -72,10 +75,10 @@ public:
 
 #ifdef HAVE_MQTT
 	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	QString mqttColumnStatistics(const Spreadsheet* , AbstractAspect*) const;
+	QString mqttColumnStatistics(const MQTTTopic * topic, MQTTClient *client) const;
 	AbstractColumn::ColumnMode mqttColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
-	void setPreparedForMQTT(bool, AbstractDataSource*, const QString&);
+	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);
 	QString separator() const;
 #endif
 
