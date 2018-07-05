@@ -551,7 +551,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		QList<MQTTClient*> list;
 		for (auto* aspect: selectedAspects) {
-			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient())->name();
+			QString clientName = qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient()->name();
 			bool found = false;
 			for (int i = 0; i < list.size(); ++i) {
 				if(list.at(i)->name() == clientName) {
@@ -560,7 +560,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 				}
 			}
 			if(!found)
-				list << qobject_cast<MQTTClient*>(qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient());
+				list << qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient();
 		}
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 

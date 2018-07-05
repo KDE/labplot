@@ -24,12 +24,12 @@
 
 #include <QDebug>
 
-MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, AbstractAspect* subscription, bool loading)
-	: Spreadsheet(engine, name, loading),
-	  m_MQTTClient(dynamic_cast<MQTTSubscriptions*> (subscription)->mqttClient()),
+MQTTTopic::MQTTTopic(const QString& name, MQTTSubscriptions *subscription, bool loading)
+	: Spreadsheet(0, name, loading),
+	  m_MQTTClient(subscription->mqttClient()),
 	  m_topicName(name),
 	  m_filter(new AsciiFilter()) {
-	AsciiFilter* mainFilter = dynamic_cast<AsciiFilter*>(dynamic_cast<MQTTClient*>(m_MQTTClient)->filter());
+	AsciiFilter* mainFilter = dynamic_cast<AsciiFilter*>(m_MQTTClient->filter());
 	AsciiFilter* myFilter = dynamic_cast<AsciiFilter*>(m_filter);
 
 	myFilter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
@@ -48,7 +48,7 @@ MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, Abstr
 		for(int i = 0; i < filterVectorNames.size(); ++i) {
 			vectorNames.append(filterVectorNames.at(i));
 			if (i != vectorNames.size() - 1)
-				vectorNames.append(" ");
+				vectorNames.append(QLatin1String(" "));
 		}
 		myFilter->setVectorNames(vectorNames);
 		myFilter->setStartRow(mainFilter->startRow());
@@ -57,7 +57,7 @@ MQTTTopic::MQTTTopic(AbstractScriptingEngine* engine, const QString& name, Abstr
 		myFilter->setEndColumn(mainFilter->endColumn());
 	}
 
-	connect(dynamic_cast<MQTTClient*>(m_MQTTClient), &MQTTClient::readFromTopics, this, &MQTTTopic::read);
+	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
 	qDebug()<<"MqttTopic constructor: " << m_topicName;
 	initActions();
 }
@@ -118,23 +118,23 @@ void MQTTTopic::plotData() {
 }
 
 int MQTTTopic::readingType() const {
-	return static_cast<int> (dynamic_cast<MQTTClient*>(m_MQTTClient)->readingType());
+	return static_cast<int> (m_MQTTClient->readingType());
 }
 
 int MQTTTopic::sampleRate() const {
-	return dynamic_cast<MQTTClient*>(m_MQTTClient)->sampleRate();
+	return m_MQTTClient->sampleRate();
 }
 
 bool  MQTTTopic::isPaused() const {
-	return dynamic_cast<MQTTClient*>(m_MQTTClient)->isPaused();
+	return m_MQTTClient->isPaused();
 }
 
 int MQTTTopic::updateInterval() const {
-	return dynamic_cast<MQTTClient*>(m_MQTTClient)->updateInterval();
+	return m_MQTTClient->updateInterval();
 }
 
 int MQTTTopic::keepNvalues() const {
-	return dynamic_cast<MQTTClient*>(m_MQTTClient)->keepNvalues();
+	return m_MQTTClient->keepNvalues();
 }
 
 void MQTTTopic::newMessage(const QString& message) {
@@ -266,7 +266,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
-AbstractAspect* MQTTTopic::mqttClient() const{
+MQTTClient *MQTTTopic::mqttClient() const{
 	return m_MQTTClient;
 }
 

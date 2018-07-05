@@ -2,7 +2,6 @@
 #define MQTTCLIENT_H
 #ifdef HAVE_MQTT
 
-//#include "backend/core/AbstractAspect.h"
 #include "backend/core/Folder.h"
 
 #include <QTimer>
@@ -14,14 +13,12 @@
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttTopicName>
 
-class MQTTSubscriptions;
-
 #include <QMap>
 
 class QString;
 class AbstractFileFilter;
+class MQTTSubscriptions;
 class QAction;
-
 
 class MQTTClient : public Folder{
 	Q_OBJECT
@@ -37,7 +34,6 @@ public:
 		FromEnd,
 		TillEnd
 	};
-
 
 	enum WillMessageType {
 		OwnMessage = 0,
@@ -68,10 +64,8 @@ public:
 		Entropy
 	};
 
-
-
-	MQTTClient(const QString& name);
-	~MQTTClient() override;
+	explicit MQTTClient(const QString& name);
+	virtual ~MQTTClient() override;
 
 	void ready();
 
@@ -222,13 +216,11 @@ private:
 	bool m_mqttRetain;
 	bool m_mqttUseID;
 	bool m_mqttUseAuthentication;
-	QString m_newTopic;
 	QVector<MQTTSubscriptions*> m_mqttSubscriptions;
 	bool m_disconnectForWill;
 	bool m_loaded;
 	int m_subscriptionsLoaded;
 	int m_subscriptionCount;
-
 
 public slots:
 	void read();
@@ -240,7 +232,6 @@ private slots:
 	void subscriptionLoaded(const QString&);
 
 signals:
-
 	void mqttSubscribed();
 	void mqttNewTopicArrived();
 	void readFromTopics();

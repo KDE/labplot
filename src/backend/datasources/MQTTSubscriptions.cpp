@@ -19,7 +19,7 @@ MQTTSubscriptions::~MQTTSubscriptions() {
 }
 
 void MQTTSubscriptions::addTopic(const QString& topicName) {
-	MQTTTopic * newTopic = new MQTTTopic(0, topicName, this, false);
+	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
 	m_topics.push_back(newTopic);
 	qDebug()<<"Adding child topic: "+topicName;
 	//this->parentAspect()->addChild(newTopic);
@@ -31,19 +31,19 @@ const QVector<MQTTTopic*> MQTTSubscriptions::topics() {
 	return  children<MQTTTopic>();
 }
 
-AbstractAspect* MQTTSubscriptions::mqttClient() const{
+MQTTClient* MQTTSubscriptions::mqttClient() const{
 	return m_MQTTClient;
 }
 
 
 void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){
 	bool found = false;
-	QVector<MQTTTopic*> topics =  children<MQTTTopic>();
-	for(int i = 0; i < topics.count(); ++i) {
+	QVector<MQTTTopic*> topics = children<MQTTTopic>();
+	for(int i = 0; i < topics.size(); ++i) {
 		if(topicName == topics[i]->topicName()) {
 			topics[i]->newMessage(message);
-			if(dynamic_cast<MQTTClient*> (m_MQTTClient)->updateType() == MQTTClient::UpdateType::NewData &&
-					!dynamic_cast<MQTTClient*> (m_MQTTClient)->isPaused())
+			if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
+					!m_MQTTClient->isPaused())
 				topics[i]->read();
 
 			bool addKnown = true;
@@ -65,8 +65,8 @@ void MQTTSubscriptions::messageArrived(const QString& message, const QString& to
 	if(!found) {
 		addTopic(topicName);
 		m_topics.last()->newMessage(message);
-		if(dynamic_cast<MQTTClient*> (m_MQTTClient)->updateType() == MQTTClient::UpdateType::NewData &&
-				!dynamic_cast<MQTTClient*> (m_MQTTClient)->isPaused())
+		if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
+				!m_MQTTClient->isPaused())
 			m_topics.last()->read();
 	}
 }
@@ -134,9 +134,9 @@ bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 				setName(str);
 			}
 
-		}  else if(reader->name() == "MQTTTopic") {
+		}  else if(reader->name() == QLatin1String("MQTTTopic")) {
 			qDebug()<<"Load MQTTTopic";
-			MQTTTopic* topic = new MQTTTopic(0, "", this, false);
+			MQTTTopic* topic = new MQTTTopic("", this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;
 				return false;
@@ -154,7 +154,7 @@ bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
-void MQTTSubscriptions::setMQTTClient(AbstractAspect* client) {
+void MQTTSubscriptions::setMQTTClient(MQTTClient* client) {
 	m_MQTTClient = client;
 }
 

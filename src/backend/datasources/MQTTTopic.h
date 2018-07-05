@@ -13,7 +13,7 @@ class MQTTTopic : public Spreadsheet{
 	Q_OBJECT
 
 public:
-	MQTTTopic(AbstractScriptingEngine*, const QString& name, AbstractAspect* subscription, bool loading = false);
+	MQTTTopic(const QString& name, MQTTSubscriptions* subscription, bool loading = false);
 	~MQTTTopic() override;
 
 	void setFilter(AbstractFileFilter*);
@@ -24,7 +24,7 @@ public:
 	QWidget* view() const override;
 
 	QString topicName() const;
-	AbstractAspect* mqttClient() const;
+	MQTTClient* mqttClient() const;
 
 	void newMessage(const QString&);
 	void read();
@@ -43,7 +43,7 @@ private:
 	void initActions();
 
 	QString m_topicName;
-	AbstractAspect* m_MQTTClient;
+	MQTTClient* m_MQTTClient;
 
 	AbstractFileFilter* m_filter;
 	QVector<QString> m_messagePuffer;

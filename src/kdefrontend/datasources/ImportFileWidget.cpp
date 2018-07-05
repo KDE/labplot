@@ -76,12 +76,10 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
-#include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/qmqttsubscription.h>
-#include <QMessageBox>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
+#include <QMessageBox>
 #endif
 
 
