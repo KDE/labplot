@@ -1607,7 +1607,7 @@ void ImportFileWidget::mqttConnection()
 		const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
 		const bool valid =hostSet && portSet && idValid && authenticationValid;
 		if (valid) {
-			m_client->setHostname(ui.leHost->text());
+			m_client->setHostname(ui.leHost->text().simplified());
 			m_client->setPort(ui.lePort->text().toUInt());
 			if(ui.chbID->isChecked())
 				m_client->setClientId(ui.leID->text());
@@ -1615,7 +1615,7 @@ void ImportFileWidget::mqttConnection()
 				m_client->setUsername(ui.leUsername->text());
 				m_client->setPassword(ui.lePassword->text());
 			}
-			qDebug()<<m_client->hostname() << "   " << m_client->port();
+			qDebug()<< ui.leHost->text() << " " << m_client->hostname() << "   " << m_client->port();
 			qDebug()<<"Trying to connect";
 			m_client->connectToHost();
 		}
