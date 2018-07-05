@@ -165,7 +165,7 @@ private slots:
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
 	void mqttButtonSubscribe(QTreeWidgetItem *item, int column);
-	void mqttButtonUnsubscribe(QListWidgetItem *item);
+	void mqttButtonUnsubscribe(QTreeWidgetItem *item, int column);
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
 	void updateWillTopics();

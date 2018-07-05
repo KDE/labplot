@@ -38,9 +38,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-785</y>
-        <width>593</width>
-        <height>1949</height>
+        <y>-1078</y>
+        <width>596</width>
+        <height>2001</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -155,14 +155,14 @@
           <item row="13" column="0">
            <widget class="QLabel" name="lUsername">
             <property name="text">
-             <string>Username</string>
+             <string>Username:</string>
             </property>
            </widget>
           </item>
           <item row="14" column="0">
            <widget class="QLabel" name="lPassword">
             <property name="text">
-             <string>Password</string>
+             <string>Password:</string>
             </property>
            </widget>
           </item>
@@ -213,7 +213,7 @@
           <item row="11" column="0">
            <widget class="QLabel" name="lMqttID">
             <property name="text">
-             <string>ID</string>
+             <string>ID:</string>
             </property>
            </widget>
           </item>
@@ -242,14 +242,14 @@
           <item row="19" column="0">
            <widget class="QLabel" name="lSubscriptions">
             <property name="text">
-             <string>Subscripitons</string>
+             <string>Subscripitons:</string>
             </property>
            </widget>
           </item>
           <item row="18" column="0">
            <widget class="QLabel" name="lQos">
             <property name="text">
-             <string>QOS level</string>
+             <string>QOS level:</string>
             </property>
            </widget>
           </item>
@@ -263,29 +263,13 @@
           <item row="13" column="2">
            <widget class="QLineEdit" name="leUsername"/>
           </item>
-          <item row="19" column="2">
-           <widget class="QListWidget" name="lwSubscriptions">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>140</height>
-             </size>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="2">
            <widget class="QLineEdit" name="leHost"/>
           </item>
           <item row="17" column="0">
            <widget class="QLabel" name="lTopicSearch">
             <property name="text">
-             <string>Search root</string>
+             <string>Scroll to root:</string>
             </property>
            </widget>
           </item>
@@ -420,7 +404,7 @@
           <item row="16" column="0">
            <widget class="QLabel" name="lTopicTree">
             <property name="text">
-             <string>Topics</string>
+             <string>Topics:</string>
             </property>
            </widget>
           </item>
@@ -462,6 +446,15 @@
               <height>16</height>
              </size>
             </property>
+           </widget>
+          </item>
+          <item row="19" column="2">
+           <widget class="QTreeWidget" name="twSubscriptions">
+            <column>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>
@@ -938,7 +931,7 @@
           <item row="9" column="0">
            <widget class="QLabel" name="lWillTopic">
             <property name="text">
-             <string>Will topic</string>
+             <string>Will topic:</string>
             </property>
            </widget>
           </item>
@@ -1114,7 +1107,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="lWillOwnMessage">
             <property name="text">
-             <string>Own message</string>
+             <string>Own message:</string>
             </property>
            </widget>
           </item>
@@ -1199,35 +1192,35 @@
           <item row="15" column="0">
            <widget class="QLabel" name="lWillUpdateInterval">
             <property name="text">
-             <string>Time interval</string>
+             <string>Time interval:</string>
             </property>
            </widget>
           </item>
           <item row="11" column="0">
            <widget class="QLabel" name="lWillQos">
             <property name="text">
-             <string>Will QoS</string>
+             <string>Will QoS:</string>
             </property>
            </widget>
           </item>
           <item row="13" column="0">
            <widget class="QLabel" name="lWillUpdate">
             <property name="text">
-             <string>Will Update Type</string>
+             <string>Will Update Type:</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lWillMessageType">
             <property name="text">
-             <string>Message type</string>
+             <string>Message type:</string>
             </property>
            </widget>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="lWillStatistics">
             <property name="text">
-             <string>Will Statistics</string>
+             <string>Will Statistics:</string>
             </property>
            </widget>
           </item>
