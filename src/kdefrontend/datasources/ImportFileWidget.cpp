@@ -865,7 +865,8 @@ void ImportFileWidget::refreshPreview() {
 	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
-	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary || fileType == AbstractFileFilter::Json)
+	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
+		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1072,7 +1073,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				QDEBUG(importedStrings[i]);
+// 				QDEBUG("imported string " << importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())
