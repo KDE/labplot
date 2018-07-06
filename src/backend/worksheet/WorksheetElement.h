@@ -39,48 +39,51 @@ class QPen;
 class KConfig;
 
 class WorksheetElement : public AbstractAspect {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit WorksheetElement(const QString&);
-		~WorksheetElement() override;
+public:
+	explicit WorksheetElement(const QString&);
+	~WorksheetElement() override;
 
-		enum WorksheetElementName {NameCartesianPlot = 1};
+	enum WorksheetElementName {NameCartesianPlot = 1};
 
-		virtual QGraphicsItem* graphicsItem() const = 0;
-		virtual void setZValue(qreal);
-		virtual void setVisible(bool on) = 0;
-		virtual bool isVisible() const = 0;
-		virtual bool isFullyVisible() const;
-		virtual void setPrinting(bool) = 0;
-		QMenu* createContextMenu() override;
-		virtual void loadThemeConfig(const KConfig&);
-		virtual void saveThemeConfig(const KConfig&);
-		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
-		virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
+	virtual QGraphicsItem* graphicsItem() const = 0;
+	virtual void setZValue(qreal);
+	virtual void setVisible(bool on) = 0;
+	virtual bool isVisible() const = 0;
+	virtual bool isFullyVisible() const;
+	virtual void setPrinting(bool) = 0;
 
-	public slots:
-		virtual void retransform() = 0;
+	QMenu* createContextMenu() override;
 
-	private:
-		QMenu* m_drawingOrderMenu;
-		QMenu* m_moveBehindMenu;
-		QMenu* m_moveInFrontOfMenu;
+	virtual void loadThemeConfig(const KConfig&);
+	virtual void saveThemeConfig(const KConfig&);
 
-	private slots:
-		void prepareMoveBehindMenu();
-		void prepareMoveInFrontOfMenu();
-		void execMoveBehind(QAction*);
-		void execMoveInFrontOf(QAction*);
+	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
+	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
 
-	signals:
-		friend class AbstractPlotSetHorizontalPaddingCmd;
-		friend class AbstractPlotSetVerticalPaddingCmd;
-		void horizontalPaddingChanged(float);
-		void verticalPaddingChanged(float);
+public slots:
+	virtual void retransform() = 0;
 
-		void hovered();
-		void unhovered();
+private:
+	QMenu* m_drawingOrderMenu;
+	QMenu* m_moveBehindMenu;
+	QMenu* m_moveInFrontOfMenu;
+
+private slots:
+	void prepareMoveBehindMenu();
+	void prepareMoveInFrontOfMenu();
+	void execMoveBehind(QAction*);
+	void execMoveInFrontOf(QAction*);
+
+signals:
+	friend class AbstractPlotSetHorizontalPaddingCmd;
+	friend class AbstractPlotSetVerticalPaddingCmd;
+	void horizontalPaddingChanged(float);
+	void verticalPaddingChanged(float);
+
+	void hovered();
+	void unhovered();
 };
 
 #endif

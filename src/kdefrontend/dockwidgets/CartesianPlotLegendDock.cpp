@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2018 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -95,6 +95,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
 	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+
+	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -190,6 +192,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
 	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
 			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
+	connect( m_legend, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(legendRotationAngleChanged(qreal)) );
 	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
 	connect(m_legend, SIGNAL(visibilityChanged(bool)), this, SLOT(legendVisibilityChanged(bool)));
 
@@ -381,6 +384,14 @@ void CartesianPlotLegendDock::customPositionYChanged(double value) {
 	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
+}
+
+void CartesianPlotLegendDock::rotationChanged(int value) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_legendList)
+		curve->setRotationAngle(value);
 }
 
 // "Background"-tab
@@ -735,6 +746,12 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
 	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
 	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	m_initializing = false;
+}
+
+void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbRotation->setValue(angle);
 	m_initializing = false;
 }
 
