@@ -127,6 +127,7 @@ private:
 	QStringList m_topicList;
 	bool m_editing;
 	QTimer *m_timer;
+	QTimer *m_timeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
@@ -170,6 +171,7 @@ private slots:
 	void willUpdateChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void searchTreeItem(const QString&);
+	void mqttTimeout();
 #endif
 
 signals:

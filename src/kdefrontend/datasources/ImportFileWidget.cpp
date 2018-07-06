@@ -103,6 +103,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #ifdef HAVE_MQTT
     m_timer = new QTimer(this);
     m_timer->setInterval(10000);
+	m_timeoutTimer = new QTimer(this);
+	m_timeoutTimer->setInterval(5000);
 #endif
 
 	QCompleter* completer = new QCompleter(this);
@@ -228,6 +230,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
 	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+	connect(m_timeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttTimeout);
 
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
@@ -1619,6 +1622,7 @@ void ImportFileWidget::mqttConnection()
 			qDebug()<< ui.leHost->text() << " " << m_client->hostname() << "   " << m_client->port();
 			qDebug()<<"Trying to connect";
 			m_client->connectToHost();
+			m_timeoutTimer->start();
 		}
 	}
 	else if (m_client->state() == QMqttClient::ClientState::Connected) {
@@ -2505,5 +2509,10 @@ void ImportFileWidget::searchChildren(QVector<QTreeWidgetItem*>& children, QTree
 			searchChildren(children, item->child(i));
 		}
 	}
+}
+
+void ImportFileWidget::mqttTimeout() {
+	m_client->disconnectFromHost();
+	QMessageBox::warning(this, "Warning", "Couldn't connect to the given broker");
 }
 #endif
