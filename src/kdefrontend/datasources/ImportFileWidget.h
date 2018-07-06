@@ -92,16 +92,19 @@ public:
 #ifdef HAVE_MQTT
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
+#endif
+
+private:
+	Ui::ImportFileWidget ui;
+
+#ifdef HAVE_MQTT
 	bool checkTopicContains(const QString&, const QString&)	;
 	QString checkCommonLevel(const QString&, const QString&);
 	int commonLevelIndex(const QString& first, const QString& second);
 	void unsubscribeFromTopic(const QString&);
-	void searchChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
+	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
 #endif
 	void hideMQTT();
-
-private:
-	Ui::ImportFileWidget ui;
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;

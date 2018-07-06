@@ -1677,21 +1677,30 @@ void ImportFileWidget::mqttSubscribe() {
 
 			QVector<QString> childrenName;
 			if(name.endsWith("#")) {
-				QVector<QTreeWidgetItem*> children;
-				searchChildren(children, item);
-				for(int child = 0; child < children.size(); ++child) {
-					QTreeWidgetItem* tempChild = children[child];
-					childrenName.push_back(tempChild->text(0));
-					while(tempChild->parent() != nullptr) {
-						tempChild = tempChild->parent();
-						childrenName[child].prepend(tempChild->text(0) + "/");
-					}
+				qDebug()<<"Adding new topic";
+				QStringList toplevelName;
+				toplevelName.push_back(name);
+				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
+				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
+
+				QMqttTopicFilter filter {name};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					m_mqttNewTopic = temp_subscription->topic().filter();
+					emit subscriptionMade();
 				}
+				qDebug()<<"Finished adding";
+
+				addSubscriptionChildren(item, newTopLevelItem);
 			}
 
 			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
-				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))) {
+				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
+						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 					qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
 					unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
 					qDebug()<<"After Delete";
@@ -1700,7 +1709,8 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 				qDebug()<<"checked inferior";
 
-				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)) {
+				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
+						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 					foundSuperior = true;
 					qDebug()<<"2"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
 					break;
@@ -1745,21 +1755,12 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 			}
 
-			if(!foundSuperior) {
+			if(!foundSuperior && !name.endsWith("#")) {
 				qDebug()<<"Adding new topic";
 				QStringList toplevelName;
 				toplevelName.push_back(name);
 				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
 				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
-
-				if(name.endsWith("#")) {
-					QStringList childName;
-					for(int i = 0; i < childrenName.size(); ++i) {
-						childName.clear();
-						childName.push_back(childrenName[i]);
-						newTopLevelItem->addChild(new QTreeWidgetItem(childName));
-					}
-				}
 
 				QMqttTopicFilter filter {name};
 				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
@@ -2501,12 +2502,30 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 	}
 }
 
-void ImportFileWidget::searchChildren(QVector<QTreeWidgetItem*>& children, QTreeWidgetItem* item) {
-	if(item->childCount() == 0) {
-		children.push_back(item);
-	} else {
-		for(int i = 0; i < item->childCount(); ++i) {
-			searchChildren(children, item->child(i));
+void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription) {
+	if(topic->childCount() > 0) {
+		for(int i = 0; i < topic->childCount(); ++i) {
+			QTreeWidgetItem* temp = topic->child(i);
+			QString name;
+			if(topic->child(i)->childCount() > 0) {
+				name.append(temp->text(0) + "/#");
+				while(temp->parent() != nullptr) {
+					temp = temp->parent();
+					name.prepend(temp->text(0) + "/");
+				}
+
+			} else {
+				name.append(temp->text(0));
+				while(temp->parent() != nullptr) {
+					temp = temp->parent();
+					name.prepend(temp->text(0) + "/");
+				}
+			}
+			QStringList nameList;
+			nameList.append(name);
+			QTreeWidgetItem* childItem = new QTreeWidgetItem(nameList);
+			subscription->addChild(childItem);
+			addSubscriptionChildren(topic->child(i), childItem);
 		}
 	}
 }
