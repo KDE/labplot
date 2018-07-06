@@ -725,7 +725,7 @@
       <attribute name="title">
        <string>Values</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QLabel" name="lValuesGeneral">
          <property name="font">
