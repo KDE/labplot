@@ -95,7 +95,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_liveDataSource(true),   
 #ifdef HAVE_MQTT
 	m_mqttReadyForPreview (false),
-	m_mqttSubscribeButton (true),
 	m_editing(false),
 #endif
 	m_suppressRefresh(false) {
@@ -223,12 +222,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
 	connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
 	connect(m_client, SIGNAL(connected()), this, SLOT(onMqttConnect()) );
-	connect(ui.bSubscribe, SIGNAL(clicked()), this, SLOT(mqttSubscribe()) );
+	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
+	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
 	connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
 	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
-	connect(ui.twTopics, &QTreeWidget::itemClicked, this, &ImportFileWidget::mqttButtonSubscribe);
-	connect(ui.twSubscriptions, &QTreeWidget::itemClicked, this, &ImportFileWidget::mqttButtonUnsubscribe);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
@@ -238,6 +236,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::searchTreeItem);
+	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
+	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
@@ -1449,14 +1449,15 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbQos->show();
 		ui.lQos->show();
 		ui.twTopics->show();
-		ui.lTopicTree->show();
+		//ui.lTopicTree->show();
 		ui.lTopicSearch->show();
 		ui.leTopics->show();
 		ui.twSubscriptions->show();
-		ui.lSubscriptions->show();
+		//ui.lSubscriptions->show();
 		ui.chbAuthentication->show();
 		ui.chbID->show();
 		ui.bSubscribe->show();
+		ui.bUnsubscribe->show();
 		ui.bConnect->show();
 
 		ui.gbOptions->setEnabled(true);
@@ -1646,263 +1647,276 @@ void ImportFileWidget::onMqttConnect() {
 	}
 }
 
-void ImportFileWidget::mqttSubscribe() {
-	if(m_mqttSubscribeButton) {
-		QString name;
-		QTreeWidgetItem *item = ui.twTopics->currentItem();
-		if(item != nullptr) {
-			QTreeWidgetItem *tempItem = item;
-			name.prepend(item->text(0));
-			if(item->childCount() != 0)
-				name.append("/#");
+void ImportFileWidget::mqttSubscribe() {	
+	QString name;
+	QTreeWidgetItem *item = ui.twTopics->currentItem();
+	if(item != nullptr) {
+		QTreeWidgetItem *tempItem = item;
+		name.prepend(item->text(0));
+		if(item->childCount() != 0)
+			name.append("/#");
 
-			while(tempItem->parent() != nullptr) {
-				tempItem = tempItem->parent();
-				name.prepend(tempItem->text(0) + "/");
+		while(tempItem->parent() != nullptr) {
+			tempItem = tempItem->parent();
+			name.prepend(tempItem->text(0) + "/");
+		}
+
+		QList<QTreeWidgetItem *> topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
+
+		if(topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
+
+			qDebug() << name;
+			bool foundSuperior = false;
+			bool foundEqual = false;
+			QVector<QString> equalTopics;
+
+			QVector<QString> childrenName;
+			if(name.endsWith("#")) {
+				QVector<QTreeWidgetItem*> children;
+				searchChildren(children, item);
+				for(int child = 0; child < children.size(); ++child) {
+					QTreeWidgetItem* tempChild = children[child];
+					childrenName.push_back(tempChild->text(0));
+					while(tempChild->parent() != nullptr) {
+						tempChild = tempChild->parent();
+						childrenName[child].prepend(tempChild->text(0) + "/");
+					}
+				}
 			}
 
-			QList<QTreeWidgetItem *> topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
+			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
+				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))) {
+					qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
+					qDebug()<<"After Delete";
+					i--;
+					continue;
+				}
+				qDebug()<<"checked inferior";
 
-			if(topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
+				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)) {
+					foundSuperior = true;
+					qDebug()<<"2"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					break;
+				}
+				qDebug()<<"checked superior";
 
-				qDebug() << name;
-				bool foundSuperior = false;
-				bool foundEqual = false;
-				QVector<QString> equalTopics;
+				QString commonTopic = checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), name);
+				if(!commonTopic.isEmpty()) {
+					equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
+				}
+				qDebug()<<"checked common";
+			}
 
-				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-					qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
-					if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))) {
-						qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
-						unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
-						qDebug()<<"After Delete";
-						i--;
-						continue;
-					}
-					qDebug()<<"checked inferior";
-
-					if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)) {
-						foundSuperior = true;
-						qDebug()<<"2"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+			if(!equalTopics.isEmpty()) {
+				qDebug()<<"Equal topics not empty";
+				int level = commonLevelIndex(name, equalTopics.first());
+				QStringList commonList = name.split('/', QString::SkipEmptyParts);
+				QTreeWidgetItem* currentItem;
+				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+					if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+						currentItem = ui.twTopics->topLevelItem(i);
 						break;
 					}
-					qDebug()<<"checked superior";
+				}
 
-					QString commonTopic = checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), name);
-					if(!commonTopic.isEmpty()) {
-						equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
-						//foundEqual = true;
-						//unsubscribeFromTopic(ui.lwSubscriptions->item(i)->text());
-						//ui.lwSubscriptions->addItem(commonTopic);
-						//QMqttTopicFilter filter {commonTopic};
-						//QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+				int levelIdx = 1;
+				while(levelIdx < level) {
+					for(int j = 0; j < currentItem->childCount(); ++j) {
+						if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+							qDebug()<<"Child: "<<currentItem->child(j)->text(0);
+							currentItem = currentItem->child(j);
+							levelIdx++;
+							break;
+						}
+					}
+				}
 
-						/*if(temp_subscription) {
+				qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
+				if(equalTopics.size() == currentItem->childCount() - 1) {
+					qDebug()<<"foundEqual set true";
+					foundEqual = true;
+				}
+			}
+
+			if(!foundSuperior) {
+				qDebug()<<"Adding new topic";
+				QStringList toplevelName;
+				toplevelName.push_back(name);
+				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
+				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
+
+				if(name.endsWith("#")) {
+					QStringList childName;
+					for(int i = 0; i < childrenName.size(); ++i) {
+						childName.clear();
+						childName.push_back(childrenName[i]);
+						newTopLevelItem->addChild(new QTreeWidgetItem(childName));
+					}
+				}
+
+				QMqttTopicFilter filter {name};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					m_mqttNewTopic = temp_subscription->topic().filter();
+					emit subscriptionMade();
+				}
+				qDebug()<<"Finished adding";
+			}
+
+			if(foundEqual) {
+				QString commonTopic;
+
+				commonTopic = checkCommonLevel(equalTopics.first(), name);
+				QStringList nameList;
+				nameList.append(commonTopic);
+				QTreeWidgetItem* newTopic = new QTreeWidgetItem(nameList);
+				ui.twSubscriptions->addTopLevelItem(newTopic);
+				QMqttTopicFilter filter {commonTopic};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					m_mqttNewTopic = temp_subscription->topic().filter();
+					emit subscriptionMade();
+				}
+
+				for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
+					if(ui.twSubscriptions->topLevelItem(j)->text(0) == name) {
+						newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
+						unsubscribeFromTopic(name);
+						break;
+					}
+				}
+
+				for(int i = 0; i < equalTopics.size(); ++i) {
+					for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
+						if(ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
+							newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
+							unsubscribeFromTopic(equalTopics[i]);
+							break;
+						}
+					}
+				}
+
+				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+					if(checkTopicContains(commonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
+							commonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
+						unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
+						i--;
+					}
+				}
+
+				bool foundNewEqual;
+				do{
+					foundNewEqual = false;
+					equalTopics.clear();
+
+					for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+						if(!checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), commonTopic).isEmpty()) {
+							equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
+						}
+					}
+
+					if(!equalTopics.isEmpty()) {
+						int level = commonLevelIndex(name, equalTopics.first());
+						QStringList commonList = name.split('/', QString::SkipEmptyParts);
+						QTreeWidgetItem* currentItem;
+						for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+							if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+								currentItem = ui.twTopics->topLevelItem(i);
+								break;
+							}
+						}
+
+						int levelIdx = 1;
+						while(levelIdx < level) {
+							for(int j = 0; j < currentItem->childCount(); ++j) {
+								if(currentItem->child(j)->text(0) == commonList[j]) {
+									currentItem = currentItem->child(j);
+									levelIdx++;
+									break;
+								}
+							}
+						}
+
+						qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
+						if(equalTopics.size() == currentItem->childCount() - 1) {
+							foundNewEqual = true;
+						}
+					}
+
+					if(foundNewEqual) {
+						QString newCommonTopic = checkCommonLevel(equalTopics.first(), commonTopic);
+						nameList.clear();
+						nameList.append(newCommonTopic);
+						QTreeWidgetItem* oldTopic = newTopic;
+						newTopic = new QTreeWidgetItem(nameList);
+						ui.twSubscriptions->addTopLevelItem(newTopic);
+
+						QMqttTopicFilter filter {newCommonTopic};
+						QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+						if(temp_subscription) {
 							m_mqttSubscriptions.push_back(temp_subscription);
 							connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 							m_mqttNewTopic = temp_subscription->topic().filter();
 							emit subscriptionMade();
 						}
-						break;*/
-					}
-					qDebug()<<"checked common";
-				}
 
-				if(!equalTopics.isEmpty()) {
-					qDebug()<<"Equal topics not empty";
-					int level = commonLevelIndex(name, equalTopics.first());
-					QStringList commonList = name.split('/', QString::SkipEmptyParts);
-					QTreeWidgetItem* currentItem;
-					for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-						if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
-							currentItem = ui.twTopics->topLevelItem(i);
-							break;
-						}
-					}
+						nameList.clear();
+						nameList.append(commonTopic);
+						newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(oldTopic)));
+						unsubscribeFromTopic(commonTopic);
 
-					int levelIdx = 1;
-					while(levelIdx < level) {
-						for(int j = 0; j < currentItem->childCount(); ++j) {
-							if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
-								qDebug()<<"Child: "<<currentItem->child(j)->text(0);
-								currentItem = currentItem->child(j);
-								levelIdx++;
-								break;
-							}
-						}
-					}
 
-					qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
-					if(equalTopics.size() == currentItem->childCount() - 1) {
-						qDebug()<<"foundEqual set true";
-						foundEqual = true;
-					}
-				}
-
-				if(!foundSuperior && !foundEqual) {
-					qDebug()<<"Adding new topic";
-					QStringList toplevelName;
-					toplevelName.push_back(name);
-					QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
-					ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
-
-					QMqttTopicFilter filter {name};
-					QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-					if(temp_subscription) {
-						m_mqttSubscriptions.push_back(temp_subscription);
-						connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-						m_mqttNewTopic = temp_subscription->topic().filter();
-						emit subscriptionMade();
-					}
-					qDebug()<<"Finished adding";
-				}
-
-				if(foundEqual) {
-					QString commonTopic;
-
-					commonTopic = checkCommonLevel(equalTopics.first(), name);
-					QStringList nameList;
-					nameList.append(commonTopic);
-					QTreeWidgetItem* newTopic = new QTreeWidgetItem(nameList);
-					ui.twSubscriptions->addTopLevelItem(newTopic);
-					QMqttTopicFilter filter {commonTopic};
-					QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-					if(temp_subscription) {
-						m_mqttSubscriptions.push_back(temp_subscription);
-						connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-						m_mqttNewTopic = temp_subscription->topic().filter();
-						emit subscriptionMade();
-					}
-
-					nameList.clear();
-					nameList.append(name);
-					newTopic->addChild(new QTreeWidgetItem(nameList));
-
-					for(int i = 0; i < equalTopics.size(); ++i) {
-						for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
-							if(ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
-								nameList.clear();
-								nameList.append(equalTopics[i]);
-								newTopic->addChild(new QTreeWidgetItem(nameList));
-								unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(j)->text(0));
-								break;
-							}
-						}
-					}
-
-					for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-						if(checkTopicContains(commonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
-								commonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
-							unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
-							i--;
-						}
-					}
-
-					bool foundNewEqual;
-					do{
-						foundNewEqual = false;
-						equalTopics.clear();
-
-						for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-							if(!checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), commonTopic).isEmpty()) {
-								equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
-							}
-						}
-
-						if(!equalTopics.isEmpty()) {
-							int level = commonLevelIndex(name, equalTopics.first());
-							QStringList commonList = name.split('/', QString::SkipEmptyParts);
-							QTreeWidgetItem* currentItem;
-							for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-								if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
-									currentItem = ui.twTopics->topLevelItem(i);
+						for(int i = 0; i < equalTopics.size(); ++i) {
+							for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
+								if(ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
+									nameList.clear();
+									nameList.append(equalTopics[i]);
+									newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
+									unsubscribeFromTopic(equalTopics[i]);
 									break;
 								}
 							}
+						}
 
-							int levelIdx = 1;
-							while(levelIdx < level) {
-								for(int j = 0; j < currentItem->childCount(); ++j) {
-									if(currentItem->child(j)->text(0) == commonList[j]) {
-										currentItem = currentItem->child(j);
-										levelIdx++;
-										break;
-									}
-								}
-							}
-
-							qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
-							if(equalTopics.size() == currentItem->childCount() - 1) {
-								foundNewEqual = true;
+						for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+							if(checkTopicContains(newCommonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
+									newCommonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
+								unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
+								i--;
 							}
 						}
 
-						if(foundNewEqual) {
-							QString newCommonTopic = checkCommonLevel(equalTopics.first(), commonTopic);
-							nameList.clear();
-							nameList.append(newCommonTopic);
-							QTreeWidgetItem* oldTopic = newTopic;
-							newTopic = new QTreeWidgetItem(nameList);
-							ui.twSubscriptions->addTopLevelItem(newTopic);
-
-							QMqttTopicFilter filter {newCommonTopic};
-							QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-							if(temp_subscription) {
-								m_mqttSubscriptions.push_back(temp_subscription);
-								connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-								m_mqttNewTopic = temp_subscription->topic().filter();
-								emit subscriptionMade();
-							}
-
-							nameList.clear();
-							nameList.append(commonTopic);
-							newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(oldTopic)));
-							unsubscribeFromTopic(commonTopic);
-
-
-							for(int i = 0; i < equalTopics.size(); ++i) {
-								for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
-									if(ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
-										nameList.clear();
-										nameList.append(equalTopics[i]);
-										newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
-										unsubscribeFromTopic(equalTopics[i]);
-										break;
-									}
-								}
-							}
-
-							for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-								if(checkTopicContains(newCommonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
-										newCommonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
-									unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
-									i--;
-								}
-							}
-
-							commonTopic = newCommonTopic;
-						}
-					} while(foundNewEqual);
-				}
-
-				if(foundSuperior) {
-					QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
-				}
+						commonTopic = newCommonTopic;
+					}
+				} while(foundNewEqual);
 			}
-			else
-				QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+
+			if(foundSuperior) {
+				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
+			}
 		}
 		else
-			QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
 	}
-	else {
-		QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
+	else
+		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+}
 
+void ImportFileWidget::mqttUnsubscribe() {
+	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
+
+	if(unsubscribeItem != nullptr) {
 		if(unsubscribeItem->parent() == nullptr)
-			unsubscribeFromTopic(m_mqttUnsubscribeTopic);
+			unsubscribeFromTopic(unsubscribeItem->text(0));
 		else{
 			while(unsubscribeItem->parent() != nullptr) {
 				for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
@@ -1926,6 +1940,8 @@ void ImportFileWidget::mqttSubscribe() {
 			unsubscribeFromTopic(unsubscribeItem->text(0));
 		}
 	}
+	else
+		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
 }
 
 void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
@@ -2121,21 +2137,6 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_lastMessage.clear();
 }
 
-void ImportFileWidget::mqttButtonSubscribe(QTreeWidgetItem *item, int column) {
-	if(!m_mqttSubscribeButton) {
-		ui.bSubscribe->setText("Subscribe");
-		m_mqttSubscribeButton = true;
-	}
-}
-
-void ImportFileWidget::mqttButtonUnsubscribe(QTreeWidgetItem *item, int column) {
-	qDebug()<< "trying to set unsubscribe, mqttSubscribeButton's value: "<<m_mqttSubscribeButton;
-	ui.bSubscribe->setText("Unsubscribe");
-	m_mqttSubscribeButton = false;
-	m_mqttUnsubscribeTopic = ui.twSubscriptions->currentItem()->text(0);
-	qDebug()<<"Unsubscribe from:"<<m_mqttUnsubscribeTopic;
-}
-
 void ImportFileWidget::useWillMessage(int state) {
 	if(state == Qt::Checked) {
 		ui.chbWillRetain->show();
@@ -2236,14 +2237,15 @@ void ImportFileWidget::hideMQTT() {
 	ui.cbQos->hide();
 	ui.lQos->hide();
 	ui.twTopics->hide();
-	ui.lTopicTree->hide();
+	//ui.lTopicTree->hide();
 	ui.lTopicSearch->hide();
 	ui.leTopics->hide();
 	ui.twSubscriptions->hide();
-	ui.lSubscriptions->hide();
+	//ui.lSubscriptions->hide();
 	ui.chbAuthentication->hide();
 	ui.chbID->hide();
 	ui.bSubscribe->hide();
+	ui.bUnsubscribe->hide();
 	ui.bConnect->hide();
 
 	ui.gbMqttWill->hide();
@@ -2492,6 +2494,16 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 
 		emit subscriptionMade();
 		refreshPreview();
+	}
+}
+
+void ImportFileWidget::searchChildren(QVector<QTreeWidgetItem*>& children, QTreeWidgetItem* item) {
+	if(item->childCount() == 0) {
+		children.push_back(item);
+	} else {
+		for(int i = 0; i < item->childCount(); ++i) {
+			searchChildren(children, item->child(i));
+		}
 	}
 }
 #endif

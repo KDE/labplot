@@ -96,6 +96,7 @@ public:
 	QString checkCommonLevel(const QString&, const QString&);
 	int commonLevelIndex(const QString& first, const QString& second);
 	void unsubscribeFromTopic(const QString&);
+	void searchChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 #endif
 	void hideMQTT();
 
@@ -130,8 +131,6 @@ private:
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
 	QString m_mqttNewTopic;
-	bool m_mqttSubscribeButton;
-	QString m_mqttUnsubscribeTopic;
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
 #endif
@@ -159,13 +158,12 @@ private slots:
     void mqttConnection();
     void onMqttConnect();
     void mqttSubscribe();
+	void mqttUnsubscribe();
     void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);
     void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
-	void mqttButtonSubscribe(QTreeWidgetItem *item, int column);
-	void mqttButtonUnsubscribe(QTreeWidgetItem *item, int column);
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
 	void updateWillTopics();

@@ -38,9 +38,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-1078</y>
-        <width>596</width>
-        <height>2001</height>
+        <y>0</y>
+        <width>593</width>
+        <height>1818</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -56,8 +56,12 @@
           <string>Data Source</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="17" column="2">
-           <widget class="QLineEdit" name="leTopics"/>
+          <item row="10" column="2">
+           <widget class="QCheckBox" name="chbID">
+            <property name="text">
+             <string>Set ID</string>
+            </property>
+           </widget>
           </item>
           <item row="0" column="2">
            <widget class="QComboBox" name="cbSourceType">
@@ -93,7 +97,7 @@
             </item>
            </widget>
           </item>
-          <item row="23" column="4">
+          <item row="22" column="4">
            <widget class="QPushButton" name="bManageFilters">
             <property name="enabled">
              <bool>false</bool>
@@ -138,13 +142,6 @@
             </property>
            </widget>
           </item>
-          <item row="16" column="3">
-           <widget class="QPushButton" name="bSubscribe">
-            <property name="text">
-             <string>Subscribe</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="lSourceType">
             <property name="text">
@@ -166,14 +163,14 @@
             </property>
            </widget>
           </item>
-          <item row="22" column="0">
+          <item row="21" column="0">
            <widget class="QLabel" name="lFileType">
             <property name="text">
              <string>Type:</string>
             </property>
            </widget>
           </item>
-          <item row="22" column="2">
+          <item row="21" column="2">
            <widget class="KComboBox" name="cbFileType">
             <property name="enabled">
              <bool>false</bool>
@@ -217,7 +214,7 @@
             </property>
            </widget>
           </item>
-          <item row="21" column="0">
+          <item row="20" column="0">
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -239,21 +236,7 @@
           <item row="4" column="2">
            <widget class="QComboBox" name="cbSerialPort"/>
           </item>
-          <item row="19" column="0">
-           <widget class="QLabel" name="lSubscriptions">
-            <property name="text">
-             <string>Subscripitons:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="18" column="0">
-           <widget class="QLabel" name="lQos">
-            <property name="text">
-             <string>QOS level:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="23" column="0">
+          <item row="22" column="0">
            <widget class="QLabel" name="lFilter">
             <property name="text">
              <string>Filter:</string>
@@ -266,14 +249,7 @@
           <item row="2" column="2">
            <widget class="QLineEdit" name="leHost"/>
           </item>
-          <item row="17" column="0">
-           <widget class="QLabel" name="lTopicSearch">
-            <property name="text">
-             <string>Scroll to root:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="24" column="0">
+          <item row="23" column="0">
            <spacer name="verticalSpacer_4">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -285,25 +261,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item row="18" column="2">
-           <widget class="QComboBox" name="cbQos">
-            <item>
-             <property name="text">
-              <string>0</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2</string>
-             </property>
-            </item>
-           </widget>
           </item>
           <item row="2" column="3">
            <widget class="QPushButton" name="bConnect">
@@ -362,14 +319,7 @@
             </property>
            </widget>
           </item>
-          <item row="10" column="2">
-           <widget class="QCheckBox" name="chbID">
-            <property name="text">
-             <string>Set ID</string>
-            </property>
-           </widget>
-          </item>
-          <item row="23" column="3">
+          <item row="22" column="3">
            <widget class="QPushButton" name="bSaveFilter">
             <property name="enabled">
              <bool>false</bool>
@@ -379,7 +329,7 @@
             </property>
            </widget>
           </item>
-          <item row="23" column="2">
+          <item row="22" column="2">
            <widget class="KComboBox" name="cbFilter">
             <property name="enabled">
              <bool>false</bool>
@@ -389,22 +339,6 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="16" column="2">
-           <widget class="QTreeWidget" name="twTopics">
-            <column>
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item row="16" column="0">
-           <widget class="QLabel" name="lTopicTree">
-            <property name="text">
-             <string>Topics:</string>
             </property>
            </widget>
           </item>
@@ -425,14 +359,14 @@
             </property>
            </widget>
           </item>
-          <item row="25" column="0">
+          <item row="24" column="0">
            <widget class="QLabel" name="lField">
             <property name="text">
              <string>Field:</string>
             </property>
            </widget>
           </item>
-          <item row="25" column="2">
+          <item row="24" column="2">
            <widget class="QTreeView" name="tvJson">
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -448,13 +382,87 @@
             </property>
            </widget>
           </item>
-          <item row="19" column="2">
-           <widget class="QTreeWidget" name="twSubscriptions">
-            <column>
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </column>
+          <item row="15" column="0" rowspan="4" colspan="5">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="3" column="1" colspan="2">
+              <widget class="QLineEdit" name="leTopics"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="lQos">
+               <property name="text">
+                <string>QOS level:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1" colspan="2">
+              <widget class="QComboBox" name="cbQos">
+               <item>
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>2</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="lTopicSearch">
+               <property name="text">
+                <string>Scroll to root:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="3">
+              <widget class="QTreeWidget" name="twTopics">
+               <column>
+                <property name="text">
+                 <string>Available topics</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="0" column="2" rowspan="3">
+              <widget class="QTreeWidget" name="twSubscriptions">
+               <column>
+                <property name="text">
+                 <string>Subscribed topics</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="bUnsubscribe">
+               <property name="text">
+                <string>Unsubscribe</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="bSubscribe">
+               <property name="text">
+                <string>Subscribe</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
