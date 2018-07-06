@@ -1633,6 +1633,7 @@ void ImportFileWidget::mqttConnection()
 
 void ImportFileWidget::onMqttConnect() {
 	if(m_client->error() == QMqttClient::NoError) {
+		m_timeoutTimer->stop();
 		ui.bConnect->setText("Disconnect");
 		ui.leHost->setEnabled(false);
 		ui.lePort->setEnabled(false);
@@ -2131,7 +2132,6 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_mqttReadyForPreview = false;
 	m_mqttSubscriptions.clear();
 
-	delete m_completer;
 	m_completer = new QCompleter;
 
 	m_topicList.clear();
@@ -2513,6 +2513,7 @@ void ImportFileWidget::searchChildren(QVector<QTreeWidgetItem*>& children, QTree
 
 void ImportFileWidget::mqttTimeout() {
 	m_client->disconnectFromHost();
+	m_timeoutTimer->stop();
 	QMessageBox::warning(this, "Warning", "Couldn't connect to the given broker");
 }
 #endif
