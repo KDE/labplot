@@ -239,6 +239,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::searchTreeItem);
+
+	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.lePassword, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leUsername, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leID, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_BrowserStop));
 #endif
@@ -1485,6 +1494,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lWillUpdateInterval->hide();
 		ui.lwWillStatistics->hide();
 		ui.lWillStatistics->hide();
+		ui.gbManageSubscriptions->setEnabled(false);
+
+		checkConnectEnable();
 
 		if(ui.chbWill->isChecked()) {
 			ui.chbWillRetain->show();
@@ -1634,6 +1646,7 @@ void ImportFileWidget::mqttConnection()
 void ImportFileWidget::onMqttConnect() {
 	if(m_client->error() == QMqttClient::NoError) {
 		m_timeoutTimer->stop();
+		ui.gbManageSubscriptions->setEnabled(true);
 		ui.bConnect->setText("Disconnect");
 		ui.leHost->setEnabled(false);
 		ui.lePort->setEnabled(false);
@@ -2104,6 +2117,7 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 }
 
 void ImportFileWidget::onMqttDisconnect() {
+	ui.gbManageSubscriptions->setEnabled(false);
 	ui.bConnect->setText("Connect");
 
 	ui.leHost->setEnabled(true);
@@ -2534,5 +2548,18 @@ void ImportFileWidget::mqttTimeout() {
 	m_client->disconnectFromHost();
 	m_timeoutTimer->stop();
 	QMessageBox::warning(this, "Warning", "Couldn't connect to the given broker");
+}
+
+void ImportFileWidget::checkConnectEnable() {
+	bool authenticationUsed = ui.chbAuthentication->isChecked();
+	bool idUsed = ui.chbID->isChecked();
+	bool authenticationFilled = !ui.leUsername->text().isEmpty() && !ui.lePassword->text().isEmpty();
+	bool idFilled = !ui.leID->text().isEmpty();
+	bool authenticationOK = !authenticationUsed || (authenticationUsed && authenticationFilled);
+	bool idOK = !idUsed || (idUsed && idFilled);
+	bool hostOK = !ui.leHost->text().isEmpty();
+	bool portOK = !ui.lePort->text().isEmpty();
+	bool enable = authenticationOK && idOK && hostOK && portOK;
+	ui.bConnect->setEnabled(enable);
 }
 #endif

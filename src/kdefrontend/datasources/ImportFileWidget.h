@@ -175,6 +175,7 @@ private slots:
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void searchTreeItem(const QString&);
 	void mqttTimeout();
+	void checkConnectEnable();
 #endif
 
 signals:
