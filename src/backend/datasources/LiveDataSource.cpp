@@ -409,7 +409,7 @@ LiveDataSource::UpdateType LiveDataSource::updateType() const {
  * \param host
  */
 void LiveDataSource::setHost(const QString& host) {
-	m_host = host;
+	m_host = host.simplified();
 }
 
 QString LiveDataSource::host() const {

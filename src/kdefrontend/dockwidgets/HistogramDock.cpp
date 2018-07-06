@@ -407,7 +407,33 @@ void HistogramDock::init(){
 	ui.cbFillingImageStyle->addItem(i18n("Center Tiled"));
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
 
+	//Error-bars
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.drawLine(3,10,17,10);//vert. line
+	pa.drawLine(10,3,10,17);//hor. line
+	pa.end();
+	ui.cbErrorBarsType->addItem(i18n("Bars"));
+	ui.cbErrorBarsType->setItemIcon(0, pm);
+
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,17,10); //vert. line
+	pa.drawLine(10,3,10,17); //hor. line
+	pa.drawLine(7,3,13,3); //upper cap
+	pa.drawLine(7,17,13,17); //bottom cap
+	pa.drawLine(3,7,3,13); //left cap
+	pa.drawLine(17,7,17,13); //right cap
+	pa.end();
+	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
+	ui.cbErrorBarsType->setItemIcon(1, pm);
+
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
+
 void HistogramDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"

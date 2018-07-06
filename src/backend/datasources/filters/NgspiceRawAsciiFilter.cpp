@@ -99,7 +99,6 @@ QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-
 /*!
   reads the content of the file \c fileName.
 */
@@ -132,7 +131,6 @@ void NgspiceRawAsciiFilter::loadFilterSettings(const QString& filterName) {
 void NgspiceRawAsciiFilter::saveFilterSettings(const QString& filterName) const {
 	Q_UNUSED(filterName);
 }
-
 
 void NgspiceRawAsciiFilter::setStartRow(const int r) {
 	d->startRow = r;
@@ -177,12 +175,7 @@ NgspiceRawAsciiFilterPrivate::NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter
 	startRow(1),
 	endRow(-1),
 	startColumn(1),
-	endColumn(-1),
-	m_actualStartRow(1),
-	m_actualRows(0),
-	m_actualCols(0),
-	m_prepared(false),
-	m_columnOffset(0) {
+	endColumn(-1) {
 }
 
 /*!
@@ -192,18 +185,10 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	DEBUG("NgspiceRawAsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 
-}
-
-/*!
- * generates the preview for the file \c fileName reading the provided number of \c lines.
- */
-QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileName, int lines) {
-	QVector<QStringList> dataStrings;
-
 	QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
-		return dataStrings;
+		return;
 	}
 
 	//skip the first four lines in the header
@@ -214,11 +199,11 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 
 	//number of variables
 	QString line = file.readLine();
-	int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
 	line = file.readLine();
-	int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
 
 	//add names of the variables
 	vectorNames.clear();
@@ -249,7 +234,108 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	}
 	file.seek(pos);
 
-	//add the data points
+	//prepare the data container
+	int actualRows = points;
+	int actualCols = vars;
+	if (hasComplexValues)
+		actualCols *= 2;
+
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows - startRow + 1,
+		                 actualCols, vectorNames, columnModes);
+
+	//read the data points
+	QStringList lineString;
+	int currentRow = 0;	// indexes the position in the vector(column)
+	QLocale locale(QLocale::C);
+	bool isNumber(false);
+	for (int i = 0; i < points; ++i) {
+		lineString.clear();
+		for (int j = 0; j < vars; ++j) {
+			line = file.readLine();
+			QStringList tokens = line.split(QLatin1Char('\t'));
+			QString valueString = tokens.at(1).simplified(); //string containing the value(s)
+			if (hasComplexValues) {
+				QStringList realImgTokens = valueString.split(QLatin1Char(','));
+				if (realImgTokens.size() == 2) { //sanity check to make sure we really have both parts
+					//real part
+					double value = locale.toDouble(realImgTokens.at(0), &isNumber);
+					static_cast<QVector<double>*>(m_dataContainer[2*j])->operator[](currentRow) = (isNumber ? value : NAN);
+
+					//imaginary part
+					value = locale.toDouble(realImgTokens.at(0), &isNumber);
+					static_cast<QVector<double>*>(m_dataContainer[2*j+1])->operator[](currentRow) = (isNumber ? value : NAN);
+				}
+			} else {
+				const double value = locale.toDouble(valueString, &isNumber);
+				static_cast<QVector<double>*>(m_dataContainer[j])->operator[](currentRow) = (isNumber ? value : NAN);
+			}
+		}
+
+		file.readLine(); //skip the empty line after each value block
+
+		currentRow++;
+		emit q->completed(100 * currentRow/actualRows);
+	}
+
+	dataSource->finalizeImport(columnOffset, startColumn, endColumn, "", importMode);
+}
+
+/*!
+ * generates the preview for the file \c fileName reading the provided number of \c lines.
+ */
+QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileName, int lines) {
+	QVector<QStringList> dataStrings;
+
+	QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		DEBUG("Failed to open the file " << fileName.toStdString());
+		return dataStrings;
+	}
+
+	//skip the first four lines in the header
+	file.readLine();
+	file.readLine();
+	file.readLine();
+	file.readLine();
+
+	//number of variables
+	QString line = file.readLine();
+	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+
+	//number of points
+	line = file.readLine();
+	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+
+	//add names of the variables
+	vectorNames.clear();
+	columnModes.clear();
+	file.readLine();
+	for (int i = 0; i<vars; ++i) {
+		line = file.readLine();
+		QStringList tokens = line.split('\t');
+		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		columnModes << AbstractColumn::Numeric;
+	}
+
+	file.readLine(); //skip the line with "Values"
+
+	//read the first value to check whether we have complex numbers
+	qint64 pos = file.pos();
+	line = file.readLine();
+	bool hasComplexValues = (line.indexOf(QLatin1Char(',')) != -1);
+	if (hasComplexValues) {
+		//add column names and types for the imaginary parts
+		QStringList newVectorNames;
+		for (int i = 0; i<vars; ++i) {
+			columnModes << AbstractColumn::Numeric;
+			newVectorNames << vectorNames.at(i) + QLatin1String(" REAL");
+			newVectorNames << vectorNames.at(i) + QLatin1String(" IMAGINARY");
+		}
+		vectorNames = newVectorNames;
+	}
+	file.seek(pos);
+
+	//read the data points
 	QStringList lineString;
 	for (int i = 0; i< qMin(lines, points); ++i) {
 		lineString.clear();
@@ -261,7 +347,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 				QStringList realImgTokens = value.split(QLatin1Char(','));
 				if (realImgTokens.size() == 2) { //sanity check to make sure we really have both parts
 					lineString << realImgTokens.at(0); //real part
-					lineString << realImgTokens.at(0); //imaginary part
+					lineString << realImgTokens.at(1); //imaginary part
 				}
 			} else
 				lineString << value;
