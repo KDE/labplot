@@ -1844,8 +1844,10 @@ void MainWin::newLiveDataSourceActionTriggered() {
 
 			if(!found)
 				this->addAspectToProject(mqttClient);
-			else
+			else {
+				delete mqttClient;
 				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host name!");
+			}
 #endif
 		}
 		else {
