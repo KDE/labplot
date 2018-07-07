@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2018 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -71,6 +71,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
@@ -121,6 +122,7 @@ signals:
 	friend class CartesianPlotLegendSetLabelColumnMajorCmd;
 	friend class CartesianPlotLegendSetLineSymbolWidthCmd;
 	friend class CartesianPlotLegendSetPositionCmd;
+	friend class CartesianPlotLegendSetRotationAngleCmd;
 	friend class CartesianPlotLegendSetBackgroundTypeCmd;
 	friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
 	friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
@@ -144,6 +146,7 @@ signals:
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);
 	void positionChanged(const CartesianPlotLegend::PositionWrapper&);
+	void rotationAngleChanged(qreal);
 	void backgroundTypeChanged(PlotArea::BackgroundType);
 	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

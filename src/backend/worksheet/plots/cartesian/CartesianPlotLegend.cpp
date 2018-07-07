@@ -83,6 +83,8 @@ void CartesianPlotLegend::init() {
 	d->position.horizontalPosition = CartesianPlotLegend::hPositionRight;
 	d->position.verticalPosition = CartesianPlotLegend::vPositionBottom;
 
+	d->rotationAngle = group.readEntry("Rotation", 0.0);
+
 	//Title
  	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
 	addChild(d->title);
@@ -186,6 +188,7 @@ CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, CartesianPlotLegend::PositionWrapper, position, position)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
 
 //Title
@@ -255,6 +258,13 @@ void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 		|| pos.horizontalPosition!=d->position.horizontalPosition
 		|| pos.verticalPosition!=d->position.verticalPosition)
 		exec(new CartesianPlotLegendSetPositionCmd(d, pos, ki18n("%1: set position")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetRotationAngle, qreal, rotationAngle, retransform)
+void CartesianPlotLegend::setRotationAngle(qreal angle) {
+	Q_D(CartesianPlotLegend);
+	if (angle != d->rotationAngle)
+		exec(new CartesianPlotLegendSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
 //Background
@@ -569,6 +579,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
+	painter->rotate(rotationAngle);
+
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
@@ -876,6 +888,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
 	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
 	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
+	writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
 	writer->writeEndElement();
 
 	//title
@@ -987,6 +1000,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
 			else
 				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
+
+			READ_DOUBLE_VALUE("rotation", rotationAngle);
 		} else if (reader->name() == "textLabel") {
 			if (!d->title->load(reader, preview)) {
 				delete d->title;
