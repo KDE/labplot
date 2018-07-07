@@ -1183,8 +1183,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				position.verticalPosition = CartesianPlotLegend::vPositionBottom;
 				legend->setPosition(position);
 
-				//TODO: rotation
-				//legend->setRotationAngle(originLegend.rotation);
+				//rotation
+				legend->setRotationAngle(originLegend.rotation);
 
 				//border line
 				if (originLegend.borderType == Origin::BorderType::None)

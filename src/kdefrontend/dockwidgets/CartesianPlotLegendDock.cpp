@@ -885,12 +885,11 @@ void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
 //*************************************************************
 void CartesianPlotLegendDock::load() {
 	//General-tab
-	ui.chkVisible->setChecked( m_legend->isVisible() );
 
+	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
-// 	qDebug()<<"font size " << font.pixelSize() << "  " << font.pointSizeF();
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
@@ -901,6 +900,15 @@ void CartesianPlotLegendDock::load() {
 		ui.cbOrder->setCurrentIndex(1); //row major
 
 	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter) );
+
+	//Geometry
+	ui.cbPositionX->setCurrentIndex(m_legend->position().horizontalPosition);
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex(m_legend->position().verticalPosition);
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), Worksheet::Centimeter) );
+	ui.sbRotation->setValue(m_legend->rotationAngle());
+
+	ui.chkVisible->setChecked( m_legend->isVisible() );
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( (int) m_legend->backgroundType() );
@@ -964,8 +972,8 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	//General-tab
-	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
 
+	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
@@ -981,6 +989,15 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
 													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
+
+	// Geometry
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_legend->position().horizontalPosition ) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_legend->position().verticalPosition ) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),Worksheet::Centimeter) );
+	ui.sbRotation->setValue( group.readEntry("Rotation", (int) m_legend->rotationAngle() ) );
+
+	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
@@ -1027,13 +1044,22 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	//General-tab
-	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	//Format
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex()==0);// true for "column major", false for "row major"
 	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
+
+	//Geometry
+	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("Rotation", ui.sbRotation->value());
+
+	group.writeEntry("Visible", ui.chkVisible->isChecked());
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
