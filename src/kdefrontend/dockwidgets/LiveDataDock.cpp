@@ -26,12 +26,15 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #include "LiveDataDock.h"
 #include <KLocalizedString>
+#include <QCompleter>
+#include <QString>
+#include <QTimer>
+#include <QTreeWidgetItem>
 #include <QStandardItemModel>
 
 #ifdef HAVE_MQTT
 #include <QMessageBox>
 #endif
-
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent),

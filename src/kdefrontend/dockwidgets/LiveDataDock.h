@@ -27,21 +27,24 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef LIVEDATADOCK_H
 #define LIVEDATADOCK_H
 
+#ifdef HAVE_MQTT
+#include <QtMqtt>
+#include <QStringList>
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/MQTTClient.h"
+
+#endif
+
 #include <QWidget>
+#include <QList>
 
 #include "ui_livedatadock.h"
 #include "backend/datasources/LiveDataSource.h"
-#include <QList>
-#ifdef HAVE_MQTT
-#include <QtMqtt>
-#include <QCompleter>
-#include <QString>
-#include <QStringList>
-#include <QTimer>
-#include <QTreeWidgetItem>
-#include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/MQTTClient.h"
-#endif
+
+class QTimer;
+class QTreeWidgetItem;
+class QString;
+class QCompleter;
 
 class LiveDataDock : public QWidget {
 	Q_OBJECT
@@ -49,11 +52,6 @@ class LiveDataDock : public QWidget {
 public:
 	explicit LiveDataDock(QWidget *parent = 0);
 	void setLiveDataSources(const QList<LiveDataSource*>& sources);
-#ifdef HAVE_MQTT
-	void setMQTTClients(const QList<MQTTClient*>& clients);
-	bool checkTopicContains(const QString& superior, const QString& inferior);
-	QString checkCommonLevel(const QString& first, const QString& second);
-#endif
 	~LiveDataDock();
 
 private:
@@ -64,30 +62,8 @@ private:
 
 	void pauseReading();
 	void continueReading();
-#ifdef HAVE_MQTT
-	int commonLevelIndex(const QString& first, const QString& second);
-	void addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription);
-	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
-#endif
-
-#ifdef HAVE_MQTT
-	QList<MQTTClient*> m_mqttClients;
-	QMqttClient* m_client;
-	QCompleter *m_completer;
-	QStringList m_topicList;
-	bool m_editing;
-	QTimer *m_timer;
-	QTimer *m_messageTimer;
-	bool m_interpretMessage;
-	bool m_MQTTUsed;
-	const MQTTClient* m_previousMQTTClient;
-	bool m_mqttSubscribeButton;
-	QString m_mqttUnsubscribeName;
-	QVector<QString> m_addedTopics;
-#endif
 
 private slots:
-
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
 	void sampleSizeChanged(int);
@@ -98,6 +74,12 @@ private slots:
 	void pauseContinueReading();
 
 #ifdef HAVE_MQTT
+public:
+	void setMQTTClients(const QList<MQTTClient*>& clients);
+	bool checkTopicContains(const QString& superior, const QString& inferior);
+	QString checkCommonLevel(const QString& first, const QString& second);
+
+private slots:
 	void useWillMessage(int);
 	void willQoSChanged(int);
 	void willRetainChanged(int);
@@ -118,14 +100,29 @@ private slots:
 	void fillSubscriptions();
 	void stopStartReceive();
 	void searchTreeItem(const QString& rootName);
+signals:
+	void newTopic(const QString&);
+private:
+	int commonLevelIndex(const QString& first, const QString& second);
+	void addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription);
+	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
+
+	QList<MQTTClient*> m_mqttClients;
+	QMqttClient* m_client;
+	QCompleter* m_completer;
+	QStringList m_topicList;
+	bool m_editing;
+	QTimer* m_timer;
+	QTimer* m_messageTimer;
+	bool m_interpretMessage;
+	bool m_MQTTUsed;
+	const MQTTClient* m_previousMQTTClient;
+	bool m_mqttSubscribeButton;
+	QString m_mqttUnsubscribeName;
+	QVector<QString> m_addedTopics;
 #endif
 
 public slots:
-
-signals:
-#ifdef HAVE_MQTT
-	void newTopic(const QString&);
-#endif
 
 };
 
