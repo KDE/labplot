@@ -590,7 +590,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	painter->rotate(rotationAngle);
+	painter->rotate(-rotationAngle);
 
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
