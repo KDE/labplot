@@ -1831,7 +1831,21 @@ void MainWin::newLiveDataSourceActionTriggered() {
 #ifdef HAVE_MQTT
 			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
 			dlg->importToMQTT(mqttClient);
-			this->addAspectToProject(mqttClient);
+
+			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
+
+			bool found = false;
+			for(int i = 0; i < existingClients.size(); ++i) {
+				if(existingClients[i]->clientHostName() == mqttClient->clientHostName()) {
+					found = true;
+					break;
+				}
+			}
+
+			if(!found)
+				this->addAspectToProject(mqttClient);
+			else
+				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host name!");
 #endif
 		}
 		else {

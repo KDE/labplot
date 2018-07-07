@@ -75,6 +75,7 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QtCore/QJsonDocument>
 
 #ifdef HAVE_MQTT
+#include "backend/core/Project.h"
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
@@ -566,48 +567,41 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	if (updateType == MQTTClient::UpdateType::TimeInterval)
 		client->setUpdateInterval(ui.sbUpdateInterval->value());
 
-		//if(ui.sbKeepNValues->value() != 0)
-			//client->setKeepLastValues(true);
-		client->setKeepNvalues(ui.sbKeepNValues->value());
-
+	client->setKeepNvalues(ui.sbKeepNValues->value());
 
 	client->setUpdateType(updateType);
 
 	if (readingType != MQTTClient::ReadingType::TillEnd)
 		client->setSampleRate(ui.sbSampleSize->value());
 
+	qDebug()<<"Saving mqtt";
+	client->setMqttClientHostPort(m_client->hostname(), m_client->port());
 
+	client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
+	if(ui.chbAuthentication->isChecked())
+		client->setMqttClientAuthentication(m_client->username(), m_client->password());
 
+	client->setMQTTUseID(ui.chbID->isChecked());
+	if(ui.chbID->isChecked())
+		client->setMqttClientId(m_client->clientId());
 
-		qDebug()<<"Saving mqtt";
-		client->setMqttClientHostPort(m_client->hostname(), m_client->port());
-
-		client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
-		if(ui.chbAuthentication->isChecked())
-			client->setMqttClientAuthentication(m_client->username(), m_client->password());
-
-		client->setMQTTUseID(ui.chbID->isChecked());
-		if(ui.chbID->isChecked())
-			client->setMqttClientId(m_client->clientId());
-
-		for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
-			client->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-		}
-		client->setMqttRetain(ui.chbRetain->isChecked());
-		client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
-		client->setWillOwnMessage(ui.leWillOwnMessage->text());
-		client->setWillQoS(ui.cbWillQoS->currentIndex() );
-		client->setWillRetain(ui.chbWillRetain->isChecked());
-		client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
-		client->setWillTopic(ui.cbWillTopic->currentText());
-		client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
-		client->setMqttWillUse(ui.chbWill->isChecked());
-		for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
-			QListWidgetItem* item = ui.lwWillStatistics->item(i);
-			if (item->checkState() == Qt::Checked)
-				client->addWillStatistics(static_cast<MQTTClient::WillStatistics> (i));
-		}
-
+	for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
+		client->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+	}
+	client->setMqttRetain(ui.chbRetain->isChecked());
+	client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
+	client->setWillOwnMessage(ui.leWillOwnMessage->text());
+	client->setWillQoS(ui.cbWillQoS->currentIndex() );
+	client->setWillRetain(ui.chbWillRetain->isChecked());
+	client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
+	client->setWillTopic(ui.cbWillTopic->currentText());
+	client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
+	client->setMqttWillUse(ui.chbWill->isChecked());
+	for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(i);
+		if (item->checkState() == Qt::Checked)
+			client->addWillStatistics(static_cast<MQTTClient::WillStatistics> (i));
+	}
 }
 #endif
 
