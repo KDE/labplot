@@ -1969,7 +1969,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	path = trafo.map(path);
 	trafo.reset();
 	if (symbolsRotationAngle != 0) {
-		trafo.rotate(symbolsRotationAngle);
+		trafo.rotate(-symbolsRotationAngle);
 		path = trafo.map(path);
 	}
 	for (const auto& point : symbolPointsScene) {
