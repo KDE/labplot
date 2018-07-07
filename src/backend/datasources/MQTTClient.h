@@ -170,6 +170,7 @@ public:
 
 	void newMQTTSubscription(const QString&, quint8);
 	void removeMQTTSubscription(const QString&);
+	void addBeforeRemoveSubscription(const QString&, quint8);
 
 private:
 	//void initActions();

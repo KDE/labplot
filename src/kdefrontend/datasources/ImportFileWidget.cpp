@@ -1682,28 +1682,6 @@ void ImportFileWidget::mqttSubscribe() {
 			bool foundEqual = false;
 			QVector<QString> equalTopics;
 
-			QVector<QString> childrenName;
-			if(name.endsWith("#")) {
-				qDebug()<<"Adding new topic";
-				QStringList toplevelName;
-				toplevelName.push_back(name);
-				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
-				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
-
-				QMqttTopicFilter filter {name};
-				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
-
-				if(temp_subscription) {
-					m_mqttSubscriptions.push_back(temp_subscription);
-					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					m_mqttNewTopic = temp_subscription->topic().filter();
-					emit subscriptionMade();
-				}
-				qDebug()<<"Finished adding";
-
-				addSubscriptionChildren(item, newTopLevelItem);
-			}
-
 			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
 				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
@@ -1762,7 +1740,7 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 			}
 
-			if(!foundSuperior && !name.endsWith("#")) {
+			if(!foundSuperior) {
 				qDebug()<<"Adding new topic";
 				QStringList toplevelName;
 				toplevelName.push_back(name);
@@ -1778,7 +1756,10 @@ void ImportFileWidget::mqttSubscribe() {
 					m_mqttNewTopic = temp_subscription->topic().filter();
 					emit subscriptionMade();
 				}
-				qDebug()<<"Finished adding";
+
+				if(name.endsWith("#")) {
+					addSubscriptionChildren(item, newTopLevelItem);
+				}
 			}
 
 			if(foundEqual) {

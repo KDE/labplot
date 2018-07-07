@@ -64,6 +64,11 @@ private:
 
 	void pauseReading();
 	void continueReading();
+#ifdef HAVE_MQTT
+	int commonLevelIndex(const QString& first, const QString& second);
+	void addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription);
+	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
+#endif
 
 #ifdef HAVE_MQTT
 	QList<MQTTClient*> m_mqttClients;
@@ -105,14 +110,13 @@ private slots:
 	void willUpdateIntervalChanged(const QString&);
 	void statisticsChanged(QListWidgetItem *);
 	void addSubscription();
+	void removeSubscription();
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
 	void stopStartReceive();
-	void mqttButtonSubscribe(QTreeWidgetItem *, int);
-	void mqttButtonUnsubscribe(QListWidgetItem *);
 	void searchTreeItem(const QString& rootName);
 #endif
 

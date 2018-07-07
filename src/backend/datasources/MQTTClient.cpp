@@ -879,7 +879,6 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 		qDebug()<<"Add to vector";
 		m_mqttSubscriptions.push_back(newSubscription);
 
-		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 		qDebug()<<"Added topic";
 
 		qDebug()<<"Check for inferior subscriptions";
@@ -921,7 +920,7 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 			}
 		}
 
-		emit mqttSubscribed();
+		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 	}
 }
 
@@ -960,9 +959,63 @@ void MQTTClient::removeMQTTSubscription(const QString &name) {
 			break;
 		}
 	}
-
-	emit mqttSubscribed();
 	emit mqttNewTopicArrived();
+}
+
+void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
+	QMqttTopicFilter filter {topic};
+	QMqttSubscription* temp = m_client->subscribe(filter, QoS);
+
+	if (temp) {
+		qDebug()<<temp->topic()<<"  "<<temp->qos();
+		m_subscriptions.push_back(temp->topic().filter());
+		m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
+
+		qDebug()<<"New MQTTSubscription";
+		MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+		newSubscription->setMQTTClient(this);
+
+		qDebug()<<"Add child";
+		addChild(newSubscription);
+
+		qDebug()<<"Add to vector";
+		m_mqttSubscriptions.push_back(newSubscription);
+
+		qDebug()<<"Added topic";
+
+		qDebug()<<"Check for superior subscription";
+		bool found = false;
+		MQTTSubscriptions* superiorSubscription;
+
+		for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+			if(checkTopicContains(m_mqttSubscriptions[i]->subscriptionName(), topic)
+					&& topic != m_mqttSubscriptions[i]->subscriptionName()) {
+				found = true;
+				superiorSubscription = m_mqttSubscriptions[i];
+				break;
+			}
+		}
+
+		if(found) {
+				qDebug()<<"Inferior subscription: "<<superiorSubscription->subscriptionName();
+				QVector<MQTTTopic*> topics = superiorSubscription->topics();
+				qDebug()<< topics.size();
+
+				QVector<MQTTTopic*> inferiorTopics;
+
+				for(int i = 0; i < topics.size(); ++i) {
+					if(checkTopicContains(topic, topics[i]->topicName())) {
+						inferiorTopics.push_back(topics[i]);
+					}
+				}
+
+				for(int i = 0; i < inferiorTopics.size() ; ++i) {
+					qDebug()<<inferiorTopics[i]->topicName();
+					inferiorTopics[i]->reparent(newSubscription);
+				}
+		}
+		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+	}
 }
 
 void MQTTClient::subscriptionLoaded(const QString &name) {
