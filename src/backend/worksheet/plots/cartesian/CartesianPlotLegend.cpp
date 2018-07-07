@@ -423,7 +423,12 @@ QString CartesianPlotLegendPrivate::name() const {
 }
 
 QRectF CartesianPlotLegendPrivate::boundingRect() const {
-	return rect;
+	if (rotationAngle != 0) {
+		QMatrix matrix;
+		matrix.rotate(-rotationAngle);
+		return matrix.mapRect(rect);
+	} else
+		return rect;
 }
 
 void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -439,6 +444,12 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 		path.addRect(rect);
 	else
 		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+
+	if (rotationAngle != 0) {
+		QTransform trafo;
+		trafo.rotate(rotationAngle);
+		path = trafo.map(path);
+	}
 
 	return path;
 }
