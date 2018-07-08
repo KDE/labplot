@@ -425,7 +425,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 				return 1;
 		}
 
-		//TOOD: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
+		//TODO: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
 		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
 			i--;
 	}
@@ -542,6 +542,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
+		if (device.atEnd())	// EOF reached
+			break;
 		firstLineStringList = getLineString(device);
 
 		if (createIndexEnabled)
