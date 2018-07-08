@@ -154,8 +154,8 @@ private:
 	QVector <QMqttSubscription*> m_mqttSubscriptions;
 	QCompleter* m_completer;
 	QStringList m_topicList;
-	bool m_editing;
-	QTimer *m_timer;
+	bool m_searching;
+	QTimer *m_searchTimer;
 	QTimer *m_timeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;

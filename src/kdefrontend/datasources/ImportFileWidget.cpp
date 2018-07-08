@@ -99,14 +99,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_liveDataSource(true),   
 #ifdef HAVE_MQTT
 	m_mqttReadyForPreview (false),
-	m_editing(false),
+	m_searching(false),
 #endif
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
 
 #ifdef HAVE_MQTT
-    m_timer = new QTimer(this);
-    m_timer->setInterval(10000);
+	m_searchTimer = new QTimer(this);
+	m_searchTimer->setInterval(10000);
 	m_timeoutTimer = new QTimer(this);
 	m_timeoutTimer->setInterval(5000);
 #endif
@@ -232,7 +232,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
 	connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
-	connect(m_timer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
+	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(m_timeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttTimeout);
 
@@ -2002,38 +2002,10 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 		}
 		emit newTopic(rootName);
 	}
-
-	/*
-	QString topicName = topic.name();
-	if(ui.cbTopic->findText(topicName) == -1) {
-		QStringList topicList = topicName.split('/', QString::SkipEmptyParts);
-		for(int i = topicList.count() - 1; i >= 0; --i) {
-			QString tempTopic = "";
-			for(int j = 0; j <= i; ++j) {
-				tempTopic = tempTopic + topicList.at(j) + "/";
-			}
-			if(i < topicList.count() - 1) {
-				tempTopic = tempTopic + "#";
-			}
-			else
-				tempTopic.remove(tempTopic.size()-1, 1);
-
-			//qDebug()<<"checking topic: " << tempTopic;
-			if (ui.cbTopic->findText(tempTopic) == -1) {
-				//qDebug()<<"Adding: "<<tempTopic;
-				ui.cbTopic->addItem(tempTopic);
-				emit newTopic(tempTopic);
-			}
-			else {
-				//qDebug() << "Not adding " + tempTopic;
-				break;
-			}
-		}
-	}*/
 }
 
 void ImportFileWidget::setCompleter(const QString& topic) {
-	if(!m_editing) {
+	if(!m_searching) {
 		if(!m_topicList.contains(topic)) {
 			m_topicList.append(topic);
 			m_completer = new QCompleter(m_topicList, this);
@@ -2046,8 +2018,8 @@ void ImportFileWidget::setCompleter(const QString& topic) {
 
 void ImportFileWidget::topicTimeout() {
 	qDebug()<<"lejart ido";
-	m_editing = false;
-	m_timer->stop();
+	m_searching = false;
+	m_searchTimer->stop();
 }
 
 bool ImportFileWidget::isMqttValid(){
@@ -2128,8 +2100,8 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_completer = new QCompleter;
 
 	m_topicList.clear();
-	m_editing = false;
-	m_timer->stop();
+	m_searching = false;
+	m_searchTimer->stop();
 	m_messageArrived.clear();
 	m_lastMessage.clear();
 }
@@ -2412,8 +2384,8 @@ int ImportFileWidget::commonLevelIndex(const QString& first, const QString& seco
 }
 
 void ImportFileWidget::searchTreeItem(const QString& rootName) {
-	m_editing = true;
-	m_timer->start();
+	m_searching = true;
+	m_searchTimer->start();
 
 	qDebug()<<rootName;
 	int topItemIdx = -1;

@@ -111,8 +111,8 @@ private:
 	QMqttClient* m_client;
 	QCompleter* m_completer;
 	QStringList m_topicList;
-	bool m_editing;
-	QTimer* m_timer;
+	bool m_searching;
+	QTimer* m_searchTimer;
 	QTimer* m_messageTimer;
 	bool m_interpretMessage;
 	bool m_MQTTUsed;

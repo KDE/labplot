@@ -40,10 +40,10 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent),
 #ifdef HAVE_MQTT
 	m_client(new QMqttClient()),
-	m_editing(true),
+	m_searching(true),
 	m_MQTTUsed(true),
 	m_previousMQTTClient(nullptr),
-	m_timer(new QTimer()),
+	m_searchTimer(new QTimer()),
 	m_messageTimer(new QTimer()),
 	m_interpretMessage(true),
 	m_mqttSubscribeButton(true),
@@ -63,12 +63,12 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
 #ifdef HAVE_MQTT
-	m_timer->setInterval(10000);
+	m_searchTimer->setInterval(10000);
 
 	connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
 	connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
-	connect(m_timer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
+	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
 	connect(ui.bSubscribe, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this, &LiveDataDock::removeSubscription);
 	connect(m_messageTimer, &QTimer::timeout, this, &LiveDataDock::stopStartReceive);
@@ -814,7 +814,7 @@ void LiveDataDock::removeSubscription() {
 }
 
 void LiveDataDock::setCompleter(const QString& topic) {
-	if(!m_editing) {
+	if(!m_searching) {
 		if(!m_topicList.contains(topic)) {
 			m_topicList.append(topic);
 			m_completer = new QCompleter(m_topicList, this);
@@ -827,8 +827,8 @@ void LiveDataDock::setCompleter(const QString& topic) {
 
 void LiveDataDock::topicTimeout() {
 	qDebug()<<"lejart ido";
-	m_editing = false;
-	m_timer->stop();
+	m_searching = false;
+	m_searchTimer->stop();
 }
 
 void LiveDataDock::addSubscription() {
@@ -1097,7 +1097,7 @@ void LiveDataDock::fillSubscriptions() {
 		}
 
 	}
-	m_editing = false;
+	m_searching = false;
 }
 
 void LiveDataDock::stopStartReceive() {
@@ -1143,8 +1143,8 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 }
 
 void LiveDataDock::searchTreeItem(const QString& rootName) {
-	m_editing = true;
-	m_timer->start();
+	m_searching = true;
+	m_searchTimer->start();
 
 	qDebug()<<rootName;
 	int topItemIdx = -1;
