@@ -56,8 +56,7 @@ public:
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();
 
-	virtual QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			ImportMode = AbstractFileFilter::Replace) = 0;
+	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = AbstractFileFilter::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	virtual void loadFilterSettings(const QString& filterName) = 0;

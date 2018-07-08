@@ -50,10 +50,9 @@ ROOTFilter::ROOTFilter():AbstractFileFilter(), d(new ROOTFilterPrivate) {}
 
 ROOTFilter::~ROOTFilter() {}
 
-QVector<QStringList> ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
+void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
 			AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
-	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
 void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) {

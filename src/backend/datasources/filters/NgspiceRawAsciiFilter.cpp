@@ -102,9 +102,8 @@ QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
-	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
 QVector<QStringList> NgspiceRawAsciiFilter::preview(const QString& fileName, int lines) {
