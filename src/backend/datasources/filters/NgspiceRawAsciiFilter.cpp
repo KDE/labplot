@@ -102,8 +102,8 @@ QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
@@ -181,9 +181,9 @@ NgspiceRawAsciiFilterPrivate::NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter
 /*!
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG("NgspiceRawAsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
-	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -235,20 +235,28 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	file.seek(pos);
 
 	//prepare the data container
-	int actualRows = points;
-	int actualCols = vars;
-	if (hasComplexValues)
-		actualCols *= 2;
+	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
+	const int actualRows = actualEndRow - startRow + 1;
+	const int actualCols = hasComplexValues ? vars*2 : vars;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows,
+														actualCols, vectorNames, columnModes);
 
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows - startRow + 1,
-		                 actualCols, vectorNames, columnModes);
+	//skip data lines, if required
+	DEBUG("	Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; ++i) {
+		for (int j = 0; j < vars; ++j)
+			file.readLine();
+
+		file.readLine(); //skip the empty line after each value block
+	}
 
 	//read the data points
 	QStringList lineString;
 	int currentRow = 0;	// indexes the position in the vector(column)
 	QLocale locale(QLocale::C);
 	bool isNumber(false);
-	for (int i = 0; i < points; ++i) {
+
+	for (int i = 0; i < actualEndRow; ++i) {
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
@@ -262,7 +270,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 					static_cast<QVector<double>*>(m_dataContainer[2*j])->operator[](currentRow) = (isNumber ? value : NAN);
 
 					//imaginary part
-					value = locale.toDouble(realImgTokens.at(0), &isNumber);
+					value = locale.toDouble(realImgTokens.at(1), &isNumber);
 					static_cast<QVector<double>*>(m_dataContainer[2*j+1])->operator[](currentRow) = (isNumber ? value : NAN);
 				}
 			} else {

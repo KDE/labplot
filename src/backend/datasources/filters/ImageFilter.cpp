@@ -52,8 +52,8 @@ QStringList ImageFilter::importFormats() {
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	return d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	return d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 /*!
@@ -137,8 +137,7 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	Q_UNUSED(lines);
+QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QVector<QStringList> dataStrings;
 
 	QImage image = QImage(fileName);
@@ -283,11 +282,7 @@ void ImageFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool ImageFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "imageFilter") {
-		reader->raiseError(i18n("no binary filter element found"));
-		return false;
-	}
-
+	Q_UNUSED(reader);
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 

@@ -1291,6 +1291,35 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbSourceType</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>bOpen</tabstop>
+  <tabstop>bFileInfo</tabstop>
+  <tabstop>leHost</tabstop>
+  <tabstop>lePort</tabstop>
+  <tabstop>cbSerialPort</tabstop>
+  <tabstop>cbBaudRate</tabstop>
+  <tabstop>cbFileType</tabstop>
+  <tabstop>cbFilter</tabstop>
+  <tabstop>bSaveFilter</tabstop>
+  <tabstop>bManageFilters</tabstop>
+  <tabstop>tvJson</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>sbPreviewLines</tabstop>
+  <tabstop>bRefreshPreview</tabstop>
+  <tabstop>tePreview</tabstop>
+  <tabstop>sbStartRow</tabstop>
+  <tabstop>sbEndRow</tabstop>
+  <tabstop>sbStartColumn</tabstop>
+  <tabstop>sbEndColumn</tabstop>
+  <tabstop>cbReadingType</tabstop>
+  <tabstop>sbSampleSize</tabstop>
+  <tabstop>cbUpdateType</tabstop>
+  <tabstop>sbUpdateInterval</tabstop>
+  <tabstop>sbKeepNValues</tabstop>
+  <tabstop>chbLinkFile</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

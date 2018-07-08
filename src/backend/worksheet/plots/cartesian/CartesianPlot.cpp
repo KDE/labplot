@@ -2596,11 +2596,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CartesianPlot);
 
-	if (!reader->isStartElement() || reader->name() != "cartesianPlot") {
-		reader->raiseError(i18n("no cartesianPlot element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

@@ -60,8 +60,8 @@ void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataS
 /*!
 reads the content of the file \c fileName.
 */
-QVector<QStringList> JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
@@ -494,9 +494,9 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 /*!
 reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	 KFilterDev device(fileName);
-	 readDataFromDevice(device, dataSource, importMode, lines);
+	 readDataFromDevice(device, dataSource, importMode, -1);
 }
 
 /*!
@@ -759,10 +759,6 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool JsonFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "jsonFilter") {
-		reader->raiseError(i18n("no json filter element found"));
-		return false;
-	}
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

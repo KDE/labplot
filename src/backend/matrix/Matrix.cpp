@@ -1049,11 +1049,6 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 }
 
 bool Matrix::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "matrix") {
-		reader->raiseError(i18n("no matrix element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

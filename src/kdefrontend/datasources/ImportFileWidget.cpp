@@ -732,8 +732,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		}
 	case AbstractFileFilter::NgspiceRawAscii: {
 			NgspiceRawAsciiFilter* filter = new NgspiceRawAsciiFilter();
-// 			filter->setStartRow( ui.sbStartRow->value() );
-// 			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
 			return filter;
 		}
 	}

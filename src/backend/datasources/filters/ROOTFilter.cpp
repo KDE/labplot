@@ -51,7 +51,7 @@ ROOTFilter::ROOTFilter():AbstractFileFilter(), d(new ROOTFilterPrivate) {}
 ROOTFilter::~ROOTFilter() {}
 
 QVector<QStringList> ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-                                                  AbstractFileFilter::ImportMode importMode, int) {
+			AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
@@ -122,11 +122,6 @@ void ROOTFilter::save(QXmlStreamWriter* writer) const {
 }
 
 bool ROOTFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "rootFilter") {
-		reader->raiseError(i18n("no ROOT filter element found"));
-		return false;
-	}
-
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
@@ -157,8 +152,8 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 ROOTFilterPrivate::ROOTFilterPrivate() {}
 
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-                                         AbstractFileFilter::ImportMode importMode) {
-	DEBUG("readDataFromFile()");
+		AbstractFileFilter::ImportMode importMode) {
+	DEBUG("ROOTFilterPrivate::readDataFromFile()");
 
 	setFile(fileName);
 
@@ -173,8 +168,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 	QVector<void*> dataContainer;
 	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, colNames.size(),
-	                                                   colNames, QVector<AbstractColumn::ColumnMode>(
-	                                                       colNames.size(), AbstractColumn::Numeric));
+			colNames, QVector<AbstractColumn::ColumnMode>(colNames.size(), AbstractColumn::Numeric));
 
 	// read data
 	DEBUG("reading " << first - last + 1 << " lines");
@@ -223,8 +217,7 @@ QStringList ROOTFilterPrivate::listHistograms(const QString& fileName) {
 	return histList;
 }
 
-QVector<QStringList> ROOTFilterPrivate::previewCurrentHistogram(const QString& fileName,
-                                                                int first, int last) {
+QVector<QStringList> ROOTFilterPrivate::previewCurrentHistogram(const QString& fileName, int first, int last) {
 	DEBUG("previewCurrentHistogram()");
 
 	setFile(fileName);

@@ -411,11 +411,6 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CustomPoint);
 
-	if (!reader->isStartElement() || reader->name() != "customPoint") {
-		reader->raiseError(i18n("no custom point element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

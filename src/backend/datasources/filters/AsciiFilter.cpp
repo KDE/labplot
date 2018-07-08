@@ -79,8 +79,8 @@ void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, Ab
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
@@ -616,12 +616,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /*!
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
-	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	KFilterDev device(fileName);
-	readDataFromDevice(device, dataSource, importMode, lines);
+	readDataFromDevice(device, dataSource, importMode, -1);
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
@@ -1585,11 +1585,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "asciiFilter") {
-		reader->raiseError(i18n("no ascii filter element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

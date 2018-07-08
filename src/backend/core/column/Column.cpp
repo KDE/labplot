@@ -804,11 +804,6 @@ private:
  * \brief Load the column from XML
  */
 bool Column::load(XmlStreamReader* reader, bool preview) {
-	if (reader->isStartElement() && reader->name() != "column") {
-		reader->raiseError(i18n("no column element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

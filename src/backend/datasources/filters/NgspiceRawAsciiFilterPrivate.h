@@ -36,7 +36,7 @@ public:
 	explicit NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter*);
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 

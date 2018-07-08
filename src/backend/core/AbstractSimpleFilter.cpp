@@ -345,33 +345,31 @@ void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
 bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
 	Q_UNUSED(preview); //TODO
 
-	if(reader->isStartElement() && reader->name() == "simple_filter") {
-		if (!readBasicAttributes(reader)) return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-		QXmlStreamAttributes attribs = reader->attributes();
-		QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
-		if(str != metaObject()->className()) {
-			reader->raiseError(i18n("incompatible filter type"));
-			return false;
-		}
+	QXmlStreamAttributes attribs = reader->attributes();
+	QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
+	if(str != metaObject()->className()) {
+		reader->raiseError(i18n("incompatible filter type"));
+		return false;
+	}
 
-		// read child elements
-		while (!reader->atEnd()) {
-			reader->readNext();
+	// read child elements
+	while (!reader->atEnd()) {
+		reader->readNext();
 
-			if (reader->isEndElement()) break;
+		if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) {
-				if (reader->name() == "comment") {
-					if (!readCommentElement(reader)) return false;
-				} else { // unknown element
-					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-					if (!reader->skipToEndElement()) return false;
-				}
+		if (reader->isStartElement()) {
+			if (reader->name() == "comment") {
+				if (!readCommentElement(reader)) return false;
+			} else { // unknown element
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				if (!reader->skipToEndElement()) return false;
 			}
 		}
-	} else
-		reader->raiseError(i18n("no simple filter element found"));
+	}
 
 	return !reader->hasError();
 }

@@ -46,7 +46,7 @@ public:
 	~FITSFilter() override;
 
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> readChdu(const QString& fileName, bool *okToMatrix = nullptr, int lines = -1);
 	void save(QXmlStreamWriter*) const override;

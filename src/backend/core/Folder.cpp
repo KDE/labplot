@@ -90,31 +90,28 @@ void Folder::save(QXmlStreamWriter* writer) const {
  * \brief Load from XML
  */
 bool Folder::load(XmlStreamReader* reader, bool preview) {
-	if(reader->isStartElement() && reader->name() == QLatin1String("folder")) {
-		if (!readBasicAttributes(reader))
-			return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-		// read child elements
-		while (!reader->atEnd()) {
-			reader->readNext();
+	// read child elements
+	while (!reader->atEnd()) {
+		reader->readNext();
 
-			if (reader->isEndElement()) break;
+		if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) {
-				if (reader->name() == QLatin1String("comment")) {
-					if (!readCommentElement(reader))
-						return false;
-				} else if(reader->name() == QLatin1String("child_aspect")) {
-					if (!readChildAspectElement(reader, preview))
-						return false;
-				} else {// unknown element
-					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-					if (!reader->skipToEndElement()) return false;
-				}
+		if (reader->isStartElement()) {
+			if (reader->name() == QLatin1String("comment")) {
+				if (!readCommentElement(reader))
+					return false;
+			} else if(reader->name() == QLatin1String("child_aspect")) {
+				if (!readChildAspectElement(reader, preview))
+					return false;
+			} else {// unknown element
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				if (!reader->skipToEndElement()) return false;
 			}
 		}
-	} else // no folder element
-		reader->raiseError(i18n("no folder element found"));
+	}
 
 	return !reader->hasError();
 }

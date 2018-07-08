@@ -459,11 +459,6 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerPoint);
 
-	if(!reader->isStartElement() || reader->name() != "datapickerPoint") {
-		reader->raiseError(i18n("no datapicker-Point element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

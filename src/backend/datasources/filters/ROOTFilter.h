@@ -51,7 +51,7 @@ public:
 	 * The ROOT file is kept open until the file name is changed
 	 */
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-	                                      AbstractFileFilter::ImportMode importMode, int) override;
+			AbstractFileFilter::ImportMode importMode) override;
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*) override;
 

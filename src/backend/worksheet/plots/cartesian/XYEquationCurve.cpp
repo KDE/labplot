@@ -195,11 +195,6 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyEquationCurve") {
-		reader->raiseError(i18n("no xy equation curve element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n( "Attribute '%1' missing or empty, default value is used" );
 	QXmlStreamAttributes attribs;
 	QString str;

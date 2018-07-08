@@ -55,10 +55,10 @@ public:
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*,
-	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	// overloaded function to read from file
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName);
