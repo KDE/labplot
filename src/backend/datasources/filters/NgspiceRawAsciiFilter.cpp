@@ -102,8 +102,8 @@ QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
@@ -181,10 +181,9 @@ NgspiceRawAsciiFilterPrivate::NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter
 /*!
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	Q_UNUSED(lines);
+void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG("NgspiceRawAsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
-	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

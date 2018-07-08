@@ -41,10 +41,10 @@ public:
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-					    AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;

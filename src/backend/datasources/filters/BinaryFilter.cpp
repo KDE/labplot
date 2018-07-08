@@ -48,8 +48,8 @@ BinaryFilter::~BinaryFilter() {}
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
+QVector<QStringList> BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
@@ -226,7 +226,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     reads the content of the device \c device to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG("readDataFromFile()");
 
 	KFilterDev device(fileName);
@@ -236,7 +236,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
 		DEBUG("	could not open file " << fileName.toStdString());
 		return;
 	}
-	readDataFromDevice(device, dataSource, importMode, lines);
+	readDataFromDevice(device, dataSource, importMode, -1);
 }
 
 /*!

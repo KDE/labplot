@@ -68,8 +68,8 @@ QVector<QStringList> HDF5Filter::readCurrentDataSet(const QString& fileName, Abs
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	return d->readDataFromFile(fileName, dataSource, mode, lines);
+QVector<QStringList> HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	return d->readDataFromFile(fileName, dataSource, mode);
 }
 
 /*!
@@ -1671,8 +1671,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	Q_UNUSED(lines);
+QVector<QStringList> HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	DEBUG("HDF5Filter::read()");
 	QVector<QStringList> dataStrings;
 

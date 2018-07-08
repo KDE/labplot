@@ -61,15 +61,15 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
   reads the content of the current variable from file \c fileName.
 */
 QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
-        AbstractFileFilter::ImportMode importMode, int lines) {
+		AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	return d->readDataFromFile(fileName, dataSource, mode, lines);
+QVector<QStringList> NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	return d->readDataFromFile(fileName, dataSource, mode);
 }
 
 /*!
@@ -646,8 +646,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
     reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	Q_UNUSED(lines);
+QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
