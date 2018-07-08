@@ -571,10 +571,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)AsciiFilter::lineNumber(device);
 
-	// reset to start of file
-	//TODO: seems to be redundant since it's already done in the lineNumber() call above
-	if (!device.isSequential())
-		device.seek(0);
 /////////////////////////////////////////////////////////////////
 
 	int actualEndRow = endRow;
