@@ -759,7 +759,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("Spreadsheet::prepareImport()");
-	DEBUG("	create() rows = " << actualRows << " cols = " << actualCols);
+	DEBUG("	resize spreadsheet to rows = " << actualRows << "and cols = " << actualCols;
 	int columnOffset = 0;
 	setUndoAware(false);
 
