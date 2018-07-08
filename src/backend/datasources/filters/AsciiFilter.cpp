@@ -571,16 +571,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)AsciiFilter::lineNumber(device);
 
-/////////////////////////////////////////////////////////////////
-
-	int actualEndRow = endRow;
-	DEBUG("endRow(actualEndRow) = " << endRow << ", m_actualRows = " << m_actualRows);
-	// TODO: improve
-	if (endRow == -1 || endRow > m_actualRows)
-		actualEndRow = m_actualRows;
-
-	if (m_actualRows > actualEndRow)
-		m_actualRows = actualEndRow;
+	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
+	m_actualRows = actualEndRow - startRow + 1;
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
@@ -851,7 +843,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
-		DEBUG("	actual row = " << m_actualRows);
+		DEBUG("	actual rows = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;
@@ -1203,9 +1195,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					c = mode;
 		}
 
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - m_actualStartRow + 1,
-		                 m_actualCols, vectorNames, columnModes);
-
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 		m_prepared = true;
 	}
 
@@ -1217,15 +1207,14 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	if (lines == -1)
 		lines = m_actualRows;
 
-	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
+	//skip data lines, if required
+	DEBUG("	Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; ++i)
+		device.readLine();
+
+	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
-
-		// skip start lines
-		if (m_actualStartRow > 1) {
-			m_actualStartRow--;
-			continue;
-		}
 
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
@@ -1453,15 +1442,14 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 	QDEBUG("	column names = " << vectorNames);
 
-	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
+	//skip data lines, if required
+	DEBUG("	Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; ++i)
+		device.readLine();
+
+	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
-
-		// skip start lines
-		if (m_actualStartRow > 1) {
-			m_actualStartRow--;
-			continue;
-		}
 
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)

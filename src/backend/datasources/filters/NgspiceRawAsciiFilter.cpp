@@ -238,8 +238,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
 	const int actualRows = actualEndRow - startRow + 1;
 	const int actualCols = hasComplexValues ? vars*2 : vars;
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows,
-														actualCols, vectorNames, columnModes);
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	//skip data lines, if required
 	DEBUG("	Skipping " << startRow - 1 << " lines");

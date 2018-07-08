@@ -40,6 +40,7 @@ class QXmlStreamWriter;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
+	Q_ENUMS(FileType)
 	Q_ENUMS(ImportMode)
 
 public:
