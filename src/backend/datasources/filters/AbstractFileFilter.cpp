@@ -32,9 +32,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <QDateTime>
 #include <QImageReader>
-#ifndef HAVE_WINDOWS
 #include <QProcess>
-#endif
 #include <QLocale>
 #include <KLocalizedString>
 
@@ -100,8 +98,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	QStringList args;
 	args << "-b" << fileName;
 	proc->start("file", args);
-	if (proc->waitForReadyRead(1000) == false) {
-		QDEBUG("ERROR: reading file type of file" << fileName);
+	if (!proc->waitForReadyRead(1000)) {
+		DEBUG("ERROR: reading file type of file" << fileName.toStdString());
 		return Binary;
 	}
 	fileInfo = proc->readLine();
