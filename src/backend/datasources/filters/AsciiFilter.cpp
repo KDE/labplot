@@ -579,6 +579,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 
 	int actualEndRow = endRow;
 	DEBUG("endRow(actualEndRow) = " << endRow << ", m_actualRows = " << m_actualRows);
+	// TODO: improve
 	if (endRow == -1 || endRow > m_actualRows)
 		actualEndRow = m_actualRows;
 
@@ -603,7 +604,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	KFilterDev device(fileName);
-	readDataFromDevice(device, dataSource, importMode, -1);
+	readDataFromDevice(device, dataSource, importMode);
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {

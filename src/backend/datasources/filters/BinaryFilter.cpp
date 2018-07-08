@@ -236,7 +236,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
 		DEBUG("	could not open file " << fileName.toStdString());
 		return;
 	}
-	readDataFromDevice(device, dataSource, importMode, -1);
+	readDataFromDevice(device, dataSource, importMode);
 }
 
 /*!

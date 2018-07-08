@@ -496,7 +496,7 @@ reads the content of the file \c fileName to the data source \c dataSource. Uses
 */
 void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	 KFilterDev device(fileName);
-	 readDataFromDevice(device, dataSource, importMode, -1);
+	 readDataFromDevice(device, dataSource, importMode);
 }
 
 /*!
