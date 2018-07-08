@@ -684,11 +684,7 @@ void NetCDFFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool NetCDFFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "netcdfFilter") {
-		reader->raiseError(i18n("no netcdf filter element found"));
-		return false;
-	}
-
+	Q_UNUSED(reader);
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;

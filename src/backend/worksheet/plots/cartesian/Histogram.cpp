@@ -1617,11 +1617,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Histogram);
 
-	if(!reader->isStartElement() || reader->name() != "Histogram") {
-		reader->raiseError(i18n("no histogram element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

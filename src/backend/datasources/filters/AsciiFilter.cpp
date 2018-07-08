@@ -1567,11 +1567,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "asciiFilter") {
-		reader->raiseError(i18n("no ascii filter element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

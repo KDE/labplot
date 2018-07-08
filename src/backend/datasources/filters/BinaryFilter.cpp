@@ -555,11 +555,6 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "binaryFilter") {
-		reader->raiseError(i18n("no binary filter element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

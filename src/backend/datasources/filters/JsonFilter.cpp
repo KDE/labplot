@@ -759,10 +759,6 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool JsonFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "jsonFilter") {
-		reader->raiseError(i18n("no json filter element found"));
-		return false;
-	}
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

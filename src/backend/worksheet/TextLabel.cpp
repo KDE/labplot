@@ -527,6 +527,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		return;
 
 	painter->save();
+// 	painter->resetMatrix();
 	painter->rotate(-rotationAngle);
 
 	if (textWrapper.teXUsed) {
@@ -703,11 +704,6 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool TextLabel::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "textLabel") {
-		reader->raiseError(i18n("no textLabel element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

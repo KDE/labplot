@@ -543,11 +543,6 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "datapickerImage") {
-		reader->raiseError(i18n("no image element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

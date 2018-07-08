@@ -2208,11 +2208,6 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyCurve") {
-		reader->raiseError(i18n("no xy-curve element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

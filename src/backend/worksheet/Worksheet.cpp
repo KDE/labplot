@@ -808,11 +808,6 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Worksheet::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "worksheet") {
-		reader->raiseError(i18n("no worksheet element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

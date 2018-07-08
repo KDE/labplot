@@ -432,11 +432,6 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	Q_D(PlotArea);
 
-	if(!reader->isStartElement() || reader->name() != "plotArea") {
-		reader->raiseError(i18n("no plot area element found"));
-		return false;
-	}
-
 	if ( !readBasicAttributes(reader) )
 		return false;
 
