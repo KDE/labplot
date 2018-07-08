@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+	Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -37,18 +37,13 @@
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #include <QtMqtt/QMqttClient>
-#include <QtMqtt/qmqttclient.h>
 #include <QtMqtt/QMqttSubscription>
-#include <QtMqtt/qmqttsubscription.h>
 #include <QtMqtt/QMqttTopicName>
 #include <QtMqtt/QMqttTopicFilter>
 #endif
 
 #include <QVector>
-#include <QCompleter>
 #include <QStringList>
-#include <QTimer>
-#include <QTreeWidgetItem>
 
 class AbstractFileFilter;
 class AsciiOptionsWidget;
@@ -60,6 +55,9 @@ class FITSOptionsWidget;
 class JsonOptionsWidget;
 class ROOTOptionsWidget;
 class QTableWidget;
+class QCompleter;
+class QTimer;
+class QTreeWidgetItem;
 
 class ImportFileWidget : public QWidget {
 	Q_OBJECT
@@ -89,21 +87,9 @@ public:
 	QString serialPort() const;
 	int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
-#ifdef HAVE_MQTT
-	void saveMQTTSettings(MQTTClient*) const;
-	bool isMqttValid();
-#endif
 
 private:
 	Ui::ImportFileWidget ui;
-
-#ifdef HAVE_MQTT
-	bool checkTopicContains(const QString&, const QString&)	;
-	QString checkCommonLevel(const QString&, const QString&);
-	int commonLevelIndex(const QString& first, const QString& second);
-	void unsubscribeFromTopic(const QString&);
-	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
-#endif
 	void hideMQTT();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
@@ -121,23 +107,6 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh;
 
-#ifdef HAVE_MQTT
-	QMqttClient *m_client;
-	QMqttSubscription *m_mainSubscription;
-	QMqttTopicFilter *m_filter;
-	QVector <QMqttSubscription*> m_mqttSubscriptions;
-	QCompleter *m_completer;
-	QStringList m_topicList;
-	bool m_editing;
-	QTimer *m_timer;
-	QTimer *m_timeoutTimer;
-	QMap<QMqttTopicName, bool> m_messageArrived;
-	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
-	bool m_mqttReadyForPreview;
-	QString m_mqttNewTopic;
-	QVector<QString> m_subscribedTopicNames;
-	QVector<QString> m_addedTopics;
-#endif
 
 public slots:
 	void loadSettings();
@@ -156,16 +125,62 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
+
+signals:
+	void fileNameChanged();
+	void sourceTypeChanged();
+	void hostChanged();
+	void portChanged();
+	void previewRefreshed();
+	void checkedFitsTableToMatrix(const bool enable);
+
+	friend class HDF5OptionsWidget;	// to access refreshPreview()
+	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
+	friend class FITSOptionsWidget;
+	friend class JsonOptionsWidget;
+	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
+
 #ifdef HAVE_MQTT
-    void idChecked(int);
-    void authenticationChecked(int);
-    void mqttConnection();
-    void onMqttConnect();
-    void mqttSubscribe();
+private:
+	bool checkTopicContains(const QString&, const QString&)	;
+	QString checkCommonLevel(const QString&, const QString&);
+	int commonLevelIndex(const QString& first, const QString& second);
+	void unsubscribeFromTopic(const QString&);
+	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
+
+	QMqttClient *m_client;
+	QMqttSubscription *m_mainSubscription;
+	QMqttTopicFilter *m_filter;
+	QVector <QMqttSubscription*> m_mqttSubscriptions;
+	QCompleter* m_completer;
+	QStringList m_topicList;
+	bool m_editing;
+	QTimer *m_timer;
+	QTimer *m_timeoutTimer;
+	QMap<QMqttTopicName, bool> m_messageArrived;
+	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
+	bool m_mqttReadyForPreview;
+	QString m_mqttNewTopic;
+	QVector<QString> m_subscribedTopicNames;
+	QVector<QString> m_addedTopics;
+public:
+	void saveMQTTSettings(MQTTClient*) const;
+	bool isMqttValid();
+signals:
+	void newTopic(QString);
+	void subscriptionMade();
+	void checkFileType();
+	void newTopicForWill();
+private slots:
+	void idChecked(int);
+	void authenticationChecked(int);
+	void mqttConnection();
+	void onMqttConnect();
+	void mqttSubscribe();
 	void mqttUnsubscribe();
-    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);
-    void topicTimeout();
+	void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
 	void useWillMessage(int);
@@ -177,27 +192,6 @@ private slots:
 	void mqttTimeout();
 	void checkConnectEnable();
 #endif
-
-signals:
-	void fileNameChanged();
-	void sourceTypeChanged();
-	void hostChanged();
-	void portChanged();
-
-#ifdef HAVE_MQTT
-	void newTopic(QString);
-	void subscriptionMade();
-	void checkFileType();
-	void newTopicForWill();
-#endif
-	void previewRefreshed();
-	void checkedFitsTableToMatrix(const bool enable);
-
-	friend class HDF5OptionsWidget;	// to access refreshPreview()
-	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
-	friend class FITSOptionsWidget;
-	friend class JsonOptionsWidget;
-	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
 };
 
 #endif

@@ -121,9 +121,6 @@ private:
 	QString m_mqttUnsubscribeName;
 	QVector<QString> m_addedTopics;
 #endif
-
-public slots:
-
 };
 
 #endif // LIVEDATADOCK_H
