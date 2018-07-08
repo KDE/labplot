@@ -485,7 +485,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
 	QDEBUG("first line: " << firstLineStringList);
-	DEBUG("headerEnabled = " << headerEnabled);
+	DEBUG("headerEnabled: " << headerEnabled);
 
 	//optionally, remove potential spaces in the first line
 	if (simplifyWhitespacesEnabled) {
@@ -572,11 +572,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	m_actualRows = (int)AsciiFilter::lineNumber(device);
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
-	m_actualRows = actualEndRow - startRow + 1;
+	m_actualRows = actualEndRow - m_actualStartRow + 1;
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
-	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
+	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
 		return 1;
@@ -1208,8 +1208,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		lines = m_actualRows;
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << startRow - 1 << " lines");
-	for (int i = 0; i < startRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
+	for (int i = 0; i < m_actualStartRow - 1; ++i)
 		device.readLine();
 
 	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines");
@@ -1443,8 +1443,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG("	column names = " << vectorNames);
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << startRow - 1 << " lines");
-	for (int i = 0; i < startRow - 1; ++i)
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
+	for (int i = 0; i < m_actualStartRow - 1; ++i)
 		device.readLine();
 
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
