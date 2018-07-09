@@ -81,14 +81,13 @@ class HistogramPrivate : public QGraphicsItem {
 		bool autoScaleX, autoScaleY;
 		Histogram::HistogramType histogramType;
 		Histogram::HistogramOrientation histogramOrientation;
-		Histogram::BinsOption binsOption;
+		Histogram::BinningMethod binningMethod;
 
 		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
 
 		//data columns
 		const AbstractColumn* xColumn;
 		QString xColumnPath;
-		QString yColumnPath;
 
         void recalculate();
 		Histogram::HistogramData histogramData;

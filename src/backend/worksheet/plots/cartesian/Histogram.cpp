@@ -80,7 +80,7 @@ void Histogram::init() {
 
 	d->histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
 	d->histogramOrientation = (Histogram::HistogramOrientation) group.readEntry("histogramOrientation", (int)Histogram::Vertical);
-	d->binsOption = (Histogram::BinsOption) group.readEntry("binOption", (int)Histogram::Number);
+	d->binningMethod = (Histogram::BinningMethod) group.readEntry("binOption", (int)Histogram::ByNumber);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
@@ -157,12 +157,12 @@ void Histogram::setPrinting(bool on) {
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, histogramType, histogramType)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, histogramOrientation, histogramOrientation)
 
-void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
-	d_ptr->histogramData.binsOption = binsOption;
+void Histogram::setBinningMethod(Histogram::BinningMethod binningMethod) {
+	d_ptr->histogramData.binningMethod = binningMethod;
 	emit HistogramDataChanged();
 }
 void Histogram::setBinValue(int binValue) {
-	d_ptr->histogramData.binValue = binValue;
+	d_ptr->histogramData.binCount = binValue;
 	emit HistogramDataChanged();
 }
 
@@ -876,21 +876,21 @@ void HistogramPrivate::updateLines() {
 
 	double xAxisMin = xColumn->minimum();
 	double xAxisMax = xColumn->maximum();
-	switch (histogramData.binsOption) {
-		case Histogram::Number:
-			m_bins = (size_t)histogramData.binValue;
+	switch (histogramData.binningMethod) {
+		case Histogram::ByNumber:
+			m_bins = (size_t)histogramData.binCount;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(histogramData.binValue);
+			m_bins = (size_t)sqrt(histogramData.binCount);
 			break;
 		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(histogramData.binValue);
+			m_bins = (size_t)2*cbrt(histogramData.binCount);
 			break;
-		case Histogram::Width:
-			m_bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binValue;
+		case Histogram::ByWidth:
+			m_bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binCount;
 			break;
 		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(histogramData.binValue);
+			m_bins =(size_t) 1 + 3.33*log(histogramData.binCount);
 			break;
 	}
 
@@ -1603,8 +1603,8 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	//write Histogram specific information
 	writer->writeStartElement( "typeChanged" );
 	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
-	writer->writeAttribute( "BinsOption", QString::number(d->histogramData.binsOption) );
-	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
+	writer->writeAttribute( "BinningMethod", QString::number(d->histogramData.binningMethod) );
+	writer->writeAttribute( "binValue", QString::number(d->histogramData.binCount));
 	writer->writeEndElement();
 
 	if (d->xColumn)
@@ -1652,11 +1652,11 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->histogramType = (Histogram::HistogramType)str.toInt();
 
-			str = attribs.value("BinsOption").toString();
-			d->binsOption = (Histogram::BinsOption)str.toInt();
+			str = attribs.value("BinningMethod").toString();
+			d->binningMethod = (Histogram::BinningMethod)str.toInt();
 
 			str = attribs.value("binValue").toString();
-			d->histogramData.binValue = str.toInt();
+			d->histogramData.binCount = str.toInt();
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 

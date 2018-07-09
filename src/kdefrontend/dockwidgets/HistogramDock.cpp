@@ -97,6 +97,8 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 		layout->setVerticalSpacing(2);
 	}
 
+	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
+
 	//Slots
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
@@ -105,8 +107,8 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( ui.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	connect( ui.cbHistogramOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramOrientationChanged(int)));
-	connect( ui.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
-	connect( ui.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
+	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
+	connect( ui.sbBinCount, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
 
 	//Line
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
@@ -306,11 +308,11 @@ void HistogramDock::valuesColorChanged(const QColor& color){
 void HistogramDock::init(){
 	//General
 	//bins option
-	ui.cbBins->addItem(i18n("By Number"));
-	ui.cbBins->addItem(i18n("By width"));
-	ui.cbBins->addItem(i18n("Square-root rule"));
-	ui.cbBins->addItem(i18n("Rice rule"));
-	ui.cbBins->addItem(i18n("Sturgis rule"));
+	ui.cbBinningMethod->addItem(i18n("By Number"));
+	ui.cbBinningMethod->addItem(i18n("By Width"));
+	ui.cbBinningMethod->addItem(i18n("Square-root Rule"));
+	ui.cbBinningMethod->addItem(i18n("Rice Rule"));
+	ui.cbBinningMethod->addItem(i18n("Sturgis Rule"));
 
 	//histogram type
 	ui.cbHistogramType->addItem(i18n("Ordinary Histogram"));
@@ -495,7 +497,7 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	//show the properties of the first curve
 	const Histogram::HistogramData& data = m_curve->histogramData();
 	ui.cbHistogramType->setCurrentIndex(data.type);
-	ui.cbBins->setCurrentIndex(data.binsOption);
+	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config("", KConfig::SimpleConfig);
@@ -1027,7 +1029,33 @@ void HistogramDock::histogramOrientationChanged(int index) {
 		curve->setHistogramOrientation(histogramOrientation);
 }
 
-void HistogramDock::binValueChanged(int value) {
+void HistogramDock::binningMethodChanged(int index) {
+	if (m_initializing)
+		return;
+
+	Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
+	if (binningMethod == Histogram::ByNumber) {
+		ui.lBinCount->show();
+		ui.sbBinCount->show();
+		ui.lBinWidth->hide();
+		ui.leBinWidth->hide();
+	} else if (binningMethod == Histogram::ByWidth) {
+		ui.lBinCount->hide();
+		ui.sbBinCount->hide();
+		ui.lBinWidth->show();
+		ui.leBinWidth->show();
+	} else {
+		ui.lBinCount->hide();
+		ui.sbBinCount->hide();
+		ui.lBinWidth->hide();
+		ui.leBinWidth->hide();
+	}
+
+	for (auto* curve : m_curvesList)
+		curve->setBinningMethod(binningMethod);
+}
+
+void HistogramDock::binCountChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -1035,13 +1063,13 @@ void HistogramDock::binValueChanged(int value) {
 		curve->setBinValue(value);
 }
 
-void HistogramDock::binsOptionChanged(int index) {
+void HistogramDock::binWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	Histogram::BinsOption binsOption = Histogram::BinsOption(index);
-	for (auto* curve : m_curvesList)
-		curve->setbinsOption(binsOption);
+	//TODO
+/*	for (auto* curve : m_curvesList)
+		curve->setBinWidth(value);*/
 }
 
 void HistogramDock::lineColorChanged(const QColor& color){
@@ -1136,7 +1164,7 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 void HistogramDock::curveHistogramDataChanged(Histogram::HistogramData data) {
 	m_initializing = true;
 	ui.cbHistogramType->setCurrentIndex(data.type);
-	ui.cbBins->setCurrentIndex(data.binsOption);
-	ui.sbBins->setValue(data.binValue);
+	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
+	ui.sbBinCount->setValue(data.binCount);
 	m_initializing = false;
 }

@@ -40,7 +40,7 @@ class Histogram: public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum BinsOption {Number,Width,SquareRoot,RiceRule,SturgisRule};
+	enum BinningMethod {ByNumber, ByWidth, SquareRoot, RiceRule, SturgisRule};
 	enum ValuesType {NoValues, ValuesY, ValuesYBracketed, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
@@ -48,11 +48,12 @@ public:
 	enum HistogramOrientation {Vertical, Horizontal};
 
 	struct HistogramData {
-		HistogramData() : type(Ordinary),binsOption(Number), binValue(10) {};
+		HistogramData() : type(Ordinary), binningMethod(ByNumber), binCount(10), binWidth(1.0) {};
 
 		HistogramType type;
-		BinsOption binsOption;
-		int binValue;
+		BinningMethod binningMethod;
+		int binCount;
+		double binWidth;
 	};
 	explicit Histogram(const QString &name);
 	//size_t bins;
@@ -108,7 +109,7 @@ public:
 	double getYMinimum() const;
 	double getXMaximum() const;
 	double getXMinimum() const;
-	void setbinsOption(Histogram::BinsOption);
+	void setBinningMethod(Histogram::BinningMethod);
 	void setBinValue(int);
 
 	typedef WorksheetElement BaseClass;
