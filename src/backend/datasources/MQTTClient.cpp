@@ -997,25 +997,55 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 		}
 
 		if(found) {
-				qDebug()<<"Inferior subscription: "<<superiorSubscription->subscriptionName();
-				QVector<MQTTTopic*> topics = superiorSubscription->topics();
-				qDebug()<< topics.size();
+			qDebug()<<"Superior subscription: "<<superiorSubscription->subscriptionName();
+			QVector<MQTTTopic*> topics = superiorSubscription->topics();
+			qDebug()<< topics.size();
 
-				QVector<MQTTTopic*> inferiorTopics;
+			QVector<MQTTTopic*> inferiorTopics;
 
-				for(int i = 0; i < topics.size(); ++i) {
-					if(checkTopicContains(topic, topics[i]->topicName())) {
-						inferiorTopics.push_back(topics[i]);
-					}
+			for(int i = 0; i < topics.size(); ++i) {
+				if(checkTopicContains(topic, topics[i]->topicName())) {
+					inferiorTopics.push_back(topics[i]);
 				}
+			}
 
-				for(int i = 0; i < inferiorTopics.size() ; ++i) {
-					qDebug()<<inferiorTopics[i]->topicName();
-					inferiorTopics[i]->reparent(newSubscription);
-				}
+			for(int i = 0; i < inferiorTopics.size() ; ++i) {
+				qDebug()<<inferiorTopics[i]->topicName();
+				inferiorTopics[i]->reparent(newSubscription);
+			}
 		}
 		connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
 	}
+}
+
+void MQTTClient::reparentTopic(const QString& topic, const QString& parent) {
+	bool found = false;
+	MQTTSubscriptions* superiorSubscription;
+
+	for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+		if(m_mqttSubscriptions[i]->subscriptionName() == parent) {
+			found = true;
+			superiorSubscription = m_mqttSubscriptions[i];
+			break;
+		}
+	}
+
+	if(found) {
+		qDebug()<<"Superior subscription: "<<superiorSubscription->subscriptionName();
+		QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::Recursive);
+		qDebug()<< topics.size();
+
+		for(int i = 0; i < topics.size(); ++i) {
+			qDebug()<<topics.size()<<"  "<<i;
+			qDebug()<<i<<" "<<topics[i]->topicName()<<" "<<topics[i]->parentAspect()->name();
+			if(topic == topics[i]->topicName()) {
+				qDebug()<<topics[i]->topicName()<<"  "<<superiorSubscription->subscriptionName();
+				topics[i]->reparent(superiorSubscription);
+				break;
+			}
+		}
+	}
+	qDebug()<<"reparent done";
 }
 
 void MQTTClient::subscriptionLoaded(const QString &name) {

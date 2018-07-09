@@ -813,6 +813,34 @@ void LiveDataDock::removeSubscription() {
 		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
 }
 
+/*void LiveDataDock::removeInferiorSubscription() {
+	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
+
+	if(unsubscribeItem != nullptr) {
+		while(unsubscribeItem->parent() != nullptr) {
+			for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
+				if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
+					for (auto* source: m_mqttClients) {
+						source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
+					}
+					ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
+					i--;
+				} else {
+					for (auto* source: m_mqttClients) {
+						source->reparentTopic(unsubscribeItem->text(0));
+					}
+				}
+			}
+			unsubscribeItem = unsubscribeItem->parent();
+		}
+
+		for (auto* source: m_mqttClients) {
+			source->removeMQTTSubscription(unsubscribeItem->text(0));
+		}
+		ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
+	}
+}*/
+
 void LiveDataDock::setCompleter(const QString& topic) {
 	if(!m_searching) {
 		if(!m_topicList.contains(topic)) {
@@ -931,7 +959,52 @@ void LiveDataDock::addSubscription() {
 				}
 			}
 
-			if(foundEqual) {
+			if(name.endsWith("#") && !foundSuperior) {
+				QStringList nameList = name.split('/', QString::SkipEmptyParts);
+				QString root = nameList.first();
+				QVector<QTreeWidgetItem*> children;
+				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+					if(ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)
+							&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
+						children.clear();
+						findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
+						for(int j = 0; j < children.size(); ++j) {
+							if(checkTopicContains(name, children[j]->text(0))) {
+								qDebug()<<children[j]->text(0);
+								QTreeWidgetItem* unsubscribeItem = children[j];
+
+								while(unsubscribeItem->parent() != nullptr) {
+									for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
+										qDebug()<<i<<" "<<unsubscribeItem->parent()->childCount();
+
+										if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
+											for (auto* source: m_mqttClients) {
+												qDebug()<<unsubscribeItem->parent()->child(i)->text(0)<<"Add ";
+												source->addBeforeRemoveSubscription(unsubscribeItem->parent()->child(i)->text(0), ui.cbQoS->currentIndex());
+											}
+											ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
+											i--;
+										} else {
+											for (auto* source: m_mqttClients) {
+												source->reparentTopic(unsubscribeItem->text(0), name);
+											}
+										}
+									}
+									unsubscribeItem = unsubscribeItem->parent();
+								}
+
+								qDebug()<<"Remove: "<<unsubscribeItem->text(0);
+								for (auto* source: m_mqttClients) {
+									source->removeMQTTSubscription(unsubscribeItem->text(0));
+								}
+								ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
+							}
+						}
+					}
+				}
+			}
+
+			if(foundEqual && !foundSuperior) {
 				QString commonTopic;
 
 				commonTopic = checkCommonLevel(equalTopics.first(), name);
@@ -1090,7 +1163,7 @@ void LiveDataDock::fillSubscriptions() {
 				}
 			}
 
-			if(topic != nullptr) {
+			if(topic != nullptr && topic->childCount() > 0) {
 				qDebug()<<"restoring Children";
 				restoreSubscriptionChildren(topic, newItem, name, 1);
 			}
@@ -1125,6 +1198,9 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
 			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
 
+			if(superiorList.size() > inferiorList.size())
+				return false;
+
 			bool ok = true;
 			for(int i = 0; i < superiorList.size(); ++i) {
 				if(superiorList.at(i) != inferiorList.at(i)) {
@@ -1138,6 +1214,7 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 			}
 			return ok;
 		}
+
 		return false;
 	}
 }
@@ -1259,26 +1336,8 @@ void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 			subscription->addChild(newItem);
 			restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
 		}
-	} else if (list[level] == "#") {
-		/*if(topic->parent() != nullptr) {
-			QString name;
-			name.append("#");
-			name.prepend(topic->text(0) + "/");
-
-			QTreeWidgetItem* temp = topic;
-			while(temp->parent() != nullptr) {
-				temp = temp->parent();
-				name.prepend(temp->text(0) + "/");
-			}
-
-			QStringList nameList;
-			nameList.append(name);
-			QTreeWidgetItem* newItem = new QTreeWidgetItem(nameList);
-			subscription->addChild(newItem);
-			addSubscriptionChildren(topic, newItem);
-		}*/
+	} else if (list[level] == "#") {		
 		addSubscriptionChildren(topic, subscription);
-
 	}
 }
 
@@ -1329,5 +1388,15 @@ int LiveDataDock::commonLevelIndex(const QString& first, const QString& second) 
 		return matchIndex;
 	else
 		return -1;
+}
+
+void LiveDataDock::findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>& children, QTreeWidgetItem* root) {
+	if(root->childCount() == 0) {
+		children.push_back(root);
+	} else {
+		for(int i = 0; i < root->childCount(); ++i) {
+			findSubscriptionLeafChildren(children, root->child(i));
+		}
+	}
 }
 #endif

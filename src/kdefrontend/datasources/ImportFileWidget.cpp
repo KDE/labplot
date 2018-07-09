@@ -1770,7 +1770,8 @@ void ImportFileWidget::mqttSubscribe() {
 				QString root = nameList.first();
 				QVector<QTreeWidgetItem*> children;
 				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-					if(ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)) {
+					if(ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)
+							&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 						children.clear();
 						findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
 						for(int j = 0; j < children.size(); ++j) {

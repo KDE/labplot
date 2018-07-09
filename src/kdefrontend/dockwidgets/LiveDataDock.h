@@ -78,6 +78,7 @@ public:
 	void setMQTTClients(const QList<MQTTClient*>& clients);
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
+	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
 
 private slots:
 	void useWillMessage(int);
