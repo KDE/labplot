@@ -1765,7 +1765,25 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 			}
 
-			if(foundEqual) {
+			if(name.endsWith("#") && !foundSuperior) {
+				QStringList nameList = name.split('/', QString::SkipEmptyParts);
+				QString root = nameList.first();
+				QVector<QTreeWidgetItem*> children;
+				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+					if(ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)) {
+						children.clear();
+						findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
+						for(int j = 0; j < children.size(); ++j) {
+							if(checkTopicContains(name, children[j]->text(0))) {
+								ui.twSubscriptions->setCurrentItem(children[j]);
+								mqttUnsubscribe();
+							}
+						}
+					}
+				}
+			}
+
+			if(foundEqual && !foundSuperior) {
 				QString commonTopic;
 
 				commonTopic = checkCommonLevel(equalTopics.first(), name);
@@ -2511,5 +2529,15 @@ void ImportFileWidget::checkConnectEnable() {
 	bool portOK = !ui.lePort->text().isEmpty();
 	bool enable = authenticationOK && idOK && hostOK && portOK;
 	ui.bConnect->setEnabled(enable);
+}
+
+void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>& children, QTreeWidgetItem* root) {
+	if(root->childCount() == 0) {
+		children.push_back(root);
+	} else {
+		for(int i = 0; i < root->childCount(); ++i) {
+			findSubscriptionLeafChildren(children, root->child(i));
+		}
+	}
 }
 #endif

@@ -147,6 +147,7 @@ private:
 	int commonLevelIndex(const QString& first, const QString& second);
 	void unsubscribeFromTopic(const QString&);
 	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
+	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
