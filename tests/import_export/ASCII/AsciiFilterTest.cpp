@@ -96,7 +96,7 @@ void AsciiFilterTest::testEmptyLines01() {
 	filter.setHeaderEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.rowCount(), 7); //TODO: there are only 3 lines, we need an option to skip empty lines
+	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 3);
 
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));

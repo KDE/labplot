@@ -604,7 +604,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 		emit q->completed(100 * i/m_actualRows);
 	}
 	//TODO: fix (startColumn + m_actualCols - 1)
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, m_actualRows, dateTimeFormat, importMode);
 }
 
 /*!
