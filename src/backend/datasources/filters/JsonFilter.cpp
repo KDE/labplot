@@ -108,7 +108,7 @@ QStringList JsonFilter::dataTypes() {
 	for (int i = 0; i <= 100; ++i)	// me.keyCount() does not work because we have holes in enum
 		if (me.valueToKey(i))
 			list << me.valueToKey(i);
-		return list;
+	return list;
 }
 
 /*!
