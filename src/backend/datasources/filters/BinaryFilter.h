@@ -54,8 +54,7 @@ class BinaryFilter : public AbstractFileFilter {
 	// read data from any device
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource*,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 

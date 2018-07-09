@@ -102,9 +102,8 @@ QString NgspiceRawAsciiFilter::fileInfoString(const QString& fileName) {
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void NgspiceRawAsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
-	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
 QVector<QStringList> NgspiceRawAsciiFilter::preview(const QString& fileName, int lines) {
@@ -238,8 +237,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
 	const int actualRows = actualEndRow - startRow + 1;
 	const int actualCols = hasComplexValues ? vars*2 : vars;
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows,
-														actualCols, vectorNames, columnModes);
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	//skip data lines, if required
 	DEBUG("	Skipping " << startRow - 1 << " lines");

@@ -52,8 +52,8 @@ QStringList ImageFilter::importFormats() {
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	return d->readDataFromFile(fileName, dataSource, importMode);
+void ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 /*!
@@ -137,15 +137,13 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	QVector<QStringList> dataStrings;
-
+void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QImage image = QImage(fileName);
 	if (image.isNull() || image.format() == QImage::Format_Invalid) {
 #ifdef QT_DEBUG
 		qDebug()<<"failed to read image"<<fileName<<"or invalid image format";
 #endif
-		return dataStrings;
+		return;
 	}
 
 	int cols = image.width();
@@ -191,8 +189,7 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 	else {
 		DEBUG("data source in image import not defined! Giving up.");
-
-		return dataStrings;
+		return;
 	}
 
 	// read data
@@ -254,7 +251,7 @@ QVector<QStringList> ImageFilterPrivate::readDataFromFile(const QString& fileNam
 	}
 
 	dataSource->finalizeImport();
-	return dataStrings;
+	return;
 }
 
 /*!

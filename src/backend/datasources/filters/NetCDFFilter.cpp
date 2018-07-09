@@ -68,8 +68,8 @@ QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, Abstr
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	return d->readDataFromFile(fileName, dataSource, mode);
+void NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	d->readDataFromFile(fileName, dataSource, mode);
 }
 
 /*!

@@ -50,8 +50,8 @@ FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {}
 
 FITSFilter::~FITSFilter() {}
 
-QVector<QStringList> FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
-	return d->readCHDU(fileName, dataSource, importMode);
+void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readCHDU(fileName, dataSource, importMode);
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {

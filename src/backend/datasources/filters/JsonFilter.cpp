@@ -60,9 +60,8 @@ void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataS
 /*!
 reads the content of the file \c fileName.
 */
-QVector<QStringList> JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
-	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
 }
 
 QVector<QStringList> JsonFilter::preview(const QString& fileName) {
@@ -496,7 +495,7 @@ reads the content of the file \c fileName to the data source \c dataSource. Uses
 */
 void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	 KFilterDev device(fileName);
-	 readDataFromDevice(device, dataSource, importMode, -1);
+	 readDataFromDevice(device, dataSource, importMode);
 }
 
 /*!
