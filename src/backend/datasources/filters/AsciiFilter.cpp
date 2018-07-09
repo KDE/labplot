@@ -424,10 +424,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			else
 				return 1;
 		}
-
-		//TODO: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
-		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
-			i--;
 	}
 
 	// Parse the first line:
