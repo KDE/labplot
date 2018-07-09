@@ -84,8 +84,9 @@ private slots:
 	//histogram-orientation
 	void histogramOrientationChanged(int);
 	//bins setting
-	void binsOptionChanged(int);
-	void binValueChanged(int);
+	void binningMethodChanged(int);
+	void binCountChanged(int);
+	void binWidthChanged(double);
 
 	//Values-Tab
 	void valuesTypeChanged(int);
