@@ -108,7 +108,7 @@ QStringList JsonFilter::dataTypes() {
 	for (int i = 0; i <= 100; ++i)	// me.keyCount() does not work because we have holes in enum
 		if (me.valueToKey(i))
 			list << me.valueToKey(i);
-		return list;
+	return list;
 }
 
 /*!
@@ -604,7 +604,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 		emit q->completed(100 * i/m_actualRows);
 	}
 	//TODO: fix (startColumn + m_actualCols - 1)
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, m_actualRows, dateTimeFormat, importMode);
 }
 
 /*!

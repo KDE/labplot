@@ -442,10 +442,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			else
 				return 1;
 		}
-
-		//TOOD: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
-		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
-			i--;
 	}
 
 	// Parse the first line:
@@ -560,6 +556,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
+		if (device.atEnd())	// EOF reached
+			break;
 		firstLineStringList = getLineString(device);
 
 		if (createIndexEnabled)
@@ -1240,7 +1238,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
 
-
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 
 		//prepend the index if required
@@ -1316,8 +1313,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		currentRow++;
 		emit q->completed(100 * currentRow/m_actualRows);
 	}
+	DEBUG("	Read " << currentRow << " lines");
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, currentRow, dateTimeFormat, importMode);
 }
 
 /*!

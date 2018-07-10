@@ -89,7 +89,7 @@ public:
     int isPrepared();
 
 private:
-	static const unsigned int m_dataTypeLines = 10;	// lines to read for determining data types
+	static const unsigned int m_dataTypeLines = 10;	// maximum lines to read for determining data types
 	QString m_separator;
 	int m_actualStartRow;
 	int m_actualRows;

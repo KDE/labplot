@@ -828,12 +828,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NETCDF);
 			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
 			break;
-#ifdef HAVE_FITS
 		case AbstractFileFilter::FITS:
+#ifdef HAVE_FITS
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::FITS);
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
-			break;
 #endif
+			break;
 		case AbstractFileFilter::Json:
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Json);
 			m_jsonOptionsWidget->loadDocument(fileName);

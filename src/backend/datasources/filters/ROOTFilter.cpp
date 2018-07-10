@@ -196,7 +196,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			container[i - first] = std::sqrt(bins[i].sumw2);
 	}
 
-	dataSource->finalizeImport(columnOffset, 0, colNames.size() - 1, QString(), importMode);
+	dataSource->finalizeImport(columnOffset, 0, colNames.size() - 1, -1, QString(), importMode);
 }
 
 void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
