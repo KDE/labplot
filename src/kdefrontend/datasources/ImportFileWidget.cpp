@@ -1683,6 +1683,7 @@ void ImportFileWidget::mqttSubscribe() {
 			qDebug() << name;
 			bool foundSuperior = false;
 			bool foundEqual = false;
+			QMap <QString, QVector<QString>> equalTopicsMap;
 			QVector<QString> equalTopics;
 
 			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
@@ -1707,39 +1708,61 @@ void ImportFileWidget::mqttSubscribe() {
 
 				QString commonTopic = checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), name);
 				if(!commonTopic.isEmpty()) {
-					equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
+					equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
 				}
 				qDebug()<<"checked common";
 			}
 
-			if(!equalTopics.isEmpty()) {
+			if(!equalTopicsMap.isEmpty()) {
 				qDebug()<<"Equal topics not empty";
-				int level = commonLevelIndex(name, equalTopics.first());
-				QStringList commonList = name.split('/', QString::SkipEmptyParts);
-				QTreeWidgetItem* currentItem;
-				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-					if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
-						currentItem = ui.twTopics->topLevelItem(i);
-						break;
-					}
-				}
 
-				int levelIdx = 1;
-				while(levelIdx < level) {
-					for(int j = 0; j < currentItem->childCount(); ++j) {
-						if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
-							qDebug()<<"Child: "<<currentItem->child(j)->text(0);
-							currentItem = currentItem->child(j);
-							levelIdx++;
+				QVector<QString> commonTopics;
+				QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
+				while(topics.hasNext()) {
+					topics.next();
+					qDebug()<<"Checking: " << topics.key();
+
+					int level = commonLevelIndex(name, topics.value().first());
+					QStringList commonList = name.split('/', QString::SkipEmptyParts);
+					QTreeWidgetItem* currentItem;
+					for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+						if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+							currentItem = ui.twTopics->topLevelItem(i);
 							break;
 						}
 					}
+
+					int levelIdx = 1;
+					while(levelIdx < level) {
+						for(int j = 0; j < currentItem->childCount(); ++j) {
+							if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+								qDebug()<<"Child: "<<currentItem->child(j)->text(0);
+								currentItem = currentItem->child(j);
+								levelIdx++;
+								break;
+							}
+						}
+					}
+
+					qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
+					if(topics.value().size() == currentItem->childCount() - 1) {
+						qDebug()<<"foundEqual set true";
+						foundEqual = true;
+						commonTopics.push_back(topics.key());
+					}
 				}
 
-				qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
-				if(equalTopics.size() == currentItem->childCount() - 1) {
-					qDebug()<<"foundEqual set true";
-					foundEqual = true;
+				if(foundEqual) {
+					int highestLevel = INT_MAX;
+					int topicIdx = -1;
+					for(int i = 0; i < commonTopics.size(); ++i) {
+						int level = commonLevelIndex(name, commonTopics[i]);
+						if(level < highestLevel) {
+							topicIdx = i;
+							highestLevel = level;
+						}
+					}
+					equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
 				}
 			}
 
