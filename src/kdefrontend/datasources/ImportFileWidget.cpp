@@ -117,13 +117,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::FITS, fitsw);
 
-	QWidget* rootw = new QWidget();
-	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
-
 	QWidget* jsonw = new QWidget();
 	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+
+	QWidget* rootw = new QWidget();
+	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
+	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.tvJson->setAlternatingRowColors(true);
