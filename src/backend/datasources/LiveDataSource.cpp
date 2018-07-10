@@ -157,12 +157,11 @@ QStringList LiveDataSource::availablePorts() {
 	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
 
-		qDebug() << sp.description();
-		qDebug() << sp.manufacturer();
-		qDebug() << sp.portName();
-		qDebug() << sp.serialNumber();
-		qDebug() << sp.systemLocation();
+		DEBUG(" port " << sp.portName().toStdString() << ": " << sp.systemLocation().toStdString() << sp.description().toStdString()
+			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
 	}
+	//TODO: Test
+	ports.append("/dev/pty/25");
 
 	return ports;
 }
