@@ -1063,18 +1063,20 @@ void LiveDataDock::addSubscription() {
 
 				bool foundNewEqual;
 				do{
+					qDebug()<<"check for new common topics";
 					foundNewEqual = false;
 					equalTopics.clear();
 
 					for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 						if(!checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), commonTopic).isEmpty()) {
 							equalTopics.push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
+							qDebug()<<ui.twSubscriptions->topLevelItem(i)->text(0)<<" added to equalTopics";
 						}
 					}
 
 					if(!equalTopics.isEmpty()) {
-						int level = commonLevelIndex(name, equalTopics.first());
-						QStringList commonList = name.split('/', QString::SkipEmptyParts);
+						int level = commonLevelIndex(commonTopic, equalTopics.first());
+						QStringList commonList = commonTopic.split('/', QString::SkipEmptyParts);
 						QTreeWidgetItem* currentItem;
 						for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
 							if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
@@ -1083,10 +1085,12 @@ void LiveDataDock::addSubscription() {
 							}
 						}
 
-						int levelIdx = 1;
+						/*int levelIdx = 1;
+						qDebug()<<"LevelIdx: "<<levelIdx<<" level: "<<level;
 						while(levelIdx < level) {
 							for(int j = 0; j < currentItem->childCount(); ++j) {
-								if(currentItem->child(j)->text(0) == commonList[j]) {
+								if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+									qDebug()<<"level index: "<<levelIdx<<" "<<currentItem->child(j)->text(0)<<" "<<commonList[levelIdx];
 									currentItem = currentItem->child(j);
 									levelIdx++;
 									break;
@@ -1097,6 +1101,14 @@ void LiveDataDock::addSubscription() {
 						qDebug()<<currentItem->text(0)<<"  "<<currentItem->childCount();
 						if(equalTopics.size() == currentItem->childCount() - 1) {
 							foundNewEqual = true;
+						}*/
+
+						int childCount = checkCommonChildCount(1, level, commonList, currentItem);
+						qDebug()<<"child count: " << childCount;
+						if(childCount > 0) {
+							if(equalTopics.size() == childCount - 1) {
+								foundNewEqual = true;
+							}
 						}
 					}
 
@@ -1421,5 +1433,63 @@ void LiveDataDock::findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>& chil
 			findSubscriptionLeafChildren(children, root->child(i));
 		}
 	}
+}
+
+int LiveDataDock::checkCommonChildCount(int levelIdx, int level, QStringList& commonList, QTreeWidgetItem* currentItem) {
+	qDebug()<<"LevelIdx: "<<levelIdx<<" level: "<<level<<" current Item: "<<currentItem->text(0);
+	if(levelIdx < level - 1) {
+		if(commonList[levelIdx] != "+") {
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+					qDebug()<<"level index: "<<levelIdx<<" "<<currentItem->child(j)->text(0)<<" "<<commonList[levelIdx];
+					return checkCommonChildCount(levelIdx + 1, level, commonList, currentItem->child(j));
+				}
+			}
+		} else {
+			int childCount = -1;
+			bool ok = true;
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				int temp = checkCommonChildCount(levelIdx + 1, level, commonList, currentItem->child(j));
+
+				if((j > 0) && (temp != childCount)) {
+					ok = false;
+					break;
+				}
+				childCount = temp;
+			}
+
+			if(ok)
+				return childCount;
+			else
+				return -1;
+		}
+	} else if (levelIdx == level - 1) {
+		if(commonList[levelIdx] != "+") {
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+					qDebug()<<"level index: "<<levelIdx<<" "<<currentItem->child(j)->text(0)<<" "<<commonList[levelIdx];
+					return currentItem->child(j)->childCount();
+				}
+			}
+		} else {
+			int childCount = -1;
+			bool ok = true;
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if((j > 0) && (currentItem->child(j)->childCount() != childCount)) {
+					ok = false;
+					break;
+				}
+				childCount = currentItem->child(j)->childCount();
+			}
+
+			if(ok)
+				return childCount;
+			else
+				return -1;
+		}
+	} else if (level == 1 && levelIdx == 1)
+		return currentItem->childCount();
+
+	return -1;
 }
 #endif

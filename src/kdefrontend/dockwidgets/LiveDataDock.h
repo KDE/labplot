@@ -79,6 +79,7 @@ public:
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
+	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 
 private slots:
 	void useWillMessage(int);

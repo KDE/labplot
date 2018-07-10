@@ -148,6 +148,7 @@ private:
 	void unsubscribeFromTopic(const QString&);
 	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
+	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
