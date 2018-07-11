@@ -29,7 +29,6 @@
 #ifndef HISTOGRAMDOCK_H
 #define HISTOGRAMDOCK_H
 
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "ui_histogramdock.h"
 

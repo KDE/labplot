@@ -158,153 +158,6 @@ HistogramDock::~HistogramDock() {
 		delete m_aspectTreeModel;
 }
 
-//TODO: very similiar to ColumnDock
-void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
-	ui.cbValuesFormat->clear();
-
-	switch (columnMode) {
-	case AbstractColumn::Numeric:
-		ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
-		ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-		ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-		break;
-	case AbstractColumn::Integer:
-		break;
-	case AbstractColumn::Text:
-		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
-		break;
-	case AbstractColumn::Month:
-		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
-		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
-		ui.cbValuesFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
-		break;
-	case AbstractColumn::Day:
-		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
-		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
-		ui.cbValuesFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
-		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
-		break;
-	case AbstractColumn::DateTime:
-		for (const auto& s: AbstractColumn::dateFormats())
-			ui.cbValuesFormat->addItem(s, QVariant(s));
-
-		for (const auto& s: AbstractColumn::timeFormats())
-			ui.cbValuesFormat->addItem(s, QVariant(s));
-
-		for (const auto& s1: AbstractColumn::dateFormats())
-			for (const auto& s2: AbstractColumn::timeFormats())
-				ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
-		break;
-	}
-
-	ui.cbValuesFormat->setCurrentIndex(0);
-
-	if (columnMode == AbstractColumn::Numeric) {
-		ui.lValuesPrecision->show();
-		ui.sbValuesPrecision->show();
-	} else {
-		ui.lValuesPrecision->hide();
-		ui.sbValuesPrecision->hide();
-	}
-
-	if (columnMode == AbstractColumn::Text) {
-		ui.lValuesFormatTop->hide();
-		ui.lValuesFormat->hide();
-		ui.cbValuesFormat->hide();
-	} else {
-		ui.lValuesFormatTop->show();
-		ui.lValuesFormat->show();
-		ui.cbValuesFormat->show();
-		ui.cbValuesFormat->setCurrentIndex(0);
-	}
-
-	if (columnMode == AbstractColumn::DateTime) {
-		ui.cbValuesFormat->setEditable(true);
-	} else {
-		ui.cbValuesFormat->setEditable(false);
-	}
-}
-
-//TODO: very similiar to ColumnDock
-void HistogramDock::showValuesColumnFormat(const Column* column){
-  if (!column){
-	// no valid column is available
-	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
-	this->updateValuesFormatWidgets(AbstractColumn::Text);
-  }else{
-	AbstractColumn::ColumnMode columnMode = column->columnMode();
-
-	//update the format widgets for the new column mode
-	this->updateValuesFormatWidgets(columnMode);
-
-	 //show the actuall formating properties
-	switch(columnMode) {
-		case AbstractColumn::Numeric:{
-		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
-		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
-		  ui.sbValuesPrecision->setValue(filter->numDigits());
-		  break;
-		}
-		case AbstractColumn::Text:
-		case AbstractColumn::Integer:
-			break;
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		case AbstractColumn::DateTime: {
-				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
-				break;
-			}
-	}
-  }
-}
-void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
-	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-	else
-		cb->setCurrentModelIndex(QModelIndex());
-}
-void HistogramDock::retranslateUi() {
-	//TODO:
-// 	ui.lName->setText(i18n("Name"));
-// 	ui.lComment->setText(i18n("Comment"));
-// 	ui.chkVisible->setText(i18n("Visible"));
-// 	ui.lXColumn->setText(i18n("x-data"));
-// 	ui.lYColumn->setText(i18n("y-data"));
-
-	//TODO updatePenStyles, updateBrushStyles for all comboboxes
-}
-// "General"-tab
-void HistogramDock::nameChanged() {
-  if (m_initializing)
-	return;
-
-  m_curve->setName(ui.leName->text());
-}
-void HistogramDock::commentChanged() {
-  if (m_initializing)
-	return;
-
-  m_curve->setComment(ui.leComment->text());
-}
-
-void HistogramDock::visibilityChanged(bool state){
-	if (m_initializing)
-		return;
-
-	for (auto* curve: m_curvesList)
-		curve->setVisible(state);
-}
-void HistogramDock::valuesColorChanged(const QColor& color){
-	if (m_initializing)
-		return;
-
-	for (auto* curve: m_curvesList)
-		curve->setValuesColor(color);
-}
 void HistogramDock::init(){
 	//General
 	//bins option
@@ -455,6 +308,7 @@ void HistogramDock::setModel() {
 
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
+
 void HistogramDock::setCurves(QList<Histogram*> list){
 	m_initializing = true;
 	m_curvesList = list;
@@ -538,67 +392,140 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	m_initializing=false;
 }
 
+void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
+	if (column)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+	else
+		cb->setCurrentModelIndex(QModelIndex());
+}
+
+void HistogramDock::retranslateUi() {
+	//TODO:
+// 	ui.lName->setText(i18n("Name"));
+// 	ui.lComment->setText(i18n("Comment"));
+// 	ui.chkVisible->setText(i18n("Visible"));
+// 	ui.lXColumn->setText(i18n("x-data"));
+// 	ui.lYColumn->setText(i18n("y-data"));
+
+	//TODO updatePenStyles, updateBrushStyles for all comboboxes
+}
+
 //*************************************************************
 //**** SLOTs for changes triggered in HistogramDock *****
 //*************************************************************
 
-void HistogramDock::curveLinePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.kcbLineColor->setColor( pen.color());
-	m_initializing = false;
+// "General"-tab
+void HistogramDock::nameChanged() {
+	if (m_initializing)
+	return;
+
+	m_curve->setName(ui.leName->text());
 }
-//Values-Tab
-void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
-	m_initializing = true;
-	ui.cbValuesType->setCurrentIndex((int) type);
-	m_initializing = false;
+void HistogramDock::commentChanged() {
+	if (m_initializing)
+	return;
+
+	m_curve->setComment(ui.leComment->text());
 }
-void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	this->setModelIndexFromColumn(cbValuesColumn, column);
-	m_initializing = false;
+
+void HistogramDock::visibilityChanged(bool state){
+	if (m_initializing)
+		return;
+
+	for (auto* curve: m_curvesList)
+		curve->setVisible(state);
 }
-void HistogramDock::curveValuesPositionChanged(Histogram::ValuesPosition position) {
-	m_initializing = true;
-  	ui.cbValuesPosition->setCurrentIndex((int) position);
-	m_initializing = false;
+
+void HistogramDock::histogramTypeChanged(int index) {
+	if (m_initializing)
+		return;
+
+	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
+	for (auto* curve : m_curvesList)
+		curve->setHistogramType(histogramType);
 }
-void HistogramDock::curveValuesDistanceChanged(qreal distance) {
-	m_initializing = true;
-  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
-	m_initializing = false;
+
+void HistogramDock::xColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column(nullptr);
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	for (auto* curve : m_curvesList)
+		curve->setXColumn(column);
 }
-void HistogramDock::curveValuesRotationAngleChanged(qreal angle) {
-	m_initializing = true;
-	ui.sbValuesRotation->setValue(angle);
-	m_initializing = false;
+
+void HistogramDock::histogramOrientationChanged(int index) {
+	if (m_initializing)
+		return;
+
+	Histogram::HistogramOrientation histogramOrientation = Histogram::HistogramOrientation(index);
+	for (auto* curve : m_curvesList)
+		curve->setHistogramOrientation(histogramOrientation);
 }
-void HistogramDock::curveValuesOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
+
+void HistogramDock::binningMethodChanged(int index) {
+	if (m_initializing)
+		return;
+
+	Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
+	if (binningMethod == Histogram::ByNumber) {
+		ui.lBinCount->show();
+		ui.sbBinCount->show();
+		ui.lBinWidth->hide();
+		ui.leBinWidth->hide();
+	} else if (binningMethod == Histogram::ByWidth) {
+		ui.lBinCount->hide();
+		ui.sbBinCount->hide();
+		ui.lBinWidth->show();
+		ui.leBinWidth->show();
+	} else {
+		ui.lBinCount->hide();
+		ui.sbBinCount->hide();
+		ui.lBinWidth->hide();
+		ui.leBinWidth->hide();
+	}
+
+	for (auto* curve : m_curvesList)
+		curve->setBinningMethod(binningMethod);
 }
-void HistogramDock::curveValuesPrefixChanged(const QString& prefix) {
-	m_initializing = true;
-  	ui.leValuesPrefix->setText(prefix);
-	m_initializing = false;
+
+void HistogramDock::binCountChanged(int value) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setBinValue(value);
 }
-void HistogramDock::curveValuesSuffixChanged(const QString& suffix) {
-	m_initializing = true;
-  	ui.leValuesSuffix->setText(suffix);
-	m_initializing = false;
+
+void HistogramDock::binWidthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	//TODO
+/*	for (auto* curve : m_curvesList)
+		curve->setBinWidth(value);*/
 }
-void HistogramDock::curveValuesFontChanged(QFont font) {
-	m_initializing = true;
-	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
-  	ui.kfrValuesFont->setFont(font);
-	m_initializing = false;
+
+//Line tab
+void HistogramDock::lineColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* curve: m_curvesList) {
+		pen = curve->linePen();
+		pen.setColor(color);
+		curve->setLinePen(pen);
+  	}
 }
-void HistogramDock::curveValuesColorChanged(QColor color) {
-	m_initializing = true;
-  	ui.kcbValuesColor->setColor(color);
-	m_initializing = false;
-}
+
+//Values tab
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
@@ -653,6 +580,110 @@ void HistogramDock::valuesTypeChanged(int index) {
 		curve->setValuesType(valuesType);
 }
 
+//TODO: very similiar to ColumnDock
+void HistogramDock::showValuesColumnFormat(const Column* column){
+  if (!column){
+	// no valid column is available
+	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
+	this->updateValuesFormatWidgets(AbstractColumn::Text);
+  }else{
+	AbstractColumn::ColumnMode columnMode = column->columnMode();
+
+	//update the format widgets for the new column mode
+	this->updateValuesFormatWidgets(columnMode);
+
+	 //show the actuall formating properties
+	switch(columnMode) {
+		case AbstractColumn::Numeric:{
+		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
+		  ui.sbValuesPrecision->setValue(filter->numDigits());
+		  break;
+		}
+		case AbstractColumn::Text:
+		case AbstractColumn::Integer:
+			break;
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime: {
+				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
+				break;
+			}
+	}
+  }
+}
+
+//TODO: very similiar to ColumnDock
+void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
+	ui.cbValuesFormat->clear();
+
+	switch (columnMode) {
+	case AbstractColumn::Numeric:
+		ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
+		ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+		ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+		ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+		ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+		break;
+	case AbstractColumn::Integer:
+		break;
+	case AbstractColumn::Text:
+		ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
+		break;
+	case AbstractColumn::Month:
+		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("M"));
+		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("MM"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated Month Name"), QVariant("MMM"));
+		ui.cbValuesFormat->addItem(i18n("Full Month Name"), QVariant("MMMM"));
+		break;
+	case AbstractColumn::Day:
+		ui.cbValuesFormat->addItem(i18n("Number without Leading Zero"), QVariant("d"));
+		ui.cbValuesFormat->addItem(i18n("Number with Leading Zero"), QVariant("dd"));
+		ui.cbValuesFormat->addItem(i18n("Abbreviated Day Name"), QVariant("ddd"));
+		ui.cbValuesFormat->addItem(i18n("Full Day Name"), QVariant("dddd"));
+		break;
+	case AbstractColumn::DateTime:
+		for (const auto& s: AbstractColumn::dateFormats())
+			ui.cbValuesFormat->addItem(s, QVariant(s));
+
+		for (const auto& s: AbstractColumn::timeFormats())
+			ui.cbValuesFormat->addItem(s, QVariant(s));
+
+		for (const auto& s1: AbstractColumn::dateFormats())
+			for (const auto& s2: AbstractColumn::timeFormats())
+				ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
+		break;
+	}
+
+	ui.cbValuesFormat->setCurrentIndex(0);
+
+	if (columnMode == AbstractColumn::Numeric) {
+		ui.lValuesPrecision->show();
+		ui.sbValuesPrecision->show();
+	} else {
+		ui.lValuesPrecision->hide();
+		ui.sbValuesPrecision->hide();
+	}
+
+	if (columnMode == AbstractColumn::Text) {
+		ui.lValuesFormatTop->hide();
+		ui.lValuesFormat->hide();
+		ui.cbValuesFormat->hide();
+	} else {
+		ui.lValuesFormatTop->show();
+		ui.lValuesFormat->show();
+		ui.cbValuesFormat->show();
+		ui.cbValuesFormat->setCurrentIndex(0);
+	}
+
+	if (columnMode == AbstractColumn::DateTime) {
+		ui.cbValuesFormat->setEditable(true);
+	} else {
+		ui.cbValuesFormat->setEditable(false);
+	}
+}
+
 /*!
   called when the custom column for the values was changed.
 */
@@ -668,12 +699,6 @@ void HistogramDock::valuesColumnChanged(const QModelIndex& index){
 		curve->setValuesColumn(column);
 	}
 }
-void HistogramDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
-	ui.chkVisible->setChecked(on);
-	m_initializing = false;
-}
-
 
 void HistogramDock::valuesPositionChanged(int index){
 	if (m_initializing)
@@ -736,51 +761,12 @@ void HistogramDock::valuesFontChanged(const QFont& font){
 		curve->setValuesFont(valuesFont);
 }
 
-//Filling
-void HistogramDock::curveFillingPositionChanged(Histogram::FillingPosition position) {
-	m_initializing = true;
-	ui.cbFillingPosition->setCurrentIndex((int)position);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
-	m_initializing = true;
-	ui.cbFillingType->setCurrentIndex(type);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style){
-	m_initializing = true;
-	ui.cbFillingColorStyle->setCurrentIndex(style);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style){
-	m_initializing = true;
-	ui.cbFillingImageStyle->setCurrentIndex(style);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style){
-	m_initializing = true;
-	ui.cbFillingBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingFirstColorChanged(QColor& color){
-	m_initializing = true;
-	ui.kcbFillingFirstColor->setColor(color);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingSecondColorChanged(QColor& color){
-	m_initializing = true;
-	ui.kcbFillingSecondColor->setColor(color);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingFileNameChanged(QString& filename){
-	m_initializing = true;
-	ui.leFillingFileName->setText(filename);
-	m_initializing = false;
-}
-void HistogramDock::curveFillingOpacityChanged(float opacity){
-	m_initializing = true;
-	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
+void HistogramDock::valuesColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
+
+	for (auto* curve: m_curvesList)
+		curve->setValuesColor(color);
 }
 
 //Filling-tab
@@ -930,6 +916,7 @@ void HistogramDock::fillingSecondColorChanged(const QColor& c){
 		curve->setFillingSecondColor(c);
 }
 
+
 /*!
 	opens a file dialog and lets the user select the image file.
 */
@@ -978,6 +965,146 @@ void HistogramDock::fillingOpacityChanged(int value){
 		curve->setFillingOpacity(opacity);
 }
 
+//*************************************************************
+//*********** SLOTs for changes triggered in Histogram *******
+//*************************************************************
+
+//General-Tab
+void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_curve != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text())
+		ui.leName->setText(aspect->name());
+	else if (aspect->comment() != ui.leComment->text())
+		ui.leComment->setText(aspect->comment());
+
+	m_initializing = false;
+}
+
+void HistogramDock::curveHistogramDataChanged(Histogram::HistogramData data) {
+	m_initializing = true;
+	ui.cbHistogramType->setCurrentIndex(data.type);
+	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
+	ui.sbBinCount->setValue(data.binCount);
+	m_initializing = false;
+}
+
+void HistogramDock::curveLinePenChanged(const QPen& pen) {
+	m_initializing = true;
+	ui.kcbLineColor->setColor( pen.color());
+	m_initializing = false;
+}
+//Values-Tab
+void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
+	m_initializing = true;
+	ui.cbValuesType->setCurrentIndex((int) type);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbValuesColumn, column);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesPositionChanged(Histogram::ValuesPosition position) {
+	m_initializing = true;
+  	ui.cbValuesPosition->setCurrentIndex((int) position);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesDistanceChanged(qreal distance) {
+	m_initializing = true;
+  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
+	m_initializing = false;
+}
+void HistogramDock::curveValuesRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbValuesRotation->setValue(angle);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void HistogramDock::curveValuesPrefixChanged(const QString& prefix) {
+	m_initializing = true;
+  	ui.leValuesPrefix->setText(prefix);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesSuffixChanged(const QString& suffix) {
+	m_initializing = true;
+  	ui.leValuesSuffix->setText(suffix);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesFontChanged(QFont font) {
+	m_initializing = true;
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+  	ui.kfrValuesFont->setFont(font);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesColorChanged(QColor color) {
+	m_initializing = true;
+  	ui.kcbValuesColor->setColor(color);
+	m_initializing = false;
+}
+
+void HistogramDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	ui.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+
+//Filling
+void HistogramDock::curveFillingPositionChanged(Histogram::FillingPosition position) {
+	m_initializing = true;
+	ui.cbFillingPosition->setCurrentIndex((int)position);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
+	m_initializing = true;
+	ui.cbFillingType->setCurrentIndex(type);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style){
+	m_initializing = true;
+	ui.cbFillingColorStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style){
+	m_initializing = true;
+	ui.cbFillingImageStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style){
+	m_initializing = true;
+	ui.cbFillingBrushStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingFirstColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingFirstColor->setColor(color);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingSecondColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingSecondColor->setColor(color);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingFileNameChanged(QString& filename){
+	m_initializing = true;
+	ui.leFillingFileName->setText(filename);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingOpacityChanged(float opacity){
+	m_initializing = true;
+	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
 void HistogramDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("Histogram"));
 
@@ -1009,93 +1136,6 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
-}
-
-void HistogramDock::histogramTypeChanged(int index) {
-	if (m_initializing)
-		return;
-
-	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
-	for (auto* curve : m_curvesList)
-		curve->setHistogramType(histogramType);
-}
-
-void HistogramDock::histogramOrientationChanged(int index) {
-	if (m_initializing)
-		return;
-
-	Histogram::HistogramOrientation histogramOrientation = Histogram::HistogramOrientation(index);
-	for (auto* curve : m_curvesList)
-		curve->setHistogramOrientation(histogramOrientation);
-}
-
-void HistogramDock::binningMethodChanged(int index) {
-	if (m_initializing)
-		return;
-
-	Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
-	if (binningMethod == Histogram::ByNumber) {
-		ui.lBinCount->show();
-		ui.sbBinCount->show();
-		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
-	} else if (binningMethod == Histogram::ByWidth) {
-		ui.lBinCount->hide();
-		ui.sbBinCount->hide();
-		ui.lBinWidth->show();
-		ui.leBinWidth->show();
-	} else {
-		ui.lBinCount->hide();
-		ui.sbBinCount->hide();
-		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
-	}
-
-	for (auto* curve : m_curvesList)
-		curve->setBinningMethod(binningMethod);
-}
-
-void HistogramDock::binCountChanged(int value) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setBinValue(value);
-}
-
-void HistogramDock::binWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	//TODO
-/*	for (auto* curve : m_curvesList)
-		curve->setBinWidth(value);*/
-}
-
-void HistogramDock::lineColorChanged(const QColor& color){
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve: m_curvesList) {
-		pen = curve->linePen();
-		pen.setColor(color);
-		curve->setLinePen(pen);
-  	}
-}
-void HistogramDock::xColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column(nullptr);
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	for (auto* curve : m_curvesList)
-		curve->setXColumn(column);
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
@@ -1142,29 +1182,4 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);
 
 	config.sync();
-}
-
-//*************************************************************
-//*********** SLOTs for changes triggered in Histogram **********
-//*************************************************************
-//General-Tab
-void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
-void HistogramDock::curveHistogramDataChanged(Histogram::HistogramData data) {
-	m_initializing = true;
-	ui.cbHistogramType->setCurrentIndex(data.type);
-	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
-	ui.sbBinCount->setValue(data.binCount);
-	m_initializing = false;
 }
