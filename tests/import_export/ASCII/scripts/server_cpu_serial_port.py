@@ -1,14 +1,16 @@
 #!/usr/bin/python
 
-import socket, psutil, os, pty, serial
+import psutil, os, pty, serial
 
 master, slave = pty.openpty()
 s_name = os.ttyname(slave)
-print 'serial port ' + s_name
+m_name = os.ttyname(master)
+print 'slave serial port ' + s_name
+#print 'master serial port ' + m_name
 
-ser = serial.Serial(s_name)
+s = serial.Serial(s_name)
 
 while True:
   cpu_percent = str(psutil.cpu_percent(interval=0.5))
-  ser.write(cpu_percent)
+  s.write(cpu_percent)
   print 'written ' + cpu_percent
