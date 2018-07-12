@@ -50,9 +50,8 @@ FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {}
 
 FITSFilter::~FITSFilter() {}
 
-QVector<QStringList> FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	Q_UNUSED(lines);
-	return d->readCHDU(fileName, dataSource, importMode);
+void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readCHDU(fileName, dataSource, importMode);
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
@@ -247,15 +246,17 @@ void FITSFilter::setExportTo(const int exportTo) {
 	d->exportTo = exportTo;
 }
 
+QString FITSFilter::fileInfoString(const QString& fileName) {
+	const int imagesCount = FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+	QString info(i18n("Images: %1", QString::number(imagesCount )));
 
-int FITSFilter::imagesCount(const QString &fileName)  {
-	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+	info += QLatin1String("<br>");
+
+	const int tablesCount = FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
+	info += i18n("Tables: %1", QString::number(tablesCount));
+
+	return info;
 }
-
-int FITSFilter::tablesCount(const QString &fileName) {
-	return FITSFilterPrivate::extensionNames(fileName).values(QLatin1String("TABLES")).size();
-}
-
 
 //#####################################################################
 //################### Private implementation ##########################
@@ -391,7 +392,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		delete[] data;
 
 		if (dataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, "", importMode);
 
 		fits_close_file(m_fitsFile, &status);
 
@@ -615,7 +616,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		delete[] array;
 
 		if (!noDataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, "", importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, "", importMode);
 
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;

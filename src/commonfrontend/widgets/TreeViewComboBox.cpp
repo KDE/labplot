@@ -78,15 +78,15 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 	setCurrentIndex(0);
 
 	// signal activated() is platform dependent
-	connect(m_treeView, SIGNAL(pressed(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
-	connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)));
+	connect(m_treeView, &QTreeView::pressed, this, &TreeViewComboBox::treeViewIndexActivated);
+	connect(m_lineEdit, &QLineEdit::textChanged, this, &TreeViewComboBox::filterChanged);
 }
 
-void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
+void TreeViewComboBox::setTopLevelClasses(const QList<const char*>& list) {
 	m_topLevelClasses = list;
 }
 
-void TreeViewComboBox::setHiddenAspects(QList<const AbstractAspect*> list) {
+void TreeViewComboBox::setHiddenAspects(const QList<const AbstractAspect*>& list) {
 	m_hiddenAspects = list;
 }
 

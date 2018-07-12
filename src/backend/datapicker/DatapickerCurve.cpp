@@ -518,11 +518,6 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerCurve);
 
-	if(!reader->isStartElement() || reader->name() != "datapickerCurve") {
-		reader->raiseError(i18n("no dataPicker curve element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

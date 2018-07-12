@@ -70,9 +70,8 @@ qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* da
 /*!
   reads the content of the file \c fileName.
 */
-QVector<QStringList> AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromFile(fileName, dataSource, importMode, lines);
-	return QVector<QStringList>();  //TODO: remove this later once all read*-functions in the filter classes don't return any preview strings anymore
+void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
@@ -147,6 +146,13 @@ QStringList AsciiFilter::dataTypes() {
 		if (me.valueToKey(i))
 			list << me.valueToKey(i);
 	return list;
+}
+
+QString AsciiFilter::fileInfoString(const QString& fileName) {
+	QString info(i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName)));
+	info += QLatin1String("<br>");
+	info += i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+	return info;
 }
 
 /*!
@@ -418,10 +424,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			else
 				return 1;
 		}
-
-		//TOOD: this logic seems to be wrong. If the user asks to read from line startRow, we should start here independent of any comments
-		if (line.startsWith(commentCharacter))	// ignore commented lines before startRow
-			i--;
 	}
 
 	// Parse the first line:
@@ -478,7 +480,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	DEBUG("separator: \'" << m_separator.toStdString() << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
 	QDEBUG("first line: " << firstLineStringList);
-	DEBUG("headerEnabled = " << headerEnabled);
+	DEBUG("headerEnabled: " << headerEnabled);
 
 	//optionally, remove potential spaces in the first line
 	if (simplifyWhitespacesEnabled) {
@@ -536,6 +538,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
+		if (device.atEnd())	// EOF reached
+			break;
 		firstLineStringList = getLineString(device);
 
 		if (createIndexEnabled)
@@ -564,23 +568,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)AsciiFilter::lineNumber(device);
 
-	// reset to start of file
-	//TODO: seems to be redundant since it's already done in the lineNumber() call above
-	if (!device.isSequential())
-		device.seek(0);
-/////////////////////////////////////////////////////////////////
-
-	int actualEndRow = endRow;
-	DEBUG("endRow(actualEndRow) = " << endRow << ", m_actualRows = " << m_actualRows);
-	if (endRow == -1 || endRow > m_actualRows)
-		actualEndRow = m_actualRows;
-
-	if (m_actualRows > actualEndRow)
-		m_actualRows = actualEndRow;
+	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
+	m_actualRows = actualEndRow - m_actualStartRow + 1;
 
 	DEBUG("start/end column: " << startColumn << ' ' << endColumn);
 	DEBUG("start/end row: " << m_actualStartRow << ' ' << actualEndRow);
-	DEBUG("actual cols/rows (w/o header incl. start rows): " << m_actualCols << ' ' << m_actualRows);
+	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
 		return 1;
@@ -591,12 +584,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /*!
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
-void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << fileName.toStdString() << "\', dataSource = "
-	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	KFilterDev device(fileName);
-	readDataFromDevice(device, dataSource, importMode, lines);
+	readDataFromDevice(device, dataSource, importMode);
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
@@ -847,7 +840,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
-		DEBUG("	actual row = " << m_actualRows);
+		DEBUG("	actual rows = " << m_actualRows);
 
 		if (linesToRead == 0)
 			return 0;
@@ -1199,9 +1192,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					c = mode;
 		}
 
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows - m_actualStartRow + 1,
-		                 m_actualCols, vectorNames, columnModes);
-
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 		m_prepared = true;
 	}
 
@@ -1213,15 +1204,14 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	if (lines == -1)
 		lines = m_actualRows;
 
-	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
+	//skip data lines, if required
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
+	for (int i = 0; i < m_actualStartRow - 1; ++i)
+		device.readLine();
+
+	DEBUG("	Reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
-
-		// skip start lines
-		if (m_actualStartRow > 1) {
-			m_actualStartRow--;
-			continue;
-		}
 
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
@@ -1229,7 +1219,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 		if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
 			continue;
-
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 
@@ -1306,8 +1295,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		currentRow++;
 		emit q->completed(100 * currentRow/m_actualRows);
 	}
+	DEBUG("	Read " << currentRow << " lines");
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, dateTimeFormat, importMode);
+	dataSource->finalizeImport(m_columnOffset, startColumn, endColumn, currentRow, dateTimeFormat, importMode);
 }
 
 /*!
@@ -1449,15 +1439,14 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 	QDEBUG("	column names = " << vectorNames);
 
-	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
+	//skip data lines, if required
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " lines");
+	for (int i = 0; i < m_actualStartRow - 1; ++i)
+		device.readLine();
+
+	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString line = device.readLine();
-
-		// skip start lines
-		if (m_actualStartRow > 1) {
-			m_actualStartRow--;
-			continue;
-		}
 
 		line.remove(QRegExp("[\\n\\r]"));	// remove any newline
 		if (simplifyWhitespacesEnabled)
@@ -1560,11 +1549,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "asciiFilter") {
-		reader->raiseError(i18n("no ascii filter element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 

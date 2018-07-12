@@ -54,7 +54,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 
-	connect(mainWidget, SIGNAL(changed()), this, SLOT(changed()));
+	connect(mainWidget, &DatabaseManagerWidget::changed, this, &DatabaseManagerDialog::changed);
 	connect(buttonBox->button(QDialogButtonBox::Ok),&QPushButton::clicked, this, &DatabaseManagerDialog::save);
 	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DatabaseManagerDialog::close);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

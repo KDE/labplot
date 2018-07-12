@@ -44,8 +44,7 @@ public:
 
 	static QStringList importFormats();
 
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-					      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;

@@ -45,8 +45,7 @@ public:
 	FITSFilter();
 	~FITSFilter() override;
 
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> readChdu(const QString& fileName, bool *okToMatrix = nullptr, int lines = -1);
 	void save(QXmlStreamWriter*) const override;
@@ -81,8 +80,7 @@ public:
 		KeywordUpdate updates;
 	};
 
-	static int imagesCount(const QString& fileName);
-	static int tablesCount(const QString& fileName);
+	static QString fileInfoString(const QString&);
 	void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
 	void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
 	void addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords);

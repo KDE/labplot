@@ -43,13 +43,13 @@ public:
 
 private:
 	Ui::FITSHeaderEditWidget* ui;
-	QAction* m_action_remove_keyword;
-	QAction* m_action_add_keyword;
-	QAction* m_action_addmodify_unit;
-	QAction* m_action_remove_extension;
+	QAction* m_actionRemoveKeyword;
+	QAction* m_actionAddKeyword;
+	QAction* m_actionAddmodifyUnit;
+	QAction* m_actionRemoveExtension;
 
-	QMenu* m_KeywordActionsMenu;
-	QMenu* m_ExtensionActionsMenu;
+	QMenu* m_keywordActionsMenu;
+	QMenu* m_extensionActionsMenu;
 
 	struct HeaderUpdate {
 		QList<FITSFilter::Keyword> newKeywords;
@@ -62,7 +62,7 @@ private:
 		QList<FITSFilter::Keyword> keywords;
 	};
 
-	QMap<QString, ExtensionData> m_extensionDatas;
+	QMap<QString, ExtensionData> m_extensionData;
 	QStringList m_removedExtensions;
 	QString m_seletedExtension;
 

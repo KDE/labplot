@@ -115,7 +115,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
 
-	connect(ui.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)));
+	connect(ui.chbHeader, &QCheckBox::stateChanged, this, &AsciiOptionsWidget::headerChanged);
 }
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool b) {

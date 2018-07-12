@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-	Copyright            : (C) 2016-2017 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2016-2018 by Alexander Semke (alexander.semke@web.de)
 	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
@@ -63,12 +63,12 @@ extern "C" {
 Histogram::Histogram(const QString &name)
 	: WorksheetElement(name), d_ptr(new HistogramPrivate(this)) {
 		init();
-	}
+}
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
 	: WorksheetElement(name), d_ptr(dd) {
 		init();
-	}
+}
 
 void Histogram::init() {
 	Q_D(Histogram);
@@ -78,11 +78,16 @@ void Histogram::init() {
 
 	d->xColumn = NULL;
 
-	d->histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
-	d->histogramOrientation = (Histogram::HistogramOrientation) group.readEntry("histogramOrientation", (int)Histogram::Vertical);
-	d->binsOption = (Histogram::BinsOption) group.readEntry("binOption", (int)Histogram::Number);
+	d->type = (Histogram::HistogramType) group.readEntry("type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::HistogramOrientation) group.readEntry("orientation", (int)Histogram::Vertical);
+	d->binningMethod = (Histogram::BinningMethod) group.readEntry("binOption", (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry("binCount", 10);
+	d->binWidth = group.readEntry("binWidth", 1.0f);
+
+	//TODO
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
+
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
@@ -154,52 +159,48 @@ void Histogram::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, histogramType, histogramType)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, histogramOrientation, histogramOrientation)
-
-void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
-	d_ptr->histogramData.binsOption = binsOption;
-	emit HistogramDataChanged();
-}
-void Histogram::setBinValue(int binValue) {
-	d_ptr->histogramData.binValue = binValue;
-	emit HistogramDataChanged();
-}
-
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+//general
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
+BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
+BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
-	QString& Histogram::xColumnPath() const {
-		return d_ptr->xColumnPath;
-	}
-	CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramData, histogramData, histogramData)
 
-	//values
-	BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
+QString& Histogram::xColumnPath() const {
+	return d_ptr->xColumnPath;
+}
+
+//lime
+CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
+
+//values
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn *, valuesColumn, valuesColumn)
-	QString& Histogram::valuesColumnPath() const {
-		return d_ptr->valuesColumnPath;
-	}
-	BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
-	BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
-	BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
-	BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
+QString& Histogram::valuesColumnPath() const {
+	return d_ptr->valuesColumnPath;
+}
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
+CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
+CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
+CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 	//filling
-	BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::FillingPosition, fillingPosition, fillingPosition)
-	BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
-	BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
-	BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-	CLASS_SHARED_D_READER_IMPL(Histogram, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstColor)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
-	CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::FillingPosition, fillingPosition, fillingPosition)
+BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
+BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
+BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
+CLASS_SHARED_D_READER_IMPL(Histogram, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstColor)
+CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
+CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
 
 double Histogram::getYMaximum() const {
@@ -218,48 +219,19 @@ double Histogram::getXMinimum() const {
 	return d_ptr->getXMinimum();
 }
 
-bool Histogram::isSourceDataChangedSinceLastPlot() const {
-	Q_D(const Histogram);
-	return d->sourceDataChangedSinceLastPlot;
-}
-
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramData, Histogram::HistogramData, histogramData, recalculate);
-void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) {
-	Q_D(Histogram);
-	exec(new HistogramSetHistogramDataCmd(d, histogramData, ki18n("%1: set equation")));
-}
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, histogramType, retransform)
-void Histogram::setHistogramType(Histogram::HistogramType histogramType) {
-	Q_D(Histogram);
-    exec(new HistogramSetHistogramTypeCmd(d, histogramType, ki18n("%1: assign histogram type")));
-	emit HistogramDataChanged();
-	DEBUG(histogramType);
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, histogramOrientation, retransform)
-void Histogram::setHistogramOrientation(Histogram::HistogramOrientation histogramOrientation) {
-    Q_D(Histogram);
-    exec(new HistogramSetHistogramOrientationCmd(d, histogramOrientation, ki18n("%1: assign histogram orientation")));
-	emit HistogramDataChanged();
-	DEBUG(histogramOrientation);
-}
-
+//General
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void Histogram::setXColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->xColumn) {
 		exec(new HistogramSetXColumnCmd(d, column, ki18n("%1: assign x values")));
-		emit sourceDataChangedSinceLastPlot();
-
-		//emit HistogramDataChanged() in order to notify the plot about the changes
-		emit HistogramDataChanged();
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::xHistogramDataChanged);
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::handleSourceDataChanged);
+//TDOO 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::handleSourceDataChanged);
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::retransform);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
@@ -269,6 +241,42 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 	}
 }
 
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, retransform)
+void Histogram::setType(Histogram::HistogramType type) {
+	Q_D(Histogram);
+	if (type != d->type)
+		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, retransform)
+void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
+    Q_D(Histogram);
+	if (orientation != d->orientation)
+		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, retransform)
+void Histogram::setBinningMethod(Histogram::BinningMethod method) {
+	Q_D(Histogram);
+	if (method != d->binningMethod)
+		exec(new HistogramSetBinningMethodCmd(d, method, ki18n("%1: set binning method")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, retransform)
+void Histogram::setBinCount(int count) {
+	Q_D(Histogram);
+	if (count != d->binCount)
+		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, retransform)
+void Histogram::setBinWidth(float width) {
+	Q_D(Histogram);
+	if (width != d->binWidth)
+		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
+}
+
+//Line
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
 void Histogram::setLinePen(const QPen &pen) {
 	Q_D(Histogram);
@@ -425,11 +433,7 @@ void Histogram::setFillingOpacity(qreal opacity) {
 void Histogram::retransform() {
 	d_ptr->retransform();
 }
-void Histogram::handleSourceDataChanged() {
-	Q_D(Histogram);
-	d->sourceDataChangedSinceLastPlot = true;
-	emit sourceDataChangedSinceLastPlot();
-}
+
 //TODO
 void Histogram::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(pageResize);
@@ -492,7 +496,7 @@ QRectF HistogramPrivate::boundingRect() const {
 double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
 		double yMaxRange = -INFINITY;
-		switch(histogramType) {
+		switch(type) {
 			case Histogram::Ordinary: {
 				size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
 				yMaxRange = gsl_histogram_get(m_histogram, maxYAddes);
@@ -523,7 +527,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 }
 
 double HistogramPrivate::getXMinimum() {
-	switch(histogramOrientation) {
+	switch(orientation) {
 		case Histogram::Vertical: {
 			return xColumn->minimum();
 		}
@@ -535,7 +539,7 @@ double HistogramPrivate::getXMinimum() {
 }
 
 double HistogramPrivate::getXMaximum() {
-	switch(histogramOrientation) {
+	switch(orientation) {
 		case Histogram::Vertical: {
 			return xColumn->maximum();
 		}
@@ -547,7 +551,7 @@ double HistogramPrivate::getXMaximum() {
 }
 
 double HistogramPrivate::getYMinimum() {
-	switch(histogramOrientation) {
+	switch(orientation) {
 		case Histogram::Vertical: {
 			return 0;
 		}
@@ -559,7 +563,7 @@ double HistogramPrivate::getYMinimum() {
 }
 
 double HistogramPrivate::getYMaximum() {
-	switch(histogramOrientation) {
+	switch(orientation) {
 		case Histogram::Vertical: {
 			return getMaximumOccuranceofHistogram();
 		}
@@ -741,7 +745,7 @@ void HistogramPrivate::verticalCumulativeHistogram() {
 }
 
 void HistogramPrivate::verticalHistogram() {
-	switch(histogramType) {
+	switch(type) {
 		case Histogram::Ordinary: {
 			verticalOrdinaryHistogram();
 			break;
@@ -842,7 +846,7 @@ void HistogramPrivate::horizontalCumulativeHistogram() {
 }
 
 void HistogramPrivate::horizontalHistogram() {
-	switch(histogramType) {
+	switch(type) {
 		case Histogram::Ordinary: {
 			horizontalOrdinaryHistogram();
 			break;
@@ -876,21 +880,21 @@ void HistogramPrivate::updateLines() {
 
 	double xAxisMin = xColumn->minimum();
 	double xAxisMax = xColumn->maximum();
-	switch (histogramData.binsOption) {
-		case Histogram::Number:
-			m_bins = (size_t)histogramData.binValue;
+	switch (binningMethod) {
+		case Histogram::ByNumber:
+			m_bins = (size_t)binCount;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(histogramData.binValue);
+			m_bins = (size_t)sqrt(binCount);
 			break;
 		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(histogramData.binValue);
+			m_bins = (size_t)2*cbrt(binCount);
 			break;
-		case Histogram::Width:
-			m_bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binValue;
+		case Histogram::ByWidth:
+			m_bins = (size_t) (xAxisMax-xAxisMin)/binCount;
 			break;
 		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(histogramData.binValue);
+			m_bins =(size_t) 1 + 3.33*log(binCount);
 			break;
 	}
 
@@ -904,7 +908,7 @@ void HistogramPrivate::updateLines() {
 			gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
 	}
 
-	switch(histogramOrientation) {
+	switch(orientation) {
 		case Histogram::Vertical: {
 			verticalHistogram();
 			break;
@@ -950,7 +954,7 @@ void HistogramPrivate::updateValues() {
 
 	//determine the value string for all points that are currently visible in the plot
 	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
-		switch(histogramType) {
+		switch(type) {
 			case Histogram::Ordinary:
 				for(size_t i=0; i<m_bins; ++i) {
 					if (!visiblePoints[i]) continue;
@@ -1542,10 +1546,6 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-void HistogramPrivate::recalculate() {
-	emit q->HistogramDataChanged();
-}
-
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -1601,11 +1601,11 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//write Histogram specific information
-	writer->writeStartElement( "typeChanged" );
-	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
-	writer->writeAttribute( "BinsOption", QString::number(d->histogramData.binsOption) );
-	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
-	writer->writeEndElement();
+// 	writer->writeStartElement( "typeChanged" );
+// 	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
+// 	writer->writeAttribute( "BinningMethod", QString::number(d->histogramData.binningMethod) );
+// 	writer->writeAttribute( "binValue", QString::number(d->binCount));
+// 	writer->writeEndElement();
 
 	if (d->xColumn)
 		d->xColumn->save(writer);
@@ -1616,11 +1616,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 //! Load from XML
 bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Histogram);
-
-	if(!reader->isStartElement() || reader->name() != "Histogram") {
-		reader->raiseError(i18n("no histogram element found"));
-		return false;
-	}
 
 	if (!readBasicAttributes(reader))
 		return false;
@@ -1649,19 +1644,19 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "typeChanged") {
-			attribs = reader->attributes();
-			str = attribs.value("type").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->histogramType = (Histogram::HistogramType)str.toInt();
-
-			str = attribs.value("BinsOption").toString();
-			d->binsOption = (Histogram::BinsOption)str.toInt();
-
-			str = attribs.value("binValue").toString();
-			d->histogramData.binValue = str.toInt();
+// 		} else if (!preview && reader->name() == "typeChanged") {
+// 			attribs = reader->attributes();
+// 			str = attribs.value("type").toString();
+// 			if(str.isEmpty())
+// 				reader->raiseWarning(attributeWarning.subs("type").toString());
+// 			else
+// 				d->type = (Histogram::HistogramType)str.toInt();
+//
+// 			str = attribs.value("BinningMethod").toString();
+// 			d->binningMethod = (Histogram::BinningMethod)str.toInt();
+//
+// 			str = attribs.value("binValue").toString();
+// 			d->binCount = str.toInt();
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 

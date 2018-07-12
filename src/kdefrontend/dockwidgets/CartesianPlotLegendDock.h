@@ -73,6 +73,7 @@ private slots:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
+	void rotationChanged(int value);
 
 	//"Background"-tab
   	void backgroundTypeChanged(int);
@@ -106,6 +107,7 @@ private slots:
 	void legendLabelOrderChanged(bool);
 	void legendLineSymbolWidthChanged(float);
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
+	void legendRotationAngleChanged(qreal);
 	void legendVisibilityChanged(bool);
 
 	void legendBackgroundTypeChanged(PlotArea::BackgroundType);

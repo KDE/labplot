@@ -46,8 +46,8 @@ class TreeViewComboBox : public QComboBox {
 		void setCurrentModelIndex(const QModelIndex&);
 		QModelIndex currentModelIndex() const;
 
-		void setTopLevelClasses(QList<const char*>);
-		void setHiddenAspects(QList<const AbstractAspect*>);
+		void setTopLevelClasses(const QList<const char *> &);
+		void setHiddenAspects(const QList<const AbstractAspect*>&);
 
 		virtual void showPopup();
 		virtual void hidePopup();

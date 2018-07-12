@@ -350,11 +350,6 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Datapicker::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "datapicker") {
-		reader->raiseError(i18n("no datapicker element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

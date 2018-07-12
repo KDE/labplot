@@ -68,8 +68,8 @@ QVector<QStringList> HDF5Filter::readCurrentDataSet(const QString& fileName, Abs
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-QVector<QStringList> HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	return d->readDataFromFile(fileName, dataSource, mode, lines);
+void HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	d->readDataFromFile(fileName, dataSource, mode);
 }
 
 /*!
@@ -1656,7 +1656,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	if (!dataSource)
 		return dataStrings;
 
-	dataSource->finalizeImport(columnOffset, 1, actualCols, "", mode);
+	dataSource->finalizeImport(columnOffset, 1, actualCols, -1, "", mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
@@ -1671,18 +1671,16 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	Q_UNUSED(lines);
+void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	DEBUG("HDF5Filter::read()");
-	QVector<QStringList> dataStrings;
 
 	if (currentDataSetName.isEmpty()) {
 		DEBUG("No data set selected");
-		return dataStrings;
+		return;
 	}
 
 	bool ok = true;
-	return readCurrentDataSet(fileName, dataSource, ok, mode);
+	readCurrentDataSet(fileName, dataSource, ok, mode);
 }
 
 /*!
@@ -1710,11 +1708,7 @@ void HDF5Filter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool HDF5Filter::load(XmlStreamReader* reader) {
-	if (!reader->isStartElement() || reader->name() != "hdfFilter") {
-		reader->raiseError(i18n("no hdf filter element found"));
-		return false;
-	}
-
+	Q_UNUSED(reader);
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;

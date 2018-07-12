@@ -720,34 +720,32 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
-	if(reader->isStartElement() && reader->name() == "spreadsheet") {
-		if (!readBasicAttributes(reader)) return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-		// read child elements
-		while (!reader->atEnd()) {
-			reader->readNext();
+	// read child elements
+	while (!reader->atEnd()) {
+		reader->readNext();
 
-			if (reader->isEndElement()) break;
+		if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) {
-				if (reader->name() == "comment") {
-					if (!readCommentElement(reader)) return false;
-				} else if(reader->name() == "column") {
-					Column* column = new Column("");
-					if (!column->load(reader, preview)) {
-						delete column;
-						setColumnCount(0);
-						return false;
-					}
-					addChildFast(column);
-				} else {	// unknown element
-					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-					if (!reader->skipToEndElement()) return false;
+		if (reader->isStartElement()) {
+			if (reader->name() == "comment") {
+				if (!readCommentElement(reader)) return false;
+			} else if(reader->name() == "column") {
+				Column* column = new Column("");
+				if (!column->load(reader, preview)) {
+					delete column;
+					setColumnCount(0);
+					return false;
 				}
+				addChildFast(column);
+			} else {	// unknown element
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				if (!reader->skipToEndElement()) return false;
 			}
 		}
-	} else // no spreadsheet element
-		reader->raiseError(i18n("no spreadsheet element found"));
+	}
 
 	return !reader->hasError();
 }
@@ -759,7 +757,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
 	DEBUG("Spreadsheet::prepareImport()");
-	DEBUG("	create() rows = " << actualRows << " cols = " << actualCols);
+	DEBUG("	resize spreadsheet to rows = " << actualRows << "and cols = " << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -801,21 +799,18 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		switch (columnMode[n]) {
 		case AbstractColumn::Numeric: {
 			QVector<double>* vector = static_cast<QVector<double>*>(column->data());
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::Integer: {
 			QVector<int>* vector = static_cast<QVector<int>*>(column->data());
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::Text: {
 			QVector<QString>* vector = static_cast<QVector<QString>*>(column->data());
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
@@ -824,7 +819,6 @@ int Spreadsheet::prepareImport(QVector<void*>& dataContainer, AbstractFileFilter
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
 			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(column->data());
-			vector->reserve(actualRows);
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
@@ -893,8 +887,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	return columnOffset;
 }
 
-void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, int numRows, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	DEBUG("Spreadsheet::finalizeImport()");
+
+	// shrink the spreadsheet if needed
+	if (numRows > 0 && numRows != rowCount()) {
+		if (importMode == AbstractFileFilter::Replace)
+			setRowCount(numRows);
+	}
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();

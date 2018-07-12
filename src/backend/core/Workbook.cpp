@@ -189,11 +189,6 @@ void Workbook::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Workbook::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "workbook") {
-		reader->raiseError(i18n("no workbook element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

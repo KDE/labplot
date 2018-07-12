@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
+    <width>656</width>
     <height>948</height>
    </rect>
   </property>
@@ -486,6 +486,9 @@
      <property name="suffix">
       <string>°</string>
      </property>
+     <property name="minimum">
+      <number>-360</number>
+     </property>
      <property name="maximum">
       <number>360</number>
      </property>
@@ -518,11 +521,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
@@ -531,6 +529,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

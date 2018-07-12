@@ -155,10 +155,10 @@ void XYCurve::init() {
 void XYCurve::initActions() {
 	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(visibilityChanged()));
 
 	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), "", this);
-	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
+	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
 
 	m_menusInitialized = true;
 }
@@ -333,8 +333,8 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::xColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -352,9 +352,9 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 
 			//update the curve itself on changes
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column, &AbstractColumn::dataChanged, this, [=](){ retransform(); });
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::yColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -486,8 +486,8 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::aspectAboutToBeRemoved);
 		}
 	}
 }
@@ -629,8 +629,8 @@ void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, ki18n("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::xErrorPlusColumnAboutToBeRemoved);
 		}
 	}
 }
@@ -642,8 +642,8 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, ki18n("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::xErrorMinusColumnAboutToBeRemoved);
 		}
 	}
 }
@@ -662,8 +662,8 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, ki18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::yErrorPlusColumnAboutToBeRemoved);
 		}
 	}
 }
@@ -675,8 +675,8 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, ki18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &XYCurve::yErrorMinusColumnAboutToBeRemoved);
 		}
 	}
 }
@@ -1969,7 +1969,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	path = trafo.map(path);
 	trafo.reset();
 	if (symbolsRotationAngle != 0) {
-		trafo.rotate(symbolsRotationAngle);
+		trafo.rotate(-symbolsRotationAngle);
 		path = trafo.map(path);
 	}
 	for (const auto& point : symbolPointsScene) {
@@ -2207,11 +2207,6 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 //! Load from XML
 bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYCurve);
-
-	if (!reader->isStartElement() || reader->name() != "xyCurve") {
-		reader->raiseError(i18n("no xy-curve element found"));
-		return false;
-	}
 
 	if (!readBasicAttributes(reader))
 		return false;

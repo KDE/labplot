@@ -408,7 +408,6 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		if (!m_mainWindow->histogramDock) {
 			m_mainWindow->histogramDock = new HistogramDock(m_mainWindow->stackedWidget);
-			m_mainWindow->histogramDock->setupGeneral();
 			connect(m_mainWindow->histogramDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->histogramDock);
 		}

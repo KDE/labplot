@@ -1997,11 +1997,6 @@ void Axis::save(QXmlStreamWriter* writer) const{
 bool Axis::load(XmlStreamReader* reader, bool preview) {
 	Q_D(Axis);
 
-	if (!reader->isStartElement() || reader->name() != "axis") {
-		reader->raiseError(i18n("no axis element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

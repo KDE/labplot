@@ -253,11 +253,6 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
-	if(!reader->isStartElement() || reader->name() != "cantorWorksheet"){
-		reader->raiseError(i18n("no Cantor worksheet element found"));
-		return false;
-	}
-
 	if (!readBasicAttributes(reader))
 		return false;
 

@@ -117,13 +117,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::FITS, fitsw);
 
-	QWidget* rootw = new QWidget();
-	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
-
 	QWidget* jsonw = new QWidget();
 	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+
+	QWidget* rootw = new QWidget();
+	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
+	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.tvJson->setAlternatingRowColors(true);
@@ -560,8 +560,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		}
 	case AbstractFileFilter::NgspiceRawAscii: {
 			NgspiceRawAsciiFilter* filter = new NgspiceRawAsciiFilter();
-// 			filter->setStartRow( ui.sbStartRow->value() );
-// 			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
 			return filter;
 		}
 	}
@@ -656,12 +656,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NETCDF);
 			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
 			break;
-#ifdef HAVE_FITS
 		case AbstractFileFilter::FITS:
+#ifdef HAVE_FITS
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::FITS);
 			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
-			break;
 #endif
+			break;
 		case AbstractFileFilter::Json:
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Json);
 			m_jsonOptionsWidget->loadDocument(fileName);
@@ -865,7 +865,8 @@ void ImportFileWidget::refreshPreview() {
 	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
-	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary || fileType == AbstractFileFilter::Json)
+	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
+		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1072,7 +1073,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				QDEBUG(importedStrings[i]);
+// 				QDEBUG("imported string " << importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())

@@ -47,19 +47,19 @@ public:
 	static QStringList dataTypes();
 	static QStringList predefinedFilters();
 
+	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName);
 	static size_t lineNumber(QIODevice&);	// calculate number of lines if device supports it
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*,
-	                        AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*dataSource);
-	qint64 readFromLiveDevice(QIODevice& device, AbstractDataSource*,
-	                          qint64 from = -1);
+	qint64 readFromLiveDevice(QIODevice& device, AbstractDataSource*, qint64 from = -1);
 	// overloaded function to read from file
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                                      AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);

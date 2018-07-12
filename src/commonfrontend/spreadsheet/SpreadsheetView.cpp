@@ -4,6 +4,7 @@
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+						   (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
 
  ***************************************************************************/
 
@@ -2131,8 +2132,9 @@ bool SpreadsheetView::exportView() {
 bool SpreadsheetView::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, this);
-	bool ret;
 	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
+
+	bool ret;
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		print(&printer);
 	}
@@ -2142,7 +2144,7 @@ bool SpreadsheetView::printView() {
 
 bool SpreadsheetView::printPreview() {
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
-	connect(dlg, SIGNAL(paintRequested(QPrinter*)), this, SLOT(print(QPrinter*)));
+	connect(dlg, &QPrintPreviewDialog::paintRequested, this, &SpreadsheetView::print);
 	return dlg->exec();
 }
 
@@ -2290,20 +2292,20 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 
 	//export header (column names)
 	if (exportHeader) {
-		for (int j=0; j<cols; ++j) {
+		for (int j = 0; j < cols; ++j) {
 			out << m_spreadsheet->column(j)->name();
-			if (j!=cols-1)
-				out<<sep;
+			if (j != cols-1)
+				out << sep;
 		}
 		out << '\n';
 	}
 
 	//export values
-	for (int i=0; i<m_spreadsheet->rowCount(); ++i) {
-		for (int j=0; j<cols; ++j) {
+	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
+		for (int j = 0; j < cols; ++j) {
 			out << m_spreadsheet->column(j)->asStringColumn()->textAt(i);
-			if (j!=cols-1)
-				out<<sep;
+			if (j != cols-1)
+				out << sep;
 		}
 		out << '\n';
 	}
@@ -2354,7 +2356,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		}
 		columnsStringSize += maxSize;
 		if (!toExport.at(i)->isValid(0))
-			columnsStringSize+=3;
+			columnsStringSize += 3;
 		if (columnsStringSize > 65)
 			break;
 		++columnsPerTable;

@@ -292,11 +292,6 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYIntegrationCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyIntegrationCurve") {
-		reader->raiseError(i18n("no xy integration curve element found"));
-		return false;
-	}
-
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;

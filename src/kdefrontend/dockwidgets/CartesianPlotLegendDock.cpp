@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2018 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -95,6 +95,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : QWidget(pare
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
 	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+
+	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -190,6 +192,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
 	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
 			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
+	connect( m_legend, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(legendRotationAngleChanged(qreal)) );
 	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
 	connect(m_legend, SIGNAL(visibilityChanged(bool)), this, SLOT(legendVisibilityChanged(bool)));
 
@@ -381,6 +384,14 @@ void CartesianPlotLegendDock::customPositionYChanged(double value) {
 	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
+}
+
+void CartesianPlotLegendDock::rotationChanged(int value) {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_legendList)
+		curve->setRotationAngle(value);
 }
 
 // "Background"-tab
@@ -738,6 +749,12 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 	m_initializing = false;
 }
 
+void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbRotation->setValue(angle);
+	m_initializing = false;
+}
+
 void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
@@ -868,12 +885,11 @@ void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
 //*************************************************************
 void CartesianPlotLegendDock::load() {
 	//General-tab
-	ui.chkVisible->setChecked( m_legend->isVisible() );
 
+	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
-// 	qDebug()<<"font size " << font.pixelSize() << "  " << font.pointSizeF();
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
@@ -884,6 +900,15 @@ void CartesianPlotLegendDock::load() {
 		ui.cbOrder->setCurrentIndex(1); //row major
 
 	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter) );
+
+	//Geometry
+	ui.cbPositionX->setCurrentIndex(m_legend->position().horizontalPosition);
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex(m_legend->position().verticalPosition);
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), Worksheet::Centimeter) );
+	ui.sbRotation->setValue(m_legend->rotationAngle());
+
+	ui.chkVisible->setChecked( m_legend->isVisible() );
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( (int) m_legend->backgroundType() );
@@ -947,8 +972,8 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	//General-tab
-	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
 
+	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
@@ -964,6 +989,15 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
 													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
+
+	// Geometry
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_legend->position().horizontalPosition ) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_legend->position().verticalPosition ) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),Worksheet::Centimeter) );
+	ui.sbRotation->setValue( group.readEntry("Rotation", (int) m_legend->rotationAngle() ) );
+
+	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
@@ -1010,13 +1044,22 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	//General-tab
-	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	//Format
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex()==0);// true for "column major", false for "row major"
 	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
+
+	//Geometry
+	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("Rotation", ui.sbRotation->value());
+
+	group.writeEntry("Visible", ui.chkVisible->isChecked());
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
