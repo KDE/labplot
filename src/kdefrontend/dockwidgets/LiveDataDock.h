@@ -80,6 +80,7 @@ public:
 	QString checkCommonLevel(const QString& first, const QString& second);
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
 	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
+	void manageCommonLevelSubscriptions();
 
 private slots:
 	void useWillMessage(int);
