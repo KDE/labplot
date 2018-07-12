@@ -349,9 +349,8 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	}
 
 	//show the properties of the first curve
-	const Histogram::HistogramData& data = m_curve->histogramData();
-	ui.cbHistogramType->setCurrentIndex(data.type);
-	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
+	ui.cbHistogramType->setCurrentIndex(m_curve->type());
+	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config("", KConfig::SimpleConfig);
@@ -442,7 +441,7 @@ void HistogramDock::histogramTypeChanged(int index) {
 
 	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
 	for (auto* curve : m_curvesList)
-		curve->setHistogramType(histogramType);
+		curve->setType(histogramType);
 }
 
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
@@ -464,9 +463,9 @@ void HistogramDock::histogramOrientationChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Histogram::HistogramOrientation histogramOrientation = Histogram::HistogramOrientation(index);
+	Histogram::HistogramOrientation orientation = Histogram::HistogramOrientation(index);
 	for (auto* curve : m_curvesList)
-		curve->setHistogramOrientation(histogramOrientation);
+		curve->setOrientation(orientation);
 }
 
 void HistogramDock::binningMethodChanged(int index) {
@@ -500,16 +499,15 @@ void HistogramDock::binCountChanged(int value) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		curve->setBinValue(value);
+		curve->setBinCount(value);
 }
 
 void HistogramDock::binWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	//TODO
-/*	for (auto* curve : m_curvesList)
-		curve->setBinWidth(value);*/
+	for (auto* curve : m_curvesList)
+		curve->setBinWidth(value);
 }
 
 //Line tab
@@ -980,14 +978,6 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
 
-	m_initializing = false;
-}
-
-void HistogramDock::curveHistogramDataChanged(Histogram::HistogramData data) {
-	m_initializing = true;
-	ui.cbHistogramType->setCurrentIndex(data.type);
-	ui.cbBinningMethod->setCurrentIndex(data.binningMethod);
-	ui.sbBinCount->setValue(data.binCount);
 	m_initializing = false;
 }
 

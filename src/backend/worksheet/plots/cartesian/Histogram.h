@@ -4,6 +4,7 @@
     Description          : Histogram
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+    Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -36,7 +37,7 @@
 
 class HistogramPrivate;
 
-class Histogram: public WorksheetElement {
+class Histogram : public WorksheetElement {
 	Q_OBJECT
 
 public:
@@ -47,16 +48,7 @@ public:
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
 
-	struct HistogramData {
-		HistogramData() : type(Ordinary), binningMethod(ByNumber), binCount(10), binWidth(1.0) {};
-
-		HistogramType type;
-		BinningMethod binningMethod;
-		int binCount;
-		double binWidth;
-	};
 	explicit Histogram(const QString &name);
-	//size_t bins;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -64,14 +56,14 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
+	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
+	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
+	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
+	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
 
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, histogramType, HistogramType)
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, histogramOrientation, HistogramOrientation)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	QString& xColumnPath() const;
-	QString& yColumnPath() const;
 
 	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
 	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
@@ -105,17 +97,14 @@ public:
 	bool isVisible() const override;
 	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
+
 	double getYMaximum() const;
 	double getYMinimum() const;
 	double getXMaximum() const;
 	double getXMinimum() const;
-	void setBinningMethod(Histogram::BinningMethod);
-	void setBinValue(int);
 
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
-
-	bool isSourceDataChangedSinceLastPlot() const;
 
 public slots:
 	void retransform() override;
@@ -125,10 +114,10 @@ private slots:
 	void updateValues();
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
+
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChangedSlot();
 
-	void handleSourceDataChanged();
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
 	HistogramPrivate* const d_ptr;
@@ -141,20 +130,25 @@ private:
 
 signals:
 	//General-Tab
-	void HistogramDataChanged();
 	void xHistogramDataChanged();
-	void yHistogramDataChanged();
 	void visibilityChanged(bool);
 
 	friend class HistogramSetHistogramTypeCmd;
 	friend class HistogramSetHistogramOrientationCmd;
+	friend class HistogramSetBinningMethodCmd;
+	friend class HistogramSetBinCountCmd;
+	friend class HistogramSetBinWidthCmd;
 	friend class HistogramSetXColumnCmd;
-	friend class HistogramSetYColumnCmd;
-	friend class HistogramSetLinePenCmd;
-	void histogramTypeChanged(Histogram::HistogramType);
-	void histogramOrientationChanged(Histogram::HistogramOrientation);
+	void typeChanged(Histogram::HistogramType);
+	void orientationChanged(Histogram::HistogramOrientation);
+	void binningMethodChanged(Histogram::BinningMethod);
+	void binCountChanged(int);
+	void binWidthChanged(float);
 	void xColumnChanged(const AbstractColumn*);
-	void yColumnChanged(const AbstractColumn*);
+
+	//Line
+	friend class HistogramSetLinePenCmd;
+	void linePenChanged(const QPen&);
 
 	//Values-Tab
 	friend class HistogramSetValuesColumnCmd;
@@ -178,8 +172,6 @@ signals:
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
 
-	void linePenChanged(const QPen&);
-
 	//Filling
 	friend class HistogramSetFillingPositionCmd;
 	friend class HistogramSetFillingTypeCmd;
@@ -199,10 +191,6 @@ signals:
 	void fillingSecondColorChanged(QColor&);
 	void fillingFileNameChanged(QString&);
 	void fillingOpacityChanged(float);
-
-	friend class HistogramSetDataCmd;
-	void histogramDataChanged(const Histogram::HistogramData&);
-	void sourceDataChangedSinceLastPlot();
 };
 
 #endif
