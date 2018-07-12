@@ -41,12 +41,10 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT
 	m_client(new QMqttClient()),
 	m_searching(true),
-	m_MQTTUsed(true),
 	m_previousMQTTClient(nullptr),
 	m_searchTimer(new QTimer()),
 	m_messageTimer(new QTimer()),
 	m_interpretMessage(true),
-	m_mqttSubscribeButton(true),
 #endif
 	m_paused(false) {
 	ui.setupUi(this);
@@ -98,7 +96,6 @@ LiveDataDock::~LiveDataDock() {
  * \param clients
  */
 void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
-	m_MQTTUsed = true;
 	m_liveDataSources.clear();
 	m_mqttClients.clear();
 	m_mqttClients = clients;
@@ -231,7 +228,6 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
  */
 void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 #ifdef HAVE_MQTT
-	m_MQTTUsed = false;
 	m_mqttClients.clear();
 #endif
 	m_liveDataSources = sources;
@@ -1006,7 +1002,7 @@ void LiveDataDock::stopStartReceive() {
 	}
 	else {
 		m_messageTimer->stop();
-		if(m_MQTTUsed) {
+		if(!m_mqttClients.isEmpty()) {
 			connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 			m_interpretMessage = true;
 			m_messageTimer->start(3000);
