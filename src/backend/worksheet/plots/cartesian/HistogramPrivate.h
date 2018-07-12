@@ -4,6 +4,7 @@
     Description          : Private members of Histogram
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+    Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -79,18 +80,18 @@ class HistogramPrivate : public QGraphicsItem {
 		double getXMaximum();
 		double getMaximumOccuranceofHistogram();
 		bool autoScaleX, autoScaleY;
-		Histogram::HistogramType histogramType;
-		Histogram::HistogramOrientation histogramOrientation;
-		Histogram::BinningMethod binningMethod;
 
 		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+        void recalculate();
 
-		//data columns
+		//General
 		const AbstractColumn* xColumn;
 		QString xColumnPath;
-
-        void recalculate();
-		Histogram::HistogramData histogramData;
+		Histogram::HistogramType type;
+		Histogram::HistogramOrientation orientation;
+		Histogram::BinningMethod binningMethod;
+		int binCount;
+		float binWidth;
 
 		//line
 		bool lineSkipGaps;

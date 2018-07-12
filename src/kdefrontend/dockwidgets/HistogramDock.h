@@ -78,11 +78,8 @@ private slots:
 	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
-	//Histogram-types
 	void histogramTypeChanged(int);
-	//histogram-orientation
 	void histogramOrientationChanged(int);
-	//bins setting
 	void binningMethodChanged(int);
 	void binCountChanged(int);
 	void binWidthChanged(double);
@@ -143,7 +140,6 @@ private slots:
 	void curveFillingOpacityChanged(float);
 
 	void curveDescriptionChanged(const AbstractAspect*);
-	void curveHistogramDataChanged(Histogram::HistogramData);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);
