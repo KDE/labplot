@@ -192,7 +192,7 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
-	//filling
+//filling
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::FillingPosition, fillingPosition, fillingPosition)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
@@ -523,7 +523,6 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	}
 
 	return -INFINITY;
-
 }
 
 double HistogramPrivate::getXMinimum() {
@@ -1553,23 +1552,28 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
 
-	writer->writeStartElement( "Histogram" );
-	writeBasicAttributes( writer );
-	writeCommentElement( writer );
+	writer->writeStartElement("Histogram");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
 	//general
-	writer->writeStartElement( "general" );
+	writer->writeStartElement("general");
 	WRITE_COLUMN(d->xColumn, xColumn);
+	writer->writeAttribute( "type", QString::number(d->type) );
+	writer->writeAttribute( "orientation", QString::number(d->orientation) );
+	writer->writeAttribute( "binningMethod", QString::number(d->binningMethod) );
+	writer->writeAttribute( "binCount", QString::number(d->binCount));
+	writer->writeAttribute( "binWidth", QString::number(d->binWidth));
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
 	//Line
-	writer->writeStartElement( "lines" );
+	writer->writeStartElement("line");
 	WRITE_QPEN(d->linePen);
 	writer->writeEndElement();
 
 	//Values
-	writer->writeStartElement( "values" );
+	writer->writeStartElement("values");
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
 	WRITE_COLUMN(d->valuesColumn, valuesColumn);
 	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
@@ -1584,7 +1588,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//Filling
-	writer->writeStartElement( "filling" );
+	writer->writeStartElement("filling");
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
 	writer->writeAttribute( "type", QString::number(d->fillingType) );
 	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
@@ -1599,16 +1603,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "fileName", d->fillingFileName );
 	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
-
-	//write Histogram specific information
-// 	writer->writeStartElement( "typeChanged" );
-// 	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
-// 	writer->writeAttribute( "BinningMethod", QString::number(d->histogramData.binningMethod) );
-// 	writer->writeAttribute( "binValue", QString::number(d->binCount));
-// 	writer->writeEndElement();
-
-	if (d->xColumn)
-		d->xColumn->save(writer);
 
 	writer->writeEndElement(); //close "Histogram" section
 }
@@ -1638,25 +1632,17 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xColumn);
+			READ_INT_VALUE("type", type, Histogram::HistogramType);
+			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
+			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
+			READ_INT_VALUE("binCount", binCount, int);
+			READ_DOUBLE_VALUE("binWidth", binWidth);
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
-// 		} else if (!preview && reader->name() == "typeChanged") {
-// 			attribs = reader->attributes();
-// 			str = attribs.value("type").toString();
-// 			if(str.isEmpty())
-// 				reader->raiseWarning(attributeWarning.subs("type").toString());
-// 			else
-// 				d->type = (Histogram::HistogramType)str.toInt();
-//
-// 			str = attribs.value("BinningMethod").toString();
-// 			d->binningMethod = (Histogram::BinningMethod)str.toInt();
-//
-// 			str = attribs.value("binValue").toString();
-// 			d->binCount = str.toInt();
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
