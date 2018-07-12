@@ -149,6 +149,7 @@ private:
 	void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
+	void manageCommonLevelSubscriptions();
 
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
