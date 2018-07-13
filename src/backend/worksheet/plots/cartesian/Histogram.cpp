@@ -228,6 +228,10 @@ void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->dataColumn) {
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
+
+		//emit dataChanged() in order to notify the plot about the changes
+		emit dataChanged();
+
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
 

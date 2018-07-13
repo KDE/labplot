@@ -350,6 +350,7 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 
 	//show the properties of the first curve
 	ui.cbType->setCurrentIndex(m_curve->type());
+	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 

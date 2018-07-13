@@ -1278,10 +1278,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 		if (histo) {
-			connect(histo, SIGNAL(HistogramDataChanged()), this, SLOT(HistogramDataChanged()));
-			connect(histo, SIGNAL(xHistogramDataChanged()), this, SLOT(xHistogramDataChanged()));
-			connect(histo, SIGNAL(yHistogramDataChanged()), this, SLOT(yHistogramDataChanged()));
-			connect(histo, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
+			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::histogramDataChanged);
+			connect(histo, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 		}
 	}
 
@@ -1385,7 +1383,7 @@ void CartesianPlot::dataChanged() {
 	}
 }
 
-void CartesianPlot::HistogramDataChanged() {
+void CartesianPlot::histogramDataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -1428,22 +1426,6 @@ void CartesianPlot::xDataChanged() {
 	}
 }
 
-void CartesianPlot::xHistogramDataChanged() {
-	if (project()->isLoading())
-		return;
-
-	Q_D(CartesianPlot);
-	if (d->suppressRetransform)
-		return;
-
-	d->curvesXMinMaxIsDirty = true;
-	if (d->autoScaleX) {
-		this->scaleAutoX();
-	} else {
-		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-		curve->retransform();
-	}
-}
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
@@ -1461,22 +1443,6 @@ void CartesianPlot::yDataChanged() {
 		this->scaleAutoY();
 	else {
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		curve->retransform();
-	}
-}
-void CartesianPlot::yHistogramDataChanged() {
-	if (project()->isLoading())
-		return;
-
-	Q_D(CartesianPlot);
-	if (d->suppressRetransform)
-		return;
-
-	d->curvesYMinMaxIsDirty = true;
-	if (d->autoScaleY)
-		this->scaleAutoY();
-	else {
-		Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
 		curve->retransform();
 	}
 }
