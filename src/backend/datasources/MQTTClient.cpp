@@ -69,6 +69,7 @@ MQTTClient::MQTTClient(const QString& name)
 }
 
 MQTTClient::~MQTTClient() {
+	emit clientAboutToBeDeleted(m_client->hostname());
 	//stop reading before deleting the objects
 	pauseReading();
 	qDebug()<<"destructor";

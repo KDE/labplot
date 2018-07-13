@@ -237,6 +237,7 @@ signals:
 	void mqttSubscribed();
 	void mqttNewTopicArrived();
 	void readFromTopics();
+	void clientAboutToBeDeleted(const QString&);
 };
 
 #endif

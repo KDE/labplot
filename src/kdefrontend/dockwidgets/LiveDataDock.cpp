@@ -88,6 +88,12 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 }
 
 LiveDataDock::~LiveDataDock() {
+	delete m_searchTimer;
+	QMapIterator<QString, QMqttClient*> clients(m_clients);
+	while(clients.hasNext()) {
+		clients.next();
+		delete clients.value();
+	}
 }
 
 #ifdef HAVE_MQTT
@@ -170,6 +176,8 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	if(m_clients[fds->clientHostName()] == nullptr) {
 		m_clients[fds->clientHostName()] = new QMqttClient();
 
+		connect(fds, &MQTTClient::clientAboutToBeDeleted, this, &LiveDataDock::removeClient);
+
 		connect(m_clients[fds->clientHostName()], &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
 		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
@@ -192,9 +200,13 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
 		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
 	} else if(m_previousMQTTClient->clientHostName() != fds->clientHostName()) {
+		qDebug()<<"At load host name not equal: "<<m_previousMQTTClient->clientHostName()<<" "<<fds->clientHostName();
 		disconnect(m_previousMQTTClient, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
 		disconnect(m_previousMQTTClient, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
 		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+
+		disconnect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
 		ui.twTopics->clear();
 		for(int i = 0; i < m_addedTopics[fds->clientHostName()].size(); ++i) {
@@ -207,7 +219,6 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
 		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
 		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
-
 	}
 
 	ui.leWillOwnMessage->setText(fds->willOwnMessage());
@@ -716,8 +727,7 @@ void LiveDataDock::onMQTTConnect() {
 	QMqttSubscription * subscription = m_clients[m_mqttClients.first()->clientHostName()]->subscribe(globalFilter, 1);
 	if(!subscription)
 		qDebug()<<"Couldn't make global subscription in LiveDataDock";
-	//m_messageTimer->start(3000);
-	QTimer::singleShot(3000, this, &LiveDataDock::fillSubscriptions);
+	//m_messageTimer->start(3000);	
 }
 
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
@@ -1402,5 +1412,23 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	}
 
 	emit newTopic(rootName);
+}
+
+void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
+	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
+		//qDebug()<<"Background message: "<<topic.name();
+		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
+	}
+}
+
+void LiveDataDock::removeClient(const QString& name) {
+
+	m_clients[name]->disconnectFromHost();
+
+	m_addedTopics.remove(name);
+	m_topicList.remove(name);
+
+	delete m_clients[name];
+	m_clients.remove(name);
 }
 #endif

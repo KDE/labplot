@@ -93,11 +93,14 @@ private slots:
 	void removeSubscription();
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+	void mqttMessageReceivedInBackground(const QByteArray&, const QMqttTopicName&);
 	void setCompleter(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
 	//void stopStartReceive();
 	void searchTreeItem(const QString& rootName);
+	void removeClient(const QString&);
+
 signals:
 	void newTopic(const QString&);
 private:
