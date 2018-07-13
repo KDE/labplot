@@ -1428,6 +1428,17 @@ void LiveDataDock::removeClient(const QString& name) {
 	m_addedTopics.remove(name);
 	m_topicList.remove(name);
 
+	if(m_previousMQTTClient != nullptr && m_previousMQTTClient->clientHostName() == name) {
+		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+		m_previousMQTTClient = nullptr;
+	}
+
+	if(m_mqttClients.first()->clientHostName() == name) {
+		ui.twSubscriptions->clear();
+		ui.twTopics->clear();
+		m_mqttClients.clear();
+	}
+
 	delete m_clients[name];
 	m_clients.remove(name);
 }

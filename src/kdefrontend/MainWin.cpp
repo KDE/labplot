@@ -1832,6 +1832,7 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
 			dlg->importToMQTT(mqttClient);
 
+			mqttClient->setName(mqttClient->clientHostName());
 			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
 
 			bool found = false;
