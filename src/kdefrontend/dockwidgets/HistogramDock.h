@@ -82,7 +82,7 @@ private slots:
 	void orientationChanged(int);
 	void binningMethodChanged(int);
 	void binCountChanged(int);
-	void binWidthChanged(double);
+	void binWidthChanged();
 
 	//Values-Tab
 	void valuesTypeChanged(int);

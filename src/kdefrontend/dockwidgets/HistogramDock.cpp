@@ -108,7 +108,8 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)));
 	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
-	connect( ui.sbBinCount, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
+	connect(ui.sbBinCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
+	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
 
 	//Line
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
@@ -352,6 +353,8 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
+	ui.sbBinCount->setValue(m_curve->binCount());
+	ui.leBinWidth->setText(QString::number(m_curve->binWidth()));
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config("", KConfig::SimpleConfig);
@@ -475,10 +478,7 @@ void HistogramDock::orientationChanged(int index) {
 }
 
 void HistogramDock::binningMethodChanged(int index) {
-	if (m_initializing)
-		return;
-
-	Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
+	const Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
 	if (binningMethod == Histogram::ByNumber) {
 		ui.lBinCount->show();
 		ui.sbBinCount->show();
@@ -496,6 +496,9 @@ void HistogramDock::binningMethodChanged(int index) {
 		ui.leBinWidth->hide();
 	}
 
+	if (m_initializing)
+		return;
+
 	for (auto* curve : m_curvesList)
 		curve->setBinningMethod(binningMethod);
 }
@@ -508,12 +511,13 @@ void HistogramDock::binCountChanged(int value) {
 		curve->setBinCount(value);
 }
 
-void HistogramDock::binWidthChanged(double value) {
+void HistogramDock::binWidthChanged() {
 	if (m_initializing)
 		return;
 
+	float width = ui.leBinWidth->text().toDouble();
 	for (auto* curve : m_curvesList)
-		curve->setBinWidth(value);
+		curve->setBinWidth(width);
 }
 
 //Line tab

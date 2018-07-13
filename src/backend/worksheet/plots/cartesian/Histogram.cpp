@@ -875,36 +875,36 @@ void HistogramPrivate::updateLines() {
 	const int count=symbolPointsLogical.count();
 
 	//nothing to do, if no data points available
-	if (count<=1) {
+	if (count <= 1) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
-	double xAxisMin = dataColumn->minimum();
-	double xAxisMax = dataColumn->maximum();
+	const double min = dataColumn->minimum();
+	const double max = dataColumn->maximum();
 	switch (binningMethod) {
 		case Histogram::ByNumber:
 			m_bins = (size_t)binCount;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(binCount);
+			m_bins = (size_t)sqrt(count);
 			break;
 		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(binCount);
+			m_bins = (size_t)2*cbrt(count);
 			break;
 		case Histogram::ByWidth:
-			m_bins = (size_t) (xAxisMax-xAxisMin)/binCount;
+			m_bins = (size_t) (max-min)/binWidth;
 			break;
 		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(binCount);
+			m_bins =(size_t) 1 + 3.33*log(count);
 			break;
 	}
 
 	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
-	gsl_histogram_set_ranges_uniform (m_histogram, xAxisMin,xAxisMax+1);
+	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
-	int startRow = 0;
-	int endRow = dataColumn->rowCount() - 1;
+	const int startRow = 0;
+	const int endRow = dataColumn->rowCount() - 1;
 	for (int row = startRow; row <= endRow; row++ ) {
 		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
 			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
