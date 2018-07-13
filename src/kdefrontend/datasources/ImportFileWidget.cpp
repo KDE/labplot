@@ -1120,14 +1120,22 @@ void ImportFileWidget::refreshPreview() {
 				}
 			case LiveDataSource::SourceType::SerialPort: {
 					QSerialPort sPort{this};
-					sPort.setBaudRate(baudRate());
+					DEBUG("	Port name: " << serialPort().toStdString());
+					DEBUG("	Settings: " << baudRate() << ',' << sPort.dataBits() << ',' << sPort.parity()
+						<< ',' << sPort.stopBits());
 					sPort.setPortName(serialPort());
+					sPort.setBaudRate(baudRate());
+
 					if (sPort.open(QIODevice::ReadOnly)) {
-						bool canread = sPort.waitForReadyRead(500);
-						if (canread)
+						if (sPort.waitForReadyRead(2000))
 							importedStrings = filter->preview(sPort);
+						else {
+							DEBUG("	ERROR: not ready for read after 2 sec");
+						}
 
 						sPort.close();
+					} else {
+						DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
 					}
 					break;
 				}

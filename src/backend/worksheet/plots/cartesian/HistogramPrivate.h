@@ -85,8 +85,8 @@ class HistogramPrivate : public QGraphicsItem {
         void recalculate();
 
 		//General
-		const AbstractColumn* xColumn;
-		QString xColumnPath;
+		const AbstractColumn* dataColumn;
+		QString dataColumnPath;
 		Histogram::HistogramType type;
 		Histogram::HistogramOrientation orientation;
 		Histogram::BinningMethod binningMethod;

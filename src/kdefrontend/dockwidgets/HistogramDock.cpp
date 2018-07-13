@@ -61,7 +61,7 @@
   \ingroup kdefrontend
 */
 HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
-	cbXColumn(nullptr),
+	cbDataColumn(nullptr),
 	m_curve(nullptr),
 	m_aspectTreeModel(nullptr),
 	m_initializing(false) {
@@ -70,8 +70,8 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 
 	// Tab "General"
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbXColumn, 3, 2, 1, 1);
+	cbDataColumn = new TreeViewComboBox(ui.tabGeneral);
+	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
 	//Tab "Values"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
@@ -104,11 +104,12 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &HistogramDock::commentChanged);
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( ui.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-	connect( ui.cbHistogramOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramOrientationChanged(int)));
+	connect( cbDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataColumnChanged(QModelIndex)) );
+	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)));
 	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
-	connect( ui.sbBinCount, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged(int)) );
+	connect(ui.sbBinCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
+	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
 
 	//Line
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
@@ -168,13 +169,13 @@ void HistogramDock::init(){
 	ui.cbBinningMethod->addItem(i18n("Sturgis Rule"));
 
 	//histogram type
-	ui.cbHistogramType->addItem(i18n("Ordinary Histogram"));
-	ui.cbHistogramType->addItem(i18n("Cumulative Histogram"));
-	ui.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
+	ui.cbType->addItem(i18n("Ordinary Histogram"));
+	ui.cbType->addItem(i18n("Cumulative Histogram"));
+	ui.cbType->addItem(i18n("AvgShifted Histogram"));
 
 	//Orientation
-	ui.cbHistogramOrientation->addItem(i18n("Vertical"));
-	ui.cbHistogramOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
+	ui.cbOrientation->addItem(i18n("Horizontal"));
 
 	//Line
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
@@ -295,16 +296,16 @@ void HistogramDock::setModel() {
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<< "Histogram"
 		<<"XYInterpolationCurve"<<"XYFitCurve"<<"XYFourierFilterCurve";
 
-	if (cbXColumn) {
-		cbXColumn->setTopLevelClasses(list);
+	if (cbDataColumn) {
+		cbDataColumn->setTopLevelClasses(list);
 	}
 	cbValuesColumn->setTopLevelClasses(list);
 
  	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	if (cbXColumn)
-		cbXColumn->setModel(m_aspectTreeModel);
+	if (cbDataColumn)
+		cbDataColumn->setModel(m_aspectTreeModel);
 
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
@@ -325,9 +326,9 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 		ui.leComment->setEnabled(true);
 
 		ui.lXColumn->setEnabled(true);
-		cbXColumn->setEnabled(true);
+		cbDataColumn->setEnabled(true);
 
-		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
+		this->setModelIndexFromColumn(cbDataColumn, m_curve->dataColumn());
 		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
 
 		ui.leName->setText(m_curve->name());
@@ -339,9 +340,9 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 		ui.leComment->setEnabled(false);
 
 		ui.lXColumn->setEnabled(false);
-		cbXColumn->setEnabled(false);
+		cbDataColumn->setEnabled(false);
 
-		cbXColumn->setCurrentModelIndex(QModelIndex());
+		cbDataColumn->setCurrentModelIndex(QModelIndex());
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 
 		ui.leName->setText("");
@@ -349,8 +350,11 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	}
 
 	//show the properties of the first curve
-	ui.cbHistogramType->setCurrentIndex(m_curve->type());
+	ui.cbType->setCurrentIndex(m_curve->type());
+	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
+	ui.sbBinCount->setValue(m_curve->binCount());
+	ui.leBinWidth->setText(QString::number(m_curve->binWidth()));
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config("", KConfig::SimpleConfig);
@@ -359,7 +363,12 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	//Slots
 	//General-tab
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_curve, SIGNAL(histogramDataChanged(Histogram::HistogramData)), this, SLOT(curveHistogramDataChanged(Histogram::HistogramData)));
+	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
+	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
+	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);
+	connect(m_curve, &Histogram::binningMethodChanged, this, &HistogramDock::curveBinningMethodChanged);
+	connect(m_curve, &Histogram::binCountChanged, this, &HistogramDock::curveBinCountChanged);
+	connect(m_curve, &Histogram::binWidthChanged, this, &HistogramDock::curveBinWidthChanged);
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 
 	//Line-tab
@@ -435,7 +444,7 @@ void HistogramDock::visibilityChanged(bool state){
 		curve->setVisible(state);
 }
 
-void HistogramDock::histogramTypeChanged(int index) {
+void HistogramDock::typeChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -444,7 +453,7 @@ void HistogramDock::histogramTypeChanged(int index) {
 		curve->setType(histogramType);
 }
 
-void HistogramDock::xColumnChanged(const QModelIndex& index) {
+void HistogramDock::dataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -456,10 +465,10 @@ void HistogramDock::xColumnChanged(const QModelIndex& index) {
 	}
 
 	for (auto* curve : m_curvesList)
-		curve->setXColumn(column);
+		curve->setDataColumn(column);
 }
 
-void HistogramDock::histogramOrientationChanged(int index) {
+void HistogramDock::orientationChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -469,10 +478,7 @@ void HistogramDock::histogramOrientationChanged(int index) {
 }
 
 void HistogramDock::binningMethodChanged(int index) {
-	if (m_initializing)
-		return;
-
-	Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
+	const Histogram::BinningMethod binningMethod = Histogram::BinningMethod(index);
 	if (binningMethod == Histogram::ByNumber) {
 		ui.lBinCount->show();
 		ui.sbBinCount->show();
@@ -490,6 +496,9 @@ void HistogramDock::binningMethodChanged(int index) {
 		ui.leBinWidth->hide();
 	}
 
+	if (m_initializing)
+		return;
+
 	for (auto* curve : m_curvesList)
 		curve->setBinningMethod(binningMethod);
 }
@@ -502,12 +511,13 @@ void HistogramDock::binCountChanged(int value) {
 		curve->setBinCount(value);
 }
 
-void HistogramDock::binWidthChanged(double value) {
+void HistogramDock::binWidthChanged() {
 	if (m_initializing)
 		return;
 
+	float width = ui.leBinWidth->text().toDouble();
 	for (auto* curve : m_curvesList)
-		curve->setBinWidth(value);
+		curve->setBinWidth(width);
 }
 
 //Line tab
@@ -566,7 +576,7 @@ void HistogramDock::valuesTypeChanged(int index) {
 		} else {
 			ui.lValuesColumn->hide();
 			cbValuesColumn->hide();
-			column = static_cast<const Column*>(m_curve->xColumn());
+			column = static_cast<const Column*>(m_curve->dataColumn());
 		}
 		this->showValuesColumnFormat(column);
 	}
@@ -981,11 +991,49 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbDataColumn, column);
+	m_initializing = false;
+}
+
+void HistogramDock::curveTypeChanged(Histogram::HistogramType type) {
+	m_initializing = true;
+	ui.cbType->setCurrentIndex((int)type);
+	m_initializing = false;
+}
+
+void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orientation) {
+	m_initializing = true;
+	ui.cbOrientation->setCurrentIndex((int)orientation);
+	m_initializing = false;
+}
+
+void HistogramDock::curveBinningMethodChanged(Histogram::BinningMethod method) {
+	m_initializing = true;
+	ui.cbBinningMethod->setCurrentIndex((int)method);
+	m_initializing = false;
+}
+
+void HistogramDock::curveBinCountChanged(int count) {
+	m_initializing = true;
+	ui.sbBinCount->setValue(count);
+	m_initializing = false;
+}
+
+void HistogramDock::curveBinWidthChanged(float width) {
+	m_initializing = true;
+	ui.leBinWidth->setText(QString::number(width));
+	m_initializing = false;
+}
+
+//Line-Tab
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.kcbLineColor->setColor( pen.color());
 	m_initializing = false;
 }
+
 //Values-Tab
 void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
 	m_initializing = true;

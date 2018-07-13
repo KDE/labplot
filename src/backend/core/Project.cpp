@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
@@ -360,62 +361,68 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
+			QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
+
+			//xy-curves
 			QVector<XYCurve*> curves = children<XYCurve>(AbstractAspect::Recursive);
-			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
-			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
-			if (!curves.isEmpty() || !axes.isEmpty()) {
-				QVector<Column*> columns = children<Column>(AbstractAspect::Recursive);
+			for (auto* curve : curves) {
+				if (!curve) continue;
+				curve->suppressRetransform(true);
 
-				//XY-curves
-				for (auto* curve : curves) {
-					if (!curve) continue;
-					curve->suppressRetransform(true);
-
-					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
-					XYAnalysisCurve* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-					if (equationCurve) {
-						//curves defined by a mathematical equations recalculate their own columns on load again.
-						if (!preview)
-							equationCurve->recalculate();
-					} else if (analysisCurve) {
-						RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
-						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-						if (fitCurve) {
-							RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
-							RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-						}
-					} else {
-						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-						RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-						RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-						RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+				XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+				XYAnalysisCurve* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+				if (equationCurve) {
+					//curves defined by a mathematical equations recalculate their own columns on load again.
+					if (!preview)
+						equationCurve->recalculate();
+				} else if (analysisCurve) {
+					RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
+					RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
+					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+					if (fitCurve) {
+						RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
 					}
-					if (dynamic_cast<XYAnalysisCurve*>(curve))
-						RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
-
-					curve->suppressRetransform(false);
+				} else {
+					RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+					RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+					RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 				}
+				if (dynamic_cast<XYAnalysisCurve*>(curve))
+					RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
-				//Axes
-				for (auto* axis : axes) {
-					if (!axis) continue;
-					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
-					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
-				}
+				curve->suppressRetransform(false);
+			}
 
-				for (auto* dataPickerCurve : dataPickerCurves) {
-					if (!dataPickerCurve) continue;
-					RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-					RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-					RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-					RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-				}
+			//axes
+			QVector<Axis*> axes = children<Axis>(AbstractAspect::Recursive);
+			for (auto* axis : axes) {
+				if (!axis) continue;
+				RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
+				RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
+			}
+
+			//histograms
+			QVector<Histogram*> hists = children<Histogram>(AbstractAspect::Recursive);
+			for (auto* hist : hists) {
+				if (!hist) continue;
+				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+			}
+
+			//data picker curves
+			QVector<DatapickerCurve*> dataPickerCurves = children<DatapickerCurve>(AbstractAspect::Recursive);
+			for (auto* dataPickerCurve : dataPickerCurves) {
+				if (!dataPickerCurve) continue;
+				RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+				RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+				RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+				RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+				RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+				RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 			}
 		} else  // no project element
 			reader->raiseError(i18n("no project element found"));

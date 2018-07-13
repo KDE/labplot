@@ -8,7 +8,7 @@ m_name = os.ttyname(master)
 print 'slave serial port ' + s_name
 #print 'master serial port ' + m_name
 
-s = serial.Serial(s_name)
+s = serial.Serial(s_name, 9600)
 
 while True:
   cpu_percent = str(psutil.cpu_percent(interval=0.5))

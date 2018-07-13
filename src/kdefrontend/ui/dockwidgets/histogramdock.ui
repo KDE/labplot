@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>532</width>
-    <height>978</height>
+    <height>1071</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -104,17 +104,17 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QComboBox" name="cbHistogramType"/>
+        <widget class="QComboBox" name="cbType"/>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lHistogramOrientation">
+        <widget class="QLabel" name="lOrientation">
          <property name="text">
           <string>Orientation:</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QComboBox" name="cbHistogramOrientation"/>
+        <widget class="QComboBox" name="cbOrientation"/>
        </item>
        <item row="7" column="0">
         <spacer name="verticalSpacerHT">

@@ -56,14 +56,15 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
+	QString& dataColumnPath() const;
+
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
 	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
 
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-	QString& xColumnPath() const;
 
 	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
 	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
@@ -112,7 +113,7 @@ public slots:
 
 private slots:
 	void updateValues();
-	void xColumnAboutToBeRemoved(const AbstractAspect*);
+	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 
 	//SLOTs for changes triggered via QActions in the context menu
@@ -130,7 +131,8 @@ private:
 
 signals:
 	//General-Tab
-	void xHistogramDataChanged();
+	void dataChanged();
+	void dataColumnChanged(const AbstractColumn*);
 	void visibilityChanged(bool);
 
 	friend class HistogramSetHistogramTypeCmd;
@@ -144,7 +146,6 @@ signals:
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
 	void binWidthChanged(float);
-	void xColumnChanged(const AbstractColumn*);
 
 	//Line
 	friend class HistogramSetLinePenCmd;

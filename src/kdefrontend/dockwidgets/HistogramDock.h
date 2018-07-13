@@ -50,7 +50,7 @@ private:
 	QStringList dateStrings;
 	QStringList timeStrings;
 
-	TreeViewComboBox* cbXColumn;
+	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbValuesColumn;
 
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
@@ -76,13 +76,13 @@ private slots:
 	//SLOTs for changes triggered in HistogramDock
 	void nameChanged();
 	void commentChanged();
-	void xColumnChanged(const QModelIndex&);
+	void dataColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
-	void histogramTypeChanged(int);
-	void histogramOrientationChanged(int);
+	void typeChanged(int);
+	void orientationChanged(int);
 	void binningMethodChanged(int);
 	void binCountChanged(int);
-	void binWidthChanged(double);
+	void binWidthChanged();
 
 	//Values-Tab
 	void valuesTypeChanged(int);
@@ -111,9 +111,16 @@ private slots:
 
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
-	/*void curveDescriptionChanged(const AbstractAspect*);
-	void curveXColumnChanged(const AbstractColumn*);*/
+	void curveDescriptionChanged(const AbstractAspect*);
+	void curveDataColumnChanged(const AbstractColumn*);
+	void curveTypeChanged(Histogram::HistogramType);
+	void curveOrientationChanged(Histogram::HistogramOrientation);
+	void curveBinningMethodChanged(Histogram::BinningMethod);
+	void curveBinCountChanged(int);
+	void curveBinWidthChanged(float);
 	void curveVisibilityChanged(bool);
+
+	//Line-tab
 	void curveLinePenChanged(const QPen&);
 
 	//Values-Tab
@@ -138,8 +145,6 @@ private slots:
 	void curveFillingSecondColorChanged(QColor&);
 	void curveFillingFileNameChanged(QString&);
 	void curveFillingOpacityChanged(float);
-
-	void curveDescriptionChanged(const AbstractAspect*);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

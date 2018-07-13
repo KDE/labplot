@@ -37,7 +37,6 @@
 #include "Histogram.h"
 #include "HistogramPrivate.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
@@ -76,7 +75,7 @@ void Histogram::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Histogram");
 
-	d->xColumn = NULL;
+	d->dataColumn = nullptr;
 
 	d->type = (Histogram::HistogramType) group.readEntry("type", (int)Histogram::Ordinary);
 	d->orientation = (Histogram::HistogramOrientation) group.readEntry("orientation", (int)Histogram::Vertical);
@@ -94,7 +93,7 @@ void Histogram::init() {
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
-	d->valuesColumn = NULL;
+	d->valuesColumn = nullptr;
 	d->valuesPosition = (Histogram::ValuesPosition) group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
@@ -168,10 +167,10 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientati
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
 BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
 
-QString& Histogram::xColumnPath() const {
-	return d_ptr->xColumnPath;
+QString& Histogram::dataColumnPath() const {
+	return d_ptr->dataColumnPath;
 }
 
 //lime
@@ -192,7 +191,7 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
-	//filling
+//filling
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::FillingPosition, fillingPosition, fillingPosition)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
@@ -224,18 +223,22 @@ double Histogram::getXMinimum() const {
 //##############################################################################
 
 //General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
-void Histogram::setXColumn(const AbstractColumn* column) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, retransform)
+void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->xColumn) {
-		exec(new HistogramSetXColumnCmd(d, column, ki18n("%1: assign x values")));
+	if (column != d->dataColumn) {
+		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
+
+		//emit dataChanged() in order to notify the plot about the changes
+		emit dataChanged();
+
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::xHistogramDataChanged);
-//TDOO 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::handleSourceDataChanged);
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
+
 			//update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::retransform);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &Histogram::xColumnAboutToBeRemoved);
+					this, &Histogram::dataColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -452,10 +455,10 @@ void Histogram::updateValues() {
 	d_ptr->updateValues();
 }
 
-void Histogram::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
-	if (aspect == d->xColumn) {
-		d->xColumn = 0;
+	if (aspect == d->dataColumn) {
+		d->dataColumn = 0;
 		d->retransform();
 	}
 }
@@ -483,7 +486,7 @@ HistogramPrivate::HistogramPrivate(Histogram *owner) : m_printing(false), m_hove
 	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false), q(owner) {
 		setFlag(QGraphicsItem::ItemIsSelectable, true);
 		setAcceptHoverEvents(true);
-	}
+}
 
 QString HistogramPrivate::name() const {
 	return q->name();
@@ -512,7 +515,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 						yMaxRange = point;
 					}
 				}
-				//yMaxRange = xColumn->rowCount();
+				//yMaxRange = dataColumn->rowCount();
 				break;
 			}
 			case Histogram::AvgShift: {
@@ -523,13 +526,12 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	}
 
 	return -INFINITY;
-
 }
 
 double HistogramPrivate::getXMinimum() {
 	switch(orientation) {
 		case Histogram::Vertical: {
-			return xColumn->minimum();
+			return dataColumn->minimum();
 		}
 		case Histogram::Horizontal: {
 			return 0;
@@ -541,7 +543,7 @@ double HistogramPrivate::getXMinimum() {
 double HistogramPrivate::getXMaximum() {
 	switch(orientation) {
 		case Histogram::Vertical: {
-			return xColumn->maximum();
+			return dataColumn->maximum();
 		}
 		case Histogram::Horizontal: {
 			return getMaximumOccuranceofHistogram();
@@ -556,7 +558,7 @@ double HistogramPrivate::getYMinimum() {
 			return 0;
 		}
 		case Histogram::Horizontal: {
-			return xColumn->minimum();
+			return dataColumn->minimum();
 		}
 	}
 	return INFINITY;
@@ -568,7 +570,7 @@ double HistogramPrivate::getYMaximum() {
 			return getMaximumOccuranceofHistogram();
 		}
 		case Histogram::Horizontal: {
-			return xColumn->maximum();
+			return dataColumn->maximum();
 		}
 	}
 	return INFINITY;
@@ -604,7 +606,7 @@ void HistogramPrivate::retransform() {
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
 
-	if (NULL == xColumn) {
+	if (NULL == dataColumn) {
 		linePath = QPainterPath();
 		valuesPath = QPainterPath();
 		//		dropLinePath = QPainterPath();
@@ -613,17 +615,17 @@ void HistogramPrivate::retransform() {
 	}
 
 	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
+	int endRow = dataColumn->rowCount() - 1;
 	QPointF tempPoint;
 
-	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
+	const AbstractColumn::ColumnMode xColMode = dataColumn->columnMode();
 
 	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++ ) {
-		if (xColumn->isValid(row) && !xColumn->isMasked(row)) {
+		if (dataColumn->isValid(row) && !dataColumn->isMasked(row)) {
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));
+					tempPoint.setX(dataColumn->valueAt(row));
 					break;
 				case AbstractColumn::Integer:
 					//TODO
@@ -662,8 +664,8 @@ void HistogramPrivate::retransform() {
 
 void HistogramPrivate::verticalOrdinaryHistogram() {
 	QPointF tempPoint,tempPoint1;
-	double xAxisMin = xColumn->minimum();
-	double xAxisMax = xColumn->maximum();
+	double xAxisMin = dataColumn->minimum();
+	double xAxisMax = dataColumn->maximum();
 	double width = (xAxisMax-xAxisMin)/m_bins;
 	for(size_t i=0; i < m_bins; ++i) {
 		tempPoint.setX(xAxisMin);
@@ -703,8 +705,8 @@ void HistogramPrivate::verticalOrdinaryHistogram() {
 
 void HistogramPrivate::verticalCumulativeHistogram() {
 	double point =0.0;
-	double xAxisMin = xColumn->minimum();
-	double xAxisMax = xColumn->maximum();
+	double xAxisMin = dataColumn->minimum();
+	double xAxisMax = dataColumn->maximum();
 	QPointF tempPoint,tempPoint1;
 	double width = (xAxisMax-xAxisMin)/m_bins;
 	for(size_t i=0; i < m_bins; ++i) {
@@ -763,8 +765,8 @@ void HistogramPrivate::verticalHistogram() {
 
 void HistogramPrivate::horizontalOrdinaryHistogram() {
 	QPointF tempPoint,tempPoint1;
-	double yAxisMin = xColumn->minimum();
-	double yAxisMax = xColumn->maximum();
+	double yAxisMin = dataColumn->minimum();
+	double yAxisMax = dataColumn->maximum();
 	double width = (yAxisMax-yAxisMin)/m_bins;
 	for(size_t i = 0; i < m_bins; ++i) {
 		tempPoint.setY(yAxisMin);
@@ -804,8 +806,8 @@ void HistogramPrivate::horizontalOrdinaryHistogram() {
 
 void HistogramPrivate::horizontalCumulativeHistogram() {
 	double point =0.0;
-	double yAxisMin = xColumn->minimum();
-	double yAxisMax = xColumn->maximum();
+	double yAxisMin = dataColumn->minimum();
+	double yAxisMax = dataColumn->maximum();
 	QPointF tempPoint,tempPoint1;
 	double width = (yAxisMax-yAxisMin)/m_bins;
 	for(size_t i=0; i < m_bins; ++i) {
@@ -873,39 +875,39 @@ void HistogramPrivate::updateLines() {
 	const int count=symbolPointsLogical.count();
 
 	//nothing to do, if no data points available
-	if (count<=1) {
+	if (count <= 1) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
-	double xAxisMin = xColumn->minimum();
-	double xAxisMax = xColumn->maximum();
+	const double min = dataColumn->minimum();
+	const double max = dataColumn->maximum();
 	switch (binningMethod) {
 		case Histogram::ByNumber:
 			m_bins = (size_t)binCount;
 			break;
 		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(binCount);
+			m_bins = (size_t)sqrt(count);
 			break;
 		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(binCount);
+			m_bins = (size_t)2*cbrt(count);
 			break;
 		case Histogram::ByWidth:
-			m_bins = (size_t) (xAxisMax-xAxisMin)/binCount;
+			m_bins = (size_t) (max-min)/binWidth;
 			break;
 		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(binCount);
+			m_bins =(size_t) 1 + 3.33*log(count);
 			break;
 	}
 
 	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
-	gsl_histogram_set_ranges_uniform (m_histogram, xAxisMin,xAxisMax+1);
+	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
-	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
+	const int startRow = 0;
+	const int endRow = dataColumn->rowCount() - 1;
 	for (int row = startRow; row <= endRow; row++ ) {
-		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-			gsl_histogram_increment(m_histogram, xColumn->valueAt(row));
+		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
 	}
 
 	switch(orientation) {
@@ -939,6 +941,7 @@ void HistogramPrivate::updateLines() {
 	updateFilling();
 	recalcShapeAndBoundingRect();
 }
+
 /*!
   recreates the value strings to be shown and recalculates their draw position.
   */
@@ -955,29 +958,29 @@ void HistogramPrivate::updateValues() {
 	//determine the value string for all points that are currently visible in the plot
 	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
 		switch(type) {
-			case Histogram::Ordinary:
-				for(size_t i=0; i<m_bins; ++i) {
-					if (!visiblePoints[i]) continue;
-					if (valuesType == Histogram::ValuesY)
-						valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
-					else
-						valuesStrings << valuesPrefix + '(' + QString::number(gsl_histogram_get(m_histogram, i)) + ')' + valuesSuffix;
-				}
-				break;
-			case Histogram::Cumulative: {
-											value = 0;
-											for(size_t i=0; i<m_bins; ++i) {
-												if (!visiblePoints[i]) continue;
-												value += gsl_histogram_get(m_histogram, i);
-												if (valuesType == Histogram::ValuesY)
-													valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
-												else
-													valuesStrings << valuesPrefix + '(' + QString::number(value) + ')' + valuesSuffix;
-											}
-											break;
-										}
-			case Histogram::AvgShift:
-										break;
+		case Histogram::Ordinary:
+			for(size_t i=0; i<m_bins; ++i) {
+				if (!visiblePoints[i]) continue;
+				if (valuesType == Histogram::ValuesY)
+					valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
+				else
+					valuesStrings << valuesPrefix + '(' + QString::number(gsl_histogram_get(m_histogram, i)) + ')' + valuesSuffix;
+			}
+			break;
+		case Histogram::Cumulative: {
+			value = 0;
+			for(size_t i=0; i<m_bins; ++i) {
+				if (!visiblePoints[i]) continue;
+				value += gsl_histogram_get(m_histogram, i);
+				if (valuesType == Histogram::ValuesY)
+					valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+				else
+					valuesStrings << valuesPrefix + '(' + QString::number(value) + ')' + valuesSuffix;
+			}
+			break;
+		}
+		case Histogram::AvgShift:
+			break;
 		}
 	} else if (valuesType == Histogram::ValuesCustomColumn) {
 		if (!valuesColumn) {
@@ -1015,8 +1018,8 @@ void HistogramPrivate::updateValues() {
 	QFontMetrics fm(valuesFont);
 	qreal w;
 	qreal h = fm.ascent();
-	double xAxisMin = xColumn->minimum();
-	double xAxisMax = xColumn->maximum();
+	double xAxisMin = dataColumn->minimum();
+	double xAxisMax = dataColumn->maximum();
 	double width = (xAxisMax-xAxisMin)/m_bins;
 	switch(valuesPosition) {
 		case Histogram::ValuesAbove:
@@ -1553,23 +1556,28 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
 
-	writer->writeStartElement( "Histogram" );
-	writeBasicAttributes( writer );
-	writeCommentElement( writer );
+	writer->writeStartElement("Histogram");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
 	//general
-	writer->writeStartElement( "general" );
-	WRITE_COLUMN(d->xColumn, xColumn);
+	writer->writeStartElement("general");
+	WRITE_COLUMN(d->dataColumn, dataColumn);
+	writer->writeAttribute( "type", QString::number(d->type) );
+	writer->writeAttribute( "orientation", QString::number(d->orientation) );
+	writer->writeAttribute( "binningMethod", QString::number(d->binningMethod) );
+	writer->writeAttribute( "binCount", QString::number(d->binCount));
+	writer->writeAttribute( "binWidth", QString::number(d->binWidth));
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
 	//Line
-	writer->writeStartElement( "lines" );
+	writer->writeStartElement("line");
 	WRITE_QPEN(d->linePen);
 	writer->writeEndElement();
 
 	//Values
-	writer->writeStartElement( "values" );
+	writer->writeStartElement("values");
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
 	WRITE_COLUMN(d->valuesColumn, valuesColumn);
 	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
@@ -1584,7 +1592,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//Filling
-	writer->writeStartElement( "filling" );
+	writer->writeStartElement("filling");
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
 	writer->writeAttribute( "type", QString::number(d->fillingType) );
 	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
@@ -1599,16 +1607,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "fileName", d->fillingFileName );
 	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
-
-	//write Histogram specific information
-// 	writer->writeStartElement( "typeChanged" );
-// 	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
-// 	writer->writeAttribute( "BinningMethod", QString::number(d->histogramData.binningMethod) );
-// 	writer->writeAttribute( "binValue", QString::number(d->binCount));
-// 	writer->writeEndElement();
-
-	if (d->xColumn)
-		d->xColumn->save(writer);
 
 	writer->writeEndElement(); //close "Histogram" section
 }
@@ -1637,26 +1635,18 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
-			READ_COLUMN(xColumn);
+			READ_COLUMN(dataColumn);
+			READ_INT_VALUE("type", type, Histogram::HistogramType);
+			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
+			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
+			READ_INT_VALUE("binCount", binCount, int);
+			READ_DOUBLE_VALUE("binWidth", binWidth);
 
 			str = attribs.value("visible").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
-// 		} else if (!preview && reader->name() == "typeChanged") {
-// 			attribs = reader->attributes();
-// 			str = attribs.value("type").toString();
-// 			if(str.isEmpty())
-// 				reader->raiseWarning(attributeWarning.subs("type").toString());
-// 			else
-// 				d->type = (Histogram::HistogramType)str.toInt();
-//
-// 			str = attribs.value("BinningMethod").toString();
-// 			d->binningMethod = (Histogram::BinningMethod)str.toInt();
-//
-// 			str = attribs.value("binValue").toString();
-// 			d->binCount = str.toInt();
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
@@ -1788,7 +1778,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			d->xColumn = column;
+			d->dataColumn = column;
 		}
 	}
 	return true;
