@@ -443,19 +443,28 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::SerialPort: {
-		const bool enable = !m_importFileWidget->serialPort().isEmpty();
-		if (enable) {
-			QSerialPort* serialPort = new QSerialPort(this);
+		const QString sPort = m_importFileWidget->serialPort();
+		const int baudRate = m_importFileWidget->baudRate();
 
-			serialPort->setBaudRate(m_importFileWidget->baudRate());
-			serialPort->setPortName(m_importFileWidget->serialPort());
+		if (!sPort.isEmpty()) {
+			QSerialPort serialPort{this};
 
-			bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
+			DEBUG("	Port name: " << sPort.toStdString());
+			DEBUG("	Settings: " << baudRate << ',' << serialPort.dataBits() << ',' << serialPort.parity()
+				<< ',' << serialPort.stopBits());
+			serialPort.setPortName(sPort);
+			serialPort.setBaudRate(baudRate);
+
+			//TODO: Test
+			/*const bool serialPortOpened = serialPort.open(QIODevice::ReadOnly);
 			okButton->setEnabled(serialPortOpened);
-			if (serialPortOpened)
+			if (serialPortOpened) {
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
-			else
+				serialPort.close();
+			} else {
+				DEBUG("Could not connect to the provided serial port");
 				okButton->setToolTip(i18n("Could not connect to the provided serial port."));
+			}*/
 		} else {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));

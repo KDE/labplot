@@ -161,7 +161,7 @@ QStringList LiveDataSource::availablePorts() {
 			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
 	}
 	//TODO: Test
-	ports.append("/dev/pty/25");
+	ports.append("/dev/pts/25");
 
 	return ports;
 }
