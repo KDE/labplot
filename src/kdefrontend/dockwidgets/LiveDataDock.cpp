@@ -39,11 +39,11 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 LiveDataDock::LiveDataDock(QWidget* parent) :
 	QWidget(parent),
 #ifdef HAVE_MQTT
-	m_client(new QMqttClient()),
+	//m_client(new QMqttClient()),
 	m_searching(true),
 	m_previousMQTTClient(nullptr),
 	m_searchTimer(new QTimer()),
-	m_messageTimer(new QTimer()),
+	//m_messageTimer(new QTimer()),
 	m_interpretMessage(true),
 #endif
 	m_paused(false) {
@@ -63,13 +63,13 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT
 	m_searchTimer->setInterval(10000);
 
-	connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
-	connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+	//connect(m_client, &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
+	//connect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
 	connect(ui.bSubscribe, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this, &LiveDataDock::removeSubscription);
-	connect(m_messageTimer, &QTimer::timeout, this, &LiveDataDock::stopStartReceive);
+	//connect(m_messageTimer, &QTimer::timeout, this, &LiveDataDock::stopStartReceive);
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &LiveDataDock::useWillMessage);
 	connect(ui.cbWillQoS, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::willQoSChanged);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, this, &LiveDataDock::willRetainChanged);
@@ -162,38 +162,54 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	ui.twTopics->show();
 	ui.leTopics->show();
 	ui.lTopicSearch->show();
-
 	ui.twSubscriptions->show();
 	ui.lQoS->show();
 	ui.cbQoS->show();
+	ui.chbWill->show();
 
-	if((m_client->state() == QMqttClient::Connected && m_client->hostname() != fds->clientHostName())
-			|| m_client->state() == QMqttClient::Disconnected) {
-		if(m_client->state() == QMqttClient::Connected)
-			m_client->disconnectFromHost();
+	if(m_clients[fds->clientHostName()] == nullptr) {
+		m_clients[fds->clientHostName()] = new QMqttClient();
 
-		m_client->setHostname(fds->clientHostName());
-		m_client->setPort(fds->clientPort());
+		connect(m_clients[fds->clientHostName()], &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
+		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+
+		m_clients[fds->clientHostName()]->setHostname(fds->clientHostName());
+		m_clients[fds->clientHostName()]->setPort(fds->clientPort());
 
 		if(fds->mqttUseAuthentication()) {
-			m_client->setUsername(fds->clientUserName());
-			m_client->setPassword(fds->clientPassword());
+			m_clients[fds->clientHostName()]->setUsername(fds->clientUserName());
+			m_clients[fds->clientHostName()]->setPassword(fds->clientPassword());
 		}
 
 		if(fds->mqttUseID()) {
-			m_client->setClientId(fds->clientID());
+			m_clients[fds->clientHostName()]->setClientId(fds->clientID());
 		}
-		m_client->connectToHost();
+
+		m_clients[fds->clientHostName()]->connectToHost();
 	}
 
-	ui.chbWill->show();
-
-	if(m_previousMQTTClient != nullptr) {
+	if(m_previousMQTTClient == nullptr) {
+		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
+	} else if(m_previousMQTTClient->clientHostName() != fds->clientHostName()) {
 		disconnect(m_previousMQTTClient, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
 		disconnect(m_previousMQTTClient, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
+		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+
+		ui.twTopics->clear();
+		for(int i = 0; i < m_addedTopics[fds->clientHostName()].size(); ++i) {
+			addTopicToTree(m_addedTopics[fds->clientHostName()].at(i));
+		}
+
+		ui.twSubscriptions->clear();
+		fillSubscriptions();
+
+		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
+		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+
 	}
-	connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-	connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateTopics);
+
 	ui.leWillOwnMessage->setText(fds->willOwnMessage());
 	ui.leWillUpdateInterval->setText(QString::number(fds->willTimeInterval()));
 	qDebug()<<"update type at setup "<<static_cast<int>(fds->willUpdateType()) <<"  start index "<<ui.cbWillUpdate->currentIndex();
@@ -213,6 +229,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 			item->setCheckState(Qt::Unchecked);
 		}
 	}
+
 	qDebug()<<"chbWill is set to: "<<fds->mqttWillUse();
 	//when chbWill's isChecked corresponds with source's m_mqttWillUse it doesn't emit state changed signal, we have to force it
 	bool checked = fds->mqttWillUse();
@@ -696,83 +713,17 @@ void LiveDataDock::statisticsChanged(QListWidgetItem *item) {
 
 void LiveDataDock::onMQTTConnect() {
 	QMqttTopicFilter globalFilter{"#"};
-	QMqttSubscription * subscription = m_client->subscribe(globalFilter, 1);
+	QMqttSubscription * subscription = m_clients[m_mqttClients.first()->clientHostName()]->subscribe(globalFilter, 1);
 	if(!subscription)
 		qDebug()<<"Couldn't make global subscription in LiveDataDock";
-	m_messageTimer->start(3000);
+	//m_messageTimer->start(3000);
 	QTimer::singleShot(3000, this, &LiveDataDock::fillSubscriptions);
 }
 
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	if(!m_addedTopics.contains(topic.name())) {
-		m_addedTopics.push_back(topic.name());
-		QStringList name;
-		QChar sep = '/';
-		QString rootName;
-		if(topic.name().contains(sep)) {
-			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
-
-			rootName = list.at(0);
-			name.append(list.at(0));
-			QTreeWidgetItem* currentItem;
-			int topItemIdx = -1;
-			for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-				if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
-					topItemIdx = i;
-					break;
-				}
-			}
-			if( topItemIdx < 0) {
-				currentItem = new QTreeWidgetItem(name);
-				ui.twTopics->addTopLevelItem(currentItem);
-				for(int i = 1; i < list.size(); ++i) {
-					name.clear();
-					name.append(list.at(i));
-					currentItem->addChild(new QTreeWidgetItem(name));
-					currentItem = currentItem->child(0);
-				}
-			} else {
-				currentItem = ui.twTopics->topLevelItem(topItemIdx);
-				int listIdx = 1;
-				for(; listIdx < list.size(); ++listIdx) {
-					QTreeWidgetItem* childItem = nullptr;
-					bool found = false;
-					for(int j = 0; j < currentItem->childCount(); ++j) {
-						childItem = currentItem->child(j);
-						if(childItem->text(0) == list.at(listIdx)) {
-							found = true;
-							currentItem = childItem;
-							break;
-						}
-					}
-					if(!found)
-						break;
-				}
-
-				for(; listIdx < list.size(); ++listIdx) {
-					name.clear();
-					name.append(list.at(listIdx));
-					currentItem->addChild(new QTreeWidgetItem(name));
-					currentItem = currentItem->child(currentItem->childCount() - 1);
-				}
-			}
-		}
-		else {
-			rootName = topic.name();
-			name.append(topic.name());
-			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
-		}
-
-		for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-			QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
-			if (rootName == subscriptionName[0]) {
-				qDebug()<<topic.name();
-				fillSubscriptions();
-				break;
-			}
-		}
-
-		emit newTopic(rootName);
+	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
+		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
+		addTopicToTree(topic.name());
 	}
 }
 
@@ -813,9 +764,9 @@ void LiveDataDock::removeSubscription() {
 
 void LiveDataDock::setCompleter(const QString& topic) {
 	if(!m_searching) {
-		if(!m_topicList.contains(topic)) {
-			m_topicList.append(topic);
-			m_completer = new QCompleter(m_topicList, this);
+		if(!m_topicList[m_mqttClients.first()->clientHostName()].contains(topic)) {
+			m_topicList[m_mqttClients.first()->clientHostName()].append(topic);
+			m_completer = new QCompleter(m_topicList[m_mqttClients.first()->clientHostName()], this);
 			m_completer->setCompletionMode(QCompleter::PopupCompletion);
 			m_completer->setCaseSensitivity(Qt::CaseSensitive);
 			ui.leTopics->setCompleter(m_completer);
@@ -993,7 +944,7 @@ void LiveDataDock::fillSubscriptions() {
 	m_searching = false;
 }
 
-void LiveDataDock::stopStartReceive() {
+/*void LiveDataDock::stopStartReceive() {
 	if (m_interpretMessage) {
 		m_messageTimer->stop();
 		disconnect(m_client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
@@ -1008,7 +959,7 @@ void LiveDataDock::stopStartReceive() {
 			m_messageTimer->start(3000);
 		}
 	}
-}
+}*/
 
 bool LiveDataDock::checkTopicContains(const QString &superior, const QString &inferior) {
 	if (superior == inferior)
@@ -1381,5 +1332,75 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 			}
 		}
 	} while(foundEqual);
+}
+
+void LiveDataDock::addTopicToTree(const QString &topicName) {
+	QStringList name;
+	QChar sep = '/';
+	QString rootName;
+	if(topicName.contains(sep)) {
+		QStringList list = topicName.split(sep, QString::SkipEmptyParts);
+
+		rootName = list.at(0);
+		name.append(list.at(0));
+		QTreeWidgetItem* currentItem;
+		int topItemIdx = -1;
+		for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+			if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+				topItemIdx = i;
+				break;
+			}
+		}
+		if( topItemIdx < 0) {
+			currentItem = new QTreeWidgetItem(name);
+			ui.twTopics->addTopLevelItem(currentItem);
+			for(int i = 1; i < list.size(); ++i) {
+				name.clear();
+				name.append(list.at(i));
+				currentItem->addChild(new QTreeWidgetItem(name));
+				currentItem = currentItem->child(0);
+			}
+		} else {
+			currentItem = ui.twTopics->topLevelItem(topItemIdx);
+			int listIdx = 1;
+			for(; listIdx < list.size(); ++listIdx) {
+				QTreeWidgetItem* childItem = nullptr;
+				bool found = false;
+				for(int j = 0; j < currentItem->childCount(); ++j) {
+					childItem = currentItem->child(j);
+					if(childItem->text(0) == list.at(listIdx)) {
+						found = true;
+						currentItem = childItem;
+						break;
+					}
+				}
+				if(!found)
+					break;
+			}
+
+			for(; listIdx < list.size(); ++listIdx) {
+				name.clear();
+				name.append(list.at(listIdx));
+				currentItem->addChild(new QTreeWidgetItem(name));
+				currentItem = currentItem->child(currentItem->childCount() - 1);
+			}
+		}
+	}
+	else {
+		rootName = topicName;
+		name.append(topicName);
+		ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
+	}
+
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+		QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
+		if (rootName == subscriptionName[0]) {
+			qDebug()<<topicName;
+			fillSubscriptions();
+			break;
+		}
+	}
+
+	emit newTopic(rootName);
 }
 #endif

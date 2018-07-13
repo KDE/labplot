@@ -30,9 +30,9 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifdef HAVE_MQTT
 #include <QtMqtt>
 #include <QStringList>
+#include <QMap>
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/MQTTClient.h"
-
 #endif
 
 #include <QWidget>
@@ -96,11 +96,13 @@ private slots:
 	void setCompleter(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
-	void stopStartReceive();
+	//void stopStartReceive();
 	void searchTreeItem(const QString& rootName);
 signals:
 	void newTopic(const QString&);
 private:
+
+	void addTopicToTree(const QString&);
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
@@ -111,16 +113,17 @@ private:
 	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
 
 	QList<MQTTClient*> m_mqttClients;
-	QMqttClient* m_client;
+	//QMqttClient* m_client;
+	QMap<QString, QMqttClient*> m_clients;
 	QCompleter* m_completer;
-	QStringList m_topicList;
+	QMap<QString, QStringList> m_topicList;
 	bool m_searching;
 	QTimer* m_searchTimer;
 	QTimer* m_messageTimer;
-	bool m_interpretMessage;
+	bool m_interpretMessage;	
 	const MQTTClient* m_previousMQTTClient;
 	QString m_mqttUnsubscribeName;
-	QVector<QString> m_addedTopics;
+	QMap<QString, QVector<QString>> m_addedTopics;
 #endif
 };
 
