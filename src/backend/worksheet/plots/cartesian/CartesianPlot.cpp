@@ -1562,8 +1562,9 @@ void CartesianPlot::scaleAutoX() {
 		for (const auto* curve: this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
-			if (!curve->xColumn())
-				continue;
+			//TODO: no member named 'xColumn' in 'Histogram'
+			//if (!curve->xColumn())
+			//	continue;
 
 			const double min = curve->getXMinimum();
 			if (d->curvesXMin > min)
@@ -1731,8 +1732,9 @@ void CartesianPlot::scaleAuto() {
 		for (const auto* curve: this->children<const Histogram>()) {
 			if (!curve->isVisible())
 				continue;
-			if (!curve->xColumn())
-				continue;
+			//TODO: no member named 'xColumn' in 'Histogram'
+			//if (!curve->xColumn())
+			//	continue;
 
 			const double min = curve->getXMinimum();
 			if (d->curvesXMin > min)
