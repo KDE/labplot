@@ -41,7 +41,7 @@ extern "C" {
 
 class HistogramPrivate : public QGraphicsItem {
   public:
-		explicit HistogramPrivate(Histogram *owner);
+		explicit HistogramPrivate(Histogram* owner);
 
 		QString name() const;
 		QRectF boundingRect() const override;
@@ -49,8 +49,8 @@ class HistogramPrivate : public QGraphicsItem {
 
 		bool m_printing;
 		bool m_hovered;
-		bool m_suppressRecalc;
 		bool m_suppressRetransform;
+		bool m_suppressRecalc;
 		QPixmap m_pixmap;
 		QImage m_hoverEffectImage;
 		QImage m_selectionEffectImage;
@@ -69,20 +69,20 @@ class HistogramPrivate : public QGraphicsItem {
 		void updateFilling();
 		bool swapVisible(bool on);
 		void recalcShapeAndBoundingRect();
+
 		void drawSymbols(QPainter*);
 		void drawValues(QPainter*);
 		void drawFilling(QPainter*);
 		void draw(QPainter*);
 		void updatePixmap();
+
 		double getYMaximum();
 		double getYMinimum();
 		double getXMinimum();
 		double getXMaximum();
 		double getMaximumOccuranceofHistogram();
-		bool autoScaleX, autoScaleY;
 
 		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
-        void recalculate();
 
 		//General
 		const AbstractColumn* dataColumn;
@@ -94,8 +94,6 @@ class HistogramPrivate : public QGraphicsItem {
 		float binWidth;
 
 		//line
-		bool lineSkipGaps;
-		int lineInterpolationPointsCount;
 		QPen linePen;
 		qreal lineOpacity;
 
@@ -125,7 +123,6 @@ class HistogramPrivate : public QGraphicsItem {
 		qreal fillingOpacity;
 
 		QPainterPath linePath;
-		//long long int bins;
 		QPainterPath valuesPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
@@ -139,24 +136,15 @@ class HistogramPrivate : public QGraphicsItem {
 		QVector<QString> valuesStrings;
 		QVector<QPolygonF> fillPolygons;
 
-		//cached values of minimum and maximum for all visible curves
-		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
-		double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
-
-		float xMin, xMax;
-		float xMinPrev, xMaxPrev;
-		bool autoScaleHistogramX;
 		Histogram* const q;
-		bool sourceDataChangedSinceLastPlot; //<! \c true if the data in the source columns (x, or bins) was changed, \c false otherwise
 
 	private:
-		gsl_histogram * m_histogram;
+		gsl_histogram* m_histogram;
 		size_t m_bins;
 
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-		QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly);
 };
 
 #endif

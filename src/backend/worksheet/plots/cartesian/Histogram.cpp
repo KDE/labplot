@@ -83,10 +83,6 @@ void Histogram::init() {
 	d->binCount = group.readEntry("binCount", 10);
 	d->binWidth = group.readEntry("binWidth", 1.0f);
 
-	//TODO
-	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
-	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
-
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
@@ -482,10 +478,18 @@ void Histogram::visibilityChangedSlot() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-HistogramPrivate::HistogramPrivate(Histogram *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false), q(owner) {
-		setFlag(QGraphicsItem::ItemIsSelectable, true);
-		setAcceptHoverEvents(true);
+HistogramPrivate::HistogramPrivate(Histogram *owner) :
+	m_printing(false),
+	m_hovered(false),
+	m_suppressRetransform(false),
+	m_suppressRecalc(false),
+	m_hoverEffectImageIsDirty(false),
+	m_selectionEffectImageIsDirty(false),
+	q(owner),
+	m_histogram(NULL) {
+
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setAcceptHoverEvents(true);
 }
 
 QString HistogramPrivate::name() const {
@@ -900,6 +904,9 @@ void HistogramPrivate::updateLines() {
 			break;
 	}
 
+	if (m_histogram)
+		gsl_histogram_free(m_histogram);
+
 	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
 	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
@@ -923,7 +930,7 @@ void HistogramPrivate::updateLines() {
 
 	//calculate the lines connecting the data points
 	for (int i = 0; i<count-1; i++) {
-		if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+		if (!connectedPointsLogical[i]) continue;
 		lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 	}
 
