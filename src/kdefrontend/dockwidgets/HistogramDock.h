@@ -74,6 +74,8 @@ private slots:
 	void retranslateUi();
 
 	//SLOTs for changes triggered in HistogramDock
+
+	//General-Tab
 	void nameChanged();
 	void commentChanged();
 	void dataColumnChanged(const QModelIndex&);
@@ -83,6 +85,13 @@ private slots:
 	void binningMethodChanged(int);
 	void binCountChanged(int);
 	void binWidthChanged();
+
+	//Lines-Tab
+	void lineTypeChanged(int);
+	void lineStyleChanged(int);
+	void lineColorChanged(const QColor&);
+	void lineWidthChanged(double);
+	void lineOpacityChanged(int);
 
 	//Values-Tab
 	void valuesTypeChanged(int);
@@ -107,7 +116,6 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void fillingOpacityChanged(int);
-	void lineColorChanged(const QColor&);
 
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
@@ -121,7 +129,9 @@ private slots:
 	void curveVisibilityChanged(bool);
 
 	//Line-tab
+	void curveLineTypeChanged(Histogram::LineType);
 	void curveLinePenChanged(const QPen&);
+	void curveLineOpacityChanged(qreal);
 
 	//Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);

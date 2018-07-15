@@ -77,12 +77,13 @@ void Histogram::init() {
 
 	d->dataColumn = nullptr;
 
-	d->type = (Histogram::HistogramType) group.readEntry("type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::HistogramOrientation) group.readEntry("orientation", (int)Histogram::Vertical);
-	d->binningMethod = (Histogram::BinningMethod) group.readEntry("binOption", (int)Histogram::SquareRoot);
-	d->binCount = group.readEntry("binCount", 10);
-	d->binWidth = group.readEntry("binWidth", 1.0f);
+	d->type = (Histogram::HistogramType) group.readEntry("Type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::HistogramOrientation) group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->binningMethod = (Histogram::BinningMethod) group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry("BinCount", 10);
+	d->binWidth = group.readEntry("BinWidth", 1.0f);
 
+	d->lineType = (Histogram::LineType) group.readEntry("LineType", (int)Histogram::Bars);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
@@ -169,8 +170,10 @@ QString& Histogram::dataColumnPath() const {
 	return d_ptr->dataColumnPath;
 }
 
-//lime
+//line
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::LineType, lineType, lineType)
 CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -276,6 +279,13 @@ void Histogram::setBinWidth(float width) {
 }
 
 //Line
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineType, Histogram::LineType, lineType, updateLines)
+void Histogram::setLineType(LineType type) {
+	Q_D(Histogram);
+	if (type != d->lineType)
+		exec(new HistogramSetLineTypeCmd(d, type, ki18n("%1: line type changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
 void Histogram::setLinePen(const QPen &pen) {
 	Q_D(Histogram);
@@ -283,7 +293,14 @@ void Histogram::setLinePen(const QPen &pen) {
 		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
 
-//Values-Tab
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineOpacity, qreal, lineOpacity, updatePixmap);
+void Histogram::setLineOpacity(qreal opacity) {
+	Q_D(Histogram);
+	if (opacity != d->lineOpacity)
+		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
+}
+
+//Values
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
 void Histogram::setValuesType(Histogram::ValuesType type) {
 	Q_D(Histogram);
@@ -1455,7 +1472,9 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 	//Line
 	writer->writeStartElement("line");
+	writer->writeAttribute( "type", QString::number(d->lineType) );
 	WRITE_QPEN(d->linePen);
+	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 
 	//Values
@@ -1529,40 +1548,21 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
+		} else if (!preview && reader->name() == "line") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("type", lineType, Histogram::LineType);
+			READ_QPEN(d->linePen);
+			READ_DOUBLE_VALUE("opacity", lineOpacity);
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->valuesType = (Histogram::ValuesType)str.toInt();
-
+			READ_INT_VALUE("type", valuesType, Histogram::ValuesType);
 			READ_COLUMN(valuesColumn);
-
-			str = attribs.value("position").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("position").toString());
-			else
-				d->valuesPosition = (Histogram::ValuesPosition)str.toInt();
-
-			str = attribs.value("distance").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("distance").toString());
-			else
-				d->valuesDistance = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rotation").toString());
-			else
-				d->valuesRotationAngle = str.toDouble();
-
-			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->valuesOpacity = str.toDouble();
+			READ_INT_VALUE("position", valuesPosition, Histogram::ValuesPosition);
+			READ_DOUBLE_VALUE("distance", valuesRotationAngle);
+			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
+			READ_DOUBLE_VALUE("opacity", valuesOpacity);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
@@ -1570,40 +1570,14 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-
-			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->valuesOpacity = str.toDouble();
 		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("enabled", fillingEnabled, bool);
-
-			str = attribs.value("type").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->fillingType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
-			else
-				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
-			else
-				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
-			else
-				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if(str.isEmpty())
@@ -1641,15 +1615,8 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
 
-			str = attribs.value("fileName").toString();
-			d->fillingFileName = str;
-
-			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->fillingOpacity = str.toDouble();
-
+			d->fillingFileName = attribs.value("fileName").toString();
+			READ_DOUBLE_VALUE("opacity", fillingOpacity);
 		} else if(reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader, preview)) {
