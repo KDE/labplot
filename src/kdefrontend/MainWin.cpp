@@ -1865,13 +1865,13 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	if (index.isValid()) {
 		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT
+
 		QString className = parent->metaObject()->className();
+		MQTTClient* clientAncestor = parent->ancestor<MQTTClient>();
 		if(className == "MQTTClient")
 			parent = parent->parentAspect();
-		else if (className == "MQTTSubscriptions")
-			parent = parent->parentAspect()->parentAspect();
-		else if(className == "MQTTTopic")
-			parent = parent->parentAspect()->parentAspect()->parentAspect();
+		else if (clientAncestor != nullptr)
+			parent = clientAncestor->parentAspect();
 #endif
 		parent->folder()->addChild(aspect);
 	} else
