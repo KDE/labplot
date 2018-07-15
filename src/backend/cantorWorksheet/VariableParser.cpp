@@ -89,10 +89,8 @@ void VariableParser::parsePythonValues() {
 }
 
 void VariableParser::parseRValues() {
-	m_string = m_string.remove( QRegExp("\\[.*\\]"));
 	m_string = m_string.trimmed();
-
-	const QStringList valueStringList = m_string.split(QStringLiteral(" "));
+	const QStringList valueStringList = m_string.split(QStringLiteral(", "));
 	parseValues(valueStringList);
 }
 
