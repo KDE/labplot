@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
-import psutil, os, pty, serial
+import psutil, serial, time
+from subprocess import Popen
 
-master, slave = pty.openpty()
-s_name = os.ttyname(slave)
-m_name = os.ttyname(master)
-print 'slave serial port ' + s_name
-#print 'master serial port ' + m_name
+Popen(["socat", "-d", "-d", "PTY,raw,echo=0,link=./serial_in", "PTY,raw,echo=0,link=./serial_out"])
+time.sleep(1)
 
-s = serial.Serial(s_name, 9600)
+# rtscts=True,dsrdtr=True
+s = serial.Serial("./serial_in", 9600)
+print(s)
 
 while True:
   cpu_percent = str(psutil.cpu_percent(interval=0.5))

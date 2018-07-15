@@ -291,8 +291,11 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 				QJsonObject obj = row.toObject();
 				if(obj.count() < colIndexInContainer + 1)
 					return -1;
-				if(vectorNames.count() == 0)
+				if(vectorNames.count() == 0) {
 					vectorNames = row.toObject().keys();
+					for(int k = 1; i < startColumn; i++)
+						vectorNames.removeFirst();
+				}
 				columnValue = *(row.toObject().begin() + colIndexInContainer);
 				break;
 			}
@@ -552,7 +555,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 				break;
 		}
 
-		int colIndex = 0;
+		int colIndex = startColumn - 1;
 		for(int n = 0; n < m_actualCols; ++n) {
 			if((createIndexEnabled || parseRowsName) && n == 0) {
 				if(createIndexEnabled)
@@ -658,7 +661,7 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 		}
 
 		QStringList lineString;
-		int colIndex = 0;
+		int colIndex = startColumn - 1;
 		for(int n = 0; n < m_actualCols; ++n) {
 			if((createIndexEnabled || parseRowsName) && n == 0) {
 				if(createIndexEnabled)
