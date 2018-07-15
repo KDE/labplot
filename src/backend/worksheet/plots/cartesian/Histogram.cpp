@@ -100,7 +100,7 @@ void Histogram::init() {
 	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
-	d->fillingPosition = (Histogram::FillingPosition) group.readEntry("FillingPosition", (int)Histogram::NoFilling);
+	d->fillingEnabled = group.readEntry("FillingEnabled", true);
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", (int)PlotArea::Color);
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
@@ -188,7 +188,7 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 //filling
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::FillingPosition, fillingPosition, fillingPosition)
+BASIC_SHARED_D_READER_IMPL(Histogram, bool, fillingEnabled, fillingEnabled)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
@@ -363,11 +363,11 @@ void Histogram::setValuesColor(const QColor& color) {
 }
 
 //Filling
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingPosition, Histogram::FillingPosition, fillingPosition, updateFilling)
-void Histogram::setFillingPosition(FillingPosition position) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingEnabled, bool, fillingEnabled, updateFilling)
+void Histogram::setFillingEnabled(bool enabled) {
 	Q_D(Histogram);
-	if (position != d->fillingPosition)
-		exec(new HistogramSetFillingPositionCmd(d, position, ki18n("%1: filling position changed")));
+	if (enabled != d->fillingEnabled)
+		exec(new HistogramSetFillingEnabledCmd(d, enabled, ki18n("%1: filling changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
@@ -1086,7 +1086,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygons.clear();
 
-	if (fillingPosition==Histogram::NoFilling) {
+	if (!fillingEnabled) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1121,7 +1121,7 @@ void HistogramPrivate::updateFilling() {
 	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
 	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
 	QPointF edge;
-	float xEnd=0, yEnd=0;
+	float yEnd=0;
 
 	//fillingPosition == Histogram::FillingZeroBaseline)
 	edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
@@ -1174,28 +1174,9 @@ void HistogramPrivate::updateFilling() {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
-		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
-			//the first point of the current line is not equal to the last point of the previous line
-			//->check whether we have a break in between.
-			const bool gap = false; //TODO
-			if (!gap) {
-				//-> we have no break in the curve -> connect the points by a horizontal/vertical line
-				pol << fillLines.at(i-1).p2() << p1;
-			} else {
-				//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
-				if (fillingPosition==Histogram::FillingAbove || fillingPosition==Histogram::FillingBelow || fillingPosition==Histogram::FillingZeroBaseline) {
-					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
-					pol << QPointF(start.x(), yEnd);
-				} else {
-					pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
-					pol << QPointF(xEnd, start.y());
-				}
+		if (i!=0 && p1!=fillLines.at(i-1).p2())
+			pol << fillLines.at(i-1).p2() << p1;
 
-				fillPolygons << pol;
-				pol.clear();
-				start = p1;
-			}
-		}
 		pol << p1 << p2;
 	}
 
@@ -1203,13 +1184,8 @@ void HistogramPrivate::updateFilling() {
 		pol << end;
 
 	//close the last polygon
-	if (fillingPosition==Histogram::FillingAbove || fillingPosition==Histogram::FillingBelow || fillingPosition==Histogram::FillingZeroBaseline) {
-		pol << QPointF(end.x(), yEnd);
-		pol << QPointF(start.x(), yEnd);
-	} else {
-		pol << QPointF(xEnd, end.y());
-		pol << QPointF(xEnd, start.y());
-	}
+	pol << QPointF(end.x(), yEnd);
+	pol << QPointF(start.x(), yEnd);
 
 	fillPolygons << pol;
 	recalcShapeAndBoundingRect();
@@ -1249,7 +1225,7 @@ void HistogramPrivate::draw(QPainter *painter) {
 	painter->drawPath(linePath);
 
 	//draw filling
-	if (fillingPosition != Histogram::NoFilling) {
+	if (fillingEnabled) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
 		drawFilling(painter);
@@ -1499,7 +1475,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 	//Filling
 	writer->writeStartElement("filling");
-	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
+	writer->writeAttribute( "enalbed", QString::number(d->fillingEnabled) );
 	writer->writeAttribute( "type", QString::number(d->fillingType) );
 	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
 	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
@@ -1603,11 +1579,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
-			str = attribs.value("position").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("position").toString());
-			else
-				d->fillingPosition = Histogram::FillingPosition(str.toInt());
+			READ_INT_VALUE("enabled", fillingEnabled, bool);
 
 			str = attribs.value("type").toString();
 			if(str.isEmpty())

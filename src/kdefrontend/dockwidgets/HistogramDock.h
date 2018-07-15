@@ -97,7 +97,7 @@ private slots:
 	void valuesColorChanged(const QColor&);
 
 	//Filling-tab
-	void fillingPositionChanged(int);
+	void fillingEnabledChanged(int);
   	void fillingTypeChanged(int);
 	void fillingColorStyleChanged(int);
 	void fillingImageStyleChanged(int);
@@ -136,7 +136,7 @@ private slots:
 	void curveValuesColorChanged(QColor);
 
 	//Filling-Tab
-	void curveFillingPositionChanged(Histogram::FillingPosition);
+	void curveFillingEnabledChanged(bool);
 	void curveFillingTypeChanged(PlotArea::BackgroundType);
 	void curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle);
