@@ -112,7 +112,7 @@ class HistogramPrivate : public QGraphicsItem {
 		QColor valuesColor;
 
 		//filling
-		Histogram::FillingPosition fillingPosition;
+		bool fillingEnabled;
 		PlotArea::BackgroundType fillingType;
 		PlotArea::BackgroundColorStyle fillingColorStyle;
 		PlotArea::BackgroundImageStyle fillingImageStyle;

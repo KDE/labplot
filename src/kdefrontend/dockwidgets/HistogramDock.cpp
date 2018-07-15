@@ -129,7 +129,7 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)) );
 
 	//Filling
-	connect( ui.cbFillingPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingPositionChanged(int)) );
+	connect(ui.chkFillingEnabled, &QCheckBox::stateChanged, this, &HistogramDock::fillingEnabledChanged);
 	connect( ui.cbFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingTypeChanged(int)) );
 	connect( ui.cbFillingColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingColorStyleChanged(int)) );
 	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
@@ -233,14 +233,6 @@ void HistogramDock::init(){
 	ui.cbValuesPosition->addItem(i18n("Right"));
 
 	//Filling
-	ui.cbFillingPosition->clear();
-	ui.cbFillingPosition->addItem(i18n("None"));
-	ui.cbFillingPosition->addItem(i18n("Above"));
-	ui.cbFillingPosition->addItem(i18n("Below"));
-	ui.cbFillingPosition->addItem(i18n("Zero Baseline"));
-	ui.cbFillingPosition->addItem(i18n("Left"));
-	ui.cbFillingPosition->addItem(i18n("Right"));
-
 	ui.cbFillingType->clear();
 	ui.cbFillingType->addItem(i18n("Color"));
 	ui.cbFillingType->addItem(i18n("Image"));
@@ -778,25 +770,22 @@ void HistogramDock::valuesColorChanged(const QColor& color){
 }
 
 //Filling-tab
-void HistogramDock::fillingPositionChanged(int index){
-	Histogram::FillingPosition fillingPosition = Histogram::FillingPosition(index);
-
-	bool b = (fillingPosition != Histogram::NoFilling);
-	ui.cbFillingType->setEnabled(b);
-	ui.cbFillingColorStyle->setEnabled(b);
-	ui.cbFillingBrushStyle->setEnabled(b);
-	ui.cbFillingImageStyle->setEnabled(b);
-	ui.kcbFillingFirstColor->setEnabled(b);
-	ui.kcbFillingSecondColor->setEnabled(b);
-	ui.leFillingFileName->setEnabled(b);
-	ui.bFillingOpen->setEnabled(b);
-	ui.sbFillingOpacity->setEnabled(b);
+void HistogramDock::fillingEnabledChanged(int state) {
+	ui.cbFillingType->setEnabled(state);
+	ui.cbFillingColorStyle->setEnabled(state);
+	ui.cbFillingBrushStyle->setEnabled(state);
+	ui.cbFillingImageStyle->setEnabled(state);
+	ui.kcbFillingFirstColor->setEnabled(state);
+	ui.kcbFillingSecondColor->setEnabled(state);
+	ui.leFillingFileName->setEnabled(state);
+	ui.bFillingOpen->setEnabled(state);
+	ui.sbFillingOpacity->setEnabled(state);
 
 	if (m_initializing)
 		return;
 
 	for (auto* curve: m_curvesList)
-		curve->setFillingPosition(fillingPosition);
+		curve->setFillingEnabled(state);
 }
 
 void HistogramDock::fillingTypeChanged(int index){
@@ -1094,9 +1083,9 @@ void HistogramDock::curveVisibilityChanged(bool on) {
 }
 
 //Filling
-void HistogramDock::curveFillingPositionChanged(Histogram::FillingPosition position) {
+void HistogramDock::curveFillingEnabledChanged(bool status) {
 	m_initializing = true;
-	ui.cbFillingPosition->setCurrentIndex((int)position);
+	ui.chkFillingEnabled->setChecked(status);
 	m_initializing = false;
 }
 void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
@@ -1165,7 +1154,7 @@ void HistogramDock::loadConfig(KConfig& config) {
   	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
 	//Filling
-	ui.cbFillingPosition->setCurrentIndex( group.readEntry("FillingPosition", (int) m_curve->fillingPosition()) );
+	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_curve->fillingEnabled()) );
 	ui.cbFillingType->setCurrentIndex( group.readEntry("FillingType", (int) m_curve->fillingType()) );
 	ui.cbFillingColorStyle->setCurrentIndex( group.readEntry("FillingColorStyle", (int) m_curve->fillingColorStyle()) );
 	ui.cbFillingImageStyle->setCurrentIndex( group.readEntry("FillingImageStyle", (int) m_curve->fillingImageStyle()) );
@@ -1209,7 +1198,7 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
 
 	//Filling
-	group.writeEntry("FillingPosition", ui.cbFillingPosition->currentIndex());
+	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());
 	group.writeEntry("FillingType", ui.cbFillingType->currentIndex());
 	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
 	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());

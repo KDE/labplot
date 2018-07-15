@@ -41,12 +41,11 @@ class Histogram : public WorksheetElement {
 	Q_OBJECT
 
 public:
+	enum HistogramType {Ordinary,Cumulative, AvgShift};
+	enum HistogramOrientation {Vertical, Horizontal};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, RiceRule, SturgisRule};
 	enum ValuesType {NoValues, ValuesY, ValuesYBracketed, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
-	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-	enum HistogramType {Ordinary,Cumulative, AvgShift};
-	enum HistogramOrientation {Vertical, Horizontal};
 
 	explicit Histogram(const QString &name);
 
@@ -64,7 +63,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
 	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
-
 
 	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
 	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
@@ -84,7 +82,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	BASIC_D_ACCESSOR_DECL(FillingPosition, fillingPosition, FillingPosition)
+	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, fillingType, FillingType)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
@@ -174,7 +172,7 @@ signals:
 	void valuesColorChanged(QColor);
 
 	//Filling
-	friend class HistogramSetFillingPositionCmd;
+	friend class HistogramSetFillingEnabledCmd;
 	friend class HistogramSetFillingTypeCmd;
 	friend class HistogramSetFillingColorStyleCmd;
 	friend class HistogramSetFillingImageStyleCmd;
@@ -183,7 +181,7 @@ signals:
 	friend class HistogramSetFillingSecondColorCmd;
 	friend class HistogramSetFillingFileNameCmd;
 	friend class HistogramSetFillingOpacityCmd;
-	void fillingPositionChanged(Histogram::FillingPosition);
+	void fillingEnabledChanged(bool);
 	void fillingTypeChanged(PlotArea::BackgroundType);
 	void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void fillingImageStyleChanged(PlotArea::BackgroundImageStyle);
