@@ -113,8 +113,8 @@ public:
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
 
-	/*QIcon icon() const override;
-		QMenu* createContextMenu() override;
+	QIcon icon() const override;
+	/*QMenu* createContextMenu() override;
 		QWidget* view() const override;*/
 
 	void save(QXmlStreamWriter*) const override;

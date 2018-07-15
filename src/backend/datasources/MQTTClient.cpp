@@ -219,18 +219,11 @@ MQTTClient::UpdateType MQTTClient::updateType() const {
 	return m_updateType;
 }
 
-/*QIcon MQTTClient::icon() const {
+QIcon MQTTClient::icon() const {
 	QIcon icon;
-	if (m_fileType == MQTTClient::Ascii)
-		icon = QIcon::fromTheme("text-plain");
-	else if (m_fileType == MQTTClient::Binary)
-		icon = QIcon::fromTheme("application-octet-stream");
-	else if (m_fileType == MQTTClient::Image)
-		icon = QIcon::fromTheme("image-x-generic");
-	// TODO: HDF5, NetCDF, FITS, etc.
-
+	icon = QIcon::fromTheme("labplot-MQTT");
 	return icon;
-}*/
+}
 
 /*QMenu* MQTTClient::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();

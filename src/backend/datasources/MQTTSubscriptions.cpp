@@ -6,6 +6,7 @@
 #include "backend/datasources/MQTTClient.h"
 
 #include <KLocalizedString>
+#include <QIcon>
 
 
 MQTTSubscriptions::MQTTSubscriptions(const QString& name)
@@ -156,6 +157,12 @@ bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 
 void MQTTSubscriptions::setMQTTClient(MQTTClient* client) {
 	m_MQTTClient = client;
+}
+
+QIcon MQTTSubscriptions::icon() const {
+	QIcon icon;
+	icon = QIcon::fromTheme("labplot-MQTT");
+	return icon;
 }
 
 #endif

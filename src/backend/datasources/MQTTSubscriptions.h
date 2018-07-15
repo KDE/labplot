@@ -22,6 +22,7 @@ public:
 	void messageArrived(const QString&, const QString&);
 	void topicRead(const QString&);
 
+	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
