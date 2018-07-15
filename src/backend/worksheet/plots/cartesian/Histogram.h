@@ -44,6 +44,7 @@ public:
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, RiceRule, SturgisRule};
+	enum LineType {NoLine, Bars, Envelope, DropLines};
 	enum ValuesType {NoValues, ValuesY, ValuesYBracketed, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 
@@ -69,10 +70,13 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
 	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
+	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
+	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
+	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
 	QString& valuesColumnPath() const;
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -146,8 +150,12 @@ signals:
 	void binWidthChanged(float);
 
 	//Line
+	friend class HistogramSetLineTypeCmd;
 	friend class HistogramSetLinePenCmd;
+	friend class HistogramSetLineOpacityCmd;
+	void lineTypeChanged(Histogram::LineType);
 	void linePenChanged(const QPen&);
+	void lineOpacityChanged(qreal);
 
 	//Values-Tab
 	friend class HistogramSetValuesColumnCmd;

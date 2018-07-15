@@ -94,6 +94,7 @@ class HistogramPrivate : public QGraphicsItem {
 		float binWidth;
 
 		//line
+		Histogram::LineType lineType;
 		QPen linePen;
 		qreal lineOpacity;
 

@@ -112,7 +112,11 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
 
 	//Line
-	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
+	connect(ui.cbLineType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);
+	connect(ui.cbLineStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineStyleChanged);
+	connect(ui.kcbLineColor, &KColorButton::changed, this, &HistogramDock::lineColorChanged);
+	connect(ui.sbLineWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &HistogramDock::lineWidthChanged);
+	connect(ui.sbLineOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::lineOpacityChanged);
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
@@ -178,17 +182,12 @@ void HistogramDock::init(){
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 
 	//Line
-	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
+	ui.cbLineType->addItem(i18n("None"));
+	ui.cbLineType->addItem(i18n("Bars"));
+	ui.cbLineType->addItem(i18n("Envelope"));
+	ui.cbLineType->addItem(i18n("Drop Lines"));
 
-	//Drop lines
-	ui.cbDropLineType->addItem(i18n("No Drop Lines"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, Y"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, XY"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Zero Baseline"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Min Baseline"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Max Baseline"));
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 
 	//Symbols
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
@@ -513,16 +512,76 @@ void HistogramDock::binWidthChanged() {
 }
 
 //Line tab
-void HistogramDock::lineColorChanged(const QColor& color){
+void HistogramDock::lineTypeChanged(int index) {
+	Histogram::LineType lineType = Histogram::LineType(index);
+
+	if ( lineType == Histogram::NoLine) {
+		ui.cbLineStyle->setEnabled(false);
+		ui.kcbLineColor->setEnabled(false);
+		ui.sbLineWidth->setEnabled(false);
+		ui.sbLineOpacity->setEnabled(false);
+	} else {
+		ui.cbLineStyle->setEnabled(true);
+		ui.kcbLineColor->setEnabled(true);
+		ui.sbLineWidth->setEnabled(true);
+		ui.sbLineOpacity->setEnabled(true);
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setLineType(lineType);
+}
+
+void HistogramDock::lineStyleChanged(int index) {
+	if (m_initializing)
+		return;
+
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	QPen pen;
+	for (auto* curve : m_curvesList) {
+		pen=curve->linePen();
+		pen.setStyle(penStyle);
+		curve->setLinePen(pen);
+	}
+}
+
+void HistogramDock::lineColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
 	QPen pen;
-	for (auto* curve: m_curvesList) {
-		pen = curve->linePen();
+	for (auto* curve : m_curvesList) {
+		pen=curve->linePen();
 		pen.setColor(color);
 		curve->setLinePen(pen);
-  	}
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbLineStyle, color);
+	m_initializing = false;
+}
+
+void HistogramDock::lineWidthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* curve : m_curvesList) {
+		pen=curve->linePen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setLinePen(pen);
+	}
+}
+
+void HistogramDock::lineOpacityChanged(int value) {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* curve : m_curvesList)
+		curve->setLineOpacity(opacity);
 }
 
 //Values tab
@@ -1017,9 +1076,24 @@ void HistogramDock::curveBinWidthChanged(float width) {
 }
 
 //Line-Tab
+void HistogramDock::curveLineTypeChanged(Histogram::LineType type) {
+	m_initializing = true;
+	ui.cbLineType->setCurrentIndex((int)type);
+	m_initializing = false;
+}
+
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
+	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
 	ui.kcbLineColor->setColor( pen.color());
+	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Point) );
+	m_initializing = false;
+}
+
+void HistogramDock::curveLineOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbLineOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -1140,6 +1214,13 @@ void HistogramDock::loadConfig(KConfig& config) {
 	//It doesn't make sense to load/save them in the template.
 	//This data is read in HistogramDock::setCurves().
 
+	//Line
+	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) m_curve->lineType()) );
+	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
+	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Point) );
+	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
+
   	//Values
   	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
   	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
@@ -1184,8 +1265,17 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 
 	m_curve->endMacro();
 }
+
 void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Histogram" );
+
+	//Line
+	group.writeEntry("LineType", ui.cbLineType->currentIndex());
+	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
+	group.writeEntry("LineColor", ui.kcbLineColor->color());
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point) );
+	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100 );
+
 	//Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
 	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
