@@ -45,7 +45,7 @@ public:
 	enum HistogramOrientation {Vertical, Horizontal};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, RiceRule, SturgisRule};
 	enum LineType {NoLine, Bars, Envelope, DropLines};
-	enum ValuesType {NoValues, ValuesY, ValuesYBracketed, ValuesCustomColumn};
+	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 
 	explicit Histogram(const QString &name);

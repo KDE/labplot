@@ -223,7 +223,7 @@ void HistogramDock::init(){
 
 	//Values
 	ui.cbValuesType->addItem(i18n("No Values"));
-	ui.cbValuesType->addItem("y");
+	ui.cbValuesType->addItem("Bin Entries Number");
 	ui.cbValuesType->addItem(i18n("Custom Column"));
 
 	ui.cbValuesPosition->addItem(i18n("Above"));
