@@ -980,15 +980,12 @@ void HistogramPrivate::updateValues() {
 	}
 
 	//determine the value string for all points that are currently visible in the plot
-	if (valuesType == Histogram::ValuesY || valuesType == Histogram::ValuesYBracketed) {
+	if (valuesType == Histogram::ValuesBinEntries) {
 		switch(type) {
 		case Histogram::Ordinary:
 			for(size_t i=0; i<m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
-				if (valuesType == Histogram::ValuesY)
-					valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
-				else
-					valuesStrings << valuesPrefix + '(' + QString::number(gsl_histogram_get(m_histogram, i)) + ')' + valuesSuffix;
+				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
@@ -996,10 +993,7 @@ void HistogramPrivate::updateValues() {
 			for(size_t i=0; i<m_bins; ++i) {
 				if (!visiblePoints[i]) continue;
 				value += gsl_histogram_get(m_histogram, i);
-				if (valuesType == Histogram::ValuesY)
-					valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
-				else
-					valuesStrings << valuesPrefix + '(' + QString::number(value) + ')' + valuesSuffix;
+				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
 			}
 			break;
 		}
