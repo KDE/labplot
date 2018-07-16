@@ -555,6 +555,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::Json:
 		case AbstractFileFilter::ROOT:
 		case AbstractFileFilter::NgspiceRawAscii:
+		case AbstractFileFilter::NgspiceRawBinary:
 			break;
 		}
 		break;

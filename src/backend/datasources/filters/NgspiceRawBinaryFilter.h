@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : NgspiceRawAsciiFilter.h
+File                 : NgspiceRawBinaryFilter.h
 Project              : LabPlot
-Description          : Ngspice RAW ASCII filter
+Description          : Ngspice RAW Binary filter
 --------------------------------------------------------------------
 Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
@@ -24,23 +24,23 @@ Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef NGSPICERAWASCIIFILTER_H
-#define NGSPICERAWASCIIFILTER_H
+#ifndef NGSPICERAWBINARYFILTER_H
+#define NGSPICERAWBINARYFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
 
 class QStringList;
-class NgspiceRawAsciiFilterPrivate;
+class NgspiceRawBinaryFilterPrivate;
 
-class NgspiceRawAsciiFilter : public AbstractFileFilter {
+class NgspiceRawBinaryFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	NgspiceRawAsciiFilter();
-	~NgspiceRawAsciiFilter() override;
+	NgspiceRawBinaryFilter();
+	~NgspiceRawBinaryFilter() override;
 
-	static bool isNgspiceAsciiFile(const QString& fileName);
+	static bool isNgspiceBinaryFile(const QString& fileName);
 	static QString fileInfoString(const QString&);
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
@@ -63,8 +63,8 @@ public:
 	bool load(XmlStreamReader*) override;
 
 private:
-	std::unique_ptr<NgspiceRawAsciiFilterPrivate> const d;
-	friend class NgspiceRawAsciiFilterPrivate;
+	std::unique_ptr<NgspiceRawBinaryFilterPrivate> const d;
+	friend class NgspiceRawBinaryFilterPrivate;
 };
 
 #endif
