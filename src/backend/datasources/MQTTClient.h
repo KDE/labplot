@@ -222,7 +222,7 @@ private:
 	bool m_disconnectForWill;
 	bool m_loaded;
 	int m_subscriptionsLoaded;
-	int m_subscriptionCount;
+	int m_subscriptionCountToLoad;
 
 public slots:
 	void read();
