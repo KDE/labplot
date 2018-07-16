@@ -1631,10 +1631,10 @@ void ImportFileWidget::mqttConnection()
 			m_client->setHostname(ui.leHost->text().simplified());
 			m_client->setPort(ui.lePort->text().toUInt());
 			if(ui.chbID->isChecked())
-				m_client->setClientId(ui.leID->text());
+				m_client->setClientId(ui.leID->text().simplified());
 			if(ui.chbAuthentication->isChecked()) {
-				m_client->setUsername(ui.leUsername->text());
-				m_client->setPassword(ui.lePassword->text());
+				m_client->setUsername(ui.leUsername->text().simplified());
+				m_client->setPassword(ui.lePassword->text().simplified());
 			}
 			qDebug()<< ui.leHost->text() << " " << m_client->hostname() << "   " << m_client->port();
 			qDebug()<<"Trying to connect";
@@ -1724,8 +1724,7 @@ void ImportFileWidget::mqttSubscribe() {
 
 				if(temp_subscription) {
 					m_mqttSubscriptions.push_back(temp_subscription);
-					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					m_mqttNewTopic = temp_subscription->topic().filter();
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);					
 					emit subscriptionMade();
 				}
 
@@ -1785,7 +1784,6 @@ void ImportFileWidget::mqttUnsubscribe() {
 						if(temp_subscription) {
 							m_mqttSubscriptions.push_back(temp_subscription);
 							connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-							m_mqttNewTopic = temp_subscription->topic().filter();
 							emit subscriptionMade();
 						}
 						i--;
@@ -1917,12 +1915,9 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 			break;
 		}
 	}
-	if (check == true)
-		m_mqttReadyForPreview = true;
 
-	if(m_mqttReadyForPreview && checkTopicContains(m_mqttNewTopic, msg.topic().name())) {
-		qDebug() << "New topic for preview:  " << m_mqttNewTopic;
-		m_mqttNewTopic.clear();
+	if (check == true) {
+		m_mqttReadyForPreview = true;
 		refreshPreview();
 	}
 }
@@ -1954,7 +1949,6 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.chbAuthentication->setEnabled(true);
 	ui.chbID->setEnabled(true);
 
-	m_mqttNewTopic.clear();
 	m_mqttReadyForPreview = false;
 	m_mqttSubscriptions.clear();
 
@@ -2277,8 +2271,6 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 				break;
 			}
 
-		if(m_mqttNewTopic == topicName)
-			m_mqttNewTopic.clear();
 		m_mqttReadyForPreview = false;
 
 		QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
@@ -2287,7 +2279,6 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 			if(checkTopicContains(topicName, i.key().name())) {
 				m_messageArrived.remove(i.key());
 				qDebug()<<"2 subscription found at  "<<i.key() <<"and removed";
-				break;
 			}
 		}
 
@@ -2297,7 +2288,6 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 			if(checkTopicContains(topicName, j.key().name())) {
 				m_lastMessage.remove(j.key());
 				qDebug()<<"3 subscription found at  "<<j.key() <<"and removed";
-				break;
 			}
 		}
 
@@ -2528,7 +2518,6 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 				if(temp_subscription) {
 					m_mqttSubscriptions.push_back(temp_subscription);
 					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					m_mqttNewTopic = temp_subscription->topic().filter();
 					emit subscriptionMade();
 				}
 

@@ -163,17 +163,19 @@ private:
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
-	QString m_mqttNewTopic;
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
+
 public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
+
 signals:
 	void newTopic(QString);
 	void subscriptionMade();
 	void checkFileType();
 	void newTopicForWill();
+
 private slots:
 	void idChecked(int);
 	void authenticationChecked(int);
