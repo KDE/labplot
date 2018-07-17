@@ -625,7 +625,6 @@ void HistogramPrivate::retransform() {
 	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
-	connectedPointsLogical.clear();
 
 	if (NULL == dataColumn) {
 		linePath = QPainterPath();
@@ -635,14 +634,11 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	int startRow = 0;
-	int endRow = dataColumn->rowCount() - 1;
 	QPointF tempPoint;
-
 	const AbstractColumn::ColumnMode xColMode = dataColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++ ) {
+	for (int row = 0; row <dataColumn->rowCount(); ++row) {
 		if (dataColumn->isValid(row) && !dataColumn->isMasked(row)) {
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
@@ -660,10 +656,6 @@ void HistogramPrivate::retransform() {
 			}
 
 			symbolPointsLogical.append(tempPoint);
-			connectedPointsLogical.push_back(true);
-		} else {
-			if (connectedPointsLogical.size())
-				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
 
@@ -924,12 +916,10 @@ void HistogramPrivate::updateLines() {
 	if (m_histogram)
 		gsl_histogram_free(m_histogram);
 
-	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
+	m_histogram = gsl_histogram_alloc (m_bins);
 	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
-	const int startRow = 0;
-	const int endRow = dataColumn->rowCount() - 1;
-	for (int row = startRow; row <= endRow; row++ ) {
+	for (int row = 0; row < dataColumn->rowCount(); ++row) {
 		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
 			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
 	}
@@ -943,12 +933,6 @@ void HistogramPrivate::updateLines() {
 			horizontalHistogram();
 			break;
 		}
-	}
-
-	//calculate the lines connecting the data points
-	for (int i = 0; i<count-1; i++) {
-		if (!connectedPointsLogical[i]) continue;
-		lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 	}
 
 	//map the lines to scene coordinates
