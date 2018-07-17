@@ -132,10 +132,10 @@ void SpreadsheetView::init() {
 
 	//horizontal header
 	m_horizontalHeader = new SpreadsheetHeaderView(this);
-	m_horizontalHeader->setClickable(true);
+	m_horizontalHeader->setSectionsClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
 	m_tableView->setHorizontalHeader(m_horizontalHeader);
-	m_horizontalHeader->setMovable(true);
+	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
 	resizeHeader();
@@ -147,8 +147,8 @@ void SpreadsheetView::init() {
 
 	// vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
-	v_header->setResizeMode(QHeaderView::Fixed);
-	v_header->setMovable(false);
+	v_header->setSectionResizeMode(QHeaderView::Fixed);
+	v_header->setSectionsMovable(false);
 	v_header->installEventFilter(this);
 
 	setFocusPolicy(Qt::StrongFocus);
@@ -1978,12 +1978,10 @@ void SpreadsheetView::clearSelectedCells() {
 void SpreadsheetView::goToCell() {
 	bool ok;
 
-	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
-	                                   1, 1, m_spreadsheet->columnCount(), 1, &ok);
+	int col = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_spreadsheet->columnCount(), 1, &ok);
 	if (!ok) return;
 
-	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
-	                                   1, 1, m_spreadsheet->rowCount(), 1, &ok);
+	int row = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_spreadsheet->rowCount(), 1, &ok);
 	if (!ok) return;
 
 	goToCell(row-1, col-1);

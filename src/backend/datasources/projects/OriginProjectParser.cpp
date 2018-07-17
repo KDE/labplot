@@ -1234,7 +1234,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& originCurve: layer.curves) {
 
 				QString data(originCurve.dataName.c_str());
-				switch(data[0].toAscii()) {
+				switch(data[0].toLatin1()) {
 				case 'T':
 				case 'E': {
 					if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol
