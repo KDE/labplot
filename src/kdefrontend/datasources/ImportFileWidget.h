@@ -159,7 +159,7 @@ private:
 	QStringList m_topicList;
 	bool m_searching;
 	QTimer *m_searchTimer;
-	QTimer *m_timeoutTimer;
+	QTimer *m_connectTimeoutTimer;
 	QMap<QMqttTopicName, bool> m_messageArrived;
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	bool m_mqttReadyForPreview;
@@ -172,7 +172,7 @@ public:
 
 signals:
 	void newTopic(QString);
-	void subscriptionMade();
+	void subscriptionsChanged();
 	void checkFileType();
 	void newTopicForWill();
 
@@ -191,10 +191,10 @@ private slots:
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
 	void updateWillTopics();
-	void willUpdateChanged(int);
+	void willUpdateTypeChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
-	void searchTreeItem(const QString&);
-	void mqttTimeout();
+	void scrollToTreeItem(const QString&);
+	void mqttConnectTimeout();
 	void checkConnectEnable();
 #endif
 };

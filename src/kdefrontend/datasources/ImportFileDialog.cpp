@@ -90,7 +90,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 	//Signals/Slots
 #ifdef HAVE_MQTT
-	connect(m_importFileWidget, &ImportFileWidget::subscriptionMade, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
 #endif
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -173,6 +173,9 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 }
 
 #ifdef HAVE_MQTT
+/*!
+  triggers data import to the MQTTClient \c client
+*/
 void ImportFileDialog::importToMQTT(MQTTClient* client) const{
 	m_importFileWidget->saveMQTTSettings(client);
 	client->read();

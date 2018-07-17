@@ -1835,6 +1835,7 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			mqttClient->setName(mqttClient->clientHostName());
 			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
 
+			//doesn't make sense to have more MQTTClients connected to the same broker
 			bool found = false;
 			for(int i = 0; i < existingClients.size(); ++i) {
 				if(existingClients[i]->clientHostName() == mqttClient->clientHostName()) {
@@ -1865,7 +1866,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	if (index.isValid()) {
 		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT
-
+		//doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
 		QString className = parent->metaObject()->className();
 		MQTTClient* clientAncestor = parent->ancestor<MQTTClient>();
 		if(className == "MQTTClient")
