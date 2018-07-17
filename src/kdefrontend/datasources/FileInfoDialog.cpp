@@ -181,6 +181,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 			//TODO infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::NgspiceRawAscii:
+		case AbstractFileFilter::NgspiceRawBinary:
 			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
 			break;
 		}

@@ -39,6 +39,7 @@ Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/QJsonModel.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
+#include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
@@ -736,6 +737,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setEndRow( ui.sbEndRow->value() );
 			return filter;
 		}
+	case AbstractFileFilter::NgspiceRawBinary: {
+			NgspiceRawBinaryFilter* filter = new NgspiceRawBinaryFilter();
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			return filter;
+		}
 	}
 
 	return 0;
@@ -845,8 +852,9 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		case AbstractFileFilter::NgspiceRawAscii:
 			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NgspiceRawAscii);
 			break;
-		default:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Binary);
+		case AbstractFileFilter::NgspiceRawBinary:
+			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NgspiceRawBinary);
+			break;
 		}
 	}
 
@@ -933,6 +941,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.cbFilter->hide();
 		break;
 	case AbstractFileFilter::NgspiceRawAscii:
+	case AbstractFileFilter::NgspiceRawBinary:
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -1038,7 +1047,8 @@ void ImportFileWidget::refreshPreview() {
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
-		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii)
+		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii
+		|| fileType == AbstractFileFilter::NgspiceRawBinary)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1253,6 +1263,15 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::NgspiceRawAscii: {
 			ui.tePreview->clear();
 			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
+			importedStrings = filter->preview(fileName, lines);
+			tmpTableWidget = m_twPreview;
+			vectorNameList = filter->vectorNames();
+			columnModes = filter->columnModes();
+			break;
+		}
+	case AbstractFileFilter::NgspiceRawBinary: {
+			ui.tePreview->clear();
+			NgspiceRawBinaryFilter* filter = (NgspiceRawBinaryFilter*)this->currentFileFilter();
 			importedStrings = filter->preview(fileName, lines);
 			tmpTableWidget = m_twPreview;
 			vectorNameList = filter->vectorNames();

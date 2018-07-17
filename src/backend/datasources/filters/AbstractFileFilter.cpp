@@ -28,6 +28,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
+#include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QDateTime>
@@ -129,6 +130,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = ROOT;
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = Image;
+	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
+		fileType = NgspiceRawBinary;
 	else
 		fileType = Binary;
 
@@ -148,5 +151,6 @@ QStringList AbstractFileFilter::fileTypes() {
 			<< i18n("JSON data")
 	        << i18n("ROOT (CERN) Histograms")
 			<< "Ngspice RAW ASCII"
+			<< "Ngspice RAW Binary"
 	       );
 }

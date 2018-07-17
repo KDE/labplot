@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : NgspiceRawNgspiceRawAsciiFilterPrivate.h
+File                 : NgspiceRawNgspiceRawBinaryFilterPrivate.h
 Project              : LabPlot
-Description          : Ngspice RAW ASCII filter
+Description          : Ngspice RAW Binary filter
 --------------------------------------------------------------------
 Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
@@ -25,22 +25,22 @@ Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NGSPICERAWASCIIFILTERPRIVATE_H
-#define NGSPICERAWASCIIFILTERPRIVATE_H
+#ifndef NGSPICERAWBINARYFILTERPRIVATE_H
+#define NGSPICERAWBINARYFILTERPRIVATE_H
 
 class AbstractDataSource;
 
-class NgspiceRawAsciiFilterPrivate {
+class NgspiceRawBinaryFilterPrivate {
 
 public:
-	explicit NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter*);
+	explicit NgspiceRawBinaryFilterPrivate(NgspiceRawBinaryFilter*);
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
-	const NgspiceRawAsciiFilter* q;
+	const NgspiceRawBinaryFilter* q;
 
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
