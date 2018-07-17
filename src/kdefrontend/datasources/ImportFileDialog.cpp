@@ -451,14 +451,12 @@ void ImportFileDialog::checkOkButton() {
 		if (!sPort.isEmpty()) {
 			QSerialPort serialPort{this};
 
-			DEBUG("	Port name: " << sPort.toStdString());
-			DEBUG("	Settings: " << baudRate << ',' << serialPort.dataBits() << ',' << serialPort.parity()
-				<< ',' << serialPort.stopBits());
+			DEBUG("	Port: " << sPort.toStdString() << ", Settings: " << baudRate << ',' << serialPort.dataBits()
+					<< ',' << serialPort.parity() << ',' << serialPort.stopBits());
 			serialPort.setPortName(sPort);
 			serialPort.setBaudRate(baudRate);
 
-			//TODO: Test
-			/*const bool serialPortOpened = serialPort.open(QIODevice::ReadOnly);
+			const bool serialPortOpened = serialPort.open(QIODevice::ReadOnly);
 			okButton->setEnabled(serialPortOpened);
 			if (serialPortOpened) {
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
@@ -466,7 +464,7 @@ void ImportFileDialog::checkOkButton() {
 			} else {
 				DEBUG("Could not connect to the provided serial port");
 				okButton->setToolTip(i18n("Could not connect to the provided serial port."));
-			}*/
+			}
 		} else {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
