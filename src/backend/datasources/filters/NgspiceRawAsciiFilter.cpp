@@ -238,7 +238,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	QLocale locale(QLocale::C);
 	bool isNumber(false);
 
-	for (int i = 0; i < actualEndRow; ++i) {
+	for (int i = 0; i < actualRows; ++i) {
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
