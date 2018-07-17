@@ -68,6 +68,11 @@
           <string>Serial port</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Web service</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="0" column="0" colspan="2">

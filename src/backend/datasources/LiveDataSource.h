@@ -34,6 +34,8 @@
 #include "backend/matrix/Matrix.h"
 
 #include <QtNetwork/QLocalSocket>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 #include <QSerialPort>
 #include <QTimer>
 
@@ -43,6 +45,7 @@ class QFileSystemWatcher;
 class QAction;
 class QTcpSocket;
 class QUdpSocket;
+class QNetworkAccessManager;
 class QFile;
 
 class LiveDataSource : public Spreadsheet {
@@ -58,7 +61,8 @@ public:
 		NetworkTcpSocket,	// TCP socket
 		NetworkUdpSocket,	// UDP socket
 		LocalSocket,		// local socket
-		SerialPort		// serial port
+		SerialPort,			// serial port
+		WebService			// web service
 	};
 
 	enum UpdateType {
@@ -71,6 +75,12 @@ public:
 		FromEnd,		// read from end, from line lastLine-sampleRate sampleRate number of lines
 		TillEnd,		// read until the end
 		WholeFile		// reread whole file
+	};
+
+	enum WebRequestType {
+		GET,
+		POST,
+		PUT
 	};
 
 	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
@@ -92,6 +102,9 @@ public:
 
 	ReadingType readingType() const;
 	void setReadingType(ReadingType);
+
+	WebRequestType requestType() const;
+	void setRequestType(WebRequestType);
 
 	int sampleSize() const;
 	void setSampleSize(int);
@@ -134,6 +147,9 @@ public:
 	void setLocalSocketName(const QString&);
 	QString localSocketName() const;
 
+	void setWebServiceRequest(const QNetworkRequest&);
+	QNetworkRequest webServiceRequest() const;
+
 	void updateNow();
 	void pauseReading();
 	void continueReading();
@@ -156,11 +172,13 @@ private:
 	QString m_serialPortName;
 	QString m_localSocketName;
 	QString m_host;
+	QNetworkRequest m_webServiceRequest;
 
 	AbstractFileFilter::FileType m_fileType;
 	UpdateType m_updateType;
 	SourceType m_sourceType;
 	ReadingType m_readingType;
+	WebRequestType m_requestType;
 
 	bool m_fileWatched;
 	bool m_fileLinked;
@@ -186,6 +204,7 @@ private:
 	QUdpSocket* m_udpSocket;
 	QSerialPort* m_serialPort;
 	QIODevice* m_device;
+	QNetworkAccessManager* m_manager;
 
 	QAction* m_reloadAction;
 	QAction* m_toggleLinkAction;
@@ -203,9 +222,12 @@ private slots:
 
 	void readyRead();
 
+	void webReadingFinished(QNetworkReply*);
+
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
+	void webServiceNetworkError(QNetworkReply::NetworkError);
 };
 
 #endif

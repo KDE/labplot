@@ -51,6 +51,8 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
+#include <QNetworkAccessManager>
+#include <QBuffer>
 
 #include <QIcon>
 #include <QAction>
@@ -238,6 +240,14 @@ QString LiveDataSource::localSocketName() const {
 	return m_localSocketName;
 }
 
+void LiveDataSource::setWebServiceRequest(const QNetworkRequest& request) {
+	 m_webServiceRequest = request;
+}
+
+QNetworkRequest LiveDataSource::webServiceRequest() const {
+	return m_webServiceRequest;
+}
+
 void LiveDataSource::setFileType(AbstractFileFilter::FileType type) {
 	m_fileType = type;
 }
@@ -374,6 +384,19 @@ void LiveDataSource::setReadingType(ReadingType readingType) {
 LiveDataSource::ReadingType LiveDataSource::readingType() const {
 	return m_readingType;
 }
+
+/*!
+ * \brief Sets the web request type to requestType
+ * \param readingType
+ */
+void LiveDataSource::setRequestType(WebRequestType requestType) {
+	m_requestType = requestType;
+}
+
+LiveDataSource::WebRequestType LiveDataSource::requestType() const {
+	return m_requestType;
+}
+
 
 /*!
  * \brief Sets the source's update type to updatetype and handles this change
@@ -524,6 +547,10 @@ void LiveDataSource::read() {
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			break;
+		case WebService:
+			m_manager = new QNetworkAccessManager;
+			connect(m_manager, &QNetworkAccessManager::finished, this, &LiveDataSource::webReadingFinished);
+			break;
 		}
 		m_prepared = true;
 	}
@@ -584,8 +611,36 @@ void LiveDataSource::read() {
 		m_serialPort->setPortName(m_serialPortName);
 		m_device = m_serialPort;
 		break;
+	case WebService:
+		DEBUG("reading from the web service");
+		QNetworkReply* reply;
+		switch(m_requestType){
+			case GET:
+				reply = m_manager->get(m_webServiceRequest);
+				break;
+			case POST:
+				//reply = m_manager->post
+				break;
+			case PUT:
+				//reply = m_manager->put
+				break;
+		}
+		m_device = reply;
+		connect(reply, static_cast<void (QNetworkReply::*) (QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &LiveDataSource::webServiceNetworkError);
+		break;
 	}
 }
+
+
+void LiveDataSource::webReadingFinished(QNetworkReply* reply) {
+	if(reply->error() != QNetworkReply::NoError)
+		return;
+	QByteArray arr = reply->readAll();
+	m_device = new QBuffer(&arr);
+	disconnect(reply, static_cast<void (QNetworkReply::*) (QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &LiveDataSource::webServiceNetworkError);
+	reply->deleteLater();
+	readyRead();
+};
 
 /*!
  * Slot for the signal that is emitted once every time new data is available for reading from the device.
@@ -693,6 +748,10 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	}
 }
 
+void LiveDataSource::webServiceNetworkError(QNetworkReply::NetworkError networkError) {
+	Q_UNUSED(networkError);
+}
+
 void LiveDataSource::watchToggled() {
 	m_fileWatched = !m_fileWatched;
 	watch();
@@ -747,6 +806,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("readingType", QString::number(m_readingType));
 	writer->writeAttribute("sourceType", QString::number(m_sourceType));
 	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
+	writer->writeAttribute("requestType", QString::number(m_requestType));
 
 	if (m_updateType == TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
@@ -768,6 +828,8 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	case FileOrPipe:
 		break;
 	case LocalSocket:
+		break;
+	case WebService:
 		break;
 	default:
 		break;
@@ -853,6 +915,12 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("readingType").toString());
 			else
 				m_readingType =  static_cast<ReadingType>(str.toInt());
+
+			str = attribs.value("requestType").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("requestType").toString());
+			else
+				m_requestType =  static_cast<WebRequestType>(str.toInt());
 
 			if (m_updateType == TimeInterval) {
 				str = attribs.value("updateInterval").toString();

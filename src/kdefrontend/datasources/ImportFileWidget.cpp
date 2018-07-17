@@ -401,6 +401,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 
 	source->setSourceType(sourceType);
 	source->setReadingType(readingType);
+	//TODO: add combobox
+	source->setRequestType(LiveDataSource::WebRequestType::GET);
 
 	if (updateType == LiveDataSource::UpdateType::TimeInterval)
 		source->setUpdateInterval(ui.sbUpdateInterval->value());
@@ -431,6 +433,12 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
+	case LiveDataSource::SourceType::WebService: {
+		QNetworkRequest request;
+		request.setUrl(QUrl(ui.leHost->text()));
+		source->setWebServiceRequest(request);
+		break;
+	}
 	default:
 		break;
 	}
@@ -959,6 +967,23 @@ void ImportFileWidget::refreshPreview() {
 					}
 					break;
 				}
+				case LiveDataSource::SourceType::WebService: {
+					QNetworkAccessManager manager(this);
+					QNetworkRequest request;
+					request.setUrl(QUrl(host()));
+					QNetworkReply* reply;
+					QEventLoop loop;
+					connect(&manager, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+					reply = manager.get(request);
+					//connect(reply, &QNetworkReply::error, &loop, &QEventLoop::quit);
+					loop.exec();
+					if(reply->error() == QNetworkReply::NoError){
+						QByteArray arr = reply->readAll();
+						QBuffer buffer(&arr);
+						importedStrings = filter->preview(buffer);
+					}
+					break;
+				}
 			}
 
 			tmpTableWidget = m_twPreview;
@@ -1229,6 +1254,29 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
+		break;
+	case LiveDataSource::SourceType::WebService:
+		ui.lHost->show();
+		ui.leHost->show();
+
+		ui.lePort->hide();
+		ui.lPort->hide();
+
+		ui.lBaudRate->hide();
+		ui.cbBaudRate->hide();
+		ui.lSerialPort->hide();
+		ui.cbSerialPort->hide();
+
+		ui.lFileName->hide();
+		ui.leFileName->hide();
+		ui.bFileInfo->hide();
+		ui.bOpen->hide();
+		ui.chbLinkFile->hide();
+
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
+		ui.cbFileType->setEnabled(true);
 		break;
 	}
 
