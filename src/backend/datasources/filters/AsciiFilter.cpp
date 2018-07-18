@@ -772,9 +772,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::NetworkTcpSocket:
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
-					if (!device.canReadLine())
-						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
-					newData[newDataIdx++] = device.readLine();
+					newData[newDataIdx++] = device.read(device.bytesAvailable());
 				}
 			} else {	// ReadingType::TillEnd
 				switch (spreadsheet->sourceType()) {	// different sources need different read methods
@@ -788,9 +786,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::NetworkTcpSocket:
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
-					if (!device.canReadLine())
-						DEBUG("WARNING in AsciiFilterPrivate::readFromLiveDevice(): device cannot 'readLine()' but using it anyway.");
-					newData.push_back(device.readLine());
+					newData.push_back(device.read(device.bytesAvailable()));
 				}
 			}
 			newLinesTillEnd++;
@@ -1340,6 +1336,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	int linesToRead = 0;
 	QVector<QString> newData;
 
+	//TODO: serial port "read(nBytes)"?
 	while (!device.atEnd()) {
 		if (device.canReadLine())
 			newData.push_back(device.readLine());

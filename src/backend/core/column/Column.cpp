@@ -783,7 +783,7 @@ public:
 		m_content = content;
 	};
 	void run() override {
-		QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
+		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
 		if (m_private->columnMode() == AbstractColumn::Numeric) {
 			QVector<double>* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());

@@ -285,7 +285,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("content").toString());
 
-			QByteArray content = QByteArray::fromBase64(str.toAscii());
+			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
 			if  (!rc) {
 				QString msg = i18n("This project has Cantor content but no Cantor plugins were found. Please check your installation. The project will be closed.");

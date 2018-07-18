@@ -1668,9 +1668,8 @@ void ImportFileWidget::refreshPreview() {
 		}
 		case LiveDataSource::SourceType::SerialPort: {
 			QSerialPort sPort{this};
-			DEBUG("	Port name: " << serialPort().toStdString());
-			DEBUG("	Settings: " << baudRate() << ',' << sPort.dataBits() << ',' << sPort.parity()
-				  << ',' << sPort.stopBits());
+			DEBUG("	Port: " << serialPort().toStdString() << ", Settings: " << baudRate() << ',' << sPort.dataBits()
+					<< ',' << sPort.parity() << ',' << sPort.stopBits());
 			sPort.setPortName(serialPort());
 			sPort.setBaudRate(baudRate());
 

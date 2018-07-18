@@ -174,14 +174,17 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 		return;
 	}
 
-	//skip the first four lines in the header
-	file.readLine();
-	file.readLine();
-	file.readLine();
-	file.readLine();
+	//skip the first three lines in the header
+	file.readLine(); //"Title"
+	file.readLine(); //"Date"
+	file.readLine(); //"Plotname"
+
+	//evaluate the "Flags" line to check whether we have complex numbers
+	QString line = file.readLine();
+	bool hasComplexValues = line.endsWith(QLatin1String("complex\n"));
 
 	//number of variables
-	QString line = file.readLine();
+	line = file.readLine();
 	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
@@ -195,27 +198,19 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
-		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
-		columnModes << AbstractColumn::Numeric;
+		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		if (hasComplexValues) {
+			vectorNames << name + QLatin1String(" REAL");
+			vectorNames << name + QLatin1String(" IMAGINARY");
+			columnModes << AbstractColumn::Numeric;
+			columnModes << AbstractColumn::Numeric;
+		} else {
+			vectorNames << name;
+			columnModes << AbstractColumn::Numeric;
+		}
 	}
 
 	file.readLine(); //skip the line with "Values"
-
-	//read the first value to check whether we have complex numbers
-	qint64 pos = file.pos();
-	line = file.readLine();
-	bool hasComplexValues = (line.indexOf(QLatin1Char(',')) != -1);
-	if (hasComplexValues) {
-		//add column names and types for the imaginary parts
-		QStringList newVectorNames;
-		for (int i = 0; i<vars; ++i) {
-			columnModes << AbstractColumn::Numeric;
-			newVectorNames << vectorNames.at(i) + QLatin1String(" REAL");
-			newVectorNames << vectorNames.at(i) + QLatin1String(" IMAGINARY");
-		}
-		vectorNames = newVectorNames;
-	}
-	file.seek(pos);
 
 	//prepare the data container
 	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
@@ -238,7 +233,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	QLocale locale(QLocale::C);
 	bool isNumber(false);
 
-	for (int i = 0; i < actualEndRow; ++i) {
+	for (int i = 0; i < actualRows; ++i) {
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
@@ -282,14 +277,17 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 		return dataStrings;
 	}
 
-	//skip the first four lines in the header
-	file.readLine();
-	file.readLine();
-	file.readLine();
-	file.readLine();
+	//skip the first three lines in the header
+	file.readLine(); //"Title"
+	file.readLine(); //"Date"
+	file.readLine(); //"Plotname"
+
+	//evaluate the "Flags" line to check whether we have complex numbers
+	QString line = file.readLine();
+	bool hasComplexValues = line.endsWith(QLatin1String("complex\n"));
 
 	//number of variables
-	QString line = file.readLine();
+	line = file.readLine();
 	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
@@ -303,27 +301,19 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
-		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
-		columnModes << AbstractColumn::Numeric;
+		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		if (hasComplexValues) {
+			vectorNames << name + QLatin1String(" REAL");
+			vectorNames << name + QLatin1String(" IMAGINARY");
+			columnModes << AbstractColumn::Numeric;
+			columnModes << AbstractColumn::Numeric;
+		} else {
+			vectorNames << name;
+			columnModes << AbstractColumn::Numeric;
+		}
 	}
 
 	file.readLine(); //skip the line with "Values"
-
-	//read the first value to check whether we have complex numbers
-	qint64 pos = file.pos();
-	line = file.readLine();
-	bool hasComplexValues = (line.indexOf(QLatin1Char(',')) != -1);
-	if (hasComplexValues) {
-		//add column names and types for the imaginary parts
-		QStringList newVectorNames;
-		for (int i = 0; i<vars; ++i) {
-			columnModes << AbstractColumn::Numeric;
-			newVectorNames << vectorNames.at(i) + QLatin1String(" REAL");
-			newVectorNames << vectorNames.at(i) + QLatin1String(" IMAGINARY");
-		}
-		vectorNames = newVectorNames;
-	}
-	file.seek(pos);
 
 	//read the data points
 	QStringList lineString;

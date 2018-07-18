@@ -1140,14 +1140,14 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "row_heights") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 			int count = bytes.size()/sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count*sizeof(int));
 		} else if (!preview && reader->name() == "column_widths") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 			int count = bytes.size()/sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count*sizeof(int));
@@ -1155,7 +1155,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			//TODO: parallelize reading of columns?
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 
 			switch (d->mode) {
 			case AbstractColumn::Numeric: {

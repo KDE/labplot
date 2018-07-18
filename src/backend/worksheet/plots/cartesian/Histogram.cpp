@@ -625,7 +625,6 @@ void HistogramPrivate::retransform() {
 	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
-	connectedPointsLogical.clear();
 
 	if (NULL == dataColumn) {
 		linePath = QPainterPath();
@@ -635,14 +634,11 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	int startRow = 0;
-	int endRow = dataColumn->rowCount() - 1;
 	QPointF tempPoint;
-
 	const AbstractColumn::ColumnMode xColMode = dataColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++ ) {
+	for (int row = 0; row <dataColumn->rowCount(); ++row) {
 		if (dataColumn->isValid(row) && !dataColumn->isMasked(row)) {
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
@@ -660,10 +656,6 @@ void HistogramPrivate::retransform() {
 			}
 
 			symbolPointsLogical.append(tempPoint);
-			connectedPointsLogical.push_back(true);
-		} else {
-			if (connectedPointsLogical.size())
-				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
 
@@ -924,12 +916,10 @@ void HistogramPrivate::updateLines() {
 	if (m_histogram)
 		gsl_histogram_free(m_histogram);
 
-	m_histogram = gsl_histogram_alloc (m_bins); // demo- number of bins
+	m_histogram = gsl_histogram_alloc (m_bins);
 	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
 
-	const int startRow = 0;
-	const int endRow = dataColumn->rowCount() - 1;
-	for (int row = startRow; row <= endRow; row++ ) {
+	for (int row = 0; row < dataColumn->rowCount(); ++row) {
 		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
 			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
 	}
@@ -943,12 +933,6 @@ void HistogramPrivate::updateLines() {
 			horizontalHistogram();
 			break;
 		}
-	}
-
-	//calculate the lines connecting the data points
-	for (int i = 0; i<count-1; i++) {
-		if (!connectedPointsLogical[i]) continue;
-		lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 	}
 
 	//map the lines to scene coordinates
@@ -1621,4 +1605,107 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 	return true;
+}
+
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Histogram::loadThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("Histogram");
+
+	int index = parentAspect()->indexOfChild<Histogram>(this);
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	QColor themeColor;
+	if (index<plot->themeColorPalette().size())
+		themeColor = plot->themeColorPalette().at(index);
+	else {
+		if (plot->themeColorPalette().size())
+			themeColor = plot->themeColorPalette().last();
+	}
+
+	QPen p;
+
+	Q_D(Histogram);
+	d->m_suppressRecalc = true;
+
+	//Line
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setColor(themeColor);
+	this->setLinePen(p);
+	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+
+	//Symbol
+	//TODO
+// 	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
+// 	QBrush brush = symbolsBrush();
+// 	brush.setColor(themeColor);
+// 	this->setSymbolsBrush(brush);
+// 	p = symbolsPen();
+// 	p.setColor(themeColor);
+// 	this->setSymbolsPen(p);
+
+	//Values
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
+	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+
+	//Filling
+	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
+	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
+	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
+	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingFirstColor(themeColor);
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
+
+	//Error Bars
+	//TODO:
+// 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
+// 	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
+// 	p.setColor(themeColor);
+// 	this->setErrorBarsPen(p);
+// 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+
+	d->m_suppressRecalc = false;
+	d->recalcShapeAndBoundingRect();
+}
+
+void Histogram::saveThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("XYCurve");
+
+	//Line
+	group.writeEntry("LineOpacity", this->lineOpacity());
+	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
+
+	//Error Bars
+// 	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
+// 	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
+// 	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
+// 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
+// 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
+
+	//Filling
+	group.writeEntry("FillingBrushStyle",(int) this->fillingBrushStyle());
+	group.writeEntry("FillingColorStyle",(int) this->fillingColorStyle());
+	group.writeEntry("FillingOpacity", this->fillingOpacity());
+	group.writeEntry("FillingSecondColor",(QColor) this->fillingSecondColor());
+	group.writeEntry("FillingType",(int) this->fillingType());
+
+	//Symbol
+// 	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+
+	//Values
+	group.writeEntry("ValuesOpacity", this->valuesOpacity());
+	group.writeEntry("ValuesColor", (QColor) this->valuesColor());
+	group.writeEntry("ValuesFont", this->valuesFont());
+
+	int index = parentAspect()->indexOfChild<Histogram>(this);
+	if(index<5) {
+		KConfigGroup themeGroup = config.group("Theme");
+		for(int i = index; i<5; i++) {
+			QString s = "ThemePaletteColor" + QString::number(i+1);
+			themeGroup.writeEntry(s,(QColor) this->linePen().color());
+		}
+	}
 }

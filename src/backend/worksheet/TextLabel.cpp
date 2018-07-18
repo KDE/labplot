@@ -806,7 +806,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "teXImage") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray ba = QByteArray::fromBase64(content.toAscii());
+			QByteArray ba = QByteArray::fromBase64(content.toLatin1());
 			teXImageFound = d->teXImage.loadFromData(ba);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

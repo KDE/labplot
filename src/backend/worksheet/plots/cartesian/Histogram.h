@@ -55,6 +55,8 @@ public:
 	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	QString& dataColumnPath() const;

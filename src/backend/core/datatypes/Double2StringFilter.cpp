@@ -77,7 +77,7 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		if ( (format_str.size() != 1) || !ok ) {
 			reader->raiseError(i18n("missing or invalid format attribute"));
 		} else {
-			setNumericFormat( format_str.at(0).toAscii() );
+			setNumericFormat( format_str.at(0).toLatin1() );
 			setNumDigits( digits );
 		}
 	} else

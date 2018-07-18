@@ -164,7 +164,7 @@ QStringList LiveDataSource::availablePorts() {
 			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
 	}
 	//TODO: Test
-	ports.append("/dev/pts/25");
+	ports.append("/dev/pts/26");
 
 	return ports;
 }
@@ -586,11 +586,12 @@ void LiveDataSource::read() {
 		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
-		//TODO: Test
 		DEBUG("reading from the serial port");
 		m_serialPort->setBaudRate(m_baudRate);
 		m_serialPort->setPortName(m_serialPortName);
-		m_device = m_serialPort;
+		//m_device = m_serialPort;
+		//TODO: Test
+		// close()/open()
 		break;
 	case MQTT:
 		break;	

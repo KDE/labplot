@@ -112,12 +112,12 @@ void MatrixView::init() {
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
-	h_header->setMovable(false);
+	h_header->setSectionsMovable(false);
 	h_header->installEventFilter(this);
 
 	//vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
-	v_header->setMovable(false);
+	v_header->setSectionsMovable(false);
 	v_header->installEventFilter(this);
 
 	//set the header sizes to the (potentially user customized) sizes stored in Matrix
@@ -544,12 +544,10 @@ void MatrixView::advanceCell() {
 void MatrixView::goToCell() {
 	bool ok;
 
-	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
-	                                   1, 1, m_matrix->columnCount(), 1, &ok);
+	int col = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_matrix->columnCount(), 1, &ok);
 	if (!ok) return;
 
-	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
-	                                   1, 1, m_matrix->rowCount(), 1, &ok);
+	int row = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_matrix->rowCount(), 1, &ok);
 	if (!ok) return;
 
 	goToCell(row-1, col-1);

@@ -98,7 +98,7 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 	for (int i=0; i<m_argument_count; i++) {
 		m_argument_types[i] = QMetaType::type(type_names[i]);
 		if (m_argument_types[i]) // type is known to QMetaType
-			m_argument_data[i] = QMetaType::construct(m_argument_types[i], argument_data[i]);
+			m_argument_data[i] = QMetaType::create(m_argument_types[i], argument_data[i]);
 		else
 			qWarning("SignallingUndoCommand: failed to copy unknown type %s"
 					" (needs to be registered with qRegisterMetaType())!\n", type_names[i]);
