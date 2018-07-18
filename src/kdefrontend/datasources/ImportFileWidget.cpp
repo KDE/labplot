@@ -577,12 +577,12 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	if (updateType == MQTTClient::UpdateType::TimeInterval)
 		client->setUpdateInterval(ui.sbUpdateInterval->value());
 
-	client->setKeepNvalues(ui.sbKeepNValues->value());
+	client->setKeepNValues(ui.sbKeepNValues->value());
 
 	client->setUpdateType(updateType);
 
 	if (readingType != MQTTClient::ReadingType::TillEnd)
-		client->setSampleRate(ui.sbSampleSize->value());
+		client->setSampleSize(ui.sbSampleSize->value());
 
 	client->setMqttClientHostPort(m_client->hostname(), m_client->port());
 

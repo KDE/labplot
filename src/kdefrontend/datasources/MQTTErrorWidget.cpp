@@ -1,5 +1,31 @@
-#include "src/kdefrontend/datasources/MQTTErrorWidget.h"
+/***************************************************************************
+File                 : LiveDataDock.cpp
+Project              : LabPlot
+Description          : Widget for informing about an MQTT error, and for trying to solve it
+--------------------------------------------------------------------
+Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
+***************************************************************************/
 
+/***************************************************************************
+*                                                                         *
+*  This program is free software; you can redistribute it and/or modify   *
+*  it under the terms of the GNU General Public License as published by   *
+*  the Free Software Foundation; either version 2 of the License, or      *
+*  (at your option) any later version.                                    *
+*                                                                         *
+*  This program is distributed in the hope that it will be useful,        *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+*  GNU General Public License for more details.                           *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the Free Software           *
+*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+*   Boston, MA  02110-1301  USA                                           *
+*                                                                         *
+***************************************************************************/
+
+#include "src/kdefrontend/datasources/MQTTErrorWidget.h"
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
@@ -12,6 +38,7 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 {
 	ui.setupUi(this);
 	bool close = false;
+	//showing the appropriate options according to the error type
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		ui.lePassword->hide();
@@ -48,13 +75,16 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 		close = true;
 		break;
 	}
-	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::makeChange);
+	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::tryToReconnect);
 	setAttribute(Qt::WA_DeleteOnClose);
 	if(close)
 		this->close();
 }
 
-void MQTTErrorWidget::makeChange(){
+/*!
+ *\brief Try to reconnect in MQTTClient after reseting options that might cause the error
+ */
+void MQTTErrorWidget::tryToReconnect(){
 	bool ok = false;
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:

@@ -1,7 +1,7 @@
 #ifdef HAVE_MQTT
 
 #include "backend/datasources/MQTTClient.h"
-#include "backend/datasources/MQTTSubscriptions.h"
+#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 
 #include "backend/datasources/filters/AsciiFilter.h"
@@ -48,8 +48,8 @@ MQTTClient::MQTTClient(const QString& name)
 	  m_mqttUseWill(false),
 	  m_mqttUseID(false),
 	  m_loaded(false),
-	  m_sampleRate(1),
-	  m_keepNvalues(0),
+	  m_sampleSize(1),
+	  m_keepNValues(0),
 	  m_updateInterval(1000),
 	  m_disconnectForWill(false),
 	  m_mqttUseAuthentication(false),
@@ -164,13 +164,13 @@ int MQTTClient::updateInterval() const {
  * \brief Sets how many values we should store
  * \param keepnvalues
  */
-void MQTTClient::setKeepNvalues(int keepnvalues) {
-	qDebug()<<"Keep N values" << keepnvalues;
-	m_keepNvalues = keepnvalues;
+void MQTTClient::setKeepNValues(int keepNValues) {
+	qDebug()<<"Keep N Values" << keepNValues;
+	m_keepNValues = keepNValues;
 }
 
-int MQTTClient::keepNvalues() const {
-	return m_keepNvalues;
+int MQTTClient::keepNValues() const {
+	return m_keepNValues;
 }
 
 bool MQTTClient::isPaused() const {
@@ -178,16 +178,16 @@ bool MQTTClient::isPaused() const {
 }
 
 /*!
- * \brief Sets the sample rate to samplerate
- * \param samplerate
+ * \brief Sets the size rate to sampleSize
+ * \param sampleSize
  */
-void MQTTClient::setSampleRate(int samplerate) {
-	qDebug()<<"Sample rate: " << samplerate;
-	m_sampleRate = samplerate;
+void MQTTClient::setSampleSize(int sampleSize) {
+	qDebug()<<"Sample rate: " << sampleSize;
+	m_sampleSize = sampleSize;
 }
 
-int MQTTClient::sampleRate() const {
-	return m_sampleRate;
+int MQTTClient::sampleSize() const {
+	return m_sampleSize;
 }
 
 /*!
@@ -289,13 +289,13 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("subscriptionCount", QString::number(m_mqttSubscriptions.size()));
 	writer->writeAttribute("updateType", QString::number(m_updateType));
 	writer->writeAttribute("readingType", QString::number(m_readingType));
-	writer->writeAttribute("keepValues", QString::number(m_keepNvalues));
+	writer->writeAttribute("keepValues", QString::number(m_keepNValues));
 
 	if (m_updateType == TimeInterval)
 		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
 
 	if (m_readingType != TillEnd)
-		writer->writeAttribute("sampleRate", QString::number(m_sampleRate));
+		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
 
 	writer->writeAttribute("host", m_client->hostname());
 	writer->writeAttribute("port", QString::number(m_client->port()));
@@ -322,8 +322,8 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	//filter
 	m_filter->save(writer);
 
-	//MQTTSubscriptions
-	for(auto* sub : children<MQTTSubscriptions>(IncludeHidden))
+	//MQTTSubscription
+	for(auto* sub : children<MQTTSubscription>(IncludeHidden))
 		sub->save(writer);
 
 	writer->writeEndElement(); // "MQTTClient"
@@ -366,7 +366,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'keepValues'"));
 			else
-				m_keepNvalues =  str.toInt();
+				m_keepNValues =  str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if(str.isEmpty())
@@ -389,11 +389,11 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			if (m_readingType != TillEnd) {
-				str = attribs.value("sampleRate").toString();
+				str = attribs.value("sampleSize").toString();
 				if(str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'sampleRate'"));
+					reader->raiseWarning(attributeWarning.arg("'sampleSize'"));
 				else
-					m_sampleRate = str.toInt();
+					m_sampleSize = str.toInt();
 			}
 
 			str = attribs.value("host").toString();
@@ -505,11 +505,11 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			m_filter = new AsciiFilter();
 			if (!m_filter->load(reader))
 				return false;
-		} else if(reader->name() == "MQTTSubscriptions") {
+		} else if(reader->name() == "MQTTSubscription") {
 			qDebug()<<"Load MQTTSubscription";
-			MQTTSubscriptions* subscription = new MQTTSubscriptions("");
+			MQTTSubscription* subscription = new MQTTSubscription("");
 			subscription->setMQTTClient(this);
-			connect(subscription, &MQTTSubscriptions::loaded, this, &MQTTClient::subscriptionLoaded);
+			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);
 			if (!subscription->load(reader, preview)) {
 				delete subscription;
 				return false;
@@ -561,7 +561,7 @@ void MQTTClient::onMqttConnect() {
 						m_subscriptions.push_back(temp->topic().filter());
 
 						qDebug()<<"New MQTTSubscription";
-						MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+						MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 						newSubscription->setMQTTClient(this);
 
 						qDebug()<<"Add child";
@@ -865,7 +865,7 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
 			qDebug()<<"New MQTTSubscription";
-			MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			qDebug()<<"Add child";
@@ -878,7 +878,7 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 
 			qDebug()<<"Check for inferior subscriptions";
 			bool found = false;
-			QVector<MQTTSubscriptions*> inferiorSubscriptions;
+			QVector<MQTTSubscription*> inferiorSubscriptions;
 
 			for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
 				if(checkTopicContains(topic, m_mqttSubscriptions[i]->subscriptionName())
@@ -933,7 +933,7 @@ void MQTTClient::removeMQTTSubscription(const QString &name) {
 		for (int i = 0; i < m_mqttSubscriptions.size(); ++i) {
 			if(m_mqttSubscriptions[i]->subscriptionName() == name) {
 				qDebug()<<"Subscription name"<<m_mqttSubscriptions[i]->subscriptionName() << "  "<<m_mqttSubscriptions[i]->name();
-				MQTTSubscriptions* removeSubscription = m_mqttSubscriptions[i];
+				MQTTSubscription* removeSubscription = m_mqttSubscriptions[i];
 				m_mqttSubscriptions.remove(i);
 				QVector<MQTTTopic*> topics = removeSubscription->topics();
 				for (int j = 0; j < topics.size(); ++j) {
@@ -971,7 +971,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
 			qDebug()<<"New MQTTSubscription";
-			MQTTSubscriptions* newSubscription = new MQTTSubscriptions(temp->topic().filter());
+			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			qDebug()<<"Add child";
@@ -984,7 +984,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 
 			qDebug()<<"Check for superior subscription";
 			bool found = false;
-			MQTTSubscriptions* superiorSubscription;
+			MQTTSubscription* superiorSubscription;
 
 			for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
 				if(checkTopicContains(m_mqttSubscriptions[i]->subscriptionName(), topic)
@@ -1021,7 +1021,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 void MQTTClient::reparentTopic(const QString& topic, const QString& parent) {
 	if(m_subscriptions.contains(parent) && m_topicNames.contains(topic)) {
 		bool found = false;
-		MQTTSubscriptions* superiorSubscription;
+		MQTTSubscription* superiorSubscription;
 
 		for(int i = 0; i < m_mqttSubscriptions.size(); ++i) {
 			if(m_mqttSubscriptions[i]->subscriptionName() == parent) {

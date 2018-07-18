@@ -1997,7 +1997,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	MQTTTopic* spreadsheet = dynamic_cast<MQTTTopic*>(dataSource);
 
-	int keepNValues = spreadsheet->keepNvalues();
+	int keepNValues = spreadsheet->keepNValues();
 
 	if (!m_prepared) {
 		qDebug()<<"Start prepare mqtt";
@@ -2027,8 +2027,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		if (keepNValues == 0)
 			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
 		else {
-			spreadsheet->setRowCount(spreadsheet->keepNvalues());
-			m_actualRows = spreadsheet->keepNvalues();
+			spreadsheet->setRowCount(spreadsheet->keepNValues());
+			m_actualRows = spreadsheet->keepNValues();
 		}
 
 		m_dataContainer.resize(m_actualCols);
@@ -2095,16 +2095,16 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	//count the new lines, increase actualrows on each
 	//now we read all the new lines, if we want to use sample rate
 	//then here we can do it, if we have actually sample rate number of lines :-?
-	int newLinesForSampleRateNotTillEnd = 0;
+	int newLinesForSampleSizeNotTillEnd = 0;
 	int newLinesTillEnd = 0;
 	QVector<QString> newData;
 	if (readingType != MQTTClient::ReadingType::TillEnd) {
-		newData.reserve(spreadsheet->sampleRate());
-		newData.resize(spreadsheet->sampleRate());
+		newData.reserve(spreadsheet->sampleSize());
+		newData.resize(spreadsheet->sampleSize());
 	}
 
 	int newDataIdx = 0;
-	bool sampleRateReached = false;
+	bool sampleSizeReached = false;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
@@ -2121,17 +2121,17 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 					newLinesTillEnd++;
 
 					if (readingType != MQTTClient::ReadingType::TillEnd) {
-						newLinesForSampleRateNotTillEnd++;
+						newLinesForSampleSizeNotTillEnd++;
 						//for Continous reading and FromEnd we read sample rate number of lines if possible
-						qDebug()<<"new lines for sample rate: "<<newLinesForSampleRateNotTillEnd;
-						if (newLinesForSampleRateNotTillEnd == spreadsheet->sampleRate()) {
-							sampleRateReached = true;
+						qDebug()<<"new lines for sample rate: "<<newLinesForSampleSizeNotTillEnd;
+						if (newLinesForSampleSizeNotTillEnd == spreadsheet->sampleSize()) {
+							sampleSizeReached = true;
 							break;
 						}
 					}
 				}
 			}
-			if(sampleRateReached)
+			if(sampleSizeReached)
 				break;
 		}
 	}
@@ -2152,48 +2152,48 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		if (keepNValues == 0)
 			m_actualRows = spreadsheetRowCountBeforeResize;
 		else {
-			if(m_actualRows != spreadsheet->keepNvalues()) {
-				if(m_actualRows < spreadsheet->keepNvalues()) {
+			if(m_actualRows != spreadsheet->keepNValues()) {
+				if(m_actualRows < spreadsheet->keepNValues()) {
 					qDebug()<<m_actualRows;
-					spreadsheet->setRowCount(spreadsheet->keepNvalues());
-					qDebug()<<"rowcount set to" << spreadsheet->keepNvalues();
+					spreadsheet->setRowCount(spreadsheet->keepNValues());
+					qDebug()<<"rowcount set to" << spreadsheet->keepNValues();
 				}
 
 				int rowDiff = 0;
-				if(m_actualRows > spreadsheet->keepNvalues()) {
-					rowDiff = m_actualRows -  spreadsheet->keepNvalues();
+				if(m_actualRows > spreadsheet->keepNValues()) {
+					rowDiff = m_actualRows -  spreadsheet->keepNValues();
 				}
-				if(m_actualRows < spreadsheet->keepNvalues()) {
-					rowDiff =spreadsheet->keepNvalues() - m_actualRows;
+				if(m_actualRows < spreadsheet->keepNValues()) {
+					rowDiff =spreadsheet->keepNValues() - m_actualRows;
 				}
-				qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNvalues()<<"   "<<rowDiff;
+				qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNValues()<<"   "<<rowDiff;
 
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 					qDebug()<<"modifying column: "<<n;
-					qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNvalues();
+					qDebug()<<"last value changed: "<<m_actualRows<<"  "<<spreadsheet->keepNValues();
 					switch (columnModes[n]) {
 					case AbstractColumn::Numeric: {
 						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
-						if(m_actualRows > spreadsheet->keepNvalues()) {
-							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+						if(m_actualRows > spreadsheet->keepNValues()) {
+							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (i) =
-										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
-								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNValues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNValues() + i;
 							}
 						}
 
-						if(m_actualRows < spreadsheet->keepNvalues()) {
-							vector->reserve( spreadsheet->keepNvalues());
-							vector->resize( spreadsheet->keepNvalues());
+						if(m_actualRows < spreadsheet->keepNValues()) {
+							vector->reserve( spreadsheet->keepNValues());
+							vector->resize( spreadsheet->keepNValues());
 							qDebug()<<"actual rows < keepn";
 							for(int i = 1; i <= m_actualRows; i++) {
-								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
-										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
-								qDebug()<< "overwrite row "<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
-								qDebug()<<static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
+										static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
+								qDebug()<< "overwrite row "<<spreadsheet->keepNValues() - i<<"  "<<spreadsheet->keepNValues() - i - rowDiff;
+								qDebug()<<static_cast<QVector<double>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[](i) = nanValue;
@@ -2206,21 +2206,21 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
-						if(m_actualRows > spreadsheet->keepNvalues()) {
-							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+						if(m_actualRows > spreadsheet->keepNValues()) {
+							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (i) =
-										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
-								qDebug()<< "overwrite row "<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNValues() + i);
+								qDebug()<< "overwrite row "<<i<<"  "<<m_actualRows - spreadsheet->keepNValues() + i;
 							}
 						}
-						if(m_actualRows < spreadsheet->keepNvalues()) {
-							vector->reserve( spreadsheet->keepNvalues());
-							vector->resize( spreadsheet->keepNvalues());
+						if(m_actualRows < spreadsheet->keepNValues()) {
+							vector->reserve( spreadsheet->keepNValues());
+							vector->resize( spreadsheet->keepNValues());
 							for(int i = 1; i <= m_actualRows; i++) {
-								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
-										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
-								qDebug()<< "overwrite row"<<spreadsheet->keepNvalues() - i<<"  "<<spreadsheet->keepNvalues() - i - rowDiff;
-								qDebug()<<static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
+										static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
+								qDebug()<< "overwrite row"<<spreadsheet->keepNValues() - i<<"  "<<spreadsheet->keepNValues() - i - rowDiff;
+								qDebug()<<static_cast<QVector<int>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++){
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[](i) = 0;
@@ -2234,20 +2234,20 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
-						if(m_actualRows > spreadsheet->keepNvalues()) {
-							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+						if(m_actualRows > spreadsheet->keepNValues()) {
+							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (i) =
-										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
-								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNValues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNValues() + i;
 							}
 						}
 
-						if(m_actualRows < spreadsheet->keepNvalues()) {
-							vector->reserve( spreadsheet->keepNvalues());
-							vector->resize( spreadsheet->keepNvalues());
+						if(m_actualRows < spreadsheet->keepNValues()) {
+							vector->reserve( spreadsheet->keepNValues());
+							vector->resize( spreadsheet->keepNValues());
 							for(int i = 1; i <= m_actualRows; i++) {
-								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
-										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
+										static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++)
 								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](i) = "";
@@ -2258,20 +2258,20 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
-						if(m_actualRows > spreadsheet->keepNvalues()) {
-							for(int i = 0; i < spreadsheet->keepNvalues(); i++) {
+						if(m_actualRows > spreadsheet->keepNValues()) {
+							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (i) =
-										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNvalues() + i);
-								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNvalues() + i;
+										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - spreadsheet->keepNValues() + i);
+								qDebug()<< "overwrite row"<<i<<"  "<<m_actualRows - spreadsheet->keepNValues() + i;
 							}
 						}
 
-						if(m_actualRows < spreadsheet->keepNvalues()) {
-							vector->reserve( spreadsheet->keepNvalues());
-							vector->resize( spreadsheet->keepNvalues());
+						if(m_actualRows < spreadsheet->keepNValues()) {
+							vector->reserve( spreadsheet->keepNValues());
+							vector->resize( spreadsheet->keepNValues());
 							for(int i = 1; i <= m_actualRows; i++) {
-								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNvalues() - i) =
-										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](spreadsheet->keepNvalues() - i - rowDiff);
+								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (spreadsheet->keepNValues() - i) =
+										static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](spreadsheet->keepNValues() - i - rowDiff);
 							}
 							for(int i = 0; i < rowDiff; i++)
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](i) = QDateTime();
@@ -2284,9 +2284,9 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						break;
 					}
 				}
-				if(m_actualRows > spreadsheet->keepNvalues())
-					spreadsheet->setRowCount(spreadsheet->keepNvalues());
-				m_actualRows = spreadsheet->keepNvalues();
+				if(m_actualRows > spreadsheet->keepNValues())
+					spreadsheet->setRowCount(spreadsheet->keepNValues());
+				m_actualRows = spreadsheet->keepNValues();
 				qDebug()<<"actual rows: "<<m_actualRows;
 			}
 		}
@@ -2303,7 +2303,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		//but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
-				m_actualRows += qMin(newData.size(), spreadsheet->sampleRate());
+				m_actualRows += qMin(newData.size(), spreadsheet->sampleSize());
 			else {
 				m_actualRows += newData.size();
 			}
@@ -2322,10 +2322,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			} else {
 				//we read max sample rate number of lines when the reading mode
 				//is ContinouslyFixed or FromEnd
-				if(spreadsheet->sampleRate() <= spreadsheet->keepNvalues())
-					linesToRead = qMin(spreadsheet->sampleRate(), newLinesTillEnd);
+				if(spreadsheet->sampleSize() <= spreadsheet->keepNValues())
+					linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 				else
-					linesToRead = qMin(spreadsheet->keepNvalues(), newLinesTillEnd);
+					linesToRead = qMin(spreadsheet->keepNValues(), newLinesTillEnd);
 			}
 		} else {
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
@@ -2403,7 +2403,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			}
 		}
 	} else {
-		//when we have a fixed size we have to pop sampleRate number of lines if specified
+		//when we have a fixed size we have to pop sampleSize number of lines if specified
 		//here popping, setting currentRow
 		if (!m_prepared)
 			currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
@@ -2476,8 +2476,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	newDataIdx = 0;
 	if (readingType == MQTTClient::ReadingType::FromEnd) {
 		if (m_prepared) {
-			if (newData.size() > spreadsheet->sampleRate())
-				newDataIdx = newData.size() - spreadsheet->sampleRate();
+			if (newData.size() > spreadsheet->sampleSize())
+				newDataIdx = newData.size() - spreadsheet->sampleSize();
 		}
 	}
 	qDebug() << "newDataIdx: " << newDataIdx;

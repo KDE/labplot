@@ -6,14 +6,14 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class MQTTSubscriptions;
+class MQTTSubscription;
 class MQTTClient;
 
 class MQTTTopic : public Spreadsheet{
 	Q_OBJECT
 
 public:
-	MQTTTopic(const QString& name, MQTTSubscriptions* subscription, bool loading = false);
+	MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading = false);
 	~MQTTTopic() override;
 
 	void setFilter(AbstractFileFilter*);
@@ -25,16 +25,12 @@ public:
 
 	QString topicName() const;
 	MQTTClient* mqttClient() const;
-
 	void newMessage(const QString&);
-	void read();
-
 	int readingType() const;
-	int sampleRate() const;
+	int sampleSize() const;
 	bool isPaused() const;
 	int updateInterval() const;
-	int keepNvalues() const;
-	//bool keepLastValues() const;
+	int keepNValues() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -53,11 +49,11 @@ private:
 	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
-public slots:
+public slots:	
+	void read();
 
 private slots:
 	void plotData();
-	void removeMessage();
 
 signals:
 	void readOccured();

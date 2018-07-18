@@ -120,13 +120,13 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	ui.sbKeepNValues->setValue(fds->keepNvalues());
+	ui.sbKeepNValues->setValue(fds->keepNValues());
 
 	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleSize->setValue(fds->sampleRate());
+		ui.sbSampleSize->setValue(fds->sampleSize());
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
@@ -321,8 +321,8 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 }
 
 /*!
- * \brief Modifies the sample rate of the live data sources or MQTTClient objects
- * \param sampleRate
+ * \brief Modifies the sample size of the live data sources or MQTTClient objects
+ * \param sampleSize
  */
 void LiveDataDock::sampleSizeChanged(int sampleSize) {
 	if(!m_liveDataSources.isEmpty()) {
@@ -332,7 +332,7 @@ void LiveDataDock::sampleSizeChanged(int sampleSize) {
 #ifdef HAVE_MQTT
 	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
-			client->setSampleRate(sampleSize);
+			client->setSampleSize(sampleSize);
 	}
 #endif
 
@@ -464,7 +464,7 @@ void LiveDataDock::updateIntervalChanged(int updateInterval) {
 
 /*!
  * \brief Modifies the number of samples to keep in each of the live data sources
- * \param keepNvalues
+ * \param keepNValues
  */
 void LiveDataDock::keepNValuesChanged(const int keepNValues) {
 	if(!m_liveDataSources.isEmpty())  {
@@ -474,7 +474,7 @@ void LiveDataDock::keepNValuesChanged(const int keepNValues) {
 #ifdef HAVE_MQTT
 	else if (!m_mqttClients.isEmpty()) {
 		for (auto* client : m_mqttClients)
-			client->setKeepNvalues(keepNValues);
+			client->setKeepNValues(keepNValues);
 	}
 #endif
 }

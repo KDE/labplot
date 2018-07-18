@@ -1,14 +1,40 @@
+/***************************************************************************
+File		: MQTTTopic.cpp
+Project		: LabPlot
+Description	: Represents a topic of a MQTTSubscription
+--------------------------------------------------------------------
+Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+
+***************************************************************************/
+
+/***************************************************************************
+*                                                                         *
+*  This program is free software; you can redistribute it and/or modify   *
+*  it under the terms of the GNU General Public License as published by   *
+*  the Free Software Foundation; either version 2 of the License, or      *
+*  (at your option) any later version.                                    *
+*                                                                         *
+*  This program is distributed in the hope that it will be useful,        *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+*  GNU General Public License for more details.                           *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the Free Software           *
+*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+*   Boston, MA  02110-1301  USA                                           *
+*                                                                         *
+***************************************************************************/
+
 #ifdef HAVE_MQTT
 
 #include "backend/datasources/MQTTTopic.h"
-
-#include "backend/datasources/MQTTSubscriptions.h"
+#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTClient.h"
 
 #include "backend/core/Project.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-
 #include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QDateTime>
@@ -17,14 +43,19 @@
 #include <QMenu>
 #include <QTimer>
 #include <QMessageBox>
-
 #include <QIcon>
 #include <QAction>
 #include <KLocalizedString>
-
 #include <QDebug>
 
-MQTTTopic::MQTTTopic(const QString& name, MQTTSubscriptions *subscription, bool loading)
+/*!
+  \class MQTTTopic
+  \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
+  Represents a topic of a subscription made in MQTTClient
+
+  \ingroup datasources
+*/
+MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading)
 	: Spreadsheet(0, name, loading),
 	  m_MQTTClient(subscription->mqttClient()),
 	  m_topicName(name),
@@ -66,22 +97,34 @@ MQTTTopic::~MQTTTopic() {
 	qDebug()<<"MqttTopic destructor:"<<m_topicName;
 }
 
+/*!
+ *\brief Sets the MQTTTopic's filter
+ *
+ * \param filter
+ */
 void MQTTTopic::setFilter(AbstractFileFilter* f) {
 	m_filter = f;
 }
 
+/*!
+ *\brief Returns the MQTTTopic's filter
+ */
 AbstractFileFilter* MQTTTopic::filter() const {
 	return m_filter;
 }
 
+/*!
+ *\brief Returns the MQTTTopic's icon
+ */
 QIcon MQTTTopic::icon() const {
 	QIcon icon;
-	//if (m_fileType == LiveDataSource::Ascii)
 	icon = QIcon::fromTheme("text-plain");
-
 	return icon;
 }
 
+/*!
+ *\brief Adds an action to the MQTTTopic's context menu in the project explorer
+ */
 QMenu* MQTTTopic::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 
@@ -104,43 +147,85 @@ QWidget* MQTTTopic::view() const {
 	return m_partView;
 }
 
-void MQTTTopic::initActions() {
-	/*m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
-	connect(m_reloadAction, &QAction::triggered, this, &LiveDataSource::read);*/
+/*!
+ *\brief Returns the reading type of the MQTTClient to which the MQTTTopic belongs
+ */
+int MQTTTopic::readingType() const {
+	return static_cast<int> (m_MQTTClient->readingType());
+}
 
+/*!
+ *\brief Returns sampleSize of the MQTTClient to which the MQTTTopic belongs
+ */
+int MQTTTopic::sampleSize() const {
+	return m_MQTTClient->sampleSize();
+}
+
+/*!
+ *\brief Returns whether reading is paused or not in the MQTTClient to which the MQTTTopic belongs
+ */
+bool  MQTTTopic::isPaused() const {
+	return m_MQTTClient->isPaused();
+}
+
+/*!
+ *\brief Returns update interval of the MQTTClient to which the MQTTTopic belongs
+ */
+int MQTTTopic::updateInterval() const {
+	return m_MQTTClient->updateInterval();
+}
+
+/*!
+ *\brief Returns the keepNValues (how many values we should keep) of the MQTTClient to which the MQTTTopic belongs
+ */
+int MQTTTopic::keepNValues() const {
+	return m_MQTTClient->keepNValues();
+}
+
+/*!
+ *\brief Adds a message received by the topic to the message puffer
+ */
+void MQTTTopic::newMessage(const QString& message) {
+	m_messagePuffer.push_back(message);
+}
+
+/*!
+ *\brief Returns the name of the MQTTTopic
+ */
+QString MQTTTopic::topicName() const{
+	return m_topicName;
+}
+
+/*!
+ *\brief Initializes the actions of MQTTTopic
+ */
+void MQTTTopic::initActions() {
 	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
 	connect(m_plotDataAction, &QAction::triggered, this, &MQTTTopic::plotData);
 }
 
+/*!
+ *\brief Returns the MQTTClient the topic belongs to
+ */
+MQTTClient *MQTTTopic::mqttClient() const{
+	return m_MQTTClient;
+}
+
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
+
+/*!
+ *\brief Plots the data stored in MQTTTopic
+ */
 void MQTTTopic::plotData() {
 	PlotDataDialog* dlg = new PlotDataDialog(this);
 	dlg->exec();
 }
 
-int MQTTTopic::readingType() const {
-	return static_cast<int> (m_MQTTClient->readingType());
-}
-
-int MQTTTopic::sampleRate() const {
-	return m_MQTTClient->sampleRate();
-}
-
-bool  MQTTTopic::isPaused() const {
-	return m_MQTTClient->isPaused();
-}
-
-int MQTTTopic::updateInterval() const {
-	return m_MQTTClient->updateInterval();
-}
-
-int MQTTTopic::keepNvalues() const {
-	return m_MQTTClient->keepNvalues();
-}
-
-void MQTTTopic::newMessage(const QString& message) {
-	m_messagePuffer.push_back(message);
-}
-
+/*!
+ *\brief Reads every message from the message puffer
+ */
 void MQTTTopic::read() {
 	while(!m_messagePuffer.isEmpty()) {
 		qDebug()<< "reading from topic " + m_topicName;
@@ -149,10 +234,12 @@ void MQTTTopic::read() {
 	}
 }
 
-QString MQTTTopic::topicName() const{
-	return m_topicName;
-}
-
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+/*!
+  Saves as XML.
+ */
 void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("MQTTTopic");
 	writeBasicAttributes(writer);
@@ -178,6 +265,9 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); //MQTTTopic
 }
 
+/*!
+  Loads from XML.
+*/
 bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	qDebug()<<"Start loading MQTTTopic";
 	removeColumns(0, columnCount());
@@ -265,13 +355,4 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	qDebug()<<"End loading MQTTTopic";
 	return !reader->hasError();
 }
-
-MQTTClient *MQTTTopic::mqttClient() const{
-	return m_MQTTClient;
-}
-
-void MQTTTopic::removeMessage() {
-	m_messagePuffer.removeFirst();
-}
-
 #endif

@@ -1,5 +1,5 @@
 /***************************************************************************
-File		: MQTTSubscriptions.cpp
+File		: MQTTSubscription.cpp
 Project		: LabPlot
 Description	: Represents a subscription made in MQTTClient
 --------------------------------------------------------------------
@@ -28,7 +28,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #ifdef HAVE_MQTT
 
-#include "backend/datasources/MQTTSubscriptions.h"
+#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
 
@@ -36,20 +36,20 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QIcon>
 
 /*!
-  \class MQTTSubscriptions
+  \class MQTTSubscription
   \brief Represents a subscription made in a MQTTClient object. It plays a role in managing MQTTTopic objects
   and makes possible representing the subscriptions and topics in a tree like structure
 
   \ingroup datasources
 */
-MQTTSubscriptions::MQTTSubscriptions(const QString& name)
+MQTTSubscription::MQTTSubscription(const QString& name)
 	: Folder(name),
 	  m_subscriptionName(name) {
-	qDebug()<<"MQTTSubscriptions constructor";
+	qDebug()<<"MQTTSubscription constructor";
 }
 
-MQTTSubscriptions::~MQTTSubscriptions() {	
-	qDebug()<<"MQTTSubscriptions destructor";
+MQTTSubscription::~MQTTSubscription() {
+	qDebug()<<"MQTTSubscription destructor";
 }
 
 /*!
@@ -57,7 +57,7 @@ MQTTSubscriptions::~MQTTSubscriptions() {
  *
  * \param topicName the name of the topic, which will be added to the tree widget
  */
-void MQTTSubscriptions::addTopic(const QString& topicName) {
+void MQTTSubscription::addTopic(const QString& topicName) {
 	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
 	m_topics.push_back(newTopic);
 	qDebug()<<"Adding child topic: "+topicName;
@@ -69,7 +69,7 @@ void MQTTSubscriptions::addTopic(const QString& topicName) {
  *
  * \return a vector of pointers to the children of the MQTTSubscription
  */
-const QVector<MQTTTopic*> MQTTSubscriptions::topics() {
+const QVector<MQTTTopic*> MQTTSubscription::topics() {
 	qDebug()<<"returning topics";
 	return  children<MQTTTopic>();
 }
@@ -79,7 +79,7 @@ const QVector<MQTTTopic*> MQTTSubscriptions::topics() {
  *
  * \return a pointer to the parent MQTTTopic of the object
  */
-MQTTClient* MQTTSubscriptions::mqttClient() const{
+MQTTClient* MQTTSubscription::mqttClient() const{
 	return m_MQTTClient;
 }
 
@@ -91,7 +91,7 @@ MQTTClient* MQTTSubscriptions::mqttClient() const{
  * \param message the message to pass
  * \param topicName the name of the topic the message was sent to
  */
-void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){	
+void MQTTSubscription::messageArrived(const QString& message, const QString& topicName){
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
 	//search for the topic among the MQTTTopic children
@@ -136,7 +136,7 @@ void MQTTSubscriptions::messageArrived(const QString& message, const QString& to
  *
  * \return m_subscriptionName
  */
-QString MQTTSubscriptions::subscriptionName() const {
+QString MQTTSubscription::subscriptionName() const {
 	return m_subscriptionName;
 }
 
@@ -145,14 +145,14 @@ QString MQTTSubscriptions::subscriptionName() const {
  *
  * \param client
  */
-void MQTTSubscriptions::setMQTTClient(MQTTClient* client) {
+void MQTTSubscription::setMQTTClient(MQTTClient* client) {
 	m_MQTTClient = client;
 }
 
 /*!
- *\brief Returns the icon of MQTTSubscriptions
+ *\brief Returns the icon of MQTTSubscription
  */
-QIcon MQTTSubscriptions::icon() const {
+QIcon MQTTSubscription::icon() const {
 	QIcon icon;
 	icon = QIcon::fromTheme("labplot-MQTT");
 	return icon;
@@ -164,8 +164,8 @@ QIcon MQTTSubscriptions::icon() const {
 /*!
   Saves as XML.
  */
-void MQTTSubscriptions::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTSubscriptions");
+void MQTTSubscription::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("MQTTSubscription");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -178,13 +178,13 @@ void MQTTSubscriptions::save(QXmlStreamWriter* writer) const {
 	for(auto* topic : children<MQTTTopic>(IncludeHidden))
 		topic->save(writer);
 
-	writer->writeEndElement(); // "MQTTSubscriptions"
+	writer->writeEndElement(); // "MQTTSubscription"
 }
 
 /*!
   Loads from XML.
 */
-bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
+bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 	qDebug()<<"Start loading MQTTSubscripiton";
 	if (!readBasicAttributes(reader))
 		return false;
@@ -195,7 +195,7 @@ bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTSubscriptions")
+		if (reader->isEndElement() && reader->name() == "MQTTSubscription")
 			break;
 
 		if (!reader->isStartElement())

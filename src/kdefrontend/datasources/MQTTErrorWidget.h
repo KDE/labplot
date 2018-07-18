@@ -24,7 +24,7 @@ private:
 	MQTTClient* m_client ;
 
 private slots:
-	void makeChange();
+	void tryToReconnect();
 };
 #endif
 

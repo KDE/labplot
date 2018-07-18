@@ -48,7 +48,7 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
-#include "backend/datasources/MQTTSubscriptions.h"
+#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #endif
 #include "backend/core/Project.h"
@@ -540,7 +540,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
-	} else if (className == "MQTTSubscriptions") {
+	} else if (className == "MQTTSubscription") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
@@ -551,7 +551,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		QList<MQTTClient*> list;
 		for (auto* aspect: selectedAspects) {
-			QString clientName = qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient()->name();
+			QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
 			bool found = false;
 			for (int i = 0; i < list.size(); ++i) {
 				if(list.at(i)->name() == clientName) {
@@ -560,7 +560,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 				}
 			}
 			if(!found)
-				list << qobject_cast<MQTTSubscriptions*>(aspect)->mqttClient();
+				list << qobject_cast<MQTTSubscription*>(aspect)->mqttClient();
 		}
 		m_mainWindow->m_liveDataDock->setMQTTClients(list);
 

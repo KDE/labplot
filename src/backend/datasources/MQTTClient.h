@@ -17,7 +17,7 @@
 
 class QString;
 class AbstractFileFilter;
-class MQTTSubscriptions;
+class MQTTSubscription;
 class QAction;
 
 class MQTTClient : public Folder{
@@ -75,16 +75,16 @@ public:
 	ReadingType readingType() const;
 	void setReadingType(ReadingType);
 
-	int sampleRate() const;
-	void setSampleRate(int);
+	int sampleSize() const;
+	void setSampleSize(int);
 
 	bool isPaused() const;
 
 	void setUpdateInterval(int);
 	int updateInterval() const;
 
-	void setKeepNvalues(int);
-	int keepNvalues() const;
+	void setKeepNValues(int);
+	int keepNValues() const;
 
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
@@ -183,8 +183,8 @@ private:
 	bool m_prepared;
 	bool m_keepLastValues;
 
-	int m_sampleRate;
-	int m_keepNvalues;
+	int m_sampleSize;
+	int m_keepNValues;
 	int m_updateInterval;
 
 	AbstractFileFilter* m_filter;
@@ -218,7 +218,7 @@ private:
 	bool m_mqttRetain;
 	bool m_mqttUseID;
 	bool m_mqttUseAuthentication;
-	QVector<MQTTSubscriptions*> m_mqttSubscriptions;
+	QVector<MQTTSubscription*> m_mqttSubscriptions;
 	bool m_disconnectForWill;
 	bool m_loaded;
 	int m_subscriptionsLoaded;

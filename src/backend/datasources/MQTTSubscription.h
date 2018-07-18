@@ -1,5 +1,5 @@
-#ifndef MQTTSUBSCRIPTIONS_H
-#define MQTTSUBSCRIPTIONS_H
+#ifndef MQTTSUBSCRIPTION_H
+#define MQTTSUBSCRIPTION_H
 
 #include <QVector>
 #include <QString>
@@ -7,12 +7,12 @@
 #include "backend/core/Folder.h"
 #include "backend/datasources/MQTTTopic.h"
 
-class MQTTSubscriptions : public Folder{
+class MQTTSubscription : public Folder{
 	Q_OBJECT
 
 public:
-	MQTTSubscriptions(const QString& name);
-	~MQTTSubscriptions() override;
+	MQTTSubscription(const QString& name);
+	~MQTTSubscription() override;
 
 	void setMQTTClient(MQTTClient *client);
 	QString subscriptionName() const;
@@ -38,4 +38,4 @@ signals:
 	void loaded(const QString &);
 };
 
-#endif // MQTTSUBSCRIPTIONS_H
+#endif // MQTTSUBSCRIPTION_H
