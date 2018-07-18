@@ -225,16 +225,16 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 #ifdef HAVE_MQTT
-	connect(ui.chbID, SIGNAL(stateChanged(int)), this, SLOT(idChecked(int)));
-	connect(ui.chbAuthentication, SIGNAL(stateChanged(int)), this, SLOT(authenticationChecked(int)));
-	connect(ui.bConnect, SIGNAL(clicked()), this, SLOT(mqttConnection()) );
-	connect(m_client, SIGNAL(connected()), this, SLOT(onMqttConnect()) );
+	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::idChecked);
+	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::authenticationChecked);
+	connect(ui.bConnect, &QPushButton::clicked, this, &ImportFileWidget::mqttConnection);
+	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
-	connect(m_client, SIGNAL(messageReceived(QByteArray, QMqttTopicName)), this, SLOT(mqttMessageReceived(QByteArray, QMqttTopicName)) );
+	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
-	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
 	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
 	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
@@ -860,6 +860,8 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 				if(superiorList.at(i) != inferiorList.at(i)) {
 					if((superiorList.at(i) != "+") &&
 							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
+						//then superior can't contain inferior
 						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
 						ok = false;
 						break;
@@ -907,12 +909,10 @@ QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& 
 						break;
 					}
 				}
-			}
-			else
+			} else
 				differ = true;
 
-			if(!differ)
-			{
+			if(!differ)	{
 				for(int i = 0; i < firstList.size(); ++i) {
 					if(i != differIndex) {
 						commonTopic.append(firstList.at(i));
@@ -1088,6 +1088,7 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
 					name.prepend(temp->text(0) + "/");
 				}
 			}
+
 			QStringList nameList;
 			nameList.append(name);
 			QTreeWidgetItem* childItem = new QTreeWidgetItem(nameList);
@@ -2294,7 +2295,7 @@ void ImportFileWidget::mqttSubscribe() {
 	if(item != nullptr) {
 		QTreeWidgetItem *tempItem = item;
 
-		//produce the topic name that the current item represents
+		//determine the topic name that the current item represents
 		name.prepend(item->text(0));
 		if(item->childCount() != 0)
 			name.append("/#");
@@ -2351,7 +2352,7 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 
 				if(name.endsWith("#")) {
-					//adding every topic that the subscription contains
+					//adding every topic that the subscription contains to twSubscriptions
 					addSubscriptionChildren(item, newTopLevelItem);
 
 					//if an already existing subscription contains a topic that the new subscription also contains
@@ -2401,9 +2402,9 @@ void ImportFileWidget::mqttUnsubscribe() {
 		//we can simply unsubscribe from it
 		if(unsubscribeItem->parent() == nullptr)
 			unsubscribeFromTopic(unsubscribeItem->text(0));
+		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
+		//the selected item's parent subscription(top level item of twSubscripitons)
 		else{
-			//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
-			//the selected item's parent subscription(top level item of twSubscripitons)
 			while(unsubscribeItem->parent() != nullptr) {
 				for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
 					if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
@@ -2513,10 +2514,10 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
  * appends the topic's root to the topicList if it isn't in the list already
  * then sets the completer for leTopics
  */
-void ImportFileWidget::setCompleter(const QString& topic) {
-	if(!m_searching) {
-		if(!m_topicList.contains(topic)) {
-			m_topicList.append(topic);
+void ImportFileWidget::setCompleter(const QString& topic) {	
+	if(!m_topicList.contains(topic)) {
+		m_topicList.append(topic);
+		if(!m_searching) {
 			m_completer = new QCompleter(m_topicList, this);
 			m_completer->setCompletionMode(QCompleter::PopupCompletion);
 			m_completer->setCaseSensitivity(Qt::CaseSensitive);
@@ -2526,7 +2527,8 @@ void ImportFileWidget::setCompleter(const QString& topic) {
 }
 
 /*!
- *\brief called when too much time passed since trying to connect to the broker
+ *\brief called when 10 seconds passed since the last time the user searched for a certain root in twTopics
+ * enables updating the completer for le
  */
 void ImportFileWidget::topicTimeout() {
 	qDebug()<<"lejart ido";

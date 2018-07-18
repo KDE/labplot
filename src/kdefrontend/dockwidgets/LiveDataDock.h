@@ -84,8 +84,8 @@ private slots:
 	void willTopicChanged(const QString &);
 	void willMessageTypeChanged(int);
 	void willOwnMessageChanged(const QString&);
-	void updateTopics();
-	void willUpdateChanged(int);
+	void updateWillTopics();
+	void willUpdateTypeChanged(int);
 	void willUpdateNow();
 	void willUpdateIntervalChanged(const QString&);
 	void statisticsChanged(QListWidgetItem *);
@@ -98,7 +98,7 @@ private slots:
 	void topicTimeout();
 	void fillSubscriptions();
 	//void stopStartReceive();
-	void searchTreeItem(const QString& rootName);
+	void scrollToTreeItem(const QString& rootName);
 	void removeClient(const QString&);
 
 signals:
