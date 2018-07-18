@@ -11,6 +11,6 @@ s = serial.Serial("./serial_in", 9600)
 print(s)
 
 while True:
-  cpu_percent = str(psutil.cpu_percent(interval=0.5))
+  cpu_percent = str(psutil.cpu_percent(interval=2.))
   s.write(cpu_percent)
   print 'written ' + cpu_percent

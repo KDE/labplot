@@ -594,7 +594,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
 	DEBUG("AsciiFilterPrivate::readFromLiveDevice(): bytes available = " << device.bytesAvailable() << ", from = " << from);
-	if (!(device.bytesAvailable() > 0)) {
+	if (device.bytesAvailable() <= 0) {
 		DEBUG("	No new data available");
 		return 0;
 	}
@@ -723,7 +723,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	//since the other source types are sequencial we cannot seek on them
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
-	DEBUG("	bytes available = " << device.bytesAvailable());
 
 	//count the new lines, increase actualrows on each
 	//now we read all the new lines, if we want to use sample rate
@@ -740,7 +739,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
 #endif
 		while (!device.atEnd()) {
-			DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 			DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, spreadsheet->sourceType()));
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
 				switch (spreadsheet->sourceType()) {	// different sources need different read methods

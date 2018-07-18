@@ -453,7 +453,7 @@ QMenu* LiveDataSource::createContextMenu() {
 	menu->insertAction(firstAction, m_plotDataAction);
 	menu->insertSeparator(firstAction);
 
-	//TODO: doesnt always make sense...
+	//TODO: doesn't always make sense...
 // 	if (!m_fileWatched)
 // 		menu->insertAction(firstAction, m_reloadAction);
 //
@@ -517,12 +517,15 @@ void LiveDataSource::read() {
 
 			break;
 		case SerialPort:
-			m_serialPort = new QSerialPort;
+			m_serialPort = new QSerialPort(this);
 			m_device = m_serialPort;
+			DEBUG("	Serial: " << m_serialPortName.toStdString() << ", " << m_baudRate);
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
-			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
+			m_serialPort->open(QIODevice::ReadOnly);
+
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
+			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			break;
 		}
 		m_prepared = true;
@@ -580,11 +583,10 @@ void LiveDataSource::read() {
 		break;
 	case SerialPort:
 		DEBUG("reading from the serial port");
-		m_serialPort->setBaudRate(m_baudRate);
-		m_serialPort->setPortName(m_serialPortName);
-		//m_device = m_serialPort;
-		//TODO: Test
-		// close()/open()
+
+		// reading data here
+		if (m_fileType == AbstractFileFilter::Ascii)
+			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	}
 }
