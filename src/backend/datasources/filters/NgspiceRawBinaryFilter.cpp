@@ -174,14 +174,17 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 		return;
 	}
 
-	//skip the first four lines in the header
-	file.readLine();
-	file.readLine();
-	file.readLine();
-	file.readLine();
+	//skip the first three lines in the header
+	file.readLine(); //"Title"
+	file.readLine(); //"Date"
+	file.readLine(); //"Plotname"
+
+	//evaluate the "Flags" line to check whether we have complex numbers
+	QString line = file.readLine();
+	bool hasComplexValues = line.endsWith(QLatin1String("complex\n"));
 
 	//number of variables
-	QString line = file.readLine();
+	line = file.readLine();
 	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
@@ -195,14 +198,21 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
-		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
-		columnModes << AbstractColumn::Numeric;
+		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		if (hasComplexValues) {
+			vectorNames << name + QLatin1String(" REAL");
+			vectorNames << name + QLatin1String(" IMAGINARY");
+			columnModes << AbstractColumn::Numeric;
+			columnModes << AbstractColumn::Numeric;
+		} else {
+			vectorNames << name;
+			columnModes << AbstractColumn::Numeric;
+		}
 	}
 
 	file.readLine(); //skip the line with "Binary:"
 
-	//read the first value to check whether we have complex numbers
-	qint64 pos = file.pos();
+	//read the data
 	//TODO
 }
 
@@ -218,14 +228,17 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 		return dataStrings;
 	}
 
-	//skip the first four lines in the header
-	file.readLine();
-	file.readLine();
-	file.readLine();
-	file.readLine();
+	//skip the first three lines in the header
+	file.readLine(); //"Title"
+	file.readLine(); //"Date"
+	file.readLine(); //"Plotname"
+
+	//evaluate the "Flags" line to check whether we have complex numbers
+	QString line = file.readLine();
+	bool hasComplexValues = line.endsWith(QLatin1String("complex\n"));
 
 	//number of variables
-	QString line = file.readLine();
+	line = file.readLine();
 	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
 
 	//number of points
@@ -239,14 +252,21 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
-		vectorNames << tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
-		columnModes << AbstractColumn::Numeric;
+		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
+		if (hasComplexValues) {
+			vectorNames << name + QLatin1String(" REAL");
+			vectorNames << name + QLatin1String(" IMAGINARY");
+			columnModes << AbstractColumn::Numeric;
+			columnModes << AbstractColumn::Numeric;
+		} else {
+			vectorNames << name;
+			columnModes << AbstractColumn::Numeric;
+		}
 	}
 
 	file.readLine(); //skip the line with "Binary"
 
-	//read the first value to check whether we have complex numbers
-	qint64 pos = file.pos();
+	//read the data
 	//TODO
 
 	return dataStrings;
