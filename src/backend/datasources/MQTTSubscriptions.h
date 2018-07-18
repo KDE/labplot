@@ -20,7 +20,6 @@ public:
 	const QVector<MQTTTopic*> topics();
 	MQTTClient* mqttClient() const;
 	void messageArrived(const QString&, const QString&);
-	void topicRead(const QString&);
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

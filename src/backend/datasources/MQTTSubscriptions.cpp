@@ -1,14 +1,47 @@
+/***************************************************************************
+File		: MQTTSubscriptions.cpp
+Project		: LabPlot
+Description	: Represents a subscription made in MQTTClient
+--------------------------------------------------------------------
+Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+
+***************************************************************************/
+
+/***************************************************************************
+*                                                                         *
+*  This program is free software; you can redistribute it and/or modify   *
+*  it under the terms of the GNU General Public License as published by   *
+*  the Free Software Foundation; either version 2 of the License, or      *
+*  (at your option) any later version.                                    *
+*                                                                         *
+*  This program is distributed in the hope that it will be useful,        *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+*  GNU General Public License for more details.                           *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the Free Software           *
+*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+*   Boston, MA  02110-1301  USA                                           *
+*                                                                         *
+***************************************************************************/
+
 #ifdef HAVE_MQTT
 
 #include "backend/datasources/MQTTSubscriptions.h"
-
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
 
 #include <KLocalizedString>
 #include <QIcon>
 
+/*!
+  \class MQTTSubscriptions
+  \brief Represents a subscription made in a MQTTClient object. It plays a role in managing MQTTTopic objects
+  and makes possible representing the subscriptions and topics in a tree like structure
 
+  \ingroup datasources
+*/
 MQTTSubscriptions::MQTTSubscriptions(const QString& name)
 	: Folder(name),
 	  m_subscriptionName(name) {
@@ -19,36 +52,61 @@ MQTTSubscriptions::~MQTTSubscriptions() {
 	qDebug()<<"MQTTSubscriptions destructor";
 }
 
+/*!
+ *\brief Adds an MQTTTopic as a child
+ *
+ * \param topicName the name of the topic, which will be added to the tree widget
+ */
 void MQTTSubscriptions::addTopic(const QString& topicName) {
 	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
 	m_topics.push_back(newTopic);
 	qDebug()<<"Adding child topic: "+topicName;
-	//this->parentAspect()->addChild(newTopic);
 	addChild(newTopic);
 }
 
+/*!
+ *\brief Returns the object's MQTTTopic children
+ *
+ * \return a vector of pointers to the children of the MQTTSubscription
+ */
 const QVector<MQTTTopic*> MQTTSubscriptions::topics() {
 	qDebug()<<"returning topics";
 	return  children<MQTTTopic>();
 }
 
+/*!
+ *\brief Returns the object's parent
+ *
+ * \return a pointer to the parent MQTTTopic of the object
+ */
 MQTTClient* MQTTSubscriptions::mqttClient() const{
 	return m_MQTTClient;
 }
 
-
-void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){
+/*!
+ *\brief Called when a message arrived to a topic contained by the MQTTSubscription
+ * If the topic can't be found among the children, a new MQTTTopic is instantiated
+ * Passes the messages to the appropriate MQTTTopic
+ *
+ * \param message the message to pass
+ * \param topicName the name of the topic the message was sent to
+ */
+void MQTTSubscriptions::messageArrived(const QString& message, const QString& topicName){	
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
+	//search for the topic among the MQTTTopic children
 	for(int i = 0; i < topics.size(); ++i) {
 		if(topicName == topics[i]->topicName()) {
+			//pass the message to the topic
 			topics[i]->newMessage(message);
+
+			//read the message if needed
 			if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
 					!m_MQTTClient->isPaused())
 				topics[i]->read();
 
+			//add topic to m_topics if it isn't part of it
 			bool addKnown = true;
-
 			for(int j = 0; j < m_topics.size(); ++j) {
 				if(m_topics[j]->topicName() == topics[i]->topicName()) {
 					addKnown = false;
@@ -63,6 +121,7 @@ void MQTTSubscriptions::messageArrived(const QString& message, const QString& to
 		}
 	}
 
+	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if(!found) {
 		addTopic(topicName);
 		m_topics.last()->newMessage(message);
@@ -72,19 +131,39 @@ void MQTTSubscriptions::messageArrived(const QString& message, const QString& to
 	}
 }
 
-void MQTTSubscriptions::topicRead(const QString& topicName) {
-	for(int i = 0; i < m_topics.count(); ++i) {
-		if(topicName == m_topics[i]->topicName()) {
-			m_topics[i]->read();
-			break;
-		}
-	}
-}
-
+/*!
+ *\brief Returns the subscription's name
+ *
+ * \return m_subscriptionName
+ */
 QString MQTTSubscriptions::subscriptionName() const {
 	return m_subscriptionName;
 }
 
+/*!
+ *\brief Sets the MQTTClient the subscription belongs to
+ *
+ * \param client
+ */
+void MQTTSubscriptions::setMQTTClient(MQTTClient* client) {
+	m_MQTTClient = client;
+}
+
+/*!
+ *\brief Returns the icon of MQTTSubscriptions
+ */
+QIcon MQTTSubscriptions::icon() const {
+	QIcon icon;
+	icon = QIcon::fromTheme("labplot-MQTT");
+	return icon;
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+/*!
+  Saves as XML.
+ */
 void MQTTSubscriptions::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("MQTTSubscriptions");
 	writeBasicAttributes(writer);
@@ -102,6 +181,9 @@ void MQTTSubscriptions::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // "MQTTSubscriptions"
 }
 
+/*!
+  Loads from XML.
+*/
 bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 	qDebug()<<"Start loading MQTTSubscripiton";
 	if (!readBasicAttributes(reader))
@@ -154,15 +236,4 @@ bool MQTTSubscriptions::load(XmlStreamReader* reader, bool preview) {
 	loaded(this->name());
 	return !reader->hasError();
 }
-
-void MQTTSubscriptions::setMQTTClient(MQTTClient* client) {
-	m_MQTTClient = client;
-}
-
-QIcon MQTTSubscriptions::icon() const {
-	QIcon icon;
-	icon = QIcon::fromTheme("labplot-MQTT");
-	return icon;
-}
-
 #endif
