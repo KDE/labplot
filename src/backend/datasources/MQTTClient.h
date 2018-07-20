@@ -94,7 +94,7 @@ public:
 	void setMqttClientId(const QString&);
 	QMqttClient mqttClient() const;
 
-	void addMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
+	void addInitialMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
 	QVector<QString> mqttSubscribtions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
@@ -114,14 +114,10 @@ public:
 	AbstractFileFilter* filter() const;
 
 	QIcon icon() const override;
-	/*QMenu* createContextMenu() override;
-		QWidget* view() const override;*/
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	int topicNumber();
-	int topicIndex(const QString&);
 	QVector<QString> topicNames() const;
 	bool checkAllArrived();
 
@@ -152,7 +148,7 @@ public:
 	void startWillTimer() const;
 	void stopWillTimer() const;
 
-	void setWillForMqtt() ;
+	void updateWillMessage() ;
 
 	void setMqttRetain(bool);
 	bool mqttRetain() const;
@@ -235,7 +231,7 @@ private slots:
 
 signals:
 	void mqttSubscribed();
-	void mqttNewTopicArrived();
+	void mqttTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&);
 };

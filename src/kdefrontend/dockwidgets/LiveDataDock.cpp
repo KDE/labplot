@@ -190,14 +190,14 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 
 	if(m_previousMQTTClient == nullptr) {
 		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateWillTopics);
+		connect(fds, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
 	}
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
 	else if(m_previousMQTTClient->clientHostName() != fds->clientHostName()) {
 		qDebug()<<"At load host name not equal: "<<m_previousMQTTClient->clientHostName()<<" "<<fds->clientHostName();
 		disconnect(m_previousMQTTClient, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		disconnect(m_previousMQTTClient, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateWillTopics);
+		disconnect(m_previousMQTTClient, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
 		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
@@ -214,7 +214,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		fillSubscriptions();
 
 		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::mqttNewTopicArrived, this, &LiveDataDock::updateWillTopics);
+		connect(fds, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
 		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	}
 
@@ -678,7 +678,7 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
 }
 
 /*!
- *\brief called when the mqttNewTopicArrived signal of a MQTTClient from m_mqttClients is emitted
+ *\brief called when the mqttTopicsChanged signal of a MQTTClient from m_mqttClients is emitted
  * updates the content of the cbWillTopic with every topic belonging to the MQTTClient
  */
 void LiveDataDock::updateWillTopics() {
@@ -739,7 +739,7 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
  */
 void LiveDataDock::willUpdateNow() {	
 	for (auto* source: m_mqttClients)
-		source->setWillForMqtt();
+		source->updateWillMessage();
 }
 
 /*!
@@ -1105,7 +1105,6 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 			}
 			return ok;
 		}
-
 		return false;
 	}
 }

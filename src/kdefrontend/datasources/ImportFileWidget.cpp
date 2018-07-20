@@ -595,7 +595,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 		client->setMqttClientId(m_client->clientId());
 
 	for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
-		client->addMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+		client->addInitialMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 	}
 
 	client->setMqttRetain(ui.chbRetain->isChecked());
