@@ -31,6 +31,7 @@
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
@@ -108,6 +109,14 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
+		if (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this)) {
+			QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
+			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, SIGNAL(importFromFileRequested()));
+			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, SIGNAL(importFromSQLDatabaseRequested()));
+			menu->addMenu(subMenu);
+			menu->addSeparator();
+		}
+
 		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
 		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
 		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));

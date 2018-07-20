@@ -1405,6 +1405,9 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
+// 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
+		connect(part, SIGNAL(importFromFileRequested()), this, SLOT(importFileDialog()));
+		connect(part, &AbstractPart::importFromSQLDatabaseRequested, this, &MainWin::importSqlDialog);
 		//TODO: export, print and print preview should be handled in the views and not in MainWin.
 		connect(part, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
 		connect(part, SIGNAL(printRequested()), this, SLOT(print()));
