@@ -59,6 +59,8 @@ protected:
 
 signals:
 	void showRequested();
+	void importFromFileRequested();
+	void importFromSQLDatabaseRequested();
 	void exportRequested();
 	void printRequested();
 	void printPreviewRequested();
