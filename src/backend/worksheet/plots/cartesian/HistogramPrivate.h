@@ -59,10 +59,8 @@ class HistogramPrivate : public QGraphicsItem {
 
 		void retransform();
 		void updateLines();
-		void verticalOrdinaryHistogram();
-		void verticalCumulativeHistogram();
-		void horizontalOrdinaryHistogram();
-		void horizontalCumulativeHistogram();
+		void verticalHistogram();
+		void horizontalHistogram();
 		void updateValues();
 		void updateFilling();
 		bool swapVisible(bool on);

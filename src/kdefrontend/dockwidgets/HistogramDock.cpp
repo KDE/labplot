@@ -175,7 +175,7 @@ void HistogramDock::init(){
 	//histogram type
 	ui.cbType->addItem(i18n("Ordinary Histogram"));
 	ui.cbType->addItem(i18n("Cumulative Histogram"));
-	ui.cbType->addItem(i18n("AvgShifted Histogram"));
+// 	ui.cbType->addItem(i18n("AvgShifted Histogram"));
 
 	//Orientation
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -378,7 +378,6 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	connect(m_curve, SIGNAL(valuesColorChanged(QColor)), this, SLOT(curveValuesColorChanged(QColor)));
 
 	//Filling-Tab
-	connect( m_curve, SIGNAL(fillingPositionChanged(Histogram::FillingPosition)), this, SLOT(curveFillingPositionChanged(Histogram::FillingPosition)) );
 	connect( m_curve, SIGNAL(fillingTypeChanged(PlotArea::BackgroundType)), this, SLOT(curveFillingTypeChanged(PlotArea::BackgroundType)) );
 	connect( m_curve, SIGNAL(fillingColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle)) );
 	connect( m_curve, SIGNAL(fillingImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle)) );
