@@ -669,6 +669,41 @@ void HistogramPrivate::retransform() {
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
+	//re-calculate the histogram
+	if (m_histogram)
+			gsl_histogram_free(m_histogram);
+
+	const int count = symbolPointsLogical.count();
+	if (count > 0) {
+		const double min = dataColumn->minimum();
+		const double max = dataColumn->maximum();
+		switch (binningMethod) {
+			case Histogram::ByNumber:
+				m_bins = (size_t)binCount;
+				break;
+			case Histogram::SquareRoot:
+				m_bins = (size_t)sqrt(count);
+				break;
+			case Histogram::RiceRule:
+				m_bins = (size_t)2*cbrt(count);
+				break;
+			case Histogram::ByWidth:
+				m_bins = (size_t) (max-min)/binWidth;
+				break;
+			case Histogram::SturgisRule:
+				m_bins =(size_t) 1 + 3.33*log(count);
+				break;
+		}
+
+		m_histogram = gsl_histogram_alloc (m_bins);
+		gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
+
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+				gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
+		}
+	}
+
 	m_suppressRecalc = true;
 	updateLines();
 	updateValues();
@@ -759,23 +794,6 @@ void HistogramPrivate::verticalCumulativeHistogram() {
 	}
 }
 
-void HistogramPrivate::verticalHistogram() {
-	switch(type) {
-		case Histogram::Ordinary: {
-			verticalOrdinaryHistogram();
-			break;
-		}
-		case Histogram::Cumulative: {
-			verticalCumulativeHistogram();
-			break;
-		}
-		case Histogram::AvgShift: {
-			//TODO
-			break;
-		}
-	}
-}
-
 void HistogramPrivate::horizontalOrdinaryHistogram() {
 	QPointF tempPoint,tempPoint1;
 	double yAxisMin = dataColumn->minimum();
@@ -860,23 +878,6 @@ void HistogramPrivate::horizontalCumulativeHistogram() {
 	}
 }
 
-void HistogramPrivate::horizontalHistogram() {
-	switch(type) {
-		case Histogram::Ordinary: {
-			horizontalOrdinaryHistogram();
-			break;
-		}
-		case Histogram::Cumulative: {
-			horizontalCumulativeHistogram();
-			break;
-		}
-		case Histogram::AvgShift: {
-			//TODO
-			break;
-		}
-	}
-}
-
 /*!
   recalculates the painter path for the lines connecting the data points.
   Called each time when the type of this connection is changed.
@@ -885,52 +886,33 @@ void HistogramPrivate::updateLines() {
 	linePath = QPainterPath();
 	lines.clear();
 
-	const int count=symbolPointsLogical.count();
-
-	//nothing to do, if no data points available
-	if (count <= 1) {
-		recalcShapeAndBoundingRect();
-		return;
-	}
-
-	const double min = dataColumn->minimum();
-	const double max = dataColumn->maximum();
-	switch (binningMethod) {
-		case Histogram::ByNumber:
-			m_bins = (size_t)binCount;
-			break;
-		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(count);
-			break;
-		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(count);
-			break;
-		case Histogram::ByWidth:
-			m_bins = (size_t) (max-min)/binWidth;
-			break;
-		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(count);
-			break;
-	}
-
-	if (m_histogram)
-		gsl_histogram_free(m_histogram);
-
-	m_histogram = gsl_histogram_alloc (m_bins);
-	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
-
-	for (int row = 0; row < dataColumn->rowCount(); ++row) {
-		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
-			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
-	}
-
 	switch(orientation) {
 		case Histogram::Vertical: {
-			verticalHistogram();
+			switch(type) {
+			case Histogram::Ordinary:
+				verticalOrdinaryHistogram();
+				break;
+			case Histogram::Cumulative:
+				verticalCumulativeHistogram();
+				break;
+			case Histogram::AvgShift:
+				//TODO
+				break;
+			}
 			break;
 		}
 		case Histogram::Horizontal: {
-			horizontalHistogram();
+			switch(type) {
+			case Histogram::Ordinary:
+				horizontalOrdinaryHistogram();
+				break;
+			case Histogram::Cumulative:
+				horizontalCumulativeHistogram();
+				break;
+			case Histogram::AvgShift:
+				//TODO
+				break;
+			}
 			break;
 		}
 	}
