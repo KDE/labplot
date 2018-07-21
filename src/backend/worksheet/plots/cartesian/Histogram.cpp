@@ -767,16 +767,45 @@ void HistogramPrivate::horizontalHistogram() {
 	const double max = dataColumn->maximum();
 	const double width = (max - min)/m_bins;
 	double value = 0.;
-	for(size_t i = 0; i < m_bins; ++i) {
-		if (type == Histogram::Ordinary)
-			value = gsl_histogram_get(m_histogram,i);
-		else
-			value += gsl_histogram_get(m_histogram,i);
+	if (lineType == Histogram::Bars) {
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram,i);
+			else
+				value += gsl_histogram_get(m_histogram,i);
 
-		const double y = min + i*width;
-		lines.append(QLineF(0., y, value, y));
-		lines.append(QLineF(value, y, value, y + width));
-		lines.append(QLineF(value, y + width, 0., y + width));
+			const double y = min + i*width;
+			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(value, y, value, y + width));
+			lines.append(QLineF(value, y + width, 0., y + width));
+		}
+	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
+		double prevValue = 0.;
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double y = min + i*width;
+			lines.append(QLineF(prevValue, y, value, y));
+			lines.append(QLineF(value, y, value, y + width));
+
+			if (i== m_bins - 1)
+				lines.append(QLineF(value, y + width, 0., y + width));
+
+			prevValue = value;
+		}
+	} else { //drop lines
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double y = min + i*width - width/2;
+			lines.append(QLineF(0., y, value, y));
+		}
 	}
 
 	lines.append(QLineF(0., min, 0., max));
