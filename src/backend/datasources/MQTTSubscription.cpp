@@ -59,7 +59,6 @@ MQTTSubscription::~MQTTSubscription() {
  */
 void MQTTSubscription::addTopic(const QString& topicName) {
 	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
-	m_topics.push_back(newTopic);
 	qDebug()<<"Adding child topic: "+topicName;
 	addChild(newTopic);
 }
@@ -105,17 +104,6 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 					!m_MQTTClient->isPaused())
 				topics[i]->read();
 
-			//add topic to m_topics if it isn't part of it
-			bool addKnown = true;
-			for(int j = 0; j < m_topics.size(); ++j) {
-				if(m_topics[j]->topicName() == topics[i]->topicName()) {
-					addKnown = false;
-					break;
-				}
-			}
-			if(addKnown)
-				m_topics.push_back(topics[i]);
-
 			found = true;
 			break;
 		}
@@ -124,10 +112,17 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if(!found) {
 		addTopic(topicName);
-		m_topics.last()->newMessage(message);
-		if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
-				!m_MQTTClient->isPaused())
-			m_topics.last()->read();
+		MQTTTopic* newTopic;
+		for(int i = 0; i < topics.size(); ++i) {
+			if(topicName == topics[i]->topicName()) {
+				newTopic = topics[i];
+				break;
+			}
+		}
+
+		newTopic->newMessage(message);
+		if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
+			newTopic->read();
 	}
 }
 
@@ -224,7 +219,6 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 				delete topic;
 				return false;
 			}
-			m_topics.push_back(topic);
 			addChildFast(topic);
 		} else {// unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

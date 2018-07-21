@@ -28,7 +28,6 @@ public:
 private:
 	QString m_subscriptionName;
 	MQTTClient* m_MQTTClient;
-	QVector<MQTTTopic*> m_topics;
 
 public slots:
 
