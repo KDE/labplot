@@ -72,8 +72,55 @@ qint64 AsciiFilter::readFromLiveDevice(QIODevice& device, AbstractDataSource* da
 	return d->readFromLiveDevice(device, dataSource, from);
 }
 
+#ifdef HAVE_MQTT
+/*!
+  reads the content of a message received by the topic.
+*/
 void AsciiFilter::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {
 	d->readMQTTTopic(message, topic, dataSource);
+}
+
+/*!
+  provides a preview of the data received by the topic.
+*/
+void AsciiFilter::mqttPreview(QVector<QStringList>& list, const QString& message, const QString& topic) {
+	d->mqttPreview(list, message, topic);
+}
+
+/*!
+  Returns the statistical data, that the MQTTTopic needs for the will message.
+*/
+QString AsciiFilter::mqttColumnStatistics(const MQTTTopic* topic) const{
+	return d->mqttColumnStatistics(topic);
+}
+
+/*!
+  Returns the column mode of the last column (the value column of the MQTTTopic).
+*/
+AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode() const{
+	return d->mqttColumnMode();
+}
+
+/*!
+  After the MQTTTopic is loaded, prepares the filter for reading.
+*/
+void AsciiFilter::setPreparedForMQTT(bool prepared, MQTTTopic* topic, const QString& separator) {
+	d->setPreparedForMQTT(prepared, topic, separator);
+}
+#endif
+
+/*!
+  returns the separator used by the filter.
+*/
+QString AsciiFilter::separator() const {
+	return d->separator();
+}
+
+/*!
+  returns the separator used by the filter.
+*/
+int AsciiFilter::isPrepared() {
+	return d->isPrepared();
 }
 
 /*!
@@ -1653,21 +1700,21 @@ int AsciiFilterPrivate::isPrepared() {
     return m_prepared;
 }
 
-int AsciiFilter::isPrepared() {
-    return d->isPrepared();
-}
-
 #ifdef HAVE_MQTT
-void AsciiFilter::mqttPreview(QVector<QStringList>& list, const QString& message, const QString& topic) {
-	d->mqttPreview(list, message, topic);
-}
 
+/*!
+ * \brief Offers a preview about the data received by the topic
+ * \param list
+ * \param message
+ * \param topic
+ */
 void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& message, const QString& topic) {
 	QVector<QStringList> dataStrings;
 
 	if (!message.isEmpty()) {
 		qDebug()<<"ascii mqtt preview" <<message<< "  " <<topic;
 
+		//check how many lines can be read
 		int linesToRead = 0;
 		QVector<QString> newData;
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
@@ -1682,24 +1729,28 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 		}
 		qDebug() <<" data investigated, lines to read: "<<linesToRead;
 
+		//if no lines can be read, then we don't modify the list
 		if (linesToRead == 0) {
-			list = dataStrings;
+			//list = dataStrings;
 			return;
 		}
 
 		if(!list.isEmpty()) {
+			//if lines to read is smaller then the size of the list, we shrink the list
 			if(linesToRead < list.size()) {
 				int oldSize = list.size();
 				for(int i = 0; i < oldSize - linesToRead; ++i)
 					list.removeLast();
 				qDebug()<<"Lines to read smaller: "	<<linesToRead;
 			}
+			//otherwise we will only read until the size of the list
 			else if (linesToRead > list.size()) {
 				linesToRead = list.size();
 				qDebug()<<"Lines to bigger: "	<<linesToRead;
 			}
 		}
 
+		//Determine the number of columns
 		int colSize = 0;
 		if(list.isEmpty()) {
 			if (createIndexEnabled)
@@ -1712,6 +1763,7 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 		columnModes.resize(colSize);
 		qDebug() << "Column modes resized: " << colSize;
 
+		//if this is the first topic, we check if index has to be added
 		if(list.isEmpty())
 			if (createIndexEnabled) {
 				columnModes[0] = AbstractColumn::ColumnMode::Integer;
@@ -1719,13 +1771,12 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 			}
 
 		vectorNames.append( topic);
-
-		qDebug()<<"vector name set on : " << topic;
-
+		//Set the column mode for the topic
 		columnModes[colSize - 1] = AbstractFileFilter::columnMode(newData[0], dateTimeFormat, numberFormat);
 
 		qDebug()<<"column mode "<<colSize - 1 << "set on: " << topic << "while column mode size: " <<columnModes.size();
 
+		//improve the column mode, based on the rest of the data
 		for(int i = 0; i < linesToRead; i++) {
 			QString tempLine = newData[i];
 			if (simplifyWhitespacesEnabled)
@@ -1760,9 +1811,9 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 				forStart = 1;
 				forEnd = linesToRead;
 				dataStrings = list;
-				qDebug() << "first column empty";
 				QLocale locale(numberFormat);
-				qDebug()<<columnModes.size()<<"   colsize-1= "<<colSize-1;
+				//this is the first column having values, after at least 1 empty column
+				//until now only one row was filled with NaN values, so for starters we fill this row with the new value
 				switch (columnModes[colSize - 1]) {
 				case AbstractColumn::Numeric: {
 					bool isNumber;
@@ -1793,6 +1844,7 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 				qDebug()<<"Column after first column empty done";
 			}
 		}
+		//We add every forEnd-forStart values to the list
 		for (int i = forStart; i < forEnd; ++i) {
 			qDebug()<<"line = newData[i]";
 			QString line = newData[i];
@@ -1800,19 +1852,23 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
-			if (line.isEmpty() || line.startsWith(commentCharacter)) // skip empty or commented lines
+			//skip empty or commented lines
+			if (line.isEmpty() || line.startsWith(commentCharacter))
 				continue;
 
 			QLocale locale(numberFormat);
 
 			QStringList lineString;
+			//We don't have to do any preparation if there were already data containing topics
 			if(!list.isEmpty() &&  mqttPreviewFirstEmptyColCount == 0)
 				lineString = dataStrings[i];
 
+			//Add index if it is the case
 			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) )
 				if (createIndexEnabled)
 					lineString += QString::number(i);
 
+			//If this is the first not empty topic, add nan value to all the empty topics before this one
 			if(!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0){
 				for(int j = 0; j < mqttPreviewFirstEmptyColCount; j++) {
 					lineString += QString::number(nanValue, 'g', 16);
@@ -1820,6 +1876,7 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 				}
 			}
 
+			//Add the actual value to the topic
 			switch (columnModes[colSize - 1]) {
 			case AbstractColumn::Numeric: {
 				bool isNumber;
@@ -1849,18 +1906,24 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 			}
 			qDebug()<<"column updated with value";
 
+			// if the list was empty, or this is the first not empty topic, we append the new line
 			if(list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0))
 				dataStrings << lineString;
+			//Otherwise we update the already existing line
 			if (!list.isEmpty() && mqttPreviewFirstEmptyColCount == 0)
 				dataStrings[i] = lineString;
 		}
+		//The first empty topics were taken care of
 		if(mqttPreviewFirstEmptyColCount > 0) {
 			mqttPreviewFirstEmptyColCount = 0;
 		}
 	}
+	//the message is empty and there were only empty messages before this
 	else if (list.isEmpty() || (!list.isEmpty() && mqttPreviewFirstEmptyColCount > 0) ) {
+		//increment the counter
 		mqttPreviewFirstEmptyColCount ++;
 		qDebug()<<"first column empty: "<< mqttPreviewFirstEmptyColCount;
+		//determine number of columns
 		int colSize;
 		if (mqttPreviewFirstEmptyColCount == 1){
 			if (createIndexEnabled)
@@ -1871,32 +1934,39 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 			colSize = columnModes.size() + 1;
 		columnModes.resize(colSize);
 
+		//add index if needed
 		if (mqttPreviewFirstEmptyColCount == 1)
 			if (createIndexEnabled) {
 				columnModes[0] = AbstractColumn::ColumnMode::Integer;
 				vectorNames.prepend("index");
 			}
 
+		//Add new column fot the mepty topic
 		vectorNames.append( topic);
 		columnModes[colSize-1] = AbstractColumn::ColumnMode::Numeric;
 		qDebug()<<"Column mode set for empty column";
 
+		//Add a NaN value to the topic's column
 		QStringList lineString;
 		if (mqttPreviewFirstEmptyColCount == 1) {
+			//Add index if needed
 			if(createIndexEnabled)
 				lineString += QString::number(0);
 			lineString += QString::number(nanValue, 'g', 16);
+			//Append since this is the first empty column
 			dataStrings << lineString;
 			qDebug()<<"new line added with nan";
 		}
 		else {
+			//Update the already existing line
 			dataStrings = list;
 			dataStrings[0] += QString::number(nanValue, 'g', 16);
 			qDebug()<<"line expanded with nan";
 		}
 	}
+	//The message is empty but there already was a non empty message
 	else if(!list.isEmpty()) {
-
+		//Append vector name
 		vectorNames.append( topic);
 		qDebug()<<"vector name set on : " << topic;
 
@@ -1904,17 +1974,19 @@ void AsciiFilterPrivate::mqttPreview(QVector<QStringList>& list, const QString& 
 		columnModes.resize(colSize);
 		columnModes[colSize-1] = AbstractColumn::ColumnMode::Numeric;
 		dataStrings = list;
+		//Add as many NaN values as many lines the list already has
 		for (int i = 0; i < dataStrings.size(); ++i) {
 			dataStrings[i] += QString::number(nanValue, 'g', 16);
 		}
 	}
+	//update the list
 	list = dataStrings;
 }
 
-QString AsciiFilter::mqttColumnStatistics(const MQTTTopic* topic) const{
-	return d->mqttColumnStatistics(topic);
-}
-
+/*!
+ * \brief Returns the statistical data that is needed by the topic for its MQTTClient's will message
+ * \param topic
+ */
 QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic) const{
 	qDebug()<<"MQTT Column Statistics";
 
@@ -1922,6 +1994,7 @@ QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic) const{
 	QString statistics;
 
 	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
+	//Add every statistical data to the string, the flag of which is set true
 	for(int i = 0; i <= willStatistics.size(); i++) {
 		if(willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatistics>(i) ) {
@@ -1978,16 +2051,19 @@ QString AsciiFilterPrivate::mqttColumnStatistics(const MQTTTopic* topic) const{
 	return statistics;
 }
 
-AbstractColumn::ColumnMode AsciiFilter::mqttColumnMode() const{
-	return d->mqttColumnMode();
-}
-
 AbstractColumn::ColumnMode AsciiFilterPrivate::mqttColumnMode() const{
-
 	return columnModes[m_actualCols - 1];
 }
 
+/*!
+ * \brief reads the content of a message received by the topic.
+ * Uses the settings defined in the MQTTTopic's MQTTClient
+ * \param message
+ * \param topic
+ * \param dataSource
+ */
 void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& topic, AbstractDataSource*dataSource) {
+	//If the message is empty, there is nothing to do
 	if (message.isEmpty()) {
 		DEBUG("No new data available");
 		return;
@@ -1999,6 +2075,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 	if (!m_prepared) {
 		qDebug()<<"Start prepare mqtt";
+		//Prepare the filter
 		const int mqttPrepareError = prepareMQTTTopicToRead(message, topic);
 		if (mqttPrepareError != 0) {
 			DEBUG("Mqtt Prepare Error = " << mqttPrepareError);
@@ -2014,7 +2091,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		qDebug() << "fds resized to col: " << m_actualCols;
 		qDebug() << "fds rowCount: " << spreadsheet->rowCount();
 
-		//columns in a file data source don't have any manual changes.
+		//columns in a MQTTTopic don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
 		//data changes will be propagated via an explicit Column::setChanged() call once new data was read.
 		for (int i = 0; i < spreadsheet->childCount<Column>(); i++) {
@@ -2077,8 +2154,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 #ifdef PERFTRACE_LIVE_IMPORT
 	PERFTRACE("AsciiLiveDataImportTotal: ");
 #endif
+
 	MQTTClient::ReadingType readingType;
 	if (!m_prepared) {
+		//if filter is not prepared we read till the end
 		readingType = MQTTClient::ReadingType::TillEnd;
 	} else {
 		//we have to read all the data when reading from end
@@ -2129,10 +2208,12 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 					}
 				}
 			}
+			//if the sample size limit is reached we brake from the outer loop as well
 			if(sampleSizeReached)
 				break;
 		}
 	}
+
 	qDebug()<<"Processing message done";
 	//now we reset the readingType
 	if (static_cast<MQTTClient::ReadingType>(spreadsheet->readingType()) == MQTTClient::ReadingType::FromEnd)
@@ -2150,6 +2231,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 		if (keepNValues == 0)
 			m_actualRows = spreadsheetRowCountBeforeResize;
 		else {
+			//if the keepNValues changed since the last read we have to manage the columns accordingly
 			if(m_actualRows != spreadsheet->keepNValues()) {
 				if(m_actualRows < spreadsheet->keepNValues()) {
 					qDebug()<<m_actualRows;
@@ -2157,6 +2239,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 					qDebug()<<"rowcount set to" << spreadsheet->keepNValues();
 				}
 
+				//Calculate the difference between the old and new keepNValues
 				int rowDiff = 0;
 				if(m_actualRows > spreadsheet->keepNValues()) {
 					rowDiff = m_actualRows -  spreadsheet->keepNValues();
@@ -2175,6 +2258,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
+						//if the keepNValues got smaller then we move the last keepNValues count of data
+						//in the first keepNValues places
 						if(m_actualRows > spreadsheet->keepNValues()) {
 							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<double>*>(m_dataContainer[n])->operator[] (i) =
@@ -2183,6 +2268,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 							}
 						}
 
+						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
+						//then fill the remaining lines with NaN
 						if(m_actualRows < spreadsheet->keepNValues()) {
 							vector->reserve( spreadsheet->keepNValues());
 							vector->resize( spreadsheet->keepNValues());
@@ -2204,6 +2291,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
+						//if the keepNValues got smaller then we move the last keepNValues count of data
+						//in the first keepNValues places
 						if(m_actualRows > spreadsheet->keepNValues()) {
 							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<int>*>(m_dataContainer[n])->operator[] (i) =
@@ -2211,6 +2300,9 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 								qDebug()<< "overwrite row "<<i<<"  "<<m_actualRows - spreadsheet->keepNValues() + i;
 							}
 						}
+
+						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
+						//then fill the remaining lines with 0
 						if(m_actualRows < spreadsheet->keepNValues()) {
 							vector->reserve( spreadsheet->keepNValues());
 							vector->resize( spreadsheet->keepNValues());
@@ -2232,6 +2324,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
+						//if the keepNValues got smaller then we move the last keepNValues count of data
+						//in the first keepNValues places
 						if(m_actualRows > spreadsheet->keepNValues()) {
 							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<QString>*>(m_dataContainer[n])->operator[] (i) =
@@ -2240,6 +2334,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 							}
 						}
 
+						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
+						//then fill the remaining lines with ""
 						if(m_actualRows < spreadsheet->keepNValues()) {
 							vector->reserve( spreadsheet->keepNValues());
 							vector->resize( spreadsheet->keepNValues());
@@ -2256,6 +2352,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
+						//if the keepNValues got smaller then we move the last keepNValues count of data
+						//in the first keepNValues places
 						if(m_actualRows > spreadsheet->keepNValues()) {
 							for(int i = 0; i < spreadsheet->keepNValues(); i++) {
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[] (i) =
@@ -2264,6 +2362,8 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 							}
 						}
 
+						//if the keepNValues got bigger we move the existing values to the last m_actualRows positions
+						//then fill the remaining lines with null datetime
 						if(m_actualRows < spreadsheet->keepNValues()) {
 							vector->reserve( spreadsheet->keepNValues());
 							vector->resize( spreadsheet->keepNValues());
@@ -2282,8 +2382,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 						break;
 					}
 				}
+				//if the keepNValues got smaller resize the spreadsheet
 				if(m_actualRows > spreadsheet->keepNValues())
 					spreadsheet->setRowCount(spreadsheet->keepNValues());
+
+				//set the new row count
 				m_actualRows = spreadsheet->keepNValues();
 				qDebug()<<"actual rows: "<<m_actualRows;
 			}
@@ -2313,12 +2416,10 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				//we had more lines than the fixed size, so we read m_actualRows number of lines
 				if (newLinesTillEnd > m_actualRows) {
 					linesToRead = m_actualRows;
-					//TODO after reading we should skip the next data lines
-					//because it's TillEnd actually
 				} else
 					linesToRead = newLinesTillEnd;
 			} else {
-				//we read max sample rate number of lines when the reading mode
+				//we read max sample size number of lines when the reading mode
 				//is ContinouslyFixed or FromEnd
 				if(spreadsheet->sampleSize() <= spreadsheet->keepNValues())
 					linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
@@ -2343,7 +2444,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	qDebug()<<"linestoread = "<<linesToRead;
 
 	//new rows/resize columns if we don't have a fixed size
-	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
 	if (keepNValues == 0) {
 		qDebug()<<"---- keepNValues == 0";
 
@@ -2472,14 +2572,15 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
 	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
 	newDataIdx = 0;
+	//From end means that we read the last sample size amount of data
 	if (readingType == MQTTClient::ReadingType::FromEnd) {
 		if (m_prepared) {
 			if (newData.size() > spreadsheet->sampleSize())
 				newDataIdx = newData.size() - spreadsheet->sampleSize();
 		}
 	}
+
 	qDebug() << "newDataIdx: " << newDataIdx;
-	//TODO
 	static int indexColumnIdx = 0;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
@@ -2493,12 +2594,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			else
 				line = newData.at(row);
 			qDebug ()<<"line  "<<line;
-			//when we read the whole file we don't care about the previous position
-			//so we don't have to count those bytes
 
-
-			//qDebug() << "line bytes: " << line.size() << " line: " << line;
-			//qDebug() << "reading in row: " << currentRow;
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
@@ -2511,6 +2607,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 			QLocale locale(numberFormat);
 
 			int col = 0;
+			//Add index if needed
 			if (createIndexEnabled) {
 				col = 1;
 				QString tempIndex;
@@ -2555,8 +2652,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 			//setting timestamp on current time
 			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) =  QDateTime::currentDateTime();
-			//static_cast<QVector<int>*>(m_dataContainer[col+1])->operator[](currentRow) =  QDateTime::currentDateTime().time().msecsSinceStartOfDay();
-
 
 			QString valueString = line;
 			qDebug()<<"putting in this line" << valueString<< "    "<<currentRow;
@@ -2595,7 +2690,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				//TODO
 				break;
 			}
-
 
 			currentRow++;
 			qDebug()<<"adding data is ok, current row increment";
@@ -2639,20 +2733,24 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 	}
 
 	qDebug()<<"check m_prepared";
+	//Set prepared true if needed
 	if(!m_prepared)
 		m_prepared = true;
 
 	qDebug()<<"return , comes end";
 }
 
+/*!
+ * \brief Prepares the filter to read from messages received by the MQTTTopic.
+ * Returns whether the preparation was successfull or not
+ * \param message
+ * \param topic
+ */
 int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QString& topic) {
 	vectorNames.append("value");
 	if (endColumn == -1)
 		endColumn = 1;
 	else endColumn++;
-
-	//vectorNames.prepend("timestamp for plot");
-	//endColumn++;
 
 	vectorNames.prepend("timestamp");
 	endColumn++;
@@ -2661,6 +2759,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		vectorNames.prepend("index");
 		endColumn++;
 	}
+
 	m_actualCols = endColumn - startColumn + 1;
 	qDebug()<<"actual cols"<<m_actualCols;
 
@@ -2715,18 +2814,17 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	columnModes[col] = AbstractColumn::DateTime;
 	col++;
 
-	//columnModes[col] = AbstractColumn::Integer;
-	//col++;
-
-
-	auto firstValue = firstLineStringList.takeFirst();//use first value to identify column mode
-	while(firstValue.isEmpty() || firstValue.startsWith(commentCharacter) )
+	auto firstValue = firstLineStringList.takeFirst();//use first value to identify column mode	
+	while(firstValue.isEmpty() || firstValue.startsWith(commentCharacter) )//get the first usable value
 		firstValue = firstLineStringList.takeFirst();
+
 	if (simplifyWhitespacesEnabled)
 		firstValue = firstValue.simplified();
+
 	columnModes[m_actualCols-1] = AbstractFileFilter::columnMode(firstValue, dateTimeFormat, numberFormat);
 	qDebug()<<"-----setting column mode" << "   "<<columnModes[m_actualCols-1]<< "based on value  " << firstValue;
 
+	//Improve the column mode based on the other values from the first line
 	for (auto& valueString : firstLineStringList) {
 		if(!valueString.isEmpty() && !valueString.startsWith(commentCharacter) ){
 			if (createIndexEnabled)
@@ -2750,6 +2848,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 			}
 		}
 	}
+	//Improve the column mode based on the remaining values
 	for (auto& valueString: lineList) {
 		QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		for (auto& valueString2: splitString) {
@@ -2773,6 +2872,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		}
 	}
 
+	//determine rowcount
 	int tempRowCount = 0;
 	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 	for (auto& valueString: newDataList) {
@@ -2784,12 +2884,7 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 		}
 	}
 
-
-
 	QDEBUG("column modes = " << columnModes);
-
-	// ATTENTION: This resets the position in the device to 0
-	//m_actualRows = (int)AsciiFilter::lineNumber(device);
 	m_actualRows = tempRowCount;
 
 	/////////////////////////////////////////////////////////////////
@@ -2809,25 +2904,28 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 
 
 	qDebug()<<"-----final column mode" << "   "<<columnModes[m_actualCols-1];
-
 	return 0;
 }
 
-void AsciiFilter::setPreparedForMQTT(bool prepared, MQTTTopic* topic, const QString& separator) {
-	d->setPreparedForMQTT(prepared, topic, separator);
-}
-
+/*!
+ * \brief After the MQTTTopic was loaded, the filter is prepared for reading
+ * \param prepared
+ * \param topic
+ * \param separator
+ */
 void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, const QString& separator) {
 	m_prepared = prepared;
+	//If originally it was prepared we have to restore the settings
 	if(prepared == true) {
 		m_separator = separator;
-		//m_actualRows = endRow - startRow + 1;
 		m_actualCols = endColumn - startColumn + 1;
 		m_actualRows = topic->rowCount();
+		//set the column modes
 		columnModes.resize(topic->columnCount());
 		for(int i = 0; i < topic->columnCount(); ++i) {
 			columnModes[i] = topic->column(i)->columnMode();
 		}
+		//set the data containers
 		m_dataContainer.resize(m_actualCols);
 		for (int n = 0; n < m_actualCols; ++n) {
 			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
@@ -2870,10 +2968,10 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, con
 	}
 }
 
-QString AsciiFilter::separator() const {
-	return d->separator();
-}
-
+/*!
+ * \brief Returns the separator used by the filter
+ * \return
+ */
 QString AsciiFilterPrivate::separator() const {
 	return m_separator;
 }
