@@ -51,6 +51,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 
 extern "C" {
@@ -622,7 +623,9 @@ bool HistogramPrivate::swapVisible(bool on) {
 void HistogramPrivate::retransform() {
 	if (m_suppressRetransform)
 		return;
-	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
+
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
+
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 
@@ -669,212 +672,143 @@ void HistogramPrivate::retransform() {
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
+	//re-calculate the histogram
+	if (m_histogram)
+			gsl_histogram_free(m_histogram);
+
+	const int count = symbolPointsLogical.count();
+	if (count > 0) {
+		const double min = dataColumn->minimum();
+		const double max = dataColumn->maximum();
+		switch (binningMethod) {
+			case Histogram::ByNumber:
+				m_bins = (size_t)binCount;
+				break;
+			case Histogram::SquareRoot:
+				m_bins = (size_t)sqrt(count);
+				break;
+			case Histogram::RiceRule:
+				m_bins = (size_t)2*cbrt(count);
+				break;
+			case Histogram::ByWidth:
+				m_bins = (size_t) (max-min)/binWidth;
+				break;
+			case Histogram::SturgisRule:
+				m_bins =(size_t) 1 + 3.33*log(count);
+				break;
+		}
+
+		m_histogram = gsl_histogram_alloc (m_bins);
+		gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
+
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+				gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
+		}
+	}
+
 	m_suppressRecalc = true;
 	updateLines();
 	updateValues();
 	m_suppressRecalc = false;
 }
 
-void HistogramPrivate::verticalOrdinaryHistogram() {
-	QPointF tempPoint,tempPoint1;
-	double xAxisMin = dataColumn->minimum();
-	double xAxisMax = dataColumn->maximum();
-	double width = (xAxisMax-xAxisMin)/m_bins;
-	for(size_t i=0; i < m_bins; ++i) {
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(0.0);
-
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(gsl_histogram_get(m_histogram,i));
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(gsl_histogram_get(m_histogram,i));
-
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(gsl_histogram_get(m_histogram,i));
-
-		lines.append(QLineF(tempPoint,tempPoint1));
-
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(gsl_histogram_get(m_histogram,i));
-
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(0.0);
-
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-		xAxisMin+= width;
-	}
-}
-
-void HistogramPrivate::verticalCumulativeHistogram() {
-	double point =0.0;
-	double xAxisMin = dataColumn->minimum();
-	double xAxisMax = dataColumn->maximum();
-	QPointF tempPoint,tempPoint1;
-	double width = (xAxisMax-xAxisMin)/m_bins;
-	for(size_t i=0; i < m_bins; ++i) {
-		point+= gsl_histogram_get(m_histogram,i);
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(0.0);
-
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(point);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(point);
-
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(point);
-
-		lines.append(QLineF(tempPoint,tempPoint1));
-
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(point);
-
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(0.0);
-
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-		xAxisMin+= width;
-	}
-}
-
 void HistogramPrivate::verticalHistogram() {
-	switch(type) {
-		case Histogram::Ordinary: {
-			verticalOrdinaryHistogram();
-			break;
+	const double min = dataColumn->minimum();
+	const double max = dataColumn->maximum();
+	const double width = (max - min)/m_bins;
+	double value = 0.;
+	if (lineType == Histogram::Bars) {
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double x = min + i*width;
+			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, value, x + width, value));
+			lines.append(QLineF(x + width, value, x + width, 0.));
 		}
-		case Histogram::Cumulative: {
-			verticalCumulativeHistogram();
-			break;
+	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
+		double prevValue = 0.;
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double x = min + i*width;
+			lines.append(QLineF(x, prevValue, x, value));
+			lines.append(QLineF(x, value, x + width, value));
+
+			if (i== m_bins - 1)
+				lines.append(QLineF(x + width, value, x + width, 0.));
+
+			prevValue = value;
 		}
-		case Histogram::AvgShift: {
-			//TODO
-			break;
+	} else { //drop lines
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double x = min + i*width - width/2;
+			lines.append(QLineF(x, 0., x, value));
 		}
 	}
-}
 
-void HistogramPrivate::horizontalOrdinaryHistogram() {
-	QPointF tempPoint,tempPoint1;
-	double yAxisMin = dataColumn->minimum();
-	double yAxisMax = dataColumn->maximum();
-	double width = (yAxisMax-yAxisMin)/m_bins;
-	for(size_t i = 0; i < m_bins; ++i) {
-		tempPoint.setY(yAxisMin);
-		tempPoint.setX(0.0);
-
-		tempPoint1.setY(yAxisMin);
-		tempPoint1.setX(gsl_histogram_get(m_histogram,i));
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setY(yAxisMin);
-		tempPoint.setX(gsl_histogram_get(m_histogram,i));
-
-		tempPoint1.setY(yAxisMin + width);
-		tempPoint1.setX(gsl_histogram_get(m_histogram,i));
-
-		lines.append(QLineF(tempPoint,tempPoint1));
-
-		tempPoint.setY(yAxisMin+width);
-		tempPoint.setX(gsl_histogram_get(m_histogram,i));
-
-		tempPoint1.setY(yAxisMin + width);
-		tempPoint1.setX(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setY(yAxisMin + width);
-		tempPoint.setX(0.0);
-
-		tempPoint1.setY(yAxisMin);
-		tempPoint1.setX(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-		yAxisMin += width;
-	}
-}
-
-void HistogramPrivate::horizontalCumulativeHistogram() {
-	double point =0.0;
-	double yAxisMin = dataColumn->minimum();
-	double yAxisMax = dataColumn->maximum();
-	QPointF tempPoint,tempPoint1;
-	double width = (yAxisMax-yAxisMin)/m_bins;
-	for(size_t i=0; i < m_bins; ++i) {
-		point+= gsl_histogram_get(m_histogram,i);
-		tempPoint.setY(yAxisMin);
-		tempPoint.setX(0.0);
-
-		tempPoint1.setY(yAxisMin);
-		tempPoint1.setX(point);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setY(yAxisMin);
-		tempPoint.setX(point);
-
-		tempPoint1.setY(yAxisMin+width);
-		tempPoint1.setX(point);
-
-		lines.append(QLineF(tempPoint,tempPoint1));
-
-		tempPoint.setY(yAxisMin+width);
-		tempPoint.setX(point);
-
-		tempPoint1.setY(yAxisMin+width);
-		tempPoint1.setX(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-
-		tempPoint.setY(yAxisMin+width);
-		tempPoint.setX(0.0);
-
-		tempPoint1.setY(yAxisMin);
-		tempPoint1.setX(0.0);
-
-		lines.append(QLineF(tempPoint, tempPoint1));
-		yAxisMin+= width;
-	}
+	lines.append(QLineF(min, 0., max, 0.));
 }
 
 void HistogramPrivate::horizontalHistogram() {
-	switch(type) {
-		case Histogram::Ordinary: {
-			horizontalOrdinaryHistogram();
-			break;
+	const double min = dataColumn->minimum();
+	const double max = dataColumn->maximum();
+	const double width = (max - min)/m_bins;
+	double value = 0.;
+	if (lineType == Histogram::Bars) {
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram,i);
+			else
+				value += gsl_histogram_get(m_histogram,i);
+
+			const double y = min + i*width;
+			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(value, y, value, y + width));
+			lines.append(QLineF(value, y + width, 0., y + width));
 		}
-		case Histogram::Cumulative: {
-			horizontalCumulativeHistogram();
-			break;
+	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
+		double prevValue = 0.;
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double y = min + i*width;
+			lines.append(QLineF(prevValue, y, value, y));
+			lines.append(QLineF(value, y, value, y + width));
+
+			if (i== m_bins - 1)
+				lines.append(QLineF(value, y + width, 0., y + width));
+
+			prevValue = value;
 		}
-		case Histogram::AvgShift: {
-			//TODO
-			break;
+	} else { //drop lines
+		for(size_t i = 0; i < m_bins; ++i) {
+			if (type == Histogram::Ordinary)
+				value = gsl_histogram_get(m_histogram, i);
+			else
+				value += gsl_histogram_get(m_histogram, i);
+
+			const double y = min + i*width - width/2;
+			lines.append(QLineF(0., y, value, y));
 		}
 	}
+
+	lines.append(QLineF(0., min, 0., max));
 }
 
 /*!
@@ -882,58 +816,15 @@ void HistogramPrivate::horizontalHistogram() {
   Called each time when the type of this connection is changed.
   */
 void HistogramPrivate::updateLines() {
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::updateLines()");
+
 	linePath = QPainterPath();
 	lines.clear();
 
-	const int count=symbolPointsLogical.count();
-
-	//nothing to do, if no data points available
-	if (count <= 1) {
-		recalcShapeAndBoundingRect();
-		return;
-	}
-
-	const double min = dataColumn->minimum();
-	const double max = dataColumn->maximum();
-	switch (binningMethod) {
-		case Histogram::ByNumber:
-			m_bins = (size_t)binCount;
-			break;
-		case Histogram::SquareRoot:
-			m_bins = (size_t)sqrt(count);
-			break;
-		case Histogram::RiceRule:
-			m_bins = (size_t)2*cbrt(count);
-			break;
-		case Histogram::ByWidth:
-			m_bins = (size_t) (max-min)/binWidth;
-			break;
-		case Histogram::SturgisRule:
-			m_bins =(size_t) 1 + 3.33*log(count);
-			break;
-	}
-
-	if (m_histogram)
-		gsl_histogram_free(m_histogram);
-
-	m_histogram = gsl_histogram_alloc (m_bins);
-	gsl_histogram_set_ranges_uniform (m_histogram, min, max+1);
-
-	for (int row = 0; row < dataColumn->rowCount(); ++row) {
-		if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
-			gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
-	}
-
-	switch(orientation) {
-		case Histogram::Vertical: {
-			verticalHistogram();
-			break;
-		}
-		case Histogram::Horizontal: {
-			horizontalHistogram();
-			break;
-		}
-	}
+	if (orientation == Histogram::Vertical)
+		verticalHistogram();
+	else
+		horizontalHistogram();
 
 	//map the lines to scene coordinates
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
@@ -1081,7 +972,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygons.clear();
 
-	if (!fillingEnabled) {
+	if (!fillingEnabled || lineType == Histogram::DropLines) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1212,12 +1103,16 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	updatePixmap();
 }
 
-void HistogramPrivate::draw(QPainter *painter) {
+void HistogramPrivate::draw(QPainter* painter) {
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::draw()");
+
 	//drawing line
-	painter->setOpacity(lineOpacity);
-	painter->setPen(linePen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(linePath);
+	if (lineType != Histogram::NoLine) {
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(linePath);
+	}
 
 	//draw filling
 	if (fillingEnabled) {
@@ -1270,7 +1165,10 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	draw(painter);
+	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
+		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
+	else
+		draw(painter); //draw directly again (slow)
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		if (m_hoverEffectImageIsDirty) {

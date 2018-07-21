@@ -234,8 +234,9 @@ double parse(const char *str) {
 		return 0.;
 	}
 
-	strncpy(p.string, str, slen);	// fills with '\0'
+	strcpy(p.string, str);
 	p.string[strlen(str)] = '\n';
+	p.string[strlen(str)+1] = '\0';
 	pdebug("\nPARSER: yyparse(\"%s\") len=%d\n", p.string, (int)strlen(p.string));
 
 	/* parameter for yylex */
