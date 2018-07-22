@@ -53,6 +53,7 @@ public:
 	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
 	void setReadOnly(bool);
+	void enablePlottableColumnsOnly(bool);
 	void enableNumericColumnsOnly(bool);
 	void enableNonEmptyNumericColumnsOnly(bool);
 	void enableShowPlotDesignation(bool);
@@ -76,6 +77,7 @@ private:
 	AbstractAspect* m_root;
 	bool m_readOnly;
 	bool m_folderSelectable;
+	bool m_plottableColumnsOnly;
 	bool m_numericColumnsOnly;
 	bool m_nonEmptyNumericColumnsOnly;
 	bool m_showPlotDesignation;

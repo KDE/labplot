@@ -473,7 +473,7 @@ void XYCurveDock::init() {
 }
 
 void XYCurveDock::setModel() {
-	m_aspectTreeModel->enableNumericColumnsOnly(true);
+	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
 	QList<const char*>  list;

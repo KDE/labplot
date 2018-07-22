@@ -142,6 +142,8 @@ public:
 	virtual void setColumnMode(AbstractColumn::ColumnMode);
 	virtual PlotDesignation plotDesignation() const = 0;
 	virtual void setPlotDesignation(AbstractColumn::PlotDesignation);
+	bool isNumeric() const;
+	bool isPlottable() const;
 
 	virtual bool copy(const AbstractColumn *source);
 	virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
