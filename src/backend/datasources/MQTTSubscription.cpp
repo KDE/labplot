@@ -112,17 +112,21 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if(!found) {
 		addTopic(topicName);
-		MQTTTopic* newTopic;
+		topics = children<MQTTTopic>();
+		MQTTTopic* newTopic = nullptr;
 		for(int i = 0; i < topics.size(); ++i) {
 			if(topicName == topics[i]->topicName()) {
+				qDebug()<<"found new topic at position: "<<i;
 				newTopic = topics[i];
 				break;
 			}
 		}
 
-		newTopic->newMessage(message);
-		if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
-			newTopic->read();
+		if(newTopic != nullptr) {
+			newTopic->newMessage(message);
+			if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
+				newTopic->read();
+		}
 	}
 }
 
