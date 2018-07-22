@@ -265,9 +265,30 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 	}
 
 	file.readLine(); //skip the line with "Binary"
+	quint64 pos = file.pos();
 
 	//read the data
-	//TODO
+	QDataStream in(&file);
+	in.skipRawData(pos);
+	QStringList lineString;
+	for (int i = 0; i< qMin(lines, points); ++i) {
+		lineString.clear();
+		for (int j = 0; j < vars; ++j) {
+			if (hasComplexValues) {
+				double real, img;
+				in >> real;
+				in >> img;
+				lineString << QString::number(real); //real part
+				lineString << QString::number(img); //imaginary part
+			} else {
+				double value;
+				in >> value;
+				lineString << QString::number(value);
+			}
+		}
+
+		dataStrings << lineString;
+	}
 
 	return dataStrings;
 }
