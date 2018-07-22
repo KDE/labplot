@@ -278,6 +278,7 @@ ImportFileWidget::~ImportFileWidget() {
 	m_asciiOptionsWidget->saveSettings();
 	m_binaryOptionsWidget->saveSettings();
 	m_imageOptionsWidget->saveSettings();
+	m_jsonOptionsWidget->saveSettings();
 }
 
 void ImportFileWidget::hideDataSource() {
