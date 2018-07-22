@@ -1139,7 +1139,17 @@ double Column::minimum(int count) const {
 			break;
 		}
 		case Text:
-		case DateTime:
+			break;
+		case DateTime: {
+			QVector<QDateTime>* vec = static_cast<QVector<QDateTime>*>(data());
+			for (int row = start; row < end; ++row) {
+				const qint64 val = vec->at(row).toSecsSinceEpoch();
+
+				if (val < min)
+					min = val;
+			}
+			break;
+		}
 		case Day:
 		case Month:
 		default:
@@ -1201,7 +1211,17 @@ double Column::maximum(int count) const {
 			break;
 		}
 		case Text:
-		case DateTime:
+			break;
+		case DateTime: {
+			QVector<QDateTime>* vec = static_cast<QVector<QDateTime>*>(data());
+			for (int row = start; row < end; ++row) {
+				const qint64 val = vec->at(row).toSecsSinceEpoch();
+
+				if (val > max)
+					max = val;
+			}
+			break;
+		}
 		case Day:
 		case Month:
 		default:

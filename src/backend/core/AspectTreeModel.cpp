@@ -76,6 +76,7 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_root(root),
 	  m_readOnly(false),
 	  m_folderSelectable(true),
+	  m_plottableColumnsOnly(false),
 	  m_numericColumnsOnly(false),
 	  m_nonEmptyNumericColumnsOnly(false),
 	  m_showPlotDesignation(false),
@@ -100,6 +101,10 @@ void AspectTreeModel::setSelectableAspects(QList<const char*> list) {
 
 void AspectTreeModel::setReadOnly(bool readOnly) {
 	m_readOnly = readOnly;
+}
+
+void AspectTreeModel::enablePlottableColumnsOnly(bool value) {
+	m_plottableColumnsOnly = value;
 }
 
 void AspectTreeModel::enableNumericColumnsOnly(bool value) {
@@ -187,7 +192,9 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			const Column* column = dynamic_cast<const Column*>(aspect);
 			if (column) {
 				QString name = aspect->name();
-				if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
+				if (m_plottableColumnsOnly && !column->isPlottable())
+					name = i18n("%1   (non-plottable data)", name);
+				else if (m_numericColumnsOnly && !column->isNumeric())
 					name = i18n("%1   (non-numeric data)", name);
 				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
 					name = i18n("%1   (no values)", name);
@@ -310,10 +317,13 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 		//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
 		result = result |Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
-		if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
+		if (m_plottableColumnsOnly && !column->isPlottable())
 			result &= ~Qt::ItemIsEnabled;
 
-		if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
+		if (m_numericColumnsOnly && !column->isNumeric())
+			result &= ~Qt::ItemIsEnabled;
+
+		if (m_nonEmptyNumericColumnsOnly && !(column->isNumeric() && column->hasValues()))
 			result &= ~Qt::ItemIsEnabled;
 	}
 

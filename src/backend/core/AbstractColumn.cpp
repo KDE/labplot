@@ -261,6 +261,16 @@ void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 	Q_UNUSED(pd)
 }
 
+bool AbstractColumn::isNumeric() const {
+	const AbstractColumn::ColumnMode mode = columnMode();
+	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer);
+}
+
+bool AbstractColumn::isPlottable() const {
+	const AbstractColumn::ColumnMode mode = columnMode();
+	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime);
+}
+
 /**
  * \brief Clear the whole column
  */
