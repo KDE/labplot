@@ -913,8 +913,11 @@ void XYCurvePrivate::retransform() {
 			case AbstractColumn::Integer:
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:	//TODO
+			case AbstractColumn::Text:
+				break;
 			case AbstractColumn::DateTime:
+				tempPoint.setX(xColumn->dateTimeAt(row).toSecsSinceEpoch());
+				break;
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
 				break;
@@ -925,8 +928,11 @@ void XYCurvePrivate::retransform() {
 			case AbstractColumn::Integer:
 				tempPoint.setY(yColumn->valueAt(row));
 				break;
-			case AbstractColumn::Text:	//TODO
+			case AbstractColumn::Text:
+				break;
 			case AbstractColumn::DateTime:
+				tempPoint.setX(yColumn->dateTimeAt(row).toSecsSinceEpoch());
+				break;
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
 				break;

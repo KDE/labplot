@@ -187,8 +187,9 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			const Column* column = dynamic_cast<const Column*>(aspect);
 			if (column) {
 				QString name = aspect->name();
-				if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
-					name = i18n("%1   (non-numeric data)", name);
+				const AbstractColumn::ColumnMode mode = column->columnMode();
+				if (m_numericColumnsOnly && !(mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime))
+					name = i18n("%1   (non-plottable data)", name);
 				else if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
 					name = i18n("%1   (no values)", name);
 
@@ -310,7 +311,8 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 		//TODO: allow drag&drop later for other objects too, once we implement copy and paste in the project explorer
 		result = result |Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
-		if (m_numericColumnsOnly && !(column->columnMode() == AbstractColumn::Numeric || column->columnMode() == AbstractColumn::Integer))
+		const AbstractColumn::ColumnMode mode = column->columnMode();
+		if (m_numericColumnsOnly && !(mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime))
 			result &= ~Qt::ItemIsEnabled;
 
 		if (m_nonEmptyNumericColumnsOnly && !column->hasValues())
