@@ -142,6 +142,7 @@ signals:
 
 #ifdef HAVE_MQTT
 private:
+	void updateSubscriptionCompleter();
 	bool checkTopicContains(const QString&, const QString&)	;
 	QString checkCommonLevel(const QString&, const QString&);
 	int commonLevelIndex(const QString& first, const QString& second);
@@ -150,12 +151,15 @@ private:
 	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 	void manageCommonLevelSubscriptions();
+	void updateSubscriptionTree();
+	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
 
 	QMqttClient *m_client;
 	QMqttSubscription *m_mainSubscription;
 	QMqttTopicFilter *m_filter;
 	QVector <QMqttSubscription*> m_mqttSubscriptions;
-	QCompleter* m_completer;
+	QCompleter* m_topicCompleter;
+	QCompleter* m_subscriptionCompleter;
 	QStringList m_topicList;
 	bool m_searching;
 	QTimer *m_searchTimer;
@@ -174,7 +178,6 @@ signals:
 	void newTopic(QString);
 	void subscriptionsChanged();
 	void checkFileType();
-	void newTopicForWill();
 
 private slots:
 	void idChecked(int);
@@ -184,7 +187,7 @@ private slots:
 	void mqttSubscribe();
 	void mqttUnsubscribe();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void setCompleter(const QString&);
+	void setTopicCompleter(const QString&);
 	void topicTimeout();
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
@@ -193,7 +196,8 @@ private slots:
 	void updateWillTopics();
 	void willUpdateTypeChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
-	void scrollToTreeItem(const QString&);
+	void scrollToTopicTreeItem(const QString&);
+	void scrollToSubsriptionTreeItem(const QString&);
 	void mqttConnectTimeout();
 	void checkConnectEnable();
 #endif

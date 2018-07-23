@@ -838,7 +838,7 @@ void LiveDataDock::addSubscription() {
 			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
 
-				//if the new subscirptions contains an already existing one, we remove the inferior one
+				//if the new subscriptions contains an already existing one, we remove the inferior one
 				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
 						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 					qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);

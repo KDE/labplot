@@ -38,9 +38,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-349</y>
-        <width>611</width>
-        <height>1885</height>
+        <y>0</y>
+        <width>614</width>
+        <height>1828</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -484,6 +484,16 @@
                 </property>
                </column>
               </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLabel" name="lSubscriptionSearch">
+               <property name="text">
+                <string>Scroll to root:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLineEdit" name="leSubscriptions"/>
              </item>
             </layout>
            </widget>
