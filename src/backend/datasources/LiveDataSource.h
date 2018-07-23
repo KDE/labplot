@@ -67,8 +67,8 @@ public:
 	};
 
 	enum ReadingType {
-		ContinuousFixed = 0,	// read fixed number of samples (aka lines) using given sample size
-		FromEnd,		// read from end, from line lastLine-sampleRate sampleRate number of lines
+		ContinuousFixed = 0,	// read fixed number of samples (aka lines) using given sampleSize
+		FromEnd,		// read from end, from line lastLine-sampleSize, i.e. sampleSize number of lines
 		TillEnd,		// read until the end
 		WholeFile		// reread whole file
 	};

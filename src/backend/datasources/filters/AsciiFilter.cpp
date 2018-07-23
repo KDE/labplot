@@ -599,6 +599,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		return 0;
 	}
 
+	// may be also a matrix?
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
@@ -926,7 +927,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						currentRow = m_actualRows - newLinesTillEnd;
 				}
 			} else {
-				//we read max sample rate number of lines when the reading mode
+				//we read max sample size number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd
 				currentRow = m_actualRows - qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
