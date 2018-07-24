@@ -555,7 +555,7 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
-		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(LiveDataSource,FileType,m_fileType));
+		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(AbstractFileFilter, FileType, m_fileType));
 		switch (m_fileType) {
 		case AbstractFileFilter::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
