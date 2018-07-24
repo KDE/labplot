@@ -2562,77 +2562,90 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMq
 		QChar sep = '/';
 		QString rootName;
 		if(topic.name().contains(sep)) {
+			qDebug()<<topic.name()<<" contains sep";
 			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
 
-			rootName = list.at(0);
-			name.append(list.at(0));
-			QTreeWidgetItem* currentItem;
-			int topItemIdx = -1;
-			//check whether the first level of the topic can be found in twTopics
-			for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-				if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
-					topItemIdx = i;
-					break;
-				}
-			}
-			//if not we simply add every level of the topic to the tree
-			if( topItemIdx < 0) {
-				currentItem = new QTreeWidgetItem(name);
-				ui.twTopics->addTopLevelItem(currentItem);
-				for(int i = 1; i < list.size(); ++i) {
-					name.clear();
-					name.append(list.at(i));
-					currentItem->addChild(new QTreeWidgetItem(name));
-					currentItem = currentItem->child(0);
-				}
-			}
-			//otherwise we search for the first level that isn't part of the tree,
-			//then add every level of the topic to the tree from that certain level
-			else {
-				currentItem = ui.twTopics->topLevelItem(topItemIdx);
-				int listIdx = 1;
-				for(; listIdx < list.size(); ++listIdx) {
-					QTreeWidgetItem* childItem = nullptr;
-					bool found = false;
-					for(int j = 0; j < currentItem->childCount(); ++j) {
-						childItem = currentItem->child(j);
-						if(childItem->text(0) == list.at(listIdx)) {
-							found = true;
-							currentItem = childItem;
-							break;
-						}
-					}
-					if(!found) {
-						//this is the level that isn't present in the tree
+			if(!list.isEmpty()) {
+				rootName = list.at(0);
+				name.append(list.at(0));
+				QTreeWidgetItem* currentItem;
+				int topItemIdx = -1;
+				qDebug()<<"check whether the first level of the topic can be found in twTopics";
+				//check whether the first level of the topic can be found in twTopics
+				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+					if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+						topItemIdx = i;
 						break;
 					}
 				}
+				//if not we simply add every level of the topic to the tree
+				if( topItemIdx < 0) {
+					qDebug()<<"if not we simply add every level of the topic to the tree";
+					currentItem = new QTreeWidgetItem(name);
+					ui.twTopics->addTopLevelItem(currentItem);
+					for(int i = 1; i < list.size(); ++i) {
+						name.clear();
+						name.append(list.at(i));
+						currentItem->addChild(new QTreeWidgetItem(name));
+						currentItem = currentItem->child(0);
+					}
+				}
+				//otherwise we search for the first level that isn't part of the tree,
+				//then add every level of the topic to the tree from that certain level
+				else {
+					qDebug()<<"otherwise we search for the first level";
+					currentItem = ui.twTopics->topLevelItem(topItemIdx);
+					int listIdx = 1;
+					for(; listIdx < list.size(); ++listIdx) {
+						QTreeWidgetItem* childItem = nullptr;
+						bool found = false;
+						for(int j = 0; j < currentItem->childCount(); ++j) {
+							childItem = currentItem->child(j);
+							if(childItem->text(0) == list.at(listIdx)) {
+								found = true;
+								currentItem = childItem;
+								break;
+							}
+						}
+						if(!found) {
+							qDebug()<<"this is the level that isn't present in the tree "<<listIdx;
+							//this is the level that isn't present in the tree
+							break;
+						}
+					}
 
-				//add every level to the tree starting with the first level that isn't part of the tree
-				for(; listIdx < list.size(); ++listIdx) {
-					name.clear();
-					name.append(list.at(listIdx));
-					currentItem->addChild(new QTreeWidgetItem(name));
-					currentItem = currentItem->child(currentItem->childCount() - 1);
+					qDebug()<<"dd every level to the tree starting with the first level that isn't part of the tree";
+					//add every level to the tree starting with the first level that isn't part of the tree
+					for(; listIdx < list.size(); ++listIdx) {
+						name.clear();
+						name.append(list.at(listIdx));
+						currentItem->addChild(new QTreeWidgetItem(name));
+						currentItem = currentItem->child(currentItem->childCount() - 1);
+					}
 				}
 			}
 		} else {
+			qDebug()<<"no sep";
 			rootName = topic.name();
 			name.append(topic.name());
 			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
 		}
 
 		//if a subscribed topic contains the new topic, we have to update twSubscriptions
+		qDebug()<<"if a subscribed topic contains the new topic, we have to update twSubscriptions";
 		for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 			QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
-			if (rootName == subscriptionName[0]) {
-				qDebug()<<topic.name();
-				updateSubscriptionTree();
-				break;
+			if(!subscriptionName.isEmpty()) {
+				if (rootName == subscriptionName.first()) {
+					qDebug()<<topic.name();
+					updateSubscriptionTree();
+					break;
+				}
 			}
 		}
 
 		//signals that a newTopic was added, in order to fill the completer of leTopics
+		qDebug()<<"emit signal";
 		emit newTopic(rootName);
 	}
 }

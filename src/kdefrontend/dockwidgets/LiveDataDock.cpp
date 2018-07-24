@@ -1606,56 +1606,58 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	if(topicName.contains(sep)) {
 		QStringList list = topicName.split(sep, QString::SkipEmptyParts);
 
-		rootName = list.at(0);
-		name.append(list.at(0));
-		QTreeWidgetItem* currentItem;
-		//check whether the first level of the topic can be found in twTopics
-		int topItemIdx = -1;
-		for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
-			if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
-				topItemIdx = i;
-				break;
-			}
-		}
-		//if not we simply add every level of the topic to the tree
-		if( topItemIdx < 0) {
-			currentItem = new QTreeWidgetItem(name);
-			ui.twTopics->addTopLevelItem(currentItem);
-			for(int i = 1; i < list.size(); ++i) {
-				name.clear();
-				name.append(list.at(i));
-				currentItem->addChild(new QTreeWidgetItem(name));
-				currentItem = currentItem->child(0);
-			}
-		}
-		//otherwise we search for the first level that isn't part of the tree,
-		//then add every level of the topic to the tree from that certain level
-		else {
-			currentItem = ui.twTopics->topLevelItem(topItemIdx);
-			int listIdx = 1;
-			for(; listIdx < list.size(); ++listIdx) {
-				QTreeWidgetItem* childItem = nullptr;
-				bool found = false;
-				for(int j = 0; j < currentItem->childCount(); ++j) {
-					childItem = currentItem->child(j);
-					if(childItem->text(0) == list.at(listIdx)) {
-						found = true;
-						currentItem = childItem;
-						break;
-					}
-				}
-				if(!found) {
-					//this is the level that isn't present in the tree
+		if(!list.isEmpty()) {
+			rootName = list.at(0);
+			name.append(list.at(0));
+			QTreeWidgetItem* currentItem;
+			//check whether the first level of the topic can be found in twTopics
+			int topItemIdx = -1;
+			for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+				if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+					topItemIdx = i;
 					break;
 				}
 			}
+			//if not we simply add every level of the topic to the tree
+			if( topItemIdx < 0) {
+				currentItem = new QTreeWidgetItem(name);
+				ui.twTopics->addTopLevelItem(currentItem);
+				for(int i = 1; i < list.size(); ++i) {
+					name.clear();
+					name.append(list.at(i));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(0);
+				}
+			}
+			//otherwise we search for the first level that isn't part of the tree,
+			//then add every level of the topic to the tree from that certain level
+			else {
+				currentItem = ui.twTopics->topLevelItem(topItemIdx);
+				int listIdx = 1;
+				for(; listIdx < list.size(); ++listIdx) {
+					QTreeWidgetItem* childItem = nullptr;
+					bool found = false;
+					for(int j = 0; j < currentItem->childCount(); ++j) {
+						childItem = currentItem->child(j);
+						if(childItem->text(0) == list.at(listIdx)) {
+							found = true;
+							currentItem = childItem;
+							break;
+						}
+					}
+					if(!found) {
+						//this is the level that isn't present in the tree
+						break;
+					}
+				}
 
-			//add every level to the tree starting with the first level that isn't part of the tree
-			for(; listIdx < list.size(); ++listIdx) {
-				name.clear();
-				name.append(list.at(listIdx));
-				currentItem->addChild(new QTreeWidgetItem(name));
-				currentItem = currentItem->child(currentItem->childCount() - 1);
+				//add every level to the tree starting with the first level that isn't part of the tree
+				for(; listIdx < list.size(); ++listIdx) {
+					name.clear();
+					name.append(list.at(listIdx));
+					currentItem->addChild(new QTreeWidgetItem(name));
+					currentItem = currentItem->child(currentItem->childCount() - 1);
+				}
 			}
 		}
 	}
