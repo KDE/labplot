@@ -94,17 +94,18 @@ private slots:
 	void onMQTTConnect();
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void mqttMessageReceivedInBackground(const QByteArray&, const QMqttTopicName&);
-	void setCompleter(const QString&);
+	void setTopicCompleter(const QString&);
 	void topicTimeout();
 	void fillSubscriptions();
-	//void stopStartReceive();
-	void scrollToTreeItem(const QString& rootName);
+	void scrollToTopicTreeItem(const QString&);
+	void scrollToSubsriptionTreeItem(const QString&);
 	void removeClient(const QString&);
 
 signals:
 	void newTopic(const QString&);
 private:
 
+	void updateSubscriptionCompleter();
 	void addTopicToTree(const QString&);
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
@@ -118,7 +119,8 @@ private:
 	QList<MQTTClient*> m_mqttClients;
 	//QMqttClient* m_client;
 	QMap<QString, QMqttClient*> m_clients;
-	QCompleter* m_completer;
+	QCompleter* m_topicCompleter;
+	QCompleter* m_subscriptionCompleter;
 	QMap<QString, QStringList> m_topicList;
 	bool m_searching;
 	QTimer* m_searchTimer;

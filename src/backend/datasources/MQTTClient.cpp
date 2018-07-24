@@ -408,7 +408,7 @@ void MQTTClient::addInitialMqttSubscriptions(const QMqttTopicFilter& filter, con
 /*!
  * \brief Returns the name of every MQTTSubscription of the MQTTClient
  */
-QVector<QString> MQTTClient::mqttSubscribtions() const {
+QVector<QString> MQTTClient::mqttSubscriptions() const {
 	return m_subscriptions;
 }
 
@@ -418,7 +418,7 @@ QVector<QString> MQTTClient::mqttSubscribtions() const {
  * \param topic, the name of the topic
  * \param QoS
  */
-void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
+void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 	//Check whether the subscription already exists, if not we can add it
 	if(!m_subscriptions.contains(topic)) {
 		QMqttTopicFilter filter {topic};
@@ -485,6 +485,8 @@ void MQTTClient::newMQTTSubscription(const QString& topic, quint8 QoS) {
 			}
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+
+			emit mqttTopicsChanged();
 		}
 	}
 }

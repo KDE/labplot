@@ -95,7 +95,7 @@ public:
 	QMqttClient mqttClient() const;
 
 	void addInitialMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
-	QVector<QString> mqttSubscribtions() const;
+	QVector<QString> mqttSubscriptions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
@@ -164,7 +164,7 @@ public:
 	void removeWillStatistics(WillStatistics);
 	QVector<bool> willStatistics() const;
 
-	void newMQTTSubscription(const QString&, quint8);
+	void addMQTTSubscription(const QString&, quint8);
 	void removeMQTTSubscription(const QString&);
 	void addBeforeRemoveSubscription(const QString&, quint8);
 	void reparentTopic(const QString& topic, const QString& parent);

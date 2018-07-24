@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
+    <width>462</width>
     <height>795</height>
    </rect>
   </property>
@@ -501,17 +501,17 @@
       <string>Manage Subscriptions</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="leTopics"/>
-      </item>
-      <item row="1" column="4">
-       <widget class="QTreeWidget" name="twSubscriptions">
+      <item row="1" column="1" colspan="2">
+       <widget class="QTreeWidget" name="twTopics">
         <column>
          <property name="text">
-          <string>Subscribed topics</string>
+          <string>Available topics</string>
          </property>
         </column>
        </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="leTopics"/>
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="lQoS">
@@ -550,15 +550,6 @@
           <string>2</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QTreeWidget" name="twTopics">
-        <column>
-         <property name="text">
-          <string>Available topics</string>
-         </property>
-        </column>
        </widget>
       </item>
       <item row="1" column="3">
@@ -607,6 +598,25 @@
          </spacer>
         </item>
        </layout>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="lSubscriptionSearch">
+        <property name="text">
+         <string>Scroll to root:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QLineEdit" name="leSubscriptions"/>
+      </item>
+      <item row="1" column="4" colspan="2">
+       <widget class="QTreeWidget" name="twSubscriptions">
+        <column>
+         <property name="text">
+          <string>Subscribed topics</string>
+         </property>
+        </column>
+       </widget>
       </item>
      </layout>
     </widget>

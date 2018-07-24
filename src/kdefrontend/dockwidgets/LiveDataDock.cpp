@@ -62,7 +62,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 #ifdef HAVE_MQTT
 	m_searchTimer->setInterval(10000);
 
-	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setCompleter);
+	connect(this, &LiveDataDock::newTopic, this, &LiveDataDock::setTopicCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &LiveDataDock::topicTimeout);
 	connect(ui.bSubscribe, &QPushButton::clicked, this, &LiveDataDock::addSubscription);
 	connect(ui.bUnsubscribe, &QPushButton::clicked, this, &LiveDataDock::removeSubscription);
@@ -76,7 +76,8 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
 	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, this, &LiveDataDock::willUpdateIntervalChanged);
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, this, &LiveDataDock::statisticsChanged);
-	connect(ui.leTopics, &QLineEdit::textChanged, this, &LiveDataDock::scrollToTreeItem);
+	connect(ui.leTopics, &QLineEdit::textChanged, this, &LiveDataDock::scrollToTopicTreeItem);
+	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &LiveDataDock::scrollToSubsriptionTreeItem);
 
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_BrowserStop));
@@ -874,7 +875,7 @@ void LiveDataDock::addSubscription() {
 
 				//subscribe in every MQTTClient
 				for (auto* source: m_mqttClients) {
-					source->newMQTTSubscription(name, ui.cbQoS->currentIndex());
+					source->addMQTTSubscription(name, ui.cbQoS->currentIndex());
 				}
 
 				if(name.endsWith("#")) {
@@ -933,6 +934,7 @@ void LiveDataDock::addSubscription() {
 				}
 
 				manageCommonLevelSubscriptions();
+				updateSubscriptionCompleter();
 			} else {
 				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
 			}
@@ -986,6 +988,8 @@ void LiveDataDock::removeSubscription() {
 			//check if any common topics were subscribed, if possible merge them
 			manageCommonLevelSubscriptions();
 		}
+
+		updateSubscriptionCompleter();
 	} else
 		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
 }
@@ -995,15 +999,36 @@ void LiveDataDock::removeSubscription() {
  * appends the topic's root to the topicList if it isn't in the list already
  * then sets the completer for leTopics
  */
-void LiveDataDock::setCompleter(const QString& topic) {
+void LiveDataDock::setTopicCompleter(const QString& topic) {
 	if(!m_searching) {
 		if(!m_topicList[m_mqttClients.first()->clientHostName()].contains(topic)) {
 			m_topicList[m_mqttClients.first()->clientHostName()].append(topic);
-			m_completer = new QCompleter(m_topicList[m_mqttClients.first()->clientHostName()], this);
-			m_completer->setCompletionMode(QCompleter::PopupCompletion);
-			m_completer->setCaseSensitivity(Qt::CaseSensitive);
-			ui.leTopics->setCompleter(m_completer);
+			m_topicCompleter = new QCompleter(m_topicList[m_mqttClients.first()->clientHostName()], this);
+			m_topicCompleter->setCompletionMode(QCompleter::PopupCompletion);
+			m_topicCompleter->setCaseSensitivity(Qt::CaseSensitive);
+			ui.leTopics->setCompleter(m_topicCompleter);
 		}
+	}
+}
+
+/*!
+ *\brief Updates the completer for leSubscriptions
+ */
+void LiveDataDock::updateSubscriptionCompleter() {
+	QStringList subscriptionList;
+	QVector<QString> subscriptions = m_mqttClients.first()->mqttSubscriptions();
+
+	if(!subscriptions.isEmpty()) {
+		for(int i = 0; i < subscriptions.size(); ++i) {
+			subscriptionList.append(subscriptions[i]);
+		}
+
+		m_subscriptionCompleter = new QCompleter(subscriptionList, this);
+		m_subscriptionCompleter->setCompletionMode(QCompleter::PopupCompletion);
+		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
+		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
+	} else {
+		ui.leSubscriptions->setCompleter(0);
 	}
 }
 
@@ -1027,7 +1052,7 @@ void LiveDataDock::fillSubscriptions() {
 
 	ui.twSubscriptions->clear();
 
-	QVector<QString> subscriptions = fds->mqttSubscribtions();
+	QVector<QString> subscriptions = fds->mqttSubscriptions();
 	for (int i = 0; i < subscriptions.count(); ++i) {
 		QStringList name;
 		name.append(subscriptions[i]);
@@ -1115,7 +1140,7 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
  *
  * \param rootName the current text of leTopics
  */
-void LiveDataDock::scrollToTreeItem(const QString& rootName) {
+void LiveDataDock::scrollToTopicTreeItem(const QString& rootName) {
 	m_searching = true;
 	m_searchTimer->start();
 
@@ -1129,6 +1154,28 @@ void LiveDataDock::scrollToTreeItem(const QString& rootName) {
 
 	if(topItemIdx >= 0) {
 		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+	}
+}
+
+/*!
+ *\brief called when leSubscriptions' text is changed
+ *		 if the rootName can be found in twSubscriptions, then we scroll it to the top of the tree widget
+ *
+ * \param rootName the current text of leSubscriptions
+ */
+void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
+	m_searching = true;
+	m_searchTimer->start();
+
+	int topItemIdx = -1;
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
+		if(ui.twSubscriptions->topLevelItem(i)->text(0) == rootName) {
+			topItemIdx = i;
+			break;
+		}
+
+	if(topItemIdx >= 0) {
+		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
 	}
 }
 
@@ -1540,7 +1587,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 
 				//make the subscripiton on commonTopic in every MQTTClient from m_mqttClients
 				for (auto* source: m_mqttClients) {
-					source->newMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
+					source->addMQTTSubscription(commonTopic, ui.cbQoS->currentIndex());
 				}
 			}
 		}
