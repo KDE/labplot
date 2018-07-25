@@ -69,11 +69,6 @@ public slots:
 
 signals:
 	void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
-
-	friend class XYAnalysisCurveSetDataSourceTypeCmd;
-	friend class XYAnalysisCurveSetDataSourceCurveCmd;
-	friend class XYAnalysisCurveSetXDataColumnCmd;
-	friend class XYAnalysisCurveSetYDataColumnCmd;
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);

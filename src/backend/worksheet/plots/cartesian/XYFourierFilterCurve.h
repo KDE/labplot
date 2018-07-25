@@ -84,7 +84,6 @@ private:
 	Q_DECLARE_PRIVATE(XYFourierFilterCurve)
 
 signals:
-	friend class XYFourierFilterCurveSetFilterDataCmd;
 	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
 };
 

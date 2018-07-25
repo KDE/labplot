@@ -263,8 +263,10 @@ void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetRotationAngle, qreal, rotationAngle, retransform)
 void CartesianPlotLegend::setRotationAngle(qreal angle) {
 	Q_D(CartesianPlotLegend);
-	if (angle != d->rotationAngle)
+	if (angle != d->rotationAngle) {
 		exec(new CartesianPlotLegendSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
+		d->title->setRotationAngle(angle);
+	}
 }
 
 //Background
@@ -447,7 +449,7 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 
 	if (rotationAngle != 0) {
 		QTransform trafo;
-		trafo.rotate(rotationAngle);
+		trafo.rotate(-rotationAngle);
 		path = trafo.map(path);
 	}
 
@@ -520,7 +522,17 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		float titleWidth = title->graphicsItem()->boundingRect().width();
+		float titleWidth;
+		if (rotationAngle == 0.0)
+			titleWidth = title->graphicsItem()->boundingRect().width();
+		else {
+			QRectF rect = title->graphicsItem()->boundingRect();
+			QMatrix matrix;
+			matrix.rotate(-rotationAngle);
+			rect = matrix.mapRect(rect);
+			titleWidth = rect.width();
+		}
+
 		if (titleWidth > legendWidth)
 			legendWidth = titleWidth;
 	}
@@ -529,8 +541,17 @@ void CartesianPlotLegendPrivate::retransform() {
 	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
 	legendHeight += rowCount*h; //height of the rows
 	legendHeight += (rowCount-1)*layoutVerticalSpacing; //spacing between the rows
-	if (title->isVisible() && !title->text().text.isEmpty())
-		legendHeight += title->graphicsItem()->boundingRect().height(); //legend title
+	if (title->isVisible() && !title->text().text.isEmpty()) {
+		if (rotationAngle == 0.0)
+			legendHeight += title->graphicsItem()->boundingRect().height(); //legend title
+		else {
+			QRectF rect = title->graphicsItem()->boundingRect();
+			QMatrix matrix;
+			matrix.rotate(-rotationAngle);
+			rect = matrix.mapRect(rect);
+			legendHeight += rect.height(); //legend title
+		}
+	}
 
 	rect.setX(-legendWidth/2);
 	rect.setY(-legendHeight/2);

@@ -39,68 +39,62 @@ class CustomPointPrivate;
 class CartesianPlot;
 
 class CustomPoint : public WorksheetElement {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit CustomPoint(const CartesianPlot*, const QString&);
-		~CustomPoint() override;
+public:
+	explicit CustomPoint(const CartesianPlot*, const QString&);
+	~CustomPoint() override;
 
-		QIcon icon() const override;
-		QMenu* createContextMenu() override;
-		QGraphicsItem* graphicsItem() const override;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
 
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
-		BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolOpacity, SymbolOpacity)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize)
-		CLASS_D_ACCESSOR_DECL(QBrush, symbolBrush, SymbolBrush)
-		CLASS_D_ACCESSOR_DECL(QPen, symbolPen, SymbolPen)
+	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolOpacity, SymbolOpacity)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, symbolBrush, SymbolBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, symbolPen, SymbolPen)
 
-		void setVisible(bool on) override;
-		bool isVisible() const override;
-		void setPrinting(bool) override;
+	void setVisible(bool on) override;
+	bool isVisible() const override;
+	void setPrinting(bool) override;
 
-		void retransform() override;
-		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-		typedef CustomPointPrivate Private;
+	typedef CustomPointPrivate Private;
 
-	private slots:
-		void visibilityChanged();
+private slots:
+	void visibilityChanged();
 
-	protected:
-		CustomPointPrivate* const d_ptr;
-		CustomPoint(const QString& name, CustomPointPrivate* dd);
+protected:
+	CustomPointPrivate* const d_ptr;
+	CustomPoint(const QString& name, CustomPointPrivate* dd);
 
-	private:
-		Q_DECLARE_PRIVATE(CustomPoint)
-		void init();
-		void initActions();
+private:
+	Q_DECLARE_PRIVATE(CustomPoint)
+	void init();
+	void initActions();
 
-		QAction* visibilityAction;
+	QAction* visibilityAction;
 
-	signals:
-		friend class CustomPointSetPositionCmd;
-		void positionChanged(const QPointF&);
-		void visibleChanged(bool);
-		void changed();
+signals:
+	friend class CustomPointSetPositionCmd;
+	void positionChanged(const QPointF&);
+	void visibleChanged(bool);
+	void changed();
 
-		friend class CustomPointSetSymbolStyleCmd;
-		friend class CustomPointSetSymbolSizeCmd;
-		friend class CustomPointSetSymbolRotationAngleCmd;
-		friend class CustomPointSetSymbolOpacityCmd;
-		friend class CustomPointSetSymbolBrushCmd;
-		friend class CustomPointSetSymbolPenCmd;
-		void symbolStyleChanged(Symbol::Style);
-		void symbolSizeChanged(qreal);
-		void symbolRotationAngleChanged(qreal);
-		void symbolOpacityChanged(qreal);
-		void symbolBrushChanged(QBrush);
-		void symbolPenChanged(const QPen&);
+	void symbolStyleChanged(Symbol::Style);
+	void symbolSizeChanged(qreal);
+	void symbolRotationAngleChanged(qreal);
+	void symbolOpacityChanged(qreal);
+	void symbolBrushChanged(QBrush);
+	void symbolPenChanged(const QPen&);
 };
 
 #endif

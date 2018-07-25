@@ -84,7 +84,6 @@ private:
 	Q_DECLARE_PRIVATE(XYDataReductionCurve)
 
 signals:
-	friend class XYDataReductionCurveSetDataReductionDataCmd;
 	void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void completed(int); //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };

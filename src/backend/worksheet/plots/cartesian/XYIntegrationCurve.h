@@ -78,7 +78,6 @@ private:
 	Q_DECLARE_PRIVATE(XYIntegrationCurve)
 
 signals:
-	friend class XYIntegrationCurveSetIntegrationDataCmd;
 	void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 };
 

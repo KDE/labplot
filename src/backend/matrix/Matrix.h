@@ -140,22 +140,14 @@ signals:
 	void dataChanged(int top, int left, int bottom, int right);
 	void coordinatesChanged();
 
-	friend class MatrixInsertRowsCmd;
-	friend class MatrixInsertColumnsCmd;
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 
-	friend class MatrixSetXStartCmd;
-	friend class MatrixSetXEndCmd;
-	friend class MatrixSetYStartCmd;
-	friend class MatrixSetYEndCmd;
 	void xStartChanged(double);
 	void xEndChanged(double);
 	void yStartChanged(double);
 	void yEndChanged(double);
 
-	friend class MatrixSetNumericFormatCmd;
-	friend class MatrixSetPrecisionCmd;
 	void numericFormatChanged(char);
 	void precisionChanged(int);
 	void headerFormatChanged(Matrix::HeaderFormat);
@@ -168,8 +160,6 @@ private:
 	mutable MatrixView* m_view;
 
 	friend class MatrixPrivate;
-	template <typename T> friend class MatrixRemoveColumnsCmd;
-	template <typename T> friend class MatrixRemoveRowsCmd;
 };
 
 #endif

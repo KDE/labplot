@@ -84,7 +84,6 @@ private:
 	Q_DECLARE_PRIVATE(XYSmoothCurve)
 
 signals:
-	friend class XYSmoothCurveSetSmoothDataCmd;
 	void smoothDataChanged(const XYSmoothCurve::SmoothData&);
 };
 
