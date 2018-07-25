@@ -236,7 +236,6 @@ private slots:
 
 	void xDataChanged();
 	void yDataChanged();
-	void histogramDataChanged();
 	void curveVisibilityChanged();
 
 	//SLOTs for changes triggered via QActions in the context menu

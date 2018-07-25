@@ -1278,7 +1278,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 		if (histo) {
-			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::histogramDataChanged);
+			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
 			connect(histo, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 		}
 	}
@@ -1374,34 +1374,17 @@ void CartesianPlot::dataChanged() {
 		if (curve)
 			curve->retransform();
 		else {
-			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
-			//-> retransform all available curves since we don't know which curves are affected.
-			//TODO: this logic can be very expensive
-			for (auto c : children<XYCurve>())
-				c->retransform();
+			Histogram* hist = dynamic_cast<Histogram*>(QObject::sender());
+			if (hist)
+				hist->retransform();
+			else {
+				//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+				//-> retransform all available curves since we don't know which curves are affected.
+				//TODO: this logic can be very expensive
+				for (auto c : children<XYCurve>())
+					c->retransform();
+			}
 		}
-	}
-}
-
-void CartesianPlot::histogramDataChanged() {
-	Q_D(CartesianPlot);
-	d->curvesXMinMaxIsDirty = true;
-	d->curvesYMinMaxIsDirty = true;
-	if (d->autoScaleX && d->autoScaleY)
-		this->scaleAuto();
-	else if (d->autoScaleX)
-		this->scaleAutoY();
-	else if (d->autoScaleY)
-		this->scaleAutoY();
-	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-	if (curve)
-		curve->retransform();
-	else {
-		//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
-		//-> retransform all available curves since we don't know which curves are affected.
-		//TODO: this logic can be very expensive
-		for (auto c : children<Histogram>())
-			c->retransform();
 	}
 }
 
