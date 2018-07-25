@@ -249,25 +249,6 @@ protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
 signals:
-	friend class CartesianPlotSetRangeTypeCmd;
-	friend class CartesianPlotSetXRangeFormatCmd;
-	friend class CartesianPlotSetYRangeFormatCmd;
-	friend class CartesianPlotSetRangeLastValuesCmd;
-	friend class CartesianPlotSetRangeFirstValuesCmd;
-	friend class CartesianPlotSetRectCmd;
-	friend class CartesianPlotSetAutoScaleXCmd;
-	friend class CartesianPlotSetXMinCmd;
-	friend class CartesianPlotSetXMaxCmd;
-	friend class CartesianPlotSetXScaleCmd;
-	friend class CartesianPlotSetAutoScaleYCmd;
-	friend class CartesianPlotSetYMinCmd;
-	friend class CartesianPlotSetYMaxCmd;
-	friend class CartesianPlotSetYScaleCmd;
-	friend class CartesianPlotSetXRangeBreakingEnabledCmd;
-	friend class CartesianPlotSetYRangeBreakingEnabledCmd;
-	friend class CartesianPlotSetXRangeBreaksCmd;
-	friend class CartesianPlotSetYRangeBreaksCmd;
-	friend class CartesianPlotSetThemeCmd;
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void xRangeFormatChanged(CartesianPlot::RangeFormat);
 	void yRangeFormatChanged(CartesianPlot::RangeFormat);

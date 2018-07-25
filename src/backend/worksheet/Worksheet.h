@@ -133,26 +133,6 @@ class Worksheet: public AbstractPart, public scripted {
 		void requestUpdate();
 		void useViewSizeRequested();
 
-		friend class WorksheetSetBackgroundTypeCmd;
-		friend class WorksheetSetBackgroundColorStyleCmd;
-		friend class WorksheetSetBackgroundImageStyleCmd;
-		friend class WorksheetSetBackgroundBrushStyleCmd;
-		friend class WorksheetSetBackgroundFirstColorCmd;
-		friend class WorksheetSetBackgroundSecondColorCmd;
-		friend class WorksheetSetBackgroundFileNameCmd;
-		friend class WorksheetSetBackgroundOpacityCmd;
-		friend class WorksheetSetScaleContentCmd;
-		friend class WorksheetSetPageRectCmd;
-		friend class WorksheetSetLayoutCmd;
-		friend class WorksheetSetLayoutTopMarginCmd;
-		friend class WorksheetSetLayoutBottomMarginCmd;
-		friend class WorksheetSetLayoutLeftMarginCmd;
-		friend class WorksheetSetLayoutRightMarginCmd;
-		friend class WorksheetSetLayoutVerticalSpacingCmd;
-		friend class WorksheetSetLayoutHorizontalSpacingCmd;
-		friend class WorksheetSetLayoutRowCountCmd;
-		friend class WorksheetSetLayoutColumnCountCmd;
-		friend class WorksheetSetThemeCmd;
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

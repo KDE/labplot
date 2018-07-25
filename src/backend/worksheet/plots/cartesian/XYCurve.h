@@ -172,20 +172,10 @@ signals:
 	void yDataChanged();
 	void visibilityChanged(bool);
 
-	friend class XYCurveSetXColumnCmd;
-	friend class XYCurveSetYColumnCmd;
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 
 	//Line-Tab
-	friend class XYCurveSetLineTypeCmd;
-	friend class XYCurveSetLineSkipGapsCmd;
-	friend class XYCurveSetLineInterpolationPointsCountCmd;
-	friend class XYCurveSetLinePenCmd;
-	friend class XYCurveSetLineOpacityCmd;
-	friend class XYCurveSetDropLineTypeCmd;
-	friend class XYCurveSetDropLinePenCmd;
-	friend class XYCurveSetDropLineOpacityCmd;
 	void lineTypeChanged(XYCurve::LineType);
 	void lineSkipGapsChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
@@ -196,12 +186,6 @@ signals:
 	void dropLineOpacityChanged(qreal);
 
 	//Symbol-Tab
-	friend class XYCurveSetSymbolsStyleCmd;
-	friend class XYCurveSetSymbolsSizeCmd;
-	friend class XYCurveSetSymbolsRotationAngleCmd;
-	friend class XYCurveSetSymbolsOpacityCmd;
-	friend class XYCurveSetSymbolsBrushCmd;
-	friend class XYCurveSetSymbolsPenCmd;
 	void symbolsStyleChanged(Symbol::Style);
 	void symbolsSizeChanged(qreal);
 	void symbolsRotationAngleChanged(qreal);
@@ -210,16 +194,6 @@ signals:
 	void symbolsPenChanged(const QPen&);
 
 	//Values-Tab
-	friend class XYCurveSetValuesColumnCmd;
-	friend class XYCurveSetValuesTypeCmd;
-	friend class XYCurveSetValuesPositionCmd;
-	friend class XYCurveSetValuesDistanceCmd;
-	friend class XYCurveSetValuesRotationAngleCmd;
-	friend class XYCurveSetValuesOpacityCmd;
-	friend class XYCurveSetValuesPrefixCmd;
-	friend class XYCurveSetValuesSuffixCmd;
-	friend class XYCurveSetValuesFontCmd;
-	friend class XYCurveSetValuesColorCmd;
 	void valuesTypeChanged(XYCurve::ValuesType);
 	void valuesColumnChanged(const AbstractColumn*);
 	void valuesPositionChanged(XYCurve::ValuesPosition);
@@ -232,15 +206,6 @@ signals:
 	void valuesColorChanged(QColor);
 
 	//Filling
-	friend class XYCurveSetFillingPositionCmd;
-	friend class XYCurveSetFillingTypeCmd;
-	friend class XYCurveSetFillingColorStyleCmd;
-	friend class XYCurveSetFillingImageStyleCmd;
-	friend class XYCurveSetFillingBrushStyleCmd;
-	friend class XYCurveSetFillingFirstColorCmd;
-	friend class XYCurveSetFillingSecondColorCmd;
-	friend class XYCurveSetFillingFileNameCmd;
-	friend class XYCurveSetFillingOpacityCmd;
 	void fillingPositionChanged(XYCurve::FillingPosition);
 	void fillingTypeChanged(PlotArea::BackgroundType);
 	void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);
@@ -252,16 +217,6 @@ signals:
 	void fillingOpacityChanged(float);
 
 	//Error bars
-	friend class XYCurveSetXErrorTypeCmd;
-	friend class XYCurveSetXErrorPlusColumnCmd;
-	friend class XYCurveSetXErrorMinusColumnCmd;
-	friend class XYCurveSetYErrorTypeCmd;
-	friend class XYCurveSetYErrorPlusColumnCmd;
-	friend class XYCurveSetYErrorMinusColumnCmd;
-	friend class XYCurveSetErrorBarsCapSizeCmd;
-	friend class XYCurveSetErrorBarsTypeCmd;
-	friend class XYCurveSetErrorBarsPenCmd;
-	friend class XYCurveSetErrorBarsOpacityCmd;
 	void xErrorTypeChanged(XYCurve::ErrorType);
 	void xErrorPlusColumnChanged(const AbstractColumn*);
 	void xErrorMinusColumnChanged(const AbstractColumn*);

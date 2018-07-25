@@ -139,12 +139,6 @@ signals:
 	void dataColumnChanged(const AbstractColumn*);
 	void visibilityChanged(bool);
 
-	friend class HistogramSetHistogramTypeCmd;
-	friend class HistogramSetHistogramOrientationCmd;
-	friend class HistogramSetBinningMethodCmd;
-	friend class HistogramSetBinCountCmd;
-	friend class HistogramSetBinWidthCmd;
-	friend class HistogramSetXColumnCmd;
 	void typeChanged(Histogram::HistogramType);
 	void orientationChanged(Histogram::HistogramOrientation);
 	void binningMethodChanged(Histogram::BinningMethod);
@@ -152,24 +146,11 @@ signals:
 	void binWidthChanged(float);
 
 	//Line
-	friend class HistogramSetLineTypeCmd;
-	friend class HistogramSetLinePenCmd;
-	friend class HistogramSetLineOpacityCmd;
 	void lineTypeChanged(Histogram::LineType);
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
 
 	//Values-Tab
-	friend class HistogramSetValuesColumnCmd;
-	friend class HistogramSetValuesTypeCmd;
-	friend class HistogramSetValuesPositionCmd;
-	friend class HistogramSetValuesDistanceCmd;
-	friend class HistogramSetValuesRotationAngleCmd;
-	friend class HistogramSetValuesOpacityCmd;
-	friend class HistogramSetValuesPrefixCmd;
-	friend class HistogramSetValuesSuffixCmd;
-	friend class HistogramSetValuesFontCmd;
-	friend class HistogramSetValuesColorCmd;
 	void valuesTypeChanged(Histogram::ValuesType);
 	void valuesColumnChanged(const AbstractColumn*);
 	void valuesPositionChanged(Histogram::ValuesPosition);
@@ -182,15 +163,6 @@ signals:
 	void valuesColorChanged(QColor);
 
 	//Filling
-	friend class HistogramSetFillingEnabledCmd;
-	friend class HistogramSetFillingTypeCmd;
-	friend class HistogramSetFillingColorStyleCmd;
-	friend class HistogramSetFillingImageStyleCmd;
-	friend class HistogramSetFillingBrushStyleCmd;
-	friend class HistogramSetFillingFirstColorCmd;
-	friend class HistogramSetFillingSecondColorCmd;
-	friend class HistogramSetFillingFileNameCmd;
-	friend class HistogramSetFillingOpacityCmd;
 	void fillingEnabledChanged(bool);
 	void fillingTypeChanged(PlotArea::BackgroundType);
 	void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);

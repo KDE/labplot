@@ -34,83 +34,71 @@
 
 class PlotAreaPrivate;
 
-//TODO: align
 class PlotArea : public WorksheetElement {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		explicit PlotArea(const QString& name);
-		~PlotArea() override;
+public:
+	explicit PlotArea(const QString& name);
+	~PlotArea() override;
 
-		enum BackgroundType {Color, Image, Pattern};
-		enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-								TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
-								RadialGradient
-								};
-		enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+	enum BackgroundType {Color, Image, Pattern};
+	enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+							TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
+							RadialGradient
+							};
+	enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
-		QGraphicsItem* graphicsItem() const override;
-		void setVisible(bool on) override;
-		bool isVisible() const override;
-		void setPrinting(bool) override {};
-		void loadThemeConfig(const KConfig& config) override;
-		void saveThemeConfig(const KConfig& config) override;
+	QGraphicsItem* graphicsItem() const override;
+	void setVisible(bool on) override;
+	bool isVisible() const override;
+	void setPrinting(bool) override {};
+	void loadThemeConfig(const KConfig& config) override;
+	void saveThemeConfig(const KConfig& config) override;
 
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
+	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+	BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
 
-		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-		BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
-		BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
+	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
-		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
-		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
+	BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
+	CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		void retransform() override;
-		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-		typedef PlotAreaPrivate Private;
+	typedef PlotAreaPrivate Private;
 
-	protected:
-		PlotArea(const QString& name, PlotAreaPrivate* dd);
-		PlotAreaPrivate* const d_ptr;
+protected:
+	PlotArea(const QString& name, PlotAreaPrivate* dd);
+	PlotAreaPrivate* const d_ptr;
 
-	private:
-		Q_DECLARE_PRIVATE(PlotArea)
-		void init();
+private:
+	Q_DECLARE_PRIVATE(PlotArea)
+	void init();
 
-	signals:
-		friend class PlotAreaSetBackgroundTypeCmd;
-		friend class PlotAreaSetBackgroundColorStyleCmd;
-		friend class PlotAreaSetBackgroundImageStyleCmd;
-		friend class PlotAreaSetBackgroundBrushStyleCmd;
-		friend class PlotAreaSetBackgroundFirstColorCmd;
-		friend class PlotAreaSetBackgroundSecondColorCmd;
-		friend class PlotAreaSetBackgroundFileNameCmd;
-		friend class PlotAreaSetBackgroundOpacityCmd;
-		friend class PlotAreaSetBorderPenCmd;
-		friend class PlotAreaSetBorderCornerRadiusCmd;
-		friend class PlotAreaSetBorderOpacityCmd;
-		void backgroundTypeChanged(PlotArea::BackgroundType);
-		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-		void backgroundBrushStyleChanged(Qt::BrushStyle);
-		void backgroundFirstColorChanged(QColor&);
-		void backgroundSecondColorChanged(QColor&);
-		void backgroundFileNameChanged(QString&);
-		void backgroundOpacityChanged(float);
-		void borderPenChanged(QPen&);
-		void borderCornerRadiusChanged(float);
-		void borderOpacityChanged(float);
+signals:
+	void backgroundTypeChanged(PlotArea::BackgroundType);
+	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void backgroundBrushStyleChanged(Qt::BrushStyle);
+	void backgroundFirstColorChanged(QColor&);
+	void backgroundSecondColorChanged(QColor&);
+	void backgroundFileNameChanged(QString&);
+	void backgroundOpacityChanged(float);
+	void borderPenChanged(QPen&);
+	void borderCornerRadiusChanged(float);
+	void borderOpacityChanged(float);
 };
 
 #endif
