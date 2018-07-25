@@ -502,9 +502,9 @@ void LiveDataSource::read() {
 	if (m_filter == nullptr)
 		return;
 
-	//initialize the device (file, socket, serial port), when calling this function for the first time
+	//initialize the device (file, socket, serial port) when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	preparing device. update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType));
+		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 		switch (m_sourceType) {
 		case FileOrPipe:
 			m_file = new QFile(m_fileName);
@@ -561,7 +561,7 @@ void LiveDataSource::read() {
 
 	switch (m_sourceType) {
 	case FileOrPipe:
-		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(LiveDataSource,FileType,m_fileType));
+		DEBUG("Reading FileOrPipe. type = " << ENUM_TO_STRING(AbstractFileFilter, FileType, m_fileType));
 		switch (m_fileType) {
 		case AbstractFileFilter::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
@@ -596,7 +596,7 @@ void LiveDataSource::read() {
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
 	case NetworkUdpSocket:
-		DEBUG("reading from UDP socket. state = " << m_udpSocket->state());
+		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
@@ -609,7 +609,7 @@ void LiveDataSource::read() {
 		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
-		DEBUG("reading from the serial port");
+		DEBUG("	Reading from the serial port");
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)

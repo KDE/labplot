@@ -127,23 +127,5 @@ signals:
 	void pointErrorBarBrushChanged(QBrush);
 	void pointErrorBarPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
-	friend class DatapickerCurveSetCurveErrorTypesCmd;
-	friend class DatapickerCurveSetPosXColumnCmd;
-	friend class DatapickerCurveSetPosYColumnCmd;
-	friend class DatapickerCurveSetPosZColumnCmd;
-	friend class DatapickerCurveSetPlusDeltaXColumnCmd;
-	friend class DatapickerCurveSetMinusDeltaXColumnCmd;
-	friend class DatapickerCurveSetPlusDeltaYColumnCmd;
-	friend class DatapickerCurveSetMinusDeltaYColumnCmd;
-	friend class DatapickerCurveSetPointStyleCmd;
-	friend class DatapickerCurveSetPointSizeCmd;
-	friend class DatapickerCurveSetPointRotationAngleCmd;
-	friend class DatapickerCurveSetPointOpacityCmd;
-	friend class DatapickerCurveSetPointBrushCmd;
-	friend class DatapickerCurveSetPointPenCmd;
-	friend class DatapickerCurveSetPointErrorBarSizeCmd;
-	friend class DatapickerCurveSetPointErrorBarPenCmd;
-	friend class DatapickerCurveSetPointErrorBarBrushCmd;
-	friend class DatapickerCurveSetPointVisibilityCmd;
 };
 #endif // DATAPICKERCURVE_H

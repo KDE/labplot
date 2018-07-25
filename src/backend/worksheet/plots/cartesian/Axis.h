@@ -181,14 +181,6 @@ private slots:
 	void visibilityChangedSlot();
 
 signals:
-	friend class AxisSetOrientationCmd;
-	friend class AxisSetPositionCmd;
-	friend class AxisSetScalingCmd;
-	friend class AxisSetAutoScaleCmd;
-	friend class AxisSetStartCmd;
-	friend class AxisSetEndCmd;
-	friend class AxisSetZeroOffsetCmd;
-	friend class AxisSetScalingFactorCmd;
 	void orientationChanged(Axis::AxisOrientation);
 	void positionChanged(Axis::AxisPosition);
 	void positionChanged(double);
@@ -200,17 +192,10 @@ signals:
 	void scalingFactorChanged(qreal);
 
 	//title
-	friend class AxisSetTitleOffsetXCmd;
-	friend class AxisSetTitleOffsetYCmd;
 	void titleOffsetXChanged(qreal);
 	void titleOffsetYChanged(qreal);
 
 	// line
-	friend class AxisSetLinePenCmd;
-	friend class AxisSetLineOpacityCmd;
-	friend class AxisSetArrowTypeCmd;
-	friend class AxisSetArrowPositionCmd;
-	friend class AxisSetArrowSizeCmd;
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
 	void arrowTypeChanged(Axis::ArrowType);
@@ -218,14 +203,6 @@ signals:
 	void arrowSizeChanged(qreal);
 
 	// major ticks
-	friend class AxisSetMajorTicksDirectionCmd;
-	friend class AxisSetMajorTicksTypeCmd;
-	friend class AxisSetMajorTicksNumberCmd;
-	friend class AxisSetMajorTicksIncrementCmd;
-	friend class AxisSetMajorTicksColumnCmd;
-	friend class AxisSetMajorTicksPenCmd;
-	friend class AxisSetMajorTicksLengthCmd;
-	friend class AxisSetMajorTicksOpacityCmd;
 	void majorTicksDirectionChanged(Axis::TicksDirection);
 	void majorTicksTypeChanged(Axis::TicksType);
 	void majorTicksNumberChanged(int);
@@ -236,14 +213,6 @@ signals:
 	void majorTicksOpacityChanged(qreal);
 
 	// minor ticks
-	friend class AxisSetMinorTicksDirectionCmd;
-	friend class AxisSetMinorTicksTypeCmd;
-	friend class AxisSetMinorTicksNumberCmd;
-	friend class AxisSetMinorTicksIncrementCmd;
-	friend class AxisSetMinorTicksColumnCmd;
-	friend class AxisSetMinorTicksPenCmd;
-	friend class AxisSetMinorTicksLengthCmd;
-	friend class AxisSetMinorTicksOpacityCmd;
 	void minorTicksDirectionChanged(Axis::TicksDirection);
 	void minorTicksTypeChanged(Axis::TicksType);
 	void minorTicksNumberChanged(int);
@@ -254,17 +223,6 @@ signals:
 	void minorTicksOpacityChanged(qreal);
 
 	//labels
-	friend class AxisSetLabelsFormatCmd;
-	friend class AxisSetLabelsAutoPrecisionCmd;
-	friend class AxisSetLabelsPrecisionCmd;
-	friend class AxisSetLabelsPositionCmd;
-	friend class AxisSetLabelsOffsetCmd;
-	friend class AxisSetLabelsRotationAngleCmd;
-	friend class AxisSetLabelsColorCmd;
-	friend class AxisSetLabelsFontCmd;
-	friend class AxisSetLabelsPrefixCmd;
-	friend class AxisSetLabelsSuffixCmd;
-	friend class AxisSetLabelsOpacityCmd;
 	void labelsFormatChanged(Axis::LabelsFormat);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
@@ -277,10 +235,6 @@ signals:
 	void labelsSuffixChanged(QString);
 	void labelsOpacityChanged(qreal);
 
-	friend class AxisSetMajorGridPenCmd;
-	friend class AxisSetMajorGridOpacityCmd;
-	friend class AxisSetMinorGridPenCmd;
-	friend class AxisSetMinorGridOpacityCmd;
 	void majorGridPenChanged(QPen);
 	void majorGridOpacityChanged(qreal);
 	void minorGridPenChanged(QPen);

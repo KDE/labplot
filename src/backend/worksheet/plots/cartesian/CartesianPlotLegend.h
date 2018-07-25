@@ -117,30 +117,6 @@ private slots:
 	void visibilityChangedSlot();
 
 signals:
-	friend class CartesianPlotLegendSetLabelFontCmd;
-	friend class CartesianPlotLegendSetLabelColorCmd;
-	friend class CartesianPlotLegendSetLabelColumnMajorCmd;
-	friend class CartesianPlotLegendSetLineSymbolWidthCmd;
-	friend class CartesianPlotLegendSetPositionCmd;
-	friend class CartesianPlotLegendSetRotationAngleCmd;
-	friend class CartesianPlotLegendSetBackgroundTypeCmd;
-	friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
-	friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
-	friend class CartesianPlotLegendSetBackgroundBrushStyleCmd;
-	friend class CartesianPlotLegendSetBackgroundFirstColorCmd;
-	friend class CartesianPlotLegendSetBackgroundSecondColorCmd;
-	friend class CartesianPlotLegendSetBackgroundFileNameCmd;
-	friend class CartesianPlotLegendSetBackgroundOpacityCmd;
-	friend class CartesianPlotLegendSetBorderPenCmd;
-	friend class CartesianPlotLegendSetBorderCornerRadiusCmd;
-	friend class CartesianPlotLegendSetBorderOpacityCmd;
-	friend class CartesianPlotLegendSetLayoutTopMarginCmd;
-	friend class CartesianPlotLegendSetLayoutBottomMarginCmd;
-	friend class CartesianPlotLegendSetLayoutLeftMarginCmd;
-	friend class CartesianPlotLegendSetLayoutRightMarginCmd;
-	friend class CartesianPlotLegendSetLayoutVerticalSpacingCmd;
-	friend class CartesianPlotLegendSetLayoutHorizontalSpacingCmd;
-	friend class CartesianPlotLegendSetLayoutColumnCountCmd;
 	void labelFontChanged(QFont&);
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);

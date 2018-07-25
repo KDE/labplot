@@ -115,6 +115,8 @@ void CartesianPlot::init() {
 	m_coordinateSystem = d->cSystem;
 
 	d->rangeType = CartesianPlot::RangeFree;
+	d->xRangeFormat = CartesianPlot::Numeric;
+	d->yRangeFormat = CartesianPlot::Numeric;
 	d->rangeLastValues = 1000;
 	d->rangeFirstValues = 1000;
 	d->autoScaleX = true;
@@ -757,6 +759,8 @@ bool CartesianPlot::isPanningActive() const {
 //################################  getter methods  ############################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, rangeType)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeFormat, xRangeFormat, xRangeFormat)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormat)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
@@ -833,6 +837,20 @@ void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, ki18n("%1: set range type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeFormat, CartesianPlot::RangeFormat, xRangeFormat, xRangeFormatChanged);
+void CartesianPlot::setXRangeFormat(RangeFormat format) {
+	Q_D(CartesianPlot);
+	if (format != d->xRangeFormat)
+		exec(new CartesianPlotSetXRangeFormatCmd(d, format, ki18n("%1: set x-range format")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
+void CartesianPlot::setYRangeFormat(RangeFormat format) {
+	Q_D(CartesianPlot);
+	if (format != d->yRangeFormat)
+		exec(new CartesianPlotSetYRangeFormatCmd(d, format, ki18n("%1: set y-range format")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
@@ -1278,7 +1296,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 		if (histo) {
-			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::histogramDataChanged);
+			connect(histo, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
 			connect(histo, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 		}
 	}
@@ -1374,34 +1392,17 @@ void CartesianPlot::dataChanged() {
 		if (curve)
 			curve->retransform();
 		else {
-			//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
-			//-> retransform all available curves since we don't know which curves are affected.
-			//TODO: this logic can be very expensive
-			for (auto c : children<XYCurve>())
-				c->retransform();
+			Histogram* hist = dynamic_cast<Histogram*>(QObject::sender());
+			if (hist)
+				hist->retransform();
+			else {
+				//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
+				//-> retransform all available curves since we don't know which curves are affected.
+				//TODO: this logic can be very expensive
+				for (auto c : children<XYCurve>())
+					c->retransform();
+			}
 		}
-	}
-}
-
-void CartesianPlot::histogramDataChanged() {
-	Q_D(CartesianPlot);
-	d->curvesXMinMaxIsDirty = true;
-	d->curvesYMinMaxIsDirty = true;
-	if (d->autoScaleX && d->autoScaleY)
-		this->scaleAuto();
-	else if (d->autoScaleX)
-		this->scaleAutoY();
-	else if (d->autoScaleY)
-		this->scaleAutoY();
-	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
-	if (curve)
-		curve->retransform();
-	else {
-		//no sender available, the function was called in CartesianPlot::dataChanged() (live data source got new data)
-		//-> retransform all available curves since we don't know which curves are affected.
-		//TODO: this logic can be very expensive
-		for (auto c : children<Histogram>())
-			c->retransform();
 	}
 }
 
@@ -2187,6 +2188,14 @@ void CartesianPlotPrivate::rangeChanged() {
 		q->scaleAutoX();
 	else if (autoScaleY)
 		q->scaleAutoY();
+}
+
+void CartesianPlotPrivate::xRangeFormatChanged() {
+	//TODO
+}
+
+void CartesianPlotPrivate::yRangeFormatChanged() {
+	//TODO
 }
 
 /*!

@@ -664,6 +664,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		return 0;
 	}
 
+	// may be also a matrix?
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
@@ -782,7 +783,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		else
 			readingType = spreadsheet->readingType();
 	}
-	DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
+	DEBUG("	Reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 
 	//move to the last read position, from == total bytes read
 	//since the other source types are sequencial we cannot seek on them
@@ -814,6 +815,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
+					newData.push_back(device.readLine());
+					break;
 				case LiveDataSource::SourceType::NetworkTcpSocket:
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
@@ -828,6 +831,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					newData.push_back(device.read(device.bytesAvailable()));
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
+					newData.push_back(device.readLine());
+					break;
 				case LiveDataSource::SourceType::NetworkTcpSocket:
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
@@ -991,7 +996,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						currentRow = m_actualRows - newLinesTillEnd;
 				}
 			} else {
-				//we read max sample rate number of lines when the reading mode
+				//we read max sample size number of lines when the reading mode
 				//is ContinuouslyFixed or FromEnd
 				currentRow = m_actualRows - qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
@@ -1082,7 +1087,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		for (; row < linesToRead; ++row) {
-			DEBUG("	row = " << row);
+			DEBUG("Reading row " << row << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -1096,7 +1101,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				}
 			}
 
-			//qDebug() << "line bytes: " << line.size() << " line: " << line;
+			DEBUG("line bytes: " << line.size() << " line: " << line.toStdString());
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
@@ -1111,7 +1116,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 			else
 				lineStringList << line;
-			QDEBUG(" line = " << lineStringList << ", separator = \'" << m_separator << "\'");
+			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
 			if (createIndexEnabled) {
 				if (spreadsheet->keepNValues() == 0)
