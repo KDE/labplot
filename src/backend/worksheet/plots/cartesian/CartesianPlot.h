@@ -61,6 +61,7 @@ public:
 
 	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum RangeFormat {Numeric, DateTime};
 	enum RangeType {RangeFree, RangeLast, RangeFirst};
 	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
 	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
@@ -110,6 +111,8 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
 
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
@@ -246,9 +249,11 @@ protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
 signals:
-	friend class CartesianPlotSetCRangeTypeCmd;
-	friend class CartesianPlotSetCRangeLastValuesCmd;
-	friend class CartesianPlotSetCRangeFirstValuesCmd;
+	friend class CartesianPlotSetRangeTypeCmd;
+	friend class CartesianPlotSetXRangeFormatCmd;
+	friend class CartesianPlotSetYRangeFormatCmd;
+	friend class CartesianPlotSetRangeLastValuesCmd;
+	friend class CartesianPlotSetRangeFirstValuesCmd;
 	friend class CartesianPlotSetRectCmd;
 	friend class CartesianPlotSetAutoScaleXCmd;
 	friend class CartesianPlotSetXMinCmd;
@@ -264,6 +269,8 @@ signals:
 	friend class CartesianPlotSetYRangeBreaksCmd;
 	friend class CartesianPlotSetThemeCmd;
 	void rangeTypeChanged(CartesianPlot::RangeType);
+	void xRangeFormatChanged(CartesianPlot::RangeFormat);
+	void yRangeFormatChanged(CartesianPlot::RangeFormat);
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);

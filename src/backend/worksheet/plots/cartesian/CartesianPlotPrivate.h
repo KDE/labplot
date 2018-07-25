@@ -43,9 +43,13 @@ public:
 	void retransform() override;
 	void retransformScales();
 	void rangeChanged();
+	void xRangeFormatChanged();
+	void yRangeFormatChanged();
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType;
+	CartesianPlot::RangeFormat xRangeFormat;
+	CartesianPlot::RangeFormat yRangeFormat;
 	int rangeFirstValues;
 	int rangeLastValues;
 	double xMin, xMax, yMin, yMax;
