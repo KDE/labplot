@@ -854,77 +854,81 @@ QString MQTTClient::willOwnMessage() const {
  * \brief Updates the will message of the client
  */
 void MQTTClient::updateWillMessage() {
-	//To update the will message we have to disconnect first, then after setting everything connect again
-	if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
-		//Disconnect only once (disconnecting may take a while)
-		if(!m_disconnectForWill) {
-			qDebug() << "Disconnecting from host";
-			m_client->disconnectFromHost();
-			m_disconnectForWill = true;
+	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::Recursive);
+	const AsciiFilter* asciiFilter = nullptr;
+	const MQTTTopic* willTopic = nullptr;
+	qDebug()<<"Searching for topic";
+	//Search for the will topic
+	for (int i = 0; i < topics.count(); ++i) {
+		if(topics[i]->topicName() == m_willTopic) {
+			willTopic = topics[i];
+			break;
 		}
-		//Try to update again
-		updateWillMessage();
 	}
-	//If client is disconnected we can update the settings
-	else if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
-		m_client->setWillQoS(m_willQoS);
-		qDebug()<<"Will QoS" << m_willQoS;
 
-		m_client->setWillRetain(m_willRetain);
-		qDebug()<<"Will retain" << m_willRetain;
-
-		m_client->setWillTopic(m_willTopic);
-		qDebug()<<"Will Topic" << m_willTopic;
-
-		//Set the will message according to m_willMessageType
-		switch (m_willMessageType) {
-		case WillMessageType::OwnMessage:
-			m_client->setWillMessage(m_willOwnMessage.toUtf8());
-			qDebug()<<"Will own message" << m_willOwnMessage;
-			break;
-		case WillMessageType::Statistics: {
-			qDebug()<<"Start will statistics";
-			QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::Recursive);
-			const AsciiFilter* asciiFilter = nullptr;
-			const MQTTTopic* tempTopic = nullptr;
-			qDebug()<<"Searching for topic";
-			//Search for the will topic
-			for (int i = 0; i < topics.count(); ++i) {
-				if(topics[i]->topicName() == m_willTopic) {
-					asciiFilter = dynamic_cast<AsciiFilter*>(topics[i]->filter());
-					tempTopic = topics[i];
-					break;
-				}
+	//if the will topic is found we can update the will message
+	if(willTopic != nullptr) {
+		//To update the will message we have to disconnect first, then after setting everything connect again
+		if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
+			//Disconnect only once (disconnecting may take a while)
+			if(!m_disconnectForWill) {
+				qDebug() << "Disconnecting from host";
+				m_client->disconnectFromHost();
+				m_disconnectForWill = true;
 			}
-			qDebug()<<"Check if topic found";
-			//If the topic was found, get the needed statistics
-			if(asciiFilter != nullptr && tempTopic != nullptr) {
-				qDebug()<<"Checking column mode";
-				//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
-				if((asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Integer) ||
-						(asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-					m_client->setWillMessage(asciiFilter->mqttColumnStatistics(tempTopic).toUtf8());
-					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
+			//Try to update again
+			updateWillMessage();
+		}
+		//If client is disconnected we can update the settings
+		else if(m_mqttUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
+			m_client->setWillQoS(m_willQoS);
+			qDebug()<<"Will QoS" << m_willQoS;
+
+			m_client->setWillRetain(m_willRetain);
+			qDebug()<<"Will retain" << m_willRetain;
+
+			m_client->setWillTopic(m_willTopic);
+			qDebug()<<"Will Topic" << m_willTopic;
+
+			//Set the will message according to m_willMessageType
+			switch (m_willMessageType) {
+			case WillMessageType::OwnMessage:
+				m_client->setWillMessage(m_willOwnMessage.toUtf8());
+				qDebug()<<"Will own message" << m_willOwnMessage;
+				break;
+			case WillMessageType::Statistics: {
+				qDebug()<<"Start will statistics";
+				asciiFilter = dynamic_cast<AsciiFilter*>(willTopic->filter());
+
+				//If the topic's asciiFilter was found, get the needed statistics
+				if(asciiFilter != nullptr) {
+					qDebug()<<"Checking column mode";
+					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
+					if((asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Integer) ||
+							(asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
+						m_client->setWillMessage(asciiFilter->mqttColumnStatistics(tempTopic).toUtf8());
+						qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
+					}
+					//Otherwise set empty message
+					else {
+						m_client->setWillMessage(QString("").toUtf8());
+						qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
+					}
 				}
-				//Otherwise set empty message
-				else {
-					m_client->setWillMessage(QString("").toUtf8());
-					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
-				}
+				break;
 			}
-			break;
+			case WillMessageType::LastMessage:
+				m_client->setWillMessage(m_willLastMessage.toUtf8());
+				qDebug()<<"Will last message:\n" << m_willLastMessage;
+				break;
+			default:
+				break;
+			}
+			m_disconnectForWill = false;
+			//Reconnect with the updated message
+			m_client->connectToHost();
+			qDebug()<< "Reconnect to host";
 		}
-		case WillMessageType::LastMessage:
-			m_client->setWillMessage(m_willLastMessage.toUtf8());
-			qDebug()<<"Will last message:\n" << m_willLastMessage;
-			break;
-		default:
-			break;
-		}
-		m_disconnectForWill = false;
-		//Reconnect with the updated message
-		m_client->connectToHost();
-		qDebug()<< "Reconnect to host";
 	}
 }
 
