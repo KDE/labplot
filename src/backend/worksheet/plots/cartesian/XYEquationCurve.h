@@ -33,44 +33,43 @@
 
 class XYEquationCurvePrivate;
 class XYEquationCurve : public XYCurve {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
+public:
+	enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
 
-		struct EquationData {
-			EquationData() : type(Cartesian), min("0"), max("1"), count(1000) {};
+	struct EquationData {
+		EquationData() : type(Cartesian), min("0"), max("1"), count(1000) {};
 
-			EquationType type;
-			QString expression1;
-			QString expression2;
-			QString min;
-			QString max;
-			int count;
-		};
+		EquationType type;
+		QString expression1;
+		QString expression2;
+		QString min;
+		QString max;
+		int count;
+	};
 
-		explicit XYEquationCurve(const QString& name);
-		~XYEquationCurve() override;
+	explicit XYEquationCurve(const QString& name);
+	~XYEquationCurve() override;
 
-		void recalculate();
-		QIcon icon() const override;
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
+	void recalculate();
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
-		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
+	CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
 
-		typedef XYEquationCurvePrivate Private;
+	typedef XYEquationCurvePrivate Private;
 
-	protected:
-		XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd);
+protected:
+	XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd);
 
-	private:
-		Q_DECLARE_PRIVATE(XYEquationCurve)
-		void init();
+private:
+	Q_DECLARE_PRIVATE(XYEquationCurve)
+	void init();
 
-	signals:
-		friend class XYEquationCurveSetEquationDataCmd;
-		void equationDataChanged(const XYEquationCurve::EquationData&);
+signals:
+	void equationDataChanged(const XYEquationCurve::EquationData&);
 };
 
 #endif

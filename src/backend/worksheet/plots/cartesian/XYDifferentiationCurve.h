@@ -79,7 +79,6 @@ private:
 	Q_DECLARE_PRIVATE(XYDifferentiationCurve)
 
 signals:
-	friend class XYDifferentiationCurveSetDifferentiationDataCmd;
 	void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 };
 

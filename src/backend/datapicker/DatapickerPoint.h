@@ -104,13 +104,7 @@ private:
 	QList<ErrorBarItem*> m_errorBarItemList;
 
 signals:
-	friend class DatapickerPointSetPositionCmd;
 	void positionChanged(QPointF);
-
-	friend class DatapickerPointSetPlusDeltaXPosCmd;
-	friend class DatapickerPointSetMinusDeltaXPosCmd;
-	friend class DatapickerPointSetPlusDeltaYPosCmd;
-	friend class DatapickerPointSetMinusDeltaYPosCmd;
 	void plusDeltaXPosChanged(QPointF);
 	void minusDeltaXPosChanged(QPointF);
 	void plusDeltaYPosChanged(QPointF);

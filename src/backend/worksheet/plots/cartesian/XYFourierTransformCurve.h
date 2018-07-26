@@ -82,7 +82,6 @@ private:
 	Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 
 signals:
-	friend class XYFourierTransformCurveSetTransformDataCmd;
 	void transformDataChanged(const XYFourierTransformCurve::TransformData&);
 };
 

@@ -41,105 +41,97 @@
 class TextLabelPrivate;
 
 class TextLabel : public WorksheetElement {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+public:
+	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
 
-		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
+	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 
-		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
-		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
+	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
+	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
-		struct TextWrapper {
-			TextWrapper() : teXUsed(false) {}
-			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-			TextWrapper(const QString& t) : text(t), teXUsed(false) {}
+	struct TextWrapper {
+		TextWrapper() : teXUsed(false) {}
+		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
+		TextWrapper(const QString& t) : text(t), teXUsed(false) {}
 
-			QString text;
-			bool teXUsed;
-		};
+		QString text;
+		bool teXUsed;
+	};
 
-		struct PositionWrapper {
-			QPointF 		   point;
-			HorizontalPosition horizontalPosition;
-			VerticalPosition   verticalPosition;
-		};
+	struct PositionWrapper {
+		QPointF 		   point;
+		HorizontalPosition horizontalPosition;
+		VerticalPosition   verticalPosition;
+	};
 
-		explicit TextLabel(const QString& name, Type type = General);
-		~TextLabel() override;
+	explicit TextLabel(const QString& name, Type type = General);
+	~TextLabel() override;
 
-		Type type() const;
-		QIcon icon() const override;
-		QMenu* createContextMenu() override;
-		QGraphicsItem* graphicsItem() const override;
-		void setParentGraphicsItem(QGraphicsItem*);
+	Type type() const;
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
+	void setParentGraphicsItem(QGraphicsItem*);
 
-		void save(QXmlStreamWriter*) const override;
-		bool load(XmlStreamReader*, bool preview) override;
-		void loadThemeConfig(const KConfig& config) override;
-		void saveThemeConfig(const KConfig& config) override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig& config) override;
+	void saveThemeConfig(const KConfig& config) override;
 
-		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
-		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
-		BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
-		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-		void setPosition(QPointF);
-		void setPositionInvalid(bool);
-		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
-		BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
+	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
+	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
+	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
+	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+	void setPosition(QPointF);
+	void setPositionInvalid(bool);
+	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
+	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
-		void setVisible(bool on) override;
-		bool isVisible() const override;
-		void setPrinting(bool) override;
+	void setVisible(bool on) override;
+	bool isVisible() const override;
+	void setPrinting(bool) override;
 
-		void retransform() override;
-		void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void retransform() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-		typedef TextLabelPrivate Private;
+	typedef TextLabelPrivate Private;
 
-	private slots:
-		void updateTeXImage();
+private slots:
+	void updateTeXImage();
 
-		//SLOTs for changes triggered via QActions in the context menu
-		void visibilityChanged();
+	//SLOTs for changes triggered via QActions in the context menu
+	void visibilityChanged();
 
-	protected:
-		TextLabelPrivate* const d_ptr;
-		TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
+protected:
+	TextLabelPrivate* const d_ptr;
+	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
 
-	private:
-		Q_DECLARE_PRIVATE(TextLabel)
-		void init();
+private:
+	Q_DECLARE_PRIVATE(TextLabel)
+	void init();
 
-		Type m_type;
-		QAction* visibilityAction;
+	Type m_type;
+	QAction* visibilityAction;
 
-	signals:
-		friend class TextLabelSetTextCmd;
-		friend class TextLabelSetTeXFontCmd;
-		friend class TextLabelSetTeXFontColorCmd;
-		friend class TextLabelSetTeXBackgroundColorCmd;
-		friend class TextLabelSetPositionCmd;
-		friend class TextLabelSetHorizontalAlignmentCmd;
-		friend class TextLabelSetVerticalAlignmentCmd;
-		friend class TextLabelSetRotationAngleCmd;
-		void textWrapperChanged(const TextLabel::TextWrapper&);
-		void teXFontSizeChanged(const int);
-		void teXFontChanged(const QFont);
-		void teXFontColorChanged(const QColor);
-		void teXBackgroundColorChanged(const QColor);
-		void positionChanged(const TextLabel::PositionWrapper&);
-		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-		void verticalAlignmentChanged(TextLabel::VerticalAlignment);
-		void rotationAngleChanged(qreal);
-		void visibleChanged(bool);
+signals:
+	void textWrapperChanged(const TextLabel::TextWrapper&);
+	void teXFontSizeChanged(const int);
+	void teXFontChanged(const QFont);
+	void teXFontColorChanged(const QColor);
+	void teXBackgroundColorChanged(const QColor);
+	void positionChanged(const TextLabel::PositionWrapper&);
+	void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
+	void verticalAlignmentChanged(TextLabel::VerticalAlignment);
+	void rotationAngleChanged(qreal);
+	void visibleChanged(bool);
 
-		void teXImageUpdated(bool);
-		void changed();
+	void teXImageUpdated(bool);
+	void changed();
 };
 
 #endif

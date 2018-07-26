@@ -157,18 +157,5 @@ signals:
 	void pointBrushChanged(QBrush);
 	void pointPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
-
-	friend class DatapickerImageSetFileNameCmd;
-	friend class DatapickerImageSetRotationAngleCmd;
-	friend class DatapickerImageSetAxisPointsCmd;
-	friend class DatapickerImageSetSettingsCmd;
-	friend class DatapickerImageSetMinSegmentLengthCmd;
-	friend class DatapickerImageSetPointStyleCmd;
-	friend class DatapickerImageSetPointSizeCmd;
-	friend class DatapickerImageSetPointRotationAngleCmd;
-	friend class DatapickerImageSetPointOpacityCmd;
-	friend class DatapickerImageSetPointBrushCmd;
-	friend class DatapickerImageSetPointPenCmd;
-	friend class DatapickerImageSetPointVisibilityCmd;
 };
 #endif

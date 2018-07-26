@@ -85,7 +85,6 @@ private:
 	Q_DECLARE_PRIVATE(XYInterpolationCurve)
 
 signals:
-	friend class XYInterpolationCurveSetInterpolationDataCmd;
 	void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
 };
 

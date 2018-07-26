@@ -150,12 +150,8 @@ private:
 	Q_DECLARE_PRIVATE(XYFitCurve)
 
 signals:
-	friend class XYFitCurveSetXErrorColumnCmd;
-	friend class XYFitCurveSetYErrorColumnCmd;
 	void xErrorColumnChanged(const AbstractColumn*);
 	void yErrorColumnChanged(const AbstractColumn*);
-
-	friend class XYFitCurveSetFitDataCmd;
 	void fitDataChanged(const XYFitCurve::FitData&);
 };
 
