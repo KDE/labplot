@@ -225,7 +225,7 @@ public slots:
 
 private slots:
 	void onMqttConnect();
-	void mqttSubscribtionMessageReceived(const QMqttMessage&);
+	void mqttSubscriptionMessageReceived(const QMqttMessage&);
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void subscriptionLoaded(const QString&);
 

@@ -1,0 +1,4 @@
+home/bathroom/sensor/temperature home/bedroom/sensor/temperature home/+/sensor/temperature
+home/+/sensor/temperature home/+/sensor/pressure home/+/sensor/+
+home/bathroom/# home/bedroom/#  home/+/#
+home/+/sensor/# home/+/switch/# home/+/+/#

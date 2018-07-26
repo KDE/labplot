@@ -484,7 +484,7 @@ void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 				}
 			}
 
-			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscriptionMessageReceived);
 
 			emit mqttTopicsChanged();
 		}
@@ -607,7 +607,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 					inferiorTopics[i]->reparent(newSubscription);
 				}
 			}
-			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscriptionMessageReceived);
 		}
 	}
 }
@@ -684,6 +684,13 @@ bool MQTTClient::checkTopicContains(const QString &superior, const QString& infe
 						//then superior can't contain inferior
 						ok = false;
 						break;
+					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						//if the two topics differ at the last level
+						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
+						//then superior can't contain inferior
+						ok = false;
+						break;
 					}
 				}
 			}
@@ -721,7 +728,7 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 
 			//they can differ at only one level
 			bool differ = false;
-			if(differIndex > 0 && differIndex < firstList.size() -1) {
+			if(differIndex > 0) {
 				for(int j = differIndex +1; j < firstList.size(); ++j) {
 					if(firstList.at(j) != secondtList.at(j)) {
 						differ = true;
@@ -906,7 +913,7 @@ void MQTTClient::updateWillMessage() {
 					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
 					if((asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Integer) ||
 							(asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-						m_client->setWillMessage(asciiFilter->mqttColumnStatistics(tempTopic).toUtf8());
+						m_client->setWillMessage(asciiFilter->mqttColumnStatistics(willTopic).toUtf8());
 						qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 					}
 					//Otherwise set empty message
@@ -1074,7 +1081,7 @@ void MQTTClient::onMqttConnect() {
 						m_mqttSubscriptions.push_back(newSubscription);
 					}
 
-					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscriptionMessageReceived);
 					qDebug()<<"Added topic";
 				}
 			}
@@ -1092,7 +1099,7 @@ void MQTTClient::onMqttConnect() {
 				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
 				if(temp) {
 					qDebug()<<temp->topic()<<"  "<<temp->qos();
-					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscribtionMessageReceived);
+					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::mqttSubscriptionMessageReceived);
 				} else
 					qDebug()<<"Couldn't subscribe after will change";
 			}
@@ -1104,7 +1111,7 @@ void MQTTClient::onMqttConnect() {
  *\brief called when a message is received by a topic belonging to one of subscriptions of the client.
  * It passes the message to the appropriate MQTTSubscription which will pass it to the appropriate MQTTTopic
  */
-void MQTTClient::mqttSubscribtionMessageReceived(const QMqttMessage& msg) {
+void MQTTClient::mqttSubscriptionMessageReceived(const QMqttMessage& msg) {
 	//Decide to interpret retain message or not
 	if(!msg.retain() || (msg.retain() && m_mqttRetain) ) {
 		qDebug()<<"message received from "<<msg.topic().name();

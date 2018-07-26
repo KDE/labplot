@@ -2193,29 +2193,31 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 #endif
 		QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 		for (auto& valueString: newDataList) {
-			QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
-			for (const auto& valueString2: splitString) {
-				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
-					if (readingType != MQTTClient::ReadingType::TillEnd)
-						newData[newDataIdx++] = valueString2;
-					else
-						newData.push_back(valueString2);
-					newLinesTillEnd++;
+			if(!valueString.startsWith(commentCharacter)) {
+				QStringList splitString = valueString.split(m_separator, static_cast<QString::SplitBehavior>(skipEmptyParts));
+				for (const auto& valueString2: splitString) {
+					if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
+						if (readingType != MQTTClient::ReadingType::TillEnd)
+							newData[newDataIdx++] = valueString2;
+						else
+							newData.push_back(valueString2);
+						newLinesTillEnd++;
 
-					if (readingType != MQTTClient::ReadingType::TillEnd) {
-						newLinesForSampleSizeNotTillEnd++;
-						//for Continous reading and FromEnd we read sample rate number of lines if possible
-						qDebug()<<"new lines for sample rate: "<<newLinesForSampleSizeNotTillEnd;
-						if (newLinesForSampleSizeNotTillEnd == spreadsheet->sampleSize()) {
-							sampleSizeReached = true;
-							break;
+						if (readingType != MQTTClient::ReadingType::TillEnd) {
+							newLinesForSampleSizeNotTillEnd++;
+							//for Continous reading and FromEnd we read sample rate number of lines if possible
+							qDebug()<<"new lines for sample rate: "<<newLinesForSampleSizeNotTillEnd;
+							if (newLinesForSampleSizeNotTillEnd == spreadsheet->sampleSize()) {
+								sampleSizeReached = true;
+								break;
+							}
 						}
 					}
 				}
+				//if the sample size limit is reached we brake from the outer loop as well
+				if(sampleSizeReached)
+					break;
 			}
-			//if the sample size limit is reached we brake from the outer loop as well
-			if(sampleSizeReached)
-				break;
 		}
 	}
 
@@ -2881,10 +2883,12 @@ int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QS
 	int tempRowCount = 0;
 	QStringList newDataList = message.split(QRegExp("\n|\r\n|\r"), QString::SkipEmptyParts);
 	for (auto& valueString: newDataList) {
-		QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-		for (auto& valueString2: splitString) {
-			if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
-				tempRowCount ++;
+		if(!valueString.startsWith(commentCharacter)) {
+			QStringList splitString = valueString.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+			for (auto& valueString2: splitString) {
+				if (!valueString2.isEmpty() && !valueString2.startsWith(commentCharacter)) {
+					tempRowCount ++;
+				}
 			}
 		}
 	}
