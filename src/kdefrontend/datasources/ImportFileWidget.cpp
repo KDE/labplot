@@ -866,6 +866,13 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
 						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
 						ok = false;
 						break;
+					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						//if the two topics differ at the last level
+						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
+						//then superior can't contain inferior
+						ok = false;
+						break;
 					}
 				}
 			}

@@ -26,6 +26,8 @@
  ***************************************************************************/
 
 #include "MQTTUnitTest.h"
+
+#ifdef HAVE_MQTT
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
@@ -396,3 +398,5 @@ void MQTTUnitTest::testTextMessage() {
 }
 
 QTEST_MAIN(MQTTUnitTest)
+
+#endif //HAVE_MQTT

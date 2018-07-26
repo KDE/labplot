@@ -1,5 +1,5 @@
 /***************************************************************************
-File                 : LiveDataDock.cpp
+File                 : MQTTErrorWidget.cpp
 Project              : LabPlot
 Description          : Widget for informing about an MQTT error, and for trying to solve it
 --------------------------------------------------------------------
