@@ -16,17 +16,8 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+  <layout class="QVBoxLayout" name="verticalLayout_2">   
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -258,7 +249,7 @@
             <property name="toolTip">
              <string>Specify the name of the file to import.</string>
             </property>
-            <property name="clearButtonEnabled">
+            <property name="clearButtonEnabled" stdset="0">
              <bool>true</bool>
             </property>
            </widget>
@@ -516,16 +507,7 @@
           <string>Format Options</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -943,7 +925,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="lSampleSize">
             <property name="text">
-             <string>Sample rate:</string>
+             <string>Sample size:</string>
             </property>
            </widget>
           </item>
@@ -1333,3 +1315,4 @@
  <resources/>
  <connections/>
 </ui>
+

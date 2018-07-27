@@ -50,7 +50,6 @@ class QFile;
 
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
-	Q_ENUMS(FileType)
 	Q_ENUMS(SourceType)
 	Q_ENUMS(UpdateType)
 	Q_ENUMS(ReadingType)
@@ -71,8 +70,8 @@ public:
 	};
 
 	enum ReadingType {
-		ContinuousFixed = 0,	// read fixed number of samples (aka lines) using given sampleSize
-		FromEnd,		// read from end, from line lastLine-sampleSize, i.e. sampleSize number of lines
+		ContinuousFixed = 0,	// read continously sampleSize number of samples (lines)
+		FromEnd,		// read sampleSize number of samples (lines) from end
 		TillEnd,		// read until the end
 		WholeFile		// reread whole file
 	};
