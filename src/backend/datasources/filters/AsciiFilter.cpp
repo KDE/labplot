@@ -1023,7 +1023,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		for (; row < linesToRead; ++row) {
-			DEBUG("\n	Reading row " << row << " of " << linesToRead);
+			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
