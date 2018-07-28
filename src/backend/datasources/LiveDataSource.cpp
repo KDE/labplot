@@ -596,13 +596,16 @@ void LiveDataSource::read() {
 			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case LocalSocket:
-		DEBUG("reading from local socket. state before abort = " << ENUM_TO_STRING(QLocalSocket, LocalSocketState, m_localSocket->state()));
-		m_localSocket->abort();
+		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
+		if (m_localSocket->state() == QLocalSocket::ConnectingState)
+			m_localSocket->abort();
 		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-		DEBUG("reading from local socket. state after reconnect = " << m_localSocket->state());
+		if (m_localSocket->waitForConnected())
+			m_localSocket->waitForReadyRead();
+		DEBUG("	Reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
 	case SerialPort:
-		DEBUG("	Reading from the serial port");
+		DEBUG("	Reading from serial port");
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::Ascii)
