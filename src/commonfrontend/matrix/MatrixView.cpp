@@ -1065,7 +1065,7 @@ void MatrixView::print(QPrinter* printer) const {
 	RESET_CURSOR;
 }
 
-void MatrixView::exportToFile(const QString& path, const QString& separator) const {
+void MatrixView::exportToFile(const QString& path, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
@@ -1080,8 +1080,11 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
 	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
 		for (int col=0; col<cols; ++col) {
+			out << locale.toString(data->at(col)[row], m_matrix->numericFormat(), m_matrix->precision());
+
 			out << data->at(col)[row];
 			if (col!=cols-1)
 				out<<sep;
