@@ -82,8 +82,8 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	else
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe || fds->readingType() == LiveDataSource::ReadingType::TillEnd
-			|| fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+	if (fds->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket || fds->sourceType() == LiveDataSource::SourceType::LocalSocket
+			|| fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
@@ -145,8 +145,8 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 	const LiveDataSource* const fds = m_liveDataSources.at(0);
 
-	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe || type == LiveDataSource::ReadingType::TillEnd
-			|| type == LiveDataSource::ReadingType::WholeFile) {
+	if (fds->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket || fds->sourceType() == LiveDataSource::SourceType::LocalSocket
+		|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
