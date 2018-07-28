@@ -1425,42 +1425,54 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	if (labelsFormat == Axis::FormatDecimal) {
-		QString nullStr = QString::number(0, 'f', labelsPrecision);
-		for (auto value : tickLabelValues) {
-			str = QString::number(value, 'f', labelsPrecision);
-			if (str == "-" + nullStr) str = nullStr;
-			str = labelsPrefix + str + labelsSuffix;
-			tickLabelStrings << str;
+	if ( (orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+		|| (orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
+		if (labelsFormat == Axis::FormatDecimal) {
+			QString nullStr = QString::number(0, 'f', labelsPrecision);
+			for (auto value : tickLabelValues) {
+				str = QString::number(value, 'f', labelsPrecision);
+				if (str == "-" + nullStr) str = nullStr;
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::FormatScientificE) {
+			QString nullStr = QString::number(0, 'e', labelsPrecision);
+			for (auto value : tickLabelValues) {
+				str = QString::number(value, 'e', labelsPrecision);
+				if (str == "-" + nullStr) str = nullStr;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::FormatPowers10) {
+			for (auto value : tickLabelValues) {
+				str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::FormatPowers2) {
+			for (auto value : tickLabelValues) {
+				str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::FormatPowersE) {
+			for (auto value : tickLabelValues) {
+				str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::FormatMultipliesPi) {
+			for (auto value : tickLabelValues) {
+				str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
 		}
-	} else if (labelsFormat == Axis::FormatScientificE) {
-		QString nullStr = QString::number(0, 'e', labelsPrecision);
+	} else {
 		for (auto value : tickLabelValues) {
-			str = QString::number(value, 'e', labelsPrecision);
-			if (str == "-" + nullStr) str = nullStr;
-			tickLabelStrings << str;
-		}
-	} else if (labelsFormat == Axis::FormatPowers10) {
-		for (auto value : tickLabelValues) {
-			str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
-			str = labelsPrefix + str + labelsSuffix;
-			tickLabelStrings << str;
-		}
-	} else if (labelsFormat == Axis::FormatPowers2) {
-		for (auto value : tickLabelValues) {
-			str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
-			str = labelsPrefix + str + labelsSuffix;
-			tickLabelStrings << str;
-		}
-	} else if (labelsFormat == Axis::FormatPowersE) {
-		for (auto value : tickLabelValues) {
-			str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
-			str = labelsPrefix + str + labelsSuffix;
-			tickLabelStrings << str;
-		}
-	} else if (labelsFormat == Axis::FormatMultipliesPi) {
-		for (auto value : tickLabelValues) {
-			str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+			QDateTime dateTime;
+			dateTime.setSecsSinceEpoch(value);
+			//TODO: use proper datetime format
+			str = dateTime.toString("yyyy-MM-dd hh:mm:ss");
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
