@@ -3,6 +3,7 @@ New features:
 	* Import of ROOT (CERN) TH1 histograms
 	* Import of Ngspice raw files
 	* Allow to rotate plot legends
+	* Allow to specify the number format when exporting spreadsheet
 
 Bug fixes:
 	* Fixed several problems in live data support (in progress)

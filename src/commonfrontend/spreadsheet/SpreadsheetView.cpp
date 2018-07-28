@@ -2122,7 +2122,8 @@ bool SpreadsheetView::exportView() {
 			exportToFits(path, exportTo, commentsAsUnits);
 		} else {
 			const QString separator = dlg->separator();
-			exportToFile(path, exportHeader, separator);
+			const QLocale::Language format = dlg->numberFormat();
+			exportToFile(path, exportHeader, separator, format);
 		}
 		RESET_CURSOR;
 	}
@@ -2279,7 +2280,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator) const {
+void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
@@ -2303,9 +2304,16 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	}
 
 	//export values
+	QLocale locale(language);
 	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
 		for (int j = 0; j < cols; ++j) {
-			out << m_spreadsheet->column(j)->asStringColumn()->textAt(i);
+			Column* col = m_spreadsheet->column(j);
+			if (col->columnMode() == AbstractColumn::Numeric) {
+					const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col->outputFilter());
+					out << locale.toString(col->valueAt(i), out_fltr->numericFormat(), 16); // export with max. precision
+			} else
+					out << col->asStringColumn()->textAt(i);
+
 			if (j != cols-1)
 				out << sep;
 		}

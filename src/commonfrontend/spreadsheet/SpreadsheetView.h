@@ -87,7 +87,7 @@ private:
 	void initMenus();
 	void connectActions();
 	bool formulaModeActive() const;
-	void exportToFile(const QString&, const bool, const QString&) const;
+	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
 	void exportToLaTeX(const QString&, const bool exportHeaders,
 	                   const bool gridLines, const bool captions, const bool latexHeaders,
 	                   const bool skipEmptyRows,const bool exportEntire) const;

@@ -28,6 +28,8 @@
 
 #include "ExportSpreadsheetDialog.h"
 #include "ui_exportspreadsheetwidget.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -77,17 +79,10 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->cbFormat->addItem("LaTeX");
 	ui->cbFormat->addItem("FITS");
 
-	ui->cbSeparator->addItem("TAB");
-	ui->cbSeparator->addItem("SPACE");
-	ui->cbSeparator->addItem(",");
-	ui->cbSeparator->addItem(";");
-	ui->cbSeparator->addItem(":");
-	ui->cbSeparator->addItem(",TAB");
-	ui->cbSeparator->addItem(";TAB");
-	ui->cbSeparator->addItem(":TAB");
-	ui->cbSeparator->addItem(",SPACE");
-	ui->cbSeparator->addItem(";SPACE");
-	ui->cbSeparator->addItem(":SPACE");
+	QStringList separators = AsciiFilter::separatorCharacters();
+	separators.takeAt(0); //remove the first entry "auto"
+	ui->cbSeparator->addItems(separators);
+	ui->cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
@@ -95,6 +90,10 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	ui->leFileName->setFocus();
+
+	const QString textNumberFormatShort = i18n("This option determines how the convert numbers to strings.");
+	ui->lNumberFormat->setToolTip(textNumberFormatShort);
+	ui->cbNumberFormat->setToolTip(textNumberFormatShort);
 
 	connect(btnBox, &QDialogButtonBox::accepted, this, &ExportSpreadsheetDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &ExportSpreadsheetDialog::reject);
@@ -118,6 +117,7 @@ void ExportSpreadsheetDialog::loadSettings() {
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
+	ui->cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui->chkHeaders->setChecked(conf.readEntry("LaTeXHeaders", true));
 	ui->chkGridLines->setChecked(conf.readEntry("LaTeXGridLines", true));
 	ui->chkCaptions->setChecked(conf.readEntry("LaTeXCaptions", true));
@@ -138,7 +138,8 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
-	conf.writeEntry("Separator", ui->cbSeparator->currentIndex());
+	conf.writeEntry("Separator", ui->cbSeparator->currentText());
+	conf.writeEntry("NumberFormat", ui->cbNumberFormat->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
 	conf.writeEntry("LaTeXHeaders", ui->chkHeaders->isChecked());
 	conf.writeEntry("LaTeXGridLines", ui->chkGridLines->isChecked());
@@ -251,6 +252,10 @@ QString ExportSpreadsheetDialog::separator() const {
 	return ui->cbSeparator->currentText();
 }
 
+QLocale::Language ExportSpreadsheetDialog::numberFormat() const {
+	return (QLocale::Language)ui->cbNumberFormat->currentIndex();
+}
+
 void ExportSpreadsheetDialog::slotButtonClicked(QAbstractButton* button) {
     if (button == m_okButton)
 	    okClicked();
@@ -354,6 +359,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	if (ui->cbFormat->currentIndex() == 2) {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
+		ui->lNumberFormat->hide();
+		ui->cbNumberFormat->hide();
 
 		ui->chkCaptions->show();
 		ui->chkGridLines->show();
@@ -401,6 +408,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkCaptions->hide();
 		ui->cbLaTeXExport->hide();
 		ui->cbSeparator->hide();
+		ui->lNumberFormat->hide();
+		ui->cbNumberFormat->hide();
 
 		ui->cbExportToFITS->show();
 		ui->lExportToFITS->show();
@@ -413,6 +422,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	} else {
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
+		ui->lNumberFormat->show();
+		ui->cbNumberFormat->show();
 
 		ui->chkCaptions->hide();
 		ui->chkEmptyRows->hide();

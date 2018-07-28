@@ -30,6 +30,7 @@
 #define EXPORTSPREADSHEETDIALOG_H
 
 #include <QDialog>
+#include <QLocale>
 
 namespace Ui {
 	class ExportSpreadsheetWidget;
@@ -59,6 +60,7 @@ public:
 	bool matrixVerticalHeader() const;
 	bool matrixHorizontalHeader() const;
 	QString separator() const;
+	QLocale::Language numberFormat() const;
 	int exportToFits() const;
 	bool commentsAsUnitsFits() const;
 	void setExportTo(const QStringList& to);
