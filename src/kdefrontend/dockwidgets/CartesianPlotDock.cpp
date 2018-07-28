@@ -128,11 +128,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.leXMin, SIGNAL(textChanged(QString)), this, SLOT(xMinChanged()) );
 	connect( ui.leXMax, SIGNAL(textChanged(QString)), this, SLOT(xMaxChanged()) );
 	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
+	connect(ui.cbXRangeFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
 
 	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
 	connect( ui.leYMin, SIGNAL(textChanged(QString)), this, SLOT(yMinChanged()) );
 	connect( ui.leYMax, SIGNAL(textChanged(QString)), this, SLOT(yMaxChanged()) );
 	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
+	connect(ui.cbYRangeFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::yRangeFormatChanged);
 
 	//Range breaks
 	connect( ui.chkXBreak, SIGNAL(toggled(bool)), this, SLOT(toggleXBreak(bool)) );
@@ -316,10 +318,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot, SIGNAL(xMinChanged(double)), this, SLOT(plotXMinChanged(double)) );
 	connect( m_plot, SIGNAL(xMaxChanged(double)), this, SLOT(plotXMaxChanged(double)) );
 	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
+	connect(m_plot, &CartesianPlot::xRangeFormatChanged, this, &CartesianPlotDock::plotXRangeFormatChanged);
 	connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(yMinChanged(double)), this, SLOT(plotYMinChanged(double)) );
 	connect( m_plot, SIGNAL(yMaxChanged(double)), this, SLOT(plotYMaxChanged(double)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+	connect(m_plot, &CartesianPlot::yRangeFormatChanged, this, &CartesianPlotDock::plotYRangeFormatChanged);
 	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
 
 	//range breaks
@@ -356,6 +360,11 @@ void CartesianPlotDock::retranslateUi() {
 	m_initializing = true;
 
 	//general
+	ui.cbXRangeFormat->addItem(i18n("numeric"));
+	ui.cbXRangeFormat->addItem(i18n("datetime"));
+	ui.cbYRangeFormat->addItem(i18n("numeric"));
+	ui.cbYRangeFormat->addItem(i18n("datetime"));
+
 	ui.cbXScaling->addItem( i18n("Linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
 	ui.cbXScaling->addItem( i18n("log2(x)") );
@@ -482,7 +491,7 @@ void CartesianPlotDock::rangeFirstChanged(const QString& text) {
 		plot->setRangeFirstValues(value);
 }
 
-void CartesianPlotDock::rangeLastChanged(const QString & text) {
+void CartesianPlotDock::rangeLastChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
@@ -532,6 +541,15 @@ void CartesianPlotDock::xScaleChanged(int scale) {
 		plot->setXScale((CartesianPlot::Scale) scale);
 }
 
+void CartesianPlotDock::xRangeFormatChanged(int index) {
+	if (m_initializing)
+		return;
+
+	CartesianPlot::RangeFormat format = (CartesianPlot::RangeFormat)index;
+	for (auto* plot: m_plotList)
+		plot->setXRangeFormat(format);
+}
+
 void CartesianPlotDock::autoScaleYChanged(int state) {
 	bool checked = (state==Qt::Checked);
 	ui.leYMin->setEnabled(!checked);
@@ -572,6 +590,15 @@ void CartesianPlotDock::yScaleChanged(int index) {
 	CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
 	for (auto* plot: m_plotList)
 		plot->setYScale(scale);
+}
+
+void CartesianPlotDock::yRangeFormatChanged(int index) {
+	if (m_initializing)
+		return;
+
+	CartesianPlot::RangeFormat format = (CartesianPlot::RangeFormat)index;
+	for (auto* plot: m_plotList)
+		plot->setYRangeFormat(format);
 }
 
 // "Range Breaks"-tab
@@ -1149,6 +1176,12 @@ void CartesianPlotDock::plotXScaleChanged(int scale) {
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotXRangeFormatChanged(CartesianPlot::RangeFormat format) {
+	m_initializing = true;
+	ui.cbXRangeFormat->setCurrentIndex(format);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 	m_initializing = true;
 	ui.chkAutoScaleY->setChecked(value);
@@ -1170,6 +1203,12 @@ void CartesianPlotDock::plotYMaxChanged(double value) {
 void CartesianPlotDock::plotYScaleChanged(int scale) {
 	m_initializing = true;
 	ui.cbYScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotYRangeFormatChanged(CartesianPlot::RangeFormat format) {
+	m_initializing = true;
+	ui.cbYRangeFormat->setCurrentIndex(format);
 	m_initializing = false;
 }
 
@@ -1335,11 +1374,13 @@ void CartesianPlotDock::load() {
 	ui.leXMin->setText( QString::number(m_plot->xMin()) );
 	ui.leXMax->setText( QString::number(m_plot->xMax()) );
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
+	ui.cbXRangeFormat->setCurrentIndex( (int) m_plot->xRangeFormat() );
 
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
 	ui.leYMin->setText( QString::number(m_plot->yMin()) );
 	ui.leYMax->setText( QString::number(m_plot->yMax()) );
 	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
+	ui.cbYRangeFormat->setCurrentIndex( (int) m_plot->yRangeFormat() );
 
 	//Title
 	labelWidget->load();
