@@ -842,15 +842,27 @@ void CartesianPlot::setRangeType(RangeType type) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeFormat, CartesianPlot::RangeFormat, xRangeFormat, xRangeFormatChanged);
 void CartesianPlot::setXRangeFormat(RangeFormat format) {
 	Q_D(CartesianPlot);
-	if (format != d->xRangeFormat)
+	if (format != d->xRangeFormat) {
 		exec(new CartesianPlotSetXRangeFormatCmd(d, format, ki18n("%1: set x-range format")));
+
+		for (auto* axis : children<Axis>()) {
+			if (axis->orientation() == Axis::AxisHorizontal)
+				axis->retransform();
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
 void CartesianPlot::setYRangeFormat(RangeFormat format) {
 	Q_D(CartesianPlot);
-	if (format != d->yRangeFormat)
+	if (format != d->yRangeFormat) {
 		exec(new CartesianPlotSetYRangeFormatCmd(d, format, ki18n("%1: set y-range format")));
+
+		for (auto* axis : children<Axis>()) {
+			if (axis->orientation() == Axis::AxisHorizontal)
+				axis->retransform();
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
@@ -1293,6 +1305,27 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = true;
+
+		//in case the first curve is added, check whether we start plotting datetime data
+		if (children<XYCurve>().size() == 1) {
+			const AbstractColumn* col = curve->xColumn();
+			if (col) {
+				if (col->columnMode() == AbstractColumn::DateTime) {
+					setUndoAware(false);
+					setXRangeFormat(CartesianPlot::DateTime);
+					setUndoAware(true);
+				}
+			}
+
+			col = curve->yColumn();
+			if (col) {
+				if (col->columnMode() == AbstractColumn::DateTime) {
+					setUndoAware(false);
+					setYRangeFormat(CartesianPlot::DateTime);
+					setUndoAware(true);
+				}
+			}
+		}
 	} else {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 		if (histo) {
@@ -1425,6 +1458,17 @@ void CartesianPlot::xDataChanged() {
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		curve->retransform();
 	}
+
+	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
+	if (children<XYCurve>().size() == 1) {
+		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		const AbstractColumn* col = curve->xColumn();
+		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			setUndoAware(false);
+			setXRangeFormat(CartesianPlot::DateTime);
+			setUndoAware(true);
+		}
+	}
 }
 
 /*!
@@ -1445,6 +1489,17 @@ void CartesianPlot::yDataChanged() {
 	else {
 		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		curve->retransform();
+	}
+
+	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
+	if (children<XYCurve>().size() == 1) {
+		XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		const AbstractColumn* col = curve->yColumn();
+		if (col->columnMode() == AbstractColumn::DateTime && d->xRangeFormat != CartesianPlot::DateTime) {
+			setUndoAware(false);
+			setYRangeFormat(CartesianPlot::DateTime);
+			setUndoAware(true);
+		}
 	}
 }
 
@@ -2525,6 +2580,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "yMax", QString::number(d->yMax) );
 	writer->writeAttribute( "xScale", QString::number(d->xScale) );
 	writer->writeAttribute( "yScale", QString::number(d->yScale) );
+	writer->writeAttribute( "xRangeFormat", QString::number(d->xRangeFormat) );
+	writer->writeAttribute( "yRangeFormat", QString::number(d->yRangeFormat) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeEndElement();
@@ -2628,17 +2685,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
 
-			str = attribs.value("autoScaleX").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoScaleX").toString());
-			else
-				d->autoScaleX = bool(str.toInt());
-
-			str = attribs.value("autoScaleY").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoScaleY").toString());
-			else
-				d->autoScaleY = bool(str.toInt());
+			READ_INT_VALUE("autoScaleX", autoScaleX, bool);
+			READ_INT_VALUE("autoScaleY", autoScaleY, bool);
 
 			str = attribs.value("xMin").toString();
 			if (str.isEmpty())
@@ -2672,39 +2720,20 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				d->yMaxPrev = d->yMax;
 			}
 
-			str = attribs.value("xScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("xScale").toString());
-			else
-				d->xScale = CartesianPlot::Scale(str.toInt());
+			READ_INT_VALUE("xScale", xScale, CartesianPlot::Scale);
+			READ_INT_VALUE("yScale", yScale, CartesianPlot::Scale);
 
-			str = attribs.value("yScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yScale").toString());
-			else
-				d->yScale = CartesianPlot::Scale(str.toInt());
+			READ_INT_VALUE("xRangeFormat", xRangeFormat, CartesianPlot::RangeFormat);
+			READ_INT_VALUE("yRangeFormat", yRangeFormat, CartesianPlot::RangeFormat);
 
-			str = attribs.value("horizontalPadding").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalPadding").toString());
-			else
-				d->horizontalPadding = str.toDouble();
-
-			str = attribs.value("verticalPadding").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalPadding").toString());
-			else
-				d->verticalPadding = str.toDouble();
+			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
+			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 		} else if (!preview && reader->name() == "xRangeBreaks") {
 			//delete default rang break
 			d->xRangeBreaks.list.clear();
 
 			attribs = reader->attributes();
-			str = attribs.value("enabled").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("enabled").toString());
-			else
-				d->xRangeBreakingEnabled = str.toInt();
+			READ_INT_VALUE("enabled", xRangeBreakingEnabled, bool);
 		} else if (!preview && reader->name() == "xRangeBreak") {
 			attribs = reader->attributes();
 
@@ -2739,11 +2768,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			d->yRangeBreaks.list.clear();
 
 			attribs = reader->attributes();
-			str = attribs.value("enabled").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("enabled").toString());
-			else
-				d->yRangeBreakingEnabled = str.toInt();
+			READ_INT_VALUE("enabled", yRangeBreakingEnabled, bool);
 		} else if (!preview && reader->name() == "yRangeBreak") {
 			attribs = reader->attributes();
 

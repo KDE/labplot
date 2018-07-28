@@ -79,11 +79,13 @@ private slots:
 	void autoScaleXChanged(int);
 	void xMinChanged();
 	void xMaxChanged();
+	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 
 	void autoScaleYChanged(int);
 	void yMinChanged();
 	void yMaxChanged();
+	void yRangeFormatChanged(int);
 	void yScaleChanged(int);
 
 	//"Range Breaks"-tab
@@ -130,14 +132,20 @@ private slots:
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
+
 	void plotXAutoScaleChanged(bool);
 	void plotXMinChanged(double);
 	void plotXMaxChanged(double);
+	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
 	void plotXScaleChanged(int);
+
+
 	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(double);
 	void plotYMaxChanged(double);
+	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
 	void plotYScaleChanged(int);
+
 	void plotVisibleChanged(bool);
 
 	//range breaks

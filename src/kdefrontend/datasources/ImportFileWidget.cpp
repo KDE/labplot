@@ -2010,8 +2010,10 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
+	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
-	if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+			|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
@@ -2038,6 +2040,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->show();
 		ui.bOpen->show();
 		ui.chbLinkFile->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
@@ -2050,33 +2054,19 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		fileNameChanged(ui.leFileName->text());
 		break;
-	case LiveDataSource::SourceType::LocalSocket:
-		ui.lFileName->show();
-		ui.leFileName->show();
-		ui.bOpen->show();
-
-		ui.bFileInfo->hide();
-		ui.cbBaudRate->hide();
-		ui.lBaudRate->hide();
-		ui.lHost->hide();
-		ui.leHost->hide();
-		ui.lPort->hide();
-		ui.lePort->hide();
-		ui.cbSerialPort->hide();
-		ui.lSerialPort->hide();
-		ui.chbLinkFile->hide();
-
-		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
-		ui.cbFilter->setEnabled(true);
-		ui.cbFileType->setEnabled(true);
-		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
+		if (type == LiveDataSource::SourceType::NetworkTcpSocket) {
+			ui.lSampleSize->hide();
+			ui.sbSampleSize->hide();
+		} else {
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
+		}
 
 		ui.lBaudRate->hide();
 		ui.cbBaudRate->hide();
@@ -2094,11 +2084,36 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
 		break;
+	case LiveDataSource::SourceType::LocalSocket:
+		ui.lFileName->show();
+		ui.leFileName->show();
+		ui.bOpen->show();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
+
+		ui.bFileInfo->hide();
+		ui.cbBaudRate->hide();
+		ui.lBaudRate->hide();
+		ui.lHost->hide();
+		ui.leHost->hide();
+		ui.lPort->hide();
+		ui.lePort->hide();
+		ui.cbSerialPort->hide();
+		ui.lSerialPort->hide();
+		ui.chbLinkFile->hide();
+
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
+		ui.cbFileType->setEnabled(true);
+		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
 		ui.cbBaudRate->show();
 		ui.lSerialPort->show();
 		ui.cbSerialPort->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 
 		ui.lHost->hide();
 		ui.leHost->hide();

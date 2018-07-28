@@ -69,7 +69,7 @@ public:
 
 	void resizeHeaders();
 	void adjustHeaders();
-	void exportToFile(const QString& path, const QString& separator) const;
+	void exportToFile(const QString& path, const QString& separator, QLocale::Language) const;
 	void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;

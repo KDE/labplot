@@ -157,7 +157,8 @@ bool Matrix::exportView() const {
 			m_view->exportToFits(path, exportTo );
 		} else {
 			const QString separator = dlg->separator();
-			m_view->exportToFile(path, separator);
+			const QLocale::Language format = dlg->numberFormat();
+			m_view->exportToFile(path, separator, format);
 		}
 		RESET_CURSOR;
     	}

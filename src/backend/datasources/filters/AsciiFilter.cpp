@@ -672,13 +672,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			return 0;
 
 	if (!m_prepared) {
-		DEBUG("Preparing ..");
+		DEBUG("	Preparing ..");
 
 		switch (spreadsheet->sourceType()) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			const int deviceError = prepareDeviceToRead(device);
 			if (deviceError != 0) {
-				DEBUG("Device error = " << deviceError);
+				DEBUG("	Device error = " << deviceError);
 				return 0;
 			}
 			break;
@@ -760,7 +760,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		DEBUG("Prepared!");
+		DEBUG("	Prepared!");
 	}
 
 	qint64 bytesread = 0;
@@ -857,7 +857,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	//we had less new lines than the sample size specified
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		QDEBUG("Removed empty lines: " << newData.removeAll(""));
+		QDEBUG("	Removed empty lines: " << newData.removeAll(""));
 
 	//back to the last read position before counting when reading from files
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
@@ -869,7 +869,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	int linesToRead = 0;
 	int keepNValues = spreadsheet->keepNValues();
 
-	DEBUG("Increase row count");
+	DEBUG("	Increase row count");
 	if (m_prepared) {
 		//increase row count if we don't have a fixed size
 		//but only after the preparation step
@@ -1048,8 +1048,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 
 	// from the last row we read the new data in the spreadsheet
-	qDebug() << "reading from line"  << currentRow << " till end" << newLinesTillEnd;
-	qDebug() << "Lines to read:" << linesToRead <<", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols;
+	DEBUG("	Reading from line"  << currentRow << " till end" << newLinesTillEnd);
+	DEBUG("	Lines to read:" << linesToRead <<", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols);
 	newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
 		if (m_prepared) {
@@ -1060,8 +1060,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				bytesread += newData.at(i).size();
 		}
 	}
-	qDebug() << "newDataIdx: " << newDataIdx;
-	//TODO
+	DEBUG("	newDataIdx: " << newDataIdx);
+
 	static int indexColumnIdx = 0;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
@@ -1087,7 +1087,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		for (; row < linesToRead; ++row) {
-			DEBUG("Reading row " << row << " of " << linesToRead);
+			DEBUG("	Reading row " << row << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -1101,7 +1101,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				}
 			}
 
-			DEBUG("line bytes: " << line.size() << " line: " << line.toStdString());
+			DEBUG("	Line bytes: " << line.size() << " line: " << line.toStdString());
 			if (simplifyWhitespacesEnabled)
 				line = line.simplified();
 
@@ -1229,6 +1229,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	m_prepared = true;
 
+	DEBUG("AsciiFilterPrivate::readFromLiveDevice() DONE");
 	return bytesread;
 }
 
