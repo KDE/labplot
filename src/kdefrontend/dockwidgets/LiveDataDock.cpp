@@ -1003,8 +1003,15 @@ void LiveDataDock::removeSubscription() {
  * appends the topic's root to the topicList if it isn't in the list already
  * then sets the completer for leTopics
  */
-void LiveDataDock::setTopicCompleter(const QString& topic) {
+void LiveDataDock::setTopicCompleter(const QString& topicName) {
 	if(!m_searching) {
+		QStringList list = topicName.split("/", QString::SkipEmptyParts);
+		QString topic;
+		if(!list.isEmpty()) {
+			topic = list.at(0);
+		} else
+			topic = topicName;
+
 		if(!m_topicList[m_mqttClients.first()->clientHostName()].contains(topic)) {
 			m_topicList[m_mqttClients.first()->clientHostName()].append(topic);
 			m_topicCompleter = new QCompleter(m_topicList[m_mqttClients.first()->clientHostName()], this);
@@ -1547,9 +1554,11 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 				if(childCount > 0) {
 					//if the number of topics found and the calculated number of topics is equal, the topics can be merged
 					if(topics.value().size() == childCount) {
+						for(int k = 0; k < topics.value().size(); ++k)
+							qDebug()<<topics.value().at(k);
+
 						foundEqual = true;
 						commonTopics.push_back(topics.key());
-						qDebug()<<topics.key()<<" equal is true";
 					}
 				}
 			}
@@ -1689,7 +1698,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	}
 
 	//signals that a newTopic was added, in order to fill the completer of leTopics
-	emit newTopic(rootName);
+	emit newTopic(topicName);
 }
 
 /*!
@@ -1727,5 +1736,77 @@ void LiveDataDock::removeClient(const QString& name) {
 
 	delete m_clients[name];
 	m_clients.remove(name);
+}
+
+/*!
+ * \brief Used for testing the MQTT related features
+ * \param topic
+ */
+bool LiveDataDock::testSubscribe(const QString& topic){
+	QStringList topicList = topic.split("/", QString::SkipEmptyParts);
+	QTreeWidgetItem* currentItem = nullptr;
+	for(int i = 0; i <ui.twTopics->topLevelItemCount(); ++i) {
+		if(ui.twTopics->topLevelItem(i)->text(0) == topicList[0]) {
+			currentItem = ui.twTopics->topLevelItem(i);
+			break;
+		}
+	}
+
+	if (currentItem) {
+		for(int i = 1 ; i < topicList.size(); ++i) {
+			if(topicList[i] == "#")
+				break;
+
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if(currentItem->child(j)->text(0) == topicList[i]) {
+					currentItem = currentItem->child(j);
+					break;
+				} else if (j == currentItem->childCount() - 1)
+					return false;
+
+			}
+		}
+	} else
+		return false;
+
+	ui.twTopics->setCurrentItem(currentItem);
+	addSubscription();
+	return true;
+}
+
+/*!
+ * \brief Used for testing the MQTT related features
+ * \param topic
+ */
+bool LiveDataDock::testUnsubscribe(const QString& topic) {
+	QTreeWidgetItem* currentItem = nullptr;
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+		if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), topic)) {
+			currentItem = ui.twSubscriptions->topLevelItem(i);
+			break;
+		}
+	}
+
+	if(currentItem) {
+		do {
+			if(topic == currentItem->text(0)) {
+				ui.twSubscriptions->setCurrentItem(currentItem);
+				removeSubscription();
+				return true;
+			} else {
+				for(int i = 0; i < currentItem->childCount(); ++i) {
+					qDebug()<<currentItem->child(i)->text(0)<<" "<<topic;
+					if(checkTopicContains(currentItem->child(i)->text(0), topic)) {
+						currentItem = currentItem->child(i);
+						break;
+					} else if (i == currentItem->childCount() - 1)
+						return false;
+				}
+			}
+		} while(currentItem);
+	} else
+		return false;
+
+	return false;
 }
 #endif

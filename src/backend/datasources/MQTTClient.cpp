@@ -425,23 +425,15 @@ void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 
 		if (temp) {
-			qDebug()<<temp->topic()<<"  "<<temp->qos();
+			qDebug()<<"Subscribe to: "<< temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			qDebug()<<"New MQTTSubscription";
 			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
-			qDebug()<<"Add child";
 			addChild(newSubscription);
-
-			qDebug()<<"Add to vector";
 			m_mqttSubscriptions.push_back(newSubscription);
-
-			qDebug()<<"Added topic";
-
-			qDebug()<<"Check for inferior subscriptions";
 
 			//Search for inferior subscriptions, that the new subscription contains
 			bool found = false;
@@ -499,30 +491,25 @@ void MQTTClient::addMQTTSubscription(const QString& topic, quint8 QoS) {
 void MQTTClient::removeMQTTSubscription(const QString &name) {
 	//We can only remove the subscription if it exists
 	if(m_subscriptions.contains(name)) {
-		qDebug()<<"Start to remove subscription in MQTTClient: "<<name;
-
 		//unsubscribe from the topic
 		QMqttTopicFilter filter{name};
 		m_client->unsubscribe(filter);
-		qDebug()<<"QMqttClient's unsubscribe occured";
+		qDebug()<<"unsubscribe from: " << name;
 
 		//Remove every connected information
 		m_subscriptions.removeAll(name);
 
 		for (int i = 0; i < m_mqttSubscriptions.size(); ++i) {
 			if(m_mqttSubscriptions[i]->subscriptionName() == name) {
-				qDebug()<<"Subscription name"<<m_mqttSubscriptions[i]->subscriptionName() << "  "<<m_mqttSubscriptions[i]->name();
 				MQTTSubscription* removeSubscription = m_mqttSubscriptions[i];
 				m_mqttSubscriptions.remove(i);
 				//Remove every topic of the subscription as well
 				QVector<MQTTTopic*> topics = removeSubscription->topics();
 				for (int j = 0; j < topics.size(); ++j) {
-					qDebug()<<"Removing topic name: "<<topics[j]->topicName();
 					m_topicNames.removeAll(topics[j]->topicName());
 				}
 				//Remove the MQTTSubscription
 				removeChild(removeSubscription);
-				qDebug()<<"removed child";
 				break;
 			}
 		}
@@ -532,7 +519,6 @@ void MQTTClient::removeMQTTSubscription(const QString &name) {
 			j.next();
 			if(j.key().filter() == name) {
 				m_subscribedTopicNameQoS.remove(j.key());
-				qDebug()<<"Removed from TopicNameQoS map  "<<j.key();
 				break;
 			}
 		}
@@ -557,21 +543,15 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 		if (temp) {
 			//Add the MQTTSubscription and other connected data
-			qDebug()<<temp->topic()<<"  "<<temp->qos();
+			qDebug()<<"Add before remove: " << temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			qDebug()<<"New MQTTSubscription";
 			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
-			qDebug()<<"Add child";
 			addChild(newSubscription);
-
-			qDebug()<<"Add to vector";
 			m_mqttSubscriptions.push_back(newSubscription);
-
-			qDebug()<<"Added topic";
 
 			//Search for the subscription the topic belonged to
 			bool found = false;
@@ -587,8 +567,6 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 			}
 
 			if(found) {
-				qDebug()<<"Superior subscription: "<<superiorSubscription->subscriptionName();
-
 				//Search for topics belonging to the superior(old) subscription
 				//which are also contained by the new subscription
 				QVector<MQTTTopic*> topics = superiorSubscription->topics();
@@ -603,7 +581,6 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 
 				//Reparent these topics, in order to avoid data loss
 				for(int i = 0; i < inferiorTopics.size() ; ++i) {
-					qDebug()<<inferiorTopics[i]->topicName();
 					inferiorTopics[i]->reparent(newSubscription);
 				}
 			}
@@ -621,6 +598,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString &topic, quint8 QoS) {
 void MQTTClient::reparentTopic(const QString& topic, const QString& parent) {
 	//We can only reparent if the parent containd the topic
 	if(m_subscriptions.contains(parent) && m_topicNames.contains(topic)) {
+		qDebug() << "Reparent " << topic << " to " << parent;
 		//search for the parent MQTTSubscription
 		bool found = false;
 		MQTTSubscription* superiorSubscription;
@@ -633,24 +611,18 @@ void MQTTClient::reparentTopic(const QString& topic, const QString& parent) {
 		}
 
 		if(found) {
-			qDebug()<<"Superior subscription: "<<superiorSubscription->subscriptionName();
 			//get every topic of the MQTTClient
 			QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::Recursive);
-			qDebug()<< topics.size();
 
 			//Search for the given topic among the MQTTTopics
 			for(int i = 0; i < topics.size(); ++i) {
-				qDebug()<<topics.size()<<"  "<<i;
-				qDebug()<<i<<" "<<topics[i]->topicName()<<" "<<topics[i]->parentAspect()->name();
 				if(topic == topics[i]->topicName()) {
-					qDebug()<<topics[i]->topicName()<<"  "<<superiorSubscription->subscriptionName();
 					//if found, it is reparented to the parent MQTTSubscription
 					topics[i]->reparent(superiorSubscription);
 					break;
 				}
 			}
 		}
-		qDebug()<<"reparent done";
 	}
 }
 

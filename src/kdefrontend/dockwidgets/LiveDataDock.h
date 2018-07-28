@@ -76,6 +76,10 @@ private slots:
 #ifdef HAVE_MQTT
 public:
 	void setMQTTClients(const QList<MQTTClient*>& clients);
+//#ifdef MQTT_UNIT_TEST
+	bool testSubscribe(const QString&);
+	bool testUnsubscribe(const QString&);
+//#endif
 
 private slots:
 	void useWillMessage(int);
@@ -117,7 +121,6 @@ private:
 	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
 
 	QList<MQTTClient*> m_mqttClients;
-	//QMqttClient* m_client;
 	QMap<QString, QMqttClient*> m_clients;
 	QCompleter* m_topicCompleter;
 	QCompleter* m_subscriptionCompleter;

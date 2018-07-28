@@ -28,6 +28,10 @@
 #ifdef HAVE_MQTT
 #include <QtTest/QtTest>
 
+#ifndef MQTT_UNIT_TEST
+#define MQTT_UNIT_TEST
+#endif
+
 class MQTTUnitTest : public QObject {
 	Q_OBJECT
 
@@ -46,6 +50,10 @@ private slots:
 	void testIntegerMessage();
 	void testNumericMessage();
 	void testTextMessage();
+
+	//test subscribing and unsubscribing
+	void testSubscriptions();
+
 
 
 private:

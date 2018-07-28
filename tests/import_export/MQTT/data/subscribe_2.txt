@@ -1,0 +1,6 @@
+myhouse/bedroom/temp/1
+myhouse/bathroom/temp/1
+myhouse/kitchen/temp/1
+myhouse/bedroom/pressure/1
+myhouse/bathroom/pressure/1
+myhouse/kitchen/pressure/1

@@ -33,6 +33,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/core/Project.h"
+#include "kdefrontend/dockwidgets/LiveDataDock.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -40,6 +41,7 @@
 #include <QVector>
 #include <QTimer>
 #include <QEventLoop>
+#include <QTreeWidgetItem>
 
 void MQTTUnitTest::initTestCase() {
 	const QString currentDir = __FILE__;
@@ -92,6 +94,9 @@ void MQTTUnitTest::testContainTrue() {
 	}
 }
 
+//##############################################################################
+//############################  check common topics  ###########################
+//##############################################################################
 void MQTTUnitTest::testCommonTrue(){
 	MQTTClient* client = new MQTTClient("test");
 	const QString fileName = m_dataDir + "common_true.txt";
@@ -130,7 +135,9 @@ void MQTTUnitTest::testCommonFalse(){
 	}
 }
 
-
+//##############################################################################
+//#################  test handling of data received by messages  ###############
+//##############################################################################
 void MQTTUnitTest::testIntegerMessage() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
@@ -166,10 +173,8 @@ void MQTTUnitTest::testIntegerMessage() {
 		QFile file(fileName);
 
 		if(file.open(QIODevice::ReadOnly)) {
-			qDebug()<<"publish";
 			QTextStream in(&file);
 			QString message = in.readAll();
-			qDebug()<<message;
 			client->publish(topicFilter.filter(), message.toUtf8(), 0);
 		}
 		file.close();
@@ -186,7 +191,6 @@ void MQTTUnitTest::testIntegerMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			qDebug()<<"search for children";
 			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
@@ -206,10 +210,8 @@ void MQTTUnitTest::testIntegerMessage() {
 			QFile file2(fileName2);
 
 			if(file2.open(QIODevice::ReadOnly)) {
-				qDebug()<<"publish";
 				QTextStream in2(&file2);
 				QString message = in2.readAll();
-				qDebug()<<message;
 				client->publish(topicFilter.filter(), message.toUtf8(), 0);
 			}
 			file2.close();
@@ -261,10 +263,8 @@ void MQTTUnitTest::testNumericMessage() {
 		QFile file(fileName);
 
 		if(file.open(QIODevice::ReadOnly)) {
-			qDebug()<<"publish";
 			QTextStream in(&file);
 			QString message = in.readAll();
-			qDebug()<<message;
 			client->publish(topicFilter.filter(), message.toUtf8(), 0);
 		}
 		file.close();
@@ -281,7 +281,6 @@ void MQTTUnitTest::testNumericMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			qDebug()<<"search for children";
 			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
@@ -301,10 +300,8 @@ void MQTTUnitTest::testNumericMessage() {
 			QFile file2(fileName2);
 
 			if(file2.open(QIODevice::ReadOnly)) {
-				qDebug()<<"publish";
 				QTextStream in2(&file2);
 				QString message = in2.readAll();
-				qDebug()<<message;
 				client->publish(topicFilter.filter(), message.toUtf8(), 0);
 			}
 			file2.close();
@@ -356,10 +353,8 @@ void MQTTUnitTest::testTextMessage() {
 		QFile file(fileName);
 
 		if(file.open(QIODevice::ReadOnly)) {
-			qDebug()<<"publish";
 			QTextStream in(&file);
 			QString message = in.readAll();
-			qDebug()<<message;
 			client->publish(topicFilter.filter(), message.toUtf8(), 0);
 		}
 		file.close();
@@ -376,7 +371,6 @@ void MQTTUnitTest::testTextMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			qDebug()<<"search for children";
 			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
@@ -394,6 +388,209 @@ void MQTTUnitTest::testTextMessage() {
 			QCOMPARE(value->textAt(3), "house");
 			QCOMPARE(value->textAt(4), "Barcelona");
 		}
+	}
+}
+
+//##############################################################################
+//#####################  test subscribing and unsubscribing  ###################
+//##############################################################################
+void MQTTUnitTest::testSubscriptions() {
+	AsciiFilter* filter = new AsciiFilter();
+	filter->setAutoModeEnabled(true);
+
+	Project* project = new Project();
+
+	MQTTClient* mqttClient = new MQTTClient("test");
+	project->addChild(mqttClient);
+	mqttClient->setFilter(filter);
+	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setKeepNValues(0);
+	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
+	mqttClient->setMqttClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTUseAuthentication(false);
+	mqttClient->setMQTTUseID(false);
+	mqttClient->setMqttWillUse(false);
+	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
+	mqttClient->addInitialMqttSubscriptions(topicFilter, 0);
+
+	LiveDataDock* liveDock = new LiveDataDock();
+	QList<MQTTClient*> list;
+	list.push_back(mqttClient);
+	liveDock->setMQTTClients(list);
+
+	mqttClient->read();
+	mqttClient->ready();
+
+	QTimer timer;
+	timer.setSingleShot(true);
+	QEventLoop* loop = new QEventLoop();
+	connect(mqttClient, &MQTTClient::mqttSubscribed, loop, &QEventLoop::quit);
+	connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
+	timer.start(5000);
+	loop->exec();
+
+	if(timer.isActive()) {
+		delete loop;
+		QMqttClient* client = new QMqttClient();
+		client->setHostname("broker.hivemq.com");
+		client->setPort(1883);
+		client->connectToHost();
+
+		QTest::qWaitFor([&]() {
+			return (client->state() == QMqttClient::Connected);
+		}, 3000);
+
+		QString fileName = m_dataDir + "subscribe_1.txt";
+		QFile* file = new QFile(fileName);
+
+		QTest::qWait(1000);
+
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+
+			while(!in.atEnd()) {
+				QString line = in.readLine();
+				QMqttTopicFilter filter{line};
+				client->publish(filter.filter(), QString("test").toUtf8());
+
+				QTimer timer2;
+				timer2.setSingleShot(true);
+				loop = new QEventLoop();
+				connect( (&timer2), &QTimer::timeout, loop, &QEventLoop::quit);
+				connect(liveDock, &LiveDataDock::newTopic, this, [line, loop](const QString& topic) {
+					if(topic == line) {
+						loop->quit();
+					}
+				});
+				timer2.start(5000);
+				loop->exec();
+
+				disconnect(liveDock, &LiveDataDock::newTopic, this, 0);
+			}
+		}
+
+		liveDock->testUnsubscribe("labplot/mqttUnitTest");
+
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "subscribe_2.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				bool found = liveDock->testSubscribe(topic);
+				QCOMPARE(found, true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "subscribe_2_result.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			int count = in.readLine().simplified().toInt();
+			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QCOMPARE(subscriptions.contains(topic), true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "unsubscribe_1.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				bool found = liveDock->testUnsubscribe(topic);
+				QCOMPARE(found, true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "unsubscribe_1_result.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			int count = in.readLine().simplified().toInt();
+			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QCOMPARE(subscriptions.contains(topic), true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "subscribe_3.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				bool found = liveDock->testSubscribe(topic);
+				QCOMPARE(found, true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "subscribe_3_result.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			int count = in.readLine().simplified().toInt();
+			QVector<QString> sub = mqttClient->mqttSubscriptions();
+			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QCOMPARE(subscriptions.contains(topic), true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "unsubscribe_2.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				bool found = liveDock->testUnsubscribe(topic);
+				QCOMPARE(found, true);
+			}
+		}
+		file->close();
+		delete file;
+
+		fileName = m_dataDir + "unsubscribe_2_result.txt";
+		file = new QFile(fileName);
+		if(file->open(QIODevice::ReadOnly)) {
+			QTextStream in(file);
+			int count = in.readLine().simplified().toInt();
+			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+
+			QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+			while(!in.atEnd()) {
+				QString topic = in.readLine();
+				QCOMPARE(subscriptions.contains(topic), true);
+			}
+		}
+		file->close();
+		delete file;
 	}
 }
 
