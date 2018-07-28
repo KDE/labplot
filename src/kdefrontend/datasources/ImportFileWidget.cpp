@@ -1152,8 +1152,9 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
+	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
-	if (type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+	if (sourceType != LiveDataSource::SourceType::FileOrPipe || type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
@@ -1180,6 +1181,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->show();
 		ui.bOpen->show();
 		ui.chbLinkFile->show();
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 
 		ui.cbBaudRate->hide();
 		ui.lBaudRate->hide();
@@ -1196,6 +1199,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lFileName->show();
 		ui.leFileName->show();
 		ui.bOpen->show();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 
 		ui.bFileInfo->hide();
 		ui.cbBaudRate->hide();
@@ -1219,6 +1224,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
+//TODO
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 
 		ui.lBaudRate->hide();
 		ui.cbBaudRate->hide();
@@ -1241,6 +1249,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->show();
 		ui.lSerialPort->show();
 		ui.cbSerialPort->show();
+//TODO
+		ui.lSampleSize->show();
+		ui.sbSampleSize->show();
 
 		ui.lHost->hide();
 		ui.leHost->hide();

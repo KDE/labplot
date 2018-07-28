@@ -82,7 +82,8 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	else
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	if (fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe || fds->readingType() == LiveDataSource::ReadingType::TillEnd
+			|| fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
@@ -142,8 +143,10 @@ void LiveDataDock::updateTypeChanged(int idx) {
  */
 void LiveDataDock::readingTypeChanged(int idx) {
 	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
+	const LiveDataSource* const fds = m_liveDataSources.at(0);
 
-	if (type == LiveDataSource::ReadingType::TillEnd) {
+	if (fds->sourceType() != LiveDataSource::SourceType::FileOrPipe || type == LiveDataSource::ReadingType::TillEnd
+			|| type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
