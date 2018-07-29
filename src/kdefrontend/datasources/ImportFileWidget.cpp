@@ -1137,26 +1137,38 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateTypeChanged(int idx) {
-	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
+	const LiveDataSource::UpdateType UpdateType = static_cast<LiveDataSource::UpdateType>(idx);
+	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
+	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
-	switch (type) {
+	switch (UpdateType) {
 	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
+		if (sourceType != LiveDataSource::SourceType::NetworkTcpSocket && sourceType != LiveDataSource::SourceType::LocalSocket
+				&& sourceType != LiveDataSource::SourceType::SerialPort
+				&& readingType != LiveDataSource::ReadingType::TillEnd && readingType != LiveDataSource::ReadingType::WholeFile) {
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
+		}
 		break;
 	case LiveDataSource::UpdateType::NewData:
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
+		ui.lSampleSize->hide();
+		ui.sbSampleSize->hide();
 	}
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
-	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
-	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(idx);
+	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	const LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
 			|| sourceType == LiveDataSource::SourceType::SerialPort
-			|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile
+			|| updateType == LiveDataSource::UpdateType::NewData) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
@@ -1164,7 +1176,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 		ui.sbSampleSize->show();
 	}
 
-	if (type == LiveDataSource::ReadingType::WholeFile) {
+	if (readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lKeepLastValues->hide();
 		ui.sbKeepNValues->hide();
 	} else {
@@ -1174,9 +1186,9 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
-	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
+	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
-	switch (type) {
+	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
 		ui.leFileName->show();
@@ -1203,7 +1215,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
-		if (type == LiveDataSource::SourceType::NetworkTcpSocket) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -1278,14 +1290,14 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	// "whole file" item
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
-	if (type == LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	else
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
 	//Activate the groupbox when switching from "file and pipe" to a different source type.
-	if (type != LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType != LiveDataSource::SourceType::FileOrPipe)
 		ui.gbUpdateOptions->setEnabled(true);
 
 	emit sourceTypeChanged();
