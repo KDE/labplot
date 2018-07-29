@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2018 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -193,6 +193,7 @@ void Axis::init() {
 	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", (int)Axis::FormatDecimal);
 	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
+	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsOffset= group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
@@ -352,10 +353,9 @@ void Axis::setSuppressRetransform(bool value) {
 }
 
 void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("Axis::handleResize()");
+// 	DEBUG("Axis::handleResize()");
 	Q_D(Axis);
 	Q_UNUSED(pageResize);
-
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
@@ -418,6 +418,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat);
 BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsAutoPrecision, labelsAutoPrecision);
 BASIC_SHARED_D_READER_IMPL(Axis, int, labelsPrecision, labelsPrecision);
+BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsDateTimeFormat, labelsDateTimeFormat);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
@@ -591,14 +592,14 @@ void Axis::setArrowSize(qreal arrowSize) {
 
 //Major ticks
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
-void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
+void Axis::setMajorTicksDirection(TicksDirection majorTicksDirection) {
 	Q_D(Axis);
 	if (majorTicksDirection != d->majorTicksDirection)
 		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, ki18n("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
-void Axis::setMajorTicksType(const TicksType majorTicksType) {
+void Axis::setMajorTicksType(TicksType majorTicksType) {
 	Q_D(Axis);
 	if (majorTicksType!= d->majorTicksType)
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, ki18n("%1: set major ticks type")));
@@ -633,7 +634,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShapeAndBoundingRect);
-void Axis::setMajorTicksPen(const QPen &pen) {
+void Axis::setMajorTicksPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->majorTicksPen)
 		exec(new AxisSetMajorTicksPenCmd(d, pen, ki18n("%1: set major ticks style")));
@@ -655,14 +656,14 @@ void Axis::setMajorTicksOpacity(qreal opacity) {
 
 //Minor ticks
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksDirection, Axis::TicksDirection, minorTicksDirection, retransformTicks);
-void Axis::setMinorTicksDirection(const TicksDirection minorTicksDirection) {
+void Axis::setMinorTicksDirection(TicksDirection minorTicksDirection) {
 	Q_D(Axis);
 	if (minorTicksDirection != d->minorTicksDirection)
 		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, ki18n("%1: set minor ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
-void Axis::setMinorTicksType(const TicksType minorTicksType) {
+void Axis::setMinorTicksType(TicksType minorTicksType) {
 	Q_D(Axis);
 	if (minorTicksType!= d->minorTicksType)
 		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, ki18n("%1: set minor ticks type")));
@@ -698,7 +699,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShapeAndBoundingRect);
-void Axis::setMinorTicksPen(const QPen &pen) {
+void Axis::setMinorTicksPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->minorTicksPen)
 		exec(new AxisSetMinorTicksPenCmd(d, pen, ki18n("%1: set minor ticks style")));
@@ -720,7 +721,7 @@ void Axis::setMinorTicksOpacity(qreal opacity) {
 
 //Labels
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
-void Axis::setLabelsFormat(const LabelsFormat labelsFormat) {
+void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat) {
 		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
@@ -734,21 +735,28 @@ void Axis::setLabelsFormat(const LabelsFormat labelsFormat) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
-void Axis::setLabelsAutoPrecision(const bool labelsAutoPrecision) {
+void Axis::setLabelsAutoPrecision(bool labelsAutoPrecision) {
 	Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
 		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
-void Axis::setLabelsPrecision(const int labelsPrecision) {
+void Axis::setLabelsPrecision(int labelsPrecision) {
 	Q_D(Axis);
 	if (labelsPrecision != d->labelsPrecision)
 		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, ki18n("%1: set labels precision")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsDateTimeFormat, QString, labelsDateTimeFormat, retransformTickLabelStrings);
+void Axis::setLabelsDateTimeFormat(const QString& format) {
+	Q_D(Axis);
+	if (format != d->labelsDateTimeFormat)
+		exec(new AxisSetLabelsDateTimeFormatCmd(d, format, ki18n("%1: set labels datetime format")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabelPositions);
-void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
+void Axis::setLabelsPosition(LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
 		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, ki18n("%1: set labels position")));
@@ -769,14 +777,14 @@ void Axis::setLabelsRotationAngle(qreal angle) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsColor, QColor, labelsColor, update);
-void Axis::setLabelsColor(const QColor &color) {
+void Axis::setLabelsColor(const QColor& color) {
 	Q_D(Axis);
 	if (color != d->labelsColor)
 		exec(new AxisSetLabelsColorCmd(d, color, ki18n("%1: set label color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabelStrings);
-void Axis::setLabelsFont(const QFont &font) {
+void Axis::setLabelsFont(const QFont& font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
 		exec(new AxisSetLabelsFontCmd(d, font, ki18n("%1: set label font")));
@@ -805,7 +813,7 @@ void Axis::setLabelsOpacity(qreal opacity) {
 
 //Major grid
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMajorGrid);
-void Axis::setMajorGridPen(const QPen &pen) {
+void Axis::setMajorGridPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->majorGridPen)
 		exec(new AxisSetMajorGridPenCmd(d, pen, ki18n("%1: set major grid style")));
@@ -820,7 +828,7 @@ void Axis::setMajorGridOpacity(qreal opacity) {
 
 //Minor grid
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMinorGrid);
-void Axis::setMinorGridPen(const QPen &pen) {
+void Axis::setMinorGridPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->minorGridPen)
 		exec(new AxisSetMinorGridPenCmd(d, pen, ki18n("%1: set minor grid style")));
@@ -1471,8 +1479,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		for (auto value : tickLabelValues) {
 			QDateTime dateTime;
 			dateTime.setSecsSinceEpoch(value);
-			//TODO: use proper datetime format
-			str = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
@@ -1984,6 +1991,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "format", QString::number(d->labelsFormat) );
 	writer->writeAttribute( "precision", QString::number(d->labelsPrecision) );
 	writer->writeAttribute( "autoPrecision", QString::number(d->labelsAutoPrecision) );
+	writer->writeAttribute( "dateTimeFormat", d->labelsDateTimeFormat );
 	WRITE_QCOLOR(d->labelsColor);
 	WRITE_QFONT(d->labelsFont);
 	writer->writeAttribute( "prefix", d->labelsPrefix );
@@ -2029,70 +2037,17 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
-			str = attribs.value("autoScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoScale").toString());
-			else
-				d->autoScale = (bool)str.toInt();
-
-			str = attribs.value("orientation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("orientation").toString());
-			else
-				d->orientation = (Axis::AxisOrientation)str.toInt();
-
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("position").toString());
-			else
-				d->position = (Axis::AxisPosition)str.toInt();
-
-			str = attribs.value("scale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("scale").toString());
-			else
-				d->scale = (Axis::AxisScale)str.toInt();
-
-			str = attribs.value("offset").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("offset").toString());
-			else
-				d->offset = str.toDouble();
-
-			str = attribs.value("start").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("start").toString());
-			else
-				d->start = str.toDouble();
-
-			str = attribs.value("end").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("end").toString());
-			else
-				d->end = str.toDouble();
-
-			str = attribs.value("scalingFactor").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("scalingFactor").toString());
-			else
-				d->scalingFactor = str.toDouble();
-
-			str = attribs.value("zeroOffset").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("zeroOffset").toString());
-			else
-				d->zeroOffset = str.toDouble();
-
-			str = attribs.value("titleOffsetX").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("titleOffsetX").toString());
-			else
-				d->titleOffsetX = str.toDouble();
-			str = attribs.value("titleOffsetY").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("titleOffsetY").toString());
-			else
-				d->titleOffsetY = str.toDouble();
+			READ_INT_VALUE("autoScale", autoScale, bool);
+			READ_INT_VALUE("orientation", orientation, Axis::AxisOrientation);
+			READ_INT_VALUE("position", position, Axis::AxisPosition);
+			READ_INT_VALUE("scale", scale, Axis::AxisScale);
+			READ_DOUBLE_VALUE("offset", offset);
+			READ_DOUBLE_VALUE("start", start);
+			READ_DOUBLE_VALUE("end", end);
+			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
+			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
+			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
+			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
@@ -2105,153 +2060,42 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->linePen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->lineOpacity = str.toDouble();
-
-			str = attribs.value("arrowType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("arrowType").toString());
-			else
-				d->arrowType = (Axis::ArrowType)str.toInt();
-
-			str = attribs.value("arrowPosition").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("arrowPosition").toString());
-			else
-				d->arrowPosition = (Axis::ArrowPosition)str.toInt();
-
-			str = attribs.value("arrowSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("arrowSize").toString());
-			else
-				d->arrowSize = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", lineOpacity);
+			READ_INT_VALUE("arrowType", arrowType, Axis::ArrowType);
+			READ_INT_VALUE("arrowPosition", arrowPosition, Axis::ArrowPosition);
+			READ_DOUBLE_VALUE("arrowSize", arrowSize);
 		} else if (!preview && reader->name() == "majorTicks") {
 			attribs = reader->attributes();
 
-			str = attribs.value("direction").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("direction").toString());
-			else
-				d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->majorTicksType = (Axis::TicksType)str.toInt();
-
-			str = attribs.value("number").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("number").toString());
-			else
-				d->majorTicksNumber = str.toInt();
-
-			str = attribs.value("increment").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("increment").toString());
-			else
-				d->majorTicksIncrement = str.toDouble();
-
+			READ_INT_VALUE("direction", majorTicksDirection, Axis::TicksDirection);
+			READ_INT_VALUE("type", majorTicksType, Axis::TicksType);
+			READ_INT_VALUE("number", majorTicksNumber, int);
+			READ_DOUBLE_VALUE("increment", majorTicksIncrement);
 			READ_COLUMN(majorTicksColumn);
-
-			str = attribs.value("length").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("length").toString());
-			else
-				d->majorTicksLength = str.toDouble();
-
+			READ_DOUBLE_VALUE("length", majorTicksLength);
 			READ_QPEN(d->majorTicksPen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->majorTicksOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", majorTicksOpacity);
 		} else if (!preview && reader->name() == "minorTicks") {
 			attribs = reader->attributes();
 
-			str = attribs.value("direction").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("direction").toString());
-			else
-				d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->minorTicksType = (Axis::TicksType)str.toInt();
-
-			str = attribs.value("number").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("number").toString());
-			else
-				d->minorTicksNumber = str.toInt();
-
-			str = attribs.value("increment").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("increment").toString());
-			else
-				d->minorTicksIncrement = str.toDouble();
-
+			READ_INT_VALUE("direction", minorTicksDirection, Axis::TicksDirection);
+			READ_INT_VALUE("type", minorTicksType, Axis::TicksType);
+			READ_INT_VALUE("number", minorTicksNumber, int);
+			READ_DOUBLE_VALUE("increment", minorTicksIncrement);
 			READ_COLUMN(minorTicksColumn);
-
-			str = attribs.value("length").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("length").toString());
-			else
-				d->minorTicksLength = str.toDouble();
-
+			READ_DOUBLE_VALUE("length", minorTicksLength);
 			READ_QPEN(d->minorTicksPen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->minorTicksOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", minorTicksOpacity);
 		} else if (!preview && reader->name() == "labels") {
 			attribs = reader->attributes();
 
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("position").toString());
-			else
-				d->labelsPosition = (Axis::LabelsPosition)str.toInt();
-
-			str = attribs.value("offset").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("offset").toString());
-			else
-				d->labelsOffset = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rotation").toString());
-			else
-				d->labelsRotationAngle = str.toDouble();
-
-			str = attribs.value("format").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("format").toString());
-			else
-				d->labelsFormat = (Axis::LabelsFormat)str.toInt();
-
-			str = attribs.value("precision").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("precision").toString());
-			else
-				d->labelsPrecision = str.toInt();
-
-			str = attribs.value("autoPrecision").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoPrecision").toString());
-			else
-				d->labelsAutoPrecision = str.toInt();
-
+			READ_INT_VALUE("position", labelsPosition, Axis::LabelsPosition);
+			READ_DOUBLE_VALUE("offset", labelsOffset);
+			READ_DOUBLE_VALUE("rotation", labelsRotationAngle);
+			READ_INT_VALUE("format", labelsFormat, Axis::LabelsFormat);
+			READ_INT_VALUE("precision", labelsPrecision, int);
+			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
+			d->labelsDateTimeFormat = attribs.value("dateTimeFormat").toString();
 			READ_QCOLOR(d->labelsColor);
 			READ_QFONT(d->labelsFont);
 
@@ -2259,31 +2103,17 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			d->labelsPrefix = attribs.value("prefix").toString();
 			d->labelsSuffix = attribs.value("suffix").toString();
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->labelsOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", labelsOpacity);
 		} else if (!preview && reader->name() == "majorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->majorGridPen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->majorGridOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", majorGridOpacity);
 		} else if (!preview && reader->name() == "minorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->minorGridPen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->minorGridOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", minorGridOpacity);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

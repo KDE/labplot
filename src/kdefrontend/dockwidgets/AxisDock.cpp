@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : axes widget class
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -136,6 +136,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsFormatChanged(int)) );
 	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(labelsPrecisionChanged(int)) );
 	connect( ui.chkLabelsAutoPrecision, SIGNAL(stateChanged(int)), this, SLOT(labelsAutoPrecisionChanged(int)) );
+	connect(ui.cbLabelsDateTimeFormat, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &AxisDock::labelsDateTimeFormatChanged);
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
 	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
@@ -145,12 +146,6 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.leLabelsSuffix, SIGNAL(textChanged(QString)), this, SLOT(labelsSuffixChanged()) );
 	connect( ui.sbLabelsOpacity, SIGNAL(valueChanged(int)), this, SLOT(labelsOpacityChanged(int)) );
 
-	/*
-
-	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(QString)), this, SLOT(labelFormatChanged(QString)) );
-	connect( ui.leLabelsDateFormat, SIGNAL(textChanged(QString)), this, SLOT(slotDataChanged()) );
-	*/
 	//"Grid"-tab
 	connect( ui.cbMajorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorGridStyleChanged(int)) );
 	connect( ui.kcbMajorGridColor, SIGNAL(changed(QColor)), this, SLOT(majorGridColorChanged(QColor)) );
@@ -178,7 +173,7 @@ AxisDock::~AxisDock() {
 }
 
 void AxisDock::init() {
-	m_initializing=true;
+	m_initializing = true;
 
 	//Validators
 	ui.lePosition->setValidator( new QDoubleValidator(ui.lePosition) );
@@ -332,7 +327,9 @@ void AxisDock::init() {
 	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
 	ui.cbLabelsFormat->addItem( i18n("Multiples of π") );
 
-	m_initializing=false;
+	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+
+	m_initializing = false;
 }
 
 void AxisDock::setModel() {
@@ -353,7 +350,7 @@ void AxisDock::setModel() {
   sets the axes. The properties of the axes in the list \c list can be edited in this widget.
 */
 void AxisDock::setAxes(QList<Axis*> list) {
-	m_initializing=true;
+	m_initializing = true;
 	m_axesList=list;
 	m_axis=list.first();
 	Q_ASSERT(m_axis != nullptr);
@@ -424,6 +421,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, SIGNAL(labelsFormatChanged(Axis::LabelsFormat)), this, SLOT(axisLabelsFormatChanged(Axis::LabelsFormat)));
 	connect(m_axis, SIGNAL(labelsAutoPrecisionChanged(bool)), this, SLOT(axisLabelsAutoPrecisionChanged(bool)));
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
+	connect(m_axis, &Axis::labelsDateTimeFormatChanged, this, &AxisDock::axisLabelsDateTimeFormatChanged);
 	connect(m_axis, SIGNAL(labelsPositionChanged(Axis::LabelsPosition)), this, SLOT(axisLabelsPositionChanged(Axis::LabelsPosition)));
 	connect(m_axis, SIGNAL(labelsOffsetChanged(double)), this, SLOT(axisLabelsOffsetChanged(double)));
 	connect(m_axis, SIGNAL(labelsRotationAngleChanged(qreal)), this, SLOT(axisLabelsRotationAngleChanged(qreal)));
@@ -694,9 +692,9 @@ void AxisDock::lineColorChanged(const QColor& color) {
 		axis->setLinePen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::lineWidthChanged(double  value) {
@@ -894,9 +892,9 @@ void AxisDock::majorTicksColorChanged(const QColor& color) {
 		axis->setMajorTicksPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::majorTicksWidthChanged(double value) {
@@ -1025,9 +1023,9 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 }
 
 void AxisDock::minorTicksLineStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	Qt::PenStyle penStyle = Qt::PenStyle(index);
 
-	bool b=(penStyle != Qt::NoPen);
+	bool b = (penStyle != Qt::NoPen);
 	ui.lMinorTicksColor->setEnabled(b);
 	ui.kcbMinorTicksColor->setEnabled(b);
 	ui.lMinorTicksWidth->setEnabled(b);
@@ -1042,7 +1040,7 @@ void AxisDock::minorTicksLineStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorTicksPen();
+		pen = axis->minorTicksPen();
 		pen.setStyle(penStyle);
 		axis->setMinorTicksPen(pen);
 	}
@@ -1059,9 +1057,9 @@ void AxisDock::minorTicksColorChanged(const QColor& color) {
 		axis->setMinorTicksPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::minorTicksWidthChanged(double value) {
@@ -1070,7 +1068,7 @@ void AxisDock::minorTicksWidthChanged(double value) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorTicksPen();
+		pen = axis->minorTicksPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		axis->setMinorTicksPen(pen);
 	}
@@ -1120,6 +1118,14 @@ void AxisDock::labelsAutoPrecisionChanged(int state) {
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsAutoPrecision(checked);
+}
+
+void AxisDock::labelsDateTimeFormatChanged(int) {
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsDateTimeFormat(ui.cbLabelsDateTimeFormat->currentText());
 }
 
 void AxisDock::labelsPositionChanged(int index) {
@@ -1212,7 +1218,7 @@ void AxisDock::labelsOpacityChanged(int value) {
 // "Grid"-tab
 //major grid
 void AxisDock::majorGridStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	Qt::PenStyle penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lMajorGridColor->setEnabled(b);
@@ -1227,7 +1233,7 @@ void AxisDock::majorGridStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorGridPen();
+		pen = axis->majorGridPen();
 		pen.setStyle(penStyle);
 		axis->setMajorGridPen(pen);
 	}
@@ -1244,9 +1250,9 @@ void AxisDock::majorGridColorChanged(const QColor& color) {
 		axis->setMajorGridPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::majorGridWidthChanged(double  value) {
@@ -1255,7 +1261,7 @@ void AxisDock::majorGridWidthChanged(double  value) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->majorGridPen();
+		pen = axis->majorGridPen();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 		axis->setMajorGridPen(pen);
 	}
@@ -1272,7 +1278,7 @@ void AxisDock::majorGridOpacityChanged(int value) {
 
 //minor grid
 void AxisDock::minorGridStyleChanged(int index) {
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	Qt::PenStyle penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lMinorGridColor->setEnabled(b);
@@ -1287,7 +1293,7 @@ void AxisDock::minorGridStyleChanged(int index) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorGridPen();
+		pen = axis->minorGridPen();
 		pen.setStyle(penStyle);
 		axis->setMinorGridPen(pen);
 	}
@@ -1299,14 +1305,14 @@ void AxisDock::minorGridColorChanged(const QColor& color) {
 
 	QPen pen;
 	for (auto* axis : m_axesList) {
-		pen=axis->minorGridPen();
+		pen = axis->minorGridPen();
 		pen.setColor(color);
 		axis->setMinorGridPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::minorGridWidthChanged(double  value) {
@@ -1419,7 +1425,7 @@ void AxisDock::axisLinePenChanged(const QPen& pen) {
 
 void AxisDock::axisArrowTypeChanged(Axis::ArrowType type) {
 	m_initializing = true;
-	ui.cbArrowType->setCurrentIndex( (int)type);
+	ui.cbArrowType->setCurrentIndex((int)type);
 	m_initializing = false;
 }
 
@@ -1533,6 +1539,11 @@ void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
 void AxisDock::axisLabelsPrecisionChanged(int precision) {
 	m_initializing = true;
 	ui.sbLabelsPrecision->setValue(precision);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsDateTimeFormatChanged(const QString& format) {
+	m_initializing = true;
+	ui.cbLabelsDateTimeFormat->setCurrentText(format);
 	m_initializing = false;
 }
 void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
@@ -1673,6 +1684,7 @@ void AxisDock::load() {
 	ui.cbLabelsFormat->setCurrentIndex( (int) m_axis->labelsFormat() );
 	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
 	ui.sbLabelsPrecision->setValue( (int)m_axis->labelsPrecision() );
+	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());
 	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(),Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
@@ -1696,7 +1708,7 @@ void AxisDock::load() {
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
@@ -1704,7 +1716,7 @@ void AxisDock::load() {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
@@ -1789,6 +1801,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbLabelsFormat->setCurrentIndex( group.readEntry("LabelsFormat", (int) m_axis->labelsFormat()) );
 	ui.chkLabelsAutoPrecision->setChecked( group.readEntry("LabelsAutoPrecision", (int) m_axis->labelsAutoPrecision()) );
 	ui.sbLabelsPrecision->setValue( group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()) );
+	ui.cbLabelsDateTimeFormat->setCurrentText( group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss") );
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
@@ -1812,7 +1825,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity())*100.0) );
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
@@ -1820,7 +1833,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
