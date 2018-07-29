@@ -542,10 +542,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			break;
 		firstLineStringList = getLineString(device);
 
-		if (createIndexEnabled)
-			col = 1;
-		else
-			col = 0;
+		createIndexEnabled ? col = 1 : col = 0;
+
 		for (auto& valueString: firstLineStringList) {
 			if (simplifyWhitespacesEnabled)
 				valueString = valueString.simplified();
@@ -998,7 +996,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 	DEBUG("	newDataIdx: " << newDataIdx);
 
-	static int indexColumnIdx = 0;
+	static int indexColumnIdx = 1;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE("AsciiLiveDataImportFillingContainers: ");
@@ -1056,7 +1054,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			if (createIndexEnabled) {
 				if (spreadsheet->keepNValues() == 0)
-					lineStringList.prepend(QString::number(currentRow));
+					lineStringList.prepend(QString::number(currentRow + 1));
 				else
 					lineStringList.prepend(QString::number(indexColumnIdx++));
 			}
@@ -1223,12 +1221,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 
-		//prepend the index if required
-		//TODO: come up maybe with a solution with adding the index inside of the loop below,
-		//without conversion to string, prepending to the list and then conversion back to integer.
-		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i+1));
-
 		// remove left white spaces
 		if (skipEmptyParts) {
 			for (int n = 0; n < lineStringList.size(); ++n) {
@@ -1241,8 +1233,14 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		for (int n = 0; n < m_actualCols; ++n) {
-			if (n < lineStringList.size()) {
-				QString valueString = lineStringList.at(n);
+			// index column if required
+			if (n == 0 && createIndexEnabled) {
+				static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = i + 1;
+				continue;
+			}
+
+			if ((createIndexEnabled ? n - 1 : n) < lineStringList.size()) {
+				QString valueString = lineStringList.at(createIndexEnabled ? n - 1 : n);
 
 				// set value depending on data type
 				switch (columnModes[n]) {
@@ -1367,7 +1365,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 
 		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
 		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i));
+			lineStringList.prepend(QString::number(i + 1));
 
 		QStringList lineString;
 		for (int n = 0; n < lineStringList.size(); ++n) {
@@ -1436,8 +1434,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		int start = 0;
 		if (createIndexEnabled)
 			start = 1;
-		for (int i=start;i<m_actualCols;i++)
-				vectorNames << "Column " + QString::number(i+1);
+		for (int i = start; i < m_actualCols; i++)
+				vectorNames << "Column " + QString::number(i + 1);
 	}
 	QDEBUG("	column names = " << vectorNames);
 
@@ -1461,14 +1459,16 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
 
-		//prepend index if required
-		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i+1));
-
 		QStringList lineString;
 		for (int n = 0; n < m_actualCols; ++n) {
-			if (n < lineStringList.size()) {
-				QString valueString = lineStringList.at(n);
+			// index column if required
+			if (n == 0 && createIndexEnabled) {
+				lineString += QString::number(i + 1);
+				continue;
+			}
+
+			if ((createIndexEnabled ? n - 1 : n) < lineStringList.size()) {
+				QString valueString = lineStringList.at(createIndexEnabled ? n - 1 : n);
 				//DEBUG(" valueString = " << valueString.toStdString());
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;

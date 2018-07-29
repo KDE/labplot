@@ -568,9 +568,10 @@ void LiveDataSource::read() {
 
 			break;
 		case AbstractFileFilter::Binary:
-			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			//TODO: not implemented yet
+			// bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
-		//TODO:?
+		//TODO: other types not implemented yet
 		case AbstractFileFilter::Image:
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
@@ -625,8 +626,9 @@ void LiveDataSource::readyRead() {
 
 	if (m_fileType == AbstractFileFilter::Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-//TODO:	else if (m_fileType == Binary)
-	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+//TODO: not implemented yet
+//	else if (m_fileType == AbstractFileFilter::Binary)
+//		dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
 	//for sequencial devices in read() we just request data/connect to servers
