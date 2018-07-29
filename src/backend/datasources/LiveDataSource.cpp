@@ -544,7 +544,9 @@ void LiveDataSource::read() {
 			m_serialPort->setPortName(m_serialPortName);
 			m_serialPort->open(QIODevice::ReadOnly);
 
-			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
+			// only connect to readyRead when update is on new data
+			if (m_updateType == NewData)
+				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			break;
 		}
@@ -616,7 +618,7 @@ void LiveDataSource::read() {
 }
 
 /*!
- * Slot for the signal that is emitted once every time new data is available for reading from the device.
+ * Slot for the signal that is emitted once every time new data is available for reading from the device (not UDP or Serial).
  * It will only be emitted again once new data is available, such as when a new payload of network data has arrived on the network socket,
  * or when a new block of data has been appended to your device.
  */
