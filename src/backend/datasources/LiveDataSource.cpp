@@ -121,7 +121,7 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType) << ", interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType) << ", interval = " << m_updateInterval);
 	switch (m_updateType) {
 	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
@@ -164,8 +164,8 @@ QStringList LiveDataSource::availablePorts() {
 		DEBUG(" port " << sp.portName().toStdString() << ": " << sp.systemLocation().toStdString() << sp.description().toStdString()
 			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
 	}
-	//TODO: Test
-	ports.append("/dev/pts/27");
+	// For Testing:
+	// ports.append("/dev/pts/26");
 
 	return ports;
 }
@@ -548,7 +548,9 @@ void LiveDataSource::read() {
 			m_serialPort->setPortName(m_serialPortName);
 			m_serialPort->open(QIODevice::ReadOnly);
 
-			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
+			// only connect to readyRead when update is on new data
+			if (m_updateType == NewData)
+				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			break;
 		case MQTT:
@@ -575,9 +577,10 @@ void LiveDataSource::read() {
 
 			break;
 		case AbstractFileFilter::Binary:
-			//TODO: bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
+			//TODO: not implemented yet
+			// bytes = dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 			m_bytesRead += bytes;
-		//TODO:?
+		//TODO: other types not implemented yet
 		case AbstractFileFilter::Image:
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
@@ -624,7 +627,7 @@ void LiveDataSource::read() {
 }
 
 /*!
- * Slot for the signal that is emitted once every time new data is available for reading from the device.
+ * Slot for the signal that is emitted once every time new data is available for reading from the device (not UDP or Serial).
  * It will only be emitted again once new data is available, such as when a new payload of network data has arrived on the network socket,
  * or when a new block of data has been appended to your device.
  */
@@ -634,9 +637,10 @@ void LiveDataSource::readyRead() {
 
 	if (m_fileType == AbstractFileFilter::Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-//TODO:	else if (m_fileType == Binary)
 
-	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+//TODO: not implemented yet
+//	else if (m_fileType == AbstractFileFilter::Binary)
+//		dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
 	//for sequencial devices in read() we just request data/connect to servers
@@ -741,18 +745,23 @@ void LiveDataSource::linkToggled() {
 	project()->setChanged(true);
 }
 
-//watch the file upon reading for changes if required
+/*!
+ * Watch the file upon reading for changes if required
+ * uses m_fileName for FileOrPipe and LocalSocket
+ */
 void LiveDataSource::watch() {
 	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
 	if (m_fileWatched) {
+		DEBUG("	file is watched");
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 		}
 
-		if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+		if (!m_fileSystemWatcher->files().contains(m_fileName))
 			m_fileSystemWatcher->addPath(m_fileName);
 	} else {
+		DEBUG("	file is not watched");
 		if (m_fileSystemWatcher)
 			m_fileSystemWatcher->removePath(m_fileName);
 	}

@@ -542,10 +542,11 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		source->setFileName( ui.leFileName->text() );
-		source->setFileLinked( ui.chbLinkFile->isChecked() );
+		source->setFileName(ui.leFileName->text());
+		source->setFileLinked(ui.chbLinkFile->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
+		source->setFileName(ui.leFileName->text());
 		source->setLocalSocketName(ui.leFileName->text());
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
@@ -1995,9 +1996,9 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateTypeChanged(int idx) {
-	LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
+	const LiveDataSource::UpdateType UpdateType = static_cast<LiveDataSource::UpdateType>(idx);
 
-	switch (type) {
+	switch (UpdateType) {
 	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
@@ -2009,11 +2010,12 @@ void ImportFileWidget::updateTypeChanged(int idx) {
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
-	LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
-	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
+	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(idx);
+	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
-			|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+			|| sourceType == LiveDataSource::SourceType::SerialPort
+			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
@@ -2021,7 +2023,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 		ui.sbSampleSize->show();
 	}
 
-	if (type == LiveDataSource::ReadingType::WholeFile) {
+	if (readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lKeepLastValues->hide();
 		ui.sbKeepNValues->hide();
 	} else {
@@ -2031,9 +2033,13 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 }
 
 void ImportFileWidget::sourceTypeChanged(int idx) {
-	LiveDataSource::SourceType type = static_cast<LiveDataSource::SourceType>(idx);
+	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
-	switch (type) {
+	// enable/disable "on new data"-option
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
+        QStandardItem* item = model->item(LiveDataSource::UpdateType::NewData);
+
+	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
 		ui.leFileName->show();
@@ -2052,6 +2058,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
 		fileNameChanged(ui.leFileName->text());
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
@@ -2060,7 +2068,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
-		if (type == LiveDataSource::SourceType::NetworkTcpSocket) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -2078,6 +2086,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
+
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -2102,6 +2112,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
 
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -2124,8 +2136,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
-		ui.cbFileType->setEnabled(true);
 
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
+		ui.cbFileType->setEnabled(true);
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -2230,16 +2244,16 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	}
 
 	// "whole file" item
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
-	if (type == LiveDataSource::SourceType::FileOrPipe)
+	model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	item = model->item(LiveDataSource::ReadingType::WholeFile);
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	else
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 	//"update options" groupbox can be deactived for "file and pipe" if the file is invalid.
 	//Activate the groupbox when switching from "file and pipe" to a different source type.
-	if (type != LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType != LiveDataSource::SourceType::FileOrPipe)
 		ui.gbUpdateOptions->setEnabled(true);
 
 	emit sourceTypeChanged();

@@ -5,6 +5,7 @@ Description          : Dock widget for live data properties
 --------------------------------------------------------------------
 Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
+Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -259,11 +260,14 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 #endif
 	m_liveDataSources = sources;
 	const LiveDataSource* const fds = sources.at(0);
+	const LiveDataSource::SourceType sourceType = fds->sourceType();
+	const LiveDataSource::ReadingType readingType = fds->readingType();
+	const LiveDataSource::UpdateType updateType = fds->updateType();
 	ui.sbUpdateInterval->setValue(fds->updateInterval());
-	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
-	ui.cbReadingType->setCurrentIndex(static_cast<int>(fds->readingType()));
+	ui.cbUpdateType->setCurrentIndex(static_cast<int>(updateType));
+	ui.cbReadingType->setCurrentIndex(static_cast<int>(readingType));
 
-	if (fds->updateType() == LiveDataSource::UpdateType::NewData) {
+	if (updateType == LiveDataSource::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
@@ -281,17 +285,28 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 	// disable "whole file" when having no file (i.e. socket or port)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
-	if (fds->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	else
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
-	if (fds->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket || fds->sourceType() == LiveDataSource::SourceType::LocalSocket
-			|| fds->readingType() == LiveDataSource::ReadingType::TillEnd || fds->readingType() == LiveDataSource::ReadingType::WholeFile) {
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort
+			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
-	} else
+	} else {
 		ui.sbSampleSize->setValue(fds->sampleSize());
+	}
+
+	// disable "on new data"-option if not available
+	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
+	item = model->item(LiveDataSource::UpdateType::NewData);
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
+			sourceType == LiveDataSource::SourceType::SerialPort) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	} else {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	}
 
 	ui.chbWill->hide();
 	ui.chbWillRetain->hide();
@@ -363,12 +378,14 @@ void LiveDataDock::updateNow() {
 void LiveDataDock::updateTypeChanged(int idx) {
 	if(!m_liveDataSources.isEmpty())  {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
+		const LiveDataSource::UpdateType type = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (type) {
 		case LiveDataSource::UpdateType::TimeInterval:
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
+			ui.lSampleSize->show();
+			ui.sbSampleSize->show();
 
 			for (auto* source: m_liveDataSources) {
 				source->setUpdateType(type);
@@ -379,10 +396,12 @@ void LiveDataDock::updateTypeChanged(int idx) {
 		case LiveDataSource::UpdateType::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
+			ui.lSampleSize->hide();
+			ui.sbSampleSize->hide();
 
 			for (auto* source: m_liveDataSources) {
-				source->setFileWatched(true);
-				source->setUpdateType(type);
+			source->setFileWatched(true);
+			source->setUpdateType(type);
 			}
 		}
 	}
@@ -415,13 +434,15 @@ void LiveDataDock::updateTypeChanged(int idx) {
  * \param idx
  */
 void LiveDataDock::readingTypeChanged(int idx) {
-<<<<<<< HEAD
 	if(!m_liveDataSources.isEmpty())  {
-		LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
+		const LiveDataSource::ReadingType type = static_cast<LiveDataSource::ReadingType>(idx);
 		const LiveDataSource* const fds = m_liveDataSources.at(0);
+		const LiveDataSource::SourceType sourceType = fds->sourceType();
+		const LiveDataSource::UpdateType updateType = fds->updateType();
 
-		if (fds->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket || fds->sourceType() == LiveDataSource::SourceType::LocalSocket
-			|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort
+				|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile
+				|| updateType == LiveDataSource::UpdateType::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {

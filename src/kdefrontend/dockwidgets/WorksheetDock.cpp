@@ -200,6 +200,7 @@ void WorksheetDock::updatePaperSize() {
 	const QSizeF st = s.transposed();
 
 	//determine the position of the QPageSize::PageSizeId in the combobox
+	bool found = false;
 	for (int i = 0; i < ui.cbSize->count(); ++i) {
 		const QVariant v = ui.cbSize->itemData(i);
 		if (!v.isValid())
@@ -210,13 +211,18 @@ void WorksheetDock::updatePaperSize() {
 		if (s == ps) { //check the portrait-orientation first
 			ui.cbSize->setCurrentIndex(i);
 			ui.cbOrientation->setCurrentIndex(0);  //a QPageSize::PaperSize in portrait-orientation was found
+			found = true;
 			break;
 		} else if (st == ps) { //check for the landscape-orientation
 			ui.cbSize->setCurrentIndex(i);
 			ui.cbOrientation->setCurrentIndex(1); //a QPageSize::PaperSize in landscape-orientation was found
+			found = true;
 			break;
 		}
 	}
+
+	if (!found)
+		ui.cbSize->setCurrentIndex(ui.cbSize->count() - 1); //select "Custom" size
 }
 
 //*************************************************************
@@ -855,7 +861,10 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", false));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), Worksheet::Centimeter));
-	updatePaperSize();
+	if (group.readEntry("UseViewSize", false))
+		ui.cbSize->setCurrentIndex(0);
+	else
+		updatePaperSize();
 
 	// Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );
