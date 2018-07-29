@@ -1139,37 +1139,25 @@ void ImportFileWidget::refreshPreview() {
 
 void ImportFileWidget::updateTypeChanged(int idx) {
 	const LiveDataSource::UpdateType UpdateType = static_cast<LiveDataSource::UpdateType>(idx);
-	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
-	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
 	switch (UpdateType) {
 	case LiveDataSource::UpdateType::TimeInterval:
 		ui.lUpdateInterval->show();
 		ui.sbUpdateInterval->show();
-		if (sourceType != LiveDataSource::SourceType::NetworkTcpSocket && sourceType != LiveDataSource::SourceType::LocalSocket
-				&& sourceType != LiveDataSource::SourceType::SerialPort
-				&& readingType != LiveDataSource::ReadingType::TillEnd && readingType != LiveDataSource::ReadingType::WholeFile) {
-			ui.lSampleSize->show();
-			ui.sbSampleSize->show();
-		}
 		break;
 	case LiveDataSource::UpdateType::NewData:
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
-		ui.lSampleSize->hide();
-		ui.sbSampleSize->hide();
 	}
 }
 
 void ImportFileWidget::readingTypeChanged(int idx) {
 	const LiveDataSource::ReadingType readingType = static_cast<LiveDataSource::ReadingType>(idx);
 	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
-	const LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
 			|| sourceType == LiveDataSource::SourceType::SerialPort
-			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile
-			|| updateType == LiveDataSource::UpdateType::NewData) {
+			|| readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
