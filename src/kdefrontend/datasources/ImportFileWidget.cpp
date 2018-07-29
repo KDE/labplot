@@ -1155,6 +1155,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(ui.cbSourceType->currentIndex());
 
 	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+			|| sourceType == LiveDataSource::SourceType::SerialPort
 			|| type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
