@@ -597,7 +597,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		return 0;
 	}
 
-	// may be also a matrix?
+	//TODO: may be also a matrix?
 	LiveDataSource* spreadsheet = dynamic_cast<LiveDataSource*>(dataSource);
 
 	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
@@ -911,7 +911,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				break;
 			}
 		}
-	} else {
+	} else {	// fixed size
 		//when we have a fixed size we have to pop sampleSize number of lines if specified
 		//here popping, setting currentRow
 		if (!m_prepared) {
@@ -940,6 +940,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE("AsciiLiveDataImportPopping: ");
 #endif
+			// enable data change signal
+			for (int col = 0; col < m_actualCols; ++col)
+				spreadsheet->child<Column>(col)->setSuppressDataChangedSignal(false);
+
 			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
