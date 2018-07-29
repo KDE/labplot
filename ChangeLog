@@ -6,7 +6,7 @@ New features:
 	* Allow to specify the number format when exporting spreadsheet and matrix
 
 Bug fixes:
-	* Fixed several problems in live data support (in progress)
+	* Fixed several problems in live data support
 
 -----2.5-----
 New features:

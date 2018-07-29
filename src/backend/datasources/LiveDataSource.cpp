@@ -161,8 +161,8 @@ QStringList LiveDataSource::availablePorts() {
 		DEBUG(" port " << sp.portName().toStdString() << ": " << sp.systemLocation().toStdString() << sp.description().toStdString()
 			<< ' ' << sp.manufacturer().toStdString() << ' ' << sp.serialNumber().toStdString());
 	}
-	//TODO: Test
-	ports.append("/dev/pts/26");
+	// For Testing:
+	// ports.append("/dev/pts/26");
 
 	return ports;
 }
@@ -735,7 +735,10 @@ void LiveDataSource::linkToggled() {
 	project()->setChanged(true);
 }
 
-//watch the file upon reading for changes if required
+/*!
+ * Watch the file upon reading for changes if required
+ * uses m_fileName for FileOrPipe and LocalSocket
+ */
 void LiveDataSource::watch() {
 	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
 	if (m_fileWatched) {
