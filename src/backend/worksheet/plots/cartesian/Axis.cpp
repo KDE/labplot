@@ -347,6 +347,11 @@ void Axis::retransform() {
 	d->retransform();
 }
 
+void Axis::retransformTickLabelStrings() {
+	Q_D(Axis);
+	d->retransformTickLabelStrings();
+}
+
 void Axis::setSuppressRetransform(bool value) {
 	Q_D(Axis);
 	d->suppressRetransform = value;

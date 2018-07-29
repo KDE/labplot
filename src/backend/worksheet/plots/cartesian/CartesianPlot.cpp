@@ -842,27 +842,15 @@ void CartesianPlot::setRangeType(RangeType type) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeFormat, CartesianPlot::RangeFormat, xRangeFormat, xRangeFormatChanged);
 void CartesianPlot::setXRangeFormat(RangeFormat format) {
 	Q_D(CartesianPlot);
-	if (format != d->xRangeFormat) {
+	if (format != d->xRangeFormat)
 		exec(new CartesianPlotSetXRangeFormatCmd(d, format, ki18n("%1: set x-range format")));
-
-		for (auto* axis : children<Axis>()) {
-			if (axis->orientation() == Axis::AxisHorizontal)
-				axis->retransform();
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
 void CartesianPlot::setYRangeFormat(RangeFormat format) {
 	Q_D(CartesianPlot);
-	if (format != d->yRangeFormat) {
+	if (format != d->yRangeFormat)
 		exec(new CartesianPlotSetYRangeFormatCmd(d, format, ki18n("%1: set y-range format")));
-
-		for (auto* axis : children<Axis>()) {
-			if (axis->orientation() == Axis::AxisHorizontal)
-				axis->retransform();
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
@@ -2246,11 +2234,17 @@ void CartesianPlotPrivate::rangeChanged() {
 }
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
-	//TODO
+	for (auto* axis : q->children<Axis>()) {
+		if (axis->orientation() == Axis::AxisHorizontal)
+			axis->retransformTickLabelStrings();
+	}
 }
 
 void CartesianPlotPrivate::yRangeFormatChanged() {
-	//TODO
+	for (auto* axis : q->children<Axis>()) {
+		if (axis->orientation() == Axis::AxisVertical)
+			axis->retransformTickLabelStrings();
+	}
 }
 
 /*!

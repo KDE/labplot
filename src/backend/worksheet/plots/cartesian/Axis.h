@@ -139,6 +139,7 @@ public:
 	void setPrinting(bool) override;
 	void setSuppressRetransform(bool);
 	void retransform() override;
+	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	typedef AxisPrivate Private;
