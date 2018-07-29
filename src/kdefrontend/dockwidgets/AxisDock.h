@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : axes widget class
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -123,6 +123,7 @@ private slots:
 	void labelsFormatChanged(int);
 	void labelsPrecisionChanged(int);
 	void labelsAutoPrecisionChanged(int);
+	void labelsDateTimeFormatChanged(int);
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
@@ -183,6 +184,7 @@ private slots:
 	void axisLabelsFormatChanged(Axis::LabelsFormat);
 	void axisLabelsAutoPrecisionChanged(bool);
 	void axisLabelsPrecisionChanged(int);
+	void axisLabelsDateTimeFormatChanged(const QString&);
 	void axisLabelsPositionChanged(Axis::LabelsPosition);
 	void axisLabelsOffsetChanged(double);
 	void axisLabelsRotationAngleChanged(qreal);

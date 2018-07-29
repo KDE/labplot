@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of Axis.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -110,6 +110,7 @@ public:
 	Axis::LabelsFormat labelsFormat;
 	int labelsPrecision;
 	bool labelsAutoPrecision;
+	QString labelsDateTimeFormat;
 	Axis::LabelsPosition labelsPosition;
 	qreal labelsRotationAngle;
 	QColor labelsColor;

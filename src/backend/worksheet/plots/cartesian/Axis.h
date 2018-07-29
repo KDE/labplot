@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -119,6 +119,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
+	CLASS_D_ACCESSOR_DECL(QString, labelsDateTimeFormat, LabelsDateTimeFormat)
 	BASIC_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOffset, LabelsOffset)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
@@ -226,6 +227,7 @@ signals:
 	void labelsFormatChanged(Axis::LabelsFormat);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
+	void labelsDateTimeFormatChanged(const QString&);
 	void labelsPositionChanged(Axis::LabelsPosition);
 	void labelsOffsetChanged(double);
 	void labelsRotationAngleChanged(qreal);
