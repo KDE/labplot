@@ -1189,6 +1189,10 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	const LiveDataSource::SourceType sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
+	// enable/disable "on new data"-option
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
+        QStandardItem* item = model->item(LiveDataSource::UpdateType::NewData);
+
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		ui.lFileName->show();
@@ -1207,6 +1211,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lePort->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
+
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		fileNameChanged(ui.leFileName->text());
 		break;
@@ -1235,6 +1241,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
 
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1258,6 +1266,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
 
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1280,8 +1290,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
-		ui.cbFileType->setEnabled(true);
 
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+
+		ui.cbFileType->setEnabled(true);
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
@@ -1289,8 +1301,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	}
 
 	// "whole file" item
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
+	model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	item = model->item(LiveDataSource::ReadingType::WholeFile);
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	else

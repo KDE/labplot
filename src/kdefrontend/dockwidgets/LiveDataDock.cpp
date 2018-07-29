@@ -91,8 +91,19 @@ void LiveDataDock::setLiveDataSources(const QList<LiveDataSource*>& sources) {
 			|| updateType == LiveDataSource::UpdateType::NewData) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
-	} else
+	} else {
 		ui.sbSampleSize->setValue(fds->sampleSize());
+	}
+
+	// disable "on new data"-option if not available
+	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
+	item = model->item(LiveDataSource::UpdateType::NewData);
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
+			sourceType == LiveDataSource::SourceType::SerialPort) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	} else {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	}
 }
 
 /*!
