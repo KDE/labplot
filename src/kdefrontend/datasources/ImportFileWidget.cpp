@@ -418,10 +418,11 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		source->setFileName( ui.leFileName->text() );
-		source->setFileLinked( ui.chbLinkFile->isChecked() );
+		source->setFileName(ui.leFileName->text());
+		source->setFileLinked(ui.chbLinkFile->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
+		source->setFileName(ui.leFileName->text());
 		source->setLocalSocketName(ui.leFileName->text());
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:

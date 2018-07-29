@@ -118,7 +118,7 @@ LiveDataSource::~LiveDataSource() {
  * depending on the update type, periodically or on data changes, starts the timer or activates the file watchers, respectively.
  */
 void LiveDataSource::ready() {
-	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource,UpdateType,m_updateType) << ", interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::ready() update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType) << ", interval = " << m_updateInterval);
 	switch (m_updateType) {
 	case TimeInterval:
 		m_updateTimer->start(m_updateInterval);
@@ -739,14 +739,16 @@ void LiveDataSource::linkToggled() {
 void LiveDataSource::watch() {
 	DEBUG("LiveDataSource::watch() file name = " << m_fileName.toStdString());
 	if (m_fileWatched) {
+		DEBUG("	file is watched");
 		if (!m_fileSystemWatcher) {
 			m_fileSystemWatcher = new QFileSystemWatcher;
 			connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, &LiveDataSource::read);
 		}
 
-		if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+		if (!m_fileSystemWatcher->files().contains(m_fileName))
 			m_fileSystemWatcher->addPath(m_fileName);
 	} else {
+		DEBUG("	file is not watched");
 		if (m_fileSystemWatcher)
 			m_fileSystemWatcher->removePath(m_fileName);
 	}
