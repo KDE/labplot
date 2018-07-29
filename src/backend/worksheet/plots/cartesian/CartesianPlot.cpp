@@ -43,6 +43,7 @@
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
 #include "backend/core/Project.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -1296,21 +1297,41 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		//in case the first curve is added, check whether we start plotting datetime data
 		if (children<XYCurve>().size() == 1) {
-			const AbstractColumn* col = curve->xColumn();
+			const Column* col = dynamic_cast<const Column*>(curve->xColumn());
 			if (col) {
 				if (col->columnMode() == AbstractColumn::DateTime) {
 					setUndoAware(false);
 					setXRangeFormat(CartesianPlot::DateTime);
 					setUndoAware(true);
+
+					//set column's datetime format for all horizontal axis
+					for (auto* axis : children<Axis>()) {
+						if (axis->orientation() == Axis::AxisHorizontal) {
+							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							axis->setUndoAware(false);
+							axis->setLabelsDateTimeFormat(filter->format());
+							axis->setUndoAware(true);
+						}
+					}
 				}
 			}
 
-			col = curve->yColumn();
+			col = dynamic_cast<const Column*>(curve->yColumn());
 			if (col) {
 				if (col->columnMode() == AbstractColumn::DateTime) {
 					setUndoAware(false);
 					setYRangeFormat(CartesianPlot::DateTime);
 					setUndoAware(true);
+
+					//set column's datetime format for all vertical axis
+					for (auto* axis : children<Axis>()) {
+						if (axis->orientation() == Axis::AxisVertical) {
+							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							axis->setUndoAware(false);
+							axis->setLabelsDateTimeFormat(filter->format());
+							axis->setUndoAware(true);
+						}
+					}
 				}
 			}
 		}
