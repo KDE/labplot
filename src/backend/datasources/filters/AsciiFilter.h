@@ -73,9 +73,9 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 #ifdef HAVE_MQTT
-	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	QString mqttColumnStatistics(const MQTTTopic * topic) const;
-	AbstractColumn::ColumnMode mqttColumnMode() const;
+	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	QString MQTTColumnStatistics(const MQTTTopic * topic) const;
+	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);
 	QString separator() const;

@@ -68,13 +68,8 @@ private:
 
 	QString m_topicName;
 	MQTTClient* m_MQTTClient;
-
 	AbstractFileFilter* m_filter;
 	QVector<QString> m_messagePuffer;
-
-	QAction* m_reloadAction;
-	QAction* m_showEditorAction;
-	QAction* m_showSpreadsheetAction;
 	QAction* m_plotDataAction;
 
 public slots:	

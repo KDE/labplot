@@ -89,7 +89,7 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 	}
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
-	qDebug()<<"MqttTopic constructor: " << m_topicName;
+	qDebug()<<"New MqttTopic: " << m_topicName;
 	initActions();
 }
 
@@ -228,7 +228,7 @@ void MQTTTopic::plotData() {
  */
 void MQTTTopic::read() {
 	while(!m_messagePuffer.isEmpty()) {
-		qDebug()<< "reading from topic " + m_topicName;
+		qDebug()<< "Reading from topic " << m_topicName;
 		QString tempMessage = m_messagePuffer.takeFirst();
 		dynamic_cast<AsciiFilter*>(m_filter)->readMQTTTopic(tempMessage, m_topicName, this);
 	}
@@ -269,7 +269,6 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
-	qDebug()<<"Start loading MQTTTopic";
 	removeColumns(0, columnCount());
 	if (!readBasicAttributes(reader))
 		return false;
@@ -293,7 +292,6 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader))
 				return false;
 		} else if (reader->name() == "general") {
-			qDebug()<<"MQTTTopic general";
 			attribs = reader->attributes();
 
 			str = attribs.value("topicName").toString();
@@ -333,11 +331,9 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 					m_messagePuffer.push_back(str);
 			}
 		} else if (reader->name() == "asciiFilter") {
-			qDebug()<<"MQTTTopic filter load";
 			if (!m_filter->load(reader))
 				return false;
 		} else if(reader->name() == "column") {
-			qDebug()<<"MQTTTopic column load";
 			Column* column = new Column("", AbstractColumn::Text);
 			if (!column->load(reader, preview)) {
 				delete column;
@@ -347,12 +343,14 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			addChild(column);
 		} else {// unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
+	//prepare filter for reading
 	dynamic_cast<AsciiFilter*>(m_filter)->setPreparedForMQTT(isFilterPrepared, this, separator);
-	qDebug()<<"End loading MQTTTopic";
+
 	return !reader->hasError();
 }
 #endif

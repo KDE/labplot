@@ -56,9 +56,9 @@ public:
 	QVector<QStringList> preview(QIODevice& device);
 
 #ifdef HAVE_MQTT
-	void mqttPreview(QVector<QStringList>&, const QString&, const QString&);
-	AbstractColumn::ColumnMode mqttColumnMode() const;
-	QString mqttColumnStatistics(const MQTTTopic* ) const;
+	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	AbstractColumn::ColumnMode MQTTColumnMode() const;
+	QString MQTTColumnStatistics(const MQTTTopic* ) const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
 	void setPreparedForMQTT(bool, MQTTTopic*topic, const QString&);

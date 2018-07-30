@@ -45,11 +45,11 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 MQTTSubscription::MQTTSubscription(const QString& name)
 	: Folder(name),
 	  m_subscriptionName(name) {
-	qDebug()<<"MQTTSubscription constructor";
+	qDebug() << "New MQTTSubscription: " << name;
 }
 
 MQTTSubscription::~MQTTSubscription() {
-	qDebug()<<"MQTTSubscription destructor";
+	qDebug() << "Delete MQTTSubscription: " << m_subscriptionName;
 }
 
 /*!
@@ -59,7 +59,6 @@ MQTTSubscription::~MQTTSubscription() {
  */
 void MQTTSubscription::addTopic(const QString& topicName) {
 	MQTTTopic * newTopic = new MQTTTopic(topicName, this, false);
-	qDebug()<<"Adding child topic: "+topicName;
 	addChild(newTopic);
 }
 
@@ -69,7 +68,6 @@ void MQTTSubscription::addTopic(const QString& topicName) {
  * \return a vector of pointers to the children of the MQTTSubscription
  */
 const QVector<MQTTTopic*> MQTTSubscription::topics() {
-	qDebug()<<"returning topics";
 	return  children<MQTTTopic>();
 }
 
@@ -116,7 +114,6 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 		MQTTTopic* newTopic = nullptr;
 		for(int i = 0; i < topics.size(); ++i) {
 			if(topicName == topics[i]->topicName()) {
-				qDebug()<<"found new topic at position: "<<i;
 				newTopic = topics[i];
 				break;
 			}
@@ -184,7 +181,6 @@ void MQTTSubscription::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
-	qDebug()<<"Start loading MQTTSubscripiton";
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -204,20 +200,17 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader))
 				return false;
 		} else if (reader->name() == "general") {
-			qDebug()<<"MQTTSub general";
 			attribs = reader->attributes();
 
 			str = attribs.value("subscriptionName").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'subscriptionName'"));
 			else {
-				qDebug()<<str;
 				m_subscriptionName =  str;
 				setName(str);
 			}
 
 		}  else if(reader->name() == QLatin1String("MQTTTopic")) {
-			qDebug()<<"Load MQTTTopic";
 			MQTTTopic* topic = new MQTTTopic("", this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;
@@ -229,9 +222,8 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
-	qDebug()<<"End loading MQTTSubscripiton";
-	qDebug()<<name();
-	loaded(this->name());
+
+	emit loaded(this->name());
 	return !reader->hasError();
 }
 #endif

@@ -867,9 +867,9 @@ void MQTTClient::updateWillMessage() {
 				//If the topic's asciiFilter was found, get the needed statistics
 				if(asciiFilter != nullptr) {
 					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
-					if((asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Integer) ||
-							(asciiFilter->mqttColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-						m_client->setWillMessage(asciiFilter->mqttColumnStatistics(willTopic).toUtf8());
+					if((asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Integer) ||
+							(asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
+						m_client->setWillMessage(asciiFilter->MQTTColumnStatistics(willTopic).toUtf8());
 					}
 					//Otherwise set empty message
 					else {

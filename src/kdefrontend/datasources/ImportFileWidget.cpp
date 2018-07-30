@@ -1820,7 +1820,7 @@ void ImportFileWidget::refreshPreview() {
 					i.next();
 					qDebug()<<"calling ascii mqtt preview"<< importedStrings << "  "<<QString(i.value().payload().data())
 						   << "    "<< i.key().name();
-					filter->mqttPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
+					filter->MQTTPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
 					if(importedStrings.isEmpty())
 						break;
 				}
