@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -46,7 +46,6 @@ class CartesianPlotDock : public QWidget {
 
 public:
 	explicit CartesianPlotDock(QWidget*);
-	~CartesianPlotDock();
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
 
@@ -79,12 +78,16 @@ private slots:
 	void autoScaleXChanged(int);
 	void xMinChanged();
 	void xMaxChanged();
+	void xMinDateTimeChanged(const QDateTime&);
+	void xMaxDateTimeChanged(const QDateTime&);
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 
 	void autoScaleYChanged(int);
 	void yMinChanged();
 	void yMaxChanged();
+	void yMinDateTimeChanged(const QDateTime&);
+	void yMaxDateTimeChanged(const QDateTime&);
 	void yRangeFormatChanged(int);
 	void yScaleChanged(int);
 
