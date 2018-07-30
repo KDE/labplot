@@ -89,21 +89,21 @@ void MQTTErrorWidget::tryToReconnect(){
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		if(!ui.leId->text().isEmpty()) {
-			m_client->setMqttClientId(ui.leId->text());
+			m_client->setMQTTClientId(ui.leId->text());
 			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::BadUsernameOrPassword:
 		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
-			m_client->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
+			m_client->setMQTTClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
 			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::NotAuthorized:
 		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
-			m_client->setMqttClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
+			m_client->setMQTTClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
 			m_client->read();
 			ok = true;
 		}

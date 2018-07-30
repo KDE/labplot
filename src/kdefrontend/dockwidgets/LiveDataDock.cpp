@@ -123,6 +123,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	ui.sbKeepNValues->setValue(fds->keepNValues());
+	ui.sbKeepNValues->setEnabled(true);
 
 	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();
@@ -178,12 +179,12 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		m_clients[fds->clientHostName()]->setHostname(fds->clientHostName());
 		m_clients[fds->clientHostName()]->setPort(fds->clientPort());
 
-		if(fds->mqttUseAuthentication()) {
+		if(fds->MQTTUseAuthentication()) {
 			m_clients[fds->clientHostName()]->setUsername(fds->clientUserName());
 			m_clients[fds->clientHostName()]->setPassword(fds->clientPassword());
 		}
 
-		if(fds->mqttUseID()) {
+		if(fds->MQTTUseID()) {
 			m_clients[fds->clientHostName()]->setClientId(fds->clientID());
 		}
 
@@ -191,15 +192,15 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	if(m_previousMQTTClient == nullptr) {
-		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
+		connect(fds, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fds, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
 	}
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
 	else if(m_previousMQTTClient->clientHostName() != fds->clientHostName()) {
 		qDebug()<<"At load host name not equal: "<<m_previousMQTTClient->clientHostName()<<" "<<fds->clientHostName();
-		disconnect(m_previousMQTTClient, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		disconnect(m_previousMQTTClient, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
+		disconnect(m_previousMQTTClient, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		disconnect(m_previousMQTTClient, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
 		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
@@ -215,8 +216,8 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		ui.twSubscriptions->clear();
 		fillSubscriptions();
 
-		connect(fds, &MQTTClient::mqttSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::mqttTopicsChanged, this, &LiveDataDock::updateWillTopics);
+		connect(fds, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fds, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
 		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	}
 
@@ -243,7 +244,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	//when chbWill's isChecked corresponds with source's m_mqttWillUse it doesn't emit state changed signal, we have to force it
-	bool checked = fds->mqttWillUse();
+	bool checked = fds->MQTTWillUse();
 	ui.chbWill->setChecked(!checked);
 	ui.chbWill->setChecked(checked);
 	m_previousMQTTClient = fds;
@@ -567,7 +568,7 @@ void LiveDataDock::useWillMessage(int state) {
 	qDebug()<<"will checkstate changed" <<state;
 	if(state == Qt::Checked) {
 		for (auto* source: m_mqttClients)
-			source->setMqttWillUse(true);
+			source->setMQTTWillUse(true);
 
 		ui.chbWillRetain->show();
 		ui.cbWillQoS->show();
@@ -598,7 +599,7 @@ void LiveDataDock::useWillMessage(int state) {
 	}
 	else if (state == Qt::Unchecked) {
 		for (auto* source: m_mqttClients)
-			source->setMqttWillUse(false);
+			source->setMQTTWillUse(false);
 
 		ui.chbWillRetain->hide();
 		ui.cbWillQoS->hide();
@@ -919,13 +920,10 @@ void LiveDataDock::addSubscription() {
 							findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
 							for(int j = 0; j < children.size(); ++j) {
 								if(checkTopicContains(name, children[j]->text(0))) {
-									qDebug()<<children[j]->text(0);
-
 									//if the new subscription contains a topic, we unsubscribe from it
 									QTreeWidgetItem* unsubscribeItem = children[j];
 									while(unsubscribeItem->parent() != nullptr) {
 										for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
-											qDebug()<<i<<" "<<unsubscribeItem->parent()->childCount();
 
 											if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
 												//add topic as subscription to every client
@@ -1048,7 +1046,7 @@ void LiveDataDock::setTopicCompleter(const QString& topicName) {
  */
 void LiveDataDock::updateSubscriptionCompleter() {
 	QStringList subscriptionList;
-	QVector<QString> subscriptions = m_mqttClients.first()->mqttSubscriptions();
+	QVector<QString> subscriptions = m_mqttClients.first()->MQTTSubscriptions();
 
 	if(!subscriptions.isEmpty()) {
 		for(int i = 0; i < subscriptions.size(); ++i) {
@@ -1084,7 +1082,7 @@ void LiveDataDock::fillSubscriptions() {
 
 	ui.twSubscriptions->clear();
 
-	QVector<QString> subscriptions = fds->mqttSubscriptions();
+	QVector<QString> subscriptions = fds->MQTTSubscriptions();
 	for (int i = 0; i < subscriptions.count(); ++i) {
 		QStringList name;
 		name.append(subscriptions[i]);

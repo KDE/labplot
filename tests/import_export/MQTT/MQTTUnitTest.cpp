@@ -150,11 +150,11 @@ void MQTTUnitTest::testIntegerMessage() {
 	mqttClient->setReadingType(MQTTClient::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMqttClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
-	mqttClient->addInitialMqttSubscriptions(topicFilter, 0);
+	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
@@ -183,7 +183,7 @@ void MQTTUnitTest::testIntegerMessage() {
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::mqttTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
 		connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
@@ -240,11 +240,11 @@ void MQTTUnitTest::testNumericMessage() {
 	mqttClient->setReadingType(MQTTClient::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMqttClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
-	mqttClient->addInitialMqttSubscriptions(topicFilter, 0);
+	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
@@ -273,7 +273,7 @@ void MQTTUnitTest::testNumericMessage() {
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::mqttTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
 		connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
@@ -330,11 +330,11 @@ void MQTTUnitTest::testTextMessage() {
 	mqttClient->setReadingType(MQTTClient::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMqttClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
-	mqttClient->addInitialMqttSubscriptions(topicFilter, 0);
+	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
@@ -363,7 +363,7 @@ void MQTTUnitTest::testTextMessage() {
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::mqttTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
 		connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
@@ -406,12 +406,12 @@ void MQTTUnitTest::testSubscriptions() {
 	mqttClient->setReadingType(MQTTClient::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMqttClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
-	mqttClient->setMqttWillUse(false);
+	mqttClient->setMQTTWillUse(false);
 	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
-	mqttClient->addInitialMqttSubscriptions(topicFilter, 0);
+	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 
 	LiveDataDock* liveDock = new LiveDataDock();
 	QList<MQTTClient*> list;
@@ -424,7 +424,7 @@ void MQTTUnitTest::testSubscriptions() {
 	QTimer timer;
 	timer.setSingleShot(true);
 	QEventLoop* loop = new QEventLoop();
-	connect(mqttClient, &MQTTClient::mqttSubscribed, loop, &QEventLoop::quit);
+	connect(mqttClient, &MQTTClient::MQTTSubscribed, loop, &QEventLoop::quit);
 	connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 	timer.start(5000);
 	loop->exec();
@@ -492,11 +492,11 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -521,11 +521,11 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -538,7 +538,7 @@ void MQTTUnitTest::testSubscriptions() {
 			QTextStream in(file);
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				bool found = liveDock->testSubscribe(topic);
 				QCOMPARE(found, true);
 			}
@@ -551,12 +551,12 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QVector<QString> sub = mqttClient->mqttSubscriptions();
-			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+			QVector<QString> sub = mqttClient->MQTTSubscriptions();
+			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -581,9 +581,9 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QCOMPARE(mqttClient->mqttSubscriptions().size(), count);
+			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
-			QVector<QString> subscriptions = mqttClient->mqttSubscriptions();
+			QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
 				QCOMPARE(subscriptions.contains(topic), true);

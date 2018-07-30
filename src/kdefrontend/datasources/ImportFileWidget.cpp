@@ -586,21 +586,21 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	if (readingType != MQTTClient::ReadingType::TillEnd)
 		client->setSampleSize(ui.sbSampleSize->value());
 
-	client->setMqttClientHostPort(m_client->hostname(), m_client->port());
+	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
 
 	client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
 	if(ui.chbAuthentication->isChecked())
-		client->setMqttClientAuthentication(m_client->username(), m_client->password());
+		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
 
 	client->setMQTTUseID(ui.chbID->isChecked());
 	if(ui.chbID->isChecked())
-		client->setMqttClientId(m_client->clientId());
+		client->setMQTTClientId(m_client->clientId());
 
 	for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
-		client->addInitialMqttSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 	}
 
-	client->setMqttRetain(ui.chbRetain->isChecked());
+	client->setMQTTRetain(ui.chbRetain->isChecked());
 	client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
 	client->setWillOwnMessage(ui.leWillOwnMessage->text());
 	client->setWillQoS(ui.cbWillQoS->currentIndex() );
@@ -608,7 +608,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
 	client->setWillTopic(ui.cbWillTopic->currentText());
 	client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
-	client->setMqttWillUse(ui.chbWill->isChecked());
+	client->setMQTTWillUse(ui.chbWill->isChecked());
 
 	for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
 		QListWidgetItem* item = ui.lwWillStatistics->item(i);
@@ -2147,6 +2147,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	case LiveDataSource::SourceType::MQTT:
 #ifdef HAVE_MQTT
+
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		ui.lBaudRate->hide();
 		ui.cbBaudRate->hide();

@@ -116,13 +116,12 @@ public:
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setMqttClientHostPort(const QString&, const quint16&);
-	void setMqttClientAuthentication(const QString&, const QString&);
-	void setMqttClientId(const QString&);
-	QMqttClient mqttClient() const;
+	void setMQTTClientHostPort(const QString&, const quint16&);
+	void setMQTTClientAuthentication(const QString&, const QString&);
+	void setMQTTClientId(const QString&);
 
-	void addInitialMqttSubscriptions(const QMqttTopicFilter&, const quint8&);
-	QVector<QString> mqttSubscriptions() const;
+	void addInitialMQTTSubscriptions(const QMqttTopicFilter&, const quint8&);
+	QVector<QString> MQTTSubscriptions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
 	QString checkCommonLevel(const QString& first, const QString& second);
@@ -148,8 +147,8 @@ public:
 	QVector<QString> topicNames() const;
 	bool checkAllArrived();
 
-	void setMqttWillUse(bool);
-	bool mqttWillUse() const;
+	void setMQTTWillUse(bool);
+	bool MQTTWillUse() const;
 
 	void setWillTopic(const QString&);
 	QString willTopic() const;
@@ -177,14 +176,14 @@ public:
 
 	void updateWillMessage() ;
 
-	void setMqttRetain(bool);
-	bool mqttRetain() const;
+	void setMQTTRetain(bool);
+	bool MQTTRetain() const;
 
 	void setMQTTUseID(bool);
-	bool mqttUseID() const;
+	bool MQTTUseID() const;
 
 	void setMQTTUseAuthentication(bool);
-	bool mqttUseAuthentication() const;
+	bool MQTTUseAuthentication() const;
 
 	void clearLastMessage();
 	void addWillStatistics(WillStatistics);
@@ -197,35 +196,23 @@ public:
 	void reparentTopic(const QString& topic, const QString& parent);
 
 private:
-	//void initActions();
 
 	UpdateType m_updateType;
 	ReadingType m_readingType;
-
 	bool m_paused;
 	bool m_prepared;
 	bool m_keepLastValues;
-
 	int m_sampleSize;
 	int m_keepNValues;
 	int m_updateInterval;
-
 	AbstractFileFilter* m_filter;
-
 	QTimer* m_updateTimer;
-	/*
-		QAction* m_reloadAction;
-		QAction* m_toggleLinkAction;
-		QAction* m_showEditorAction;
-		QAction* m_showSpreadsheetAction;
-		QAction* m_plotDataAction;*/
-
 	QMqttClient* m_client;
 	QMap<QMqttTopicFilter, quint8> m_subscribedTopicNameQoS;
 	QVector<QString> m_subscriptions;
 	QVector<QString> m_topicNames;
-	bool m_mqttTest;
-	bool m_mqttUseWill;
+	bool m_MQTTTest;
+	bool m_MQTTUseWill;
 	QString m_willMessage;
 	QString m_willTopic;
 	bool m_willRetain;
@@ -237,11 +224,11 @@ private:
 	int m_willTimeInterval;
 	WillUpdateType m_willUpdateType;
 	QVector<bool> m_willStatistics;
-	bool m_mqttFirstConnectEstablished;
-	bool m_mqttRetain;
-	bool m_mqttUseID;
-	bool m_mqttUseAuthentication;
-	QVector<MQTTSubscription*> m_mqttSubscriptions;
+	bool m_MQTTFirstConnectEstablished;
+	bool m_MQTTRetain;
+	bool m_MQTTUseID;
+	bool m_MQTTUseAuthentication;
+	QVector<MQTTSubscription*> m_MQTTSubscriptions;
 	bool m_disconnectForWill;
 	bool m_loaded;
 	int m_subscriptionsLoaded;
@@ -251,14 +238,14 @@ public slots:
 	void read();
 
 private slots:
-	void onMqttConnect();
-	void mqttSubscriptionMessageReceived(const QMqttMessage&);
-	void mqttErrorChanged(QMqttClient::ClientError);
+	void onMQTTConnect();
+	void MQTTSubscriptionMessageReceived(const QMqttMessage&);
+	void MQTTErrorChanged(QMqttClient::ClientError);
 	void subscriptionLoaded(const QString&);
 
 signals:
-	void mqttSubscribed();
-	void mqttTopicsChanged();
+	void MQTTSubscribed();
+	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&);
 };
