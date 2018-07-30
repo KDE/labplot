@@ -50,6 +50,8 @@ public:
 	CartesianPlot::RangeType rangeType;
 	CartesianPlot::RangeFormat xRangeFormat;
 	CartesianPlot::RangeFormat yRangeFormat;
+	QString xRangeDateTimeFormat;
+	QString yRangeDateTimeFormat;
 	int rangeFirstValues;
 	int rangeLastValues;
 	double xMin, xMax, yMin, yMax;

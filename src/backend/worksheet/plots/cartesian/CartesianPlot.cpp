@@ -118,6 +118,8 @@ void CartesianPlot::init() {
 	d->rangeType = CartesianPlot::RangeFree;
 	d->xRangeFormat = CartesianPlot::Numeric;
 	d->yRangeFormat = CartesianPlot::Numeric;
+	d->xRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
+	d->yRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 	d->rangeLastValues = 1000;
 	d->rangeFirstValues = 1000;
 	d->autoScaleX = true;
@@ -794,6 +796,16 @@ CartesianPlot::MouseMode CartesianPlot::mouseMode() const {
 	return d->mouseMode;
 }
 
+const QString& CartesianPlot::xRangeDateTimeFormat() const {
+	Q_D(const CartesianPlot);
+	return d->xRangeDateTimeFormat;
+}
+
+const QString& CartesianPlot::yRangeDateTimeFormat() const {
+	Q_D(const CartesianPlot);
+	return d->yRangeDateTimeFormat;
+}
+
 //##############################################################################
 //######################  setter methods and undo commands  ####################
 //##############################################################################
@@ -1308,8 +1320,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 					for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::AxisHorizontal) {
 							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							d->xRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(filter->format());
+							axis->setLabelsDateTimeFormat(d->xRangeDateTimeFormat);
 							axis->setUndoAware(true);
 						}
 					}
@@ -1327,8 +1340,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 					for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::AxisVertical) {
 							DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+							d->yRangeDateTimeFormat = filter->format();
 							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(filter->format());
+							axis->setLabelsDateTimeFormat(d->yRangeDateTimeFormat);
 							axis->setUndoAware(true);
 						}
 					}

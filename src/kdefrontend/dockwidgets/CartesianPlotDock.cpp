@@ -505,6 +505,8 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 	ui.cbXRangeFormat->setEnabled(!checked);
 	ui.leXMin->setEnabled(!checked);
 	ui.leXMax->setEnabled(!checked);
+	ui.dateTimeEditXMin->setEnabled(!checked);
+	ui.dateTimeEditXMax->setEnabled(!checked);
 
 	if (m_initializing)
 		return;
@@ -586,6 +588,8 @@ void CartesianPlotDock::autoScaleYChanged(int state) {
 	ui.cbYRangeFormat->setEnabled(!checked);
 	ui.leYMin->setEnabled(!checked);
 	ui.leYMax->setEnabled(!checked);
+	ui.dateTimeEditYMin->setEnabled(!checked);
+	ui.dateTimeEditYMax->setEnabled(!checked);
 
 	if (m_initializing)
 		return;
@@ -1439,6 +1443,8 @@ void CartesianPlotDock::load() {
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
 	ui.leXMin->setText( QString::number(m_plot->xMin()) );
 	ui.leXMax->setText( QString::number(m_plot->xMax()) );
+	ui.dateTimeEditXMin->setDisplayFormat(m_plot->xRangeDateTimeFormat());
+	ui.dateTimeEditXMax->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMin->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->xMin()));
 	ui.dateTimeEditXMax->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->xMax()));
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
@@ -1447,6 +1453,8 @@ void CartesianPlotDock::load() {
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
 	ui.leYMin->setText( QString::number(m_plot->yMin()) );
 	ui.leYMax->setText( QString::number(m_plot->yMax()) );
+	ui.dateTimeEditYMin->setDisplayFormat(m_plot->yRangeDateTimeFormat());
+	ui.dateTimeEditYMax->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMin->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->yMin()));
 	ui.dateTimeEditYMax->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->yMax()));
 	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
