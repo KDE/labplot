@@ -39,7 +39,7 @@ class HDF5OptionsWidget : public QWidget {
 public:
 	explicit HDF5OptionsWidget(QWidget*, ImportFileWidget*);
 	void clear();
-	void updateContent(HDF5Filter*, QString fileName);
+	void updateContent(HDF5Filter*, const QString &fileName);
 	const QStringList selectedHDF5Names() const;
 	int lines() const { return ui.sbPreviewLines->value(); }
 	QTableWidget* previewWidget() const { return ui.twPreview; }

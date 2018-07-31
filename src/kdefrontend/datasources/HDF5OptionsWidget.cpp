@@ -60,7 +60,7 @@ void HDF5OptionsWidget::clear() {
 	ui.twPreview->clear();
 }
 
-void HDF5OptionsWidget::updateContent(HDF5Filter *filter, QString fileName) {
+void HDF5OptionsWidget::updateContent(HDF5Filter *filter, const QString& fileName) {
 	ui.twContent->clear();
 	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
 	filter->parse(fileName, rootItem);
