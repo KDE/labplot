@@ -81,6 +81,8 @@ private slots:
 	void autoScaleChanged(int);
 	void startChanged();
 	void endChanged();
+	void startDateTimeChanged(const QDateTime&);
+	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
 
