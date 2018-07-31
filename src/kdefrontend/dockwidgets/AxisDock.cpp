@@ -31,6 +31,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -94,6 +95,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeMode
 	connect( ui.chkAutoScale, SIGNAL(stateChanged(int)), this, SLOT(autoScaleChanged(int)) );
 	connect( ui.leStart, SIGNAL(textChanged(QString)), this, SLOT(startChanged()) );
 	connect( ui.leEnd, SIGNAL(textChanged(QString)), this, SLOT(endChanged()) );
+	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
+	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
 	connect( ui.leZeroOffset, SIGNAL(textChanged(QString)), this, SLOT(zeroOffsetChanged()) );
 	connect( ui.leScalingFactor, SIGNAL(textChanged(QString)), this, SLOT(scalingFactorChanged()) );
 
@@ -593,6 +596,8 @@ void AxisDock::autoScaleChanged(int index) {
 	bool autoScale = index == Qt::Checked;
 	ui.leStart->setEnabled(!autoScale);
 	ui.leEnd->setEnabled(!autoScale);
+	ui.dateTimeEditStart->setEnabled(!autoScale);
+	ui.dateTimeEditEnd->setEnabled(!autoScale);
 
 	if (m_initializing)
 		return;
@@ -636,6 +641,24 @@ void AxisDock::endChanged() {
 		return;
 
 	double value = ui.leEnd->text().toDouble();
+	for (auto* axis : m_axesList)
+		axis->setEnd(value);
+}
+
+void AxisDock::startDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 value = dateTime.toSecsSinceEpoch();
+	for (auto* axis : m_axesList)
+		axis->setStart(value);
+}
+
+void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 value = dateTime.toSecsSinceEpoch();
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -1392,12 +1415,14 @@ void AxisDock::axisAutoScaleChanged(bool on) {
 void AxisDock::axisStartChanged(double value) {
 	m_initializing = true;
 	ui.leStart->setText( QString::number(value) );
+	ui.dateTimeEditStart->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
 void AxisDock::axisEndChanged(double value) {
 	m_initializing = true;
 	ui.leEnd->setText( QString::number(value) );
+	ui.dateTimeEditEnd->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
@@ -1643,6 +1668,33 @@ void AxisDock::load() {
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
 	ui.leStart->setText( QString::number(m_axis->start()) );
 	ui.leEnd->setText( QString::number(m_axis->end()) );
+
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (plot) {
+		bool numeric = ( (m_axis->orientation() == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
+			|| (m_axis->orientation() == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) );
+		ui.lStart->setVisible(numeric);
+		ui.lEnd->setVisible(numeric);
+		ui.leStart->setVisible(numeric);
+		ui.leEnd->setVisible(numeric);
+		ui.lStartDateTime->setVisible(!numeric);
+		ui.dateTimeEditStart->setVisible(!numeric);
+		ui.lEndDateTime->setVisible(!numeric);
+		ui.dateTimeEditEnd->setVisible(!numeric);
+
+		if (!numeric) {
+			if (m_axis->orientation() == Axis::AxisHorizontal) {
+				ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat());
+				ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat());
+			} else {
+				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
+				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
+			}
+			ui.dateTimeEditStart->setDateTime(QDateTime::fromSecsSinceEpoch(m_axis->start()));
+			ui.dateTimeEditEnd->setDateTime(QDateTime::fromSecsSinceEpoch(m_axis->end()));
+		}
+	}
+
 	ui.leZeroOffset->setText( QString::number(m_axis->zeroOffset()) );
 	ui.leScalingFactor->setText( QString::number(m_axis->scalingFactor()) );
 
