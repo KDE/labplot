@@ -1476,46 +1476,36 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		return;
 	}
 
+
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
-		switch(fileType) {
-		case AbstractFileFilter::Ascii:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Ascii);
-			break;
-		case AbstractFileFilter::Binary:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Binary);
-			break;
-		case AbstractFileFilter::Image:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Image);
-			break;
-		case AbstractFileFilter::HDF5:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::HDF5);
-			m_hdf5OptionsWidget->updateContent((HDF5Filter*)this->currentFileFilter(), fileName);
-			break;
-		case AbstractFileFilter::NETCDF:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NETCDF);
-			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)this->currentFileFilter(), fileName);
-			break;
-		case AbstractFileFilter::FITS:
+		ui.cbFileType->setCurrentIndex(fileType);
+		if (auto filter = currentFileFilter()) {
+			switch(fileType) {
+			case AbstractFileFilter::HDF5:
+				m_hdf5OptionsWidget->updateContent((HDF5Filter*)filter, fileName);
+				break;
+			case AbstractFileFilter::NETCDF:
+				m_netcdfOptionsWidget->updateContent((NetCDFFilter*)filter, fileName);
+				break;
+			case AbstractFileFilter::FITS:
 #ifdef HAVE_FITS
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::FITS);
-			m_fitsOptionsWidget->updateContent((FITSFilter*)this->currentFileFilter(), fileName);
+				m_fitsOptionsWidget->updateContent((FITSFilter*)filter, fileName);
 #endif
-			break;
-		case AbstractFileFilter::Json:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::Json);
-			m_jsonOptionsWidget->loadDocument(fileName);
-			break;
-		case AbstractFileFilter::ROOT:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::ROOT);
-			m_rootOptionsWidget->updateContent((ROOTFilter*)this->currentFileFilter(), fileName);
-			break;
-		case AbstractFileFilter::NgspiceRawAscii:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NgspiceRawAscii);
-			break;
-		case AbstractFileFilter::NgspiceRawBinary:
-			ui.cbFileType->setCurrentIndex(AbstractFileFilter::NgspiceRawBinary);
-			break;
+				break;
+			case AbstractFileFilter::Json:
+				m_jsonOptionsWidget->loadDocument(fileName);
+				break;
+			case AbstractFileFilter::ROOT:
+				m_rootOptionsWidget->updateContent((ROOTFilter*)filter, fileName);
+				break;
+			case AbstractFileFilter::Ascii:
+			case AbstractFileFilter::Binary:
+			case AbstractFileFilter::Image:
+			case AbstractFileFilter::NgspiceRawAscii:
+			case AbstractFileFilter::NgspiceRawBinary:
+				break;
+			}
 		}
 	}
 
@@ -1717,7 +1707,7 @@ void ImportFileWidget::refreshPreview() {
 	int lines = ui.sbPreviewLines->value();
 
 	bool ok = true;
-	QTableWidget* tmpTableWidget{nullptr};
+	QTableWidget* tmpTableWidget = m_twPreview;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	DEBUG("Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
@@ -1838,7 +1828,6 @@ void ImportFileWidget::refreshPreview() {
 		}
 		}
 
-		tmpTableWidget = m_twPreview;
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -1847,7 +1836,6 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedStrings = filter->preview(fileName, lines);
-		tmpTableWidget = m_twPreview;
 		break;
 	}
 	case AbstractFileFilter::Image: {
@@ -1899,7 +1887,6 @@ void ImportFileWidget::refreshPreview() {
 		JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(fileName);
-		tmpTableWidget = m_twPreview;
 		columnModes = filter->columnModes();
 		break;
 	}
@@ -1924,7 +1911,6 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
 		importedStrings = filter->preview(fileName, lines);
-		tmpTableWidget = m_twPreview;
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -1933,7 +1919,6 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		NgspiceRawBinaryFilter* filter = (NgspiceRawBinaryFilter*)this->currentFileFilter();
 		importedStrings = filter->preview(fileName, lines);
-		tmpTableWidget = m_twPreview;
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2960,3 +2945,4 @@ void ImportFileWidget::mqttConnectTimeout() {
 	QMessageBox::warning(this, "Warning", "Couldn't connect to the given broker");
 }
 #endif
+
