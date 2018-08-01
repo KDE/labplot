@@ -41,7 +41,7 @@ public:
 	explicit ROOTOptionsWidget(QWidget*, ImportFileWidget*);
 	void clear();
 	/// Fill the list of available histograms
-	void updateContent(ROOTFilter* filter, QString fileName);
+	void updateContent(ROOTFilter* filter, const QString &fileName);
 	/// Return a list of selected histograms
 	const QStringList selectedROOTNames() const;
 	int lines() const { return ui.sbPreviewLines->value(); }

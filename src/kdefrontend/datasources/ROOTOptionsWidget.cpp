@@ -44,7 +44,7 @@ void ROOTOptionsWidget::clear() {
 	ui.twPreview->clearContents();
 }
 
-void ROOTOptionsWidget::updateContent(ROOTFilter *filter, QString fileName) {
+void ROOTOptionsWidget::updateContent(ROOTFilter *filter, const QString& fileName) {
 	DEBUG("updateContent()");
 	ui.lwContent->clear();
 	ui.lwContent->addItems(filter->listHistograms(fileName));
