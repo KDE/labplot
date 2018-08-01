@@ -19,7 +19,14 @@
     </widget>
    </item>
    <item row="14" column="1" colspan="2">
-    <widget class="QLineEdit" name="leWillOwnMessage"/>
+    <widget class="QLineEdit" name="leWillOwnMessage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="15" column="0">
     <widget class="QLabel" name="lWillStatistics">
@@ -31,7 +38,7 @@
    <item row="13" column="1" colspan="2">
     <widget class="QComboBox" name="cbWillMessageType">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -55,6 +62,12 @@
    </item>
    <item row="15" column="1">
     <widget class="QListWidget" name="lwWillStatistics">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <item>
       <property name="text">
        <string>Minimum</string>
@@ -243,20 +256,6 @@
      </property>
     </widget>
    </item>
-   <item row="19" column="1">
-    <widget class="QComboBox" name="cbWillUpdate">
-     <item>
-      <property name="text">
-       <string>Time interval</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>On click</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="18" column="0" colspan="2">
     <widget class="QCheckBox" name="chbWillRetain">
      <property name="text">
@@ -268,13 +267,6 @@
     <widget class="QLabel" name="lWillUpdate">
      <property name="text">
       <string>Will Update Type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="21" column="0" colspan="2">
-    <widget class="QPushButton" name="bWillUpdateNow">
-     <property name="text">
-      <string>Update will message</string>
      </property>
     </widget>
    </item>
@@ -358,7 +350,7 @@
    <item row="17" column="1" colspan="2">
     <widget class="QComboBox" name="cbWillQoS">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -383,7 +375,7 @@
    <item row="16" column="1" colspan="2">
     <widget class="QComboBox" name="cbWillTopic">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -462,20 +454,13 @@
      </item>
     </widget>
    </item>
-   <item row="20" column="1">
-    <widget class="QLineEdit" name="leWillUpdateInterval">
-     <property name="text">
-      <string>10000</string>
-     </property>
-    </widget>
-   </item>
    <item row="10" column="0" colspan="2">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>QSizePolicy::Preferred</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -492,10 +477,10 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0" colspan="2">
+   <item row="11" column="0" colspan="3">
     <widget class="QGroupBox" name="gbManageSubscriptions">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -624,9 +609,42 @@
      </layout>
     </widget>
    </item>
+   <item row="19" column="1" colspan="2">
+    <widget class="QComboBox" name="cbWillUpdate">
+     <item>
+      <property name="text">
+       <string>Time interval</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>On click</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="20" column="1" colspan="2">
+    <widget class="QLineEdit" name="leWillUpdateInterval">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>10000</string>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="0" colspan="3">
+    <widget class="QPushButton" name="bWillUpdateNow">
+     <property name="text">
+      <string>Update will message</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
  <connections/>
 </ui>
-
