@@ -537,7 +537,7 @@ void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot: m_plotList)
 		plot->setXMin(value);
 }
@@ -546,7 +546,7 @@ void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot: m_plotList)
 		plot->setXMax(value);
 }
@@ -620,7 +620,7 @@ void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot: m_plotList)
 		plot->setXMin(value);
 }
@@ -629,7 +629,7 @@ void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot: m_plotList)
 		plot->setXMax(value);
 }
@@ -1227,14 +1227,14 @@ void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
 void CartesianPlotDock::plotXMinChanged(double value) {
 	m_initializing = true;
 	ui.leXMin->setText( QString::number(value) );
-	ui.dateTimeEditXMin->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditXMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXMaxChanged(double value) {
 	m_initializing = true;
 	ui.leXMax->setText( QString::number(value) );
-	ui.dateTimeEditXMax->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditXMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
@@ -1259,14 +1259,14 @@ void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
 void CartesianPlotDock::plotYMinChanged(double value) {
 	m_initializing = true;
 	ui.leYMin->setText( QString::number(value) );
-	ui.dateTimeEditYMin->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditYMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYMaxChanged(double value) {
 	m_initializing = true;
 	ui.leYMax->setText( QString::number(value) );
-	ui.dateTimeEditYMax->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditYMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
@@ -1445,8 +1445,8 @@ void CartesianPlotDock::load() {
 	ui.leXMax->setText( QString::number(m_plot->xMax()) );
 	ui.dateTimeEditXMin->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMax->setDisplayFormat(m_plot->xRangeDateTimeFormat());
-	ui.dateTimeEditXMin->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->xMin()));
-	ui.dateTimeEditXMax->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->xMax()));
+	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xMin()));
+	ui.dateTimeEditXMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xMax()));
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
 	ui.cbXRangeFormat->setCurrentIndex( (int) m_plot->xRangeFormat() );
 
@@ -1455,8 +1455,8 @@ void CartesianPlotDock::load() {
 	ui.leYMax->setText( QString::number(m_plot->yMax()) );
 	ui.dateTimeEditYMin->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMax->setDisplayFormat(m_plot->yRangeDateTimeFormat());
-	ui.dateTimeEditYMin->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->yMin()));
-	ui.dateTimeEditYMax->setDateTime(QDateTime::fromSecsSinceEpoch(m_plot->yMax()));
+	ui.dateTimeEditYMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMin()));
+	ui.dateTimeEditYMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMax()));
 	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
 	ui.cbYRangeFormat->setCurrentIndex( (int) m_plot->yRangeFormat() );
 

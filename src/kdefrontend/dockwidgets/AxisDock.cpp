@@ -649,7 +649,7 @@ void AxisDock::startDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
@@ -658,7 +658,7 @@ void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 value = dateTime.toSecsSinceEpoch();
+	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -1415,14 +1415,14 @@ void AxisDock::axisAutoScaleChanged(bool on) {
 void AxisDock::axisStartChanged(double value) {
 	m_initializing = true;
 	ui.leStart->setText( QString::number(value) );
-	ui.dateTimeEditStart->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
 void AxisDock::axisEndChanged(double value) {
 	m_initializing = true;
 	ui.leEnd->setText( QString::number(value) );
-	ui.dateTimeEditEnd->setDateTime( QDateTime::fromSecsSinceEpoch(value) );
+	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 	m_initializing = false;
 }
 
@@ -1690,8 +1690,8 @@ void AxisDock::load() {
 				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
 				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
 			}
-			ui.dateTimeEditStart->setDateTime(QDateTime::fromSecsSinceEpoch(m_axis->start()));
-			ui.dateTimeEditEnd->setDateTime(QDateTime::fromSecsSinceEpoch(m_axis->end()));
+			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->start()));
+			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->end()));
 		}
 	}
 

@@ -2429,15 +2429,15 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 			else
-				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
-													QDateTime::fromSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
+				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 
 			info += QLatin1String(", ");
 			if (yRangeFormat == CartesianPlot::Numeric)
 				 info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 			else
-				info += i18n("from y=%1 to y=%2").arg(QDateTime::fromSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
-													QDateTime::fromSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
+				info += i18n("from y=%1 to y=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionEnd.setX(event->pos().x());
 			m_selectionEnd.setY(-dataRect.height()/2);
@@ -2445,8 +2445,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 			else
-				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
-													QDateTime::fromSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
+				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 			m_selectionEnd.setX(dataRect.width()/2);
 			m_selectionEnd.setY(event->pos().y());
@@ -2454,8 +2454,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (yRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 			else
-				info = i18n("from y=%1 to y=%2").arg(QDateTime::fromSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
-													QDateTime::fromSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
+				info = i18n("from y=%1 to y=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 		}
 		q->info(info);
 		update();
@@ -2561,13 +2561,13 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 
 			info += ", y=";
 			if (yRangeFormat == CartesianPlot::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
 			QPointF p1(logicalPoint.x(), yMin);
 			QPointF p2(logicalPoint.x(), yMax);
@@ -2577,7 +2577,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 			update();
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {
 			QPointF p1(xMin, logicalPoint.y());
@@ -2588,7 +2588,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (yRangeFormat == CartesianPlot::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
 			update();
 		}
 	}
