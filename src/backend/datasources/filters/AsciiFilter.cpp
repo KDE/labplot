@@ -430,10 +430,8 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endColumn(-1),
 	m_actualStartRow(1),
 	m_actualRows(0),
-	m_maxActualRows (0),
 	m_actualCols(0),
 	m_prepared(false),
-	m_lastRowNum (0),
 	mqttPreviewFirstEmptyColCount (0),
 	m_columnOffset(0) {
 }

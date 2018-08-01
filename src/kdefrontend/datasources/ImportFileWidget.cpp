@@ -99,14 +99,16 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_fileName(fileName),
 	m_fileEmpty(false),
 	m_liveDataSource(true),
-	#ifdef HAVE_MQTT
-	m_mqttReadyForPreview (false),
+	m_suppressRefresh(false)
+  #ifdef HAVE_MQTT
+  ,
+	m_client(new QMqttClient(this)),
 	m_searching(false),
 	m_searchTimer(new QTimer(this)),
 	m_connectTimeoutTimer(new QTimer(this)),
-	m_client(new QMqttClient(this)),
-	#endif
-	m_suppressRefresh(false) {
+	m_mqttReadyForPreview (false)
+  #endif
+{
 	ui.setupUi(this);
 
 #ifdef HAVE_MQTT
@@ -558,6 +560,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
+	case LiveDataSource::SourceType::MQTT:
+		break;
 	default:
 		break;
 	}
@@ -821,6 +825,7 @@ void ImportFileWidget::hideMQTT() {
 	ui.lWillUpdateInterval->hide();
 	ui.lwWillStatistics->hide();
 	ui.lWillStatistics->hide();
+	ui.gbManageSubscriptions->hide();
 }
 
 #ifdef HAVE_MQTT
@@ -1234,7 +1239,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
 				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
-				QTreeWidgetItem* currentItem;
+				QTreeWidgetItem* currentItem = nullptr;
 				//search the corresponding item to the common topics first level(root)
 				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
 					if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
@@ -2028,6 +2033,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		fileNameChanged(ui.leFileName->text());
+		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -2060,6 +2066,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
+		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
@@ -2085,6 +2092,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
+		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -2110,8 +2118,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
+		hideMQTT();
 		break;
-
 	case LiveDataSource::SourceType::MQTT:
 #ifdef HAVE_MQTT
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -2120,6 +2128,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->hide();
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
+		ui.gbManageSubscriptions->show();
 
 		ui.lHost->show();
 		ui.leHost->show();
@@ -2831,6 +2840,11 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		break;
 	case QMqttClient::UnknownError:
 		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		break;
+	case QMqttClient::NoError:
+	case QMqttClient::InvalidProtocolVersion:
+	case QMqttClient::TransportInvalid:
+	case QMqttClient::ProtocolViolation:
 		break;
 	default:
 		break;

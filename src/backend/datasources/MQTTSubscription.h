@@ -29,13 +29,17 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTSUBSCRIPTION_H
 #define MQTTSUBSCRIPTION_H
 
-#include <QVector>
-#include <QString>
-
 #include "backend/core/Folder.h"
+
+#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 
+#include <QVector>
+#include <QString>
+#endif
+
 class MQTTSubscription : public Folder{
+#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -63,6 +67,7 @@ private slots:
 
 signals:
 	void loaded(const QString &);
+#endif //HAVE_MQTT
 };
 
 #endif // MQTTSUBSCRIPTION_H

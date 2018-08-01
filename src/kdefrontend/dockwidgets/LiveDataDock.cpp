@@ -86,12 +86,14 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 }
 
 LiveDataDock::~LiveDataDock() {
+#ifdef HAVE_MQTT
 	delete m_searchTimer;
 	QMapIterator<QString, QMqttClient*> clients(m_clients);
 	while(clients.hasNext()) {
 		clients.next();
 		delete clients.value();
 	}
+#endif
 }
 
 #ifdef HAVE_MQTT
@@ -1530,7 +1532,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
 				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
-				QTreeWidgetItem* currentItem;
+				QTreeWidgetItem* currentItem = nullptr;
 
 				//search the corresponding item to the common topics first level(root)
 				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {

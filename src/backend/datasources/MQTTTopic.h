@@ -29,15 +29,17 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTTOPIC_H
 #define MQTTTOPIC_H
 
-#ifdef HAVE_MQTT
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
+#ifdef HAVE_MQTT
 class MQTTSubscription;
 class MQTTClient;
+#endif
 
 class MQTTTopic : public Spreadsheet{
+#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -80,8 +82,7 @@ private slots:
 
 signals:
 	void readOccured();
-
+#endif // HAVE_MQTT
 };
 
-#endif // HAVE_MQTT
 #endif // MQTTTOPIC_H
