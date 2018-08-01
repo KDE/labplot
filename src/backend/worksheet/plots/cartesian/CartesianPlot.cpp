@@ -1152,7 +1152,7 @@ void CartesianPlot::addIntegrationCurve() {
 		curve->recalculate();
 		emit curve->integrationDataChanged(curve->integrationData());
 	} else {
-		beginMacro(i18n("%1: add differentiation curve", name()));
+		beginMacro(i18n("%1: add integration curve", name()));
 		this->addChild(curve);
 	}
 
