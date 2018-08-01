@@ -1483,7 +1483,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	} else {
 		for (auto value : tickLabelValues) {
 			QDateTime dateTime;
-			dateTime.setSecsSinceEpoch(value);
+			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
