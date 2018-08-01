@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2018 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -319,6 +319,8 @@ void WorksheetView::initActions() {
 //	addDifferentiationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("xy-curve From a Differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From an Integration"), cartesianPlotAddNewActionGroup);
 //	addIntegrationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("xy-curve From an Integration"), cartesianPlotAddNewActionGroup);
+	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve From a Convolution"), cartesianPlotAddNewActionGroup);
+//	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve From a Convolution"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve From an Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("xy-curve From a Smooth"), cartesianPlotAddNewActionGroup);
@@ -340,6 +342,8 @@ void WorksheetView::initActions() {
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integration"), cartesianPlotAddNewActionGroup);
+	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Convolution"), cartesianPlotAddNewActionGroup);
+//	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("Convolution"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
@@ -467,6 +471,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFourierFilterCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFourierTransformCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addConvolutionCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
@@ -573,6 +578,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) {
 	menu->addAction(addFitAction);
 	menu->addAction(addFourierFilterAction);
 	menu->addAction(addFourierTransformAction);
+	menu->addAction(addConvolutionAction);
 }
 
 void WorksheetView::fillToolBar(QToolBar* toolBar) {
@@ -625,6 +631,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 //	toolBar->addAction(addFitCurveAction);
 //	toolBar->addAction(addFourierFilterCurveAction);
 //	toolBar->addAction(addFourierTransformCurveAction);
+//	toolBar->addAction(addConvolutionCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
@@ -1527,6 +1534,8 @@ void WorksheetView::handleCartesianPlotActions() {
 	addFitCurveAction->setEnabled(plot);
 	addFourierFilterCurveAction->setEnabled(plot);
 	addFourierTransformCurveAction->setEnabled(plot);
+	addConvolutionCurveAction->setEnabled(plot);
+
 	addHorizontalAxisAction->setEnabled(plot);
 	addVerticalAxisAction->setEnabled(plot);
 	addLegendAction->setEnabled(plot);
@@ -1556,6 +1565,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addFitAction->setEnabled(plot);
 	addFourierFilterAction->setEnabled(plot);
 	addFourierTransformAction->setEnabled(plot);
+	addConvolutionAction->setEnabled(plot);
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -1799,14 +1809,16 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addIntegrationCurve();
 	else if (action == addInterpolationCurveAction)
 		plot->addInterpolationCurve();
+	else if (action == addSmoothCurveAction)
+		plot->addSmoothCurve();
 	else if (action == addFitCurveAction)
 		plot->addFitCurve();
 	else if (action == addFourierFilterCurveAction)
 		plot->addFourierFilterCurve();
 	else if (action == addFourierTransformCurveAction)
 		plot->addFourierTransformCurve();
-	else if (action == addSmoothCurveAction)
-		plot->addSmoothCurve();
+	else if (action == addConvolutionCurveAction)
+		plot->addConvolutionCurve();
 	else if (action == addLegendAction)
 		plot->addLegend();
 	else if (action == addHorizontalAxisAction)
@@ -1824,14 +1836,16 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addIntegrationCurve();
 	else if (action == addInterpolationAction)
 		plot->addInterpolationCurve();
+	else if (action == addSmoothAction)
+		plot->addSmoothCurve();
 	else if (action == addFitAction)
 		plot->addFitCurve();
 	else if (action == addFourierFilterAction)
 		plot->addFourierFilterCurve();
 	else if (action == addFourierTransformAction)
 		plot->addFourierTransformCurve();
-	else if (action == addSmoothAction)
-		plot->addSmoothCurve();
+	else if (action == addConvolutionAction)
+		plot->addConvolutionCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

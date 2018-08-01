@@ -4,7 +4,7 @@
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
 	Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2016-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
+	Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
@@ -42,6 +42,7 @@
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
+#include "XYConvolutionCurve.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -396,10 +397,12 @@ void CartesianPlot::initActions() {
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), this);
 	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), this);
+	addConvolutionCurveAction = new QAction(i18n("xy-curve from a convolution"), this);
 //	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
+//	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("xy-curve from a convolution"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("Legend"), this);
 	if (children<CartesianPlotLegend>().size()>0)
 		addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
@@ -420,6 +423,8 @@ void CartesianPlot::initActions() {
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
+	connect(addConvolutionCurveAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
+
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
@@ -604,6 +609,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addInterpolationAction);
 	dataAnalysisMenu->addAction(addSmoothAction);
 	dataAnalysisMenu->addAction(addFourierFilterAction);
+	dataAnalysisMenu->addAction(addConvolutionAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addMenu(dataFitMenu);
 
@@ -1246,6 +1252,11 @@ void CartesianPlot::addFourierFilterCurve() {
 
 void CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
+	this->addChild(curve);
+}
+
+void CartesianPlot::addConvolutionCurve() {
+	XYConvolutionCurve* curve = new XYConvolutionCurve("Convolution");
 	this->addChild(curve);
 }
 

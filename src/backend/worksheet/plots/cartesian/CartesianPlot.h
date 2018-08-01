@@ -5,6 +5,7 @@
     Description          : Cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -49,8 +50,9 @@ class XYInterpolationCurve;
 class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
-class KConfig;
 class XYFourierTransformCurve;
+class XYConvolutionCurve;
+class KConfig;
 
 class CartesianPlot:public AbstractPlot {
 	Q_OBJECT
@@ -164,6 +166,8 @@ private:
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
+	QAction* addConvolutionCurveAction;
+
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -194,6 +198,7 @@ private:
 	QAction* addSmoothAction;
 	QVector <QAction *> addFitAction;
 	QAction* addFourierFilterAction;
+	QAction* addConvolutionAction;
 
 	QMenu* addNewMenu;
 	QMenu* zoomMenu;
@@ -216,6 +221,8 @@ public slots:
 	void addFitCurve();
 	void addFourierFilterCurve();
 	void addFourierTransformCurve();
+	void addConvolutionCurve();
+
 	void addLegend();
 	void addTextLabel();
 	void addCustomPoint();

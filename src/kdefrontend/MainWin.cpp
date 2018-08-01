@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Main window of the application
     --------------------------------------------------------------------
+    Copyright            : (C) 2008-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2009-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -136,6 +136,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xyFitCurveDock(0),
 	  xyFourierFilterCurveDock(0),
 	  xyFourierTransformCurveDock(0),
+	  xyConvolutionCurveDock(0),
 	  histogramDock(0),
 	  worksheetDock(0),
 	  textLabelDock(0),

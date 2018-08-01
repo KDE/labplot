@@ -4,7 +4,7 @@
 	Description 		 : GUI observer
 --------------------------------------------------------------------
 	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+	Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 	Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
 ***************************************************************************/
@@ -68,10 +68,11 @@
 #include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYIntegrationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
-#include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
+#include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #ifdef HAVE_CANTOR_LIBS
@@ -339,6 +340,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyInterpolationCurveDock->setCurves(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyInterpolationCurveDock);
+	} else if (className == "XYSmoothCurve") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Smoothing"));
+
+		if (!m_mainWindow->xySmoothCurveDock) {
+			m_mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(m_mainWindow->stackedWidget);
+			m_mainWindow->xySmoothCurveDock->setupGeneral();
+			connect(m_mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xySmoothCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		for (auto* aspect: selectedAspects)
+			list << qobject_cast<XYCurve*>(aspect);
+		m_mainWindow->xySmoothCurveDock->setCurves(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xySmoothCurveDock);
 	} else if (className == "XYFitCurve") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fit"));
 
@@ -387,22 +404,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyFourierFilterCurveDock->setCurves(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyFourierFilterCurveDock);
-	} else if (className == "XYSmoothCurve") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Smoothing"));
+	} else if (className == "XYConvolutionCurve") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution"));
 
-		if (!m_mainWindow->xySmoothCurveDock) {
-			m_mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(m_mainWindow->stackedWidget);
-			m_mainWindow->xySmoothCurveDock->setupGeneral();
-			connect(m_mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
-			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xySmoothCurveDock);
+		if (!m_mainWindow->xyConvolutionCurveDock) {
+			m_mainWindow->xyConvolutionCurveDock = new XYConvolutionCurveDock(m_mainWindow->stackedWidget);
+			m_mainWindow->xyConvolutionCurveDock->setupGeneral();
+			connect(m_mainWindow->xyConvolutionCurveDock, SIGNAL(info(QString)), m_mainWindow->statusBar(), SLOT(showMessage(QString)));
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyConvolutionCurveDock);
 		}
 
 		QList<XYCurve*> list;
 		for (auto* aspect: selectedAspects)
 			list << qobject_cast<XYCurve*>(aspect);
-		m_mainWindow->xySmoothCurveDock->setCurves(list);
+		m_mainWindow->xyConvolutionCurveDock->setCurves(list);
 
-		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xySmoothCurveDock);
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->xyConvolutionCurveDock);
 	} else if (className=="Histogram") {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 
