@@ -67,24 +67,24 @@ MQTTClient::MQTTClient(const QString& name)
 	: Folder(name),
 	  m_paused(false),
 	  m_prepared(false),
-	  m_keepLastValues(false),
-	  m_filter(nullptr),
-	  m_updateTimer(new QTimer(this)),
-	  m_willTimer(new QTimer(this)),
-	  m_client(new QMqttClient(this)),
-	  m_MQTTTest(false),
-	  m_MQTTRetain(false),
-	  m_MQTTUseWill(false),
-	  m_MQTTUseID(false),
-	  m_loaded(false),
 	  m_sampleSize(1),
 	  m_keepNValues(0),
 	  m_updateInterval(1000),
-	  m_disconnectForWill(false),
+	  m_filter(nullptr),
+	  m_updateTimer(new QTimer(this)),
+	  m_client(new QMqttClient(this)),
+	  m_MQTTTest(false),
+	  m_MQTTUseWill(false),
+	  m_willRetain(false),
+	  m_willTimer(new QTimer(this)),
+	  m_MQTTFirstConnectEstablished(false),
+	  m_MQTTRetain(false),
+	  m_MQTTUseID(false),
 	  m_MQTTUseAuthentication(false),
+	  m_disconnectForWill(false),
+	  m_loaded(false),
 	  m_subscriptionsLoaded(0),
-	  m_subscriptionCountToLoad(0),
-	  m_MQTTFirstConnectEstablished(false) {
+	  m_subscriptionCountToLoad(0) {
 
 	qDebug() << "MQTTClient constructor: " << m_client->hostname();
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
@@ -106,7 +106,6 @@ MQTTClient::~MQTTClient() {
 	delete m_willTimer;
 	m_client->disconnectFromHost();
 	delete m_client;
-
 }
 
 /*!

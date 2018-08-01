@@ -2560,6 +2560,7 @@ void ImportFileWidget::mqttUnsubscribe() {
  * if the message arrived from a new topic, the topic is put in twTopics
  */
 void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
+	Q_UNUSED(message);
 	if(!m_addedTopics.contains(topic.name())) {
 		m_addedTopics.push_back(topic.name());
 		QStringList name;
@@ -2844,7 +2845,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::TransportInvalid:
-	case QMqttClient::ProtocolViolation:
+	case QMqttClient::ProtocolViolation:		
 		break;
 	default:
 		break;

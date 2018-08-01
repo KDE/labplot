@@ -29,8 +29,8 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTSubscription.h"
-#include "backend/datasources/MQTTClient.h"
 
+#include "backend/datasources/MQTTClient.h"
 #include "backend/core/Project.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -56,8 +56,8 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 */
 MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading)
 	: Spreadsheet(0, name, loading),
-	  m_MQTTClient(subscription->mqttClient()),
 	  m_topicName(name),
+	  m_MQTTClient(subscription->mqttClient()),	 
 	  m_filter(new AsciiFilter()) {
 	AsciiFilter* mainFilter = dynamic_cast<AsciiFilter*>(m_MQTTClient->filter());
 	AsciiFilter* myFilter = dynamic_cast<AsciiFilter*>(m_filter);

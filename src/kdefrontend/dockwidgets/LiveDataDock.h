@@ -125,7 +125,6 @@ private:
 	QMap<QString, QStringList> m_topicList;
 	bool m_searching;
 	QTimer* m_searchTimer;
-	QTimer* m_messageTimer;
 	bool m_interpretMessage;	
 	const MQTTClient* m_previousMQTTClient;
 	QString m_mqttUnsubscribeName;

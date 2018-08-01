@@ -39,14 +39,16 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #endif
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
-	QWidget(parent),
-	#ifdef HAVE_MQTT
+	QWidget(parent),	
+	m_paused(false)
+  #ifdef HAVE_MQTT
+  ,
 	m_searching(true),
-	m_previousMQTTClient(nullptr),
 	m_searchTimer(new QTimer()),
 	m_interpretMessage(true),
-	#endif
-	m_paused(false) {
+	m_previousMQTTClient(nullptr)
+  #endif
+{
 	ui.setupUi(this);
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -824,6 +826,7 @@ void LiveDataDock::onMQTTConnect() {
  * if the message arrived from a new topic, the topic is put in twTopics
  */
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
+	Q_UNUSED(message)
 	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
 		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
 		addTopicToTree(topic.name());
@@ -1697,6 +1700,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
  * if the message arrived from a new topic, the topic is put in m_addedTopics
  */
 void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
+	Q_UNUSED(message)
 	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
 		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
 	}

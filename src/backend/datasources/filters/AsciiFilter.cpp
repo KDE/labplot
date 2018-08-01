@@ -428,11 +428,11 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	endRow(-1),
 	startColumn(1),
 	endColumn(-1),
+	mqttPreviewFirstEmptyColCount (0),
 	m_actualStartRow(1),
 	m_actualRows(0),
 	m_actualCols(0),
-	m_prepared(false),
-	mqttPreviewFirstEmptyColCount (0),
+	m_prepared(false),	
 	m_columnOffset(0) {
 }
 
@@ -694,6 +694,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				vectorNames << i18n("Value");
 			}
 			QDEBUG("	vector names = " << vectorNames);
+		case LiveDataSource::SourceType::MQTT:
+			break;
 		}
 
 		// prepare import for spreadsheet
@@ -817,6 +819,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
+				case LiveDataSource::SourceType::MQTT:
+					break;
 				}
 			} else {	// ReadingType::TillEnd
 				switch (spreadsheet->sourceType()) {	// different sources need different read methods
@@ -833,6 +837,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				//TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData.push_back(device.read(device.bytesAvailable()));
+				case LiveDataSource::SourceType::MQTT:
+					break;
 				}
 			}
 			newLinesTillEnd++;
@@ -2711,6 +2717,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
  * \param topic
  */
 int AsciiFilterPrivate::prepareMQTTTopicToRead(const QString& message,  const QString& topic) {
+	Q_UNUSED(topic)
 	vectorNames.append("value");
 	if (endColumn == -1)
 		endColumn = 1;
