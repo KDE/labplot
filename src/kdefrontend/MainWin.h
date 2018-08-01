@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2008-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
 
@@ -66,6 +66,7 @@ class XYSmoothCurveDock;
 class XYFitCurveDock;
 class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
+class XYConvolutionCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class DatapickerImageWidget;
@@ -198,6 +199,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
+	XYConvolutionCurveDock* xyConvolutionCurveDock;
 	HistogramDock* histogramDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;

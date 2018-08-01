@@ -59,6 +59,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
@@ -135,6 +136,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
@@ -252,6 +254,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
 	${BACKEND_DIR}/datapicker/DatapickerImage.cpp

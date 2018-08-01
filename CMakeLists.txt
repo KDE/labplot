@@ -354,6 +354,10 @@ ELSE ()
 ENDIF ()
 
 #################################################
+include(CheckFunctionExists)
+
+CHECK_FUNCTION_EXISTS(random HAVE_RANDOM_FUNCTION)
+#################################################
 FIND_PATH (XLOCALE_INCLUDE_DIR xlocale.h
 	/usr/include
 	/usr/local/include

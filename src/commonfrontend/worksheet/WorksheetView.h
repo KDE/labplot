@@ -4,6 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -200,6 +201,8 @@ private:
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
+	QAction* addConvolutionCurveAction;
+
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -229,6 +232,7 @@ private:
 	QAction* addFitAction;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
+	QAction* addConvolutionAction;
 
 public slots:
 	void createContextMenu(QMenu*);
