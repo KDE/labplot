@@ -54,6 +54,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
+	QString separator() const;
 
 #ifdef HAVE_MQTT
 	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
@@ -61,8 +62,7 @@ public:
 	QString MQTTColumnStatistics(const MQTTTopic* ) const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
 	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
-	void setPreparedForMQTT(bool, MQTTTopic*topic, const QString&);
-	QString separator() const;
+	void setPreparedForMQTT(bool, MQTTTopic*topic, const QString&);	
 #endif
 
 	const AsciiFilter* q;

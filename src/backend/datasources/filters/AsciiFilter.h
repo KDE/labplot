@@ -77,10 +77,10 @@ public:
 	QString MQTTColumnStatistics(const MQTTTopic * topic) const;
 	AbstractColumn::ColumnMode MQTTColumnMode() const;
 	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
-	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);
-	QString separator() const;
+	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);	
 #endif
 
+	QString separator() const;
 	void setCommentCharacter(const QString&);
 	QString commentCharacter() const;
 	void setSeparatingCharacter(const QString&);

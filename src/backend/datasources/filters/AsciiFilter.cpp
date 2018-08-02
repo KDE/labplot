@@ -2933,6 +2933,7 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, con
 		}
 	}
 }
+#endif
 
 /*!
  * \brief Returns the separator used by the filter
@@ -2941,5 +2942,3 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic *topic, con
 QString AsciiFilterPrivate::separator() const {
 	return m_separator;
 }
-
-#endif
