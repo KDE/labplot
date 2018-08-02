@@ -109,6 +109,9 @@ private slots:
 	void fileInfoDialog();
 	void refreshPreview();
 
+private:
+	void updateContent(const QString&, AbstractFileFilter::FileType);
+
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
