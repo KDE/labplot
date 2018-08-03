@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Ngspice RAW Binary filter
 --------------------------------------------------------------------
 Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -169,7 +170,7 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return;
 	}
@@ -220,10 +221,11 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileName, int lines) {
+	DEBUG("NgspiceRawBinaryFilterPrivate::preview()");
 	QVector<QStringList> dataStrings;
 
 	QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		DEBUG("Failed to open the file " << fileName.toStdString());
 		return dataStrings;
 	}
@@ -240,16 +242,18 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 	//number of variables
 	line = file.readLine();
 	const int vars = line.right(line.length() - 15).toInt(); //remove the "No. Variables: " sub-string
+	DEBUG("	vars = " << vars);
 
 	//number of points
 	line = file.readLine();
 	const int points = line.right(line.length() - 12).toInt(); //remove the "No. Points: " sub-string
+	DEBUG("	points = " << points);
 
 	//add names of the variables
 	vectorNames.clear();
 	columnModes.clear();
 	file.readLine();
-	for (int i = 0; i<vars; ++i) {
+	for (int i = 0; i < vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
 		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
@@ -265,25 +269,28 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 	}
 
 	file.readLine(); //skip the line with "Binary"
-	quint64 pos = file.pos();
 
 	//read the data
-	QDataStream in(&file);
-	in.skipRawData(pos);
 	QStringList lineString;
-	for (int i = 0; i< qMin(lines, points); ++i) {
+	for (int i = 0; i < qMin(lines, points); ++i) {
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
+			double v;
 			if (hasComplexValues) {
-				double real, img;
-				in >> real;
-				in >> img;
-				lineString << QString::number(real); //real part
-				lineString << QString::number(img); //imaginary part
+				QDataStream sre(file.read(8));
+				sre.setByteOrder(QDataStream::LittleEndian);
+				sre >> v;
+				lineString << QString::number(v); //real part
+				QDataStream sim(file.read(8));
+				sim.setByteOrder(QDataStream::LittleEndian);
+				sim >> v;
+				lineString << QString::number(v); //imaginary part
 			} else {
-				double value;
-				in >> value;
-				lineString << QString::number(value);
+				QDataStream s(file.read(8));
+				s.setByteOrder(QDataStream::LittleEndian);
+				s >> v;
+
+				lineString << QString::number(v);
 			}
 		}
 
