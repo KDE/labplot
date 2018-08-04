@@ -1426,18 +1426,23 @@ void ImportFileWidget::updateSubscriptionCompleter() {
 
 /************** SLOTS **************************************************************/
 
+QString absolutePath(const QString& fileName)
+{
+#ifndef HAVE_WINDOWS
+	// make absolute path // FIXME
+	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
+		return QDir::homePath() + QDir::separator() + fileName;
+#endif
+	return fileName;
+}
+
 /*!
 	called on file name changes.
 	Determines the file format (ASCII, binary etc.), if the file exists,
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	QString fileName = name;
-#ifndef HAVE_WINDOWS
-	// make relative path
-	if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + fileName;
-#endif
+	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
@@ -1470,33 +1475,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
 		ui.cbFileType->setCurrentIndex(fileType);
-		if (auto filter = currentFileFilter()) {
-			switch(fileType) {
-			case AbstractFileFilter::HDF5:
-				m_hdf5OptionsWidget->updateContent((HDF5Filter*)filter, fileName);
-				break;
-			case AbstractFileFilter::NETCDF:
-				m_netcdfOptionsWidget->updateContent((NetCDFFilter*)filter, fileName);
-				break;
-			case AbstractFileFilter::FITS:
-#ifdef HAVE_FITS
-				m_fitsOptionsWidget->updateContent((FITSFilter*)filter, fileName);
-#endif
-				break;
-			case AbstractFileFilter::Json:
-				m_jsonOptionsWidget->loadDocument(fileName);
-				break;
-			case AbstractFileFilter::ROOT:
-				m_rootOptionsWidget->updateContent((ROOTFilter*)filter, fileName);
-				break;
-			case AbstractFileFilter::Ascii:
-			case AbstractFileFilter::Binary:
-			case AbstractFileFilter::Image:
-			case AbstractFileFilter::NgspiceRawAscii:
-			case AbstractFileFilter::NgspiceRawBinary:
-				break;
-			}
-		}
+		updateContent(fileName, fileType);
 	}
 
 	refreshPreview();
@@ -1612,6 +1591,13 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
 	filterChanged(lastUsedFilterIndex);
 
+	if (currentSourceType() == LiveDataSource::FileOrPipe) {
+		const QString fileName = absolutePath(ui.leFileName->text());
+
+		if (QFile::exists(fileName))
+			updateContent(fileName, static_cast<AbstractFileFilter::FileType>(fileType));
+	}
+
 	refreshPreview();
 }
 
@@ -1676,11 +1662,7 @@ void ImportFileWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 
-	QString fileName = ui.leFileName->text();
-#ifndef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.at(0) != QDir::separator())
-		fileName = QDir::homePath() + QDir::separator() + fileName;
-#endif
+	QString fileName = absolutePath(ui.leFileName->text());
 	DEBUG("refreshPreview(): file name = " << fileName.toStdString());
 
 	QVector<QStringList> importedStrings;
@@ -1966,6 +1948,36 @@ void ImportFileWidget::refreshPreview() {
 
 	RESET_CURSOR;
 }
+
+void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter::FileType fileType)
+{
+	if (auto filter = currentFileFilter()) {
+		switch(fileType) {
+		case AbstractFileFilter::HDF5:
+			m_hdf5OptionsWidget->updateContent((HDF5Filter*)filter, fileName);
+			break;
+		case AbstractFileFilter::NETCDF:
+			m_netcdfOptionsWidget->updateContent((NetCDFFilter*)filter, fileName);
+			break;
+		case AbstractFileFilter::FITS:
+#ifdef HAVE_FITS
+			m_fitsOptionsWidget->updateContent((FITSFilter*)filter, fileName);
+#endif
+			break;
+		case AbstractFileFilter::ROOT:
+			m_rootOptionsWidget->updateContent((ROOTFilter*)filter, fileName);
+			break;
+		case AbstractFileFilter::Ascii:
+		case AbstractFileFilter::Binary:
+		case AbstractFileFilter::Image:
+		case AbstractFileFilter::Json:
+		case AbstractFileFilter::NgspiceRawAscii:
+		case AbstractFileFilter::NgspiceRawBinary:
+			break;
+		}
+	}
+}
+
 
 void ImportFileWidget::updateTypeChanged(int idx) {
 	const LiveDataSource::UpdateType UpdateType = static_cast<LiveDataSource::UpdateType>(idx);
@@ -2924,3 +2936,4 @@ void ImportFileWidget::mqttConnectTimeout() {
 	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out!");
 }
 #endif
+
