@@ -213,8 +213,43 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 
 	file.readLine(); //skip the line with "Binary:"
 
-	//read the data
-	//TODO
+	//prepare the data container
+	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
+	const int actualRows = actualEndRow - startRow + 1;
+	const int actualCols = hasComplexValues ? vars*2 : vars;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+
+	//skip data lines, if required
+	DEBUG("	Skipping " << startRow - 1 << " lines");
+	//TODO:
+
+	//read the data points
+	int currentRow = 0;	// indexes the position in the vector(column)
+	file.setTextModeEnabled(false);
+	for (int i = 0; i < actualRows; ++i) {
+		for (int j = 0; j < vars; ++j) {
+			double value;
+			QDataStream s(file.read(8));
+			s.setByteOrder(QDataStream::LittleEndian);
+			s >> value;
+			if (hasComplexValues) {
+				//real part
+				static_cast<QVector<double>*>(m_dataContainer[2*j])->operator[](currentRow) = value;
+
+				//imaginary part
+				QDataStream sim(file.read(8));
+				sim.setByteOrder(QDataStream::LittleEndian);
+				sim >> value;
+				static_cast<QVector<double>*>(m_dataContainer[2*j+1])->operator[](currentRow) = value;
+			} else
+				static_cast<QVector<double>*>(m_dataContainer[j])->operator[](currentRow) = value;
+		}
+
+		currentRow++;
+		emit q->completed(100 * currentRow/actualRows);
+	}
+
+	dataSource->finalizeImport(columnOffset, -1, -1, currentRow, "", importMode);
 }
 
 /*!
@@ -280,12 +315,12 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 			QDataStream s(file.read(8));
 			s.setByteOrder(QDataStream::LittleEndian);
 			s >> v;
-			lineString << QString::number(v); //real part
+			lineString << QString::number(v, 'e', 15); //real part
 			if (hasComplexValues) {
 				QDataStream sim(file.read(8));
 				sim.setByteOrder(QDataStream::LittleEndian);
 				sim >> v;
-				lineString << QString::number(v); //imaginary part
+				lineString << QString::number(v, 'e', 15); //imaginary part
 			}
 		}
 
