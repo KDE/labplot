@@ -175,12 +175,12 @@ void WorkbookView::showTabContextMenu(QPoint point) {
 }
 
 void WorkbookView::addMatrix() {
-	Matrix* matrix = new Matrix(0, i18n("Matrix"));
+	Matrix* matrix = new Matrix(i18n("Matrix"));
 	m_workbook->addChild(matrix);
 }
 
 void WorkbookView::addSpreadsheet() {
-	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 	m_workbook->addChild(spreadsheet);
 }
 

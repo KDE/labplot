@@ -76,7 +76,7 @@ public:
 		WholeFile		// reread whole file
 	};
 
-	LiveDataSource(AbstractScriptingEngine*, const QString& name, bool loading = false);
+	LiveDataSource(const QString& name, bool loading = false);
 	~LiveDataSource() override;
 
 	void ready();

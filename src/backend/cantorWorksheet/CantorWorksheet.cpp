@@ -46,15 +46,13 @@
 #include <cantor/panelplugin.h>
 #include <cantor/worksheetaccess.h>
 
-CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name, bool loading)
-		: AbstractPart(name),
-		scripted(engine),
-		m_view(nullptr),
-		m_backendName(name),
-		m_session(nullptr),
-		m_part(nullptr),
-		m_variableModel(nullptr),
-		m_worksheetAccess(nullptr) {
+CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPart(name),
+	m_view(nullptr),
+	m_backendName(name),
+	m_session(nullptr),
+	m_part(nullptr),
+	m_variableModel(nullptr),
+	m_worksheetAccess(nullptr) {
 
 	if(!loading)
 		init();

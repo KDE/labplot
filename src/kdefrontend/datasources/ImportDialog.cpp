@@ -165,11 +165,11 @@ void ImportDialog::newDataContainer(QAction* action) {
 		AbstractAspect* aspect;
 		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
 		if (actionIndex == 0)
-			aspect = new Workbook(0, name);
+			aspect = new Workbook(name);
 		else if (actionIndex == 1)
-			aspect = new Spreadsheet(0, name);
+			aspect = new Spreadsheet(name);
 		else
-			aspect = new Matrix(0, name);
+			aspect = new Matrix(name);
 
 		m_mainWin->addAspectToProject(aspect);
 		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));

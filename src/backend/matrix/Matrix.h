@@ -45,9 +45,9 @@ class Matrix : public AbstractDataSource {
 public:
 	enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 
-	Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false,
+	Matrix(const QString& name, bool loading = false,
 		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
-	Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name,
+	Matrix(int rows, int cols, const QString& name,
 		   const AbstractColumn::ColumnMode = AbstractColumn::Numeric);
 	~Matrix() override;
 

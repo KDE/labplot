@@ -58,8 +58,8 @@
 
 	\ingroup backend
 */
-Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
+Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -68,8 +68,8 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	init();
 }
 
-Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
+Matrix::Matrix(const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
+	: AbstractDataSource(name), d(new MatrixPrivate(this, mode)), m_model(nullptr), m_view(nullptr) {
 
 	if (!loading)
 		init();
@@ -531,7 +531,7 @@ void Matrix::copy(Matrix* other) {
 
 //! Duplicate the matrix inside its folder
 void Matrix::duplicate() {
-	Matrix* matrix = new Matrix(0, rowCount(), columnCount(), name());
+	Matrix* matrix = new Matrix(rowCount(), columnCount(), name());
 	matrix->copy(this);
 	if (folder())
 		folder()->addChild(matrix);

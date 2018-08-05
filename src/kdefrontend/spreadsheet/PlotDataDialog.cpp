@@ -358,7 +358,7 @@ void PlotDataDialog::plot() {
 			parent = qobject_cast<AbstractAspect*>(m_spreadsheet->project());
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
-		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
+		Worksheet* worksheet = new Worksheet(i18n("Plot data from %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacement1->isChecked()) {

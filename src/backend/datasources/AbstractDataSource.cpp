@@ -37,8 +37,7 @@ Copyright		: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 \ingroup datasources
 */
 
-AbstractDataSource::AbstractDataSource(AbstractScriptingEngine* engine, const QString& name):
-	AbstractPart(name), scripted(engine) {
+AbstractDataSource::AbstractDataSource(const QString& name) : AbstractPart(name) {
 
 }
 

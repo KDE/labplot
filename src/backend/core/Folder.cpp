@@ -183,28 +183,28 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(folder);
 	} else if (element_name == QLatin1String("workbook")) {
-		Workbook* workbook = new Workbook(0, "");
+		Workbook* workbook = new Workbook("");
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
 		addChildFast(workbook);
 	} else if (element_name == QLatin1String("spreadsheet")) {
-		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
+		Spreadsheet* spreadsheet = new Spreadsheet("", true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChildFast(spreadsheet);
 	} else if (element_name == QLatin1String("matrix")) {
-		Matrix* matrix = new Matrix(0, "", true);
+		Matrix* matrix = new Matrix("", true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
 		addChildFast(matrix);
 	} else if (element_name == QLatin1String("worksheet")) {
-		Worksheet* worksheet = new Worksheet(0, "");
+		Worksheet* worksheet = new Worksheet("");
 		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader, preview)) {
 			delete worksheet;
@@ -214,7 +214,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
 	} else if (element_name == QLatin1String("cantorWorksheet")) {
-		CantorWorksheet* cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
+		CantorWorksheet* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
 			return false;
@@ -232,14 +232,14 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(client);
 #endif
 	} else if (element_name == QLatin1String("LiveDataSource")) {
-		LiveDataSource* liveDataSource = new LiveDataSource(0, "", true);
+		LiveDataSource* liveDataSource = new LiveDataSource("", true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;
 		}
 		addChildFast(liveDataSource);
 	} else if (element_name == QLatin1String("datapicker")) {
-		Datapicker* datapicker = new Datapicker(0, "", true);
+		Datapicker* datapicker = new Datapicker("", true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;

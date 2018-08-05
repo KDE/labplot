@@ -315,14 +315,14 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::SpreadSheet: {
 			DEBUG("	top level spreadsheet");
-			Spreadsheet* spreadsheet = new Spreadsheet(0, name);
+			Spreadsheet* spreadsheet = new Spreadsheet(name);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 			break;
 		}
 		case Origin::ProjectNode::Graph: {
 			DEBUG("	top level graph");
-			Worksheet* worksheet = new Worksheet(0, name);
+			Worksheet* worksheet = new Worksheet(name);
 			worksheet->setIsLoading(true);
 			worksheet->setTheme("");
 			loadWorksheet(worksheet, preview);
@@ -336,12 +336,12 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			DEBUG("	number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
-				Matrix* matrix = new Matrix(0, name);
+				Matrix* matrix = new Matrix(name);
 				loadMatrix(matrix, preview);
 				aspect = matrix;
 			} else {
 				// multiple sheets -> load into a workbook
-				Workbook* workbook = new Workbook(0, name);
+				Workbook* workbook = new Workbook(name);
 				loadMatrixWorkbook(workbook, preview);
 				aspect = workbook;
 			}
@@ -349,7 +349,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::Excel: {
 			DEBUG("	top level excel");
-			Workbook* workbook = new Workbook(0, name);
+			Workbook* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
 			break;
@@ -434,7 +434,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (!m_spreadNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose spread: " << name.toStdString());
 
-			Spreadsheet* spreadsheet = new Spreadsheet(0, name);
+			Spreadsheet* spreadsheet = new Spreadsheet(name);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 		}
@@ -463,7 +463,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			DEBUG("	Adding loose excel: " << name.toStdString());
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 
-			Workbook* workbook = new Workbook(0, name);
+			Workbook* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
 		}
@@ -491,11 +491,11 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			DEBUG("	Adding loose matrix: " << name.toStdString());
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) { // single sheet -> load into a matrix
-				Matrix* matrix = new Matrix(0, name);
+				Matrix* matrix = new Matrix(name);
 				loadMatrix(matrix, preview);
 				aspect = matrix;
 			} else { // multiple sheets -> load into a workbook
-				Workbook* workbook = new Workbook(0, name);
+				Workbook* workbook = new Workbook(name);
 				loadMatrixWorkbook(workbook, preview);
 				aspect = workbook;
 			}
@@ -521,7 +521,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_graphNameList.contains(name) && (preview || (!preview && folder->pathesToLoad().indexOf(childPath) != -1))) {
 			DEBUG("	Adding loose graph: " << name.toStdString());
-			Worksheet* worksheet = new Worksheet(0, name);
+			Worksheet* worksheet = new Worksheet(name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 		}
@@ -564,7 +564,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(" excel name = " << excel.name);
 	DEBUG(" number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-		Spreadsheet* spreadsheet = new Spreadsheet(0, QString::fromLatin1(excel.sheets[s].name.c_str()));
+		Spreadsheet* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
 	}
@@ -890,7 +890,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	//load matrix workbook sheets
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
-		Matrix* matrix = new Matrix(0, QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
+		Matrix* matrix = new Matrix(QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
 		loadMatrix(matrix, preview, s, workbook->name());
 		workbook->addChildFast(matrix);
 	}

@@ -30,7 +30,6 @@
 #define DATAPICKER_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
 class DatapickerCurve;
@@ -43,11 +42,11 @@ class Transform;
 class QPointF;
 class QVector3D;
 
-class Datapicker : public AbstractPart, public scripted {
+class Datapicker : public AbstractPart {
 	Q_OBJECT
 
 public:
-	explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+	explicit Datapicker(const QString& name, const bool loading = false);
 	~Datapicker() override;
 
 	QIcon icon() const override;
