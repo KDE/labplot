@@ -247,10 +247,6 @@ void Histogram::setDataColumn(const AbstractColumn* column) {
 	if (column != d->dataColumn) {
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
 
-		//emit dataChanged() in order to notify the plot about the changes
-		//TODO: not undo/redoable
-// 		emit dataChanged();
-
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
 
@@ -709,7 +705,7 @@ void HistogramPrivate::recalcHistogram() {
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcHistogram()");
 
 	if (m_histogram)
-			gsl_histogram_free(m_histogram);
+		gsl_histogram_free(m_histogram);
 
 	//calculate the number of valid data points
 	int count = 0;
@@ -1468,6 +1464,16 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 
+	//Symbols
+	writer->writeStartElement( "symbols" );
+	writer->writeAttribute( "symbolsStyle", QString::number(d->symbolsStyle) );
+	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
+	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
+	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
+	WRITE_QBRUSH(d->symbolsBrush);
+	WRITE_QPEN(d->symbolsPen);
+	writer->writeEndElement();
+
 	//Values
 	writer->writeStartElement("values");
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
@@ -1545,6 +1551,16 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", lineType, Histogram::LineType);
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);
+		} else if (!preview && reader->name() == "symbols") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
+
+			READ_QBRUSH(d->symbolsBrush);
+			READ_QPEN(d->symbolsPen);
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
