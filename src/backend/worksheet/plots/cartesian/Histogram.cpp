@@ -223,14 +223,15 @@ double Histogram::getXMinimum() const {
 //##############################################################################
 
 //General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcLogicalPoints)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->dataColumn) {
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
 
 		//emit dataChanged() in order to notify the plot about the changes
-		emit dataChanged();
+		//TODO: not undo/redoable
+// 		emit dataChanged();
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
@@ -244,35 +245,35 @@ void Histogram::setDataColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
 void Histogram::setType(Histogram::HistogramType type) {
 	Q_D(Histogram);
 	if (type != d->type)
 		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
 void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
     Q_D(Histogram);
 	if (orientation != d->orientation)
 		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
 void Histogram::setBinningMethod(Histogram::BinningMethod method) {
 	Q_D(Histogram);
 	if (method != d->binningMethod)
 		exec(new HistogramSetBinningMethodCmd(d, method, ki18n("%1: set binning method")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, recalcHistogram)
 void Histogram::setBinCount(int count) {
 	Q_D(Histogram);
 	if (count != d->binCount)
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, retransform)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, recalcHistogram)
 void Histogram::setBinWidth(float width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
@@ -617,7 +618,6 @@ bool HistogramPrivate::swapVisible(bool on) {
 }
 
 /*!
-  recalculates the position of the points to be drawn. Called when the data was changed.
   Triggers the update of lines, drop lines, symbols etc.
   */
 void HistogramPrivate::retransform() {
@@ -626,17 +626,35 @@ void HistogramPrivate::retransform() {
 
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
 
-	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 
 	if (NULL == dataColumn) {
 		linePath = QPainterPath();
 		valuesPath = QPainterPath();
-		//		dropLinePath = QPainterPath();
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
+	//calculate the scene coordinates
+	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+
+	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	Q_ASSERT(cSystem);
+	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
+	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+
+	m_suppressRecalc = true;
+	updateLines();
+	updateValues();
+	m_suppressRecalc = false;
+}
+
+void HistogramPrivate::recalcLogicalPoints() {
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcLogicalPoints()");
+
+	symbolPointsLogical.clear();
 	QPointF tempPoint;
 	const AbstractColumn::ColumnMode xColMode = dataColumn->columnMode();
 
@@ -662,17 +680,12 @@ void HistogramPrivate::retransform() {
 		}
 	}
 
-	//calculate the scene coordinates
-	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
-	if (!plot)
-		return;
+	recalcHistogram();
+}
 
-	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	Q_ASSERT(cSystem);
-	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+void HistogramPrivate::recalcHistogram() {
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcHistogram()");
 
-	//re-calculate the histogram
 	if (m_histogram)
 			gsl_histogram_free(m_histogram);
 
@@ -694,7 +707,7 @@ void HistogramPrivate::retransform() {
 				m_bins = (size_t) (max-min)/binWidth;
 				break;
 			case Histogram::SturgisRule:
-				m_bins =(size_t) 1 + 3.33*log(count);
+				m_bins = (size_t) 1 + 3.33*log(count);
 				break;
 		}
 
@@ -707,10 +720,9 @@ void HistogramPrivate::retransform() {
 		}
 	}
 
-	m_suppressRecalc = true;
-	updateLines();
-	updateValues();
-	m_suppressRecalc = false;
+	//histogram changed because of the actual data changes or because of new bin settings,
+	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	emit q->dataChanged();
 }
 
 void HistogramPrivate::verticalHistogram() {
@@ -809,6 +821,18 @@ void HistogramPrivate::horizontalHistogram() {
 	}
 
 	lines.append(QLineF(0., min, 0., max));
+}
+
+void HistogramPrivate::updateType() {
+	//type (ordinary or cumulative) changed,
+	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	emit q->dataChanged();
+}
+
+void HistogramPrivate::updateOrientation() {
+	//orientation (horizontal or vertical) changed
+	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	emit q->dataChanged();
 }
 
 /*!
