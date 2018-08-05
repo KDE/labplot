@@ -43,7 +43,7 @@ void AsciiFilterTest::initTestCase() {
 //#################  handling of empty and sparse files ########################
 //##############################################################################
 void AsciiFilterTest::testEmptyFileAppend() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -58,7 +58,7 @@ void AsciiFilterTest::testEmptyFileAppend() {
 }
 
 void AsciiFilterTest::testEmptyFilePrepend() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -73,7 +73,7 @@ void AsciiFilterTest::testEmptyFilePrepend() {
 }
 
 void AsciiFilterTest::testEmptyFileReplace() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -87,7 +87,7 @@ void AsciiFilterTest::testEmptyFileReplace() {
 }
 
 void AsciiFilterTest::testEmptyLines01() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "empty_lines_01.txt";
 
@@ -119,7 +119,7 @@ void AsciiFilterTest::testEmptyLines01() {
 }
 
 void AsciiFilterTest::testSparseFile01() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "sparse_file_01.txt";
 
@@ -154,7 +154,7 @@ void AsciiFilterTest::testSparseFile01() {
 }
 
 void AsciiFilterTest::testSparseFile02() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "sparse_file_02.txt";
 
@@ -191,7 +191,7 @@ void AsciiFilterTest::testSparseFile02() {
 }
 
 void AsciiFilterTest::testSparseFile03() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "sparse_file_03.txt";
 
@@ -234,7 +234,7 @@ void AsciiFilterTest::testSparseFile03() {
 //################################  header handling ############################
 //##############################################################################
 void AsciiFilterTest::testHeader01() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
@@ -249,7 +249,7 @@ void AsciiFilterTest::testHeader01() {
 }
 
 void AsciiFilterTest::testHeader02() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
@@ -269,7 +269,7 @@ void AsciiFilterTest::testHeader02() {
 }
 
 void AsciiFilterTest::testHeader03() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
@@ -285,7 +285,7 @@ void AsciiFilterTest::testHeader03() {
 }
 
 void AsciiFilterTest::testHeader04() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
@@ -301,7 +301,7 @@ void AsciiFilterTest::testHeader04() {
 }
 
 void AsciiFilterTest::testHeader05() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
@@ -318,7 +318,7 @@ void AsciiFilterTest::testHeader05() {
 }
 
 void AsciiFilterTest::testHeader06() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
 	const QString fileName = m_dataDir + "separator_semicolon.txt";
 
