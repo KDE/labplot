@@ -409,7 +409,7 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
-	addTextLabelAction = new QAction(QIcon::fromTheme("labplot-text-label"), i18n("Text Label"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
@@ -438,6 +438,7 @@ void CartesianPlot::initActions() {
 	addIntegrationAction = new QAction(i18n("Integrate"), this);
 	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
+	addConvolutionAction = new QAction(i18n("Convolute"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(PlotDataDialog::FitLinear);
@@ -490,6 +491,7 @@ void CartesianPlot::initActions() {
 	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
 	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
 	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
+	connect(addConvolutionAction, SIGNAL(triggered()), SLOT(addConvolutionCurve()));
 	for (const auto& action: addFitAction)
 		connect(action, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
