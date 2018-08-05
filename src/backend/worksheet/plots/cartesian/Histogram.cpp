@@ -1636,7 +1636,6 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
@@ -1666,14 +1665,13 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
 
 	//Symbol
-	//TODO
-// 	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-// 	QBrush brush = symbolsBrush();
-// 	brush.setColor(themeColor);
-// 	this->setSymbolsBrush(brush);
-// 	p = symbolsPen();
-// 	p.setColor(themeColor);
-// 	this->setSymbolsPen(p);
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
+	QBrush brush = symbolsBrush();
+	brush.setColor(themeColor);
+	this->setSymbolsBrush(brush);
+	p = symbolsPen();
+	p.setColor(themeColor);
+	this->setSymbolsPen(p);
 
 	//Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
@@ -1722,7 +1720,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("FillingType",(int) this->fillingType());
 
 	//Symbol
-// 	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
 
 	//Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
