@@ -65,6 +65,7 @@ public:
 	void updateLines();
 	void verticalHistogram();
 	void horizontalHistogram();
+	void updateSymbols();
 	void updateValues();
 	void updateFilling();
 	bool swapVisible(bool on);
@@ -97,6 +98,14 @@ public:
 	Histogram::LineType lineType;
 	QPen linePen;
 	qreal lineOpacity;
+
+	//symbols
+	Symbol::Style symbolsStyle;
+	QBrush symbolsBrush;
+	QPen symbolsPen;
+	qreal symbolsOpacity;
+	qreal symbolsRotationAngle;
+	qreal symbolsSize;
 
 	//values
 	int value;

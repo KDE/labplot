@@ -90,6 +90,16 @@ void Histogram::init() {
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
+	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::NoSymbols);
+	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
+	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
+	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
+	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
+	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = nullptr;
 	d->valuesPosition = (Histogram::ValuesPosition) group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
@@ -175,6 +185,14 @@ QString& Histogram::dataColumnPath() const {
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::LineType, lineType, lineType)
 CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
+
+//symbols
+BASIC_SHARED_D_READER_IMPL(Histogram, Symbol::Style, symbolsStyle, symbolsStyle)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsOpacity, symbolsOpacity)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsRotationAngle, symbolsRotationAngle)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsSize, symbolsSize)
+CLASS_SHARED_D_READER_IMPL(Histogram, QBrush, symbolsBrush, symbolsBrush)
+CLASS_SHARED_D_READER_IMPL(Histogram, QPen, symbolsPen, symbolsPen)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -300,6 +318,49 @@ void Histogram::setLineOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->lineOpacity)
 		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
+}
+
+// Symbols
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsStyle, Symbol::Style, symbolsStyle, updateSymbols)
+void Histogram::setSymbolsStyle(Symbol::Style style) {
+	Q_D(Histogram);
+	if (style != d->symbolsStyle)
+		exec(new HistogramSetSymbolsStyleCmd(d, style, ki18n("%1: set symbol style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
+void Histogram::setSymbolsSize(qreal size) {
+	Q_D(Histogram);
+	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
+		exec(new HistogramSetSymbolsSizeCmd(d, size, ki18n("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updateSymbols)
+void Histogram::setSymbolsRotationAngle(qreal angle) {
+	Q_D(Histogram);
+	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
+		exec(new HistogramSetSymbolsRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
+void Histogram::setSymbolsBrush(const QBrush &brush) {
+	Q_D(Histogram);
+	if (brush != d->symbolsBrush)
+		exec(new HistogramSetSymbolsBrushCmd(d, brush, ki18n("%1: set symbol filling")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsPen, QPen, symbolsPen, updateSymbols)
+void Histogram::setSymbolsPen(const QPen &pen) {
+	Q_D(Histogram);
+	if (pen != d->symbolsPen)
+		exec(new HistogramSetSymbolsPenCmd(d, pen, ki18n("%1: set symbol outline style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
+void Histogram::setSymbolsOpacity(qreal opacity) {
+	Q_D(Histogram);
+	if (opacity != d->symbolsOpacity)
+		exec(new HistogramSetSymbolsOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
 //Values
@@ -863,6 +924,10 @@ void HistogramPrivate::updateLines() {
 
 	updateFilling();
 	recalcShapeAndBoundingRect();
+}
+
+void HistogramPrivate::updateSymbols() {
+
 }
 
 /*!
@@ -1593,7 +1658,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 }
 
 void Histogram::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group("Histogram");
 
 	//Line
 	group.writeEntry("LineOpacity", this->lineOpacity());

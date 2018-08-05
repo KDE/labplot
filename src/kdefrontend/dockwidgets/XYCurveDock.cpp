@@ -220,7 +220,6 @@ void XYCurveDock::setupGeneral() {
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
 }
 
-
 void XYCurveDock::init() {
 	m_initializing = true;
 
@@ -2014,7 +2013,6 @@ void XYCurveDock::load() {
 	ui.sbDropLineOpacity->setValue( round(m_curve->dropLineOpacity()*100.0) );
 
 	//Symbols
-	//TODO: character
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_curve->symbolsStyle() );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( m_curve->symbolsRotationAngle() );
@@ -2113,7 +2111,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity())*100.0) );
 
 	//Symbols
-	//TODO: character
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
