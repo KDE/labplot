@@ -860,93 +860,26 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			else
 				rect.setHeight(str.toDouble());
 
-			str = attribs.value("useViewSize").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("useViewSize").toString());
-			else
-				d->useViewSize = str.toInt();
+			READ_INT_VALUE("useViewSize", useViewSize, int);
 		} else if (!preview && reader->name() == "layout") {
 			attribs = reader->attributes();
 
-			str = attribs.value("layout").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("layout").toString());
-			else
-				d->layout = Worksheet::Layout(str.toInt());
-
-			str = attribs.value("topMargin").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("topMargin").toString());
-			else
-				d->layoutTopMargin = str.toDouble();
-
-			str = attribs.value("bottomMargin").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("bottomMargin").toString());
-			else
-				d->layoutBottomMargin = str.toDouble();
-
-			str = attribs.value("leftMargin").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("leftMargin").toString());
-			else
-				d->layoutLeftMargin = str.toDouble();
-
-			str = attribs.value("rightMargin").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rightMargin").toString());
-			else
-				d->layoutRightMargin = str.toDouble();
-
-			str = attribs.value("verticalSpacing").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalSpacing").toString());
-			else
-				d->layoutVerticalSpacing = str.toDouble();
-
-			str = attribs.value("horizontalSpacing").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalSpacing").toString());
-			else
-				d->layoutHorizontalSpacing = str.toDouble();
-
-			str = attribs.value("columnCount").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columnCount").toString());
-			else
-				d->layoutColumnCount = str.toInt();
-
-			str = attribs.value("rowCount").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rowCount").toString());
-			else
-				d->layoutRowCount = str.toInt();
+			READ_INT_VALUE("layout", layout, Worksheet::Layout);
+			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
+			READ_DOUBLE_VALUE("bottomMargin", layoutBottomMargin);
+			READ_DOUBLE_VALUE("leftMargin", layoutLeftMargin);
+			READ_DOUBLE_VALUE("rightMargin", layoutRightMargin);
+			READ_DOUBLE_VALUE("verticalSpacing", layoutVerticalSpacing);
+			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
+			READ_INT_VALUE("columnCount", layoutColumnCount, int);
+			READ_INT_VALUE("rowCount", layoutRowCount, int);
 		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->backgroundType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
-			else
-				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
-			else
-				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
-			else
-				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("type", backgroundType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", backgroundColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", backgroundImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if(str.isEmpty())
@@ -987,11 +920,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("fileName").toString();
 			d->backgroundFileName = str;
 
-			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->backgroundOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
 		} else if(reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
 			plot->setIsLoading(true);

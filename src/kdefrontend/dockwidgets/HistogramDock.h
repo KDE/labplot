@@ -93,6 +93,17 @@ private slots:
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 
+	//Symbol-tab
+  	void symbolsStyleChanged(int);
+	void symbolsSizeChanged(double);
+	void symbolsRotationChanged(int);
+	void symbolsOpacityChanged(int);
+	void symbolsFillingStyleChanged(int);
+	void symbolsFillingColorChanged(const QColor&);
+	void symbolsBorderStyleChanged(int);
+	void symbolsBorderColorChanged(const QColor&);
+	void symbolsBorderWidthChanged(double);
+
 	//Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
@@ -132,6 +143,14 @@ private slots:
 	void curveLineTypeChanged(Histogram::LineType);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
+
+	//Symbol-Tab
+	void curveSymbolsStyleChanged(Symbol::Style);
+	void curveSymbolsSizeChanged(qreal);
+	void curveSymbolsRotationAngleChanged(qreal);
+	void curveSymbolsOpacityChanged(qreal);
+	void curveSymbolsBrushChanged(const QBrush&);
+	void curveSymbolsPenChanged(const QPen&);
 
 	//Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);

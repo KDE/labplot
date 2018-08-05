@@ -63,7 +63,7 @@ class ImportFileWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
 	~ImportFileWidget();
 
 	void showOptions(bool);
@@ -78,7 +78,6 @@ public:
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
-	void hideDataSource();
 	void showAsciiHeaderOptions(bool);
 	void showJsonModel(bool);
 
@@ -86,7 +85,6 @@ public:
 	QString port() const;
 	QString serialPort() const;
 	int baudRate() const;
-	void initializeAndFillPortsAndBaudRates();
 
 private:
 	Ui::ImportFileWidget ui;
@@ -107,11 +105,8 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh;
 
-
-public slots:
-	void loadSettings();
-
 private slots:
+	void loadSettings();
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 

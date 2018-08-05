@@ -68,7 +68,7 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName) : ImportDialog(parent),
-	m_importFileWidget(new ImportFileWidget(this, fileName)),
+	m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)),
 	m_showOptions(false) {
 
 	vLayout->addWidget(m_importFileWidget);
@@ -81,12 +81,8 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	vLayout->addWidget(buttonBox);
 
 	//hide the data-source related widgets
-	if (!liveDataSource) {
+	if (!liveDataSource)
 		setModel();
-		//TODO: disable for file data sources
-		m_importFileWidget->hideDataSource();
-	} else
-		m_importFileWidget->initializeAndFillPortsAndBaudRates();
 
 	//Signals/Slots
 #ifdef HAVE_MQTT
@@ -96,10 +92,9 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	if (!liveDataSource) {
+	if (!liveDataSource)
 		setWindowTitle(i18nc("@title:window", "Import Data to Spreadsheet or Matrix"));
-		m_importFileWidget->hideDataSource();
-	} else
+	else
 		setWindowTitle(i18nc("@title:window", "Add New Live Data Source"));
 
 	setWindowIcon(QIcon::fromTheme("document-import-database"));
@@ -115,7 +110,6 @@ void ImportFileDialog::loadSettings() {
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 
 	m_importFileWidget->showOptions(m_showOptions);
-	m_importFileWidget->loadSettings();
 
 	//do the signal-slot connections after all settings where loaded in import file widget and check the OK button after this
 	connect(m_importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));

@@ -58,13 +58,13 @@ public:
 	bool m_selectionEffectImageIsDirty;
 
 	void retransform();
-	void recalcLogicalPoints();
 	void recalcHistogram();
 	void updateType();
 	void updateOrientation();
 	void updateLines();
 	void verticalHistogram();
 	void horizontalHistogram();
+	void updateSymbols();
 	void updateValues();
 	void updateFilling();
 	bool swapVisible(bool on);
@@ -98,6 +98,14 @@ public:
 	QPen linePen;
 	qreal lineOpacity;
 
+	//symbols
+	Symbol::Style symbolsStyle;
+	QBrush symbolsBrush;
+	QPen symbolsPen;
+	qreal symbolsOpacity;
+	qreal symbolsRotationAngle;
+	qreal symbolsSize;
+
 	//values
 	int value;
 	Histogram::ValuesType valuesType;
@@ -124,6 +132,7 @@ public:
 	qreal fillingOpacity;
 
 	QPainterPath linePath;
+	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;

@@ -74,7 +74,6 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <QtCore/QJsonDocument>
 #include <QTreeWidgetItem>
 #include <QTimer>
 #include <QCompleter>
@@ -95,10 +94,10 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent),
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName) : QWidget(parent),
 	m_fileName(fileName),
 	m_fileEmpty(false),
-	m_liveDataSource(true),
+	m_liveDataSource(liveDataSource),
 	m_suppressRefresh(false)
   #ifdef HAVE_MQTT
   ,
@@ -121,8 +120,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.leFileName->setCompleter(completer);
 
 	ui.cbFileType->addItems(AbstractFileFilter::fileTypes());
-	QStringList filterItems;
-	filterItems << i18n("Automatic") << i18n("Custom");
+
+	QStringList filterItems {i18n("Automatic"), i18n("Custom")};
 	ui.cbFilter->addItems(filterItems);
 
 	// file type specific option widgets
@@ -214,6 +213,59 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+
+	if (!liveDataSource) {
+		ui.gbUpdateOptions->hide();
+
+		ui.chbLinkFile->hide();
+
+		ui.cbBaudRate->hide();
+		ui.lBaudRate->hide();
+
+		ui.lHost->hide();
+		ui.leHost->hide();
+
+		ui.lPort->hide();
+		ui.lePort->hide();
+
+		ui.cbSerialPort->hide();
+		ui.lSerialPort->hide();
+
+		ui.lSourceType->hide();
+		ui.cbSourceType->hide();
+
+		ui.cbUpdateType->hide();
+		ui.lUpdateType->hide();
+
+		ui.sbUpdateInterval->hide();
+		ui.lUpdateInterval->hide();
+
+		hideMQTT();
+	} else {
+		for (int i = 2; i < ui.swOptions->count(); ++i)
+			ui.swOptions->removeWidget(ui.swOptions->widget(i));
+
+		const int size = ui.cbFileType->count();
+		for (int i = 2; i < size; ++i)
+			ui.cbFileType->removeItem(2);
+
+		ui.cbBaudRate->hide();
+		ui.lBaudRate->hide();
+
+		ui.lHost->hide();
+		ui.leHost->hide();
+
+		ui.lPort->hide();
+		ui.lePort->hide();
+
+		ui.cbSerialPort->hide();
+		ui.lSerialPort->hide();
+
+		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
+		ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
+
+		ui.tabWidget->removeTab(2);
+	}
 
 	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -401,38 +453,6 @@ ImportFileWidget::~ImportFileWidget() {
 	m_binaryOptionsWidget->saveSettings();
 	m_imageOptionsWidget->saveSettings();
 	m_jsonOptionsWidget->saveSettings();
-}
-
-void ImportFileWidget::hideDataSource() {
-	m_liveDataSource = false;
-	ui.gbUpdateOptions->hide();
-
-	ui.chbLinkFile->hide();
-
-	ui.cbBaudRate->hide();
-	ui.lBaudRate->hide();
-
-	ui.lHost->hide();
-	ui.leHost->hide();
-
-	ui.lPort->hide();
-	ui.lePort->hide();
-
-	ui.cbSerialPort->hide();
-	ui.lSerialPort->hide();
-
-	ui.lSourceType->hide();
-	ui.cbSourceType->hide();
-
-	ui.cbUpdateType->hide();
-	ui.lUpdateType->hide();
-
-	ui.sbUpdateInterval->hide();
-	ui.lUpdateInterval->hide();
-
-#ifdef HAVE_MQTT
-	hideMQTT();
-#endif
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -1555,13 +1575,15 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	case AbstractFileFilter::Image:
-		ui.lPreviewLines->hide();
-		ui.sbPreviewLines->hide();
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
+		ui.lPreviewLines->hide();
+		ui.sbPreviewLines->hide();
 		break;
 	case AbstractFileFilter::NgspiceRawAscii:
 	case AbstractFileFilter::NgspiceRawBinary:
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -2248,32 +2270,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	refreshPreview();
 }
 
-void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
-	for (int i = 2; i < ui.swOptions->count(); ++i)
-		ui.swOptions->removeWidget(ui.swOptions->widget(i));
-
-	const int size = ui.cbFileType->count();
-	for (int i = 2; i < size; ++i)
-		ui.cbFileType->removeItem(2);
-
-	ui.cbBaudRate->hide();
-	ui.lBaudRate->hide();
-
-	ui.lHost->hide();
-	ui.leHost->hide();
-
-	ui.lPort->hide();
-	ui.lePort->hide();
-
-	ui.cbSerialPort->hide();
-	ui.lSerialPort->hide();
-
-	ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
-	ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
-
-	ui.tabWidget->removeTab(2);
-}
-
 #ifdef HAVE_MQTT
 
 /*!
@@ -2936,4 +2932,5 @@ void ImportFileWidget::mqttConnectTimeout() {
 	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out!");
 }
 #endif
+
 

@@ -31,6 +31,7 @@
 #define HISTOGRAM_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
@@ -75,6 +76,13 @@ public:
 	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolsStyle, SymbolsStyle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
@@ -145,7 +153,15 @@ signals:
 	void binCountChanged(int);
 	void binWidthChanged(float);
 
-	//Line
+	//Symbol-Tab
+	void symbolsStyleChanged(Symbol::Style);
+	void symbolsSizeChanged(qreal);
+	void symbolsRotationAngleChanged(qreal);
+	void symbolsOpacityChanged(qreal);
+	void symbolsBrushChanged(QBrush);
+	void symbolsPenChanged(const QPen&);
+
+	//Line-Tab
 	void lineTypeChanged(Histogram::LineType);
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
