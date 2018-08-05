@@ -13,7 +13,7 @@ void JsonFilterTest::initTestCase() {
 }
 
 void JsonFilterTest::testArrayImport() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "array.json";
@@ -44,7 +44,7 @@ void JsonFilterTest::testArrayImport() {
 }
 
 void JsonFilterTest::testObjectImport() {
-	Spreadsheet spreadsheet(0, "test", false);
+	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "object.json";
