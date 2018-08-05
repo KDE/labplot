@@ -241,7 +241,7 @@ double Histogram::getXMinimum() const {
 //##############################################################################
 
 //General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcLogicalPoints)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcHistogram)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->dataColumn) {
@@ -688,60 +688,21 @@ void HistogramPrivate::retransform() {
 	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
 
 	symbolPointsScene.clear();
+	symbolPointsLogical.clear();
 
 	if (NULL == dataColumn) {
 		linePath = QPainterPath();
+		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
-	//calculate the scene coordinates
-	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
-	if (!plot)
-		return;
-
-	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	Q_ASSERT(cSystem);
-	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
-
 	m_suppressRecalc = true;
 	updateLines();
+	updateSymbols();
 	updateValues();
 	m_suppressRecalc = false;
-}
-
-void HistogramPrivate::recalcLogicalPoints() {
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcLogicalPoints()");
-
-	symbolPointsLogical.clear();
-	QPointF tempPoint;
-	const AbstractColumn::ColumnMode xColMode = dataColumn->columnMode();
-
-	//take over only valid and non masked points.
-	for (int row = 0; row <dataColumn->rowCount(); ++row) {
-		if (dataColumn->isValid(row) && !dataColumn->isMasked(row)) {
-			switch(xColMode) {
-				case AbstractColumn::Numeric:
-					tempPoint.setX(dataColumn->valueAt(row));
-					break;
-				case AbstractColumn::Integer:
-					//TODO
-				case AbstractColumn::Text:
-					//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
-			}
-
-			symbolPointsLogical.append(tempPoint);
-		}
-	}
-
-	recalcHistogram();
 }
 
 void HistogramPrivate::recalcHistogram() {
@@ -750,7 +711,14 @@ void HistogramPrivate::recalcHistogram() {
 	if (m_histogram)
 			gsl_histogram_free(m_histogram);
 
-	const int count = symbolPointsLogical.count();
+	//calculate the number of valid data points
+	int count = 0;
+	for (int row = 0; row <dataColumn->rowCount(); ++row) {
+		if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
+			++count;
+	}
+
+	//TODO: support different column modes
 	if (count > 0) {
 		const double min = dataColumn->minimum();
 		const double max = dataColumn->maximum();
@@ -786,6 +754,52 @@ void HistogramPrivate::recalcHistogram() {
 	emit q->dataChanged();
 }
 
+void HistogramPrivate::updateType() {
+	//type (ordinary or cumulative) changed,
+	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	emit q->dataChanged();
+}
+
+void HistogramPrivate::updateOrientation() {
+	//orientation (horizontal or vertical) changed
+	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	emit q->dataChanged();
+}
+
+/*!
+  recalculates the painter path for the lines connecting the data points.
+  Called each time when the type of this connection is changed.
+  */
+void HistogramPrivate::updateLines() {
+	PERFTRACE(name().toLatin1() + ", HistogramPrivate::updateLines()");
+
+	linePath = QPainterPath();
+	lines.clear();
+	symbolPointsLogical.clear();
+
+	if (orientation == Histogram::Vertical)
+		verticalHistogram();
+	else
+		horizontalHistogram();
+
+	//map the lines and the symbol positions to the scene coordinates
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	Q_ASSERT(cSystem);
+	lines = cSystem->mapLogicalToScene(lines);
+	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
+	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+
+	//new line path
+	for (const auto& line: lines) {
+		linePath.moveTo(line.p1());
+		linePath.lineTo(line.p2());
+	}
+
+	updateFilling();
+	recalcShapeAndBoundingRect();
+}
+
 void HistogramPrivate::verticalHistogram() {
 	const double min = dataColumn->minimum();
 	const double max = dataColumn->maximum();
@@ -802,6 +816,7 @@ void HistogramPrivate::verticalHistogram() {
 			lines.append(QLineF(x, 0., x, value));
 			lines.append(QLineF(x, value, x + width, value));
 			lines.append(QLineF(x + width, value, x + width, 0.));
+			symbolPointsLogical.append(QPointF(x+width/2, value));
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
@@ -814,6 +829,7 @@ void HistogramPrivate::verticalHistogram() {
 			const double x = min + i*width;
 			lines.append(QLineF(x, prevValue, x, value));
 			lines.append(QLineF(x, value, x + width, value));
+			symbolPointsLogical.append(QPointF(x+width/2, value));
 
 			if (i== m_bins - 1)
 				lines.append(QLineF(x + width, value, x + width, 0.));
@@ -829,6 +845,7 @@ void HistogramPrivate::verticalHistogram() {
 
 			const double x = min + i*width - width/2;
 			lines.append(QLineF(x, 0., x, value));
+			symbolPointsLogical.append(QPointF(x, value));
 		}
 	}
 
@@ -851,6 +868,7 @@ void HistogramPrivate::horizontalHistogram() {
 			lines.append(QLineF(0., y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
 			lines.append(QLineF(value, y + width, 0., y + width));
+			symbolPointsLogical.append(QPointF(value, y+width/2));
 		}
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
@@ -863,6 +881,7 @@ void HistogramPrivate::horizontalHistogram() {
 			const double y = min + i*width;
 			lines.append(QLineF(prevValue, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
+			symbolPointsLogical.append(QPointF(value, y+width/2));
 
 			if (i== m_bins - 1)
 				lines.append(QLineF(value, y + width, 0., y + width));
@@ -878,56 +897,36 @@ void HistogramPrivate::horizontalHistogram() {
 
 			const double y = min + i*width - width/2;
 			lines.append(QLineF(0., y, value, y));
+			symbolPointsLogical.append(QPointF(value, y));
 		}
 	}
 
 	lines.append(QLineF(0., min, 0., max));
 }
 
-void HistogramPrivate::updateType() {
-	//type (ordinary or cumulative) changed,
-	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	emit q->dataChanged();
-}
+void HistogramPrivate::updateSymbols() {
+	symbolsPath = QPainterPath();
+	if (symbolsStyle != Symbol::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
 
-void HistogramPrivate::updateOrientation() {
-	//orientation (horizontal or vertical) changed
-	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	emit q->dataChanged();
-}
+		QTransform trafo;
+		trafo.scale(symbolsSize, symbolsSize);
+		path = trafo.map(path);
+		trafo.reset();
 
-/*!
-  recalculates the painter path for the lines connecting the data points.
-  Called each time when the type of this connection is changed.
-  */
-void HistogramPrivate::updateLines() {
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::updateLines()");
+		if (symbolsRotationAngle != 0) {
+			trafo.rotate(symbolsRotationAngle);
+			path = trafo.map(path);
+		}
 
-	linePath = QPainterPath();
-	lines.clear();
-
-	if (orientation == Histogram::Vertical)
-		verticalHistogram();
-	else
-		horizontalHistogram();
-
-	//map the lines to scene coordinates
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
-	lines = cSystem->mapLogicalToScene(lines);
-
-	//new line path
-	for (const auto& line: lines) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
+		for (const auto& point : symbolPointsScene) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			symbolsPath.addPath(trafo.map(path));
+		}
 	}
 
-	updateFilling();
 	recalcShapeAndBoundingRect();
-}
-
-void HistogramPrivate::updateSymbols() {
-
 }
 
 /*!
@@ -1175,10 +1174,15 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
-	curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
+	if (lineType != Histogram::NoLine)
+		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
+
+	if (symbolsStyle != Symbol::NoSymbols)
+		curveShape.addPath(symbolsPath);
 
 	if (valuesType != Histogram::NoValues)
 		curveShape.addPath(valuesPath);
+
 	boundingRectangle = curveShape.boundingRect();
 
 	for (const auto& pol : fillPolygons)
@@ -1208,6 +1212,14 @@ void HistogramPrivate::draw(QPainter* painter) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
 		drawFilling(painter);
+	}
+
+	//draw symbols
+	if (symbolsStyle != Symbol::NoSymbols) {
+		painter->setOpacity(symbolsOpacity);
+		painter->setPen(symbolsPen);
+		painter->setBrush(symbolsBrush);
+		drawSymbols(painter);
 	}
 
 	//draw values
@@ -1286,10 +1298,24 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 }
 
-/*!
-  Drawing of symbolsPath is very slow, so we draw every symbol in the loop
-  which us much faster (factor 10)
-  */
+void HistogramPrivate::drawSymbols(QPainter* painter) {
+	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
+
+	QTransform trafo;
+	trafo.scale(symbolsSize, symbolsSize);
+	path = trafo.map(path);
+	trafo.reset();
+	if (symbolsRotationAngle != 0) {
+		trafo.rotate(-symbolsRotationAngle);
+		path = trafo.map(path);
+	}
+	for (const auto& point : symbolPointsScene) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
+}
+
 void HistogramPrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;

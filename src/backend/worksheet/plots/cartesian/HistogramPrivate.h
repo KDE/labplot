@@ -58,7 +58,6 @@ public:
 	bool m_selectionEffectImageIsDirty;
 
 	void retransform();
-	void recalcLogicalPoints();
 	void recalcHistogram();
 	void updateType();
 	void updateOrientation();
@@ -133,6 +132,7 @@ public:
 	qreal fillingOpacity;
 
 	QPainterPath linePath;
+	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
