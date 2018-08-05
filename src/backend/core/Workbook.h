@@ -30,7 +30,6 @@
 #define WORKBOOK_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
 class Matrix;
@@ -38,11 +37,11 @@ class WorkbookView;
 class QXmlStreamWriter;
 class XmlStreamReader;
 
-class Workbook : public AbstractPart, public scripted {
+class Workbook : public AbstractPart {
 	Q_OBJECT
 
 public:
-	Workbook(AbstractScriptingEngine* engine, const QString& name);
+	Workbook(const QString& name);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

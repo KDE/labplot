@@ -63,8 +63,7 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), m_view(nullptr) {
+Spreadsheet::Spreadsheet(const QString& name, bool loading) : AbstractDataSource(name), m_view(nullptr) {
 
 	if (!loading)
 		init();

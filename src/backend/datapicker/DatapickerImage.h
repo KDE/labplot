@@ -30,7 +30,6 @@
 #define DATAPICKERIMAGE_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
@@ -47,11 +46,11 @@ class Segments;
 class QGraphicsScene;
 class QGraphicsPixmapItem;
 
-class DatapickerImage: public AbstractPart, public scripted {
+class DatapickerImage : public AbstractPart {
 	Q_OBJECT
 
 public:
-	DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+	DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
 	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};

@@ -44,8 +44,7 @@
  * \brief Top-level container for DatapickerCurve and DatapickerImage.
  * \ingroup backend
  */
-Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
-	: AbstractPart(name), scripted(engine),
+Datapicker::Datapicker(const QString& name, const bool loading) : AbstractPart(name),
 	m_view(nullptr),
 	m_activeCurve(nullptr),
 	m_transform(new Transform()),
@@ -63,7 +62,7 @@ Datapicker::~Datapicker() {
 }
 
 void Datapicker::init() {
-	m_image = new DatapickerImage(0, i18n("Plot"));
+	m_image = new DatapickerImage(i18n("Plot"));
 	m_image->setHidden(true);
 	setUndoAware(false);
 	addChild(m_image);
@@ -362,7 +361,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "datapickerImage") {
-			DatapickerImage* plot = new DatapickerImage(0, i18n("Plot"), true);
+			DatapickerImage* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;

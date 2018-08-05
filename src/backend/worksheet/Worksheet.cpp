@@ -59,8 +59,8 @@
  *
  * * \ingroup worksheet
  */
-Worksheet::Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)), m_view(nullptr) {
+Worksheet::Worksheet(const QString& name, bool loading)
+	: AbstractPart(name), d(new WorksheetPrivate(this)), m_view(nullptr) {
 
 	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);

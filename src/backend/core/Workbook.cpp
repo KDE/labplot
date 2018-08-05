@@ -41,8 +41,7 @@
  * \brief Top-level container for Spreadsheet and Matrix.
  * \ingroup backend
  */
-Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
-	: AbstractPart(name), scripted(engine), m_view(nullptr) {
+Workbook::Workbook(const QString& name) : AbstractPart(name), m_view(nullptr) {
 }
 
 QIcon Workbook::icon() const {
@@ -201,14 +200,14 @@ bool Workbook::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if(reader->name() == "spreadsheet") {
-			Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
+			Spreadsheet* spreadsheet = new Spreadsheet("spreadsheet", true);
 			if (!spreadsheet->load(reader, preview)) {
 				delete spreadsheet;
 				return false;
 			} else
 				addChild(spreadsheet);
 		} else if (reader->name() == "matrix") {
-			Matrix* matrix = new Matrix(0, i18n("matrix"), true);
+			Matrix* matrix = new Matrix(i18n("matrix"), true);
 			if (!matrix->load(reader, preview)) {
 				delete matrix;
 				return false;

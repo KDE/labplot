@@ -188,7 +188,7 @@ QString& DatapickerCurve::minusDeltaYColumnPath() const {
 void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
-	m_datasheet = new Spreadsheet(0, i18n("Data"));
+	m_datasheet = new Spreadsheet(i18n("Data"));
 	addChild(m_datasheet);
 	QString xLabel('x');
 	QString yLabel('y');
@@ -614,7 +614,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				curvePoint->initErrorBar(curveErrorTypes());
 			}
 		} else if (reader->name() == "spreadsheet") {
-			Spreadsheet* datasheet = new Spreadsheet(0, "spreadsheet", true);
+			Spreadsheet* datasheet = new Spreadsheet("spreadsheet", true);
 			if (!datasheet->load(reader, preview)) {
 				delete datasheet;
 				return false;

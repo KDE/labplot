@@ -56,18 +56,17 @@
  *
  * * \ingroup datapicker
  */
-DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractPart(name), scripted(engine),
-	  isLoaded(false),
-	  foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
-	  hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
-	  saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
-	  valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
-	  intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
-	  m_magnificationWindow(nullptr),
-	  d(new DatapickerImagePrivate(this)),
-	  m_view(nullptr),
-	  m_segments(new Segments(this)) {
+DatapickerImage::DatapickerImage(const QString& name, bool loading) : AbstractPart(name),
+	isLoaded(false),
+	foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
+	hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
+	saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
+	valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
+	intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
+	m_magnificationWindow(nullptr),
+	d(new DatapickerImagePrivate(this)),
+	m_view(nullptr),
+	m_segments(new Segments(this)) {
 
 	if (!loading)
 		init();

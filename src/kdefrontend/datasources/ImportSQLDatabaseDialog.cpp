@@ -128,7 +128,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 		else if (matrix && importSQLDatabaseWidget->isNumericData())
 			importSQLDatabaseWidget->read(matrix, mode);
 		else {
-			spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+			spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 			workbook->addChild(spreadsheet);
 			importSQLDatabaseWidget->read(spreadsheet, mode);
 		}

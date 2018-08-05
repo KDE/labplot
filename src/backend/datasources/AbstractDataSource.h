@@ -29,18 +29,17 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define ABSTRACTDATASOURCE_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
 #include <QVector>
 
 class QStringList;
 
-class AbstractDataSource : public AbstractPart, public scripted {
+class AbstractDataSource : public AbstractPart {
 	Q_OBJECT
 
 public:
-	AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
+	AbstractDataSource(const QString& name);
 	~AbstractDataSource() override {}
 
 	void clear();

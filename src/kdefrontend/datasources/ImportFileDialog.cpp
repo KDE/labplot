@@ -243,7 +243,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// add additional sheets
 			for (int i = start; i < nrNames; ++i) {
-				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				Spreadsheet *spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 				if (mode == AbstractFileFilter::Prepend)
 					workbook->insertChildBefore(spreadsheet,sheets[0]);
 				else
@@ -290,7 +290,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			else if (matrix)
 				filter->readDataFromFile(fileName, matrix, mode);
 			else {
-				spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 				workbook->addChild(spreadsheet);
 				filter->readDataFromFile(fileName, spreadsheet, mode);
 			}

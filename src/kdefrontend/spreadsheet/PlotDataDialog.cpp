@@ -349,7 +349,7 @@ void PlotDataDialog::plot() {
 		//add curves to a new plot(s) in a new worksheet
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
-		Worksheet* worksheet = new Worksheet(0, i18n("Plot data from %1", m_spreadsheet->name()));
+		Worksheet* worksheet = new Worksheet(i18n("Plot data from %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacement1->isChecked()) {

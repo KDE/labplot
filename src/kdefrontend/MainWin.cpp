@@ -1173,7 +1173,7 @@ void MainWin::newFolder() {
 	adds a new Workbook to the project.
 */
 void MainWin::newWorkbook() {
-	Workbook* workbook = new Workbook(0, i18n("Workbook"));
+	Workbook* workbook = new Workbook(i18n("Workbook"));
 	this->addAspectToProject(workbook);
 }
 
@@ -1181,14 +1181,14 @@ void MainWin::newWorkbook() {
 	adds a new Datapicker to the project.
 */
 void MainWin::newDatapicker() {
-	Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
+	Datapicker* datapicker = new Datapicker(i18n("Datapicker"));
 	this->addAspectToProject(datapicker);
 }
 /*!
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet() {
-	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new spreadsheet to the workbook
@@ -1209,7 +1209,7 @@ void MainWin::newSpreadsheet() {
 	adds a new Matrix to the project.
 */
 void MainWin::newMatrix() {
-	Matrix* matrix = new Matrix(0, i18n("Matrix"));
+	Matrix* matrix = new Matrix(i18n("Matrix"));
 
 	//if the current active window is a workbook and no folder/project is selected in the project explorer,
 	//add the new matrix to the workbook
@@ -1230,7 +1230,7 @@ void MainWin::newMatrix() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet = new Worksheet(0, i18n("Worksheet"));
+	Worksheet* worksheet = new Worksheet(i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 
@@ -1349,7 +1349,7 @@ Worksheet* MainWin::activeWorksheet() const {
     adds a new Cantor Spreadsheet to the project.
 */
 void MainWin::newCantorWorksheet(QAction* action) {
-	CantorWorksheet* cantorworksheet = new CantorWorksheet(0, action->data().toString());
+	CantorWorksheet* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
 }
 
@@ -1827,7 +1827,7 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		LiveDataSource* dataSource = new LiveDataSource(0,  i18n("Live data source%1", 1), false);
+		LiveDataSource* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
 		dlg->importToLiveDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}

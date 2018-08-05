@@ -30,7 +30,6 @@
 #define CANTORWORKSHEET_H
 
 #include <backend/core/AbstractPart.h>
-#include "backend/core/AbstractScriptingEngine.h"
 #include <cantor/session.h>
 
 namespace Cantor {
@@ -46,11 +45,11 @@ class CantorWorksheetView;
 class Column;
 class QAbstractItemModel;
 
-class CantorWorksheet : public AbstractPart, public scripted {
+class CantorWorksheet : public AbstractPart {
 	Q_OBJECT
 
 public:
-	CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+	CantorWorksheet(const QString& name, bool loading = false);
 
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
