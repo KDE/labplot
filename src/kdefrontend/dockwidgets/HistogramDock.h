@@ -128,6 +128,15 @@ private slots:
 	void fileNameChanged();
 	void fillingOpacityChanged(int);
 
+	//"Error bars"-Tab
+	void errorTypeChanged(int) const;
+	void errorBarsTypeChanged(int) const;
+	void errorBarsCapSizeChanged(double) const;
+  	void errorBarsStyleChanged(int) const;
+	void errorBarsColorChanged(const QColor&);
+	void errorBarsWidthChanged(double) const;
+	void errorBarsOpacityChanged(int) const;
+
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
@@ -174,6 +183,13 @@ private slots:
 	void curveFillingSecondColorChanged(QColor&);
 	void curveFillingFileNameChanged(QString&);
 	void curveFillingOpacityChanged(float);
+
+	//"Error bars"-Tab
+	void curveErrorTypeChanged(Histogram::ErrorType);
+	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
+	void curveErrorBarsPenChanged(const QPen&);
+	void curveErrorBarsCapSizeChanged(qreal);
+	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

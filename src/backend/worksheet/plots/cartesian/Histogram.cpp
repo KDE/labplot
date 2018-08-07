@@ -122,6 +122,14 @@ void Histogram::init() {
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
 	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
 
+	d->errorType = (Histogram::ErrorType) group.readEntry("ErrorType", (int)Histogram::NoError);
+	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
+	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
+	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
+	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+
 	this->initActions();
 }
 
@@ -219,6 +227,13 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstCol
 CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
+
+//error bars
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
+BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
+CLASS_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
+BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
 double Histogram::getYMaximum() const {
 	return d_ptr->getYMaximum();
@@ -500,6 +515,42 @@ void Histogram::setFillingOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->fillingOpacity)
 		exec(new HistogramSetFillingOpacityCmd(d, opacity, ki18n("%1: set filling opacity")));
+}
+
+//Error bars
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorType, Histogram::ErrorType, errorType, updateErrorBars)
+void Histogram::setErrorType(ErrorType type) {
+	Q_D(Histogram);
+	if (type != d->errorType)
+		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
+void Histogram::setErrorBarsCapSize(qreal size) {
+	Q_D(Histogram);
+	if (size != d->errorBarsCapSize)
+		exec(new HistogramSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
+void Histogram::setErrorBarsType(XYCurve::ErrorBarsType type) {
+	Q_D(Histogram);
+	if (type != d->errorBarsType)
+		exec(new HistogramSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
+void Histogram::setErrorBarsPen(const QPen& pen) {
+	Q_D(Histogram);
+	if (pen != d->errorBarsPen)
+		exec(new HistogramSetErrorBarsPenCmd(d, pen, ki18n("%1: set error bar style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsOpacity, qreal, errorBarsOpacity, updatePixmap)
+void Histogram::setErrorBarsOpacity(qreal opacity) {
+	Q_D(Histogram);
+	if (opacity != d->errorBarsOpacity)
+		exec(new HistogramSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
 }
 
 //##############################################################################
@@ -994,44 +1045,37 @@ void HistogramPrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	qreal w;
-	qreal h = fm.ascent();
-	double xAxisMin = dataColumn->minimum();
-	double xAxisMax = dataColumn->maximum();
-	double width = (xAxisMax-xAxisMin)/m_bins;
+	const qreal h = fm.ascent();
 	switch(valuesPosition) {
 		case Histogram::ValuesAbove:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2 +xAxisMin);
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
 				tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesUnder:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2+xAxisMin );
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
 				tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesLeft:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 +xAxisMin);
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1);
 				tempPoint.setY( symbolPointsScene.at(i).y());
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesRight:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
+				tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1);
 				tempPoint.setY( symbolPointsScene.at(i).y() );
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 	}
@@ -1159,6 +1203,10 @@ void HistogramPrivate::updateFilling() {
 
 	fillPolygons << pol;
 	recalcShapeAndBoundingRect();
+}
+
+void HistogramPrivate::updateErrorBars() {
+
 }
 
 /*!

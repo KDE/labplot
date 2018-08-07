@@ -158,6 +158,14 @@ HistogramDock::HistogramDock(QWidget* parent) : QWidget(parent),
 	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
 	connect( ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)) );
 
+	//Error bars
+	connect( ui.cbErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorTypeChanged(int)) );
+	connect( ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)) );
+	connect( ui.sbErrorBarsCapSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarsCapSizeChanged(double)) );
+	connect( ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)) );
+	connect( ui.kcbErrorBarsColor, SIGNAL(changed(QColor)), this, SLOT(errorBarsColorChanged(QColor)) );
+	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
+	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
@@ -291,6 +299,8 @@ void HistogramDock::init(){
 	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
 	ui.cbErrorBarsType->setItemIcon(1, pm);
 
+	ui.cbErrorType->addItem(i18n("No Errors"));
+
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
 
@@ -408,6 +418,13 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	connect( m_curve, SIGNAL(fillingSecondColorChanged(QColor&)), this, SLOT(curveFillingSecondColorChanged(QColor&)) );
 	connect( m_curve, SIGNAL(fillingFileNameChanged(QString&)), this, SLOT(curveFillingFileNameChanged(QString&)) );
 	connect( m_curve, SIGNAL(fillingOpacityChanged(float)), this, SLOT(curveFillingOpacityChanged(float)) );
+
+	//"Error bars"-Tab
+	connect(m_curve, SIGNAL(errorTypeChanged(Histogram::ErrorType)), this, SLOT(curveErrorTypeChanged(Histogram::ErrorType)));
+	connect(m_curve, SIGNAL(errorBarsCapSizeChanged(qreal)), this, SLOT(curveErrorBarsCapSizeChanged(qreal)));
+	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
+	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
+	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
 
 	m_initializing=false;
 }
@@ -1142,6 +1159,100 @@ void HistogramDock::fillingSecondColorChanged(const QColor& c){
 		curve->setFillingSecondColor(c);
 }
 
+//"Error bars"-Tab
+void HistogramDock::errorTypeChanged(int index) const {
+	bool b = (index != 0);
+	ui.lErrorData->setVisible(b);
+	ui.lErrorFormat->setVisible(b);
+	ui.lErrorBarsType->setVisible(b);
+	ui.cbErrorBarsType->setVisible(b);
+	ui.lErrorBarsStyle->setVisible(b);
+	ui.cbErrorBarsStyle->setVisible(b);
+	ui.lErrorBarsColor->setVisible(b);
+	ui.kcbErrorBarsColor->setVisible(b);
+	ui.lErrorBarsWidth->setVisible(b);
+	ui.sbErrorBarsWidth->setVisible(b);
+	ui.lErrorBarsOpacity->setVisible(b);
+	ui.sbErrorBarsOpacity->setVisible(b);
+
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setErrorType(Histogram::ErrorType(index));
+}
+
+void HistogramDock::errorBarsTypeChanged(int index) const {
+	XYCurve::ErrorBarsType type = XYCurve::ErrorBarsType(index);
+	bool b = (type == XYCurve::ErrorBarsWithEnds);
+	ui.lErrorBarsCapSize->setVisible(b);
+	ui.sbErrorBarsCapSize->setVisible(b);
+
+	if (m_initializing)
+		return;
+
+	for (auto* curve : m_curvesList)
+		curve->setErrorBarsType(type);
+}
+
+void HistogramDock::errorBarsCapSizeChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	float size = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	for (auto* curve : m_curvesList)
+		curve->setErrorBarsCapSize(size);
+}
+
+void HistogramDock::errorBarsStyleChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	QPen pen;
+	for (auto* curve : m_curvesList) {
+		pen=curve->errorBarsPen();
+		pen.setStyle(penStyle);
+		curve->setErrorBarsPen(pen);
+	}
+}
+
+void HistogramDock::errorBarsColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* curve : m_curvesList) {
+		pen=curve->errorBarsPen();
+		pen.setColor(color);
+		curve->setErrorBarsPen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, color);
+	m_initializing = false;
+}
+
+void HistogramDock::errorBarsWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* curve : m_curvesList) {
+		pen=curve->errorBarsPen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setErrorBarsPen(pen);
+	}
+}
+
+void HistogramDock::errorBarsOpacityChanged(int value) const {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* curve : m_curvesList)
+		curve->setErrorBarsOpacity(opacity);
+}
 
 /*!
 	opens a file dialog and lets the user select the image file.
@@ -1408,6 +1519,37 @@ void HistogramDock::curveFillingOpacityChanged(float opacity){
 	m_initializing = false;
 }
 
+
+//"Error bars"-Tab
+void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
+	m_initializing = true;
+	ui.cbErrorType->setCurrentIndex((int)type);
+	m_initializing = false;
+}
+void HistogramDock::curveErrorBarsCapSizeChanged(qreal size) {
+	m_initializing = true;
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	m_initializing = false;
+}
+void HistogramDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
+	m_initializing = true;
+	ui.cbErrorBarsType->setCurrentIndex((int)type);
+	m_initializing = false;
+}
+void HistogramDock::curveErrorBarsPenChanged(const QPen& pen) {
+	m_initializing = true;
+	ui.cbErrorBarsStyle->setCurrentIndex( (int) pen.style());
+	ui.kcbErrorBarsColor->setColor( pen.color());
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	m_initializing = false;
+}
+void HistogramDock::curveErrorBarsOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbErrorBarsOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
@@ -1460,6 +1602,15 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
+
+	//Error bars
+	ui.cbErrorType->setCurrentIndex( group.readEntry("ErrorType", (int) m_curve->errorType()) );
+	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Point) );
+	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) m_curve->errorBarsPen().style()) );
+	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Point) );
+	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {

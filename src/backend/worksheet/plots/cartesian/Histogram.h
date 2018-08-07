@@ -32,6 +32,7 @@
 
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
@@ -48,6 +49,7 @@ public:
 	enum LineType {NoLine, Bars, Envelope, DropLines};
 	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
 	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
+	enum ErrorType {NoError};
 
 	explicit Histogram(const QString &name);
 
@@ -105,6 +107,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
 	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
+
+	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
+	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
+	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
+	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
+	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
@@ -188,6 +196,13 @@ signals:
 	void fillingSecondColorChanged(QColor&);
 	void fillingFileNameChanged(QString&);
 	void fillingOpacityChanged(float);
+
+	//Error bars
+	void errorTypeChanged(Histogram::ErrorType);
+	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
+	void errorBarsPenChanged(QPen);
+	void errorBarsCapSizeChanged(qreal);
+	void errorBarsOpacityChanged(qreal);
 };
 
 #endif
