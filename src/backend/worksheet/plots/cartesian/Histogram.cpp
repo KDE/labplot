@@ -994,44 +994,37 @@ void HistogramPrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	qreal w;
-	qreal h = fm.ascent();
-	double xAxisMin = dataColumn->minimum();
-	double xAxisMax = dataColumn->maximum();
-	double width = (xAxisMax-xAxisMin)/m_bins;
+	const qreal h = fm.ascent();
 	switch(valuesPosition) {
 		case Histogram::ValuesAbove:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2 +xAxisMin);
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
 				tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesUnder:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() -w/2+xAxisMin );
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() -w/2);
 				tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesLeft:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				w=fm.width(valuesStrings.at(i));
-				tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 +xAxisMin);
+				w = fm.width(valuesStrings.at(i));
+				tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1);
 				tempPoint.setY( symbolPointsScene.at(i).y());
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 		case Histogram::ValuesRight:
 			for (int i = 0; i < valuesStrings.size(); i++) {
-				tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
+				tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1);
 				tempPoint.setY( symbolPointsScene.at(i).y() );
 				valuesPoints.append(tempPoint);
-				xAxisMin+= 9*width;
 			}
 			break;
 	}
