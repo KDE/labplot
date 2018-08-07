@@ -30,6 +30,8 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+
 #include <QGraphicsItem>
 #include <vector>
 #include <QFont>
@@ -67,6 +69,7 @@ public:
 	void updateSymbols();
 	void updateValues();
 	void updateFilling();
+	void updateErrorBars();
 	bool swapVisible(bool on);
 	void recalcShapeAndBoundingRect();
 
@@ -130,6 +133,13 @@ public:
 	QColor fillingSecondColor;
 	QString fillingFileName;
 	qreal fillingOpacity;
+
+	//error bars
+	Histogram::ErrorType errorType;
+	XYCurve::ErrorBarsType errorBarsType;
+	double errorBarsCapSize;
+	QPen errorBarsPen;
+	qreal errorBarsOpacity;
 
 	QPainterPath linePath;
 	QPainterPath symbolsPath;
