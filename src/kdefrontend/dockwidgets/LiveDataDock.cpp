@@ -198,6 +198,13 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	if(m_previousMQTTClient == nullptr) {
 		connect(fmc, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
 		connect(fmc, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
+
+		//Fill the subscription tree(useful if the MQTTClient was loaded)
+		QVector<QString> topics = fmc->topicNames();
+		for(int i = 0; i < topics.size(); ++i) {
+			addTopicToTree(topics[i]);
+		}
+		fillSubscriptions();
 	}
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
@@ -216,7 +223,7 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 			addTopicToTree(m_addedTopics[fmc->clientHostName()].at(i));
 		}
 
-		//fill subscriptions tree widget
+		//fill subscriptions tree widget		
 		ui.twSubscriptions->clear();
 		fillSubscriptions();
 

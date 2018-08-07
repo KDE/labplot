@@ -2501,6 +2501,7 @@ void ImportFileWidget::mqttSubscribe() {
 									//if the new subscription contains a topic, we unsubscribe from it
 									ui.twSubscriptions->setCurrentItem(children[j]);
 									mqttUnsubscribe();
+									i--;
 								}
 							}
 						}

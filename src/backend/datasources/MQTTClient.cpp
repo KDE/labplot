@@ -1101,11 +1101,23 @@ void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
  */
 void MQTTClient::subscriptionLoaded(const QString &name) {
 	if(!name.isEmpty()) {
+		qDebug() << "Finished loading: " << name;
 		//Save information about the subscription
 		m_subscriptionsLoaded++;
 		m_subscriptions.push_back(name);
 		QMqttTopicFilter filter {name};
 		m_subscribedTopicNameQoS[filter] = 0;
+
+		//Save the topics belonging to the subscription
+		for(int i = 0; i < m_MQTTSubscriptions.size(); ++i) {
+			if(m_MQTTSubscriptions[i]->subscriptionName() == name) {
+				QVector<MQTTTopic*> topics = m_MQTTSubscriptions[i]->topics();
+				for(int j = 0; j < topics.size(); ++j) {
+					m_topicNames.push_back(topics[j]->topicName());
+				}
+				break;
+			}
+		}
 
 		//Check whether every subscription was loaded or not
 		if(m_subscriptionsLoaded == m_subscriptionCountToLoad) {
@@ -1349,12 +1361,12 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 		} else if(reader->name() == "MQTTSubscription") {
 			MQTTSubscription* subscription = new MQTTSubscription("");
 			subscription->setMQTTClient(this);
+			m_MQTTSubscriptions.push_back(subscription);
 			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);
 			if (!subscription->load(reader, preview)) {
 				delete subscription;
 				return false;
 			}
-			m_MQTTSubscriptions.push_back(subscription);
 			addChildFast(subscription);
 		} else {// unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

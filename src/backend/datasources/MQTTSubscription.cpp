@@ -222,7 +222,7 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	emit loaded(this->name());
+	emit loaded(this->subscriptionName());
 	return !reader->hasError();
 }
 #endif
