@@ -32,9 +32,9 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
 
-MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
-	m_client(client),
-	m_error(error)
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),	
+	m_error(error),
+	m_client(client)
 {
 	ui.setupUi(this);
 	bool close = false;
@@ -70,6 +70,12 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 		ui.leUserName->hide();
 		ui.lUserName->hide();
 		ui.lErrorType->setText("An unknown error occurred.");
+		break;
+	case QMqttClient::NoError:
+	case QMqttClient::InvalidProtocolVersion:
+	case QMqttClient::TransportInvalid:
+	case QMqttClient::ProtocolViolation:
+		close = true;
 		break;
 	default:
 		close = true;
@@ -107,6 +113,13 @@ void MQTTErrorWidget::tryToReconnect(){
 			m_client->read();
 			ok = true;
 		}
+		break;
+	case QMqttClient::NoError:
+	case QMqttClient::InvalidProtocolVersion:
+	case QMqttClient::TransportInvalid:
+	case QMqttClient::ServerUnavailable:
+	case QMqttClient::UnknownError:
+	case QMqttClient::ProtocolViolation:
 		break;
 	default:
 		break;

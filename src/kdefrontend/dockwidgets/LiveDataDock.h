@@ -76,10 +76,8 @@ private slots:
 #ifdef HAVE_MQTT
 public:
 	void setMQTTClients(const QList<MQTTClient*>& clients);
-//#ifdef MQTT_UNIT_TEST
 	bool testSubscribe(const QString&);
 	bool testUnsubscribe(const QString&);
-//#endif
 
 private slots:
 	void useWillMessage(int);
@@ -127,7 +125,6 @@ private:
 	QMap<QString, QStringList> m_topicList;
 	bool m_searching;
 	QTimer* m_searchTimer;
-	QTimer* m_messageTimer;
 	bool m_interpretMessage;	
 	const MQTTClient* m_previousMQTTClient;
 	QString m_mqttUnsubscribeName;

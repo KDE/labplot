@@ -27,27 +27,27 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 #ifndef MQTTCLIENT_H
 #define MQTTCLIENT_H
-#ifdef HAVE_MQTT
 
 #include "backend/core/Folder.h"
 
+#ifdef HAVE_MQTT
 #include <QTimer>
 #include <QVector>
-
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttTopicName>
-
 #include <QMap>
 
 class QString;
 class AbstractFileFilter;
 class MQTTSubscription;
 class QAction;
+#endif
 
 class MQTTClient : public Folder{
+#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:	
@@ -201,7 +201,6 @@ private:
 	ReadingType m_readingType;
 	bool m_paused;
 	bool m_prepared;
-	bool m_keepLastValues;
 	int m_sampleSize;
 	int m_keepNValues;
 	int m_updateInterval;
@@ -248,7 +247,6 @@ signals:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&);
+#endif //HAVE_MQTT
 };
-
-#endif
 #endif // MQTTCLIENT_H

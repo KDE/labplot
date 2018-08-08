@@ -25,10 +25,10 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
+#include "backend/datasources/MQTTClient.h"
 
 #ifdef HAVE_MQTT
 
-#include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 
@@ -67,24 +67,24 @@ MQTTClient::MQTTClient(const QString& name)
 	: Folder(name),
 	  m_paused(false),
 	  m_prepared(false),
-	  m_keepLastValues(false),
-	  m_filter(nullptr),
-	  m_updateTimer(new QTimer(this)),
-	  m_willTimer(new QTimer(this)),
-	  m_client(new QMqttClient(this)),
-	  m_MQTTTest(false),
-	  m_MQTTRetain(false),
-	  m_MQTTUseWill(false),
-	  m_MQTTUseID(false),
-	  m_loaded(false),
 	  m_sampleSize(1),
 	  m_keepNValues(0),
 	  m_updateInterval(1000),
-	  m_disconnectForWill(false),
+	  m_filter(nullptr),
+	  m_updateTimer(new QTimer(this)),
+	  m_client(new QMqttClient(this)),
+	  m_MQTTTest(false),
+	  m_MQTTUseWill(false),
+	  m_willRetain(false),
+	  m_willTimer(new QTimer(this)),
+	  m_MQTTFirstConnectEstablished(false),
+	  m_MQTTRetain(false),
+	  m_MQTTUseID(false),
 	  m_MQTTUseAuthentication(false),
+	  m_disconnectForWill(false),
+	  m_loaded(false),
 	  m_subscriptionsLoaded(0),
-	  m_subscriptionCountToLoad(0),
-	  m_MQTTFirstConnectEstablished(false) {
+	  m_subscriptionCountToLoad(0) {
 
 	qDebug() << "MQTTClient constructor: " << m_client->hostname();
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
@@ -106,7 +106,6 @@ MQTTClient::~MQTTClient() {
 	delete m_willTimer;
 	m_client->disconnectFromHost();
 	delete m_client;
-
 }
 
 /*!
@@ -1102,11 +1101,23 @@ void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
  */
 void MQTTClient::subscriptionLoaded(const QString &name) {
 	if(!name.isEmpty()) {
+		qDebug() << "Finished loading: " << name;
 		//Save information about the subscription
 		m_subscriptionsLoaded++;
 		m_subscriptions.push_back(name);
 		QMqttTopicFilter filter {name};
 		m_subscribedTopicNameQoS[filter] = 0;
+
+		//Save the topics belonging to the subscription
+		for(int i = 0; i < m_MQTTSubscriptions.size(); ++i) {
+			if(m_MQTTSubscriptions[i]->subscriptionName() == name) {
+				QVector<MQTTTopic*> topics = m_MQTTSubscriptions[i]->topics();
+				for(int j = 0; j < topics.size(); ++j) {
+					m_topicNames.push_back(topics[j]->topicName());
+				}
+				break;
+			}
+		}
 
 		//Check whether every subscription was loaded or not
 		if(m_subscriptionsLoaded == m_subscriptionCountToLoad) {
@@ -1350,12 +1361,12 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 		} else if(reader->name() == "MQTTSubscription") {
 			MQTTSubscription* subscription = new MQTTSubscription("");
 			subscription->setMQTTClient(this);
+			m_MQTTSubscriptions.push_back(subscription);
 			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);
 			if (!subscription->load(reader, preview)) {
 				delete subscription;
 				return false;
 			}
-			m_MQTTSubscriptions.push_back(subscription);
 			addChildFast(subscription);
 		} else {// unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

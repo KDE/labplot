@@ -163,9 +163,10 @@ void MQTTUnitTest::testIntegerMessage() {
 	client->setPort(1883);
 	client->connectToHost();
 
-	QTest::qWaitFor([&]() {
+	bool wait = QTest::qWaitFor([&]() {
 		return (client->state() == QMqttClient::Connected);
 	}, 5000);
+	QCOMPARE(wait, true);
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if(subscription) {
@@ -253,9 +254,10 @@ void MQTTUnitTest::testNumericMessage() {
 	client->setPort(1883);
 	client->connectToHost();
 
-	QTest::qWaitFor([&]() {
+	bool wait = QTest::qWaitFor([&]() {
 		return (client->state() == QMqttClient::Connected);
 	}, 5000);
+	QCOMPARE(wait, true);
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if(subscription) {
@@ -343,9 +345,10 @@ void MQTTUnitTest::testTextMessage() {
 	client->setPort(1883);
 	client->connectToHost();
 
-	QTest::qWaitFor([&]() {
+	bool wait = QTest::qWaitFor([&]() {
 		return (client->state() == QMqttClient::Connected);
 	}, 5000);
+	QCOMPARE(wait, true);
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if(subscription) {
@@ -436,9 +439,10 @@ void MQTTUnitTest::testSubscriptions() {
 		client->setPort(1883);
 		client->connectToHost();
 
-		QTest::qWaitFor([&]() {
+		bool wait = QTest::qWaitFor([&]() {
 			return (client->state() == QMqttClient::Connected);
 		}, 3000);
+		QCOMPARE(wait, true);
 
 		QString fileName = m_dataDir + "subscribe_1.txt";
 		QFile* file = new QFile(fileName);

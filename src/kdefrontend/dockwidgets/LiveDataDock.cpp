@@ -39,14 +39,16 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #endif
 
 LiveDataDock::LiveDataDock(QWidget* parent) :
-	QWidget(parent),
-	#ifdef HAVE_MQTT
+	QWidget(parent),	
+	m_paused(false)
+  #ifdef HAVE_MQTT
+  ,
 	m_searching(true),
-	m_previousMQTTClient(nullptr),
 	m_searchTimer(new QTimer()),
 	m_interpretMessage(true),
-	#endif
-	m_paused(false) {
+	m_previousMQTTClient(nullptr)
+  #endif
+{
 	ui.setupUi(this);
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -86,12 +88,14 @@ LiveDataDock::LiveDataDock(QWidget* parent) :
 }
 
 LiveDataDock::~LiveDataDock() {
+#ifdef HAVE_MQTT
 	delete m_searchTimer;
 	QMapIterator<QString, QMqttClient*> clients(m_clients);
 	while(clients.hasNext()) {
 		clients.next();
 		delete clients.value();
 	}
+#endif
 }
 
 #ifdef HAVE_MQTT
@@ -103,18 +107,18 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	m_liveDataSources.clear();
 	m_mqttClients.clear();
 	m_mqttClients = clients;
-	const MQTTClient* const fds = clients.at(0);
+	const MQTTClient* const fmc = clients.at(0);
 
-	ui.sbUpdateInterval->setValue(fds->updateInterval());
-	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fds->updateType()));
-	ui.cbReadingType->setCurrentIndex(static_cast<int>(fds->readingType()));
+	ui.sbUpdateInterval->setValue(fmc->updateInterval());
+	ui.cbUpdateType->setCurrentIndex(static_cast<int>(fmc->updateType()));
+	ui.cbReadingType->setCurrentIndex(static_cast<int>(fmc->readingType()));
 
-	if (fds->updateType() == MQTTClient::UpdateType::NewData) {
+	if (fmc->updateType() == MQTTClient::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (fds->isPaused()) {
+	if (fmc->isPaused()) {
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -122,16 +126,16 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 
-	ui.sbKeepNValues->setValue(fds->keepNValues());
+	ui.sbKeepNValues->setValue(fmc->keepNValues());
 	ui.sbKeepNValues->setEnabled(true);
 
-	if (fds->readingType() == MQTTClient::ReadingType::TillEnd) {
+	if (fmc->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
-		ui.sbSampleSize->setValue(fds->sampleSize());
+		ui.sbSampleSize->setValue(fmc->sampleSize());
 
-	// disable "whole file" when having no file (i.e. socket or port)
+	// disable "whole file" option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(LiveDataSource::ReadingType::WholeFile);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
@@ -168,71 +172,78 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	ui.chbWill->show();
 
 	//if there isn't a client with this hostname we instantiate a new one
-	if(m_clients[fds->clientHostName()] == nullptr) {
-		m_clients[fds->clientHostName()] = new QMqttClient();
+	if(m_clients[fmc->clientHostName()] == nullptr) {
+		m_clients[fmc->clientHostName()] = new QMqttClient();
 
-		connect(fds, &MQTTClient::clientAboutToBeDeleted, this, &LiveDataDock::removeClient);
+		connect(fmc, &MQTTClient::clientAboutToBeDeleted, this, &LiveDataDock::removeClient);
 
-		connect(m_clients[fds->clientHostName()], &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
-		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(m_clients[fmc->clientHostName()], &QMqttClient::connected, this, &LiveDataDock::onMQTTConnect);
+		connect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
-		m_clients[fds->clientHostName()]->setHostname(fds->clientHostName());
-		m_clients[fds->clientHostName()]->setPort(fds->clientPort());
+		m_clients[fmc->clientHostName()]->setHostname(fmc->clientHostName());
+		m_clients[fmc->clientHostName()]->setPort(fmc->clientPort());
 
-		if(fds->MQTTUseAuthentication()) {
-			m_clients[fds->clientHostName()]->setUsername(fds->clientUserName());
-			m_clients[fds->clientHostName()]->setPassword(fds->clientPassword());
+		if(fmc->MQTTUseAuthentication()) {
+			m_clients[fmc->clientHostName()]->setUsername(fmc->clientUserName());
+			m_clients[fmc->clientHostName()]->setPassword(fmc->clientPassword());
 		}
 
-		if(fds->MQTTUseID()) {
-			m_clients[fds->clientHostName()]->setClientId(fds->clientID());
+		if(fmc->MQTTUseID()) {
+			m_clients[fmc->clientHostName()]->setClientId(fmc->clientID());
 		}
 
-		m_clients[fds->clientHostName()]->connectToHost();
+		m_clients[fmc->clientHostName()]->connectToHost();
 	}
 
 	if(m_previousMQTTClient == nullptr) {
-		connect(fds, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
+		connect(fmc, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fmc, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
+
+		//Fill the subscription tree(useful if the MQTTClient was loaded)
+		QVector<QString> topics = fmc->topicNames();
+		for(int i = 0; i < topics.size(); ++i) {
+			addTopicToTree(topics[i]);
+		}
+		fillSubscriptions();
 	}
+
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
 	//and clear the tree widgets
-	else if(m_previousMQTTClient->clientHostName() != fds->clientHostName()) {
-		qDebug()<<"At load host name not equal: "<<m_previousMQTTClient->clientHostName()<<" "<<fds->clientHostName();
+	else if(m_previousMQTTClient->clientHostName() != fmc->clientHostName()) {
 		disconnect(m_previousMQTTClient, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
 		disconnect(m_previousMQTTClient, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
 		disconnect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 		connect(m_clients[m_previousMQTTClient->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
-		disconnect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
+		disconnect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 
 		ui.twTopics->clear();
 		//repopulating the tree widget with the already known topics of the client
-		for(int i = 0; i < m_addedTopics[fds->clientHostName()].size(); ++i) {
-			addTopicToTree(m_addedTopics[fds->clientHostName()].at(i));
+		for(int i = 0; i < m_addedTopics[fmc->clientHostName()].size(); ++i) {
+			addTopicToTree(m_addedTopics[fmc->clientHostName()].at(i));
 		}
 
-		//fill subscriptions tree widget
+		//fill subscriptions tree widget		
 		ui.twSubscriptions->clear();
 		fillSubscriptions();
 
-		connect(fds, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
-		connect(fds, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
-		connect(m_clients[fds->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
+		connect(fmc, &MQTTClient::MQTTSubscribed, this, &LiveDataDock::fillSubscriptions);
+		connect(fmc, &MQTTClient::MQTTTopicsChanged, this, &LiveDataDock::updateWillTopics);
+		connect(m_clients[fmc->clientHostName()], &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 	}
 
 	//set will message connected options
 	updateWillTopics();
-	ui.leWillOwnMessage->setText(fds->willOwnMessage());
-	ui.leWillUpdateInterval->setText(QString::number(fds->willTimeInterval()));
-	ui.cbWillUpdate->setCurrentIndex(static_cast<int>(fds->willUpdateType()) );
-	fds->startWillTimer();
-	ui.cbWillMessageType->setCurrentIndex(static_cast<int>(fds->willMessageType()) );
-	ui.cbWillQoS->setCurrentIndex(fds->willQoS());
-	ui.cbWillTopic->setCurrentText(fds->willTopic());
-	ui.chbWillRetain->setChecked(fds->willRetain());
+	ui.leWillOwnMessage->setText(fmc->willOwnMessage());
+	ui.leWillUpdateInterval->setText(QString::number(fmc->willTimeInterval()));
+	ui.cbWillUpdate->setCurrentIndex(static_cast<int>(fmc->willUpdateType()) );
+	fmc->startWillTimer();
+	ui.cbWillMessageType->setCurrentIndex(static_cast<int>(fmc->willMessageType()) );
+	ui.cbWillQoS->setCurrentIndex(fmc->willQoS());
+	ui.cbWillTopic->setCurrentText(fmc->willTopic());
+	ui.chbWillRetain->setChecked(fmc->willRetain());
 
-	QVector<bool> statitics = fds->willStatistics();
+	QVector<bool> statitics = fmc->willStatistics();
 	for(int i = 0; i < statitics.count(); ++i) {
 		QListWidgetItem* item = ui.lwWillStatistics->item(static_cast<int>(i));
 		if(statitics[i]) {
@@ -244,10 +255,10 @@ void LiveDataDock::setMQTTClients(const QList<MQTTClient *> &clients) {
 	}
 
 	//when chbWill's isChecked corresponds with source's m_mqttWillUse it doesn't emit state changed signal, we have to force it
-	bool checked = fds->MQTTWillUse();
+	bool checked = fmc->MQTTWillUse();
 	ui.chbWill->setChecked(!checked);
 	ui.chbWill->setChecked(checked);
-	m_previousMQTTClient = fds;
+	m_previousMQTTClient = fmc;
 }
 #endif
 
@@ -408,7 +419,8 @@ void LiveDataDock::updateTypeChanged(int idx) {
 	}
 #ifdef HAVE_MQTT
 	else if (!m_mqttClients.isEmpty()) {
-		MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
+		DEBUG("LiveDataDock::updateTypeChanged()");
+		const MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
 
 		if (type == MQTTClient::UpdateType::TimeInterval) {
 			ui.lUpdateInterval->show();
@@ -565,7 +577,8 @@ void LiveDataDock::pauseContinueReading() {
  * \param state the state of the checbox
  */
 void LiveDataDock::useWillMessage(int state) {
-	qDebug()<<"will checkstate changed" <<state;
+	qDebug()<<"Use will message: " <<state;
+
 	if(state == Qt::Checked) {
 		for (auto* source: m_mqttClients)
 			source->setMQTTWillUse(true);
@@ -589,15 +602,13 @@ void LiveDataDock::useWillMessage(int state) {
 			ui.lwWillStatistics->show();
 		}
 
-
 		if(ui.cbWillUpdate->currentIndex() == static_cast<int>(MQTTClient::WillUpdateType::TimePeriod)) {
 			ui.leWillUpdateInterval->show();
 			ui.lWillUpdateInterval->show();
 		}
 		else if (ui.cbWillUpdate->currentIndex() == static_cast<int>(MQTTClient::WillUpdateType::OnClick))
 			ui.bWillUpdateNow->show();
-	}
-	else if (state == Qt::Unchecked) {
+	} else if (state == Qt::Unchecked) {
 		for (auto* source: m_mqttClients)
 			source->setMQTTWillUse(false);
 
@@ -654,10 +665,10 @@ void LiveDataDock::willRetainChanged(int state) {
  * \param topic the current text of cbWillTopic
  */
 void LiveDataDock::willTopicChanged(const QString& topic) {
-	qDebug()<<"topic  changed" << topic;
 	for (auto* source: m_mqttClients) {
 		if(source->willTopic() != topic)
 			source->clearLastMessage();
+
 		source->setWillTopic(topic);
 	}
 }
@@ -710,19 +721,16 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
  */
 void LiveDataDock::updateWillTopics() {
 	ui.cbWillTopic->clear();
-	const MQTTClient* const fds = m_mqttClients.at(0);
-	QVector<QString> topics = fds->topicNames();
+	const MQTTClient* const fmc = m_mqttClients.at(0);
+	QVector<QString> topics = fmc->topicNames();
 
 	if(!topics.isEmpty()) {
 		for(int i = 0; i < topics.count(); i++) {
-			qDebug()<<"Live Data Dock: updating will topics: "<<topics[i];
 			ui.cbWillTopic->addItem(topics[i]);
 		}
-		if(!fds->willTopic().isEmpty())
-			ui.cbWillTopic->setCurrentText(fds->willTopic());
+		if(!fmc->willTopic().isEmpty())
+			ui.cbWillTopic->setCurrentText(fmc->willTopic());
 	}
-	else
-		qDebug()<<"Topic Vector Empty";
 }
 
 /*!
@@ -733,8 +741,6 @@ void LiveDataDock::updateWillTopics() {
  * \param type the selected will update type
  */
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
-	qDebug()<<"Update type changed" << updateType;
-
 	for (auto* source: m_mqttClients)
 		source->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
@@ -747,8 +753,7 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
 			source->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
 			source->startWillTimer();
 		}
-	}
-	else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
+	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
 		ui.bWillUpdateNow->show();
 		ui.leWillUpdateInterval->hide();
 		ui.lWillUpdateInterval->hide();
@@ -757,7 +762,6 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
 		for (auto* source: m_mqttClients)
 			source->stopWillTimer();
 	}
-
 }
 
 /*!
@@ -776,7 +780,6 @@ void LiveDataDock::willUpdateNow() {
  * \param interval the new will update interval
  */
 void LiveDataDock::willUpdateIntervalChanged(const QString& interval) {
-	qDebug()<<"Update interval changed " <<interval;
 	for (auto* source: m_mqttClients) {
 		source->setWillTimeInterval(interval.toInt());
 		source->startWillTimer();
@@ -830,6 +833,7 @@ void LiveDataDock::onMQTTConnect() {
  * if the message arrived from a new topic, the topic is put in twTopics
  */
 void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
+	Q_UNUSED(message)
 	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
 		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
 		addTopicToTree(topic.name());
@@ -858,37 +862,30 @@ void LiveDataDock::addSubscription() {
 		//check if the subscription already exists
 		QList<QTreeWidgetItem *> topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
 		if(topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
-
-			qDebug() << name;
+			qDebug() << "LiveDataDock: start to add new subscription: " << name;
 			bool foundSuperior = false;
 
 			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
-
 				//if the new subscriptions contains an already existing one, we remove the inferior one
 				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
 						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
-					qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
 					ui.twSubscriptions->topLevelItem(i)->takeChildren();
 					ui.twSubscriptions->takeTopLevelItem(i);
 					i--;
 					continue;
 				}
-				qDebug()<<"checked inferior";
 
 				//if there is a subscription containing the new one we set foundSuperior true
 				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
 						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 					foundSuperior = true;
-					qDebug()<<"2"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					qDebug()<<"Can't add "<<name<<" because found usperior: "<< ui.twSubscriptions->topLevelItem(i)->text(0);
 					break;
 				}
-				qDebug()<<"checked superior";
 			}
 
 			//if there wasn't a superior subscription we can subscribe to the new topic
 			if(!foundSuperior) {
-				qDebug()<<"Adding new topic";
 				QStringList toplevelName;
 				toplevelName.push_back(name);
 				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
@@ -949,6 +946,7 @@ void LiveDataDock::addSubscription() {
 									for (auto* source: m_mqttClients) {
 										source->removeMQTTSubscription(unsubscribeItem->text(0));
 									}
+
 									ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 								}
 							}
@@ -977,6 +975,8 @@ void LiveDataDock::removeSubscription() {
 	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
 
 	if(unsubscribeItem != nullptr) {
+		qDebug() << "LiveDataDock: unsubscribe from " << unsubscribeItem->text(0);
+
 		//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
 		//we can simply unsubscribe from it
 		if(unsubscribeItem->parent() == nullptr) {
@@ -1067,7 +1067,6 @@ void LiveDataDock::updateSubscriptionCompleter() {
  * enables updating the completer for le
  */
 void LiveDataDock::topicTimeout() {
-	qDebug()<<"lejart ido";
 	m_searching = false;
 	m_searchTimer->stop();
 }
@@ -1078,11 +1077,11 @@ void LiveDataDock::topicTimeout() {
  * Fills twSubscriptions with the subscriptions of the MQTTClient
  */
 void LiveDataDock::fillSubscriptions() {
-	const MQTTClient* const fds = m_mqttClients.at(0);
+	const MQTTClient* const fmc = m_mqttClients.at(0);
 
 	ui.twSubscriptions->clear();
 
-	QVector<QString> subscriptions = fds->MQTTSubscriptions();
+	QVector<QString> subscriptions = fmc->MQTTSubscriptions();
 	for (int i = 0; i < subscriptions.count(); ++i) {
 		QStringList name;
 		name.append(subscriptions[i]);
@@ -1096,7 +1095,6 @@ void LiveDataDock::fillSubscriptions() {
 		}
 
 		if(!found) {
-			qDebug()<<"add:" << subscriptions[i];
 			//Add the subscription to the tree widget
 			QTreeWidgetItem* newItem = new QTreeWidgetItem(name);
 			ui.twSubscriptions->addTopLevelItem(newItem);
@@ -1107,7 +1105,6 @@ void LiveDataDock::fillSubscriptions() {
 			QTreeWidgetItem* topic = nullptr;
 			for(int j = 0; j < ui.twTopics->topLevelItemCount(); ++j) {
 				if(ui.twTopics->topLevelItem(j)->text(0) == name[0]) {
-					qDebug()<<"found top level topic: "<<name[0]<<" "<<j;
 					topic = ui.twTopics->topLevelItem(j);
 					break;
 				}
@@ -1115,12 +1112,9 @@ void LiveDataDock::fillSubscriptions() {
 
 			//restore the children of the subscription
 			if(topic != nullptr && topic->childCount() > 0) {
-				qDebug()<<"restoring Children";
-
 				restoreSubscriptionChildren(topic, newItem, name, 1);
 			}
 		}
-
 	}
 	m_searching = false;
 }
@@ -1150,13 +1144,11 @@ bool LiveDataDock::checkTopicContains(const QString &superior, const QString &in
 				if(superiorList.at(i) != inferiorList.at(i)) {
 					if((superiorList.at(i) != "+") &&
 							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
-						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
 						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 						//then superior can't contain inferior
 						ok = false;
 						break;
 					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
-						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
 						//if the two topics differ at the last level
 						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
 						//then superior can't contain inferior
@@ -1181,7 +1173,6 @@ void LiveDataDock::scrollToTopicTreeItem(const QString& rootName) {
 	m_searching = true;
 	m_searchTimer->start();
 
-	qDebug()<<rootName;
 	int topItemIdx = -1;
 	for(int i = 0; i< ui.twTopics->topLevelItemCount(); ++i)
 		if(ui.twTopics->topLevelItem(i)->text(0) == rootName) {
@@ -1201,9 +1192,6 @@ void LiveDataDock::scrollToTopicTreeItem(const QString& rootName) {
  * \param rootName the current text of leSubscriptions
  */
 void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
-	m_searching = true;
-	m_searchTimer->start();
-
 	int topItemIdx = -1;
 	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
 		if(ui.twSubscriptions->topLevelItem(i)->text(0) == rootName) {
@@ -1223,8 +1211,7 @@ void LiveDataDock::scrollToSubsriptionTreeItem(const QString& rootName) {
  * \param second the name of a topic
  * \return The name of the common topic, if it exists, otherwise ""
  */
-QString LiveDataDock::checkCommonLevel(const QString& first, const QString& second) {
-	qDebug()<<first<<"  "<<second;
+QString LiveDataDock::checkCommonLevel(const QString& first, const QString& second) {	
 	QStringList firstList = first.split('/', QString::SkipEmptyParts);
 	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
 	QString commonTopic = "";
@@ -1271,7 +1258,7 @@ QString LiveDataDock::checkCommonLevel(const QString& first, const QString& seco
 			}
 		}
 	}
-	qDebug() << "Common topic: "<<commonTopic;
+	qDebug() << "Common topic for " << first << " and "<<second << " is: " << commonTopic;
 	return commonTopic;
 }
 
@@ -1325,39 +1312,41 @@ void LiveDataDock::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetI
  * \param level the level's number which is being investigated
  */
 void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
-	if(list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
-		for(int i = 0; i < topic->childCount(); ++i) {
-			//if the current level isn't + or # wildcard we recursively continue with the next level
-			if(topic->child(i)->text(0) == list[level]) {
-				restoreSubscriptionChildren(topic->child(i), subscription, list, level + 1);
-				break;
+	if(level < list.size()) {
+		if((level < list.size() - 1) && (list[level] != "+") && (list[level] != "#")) {
+			for(int i = 0; i < topic->childCount(); ++i) {
+				//if the current level isn't + or # wildcard we recursively continue with the next level
+				if(topic->child(i)->text(0) == list[level]) {
+					restoreSubscriptionChildren(topic->child(i), subscription, list, level + 1);
+					break;
+				}
 			}
-		}
-	} else if (list[level] == "+") {
-		for(int i = 0; i < topic->childCount(); ++i) {
-			//determine the name of the topic, contained by the subscription
-			QString name;
-			name.append(topic->child(i)->text(0));
-			for(int j = level + 1; j < list.size(); ++j) {
-				name.append("/" + list[j]);
-			}
-			QTreeWidgetItem* temp = topic->child(i);
-			while(temp->parent() != nullptr) {
-				temp = temp->parent();
-				name.prepend(temp->text(0) + "/");
-			}
+		} else if (list[level] == "+") {
+			for(int i = 0; i < topic->childCount(); ++i) {
+				//determine the name of the topic, contained by the subscription
+				QString name;
+				name.append(topic->child(i)->text(0));
+				for(int j = level + 1; j < list.size(); ++j) {
+					name.append("/" + list[j]);
+				}
+				QTreeWidgetItem* temp = topic->child(i);
+				while(temp->parent() != nullptr) {
+					temp = temp->parent();
+					name.prepend(temp->text(0) + "/");
+				}
 
-			//Add the topic as child of the subscription
-			QStringList nameList;
-			nameList.append(name);
-			QTreeWidgetItem* newItem = new QTreeWidgetItem(nameList);
-			subscription->addChild(newItem);
-			//Continue adding children recursively to the new item
-			restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
+				//Add the topic as child of the subscription
+				QStringList nameList;
+				nameList.append(name);
+				QTreeWidgetItem* newItem = new QTreeWidgetItem(nameList);
+				subscription->addChild(newItem);
+				//Continue adding children recursively to the new item
+				restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
+			}
+		} else if (list[level] == "#") {
+			//add the children of the # wildcard containing subscription
+			addSubscriptionChildren(topic, subscription);
 		}
-	} else if (list[level] == "#") {
-		//add the children of the # wildcard containing subscription
-		addSubscriptionChildren(topic, subscription);
 	}
 }
 
@@ -1369,7 +1358,6 @@ void LiveDataDock::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
  * \return The index of the unequal level, if there is a common topic, otherwise -1
  */
 int LiveDataDock::commonLevelIndex(const QString& first, const QString& second) {
-	qDebug()<<first<<"  "<<second;
 	QStringList firstList = first.split('/', QString::SkipEmptyParts);
 	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
 	QString commonTopic = "";
@@ -1527,18 +1515,15 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 		//compare the subscriptions present in the TreeWidget
 		for(int i = 0; i < ui.twSubscriptions->topLevelItemCount() - 1; ++i) {
 			for(int j = i + 1; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
-				qDebug()<<ui.twSubscriptions->topLevelItem(i)->text(0)<<"  "<<ui.twSubscriptions->topLevelItem(j)->text(0);
 				QString commonTopic = checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), ui.twSubscriptions->topLevelItem(j)->text(0));
 
 				//if there is a common topic for the 2 compared topics, we add them to the map (using the common topic as key)
 				if(!commonTopic.isEmpty()) {
 					if(!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(i)->text(0))) {
-						qDebug()<<commonTopic<<":  "<<ui.twSubscriptions->topLevelItem(i)->text(0);
 						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
 					}
 
 					if(!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(j)->text(0))) {
-						qDebug()<<commonTopic<<":  "<<ui.twSubscriptions->topLevelItem(i)->text(0);
 						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(j)->text(0));
 					}
 				}
@@ -1546,7 +1531,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 		}
 
 		if(!equalTopicsMap.isEmpty()) {
-			qDebug()<<"Equal topics not empty";
+			qDebug()<<"Manage equal topics";
 
 			QVector<QString> commonTopics;
 			QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
@@ -1554,11 +1539,10 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 			//check for every map entry, if the found topics can be merged or not
 			while(topics.hasNext()) {
 				topics.next();
-				qDebug()<<"Checking: " << topics.key();
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
 				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
-				QTreeWidgetItem* currentItem;
+				QTreeWidgetItem* currentItem = nullptr;
 
 				//search the corresponding item to the common topics first level(root)
 				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
@@ -1573,9 +1557,7 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 				if(childCount > 0) {
 					//if the number of topics found and the calculated number of topics is equal, the topics can be merged
 					if(topics.value().size() == childCount) {
-						for(int k = 0; k < topics.value().size(); ++k)
-							qDebug()<<topics.value().at(k);
-
+						qDebug() << "Found common topic to manage: " << topics.key();
 						foundEqual = true;
 						commonTopics.push_back(topics.key());
 					}
@@ -1593,9 +1575,9 @@ void LiveDataDock::manageCommonLevelSubscriptions() {
 						highestLevel = level;
 					}
 				}
+				qDebug() << "Start to manage: " << commonTopics[topicIdx];
 				equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
 
-				qDebug()<<"Adding common topic";
 				//Add the common topic ("merging")
 				QString commonTopic;
 				commonTopic = checkCommonLevel(equalTopics.first(), equalTopics.last());
@@ -1710,13 +1692,13 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
 		QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
 		if (rootName == subscriptionName[0]) {
-			qDebug()<<topicName;
 			fillSubscriptions();
 			break;
 		}
 	}
 
 	//signals that a newTopic was added, in order to fill the completer of leTopics
+	//we have to pass the whole topic name, not just the root name, for testing purposes
 	emit newTopic(topicName);
 }
 
@@ -1725,6 +1707,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
  * if the message arrived from a new topic, the topic is put in m_addedTopics
  */
 void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
+	Q_UNUSED(message)
 	if(!m_addedTopics[m_mqttClients.first()->clientHostName()].contains(topic.name())) {
 		m_addedTopics[m_mqttClients.first()->clientHostName()].push_back(topic.name());
 	}

@@ -28,18 +28,21 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTERRORWIDGET_H
 #define MQTTERRORWIDGET_H
 
+#include <QWidget>
+
 #ifdef HAVE_MQTT
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicName>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QString>
-#include <QWidget>
 
 #include "ui_mqtterrorwidget.h"
 #include "backend/datasources/MQTTClient.h"
+#endif
 
 class MQTTErrorWidget : public QWidget {
+#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -52,7 +55,7 @@ private:
 
 private slots:
 	void tryToReconnect();
-};
 #endif
+};
 
 #endif // MQTTERRORWIDGET_H
