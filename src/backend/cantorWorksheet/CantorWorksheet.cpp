@@ -75,7 +75,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		if(content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
 
-		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SLOT(sessionChanged()));
+		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		//Cantor's session
 		m_session = m_worksheetAccess->session();
@@ -138,8 +138,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 	project()->setChanged(true);
 }
 
-void CantorWorksheet::sessionChanged() {
-	//TODO: signal is never emitted in Cantor
+void CantorWorksheet::modified() {
 	project()->setChanged(true);
 }
 

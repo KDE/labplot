@@ -81,7 +81,7 @@ private slots:
 	void rowsInserted(const QModelIndex & parent, int first, int last);
 	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
 	void modelReset();
-	void sessionChanged();
+	void modified();
 
 signals:
 	void requestProjectContextMenu(QMenu*);
