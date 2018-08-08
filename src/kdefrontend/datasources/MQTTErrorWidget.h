@@ -1,9 +1,9 @@
 /***************************************************************************
-File                 : FITSHeaderEditNewKeywordDialog.h
+File                 : MQTTErrorWidget.h
 Project              : LabPlot
-Description          : Widget for adding new keyword in the FITS edit widget
+Description          : Widget for informing about an MQTT error, and for trying to solve it
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -24,34 +24,35 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef FITSHEADEREDITNEWKEYWORDDIALOG_H
-#define FITSHEADEREDITNEWKEYWORDDIALOG_H
 
-#include "backend/datasources/filters/FITSFilter.h"
-#include "ui_fitsheadereditnewkeywordwidget.h"
-#include <QAbstractButton>
+#ifndef MQTTERRORWIDGET_H
+#define MQTTERRORWIDGET_H
 
-#include <QDialog>
+#ifdef HAVE_MQTT
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/QMqttSubscription>
+#include <QtMqtt/QMqttTopicName>
+#include <QtMqtt/QMqttTopicFilter>
+#include <QString>
+#include <QWidget>
 
-class QPushButton;
-class QAbstractButton;
-class FITSHeaderEditNewKeywordDialog : public QDialog {
+#include "ui_mqtterrorwidget.h"
+#include "backend/datasources/MQTTClient.h"
+
+class MQTTErrorWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
-	FITSFilter::Keyword newKeyword() const;
+	MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, MQTTClient* client = 0, QWidget* parent = 0);
 
 private:
-	QPushButton* m_okButton;
-	QPushButton* m_cancelButton;
-
-	Ui::FITSHeaderEditNewKeywordDialog ui;
-	FITSFilter::Keyword m_newKeyword;
-	int okClicked();
+	Ui::MQTTErrorWidget ui;
+	QMqttClient::ClientError m_error;
+	MQTTClient* m_client ;
 
 private slots:
-	void slotButtonClicked(QAbstractButton *button);
+	void tryToReconnect();
 };
+#endif
 
-#endif // FITSHEADEREDITNEWKEYWORDDIALOG_H
+#endif // MQTTERRORWIDGET_H

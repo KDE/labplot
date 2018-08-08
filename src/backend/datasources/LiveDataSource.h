@@ -36,6 +36,9 @@
 #include <QtNetwork/QLocalSocket>
 #include <QSerialPort>
 #include <QTimer>
+#include <QVector>
+
+#include <QMap>
 
 class QString;
 class AbstractFileFilter;
@@ -57,7 +60,8 @@ public:
 		NetworkTcpSocket,	// TCP socket
 		NetworkUdpSocket,	// UDP socket
 		LocalSocket,		// local socket
-		SerialPort		// serial port
+		SerialPort,		// serial port
+		MQTT
 	};
 
 	enum UpdateType {
@@ -135,7 +139,7 @@ public:
 
 	void updateNow();
 	void pauseReading();
-	void continueReading();
+	void continueReading();    
 
 	void setFilter(AbstractFileFilter*);
 	AbstractFileFilter* filter() const;
@@ -205,6 +209,9 @@ private slots:
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
 	void serialPortError(QSerialPort::SerialPortError);
+
+signals:
+
 };
 
 #endif

@@ -1,9 +1,10 @@
 /***************************************************************************
-File                 : FITSHeaderEditNewKeywordDialog.h
-Project              : LabPlot
-Description          : Widget for adding new keyword in the FITS edit widget
+File		: MQTTSubscription.h
+Project		: LabPlot
+Description	: Represents a subscription made in MQTTClient
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+
 ***************************************************************************/
 
 /***************************************************************************
@@ -24,34 +25,44 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef FITSHEADEREDITNEWKEYWORDDIALOG_H
-#define FITSHEADEREDITNEWKEYWORDDIALOG_H
 
-#include "backend/datasources/filters/FITSFilter.h"
-#include "ui_fitsheadereditnewkeywordwidget.h"
-#include <QAbstractButton>
+#ifndef MQTTSUBSCRIPTION_H
+#define MQTTSUBSCRIPTION_H
 
-#include <QDialog>
+#include <QVector>
+#include <QString>
 
-class QPushButton;
-class QAbstractButton;
-class FITSHeaderEditNewKeywordDialog : public QDialog {
+#include "backend/core/Folder.h"
+#include "backend/datasources/MQTTTopic.h"
+
+class MQTTSubscription : public Folder{
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
-	FITSFilter::Keyword newKeyword() const;
+	MQTTSubscription(const QString& name);
+	~MQTTSubscription() override;
+
+	void setMQTTClient(MQTTClient *client);
+	QString subscriptionName() const;
+	void addTopic(const QString&);
+	const QVector<MQTTTopic*> topics();
+	MQTTClient* mqttClient() const;
+	void messageArrived(const QString&, const QString&);
+
+	QIcon icon() const override;
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
 
 private:
-	QPushButton* m_okButton;
-	QPushButton* m_cancelButton;
+	QString m_subscriptionName;
+	MQTTClient* m_MQTTClient;
 
-	Ui::FITSHeaderEditNewKeywordDialog ui;
-	FITSFilter::Keyword m_newKeyword;
-	int okClicked();
+public slots:
 
 private slots:
-	void slotButtonClicked(QAbstractButton *button);
+
+signals:
+	void loaded(const QString &);
 };
 
-#endif // FITSHEADEREDITNEWKEYWORDDIALOG_H
+#endif // MQTTSUBSCRIPTION_H

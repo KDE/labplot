@@ -46,6 +46,11 @@
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#include "backend/datasources/MQTTSubscription.h"
+#include "backend/datasources/MQTTTopic.h"
+#endif
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"
@@ -535,8 +540,76 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->notesDock->setNotesList(list);
 
 		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->notesDock);
-	} else if (className == "LiveDataSource") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
+	}
+#ifdef HAVE_MQTT
+	else if (className == "MQTTClient") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
+
+		if (!m_mainWindow->m_liveDataDock) {
+			qDebug()<<"new live data dock";
+			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
+		}
+
+		QList<MQTTClient*> list;
+		for (auto* aspect: selectedAspects)
+			list << qobject_cast<MQTTClient*>(aspect);
+		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
+	} else if (className == "MQTTSubscription") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
+
+		if (!m_mainWindow->m_liveDataDock) {
+			qDebug()<<"new live data dock";
+			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
+		}
+
+		QList<MQTTClient*> list;
+		for (auto* aspect: selectedAspects) {
+			QString clientName = qobject_cast<MQTTSubscription*>(aspect)->mqttClient()->name();
+			bool found = false;
+			for (int i = 0; i < list.size(); ++i) {
+				if(list.at(i)->name() == clientName) {
+					found = true;
+					break;
+				}
+			}
+			if(!found)
+				list << qobject_cast<MQTTSubscription*>(aspect)->mqttClient();
+		}
+		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
+	} else if (className == "MQTTTopic") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("MQTT Data Source"));
+
+		if (!m_mainWindow->m_liveDataDock) {
+			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);
+			m_mainWindow->stackedWidget->addWidget(m_mainWindow->m_liveDataDock);
+		}
+
+		QList<MQTTClient*> list;
+		for (auto* aspect: selectedAspects) {
+			QString clientName = qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient())->name();
+			bool found = false;
+			for (int i = 0; i < list.size(); ++i) {
+				if(list.at(i)->name() == clientName) {
+					found = true;
+					break;
+				}
+			}
+			if(!found)
+				list << qobject_cast<MQTTClient*>(qobject_cast<MQTTTopic*>(aspect)->mqttClient());
+		}
+		m_mainWindow->m_liveDataDock->setMQTTClients(list);
+
+		m_mainWindow->stackedWidget->setCurrentWidget(m_mainWindow->m_liveDataDock);
+	}
+#endif
+	else if (className == "LiveDataSource") {
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
 			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);

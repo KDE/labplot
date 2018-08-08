@@ -35,6 +35,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
@@ -111,6 +112,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -199,6 +201,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
+	${BACKEND_DIR}/datasources/MQTTClient.cpp
+	${BACKEND_DIR}/datasources/MQTTSubscription.cpp
+	${BACKEND_DIR}/datasources/MQTTTopic.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
@@ -343,12 +348,15 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 # static library
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+
 target_link_libraries( labplot2lib KF5::Archive KF5::Completion KF5::ConfigCore KF5::I18n KF5::IconThemes KF5::TextWidgets KF5::XmlGui Qt5::Svg Qt5::Core Qt5::Network Qt5::PrintSupport Qt5::Sql ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )
 ENDIF ()
-
+IF (Qt5Mqtt_FOUND)
+	target_link_libraries( labplot2lib Qt5::Mqtt )
+ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
 ENDIF ()

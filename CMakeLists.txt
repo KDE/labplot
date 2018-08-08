@@ -19,6 +19,7 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	SerialPort
 )
 
+
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
@@ -142,6 +143,7 @@ option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
+option(ENABLE_MQTT "Build with MQTT support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -252,6 +254,22 @@ ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED.")
 ENDIF ()
+
+### MQTT (optional) ###############################
+IF (ENABLE_MQTT)
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS	
+	Mqtt
+)
+IF (Qt5Mqtt_FOUND)
+	MESSAGE (STATUS "Found MQTT")
+	add_definitions (-DHAVE_MQTT)
+ELSE ()
+	MESSAGE (STATUS "MQTT Library not found.")
+ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "MQTT Library DISABLED.")
+ENDIF ()	
+
 
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
@@ -365,3 +383,4 @@ endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 feature_summary(WHAT ALL)
+

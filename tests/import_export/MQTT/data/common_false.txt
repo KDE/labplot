@@ -1,0 +1,6 @@
+home/bathroom/sensor/temperature home/bathroom/sensor/temperature/1
+home/bathroom/sensor/temperature home/bathroom/sensor/temperature
+home/bathroom/sensor/temperature home/bedroom/sensor/pressure
+home/+/sensor/temperature home/bedroom/sensor/pressure
+home/bathroom/+ home/bedroom/#
+home/bathroom/sensor/temperature guesthouse/bathroom/sensor/temperature

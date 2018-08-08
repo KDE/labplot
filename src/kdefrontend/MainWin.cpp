@@ -45,6 +45,10 @@
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
 
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
+
 #include "commonfrontend/core/PartMdiView.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -1827,9 +1831,36 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		LiveDataSource* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
-		dlg->importToLiveDataSource(dataSource, statusBar());
-		this->addAspectToProject(dataSource);
+		if(static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::MQTT) {
+#ifdef HAVE_MQTT
+			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
+			dlg->importToMQTT(mqttClient);
+
+			mqttClient->setName(mqttClient->clientHostName());
+			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::Recursive);
+
+			//doesn't make sense to have more MQTTClients connected to the same broker
+			bool found = false;
+			for(int i = 0; i < existingClients.size(); ++i) {
+				if(existingClients[i]->clientHostName() == mqttClient->clientHostName()) {
+					found = true;
+					break;
+				}
+			}
+
+			if(!found)
+				this->addAspectToProject(mqttClient);
+			else {
+				delete mqttClient;
+				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host name!");
+			}
+#endif
+		}
+		else {
+			LiveDataSource* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
+			dlg->importToLiveDataSource(dataSource, statusBar());
+			this->addAspectToProject(dataSource);
+		}
 	}
 	delete dlg;
 }
@@ -1838,6 +1869,15 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	const QModelIndex& index = m_projectExplorer->currentIndex();
 	if (index.isValid()) {
 		AbstractAspect* parent = static_cast<AbstractAspect*>(index.internalPointer());
+#ifdef HAVE_MQTT
+		//doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
+		QString className = parent->metaObject()->className();
+		MQTTClient* clientAncestor = parent->ancestor<MQTTClient>();
+		if(className == "MQTTClient")
+			parent = parent->parentAspect();
+		else if (clientAncestor != nullptr)
+			parent = clientAncestor->parentAspect();
+#endif
 		parent->folder()->addChild(aspect);
 	} else
 		m_project->addChild(aspect);

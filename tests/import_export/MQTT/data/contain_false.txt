@@ -1,0 +1,5 @@
+home/+/sensor/temperature home/bedroom/sensor/pressure
+home/+/# home/#
+home/bedroom/sensor/+ home/bedroom/sensor
+home home/bedroom
+home/bedroom/sensor/+ home/bedroom/sensor/#

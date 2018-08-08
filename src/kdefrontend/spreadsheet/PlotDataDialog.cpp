@@ -42,6 +42,10 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTTopic.h"
+#endif
+
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
@@ -348,6 +352,11 @@ void PlotDataDialog::plot() {
 	} else {
 		//add curves to a new plot(s) in a new worksheet
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
+#ifdef HAVE_MQTT
+		MQTTTopic* topic = qobject_cast<MQTTTopic*>(m_spreadsheet);
+		if(topic != 0)
+			parent = qobject_cast<AbstractAspect*>(m_spreadsheet->project());
+#endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
 		Worksheet* worksheet = new Worksheet(i18n("Plot data from %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);

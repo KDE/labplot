@@ -37,6 +37,8 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+
+
 #include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
@@ -85,6 +87,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(
 	m_device(nullptr) {
 
 	initActions();
+
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 }
 
@@ -283,8 +286,9 @@ int LiveDataSource::baudRate() const {
  * \param interval
  */
 void LiveDataSource::setUpdateInterval(int interval) {
-	m_updateInterval = interval;
-	m_updateTimer->start(m_updateInterval);
+	m_updateInterval = interval;	
+	if(!m_paused)
+		m_updateTimer->start(m_updateInterval);
 }
 
 int LiveDataSource::updateInterval() const {
@@ -548,6 +552,8 @@ void LiveDataSource::read() {
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
 			break;
+		case MQTT:
+			break;
 		}
 		m_prepared = true;
 	}
@@ -565,6 +571,7 @@ void LiveDataSource::read() {
 				bytes = dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 				m_bytesRead += bytes;
 			}
+
 			DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 
 			break;
@@ -613,6 +620,8 @@ void LiveDataSource::read() {
 		if (m_fileType == AbstractFileFilter::Ascii)
 			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
+	case MQTT:
+		break;	
 	}
 }
 
@@ -627,6 +636,7 @@ void LiveDataSource::readyRead() {
 
 	if (m_fileType == AbstractFileFilter::Ascii)
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+
 //TODO: not implemented yet
 //	else if (m_fileType == AbstractFileFilter::Binary)
 //		dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
@@ -804,6 +814,8 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		break;
 	case LocalSocket:
 		break;
+	case MQTT:
+		break;
 	default:
 		break;
 	}
@@ -933,6 +945,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
 					m_host = str;
+				break;
+			case MQTT:
 				break;
 			case FileOrPipe:
 				break;

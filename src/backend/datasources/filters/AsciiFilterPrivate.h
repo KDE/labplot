@@ -33,6 +33,9 @@
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
+class AbstractAspect;
+class Spreadsheet;
+class MQTTTopic;
 
 class AsciiFilterPrivate {
 
@@ -51,6 +54,16 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
+
+#ifdef HAVE_MQTT
+	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	AbstractColumn::ColumnMode MQTTColumnMode() const;
+	QString MQTTColumnStatistics(const MQTTTopic* ) const;
+	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
+	int prepareMQTTTopicToRead(const QString& message,  const QString& topic);
+	void setPreparedForMQTT(bool, MQTTTopic*topic, const QString&);
+	QString separator() const;
+#endif
 
 	const AsciiFilter* q;
 
@@ -71,6 +84,9 @@ public:
 	int endRow;
 	int startColumn;
 	int endColumn;
+	int mqttPreviewFirstEmptyColCount;
+
+    int isPrepared();
 
 private:
 	static const unsigned int m_dataTypeLines = 10;	// maximum lines to read for determining data types
@@ -78,6 +94,8 @@ private:
 	int m_actualStartRow;
 	int m_actualRows;
 	int m_actualCols;
+	int m_maxActualRows;
+	int m_lastRowNum;
 	int m_prepared;
 	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers

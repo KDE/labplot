@@ -41,6 +41,10 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
+#ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
+#endif
+
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
@@ -81,6 +85,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		setModel();
 
 	//Signals/Slots
+#ifdef HAVE_MQTT
+	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
+#endif
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -127,6 +135,10 @@ ImportFileDialog::~ImportFileDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+int ImportFileDialog::sourceType() const {
+	return static_cast<int>(m_importFileWidget->currentSourceType());
+}
+
 /*!
   triggers data import to the live data source \c source
 */
@@ -137,7 +149,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
-	connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+    connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -153,6 +165,19 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	statusBar->removeWidget(progressBar);
 	source->ready();
 }
+
+#ifdef HAVE_MQTT
+/*!
+  triggers data import to the MQTTClient \c client
+*/
+void ImportFileDialog::importToMQTT(MQTTClient* client) const{
+	m_importFileWidget->saveMQTTSettings(client);
+	client->read();
+	client->ready();
+
+}
+#endif
+
 /*!
   triggers data import to the currently selected data container
 */
@@ -463,6 +488,20 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
 		}
+    }
+	case LiveDataSource::SourceType::MQTT: {
+#ifdef HAVE_MQTT
+		const bool enable = m_importFileWidget->isMqttValid();
+		if (enable) {
+			okButton->setEnabled(true);
+			okButton->setToolTip(i18n("Close the dialog and import the data."));
+		}
+		else {
+			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made, or the file filter isn't Ascii."));
+		}
+#endif
+		break;
 	}
 	}
 }

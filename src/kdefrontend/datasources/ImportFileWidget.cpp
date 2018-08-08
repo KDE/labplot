@@ -5,7 +5,8 @@ Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
-Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 ***************************************************************************/
 
@@ -58,17 +59,32 @@ Copyright            : (C) 2017 Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
+#include <QJsonDocument>
 #include <QProcess>
 #include <QStandardItemModel>
 #include <QTableWidget>
 #include <QTcpSocket>
 #include <QTimer>
 #include <QUdpSocket>
+#include <QCheckBox>
+#include <QTreeWidgetItem>
+#include <QStringList>
 #include <QBuffer>
+
 
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
+
+
+#ifdef HAVE_MQTT
+#include "backend/core/Project.h"
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/QMqttSubscription>
+#include <QtMqtt/QMqttTopicFilter>
+#include <QtMqtt/QMqttMessage>
+#include <QMessageBox>
+#endif
 
 /*!
    \class ImportFileWidget
@@ -80,8 +96,21 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_fileName(fileName),
 	m_fileEmpty(false),
 	m_liveDataSource(liveDataSource),
+
+	#ifdef HAVE_MQTT
+	m_mqttReadyForPreview (false),
+	m_searching(false),
+	m_searchTimer(new QTimer(this)),
+	m_connectTimeoutTimer(new QTimer(this)),
+	m_client(new QMqttClient(this)),
+	#endif
 	m_suppressRefresh(false) {
 	ui.setupUi(this);
+
+#ifdef HAVE_MQTT
+	m_searchTimer->setInterval(10000);
+	m_connectTimeoutTimer->setInterval(5000);
+#endif
 
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
@@ -164,6 +193,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	QStandardItem* item4 = model->item(AbstractFileFilter::ROOT);
 	item4->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
+#ifndef HAVE_MQTT
+	// disable MQTT item
+	QStandardItem* item5 = model->item(LiveDataSource::MQTT);
+	item5->setFlags(item5->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+#endif
 
 	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
@@ -202,6 +236,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.sbUpdateInterval->hide();
 		ui.lUpdateInterval->hide();
+		#ifdef HAVE_MQTT
+			hideMQTT();
+		#endif
 	} else {
 		for (int i = 2; i < ui.swOptions->count(); ++i)
 			ui.swOptions->removeWidget(ui.swOptions->widget(i));
@@ -239,6 +276,37 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
+#ifdef HAVE_MQTT
+	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::idChecked);
+	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::authenticationChecked);
+	connect(ui.bConnect, &QPushButton::clicked, this, &ImportFileWidget::mqttConnection);
+	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
+	connect(ui.bUnsubscribe, &QPushButton::clicked, this,&ImportFileWidget::mqttUnsubscribe);
+	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
+	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setTopicCompleter);
+	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
+	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
+	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
+	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
+	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateTypeChanged);
+	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
+	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
+	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
+	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.lePassword, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leUsername, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leID, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+
+	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
+	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_BrowserStop));
+#endif
+
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
 
@@ -252,6 +320,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
+	hideMQTT();
 }
 
 void ImportFileWidget::loadSettings() {
@@ -294,6 +363,35 @@ void ImportFileWidget::loadSettings() {
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 
+#ifdef HAVE_MQTT
+	//MQTT related settings
+	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
+	ui.chbAuthentication->setChecked(conf.readEntry("mqttUseAuthentication").toInt());
+	ui.chbRetain->setChecked(conf.readEntry("mqttUseRetain").toInt());
+	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
+	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
+	ui.leID->setText(conf.readEntry("mqttId",""));
+	ui.chbWillRetain->setChecked(conf.readEntry("mqttWillRetain").toInt());
+	ui.cbWillUpdate->setCurrentIndex(conf.readEntry("mqttWillUpdateType").toInt());
+	ui.cbWillQoS->setCurrentIndex(conf.readEntry("mqttWillQoS").toInt());
+	ui.leWillOwnMessage->setText(conf.readEntry("mqttWillOwnMessage",""));
+	ui.leWillUpdateInterval->setText(conf.readEntry("mqttWillUpdateInterval",""));
+	QString willStatistics = conf.readEntry("mqttWillStatistics","");
+	QStringList statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
+	for(auto value : statisticsList) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(value.toInt());
+		item->setCheckState(Qt::Checked);
+	}
+	ui.cbWillMessageType->setCurrentIndex(conf.readEntry("mqttWillMessageType").toInt());
+	ui.chbWill->setChecked(conf.readEntry("mqttWillUse").toInt());
+
+	//chbWill is unchecked by deafult, so if false is loaded it doesn't emit state changed signal, we have to force it
+	if(!ui.chbWill->isChecked()) {
+		ui.chbWill->setChecked(true);
+		ui.chbWill->setChecked(false);
+	}
+#endif
+
 	m_suppressRefresh = false;
 	refreshPreview();
 }
@@ -323,6 +421,30 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+
+#ifdef HAVE_MQTT
+	//MQTT related settings
+	conf.writeEntry("mqttUsername", ui.leUsername->text());
+	conf.writeEntry("mqttPassword", ui.lePassword->text());
+	conf.writeEntry("mqttId", ui.leID->text());
+	conf.writeEntry("mqttWillMessageType", ui.cbWillMessageType->currentIndex());
+	conf.writeEntry("mqttWillUpdateType", ui.cbWillUpdate->currentIndex());
+	conf.writeEntry("mqttWillQoS", ui.cbWillQoS->currentIndex());
+	conf.writeEntry("mqttWillOwnMessage", ui.leWillOwnMessage->text());
+	conf.writeEntry("mqttWillUpdateInterval", ui.leWillUpdateInterval->text());
+	QString willStatistics;
+	for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(i);
+		if (item->checkState() == Qt::Checked)
+			willStatistics += QString::number(i)+"|";
+	}
+	conf.writeEntry("mqttWillStatistics", willStatistics);
+	conf.writeEntry("mqttWillRetain", static_cast<int>(ui.chbWillRetain->isChecked()));
+	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
+	conf.writeEntry("mqttUseId", static_cast<int>(ui.chbID->isChecked()));
+	conf.writeEntry("mqttUseAuthentication", static_cast<int>(ui.chbAuthentication->isChecked()));
+	conf.writeEntry("mqttUseRetain", static_cast<int>(ui.chbRetain->isChecked()));
+#endif
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
@@ -461,6 +583,61 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	}
 }
 
+#ifdef HAVE_MQTT
+/*!
+	saves the settings to the MQTTClient \c client.
+*/
+void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
+	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
+	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
+
+	client->setComment( ui.leFileName->text() );
+	client->setFilter(this->currentFileFilter());
+
+	client->setReadingType(readingType);
+
+	if (updateType == MQTTClient::UpdateType::TimeInterval)
+		client->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	client->setKeepNValues(ui.sbKeepNValues->value());
+
+	client->setUpdateType(updateType);
+
+	if (readingType != MQTTClient::ReadingType::TillEnd)
+		client->setSampleSize(ui.sbSampleSize->value());
+
+	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
+
+	client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
+	if(ui.chbAuthentication->isChecked())
+		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
+
+	client->setMQTTUseID(ui.chbID->isChecked());
+	if(ui.chbID->isChecked())
+		client->setMQTTClientId(m_client->clientId());
+
+	for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
+		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+	}
+
+	client->setMQTTRetain(ui.chbRetain->isChecked());
+	client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
+	client->setWillOwnMessage(ui.leWillOwnMessage->text());
+	client->setWillQoS(ui.cbWillQoS->currentIndex() );
+	client->setWillRetain(ui.chbWillRetain->isChecked());
+	client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
+	client->setWillTopic(ui.cbWillTopic->currentText());
+	client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
+	client->setMQTTWillUse(ui.chbWill->isChecked());
+
+	for(int i = 0; i < ui.lwWillStatistics->count(); ++i) {
+		QListWidgetItem* item = ui.lwWillStatistics->item(i);
+		if (item->checkState() == Qt::Checked)
+			client->addWillStatistics(static_cast<MQTTClient::WillStatistics> (i));
+	}
+}
+#endif
+
 /*!
 	returns the currently used file type.
 */
@@ -481,108 +658,108 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 	switch (fileType) {
 	case AbstractFileFilter::Ascii: {
-			DEBUG("	ASCII");
-//TODO			std::unique_ptr<AsciiFilter> filter(new AsciiFilter());
-			AsciiFilter* filter = new AsciiFilter();
+		DEBUG("	ASCII");
+		//TODO			std::unique_ptr<AsciiFilter> filter(new AsciiFilter());
+		AsciiFilter* filter = new AsciiFilter();
 
-			if (ui.cbFilter->currentIndex() == 0)     //"automatic"
-				filter->setAutoModeEnabled(true);
-			else if (ui.cbFilter->currentIndex() == 1) { //"custom"
-				filter->setAutoModeEnabled(false);
-				m_asciiOptionsWidget->applyFilterSettings(filter);
-			} else
-				filter->loadFilterSettings( ui.cbFilter->currentText() );
+		if (ui.cbFilter->currentIndex() == 0)     //"automatic"
+			filter->setAutoModeEnabled(true);
+		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+			filter->setAutoModeEnabled(false);
+			m_asciiOptionsWidget->applyFilterSettings(filter);
+		} else
+			filter->loadFilterSettings( ui.cbFilter->currentText() );
 
-			//save the data portion to import
-			filter->setStartRow( ui.sbStartRow->value());
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value());
-			filter->setEndColumn( ui.sbEndColumn->value());
+		//save the data portion to import
+		filter->setStartRow( ui.sbStartRow->value());
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value());
+		filter->setEndColumn( ui.sbEndColumn->value());
 
-			return filter;
-		}
+		return filter;
+	}
 	case AbstractFileFilter::Binary: {
-			BinaryFilter* filter = new BinaryFilter();
-			if ( ui.cbFilter->currentIndex() == 0 ) 	//"automatic"
-				filter->setAutoModeEnabled(true);
-			else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
-				filter->setAutoModeEnabled(false);
-				m_binaryOptionsWidget->applyFilterSettings(filter);
-			} else {
-				//TODO: load filter settings
-// 			filter->setFilterName( ui.cbFilter->currentText() );
-			}
-
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-
-			return filter;
+		BinaryFilter* filter = new BinaryFilter();
+		if ( ui.cbFilter->currentIndex() == 0 ) 	//"automatic"
+			filter->setAutoModeEnabled(true);
+		else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
+			filter->setAutoModeEnabled(false);
+			m_binaryOptionsWidget->applyFilterSettings(filter);
+		} else {
+			//TODO: load filter settings
+			// 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
+
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+
+		return filter;
+	}
 	case AbstractFileFilter::Image: {
-			ImageFilter* filter = new ImageFilter();
+		ImageFilter* filter = new ImageFilter();
 
-			filter->setImportFormat(m_imageOptionsWidget->currentFormat());
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value() );
-			filter->setEndColumn( ui.sbEndColumn->value() );
+		filter->setImportFormat(m_imageOptionsWidget->currentFormat());
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
 
-			return filter;
-		}
+		return filter;
+	}
 	case AbstractFileFilter::HDF5: {
-			HDF5Filter* filter = new HDF5Filter();
-			QStringList names = selectedHDF5Names();
-			if (!names.isEmpty())
-				filter->setCurrentDataSetName(names[0]);
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value() );
-			filter->setEndColumn( ui.sbEndColumn->value() );
+		HDF5Filter* filter = new HDF5Filter();
+		QStringList names = selectedHDF5Names();
+		if (!names.isEmpty())
+			filter->setCurrentDataSetName(names[0]);
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
 
-			return filter;
-		}
+		return filter;
+	}
 	case AbstractFileFilter::NETCDF: {
-			NetCDFFilter* filter = new NetCDFFilter();
+		NetCDFFilter* filter = new NetCDFFilter();
 
-			if (!selectedNetCDFNames().isEmpty())
-				filter->setCurrentVarName(selectedNetCDFNames()[0]);
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value() );
-			filter->setEndColumn( ui.sbEndColumn->value() );
+		if (!selectedNetCDFNames().isEmpty())
+			filter->setCurrentVarName(selectedNetCDFNames()[0]);
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
 
-			return filter;
-		}
+		return filter;
+	}
 	case AbstractFileFilter::FITS: {
-			FITSFilter* filter = new FITSFilter();
-			filter->setStartRow( ui.sbStartRow->value());
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value());
-			filter->setEndColumn( ui.sbEndColumn->value());
-			return filter;
-		}
+		FITSFilter* filter = new FITSFilter();
+		filter->setStartRow( ui.sbStartRow->value());
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value());
+		filter->setEndColumn( ui.sbEndColumn->value());
+		return filter;
+	}
 	case AbstractFileFilter::Json: {
-			JsonFilter* filter = new JsonFilter();
-			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+		JsonFilter* filter = new JsonFilter();
+		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
-			filter->setStartRow( ui.sbStartRow->value() );
-			filter->setEndRow( ui.sbEndRow->value() );
-			filter->setStartColumn( ui.sbStartColumn->value());
-			filter->setEndColumn( ui.sbEndColumn->value());
-			return filter;
-		}
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value());
+		filter->setEndColumn( ui.sbEndColumn->value());
+		return filter;
+	}
 	case AbstractFileFilter::ROOT: {
-			ROOTFilter* filter = new ROOTFilter();
-			QStringList names = selectedROOTNames();
-			if (!names.isEmpty())
-				filter->setCurrentHistogram(names.first());
+		ROOTFilter* filter = new ROOTFilter();
+		QStringList names = selectedROOTNames();
+		if (!names.isEmpty())
+			filter->setCurrentHistogram(names.first());
 
-			filter->setStartBin( m_rootOptionsWidget->startBin() );
-			filter->setEndBin( m_rootOptionsWidget->endBin() );
-			filter->setColumns( m_rootOptionsWidget->columns() );
+		filter->setStartBin( m_rootOptionsWidget->startBin() );
+		filter->setEndBin( m_rootOptionsWidget->endBin() );
+		filter->setColumns( m_rootOptionsWidget->columns() );
 
-			return filter;
-		}
+		return filter;
+	}
 	case AbstractFileFilter::NgspiceRawAscii: {
 			NgspiceRawAsciiFilter* filter = new NgspiceRawAsciiFilter();
 			filter->setStartRow( ui.sbStartRow->value() );
@@ -620,9 +797,9 @@ void ImportFileWidget::selectFile() {
 	ui.leFileName->setText(path);
 
 	//TODO: decide whether the selection of several files should be possible
-// 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
-// 	if (! filelist.isEmpty() )
-// 		ui.leFileName->setText(filelist.join(";"));
+	// 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
+	// 	if (! filelist.isEmpty() )
+	// 		ui.leFileName->setText(filelist.join(";"));
 }
 
 /************** SLOTS **************************************************************/
@@ -638,12 +815,671 @@ QString absolutePath(const QString& fileName)
 }
 
 /*!
+	hides the MQTT related items of the widget
+*/
+void ImportFileWidget::hideMQTT() {
+	ui.leID->hide();
+	ui.lMqttID->hide();
+	ui.lePassword->hide();
+	ui.lPassword->hide();
+	ui.leUsername->hide();
+	ui.lUsername->hide();
+	ui.cbQos->hide();
+	ui.lQos->hide();
+	ui.twTopics->hide();
+	ui.lTopicSearch->hide();
+	ui.leTopics->hide();
+	ui.twSubscriptions->hide();
+	ui.chbAuthentication->hide();
+	ui.chbID->hide();
+	ui.bSubscribe->hide();
+	ui.bUnsubscribe->hide();
+	ui.bConnect->hide();
+	ui.gbMqttWill->hide();
+	ui.chbWill->hide();
+	ui.chbWillRetain->hide();
+	ui.cbWillQoS->hide();
+	ui.cbWillMessageType->hide();
+	ui.cbWillTopic->hide();
+	ui.cbWillUpdate->hide();
+	ui.leWillOwnMessage->hide();
+	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+	ui.leWillUpdateInterval->hide();
+	ui.lWillMessageType->hide();
+	ui.lWillOwnMessage->hide();
+	ui.lWillQos->hide();
+	ui.lWillTopic->hide();
+	ui.lWillUpdate->hide();
+	ui.lWillUpdateInterval->hide();
+	ui.lwWillStatistics->hide();
+	ui.lWillStatistics->hide();
+}
+
+#ifdef HAVE_MQTT
+/*!
+ * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
+ * returns \c false otherwise.
+ */
+bool ImportFileWidget::isMqttValid(){
+	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+	bool subscribed = (ui.twSubscriptions->topLevelItemCount() > 0);
+	bool fileTypeOk = false;
+	if(this->currentFileType() == AbstractFileFilter::FileType::Ascii)
+		fileTypeOk = true;
+	return connected && subscribed && fileTypeOk;
+}
+
+/*!
+ *\brief Checks if a topic contains another one
+ *
+ * \param superior the name of a topic
+ * \param inferior the name of a topic
+ * \return	true if superior is equal to or contains(if superior contains wildcards) inferior,
+ *			false otherwise
+ */
+bool ImportFileWidget::checkTopicContains(const QString& superior, const QString& inferior) {
+	if (superior == inferior)
+		return true;
+	else {
+		if(superior.contains("/")) {
+			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
+
+			//a longer topic can't contain a shorter one
+			if(superiorList.size() > inferiorList.size())
+				return false;
+
+			bool ok = true;
+			for(int i = 0; i < superiorList.size(); ++i) {
+				if(superiorList.at(i) != inferiorList.at(i)) {
+					if((superiorList.at(i) != "+") &&
+							!(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
+						//then superior can't contain inferior
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						ok = false;
+						break;
+					} else if(i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#") ) {
+						qDebug() <<superiorList.at(i)<<"  "<<inferiorList.at(i);
+						//if the two topics differ at the last level
+						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
+						//then superior can't contain inferior
+						ok = false;
+						break;
+					}
+				}
+			}
+			return ok;
+		}
+		return false;
+	}
+}
+
+/*!
+ *\brief Returns the "+" wildcard containing topic name, which includes the given topic names
+ *
+ * \param first the name of a topic
+ * \param second the name of a topic
+ * \return The name of the common topic, if it exists, otherwise ""
+ */
+QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/', QString::SkipEmptyParts);
+	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QString commonTopic = "";
+
+	if(!firstList.isEmpty()) {
+		//the two topics have to be the same size and can't be identic
+		if(firstList.size() == secondtList.size() && (first != second))	{
+
+			//the index where they differ
+			int differIndex = -1;
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(firstList.at(i) != secondtList.at(i)) {
+					differIndex = i;
+					break;
+				}
+			}
+
+			//they can differ at only one level
+			bool differ = false;
+			if(differIndex > 0) {
+				for(int j = differIndex + 1; j < firstList.size(); ++j) {
+					if(firstList.at(j) != secondtList.at(j)) {
+						differ = true;
+						break;
+					}
+				}
+			} else
+				differ = true;
+
+			if(!differ)	{
+				for(int i = 0; i < firstList.size(); ++i) {
+					if(i != differIndex) {
+						commonTopic.append(firstList.at(i));
+					} else {
+						//we put "+" wildcard at the level where they differ
+						commonTopic.append("+");
+					}
+
+					if(i != firstList.size() - 1)
+						commonTopic.append("/");
+				}
+			}
+		}
+	}
+
+	qDebug() << "Common topic: "<<commonTopic;
+	return commonTopic;
+}
+
+/*!
+ *\brief Returns the index of level where the two topic names differ, if there is a common topic for them
+ *
+ * \param first the name of a topic
+ * \param second the name of a topic
+ * \return The index of the unequal level, if there is a common topic, otherwise -1
+ */
+int ImportFileWidget::commonLevelIndex(const QString& first, const QString& second) {
+	qDebug()<<first<<"  "<<second;
+	QStringList firstList = first.split('/', QString::SkipEmptyParts);
+	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QString commonTopic = "";
+	int differIndex = -1;
+
+	if(!firstList.isEmpty()) {
+		//the two topics have to be the same size and can't be identic
+		if(firstList.size() == secondtList.size() && (first != second))	{
+
+			//the index where they differ
+			for(int i = 0; i < firstList.size(); ++i) {
+				if(firstList.at(i) != secondtList.at(i)) {
+					differIndex = i;
+					break;
+				}
+			}
+
+			//they can differ at only one level
+			bool differ = false;
+			if(differIndex > 0) {
+				for(int j = differIndex + 1; j < firstList.size(); ++j) {
+					if(firstList.at(j) != secondtList.at(j)) {
+						differ = true;
+						break;
+					}
+				}
+			}
+			else
+				differ = true;
+
+			if(!differ)
+			{
+				for(int i = 0; i < firstList.size(); ++i) {
+					if(i != differIndex)
+						commonTopic.append(firstList.at(i));
+					else
+						commonTopic.append("+");
+
+					if(i != firstList.size() - 1)
+						commonTopic.append("/");
+				}
+			}
+		}
+	}
+
+	qDebug() << "Common topic: "<<commonTopic;
+	qDebug() << "differ Index: "<<differIndex;
+	//if there is a common topic we return the differIndex
+	if(!commonTopic.isEmpty())
+		return differIndex;
+	else
+		return -1;
+}
+
+/*!
+ *\brief Unsubscribes from the given topic, and removes any data connected to it
+ *
+ * \param topicName the name of a topic we want to unsubscribe from
+ */
+void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
+	if(!topicName.isEmpty()) {
+		QMqttTopicFilter filter{topicName};
+		m_client->unsubscribe(filter);
+
+		qDebug()<<"unsubscribe occured";
+
+		for(int i = 0; i< m_mqttSubscriptions.count(); ++i)
+			if(m_mqttSubscriptions[i]->topic().filter() == topicName) {
+				m_mqttSubscriptions.remove(i);
+				break;
+			}
+
+		m_mqttReadyForPreview = false;
+
+		QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+		while(i.hasNext()) {
+			i.next();
+			if(checkTopicContains(topicName, i.key().name())) {
+				m_messageArrived.remove(i.key());
+			}
+		}
+
+		QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+		while(j.hasNext()) {
+			j.next();
+			if(checkTopicContains(topicName, j.key().name())) {
+				m_lastMessage.remove(j.key());
+			}
+		}
+
+		for(int row = 0; row<ui.twSubscriptions->topLevelItemCount(); row++)  {
+			if(ui.twSubscriptions->topLevelItem(row)->text(0) == topicName) {
+				ui.twSubscriptions->topLevelItem(row)->takeChildren();
+				ui.twSubscriptions->takeTopLevelItem(row);
+			}
+		}
+
+		for(int i = 0; i < m_subscribedTopicNames.size(); ++i) {
+			if(checkTopicContains(topicName, m_subscribedTopicNames[i])) {
+				m_subscribedTopicNames.remove(i);
+				i--;
+			}
+		}
+
+		for(int item = 0; item < ui.cbWillTopic->count(); ++item) {
+			if(checkTopicContains(topicName, ui.cbWillTopic->itemText(item))) {
+				ui.cbWillTopic->removeItem(item);
+				item--;
+			}
+		}
+
+		//signals that there was a change among the subscribed topics
+		emit subscriptionsChanged();
+		refreshPreview();
+	}
+}
+
+/*!
+ *\brief Adds to a # wildcard containing topic, every topic present in twTopics that the former topic contains
+ *
+ * \param topic pointer to the TreeWidgetItem which was selected before subscribing
+ * \param subscription pointer to the TreeWidgetItem which represents the new subscirption,
+ *		  we add all of the children to this item
+ */
+void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription) {
+	//if the topic doesn't have any children we don't do anything
+	if(topic->childCount() > 0) {
+		for(int i = 0; i < topic->childCount(); ++i) {
+			QTreeWidgetItem* temp = topic->child(i);
+			QString name;
+			//if it has children, then we add it as a # wildcrad containing topic
+			if(topic->child(i)->childCount() > 0) {
+				name.append(temp->text(0) + "/#");
+				while(temp->parent() != nullptr) {
+					temp = temp->parent();
+					name.prepend(temp->text(0) + "/");
+				}
+
+			}
+			//if not then we simply add the topic itself
+			else {
+				name.append(temp->text(0));
+				while(temp->parent() != nullptr) {
+					temp = temp->parent();
+					name.prepend(temp->text(0) + "/");
+				}
+			}
+
+			QStringList nameList;
+			nameList.append(name);
+			QTreeWidgetItem* childItem = new QTreeWidgetItem(nameList);
+			subscription->addChild(childItem);
+			//we use the function recursively on the given item
+			addSubscriptionChildren(topic->child(i), childItem);
+		}
+	}
+}
+
+/*!
+ *\brief Fills the children vector, with the root item's (twSubscriptions) leaf children (meaning no wildcard containing topics)
+ *
+ * \param children vector of TreeWidgetItem pointers
+ * \param root pointer to a TreeWidgetItem of twSubscriptions
+ */
+void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>& children, QTreeWidgetItem* root) {
+	if(root->childCount() == 0) {
+		children.push_back(root);
+	} else {
+		for(int i = 0; i < root->childCount(); ++i) {
+			findSubscriptionLeafChildren(children, root->child(i));
+		}
+	}
+}
+
+/*!
+ *\brief Returns the amount of topics that the "+" wildcard will replace in the level position
+ *
+ * \param levelIdx the level currently being investigated
+ * \param level the level where the new + wildcard will be placed
+ * \param commonList the topic name split into levels
+ * \param currentItem pointer to a TreeWidgetItem which represents the parent of the level
+ *		  represented by levelIdx
+ * \return returns the childCount, or -1 if some topics already represented by + wildcard have different
+ *		   amount of children
+ */
+int ImportFileWidget::checkCommonChildCount(int levelIdx, int level, QStringList& commonList, QTreeWidgetItem* currentItem) {
+	//we recursively check the number of children, until we get to level-1
+	if(levelIdx < level - 1) {
+		if(commonList[levelIdx] != "+") {
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item, recursively
+					return checkCommonChildCount(levelIdx + 1, level, commonList, currentItem->child(j));
+				}
+			}
+		} else {
+			int childCount = -1;
+			bool ok = true;
+
+			//otherwise we check if every + wildcard represented topic has the same number of children, recursively
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				int temp = checkCommonChildCount(levelIdx + 1, level, commonList, currentItem->child(j));
+				if((j > 0) && (temp != childCount)) {
+					ok = false;
+					break;
+				}
+				childCount = temp;
+			}
+
+			//if yes we return this number, otherwise -1
+			if(ok)
+				return childCount;
+			else
+				return -1;
+		}
+	} else if (levelIdx == level - 1) {
+		if(commonList[levelIdx] != "+") {
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if(currentItem->child(j)->text(0) == commonList[levelIdx]) {
+					//if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item
+					return currentItem->child(j)->childCount();
+				}
+			}
+		} else {
+			int childCount = -1;
+			bool ok = true;
+
+			//otherwise we check if every + wildcard represented topic has the same number of children
+			for(int j = 0; j < currentItem->childCount(); ++j) {
+				if((j > 0) && (currentItem->child(j)->childCount() != childCount)) {
+					ok = false;
+					break;
+				}
+				childCount = currentItem->child(j)->childCount();
+			}
+
+			//if yes we return this number, otherwise -1
+			if(ok)
+				return childCount;
+			else
+				return -1;
+		}
+
+	} else if (level == 1 && levelIdx == 1) {
+		return currentItem->childCount();
+	}
+
+	return -1;
+}
+
+/*!
+ *\brief We search in twSubscriptions for topics that can be represented using + wildcards, then merge them.
+ *		 We do this until there are no topics to merge
+ */
+void ImportFileWidget::manageCommonLevelSubscriptions() {
+	bool foundEqual = false;
+
+	do{
+		foundEqual = false;
+		QMap<QString, QVector<QString>> equalTopicsMap;
+		QVector<QString> equalTopics;
+
+		//compare the subscriptions present in the TreeWidget
+		for(int i = 0; i < ui.twSubscriptions->topLevelItemCount() - 1; ++i) {
+			for(int j = i + 1; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
+				qDebug()<<ui.twSubscriptions->topLevelItem(i)->text(0)<<"  "<<ui.twSubscriptions->topLevelItem(j)->text(0);
+				QString commonTopic = checkCommonLevel(ui.twSubscriptions->topLevelItem(i)->text(0), ui.twSubscriptions->topLevelItem(j)->text(0));
+
+				//if there is a common topic for the 2 compared topics, we add them to the map (using the common topic as key)
+				if(!commonTopic.isEmpty()) {
+					if(!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(i)->text(0))) {
+						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(i)->text(0));
+					}
+
+					if(!equalTopicsMap[commonTopic].contains(ui.twSubscriptions->topLevelItem(j)->text(0))) {
+						qDebug()<<commonTopic<<":  "<<ui.twSubscriptions->topLevelItem(i)->text(0);
+						equalTopicsMap[commonTopic].push_back(ui.twSubscriptions->topLevelItem(j)->text(0));
+					}
+				}
+			}
+		}
+
+		if(!equalTopicsMap.isEmpty()) {
+			qDebug()<<"Equal topics not empty";
+
+			QVector<QString> commonTopics;
+			QMapIterator<QString, QVector<QString>> topics(equalTopicsMap);
+
+			//check for every map entry, if the found topics can be merged or not
+			while(topics.hasNext()) {
+				topics.next();
+
+				int level = commonLevelIndex(topics.value().last(), topics.value().first());
+				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
+				QTreeWidgetItem* currentItem;
+				//search the corresponding item to the common topics first level(root)
+				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+					if(ui.twTopics->topLevelItem(i)->text(0) == commonList.first()) {
+						currentItem = ui.twTopics->topLevelItem(i);
+						break;
+					}
+				}
+
+				//calculate the number of topics the new + wildcard could replace
+				int childCount = checkCommonChildCount(1, level, commonList, currentItem);
+				if(childCount > 0) {
+					//if the number of topics found and the calculated number of topics is equal, the topics can be merged
+					if(topics.value().size() == childCount) {
+						foundEqual = true;
+						commonTopics.push_back(topics.key());
+					}
+				}
+			}
+
+			if(foundEqual) {
+				//if there are more common topics, the topics of which can be merged, we choose the one which has the lowest level new "+" wildcard
+				int lowestLevel = INT_MAX;
+				int topicIdx = -1;
+				for(int i = 0; i < commonTopics.size(); ++i) {
+					int level = commonLevelIndex(equalTopicsMap[commonTopics[i]].first(), commonTopics[i]);
+					if(level < lowestLevel) {
+						topicIdx = i;
+						lowestLevel = level;
+					}
+				}
+
+				equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
+
+				qDebug()<<"Adding common topic";
+				//Add the common topic ("merging")
+				QString commonTopic;
+				commonTopic = checkCommonLevel(equalTopics.first(), equalTopics.last());
+				QStringList nameList;
+				nameList.append(commonTopic);
+				QTreeWidgetItem* newTopic = new QTreeWidgetItem(nameList);
+				ui.twSubscriptions->addTopLevelItem(newTopic);
+				QMqttTopicFilter filter {commonTopic};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					emit subscriptionsChanged();
+				}
+
+				//remove the "merged" topics
+				qDebug()<<"unsubscribe from equal topics";
+				for(int i = 0; i < equalTopics.size(); ++i) {
+					for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j){
+						if(ui.twSubscriptions->topLevelItem(j)->text(0) == equalTopics[i]) {
+							newTopic->addChild(ui.twSubscriptions->takeTopLevelItem(j));
+							unsubscribeFromTopic(equalTopics[i]);
+							break;
+						}
+					}
+				}
+
+				//remove any subscription that the new subscription contains
+				for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+					if(checkTopicContains(commonTopic, ui.twSubscriptions->topLevelItem(i)->text(0)) &&
+							commonTopic != ui.twSubscriptions->topLevelItem(i)->text(0) ) {
+						unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
+						i--;
+					}
+				}
+			}
+		}
+	} while(foundEqual);
+}
+
+/*!
+ *\brief Fills twSubscriptions with the subscriptions made by the client
+ */
+void ImportFileWidget::updateSubscriptionTree() {
+	ui.twSubscriptions->clear();
+
+	for (int i = 0; i < m_mqttSubscriptions.size(); ++i) {
+		QStringList name;
+		name.append(m_mqttSubscriptions[i]->topic().filter());
+
+		bool found = false;
+		for(int j = 0; j < ui.twSubscriptions->topLevelItemCount(); ++j) {
+			if(ui.twSubscriptions->topLevelItem(j)->text(0) == m_mqttSubscriptions[i]->topic().filter()) {
+				found = true;
+				break;
+			}
+		}
+
+		if(!found) {
+			qDebug()<<"add:" << m_mqttSubscriptions[i]->topic().filter();
+			//Add the subscription to the tree widget
+			QTreeWidgetItem* newItem = new QTreeWidgetItem(name);
+			ui.twSubscriptions->addTopLevelItem(newItem);
+			name.clear();
+			name = m_mqttSubscriptions[i]->topic().filter().split('/', QString::SkipEmptyParts);
+
+			//find the corresponding "root" item in twTopics
+			QTreeWidgetItem* topic = nullptr;
+			for(int j = 0; j < ui.twTopics->topLevelItemCount(); ++j) {
+				if(ui.twTopics->topLevelItem(j)->text(0) == name[0]) {
+					qDebug()<<"found top level topic: "<<name[0]<<" "<<j;
+					topic = ui.twTopics->topLevelItem(j);
+					break;
+				}
+			}
+
+			//restore the children of the subscription
+			if(topic != nullptr && topic->childCount() > 0) {
+				qDebug()<<"restoring Children";
+
+				restoreSubscriptionChildren(topic, newItem, name, 1);
+			}
+		}
+	}
+	m_searching = false;
+
+	updateWillTopics();
+}
+
+/*!
+ *\brief Restores the children of a top level item in twSubscriptions if it contains wildcards
+ *
+ * \param topic pointer to a top level item in twTopics wich represents the root of the subscription topic
+ * \param subscription pointer to a top level item in twSubscriptions, this is the item whose children will be restored
+ * \param list QStringList containing the levels of the subscription topic
+ * \param level the level's number which is being investigated
+ */
+void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
+	if(list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
+		for(int i = 0; i < topic->childCount(); ++i) {
+			//if the current level isn't + or # wildcard we recursively continue with the next level
+			if(topic->child(i)->text(0) == list[level]) {
+				restoreSubscriptionChildren(topic->child(i), subscription, list, level + 1);
+				break;
+			}
+		}
+	} else if (list[level] == "+") {
+		for(int i = 0; i < topic->childCount(); ++i) {
+			//determine the name of the topic, contained by the subscription
+			QString name;
+			name.append(topic->child(i)->text(0));
+			for(int j = level + 1; j < list.size(); ++j) {
+				name.append("/" + list[j]);
+			}
+			QTreeWidgetItem* temp = topic->child(i);
+			while(temp->parent() != nullptr) {
+				temp = temp->parent();
+				name.prepend(temp->text(0) + "/");
+			}
+
+			//Add the topic as child of the subscription
+			QStringList nameList;
+			nameList.append(name);
+			QTreeWidgetItem* newItem = new QTreeWidgetItem(nameList);
+			subscription->addChild(newItem);
+			//Continue adding children recursively to the new item
+			restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
+		}
+	} else if (list[level] == "#") {
+		//add the children of the # wildcard containing subscription
+		addSubscriptionChildren(topic, subscription);
+	}
+}
+
+/*!
+ *\brief Updates the completer for leSubscriptions
+ */
+void ImportFileWidget::updateSubscriptionCompleter() {
+	QStringList subscriptionList;
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+		subscriptionList.append(ui.twSubscriptions->topLevelItem(i)->text(0));
+	}
+
+	if(!subscriptionList.isEmpty()) {
+		m_subscriptionCompleter = new QCompleter(subscriptionList, this);
+		m_subscriptionCompleter->setCompletionMode(QCompleter::PopupCompletion);
+		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
+		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
+	} else {
+		ui.leSubscriptions->setCompleter(0);
+	}
+}
+#endif
+
+/************** SLOTS **************************************************************/
+
+/*!
 	called on file name changes.
 	Determines the file format (ASCII, binary etc.), if the file exists,
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	const QString fileName = absolutePath(name);
+	QString fileName = name;
+#ifndef HAVE_WINDOWS
+	// make relative path
+	if ( !fileName.isEmpty() && fileName.at(0) != QDir::separator())
+		fileName = QDir::homePath() + QDir::separator() + fileName;
+#endif
 
 	bool fileExists = QFile::exists(fileName);
 	if (fileExists)
@@ -675,7 +1511,33 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
 		ui.cbFileType->setCurrentIndex(fileType);
-		updateContent(fileName, fileType);
+		if (auto filter = currentFileFilter()) {
+			switch(fileType) {
+			case AbstractFileFilter::HDF5:
+				m_hdf5OptionsWidget->updateContent((HDF5Filter*)filter, fileName);
+				break;
+			case AbstractFileFilter::NETCDF:
+				m_netcdfOptionsWidget->updateContent((NetCDFFilter*)filter, fileName);
+				break;
+			case AbstractFileFilter::FITS:
+#ifdef HAVE_FITS
+				m_fitsOptionsWidget->updateContent((FITSFilter*)filter, fileName);
+#endif
+				break;
+			case AbstractFileFilter::Json:
+				m_jsonOptionsWidget->loadDocument(fileName);
+				break;
+			case AbstractFileFilter::ROOT:
+				m_rootOptionsWidget->updateContent((ROOTFilter*)filter, fileName);
+				break;
+			case AbstractFileFilter::Ascii:
+			case AbstractFileFilter::Binary:
+			case AbstractFileFilter::Image:
+			case AbstractFileFilter::NgspiceRawAscii:
+			case AbstractFileFilter::NgspiceRawBinary:
+				break;
+			}
+		}
 	}
 
 	refreshPreview();
@@ -688,7 +1550,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 void ImportFileWidget::saveFilter() {
 	bool ok;
 	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-	                                     i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+										 i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
 	if (ok && !text.isEmpty()) {
 		//TODO
 		//AsciiFilter::saveFilter()
@@ -836,11 +1698,11 @@ void ImportFileWidget::fileInfoDialog() {
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
 	if (ui.cbFileType->currentIndex() == AbstractFileFilter::HDF5 ||
-		ui.cbFileType->currentIndex() == AbstractFileFilter::NETCDF ||
-		ui.cbFileType->currentIndex() == AbstractFileFilter::Image ||
-		ui.cbFileType->currentIndex() == AbstractFileFilter::FITS ||
-		ui.cbFileType->currentIndex() == AbstractFileFilter::Json ||
-		ui.cbFileType->currentIndex() == AbstractFileFilter::ROOT) {
+			ui.cbFileType->currentIndex() == AbstractFileFilter::NETCDF ||
+			ui.cbFileType->currentIndex() == AbstractFileFilter::Image ||
+			ui.cbFileType->currentIndex() == AbstractFileFilter::FITS ||
+			ui.cbFileType->currentIndex() == AbstractFileFilter::Json ||
+			ui.cbFileType->currentIndex() == AbstractFileFilter::ROOT) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -887,189 +1749,216 @@ void ImportFileWidget::refreshPreview() {
 	DEBUG("Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	switch (fileType) {
 	case AbstractFileFilter::Ascii: {
-			ui.tePreview->clear();
+		ui.tePreview->clear();
 
-			AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
+		AsciiFilter* filter = static_cast<AsciiFilter*>(this->currentFileFilter());
 
-			DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, currentSourceType()));
-			switch (currentSourceType()) {
-			case LiveDataSource::SourceType::FileOrPipe: {
-					importedStrings = filter->preview(fileName, lines);
-					break;
-				}
-			case LiveDataSource::SourceType::LocalSocket: {
-					QLocalSocket lsocket{this};
-					DEBUG("Local socket: CONNECT PREVIEW");
-					lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
-					if (lsocket.waitForConnected()) {
-						DEBUG("connected to local socket " << fileName.toStdString());
-						if (lsocket.waitForReadyRead())
-							importedStrings = filter->preview(lsocket);
-						DEBUG("Local socket: DISCONNECT PREVIEW");
-						lsocket.disconnectFromServer();
-						// read-only socket is disconnected immediately (no waitForDisconnected())
-					} else {
-						DEBUG("failed connect to local socket " << fileName.toStdString() << " - " << lsocket.errorString().toStdString());
-					}
-
-					break;
-				}
-			case LiveDataSource::SourceType::NetworkTcpSocket: {
-					QTcpSocket tcpSocket{this};
-					tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-					if (tcpSocket.waitForConnected()) {
-						DEBUG("connected to TCP socket");
-						if ( tcpSocket.waitForReadyRead() )
-							importedStrings = filter->preview(tcpSocket);
-
-						tcpSocket.disconnectFromHost();
-					} else {
-						DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
-					}
-
-					break;
-				}
-			case LiveDataSource::SourceType::NetworkUdpSocket: {
-					QUdpSocket udpSocket{this};
-					DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
-					udpSocket.bind(QHostAddress(host()), port().toInt());
-					udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
-					if (udpSocket.waitForConnected()) {
-						DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
-						if (!udpSocket.waitForReadyRead(2000) )
-							DEBUG("	ERROR: not ready for read after 2 sec");
-						if (udpSocket.hasPendingDatagrams()) {
-							DEBUG("	has pending data");
-						} else {
-							DEBUG("	has no pending data");
-						}
-						importedStrings = filter->preview(udpSocket);
-
-						DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
-						udpSocket.disconnectFromHost();
-					} else {
-						DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
-					}
-
-					break;
-				}
-			case LiveDataSource::SourceType::SerialPort: {
-					QSerialPort sPort{this};
-					DEBUG("	Port: " << serialPort().toStdString() << ", Settings: " << baudRate() << ',' << sPort.dataBits()
-							<< ',' << sPort.parity() << ',' << sPort.stopBits());
-					sPort.setPortName(serialPort());
-					sPort.setBaudRate(baudRate());
-
-					if (sPort.open(QIODevice::ReadOnly)) {
-						if (sPort.waitForReadyRead(2000))
-							importedStrings = filter->preview(sPort);
-						else {
-							DEBUG("	ERROR: not ready for read after 2 sec");
-						}
-
-						sPort.close();
-					} else {
-						DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
-					}
-					break;
-				}
-			}
-
-			vectorNameList = filter->vectorNames();
-			columnModes = filter->columnModes();
+		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, currentSourceType()));
+		switch (currentSourceType()) {
+		case LiveDataSource::SourceType::FileOrPipe: {
+			importedStrings = filter->preview(fileName, lines);
 			break;
 		}
+		case LiveDataSource::SourceType::LocalSocket: {
+			QLocalSocket lsocket{this};
+			DEBUG("Local socket: CONNECT PREVIEW");
+			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
+			if (lsocket.waitForConnected()) {
+				DEBUG("connected to local socket " << fileName.toStdString());
+				if (lsocket.waitForReadyRead())
+					importedStrings = filter->preview(lsocket);
+				DEBUG("Local socket: DISCONNECT PREVIEW");
+				lsocket.disconnectFromServer();
+				// read-only socket is disconnected immediately (no waitForDisconnected())
+			} else {
+				DEBUG("failed connect to local socket " << fileName.toStdString() << " - " << lsocket.errorString().toStdString());
+			}
+
+			break;
+		}
+		case LiveDataSource::SourceType::NetworkTcpSocket: {
+			QTcpSocket tcpSocket{this};
+			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
+			if (tcpSocket.waitForConnected()) {
+				DEBUG("connected to TCP socket");
+				if ( tcpSocket.waitForReadyRead() )
+					importedStrings = filter->preview(tcpSocket);
+
+				tcpSocket.disconnectFromHost();
+			} else {
+				DEBUG("failed to connect to TCP socket " << " - " << tcpSocket.errorString().toStdString());
+			}
+
+			break;
+		}
+		case LiveDataSource::SourceType::NetworkUdpSocket: {
+			QUdpSocket udpSocket{this};
+			DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
+			udpSocket.bind(QHostAddress(host()), port().toInt());
+			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
+			if (udpSocket.waitForConnected()) {
+				DEBUG("	connected to UDP socket " << host().toStdString() << ':' << port().toInt());
+				if (!udpSocket.waitForReadyRead(2000) )
+					DEBUG("	ERROR: not ready for read after 2 sec");
+				if (udpSocket.hasPendingDatagrams()) {
+					DEBUG("	has pending data");
+				} else {
+					DEBUG("	has no pending data");
+				}
+				importedStrings = filter->preview(udpSocket);
+
+				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
+				udpSocket.disconnectFromHost();
+			} else {
+				DEBUG("failed to connect to UDP socket " << " - " << udpSocket.errorString().toStdString());
+			}
+
+			break;
+		}
+		case LiveDataSource::SourceType::SerialPort: {
+			QSerialPort sPort{this};
+			DEBUG("	Port: " << serialPort().toStdString() << ", Settings: " << baudRate() << ',' << sPort.dataBits()
+					<< ',' << sPort.parity() << ',' << sPort.stopBits());
+			sPort.setPortName(serialPort());
+			sPort.setBaudRate(baudRate());
+
+			if (sPort.open(QIODevice::ReadOnly)) {
+				if (sPort.waitForReadyRead(2000))
+					importedStrings = filter->preview(sPort);
+				else {
+					DEBUG("	ERROR: not ready for read after 2 sec");
+				}
+
+				sPort.close();
+			} else {
+				DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
+			}
+			break;
+		}
+		case LiveDataSource::SourceType::MQTT: {
+#ifdef HAVE_MQTT
+			qDebug()<<"preview mqtt, is it ready:"<<m_mqttReadyForPreview;
+			if(m_mqttReadyForPreview)
+			{
+				filter->vectorNames().clear();
+				QMapIterator<QMqttTopicName, QMqttMessage> i(m_lastMessage);
+				while(i.hasNext()) {
+					i.next();
+					qDebug()<<"calling ascii mqtt preview"<< importedStrings << "  "<<QString(i.value().payload().data())
+						   << "    "<< i.key().name();
+					filter->MQTTPreview(importedStrings, QString(i.value().payload().data()), i.key().name() );
+					if(importedStrings.isEmpty())
+						break;
+				}
+
+				QMapIterator<QMqttTopicName, bool> j(m_messageArrived);
+				while(j.hasNext()) {
+					j.next();
+					qDebug()<<"Set false after preview: "<<j.key().name();
+					m_messageArrived[j.key()] = false;
+				}
+				m_mqttReadyForPreview = false;
+			}
+#endif
+			break;
+		}
+		}
+
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		break;
+	}
 	case AbstractFileFilter::Binary: {
-			ui.tePreview->clear();
-			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-			importedStrings = filter->preview(fileName, lines);
-			break;
-		}
+		ui.tePreview->clear();
+		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
+		importedStrings = filter->preview(fileName, lines);
+		break;
+	}
 	case AbstractFileFilter::Image: {
-			ui.tePreview->clear();
+		ui.tePreview->clear();
 
-			QImage image(fileName);
-			QTextCursor cursor = ui.tePreview->textCursor();
-			cursor.insertImage(image);
-			RESET_CURSOR;
-			return;
-		}
+		QImage image(fileName);
+		QTextCursor cursor = ui.tePreview->textCursor();
+		cursor.insertImage(image);
+		RESET_CURSOR;
+		return;
+	}
 	case AbstractFileFilter::HDF5: {
-			HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
-			lines = m_hdf5OptionsWidget->lines();
-			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
-			break;
-		}
+		HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
+		lines = m_hdf5OptionsWidget->lines();
+		importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
+		break;
+	}
 	case AbstractFileFilter::NETCDF: {
-			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-			lines = m_netcdfOptionsWidget->lines();
-			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
-			tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
-			break;
-		}
+		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		lines = m_netcdfOptionsWidget->lines();
+		importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
+		break;
+	}
 	case AbstractFileFilter::FITS: {
-			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-			lines = m_fitsOptionsWidget->lines();
+		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
+		lines = m_fitsOptionsWidget->lines();
 
-			// update file name (may be any file type)
-			m_fitsOptionsWidget->updateContent(filter, fileName);
-			QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
-			if (!extensionName.isEmpty()) {
-				DEBUG("	extension name = " << extensionName.toStdString());
-				fileName = extensionName;
-			}
-			DEBUG("	file name = " << fileName.toStdString());
-
-			bool readFitsTableToMatrix;
-			importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
-			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
-
-			tmpTableWidget = m_fitsOptionsWidget->previewWidget();
-			break;
+		// update file name (may be any file type)
+		m_fitsOptionsWidget->updateContent(filter, fileName);
+		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
+		if (!extensionName.isEmpty()) {
+			DEBUG("	extension name = " << extensionName.toStdString());
+			fileName = extensionName;
 		}
+		DEBUG("	file name = " << fileName.toStdString());
+
+		bool readFitsTableToMatrix;
+		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
+
+		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
+		break;
+	}
 	case AbstractFileFilter::Json: {
-			ui.tePreview->clear();
-			m_jsonOptionsWidget->loadDocument(fileName);
-			JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
-			m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
-			importedStrings = filter->preview(fileName);
-			columnModes = filter->columnModes();
-			break;
-		}
+		ui.tePreview->clear();
+		m_jsonOptionsWidget->loadDocument(fileName);
+		JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
+		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+		importedStrings = filter->preview(fileName);
+		columnModes = filter->columnModes();
+		break;
+	}
 	case AbstractFileFilter::ROOT: {
-			ROOTFilter *filter = (ROOTFilter *)this->currentFileFilter();
-			lines = m_rootOptionsWidget->lines();
-			m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
-			importedStrings = filter->previewCurrentHistogram(
-				fileName,
-				m_rootOptionsWidget->startBin(),
-				qMin(m_rootOptionsWidget->startBin() + m_rootOptionsWidget->lines() - 1,
-				     m_rootOptionsWidget->endBin())
-			);
-			tmpTableWidget = m_rootOptionsWidget->previewWidget();
-			// the last vector element contains the column names
-			vectorNameList = importedStrings.last();
-			importedStrings.removeLast();
-			columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::Numeric);
-			break;
-		}
+		ROOTFilter *filter = (ROOTFilter *)this->currentFileFilter();
+		lines = m_rootOptionsWidget->lines();
+		m_rootOptionsWidget->setNBins(filter->binsInCurrentHistogram(fileName));
+		importedStrings = filter->previewCurrentHistogram(
+					fileName,
+					m_rootOptionsWidget->startBin(),
+					qMin(m_rootOptionsWidget->startBin() + m_rootOptionsWidget->lines() - 1,
+						 m_rootOptionsWidget->endBin())
+					);
+		tmpTableWidget = m_rootOptionsWidget->previewWidget();
+		// the last vector element contains the column names
+		vectorNameList = importedStrings.last();
+		importedStrings.removeLast();
+		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::Numeric);
+		break;
+	}
 	case AbstractFileFilter::NgspiceRawAscii: {
-			ui.tePreview->clear();
-			NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
-			importedStrings = filter->preview(fileName, lines);
-			vectorNameList = filter->vectorNames();
-			columnModes = filter->columnModes();
-			break;
-		}
+		ui.tePreview->clear();
+		NgspiceRawAsciiFilter* filter = (NgspiceRawAsciiFilter*)this->currentFileFilter();
+		importedStrings = filter->preview(fileName, lines);
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		break;
+	}
 	case AbstractFileFilter::NgspiceRawBinary: {
-			ui.tePreview->clear();
-			NgspiceRawBinaryFilter* filter = (NgspiceRawBinaryFilter*)this->currentFileFilter();
-			importedStrings = filter->preview(fileName, lines);
-			vectorNameList = filter->vectorNames();
-			columnModes = filter->columnModes();
-			break;
-		}
+		ui.tePreview->clear();
+		NgspiceRawBinaryFilter* filter = (NgspiceRawBinaryFilter*)this->currentFileFilter();
+		importedStrings = filter->preview(fileName, lines);
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		break;
+	}
 	}
 
 	// fill the table widget
@@ -1091,7 +1980,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-// 				QDEBUG("imported string " << importedStrings[i]);
+				// 				QDEBUG("imported string " << importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())
@@ -1306,6 +2195,105 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		break;
+
+	case LiveDataSource::SourceType::MQTT:
+#ifdef HAVE_MQTT
+
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+		ui.lBaudRate->hide();
+		ui.cbBaudRate->hide();
+		ui.lSerialPort->hide();
+		ui.cbSerialPort->hide();
+
+		ui.lHost->show();
+		ui.leHost->show();
+		ui.lePort->show();
+		ui.lPort->show();
+		ui.lFileName->hide();
+		ui.leFileName->hide();
+		ui.bFileInfo->hide();
+		ui.bOpen->hide();
+		ui.chbLinkFile->hide();
+		ui.cbFileType->setEnabled(true);
+
+		ui.leID->hide();
+		ui.lMqttID->hide();
+		ui.lePassword->hide();
+		ui.lPassword->hide();
+		ui.leUsername->hide();
+		ui.lUsername->hide();
+		ui.cbQos->show();
+		ui.lQos->show();
+		ui.twTopics->show();
+		ui.lTopicSearch->show();
+		ui.leTopics->show();
+		ui.twSubscriptions->show();
+		ui.chbAuthentication->show();
+		ui.chbID->show();
+		ui.bSubscribe->show();
+		ui.bUnsubscribe->show();
+		ui.bConnect->show();
+
+		ui.gbOptions->setEnabled(true);
+		ui.bManageFilters->setEnabled(true);
+		ui.cbFilter->setEnabled(true);
+
+		ui.gbMqttWill->show();
+		ui.chbWill->show();
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lwWillStatistics->hide();
+		ui.lWillStatistics->hide();
+		ui.gbManageSubscriptions->setEnabled(false);
+
+		checkConnectEnable();
+
+		if(ui.chbWill->isChecked()) {
+			ui.chbWillRetain->show();
+			ui.cbWillQoS->show();
+			ui.cbWillMessageType->show();
+			ui.cbWillTopic->show();
+			ui.cbWillUpdate->show();
+			ui.lWillMessageType->show();
+			ui.lWillQos->show();
+			ui.lWillTopic->show();
+			ui.lWillUpdate->show();
+
+			if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
+				ui.leWillOwnMessage->show();
+				ui.lWillOwnMessage->show();
+			}
+			else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ){
+				qDebug()<<"source type changed show statistics";
+				ui.lWillStatistics->show();
+				ui.lwWillStatistics->show();
+			}
+
+			if(ui.cbWillUpdate->currentIndex() == 0) {
+				ui.leWillUpdateInterval->show();
+				ui.lWillUpdateInterval->show();
+			}
+			else if (ui.cbWillUpdate->currentIndex() == 1)
+			{
+				ui.leWillUpdateInterval->hide();
+				ui.lWillUpdateInterval->hide();
+			}
+		}
+#endif
+		break;
 	}
 
 	// "whole file" item
@@ -1324,3 +2312,676 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	emit sourceTypeChanged();
 	refreshPreview();
 }
+
+#ifdef HAVE_MQTT
+
+/*!
+ *\brief called when ID checkbox's state is changed, if checked a lineEdit is shown so the user can set the ID
+ * \param state the state of the checbox
+ */
+void ImportFileWidget::idChecked(int state) {
+	if (state == 2)	{
+		ui.leID->show();
+		ui.lMqttID->show();
+	} else if (state == 0) {
+		ui.leID->hide();
+		ui.lMqttID->hide();
+	}
+}
+
+/*!
+ *\brief called when authentication checkbox's state is changed,
+ *       if checked two lineEdits are shown so the user can set the username and password
+ *
+ * \param state the state of the checbox
+ */
+void ImportFileWidget::authenticationChecked(int state) {
+	if(state == 2) {
+		ui.leUsername->show();
+		ui.lePassword->show();
+		ui.lPassword->show();
+		ui.lUsername->show();
+	} else if (state == 0) {
+		ui.leUsername->hide();
+		ui.lePassword->hide();
+		ui.lUsername->hide();
+		ui.lPassword->hide();
+	}
+}
+
+/*!
+ *\brief called when the connect/disconnect button is pressed
+ * makes the connection to the given MQTT broker, with the given options
+ * or disconnects from the broker
+ */
+void ImportFileWidget::mqttConnection() {
+	if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
+		//Check whether the set options are valid and a connection can be made, or not
+		const bool hostSet = !ui.leHost->text().isEmpty();
+		const bool portSet = !ui.lePort->text().isEmpty();
+		const bool idUsed = ui.chbID->isChecked();
+		const bool idSet = !ui.leID->text().isEmpty();
+		const bool idValid = !(idUsed && !idSet);
+		const bool authenticationUsed = ui.chbAuthentication->isChecked();
+		const bool usernameSet = !ui.leUsername->text().isEmpty();
+		const bool passwordSet = !ui.lePassword->text().isEmpty();
+		const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
+		const bool valid =hostSet && portSet && idValid && authenticationValid;
+		if (valid) {
+			m_client->setHostname(ui.leHost->text().simplified());
+			m_client->setPort(ui.lePort->text().toUInt());
+
+			if(ui.chbID->isChecked())
+				m_client->setClientId(ui.leID->text().simplified());
+
+			if(ui.chbAuthentication->isChecked()) {
+				m_client->setUsername(ui.leUsername->text().simplified());
+				m_client->setPassword(ui.lePassword->text().simplified());
+			}
+
+			qDebug()<< ui.leHost->text() << " " << m_client->hostname() << "   " << m_client->port();
+			qDebug()<<"Trying to connect";
+			m_client->connectToHost();
+			m_connectTimeoutTimer->start();
+		}
+	}
+	else if (m_client->state() == QMqttClient::ClientState::Connected) {
+		qDebug()<<"Disconnecting from mqtt broker"	;
+		m_client->disconnectFromHost();
+	}
+}
+
+/*!
+ *\brief called when the client connects to the broker succesfully, it subscribes to every topic (# wildcard)
+ * in order to later list every available topic
+ */
+void ImportFileWidget::onMqttConnect() {
+	if(m_client->error() == QMqttClient::NoError) {
+		m_connectTimeoutTimer->stop();
+		ui.gbManageSubscriptions->setEnabled(true);
+		ui.bConnect->setText("Disconnect");
+		ui.leHost->setEnabled(false);
+		ui.lePort->setEnabled(false);
+		ui.lePassword->setEnabled(false);
+		ui.leUsername->setEnabled(false);
+		ui.leID->setEnabled(false);
+		ui.cbSourceType->setEnabled(false);
+		ui.chbAuthentication->setEnabled(false);
+		ui.chbID->setEnabled(false);
+		ui.chbRetain->setEnabled(false);
+		QMessageBox::information(this, "Connection successful", "Connection established");
+
+		//subscribing to every topic (# wildcard) in order to later list every available topic
+		QMqttTopicFilter globalFilter{"#"};
+		m_mainSubscription = m_client->subscribe(globalFilter, 1);
+		if(!m_mainSubscription)
+			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+	}
+}
+
+/*!
+ *\brief called when the client disconnects from the broker succesfully
+ * removes every information about the former connection
+ */
+void ImportFileWidget::onMqttDisconnect() {
+	ui.gbManageSubscriptions->setEnabled(false);
+	ui.bConnect->setText("Connect");
+
+	ui.leHost->setEnabled(true);
+	ui.leHost->clear();
+
+	ui.lePort->setEnabled(true);
+	ui.lePort->clear();
+
+	ui.lePassword->setEnabled(true);
+	ui.lePassword->clear();
+
+	ui.leUsername->setEnabled(true);
+	ui.leUsername->clear();
+
+	ui.leID->setEnabled(true);
+	ui.leID->clear();
+
+	ui.twSubscriptions->clear();
+	ui.twTopics->clear();
+
+	ui.chbRetain->setEnabled(true);
+	ui.cbSourceType->setEnabled(true);
+	ui.chbAuthentication->setEnabled(true);
+	ui.chbID->setEnabled(true);
+
+	m_mqttReadyForPreview = false;
+	m_mqttSubscriptions.clear();
+
+	m_topicCompleter = new QCompleter;
+	m_subscriptionCompleter = new QCompleter;
+
+	m_topicList.clear();
+	m_searching = false;
+	m_searchTimer->stop();
+	m_messageArrived.clear();
+	m_lastMessage.clear();
+}
+
+/*!
+ *\brief called when the subscribe button is pressed
+ * subscribes to the topic represented by the current item of twTopics
+ */
+void ImportFileWidget::mqttSubscribe() {	
+	QString name;
+	QTreeWidgetItem *item = ui.twTopics->currentItem();
+	if(item != nullptr) {
+		QTreeWidgetItem *tempItem = item;
+
+		//determine the topic name that the current item represents
+		name.prepend(item->text(0));
+		if(item->childCount() != 0)
+			name.append("/#");
+		while(tempItem->parent() != nullptr) {
+			tempItem = tempItem->parent();
+			name.prepend(tempItem->text(0) + "/");
+		}
+
+		QList<QTreeWidgetItem *> topLevelList = ui.twSubscriptions->findItems(name, Qt::MatchExactly);
+
+		//check if the subscription already exists
+		if(topLevelList.isEmpty() || topLevelList.first()->parent() != nullptr) {
+			qDebug() << name;
+			bool foundSuperior = false;
+
+			for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+				qDebug()<<i<<" "<<ui.twSubscriptions->topLevelItemCount();
+
+				//if the new subscirptions contains an already existing one, we remove the inferior one
+				if(checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0))
+						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
+					qDebug()<<"1"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));
+					i--;
+					continue;
+				}
+				qDebug()<<"checked inferior";
+
+				//if there is a subscription containing the new one we set foundSuperior true
+				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
+						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
+					foundSuperior = true;
+					qDebug()<<"2"<<name<<" "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					break;
+				}
+				qDebug()<<"checked superior";
+			}
+
+			//if there wasn't a superior subscription we can subscribe to the new topic
+			if(!foundSuperior) {
+				qDebug()<<"Adding new topic";
+				QStringList toplevelName;
+				toplevelName.push_back(name);
+				QTreeWidgetItem* newTopLevelItem = new QTreeWidgetItem(toplevelName);
+				ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
+
+				QMqttTopicFilter filter {name};
+				QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+				if(temp_subscription) {
+					m_mqttSubscriptions.push_back(temp_subscription);
+					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+					emit subscriptionsChanged();
+				}
+
+				if(name.endsWith("#")) {
+					//adding every topic that the subscription contains to twSubscriptions
+					addSubscriptionChildren(item, newTopLevelItem);
+
+					//if an already existing subscription contains a topic that the new subscription also contains
+					//we decompose the already existing subscription
+					//by unsubscribing from its topics, that are present in the new subscription as well
+					QStringList nameList = name.split('/', QString::SkipEmptyParts);
+					QString root = nameList.first();
+					QVector<QTreeWidgetItem*> children;
+					for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+						if(ui.twSubscriptions->topLevelItem(i)->text(0).startsWith(root)
+								&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
+							children.clear();
+							//get the "leaf" children of the inspected subscription
+							findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
+							for(int j = 0; j < children.size(); ++j) {
+								if(checkTopicContains(name, children[j]->text(0))) {
+									//if the new subscription contains a topic, we unsubscribe from it
+									ui.twSubscriptions->setCurrentItem(children[j]);
+									mqttUnsubscribe();
+								}
+							}
+						}
+					}
+				}
+
+				manageCommonLevelSubscriptions();
+				updateWillTopics();
+				updateSubscriptionCompleter();
+			} else {
+				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
+			}
+		}
+		else
+			QMessageBox::warning(this, "Warning", "You already subscribed to this topic");
+	}
+	else
+		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+}
+
+/*!
+ *\brief called when the unsubscribe button is pressed
+ * unsubscribes from the topic represented by the current item of twSubscription
+ */
+void ImportFileWidget::mqttUnsubscribe() {
+	QTreeWidgetItem* unsubscribeItem = ui.twSubscriptions->currentItem();
+
+	if(unsubscribeItem != nullptr) {
+		//if it is a top level item, meaning a topic that we really subscribed to(not one that belongs to a subscription)
+		//we can simply unsubscribe from it
+		if(unsubscribeItem->parent() == nullptr)
+			unsubscribeFromTopic(unsubscribeItem->text(0));
+		//otherwise we remove the selected item, but subscribe to every other topic, that was contained by
+		//the selected item's parent subscription(top level item of twSubscripitons)
+		else{
+			while(unsubscribeItem->parent() != nullptr) {
+				for(int i = 0; i < unsubscribeItem->parent()->childCount(); ++i) {
+					if(unsubscribeItem->text(0) != unsubscribeItem->parent()->child(i)->text(0)) {
+						QMqttTopicFilter filter {unsubscribeItem->parent()->child(i)->text(0)};
+						QMqttSubscription *temp_subscription = m_client->subscribe(filter, static_cast<quint8> (ui.cbQos->currentText().toUInt()) );
+
+						ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
+
+						if(temp_subscription) {
+							m_mqttSubscriptions.push_back(temp_subscription);
+							connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+							emit subscriptionsChanged();
+						}
+						i--;
+					}
+				}
+				unsubscribeItem = unsubscribeItem->parent();
+			}
+			unsubscribeFromTopic(unsubscribeItem->text(0));
+
+			//check if any common topics were subscribed, if possible merge them
+			manageCommonLevelSubscriptions();
+		}
+		updateWillTopics();
+		updateSubscriptionCompleter();
+	} else
+		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
+}
+
+/*!
+ *\brief called when the client receives a message
+ * if the message arrived from a new topic, the topic is put in twTopics
+ */
+void ImportFileWidget::mqttMessageReceived(const QByteArray &message , const QMqttTopicName &topic) {
+	if(!m_addedTopics.contains(topic.name())) {
+		m_addedTopics.push_back(topic.name());
+		QStringList name;
+		QChar sep = '/';
+		QString rootName;
+		if(topic.name().contains(sep)) {
+			QStringList list = topic.name().split(sep, QString::SkipEmptyParts);
+
+			if(!list.isEmpty()) {
+				rootName = list.at(0);
+				name.append(list.at(0));
+				QTreeWidgetItem* currentItem;
+				int topItemIdx = -1;
+				//check whether the first level of the topic can be found in twTopics
+				for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i) {
+					if(ui.twTopics->topLevelItem(i)->text(0) == list.at(0)) {
+						topItemIdx = i;
+						break;
+					}
+				}
+				//if not we simply add every level of the topic to the tree
+				if( topItemIdx < 0) {
+					currentItem = new QTreeWidgetItem(name);
+					ui.twTopics->addTopLevelItem(currentItem);
+					for(int i = 1; i < list.size(); ++i) {
+						name.clear();
+						name.append(list.at(i));
+						currentItem->addChild(new QTreeWidgetItem(name));
+						currentItem = currentItem->child(0);
+					}
+				}
+				//otherwise we search for the first level that isn't part of the tree,
+				//then add every level of the topic to the tree from that certain level
+				else {
+					currentItem = ui.twTopics->topLevelItem(topItemIdx);
+					int listIdx = 1;
+					for(; listIdx < list.size(); ++listIdx) {
+						QTreeWidgetItem* childItem = nullptr;
+						bool found = false;
+						for(int j = 0; j < currentItem->childCount(); ++j) {
+							childItem = currentItem->child(j);
+							if(childItem->text(0) == list.at(listIdx)) {
+								found = true;
+								currentItem = childItem;
+								break;
+							}
+						}
+						if(!found) {
+							//this is the level that isn't present in the tree
+							break;
+						}
+					}
+
+					//add every level to the tree starting with the first level that isn't part of the tree
+					for(; listIdx < list.size(); ++listIdx) {
+						name.clear();
+						name.append(list.at(listIdx));
+						currentItem->addChild(new QTreeWidgetItem(name));
+						currentItem = currentItem->child(currentItem->childCount() - 1);
+					}
+				}
+			}
+		} else {
+			rootName = topic.name();
+			name.append(topic.name());
+			ui.twTopics->addTopLevelItem(new QTreeWidgetItem(name));
+		}
+
+		//if a subscribed topic contains the new topic, we have to update twSubscriptions
+		for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+			QStringList subscriptionName = ui.twSubscriptions->topLevelItem(i)->text(0).split('/', QString::SkipEmptyParts);
+			if(!subscriptionName.isEmpty()) {
+				if (rootName == subscriptionName.first()) {
+					updateSubscriptionTree();
+					break;
+				}
+			}
+		}
+
+		//signals that a newTopic was added, in order to fill the completer of leTopics
+		qDebug()<<"emit signal";
+		emit newTopic(rootName);
+	}
+}
+
+/*!
+ *\brief called when a new topic is added to the tree(twTopics)
+ * appends the topic's root to the topicList if it isn't in the list already
+ * then sets the completer for leTopics
+ */
+void ImportFileWidget::setTopicCompleter(const QString& topic) {
+	if(!m_topicList.contains(topic)) {
+		m_topicList.append(topic);
+		if(!m_searching) {
+			m_topicCompleter = new QCompleter(m_topicList, this);
+			m_topicCompleter->setCompletionMode(QCompleter::PopupCompletion);
+			m_topicCompleter->setCaseSensitivity(Qt::CaseSensitive);
+			ui.leTopics->setCompleter(m_topicCompleter);
+		}
+	}
+}
+
+/*!
+ *\brief called when 10 seconds passed since the last time the user searched for a certain root in twTopics
+ * enables updating the completer for le
+ */
+void ImportFileWidget::topicTimeout() {
+	qDebug()<<"lejart ido";
+	m_searching = false;
+	m_searchTimer->stop();
+}
+
+/*!
+ *\brief called when the client receives a message from a subscribed topic (that isn't the "#" wildcard)
+ */
+void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
+	qDebug()<<"message received from: "<<msg.topic().name();
+	if(!m_subscribedTopicNames.contains(msg.topic().name())) {
+		m_messageArrived[msg.topic()] = true;
+		qDebug()<<msg.topic().name()<<"set true";
+		m_subscribedTopicNames.push_back(msg.topic().name());
+	}
+
+	if(m_messageArrived[msg.topic()] == false) {
+		qDebug()<<msg.topic().name()<<"set true";
+		m_messageArrived[msg.topic()] = true;
+	}
+
+	//updates the last message of the topic
+	m_lastMessage[msg.topic()]= msg;
+
+	//check if the client received a message from every subscribed topic, since the last time the preview was refreshed
+	bool check = true;
+	QMapIterator<QMqttTopicName, bool> i(m_messageArrived);
+	while(i.hasNext()) {
+		i.next();
+		if(i.value() == false ) {
+			qDebug()<<"Found false: "<<i.key().name();
+			check = false;
+			break;
+		}
+	}
+
+	//if there is a message from every subscribed topic, we refresh the preview
+	if (check == true) {
+		m_mqttReadyForPreview = true;
+		refreshPreview();
+	}
+}
+
+/*!
+ *\brief called when use will message checkbox's state is changed,
+ *       if state is checked it shows the options regarding the will message
+ *
+ * \param state the state of the checbox
+ */
+void ImportFileWidget::useWillMessage(int state) {
+	if(state == Qt::Checked) {
+		ui.chbWillRetain->show();
+		ui.cbWillQoS->show();
+		ui.cbWillMessageType->show();
+		ui.cbWillTopic->show();
+		ui.cbWillUpdate->show();
+		ui.lWillMessageType->show();
+		ui.lWillQos->show();
+		ui.lWillTopic->show();
+		ui.lWillUpdate->show();
+
+		if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
+			ui.leWillOwnMessage->show();
+			ui.lWillOwnMessage->show();
+		} else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ) {
+			ui.lWillStatistics->show();
+			ui.lwWillStatistics->show();
+		}
+
+		if(ui.cbWillUpdate->currentIndex() == 0) {
+			ui.leWillUpdateInterval->show();
+			ui.lWillUpdateInterval->show();
+		}
+	} else if (state == Qt::Unchecked) {
+		qDebug()<<"will use unchecked";
+		ui.chbWillRetain->hide();
+		ui.cbWillQoS->hide();
+		ui.cbWillMessageType->hide();
+		ui.cbWillTopic->hide();
+		ui.cbWillUpdate->hide();
+		ui.leWillOwnMessage->hide();
+		ui.leWillUpdateInterval->hide();
+		ui.lWillMessageType->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillQos->hide();
+		ui.lWillTopic->hide();
+		ui.lWillUpdate->hide();
+		ui.lWillUpdateInterval->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	}
+}
+
+
+/*!
+ *\brief called when the selected will message type is changed,
+ *       shows the options for the selected message type, hides the irrelevant ones
+ *
+ * \param type the selected will message type
+ */
+void ImportFileWidget::willMessageTypeChanged(int type) {
+	if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::OwnMessage) {
+		ui.leWillOwnMessage->show();
+		ui.lWillOwnMessage->show();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	} else if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::LastMessage) {
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
+		ui.lWillStatistics->hide();
+		ui.lwWillStatistics->hide();
+	} else if(static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::Statistics) {
+		qDebug()<<"will message type changed show statistics";
+		ui.lWillStatistics->show();
+		ui.lwWillStatistics->show();
+		ui.leWillOwnMessage->hide();
+		ui.lWillOwnMessage->hide();
+	}
+}
+
+/*!
+ *\brief called when newTopicForWill signal is emitted,
+ *       updates the topics that can be selected as the will message's topic
+ */
+void ImportFileWidget::updateWillTopics() {
+	QString current = ui.cbWillTopic->currentText();
+	ui.cbWillTopic->clear();
+
+	//Get every leaf subscribed topic
+	QVector<QTreeWidgetItem*> children;
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+		findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
+	}
+
+	for(int i = 0; i < children.size(); ++i) {
+		ui.cbWillTopic->addItem(children[i]->text(0));
+	}
+
+	//Set back the previous value
+	if(!current.isEmpty())
+		ui.cbWillTopic->setCurrentText(current);
+}
+
+/*!
+ *\brief called when the selected update type for the will message is changed,
+ *       shows the options for the selected update type, hides the irrelevant ones
+ *
+ * \param type the selected will update type
+ */
+void ImportFileWidget::willUpdateTypeChanged(int updateType) {
+	if(static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
+		ui.leWillUpdateInterval->show();
+		ui.lWillUpdateInterval->show();
+	}
+	else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
+		ui.leWillUpdateInterval->hide();
+		ui.lWillUpdateInterval->hide();
+	}
+}
+
+/*!
+ *\brief called when the clientError of the MQTT client changes
+ *
+ * \param clientError the current error of the client
+ */
+void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
+	switch (clientError) {
+	case QMqttClient::BadUsernameOrPassword:
+		QMessageBox::warning(this, "Couldn't connect", "Bad username or password");
+		break;
+	case QMqttClient::IdRejected:
+		QMessageBox::warning(this, "Couldn't connect", "The client ID wasn't accepted");
+		break;
+	case QMqttClient::ServerUnavailable:
+		QMessageBox::warning(this, "Server unavailable", "The network connection has been established, but the service is unavailable on the broker side.");
+		break;
+	case QMqttClient::NotAuthorized:
+		QMessageBox::warning(this, "Couldn't connect", "The client is not authorized to connect.");
+		break;
+	case QMqttClient::UnknownError:
+		QMessageBox::warning(this, "Unknown MQTT error", "An unknown error occurred.");
+		break;
+	default:
+		break;
+	}
+}
+
+/*!
+ *\brief called when leTopics' text is changed
+ *		 if the rootName can be found in twTopics, then we scroll it to the top of the tree widget
+ *
+ * \param rootName the current text of leTopics
+ */
+void ImportFileWidget::scrollToTopicTreeItem(const QString& rootName) {
+	m_searching = true;
+	m_searchTimer->start();
+
+	int topItemIdx = -1;
+	for(int i = 0; i < ui.twTopics->topLevelItemCount(); ++i)
+		if(ui.twTopics->topLevelItem(i)->text(0) == rootName) {
+			topItemIdx = i;
+			break;
+		}
+
+	if(topItemIdx >= 0) {
+		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+	}
+}
+
+/*!
+ *\brief called when leSubscriptions' text is changed
+ *		 if the rootName can be found in twSubscriptions, then we scroll it to the top of the tree widget
+ *
+ * \param rootName the current text of leSubscriptions
+ */
+void ImportFileWidget::scrollToSubsriptionTreeItem(const QString& rootName) {
+	m_searching = true;
+	m_searchTimer->start();
+
+	int topItemIdx = -1;
+	for(int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i)
+		if(ui.twSubscriptions->topLevelItem(i)->text(0) == rootName) {
+			topItemIdx = i;
+			break;
+		}
+
+	if(topItemIdx >= 0) {
+		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
+	}
+}
+
+/*!
+ *\brief called when any option of the client (host, port, id, etc.) is changed before connecting to the broker,
+ *		 checks if every option needed for the connection is set, if it is, then enables the connect button
+ */
+void ImportFileWidget::checkConnectEnable() {
+	bool authenticationUsed = ui.chbAuthentication->isChecked();
+	bool idUsed = ui.chbID->isChecked();
+	bool authenticationFilled = !ui.leUsername->text().isEmpty() && !ui.lePassword->text().isEmpty();
+	bool idFilled = !ui.leID->text().isEmpty();
+	bool authenticationOK = !authenticationUsed || (authenticationUsed && authenticationFilled);
+	bool idOK = !idUsed || (idUsed && idFilled);
+	bool hostOK = !ui.leHost->text().isEmpty();
+	bool portOK = !ui.lePort->text().isEmpty();
+	bool enable = authenticationOK && idOK && hostOK && portOK;
+	ui.bConnect->setEnabled(enable);
+}
+
+/*!
+ *\brief called when m_connectTimeoutTimer ticks,
+ *		 meaning that the client couldn't connect to the broker in 5 seconds
+ *		 disconnects the client, stops the timer, and warns the user
+ */
+void ImportFileWidget::mqttConnectTimeout() {
+	m_client->disconnectFromHost();
+	m_connectTimeoutTimer->stop();
+	QMessageBox::warning(this, "Warning", "Couldn't connect to the given broker");
+}
+#endif

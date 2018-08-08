@@ -1,5 +1,6 @@
 *.user
 .gitignore
+.gitconfig
 build*
 TODO
 .kdev4

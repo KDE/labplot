@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
-    Project              : LabPlot
-    Description          : import data dialog
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
+	File                 : MQTTUnitTest.h
+	Project              : LabPlot
+	Description          : Tests for MQTT related features
+	--------------------------------------------------------------------
+	Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,54 +25,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
-
-#include "ImportDialog.h"
-
-class MainWin;
-class ImportFileWidget;
-class LiveDataSource;
-
 #ifdef HAVE_MQTT
-class MQTTClient;
+#include <QtTest/QtTest>
+
+#ifndef MQTT_UNIT_TEST
+#define MQTT_UNIT_TEST
 #endif
 
-class QStatusBar;
-class QMenu;
-
-class ImportFileDialog : public ImportDialog {
+class MQTTUnitTest : public QObject {
 	Q_OBJECT
 
-public:
-	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+private slots:
+	void initTestCase();
 
-	virtual QString selectedObject() const;
+	//check superior and inferior relations
+	void testContainFalse();
+	void testContainTrue();
 
-	int sourceType() const;
+	//check common topics
+	void testCommonTrue();
+	void testCommonFalse();
 
-	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
+	//test for different tipes of messages
+	void testIntegerMessage();
+	void testNumericMessage();
+	void testTextMessage();
 
-#ifdef HAVE_MQTT
-	void importToMQTT(MQTTClient*) const;
-#endif
+	//test subscribing and unsubscribing
+	void testSubscriptions();
 
-	virtual void importTo(QStatusBar*) const;
+
 
 private:
-	ImportFileWidget* m_importFileWidget;
-	bool m_showOptions;
-	QMenu* m_newDataContainerMenu;
-	QPushButton* m_optionsButton;
-
-protected  slots:
-	virtual void checkOkButton();
-
-private slots:
-	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
-	void loadSettings();
+	QString m_dataDir;
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif //HAVE_MQTT

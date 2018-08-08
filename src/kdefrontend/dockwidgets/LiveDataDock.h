@@ -27,11 +27,24 @@ Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef LIVEDATADOCK_H
 #define LIVEDATADOCK_H
 
+#ifdef HAVE_MQTT
+#include <QtMqtt>
+#include <QStringList>
+#include <QMap>
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/MQTTClient.h"
+#endif
+
 #include <QWidget>
+#include <QList>
 
 #include "ui_livedatadock.h"
 #include "backend/datasources/LiveDataSource.h"
-#include <QList>
+
+class QTimer;
+class QTreeWidgetItem;
+class QString;
+class QCompleter;
 
 class LiveDataDock : public QWidget {
 	Q_OBJECT
@@ -49,8 +62,8 @@ private:
 
 	void pauseReading();
 	void continueReading();
-private slots:
 
+private slots:
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
 	void sampleSizeChanged(int);
@@ -59,11 +72,67 @@ private slots:
 
 	void updateNow();
 	void pauseContinueReading();
-public slots:
+
+#ifdef HAVE_MQTT
+public:
+	void setMQTTClients(const QList<MQTTClient*>& clients);
+//#ifdef MQTT_UNIT_TEST
+	bool testSubscribe(const QString&);
+	bool testUnsubscribe(const QString&);
+//#endif
+
+private slots:
+	void useWillMessage(int);
+	void willQoSChanged(int);
+	void willRetainChanged(int);
+	void willTopicChanged(const QString &);
+	void willMessageTypeChanged(int);
+	void willOwnMessageChanged(const QString&);
+	void updateWillTopics();
+	void willUpdateTypeChanged(int);
+	void willUpdateNow();
+	void willUpdateIntervalChanged(const QString&);
+	void statisticsChanged(QListWidgetItem *);
+	void addSubscription();
+	void removeSubscription();
+	void onMQTTConnect();
+	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+	void mqttMessageReceivedInBackground(const QByteArray&, const QMqttTopicName&);
+	void setTopicCompleter(const QString&);
+	void topicTimeout();
+	void fillSubscriptions();
+	void scrollToTopicTreeItem(const QString&);
+	void scrollToSubsriptionTreeItem(const QString&);
+	void removeClient(const QString&);
 
 signals:
+	void newTopic(const QString&);
+private:
 
+	void updateSubscriptionCompleter();
+	void addTopicToTree(const QString&);
+	bool checkTopicContains(const QString& superior, const QString& inferior);
+	QString checkCommonLevel(const QString& first, const QString& second);
+	void findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>&, QTreeWidgetItem*);
+	int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
+	void manageCommonLevelSubscriptions();
+	int commonLevelIndex(const QString& first, const QString& second);
+	void addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription);
+	void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList&, int level);
 
+	QList<MQTTClient*> m_mqttClients;
+	QMap<QString, QMqttClient*> m_clients;
+	QCompleter* m_topicCompleter;
+	QCompleter* m_subscriptionCompleter;
+	QMap<QString, QStringList> m_topicList;
+	bool m_searching;
+	QTimer* m_searchTimer;
+	QTimer* m_messageTimer;
+	bool m_interpretMessage;	
+	const MQTTClient* m_previousMQTTClient;
+	QString m_mqttUnsubscribeName;
+	QMap<QString, QVector<QString>> m_addedTopics;
+#endif
 };
 
 #endif // LIVEDATADOCK_H

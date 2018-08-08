@@ -31,10 +31,14 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
 
+class Spreadsheet;
 class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
 class QAbstractSocket;
+class MQTTTopic;
+class MQTTClient;
+
 class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -68,6 +72,15 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
+#ifdef HAVE_MQTT
+	void MQTTPreview(QVector<QStringList>&, const QString&, const QString&);
+	QString MQTTColumnStatistics(const MQTTTopic * topic) const;
+	AbstractColumn::ColumnMode MQTTColumnMode() const;
+	void readMQTTTopic(const QString&, const QString&, AbstractDataSource*dataSource);
+	void setPreparedForMQTT(bool, MQTTTopic *topic, const QString&);
+	QString separator() const;
+#endif
+
 	void setCommentCharacter(const QString&);
 	QString commentCharacter() const;
 	void setSeparatingCharacter(const QString&);
@@ -90,6 +103,7 @@ public:
 	void setRemoveQuotesEnabled(const bool);
 	bool removeQuotesEnabled() const;
 	void setCreateIndexEnabled(const bool);
+	bool createIndexEnabled() const;
 
 	void setVectorNames(const QString&);
 	QStringList vectorNames() const;
@@ -106,6 +120,8 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
+
+    int isPrepared();
 
 private:
 	std::unique_ptr<AsciiFilterPrivate> const d;
