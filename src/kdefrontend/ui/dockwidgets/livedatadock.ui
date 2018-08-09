@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>456</width>
-    <height>899</height>
+    <height>911</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="20" column="0">
     <widget class="QLabel" name="lWillUpdateInterval">
      <property name="text">
-      <string>Time interval</string>
+      <string>Time interval:</string>
      </property>
     </widget>
    </item>
@@ -31,7 +31,7 @@
    <item row="15" column="0">
     <widget class="QLabel" name="lWillStatistics">
      <property name="text">
-      <string>Will Statistics</string>
+      <string>Will statistics:</string>
      </property>
     </widget>
    </item>
@@ -45,7 +45,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Own message</string>
+       <string>Own Message</string>
       </property>
      </item>
      <item>
@@ -55,7 +55,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Last message received</string>
+       <string>Last Message Received</string>
       </property>
      </item>
     </widget>
@@ -63,28 +63,28 @@
    <item row="16" column="0">
     <widget class="QLabel" name="lWillTopic">
      <property name="text">
-      <string>Will topic</string>
+      <string>Will topic:</string>
      </property>
     </widget>
    </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lWillQos">
      <property name="text">
-      <string>Will QoS</string>
+      <string>Will QoS:</string>
      </property>
     </widget>
    </item>
    <item row="13" column="0">
     <widget class="QLabel" name="lWillMessageType">
      <property name="text">
-      <string>Message type</string>
+      <string>Message type:</string>
      </property>
     </widget>
    </item>
    <item row="19" column="0">
     <widget class="QLabel" name="lWillUpdate">
      <property name="text">
-      <string>Will Update Type</string>
+      <string>Will update type:</string>
      </property>
     </widget>
    </item>
@@ -297,7 +297,7 @@
    <item row="14" column="0">
     <widget class="QLabel" name="lWillOwnMessage">
      <property name="text">
-      <string>Own message</string>
+      <string>Own message:</string>
      </property>
     </widget>
    </item>
@@ -443,12 +443,12 @@
      </property>
      <item>
       <property name="text">
-       <string>Time interval</string>
+       <string>Time Interval</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>On click</string>
+       <string>On Click</string>
       </property>
      </item>
     </widget>
@@ -475,7 +475,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Update will message</string>
+      <string>Update Will Message</string>
      </property>
     </widget>
    </item>

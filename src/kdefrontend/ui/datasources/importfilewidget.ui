@@ -16,8 +16,17 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">   
-   <property name="margin">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -30,8 +39,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>614</width>
-        <height>1828</height>
+        <width>610</width>
+        <height>1848</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -249,7 +258,7 @@
             <property name="toolTip">
              <string>Specify the name of the file to import.</string>
             </property>
-            <property name="clearButtonEnabled" stdset="0">
+            <property name="clearButtonEnabled">
              <bool>true</bool>
             </property>
            </widget>
@@ -366,7 +375,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Manage subscriptions</string>
+             <string>Manage Subscriptions</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_6" columnstretch="2,2,1,2,2">
              <item row="2" column="0">
@@ -507,7 +516,16 @@
           <string>Format Options</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -1138,12 +1156,12 @@
            <widget class="QComboBox" name="cbWillUpdate">
             <item>
              <property name="text">
-              <string>Time interval</string>
+              <string>Time Interval</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>On click</string>
+              <string>On Click</string>
              </property>
             </item>
            </widget>
@@ -1158,7 +1176,7 @@
             </property>
             <item>
              <property name="text">
-              <string>Own message</string>
+              <string>Own Message</string>
              </property>
             </item>
             <item>
@@ -1168,7 +1186,7 @@
             </item>
             <item>
              <property name="text">
-              <string>Last message received</string>
+              <string>Last Message Received</string>
              </property>
             </item>
            </widget>
@@ -1229,7 +1247,7 @@
           <item row="13" column="0">
            <widget class="QLabel" name="lWillUpdate">
             <property name="text">
-             <string>Will Update Type:</string>
+             <string>Will update type:</string>
             </property>
            </widget>
           </item>
@@ -1243,7 +1261,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="lWillStatistics">
             <property name="text">
-             <string>Will Statistics:</string>
+             <string>Will statistics:</string>
             </property>
            </widget>
           </item>
@@ -1315,4 +1333,3 @@
  <resources/>
  <connections/>
 </ui>
-

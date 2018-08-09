@@ -609,7 +609,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	}
 #endif
 	else if (className == "LiveDataSource") {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18n("Live data source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
 
 		if (!m_mainWindow->m_liveDataDock) {
 			m_mainWindow->m_liveDataDock = new LiveDataDock(m_mainWindow->stackedWidget);

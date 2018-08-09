@@ -498,7 +498,7 @@ void ImportFileDialog::checkOkButton() {
 		}
 		else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made, or the file filter isn't Ascii."));
+			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made, or the file filter is not ASCII."));
 		}
 #endif
 		break;

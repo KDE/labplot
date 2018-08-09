@@ -30,14 +30,14 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lUserName">
      <property name="text">
-      <string>User name</string>
+      <string>User name:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lPassword">
      <property name="text">
-      <string>Password</string>
+      <string>Password:</string>
      </property>
     </widget>
    </item>
@@ -50,7 +50,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QPushButton" name="bChange">
      <property name="text">
-      <string>Make changes</string>
+      <string>Make Changes</string>
      </property>
     </widget>
    </item>
@@ -64,7 +64,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="lId">
      <property name="text">
-      <string>Client ID</string>
+      <string>Client ID:</string>
      </property>
     </widget>
    </item>
