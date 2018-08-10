@@ -2310,6 +2310,7 @@ void ImportFileWidget::authenticationChecked(int state) {
  */
 void ImportFileWidget::mqttConnection() {
 	if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
+		WAIT_CURSOR;
 		//Check whether the set options are valid and a connection can be made, or not
 		const bool hostSet = !ui.leHost->text().isEmpty();
 		const bool portSet = !ui.lePort->text().isEmpty();
@@ -2340,6 +2341,7 @@ void ImportFileWidget::mqttConnection() {
 		}
 	}
 	else if (m_client->state() == QMqttClient::ClientState::Connected) {
+		WAIT_CURSOR;
 		qDebug()<<"Disconnecting from mqtt broker"	;
 		m_client->disconnectFromHost();
 	}
@@ -2370,6 +2372,7 @@ void ImportFileWidget::onMqttConnect() {
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
 		if(!m_mainSubscription)
 			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+		RESET_CURSOR;
 	}
 }
 
@@ -2382,10 +2385,8 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.bConnect->setText("Connect");
 
 	ui.leHost->setEnabled(true);
-	ui.leHost->clear();
 
 	ui.lePort->setEnabled(true);
-	ui.lePort->clear();
 
 	ui.lePassword->setEnabled(true);
 	ui.lePassword->clear();
@@ -2413,8 +2414,10 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_topicList.clear();
 	m_searching = false;
 	m_searchTimer->stop();
+	m_connectTimeoutTimer->stop();
 	m_messageArrived.clear();
 	m_lastMessage.clear();
+	RESET_CURSOR;
 }
 
 /*!
