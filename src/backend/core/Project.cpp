@@ -130,7 +130,7 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 
 Project::~Project() {
 	//if the project is being closed and the live data sources still continue reading the data,
-	//the dependend objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
+	//the dependent objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
 	//->stop reading the live data sources prior to deleting all objects.
 	for (auto* lds : children<LiveDataSource>())
 		lds->pauseReading();

@@ -784,7 +784,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG("	Reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 
 	//move to the last read position, from == total bytes read
-	//since the other source types are sequencial we cannot seek on them
+	//since the other source types are sequential we cannot seek on them
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
 
@@ -2198,7 +2198,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 						if (readingType != MQTTClient::ReadingType::TillEnd) {
 							newLinesForSampleSizeNotTillEnd++;
-							//for Continous reading and FromEnd we read sample rate number of lines if possible
+							//for Continuous reading and FromEnd we read sample rate number of lines if possible
 							if (newLinesForSampleSizeNotTillEnd == spreadsheet->sampleSize()) {
 								sampleSizeReached = true;
 								break;
@@ -2403,7 +2403,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 					linesToRead = newLinesTillEnd;
 			} else {
 				//we read max sample size number of lines when the reading mode
-				//is ContinouslyFixed or FromEnd
+				//is ContinuouslyFixed or FromEnd
 				if(spreadsheet->sampleSize() <= spreadsheet->keepNValues())
 					linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
 				else
@@ -2496,7 +2496,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 				}
 			} else {
 				//we read max sample rate number of lines when the reading mode
-				//is ContinouslyFixed or FromEnd
+				//is ContinuouslyFixed or FromEnd
 				currentRow = m_actualRows - linesToRead;
 			}
 		}
@@ -2712,7 +2712,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, const QString& to
 
 /*!
  * \brief Prepares the filter to read from messages received by the MQTTTopic.
- * Returns whether the preparation was successfull or not
+ * Returns whether the preparation was successful or not
  * \param message
  * \param topic
  */

@@ -1380,7 +1380,7 @@ void ImportFileWidget::updateSubscriptionTree() {
 /*!
  *\brief Restores the children of a top level item in twSubscriptions if it contains wildcards
  *
- * \param topic pointer to a top level item in twTopics wich represents the root of the subscription topic
+ * \param topic pointer to a top level item in twTopics which represents the root of the subscription topic
  * \param subscription pointer to a top level item in twSubscriptions, this is the item whose children will be restored
  * \param list QStringList containing the levels of the subscription topic
  * \param level the level's number which is being investigated
@@ -2348,7 +2348,7 @@ void ImportFileWidget::mqttConnection() {
 }
 
 /*!
- *\brief called when the client connects to the broker succesfully, it subscribes to every topic (# wildcard)
+ *\brief called when the client connects to the broker successfully, it subscribes to every topic (# wildcard)
  * in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
@@ -2377,7 +2377,7 @@ void ImportFileWidget::onMqttConnect() {
 }
 
 /*!
- *\brief called when the client disconnects from the broker succesfully
+ *\brief called when the client disconnects from the broker successfully
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {

@@ -826,7 +826,7 @@ void HistogramDock::valuesTypeChanged(int index) {
 		curve->setValuesType(valuesType);
 }
 
-//TODO: very similiar to ColumnDock
+//TODO: very similar to ColumnDock
 void HistogramDock::showValuesColumnFormat(const Column* column){
   if (!column){
 	// no valid column is available
@@ -860,7 +860,7 @@ void HistogramDock::showValuesColumnFormat(const Column* column){
   }
 }
 
-//TODO: very similiar to ColumnDock
+//TODO: very similar to ColumnDock
 void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode) {
 	ui.cbValuesFormat->clear();
 

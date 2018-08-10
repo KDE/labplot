@@ -157,7 +157,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	QTime timer;
 	timer.start();
-	DEBUG("	Inital read()");
+	DEBUG("	Initial read()");
 	source->read();
 	statusBar->showMessage( i18n("Live data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 

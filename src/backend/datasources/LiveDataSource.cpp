@@ -642,7 +642,7 @@ void LiveDataSource::readyRead() {
 //		dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	//since we won't have the timer to call read() where we create new connections
-	//for sequencial devices in read() we just request data/connect to servers
+	//for sequential devices in read() we just request data/connect to servers
 	if (m_updateType == NewData)
 		read();
 }

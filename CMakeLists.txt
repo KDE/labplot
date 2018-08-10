@@ -103,7 +103,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
 	message(STATUS "Intel C++ compiler detected, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
-	#-std=c++0x comes with cmake's general flags, depricated in icc, remove it
+	#-std=c++0x comes with cmake's general flags, deprecated in icc, remove it
 	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 	message(STATUS "PGI C++ compiler detected, adding compile flags")

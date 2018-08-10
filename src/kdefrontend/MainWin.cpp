@@ -807,7 +807,7 @@ void MainWin::updateGUI() {
 #ifdef HAVE_CANTOR_LIBS
 	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
 	if(cantorworksheet) {
-		// enable Cantor Worksheet related menues
+		// enable Cantor Worksheet related menus
 		factory->container("cas_worksheet", this)->setEnabled(true);
 		CantorWorksheetView* view=qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("cas_worksheet", this));

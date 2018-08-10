@@ -925,7 +925,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	for (int j = 0; j < colCount; j++)
 		matrix->setColumnWidth(j, layer.width * scaling_factor);
 
-	//TODO: check colum major vs. row major to improve the performance here
+	//TODO: check column major vs. row major to improve the performance here
 	for (int i = 0; i < rowCount; i++) {
 		for (int j = 0; j < colCount; j++)
 			matrix->setCell(i, j, layer.data[j + i*colCount]);
@@ -1152,7 +1152,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//the text before these formatting tags, if available, is interpreted as the legend title
 				QString legendTitle;
 
-				//search for the first occurance of the legend symbol substring
+				//search for the first occurrence of the legend symbol substring
 				int index = legendText.indexOf(QLatin1String("\\l("), 0, Qt::CaseInsensitive);
 				if (index != -1)
 					legendTitle = legendText.left(index);

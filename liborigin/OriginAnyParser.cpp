@@ -850,7 +850,7 @@ void OriginAnyParser::readProjectLeaf(tree<ProjectNode>::iterator current_folder
 
 void OriginAnyParser::readAttachmentList() {
 	/* Attachments are divided in two groups (which can be empty)
-	 first group is preceeded by two integers: 4096 (0x1000) and number_of_attachments followed as usual by a '\n' mark
+	 first group is preceded by two integers: 4096 (0x1000) and number_of_attachments followed as usual by a '\n' mark
 	 second group is a series of (header, name, data) triplets without the '\n' mark.
 	*/
 

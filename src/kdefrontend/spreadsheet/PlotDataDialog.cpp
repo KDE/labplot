@@ -321,7 +321,7 @@ void PlotDataDialog::plot() {
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
-			//set the axis titles befor we add the plot to the worksheet
+			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {
@@ -366,7 +366,7 @@ void PlotDataDialog::plot() {
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
 			plot->initDefault(CartesianPlot::FourAxes);
 
-			//set the axis titles befor we add the plot to the worksheet
+			//set the axis titles before we add the plot to the worksheet
 			//set the x-axis names
 			const QString& xColumnName = ui->cbXColumn->currentText();
 			for (auto axis : plot->children<Axis>()) {

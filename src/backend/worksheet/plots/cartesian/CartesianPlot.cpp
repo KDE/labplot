@@ -2431,14 +2431,14 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 			else
-				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+				info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
 													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 
 			info += QLatin1String(", ");
 			if (yRangeFormat == CartesianPlot::Numeric)
 				 info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 			else
-				info += i18n("from y=%1 to y=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+				info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
 													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode) {
 			m_selectionEnd.setX(event->pos().x());
@@ -2447,7 +2447,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (xRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 			else
-				info = i18n("from x=%1 to x=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
+				info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
 													QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode) {
 			m_selectionEnd.setX(dataRect.width()/2);
@@ -2456,7 +2456,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (yRangeFormat == CartesianPlot::Numeric)
 				 info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 			else
-				info = i18n("from y=%1 to y=%2").arg(QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
+				info = i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
 													QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 		}
 		q->info(info);

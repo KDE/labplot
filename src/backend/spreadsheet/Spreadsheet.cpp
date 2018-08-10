@@ -874,7 +874,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			}
 		}
 
-		//rename the columns that are already available and supress the dataChanged signal for them
+		//rename the columns that are already available and suppress the dataChanged signal for them
 		for (int i = 0; i < childCount<Column>(); i++) {
 			if (mode == AbstractFileFilter::Replace)
 				child<Column>(i)->setSuppressDataChangedSignal(true);
