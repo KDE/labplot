@@ -169,7 +169,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 	// default filter
 	ui.swOptions->setCurrentIndex(AbstractFileFilter::Ascii);
-#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS) || !defined(HAVE_ZIP)
+#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS) || !defined(HAVE_ZIP) || !defined(HAVE_MQTT)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
 #endif
 #ifndef HAVE_HDF5
@@ -911,7 +911,7 @@ bool ImportFileWidget::checkTopicContains(const QString& superior, const QString
  * \param second the name of a topic
  * \return The name of the common topic, if it exists, otherwise ""
  */
-QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {	
+QString ImportFileWidget::checkCommonLevel(const QString& first, const QString& second) {
 	QStringList firstList = first.split('/', QString::SkipEmptyParts);
 	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
 	QString commonTopic = "";
@@ -2424,7 +2424,7 @@ void ImportFileWidget::onMqttDisconnect() {
  *\brief called when the subscribe button is pressed
  * subscribes to the topic represented by the current item of twTopics
  */
-void ImportFileWidget::mqttSubscribe() {	
+void ImportFileWidget::mqttSubscribe() {
 	QString name;
 	QTreeWidgetItem *item = ui.twTopics->currentItem();
 	if(item != nullptr) {
@@ -2854,7 +2854,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::TransportInvalid:
-	case QMqttClient::ProtocolViolation:		
+	case QMqttClient::ProtocolViolation:
 		break;
 	default:
 		break;

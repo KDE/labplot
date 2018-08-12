@@ -1,3 +1,5 @@
+IF (Qt5Mqtt_FOUND)
+
 add_executable (mqttunittest MQTTUnitTest.cpp)
 
 target_link_libraries(mqttunittest Qt5::Test)
@@ -29,10 +31,10 @@ ENDIF ()
 IF (USE_LIBORIGIN)
 	target_link_libraries(mqttunittest liborigin-static )
 ENDIF ()
-IF (Qt5Mqtt_FOUND)
-	target_link_libraries(mqttunittest Qt5::Mqtt )
-ENDIF ()
 
+target_link_libraries(mqttunittest Qt5::Mqtt )
 target_link_libraries(mqttunittest labplot2lib)
 
 add_test(NAME mqttunittest COMMAND mqttunittest)
+
+ENDIF ()
