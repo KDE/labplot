@@ -2371,9 +2371,9 @@ void ImportFileWidget::onMqttConnect() {
 		QMqttTopicFilter globalFilter{"#"};
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
 		if(!m_mainSubscription)
-			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
-		RESET_CURSOR;
+			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");		
 	}
+	RESET_CURSOR;
 }
 
 /*!
@@ -2931,5 +2931,6 @@ void ImportFileWidget::mqttConnectTimeout() {
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
 	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out!");
+	RESET_CURSOR;
 }
 #endif
