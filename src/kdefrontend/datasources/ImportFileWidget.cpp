@@ -101,6 +101,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 	ui.swOptions->insertWidget(AbstractFileFilter::Binary, binaryw);
 
+	QWidget* jsonw = new QWidget();
+	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
+	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+
 	QWidget* imagew = new QWidget();
 	m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
 	ui.swOptions->insertWidget(AbstractFileFilter::Image, imagew);
@@ -116,10 +120,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	QWidget* fitsw = new QWidget();
 	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 	ui.swOptions->insertWidget(AbstractFileFilter::FITS, fitsw);
-
-	QWidget* jsonw = new QWidget();
-	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
 
 	QWidget* rootw = new QWidget();
 	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
@@ -190,6 +190,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
 	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
+	connect(ui.leRequestQuery, SIGNAL(textChanged(QString)), this, SIGNAL(queryChanged()));
 
 	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 
@@ -242,6 +243,7 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port",""));
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize").toInt());
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
+	ui.leRequestQuery->setText(conf.readEntry("RequestQuery",""));
 
 	m_suppressRefresh = false;
 	refreshPreview();
@@ -272,6 +274,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
+	conf.writeEntry("RequestQuery", ui.leRequestQuery->text());
 
 	// data type specific settings
 	m_asciiOptionsWidget->saveSettings();
@@ -293,6 +296,9 @@ void ImportFileWidget::hideDataSource() {
 
 	ui.lPort->hide();
 	ui.lePort->hide();
+
+	ui.lRequestQuery->hide();
+	ui.leRequestQuery->hide();
 
 	ui.cbSerialPort->hide();
 	ui.lSerialPort->hide();
@@ -378,6 +384,10 @@ QString ImportFileWidget::port() const {
 	return ui.lePort->text();
 }
 
+QString ImportFileWidget::requestQuery() const {
+	return ui.leRequestQuery->text();
+}
+
 QString ImportFileWidget::serialPort() const {
 	return ui.cbSerialPort->currentText();
 }
@@ -434,9 +444,10 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
 	case LiveDataSource::SourceType::WebService: {
-		QNetworkRequest request;
-		request.setUrl(QUrl(ui.leHost->text()));
-		source->setWebServiceRequest(request);
+		QUrl requestUrl;
+		requestUrl.setUrl(ui.leHost->text());
+		requestUrl.setQuery(ui.leRequestQuery->text());
+		source->setWebServiceRequest(QNetworkRequest(requestUrl));
 		break;
 	}
 	default:
@@ -1185,6 +1196,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->hide();
 		ui.lPort->hide();
 		ui.lePort->hide();
+		ui.lRequestQuery->hide();
+		ui.leRequestQuery->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 
@@ -1202,6 +1215,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->hide();
 		ui.lPort->hide();
 		ui.lePort->hide();
+		ui.lRequestQuery->hide();
+		ui.leRequestQuery->hide();
 		ui.cbSerialPort->hide();
 		ui.lSerialPort->hide();
 		ui.chbLinkFile->hide();
@@ -1223,6 +1238,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
 
+		ui.lRequestQuery->hide();
+		ui.leRequestQuery->hide();
 		ui.lFileName->hide();
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
@@ -1244,6 +1261,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.leHost->hide();
 		ui.lePort->hide();
 		ui.lPort->hide();
+		ui.lRequestQuery->hide();
+		ui.leRequestQuery->hide();
 		ui.lFileName->hide();
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
@@ -1258,6 +1277,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	case LiveDataSource::SourceType::WebService:
 		ui.lHost->show();
 		ui.leHost->show();
+
+		ui.lRequestQuery->show();
+		ui.leRequestQuery->show();
 
 		ui.lePort->hide();
 		ui.lPort->hide();
@@ -1298,12 +1320,12 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 }
 
 void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
-	for (int i = 2; i < ui.swOptions->count(); ++i)
+	for (int i = 3; i < ui.swOptions->count(); ++i)
 		ui.swOptions->removeWidget(ui.swOptions->widget(i));
 
 	const int size = ui.cbFileType->count();
-	for (int i = 2; i < size; ++i)
-		ui.cbFileType->removeItem(2);
+	for (int i = 3; i < size; ++i)
+		ui.cbFileType->removeItem(3);
 
 	ui.cbBaudRate->hide();
 	ui.lBaudRate->hide();
@@ -1313,6 +1335,9 @@ void ImportFileWidget::initializeAndFillPortsAndBaudRates() {
 
 	ui.lPort->hide();
 	ui.lePort->hide();
+
+	ui.lRequestQuery->hide();
+	ui.leRequestQuery->hide();
 
 	ui.cbSerialPort->hide();
 	ui.lSerialPort->hide();

@@ -450,19 +450,55 @@ void ImportFileDialog::checkOkButton() {
 			serialPort->setBaudRate(m_importFileWidget->baudRate());
 			serialPort->setPortName(m_importFileWidget->serialPort());
 
-			bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
-			okButton->setEnabled(serialPortOpened);
-			if (serialPortOpened)
-				okButton->setToolTip(i18n("Close the dialog and import the data."));
-			else
-				okButton->setToolTip(i18n("Could not connect to the provided serial port."));
-		} else {
-			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Serial port number is missing."));
+				bool serialPortOpened = serialPort->open(QIODevice::ReadOnly);
+				okButton->setEnabled(serialPortOpened);
+				if (serialPortOpened)
+					okButton->setToolTip(i18n("Close the dialog and import the data."));
+				else
+					okButton->setToolTip(i18n("Could not connect to the provided serial port."));
+			} else {
+				okButton->setEnabled(false);
+				okButton->setToolTip(i18n("Serial port number is missing."));
+			}
+		}
+		case LiveDataSource::SourceType::WebService: {
+			const bool enable = !m_importFileWidget->host().isEmpty();
+			if (enable) {
+				QNetworkAccessManager *mgr = new QNetworkAccessManager(this);
+				//TODO: add POST and PUT
+				QUrl url(m_importFileWidget->host());
+				url.setQuery(m_importFileWidget->requestQuery());
+				QNetworkRequest request(url);
+				//TODO: add timeout option
+
+				QEventLoop loop;
+				QTimer timer;
+				timer.setSingleShot(true);
+
+				connect(&timer, SIGNAL(timeout()), &loop, SLOT(checkReply()));
+				QNetworkReply *reply = mgr->get(request);
+				connect(reply, SIGNAL(finished()), &loop, SLOT(checkReply()));
+				timer.start(500);
+				loop.exec();
+
+				if (!timer.isActive() || reply->error() != QNetworkReply::NoError) {
+					disconnect(reply, SIGNAL(finished()), &loop, SLOT(checkReply()));
+					reply->abort();
+					okButton->setEnabled(false);
+					okButton->setToolTip(i18n("Load data from webservice fault."));
+				} else {
+					okButton->setEnabled(true);
+					okButton->setToolTip(i18n("Close the dialog and import the data."));
+				}
+			} else {
+				okButton->setEnabled(false);
+				okButton->setToolTip(i18n("Web service URL is missing."));
+			}
 		}
 	}
-	}
 }
+
+void ImportFileDialog::checkReply() { }
 
 QString ImportFileDialog::selectedObject() const {
 	return m_importFileWidget->selectedObject();

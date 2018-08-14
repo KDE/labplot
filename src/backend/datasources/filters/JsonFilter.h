@@ -34,6 +34,7 @@
 #include "backend/core/AbstractColumn.h"
 
 #include <QJsonValue>
+#include <backend/datasources/LiveDataSource.h>
 
 class QStringList;
 class QIODevice;
@@ -53,6 +54,7 @@ public:
 	static QStringList dataTypes();
 	static QStringList dataRowTypes();
 
+	QJsonValue readDataFromLiveDevice(QIODevice& device, AbstractDataSource*, QJsonValue from = QJsonValue());
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
 	// overloaded function to read from file

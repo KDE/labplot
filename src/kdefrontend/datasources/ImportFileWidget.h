@@ -70,6 +70,7 @@ public:
 
 	QString host() const;
 	QString port() const;
+	QString requestQuery() const;
 	QString serialPort() const;
 	int baudRate() const;
 	void initializeAndFillPortsAndBaudRates();
@@ -114,6 +115,7 @@ signals:
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
+	void queryChanged();
 	void previewRefreshed();
 	void checkedFitsTableToMatrix(const bool enable);
 

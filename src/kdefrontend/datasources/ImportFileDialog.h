@@ -61,6 +61,7 @@ protected  slots:
 	virtual void checkOkButton();
 
 private slots:
+	void checkReply();
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);
 	void loadSettings();

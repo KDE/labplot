@@ -37,6 +37,7 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QSerialPort>
+#include <QJsonValue>
 #include <QTimer>
 
 class QString;
@@ -192,6 +193,7 @@ private:
 	int m_baudRate;
 
 	qint64 m_bytesRead;
+	QJsonValue m_lastRow;
 
 	AbstractFileFilter* m_filter;
 

@@ -31,6 +31,9 @@
 #include "backend/datasources/filters/JsonFilterPrivate.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -49,6 +52,13 @@
 JsonFilter::JsonFilter() : AbstractFileFilter(), d(new JsonFilterPrivate(this)) {}
 
 JsonFilter::~JsonFilter() {}
+
+/*!
+reads the content of the live device \c device and return last row.
+*/
+QJsonValue JsonFilter::readDataFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, QJsonValue from) {
+	return d->readDataFromLiveDevice(device, dataSource, from);
+}
 
 /*!
 reads the content of the device \c device.
@@ -226,6 +236,7 @@ JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner) : q(owner),
 	m_actualRows(0),
 	m_actualCols(0),
 	m_prepared(false),
+	m_livePrepared(false),
 	m_columnOffset(0) {
 }
 //TODO: delete model from memory
@@ -293,7 +304,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 					return -1;
 				if(vectorNames.count() == 0) {
 					vectorNames = row.toObject().keys();
-					for(int k = 1; i < startColumn; i++)
+					for(int k = 1; k < startColumn; k++)
 						vectorNames.removeFirst();
 				}
 				columnValue = *(row.toObject().begin() + colIndexInContainer);
@@ -375,6 +386,7 @@ void JsonFilterPrivate::setValueFromString(int column, int row, QString valueStr
 		}
 		case AbstractColumn::Text:
 			static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = valueString;
+			QDEBUG("actual size" << static_cast<QVector<QString> *>(m_dataContainer[column])->count());
 			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -491,6 +503,455 @@ int JsonFilterPrivate::prepareDocumentToRead(const QJsonDocument& doc) {
 	DEBUG("actual cols/rows = " << m_actualCols << ' ' << m_actualRows);
 
 	return 0;
+}
+
+QVector<QJsonValue>* JsonFilterPrivate::getNewRows(QJsonValue lastRow) {
+	QVector<QJsonValue>* avaliableRows = new QVector<QJsonValue>();
+	switch (containerType) {
+		case JsonFilter::Array: {
+			QJsonArray arr = m_preparedDoc.array();
+
+			if(arr.count() < startRow)
+				return avaliableRows;
+
+			int startRowOffset = startRow - 2;
+			int endRowOffset = (endRow == -1 || endRow > arr.count()) ? arr.count() : endRow;
+			endRowOffset--;
+
+			for(QJsonArray::iterator it = arr.begin() + endRowOffset - 1; it != arr.begin() + startRowOffset; --it) {
+				if(*it != lastRow)
+					avaliableRows->append((*it));
+				else
+					return avaliableRows;
+			}
+			break;
+		}
+
+		case JsonFilter::Object: {
+			QJsonObject obj = m_preparedDoc.object();
+
+			if(obj.count() < startRow)
+				return avaliableRows;
+
+			if(parseRowsName)
+				m_liveSourceObjectKeys.clear();
+
+			int startRowOffset = startRow - 2;
+			int endRowOffset = (endRow == -1 || endRow > obj.count()) ? obj.count() : endRow;
+			endRowOffset--;
+
+			for(QJsonObject::iterator it = obj.begin() + endRowOffset - 1; it != obj.begin() + startRowOffset; --it) {
+				if(*it != lastRow) {
+					avaliableRows->append(*it);
+					if(parseRowsName)
+						m_liveSourceObjectKeys.append(it.key());
+				}
+				else
+					return avaliableRows;
+			}
+			break;
+		}
+	}
+	return avaliableRows;
+}
+
+QJsonValue JsonFilterPrivate::readDataFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, QJsonValue from) {
+	QJsonValue lastRow = QJsonValue();
+
+	LiveDataSource *spreadsheet = dynamic_cast<LiveDataSource *>(dataSource);
+	switch (spreadsheet->sourceType()) {
+		case LiveDataSource::SourceType::FileOrPipe:
+		case LiveDataSource::SourceType::WebService: {
+			const int deviceError = prepareDeviceToRead(device);
+			if (deviceError != 0) {
+				DEBUG("Device error = " << deviceError);
+				return lastRow;
+			}
+			break;
+		}
+		case LiveDataSource::SourceType::NetworkTcpSocket:
+		case LiveDataSource::SourceType::NetworkUdpSocket:
+		case LiveDataSource::SourceType::LocalSocket:
+		case LiveDataSource::SourceType::SerialPort:
+			return lastRow;
+	}
+
+	if (!m_livePrepared) {
+		DEBUG("Preparing ..");
+		// prepare import for spreadsheet
+		spreadsheet->setUndoAware(false);
+		spreadsheet->resize(AbstractFileFilter::Replace, vectorNames, m_actualCols);
+		DEBUG("	data source resized to col: " << m_actualCols);
+		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
+
+		//columns in a file data source don't have any manual changes.
+		//make the available columns undo unaware and suppress the "data changed" signal.
+		//data changes will be propagated via an explicit Column::setChanged() call once new data was read.
+		for (int i = 0; i < spreadsheet->childCount<Column>(); i++) {
+			spreadsheet->child<Column>(i)->setUndoAware(false);
+			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
+		}
+
+		int keepNValues = spreadsheet->keepNValues();
+		if (keepNValues == 0)
+			spreadsheet->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
+		else {
+			spreadsheet->setRowCount(keepNValues);
+			m_actualRows = keepNValues;
+		}
+
+		m_dataContainer.resize(m_actualCols);
+
+		DEBUG("	Setting data ..");
+		for (int n = 0; n < m_actualCols; ++n) {
+			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
+			switch (columnModes[n]) {
+				case AbstractColumn::Numeric: {
+					QVector<double> *vector = static_cast<QVector<double> * >(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::Integer: {
+					QVector<int> *vector = static_cast<QVector<int> * >(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::Text: {
+					QVector<QString> *vector = static_cast<QVector<QString> *>(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::DateTime: {
+					QVector<QDateTime> *vector = static_cast<QVector<QDateTime> * >(spreadsheet->child<Column>(
+							n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+					//TODO
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
+					break;
+			}
+		}
+		DEBUG("Prepared!");
+	}
+
+	LiveDataSource::ReadingType readingType;
+	if (!m_livePrepared) {
+		readingType = LiveDataSource::ReadingType::TillEnd;
+	} else {
+		//we have to read all the data when reading from end
+		//so we set readingType to TillEnd
+		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
+			readingType = LiveDataSource::ReadingType::TillEnd;
+			//if we read the whole file we just start from the beginning of it
+			//and read till end
+		else if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+			readingType = LiveDataSource::ReadingType::TillEnd;
+		else
+			readingType = spreadsheet->readingType();
+	}
+	DEBUG("	reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
+
+	QVector<QJsonValue> *newData = getNewRows(
+			readingType != LiveDataSource::ReadingType::WholeFile ? from : QJsonValue());
+	DEBUG("	rows available = " << newData->size());
+
+	if (readingType != LiveDataSource::ReadingType::TillEnd)
+		newData->resize(spreadsheet->sampleSize());
+	DEBUG("	rows for read: " << newData->size());
+
+	//now we reset the readingType
+	if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
+		readingType = spreadsheet->readingType();
+
+	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
+
+	int currentRow = 0; // indexes the position in the vector(column)
+	int linesToRead = 0;
+	int keepNValues = spreadsheet->keepNValues();
+
+	DEBUG("Increase row count");
+		if (keepNValues == 0) {
+			if (readingType != LiveDataSource::ReadingType::TillEnd)
+				m_actualRows += qMin(newData->size(), spreadsheet->sampleSize());
+			else {
+				//we don't increase it if we reread the whole file, we reset it
+				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
+					m_actualRows += newData->size();
+				else
+					m_actualRows = newData->size();
+			}
+			//appending
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+				linesToRead = m_actualRows;
+			else
+				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+
+		} else {    // fixed size
+			if (readingType == LiveDataSource::ReadingType::TillEnd)
+				linesToRead = (newData->size() > m_actualRows) ? m_actualRows : newData->size();
+			else {
+				//we read max sample rate number of lines when the reading mode
+				//is ContinuouslyFixed or FromEnd, WholeFile is disabled
+				linesToRead = qMin(spreadsheet->sampleSize(), newData->size());
+			}
+		}
+		DEBUG("	actual rows = " << m_actualRows);
+
+		if (linesToRead == 0)
+			return lastRow;
+
+	DEBUG("	lines to read = " << linesToRead);
+
+	//new rows/resize columns if we don't have a fixed size
+	//TODO if the user changes this value..m_resizedToFixedSize..setResizedToFixedSize
+	if (keepNValues == 0) {
+		if (spreadsheet->rowCount() < m_actualRows)
+			spreadsheet->setRowCount(m_actualRows);
+
+		if (!m_livePrepared)
+			currentRow = 0;
+		else {
+			// indexes the position in the vector(column)
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+				currentRow = 0;
+			else
+				currentRow = spreadsheetRowCountBeforeResize;
+		}
+
+		// if we have fixed size, we do this only once in preparation, here we can use
+		// m_prepared and we need something to decide whether it has a fixed size or increasing
+		for (int n = 0; n < m_actualCols; ++n) {
+			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+			switch (columnModes[n]) {
+				case AbstractColumn::Numeric: {
+					QVector<double> *vector = static_cast<QVector<double> * >(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::Integer: {
+					QVector<int> *vector = static_cast<QVector<int> * >(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::Text: {
+					QVector<QString> *vector = static_cast<QVector<QString> *>(spreadsheet->child<Column>(n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+				case AbstractColumn::DateTime: {
+					QVector<QDateTime> *vector = static_cast<QVector<QDateTime> * >(spreadsheet->child<Column>(
+							n)->data());
+					vector->resize(m_actualRows);
+					m_dataContainer[n] = static_cast<void *>(vector);
+					break;
+				}
+					//TODO
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
+					break;
+			}
+		}
+	} else {
+		//when we have a fixed size we have to pop sampleSize number of lines if specified
+		//here popping, setting currentRow
+		if (!m_livePrepared) {
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+				currentRow = 0;
+			else
+				currentRow = m_actualRows - qMin(newData->size(), m_actualRows);
+		} else {
+			if (readingType == LiveDataSource::ReadingType::TillEnd) {
+				if (newData->size() > m_actualRows) {
+					currentRow = 0;
+				} else {
+					if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+						currentRow = 0;
+					else
+						currentRow = m_actualRows - newData->size();
+				}
+			} else {
+				//we read max sample rate number of lines when the reading mode
+				//is ContinuouslyFixed or FromEnd
+				currentRow = m_actualRows - qMin(spreadsheet->sampleSize(), newData->size());
+			}
+		}
+
+		if (m_livePrepared) {
+			for (int row = 0; row < linesToRead; ++row) {
+				for (int col = 0; col < m_actualCols; ++col) {
+					switch (columnModes[col]) {
+						case AbstractColumn::Numeric: {
+							QVector<double> *vector = static_cast<QVector<double> * >(spreadsheet->child<Column>(
+									col)->data());
+							vector->pop_front();
+							vector->resize(m_actualRows);
+							m_dataContainer[col] = static_cast<void *>(vector);
+							break;
+						}
+						case AbstractColumn::Integer: {
+							QVector<int> *vector = static_cast<QVector<int> * >(spreadsheet->child<Column>(
+									col)->data());
+							vector->pop_front();
+							vector->resize(m_actualRows);
+							m_dataContainer[col] = static_cast<void *>(vector);
+							break;
+						}
+						case AbstractColumn::Text: {
+							QVector<QString> *vector = static_cast<QVector<QString> *>(spreadsheet->child<Column>(
+									col)->data());
+							vector->pop_front();
+							vector->resize(m_actualRows);
+							m_dataContainer[col] = static_cast<void *>(vector);
+							break;
+						}
+						case AbstractColumn::DateTime: {
+							QVector<QDateTime> *vector = static_cast<QVector<QDateTime> * >(spreadsheet->child<Column>(
+									col)->data());
+							vector->pop_front();
+							vector->resize(m_actualRows);
+							m_dataContainer[col] = static_cast<void *>(vector);
+							break;
+						}
+							//TODO
+						case AbstractColumn::Month:
+						case AbstractColumn::Day:
+							break;
+					}
+				}
+			}
+		}
+	}
+
+	// from the last row we read the new data in the spreadsheet
+	qDebug() << "reading from line" << currentRow << " till end" << newData->size();
+	qDebug() << "Lines to read:" << linesToRead << ", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols;
+	int newDataIdx = 0;
+	if (readingType == LiveDataSource::ReadingType::FromEnd) {
+		if (m_livePrepared) {
+			if (newData->size() > spreadsheet->sampleSize())
+				newDataIdx = newData->size() - spreadsheet->sampleSize();
+		}
+	}
+	qDebug() << "newDataIdx: " << newDataIdx;
+
+	static int indexColumnIdx = 0;
+	{
+		for (int row = 0; row < linesToRead; ++row) {
+			QDEBUG("	row = " << row);
+			QJsonValue jsonRow;
+			QString jsonRowName = "";
+
+			if (readingType == LiveDataSource::ReadingType::FromEnd) {
+				jsonRow = newData->at(newDataIdx++);
+				if (parseRowsName)
+					jsonRowName = m_liveSourceObjectKeys.at(newDataIdx - 1);
+			} else {
+				jsonRow = newData->at(row);
+				if (parseRowsName)
+					jsonRowName = m_liveSourceObjectKeys.at(row);
+
+			}
+			QDEBUG("	column modes = " << columnModes);
+			int colIndex = startColumn - 1;
+			for (int n = 0; n < m_actualCols; ++n) {
+				QDEBUG("	actual col = " << n);
+				if ((createIndexEnabled || parseRowsName) && n == 0) {
+					if (createIndexEnabled) {
+						if (spreadsheet->keepNValues() == 0)
+							static_cast<QVector<int> *>(m_dataContainer[n])->operator[](row) = row + 1;
+						else
+							static_cast<QVector<int> *>(m_dataContainer[n])->operator[](row) = indexColumnIdx++;
+					}
+					if (parseRowsName)
+						setValueFromString(n + createIndexEnabled, row, jsonRowName);
+					n = n + createIndexEnabled + parseRowsName - 1;
+					continue;
+				}
+
+				QJsonValue value;
+				switch (rowType) {
+					//TODO: implement other value types
+					case QJsonValue::Array: {
+						value = *(jsonRow.toArray().begin() + colIndex);
+						break;
+					}
+					case QJsonValue::Object: {
+						value = *(jsonRow.toObject().begin() + colIndex);
+						break;
+					}
+					case QJsonValue::Double:
+					case QJsonValue::String:
+					case QJsonValue::Bool:
+					case QJsonValue::Null:
+					case QJsonValue::Undefined:
+						break;
+				}
+				QDEBUG("	value string = " + value.toString());
+
+				switch (value.type()) {
+					case QJsonValue::Double:
+						if (columnModes[n] == AbstractColumn::Numeric)
+							static_cast<QVector<double> *>(m_dataContainer[n])->operator[](row) = value.toDouble();
+						else
+							setEmptyValue(n, row);
+						break;
+					case QJsonValue::String:
+						setValueFromString(n, row, value.toString());
+						break;
+					case QJsonValue::Array:
+					case QJsonValue::Object:
+					case QJsonValue::Bool:
+					case QJsonValue::Null:
+					case QJsonValue::Undefined:
+						setEmptyValue(n, row);
+						break;
+				}
+				colIndex++;
+			}
+		}
+		if (m_livePrepared) {
+			//notify all affected columns and plots about the changes
+			const Project *project = spreadsheet->project();
+			QVector<const XYCurve *> curves = project->children<const XYCurve>(AbstractAspect::Recursive);
+			QVector<CartesianPlot *> plots;
+			for (int n = 0; n < m_actualCols; ++n) {
+				Column *column = spreadsheet->column(n);
+
+				//determine the plots where the column is consumed
+				for (const auto *curve: curves) {
+					if (curve->xColumn() == column || curve->yColumn() == column) {
+						CartesianPlot *plot = dynamic_cast<CartesianPlot *>(curve->parentAspect());
+						if (plots.indexOf(plot) == -1) {
+							plots << plot;
+							plot->setSuppressDataChangedSignal(true);
+						}
+					}
+				}
+
+				column->setChanged();
+			}
+
+			//loop over all affected plots and retransform them
+			for (auto *plot: plots) {
+				plot->setSuppressDataChangedSignal(false);
+				plot->dataChanged();
+			}
+		}
+
+		m_livePrepared = true;
+		device.reset();
+		return lastRow;
+	}
 }
 
 /*!

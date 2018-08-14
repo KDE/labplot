@@ -32,6 +32,7 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/JsonFilter.h"
 #include "backend/core/Project.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -549,6 +550,7 @@ void LiveDataSource::read() {
 			break;
 		case WebService:
 			m_manager = new QNetworkAccessManager;
+			m_device = new QBuffer();
 			connect(m_manager, &QNetworkAccessManager::finished, this, &LiveDataSource::webReadingFinished);
 			break;
 		}
@@ -579,7 +581,13 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
 		case AbstractFileFilter::FITS:
-		case AbstractFileFilter::Json:
+		case AbstractFileFilter::Json: {
+			if (m_readingType == LiveDataSource::ReadingType::WholeFile)
+				dynamic_cast<JsonFilter *>(m_filter)->readDataFromLiveDevice(*m_file, this);
+			else
+				m_lastRow = dynamic_cast<JsonFilter *>(m_filter)->readDataFromLiveDevice(*m_file, this, m_lastRow);
+			break;
+		}
 		case AbstractFileFilter::ROOT:
 		case AbstractFileFilter::NgspiceRawAscii:
 			break;
@@ -625,7 +633,7 @@ void LiveDataSource::read() {
 				//reply = m_manager->put
 				break;
 		}
-		m_device = reply;
+		m_device = new QBuffer(new QByteArray());
 		connect(reply, static_cast<void (QNetworkReply::*) (QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &LiveDataSource::webServiceNetworkError);
 		break;
 	}
@@ -633,8 +641,10 @@ void LiveDataSource::read() {
 
 
 void LiveDataSource::webReadingFinished(QNetworkReply* reply) {
-	if(reply->error() != QNetworkReply::NoError)
+	if (reply->error() != QNetworkReply::NoError) {
+		m_device = new QBuffer(new QByteArray());
 		return;
+	}
 	QByteArray arr = reply->readAll();
 	m_device = new QBuffer(&arr);
 	disconnect(reply, static_cast<void (QNetworkReply::*) (QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &LiveDataSource::webServiceNetworkError);
@@ -655,7 +665,8 @@ void LiveDataSource::readyRead() {
 		dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 //TODO:	else if (m_fileType == Binary)
 	//  dynamic_cast<BinaryFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
-
+	else if(m_fileType == AbstractFileFilter::Json)
+		m_lastRow = dynamic_cast<JsonFilter*>(m_filter)->readDataFromLiveDevice(*m_device, this, m_lastRow);
 	//since we won't have the timer to call read() where we create new connections
 	//for sequencial devices in read() we just request data/connect to servers
 	if (m_updateType == NewData)
@@ -750,6 +761,11 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 
 void LiveDataSource::webServiceNetworkError(QNetworkReply::NetworkError networkError) {
 	Q_UNUSED(networkError);
+	//switch (networkError){
+	//
+	//	case QNetworkReply::NoError:
+	//	break;
+	//}
 }
 
 void LiveDataSource::watchToggled() {
@@ -830,6 +846,8 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	case LocalSocket:
 		break;
 	case WebService:
+		writer->writeAttribute("url", m_webServiceRequest.url().url());
+		writer->writeAttribute("query", m_webServiceRequest.url().query());
 		break;
 	default:
 		break;
@@ -971,6 +989,23 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				break;
 			case LocalSocket:
 				break;
+			case WebService: {
+				QUrl url;
+				str = attribs.value("url").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("url").toString());
+				else
+					url.setUrl(str);
+
+				str = attribs.value("query").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("query").toString());
+				else
+					url.setQuery(str);
+
+				m_webServiceRequest.setUrl(url);
+				break;
+			}
 			default:
 				break;
 			}

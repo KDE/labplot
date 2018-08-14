@@ -45,9 +45,12 @@ public:
 	int parseColumnModes(QJsonValue row, QString rowName = "");
 	void setEmptyValue(int column, int row);
 	void setValueFromString(int column, int row, QString value);
+	QVector<QJsonValue>* getNewRows(QJsonValue lastRow);
 
 	int prepareDeviceToRead(QIODevice&);
 	int prepareDocumentToRead(const QJsonDocument&);
+
+	QJsonValue readDataFromLiveDevice(QIODevice& device, AbstractDataSource* = nullptr, QJsonValue from = QJsonValue());
 
 	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
@@ -89,9 +92,11 @@ private:
 	int m_actualRows;
 	int m_actualCols;
 	int m_prepared;
+	int m_livePrepared;
 	int m_columnOffset; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	QVector<void*> m_dataContainer; // pointers to the actual data containers (columns).
 	QJsonDocument m_preparedDoc; // parsed Json document
+	QVector<QString> m_liveSourceObjectKeys; // keys from new readed rows
 };
 
 #endif
