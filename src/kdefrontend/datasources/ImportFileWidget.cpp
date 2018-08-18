@@ -76,6 +76,8 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <KSharedConfig>
 
 #ifdef HAVE_MQTT
+#include "MQTTConnectionManagerDialog.h"
+#include "MQTTConnectionManagerWidget.h"
 #include "backend/core/Project.h"
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
@@ -277,8 +279,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 #ifdef HAVE_MQTT
-	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::idChecked);
-	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::authenticationChecked);
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "mqtt_connections";
+
 	connect(ui.bConnect, &QPushButton::clicked, this, &ImportFileWidget::mqttConnection);
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
@@ -294,17 +296,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
-	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
-	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.chbID, &QCheckBox::stateChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.lePassword, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.leUsername, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
-	connect(ui.leID, &QLineEdit::textChanged, this, &ImportFileWidget::checkConnectEnable);
+	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);	
+	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 
 	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_BrowserStop));
+	ui.bManageConnections->setIcon(ui.bManageConnections->style()->standardIcon(QStyle::SP_BrowserReload));
+	ui.bManageConnections->setToolTip("Manage MQTT connections");
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
@@ -325,6 +323,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 void ImportFileWidget::loadSettings() {
 	m_suppressRefresh = true;
+
+#ifdef HAVE_MQTT
+	//read available connections
+	readMQTTConnections();
+#endif
 
 	//load last used settings
 	QString confName;
@@ -365,12 +368,8 @@ void ImportFileWidget::loadSettings() {
 
 #ifdef HAVE_MQTT
 	//MQTT related settings
-	ui.chbID->setChecked(conf.readEntry("mqttUseId").toInt());
-	ui.chbAuthentication->setChecked(conf.readEntry("mqttUseAuthentication").toInt());
+	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
 	ui.chbRetain->setChecked(conf.readEntry("mqttUseRetain").toInt());
-	ui.leUsername->setText(conf.readEntry("mqttUsername",""));
-	ui.lePassword->setText(conf.readEntry("mqttPassword",""));
-	ui.leID->setText(conf.readEntry("mqttId",""));
 	ui.chbWillRetain->setChecked(conf.readEntry("mqttWillRetain").toInt());
 	ui.cbWillUpdate->setCurrentIndex(conf.readEntry("mqttWillUpdateType").toInt());
 	ui.cbWillQoS->setCurrentIndex(conf.readEntry("mqttWillQoS").toInt());
@@ -390,6 +389,7 @@ void ImportFileWidget::loadSettings() {
 		ui.chbWill->setChecked(true);
 		ui.chbWill->setChecked(false);
 	}
+	checkConnectEnable();
 #endif
 
 	m_suppressRefresh = false;
@@ -424,9 +424,7 @@ ImportFileWidget::~ImportFileWidget() {
 
 #ifdef HAVE_MQTT
 	//MQTT related settings
-	conf.writeEntry("mqttUsername", ui.leUsername->text());
-	conf.writeEntry("mqttPassword", ui.lePassword->text());
-	conf.writeEntry("mqttId", ui.leID->text());
+	conf.writeEntry("Connection", ui.cbConnection->currentText());
 	conf.writeEntry("mqttWillMessageType", ui.cbWillMessageType->currentIndex());
 	conf.writeEntry("mqttWillUpdateType", ui.cbWillUpdate->currentIndex());
 	conf.writeEntry("mqttWillQoS", ui.cbWillQoS->currentIndex());
@@ -441,8 +439,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttWillStatistics", willStatistics);
 	conf.writeEntry("mqttWillRetain", static_cast<int>(ui.chbWillRetain->isChecked()));
 	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
-	conf.writeEntry("mqttUseId", static_cast<int>(ui.chbID->isChecked()));
-	conf.writeEntry("mqttUseAuthentication", static_cast<int>(ui.chbAuthentication->isChecked()));
 	conf.writeEntry("mqttUseRetain", static_cast<int>(ui.chbRetain->isChecked()));
 #endif
 
@@ -610,12 +606,18 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 
 	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
 
-	client->setMQTTUseAuthentication(ui.chbAuthentication->isChecked());
-	if(ui.chbAuthentication->isChecked())
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	bool useID = group.readEntry("UseID").toUInt();
+	bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+
+	client->setMQTTUseAuthentication(useAuthentication);
+	if(useAuthentication)
 		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
 
-	client->setMQTTUseID(ui.chbID->isChecked());
-	if(ui.chbID->isChecked())
+	client->setMQTTUseID(useID);
+	if(useID)
 		client->setMQTTClientId(m_client->clientId());
 
 	for(int i=0; i<m_mqttSubscriptions.count(); ++i) {
@@ -808,20 +810,15 @@ void ImportFileWidget::selectFile() {
 	hides the MQTT related items of the widget
 */
 void ImportFileWidget::hideMQTT() {
-	ui.leID->hide();
-	ui.lMqttID->hide();
-	ui.lePassword->hide();
-	ui.lPassword->hide();
-	ui.leUsername->hide();
-	ui.lUsername->hide();
+	ui.lConnections->hide();
+	ui.cbConnection->hide();
+	ui.bManageConnections->hide();
 	ui.cbQos->hide();
 	ui.lQos->hide();
 	ui.twTopics->hide();
 	ui.lTopicSearch->hide();
 	ui.leTopics->hide();
 	ui.twSubscriptions->hide();
-	ui.chbAuthentication->hide();
-	ui.chbID->hide();
 	ui.bSubscribe->hide();
 	ui.bUnsubscribe->hide();
 	ui.bConnect->hide();
@@ -2159,33 +2156,29 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbBaudRate->hide();
 		ui.lSerialPort->hide();
 		ui.cbSerialPort->hide();
-		ui.gbManageSubscriptions->show();
-
-		ui.lHost->show();
-		ui.leHost->show();
-		ui.lePort->show();
-		ui.lPort->show();
+		ui.lHost->hide();
+		ui.leHost->hide();
+		ui.lPort->hide();
+		ui.lePort->hide();
 		ui.lFileName->hide();
 		ui.leFileName->hide();
 		ui.bFileInfo->hide();
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
+
+		ui.lConnections->show();
+		ui.bManageConnections->show();
+		ui.cbConnection->show();
+		ui.gbManageSubscriptions->show();
+
 		ui.cbFileType->setEnabled(true);
 
-		ui.leID->hide();
-		ui.lMqttID->hide();
-		ui.lePassword->hide();
-		ui.lPassword->hide();
-		ui.leUsername->hide();
-		ui.lUsername->hide();
 		ui.cbQos->show();
 		ui.lQos->show();
 		ui.twTopics->show();
 		ui.lTopicSearch->show();
 		ui.leTopics->show();
 		ui.twSubscriptions->show();
-		ui.chbAuthentication->show();
-		ui.chbID->show();
 		ui.bSubscribe->show();
 		ui.bUnsubscribe->show();
 		ui.bConnect->show();
@@ -2270,75 +2263,46 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 #ifdef HAVE_MQTT
 
 /*!
- *\brief called when ID checkbox's state is changed, if checked a lineEdit is shown so the user can set the ID
- * \param state the state of the checbox
- */
-void ImportFileWidget::idChecked(int state) {
-	if (state == 2)	{
-		ui.leID->show();
-		ui.lMqttID->show();
-	} else if (state == 0) {
-		ui.leID->hide();
-		ui.lMqttID->hide();
-	}
-}
-
-/*!
- *\brief called when authentication checkbox's state is changed,
- *       if checked two lineEdits are shown so the user can set the username and password
- *
- * \param state the state of the checbox
- */
-void ImportFileWidget::authenticationChecked(int state) {
-	if(state == 2) {
-		ui.leUsername->show();
-		ui.lePassword->show();
-		ui.lPassword->show();
-		ui.lUsername->show();
-	} else if (state == 0) {
-		ui.leUsername->hide();
-		ui.lePassword->hide();
-		ui.lUsername->hide();
-		ui.lPassword->hide();
-	}
-}
-
-/*!
  *\brief called when the connect/disconnect button is pressed
  * makes the connection to the given MQTT broker, with the given options
  * or disconnects from the broker
  */
 void ImportFileWidget::mqttConnection() {
 	if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
+		if (ui.cbConnection->currentIndex() == -1)
+			return;
+
 		WAIT_CURSOR;
-		//Check whether the set options are valid and a connection can be made, or not
-		const bool hostSet = !ui.leHost->text().isEmpty();
-		const bool portSet = !ui.lePort->text().isEmpty();
-		const bool idUsed = ui.chbID->isChecked();
-		const bool idSet = !ui.leID->text().isEmpty();
-		const bool idValid = !(idUsed && !idSet);
-		const bool authenticationUsed = ui.chbAuthentication->isChecked();
-		const bool usernameSet = !ui.leUsername->text().isEmpty();
-		const bool passwordSet = !ui.lePassword->text().isEmpty();
-		const bool authenticationValid = ! (authenticationUsed && ( !usernameSet || !passwordSet) );
-		const bool valid =hostSet && portSet && idValid && authenticationValid;
-		if (valid) {
-			m_client->setHostname(ui.leHost->text().simplified());
-			m_client->setPort(ui.lePort->text().simplified().toUInt());
 
-			if(ui.chbID->isChecked())
-				m_client->setClientId(ui.leID->text().simplified());
+		//determine the current connection's settings
+		KConfig config(m_configPath, KConfig::SimpleConfig);
+		KConfigGroup group = config.group(ui.cbConnection->currentText());
 
-			if(ui.chbAuthentication->isChecked()) {
-				m_client->setUsername(ui.leUsername->text().simplified());
-				m_client->setPassword(ui.lePassword->text().simplified());
-			}
+		m_client->setHostname(ui.cbConnection->currentText().simplified());
+		m_client->setPort(group.readEntry("Port").toUInt());
 
-			qDebug()<< ui.leHost->text() << " " << m_client->hostname() << "   " << m_client->port();
-			qDebug()<<"Trying to connect";
-			m_client->connectToHost();
-			m_connectTimeoutTimer->start();
+		bool useID = group.readEntry("UseID").toUInt();
+		if(useID)
+			m_client->setClientId(group.readEntry("ClientID"));
+		else
+			m_client->setClientId("");
+
+		bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+		if(useAuthentication) {
+			m_client->setUsername(group.readEntry("UserName"));
+			m_client->setPassword(group.readEntry("Password"));
+		} else {
+			m_client->setUsername("");
+			m_client->setPassword("");
 		}
+
+		qDebug()<< "Use ID" << useID << " " << m_client->clientId();
+		qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
+		qDebug()<< m_client->hostname() << "   " << m_client->port();
+		qDebug()<< "Trying to connect";
+		m_client->connectToHost();
+		m_connectTimeoutTimer->start();
+
 	}
 	else if (m_client->state() == QMqttClient::ClientState::Connected) {
 		WAIT_CURSOR;
@@ -2356,14 +2320,9 @@ void ImportFileWidget::onMqttConnect() {
 		m_connectTimeoutTimer->stop();
 		ui.gbManageSubscriptions->setEnabled(true);
 		ui.bConnect->setText("Disconnect");
-		ui.leHost->setEnabled(false);
-		ui.lePort->setEnabled(false);
-		ui.lePassword->setEnabled(false);
-		ui.leUsername->setEnabled(false);
-		ui.leID->setEnabled(false);
+		ui.bManageConnections->setEnabled(false);
+		ui.cbConnection->setEnabled(false);
 		ui.cbSourceType->setEnabled(false);
-		ui.chbAuthentication->setEnabled(false);
-		ui.chbID->setEnabled(false);
 		ui.chbRetain->setEnabled(false);
 		QMessageBox::information(this, "Connection successful", "Connection established");
 
@@ -2383,27 +2342,14 @@ void ImportFileWidget::onMqttConnect() {
 void ImportFileWidget::onMqttDisconnect() {
 	ui.gbManageSubscriptions->setEnabled(false);
 	ui.bConnect->setText("Connect");
-
-	ui.leHost->setEnabled(true);
-
-	ui.lePort->setEnabled(true);
-
-	ui.lePassword->setEnabled(true);
-	ui.lePassword->clear();
-
-	ui.leUsername->setEnabled(true);
-	ui.leUsername->clear();
-
-	ui.leID->setEnabled(true);
-	ui.leID->clear();
+	ui.bManageConnections->setEnabled(true);
+	ui.cbConnection->setEnabled(true);
 
 	ui.twSubscriptions->clear();
 	ui.twTopics->clear();
 
 	ui.chbRetain->setEnabled(true);
 	ui.cbSourceType->setEnabled(true);
-	ui.chbAuthentication->setEnabled(true);
-	ui.chbID->setEnabled(true);
 
 	m_mqttReadyForPreview = false;
 	m_mqttSubscriptions.clear();
@@ -2417,6 +2363,8 @@ void ImportFileWidget::onMqttDisconnect() {
 	m_connectTimeoutTimer->stop();
 	m_messageArrived.clear();
 	m_lastMessage.clear();
+
+	emit subscriptionsChanged();
 	RESET_CURSOR;
 }
 
@@ -2910,15 +2858,7 @@ void ImportFileWidget::scrollToSubsriptionTreeItem(const QString& rootName) {
  *		 checks if every option needed for the connection is set, if it is, then enables the connect button
  */
 void ImportFileWidget::checkConnectEnable() {
-	bool authenticationUsed = ui.chbAuthentication->isChecked();
-	bool idUsed = ui.chbID->isChecked();
-	bool authenticationFilled = !ui.leUsername->text().isEmpty() && !ui.lePassword->text().isEmpty();
-	bool idFilled = !ui.leID->text().isEmpty();
-	bool authenticationOK = !authenticationUsed || (authenticationUsed && authenticationFilled);
-	bool idOK = !idUsed || (idUsed && idFilled);
-	bool hostOK = !ui.leHost->text().isEmpty();
-	bool portOK = !ui.lePort->text().isEmpty();
-	bool enable = authenticationOK && idOK && hostOK && portOK;
+	bool enable = (ui.cbConnection->count() > 0);
 	ui.bConnect->setEnabled(enable);
 }
 
@@ -2932,5 +2872,37 @@ void ImportFileWidget::mqttConnectTimeout() {
 	m_connectTimeoutTimer->stop();
 	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out!");
 	RESET_CURSOR;
+}
+
+/*!
+	shows the MQTT conneciton manager where the connections are created and edited.
+	The selected connection is selected in the connection combo box in this widget.
+*/
+void ImportFileWidget::showMQTTConnectionManager() {
+	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText());
+
+	if (dlg->exec() == QDialog::Accepted) {
+		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
+		ui.cbConnection->clear();
+		readMQTTConnections();
+
+		//select the connection the user has selected in MQTTConnecitonManager
+		QString conn = dlg->connection();
+		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
+	}
+
+	checkConnectEnable();
+
+	delete dlg;
+}
+
+/*!
+	loads all available saved MQTT nconnections
+*/
+void ImportFileWidget::readMQTTConnections() {
+	qDebug()<< "ImportFileWidget: reading available MQTT connections";
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	for (const auto& name : config.groupList())
+		ui.cbConnection->addItem(name);
 }
 #endif

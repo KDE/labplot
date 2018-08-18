@@ -167,6 +167,7 @@ private:
 	bool m_mqttReadyForPreview;
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
+	QString m_configPath;
 
 public:
 	void saveMQTTSettings(MQTTClient*) const;
@@ -178,8 +179,6 @@ signals:
 	void checkFileType();
 
 private slots:
-	void idChecked(int);
-	void authenticationChecked(int);
 	void mqttConnection();
 	void onMqttConnect();
 	void mqttSubscribe();
@@ -198,6 +197,8 @@ private slots:
 	void scrollToSubsriptionTreeItem(const QString&);
 	void mqttConnectTimeout();
 	void checkConnectEnable();
+	void showMQTTConnectionManager();
+	void readMQTTConnections();
 #endif
 };
 
