@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : MQTTConnectionManagerWidget.h
-    Project              : LabPlot
-    Description          : widget for managing MQTT connections
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
+	File                 : MQTTConnectionManagerWidget.h
+	Project              : LabPlot
+	Description          : widget for managing MQTT connections
+	--------------------------------------------------------------------
+	Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
  ***************************************************************************/
 
@@ -32,43 +32,43 @@
 
 class MQTTConnectionManagerWidget : public QWidget {
 #ifdef HAVE_MQTT
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MQTTConnectionManagerWidget(QWidget*, const QString&);
+	explicit MQTTConnectionManagerWidget(QWidget*, const QString&);
 
-    struct MQTTConnection {
-        int port;
-        QString hostName;
-        bool useAuthentication;
-        QString userName;
-        QString password;
-        bool useID;
-        QString clientID;
-    };
+	struct MQTTConnection {
+		int port;
+		QString hostName;
+		bool useAuthentication;
+		QString userName;
+		QString password;
+		bool useID;
+		QString clientID;
+	};
 
-    QString connection() const;
-    void setCurrentConnection(const QString&);
-    void saveConnections();
+	QString connection() const;
+	void setCurrentConnection(const QString&);
+	void saveConnections();
 	bool checkConnections();
 
 private:
-    Ui::MQTTConnectionManagerWidget ui;
-    QList<MQTTConnection> m_connections;
-    bool m_initializing;
-    QString m_configPath;
-    QString m_initConnName;
+	Ui::MQTTConnectionManagerWidget ui;
+	QList<MQTTConnection> m_connections;
+	bool m_initializing;
+	QString m_configPath;
+	QString m_initConnName;
 
-    QString uniqueName();
-    void loadConnection();
-    void dataChanged();
+	QString uniqueName();
+	void loadConnection();
+	void dataChanged();
 
 private slots:
-    void loadConnections();
-    void addConnection();
+	void loadConnections();
+	void addConnection();
 	void deleteConnection();
-    void connectionChanged(int);
-    void hostChanged(const QString&);
+	void connectionChanged(int);
+	void hostChanged(const QString&);
 	void portChanged();
 	void userNameChanged(const QString&);
 	void passwordChanged(const QString&);
@@ -77,7 +77,7 @@ private slots:
 	void idChecked(int);
 
 signals:
-    void changed();
+	void changed();
 #endif
 };
 
