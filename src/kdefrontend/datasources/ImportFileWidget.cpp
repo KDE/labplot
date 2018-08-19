@@ -299,10 +299,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);	
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 
-	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
-	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_BrowserStop));
-	ui.bManageConnections->setIcon(ui.bManageConnections->style()->standardIcon(QStyle::SP_BrowserReload));
-	ui.bManageConnections->setToolTip("Manage MQTT connections");
+	ui.bSubscribe->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
+	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
+	ui.bUnsubscribe->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
+	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
+	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
+	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
