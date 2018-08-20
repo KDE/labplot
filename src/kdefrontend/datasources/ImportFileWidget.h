@@ -168,6 +168,8 @@ private:
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
 	QString m_configPath;
+	bool m_initialisingMQTT;
+	bool m_connectionTimedOut;
 
 public:
 	void saveMQTTSettings(MQTTClient*) const;

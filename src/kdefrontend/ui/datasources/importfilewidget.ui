@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
-    <height>1272</height>
+    <width>751</width>
+    <height>1256</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,8 +39,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>606</width>
-        <height>1986</height>
+        <width>735</width>
+        <height>1679</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -169,32 +169,6 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cbConnection"/>
           </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="bConnect">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Connect</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QPushButton" name="bManageConnections">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="0">
            <widget class="QLabel" name="lPort">
             <property name="text">
@@ -240,161 +214,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Topics</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1" colspan="3">
-           <widget class="QGroupBox" name="gbManageSubscriptions">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="title">
-             <string/>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_6" columnstretch="2,2,1,2,2">
-             <item row="2" column="0">
-              <widget class="QLabel" name="lQos">
-               <property name="text">
-                <string>QOS level:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="cbQos">
-               <item>
-                <property name="text">
-                 <string>0</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="leTopics"/>
-             </item>
-             <item row="0" column="0" colspan="2">
-              <widget class="QTreeWidget" name="twTopics">
-               <column>
-                <property name="text">
-                 <string>Available</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0">
-               <property name="spacing">
-                <number>12</number>
-               </property>
-               <item>
-                <spacer name="verticalSpacer_5">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QPushButton" name="bSubscribe">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="bUnsubscribe">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="lTopicSearch">
-               <property name="text">
-                <string>Scroll to root:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3" colspan="2">
-              <widget class="QTreeWidget" name="twSubscriptions">
-               <column>
-                <property name="text">
-                 <string>Subscribed</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QLabel" name="lSubscriptionSearch">
-               <property name="text">
-                <string>Scroll to root:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="4">
-              <widget class="QLineEdit" name="leSubscriptions"/>
-             </item>
-             <item row="3" column="0" colspan="5">
-              <widget class="QCheckBox" name="chbRetain">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Interpret retain messages</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
           </item>
           <item row="9" column="0">
            <widget class="QLabel" name="lFileType">
@@ -492,6 +311,161 @@
               <width>16</width>
               <height>16</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QPushButton" name="bManageConnections">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1" colspan="3">
+           <widget class="QGroupBox" name="gbManageSubscriptions">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_6" columnstretch="2,0,0,0,0">
+             <item row="0" column="0" colspan="2">
+              <widget class="QTreeWidget" name="twTopics">
+               <column>
+                <property name="text">
+                 <string>Available</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="lQos">
+               <property name="text">
+                <string>QOS level:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="cbQos">
+               <item>
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>2</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="leTopics"/>
+             </item>
+             <item row="0" column="2">
+              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0">
+               <property name="spacing">
+                <number>12</number>
+               </property>
+               <item>
+                <spacer name="verticalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="bSubscribe">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="bUnsubscribe">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="lTopicSearch">
+               <property name="text">
+                <string>Scroll to root:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3" colspan="2">
+              <widget class="QTreeWidget" name="twSubscriptions">
+               <column>
+                <property name="text">
+                 <string>Subscribed</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLabel" name="lSubscriptionSearch">
+               <property name="text">
+                <string>Scroll to root:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLineEdit" name="leSubscriptions"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Topics</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
            </widget>
           </item>

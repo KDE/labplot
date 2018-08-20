@@ -38,15 +38,17 @@ class MQTTConnectionManagerDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit MQTTConnectionManagerDialog(QWidget*, const QString&);
+	explicit MQTTConnectionManagerDialog(QWidget*, const QString&, bool*);
 	~MQTTConnectionManagerDialog();
 
 	QString connection() const;
 
 private:
-	MQTTConnectionManagerWidget* mainWidget;
-	bool m_changed;
+	MQTTConnectionManagerWidget* mainWidget;	
 	QDialogButtonBox* m_buttonBox;
+	bool m_changed;
+	bool* m_initialConnectionChanged;
+	QString m_initialConnection;
 
 private slots:
 	void changed();

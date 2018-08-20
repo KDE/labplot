@@ -44,8 +44,9 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
 */
-MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn) : QDialog(parent),
-	mainWidget(new MQTTConnectionManagerWidget(this, conn)), m_changed(false) {
+MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool* changed) : QDialog(parent),
+	mainWidget(new MQTTConnectionManagerWidget(this, conn)), m_changed(false),
+	m_initialConnectionChanged(changed), m_initialConnection(conn) {
 
 	setWindowIcon(QIcon::fromTheme("labplot-MQTT"));
 	setWindowTitle(i18nc("@title:window", "MQTT Connections"));
@@ -93,6 +94,9 @@ MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
  */
 void MQTTConnectionManagerDialog::changed() {
 	setWindowTitle(i18nc("@title:window", "MQTT Connections  [Changed]"));
+	if(mainWidget->connection() == m_initialConnection)
+		*m_initialConnectionChanged = true;
+
 	if(mainWidget->checkConnections()) {
 		m_buttonBox->setEnabled(true);
 		m_changed = true;

@@ -30,6 +30,11 @@
 
 #include "ui_mqttconnectionmanagerwidget.h"
 
+#ifdef HAVE_MQTT
+class QMqttClient;
+class QTimer;
+#endif
+
 class MQTTConnectionManagerWidget : public QWidget {
 #ifdef HAVE_MQTT
 	Q_OBJECT
@@ -38,6 +43,7 @@ public:
 	explicit MQTTConnectionManagerWidget(QWidget*, const QString&);
 
 	struct MQTTConnection {
+		QString name;
 		int port;
 		QString hostName;
 		bool useAuthentication;
@@ -45,6 +51,7 @@ public:
 		QString password;
 		bool useID;
 		QString clientID;
+		bool retain;
 	};
 
 	QString connection() const;
@@ -58,16 +65,21 @@ private:
 	bool m_initializing;
 	QString m_configPath;
 	QString m_initConnName;
+	QMqttClient* m_client;
+	bool m_testing;
+	QTimer* m_testTimer;
 
 	QString uniqueName();
 	void loadConnection();
 	void dataChanged();
 
 private slots:
+	void testConnection();
 	void loadConnections();
 	void addConnection();
 	void deleteConnection();
 	void connectionChanged(int);
+	void nameChanged(const QString&);
 	void hostChanged(const QString&);
 	void portChanged();
 	void userNameChanged(const QString&);
@@ -75,6 +87,10 @@ private slots:
 	void clientIdChanged(const QString&);
 	void authenticationChecked(int);
 	void idChecked(int);
+	void retainChecked(int);
+	void onConnect();
+	void onDisconnect();
+	void testTimeout();
 
 signals:
 	void changed();

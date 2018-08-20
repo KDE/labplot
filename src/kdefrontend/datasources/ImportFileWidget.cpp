@@ -103,14 +103,16 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_searching(false),
 	m_searchTimer(new QTimer(this)),
 	m_connectTimeoutTimer(new QTimer(this)),
-	m_mqttReadyForPreview (false)
+	m_mqttReadyForPreview (false),
+	m_initialisingMQTT(false),
+	m_connectionTimedOut(false)
   #endif
 {
 	ui.setupUi(this);
 
 #ifdef HAVE_MQTT
 	m_searchTimer->setInterval(10000);
-	m_connectTimeoutTimer->setInterval(5000);
+	m_connectTimeoutTimer->setInterval(6000);
 #endif
 
 	QCompleter* completer = new QCompleter(this);
@@ -279,9 +281,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 #ifdef HAVE_MQTT
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "mqtt_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
 
-	connect(ui.bConnect, &QPushButton::clicked, this, &ImportFileWidget::mqttConnection);
+	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnection);
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
@@ -328,6 +330,7 @@ void ImportFileWidget::loadSettings() {
 
 #ifdef HAVE_MQTT
 	//read available connections
+	m_initialisingMQTT = true;
 	readMQTTConnections();
 #endif
 
@@ -371,7 +374,6 @@ void ImportFileWidget::loadSettings() {
 #ifdef HAVE_MQTT
 	//MQTT related settings
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
-	ui.chbRetain->setChecked(conf.readEntry("mqttUseRetain").toInt());
 	ui.chbWillRetain->setChecked(conf.readEntry("mqttWillRetain").toInt());
 	ui.cbWillUpdate->setCurrentIndex(conf.readEntry("mqttWillUpdateType").toInt());
 	ui.cbWillQoS->setCurrentIndex(conf.readEntry("mqttWillQoS").toInt());
@@ -391,7 +393,8 @@ void ImportFileWidget::loadSettings() {
 		ui.chbWill->setChecked(true);
 		ui.chbWill->setChecked(false);
 	}
-	checkConnectEnable();
+	m_initialisingMQTT = false;
+	mqttConnection();
 #endif
 
 	m_suppressRefresh = false;
@@ -441,7 +444,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttWillStatistics", willStatistics);
 	conf.writeEntry("mqttWillRetain", static_cast<int>(ui.chbWillRetain->isChecked()));
 	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
-	conf.writeEntry("mqttUseRetain", static_cast<int>(ui.chbRetain->isChecked()));
 #endif
 
 	// data type specific settings
@@ -626,7 +628,8 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
 	}
 
-	client->setMQTTRetain(ui.chbRetain->isChecked());
+	bool retain = group.readEntry("Retain").toUInt();
+	client->setMQTTRetain(retain);
 	client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
 	client->setWillOwnMessage(ui.leWillOwnMessage->text());
 	client->setWillQoS(ui.cbWillQoS->currentIndex() );
@@ -823,7 +826,6 @@ void ImportFileWidget::hideMQTT() {
 	ui.twSubscriptions->hide();
 	ui.bSubscribe->hide();
 	ui.bUnsubscribe->hide();
-	ui.bConnect->hide();
 	ui.gbMqttWill->hide();
 	ui.chbWill->hide();
 	ui.chbWillRetain->hide();
@@ -2063,6 +2065,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		fileNameChanged(ui.leFileName->text());
+		ui.cbFileType->show();
+		ui.lFileType->show();
 		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
@@ -2096,6 +2100,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
+		ui.cbFileType->show();
+		ui.lFileType->show();
 		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
@@ -2122,6 +2128,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
+		ui.cbFileType->show();
+		ui.lFileType->show();
 		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::SerialPort:
@@ -2148,11 +2156,18 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
+		ui.cbFileType->show();
+		ui.lFileType->show();
 		hideMQTT();
 		break;
 	case LiveDataSource::SourceType::MQTT:
 #ifdef HAVE_MQTT
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+		int idx = ui.cbFileType->findText("ASCII data");
+		ui.cbFileType->setCurrentIndex(idx);
+		ui.cbFileType->hide();
+		ui.lFileType->hide();
 
 		ui.lBaudRate->hide();
 		ui.cbBaudRate->hide();
@@ -2183,7 +2198,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.twSubscriptions->show();
 		ui.bSubscribe->show();
 		ui.bUnsubscribe->show();
-		ui.bConnect->show();
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -2270,46 +2284,60 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
  * or disconnects from the broker
  */
 void ImportFileWidget::mqttConnection() {
-	if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
-		if (ui.cbConnection->currentIndex() == -1)
-			return;
+	if(!m_initialisingMQTT) {
+		if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
+			qDebug() << "Connecting...";
+			if (ui.cbConnection->currentIndex() == -1)
+				return;
+			WAIT_CURSOR;
 
-		WAIT_CURSOR;
+			delete m_client;
+			m_client = new QMqttClient();
+			connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+			connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+			connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
+			connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 
-		//determine the current connection's settings
-		KConfig config(m_configPath, KConfig::SimpleConfig);
-		KConfigGroup group = config.group(ui.cbConnection->currentText());
+			ui.cbConnection->setEnabled(false);
+			ui.bManageConnections->setEnabled(false);
 
-		m_client->setHostname(ui.cbConnection->currentText().simplified());
-		m_client->setPort(group.readEntry("Port").toUInt());
+			//determine the current connection's settings
+			KConfig config(m_configPath, KConfig::SimpleConfig);
+			KConfigGroup group = config.group(ui.cbConnection->currentText());
 
-		bool useID = group.readEntry("UseID").toUInt();
-		if(useID)
-			m_client->setClientId(group.readEntry("ClientID"));
-		else
-			m_client->setClientId("");
+			m_client->setHostname(group.readEntry("Host"));
+			m_client->setPort(group.readEntry("Port").toUInt());
 
-		bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
-		if(useAuthentication) {
-			m_client->setUsername(group.readEntry("UserName"));
-			m_client->setPassword(group.readEntry("Password"));
-		} else {
-			m_client->setUsername("");
-			m_client->setPassword("");
+			bool useID = group.readEntry("UseID").toUInt();
+			if(useID)
+				m_client->setClientId(group.readEntry("ClientID"));
+			else
+				m_client->setClientId("");
+
+			bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+			if(useAuthentication) {
+				m_client->setUsername(group.readEntry("UserName"));
+				m_client->setPassword(group.readEntry("Password"));
+			} else {
+				m_client->setUsername("");
+				m_client->setPassword("");
+			}
+
+			qDebug()<< "Use ID" << useID << " " << m_client->clientId();
+			qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
+			qDebug()<< m_client->hostname() << "   " << m_client->port();
+			qDebug()<< "Trying to connect";
+			m_connectTimeoutTimer->start();
+			qDebug()<< "Timer started";
+			m_client->connectToHost();
+			qDebug() << "Client connect";
+		} else if (m_client->state() == QMqttClient::ClientState::Connected) {
+			WAIT_CURSOR;
+			ui.cbConnection->setEnabled(false);
+			ui.bManageConnections->setEnabled(false);
+			qDebug()<<"Disconnecting from mqtt broker"	;
+			m_client->disconnectFromHost();
 		}
-
-		qDebug()<< "Use ID" << useID << " " << m_client->clientId();
-		qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
-		qDebug()<< m_client->hostname() << "   " << m_client->port();
-		qDebug()<< "Trying to connect";
-		m_client->connectToHost();
-		m_connectTimeoutTimer->start();
-
-	}
-	else if (m_client->state() == QMqttClient::ClientState::Connected) {
-		WAIT_CURSOR;
-		qDebug()<<"Disconnecting from mqtt broker"	;
-		m_client->disconnectFromHost();
 	}
 }
 
@@ -2318,22 +2346,20 @@ void ImportFileWidget::mqttConnection() {
  * in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
+	qDebug() << "MQTT Connected";
 	if(m_client->error() == QMqttClient::NoError) {
 		m_connectTimeoutTimer->stop();
 		ui.gbManageSubscriptions->setEnabled(true);
-		ui.bConnect->setText("Disconnect");
-		ui.bManageConnections->setEnabled(false);
-		ui.cbConnection->setEnabled(false);
-		ui.cbSourceType->setEnabled(false);
-		ui.chbRetain->setEnabled(false);
-		QMessageBox::information(this, "Connection successful", "Connection established");
 
 		//subscribing to every topic (# wildcard) in order to later list every available topic
 		QMqttTopicFilter globalFilter{"#"};
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
 		if(!m_mainSubscription)
 			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");		
-	}
+	}	
+	ui.cbConnection->setEnabled(true);
+	ui.bManageConnections->setEnabled(true);
+	emit subscriptionsChanged();
 	RESET_CURSOR;
 }
 
@@ -2342,15 +2368,12 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	ui.gbManageSubscriptions->setEnabled(false);
-	ui.bConnect->setText("Connect");
-	ui.bManageConnections->setEnabled(true);
-	ui.cbConnection->setEnabled(true);
+	qDebug() << "MQTT disconnected";
 
+	ui.gbManageSubscriptions->setEnabled(false);
 	ui.twSubscriptions->clear();
 	ui.twTopics->clear();
 
-	ui.chbRetain->setEnabled(true);
 	ui.cbSourceType->setEnabled(true);
 
 	m_mqttReadyForPreview = false;
@@ -2368,6 +2391,14 @@ void ImportFileWidget::onMqttDisconnect() {
 
 	emit subscriptionsChanged();
 	RESET_CURSOR;
+
+	ui.cbConnection->setEnabled(true);
+	ui.bManageConnections->setEnabled(true);
+
+	if(!m_connectionTimedOut) {
+		QTimer::singleShot(300, this, &ImportFileWidget::mqttConnection);
+	} else
+		m_connectionTimedOut = false;
 }
 
 /*!
@@ -2861,7 +2892,6 @@ void ImportFileWidget::scrollToSubsriptionTreeItem(const QString& rootName) {
  */
 void ImportFileWidget::checkConnectEnable() {
 	bool enable = (ui.cbConnection->count() > 0);
-	ui.bConnect->setEnabled(enable);
 }
 
 /*!
@@ -2870,9 +2900,10 @@ void ImportFileWidget::checkConnectEnable() {
  *		 disconnects the client, stops the timer, and warns the user
  */
 void ImportFileWidget::mqttConnectTimeout() {
+	m_connectionTimedOut = true;
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out!");
+	QMessageBox::warning(this, "Warning", "Connecting to the given broker timed out! Try changing the settings");
 	RESET_CURSOR;
 }
 
@@ -2881,20 +2912,39 @@ void ImportFileWidget::mqttConnectTimeout() {
 	The selected connection is selected in the connection combo box in this widget.
 */
 void ImportFileWidget::showMQTTConnectionManager() {
-	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText());
+	bool previousConnectionChanged = false;
+	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), &previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
+		m_initialisingMQTT = true;
+		QString previousConnection = "";
+		previousConnection = ui.cbConnection->currentText();
 		ui.cbConnection->clear();
 		readMQTTConnections();
+		m_initialisingMQTT = false;
 
-		//select the connection the user has selected in MQTTConnecitonManager
+		//select the connection the user has selected in MQTTConnectionManager
 		QString conn = dlg->connection();
-		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
+		int index = ui.cbConnection->findText(conn);
+		qDebug() <<"Previous: " << previousConnection << "Changed: " << previousConnectionChanged;
+		qDebug() <<"Current: " << conn << " " <<index;
+		if(conn != previousConnection) {//Current connection isn't the previous one
+			if(ui.cbConnection->currentIndex() != index)
+				ui.cbConnection->setCurrentIndex(index);
+			else
+				mqttConnection();
+		} else if (previousConnectionChanged) {//Current connection is the same with previous one but it changed
+			if(ui.cbConnection->currentIndex() == index)
+				mqttConnection();
+			else
+				ui.cbConnection->setCurrentIndex(index);
+		} else { //Previous connection wasn't changed
+			m_initialisingMQTT = true;
+			ui.cbConnection->setCurrentIndex(index);
+			m_initialisingMQTT = false;
+		}
 	}
-
-	checkConnectEnable();
-
 	delete dlg;
 }
 
