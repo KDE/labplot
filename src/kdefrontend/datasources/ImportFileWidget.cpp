@@ -2223,8 +2223,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lWillStatistics->hide();
 		ui.gbManageSubscriptions->setEnabled(false);
 
-		checkConnectEnable();
-
 		if(ui.chbWill->isChecked()) {
 			ui.chbWillRetain->show();
 			ui.cbWillQoS->show();
@@ -2884,14 +2882,6 @@ void ImportFileWidget::scrollToSubsriptionTreeItem(const QString& rootName) {
 	if(topItemIdx >= 0) {
 		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
 	}
-}
-
-/*!
- *\brief called when any option of the client (host, port, id, etc.) is changed before connecting to the broker,
- *		 checks if every option needed for the connection is set, if it is, then enables the connect button
- */
-void ImportFileWidget::checkConnectEnable() {
-	bool enable = (ui.cbConnection->count() > 0);
 }
 
 /*!
