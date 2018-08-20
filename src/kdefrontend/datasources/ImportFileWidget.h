@@ -198,7 +198,6 @@ private slots:
 	void scrollToTopicTreeItem(const QString&);
 	void scrollToSubsriptionTreeItem(const QString&);
 	void mqttConnectTimeout();
-	void checkConnectEnable();
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
 #endif
