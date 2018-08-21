@@ -29,7 +29,6 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 #include "MQTTConnectionManagerWidget.h"
 
 #ifdef HAVE_MQTT
-
 #include "backend/lib/macros.h"
 
 #include <KConfig>
@@ -37,7 +36,6 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-
 #include <QTimer>
 #include <QtMqtt>
 #include <QDebug>
@@ -150,6 +148,10 @@ void MQTTConnectionManagerWidget::connectionChanged(int index) {
 	m_initializing = false;
 }
 
+/*!
+ * \brief Called when the name is changed
+ * Sets the name for the current connection
+ */
 void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
 	if (name.isEmpty()) {
 		ui.leName->setStyleSheet("QLineEdit{background: red;}");
@@ -198,7 +200,7 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 		ui.leHost->setStyleSheet("");
 		ui.leHost->setToolTip("");
 
-		//check uniqueness of the provided name
+		//check uniqueness of the provided host name
 		bool unique = true;
 		for(int i = 0; i < m_connections.size(); ++i) {
 			if (ui.lwConnections->currentRow() == i)
@@ -308,6 +310,10 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 		emit changed();
 }
 
+/*!
+ * \brief called when retain checkbox's state is changed
+ * \param state the state of the checbox
+ */
 void MQTTConnectionManagerWidget::retainChecked(int state) {
 	if(m_initializing)
 		return;
@@ -404,7 +410,6 @@ void MQTTConnectionManagerWidget::addConnection() {
 	ui.lePassword->setEnabled(true);
 	ui.leID->setEnabled(true);
 	ui.leName->setEnabled(true);
-
 	emit changed();
 }
 
@@ -447,7 +452,6 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 
 		m_initializing = false;
 	}
-
 	emit changed();
 }
 
@@ -605,6 +609,9 @@ QString MQTTConnectionManagerWidget::uniqueName() {
 	return new_name;
 }
 
+/*!
+ * \brief Tests the currently selected connection
+ */
 void MQTTConnectionManagerWidget::testConnection() {
 	WAIT_CURSOR;
 
@@ -640,6 +647,9 @@ void MQTTConnectionManagerWidget::testConnection() {
 	m_client->connectToHost();
 }
 
+/*!
+ * \brief Called when the client connects to the host, this means the test was succesful
+ */
 void MQTTConnectionManagerWidget::onConnect() {
 	m_testTimer->stop();
 
@@ -649,6 +659,9 @@ void MQTTConnectionManagerWidget::onConnect() {
 	m_client->disconnectFromHost();
 }
 
+/*!
+ * \brief Called when testTimer times out, this means that the test wasn't succesful
+ */
 void MQTTConnectionManagerWidget::testTimeout() {
 	m_testTimer->stop();
 
@@ -658,6 +671,10 @@ void MQTTConnectionManagerWidget::testTimeout() {
 	m_client->disconnectFromHost();
 }
 
+/*!
+ * \brief Called when the client disconnects from the host
+ * Enables the widgets, because the test has ended
+ */
 void MQTTConnectionManagerWidget::onDisconnect() {
 	RESET_CURSOR;
 

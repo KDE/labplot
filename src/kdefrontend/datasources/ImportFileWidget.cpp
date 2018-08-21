@@ -2284,7 +2284,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 void ImportFileWidget::mqttConnection() {
 	if(!m_initialisingMQTT) {
 		if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
-			qDebug() << "Connecting...";
 			if (ui.cbConnection->currentIndex() == -1)
 				return;
 			WAIT_CURSOR;
@@ -2326,14 +2325,12 @@ void ImportFileWidget::mqttConnection() {
 			qDebug()<< m_client->hostname() << "   " << m_client->port();
 			qDebug()<< "Trying to connect";
 			m_connectTimeoutTimer->start();
-			qDebug()<< "Timer started";
 			m_client->connectToHost();
-			qDebug() << "Client connect";
 		} else if (m_client->state() == QMqttClient::ClientState::Connected) {
 			WAIT_CURSOR;
 			ui.cbConnection->setEnabled(false);
 			ui.bManageConnections->setEnabled(false);
-			qDebug()<<"Disconnecting from mqtt broker"	;
+			qDebug()<<"Disconnecting from MQTT broker"	;
 			m_client->disconnectFromHost();
 		}
 	}
@@ -2344,7 +2341,6 @@ void ImportFileWidget::mqttConnection() {
  * in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
-	qDebug() << "MQTT Connected";
 	if(m_client->error() == QMqttClient::NoError) {
 		m_connectTimeoutTimer->stop();
 		ui.gbManageSubscriptions->setEnabled(true);
@@ -2366,8 +2362,6 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	qDebug() << "MQTT disconnected";
-
 	ui.gbManageSubscriptions->setEnabled(false);
 	ui.twSubscriptions->clear();
 	ui.twTopics->clear();
@@ -2393,10 +2387,12 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.cbConnection->setEnabled(true);
 	ui.bManageConnections->setEnabled(true);
 
-	if(!m_connectionTimedOut) {
-		QTimer::singleShot(300, this, &ImportFileWidget::mqttConnection);
-	} else
-		m_connectionTimedOut = false;
+	if(!m_initialisingMQTT) {
+		if(!m_connectionTimedOut) {
+			QTimer::singleShot(300, this, &ImportFileWidget::mqttConnection);
+		} else
+			m_connectionTimedOut = false;
+	}
 }
 
 /*!
@@ -2917,8 +2913,6 @@ void ImportFileWidget::showMQTTConnectionManager() {
 		//select the connection the user has selected in MQTTConnectionManager
 		QString conn = dlg->connection();
 		int index = ui.cbConnection->findText(conn);
-		qDebug() <<"Previous: " << previousConnection << "Changed: " << previousConnectionChanged;
-		qDebug() <<"Current: " << conn << " " <<index;
 		if(conn != previousConnection) {//Current connection isn't the previous one
 			if(ui.cbConnection->currentIndex() != index)
 				ui.cbConnection->setCurrentIndex(index);

@@ -94,6 +94,8 @@ MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
  */
 void MQTTConnectionManagerDialog::changed() {
 	setWindowTitle(i18nc("@title:window", "MQTT Connections  [Changed]"));
+
+	//set true if initial connection was changed
 	if(mainWidget->connection() == m_initialConnection)
 		*m_initialConnectionChanged = true;
 
