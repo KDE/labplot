@@ -488,6 +488,7 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
 		}
+		break;
     }
 	case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
