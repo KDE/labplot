@@ -100,10 +100,10 @@ void MQTTConnectionManagerDialog::changed() {
 		*m_initialConnectionChanged = true;
 
 	if(mainWidget->checkConnections()) {
-		m_buttonBox->setEnabled(true);
+		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 		m_changed = true;
 	} else
-		m_buttonBox->setEnabled(false);
+		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
 
 /*!

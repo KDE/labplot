@@ -823,8 +823,13 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	ui.lQos->setVisible(visible);
 
 	//topics
-	ui.lTopics->setVisible(visible);
-	ui.gbManageSubscriptions->setVisible(visible);
+	if (ui.cbConnection->currentIndex() != -1 && visible) {
+		ui.lTopics->setVisible(true);
+		ui.gbManageSubscriptions->setVisible(true);
+	} else {
+		ui.lTopics->setVisible(false);
+		ui.gbManageSubscriptions->setVisible(false);
+	}
 
 	//will message
 	ui.gbMqttWill->setVisible(visible);

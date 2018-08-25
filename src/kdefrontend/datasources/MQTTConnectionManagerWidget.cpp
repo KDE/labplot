@@ -651,6 +651,7 @@ void MQTTConnectionManagerWidget::testConnection() {
  * \brief Called when the client connects to the host, this means the test was succesful
  */
 void MQTTConnectionManagerWidget::onConnect() {
+	RESET_CURSOR;
 	m_testTimer->stop();
 
 	KMessageBox::information(this, i18n("Connection to the broker '%1' was successful.", m_connections[ui.lwConnections->currentRow()].hostName),
@@ -663,6 +664,7 @@ void MQTTConnectionManagerWidget::onConnect() {
  * \brief Called when testTimer times out, this means that the test wasn't succesful
  */
 void MQTTConnectionManagerWidget::testTimeout() {
+	RESET_CURSOR;
 	m_testTimer->stop();
 
 	KMessageBox::error(this, i18n("Failed to connect to the broker '%1'.", m_connections[ui.lwConnections->currentRow()].hostName),
