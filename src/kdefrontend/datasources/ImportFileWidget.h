@@ -88,7 +88,7 @@ public:
 
 private:
 	Ui::ImportFileWidget ui;
-	void hideMQTT();
+	void setMQTTVisible(bool);
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;

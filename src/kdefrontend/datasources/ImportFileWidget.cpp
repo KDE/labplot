@@ -97,7 +97,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_fileEmpty(false),
 	m_liveDataSource(liveDataSource),
 	m_suppressRefresh(false)
-  #ifdef HAVE_MQTT
+#ifdef HAVE_MQTT
 	,
 	m_client(new QMqttClient(this)),
 	m_searching(false),
@@ -106,7 +106,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_mqttReadyForPreview (false),
 	m_initialisingMQTT(false),
 	m_connectionTimedOut(false)
-  #endif
+#endif
 {
 	ui.setupUi(this);
 
@@ -208,11 +208,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.gbOptions->hide();
 	ui.gbUpdateOptions->hide();
 
-	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
-	ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
-	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
-	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
+	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
+	ui.bManageFilters->setIcon( QIcon::fromTheme(QLatin1String("configure")) );
+	ui.bSaveFilter->setIcon( QIcon::fromTheme(QLatin1String("document-save")) );
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme(QLatin1String("view-refresh")) );
 
 	if (!liveDataSource) {
 		ui.gbUpdateOptions->hide();
@@ -239,10 +239,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.sbUpdateInterval->hide();
 		ui.lUpdateInterval->hide();
-		#ifdef HAVE_MQTT
-			hideMQTT();
-		#endif
 
+		setMQTTVisible(false);
 	} else {
 		for (int i = 2; i < ui.swOptions->count(); ++i)
 			ui.swOptions->removeWidget(ui.swOptions->widget(i));
@@ -281,7 +279,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 #ifdef HAVE_MQTT
+	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
+	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
 
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnection);
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
@@ -298,7 +298,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
-	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);	
+	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 
 	ui.bSubscribe->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
@@ -322,7 +322,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
-	hideMQTT();
 }
 
 void ImportFileWidget::loadSettings() {
@@ -398,7 +397,9 @@ void ImportFileWidget::loadSettings() {
 #endif
 
 	m_suppressRefresh = false;
-	refreshPreview();
+
+	//update the widgets and refresh the preview for the for current source type
+	sourceTypeChanged(ui.cbSourceType->currentIndex());
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -814,37 +815,35 @@ void ImportFileWidget::selectFile() {
 /*!
 	hides the MQTT related items of the widget
 */
-void ImportFileWidget::hideMQTT() {
-	ui.lConnections->hide();
-	ui.cbConnection->hide();
-	ui.bManageConnections->hide();
-	ui.cbQos->hide();
-	ui.lQos->hide();
-	ui.twTopics->hide();
-	ui.lTopicSearch->hide();
-	ui.leTopics->hide();
-	ui.twSubscriptions->hide();
-	ui.bSubscribe->hide();
-	ui.bUnsubscribe->hide();
-	ui.gbMqttWill->hide();
-	ui.chbWill->hide();
-	ui.chbWillRetain->hide();
-	ui.cbWillQoS->hide();
-	ui.cbWillMessageType->hide();
-	ui.cbWillTopic->hide();
-	ui.cbWillUpdate->hide();
-	ui.leWillOwnMessage->hide();
-	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-	ui.leWillUpdateInterval->hide();
-	ui.lWillMessageType->hide();
-	ui.lWillOwnMessage->hide();
-	ui.lWillQos->hide();
-	ui.lWillTopic->hide();
-	ui.lWillUpdate->hide();
-	ui.lWillUpdateInterval->hide();
-	ui.lwWillStatistics->hide();
-	ui.lWillStatistics->hide();
-	ui.gbManageSubscriptions->hide();
+void ImportFileWidget::setMQTTVisible(bool visible) {
+	ui.lConnections->setVisible(visible);
+	ui.cbConnection->setVisible(visible);
+	ui.bManageConnections->setVisible(visible);
+	ui.cbQos->setVisible(visible);
+	ui.lQos->setVisible(visible);
+
+	//topics
+	ui.lTopics->setVisible(visible);
+	ui.gbManageSubscriptions->setVisible(visible);
+
+	//will message
+	ui.gbMqttWill->setVisible(visible);
+	ui.chbWill->setVisible(visible);
+	ui.chbWillRetain->setVisible(visible);
+	ui.cbWillQoS->setVisible(visible);
+	ui.cbWillMessageType->setVisible(visible);
+	ui.cbWillTopic->setVisible(visible);
+	ui.cbWillUpdate->setVisible(visible);
+	ui.leWillOwnMessage->setVisible(visible);
+	ui.leWillUpdateInterval->setVisible(visible);
+	ui.lWillMessageType->setVisible(visible);
+	ui.lWillOwnMessage->setVisible(visible);
+	ui.lWillQos->setVisible(visible);
+	ui.lWillTopic->setVisible(visible);
+	ui.lWillUpdate->setVisible(visible);
+	ui.lWillUpdateInterval->setVisible(visible);
+	ui.lwWillStatistics->setVisible(visible);
+	ui.lWillStatistics->setVisible(visible);
 }
 
 #ifdef HAVE_MQTT
@@ -2067,7 +2066,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		fileNameChanged(ui.leFileName->text());
 		ui.cbFileType->show();
 		ui.lFileType->show();
-		hideMQTT();
+		setMQTTVisible(false);
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -2102,7 +2101,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
 		ui.lFileType->show();
-		hideMQTT();
+		setMQTTVisible(false);
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		ui.lFileName->show();
@@ -2130,7 +2129,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
 		ui.lFileType->show();
-		hideMQTT();
+		setMQTTVisible(false);
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		ui.lBaudRate->show();
@@ -2158,7 +2157,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->show();
 		ui.lFileType->show();
-		hideMQTT();
+		setMQTTVisible(false);
 		break;
 	case LiveDataSource::SourceType::MQTT:
 #ifdef HAVE_MQTT
@@ -2183,76 +2182,12 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bOpen->hide();
 		ui.chbLinkFile->hide();
 
-		ui.lConnections->show();
-		ui.bManageConnections->show();
-		ui.cbConnection->show();
-		ui.gbManageSubscriptions->show();
+		setMQTTVisible(true);
 
 		ui.cbFileType->setEnabled(true);
-
-		ui.cbQos->show();
-		ui.lQos->show();
-		ui.twTopics->show();
-		ui.lTopicSearch->show();
-		ui.leTopics->show();
-		ui.twSubscriptions->show();
-		ui.bSubscribe->show();
-		ui.bUnsubscribe->show();
-
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
-
-		ui.gbMqttWill->show();
-		ui.chbWill->show();
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lwWillStatistics->hide();
-		ui.lWillStatistics->hide();
-		ui.gbManageSubscriptions->setEnabled(false);
-
-		if(ui.chbWill->isChecked()) {
-			ui.chbWillRetain->show();
-			ui.cbWillQoS->show();
-			ui.cbWillMessageType->show();
-			ui.cbWillTopic->show();
-			ui.cbWillUpdate->show();
-			ui.lWillMessageType->show();
-			ui.lWillQos->show();
-			ui.lWillTopic->show();
-			ui.lWillUpdate->show();
-
-			if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
-				ui.leWillOwnMessage->show();
-				ui.lWillOwnMessage->show();
-			}
-			else if(ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ){
-				ui.lWillStatistics->show();
-				ui.lwWillStatistics->show();
-			}
-
-			if(ui.cbWillUpdate->currentIndex() == 0) {
-				ui.leWillUpdateInterval->show();
-				ui.lWillUpdateInterval->show();
-			}
-			else if (ui.cbWillUpdate->currentIndex() == 1)
-			{
-				ui.leWillUpdateInterval->hide();
-				ui.lWillUpdateInterval->hide();
-			}
-		}
 #endif
 		break;
 	}
@@ -2349,8 +2284,8 @@ void ImportFileWidget::onMqttConnect() {
 		QMqttTopicFilter globalFilter{"#"};
 		m_mainSubscription = m_client->subscribe(globalFilter, 1);
 		if(!m_mainSubscription)
-			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");		
-	}	
+			QMessageBox::information(this, "Couldn't subscribe", "Something went wrong");
+	}
 	ui.cbConnection->setEnabled(true);
 	ui.bManageConnections->setEnabled(true);
 	emit subscriptionsChanged();

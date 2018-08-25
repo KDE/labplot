@@ -39,8 +39,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>735</width>
-        <height>1679</height>
+        <width>727</width>
+        <height>2086</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -88,11 +88,6 @@
             <item>
              <property name="text">
               <string>Serial Port</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>MQTT</string>
              </property>
             </item>
            </widget>
@@ -460,7 +455,7 @@
            </widget>
           </item>
           <item row="8" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="lTopics">
             <property name="text">
              <string>Topics</string>
             </property>
