@@ -283,7 +283,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
 
-	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnection);
+	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(ui.bSubscribe,  &QPushButton::clicked, this, &ImportFileWidget::mqttSubscribe);
@@ -393,7 +393,7 @@ void ImportFileWidget::loadSettings() {
 		ui.chbWill->setChecked(false);
 	}
 	m_initialisingMQTT = false;
-	mqttConnection();
+	mqttConnectionChanged();
 #endif
 
 	m_suppressRefresh = false;
@@ -2217,11 +2217,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 #ifdef HAVE_MQTT
 
 /*!
- *\brief called when the connect/disconnect button is pressed
- * makes the connection to the given MQTT broker, with the given options
- * or disconnects from the broker
+ *\brief called when a different MQTT connection is selected in the connection ComboBox.
+ * connects to the MQTT broker according to the connection settings.
  */
-void ImportFileWidget::mqttConnection() {
+void ImportFileWidget::mqttConnectionChanged() {
 	if(!m_initialisingMQTT) {
 		if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
 			if (ui.cbConnection->currentIndex() == -1)
@@ -2283,7 +2282,7 @@ void ImportFileWidget::mqttConnection() {
 void ImportFileWidget::onMqttConnect() {
 	if(m_client->error() == QMqttClient::NoError) {
 		m_connectTimeoutTimer->stop();
-		ui.gbManageSubscriptions->setEnabled(true);
+		ui.gbManageSubscriptions->setVisible(true);
 
 		//subscribing to every topic (# wildcard) in order to later list every available topic
 		QMqttTopicFilter globalFilter{"#"};
@@ -2302,7 +2301,7 @@ void ImportFileWidget::onMqttConnect() {
  * removes every information about the former connection
  */
 void ImportFileWidget::onMqttDisconnect() {
-	ui.gbManageSubscriptions->setEnabled(false);
+	ui.gbManageSubscriptions->setVisible(false);
 	ui.twSubscriptions->clear();
 	ui.twTopics->clear();
 
@@ -2328,9 +2327,9 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.bManageConnections->setEnabled(true);
 
 	if(!m_initialisingMQTT) {
-		if(!m_connectionTimedOut) {
-			QTimer::singleShot(300, this, &ImportFileWidget::mqttConnection);
-		} else
+		if(!m_connectionTimedOut)
+			QTimer::singleShot(300, this, &ImportFileWidget::mqttConnectionChanged);
+		else
 			m_connectionTimedOut = false;
 	}
 }
@@ -2793,9 +2792,8 @@ void ImportFileWidget::scrollToTopicTreeItem(const QString& rootName) {
 			break;
 		}
 
-	if(topItemIdx >= 0) {
+	if(topItemIdx >= 0)
 		ui.twTopics->scrollToItem(ui.twTopics->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-	}
 }
 
 /*!
@@ -2815,9 +2813,8 @@ void ImportFileWidget::scrollToSubsriptionTreeItem(const QString& rootName) {
 			break;
 		}
 
-	if(topItemIdx >= 0) {
+	if(topItemIdx >= 0)
 		ui.twSubscriptions->scrollToItem(ui.twSubscriptions->topLevelItem(topItemIdx), QAbstractItemView::ScrollHint::PositionAtTop);
-	}
 }
 
 /*!
@@ -2843,31 +2840,12 @@ void ImportFileWidget::showMQTTConnectionManager() {
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
-		m_initialisingMQTT = true;
-		QString previousConnection = "";
-		previousConnection = ui.cbConnection->currentText();
 		ui.cbConnection->clear();
 		readMQTTConnections();
-		m_initialisingMQTT = false;
 
 		//select the connection the user has selected in MQTTConnectionManager
 		QString conn = dlg->connection();
-		int index = ui.cbConnection->findText(conn);
-		if(conn != previousConnection) {//Current connection isn't the previous one
-			if(ui.cbConnection->currentIndex() != index)
-				ui.cbConnection->setCurrentIndex(index);
-			else
-				mqttConnection();
-		} else if (previousConnectionChanged) {//Current connection is the same with previous one but it changed
-			if(ui.cbConnection->currentIndex() == index)
-				mqttConnection();
-			else
-				ui.cbConnection->setCurrentIndex(index);
-		} else { //Previous connection wasn't changed
-			m_initialisingMQTT = true;
-			ui.cbConnection->setCurrentIndex(index);
-			m_initialisingMQTT = false;
-		}
+		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
 	}
 	delete dlg;
 }

@@ -540,7 +540,7 @@ void MQTTConnectionManagerWidget::saveConnections() {
  */
 bool MQTTConnectionManagerWidget::checkConnections() {
 	if(m_connections.isEmpty())
-		return false;
+		return true;
 
 	bool connectionsOk = true;
 

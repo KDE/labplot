@@ -181,7 +181,7 @@ signals:
 	void checkFileType();
 
 private slots:
-	void mqttConnection();
+	void mqttConnectionChanged();
 	void onMqttConnect();
 	void mqttSubscribe();
 	void mqttUnsubscribe();

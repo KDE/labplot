@@ -427,7 +427,7 @@ void ImportSQLDatabaseWidget::showDatabaseManager() {
 		ui.cbConnection->clear();
 		readConnections();
 
-		//select the connection the user has selected in DataabaseManager
+		//select the connection the user has selected in DatabaseManager
 		QString conn = dlg->connection();
 		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
 	}
