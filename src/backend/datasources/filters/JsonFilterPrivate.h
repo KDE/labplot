@@ -39,7 +39,7 @@ class AbstractColumn;
 class JsonFilterPrivate {
 
 public:
-	JsonFilterPrivate (JsonFilter* owner);
+	explicit JsonFilterPrivate (JsonFilter* owner);
 
 	int checkRow(QJsonValueRef value, int &countCols);
 	int parseColumnModes(QJsonValue row, QString rowName = "");

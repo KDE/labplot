@@ -50,7 +50,7 @@ class DatapickerImage : public AbstractPart {
 	Q_OBJECT
 
 public:
-	DatapickerImage(const QString& name, bool loading = false);
+	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
 	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};

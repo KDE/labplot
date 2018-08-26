@@ -49,7 +49,7 @@ class CantorWorksheet : public AbstractPart {
 	Q_OBJECT
 
 public:
-	CantorWorksheet(const QString& name, bool loading = false);
+	explicit CantorWorksheet(const QString& name, bool loading = false);
 
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;

@@ -37,7 +37,7 @@ class QJsonItem;
 
 class QJsonTreeItem {
 public:
-	QJsonTreeItem(QJsonTreeItem* parent = nullptr);
+	explicit QJsonTreeItem(QJsonTreeItem* parent = nullptr);
 	~QJsonTreeItem();
 	void appendChild(QJsonTreeItem*);
 	QJsonTreeItem* child(int row);

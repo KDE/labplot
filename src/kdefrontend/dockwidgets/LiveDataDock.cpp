@@ -879,7 +879,7 @@ void LiveDataDock::addSubscription() {
 				if(checkTopicContains(ui.twSubscriptions->topLevelItem(i)->text(0), name)
 						&& name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 					foundSuperior = true;
-					qDebug()<<"Can't add "<<name<<" because found usperior: "<< ui.twSubscriptions->topLevelItem(i)->text(0);
+					qDebug()<<"Can't add "<<name<<" because found superior: "<< ui.twSubscriptions->topLevelItem(i)->text(0);
 					break;
 				}
 			}

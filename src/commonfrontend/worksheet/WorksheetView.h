@@ -33,7 +33,7 @@
 #include <QGraphicsView>
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include <QtPrintSupport/QPrinter>
+#include <QPrinter>
 
 class QMenu;
 class QToolBar;

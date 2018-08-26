@@ -56,7 +56,7 @@ public:
 	 *
 	 * @param[in] filename ROOT file to be read
 	 */
-	ROOTHist(const std::string& filename);
+	explicit ROOTHist(const std::string& filename);
 
 	struct BinPars {
 		double content;

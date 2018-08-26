@@ -25,7 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <backend/lib/macros.h>	// DEBUG()
 
 extern "C" {

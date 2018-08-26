@@ -43,7 +43,7 @@ class Worksheet : public AbstractPart {
 Q_OBJECT
 
 public:
-	Worksheet(const QString& name, bool loading = false);
+	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
 	enum Unit {Millimeter, Centimeter, Inch, Point};

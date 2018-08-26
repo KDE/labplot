@@ -46,7 +46,7 @@ class MQTTErrorWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, MQTTClient* client = 0, QWidget* parent = 0);
+	explicit MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, MQTTClient* client = 0, QWidget* parent = 0);
 
 private:
 	Ui::MQTTErrorWidget ui;

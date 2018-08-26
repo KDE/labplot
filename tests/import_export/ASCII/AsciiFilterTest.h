@@ -24,7 +24,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class AsciiFilterTest : public QObject {
 	Q_OBJECT

@@ -40,7 +40,7 @@ class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 public:
-	Spreadsheet(const QString& name, bool loading = false);
+	explicit Spreadsheet(const QString& name, bool loading = false);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

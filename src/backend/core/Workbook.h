@@ -41,7 +41,7 @@ class Workbook : public AbstractPart {
 	Q_OBJECT
 
 public:
-	Workbook(const QString& name);
+	explicit Workbook(const QString& name);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

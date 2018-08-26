@@ -43,7 +43,7 @@ class MQTTSubscription : public Folder{
 	Q_OBJECT
 
 public:
-	MQTTSubscription(const QString& name);
+	explicit MQTTSubscription(const QString& name);
 	~MQTTSubscription() override;
 
 	void setMQTTClient(MQTTClient *client);

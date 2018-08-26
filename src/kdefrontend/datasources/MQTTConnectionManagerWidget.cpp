@@ -648,7 +648,7 @@ void MQTTConnectionManagerWidget::testConnection() {
 }
 
 /*!
- * \brief Called when the client connects to the host, this means the test was succesful
+ * \brief Called when the client connects to the host, this means the test was successful
  */
 void MQTTConnectionManagerWidget::onConnect() {
 	RESET_CURSOR;
@@ -661,7 +661,7 @@ void MQTTConnectionManagerWidget::onConnect() {
 }
 
 /*!
- * \brief Called when testTimer times out, this means that the test wasn't succesful
+ * \brief Called when testTimer times out, this means that the test wasn't successful
  */
 void MQTTConnectionManagerWidget::testTimeout() {
 	RESET_CURSOR;
