@@ -293,7 +293,7 @@ int JsonFilterPrivate::parseColumnModes(QJsonValue row, QString rowName) {
 					return -1;
 				if(vectorNames.count() == 0) {
 					vectorNames = row.toObject().keys();
-					for(int k = 1; i < startColumn; i++)
+					for (int i = 1; i < startColumn; i++)
 						vectorNames.removeFirst();
 				}
 				columnValue = *(row.toObject().begin() + colIndexInContainer);
