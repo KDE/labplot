@@ -2221,57 +2221,58 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
  * connects to the MQTT broker according to the connection settings.
  */
 void ImportFileWidget::mqttConnectionChanged() {
-	if(!m_initialisingMQTT) {
-		if(m_client->state() == QMqttClient::ClientState::Disconnected)	{
-			if (ui.cbConnection->currentIndex() == -1)
-				return;
-			WAIT_CURSOR;
+	if(m_initialisingMQTT)
+		return;
 
-			delete m_client;
-			m_client = new QMqttClient();
-			connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
-			connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
-			connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
-			connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
+	if(m_client->state() == QMqttClient::ClientState::Disconnected) {
+		if (ui.cbConnection->currentIndex() == -1)
+			return;
+		WAIT_CURSOR;
 
-			ui.cbConnection->setEnabled(false);
-			ui.bManageConnections->setEnabled(false);
+		delete m_client;
+		m_client = new QMqttClient();
+		connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
+		connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+		connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
+		connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 
-			//determine the current connection's settings
-			KConfig config(m_configPath, KConfig::SimpleConfig);
-			KConfigGroup group = config.group(ui.cbConnection->currentText());
+		ui.cbConnection->setEnabled(false);
+		ui.bManageConnections->setEnabled(false);
 
-			m_client->setHostname(group.readEntry("Host"));
-			m_client->setPort(group.readEntry("Port").toUInt());
+		//determine the current connection's settings
+		KConfig config(m_configPath, KConfig::SimpleConfig);
+		KConfigGroup group = config.group(ui.cbConnection->currentText());
 
-			bool useID = group.readEntry("UseID").toUInt();
-			if(useID)
-				m_client->setClientId(group.readEntry("ClientID"));
-			else
-				m_client->setClientId("");
+		m_client->setHostname(group.readEntry("Host"));
+		m_client->setPort(group.readEntry("Port").toUInt());
 
-			bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
-			if(useAuthentication) {
-				m_client->setUsername(group.readEntry("UserName"));
-				m_client->setPassword(group.readEntry("Password"));
-			} else {
-				m_client->setUsername("");
-				m_client->setPassword("");
-			}
+		bool useID = group.readEntry("UseID").toUInt();
+		if(useID)
+			m_client->setClientId(group.readEntry("ClientID"));
+		else
+			m_client->setClientId("");
 
-			qDebug()<< "Use ID" << useID << " " << m_client->clientId();
-			qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
-			qDebug()<< m_client->hostname() << "   " << m_client->port();
-			qDebug()<< "Trying to connect";
-			m_connectTimeoutTimer->start();
-			m_client->connectToHost();
-		} else if (m_client->state() == QMqttClient::ClientState::Connected) {
-			WAIT_CURSOR;
-			ui.cbConnection->setEnabled(false);
-			ui.bManageConnections->setEnabled(false);
-			qDebug()<<"Disconnecting from MQTT broker"	;
-			m_client->disconnectFromHost();
+		bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+		if(useAuthentication) {
+			m_client->setUsername(group.readEntry("UserName"));
+			m_client->setPassword(group.readEntry("Password"));
+		} else {
+			m_client->setUsername("");
+			m_client->setPassword("");
 		}
+
+		qDebug()<< "Use ID" << useID << " " << m_client->clientId();
+		qDebug()<< "Use authentication" << useAuthentication << " " << m_client->username() << " " << m_client->password();
+		qDebug()<< m_client->hostname() << "   " << m_client->port();
+		qDebug()<< "Trying to connect";
+		m_connectTimeoutTimer->start();
+		m_client->connectToHost();
+	} else if (m_client->state() == QMqttClient::ClientState::Connected) {
+		WAIT_CURSOR;
+		ui.cbConnection->setEnabled(false);
+		ui.bManageConnections->setEnabled(false);
+		qDebug()<<"Disconnecting from MQTT broker"	;
+		m_client->disconnectFromHost();
 	}
 }
 
@@ -2839,13 +2840,33 @@ void ImportFileWidget::showMQTTConnectionManager() {
 	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), &previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
+
 		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
+		m_initialisingMQTT = true;
+		QString prevConn = ui.cbConnection->currentText();
 		ui.cbConnection->clear();
 		readMQTTConnections();
+		m_initialisingMQTT = false;
 
 		//select the connection the user has selected in MQTTConnectionManager
 		QString conn = dlg->connection();
-		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
+
+		int index = ui.cbConnection->findText(conn);
+		if(conn != prevConn) {//Current connection isn't the previous one
+			if(ui.cbConnection->currentIndex() != index)
+				ui.cbConnection->setCurrentIndex(index);
+			else
+				mqttConnectionChanged();
+		} else if (previousConnectionChanged) {//Current connection is the same with previous one but it changed
+			if(ui.cbConnection->currentIndex() == index)
+				mqttConnectionChanged();
+			else
+				ui.cbConnection->setCurrentIndex(index);
+		} else { //Previous connection wasn't changed
+			m_initialisingMQTT = true;
+			ui.cbConnection->setCurrentIndex(index);
+			m_initialisingMQTT = false;
+		}
 	}
 	delete dlg;
 }
