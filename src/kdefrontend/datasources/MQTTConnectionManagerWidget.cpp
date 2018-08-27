@@ -85,19 +85,14 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 
 	ui.lePassword->hide();
 	ui.lPassword->hide();
-	ui.lePassword->setStyleSheet("QLineEdit{background: red;}");
 	ui.lePassword->setToolTip("Please set a password");
 	ui.leUserName->hide();
 	ui.lUsername->hide();
-	ui.leUserName->setStyleSheet("QLineEdit{background: red;}");
 	ui.leUserName->setToolTip("Please set a username");
 	ui.leID->hide();
 	ui.lID->hide();
-	ui.leID->setStyleSheet("QLineEdit{background: red;}");
 	ui.leID->setToolTip("Please set a client ID");
-	ui.leHost->setStyleSheet("QLineEdit{background: red;}");
 	ui.leHost->setToolTip("Please set a valid host name");
-	ui.leName->setStyleSheet("QLineEdit{background: red;}");
 	ui.leHost->setToolTip("Please set a valid name");
 
 	QTimer::singleShot( 100, this, SLOT(loadConnections()) );
