@@ -37,9 +37,9 @@ class SpreadsheetCommentsHeaderView : public QHeaderView {
 
 public:
 	explicit SpreadsheetCommentsHeaderView(QWidget* parent = 0);
-	virtual ~SpreadsheetCommentsHeaderView();
+	~SpreadsheetCommentsHeaderView() override;
 
-	virtual void setModel(QAbstractItemModel*);
+	void setModel(QAbstractItemModel*) override;
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
 };
 
@@ -48,10 +48,10 @@ class SpreadsheetHeaderView : public QHeaderView {
 
 public:
 	explicit SpreadsheetHeaderView(QWidget* parent = 0);
-	~SpreadsheetHeaderView();
+	~SpreadsheetHeaderView() override;
 
-	virtual void setModel(QAbstractItemModel*);
-	virtual QSize sizeHint () const;
+	void setModel(QAbstractItemModel*) override;
+	QSize sizeHint () const override;
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
@@ -65,7 +65,7 @@ private slots:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 
 protected:
-	virtual void paintSection(QPainter*, const QRect&, int logicalIndex) const;
+	void paintSection(QPainter*, const QRect&, int logicalIndex) const override;
 };
 
 #endif

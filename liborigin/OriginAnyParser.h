@@ -33,7 +33,7 @@ class OriginAnyParser : public OriginParser
 {
 public:
 	explicit OriginAnyParser(const string& fileName);
-	bool parse();
+	bool parse() override;
 
 protected:
 	unsigned int readObjectSize();

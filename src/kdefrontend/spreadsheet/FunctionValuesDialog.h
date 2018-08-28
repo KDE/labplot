@@ -45,7 +45,7 @@ class FunctionValuesDialog : public QDialog {
 
 	public:
 		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0);
-		~FunctionValuesDialog();
+		~FunctionValuesDialog() override;
 		void setColumns(QVector<Column*>);
 
 	private:

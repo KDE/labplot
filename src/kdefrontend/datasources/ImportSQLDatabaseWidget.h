@@ -48,7 +48,7 @@ class ImportSQLDatabaseWidget : public QWidget {
 
 public:
 	explicit ImportSQLDatabaseWidget(QWidget*);
-	~ImportSQLDatabaseWidget();
+	~ImportSQLDatabaseWidget() override;
 
 	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
 	QString selectedTable() const;

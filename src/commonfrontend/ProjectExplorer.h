@@ -59,8 +59,8 @@ public:
 
 private:
 	void createActions();
-	void contextMenuEvent(QContextMenuEvent*);
-	bool eventFilter(QObject*, QEvent*);
+	void contextMenuEvent(QContextMenuEvent*) override;
+	bool eventFilter(QObject*, QEvent*) override;
 	void collapseParents(const QModelIndex&, const QList<QModelIndex>& expanded);
 	bool filter(const QModelIndex&, const QString&);
 	int m_columnToHide;

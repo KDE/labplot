@@ -44,7 +44,7 @@ class EquationHighlighter : public QSyntaxHighlighter {
 		void rehighlight();
 
 	protected:
-		virtual void highlightBlock(const QString& text);
+		void highlightBlock(const QString& text) override;
 
 // 		int m_errorPosition;
 		KTextEdit* m_parent;

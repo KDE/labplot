@@ -91,7 +91,7 @@ class MainWin : public KXmlGuiWindow {
 
 public:
 	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
-	~MainWin();
+	~MainWin() override;
 
 	void showPresenter();
 	AspectTreeModel* model() const;
@@ -230,9 +230,9 @@ private:
 	GuiObserver* m_guiObserver;
 
 protected:
-	void closeEvent(QCloseEvent*);
-	void dragEnterEvent(QDragEnterEvent*);
-	void dropEvent(QDropEvent*);
+	void closeEvent(QCloseEvent*) override;
+	void dragEnterEvent(QDragEnterEvent*) override;
+	void dropEvent(QDropEvent*) override;
 
 private slots:
 	void initGUI(const QString&);

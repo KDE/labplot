@@ -47,7 +47,7 @@ private:
 	bool m_rehighlighting;
 	bool m_invalidRanges;
 
-	bool eventFilter(QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent*) override;
 	void highlightInvalid(int row, int col, bool invalid) const;
 
 signals:

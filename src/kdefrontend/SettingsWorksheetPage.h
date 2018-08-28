@@ -41,8 +41,8 @@ class SettingsWorksheetPage : public SettingsPage {
 public:
 	explicit SettingsWorksheetPage(QWidget*);
 
-	virtual void applySettings();
-	virtual void restoreDefaults();
+	void applySettings() override;
+	void restoreDefaults() override;
 
 private:
 	Ui::SettingsWorksheetPage ui;

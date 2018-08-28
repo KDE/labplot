@@ -44,7 +44,7 @@ class AxisDock : public QWidget{
 
 public:
 	explicit AxisDock(QWidget*);
-    ~AxisDock();
+    ~AxisDock() override;
 
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();

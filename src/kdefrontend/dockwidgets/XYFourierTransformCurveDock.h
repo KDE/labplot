@@ -41,10 +41,10 @@ class XYFourierTransformCurveDock: public XYCurveDock {
 public:
 	explicit XYFourierTransformCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showTransformResult();
 
 	Ui::XYFourierTransformCurveDockGeneralTab uiGeneralTab;
@@ -55,7 +55,7 @@ private:
 	XYFourierTransformCurve::TransformData m_transformData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYFourierTransformCurveDock

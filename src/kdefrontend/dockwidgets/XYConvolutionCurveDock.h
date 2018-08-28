@@ -41,10 +41,10 @@ class XYConvolutionCurveDock: public XYCurveDock {
 public:
 	explicit XYConvolutionCurveDock(QWidget*);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showConvolutionResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -57,7 +57,7 @@ private:
 	XYConvolutionCurve::ConvolutionData m_convolutionData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYConvolutionCurveDock

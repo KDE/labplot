@@ -36,7 +36,7 @@ class FITSHeaderEditDialog : public QDialog {
 
 public:
 	explicit FITSHeaderEditDialog(QWidget* parent = 0);
-	~FITSHeaderEditDialog();
+	~FITSHeaderEditDialog() override;
 	bool saved() const;
 
 private:

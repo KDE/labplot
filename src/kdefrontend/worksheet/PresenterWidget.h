@@ -39,7 +39,7 @@ class PresenterWidget : public QWidget {
 
 public:
 	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
-	~PresenterWidget();
+	~PresenterWidget() override;
 
 private:
 	QLabel* m_imageLabel;

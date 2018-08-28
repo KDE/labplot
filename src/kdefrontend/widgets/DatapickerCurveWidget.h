@@ -39,7 +39,7 @@ class DatapickerCurveWidget : public QWidget {
 
 public:
 	explicit DatapickerCurveWidget(QWidget*);
-	~DatapickerCurveWidget();
+	~DatapickerCurveWidget() override;
 
 	void setCurves(QList<DatapickerCurve*>);
 	void load();

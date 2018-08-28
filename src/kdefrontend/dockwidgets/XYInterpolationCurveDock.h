@@ -42,10 +42,10 @@ class XYInterpolationCurveDock: public XYCurveDock {
 public:
 	explicit XYInterpolationCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showInterpolationResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -59,7 +59,7 @@ private:
 	unsigned int dataPoints;	// number of data points in selected column
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYInterpolationCurveDock

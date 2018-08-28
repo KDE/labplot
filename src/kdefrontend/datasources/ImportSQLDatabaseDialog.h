@@ -41,15 +41,15 @@ class ImportSQLDatabaseDialog : public ImportDialog {
 
 public:
 	explicit ImportSQLDatabaseDialog(MainWin*);
-	~ImportSQLDatabaseDialog();
+	~ImportSQLDatabaseDialog() override;
 
-	void importTo(QStatusBar*) const;
-	virtual QString selectedObject() const;
+	void importTo(QStatusBar*) const override;
+	QString selectedObject() const override;
 
 private:
 	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
 protected  slots:
-	virtual void checkOkButton();
+	void checkOkButton() override;
 private slots:
 	void loadSettings();
 };

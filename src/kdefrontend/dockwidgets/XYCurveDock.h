@@ -47,7 +47,7 @@ class XYCurveDock : public QWidget {
 
 public:
 	explicit XYCurveDock(QWidget*);
-	virtual ~XYCurveDock();
+	~XYCurveDock() override;
 
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();

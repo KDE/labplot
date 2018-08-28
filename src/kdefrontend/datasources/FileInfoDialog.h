@@ -38,7 +38,7 @@ Q_OBJECT
 
 public:
 	explicit FileInfoDialog(QWidget*);
-	~FileInfoDialog();
+	~FileInfoDialog() override;
 	void setFiles(QStringList&);
 
 private:

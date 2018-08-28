@@ -38,17 +38,17 @@ class SpreadsheetItemDelegate : public QItemDelegate {
 public:
 	explicit SpreadsheetItemDelegate(QObject* parent = 0);
 
-	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 
 	void setMaskingColor(const QColor&);
 	QColor maskingColor() const;
 
-	void setEditorData(QWidget*, const QModelIndex&) const;
-	void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const;
+	void setEditorData(QWidget*, const QModelIndex&) const override;
+	void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const override;
 
 private:
 	QColor m_maskingColor;
-	bool eventFilter(QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent*) override;
 };
 
 #endif

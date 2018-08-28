@@ -42,10 +42,10 @@ class XYFitCurveDock: public XYCurveDock {
 public:
 	explicit XYFitCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showFitResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -62,7 +62,7 @@ private:
 	QList<double> parameterValues;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYFitCurveDock

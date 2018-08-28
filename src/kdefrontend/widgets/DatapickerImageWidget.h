@@ -48,8 +48,8 @@ public slots:
     void setSpan(int, int);
 
 private:
-    void resizeEvent(QResizeEvent *event);
-    void drawBackground(QPainter*, const QRectF&);
+    void resizeEvent(QResizeEvent *event) override;
+    void drawBackground(QPainter*, const QRectF&) override;
     QGraphicsRectItem* m_lowerSlider;
     QGraphicsRectItem* m_upperSlider;
     QGraphicsScene* m_scene;

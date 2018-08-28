@@ -41,10 +41,10 @@ class XYSmoothCurveDock: public XYCurveDock {
 public:
 	explicit XYSmoothCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showSmoothResult();
 
 	Ui::XYSmoothCurveDockGeneralTab uiGeneralTab;
@@ -56,7 +56,7 @@ private:
 	XYSmoothCurve::SmoothData m_smoothData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYSmoothCurveDock

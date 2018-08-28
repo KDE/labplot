@@ -40,7 +40,7 @@ Q_OBJECT
 
 public:
 	explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0);
-	~RandomValuesDialog();
+	~RandomValuesDialog() override;
 	void setColumns(QVector<Column*>);
 
 private:

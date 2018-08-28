@@ -41,10 +41,10 @@ class XYFourierFilterCurveDock: public XYCurveDock {
 public:
 	explicit XYFourierFilterCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showFilterResult();
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
@@ -56,7 +56,7 @@ private:
 	XYFourierFilterCurve::FilterData m_filterData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYFourierFilterCurveDock

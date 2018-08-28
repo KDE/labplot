@@ -39,8 +39,8 @@ class SettingsGeneralPage : public SettingsPage {
 public:
 	explicit SettingsGeneralPage(QWidget*);
 
-	virtual void applySettings();
-	virtual void restoreDefaults();
+	void applySettings() override;
+	void restoreDefaults() override;
 
 private:
 	Ui::SettingsGeneralPage ui;

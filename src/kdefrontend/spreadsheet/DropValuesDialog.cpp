@@ -117,7 +117,7 @@ class MaskValuesTask : public QRunnable {
 			m_value2 = value2;
 		}
 
-		void run() {
+		void run() override {
 			m_column->setSuppressDataChangedSignal(true);
 			bool changed = false;
 			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
@@ -213,7 +213,7 @@ class DropValuesTask : public QRunnable {
 			m_value2 = value2;
 		}
 
-		void run() {
+		void run() override {
 			bool changed = false;
 			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
 			QVector<double> new_data(*data);

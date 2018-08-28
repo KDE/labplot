@@ -41,7 +41,7 @@ class DynamicPresenterWidget : public QWidget {
 
 public:
 	explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = 0);
-	~DynamicPresenterWidget();
+	~DynamicPresenterWidget() override;
 
 private:
 	WorksheetView* m_view;

@@ -67,7 +67,7 @@ class QJsonModel : public QAbstractItemModel {
 
 public:
 	explicit QJsonModel(QObject* parent = nullptr);
-	~QJsonModel();
+	~QJsonModel() override;
 	void clear();
 	bool load(const QString& fileName);
 	bool load(QIODevice*);

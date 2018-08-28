@@ -38,7 +38,7 @@ class DatabaseManagerDialog : public QDialog {
 
 public:
 	explicit DatabaseManagerDialog(QWidget*, const QString&);
-	~DatabaseManagerDialog();
+	~DatabaseManagerDialog() override;
 
 	QString connection() const;
 

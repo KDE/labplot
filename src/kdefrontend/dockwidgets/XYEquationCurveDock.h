@@ -41,11 +41,11 @@ class XYEquationCurveDock: public XYCurveDock {
 
 public:
 	explicit XYEquationCurveDock(QWidget *parent);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 	void setCurves(QList<XYCurve*>);
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve;

@@ -41,10 +41,10 @@ class XYIntegrationCurveDock: public XYCurveDock {
 public:
 	explicit XYIntegrationCurveDock(QWidget*);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showIntegrationResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -57,7 +57,7 @@ private:
 	XYIntegrationCurve::IntegrationData m_integrationData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYIntegrationCurveDock

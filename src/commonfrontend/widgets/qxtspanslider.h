@@ -51,7 +51,7 @@ class QxtSpanSlider : public QSlider
 public:
     explicit QxtSpanSlider(QWidget* parent = 0);
     explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = 0);
-    virtual ~QxtSpanSlider();
+    ~QxtSpanSlider() override;
 
     enum HandleMovementMode
     {
@@ -95,11 +95,11 @@ Q_SIGNALS:
     void sliderPressed(QxtSpanSlider::SpanHandle handle);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
+    void keyPressEvent(QKeyEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // QXTSPANSLIDER_H

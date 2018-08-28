@@ -37,11 +37,11 @@ class SpreadsheetCommentsHeaderModel : public QAbstractTableModel {
 	public:
 		explicit SpreadsheetCommentsHeaderModel(SpreadsheetModel* , QObject* parent = 0);
 
-		Qt::ItemFlags flags( const QModelIndex&) const;
-		QVariant data(const QModelIndex& index, int role) const;
-		QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-		int rowCount(const QModelIndex& parent = QModelIndex()) const;
-		int columnCount(const QModelIndex& parent = QModelIndex()) const;
+		Qt::ItemFlags flags( const QModelIndex&) const override;
+		QVariant data(const QModelIndex& index, int role) const override;
+		QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	private:
 		SpreadsheetModel* m_spreadsheet_model;

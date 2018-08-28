@@ -730,7 +730,7 @@ public:
 		m_min = min;
 	};
 
-	void run() {
+	void run() override {
 		for (int row = m_start; row < m_end; ++row) {
 			m_mutex.lock();
 			QRgb* line = reinterpret_cast<QRgb*>(m_image.scanLine(row));

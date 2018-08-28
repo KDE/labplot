@@ -48,9 +48,9 @@ class ImportFileDialog : public ImportDialog {
 
 public:
 	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& fileName = QString());
-	~ImportFileDialog();
+	~ImportFileDialog() override;
 
-	virtual QString selectedObject() const;
+	QString selectedObject() const override;
 
 	int sourceType() const;
 
@@ -60,7 +60,7 @@ public:
 	void importToMQTT(MQTTClient*) const;
 #endif
 
-	virtual void importTo(QStatusBar*) const;
+	void importTo(QStatusBar*) const override;
 
 private:
 	ImportFileWidget* m_importFileWidget;
@@ -69,7 +69,7 @@ private:
 	QPushButton* m_optionsButton;
 
 protected  slots:
-	virtual void checkOkButton();
+	void checkOkButton() override;
 
 private slots:
 	void toggleOptions();

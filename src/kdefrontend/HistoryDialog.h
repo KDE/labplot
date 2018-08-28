@@ -39,7 +39,7 @@ class HistoryDialog: public QDialog {
 
 public:
 	HistoryDialog(QWidget*, QUndoStack*, const QString&);
-	~HistoryDialog();
+	~HistoryDialog() override;
 
 private:
 	QUndoStack* m_undoStack;

@@ -39,7 +39,7 @@ class SettingsDialog : public KPageDialog {
 
 	public:
 		explicit SettingsDialog(QWidget*);
-		virtual ~SettingsDialog();
+		~SettingsDialog() override;
 
 	private slots:
 		void changed();

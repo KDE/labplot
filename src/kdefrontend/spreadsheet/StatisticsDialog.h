@@ -39,7 +39,7 @@ class StatisticsDialog : public QDialog {
 
 public:
 	explicit StatisticsDialog(const QString&, QWidget *parent = 0);
-	~StatisticsDialog();
+	~StatisticsDialog() override;
 	void setColumns(const QVector<Column*>&);
 
 private:

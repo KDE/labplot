@@ -42,10 +42,10 @@ class XYDifferentiationCurveDock : public XYCurveDock {
 public:
 	explicit XYDifferentiationCurveDock(QWidget*);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showDifferentiationResult();
 	void updateSettings(const AbstractColumn*);
 
@@ -58,7 +58,7 @@ private:
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYDifferentiationCurveDock

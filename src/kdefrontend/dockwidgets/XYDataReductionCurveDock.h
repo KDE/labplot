@@ -44,10 +44,10 @@ class XYDataReductionCurveDock : public XYCurveDock {
 public:
 	explicit XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb);
 	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	void setupGeneral() override;
 
 private:
-	virtual void initGeneralTab();
+	void initGeneralTab() override;
 	void showDataReductionResult();
 	void updateTolerance();
 	void updateTolerance2();
@@ -62,7 +62,7 @@ private:
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
 
 protected:
-	virtual void setModel();
+	void setModel() override;
 
 private slots:
 	//SLOTs for changes triggered in XYDataReductionCurveDock

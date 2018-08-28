@@ -39,7 +39,7 @@ class MQTTConnectionManagerDialog : public QDialog {
 
 public:
 	explicit MQTTConnectionManagerDialog(QWidget*, const QString&, bool*);
-	~MQTTConnectionManagerDialog();
+	~MQTTConnectionManagerDialog() override;
 
 	QString connection() const;
 

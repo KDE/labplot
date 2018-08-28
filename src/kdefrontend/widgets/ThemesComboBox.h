@@ -41,13 +41,13 @@ class ThemesComboBox : public QComboBox {
 		explicit ThemesComboBox(QWidget* parent = 0);
 		void setCurrentTheme(const QString&);
 
-		virtual void showPopup();
-		virtual void hidePopup();
+		void showPopup() override;
+		void hidePopup() override;
 
 	private:
 		QGroupBox* m_groupBox;
 		ThemesWidget* m_view;
-		bool eventFilter(QObject*, QEvent*);
+		bool eventFilter(QObject*, QEvent*) override;
 
 	private slots:
 		void handleThemeChanged(const QString&);

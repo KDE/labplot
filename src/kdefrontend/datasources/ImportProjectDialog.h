@@ -48,7 +48,7 @@ public:
 	enum ProjectType {ProjectLabPlot, ProjectOrigin};
 
 	explicit ImportProjectDialog(MainWin*, ProjectType);
-	~ImportProjectDialog();
+	~ImportProjectDialog() override;
 
 	void setCurrentFolder(const Folder*);
 	void importTo(QStatusBar*) const;

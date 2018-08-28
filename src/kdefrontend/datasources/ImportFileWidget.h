@@ -64,7 +64,7 @@ class ImportFileWidget : public QWidget {
 
 public:
 	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
-	~ImportFileWidget();
+	~ImportFileWidget() override;
 
 	void showOptions(bool);
 	void saveSettings(LiveDataSource*) const;

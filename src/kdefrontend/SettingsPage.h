@@ -35,7 +35,7 @@ class SettingsPage : public QWidget {
 
 public:
 	explicit SettingsPage(QWidget*) {};
-	virtual ~SettingsPage() {};
+	~SettingsPage() override {};
 
 	virtual void applySettings() = 0;
 	virtual void restoreDefaults() = 0;

@@ -51,7 +51,7 @@ class ImportDialog : public QDialog {
 
 public:
 	explicit ImportDialog(MainWin*);
-	~ImportDialog();
+	~ImportDialog() override;
 
 	virtual void importTo(QStatusBar*) const = 0;
 	void setCurrentIndex(const QModelIndex&);

@@ -42,7 +42,7 @@ class HistogramDock : public QWidget {
 
 public:
 	explicit HistogramDock(QWidget*);
-	~HistogramDock();
+	~HistogramDock() override;
 
 	void setCurves(QList<Histogram*>);
 
