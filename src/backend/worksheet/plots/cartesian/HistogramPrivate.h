@@ -85,7 +85,7 @@ public:
 	double getXMaximum();
 	double getMaximumOccuranceofHistogram();
 
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	//General
 	const AbstractColumn* dataColumn;

@@ -397,7 +397,7 @@ void Spreadsheet::sortColumns(Column* leading, QVector<Column*> cols, bool ascen
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: sort columns", name()));
 
-	if(leading == 0) { // sort separately
+	if(leading == nullptr) { // sort separately
 		for (auto* col: cols) {
 			switch (col->columnMode()) {
 			case AbstractColumn::Numeric: {
@@ -842,7 +842,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 
 	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
-	Column* newColumn = 0;
+	Column* newColumn = nullptr;
 	if (mode == AbstractFileFilter::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++ ) {

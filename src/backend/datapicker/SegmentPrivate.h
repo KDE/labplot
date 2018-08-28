@@ -46,7 +46,7 @@ public:
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	Segment* const q;
 
 private:

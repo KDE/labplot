@@ -784,7 +784,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		}
 	}
 
-	return 0;
+	return nullptr;
 }
 
 /*!
@@ -1442,7 +1442,7 @@ void ImportFileWidget::updateSubscriptionCompleter() {
 		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
 		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
 	} else {
-		ui.leSubscriptions->setCompleter(0);
+		ui.leSubscriptions->setCompleter(nullptr);
 	}
 }
 #endif
@@ -1843,14 +1843,14 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::HDF5: {
 		HDF5Filter *filter = (HDF5Filter *)this->currentFileFilter();
 		lines = m_hdf5OptionsWidget->lines();
-		importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+		importedStrings = filter->readCurrentDataSet(fileName, nullptr, ok, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 		break;
 	}
 	case AbstractFileFilter::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		lines = m_netcdfOptionsWidget->lines();
-		importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
 		break;
 	}

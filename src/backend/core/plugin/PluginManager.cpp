@@ -107,7 +107,7 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
 	}
 
 	if (!alreadyLoaded) {
-		PluginLoader *pluginLoader = NULL;
+		PluginLoader *pluginLoader = nullptr;
 		// check whether a loader for this plugin already exists
 		for (auto* loader : m_pluginsWithErrors) {
 			if (loader->fileName() == absolutePath) {
@@ -262,7 +262,7 @@ QString PluginManager::errorOfPlugin(const QString &fileName) {
  * \brief Get the plugin root instance for a given file name.
  */
 QObject *PluginManager::instanceOfPlugin(const QString &fileName) {
-	QObject *result = NULL;
+	QObject *result = nullptr;
 	for (auto* loader : m_loadedPlugins)
 		if (loader->fileName() == fileName)
 			result = loader->instance();

@@ -561,7 +561,7 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
 	QModelIndex index;
 	QModelIndexList items;
-	AbstractAspect* aspect = 0;
+	AbstractAspect* aspect = nullptr;
 
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)

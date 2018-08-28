@@ -39,7 +39,7 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_initializing(false) {
+ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(nullptr), m_initializing(false) {
 	ui.setupUi(this);
 
 	// SLOTS
@@ -108,11 +108,11 @@ void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 			ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.tbComment->toPlainText()) {
+	else if (aspect->comment() != ui.tbComment->toPlainText())
 			ui.tbComment->setText(aspect->comment());
-	}
+
 	m_initializing = false;
 }
 

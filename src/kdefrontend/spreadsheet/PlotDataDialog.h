@@ -51,7 +51,7 @@ public:
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
 		FourierFilter};
 
-	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = 0);
+	explicit PlotDataDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
 	void setAnalysisAction(AnalysisAction);

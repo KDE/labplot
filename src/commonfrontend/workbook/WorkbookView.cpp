@@ -86,7 +86,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 
 WorkbookView::~WorkbookView() {
 	//no need to react on currentChanged() in TabWidget when views are deleted
-	disconnect(m_tabWidget, 0, 0, 0);
+	disconnect(m_tabWidget, nullptr, nullptr, nullptr);
 
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
 	for (const auto* part : m_workbook->children<AbstractPart>())
@@ -146,7 +146,7 @@ void WorkbookView::itemSelected(int index) {
 void WorkbookView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -159,7 +159,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 }
 
 void WorkbookView::showTabContextMenu(QPoint point) {
-	QMenu* menu = 0;
+	QMenu* menu = nullptr;
 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(m_tabWidget->currentIndex());
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	if (spreadsheet) {

@@ -40,7 +40,7 @@
 //! Insert columns
 class MatrixInsertColumnsCmd : public QUndoCommand {
 public:
-	MatrixInsertColumnsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = 0);
+	MatrixInsertColumnsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = nullptr);
 	void redo() override;
 	void undo() override;
 
@@ -53,7 +53,7 @@ private:
 //! Insert rows
 class MatrixInsertRowsCmd : public QUndoCommand {
 public:
-	MatrixInsertRowsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = 0);
+	MatrixInsertRowsCmd(MatrixPrivate*, int before, int count, QUndoCommand* = nullptr);
 	void redo() override;
 	void undo() override;
 
@@ -67,7 +67,7 @@ private:
 template <typename T>
 class MatrixRemoveColumnsCmd : public QUndoCommand {
 public:
-	MatrixRemoveColumnsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0)
+	MatrixRemoveColumnsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_first(first), m_count(count) {
 		setText(i18np("%1: remove %2 column", "%1: remove %2 columns", m_private_obj->name(), m_count));
 	}
@@ -102,7 +102,7 @@ private:
 template <typename T>
 class MatrixRemoveRowsCmd : public QUndoCommand {
 public:
-	MatrixRemoveRowsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0)
+	MatrixRemoveRowsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_first(first), m_count(count) {
 		setText(i18np("%1: remove %2 row", "%1: remove %2 rows", m_private_obj->name(), m_count));
 	}
@@ -134,7 +134,7 @@ private:
 template <typename T>
 class MatrixClearCmd : public QUndoCommand {
 public:
-	explicit MatrixClearCmd(MatrixPrivate* private_obj, QUndoCommand* parent = 0)
+	explicit MatrixClearCmd(MatrixPrivate* private_obj, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: clear", m_private_obj->name()));
 	}
@@ -164,7 +164,7 @@ private:
 template <typename T>
 class MatrixClearColumnCmd : public QUndoCommand {
 public:
-	MatrixClearColumnCmd(MatrixPrivate* private_obj, int col, QUndoCommand* parent = 0)
+	MatrixClearColumnCmd(MatrixPrivate* private_obj, int col, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_col(col) {
 		setText(i18n("%1: clear column %2", m_private_obj->name(), m_col+1));
 	}
@@ -187,7 +187,7 @@ private:
 template <typename T>
 class MatrixSetCellValueCmd : public QUndoCommand {
 public:
-	MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, T value, QUndoCommand* parent = 0)
+	MatrixSetCellValueCmd(MatrixPrivate* private_obj, int row, int col, T value, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_col(col), m_value(value) {
 		// remark: don't use many QString::arg() calls in ctors of commands that might be called often,
 		// they use a lot of execution time
@@ -212,7 +212,7 @@ private:
 // Set matrix coordinates
 class MatrixSetCoordinatesCmd : public QUndoCommand {
 public:
-	MatrixSetCoordinatesCmd(MatrixPrivate*, double x1, double x2, double y1, double y2, QUndoCommand* = 0);
+	MatrixSetCoordinatesCmd(MatrixPrivate*, double x1, double x2, double y1, double y2, QUndoCommand* = nullptr);
 	void redo() override;
 	void undo() override;
 
@@ -244,7 +244,7 @@ private:
 template <typename T>
 class MatrixSetColumnCellsCmd : public QUndoCommand {
 public:
-	MatrixSetColumnCellsCmd(MatrixPrivate* private_obj, int col, int first_row, int last_row, const QVector<T>& values, QUndoCommand* parent = 0)
+	MatrixSetColumnCellsCmd(MatrixPrivate* private_obj, int col, int first_row, int last_row, const QVector<T>& values, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_col(col), m_first_row(first_row), m_last_row(last_row), m_values(values) {
 		setText(i18n("%1: set cell values", m_private_obj->name()));
 	}
@@ -270,7 +270,7 @@ private:
 template <typename T>
 class MatrixSetRowCellsCmd : public QUndoCommand {
 public:
-	MatrixSetRowCellsCmd(MatrixPrivate* private_obj, int row, int first_column, int last_column, const QVector<T>& values, QUndoCommand* parent = 0)
+	MatrixSetRowCellsCmd(MatrixPrivate* private_obj, int row, int first_column, int last_column, const QVector<T>& values, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj), m_row(row), m_first_column(first_column),
 				m_last_column(last_column), m_values(values) {
 		setText(i18n("%1: set cell values", m_private_obj->name()));
@@ -297,7 +297,7 @@ private:
 template <typename T>
 class MatrixTransposeCmd : public QUndoCommand {
 public:
-	explicit MatrixTransposeCmd(MatrixPrivate* private_obj, QUndoCommand* parent = 0)
+	explicit MatrixTransposeCmd(MatrixPrivate* private_obj, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: transpose", m_private_obj->name()));
 	}
@@ -337,7 +337,7 @@ private:
 template <typename T>
 class MatrixMirrorHorizontallyCmd : public QUndoCommand {
 public:
-	explicit MatrixMirrorHorizontallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent = 0)
+	explicit MatrixMirrorHorizontallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent = nullptr)
 			: QUndoCommand(parent), m_private_obj(private_obj) {
 		setText(i18n("%1: mirror horizontally", m_private_obj->name()));
 	}
@@ -367,7 +367,7 @@ private:
 template <typename T>
 class MatrixMirrorVerticallyCmd : public QUndoCommand {
 public:
-	explicit MatrixMirrorVerticallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent = 0)
+	explicit MatrixMirrorVerticallyCmd(MatrixPrivate* private_obj, QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent), m_private_obj(private_obj) {
 			setText(i18n("%1: mirror vertically", m_private_obj->name()));
 	}
@@ -397,7 +397,7 @@ private:
 // Replace matrix values
 class MatrixReplaceValuesCmd : public QUndoCommand {
 public:
-	explicit MatrixReplaceValuesCmd(MatrixPrivate*, void* new_values, QUndoCommand* = 0);
+	explicit MatrixReplaceValuesCmd(MatrixPrivate*, void* new_values, QUndoCommand* = nullptr);
 	void redo() override;
 	void undo() override;
 

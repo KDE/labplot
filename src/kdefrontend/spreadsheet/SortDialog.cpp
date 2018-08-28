@@ -62,7 +62,7 @@ void SortDialog::sortColumns(){
     if(ui.cbType->currentIndex() == Together)
         leading = m_columns.at(ui.cbColumns->currentIndex());
 	else
-		leading = 0;
+		leading = nullptr;
 
     emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending );
 }

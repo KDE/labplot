@@ -143,7 +143,7 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int);

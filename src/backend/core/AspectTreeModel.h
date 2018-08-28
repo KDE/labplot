@@ -38,7 +38,7 @@ class AspectTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 
 public:
-	explicit AspectTreeModel(AbstractAspect* root, QObject* parent=0);
+	explicit AspectTreeModel(AbstractAspect* root, QObject* parent=nullptr);
 
 	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex &index) const override;

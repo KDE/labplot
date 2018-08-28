@@ -354,7 +354,7 @@ void PlotDataDialog::plot() {
 		AbstractAspect* parent = m_spreadsheet->parentAspect();
 #ifdef HAVE_MQTT
 		MQTTTopic* topic = qobject_cast<MQTTTopic*>(m_spreadsheet);
-		if(topic != 0)
+		if(topic != nullptr)
 			parent = qobject_cast<AbstractAspect*>(m_spreadsheet->project());
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
@@ -404,7 +404,7 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 		if (column->name() == name)
 			return column;
 	}
-	return 0;
+	return nullptr;
 }
 
 /*!
@@ -476,7 +476,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		plot->addChild(curve);
 	} else {
 		bool createDataCurve = ui->chkCreateDataCurve->isChecked();
-		XYCurve* curve = 0;
+		XYCurve* curve = nullptr;
 		if (createDataCurve) {
 			curve = new XYCurve(name);
 			curve->suppressRetransform(true);
@@ -571,12 +571,12 @@ void PlotDataDialog::checkOkButton() {
 	QString msg;
 	if (ui->rbPlotPlacement1->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
-		enable = (aspect!=NULL);
+		enable = (aspect!=nullptr);
 		if (!enable)
 			msg = i18n("An already existing plot has to be selected.");
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
-		enable = (aspect!=NULL);
+		enable = (aspect!=nullptr);
 		if (!enable)
 			msg = i18n("An already existing worksheet has to be selected.");
 	} else

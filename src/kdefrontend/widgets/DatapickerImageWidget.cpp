@@ -50,7 +50,7 @@
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
-	bins(0),
+	bins(nullptr),
 	m_scene(new QGraphicsScene()),
 	m_range(range) {
 
@@ -61,13 +61,13 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_lowerSlider = new QGraphicsRectItem(pageRect, 0);
+    m_lowerSlider = new QGraphicsRectItem(pageRect, nullptr);
     m_lowerSlider->setPen(QPen(Qt::black, 0.5));
     m_lowerSlider->setBrush(Qt::blue);
     m_lowerSlider->setOpacity(0.2);
     m_scene->addItem(m_lowerSlider);
 
-    m_upperSlider = new QGraphicsRectItem(pageRect, 0);
+    m_upperSlider = new QGraphicsRectItem(pageRect, nullptr);
     m_upperSlider->setPen(QPen(Qt::black, 0.5));
     m_upperSlider->setBrush(Qt::blue);
     m_upperSlider->setOpacity(0.2);
@@ -77,7 +77,7 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 void HistogramView::setScalePixmap(const QString& file) {
 	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
 	// and lower 1000*20 is for histogram scale
-	QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), 0);
+	QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), nullptr);
 	pixmap->setZValue(-1);
 	pixmap->setPos(0, 90);
 	m_scene->addItem(pixmap);
@@ -835,7 +835,7 @@ void DatapickerImageWidget::symbolVisibleChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void DatapickerImageWidget::load() {
-	if(m_image == NULL)
+	if(!m_image)
 		return;
 
 	m_initializing = true;

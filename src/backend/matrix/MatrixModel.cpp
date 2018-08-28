@@ -45,7 +45,7 @@
 
 	\ingroup backend
 */
-MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matrix), m_suppressDataChangedSignal(false) {
+MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(nullptr), m_matrix(matrix), m_suppressDataChangedSignal(false) {
 	connect(m_matrix, &Matrix::columnsAboutToBeInserted, this, &MatrixModel::handleColumnsAboutToBeInserted);
 	connect(m_matrix, &Matrix::columnsInserted, this, &MatrixModel::handleColumnsInserted);
 	connect(m_matrix, &Matrix::columnsAboutToBeRemoved, this, &MatrixModel::handleColumnsAboutToBeRemoved);

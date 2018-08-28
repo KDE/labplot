@@ -42,7 +42,7 @@ class WorksheetElementContainerPrivate : public QGraphicsItem {
 
 		QString name() const;
 		QRectF boundingRect() const override;
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 

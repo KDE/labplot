@@ -142,8 +142,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	filterResult = XYFourierFilterCurve::FilterResult();
 
 	//determine the data source columns
-	const AbstractColumn* tmpXDataColumn = 0;
-	const AbstractColumn* tmpYDataColumn = 0;
+	const AbstractColumn* tmpXDataColumn = nullptr;
+	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;

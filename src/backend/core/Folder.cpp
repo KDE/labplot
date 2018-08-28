@@ -67,7 +67,7 @@ QIcon Folder::icon() const {
 QMenu* Folder::createContextMenu() {
 	if (project())
 		return project()->createFolderContextMenu(this);
-	return 0;
+	return nullptr;
 }
 
 /**

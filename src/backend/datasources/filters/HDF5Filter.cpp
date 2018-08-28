@@ -1484,7 +1484,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 				break;
 			}
 
-			if (dataSource == NULL) {
+			if (!dataSource) {
 				QDEBUG("dataString =" << dataString);
 				for (int i = 0; i < qMin(rows, lines); ++i)
 					dataStrings << (QStringList() << dataString[i]);

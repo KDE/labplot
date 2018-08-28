@@ -43,9 +43,9 @@ OriginFile::OriginFile(const string& fileName)
 	}
 
 #ifdef GENERATE_CODE_FOR_LOG
-	FILE *logfile = NULL;
+	FILE *logfile = nullptr;
 	logfile = fopen("./opjfile.log", "w");
-	if (logfile == NULL)
+	if (logfile == nullptr)
 	{
 		cerr <<  "Could not open opjfile.log !" << endl;
 		exit(EXIT_FAILURE);
@@ -54,9 +54,9 @@ OriginFile::OriginFile(const string& fileName)
 
 	string vers;
 	getline(file, vers);
-	long majorVersion = strtol(vers.substr(5,1).c_str(),0,10);
+	long majorVersion = strtol(vers.substr(5,1).c_str(),nullptr,10);
 	//char locale_decpoint = vers[6];
-	buildVersion = strtol(vers.substr(7).c_str(),0,10);
+	buildVersion = strtol(vers.substr(7).c_str(),nullptr,10);
 	//long buildNumber = strtol(vers.substr(12).c_str(),0,10);
 	file.close();
 

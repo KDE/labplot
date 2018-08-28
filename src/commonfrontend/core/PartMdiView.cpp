@@ -42,7 +42,7 @@
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actuall data visualized in this window via the pointer to \c AbstractPart.
  */
-PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(0), m_part(part) {
+PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(part) {
 
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());

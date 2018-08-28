@@ -125,7 +125,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 	else
 		fileName = name;
 #endif
-	if(file==0)
+	if(!file)
 		file = new QFile(fileName);
 
 	if (file->open(QIODevice::ReadOnly)) {

@@ -346,7 +346,7 @@ bool AbstractAspect::isDescendantOf(AbstractAspect* other) {
  * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
  */
 Project* AbstractAspect::project() {
-	return parentAspect() ? parentAspect()->project() : 0;
+	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
 /**
@@ -378,7 +378,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
-	emit aspectAboutToBeAdded(this, 0, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
+	emit aspectAboutToBeAdded(this, nullptr, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
 	emit aspectAdded(child);
@@ -415,7 +415,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	if (index == -1)
 		index = d->m_children.count();
 
-	emit aspectAboutToBeAdded(this, 0, child);
+	emit aspectAboutToBeAdded(this, nullptr, child);
 	d->insertChild(index, child);
 	emit aspectAdded(child);
 }
@@ -442,7 +442,7 @@ void AbstractAspect::removeAllChildren() {
 
 	QVector<AbstractAspect*> children_list = children();
 	QVector<AbstractAspect*>::const_iterator i = children_list.constBegin();
-	AbstractAspect *current = 0, *nextSibling = 0;
+	AbstractAspect *current = nullptr, *nextSibling = nullptr;
 	if (i != children_list.constEnd()) {
 		current = *i;
 		if (++i != children_list.constEnd())
@@ -458,7 +458,7 @@ void AbstractAspect::removeAllChildren() {
 		if (i != children_list.constEnd() && ++i != children_list.constEnd())
 			nextSibling = *i;
 		else
-			nextSibling = 0;
+			nextSibling = nullptr;
 	}
 
 	endMacro();
@@ -468,8 +468,8 @@ void AbstractAspect::removeAllChildren() {
  * \brief Move a child to another parent aspect and transfer ownership.
  */
 void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
-	Q_ASSERT(parentAspect() != NULL);
-	Q_ASSERT(newParent != NULL);
+	Q_ASSERT(parentAspect() != nullptr);
+	Q_ASSERT(newParent != nullptr);
 	int max_index = newParent->childCount<AbstractAspect>(IncludeHidden);
 	if (newIndex == -1)
 		newIndex = max_index;
@@ -634,7 +634,7 @@ void AbstractAspect::setUndoAware(bool b) {
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
 QUndoStack* AbstractAspect::undoStack() const {
-	return parentAspect() ? parentAspect()->undoStack() : 0;
+	return parentAspect() ? parentAspect()->undoStack() : nullptr;
 }
 
 /**
@@ -732,7 +732,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the selection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != 0
+	if (aspect->parentAspect() != nullptr
 		&& !aspect->parentAspect()->inherits("Folder")
 		&& !aspect->parentAspect()->inherits("XYFitCurve")
 		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
@@ -744,7 +744,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
 	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
 	//the child column for calculated residuals
-	if (aspect->parentAspect() != 0
+	if (aspect->parentAspect() != nullptr
 		&& !aspect->parentAspect()->inherits("Folder")
 		&& !aspect->parentAspect()->inherits("XYFitCurve")
 		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
@@ -799,7 +799,7 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //######################  Private implementation ###############################
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
-	: m_name(name.isEmpty() ? QLatin1String("1") : name), m_hidden(false), q(owner), m_parent(0),
+	: m_name(name.isEmpty() ? QLatin1String("1") : name), m_hidden(false), q(owner), m_parent(nullptr),
 	m_undoAware(true), m_isLoading(false)
 {
 	m_creation_time = QDateTime::currentDateTime();
@@ -815,7 +815,7 @@ void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 
 	// Always remove from any previous parent before adding to a new one!
 	// Can't handle this case here since two undo commands have to be created.
-	Q_ASSERT(child->parentAspect() == 0);
+	Q_ASSERT(child->parentAspect() == nullptr);
 	child->setParentAspect(q);
 	q->connectChild(child);
 }
@@ -831,7 +831,7 @@ int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
 	m_children.removeAll(child);
-	QObject::disconnect(child, 0, q, 0);
-	child->setParentAspect(0);
+	QObject::disconnect(child, nullptr, q, nullptr);
+	child->setParentAspect(nullptr);
 	return index;
 }

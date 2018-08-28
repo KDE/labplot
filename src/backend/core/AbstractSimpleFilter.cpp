@@ -304,11 +304,11 @@ void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int f
  * \brief Return a pointer to #m_output_column on port 0 (don't override unless you really know what you are doing).
  */
 AbstractColumn *AbstractSimpleFilter::output(int port) {
-	return port == 0 ? static_cast<AbstractColumn*>(m_output_column) : 0;
+	return port == 0 ? static_cast<AbstractColumn*>(m_output_column) : nullptr;
 }
 
 const AbstractColumn *AbstractSimpleFilter::output(int port) const {
-	return port == 0 ? static_cast<const AbstractColumn*>(m_output_column) : 0;
+	return port == 0 ? static_cast<const AbstractColumn*>(m_output_column) : nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -581,7 +581,7 @@ void Histogram::updateValues() {
 void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->dataColumn) {
-		d->dataColumn = 0;
+		d->dataColumn = nullptr;
 		d->retransform();
 	}
 }
@@ -589,7 +589,7 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->valuesColumn) {
-		d->valuesColumn = 0;
+		d->valuesColumn = nullptr;
 		d->updateValues();
 	}
 }
@@ -613,7 +613,7 @@ HistogramPrivate::HistogramPrivate(Histogram *owner) :
 	m_hoverEffectImageIsDirty(false),
 	m_selectionEffectImageIsDirty(false),
 	q(owner),
-	m_histogram(NULL) {
+	m_histogram(nullptr) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
@@ -737,7 +737,7 @@ void HistogramPrivate::retransform() {
 	symbolPointsScene.clear();
 	symbolPointsLogical.clear();
 
-	if (NULL == dataColumn) {
+	if (!dataColumn) {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();

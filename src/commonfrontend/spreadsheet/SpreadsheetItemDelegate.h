@@ -36,7 +36,7 @@ class SpreadsheetItemDelegate : public QItemDelegate {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetItemDelegate(QObject* parent = 0);
+	explicit SpreadsheetItemDelegate(QObject* parent = nullptr);
 
 	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 

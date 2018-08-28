@@ -50,7 +50,7 @@ class LiveDataDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit LiveDataDock(QWidget *parent = 0);
+	explicit LiveDataDock(QWidget *parent = nullptr);
 	void setLiveDataSources(const QList<LiveDataSource*>& sources);
 	~LiveDataDock() override;
 

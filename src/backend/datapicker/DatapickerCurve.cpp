@@ -65,13 +65,13 @@ void DatapickerCurve::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerCurve");
-	d->posXColumn = NULL;
-	d->posYColumn = NULL;
-	d->posZColumn = NULL;
-	d->plusDeltaXColumn = NULL;
-	d->minusDeltaXColumn = NULL;
-	d->plusDeltaYColumn = NULL;
-	d->minusDeltaYColumn = NULL;
+	d->posXColumn = nullptr;
+	d->posYColumn = nullptr;
+	d->posZColumn = nullptr;
+	d->plusDeltaXColumn = nullptr;
+	d->minusDeltaXColumn = nullptr;
+	d->plusDeltaYColumn = nullptr;
+	d->minusDeltaYColumn = nullptr;
 	d->curveErrorTypes.x = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
 	d->curveErrorTypes.y = (ErrorType) group.readEntry("CurveErrorType_X", (int) NoError);
 
@@ -115,7 +115,7 @@ QMenu* DatapickerCurve::createContextMenu() {
 	QMenu *menu = AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
@@ -228,28 +228,28 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
 		else if ( d->plusDeltaXColumn && errors.x == NoError ) {
 			d->plusDeltaXColumn->remove();
-			d->plusDeltaXColumn = 0;
+			d->plusDeltaXColumn = nullptr;
 		}
 
 		if ( errors.x == AsymmetricError && !d->minusDeltaXColumn )
 			setMinusDeltaXColumn(appendColumn(QLatin1String("-delta_x")));
 		else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
 			d->minusDeltaXColumn->remove();
-			d->minusDeltaXColumn = 0;
+			d->minusDeltaXColumn = nullptr;
 		}
 
 		if ( errors.y != NoError && !d->plusDeltaYColumn )
 			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
 		else if ( d->plusDeltaYColumn && errors.y == NoError ) {
 			d->plusDeltaYColumn->remove();
-			d->plusDeltaYColumn = 0;
+			d->plusDeltaYColumn = nullptr;
 		}
 
 		if ( errors.y == AsymmetricError && !d->minusDeltaYColumn )
 			setMinusDeltaYColumn(appendColumn(QLatin1String("-delta_y")));
 		else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
 			d->minusDeltaYColumn->remove();
-			d->minusDeltaYColumn = 0;
+			d->minusDeltaYColumn = nullptr;
 		}
 
 		endMacro();

@@ -603,7 +603,7 @@ void CartesianPlot::initMenus() {
 
 	//analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
-	dataAnalysisMenu->insertMenu(0, dataManipulationMenu);
+	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -617,7 +617,7 @@ void CartesianPlot::initMenus() {
 
 	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
-	ThemesWidget* themeWidget = new ThemesWidget(0);
+	ThemesWidget* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
@@ -1101,7 +1101,7 @@ const XYCurve* CartesianPlot::currentCurve() const {
 			return curve;
 	}
 
-	return 0;
+	return nullptr;
 }
 
 void CartesianPlot::addDataReductionCurve() {

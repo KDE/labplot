@@ -744,7 +744,7 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
-		: q(owner), data(0), mode(m), rowCount(0), columnCount(0), suppressDataChange(false) {
+		: q(owner), data(nullptr), mode(m), rowCount(0), columnCount(0), suppressDataChange(false) {
 
 	switch (mode) {
 	case AbstractColumn::Numeric:

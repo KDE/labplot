@@ -39,7 +39,7 @@ class FITSHeaderEditNewKeywordDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
+	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = nullptr);
 	FITSFilter::Keyword newKeyword() const;
 
 private:

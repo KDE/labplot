@@ -53,7 +53,7 @@ public:
 	void redo() override {
 		AbstractAspect* nextSibling;
 		if (m_child == m_target->m_children.last())
-			nextSibling = 0;
+			nextSibling = nullptr;
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
@@ -67,7 +67,7 @@ public:
 	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-		emit m_target->q->aspectAboutToBeAdded(m_target->q, 0, m_child);
+		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		m_target->insertChild(m_index, m_child);
 		emit m_target->q->aspectAdded(m_child);
 // 		m_removed = false;

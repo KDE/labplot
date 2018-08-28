@@ -126,7 +126,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 	if (source == old_input) return true;
 
 	if (old_input) {
-		disconnect(old_input, 0, this, 0);
+		disconnect(old_input, nullptr, this, nullptr);
 		// replace input, notifying the filter implementation of the changes
 		inputDescriptionAboutToChange(old_input);
 		inputPlotDesignationAboutToChange(old_input);
@@ -168,7 +168,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 //		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
-		while (m_inputs.at(num_connected_inputs-1) == 0) {
+		while (m_inputs.at(num_connected_inputs-1) == nullptr) {
 			num_connected_inputs--;
 			if(!num_connected_inputs) break;
 		}

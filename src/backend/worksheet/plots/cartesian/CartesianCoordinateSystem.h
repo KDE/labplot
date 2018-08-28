@@ -50,8 +50,8 @@ class CartesianScale {
 		static CartesianScale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 			double logicalStart, double logicalEnd, double base);
 
-		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
-				double *a = NULL, double *b = NULL, double *c = NULL) const;
+		virtual void getProperties(ScaleType *type = nullptr, Interval<double> *interval = nullptr,
+				double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
 
 		inline double start() const;
 		inline double end() const;

@@ -55,7 +55,7 @@
   \ingroup kdefrontend
 */
 
-XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), m_equationCurve(0) {
+XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), m_equationCurve(nullptr) {
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
 }

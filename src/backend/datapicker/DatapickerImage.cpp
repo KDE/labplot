@@ -127,7 +127,7 @@ QIcon DatapickerImage::icon() const {
     Return a new context menu
 */
 QMenu* DatapickerImage::createContextMenu() {
-	QMenu* menu = new QMenu(0);
+	QMenu* menu = new QMenu(nullptr);
 	emit requestProjectContextMenu(menu);
 	return menu;
 }

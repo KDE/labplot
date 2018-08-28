@@ -328,7 +328,7 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_integrationCurve->xDataColumn();
 		else {
@@ -408,9 +408,9 @@ void XYIntegrationCurveDock::enableRecalculate() const {
 	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=0 && aspectY!=0);
+		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
 	} else {
-		 hasSourceData = (m_integrationCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_integrationCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);

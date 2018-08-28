@@ -50,7 +50,7 @@ class ProjectExplorer : public QWidget {
 Q_OBJECT
 
 public:
-	explicit ProjectExplorer(QWidget* parent = 0);
+	explicit ProjectExplorer(QWidget* parent = nullptr);
 
 	void setCurrentAspect(const AbstractAspect*);
 	void setModel(AspectTreeModel*);

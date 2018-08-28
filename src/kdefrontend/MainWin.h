@@ -90,7 +90,7 @@ class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
+	explicit MainWin(QWidget* parent = nullptr, const QString& filename=nullptr);
 	~MainWin() override;
 
 	void showPresenter();

@@ -179,7 +179,7 @@ QMenu* XYCurve::createContextMenu() {
 	menu->insertSeparator(visibilityAction);
 
 	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
-	AbstractAspect* parentSpreadsheet = 0;
+	AbstractAspect* parentSpreadsheet = nullptr;
 	if (xColumn() && dynamic_cast<Spreadsheet*>(xColumn()->parentAspect()) )
 		parentSpreadsheet = xColumn()->parentAspect();
 	else if (yColumn() && dynamic_cast<Spreadsheet*>(yColumn()->parentAspect()) )
@@ -756,7 +756,7 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xColumn) {
-		d->xColumn = 0;
+		d->xColumn = nullptr;
 		d->retransform();
 	}
 }
@@ -764,7 +764,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yColumn) {
-		d->yColumn = 0;
+		d->yColumn = nullptr;
 		d->retransform();
 	}
 }
@@ -772,7 +772,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->valuesColumn) {
-		d->valuesColumn = 0;
+		d->valuesColumn = nullptr;
 		d->updateValues();
 	}
 }
@@ -780,7 +780,7 @@ void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xErrorPlusColumn) {
-		d->xErrorPlusColumn = 0;
+		d->xErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
 }
@@ -788,7 +788,7 @@ void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->xErrorMinusColumn) {
-		d->xErrorMinusColumn = 0;
+		d->xErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
 }
@@ -796,7 +796,7 @@ void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yErrorPlusColumn) {
-		d->yErrorPlusColumn = 0;
+		d->yErrorPlusColumn = nullptr;
 		d->updateErrorBars();
 	}
 }
@@ -804,7 +804,7 @@ void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (aspect == d->yErrorMinusColumn) {
-		d->yErrorMinusColumn = 0;
+		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
 }
@@ -883,7 +883,7 @@ void XYCurvePrivate::retransform() {
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
 
-	if ( (NULL == xColumn) || (NULL == yColumn) ) {
+	if ( (nullptr == xColumn) || (nullptr == yColumn) ) {
 		DEBUG("	xColumn or yColumn == NULL");
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
@@ -1084,7 +1084,7 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::SplineAkimaNatural:
 	case XYCurve::SplineAkimaPeriodic: {
 			gsl_interp_accel *acc = gsl_interp_accel_alloc();
-			gsl_spline *spline = 0;
+			gsl_spline *spline = nullptr;
 
 			double* x = new double[count];
 			double* y = new double[count];

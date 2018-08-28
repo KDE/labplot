@@ -45,13 +45,13 @@
  */
 
 AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name, new AbstractPlotPrivate(this)),
-	m_coordinateSystem(0), m_plotArea(0), m_title(0){
+	m_coordinateSystem(nullptr), m_plotArea(nullptr), m_title(nullptr){
 	init();
 }
 
 AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
 	: WorksheetElementContainer(name, dd),
-	m_coordinateSystem(0), m_plotArea(0), m_title(0){
+	m_coordinateSystem(nullptr), m_plotArea(nullptr), m_title(nullptr){
 	init();
 }
 

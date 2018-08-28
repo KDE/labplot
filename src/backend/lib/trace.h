@@ -92,16 +92,16 @@ static inline void print_callstack() {
     for (int i = 1; i < frames_count; i++) {
 		Dl_info info;
 		if (dladdr(callstack[i], &info) && info.dli_sname) {
-			char* demangled_name = NULL;
-			const char* name_to_print = NULL;
+			char* demangled_name = nullptr;
+			const char* name_to_print = nullptr;
 			int status = -1;
 			if (info.dli_sname[0] == '_')
-				demangled_name = abi::__cxa_demangle(info.dli_sname, NULL, 0, &status);
+				demangled_name = abi::__cxa_demangle(info.dli_sname, nullptr, nullptr, &status);
 
 			if (status == 0)
 				name_to_print = demangled_name;
 			else {
-				if (info.dli_sname == 0)
+				if (info.dli_sname == nullptr)
 					name_to_print = symbols[i];
 				else
 					name_to_print = info.dli_sname;

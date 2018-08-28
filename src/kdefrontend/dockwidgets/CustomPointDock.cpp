@@ -424,7 +424,7 @@ void CustomPointDock::pointVisibilityChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void CustomPointDock::load() {
-	if (m_point == NULL)
+	if (!m_point)
 		return;
 
 	m_initializing = true;

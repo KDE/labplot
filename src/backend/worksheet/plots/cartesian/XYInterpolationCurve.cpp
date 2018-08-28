@@ -139,8 +139,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	interpolationResult = XYInterpolationCurve::InterpolationResult();
 
 	//determine the data source columns
-	const AbstractColumn* tmpXDataColumn = 0;
-	const AbstractColumn* tmpYDataColumn = 0;
+	const AbstractColumn* tmpXDataColumn = nullptr;
+	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
@@ -226,7 +226,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	int status = 0;
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
-	gsl_spline *spline = 0;
+	gsl_spline *spline = nullptr;
 	switch (type) {
 	case nsl_interp_type_linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);

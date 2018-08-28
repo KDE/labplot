@@ -414,7 +414,7 @@ void SpreadsheetView::initMenus() {
 
 	//analyze and plot data menu
 	m_analyzePlotMenu = new QMenu(i18n("Analyze and Plot Data"));
-	m_analyzePlotMenu->insertMenu(0, dataManipulationMenu);
+	m_analyzePlotMenu->insertMenu(nullptr, dataManipulationMenu);
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDifferentiationAction);
 	m_analyzePlotMenu->addAction(addIntegrationAction);
@@ -616,7 +616,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 
 	checkSpreadsheetMenu();
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -715,7 +715,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect)
 	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
 
-	disconnect(col, 0, this, 0);
+	disconnect(col, nullptr, this, nullptr);
 }
 
 void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
@@ -1570,7 +1570,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		case AbstractColumn::Text:
 			if (!stringOk)
 				stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-				                                    i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+				                                    i18n("Value"), QLineEdit::Normal, nullptr, &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
 				WAIT_CURSOR;
 				QVector<QString> results;
@@ -1982,10 +1982,10 @@ void SpreadsheetView::clearSelectedCells() {
 void SpreadsheetView::goToCell() {
 	bool ok;
 
-	int col = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_spreadsheet->columnCount(), 1, &ok);
+	int col = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_spreadsheet->columnCount(), 1, &ok);
 	if (!ok) return;
 
-	int row = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_spreadsheet->rowCount(), 1, &ok);
+	int row = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_spreadsheet->rowCount(), 1, &ok);
 	if (!ok) return;
 
 	goToCell(row-1, col-1);

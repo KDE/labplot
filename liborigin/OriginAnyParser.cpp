@@ -31,7 +31,7 @@
 
 OriginAnyParser::OriginAnyParser(const string& fileName)
 :	file(fileName.c_str(),ios::binary),
-	logfile(NULL),
+	logfile(nullptr),
 	d_file_size(0),
 	curpos(0),
 	objectIndex(0),
@@ -1067,7 +1067,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string& col_header, unsigned in
 
 		string::size_type sheetpos = spreadSheets[spread].columns.back().name.find_last_of("@");
 		if(sheetpos != string::npos){
-			unsigned int sheet = strtol(column_name.substr(sheetpos + 1).c_str(), 0, 10);
+			unsigned int sheet = strtol(column_name.substr(sheetpos + 1).c_str(), nullptr, 10);
 			if( sheet > 1){
 				spreadSheets[spread].columns.back().name = column_name;
 

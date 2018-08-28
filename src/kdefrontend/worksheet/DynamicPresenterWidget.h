@@ -40,7 +40,7 @@ class DynamicPresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = 0);
+	explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = nullptr);
 	~DynamicPresenterWidget() override;
 
 private:

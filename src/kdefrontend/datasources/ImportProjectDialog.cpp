@@ -213,7 +213,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1); //strip away the name of the root folder "Project"
 		msg += "\n\n" + i18n("Do you want to proceed?");
 
-		const int rc = KMessageBox::warningYesNo(0, msg, i18n("Override existing objects?"));
+		const int rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
 		if (rc == KMessageBox::No)
 			return;
 	}

@@ -64,8 +64,8 @@ extern "C" {
 */
 
 XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent),
-	cbDataSourceCurve(0), cbXDataColumn(0), cbYDataColumn(0), cbXErrorColumn(0),
-	cbYErrorColumn(0), m_fitCurve(0) {
+	cbDataSourceCurve(nullptr), cbXDataColumn(nullptr), cbYDataColumn(nullptr), cbXErrorColumn(nullptr),
+	cbYErrorColumn(nullptr), m_fitCurve(nullptr) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -846,7 +846,7 @@ void XYFitCurveDock::enableRecalculate() const {
 	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != 0 && aspectY != 0);
+		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
 	} else {
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
 	}

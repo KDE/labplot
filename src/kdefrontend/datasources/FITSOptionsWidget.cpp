@@ -52,7 +52,7 @@ void FITSOptionsWidget::clear() {
 QString FITSOptionsWidget::currentExtensionName() {
 	QString name;
 
-	if (ui.twExtensions->currentItem() != 0 && ui.twExtensions->currentItem()->text(0) != i18n("Primary header"))
+	if (ui.twExtensions->currentItem() != nullptr && ui.twExtensions->currentItem()->text(0) != i18n("Primary header"))
 		name = ui.twExtensions->currentItem()->text(ui.twExtensions->currentColumn());
 
 	return name;
@@ -90,20 +90,20 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	else if (!itemText.compare(i18n("Primary header")))
 		extType = 2;
 	if (extType == 0) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0)
+		if (item->parent() != nullptr) {
+			if (item->parent()->parent() != nullptr)
 				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + item->text(column) + QLatin1String("]");
 		}
 	} else if (extType == 1) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0) {
+		if (item->parent() != nullptr) {
+			if (item->parent()->parent() != nullptr) {
 				bool ok;
 				int hduNum = itemText.rightRef(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		}
 	} else {
-		if (item->parent()->parent() != 0)
+		if (item->parent()->parent() != nullptr)
 			selectedExtension = item->parent()->parent()->text(column);
 	}
 
@@ -149,7 +149,7 @@ const QStringList FITSOptionsWidget::selectedFITSExtensions() const {
 }
 
 const QString FITSOptionsWidget::extensionName(bool* ok) {
-	if (ui.twExtensions->currentItem() != 0) {
+	if (ui.twExtensions->currentItem() != nullptr) {
 		const QTreeWidgetItem* item = ui.twExtensions->currentItem();
 		const int currentColumn = ui.twExtensions->currentColumn();
 		QString itemText = item->text(currentColumn);
@@ -162,15 +162,15 @@ const QString FITSOptionsWidget::extensionName(bool* ok) {
 			extType = 2;
 
 		if (extType == 0) {
-			if (item->parent() != 0 && item->parent()->parent() != 0)
+			if (item->parent() != nullptr && item->parent()->parent() != nullptr)
 				return item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
 		} else if (extType == 1) {
-			if (item->parent() != 0 && item->parent()->parent() != 0) {
+			if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
 				int hduNum = itemText.rightRef(1).toInt(ok);
 				return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		} else {
-			if (item->parent()->parent() != 0)
+			if (item->parent()->parent() != nullptr)
 				return item->parent()->parent()->text(currentColumn);
 		}
 	}

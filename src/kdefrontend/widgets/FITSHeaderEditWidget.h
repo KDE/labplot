@@ -38,7 +38,7 @@ class FITSHeaderEditWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditWidget(QWidget *parent = 0);
+	explicit FITSHeaderEditWidget(QWidget *parent = nullptr);
 	~FITSHeaderEditWidget() override;
 
 private:

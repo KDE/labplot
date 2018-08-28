@@ -55,7 +55,7 @@
 	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
-	m_label(0),
+	m_label(nullptr),
 	m_initializing(false),
 	m_dateTimeMenu(new QMenu(this)),
 	m_teXEnabled(false) {
@@ -343,7 +343,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.kcbBackgroundColor->setColor(m_label->teXBackgroundColor());
 	} else {
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-		m_highlighter->setDocument(0);
+		m_highlighter->setDocument(nullptr);
 #endif
 		ui.lFontTeX->setVisible(false);
 		ui.kfontRequesterTeX->setVisible(false);
@@ -482,7 +482,7 @@ void LabelWidget::teXFontChanged(const QFont& font) {
 
 void LabelWidget::charMenu() {
 	QMenu menu;
-	KCharSelect selection(this, 0, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
+	KCharSelect selection(this, nullptr, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
 	selection.setCurrentFont(ui.teLabel->currentFont());
 	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
 	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
@@ -728,7 +728,7 @@ void LabelWidget::labelVisibleChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void LabelWidget::load() {
-	if(m_label == NULL)
+	if(!m_label)
 		return;
 
 	m_initializing = true;
@@ -772,7 +772,7 @@ void LabelWidget::load() {
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {
-	if(m_label == NULL)
+	if(!m_label)
 		return;
 
 	m_initializing = true;

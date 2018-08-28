@@ -65,7 +65,7 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	m_selectionBandIsShown(false),
 	magnificationFactor(0),
 	m_rotationAngle(0),
-	tbZoom(0) {
+	tbZoom(nullptr) {
 
 	setScene(m_image->scene());
 
@@ -238,7 +238,7 @@ void DatapickerImageView::initMenus() {
 void DatapickerImageView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.

@@ -78,11 +78,11 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_cartesianPlotMouseMode(CartesianPlot::SelectionMode),
 	m_selectionBandIsShown(false),
 	magnificationFactor(0),
-	m_magnificationWindow(0),
+	m_magnificationWindow(nullptr),
 	m_suppressSelectionChangedEvent(false),
-	lastAddedWorksheetElement(0),
-	m_fadeInTimeLine(0),
-	m_fadeOutTimeLine(0),
+	lastAddedWorksheetElement(nullptr),
+	m_fadeInTimeLine(nullptr),
+	m_fadeOutTimeLine(nullptr),
 	m_isClosing(false),
 	m_menusInitialized(false),
 	m_ctrlPressed(false),
@@ -101,9 +101,9 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_cartesianPlotZoomMenu(nullptr),
 	m_cartesianPlotActionModeMenu(nullptr),
 	m_dataManipulationMenu(nullptr),
-	tbNewCartesianPlot(0),
-	tbZoom(0),
-	tbMagnification(0) {
+	tbNewCartesianPlot(nullptr),
+	tbZoom(nullptr),
+	tbMagnification(nullptr) {
 
 	setScene(m_worksheet->scene());
 
@@ -516,7 +516,7 @@ void WorksheetView::initMenus() {
 
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"));
-	ThemesWidget* themeWidget = new ThemesWidget(0);
+	ThemesWidget* themeWidget = new ThemesWidget(nullptr);
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(setTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
 
@@ -540,7 +540,7 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	if (!m_menusInitialized)
 		initMenus();
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -569,7 +569,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) {
 		initMenus();
 
 	// Data manipulation menu
-	menu->insertMenu(0, m_dataManipulationMenu);
+	menu->insertMenu(nullptr, m_dataManipulationMenu);
 
 	menu->addAction(addDifferentiationAction);
 	menu->addAction(addIntegrationAction);
@@ -1007,7 +1007,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	//show the magnification window
 	if (magnificationFactor /*&& m_mouseMode == SelectAndEditMode*/) {
 		if (!m_magnificationWindow) {
-			m_magnificationWindow = new QGraphicsPixmapItem(0);
+			m_magnificationWindow = new QGraphicsPixmapItem(nullptr);
 			m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
 			scene()->addItem(m_magnificationWindow);
 		}
@@ -1193,7 +1193,7 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
-	WorksheetElement* aspect = 0;
+	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::FourAxes);

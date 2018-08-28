@@ -295,7 +295,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve = 0;
+	XYCurve* dataSourceCurve = nullptr;
 	if (aspect) {
 		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 		Q_ASSERT(dataSourceCurve);
@@ -313,7 +313,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
+	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column);
@@ -410,7 +410,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
+	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column);
@@ -430,7 +430,7 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_interpolationCurve->xDataColumn();
 		else {
@@ -641,9 +641,9 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=0 && aspectY!=0);
+		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
 	} else {
-		 hasSourceData = (m_interpolationCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);

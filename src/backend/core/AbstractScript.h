@@ -42,7 +42,7 @@ class AbstractScript : public QObject
   Q_OBJECT
 
   public:
-    AbstractScript(AbstractScriptingEngine *env, const QString &code, QObject *context=0, const QString &name="<input>");
+    AbstractScript(AbstractScriptingEngine *env, const QString &code, QObject *context=nullptr, const QString &name="<input>");
     ~AbstractScript() override;
 
     const QString code() const;

@@ -1058,7 +1058,7 @@ void LiveDataDock::updateSubscriptionCompleter() {
 		m_subscriptionCompleter->setCaseSensitivity(Qt::CaseSensitive);
 		ui.leSubscriptions->setCompleter(m_subscriptionCompleter);
 	} else {
-		ui.leSubscriptions->setCompleter(0);
+		ui.leSubscriptions->setCompleter(nullptr);
 	}
 }
 

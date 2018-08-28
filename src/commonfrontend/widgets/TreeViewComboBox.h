@@ -40,7 +40,7 @@ class TreeViewComboBox : public QComboBox {
 	Q_OBJECT
 
 	public:
-		explicit TreeViewComboBox(QWidget* parent = 0);
+		explicit TreeViewComboBox(QWidget* parent = nullptr);
 
 		void setModel(QAbstractItemModel*);
 		void setCurrentModelIndex(const QModelIndex&);

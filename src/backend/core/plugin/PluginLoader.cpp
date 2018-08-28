@@ -41,7 +41,7 @@
  */
 
 PluginLoader::PluginLoader(const QString &fileName) 
-		: m_loader(NULL), m_fileName(fileName) {
+		: m_loader(nullptr), m_fileName(fileName) {
 	m_status = NotYetLoaded;
 	m_statusString = i18n("Not yet loaded.");
 }
@@ -63,7 +63,7 @@ QString PluginLoader::fileName() const {
 }
 
 QObject *PluginLoader::instance() {
-	return isActive() ? m_loader->instance() : NULL;
+	return isActive() ? m_loader->instance() : nullptr;
 }
 
 bool PluginLoader::isActive() const {
@@ -105,7 +105,7 @@ bool PluginLoader::unload() {
 	if (m_loader && m_loader->isLoaded())
 		m_loader->unload();
 	delete m_loader;
-	m_loader = NULL;
+	m_loader = nullptr;
 	m_status = NotYetLoaded;
 	m_statusString = i18n("Not yet loaded.");
 

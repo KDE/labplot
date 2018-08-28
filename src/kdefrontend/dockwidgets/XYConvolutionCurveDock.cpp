@@ -322,7 +322,7 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_convolutionCurve->xDataColumn();
 		else {
@@ -383,9 +383,9 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=0 && aspectY!=0);
+		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
 	} else {
-		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);

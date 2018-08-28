@@ -89,7 +89,7 @@ protected slots:
 		Q_UNUSED(source);
 	}
 	void inputAboutToBeDestroyed(const AbstractColumn* source) {
-		input(portIndexOf(source), 0);
+		input(portIndexOf(source), nullptr);
 	}
 
 protected:

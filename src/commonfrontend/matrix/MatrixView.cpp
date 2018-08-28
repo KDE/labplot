@@ -297,7 +297,7 @@ void MatrixView::initMenus() {
 void MatrixView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -544,10 +544,10 @@ void MatrixView::advanceCell() {
 void MatrixView::goToCell() {
 	bool ok;
 
-	int col = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_matrix->columnCount(), 1, &ok);
+	int col = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter column"), 1, 1, m_matrix->columnCount(), 1, &ok);
 	if (!ok) return;
 
-	int row = QInputDialog::getInt(0, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_matrix->rowCount(), 1, &ok);
+	int row = QInputDialog::getInt(nullptr, i18n("Go to Cell"), i18n("Enter row"), 1, 1, m_matrix->rowCount(), 1, &ok);
 	if (!ok) return;
 
 	goToCell(row-1, col-1);

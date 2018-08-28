@@ -221,7 +221,7 @@ void OriginParser::convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type s
 		int pos = (int)(it->name.find_last_of("@"));
 		if(pos != -1)
 		{
-			index = strtol(it->name.substr(pos + 1).c_str(), 0, 10) - 1;
+			index = strtol(it->name.substr(pos + 1).c_str(), nullptr, 10) - 1;
 			it->name = it->name.substr(0, pos);
 		}
 

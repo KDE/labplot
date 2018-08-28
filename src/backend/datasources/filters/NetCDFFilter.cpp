@@ -330,7 +330,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			valueString << "not supported";
 		}
 
-		if (parentItem != NULL) {
+		if (parentItem != nullptr) {
 			QString typeName;
 			if (varid == NC_GLOBAL)
 				typeName = i18n("global attribute");

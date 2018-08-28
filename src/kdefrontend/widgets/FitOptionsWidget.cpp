@@ -94,7 +94,7 @@ void FitOptionsWidget::autoRangeChanged() {
 		ui.lXRange->setEnabled(false);
 		ui.sbMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_fitCurve->xDataColumn();
 		else {
@@ -123,7 +123,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 		ui.lEvalRange->setEnabled(false);
 		ui.sbEvalMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_fitCurve->xDataColumn();
 		else {

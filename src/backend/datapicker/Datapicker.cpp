@@ -133,14 +133,14 @@ DatapickerCurve* Datapicker::activeCurve() {
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
 	if (!m_view)
-		return 0;
+		return nullptr;
 
 	const int index = m_view->currentIndex();
 	if(index>0) {
 		DatapickerCurve* curve = child<DatapickerCurve>(index-1);
 		return curve->child<Spreadsheet>(0);
 	}
-	return 0;
+	return nullptr;
 }
 
 DatapickerImage* Datapicker::image() const {
@@ -276,7 +276,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 			handleChildAspectAboutToBeRemoved(point);
 
 		if (curve==m_activeCurve) {
-			m_activeCurve = 0;
+			m_activeCurve = nullptr;
 			emit statusInfo("");
 		}
 	} else
@@ -314,8 +314,8 @@ void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect)
 	const DatapickerPoint *removedPoint = qobject_cast<const DatapickerPoint*>(aspect);
 	if (removedPoint) {
 		QGraphicsItem *item = removedPoint->graphicsItem();
-		Q_ASSERT(item != NULL);
-		Q_ASSERT(m_image != NULL);
+		Q_ASSERT(item != nullptr);
+		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->removeItem(item);
 	}
 }
@@ -324,8 +324,8 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 	const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
 	if (addedPoint) {
 		QGraphicsItem *item = addedPoint->graphicsItem();
-		Q_ASSERT(item != NULL);
-		Q_ASSERT(m_image != NULL);
+		Q_ASSERT(item != nullptr);
+		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->addItem(item);
 	}
 }

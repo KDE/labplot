@@ -74,7 +74,7 @@ class AbstractCoordinateSystem {
 		};
 
 		//static members
-		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = NULL);
+		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
 		static bool approximatelyEqual(float a, float b, float epsilon=0.0000001);
 		static bool essentiallyEqual(float a, float b, float epsilon=0.0000001);
 		static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);

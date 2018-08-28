@@ -215,7 +215,7 @@ void ColumnSetModeCmd::undo() {
  * \brief Ctor
  */
 ColumnFullCopyCmd::ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_src(src), m_backup(0), m_backup_owner(0) {
+	: QUndoCommand(parent), m_col(col), m_src(src), m_backup(nullptr), m_backup_owner(nullptr) {
 	setText(i18n("%1: change cell values", col->name()));
 }
 
@@ -231,7 +231,7 @@ ColumnFullCopyCmd::~ColumnFullCopyCmd() {
  * \brief Execute the command
  */
 void ColumnFullCopyCmd::redo() {
-	if(m_backup == 0) {
+	if(m_backup == nullptr) {
 		m_backup_owner = new Column("temp", m_src->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
@@ -340,7 +340,7 @@ ColumnPartialCopyCmd::~ColumnPartialCopyCmd() {
  * \brief Execute the command
  */
 void ColumnPartialCopyCmd::redo() {
-	if(m_src_backup == 0) {
+	if(m_src_backup == nullptr) {
 		// copy the relevant rows of source and destination column into backup columns
 		m_src_backup_owner = new Column("temp", m_col->columnMode());
 		m_src_backup = new ColumnPrivate(m_src_backup_owner, m_col->columnMode());
@@ -438,7 +438,7 @@ void ColumnInsertRowsCmd::undo() {
 
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_first(first), m_count(count),
-	m_data_row_count(0), m_old_size(0), m_backup(0), m_backup_owner(nullptr) {
+	m_data_row_count(0), m_old_size(0), m_backup(nullptr), m_backup_owner(nullptr) {
 }
 
 /**
@@ -453,7 +453,7 @@ ColumnRemoveRowsCmd::~ColumnRemoveRowsCmd() {
  * \brief Execute the command
  */
 void ColumnRemoveRowsCmd::redo() {
-	if(m_backup == 0) {
+	if(m_backup == nullptr) {
 		if(m_first >= m_col->rowCount())
 			m_data_row_count = 0;
 		else if(m_first + m_count > m_col->rowCount())
@@ -554,8 +554,8 @@ void ColumnSetPlotDesignationCmd::undo() {
 ColumnClearCmd::ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col) {
 	setText(i18n("%1: clear column", col->name()));
-	m_empty_data = 0;
-	m_data = 0;
+	m_empty_data = nullptr;
+	m_data = nullptr;
 	m_undone = false;
 }
 

@@ -183,7 +183,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 }
 
 void EquationHighlighter::rehighlight() {
-	setDocument(0);
+	setDocument(nullptr);
 	setDocument(m_parent->document());
 }
 

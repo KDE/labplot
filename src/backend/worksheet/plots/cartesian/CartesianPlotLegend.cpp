@@ -1037,7 +1037,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "textLabel") {
 			if (!d->title->load(reader, preview)) {
 				delete d->title;
-				d->title=0;
+				d->title=nullptr;
 				return false;
 			}
 		} else if (!preview && reader->name() == "background") {

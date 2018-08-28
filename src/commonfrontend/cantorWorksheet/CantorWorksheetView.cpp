@@ -183,7 +183,7 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	if (!part)
 		return;
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -223,7 +223,7 @@ void CantorWorksheetView::triggerCantorAction(QAction* action) {
 
 CantorWorksheetView::~CantorWorksheetView() {
 	if (part)
-		part->widget()->setParent(0);
+		part->widget()->setParent(nullptr);
 }
 
 void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {

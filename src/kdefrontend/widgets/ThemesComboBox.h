@@ -38,7 +38,7 @@ class ThemesComboBox : public QComboBox {
 	Q_OBJECT
 
 	public:
-		explicit ThemesComboBox(QWidget* parent = 0);
+		explicit ThemesComboBox(QWidget* parent = nullptr);
 		void setCurrentTheme(const QString&);
 
 		void showPopup() override;

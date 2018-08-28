@@ -107,50 +107,50 @@
 */
 MainWin::MainWin(QWidget *parent, const QString& filename)
 	: KXmlGuiWindow(parent),
-	  m_currentSubWindow(0),
-	  m_project(0),
-	  m_aspectTreeModel(0),
-	  m_projectExplorer(0),
-	  m_projectExplorerDock(0),
-	  m_propertiesDock(0),
-	  m_currentAspect(0),
-	  m_currentFolder(0),
+	  m_currentSubWindow(nullptr),
+	  m_project(nullptr),
+	  m_aspectTreeModel(nullptr),
+	  m_projectExplorer(nullptr),
+	  m_projectExplorerDock(nullptr),
+	  m_propertiesDock(nullptr),
+	  m_currentAspect(nullptr),
+	  m_currentFolder(nullptr),
 	  m_suppressCurrentSubWindowChangedEvent(false),
 	  m_closing(false),
 	  m_autoSaveActive(false),
-	  m_visibilityMenu(0),
-	  m_newMenu(0),
-	  m_editMenu(0),
-	  axisDock(0),
-	  notesDock(0),
-	  cartesianPlotDock(0),
-	  cartesianPlotLegendDock(0),
-	  columnDock(0),
-	  m_liveDataDock(0),
-	  matrixDock(0),
-	  spreadsheetDock(0),
-	  projectDock(0),
-	  xyCurveDock(0),
-	  xyEquationCurveDock(0),
-	  xyDataReductionCurveDock(0),
-	  xyDifferentiationCurveDock(0),
-	  xyIntegrationCurveDock(0),
-	  xyInterpolationCurveDock(0),
-	  xySmoothCurveDock(0),
-	  xyFitCurveDock(0),
-	  xyFourierFilterCurveDock(0),
-	  xyFourierTransformCurveDock(0),
-	  xyConvolutionCurveDock(0),
-	  histogramDock(0),
-	  worksheetDock(0),
-	  textLabelDock(0),
-	  customPointDock(0),
-	  datapickerImageDock(0),
-	  datapickerCurveDock(0),
+	  m_visibilityMenu(nullptr),
+	  m_newMenu(nullptr),
+	  m_editMenu(nullptr),
+	  axisDock(nullptr),
+	  notesDock(nullptr),
+	  cartesianPlotDock(nullptr),
+	  cartesianPlotLegendDock(nullptr),
+	  columnDock(nullptr),
+	  m_liveDataDock(nullptr),
+	  matrixDock(nullptr),
+	  spreadsheetDock(nullptr),
+	  projectDock(nullptr),
+	  xyCurveDock(nullptr),
+	  xyEquationCurveDock(nullptr),
+	  xyDataReductionCurveDock(nullptr),
+	  xyDifferentiationCurveDock(nullptr),
+	  xyIntegrationCurveDock(nullptr),
+	  xyInterpolationCurveDock(nullptr),
+	  xySmoothCurveDock(nullptr),
+	  xyFitCurveDock(nullptr),
+	  xyFourierFilterCurveDock(nullptr),
+	  xyFourierTransformCurveDock(nullptr),
+	  xyConvolutionCurveDock(nullptr),
+	  histogramDock(nullptr),
+	  worksheetDock(nullptr),
+	  textLabelDock(nullptr),
+	  customPointDock(nullptr),
+	  datapickerImageDock(nullptr),
+	  datapickerCurveDock(nullptr),
 #ifdef HAVE_CANTOR_LIBS
-	  cantorWorksheetDock(0),
+	  cantorWorksheetDock(nullptr),
 #endif
-	  m_guiObserver(0) {
+	  m_guiObserver(nullptr) {
 
 	initGUI(filename);
 	setAcceptDrops(true);
@@ -167,9 +167,9 @@ MainWin::~MainWin() {
 	group.writeEntry("geometry", saveGeometry());
 	KSharedConfig::openConfig()->sync();
 
-	if (m_project != 0) {
+	if (m_project != nullptr) {
 		m_mdiArea->closeAllSubWindows();
-		disconnect(m_project, 0, this, 0);
+		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
 	}
 
@@ -624,14 +624,14 @@ void MainWin::updateGUIOnProjectChanges() {
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container("worksheet", this) == NULL) {
+	if (factory->container("worksheet", this) == nullptr) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
 	}
 
 	//disable all menus if there is no project
-	bool b = (m_project == 0);
+	bool b = (m_project == nullptr);
 	m_saveAction->setEnabled(!b);
 	m_saveAsAction->setEnabled(!b);
 	m_printAction->setEnabled(!b);
@@ -695,7 +695,7 @@ void MainWin::updateGUI() {
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container("worksheet", this) == NULL) {
+	if (factory->container("worksheet", this) == nullptr) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
@@ -723,7 +723,7 @@ void MainWin::updateGUI() {
 
 	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
-	if (w != 0) {
+	if (w != nullptr) {
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
 		factory->container("analysis", this)->setEnabled(true);
@@ -878,7 +878,7 @@ bool MainWin::newProject() {
 
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
-	if (m_projectExplorer == 0) {
+	if (m_projectExplorer == nullptr) {
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
 		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
@@ -1011,16 +1011,16 @@ void MainWin::openRecentProject(const QUrl& url) {
 	Closes the current project, if available. Return \c true, if the project was closed.
 */
 bool MainWin::closeProject() {
-	if (m_project == 0)
+	if (m_project == nullptr)
 		return true; //nothing to close
 
 	if (warnModified())
 		return false;
 
 	delete m_aspectTreeModel;
-	m_aspectTreeModel = 0;
+	m_aspectTreeModel = nullptr;
 	delete m_project;
-	m_project = 0;
+	m_project = nullptr;
 	m_currentFileName = "";
 
 	//update the UI if we're just closing a project
@@ -1028,8 +1028,8 @@ bool MainWin::closeProject() {
 	if (!m_closing) {
 		m_projectExplorerDock->hide();
 		m_propertiesDock->hide();
-		m_currentAspect = 0;
-		m_currentFolder = 0;
+		m_currentAspect = nullptr;
+		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
 
 		if (m_autoSaveActive)
@@ -1083,7 +1083,7 @@ bool MainWin::save(const QString& fileName) {
 	else
 		file = new KFilterDev(fileName);
 
-	if (file == 0)
+	if (file == nullptr)
 		file = new QFile(fileName);
 
 	bool ok;
@@ -1253,7 +1253,7 @@ void MainWin::newNotes() {
 Workbook* MainWin::activeWorkbook() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
@@ -1267,7 +1267,7 @@ Workbook* MainWin::activeWorkbook() const {
 Datapicker* MainWin::activeDatapicker() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
@@ -1282,11 +1282,11 @@ Datapicker* MainWin::activeDatapicker() const {
 Spreadsheet* MainWin::activeSpreadsheet() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
-	Spreadsheet* spreadsheet = 0;
+	Spreadsheet* spreadsheet = nullptr;
 	const Workbook* workbook = dynamic_cast<const Workbook*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
@@ -1314,11 +1314,11 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 Matrix* MainWin::activeMatrix() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
-	Matrix* matrix = 0;
+	Matrix* matrix = nullptr;
 	Workbook* workbook = dynamic_cast<Workbook*>(part);
 	if (workbook) {
 		matrix = workbook->currentMatrix();
@@ -1341,7 +1341,7 @@ Matrix* MainWin::activeMatrix() const {
 Worksheet* MainWin::activeWorksheet() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
@@ -1365,7 +1365,7 @@ void MainWin::newCantorWorksheet(QAction* action) {
 CantorWorksheet* MainWin::activeCantorWorksheet() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
-		return 0;
+		return nullptr;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);

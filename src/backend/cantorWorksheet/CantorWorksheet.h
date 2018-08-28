@@ -75,7 +75,7 @@ private:
 	QAbstractItemModel* m_variableModel;
 	Cantor::WorksheetAccessInterface* m_worksheetAccess;
 
-	bool init(QByteArray* content = NULL);
+	bool init(QByteArray* content = nullptr);
 
 private slots:
 	void rowsInserted(const QModelIndex & parent, int first, int last);

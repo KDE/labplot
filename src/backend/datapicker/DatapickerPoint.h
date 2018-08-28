@@ -45,7 +45,7 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
 public:
 	enum ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-	explicit ErrorBarItem(DatapickerPoint* parent = 0, const ErrorBarType& type = PlusDeltaX);
+	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, const ErrorBarType& type = PlusDeltaX);
 
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 	void setRectSize(const qreal);

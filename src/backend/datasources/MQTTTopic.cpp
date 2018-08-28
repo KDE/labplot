@@ -127,7 +127,7 @@ QIcon MQTTTopic::icon() const {
 QMenu* MQTTTopic::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.

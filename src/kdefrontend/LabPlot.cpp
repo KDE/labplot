@@ -56,13 +56,13 @@ int main (int argc, char *argv[]) {
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 		KAboutLicense::GPL,i18n("(c) 2007-2018"), QString(), QStringLiteral("https://labplot.kde.org"));
-	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", 0);
-	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", 0);
-	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", 0);
-	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), "kainz.a@gmail.com", 0);
-	aboutData.addCredit(i18n("Yuri Chornoivan"), i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
-	aboutData.addCredit(i18n("Garvit Khatri"), i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
-	aboutData.addCredit(i18n("Christoph Roick"), i18nc("@info:credit", "Support import of ROOT (CERN) TH1 histograms"), "chrisito@gmx.de", 0);
+	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", nullptr);
+	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", nullptr);
+	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", nullptr);
+	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), "kainz.a@gmail.com", nullptr);
+	aboutData.addCredit(i18n("Yuri Chornoivan"), i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", nullptr);
+	aboutData.addCredit(i18n("Garvit Khatri"), i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", nullptr);
+	aboutData.addCredit(i18n("Christoph Roick"), i18nc("@info:credit", "Support import of ROOT (CERN) TH1 histograms"), "chrisito@gmx.de", nullptr);
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);
@@ -94,7 +94,7 @@ int main (int argc, char *argv[]) {
 		filename = dir.absoluteFilePath(filename);
 
 		if ( !QFile::exists(filename)) {
-			if ( KMessageBox::warningContinueCancel( 0,
+			if ( KMessageBox::warningContinueCancel( nullptr,
 					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 					i18n("Failed to Open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
@@ -136,7 +136,7 @@ int main (int argc, char *argv[]) {
 	KColorSchemeManager manager;
 	manager.activateScheme(manager.indexForScheme(schemeName));
 
-	MainWin* window = new MainWin(0, filename);
+	MainWin* window = new MainWin(nullptr, filename);
 	window->show();
 
 	if(splash)

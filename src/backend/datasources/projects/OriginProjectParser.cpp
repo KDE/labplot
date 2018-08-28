@@ -669,7 +669,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 					if (value.as_double() != _ONAN)
 						break;
 				} else {
-					if (value.as_string() != NULL) {
+					if (value.as_string() != nullptr) {
 						col->setColumnMode(AbstractColumn::Text);
 						break;
 					}
@@ -687,7 +687,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 					const Origin::variant value(column.data.at(i));
 					if (value.type() == Origin::Variant::V_STRING) {
-						if (value.as_string() != NULL)
+						if (value.as_string() != nullptr)
 							col->setTextAt(i, value.as_string());
 					} else {
 						if (value.as_double() != _ONAN)

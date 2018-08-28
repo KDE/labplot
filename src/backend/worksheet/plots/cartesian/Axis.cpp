@@ -862,7 +862,7 @@ void Axis::retransformTicks() {
 void Axis::majorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
 	if (aspect == d->majorTicksColumn) {
-		d->majorTicksColumn = 0;
+		d->majorTicksColumn = nullptr;
 		d->retransformTicks();
 	}
 }
@@ -870,7 +870,7 @@ void Axis::majorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
 	if (aspect == d->minorTicksColumn) {
-		d->minorTicksColumn = 0;
+		d->minorTicksColumn = nullptr;
 		d->retransformTicks();
 	}
 }
@@ -908,8 +908,8 @@ void Axis::visibilityChangedSlot() {
 //################### Private implementation ##########################
 //#####################################################################
 AxisPrivate::AxisPrivate(Axis* owner) :
-	majorTicksColumn(0),
-	minorTicksColumn(0),
+	majorTicksColumn(nullptr),
+	minorTicksColumn(nullptr),
 	gridItem(new AxisGrid(this)),
 	q(owner),
 	suppressRetransform(false),

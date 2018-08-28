@@ -36,7 +36,7 @@ class FITSHeaderEditAddUnitDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditAddUnitDialog(const QString& unit = QString(), QWidget* parent = 0);
+	explicit FITSHeaderEditAddUnitDialog(const QString& unit = QString(), QWidget* parent = nullptr);
 	QString unit() const;
 
 private:

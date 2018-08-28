@@ -66,7 +66,7 @@ AbstractScriptingEngine * ScriptingEngineManager::engine(const QString &name)
 		if (engine->objectName() == name) {
 			if (!engine->initialized())
 				engine->initialize();
-			return engine->initialized() ? engine : 0;
+			return engine->initialized() ? engine : nullptr;
 		}
-	return 0;
+	return nullptr;
 }

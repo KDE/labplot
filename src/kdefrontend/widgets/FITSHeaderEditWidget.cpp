@@ -160,20 +160,20 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem *item, int col) {
 	else if (!itemText.compare(QLatin1String("Primary header")))
 		extType = 2;
 	if (extType == 0) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0)
+		if (item->parent() != nullptr) {
+			if (item->parent()->parent() != nullptr)
 				selectedExtension = item->parent()->parent()->text(0) + '[' + item->text(col) + ']';
 		}
 	} else if (extType == 1) {
-		if (item->parent() != 0) {
-			if (item->parent()->parent() != 0) {
+		if (item->parent() != nullptr) {
+			if (item->parent()->parent() != nullptr) {
 				bool ok;
 				int hduNum = itemText.rightRef(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + '[' + QString::number(hduNum-1) + ']';
 			}
 		}
 	} else {
-		if (item->parent()->parent() != 0)
+		if (item->parent()->parent() != nullptr)
 			selectedExtension = item->parent()->parent()->text(col);
 	}
 
@@ -593,7 +593,7 @@ void FITSHeaderEditWidget::closeFile() {
 			}
 		}
 
-		QTreeWidgetItem* newCurrent = (QTreeWidgetItem*)0;
+		QTreeWidgetItem* newCurrent = (QTreeWidgetItem*)nullptr;
 		if (idxOfCurrentAsTopLevel == 0) {
 			if (ui->twExtensions->topLevelItemCount() == 1) {
 				//last file closed, deactivate action buttons, clear keywords table

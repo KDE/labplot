@@ -47,7 +47,7 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(0), m_initializing(false) {
+ColumnDock::ColumnDock(QWidget* parent) : QWidget(parent), m_column(nullptr), m_initializing(false) {
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
@@ -82,7 +82,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 
 	if (list.size() == 1) {
 		//names and comments of non-editable columns in a file data source can be changed.
-		if (!nonEditable && dynamic_cast<LiveDataSource*>(m_column->parentAspect()) != 0) {
+		if (!nonEditable && dynamic_cast<LiveDataSource*>(m_column->parentAspect()) != nullptr) {
 			ui.leName->setEnabled(false);
 			ui.leComment->setEnabled(false);
 		} else {

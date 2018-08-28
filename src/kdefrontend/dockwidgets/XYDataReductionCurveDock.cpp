@@ -299,7 +299,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	//TODO: this->updateSettings(column); ?
-	if (column != 0 && uiGeneralTab.cbAutoRange->isChecked()) {
+	if (column != nullptr && uiGeneralTab.cbAutoRange->isChecked()) {
 		uiGeneralTab.sbMin->setValue(column->minimum());
 		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
@@ -400,7 +400,7 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
 
-		const AbstractColumn* xDataColumn = 0;
+		const AbstractColumn* xDataColumn = nullptr;
 		if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
 			xDataColumn = m_dataReductionCurve->xDataColumn();
 		else {
@@ -604,9 +604,9 @@ void XYDataReductionCurveDock::enableRecalculate() const {
 	if (m_dataReductionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX!=0 && aspectY!=0);
+		hasSourceData = (aspectX!=nullptr && aspectY!=nullptr);
 	} else {
-		 hasSourceData = (m_dataReductionCurve->dataSourceCurve() != NULL);
+		 hasSourceData = (m_dataReductionCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);

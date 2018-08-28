@@ -50,7 +50,7 @@
  \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeModel(0), m_dataChanged(0), m_initializing(false) {
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(nullptr), m_aspectTreeModel(nullptr), m_dataChanged(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	//"Title"-tab
@@ -894,7 +894,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
+	AbstractColumn* column = nullptr;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column != nullptr);

@@ -469,7 +469,7 @@ void MQTTUnitTest::testSubscriptions() {
 				timer2.start(5000);
 				loop->exec();
 
-				disconnect(liveDock, &LiveDataDock::newTopic, this, 0);
+				disconnect(liveDock, &LiveDataDock::newTopic, this, nullptr);
 			}
 		}
 

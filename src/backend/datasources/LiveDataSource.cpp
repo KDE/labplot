@@ -466,7 +466,7 @@ QIcon LiveDataSource::icon() const {
 QMenu* LiveDataSource::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 
-	QAction* firstAction = 0;
+	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
@@ -695,26 +695,26 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to open the device."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
 		break;
 	case QSerialPort::PermissionError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"),
 			i18n("Failed to open the device. Please check your permissions on this device."));
 		break;
 	case QSerialPort::OpenError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Device already opened."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Device already opened."));
 		break;
 	case QSerialPort::NotOpenError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("The device is not opened."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device is not opened."));
 		break;
 	case QSerialPort::ReadError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to read data."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data."));
 		break;
 	case QSerialPort::ResourceError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
 		break;
 	case QSerialPort::TimeoutError:
-		QMessageBox::critical(0, i18n("Serial Port Error"), i18n("The device timed out."));
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
 		break;
 #ifndef _MSC_VER
 	//MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
@@ -725,7 +725,7 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
-		QMessageBox::critical(0, i18n("Serial Port Error"),
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"),
 			i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
 	case QSerialPort::NoError:

@@ -86,7 +86,7 @@ class Project::Private {
 public:
 	Private() :
 		mdiWindowVisibility(Project::folderOnly),
-		scriptingEngine(0),
+		scriptingEngine(nullptr),
 		version(LVERSION),
 		author(QString(qgetenv("USER"))),
 		modificationTime(QDateTime::currentDateTime()),
@@ -265,18 +265,18 @@ bool Project::load(const QString& filename, bool preview) {
 	else	// opens filename using file ending
 		file = new KFilterDev(filename);
 
-	if (file == 0)
+	if (!file)
 		file = new QFile(filename);
 
 	if (!file->open(QIODevice::ReadOnly)) {
-		KMessageBox::error(0, i18n("Sorry. Could not open file for reading."));
+		KMessageBox::error(nullptr, i18n("Sorry. Could not open file for reading."));
 		return false;
 	}
 
 	char c;
 	bool rc = file->getChar(&c);
 	if (!rc) {
-		KMessageBox::error(0, i18n("The project file is empty."), i18n("Error opening project"));
+		KMessageBox::error(nullptr, i18n("The project file is empty."), i18n("Error opening project"));
 		file->close();
 		delete file;
 		return false;
@@ -291,7 +291,7 @@ bool Project::load(const QString& filename, bool preview) {
 	if (rc == false) {
 		RESET_CURSOR;
 		QString msg_text = reader.errorString();
-		KMessageBox::error(0, msg_text, i18n("Error when opening the project"));
+		KMessageBox::error(nullptr, msg_text, i18n("Error when opening the project"));
 		return false;
 	}
 

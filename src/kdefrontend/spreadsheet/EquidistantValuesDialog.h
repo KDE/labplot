@@ -39,7 +39,7 @@ class EquidistantValuesDialog : public QDialog {
 Q_OBJECT
 
 public:
-	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0);
+	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
 	void setColumns(const QVector<Column*>&);
 
 private:

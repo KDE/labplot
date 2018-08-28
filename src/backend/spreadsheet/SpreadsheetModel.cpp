@@ -53,7 +53,7 @@
 	\ingroup backend
 */
 SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
-	: QAbstractItemModel(0), m_spreadsheet(spreadsheet), m_formula_mode(false) {
+	: QAbstractItemModel(nullptr), m_spreadsheet(spreadsheet), m_formula_mode(false) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
@@ -281,7 +281,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 		return;
 
 	beginResetModel();
-	disconnect(col, 0, this, 0);
+	disconnect(col, nullptr, this, nullptr);
 }
 
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
@@ -316,7 +316,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 	handleDataChange(col);
 
 	//output filter was changed after the mode change, update the signal-slot connection
-	disconnect(0, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
+	disconnect(nullptr, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
 	connect(dynamic_cast<const Column*>(col)->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 }
 

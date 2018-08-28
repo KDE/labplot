@@ -33,7 +33,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(0) {
+NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(nullptr) {
 	ui.setupUi(this);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, [this]() { nameChanged(ui.leName->text()); });

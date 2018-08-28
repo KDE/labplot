@@ -40,7 +40,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 	m_plot_designation(AbstractColumn::NoDesignation),
 	m_width(0),
 	m_owner(owner) {
-	Q_ASSERT(owner != 0);
+	Q_ASSERT(owner != nullptr);
 
 	switch(mode) {
 	case AbstractColumn::Numeric:
@@ -178,9 +178,9 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	void* old_data = m_data;
 	// remark: the deletion of the old data will be done in the dtor of a command
 
-	AbstractSimpleFilter* filter = 0, *new_in_filter = 0, *new_out_filter = 0;
+	AbstractSimpleFilter* filter = nullptr, *new_in_filter = nullptr, *new_out_filter = nullptr;
 	bool filter_is_temporary = false; // it can also become outputFilter(), which we may not delete here
-	Column* temp_col = 0;
+	Column* temp_col = nullptr;
 
 	emit m_owner->modeAboutToChange(m_owner);
 

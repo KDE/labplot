@@ -500,7 +500,7 @@ void DatapickerCurveWidget::symbolVisibleChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void DatapickerCurveWidget::load() {
-	if(m_curve == NULL)
+	if(!m_curve)
 		return;
 
 	m_initializing = true;

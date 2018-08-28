@@ -42,7 +42,7 @@ class AbstractSimpleFilter;
 
 class ColumnSetModeCmd : public QUndoCommand {
 public:
-	explicit ColumnSetModeCmd(ColumnPrivate* col, AbstractColumn::ColumnMode mode, QUndoCommand* parent = 0);
+	explicit ColumnSetModeCmd(ColumnPrivate* col, AbstractColumn::ColumnMode mode, QUndoCommand* parent = nullptr);
 	~ColumnSetModeCmd() override;
 
 	void redo() override;
@@ -64,7 +64,7 @@ private:
 
 class ColumnFullCopyCmd : public QUndoCommand {
 public:
-	explicit ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent = 0);
+	explicit ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent = nullptr);
 	~ColumnFullCopyCmd() override;
 
 	void redo() override;
@@ -79,7 +79,7 @@ private:
 
 class ColumnPartialCopyCmd : public QUndoCommand {
 public:
-	explicit ColumnPartialCopyCmd(ColumnPrivate* col, const AbstractColumn* src, int src_start, int dest_start, int num_rows, QUndoCommand* parent = 0);
+	explicit ColumnPartialCopyCmd(ColumnPrivate* col, const AbstractColumn* src, int src_start, int dest_start, int num_rows, QUndoCommand* parent = nullptr);
 	~ColumnPartialCopyCmd() override;
 
 	void redo() override;
@@ -100,7 +100,7 @@ private:
 
 class ColumnInsertRowsCmd : public QUndoCommand {
 public:
-	explicit ColumnInsertRowsCmd(ColumnPrivate* col, int before, int count, QUndoCommand* parent = 0);
+	explicit ColumnInsertRowsCmd(ColumnPrivate* col, int before, int count, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -112,7 +112,7 @@ private:
 
 class ColumnRemoveRowsCmd : public QUndoCommand {
 public:
-	explicit ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent = 0);
+	explicit ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent = nullptr);
 	~ColumnRemoveRowsCmd() override;
 
 	void redo() override;
@@ -130,7 +130,7 @@ private:
 
 class ColumnSetPlotDesignationCmd : public QUndoCommand {
 public:
-	explicit ColumnSetPlotDesignationCmd(ColumnPrivate* col, AbstractColumn::PlotDesignation pd, QUndoCommand* parent = 0);
+	explicit ColumnSetPlotDesignationCmd(ColumnPrivate* col, AbstractColumn::PlotDesignation pd, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -143,7 +143,7 @@ private:
 
 class ColumnClearCmd : public QUndoCommand {
 public:
-	explicit ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent = 0);
+	explicit ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent = nullptr);
 	~ColumnClearCmd() override;
 
 	void redo() override;
@@ -177,7 +177,7 @@ private:
 
 class ColumnSetFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent = 0);
+	explicit ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, const QString& formula, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -193,7 +193,7 @@ private:
 
 class ColumnClearFormulasCmd : public QUndoCommand {
 public:
-	explicit ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent = 0);
+	explicit ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -206,7 +206,7 @@ private:
 
 class ColumnSetTextCmd : public QUndoCommand {
 public:
-	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent = 0);
+	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -221,7 +221,7 @@ private:
 
 class ColumnSetValueCmd : public QUndoCommand {
 public:
-	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = 0);
+	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -236,7 +236,7 @@ private:
 
 class ColumnSetIntegerCmd : public QUndoCommand {
 public:
-	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = 0);
+	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -251,7 +251,7 @@ private:
 
 class ColumnSetDateTimeCmd : public QUndoCommand {
 public:
-	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = 0);
+	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -266,7 +266,7 @@ private:
 
 class ColumnReplaceTextsCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -282,7 +282,7 @@ private:
 
 class ColumnReplaceValuesCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -298,7 +298,7 @@ private:
 
 class ColumnReplaceIntegersCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -314,7 +314,7 @@ private:
 
 class ColumnReplaceDateTimesCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = 0);
+	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;

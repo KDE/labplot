@@ -79,7 +79,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		//reimplemented from QGraphicsItem
 		QRectF boundingRect() const override;
  		QPainterPath shape() const override;
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 		TextLabel* const q;

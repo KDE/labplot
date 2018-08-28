@@ -43,7 +43,7 @@ extern "C" {
 #include "backend/gsl/parser.h"
 }
 
-ExpressionParser* ExpressionParser::instance = NULL;
+ExpressionParser* ExpressionParser::instance = nullptr;
 
 ExpressionParser::ExpressionParser() {
 	init_table();
@@ -53,7 +53,7 @@ ExpressionParser::ExpressionParser() {
 
 void ExpressionParser::initFunctions() {
 	//functions	(sync with functions.h!)
-	for (int i = 0; _functions[i].name != 0; i++)
+	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << _functions[i].name;
 
 	m_functionsGroups << i18n("Standard Mathematical functions");
@@ -828,7 +828,7 @@ void ExpressionParser::initFunctions() {
 
 //TODO: decide whether we want to have i18n here in the backend part of the code
 void ExpressionParser::initConstants() {
-	for (int i = 0; _constants[i].name != 0; i++)
+	for (int i = 0; _constants[i].name != nullptr; i++)
 		m_constants << _constants[i].name;
 
 	//groups

@@ -193,7 +193,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 
 	if (m_importFileWidget->isFileEmpty()) {
-		KMessageBox::information(0, i18n("No data to import."), i18n("No Data"));
+		KMessageBox::information(nullptr, i18n("No data to import."), i18n("No Data"));
 		return;
 	}
 
@@ -369,7 +369,7 @@ void ImportFileDialog::checkOkButton() {
 			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
 			//to name the columns since the column names are fixed in a matrix
 			const Matrix* matrix = dynamic_cast<const Matrix*>(aspect);
-			m_importFileWidget->showAsciiHeaderOptions(matrix == NULL);
+			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
 		}
 	}
 

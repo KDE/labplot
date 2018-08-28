@@ -51,7 +51,7 @@
 */
 
 XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent):
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_transformCurve(0) {
+	XYCurveDock(parent), cbXDataColumn(nullptr), cbYDataColumn(nullptr), m_transformCurve(nullptr) {
 
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -336,7 +336,7 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
 	//no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+	bool data = (aspectX!=nullptr && aspectY!=nullptr);
 
 	uiGeneralTab.pbRecalculate->setEnabled(data);
 }

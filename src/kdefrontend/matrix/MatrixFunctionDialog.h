@@ -37,7 +37,7 @@ class MatrixFunctionDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit MatrixFunctionDialog(Matrix*, QWidget* parent = 0);
+	explicit MatrixFunctionDialog(Matrix*, QWidget* parent = nullptr);
 
 private:
 	Ui::MatrixFunctionWidget ui;

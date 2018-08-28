@@ -148,7 +148,7 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
     remove unneeded lines belonging to segments that just finished in the previous column.
 */
 void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment, int height) {
-	Segment* segLast = 0;
+	Segment* segLast = nullptr;
 	for (int yLast = 0; yLast < height; ++yLast) {
 		if (lastSegment [yLast] && (lastSegment [yLast] != segLast)) {
 			segLast = lastSegment [yLast];
@@ -176,7 +176,7 @@ void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment,
 */
 void Segments::loadSegment(Segment** columnSegment, int height) {
 	for (int y = 0; y < height; ++y)
-		columnSegment [y] = 0;
+		columnSegment [y] = nullptr;
 }
 
 void Segments::clearSegments() {
@@ -270,7 +270,7 @@ Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop,
 				return lastSegment [y];
 	}
 
-	return 0;
+	return nullptr;
 }
 
 /*!

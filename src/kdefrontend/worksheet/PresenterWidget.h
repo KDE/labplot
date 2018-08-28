@@ -38,7 +38,7 @@ class PresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
+	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = nullptr);
 	~PresenterWidget() override;
 
 private:

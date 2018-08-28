@@ -172,7 +172,7 @@ CartesianScale *CartesianScale::createScale(ScaleType type, const Interval<doubl
 		case ScaleLog:
 			return new LogScale(interval, a, b, c);
 		default:
-			return NULL;
+			return nullptr;
 	}
 }
 
@@ -182,7 +182,7 @@ CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interv
 
 	double lDiff = logicalEnd - logicalStart;
 	if (lDiff == 0.0)
-		return NULL;
+		return nullptr;
 
 	double b = (sceneEnd - sceneStart) / lDiff;
 	double a = sceneStart - b * logicalStart;
@@ -194,15 +194,15 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, double base) {
 
 	if (base < 0.0 || base == 0.0)
-		return NULL;
+		return nullptr;
 	if (logicalStart < 0.0 || logicalStart == 0.0)
-		return NULL;
+		return nullptr;
 	if (logicalEnd < 0.0 || logicalEnd == 0.0)
-		return NULL;
+		return nullptr;
 
 	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
 	if (lDiff == 0.0)
-		return NULL;
+		return nullptr;
 
 	double b = (sceneEnd - sceneStart) / lDiff;
 	double a = sceneStart - b * log(logicalStart)/log(base);
@@ -351,7 +351,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 			const CartesianScale* nextXScale = xIterator.peekNext();
 			if (!nextXScale) continue;
 			Interval<double> nextXInterval;
-			nextXScale->getProperties(NULL, &nextXInterval);
+			nextXScale->getProperties(nullptr, &nextXInterval);
 
 			double x1 = xScale->end();
 			double x2 = nextXScale->start();
@@ -667,7 +667,7 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 //######################### Private implementation #############################
 //##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
-	:q(owner), plot(0) {
+	:q(owner), plot(nullptr) {
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {

@@ -50,7 +50,7 @@
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(nullptr) {
 	ui.setupUi(this);
 
 	//Background-tab

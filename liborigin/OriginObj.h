@@ -799,7 +799,7 @@ namespace Origin
 		,	size(0)
 		,	windowName(_name)
 		,	borderType(BlackLine)
-		,	data(0)
+		,	data(nullptr)
 		{
 		};
 
@@ -809,7 +809,7 @@ namespace Origin
 		,	size(bitmap.size)
 		,	windowName(bitmap.windowName)
 		,	borderType(bitmap.borderType)
-		,	data(0)
+		,	data(nullptr)
 		{
 			if(size > 0)
 			{
@@ -993,7 +993,7 @@ namespace Origin
 		time_t modificationDate;
 		bool active;
 
-		ProjectNode(const string& _name = "", NodeType _type = Folder, const time_t _creationDate = time(NULL), const time_t _modificationDate = time(NULL), bool _active = false)
+		ProjectNode(const string& _name = "", NodeType _type = Folder, const time_t _creationDate = time(nullptr), const time_t _modificationDate = time(nullptr), bool _active = false)
 		:	type(_type)
 		,	name(_name)
 		,	creationDate(_creationDate)
