@@ -68,9 +68,9 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 
 	//TODO: change this after implementation other row types
 	filter->setDataRowType(QJsonValue::Array);
-	if(!index.isValid()) return;
+	if (!index.isValid()) return;
 	QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
-	if(item->childCount() < 1) return;
+	if (item->childCount() < 1) return;
 	filter->setDataRowType(item->child(0)->type());
 }
 
@@ -99,7 +99,7 @@ void JsonOptionsWidget::saveSettings() {
 }
 
 void JsonOptionsWidget::loadDocument(QString filename) {
-	if(m_filename == filename) return;
+	if (m_filename == filename) return;
 	else
 		m_filename = filename;
 
@@ -109,7 +109,7 @@ void JsonOptionsWidget::loadDocument(QString filename) {
 
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return;
-	if(!m_model->loadJson(device.readAll()))
+	if (!m_model->loadJson(device.readAll()))
 		m_model->clear();
 }
 

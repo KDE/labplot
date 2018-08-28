@@ -91,13 +91,13 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
 	//search for the topic among the MQTTTopic children
-	for(int i = 0; i < topics.size(); ++i) {
-		if(topicName == topics[i]->topicName()) {
+	for (int i = 0; i < topics.size(); ++i) {
+		if (topicName == topics[i]->topicName()) {
 			//pass the message to the topic
 			topics[i]->newMessage(message);
 
 			//read the message if needed
-			if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
+			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
 					!m_MQTTClient->isPaused())
 				topics[i]->read();
 
@@ -107,20 +107,20 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 	}
 
 	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
-	if(!found) {
+	if (!found) {
 		addTopic(topicName);
 		topics = children<MQTTTopic>();
 		MQTTTopic* newTopic = nullptr;
-		for(int i = 0; i < topics.size(); ++i) {
-			if(topicName == topics[i]->topicName()) {
+		for (int i = 0; i < topics.size(); ++i) {
+			if (topicName == topics[i]->topicName()) {
 				newTopic = topics[i];
 				break;
 			}
 		}
 
-		if(newTopic != nullptr) {
+		if (newTopic != nullptr) {
 			newTopic->newMessage(message);
-			if((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
+			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
 				newTopic->read();
 		}
 	}
@@ -170,7 +170,7 @@ void MQTTSubscription::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//MQTTTopics
-	for(auto* topic : children<MQTTTopic>(IncludeHidden))
+	for (auto* topic : children<MQTTTopic>(IncludeHidden))
 		topic->save(writer);
 
 	writer->writeEndElement(); // "MQTTSubscription"
@@ -202,14 +202,14 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("subscriptionName").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'subscriptionName'"));
 			else {
 				m_subscriptionName =  str;
 				setName(str);
 			}
 
-		}  else if(reader->name() == QLatin1String("MQTTTopic")) {
+		}  else if ( reader->name() == QLatin1String("MQTTTopic")) {
 			MQTTTopic* topic = new MQTTTopic("", this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;

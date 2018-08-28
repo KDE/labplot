@@ -83,7 +83,7 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 	}
 	connect(ui.bChange, &QPushButton::clicked, this, &MQTTErrorWidget::tryToReconnect);
 	setAttribute(Qt::WA_DeleteOnClose);
-	if(close)
+	if (close)
 		this->close();
 }
 
@@ -94,21 +94,21 @@ void MQTTErrorWidget::tryToReconnect(){
 	bool ok = false;
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
-		if(!ui.leId->text().isEmpty()) {
+		if (!ui.leId->text().isEmpty()) {
 			m_client->setMQTTClientId(ui.leId->text());
 			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::BadUsernameOrPassword:
-		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
+		if (!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
 			m_client->setMQTTClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
 			m_client->read();
 			ok = true;
 		}
 		break;
 	case QMqttClient::ClientError::NotAuthorized:
-		if(!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
+		if (!ui.lePassword->text().isEmpty() && !ui.leUserName->text().isEmpty()) {
 			m_client->setMQTTClientAuthentication(ui.leUserName->text(), ui.lePassword->text());
 			m_client->read();
 			ok = true;

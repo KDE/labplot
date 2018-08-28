@@ -274,7 +274,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 	int row = 0;
 	do {
-		for(int col = 0; col < m_cols; ++col) {
+		for (int col = 0; col < m_cols; ++col) {
 			ui.twPreview->setRowCount(row+1);
 			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
 		}
@@ -345,7 +345,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	//read the data
 	int row = 0;
 	do {
-		for(int col = 0; col < m_cols; ++col) {
+		for (int col = 0; col < m_cols; ++col) {
 			const QString valueString = q.record().value(col).toString();
 
 			// set value depending on data type

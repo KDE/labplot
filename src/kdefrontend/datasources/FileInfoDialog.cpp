@@ -90,7 +90,7 @@ void FileInfoDialog::setFiles(QStringList& files) {
 	QString infoString;
 
 	for (const auto& fileName: files) {
-		if(fileName.isEmpty())
+		if (fileName.isEmpty())
 			continue;
 
 		if (!infoString.isEmpty())
@@ -125,7 +125,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 	else
 		fileName = name;
 #endif
-	if(!file)
+	if (!file)
 		file = new QFile(fileName);
 
 	if (file->open(QIODevice::ReadOnly)) {
@@ -139,11 +139,11 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		args<<"-b"<<fileName;
 		proc->start( "file", args);
 
-		if(proc->waitForReadyRead(1000) == false)
+		if (proc->waitForReadyRead(1000) == false)
 			infoStrings << i18n("Could not open file %1 for reading.", fileName);
 		else {
 			fileTypeString = proc->readLine();
-			if( fileTypeString.contains(i18n("cannot open")) )
+			if ( fileTypeString.contains(i18n("cannot open")) )
 				fileTypeString="";
 			else {
 				fileTypeString.remove(fileTypeString.length()-1,1);	// remove '\n'
@@ -155,7 +155,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		//depending on the file type, generate additional information about the file:
 		infoStrings << "<br>";
 		AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
-		switch(fileType) {
+		switch (fileType) {
 		case AbstractFileFilter::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
 			break;

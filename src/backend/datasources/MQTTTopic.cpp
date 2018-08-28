@@ -75,7 +75,7 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 		myFilter->setHeaderEnabled(mainFilter->isHeaderEnabled());
 		QString vectorNames;
 		QStringList filterVectorNames = mainFilter->vectorNames();
-		for(int i = 0; i < filterVectorNames.size(); ++i) {
+		for (int i = 0; i < filterVectorNames.size(); ++i) {
 			vectorNames.append(filterVectorNames.at(i));
 			if (i != vectorNames.size() - 1)
 				vectorNames.append(QLatin1String(" "));
@@ -250,7 +250,7 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("filterPrepared", QString::number(dynamic_cast<AsciiFilter*>(m_filter)->isPrepared()));
 	writer->writeAttribute("filterSeparator", dynamic_cast<AsciiFilter*>(m_filter)->separator());
 	writer->writeAttribute("messagePufferSize", QString::number(m_messagePuffer.size()));
-	for(int i = 0; i < m_messagePuffer.count(); ++i)
+	for (int i = 0; i < m_messagePuffer.count(); ++i)
 		writer->writeAttribute("message"+QString::number(i), m_messagePuffer[i]);
 	writer->writeEndElement();
 
@@ -294,7 +294,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			str = attribs.value("topicName").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'topicName'"));
 			else {
 				m_topicName =  str;
@@ -302,14 +302,14 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			str = attribs.value("filterPrepared").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'filterPrepared'"));
 			else {
 				isFilterPrepared =  str.toInt();
 			}
 
 			str = attribs.value("filterSeparator").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'filterSeparator'"));
 			else {
 				separator =  str;
@@ -317,14 +317,13 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 
 			int pufferSize = 0;
 			str = attribs.value("messagePufferSize").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'messagePufferSize'"));
 			else
 				pufferSize = str.toInt();
-			for(int i = 0; i < pufferSize; ++i)
-			{
+			for (int i = 0; i < pufferSize; ++i) {
 				str = attribs.value("message"+QString::number(i)).toString();
-				if(str.isEmpty())
+				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+"'"));
 				else
 					m_messagePuffer.push_back(str);
@@ -332,7 +331,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "asciiFilter") {
 			if (!m_filter->load(reader))
 				return false;
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Text);
 			if (!column->load(reader, preview)) {
 				delete column;

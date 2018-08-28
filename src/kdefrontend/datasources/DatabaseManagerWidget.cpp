@@ -119,7 +119,7 @@ void DatabaseManagerWidget::connectionChanged(int index) {
 void DatabaseManagerWidget::nameChanged(const QString& name) {
 	//check uniqueness of the provided name
 	bool unique = true;
-	for(int i = 0; i < ui.lwConnections->count(); ++i) {
+	for (int i = 0; i < ui.lwConnections->count(); ++i) {
 		if (ui.lwConnections->currentRow() == i)
 			continue;
 
@@ -431,7 +431,7 @@ QString DatabaseManagerWidget::uniqueName() {
 
 	//TODO
 	QStringList connection_names;
-	for(int row = 0; row < ui.lwConnections->count(); row++)
+	for (int row = 0; row < ui.lwConnections->count(); row++)
 		connection_names << ui.lwConnections->item(row)->text();
 
 	if (!connection_names.contains(name))
