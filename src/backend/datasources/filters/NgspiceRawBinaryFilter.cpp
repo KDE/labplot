@@ -212,20 +212,21 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	}
 
 	file.readLine(); //skip the line with "Binary:"
+	file.setTextModeEnabled(false);	// the rest is binary
 
 	//prepare the data container
 	const int actualEndRow = (endRow == -1 || endRow > points) ? points : endRow;
 	const int actualRows = actualEndRow - startRow + 1;
-	const int actualCols = hasComplexValues ? vars*2 : vars;
+	const int actualCols = hasComplexValues ? 2 * vars : vars;
 	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	//skip data lines, if required
 	DEBUG("	Skipping " << startRow - 1 << " lines");
-	//TODO:
+	const int skip = hasComplexValues ? 2 * vars * (startRow - 1) : vars * (startRow - 1);
+	file.read(8 * skip);
 
 	//read the data points
 	int currentRow = 0;	// indexes the position in the vector(column)
-	file.setTextModeEnabled(false);
 	for (int i = 0; i < actualRows; ++i) {
 		for (int j = 0; j < vars; ++j) {
 			double value;
