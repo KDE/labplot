@@ -86,11 +86,10 @@ private slots:
 	void willTopicChanged(const QString &);
 	void willMessageTypeChanged(int);
 	void willOwnMessageChanged(const QString&);
-	void updateWillTopics();
 	void willUpdateTypeChanged(int);
 	void willUpdateNow();
-	void willUpdateIntervalChanged(const QString&);
-	void statisticsChanged(QListWidgetItem *);
+	void willUpdateIntervalChanged(int);
+	void statisticsChanged(int);
 	void addSubscription();
 	void removeSubscription();
 	void onMQTTConnect();
@@ -102,6 +101,7 @@ private slots:
 	void scrollToTopicTreeItem(const QString&);
 	void scrollToSubsriptionTreeItem(const QString&);
 	void removeClient(const QString&);
+	void showWillSettings();
 
 signals:
 	void newTopic(const QString&);
@@ -125,7 +125,7 @@ private:
 	QMap<QString, QStringList> m_topicList;
 	bool m_searching;
 	QTimer* m_searchTimer;
-	bool m_interpretMessage;	
+	bool m_interpretMessage;
 	const MQTTClient* m_previousMQTTClient;
 	QString m_mqttUnsubscribeName;
 	QMap<QString, QVector<QString>> m_addedTopics;

@@ -170,6 +170,7 @@ private:
 	QString m_configPath;
 	bool m_initialisingMQTT;
 	bool m_connectionTimedOut;
+	MQTTClient::MQTTWill m_willSettings;
 
 public:
 	void saveMQTTSettings(MQTTClient*) const;
@@ -192,14 +193,20 @@ private slots:
 	void onMqttDisconnect();
 	void useWillMessage(int);
 	void willMessageTypeChanged(int);
-	void updateWillTopics();
 	void willUpdateTypeChanged(int);
+	void willRetainChanged(bool);
+	void willTimeIntervalChanged(int);
+	void willOwnMessageChanged(const QString&);
+	void willTopicChanged(const QString&);
+	void willStatisticsChanged(int);
+	void willQoSChanged(int);
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void scrollToTopicTreeItem(const QString&);
 	void scrollToSubsriptionTreeItem(const QString&);
 	void mqttConnectTimeout();
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
+	void showWillSettings();
 #endif
 };
 

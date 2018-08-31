@@ -92,6 +92,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+	${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp
 )
 
 set(UI_SOURCES
@@ -103,6 +104,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
+	${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui

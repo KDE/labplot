@@ -76,6 +76,7 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <KSharedConfig>
 
 #ifdef HAVE_MQTT
+#include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"
 #include "backend/core/Project.h"
@@ -84,6 +85,8 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
 #include <QMessageBox>
+#include <QWidgetAction>
+#include <QMenu>
 #endif
 
 /*!
@@ -281,7 +284,17 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QLatin1String("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "MQTT_connections";
-	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000) );
+
+	m_willSettings.MQTTUseWill = false;
+	m_willSettings.willRetain = false;
+	m_willSettings.willOwnMessage = QString();
+	m_willSettings.willQoS = 0;
+	m_willSettings.willMessageType = MQTTClient::WillMessageType::OwnMessage;
+	m_willSettings.willUpdateType = MQTTClient::WillUpdateType::TimePeriod;
+	m_willSettings.willTimeInterval = 10000;
+	m_willSettings.willTopic = QString();
+	m_willSettings.willLastMessage = QString();
+	m_willSettings.willStatistics.fill(false, 15);
 
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
@@ -292,21 +305,23 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	connect(this, &ImportFileWidget::newTopic, this, &ImportFileWidget::setTopicCompleter);
 	connect(m_searchTimer, &QTimer::timeout, this, &ImportFileWidget::topicTimeout);
 	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
-	connect(ui.chbWill, &QCheckBox::stateChanged, this, &ImportFileWidget::useWillMessage);
-	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willMessageTypeChanged);
-	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::willUpdateTypeChanged);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {emit checkFileType();});
 	connect(ui.leTopics, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToTopicTreeItem);
 	connect(ui.leSubscriptions, &QLineEdit::textChanged, this, &ImportFileWidget::scrollToSubsriptionTreeItem);
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
+	connect(ui.bWillMessage, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
 
-	ui.bSubscribe->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
+	ui.bSubscribe->setIcon(ui.bSubscribe->style()->standardIcon(QStyle::SP_ArrowRight));
 	ui.bSubscribe->setToolTip(i18n("Subscribe selected topics"));
-	ui.bUnsubscribe->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
+	ui.bUnsubscribe->setIcon(ui.bUnsubscribe->style()->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bUnsubscribe->setToolTip(i18n("Unsubscribe selected topics"));
 	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
+	ui.bWillMessage->setEnabled(false);
+	ui.bWillMessage->setToolTip(i18n("Manage MQTT connection's will settings"));
+	ui.bWillMessage->setIcon(ui.bWillMessage->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+
 #endif
 
 	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
@@ -371,27 +386,22 @@ void ImportFileWidget::loadSettings() {
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 
 #ifdef HAVE_MQTT
-	//MQTT related settings
+	//MQTT related settings	
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
-	ui.chbWillRetain->setChecked(conf.readEntry("mqttWillRetain").toInt());
-	ui.cbWillUpdate->setCurrentIndex(conf.readEntry("mqttWillUpdateType").toInt());
-	ui.cbWillQoS->setCurrentIndex(conf.readEntry("mqttWillQoS").toInt());
-	ui.leWillOwnMessage->setText(conf.readEntry("mqttWillOwnMessage",""));
-	ui.leWillUpdateInterval->setText(conf.readEntry("mqttWillUpdateInterval",""));
+
+	m_willSettings.willRetain = conf.readEntry("mqttWillRetain").toInt();
+	m_willSettings.willUpdateType = static_cast<MQTTClient::WillUpdateType>(conf.readEntry("mqttWillUpdateType").toInt());
+	m_willSettings.willQoS = conf.readEntry("mqttWillQoS").toInt();
+	m_willSettings.willOwnMessage = conf.readEntry("mqttWillOwnMessage","");
+	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval","").toInt();
 	QString willStatistics = conf.readEntry("mqttWillStatistics","");
 	QStringList statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
 	for (auto value : statisticsList) {
-		QListWidgetItem* item = ui.lwWillStatistics->item(value.toInt());
-		item->setCheckState(Qt::Checked);
+		m_willSettings.willStatistics[value.toInt()] = true;
 	}
-	ui.cbWillMessageType->setCurrentIndex(conf.readEntry("mqttWillMessageType").toInt());
-	ui.chbWill->setChecked(conf.readEntry("mqttWillUse").toInt());
+	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(conf.readEntry("mqttWillMessageType").toInt());
+	m_willSettings.MQTTUseWill = conf.readEntry("mqttWillUse").toInt();
 
-	//chbWill is unchecked by deafult, so if false is loaded it doesn't emit state changed signal, we have to force it
-	if (!ui.chbWill->isChecked()) {
-		ui.chbWill->setChecked(true);
-		ui.chbWill->setChecked(false);
-	}
 	m_initialisingMQTT = false;
 	mqttConnectionChanged();
 #endif
@@ -431,20 +441,19 @@ ImportFileWidget::~ImportFileWidget() {
 #ifdef HAVE_MQTT
 	//MQTT related settings
 	conf.writeEntry("Connection", ui.cbConnection->currentText());
-	conf.writeEntry("mqttWillMessageType", ui.cbWillMessageType->currentIndex());
-	conf.writeEntry("mqttWillUpdateType", ui.cbWillUpdate->currentIndex());
-	conf.writeEntry("mqttWillQoS", ui.cbWillQoS->currentIndex());
-	conf.writeEntry("mqttWillOwnMessage", ui.leWillOwnMessage->text());
-	conf.writeEntry("mqttWillUpdateInterval", ui.leWillUpdateInterval->text());
+	conf.writeEntry("mqttWillMessageType", static_cast<int>(m_willSettings.willMessageType));
+	conf.writeEntry("mqttWillUpdateType", static_cast<int>(m_willSettings.willUpdateType));
+	conf.writeEntry("mqttWillQoS", QString::number(m_willSettings.willQoS));
+	conf.writeEntry("mqttWillOwnMessage", m_willSettings.willOwnMessage);
+	conf.writeEntry("mqttWillUpdateInterval", QString::number(m_willSettings.willTimeInterval));
 	QString willStatistics;
-	for (int i = 0; i < ui.lwWillStatistics->count(); ++i) {
-		QListWidgetItem* item = ui.lwWillStatistics->item(i);
-		if (item->checkState() == Qt::Checked)
+	for (int i = 0; i < m_willSettings.willStatistics.size(); ++i) {
+		if (m_willSettings.willStatistics[i])
 			willStatistics += QString::number(i)+"|";
 	}
 	conf.writeEntry("mqttWillStatistics", willStatistics);
-	conf.writeEntry("mqttWillRetain", static_cast<int>(ui.chbWillRetain->isChecked()));
-	conf.writeEntry("mqttWillUse", static_cast<int>(ui.chbWill->isChecked()));
+	conf.writeEntry("mqttWillRetain", static_cast<int>(m_willSettings.willRetain));
+	conf.writeEntry("mqttWillUse", static_cast<int>(m_willSettings.MQTTUseWill));
 #endif
 
 	// data type specific settings
@@ -631,20 +640,8 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 
 	bool retain = group.readEntry("Retain").toUInt();
 	client->setMQTTRetain(retain);
-	client->setWillMessageType(static_cast<MQTTClient::WillMessageType>(ui.cbWillMessageType->currentIndex()) );
-	client->setWillOwnMessage(ui.leWillOwnMessage->text());
-	client->setWillQoS(ui.cbWillQoS->currentIndex() );
-	client->setWillRetain(ui.chbWillRetain->isChecked());
-	client->setWillTimeInterval(ui.leWillUpdateInterval->text().toInt());
-	client->setWillTopic(ui.cbWillTopic->currentText());
-	client->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(ui.cbWillUpdate->currentIndex()) );
-	client->setMQTTWillUse(ui.chbWill->isChecked());
 
-	for (int i = 0; i < ui.lwWillStatistics->count(); ++i) {
-		QListWidgetItem* item = ui.lwWillStatistics->item(i);
-		if (item->checkState() == Qt::Checked)
-			client->addWillStatistics(static_cast<MQTTClient::WillStatistics> (i));
-	}
+	client->setWillSettings(m_willSettings);
 }
 #endif
 
@@ -832,23 +829,8 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	}
 
 	//will message
-	ui.gbMqttWill->setVisible(visible);
-	ui.chbWill->setVisible(visible);
-	ui.chbWillRetain->setVisible(visible);
-	ui.cbWillQoS->setVisible(visible);
-	ui.cbWillMessageType->setVisible(visible);
-	ui.cbWillTopic->setVisible(visible);
-	ui.cbWillUpdate->setVisible(visible);
-	ui.leWillOwnMessage->setVisible(visible);
-	ui.leWillUpdateInterval->setVisible(visible);
-	ui.lWillMessageType->setVisible(visible);
-	ui.lWillOwnMessage->setVisible(visible);
-	ui.lWillQos->setVisible(visible);
-	ui.lWillTopic->setVisible(visible);
-	ui.lWillUpdate->setVisible(visible);
-	ui.lWillUpdateInterval->setVisible(visible);
-	ui.lwWillStatistics->setVisible(visible);
-	ui.lWillStatistics->setVisible(visible);
+	ui.lWillMessage->setVisible(visible);
+	ui.bWillMessage->setVisible(visible);
 }
 
 #ifdef HAVE_MQTT
@@ -1073,11 +1055,13 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName) {
 			}
 		}
 
-		for (int item = 0; item < ui.cbWillTopic->count(); ++item) {
-			if (checkTopicContains(topicName, ui.cbWillTopic->itemText(item))) {
-				ui.cbWillTopic->removeItem(item);
-				item--;
-			}
+		if(m_willSettings.willTopic == topicName) {
+			QVector<QTreeWidgetItem*> children;
+			if(ui.twSubscriptions->topLevelItemCount() > 0) {
+				findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(0));
+				m_willSettings.willTopic = children[0]->text(0);
+			} else
+				m_willSettings.willTopic = "";
 		}
 
 		//signals that there was a change among the subscribed topics
@@ -1377,8 +1361,6 @@ void ImportFileWidget::updateSubscriptionTree() {
 		}
 	}
 	m_searching = false;
-
-	updateWillTopics();
 }
 
 /*!
@@ -2389,7 +2371,7 @@ void ImportFileWidget::mqttSubscribe() {
 				if (temp_subscription) {
 					m_mqttSubscriptions.push_back(temp_subscription);
 					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					emit subscriptionsChanged();
+					emit subscriptionsChanged();					
 				}
 
 				if (name.endsWith("#")) {
@@ -2421,8 +2403,10 @@ void ImportFileWidget::mqttSubscribe() {
 				}
 
 				manageCommonLevelSubscriptions();
-				updateWillTopics();
 				updateSubscriptionCompleter();
+
+				if(!ui.bWillMessage->isEnabled())
+					ui.bWillMessage->setEnabled(true);
 			} else
 				QMessageBox::warning(this, "Warning", "You already subscribed to a topic containing this one");
 		} else
@@ -2470,8 +2454,11 @@ void ImportFileWidget::mqttUnsubscribe() {
 			//check if any common topics were subscribed, if possible merge them
 			manageCommonLevelSubscriptions();
 		}
-		updateWillTopics();
 		updateSubscriptionCompleter();
+
+		if(ui.twSubscriptions->topLevelItemCount() <= 0) {
+			ui.bWillMessage->setEnabled(false);
+		}
 	} else
 		QMessageBox::warning(this, "Warning", "You didn't select any item from the Tree Widget");
 }
@@ -2628,117 +2615,80 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 }
 
 /*!
- *\brief called when use will message checkbox's state is changed,
- *       if state is checked it shows the options regarding the will message
- *
- * \param state the state of the checbox
+ *\brief called when use will message is changed in the settings widget
+ * Updates the will settings
  */
 void ImportFileWidget::useWillMessage(int state) {
 	if (state == Qt::Checked) {
-		ui.chbWillRetain->show();
-		ui.cbWillQoS->show();
-		ui.cbWillMessageType->show();
-		ui.cbWillTopic->show();
-		ui.cbWillUpdate->show();
-		ui.lWillMessageType->show();
-		ui.lWillQos->show();
-		ui.lWillTopic->show();
-		ui.lWillUpdate->show();
-
-		if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::OwnMessage) ) {
-			ui.leWillOwnMessage->show();
-			ui.lWillOwnMessage->show();
-		} else if (ui.cbWillMessageType->currentIndex() == static_cast<int>(MQTTClient::WillMessageType::Statistics) ) {
-			ui.lWillStatistics->show();
-			ui.lwWillStatistics->show();
-		}
-
-		if (ui.cbWillUpdate->currentIndex() == 0) {
-			ui.leWillUpdateInterval->show();
-			ui.lWillUpdateInterval->show();
-		}
+		m_willSettings.MQTTUseWill = true;
 	} else if (state == Qt::Unchecked) {
-		ui.chbWillRetain->hide();
-		ui.cbWillQoS->hide();
-		ui.cbWillMessageType->hide();
-		ui.cbWillTopic->hide();
-		ui.cbWillUpdate->hide();
-		ui.leWillOwnMessage->hide();
-		ui.leWillUpdateInterval->hide();
-		ui.lWillMessageType->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillQos->hide();
-		ui.lWillTopic->hide();
-		ui.lWillUpdate->hide();
-		ui.lWillUpdateInterval->hide();
-		ui.lWillStatistics->hide();
-		ui.lwWillStatistics->hide();
+		m_willSettings.MQTTUseWill = false;
 	}
 }
 
-
 /*!
- *\brief called when the selected will message type is changed,
- *       shows the options for the selected message type, hides the irrelevant ones
- *
- * \param type the selected will message type
+ *\brief called when the selected will message type is changed in the settings widget
+ * Updates the will settings
  */
 void ImportFileWidget::willMessageTypeChanged(int type) {
-	if (static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::OwnMessage) {
-		ui.leWillOwnMessage->show();
-		ui.lWillOwnMessage->show();
-		ui.lWillStatistics->hide();
-		ui.lwWillStatistics->hide();
-	} else if (static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::LastMessage) {
-		ui.leWillOwnMessage->hide();
-		ui.lWillOwnMessage->hide();
-		ui.lWillStatistics->hide();
-		ui.lwWillStatistics->hide();
-	} else if (static_cast<MQTTClient::WillMessageType> (type) == MQTTClient::WillMessageType::Statistics) {
-		ui.lWillStatistics->show();
-		ui.lwWillStatistics->show();
-		ui.leWillOwnMessage->hide();
-		ui.lWillOwnMessage->hide();
-	}
+	m_willSettings.willMessageType = static_cast<MQTTClient::WillMessageType>(type);
 }
 
 /*!
- *\brief called when newTopicForWill signal is emitted,
- *       updates the topics that can be selected as the will message's topic
+ *\brief called when the selected will message' type's retain flag is changed in the settings widget
+ * Updates the will settings
  */
-void ImportFileWidget::updateWillTopics() {
-	QString current = ui.cbWillTopic->currentText();
-	ui.cbWillTopic->clear();
-
-	//Get every leaf subscribed topic
-	QVector<QTreeWidgetItem*> children;
-	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-		findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
-	}
-
-	for (int i = 0; i < children.size(); ++i) {
-		ui.cbWillTopic->addItem(children[i]->text(0));
-	}
-
-	//Set back the previous value
-	if (!current.isEmpty())
-		ui.cbWillTopic->setCurrentText(current);
+void ImportFileWidget::willRetainChanged(bool retain) {
+	m_willSettings.willRetain = retain;
 }
 
 /*!
- *\brief called when the selected update type for the will message is changed,
- *       shows the options for the selected update type, hides the irrelevant ones
- *
- * \param type the selected will update type
+ *\brief called when the selected will update interval is changed in the settings widget
+ * Updates the will settings
+ */
+void ImportFileWidget::willTimeIntervalChanged(int interval) {
+	m_willSettings.willTimeInterval = interval;
+}
+
+/*!
+ *\brief called when the selected will own message is changed in the settings widget
+ * Updates the will settings
+ */
+void ImportFileWidget::willOwnMessageChanged(const QString& msg) {
+	m_willSettings.willOwnMessage = msg;
+}
+
+/*!
+ *\brief called when the selected will topic is changed in the settings widget
+ * Updates the will settings
+ */
+void ImportFileWidget::willTopicChanged(const QString& topic) {
+	m_willSettings.willTopic = topic;
+}
+
+/*!
+ *\brief called when the selected will statistics are changed in the settings widget
+ * Updates the will settings
+ */
+void ImportFileWidget::willStatisticsChanged(int index) {
+	m_willSettings.willStatistics[index] = !m_willSettings.willStatistics[index];
+}
+
+/*!
+ *\brief called when the selected will message's QoS is changed in the settings widget
+ * Updates the will settings
+ */
+void ImportFileWidget::willQoSChanged(int qos) {
+	m_willSettings.willQoS = qos;
+}
+
+/*!
+ *\brief called when the selected will update type is changed in the settings widget
+ * Updates the will settings
  */
 void ImportFileWidget::willUpdateTypeChanged(int updateType) {
-	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::TimePeriod) {
-		ui.leWillUpdateInterval->show();
-		ui.lWillUpdateInterval->show();
-	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::WillUpdateType::OnClick) {
-		ui.leWillUpdateInterval->hide();
-		ui.lWillUpdateInterval->hide();
-	}
+	qDebug() << "update type changed: " <<updateType;
+	m_willSettings.willUpdateType = static_cast<MQTTClient::WillUpdateType>(updateType);
 }
 
 /*!
@@ -2876,5 +2826,41 @@ void ImportFileWidget::readMQTTConnections() {
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& name : config.groupList())
 		ui.cbConnection->addItem(name);
+}
+
+/*!
+ * \brief Shows the mqtt will settings widget, which allows the user to modify the will settings
+ */
+void ImportFileWidget::showWillSettings() {
+	QMenu menu;
+
+	QVector<QTreeWidgetItem*> children;
+	for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
+		findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(i));
+	}
+
+	QVector<QString> topics;
+	for (int i = 0; i < children.size(); ++i) {
+		topics.append(children[i]->text(0));
+	}
+	MQTTWillSettingsWidget willSettings(&menu, m_willSettings, topics);
+
+	connect(&willSettings, &MQTTWillSettingsWidget::useChanged, this, &ImportFileWidget::useWillMessage);
+	connect(&willSettings, &MQTTWillSettingsWidget::messageTypeChanged, this, &ImportFileWidget::willMessageTypeChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::updateTypeChanged, this, &ImportFileWidget::willUpdateTypeChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::retainChanged, this, &ImportFileWidget::willRetainChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::intervalChanged, this, &ImportFileWidget::willTimeIntervalChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::ownMessageChanged, this, &ImportFileWidget::willOwnMessageChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::topicChanged, this, &ImportFileWidget::willTopicChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::statisticsChanged, this, &ImportFileWidget::willStatisticsChanged);
+	connect(&willSettings, &MQTTWillSettingsWidget::QoSChanged, this, &ImportFileWidget::willQoSChanged);
+	connect(&willSettings, SIGNAL(canceled()), &menu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(&willSettings);
+	menu.addAction(widgetAction);
+
+	QPoint pos(ui.bWillMessage->sizeHint().width(),ui.bWillMessage->sizeHint().height());
+	menu.exec(ui.bWillMessage->mapToGlobal(pos));
 }
 #endif

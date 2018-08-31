@@ -74,8 +74,6 @@ MQTTClient::MQTTClient(const QString& name)
 	  m_updateTimer(new QTimer(this)),
 	  m_client(new QMqttClient(this)),
 	  m_MQTTTest(false),
-	  m_MQTTUseWill(false),
-	  m_willRetain(false),
 	  m_willTimer(new QTimer(this)),
 	  m_MQTTFirstConnectEstablished(false),
 	  m_MQTTRetain(false),
@@ -87,8 +85,11 @@ MQTTClient::MQTTClient(const QString& name)
 	  m_subscriptionCountToLoad(0) {
 
 	qDebug() << "MQTTClient constructor: " << m_client->hostname();
+	m_MQTTWill.MQTTUseWill = false;
+	m_MQTTWill.willRetain = false;
+	m_MQTTWill.willStatistics.fill(false, 15);
+
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
-	m_willStatistics.fill(false, 15);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &MQTTClient::updateWillMessage);
 	connect(m_client, &QMqttClient::errorChanged, this, &MQTTClient::MQTTErrorChanged);
@@ -715,13 +716,21 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 	return commonTopic;
 }
 
+void MQTTClient::setWillSettings(MQTTWill settings) {
+	m_MQTTWill = settings;
+}
+
+MQTTClient::MQTTWill MQTTClient::willSettings() const{
+	return m_MQTTWill;
+}
+
 /*!
  * \brief Sets whether the user wants to use will message or not
  *
  * \param use
  */
 void MQTTClient::setMQTTWillUse(bool use) {
-	m_MQTTUseWill = use;
+	m_MQTTWill.MQTTUseWill = use;
 	if (use == false)
 		m_willTimer->stop();
 }
@@ -730,7 +739,7 @@ void MQTTClient::setMQTTWillUse(bool use) {
  * \brief Returns whether the user wants to use will message or not
  */
 bool MQTTClient::MQTTWillUse() const{
-	return m_MQTTUseWill;
+	return m_MQTTWill.MQTTUseWill;
 }
 
 /*!
@@ -739,14 +748,15 @@ bool MQTTClient::MQTTWillUse() const{
  * \param topic
  */
 void  MQTTClient::setWillTopic(const QString& topic) {
-	m_willTopic = topic;
+	qDebug() << "Set will topic:" << topic;
+	m_MQTTWill.willTopic = topic;
 }
 
 /*!
  * \brief Returns the will topic of the client
  */
 QString MQTTClient::willTopic() const{
-	return m_willTopic;
+	return m_MQTTWill.willTopic;
 }
 
 /*!
@@ -755,14 +765,14 @@ QString MQTTClient::willTopic() const{
  * \param retain
  */
 void MQTTClient::setWillRetain(bool retain) {
-	m_willRetain = retain;
+	m_MQTTWill.willRetain = retain;
 }
 
 /*!
  * \brief Returns the retain flag of the client's will message
  */
 bool MQTTClient::willRetain() const {
-	return m_willRetain;
+	return m_MQTTWill.willRetain;
 }
 
 /*!
@@ -771,14 +781,14 @@ bool MQTTClient::willRetain() const {
  * \param QoS
  */
 void MQTTClient::setWillQoS(quint8 QoS) {
-	m_willQoS = QoS;
+	m_MQTTWill.willQoS = QoS;
 }
 
 /*!
  * \brief Returns the QoS level of the client's will message
  */
 quint8 MQTTClient::willQoS() const {
-	return m_willQoS;
+	return m_MQTTWill.willQoS;
 }
 
 /*!
@@ -787,14 +797,14 @@ quint8 MQTTClient::willQoS() const {
  * \param messageType
  */
 void MQTTClient::setWillMessageType(WillMessageType messageType) {
-	m_willMessageType = messageType;
+	m_MQTTWill.willMessageType = messageType;
 }
 
 /*!
  * \brief Returns the will message type of the client
  */
 MQTTClient::WillMessageType MQTTClient::willMessageType() const {
-	return m_willMessageType;
+	return m_MQTTWill.willMessageType;
 }
 
 /*!
@@ -803,14 +813,14 @@ MQTTClient::WillMessageType MQTTClient::willMessageType() const {
  * \param ownMessage
  */
 void MQTTClient::setWillOwnMessage(const QString& ownMessage) {
-	m_willOwnMessage = ownMessage;
+	m_MQTTWill.willOwnMessage = ownMessage;
 }
 
 /*!
  * \brief Returns the own will message of the user
  */
 QString MQTTClient::willOwnMessage() const {
-	return m_willOwnMessage;
+	return m_MQTTWill.willOwnMessage;
 }
 
 /*!
@@ -823,7 +833,7 @@ void MQTTClient::updateWillMessage() {
 
 	//Search for the will topic
 	for (int i = 0; i < topics.count(); ++i) {
-		if (topics[i]->topicName() == m_willTopic) {
+		if (topics[i]->topicName() == m_MQTTWill.willTopic) {
 			willTopic = topics[i];
 			break;
 		}
@@ -832,7 +842,7 @@ void MQTTClient::updateWillMessage() {
 	//if the will topic is found we can update the will message
 	if (willTopic != nullptr) {
 		//To update the will message we have to disconnect first, then after setting everything connect again
-		if (m_MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
+		if (m_MQTTWill.MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Connected) ) {
 			//Disconnect only once (disconnecting may take a while)
 			if (!m_disconnectForWill) {
 				qDebug() << "Disconnecting from host in order to update will message";
@@ -843,21 +853,21 @@ void MQTTClient::updateWillMessage() {
 			updateWillMessage();
 		}
 		//If client is disconnected we can update the settings
-		else if (m_MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
-			m_client->setWillQoS(m_willQoS);
-			qDebug()<<"Will QoS" << m_willQoS;
+		else if (m_MQTTWill.MQTTUseWill && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
+			m_client->setWillQoS(m_MQTTWill.willQoS);
+			qDebug()<<"Will QoS" << m_MQTTWill.willQoS;
 
-			m_client->setWillRetain(m_willRetain);
-			qDebug()<<"Will retain" << m_willRetain;
+			m_client->setWillRetain(m_MQTTWill.willRetain);
+			qDebug()<<"Will retain" << m_MQTTWill.willRetain;
 
-			m_client->setWillTopic(m_willTopic);
-			qDebug()<<"Will Topic" << m_willTopic;
+			m_client->setWillTopic(m_MQTTWill.willTopic);
+			qDebug()<<"Will Topic" << m_MQTTWill.willTopic;
 
 			//Set the will message according to m_willMessageType
-			switch (m_willMessageType) {
+			switch (m_MQTTWill.willMessageType) {
 			case WillMessageType::OwnMessage:
-				m_client->setWillMessage(m_willOwnMessage.toUtf8());
-				qDebug()<<"Will own message" << m_willOwnMessage;
+				m_client->setWillMessage(m_MQTTWill.willOwnMessage.toUtf8());
+				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
 				break;
 			case WillMessageType::Statistics: {
 				asciiFilter = dynamic_cast<AsciiFilter*>(willTopic->filter());
@@ -878,8 +888,8 @@ void MQTTClient::updateWillMessage() {
 				break;
 			}
 			case WillMessageType::LastMessage:
-				m_client->setWillMessage(m_willLastMessage.toUtf8());
-				qDebug()<<"Will last message:\n" << m_willLastMessage;
+				m_client->setWillMessage(m_MQTTWill.willLastMessage.toUtf8());
+				qDebug()<<"Will last message:\n" << m_MQTTWill.willLastMessage;
 				break;
 			default:
 				break;
@@ -896,7 +906,7 @@ void MQTTClient::updateWillMessage() {
  * \brief Returns the MQTTClient's will update type
  */
 MQTTClient::WillUpdateType MQTTClient::willUpdateType() const{
-	return m_willUpdateType;
+	return m_MQTTWill.willUpdateType;
 }
 
 /*!
@@ -905,14 +915,14 @@ MQTTClient::WillUpdateType MQTTClient::willUpdateType() const{
  * \param willUpdateType
  */
 void MQTTClient::setWillUpdateType(WillUpdateType willUpdateType) {
-	m_willUpdateType = willUpdateType;
+	m_MQTTWill.willUpdateType = willUpdateType;
 }
 
 /*!
  * \brief Returns the time interval of updating the MQTTClient's will message
  */
 int MQTTClient::willTimeInterval() const{
-	return m_willTimeInterval;
+	return m_MQTTWill.willTimeInterval;
 }
 
 /*!
@@ -921,7 +931,7 @@ int MQTTClient::willTimeInterval() const{
  * \param interval
  */
 void MQTTClient::setWillTimeInterval(int interval) {
-	m_willTimeInterval = interval;
+	m_MQTTWill.willTimeInterval = interval;
 }
 
 /*!
@@ -929,7 +939,7 @@ void MQTTClient::setWillTimeInterval(int interval) {
  * Called when the will topic is changed
  */
 void MQTTClient::clearLastMessage() {
-	m_willLastMessage.clear();
+	m_MQTTWill.willLastMessage.clear();
 }
 
 /*!
@@ -939,7 +949,7 @@ void MQTTClient::clearLastMessage() {
  * \param statistics
  */
 void MQTTClient::addWillStatistics(WillStatistics statistic){
-	m_willStatistics[static_cast<int>(statistic)] = true;
+	m_MQTTWill.willStatistics[static_cast<int>(statistic)] = true;
 }
 
 /*!
@@ -949,7 +959,7 @@ void MQTTClient::addWillStatistics(WillStatistics statistic){
  * \param statistics
  */
 void MQTTClient::removeWillStatistics(WillStatistics statistic) {
-	m_willStatistics[static_cast<int>(statistic)] = false;
+	m_MQTTWill.willStatistics[static_cast<int>(statistic)] = false;
 }
 
 /*!
@@ -957,15 +967,15 @@ void MQTTClient::removeWillStatistics(WillStatistics statistic) {
  * If the corresponding value is true, the statistic type is included, otherwise it isn't
  */
 QVector<bool> MQTTClient::willStatistics() const{
-	return m_willStatistics;
+	return m_MQTTWill.willStatistics;
 }
 
 /*!
  * \brief Starts the will timer, which will update the will message
  */
 void MQTTClient::startWillTimer() const{
-	if (m_willUpdateType == WillUpdateType::TimePeriod)
-		m_willTimer->start(m_willTimeInterval);
+	if (m_MQTTWill.willUpdateType == WillUpdateType::TimePeriod)
+		m_willTimer->start(m_MQTTWill.willTimeInterval);
 }
 
 /*!
@@ -1076,8 +1086,8 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		}
 
 		//if the message was received by the will topic, update the last message received by it
-		if (msg.topic().name() == m_willTopic)
-			m_willLastMessage = QString(msg.payload());
+		if (msg.topic().name() == m_MQTTWill.willTopic)
+			m_MQTTWill.willLastMessage = QString(msg.payload());
 	}
 }
 
@@ -1157,17 +1167,17 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("pasword", m_client->password());
 	writer->writeAttribute("clientId", m_client->clientId());
 	writer->writeAttribute("useRetain", QString::number(m_MQTTRetain));
-	writer->writeAttribute("useWill", QString::number(m_MQTTUseWill));
-	writer->writeAttribute("willTopic", m_willTopic);
-	writer->writeAttribute("willOwnMessage", m_willOwnMessage);
-	writer->writeAttribute("willQoS", QString::number(m_willQoS));
-	writer->writeAttribute("willRetain", QString::number(m_willRetain));
-	writer->writeAttribute("willMessageType", QString::number(static_cast<int>(m_willMessageType)));
-	writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_willUpdateType)));
-	writer->writeAttribute("willTimeInterval", QString::number(m_willTimeInterval));
+	writer->writeAttribute("useWill", QString::number(m_MQTTWill.MQTTUseWill));
+	writer->writeAttribute("willTopic", m_MQTTWill.willTopic);
+	writer->writeAttribute("willOwnMessage", m_MQTTWill.willOwnMessage);
+	writer->writeAttribute("willQoS", QString::number(m_MQTTWill.willQoS));
+	writer->writeAttribute("willRetain", QString::number(m_MQTTWill.willRetain));
+	writer->writeAttribute("willMessageType", QString::number(static_cast<int>(m_MQTTWill.willMessageType)));
+	writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
+	writer->writeAttribute("willTimeInterval", QString::number(m_MQTTWill.willTimeInterval));
 
-	for (int i = 0; i < m_willStatistics.count(); ++i) {
-		writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_willStatistics[i]));
+	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
+		writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
 	}
 	writer->writeAttribute("useID", QString::number(m_MQTTUseID));
 	writer->writeAttribute("useAuthentication", QString::number(m_MQTTUseAuthentication));
@@ -1299,57 +1309,57 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'useWill'"));
 			else
-				m_MQTTUseWill = str.toInt();
+				m_MQTTWill.MQTTUseWill = str.toInt();
 
-			if (m_MQTTUseWill) {
+			if (m_MQTTWill.MQTTUseWill) {
 				str = attribs.value("willTopic").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willTopic'"));
 				else
-					m_willTopic = str;
+					m_MQTTWill.willTopic = str;
 
 				str = attribs.value("willOwnMessage").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willOwnMessage'"));
 				else
-					m_willOwnMessage = str;
+					m_MQTTWill.willOwnMessage = str;
 
 				str = attribs.value("willQoS").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willQoS'"));
 				else
-					m_willQoS = str.toUInt();
+					m_MQTTWill.willQoS = str.toUInt();
 
 				str = attribs.value("willRetain").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willRetain'"));
 				else
-					m_willRetain = str.toInt();
+					m_MQTTWill.willRetain = str.toInt();
 
 				str = attribs.value("willMessageType").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willMessageType'"));
 				else
-					m_willMessageType = static_cast<MQTTClient::WillMessageType>(str.toInt());
+					m_MQTTWill.willMessageType = static_cast<MQTTClient::WillMessageType>(str.toInt());
 
 				str = attribs.value("willUpdateType").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willUpdateType'"));
 				else
-					m_willUpdateType = static_cast<MQTTClient::WillUpdateType>(str.toInt());
+					m_MQTTWill.willUpdateType = static_cast<MQTTClient::WillUpdateType>(str.toInt());
 
 				str = attribs.value("willTimeInterval").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
 				else
-					m_willTimeInterval = str.toInt();
+					m_MQTTWill.willTimeInterval = str.toInt();
 
-				for (int i = 0; i < m_willStatistics.count(); ++i) {
+				for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
 					str = attribs.value("willStatistics"+QString::number(i)).toString();
 					if (str.isEmpty())
 						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
 					else
-						m_willStatistics[i] = str.toInt();
+						m_MQTTWill.willStatistics[i] = str.toInt();
 				}
 			}
 

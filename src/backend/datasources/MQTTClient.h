@@ -91,6 +91,20 @@ public:
 		Entropy
 	};
 
+	struct MQTTWill {
+		bool MQTTUseWill;
+		QString willMessage;
+		QString willTopic;
+		bool willRetain;
+		quint8 willQoS;
+		WillMessageType willMessageType;
+		QString willOwnMessage;
+		QString willLastMessage;
+		int willTimeInterval;
+		WillUpdateType willUpdateType;
+		QVector<bool> willStatistics;
+	};
+
 	explicit MQTTClient(const QString& name);
 	~MQTTClient() override;
 
@@ -146,6 +160,9 @@ public:
 
 	QVector<QString> topicNames() const;
 	bool checkAllArrived();
+
+	void setWillSettings(MQTTWill);
+	MQTTWill willSettings() const;
 
 	void setMQTTWillUse(bool);
 	bool MQTTWillUse() const;
@@ -211,18 +228,7 @@ private:
 	QVector<QString> m_subscriptions;
 	QVector<QString> m_topicNames;
 	bool m_MQTTTest;
-	bool m_MQTTUseWill;
-	QString m_willMessage;
-	QString m_willTopic;
-	bool m_willRetain;
-	quint8 m_willQoS;
-	WillMessageType m_willMessageType;
-	QString m_willOwnMessage;
-	QString m_willLastMessage;
-	QTimer* m_willTimer;
-	int m_willTimeInterval;
-	WillUpdateType m_willUpdateType;
-	QVector<bool> m_willStatistics;
+	QTimer* m_willTimer;	
 	bool m_MQTTFirstConnectEstablished;
 	bool m_MQTTRetain;
 	bool m_MQTTUseID;
@@ -232,6 +238,7 @@ private:
 	bool m_loaded;
 	int m_subscriptionsLoaded;
 	int m_subscriptionCountToLoad;
+	MQTTWill m_MQTTWill;
 
 public slots:
 	void read();
