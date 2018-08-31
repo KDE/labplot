@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "MQTTWillSettingsWidget.h"
 
+#ifdef HAVE_MQTT
 /*!
 	\class MQTTWillSettingsWidget
 	\brief Widget for managing MQTT connection's will settings
@@ -200,3 +201,4 @@ void MQTTWillSettingsWidget::loadSettings() {
 			ui.lwWillStatistics->item(i)->setCheckState(Qt::Unchecked);
 	}
 }
+#endif
