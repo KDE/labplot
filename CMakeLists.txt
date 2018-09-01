@@ -263,7 +263,7 @@ ENDIF ()
 
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS	
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS
 OPTIONAL_COMPONENTS
 	Mqtt
 )
@@ -275,7 +275,7 @@ ELSE ()
 ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "MQTT Library DISABLED.")
-ENDIF ()	
+ENDIF ()
 
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
