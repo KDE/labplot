@@ -40,6 +40,8 @@ FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twExtensions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+
 	connect(ui.twExtensions, &QTreeWidget::itemSelectionChanged, this, &FITSOptionsWidget::fitsTreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }

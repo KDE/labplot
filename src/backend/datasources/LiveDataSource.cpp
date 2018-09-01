@@ -286,7 +286,7 @@ int LiveDataSource::baudRate() const {
  * \param interval
  */
 void LiveDataSource::setUpdateInterval(int interval) {
-	m_updateInterval = interval;	
+	m_updateInterval = interval;
 	if (!m_paused)
 		m_updateTimer->start(m_updateInterval);
 }
@@ -451,7 +451,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FITS:
 		icon = QIcon::fromTheme("kstars_fitsviewer");
 		break;
-	case AbstractFileFilter::Json:
+	case AbstractFileFilter::JSON:
 		icon = QIcon::fromTheme("application-json");
 		break;
 	case AbstractFileFilter::ROOT:
@@ -584,7 +584,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::HDF5:
 		case AbstractFileFilter::NETCDF:
 		case AbstractFileFilter::FITS:
-		case AbstractFileFilter::Json:
+		case AbstractFileFilter::JSON:
 		case AbstractFileFilter::ROOT:
 		case AbstractFileFilter::NgspiceRawAscii:
 		case AbstractFileFilter::NgspiceRawBinary:
@@ -621,7 +621,7 @@ void LiveDataSource::read() {
 			dynamic_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case MQTT:
-		break;	
+		break;
 	}
 }
 

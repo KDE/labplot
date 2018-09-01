@@ -174,7 +174,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FITS:
 			infoStrings << FITSFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::Json:
+		case AbstractFileFilter::JSON:
 			//TODO infoStrings << JsonFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::ROOT:

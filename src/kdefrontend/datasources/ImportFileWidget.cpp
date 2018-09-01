@@ -139,9 +139,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_FITS
 		ui.cbFileType->addItem(i18n("Flexible Image Transport System Data Format (FITS)"), AbstractFileFilter::FITS);
 #endif
-		ui.cbFileType->addItem(i18n("JSON data"), AbstractFileFilter::Json);
+		ui.cbFileType->addItem(i18n("JSON data"), AbstractFileFilter::JSON);
 #ifdef HAVE_ZIP
-		ui.cbFileType->addItem(i18n("ROOT (CERN) Histograms"), AbstractFileFilter::Json);
+		ui.cbFileType->addItem(i18n("ROOT (CERN) Histograms"), AbstractFileFilter::ROOT);
 #endif
 		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), AbstractFileFilter::NgspiceRawAscii);
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
@@ -673,7 +673,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndColumn( ui.sbEndColumn->value());
 		return filter;
 	}
-	case AbstractFileFilter::Json: {
+	case AbstractFileFilter::JSON: {
 		JsonFilter* filter = new JsonFilter();
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
@@ -1445,6 +1445,7 @@ void ImportFileWidget::manageFilters() {
 */
 void ImportFileWidget::fileTypeChanged(int index) {
 	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->itemData(index).toInt();
+	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget(fileType);
 
 	//default
@@ -1509,7 +1510,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
-	case AbstractFileFilter::Json:
+	case AbstractFileFilter::JSON:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		showJsonModel(true);
@@ -1541,7 +1542,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) {
 	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	switch(fileType) {
-	case AbstractFileFilter::Ascii: {
+	case AbstractFileFilter::Ascii:
 		if (!m_asciiOptionsWidget) {
 			QWidget* asciiw = new QWidget();
 			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
@@ -1550,8 +1551,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		}
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::Binary: {
+	case AbstractFileFilter::Binary:
 		if (m_binaryOptionsWidget) {
 			QWidget* binaryw = new QWidget();
 			m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
@@ -1560,8 +1560,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		}
 		ui.swOptions->setCurrentWidget(m_binaryOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::Image: {
+	case AbstractFileFilter::Image:
 		if (!m_imageOptionsWidget) {
 			QWidget* imagew = new QWidget();
 			m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
@@ -1570,8 +1569,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		}
 		ui.swOptions->setCurrentWidget(m_imageOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::HDF5: {
+	case AbstractFileFilter::HDF5:
 		if (!m_hdf5OptionsWidget) {
 			QWidget* hdf5w = new QWidget();
 			m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
@@ -1580,8 +1578,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			m_hdf5OptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_hdf5OptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::NETCDF: {
+	case AbstractFileFilter::NETCDF:
 		if (!m_netcdfOptionsWidget) {
 			QWidget* netcdfw = new QWidget();
 			m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
@@ -1590,8 +1587,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			m_netcdfOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_netcdfOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::FITS: {
+	case AbstractFileFilter::FITS:
 		if (!m_fitsOptionsWidget) {
 			QWidget* fitsw = new QWidget();
 			m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
@@ -1599,8 +1595,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		}
 		ui.swOptions->setCurrentWidget(m_fitsOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::Json: {
+	case AbstractFileFilter::JSON:
 		if (!m_jsonOptionsWidget) {
 			QWidget* jsonw = new QWidget();
 			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
@@ -1610,8 +1605,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 		}
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
 		break;
-	}
-	case AbstractFileFilter::ROOT: {
+	case AbstractFileFilter::ROOT:
 		if (!m_rootOptionsWidget) {
 			QWidget* rootw = new QWidget();
 			m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
@@ -1620,7 +1614,6 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			m_rootOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_rootOptionsWidget->parentWidget());
 		break;
-	}
 	case AbstractFileFilter::NgspiceRawAscii:
 	case AbstractFileFilter::NgspiceRawBinary:
 		break;
@@ -1662,7 +1655,7 @@ void ImportFileWidget::filterChanged(int index) {
 			ui.cbFileType->currentIndex() == AbstractFileFilter::NETCDF ||
 			ui.cbFileType->currentIndex() == AbstractFileFilter::Image ||
 			ui.cbFileType->currentIndex() == AbstractFileFilter::FITS ||
-			ui.cbFileType->currentIndex() == AbstractFileFilter::Json ||
+			ui.cbFileType->currentIndex() == AbstractFileFilter::JSON ||
 			ui.cbFileType->currentIndex() == AbstractFileFilter::ROOT) {
 		ui.swOptions->setEnabled(true);
 		return;
@@ -1692,11 +1685,11 @@ void ImportFileWidget::refreshPreview() {
 
 	QVector<QStringList> importedStrings;
 	AbstractFileFilter::FileType fileType = currentFileType();
-	initOptionsWidget(fileType);
+// 	initOptionsWidget(fileType);
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
-		|| fileType == AbstractFileFilter::Json || fileType == AbstractFileFilter::NgspiceRawAscii
+		|| fileType == AbstractFileFilter::JSON || fileType == AbstractFileFilter::NgspiceRawAscii
 		|| fileType == AbstractFileFilter::NgspiceRawBinary)
 		m_twPreview->show();
 	else
@@ -1875,7 +1868,7 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
 		break;
 	}
-	case AbstractFileFilter::Json: {
+	case AbstractFileFilter::JSON: {
 		ui.tePreview->clear();
 		m_jsonOptionsWidget->loadDocument(fileName);
 		JsonFilter *filter = (JsonFilter*)this->currentFileFilter();
@@ -1995,7 +1988,7 @@ void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter
 		case AbstractFileFilter::Ascii:
 		case AbstractFileFilter::Binary:
 		case AbstractFileFilter::Image:
-		case AbstractFileFilter::Json:
+		case AbstractFileFilter::JSON:
 		case AbstractFileFilter::NgspiceRawAscii:
 		case AbstractFileFilter::NgspiceRawBinary:
 			break;
@@ -2157,10 +2150,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 
 		ui.cbFileType->setEnabled(true);
+		ui.cbFileType->show();
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
-		ui.cbFileType->show();
 		ui.lFileType->show();
 		setMQTTVisible(false);
 		break;
