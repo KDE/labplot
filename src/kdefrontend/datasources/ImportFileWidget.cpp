@@ -326,10 +326,10 @@ void ImportFileWidget::loadSettings() {
 	m_initialisingMQTT = false;
 #endif
 
-	m_suppressRefresh = false;
-
 	//update the widgets and refresh the preview for the for current source type
 	sourceTypeChanged(ui.cbSourceType->currentIndex());
+	m_suppressRefresh = false;
+	fileTypeChanged(ui.cbFileType->currentIndex());
 }
 
 ImportFileWidget::~ImportFileWidget() {

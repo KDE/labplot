@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>396</width>
-    <height>454</height>
+    <width>424</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -192,7 +192,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="lWillTopic">
      <property name="text">
-      <string>Will topic:</string>
+      <string>Topic:</string>
      </property>
     </widget>
    </item>
@@ -209,7 +209,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="lWillQos">
      <property name="text">
-      <string>Will QoS:</string>
+      <string>QoS</string>
      </property>
     </widget>
    </item>
@@ -238,17 +238,10 @@
      </item>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QCheckBox" name="chbWillRetain">
-     <property name="text">
-      <string>Set will message as retain</string>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lWillUpdate">
      <property name="text">
-      <string>Will update type:</string>
+      <string>Update type:</string>
      </property>
     </widget>
    </item>
@@ -277,13 +270,6 @@
     <widget class="QLineEdit" name="leWillUpdateInterval">
      <property name="text">
       <string>10000</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QCheckBox" name="chbWill">
-     <property name="text">
-      <string>Set will message for the client</string>
      </property>
     </widget>
    </item>
@@ -340,6 +326,34 @@
     <widget class="QPushButton" name="bCancel">
      <property name="text">
       <string>Finish managing the will settings</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QCheckBox" name="chbWillRetain">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lRetainMessage">
+     <property name="text">
+      <string>Retain:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="chbWill">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lWillEnabled">
+     <property name="text">
+      <string>Enabled:</string>
      </property>
     </widget>
    </item>
