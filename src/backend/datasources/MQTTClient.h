@@ -50,7 +50,7 @@ class MQTTClient : public Folder {
 #ifdef HAVE_MQTT
 	Q_OBJECT
 
-public:	
+public:
 	enum UpdateType {
 		TimeInterval = 0,
 		NewData
@@ -228,7 +228,7 @@ private:
 	QVector<QString> m_subscriptions;
 	QVector<QString> m_topicNames;
 	bool m_MQTTTest;
-	QTimer* m_willTimer;	
+	QTimer* m_willTimer;
 	bool m_MQTTFirstConnectEstablished;
 	bool m_MQTTRetain;
 	bool m_MQTTUseID;

@@ -74,7 +74,7 @@ private:
 	QVector<QString> m_messagePuffer;
 	QAction* m_plotDataAction;
 
-public slots:	
+public slots:
 	void read();
 
 private slots:
