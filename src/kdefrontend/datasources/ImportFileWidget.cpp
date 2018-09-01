@@ -96,6 +96,14 @@ Copyright            : (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
    \ingroup kdefrontend
 */
 ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName) : QWidget(parent),
+	m_asciiOptionsWidget(nullptr),
+	m_binaryOptionsWidget(nullptr),
+	m_hdf5OptionsWidget(nullptr),
+	m_imageOptionsWidget(nullptr),
+	m_netcdfOptionsWidget(nullptr),
+	m_fitsOptionsWidget(nullptr),
+	m_jsonOptionsWidget(nullptr),
+	m_rootOptionsWidget(nullptr),
 	m_fileName(fileName),
 	m_fileEmpty(false),
 	m_liveDataSource(liveDataSource),
@@ -113,56 +121,76 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 {
 	ui.setupUi(this);
 
-#ifdef HAVE_MQTT
-	m_searchTimer->setInterval(10000);
-	m_connectTimeoutTimer->setInterval(6000);
-#endif
-
 	QCompleter* completer = new QCompleter(this);
 	completer->setModel(new QDirModel);
 	ui.leFileName->setCompleter(completer);
 
-	ui.cbFileType->addItems(AbstractFileFilter::fileTypes());
+	//add supported file types
+	if (!liveDataSource) {
+		ui.cbFileType->addItem(i18n("ASCII data"), AbstractFileFilter::Ascii);
+		ui.cbFileType->addItem(i18n("Binary data"), AbstractFileFilter::Binary);
+		ui.cbFileType->addItem(i18n("Image"), AbstractFileFilter::Image);
+#ifdef HAVE_HDF5
+		ui.cbFileType->addItem(i18n("Hierarchical Data Format 5 (HDF5)"), AbstractFileFilter::HDF5);
+#endif
+#ifdef HAVE_NETCDF
+		ui.cbFileType->addItem(i18n("Network Common Data Format (NetCDF)"), AbstractFileFilter::NETCDF);
+#endif
+#ifdef HAVE_FITS
+		ui.cbFileType->addItem(i18n("Flexible Image Transport System Data Format (FITS)"), AbstractFileFilter::FITS);
+#endif
+		ui.cbFileType->addItem(i18n("JSON data"), AbstractFileFilter::Json);
+#ifdef HAVE_ZIP
+		ui.cbFileType->addItem(i18n("ROOT (CERN) Histograms"), AbstractFileFilter::Json);
+#endif
+		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), AbstractFileFilter::NgspiceRawAscii);
+		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
+
+		//hide widgets relevant for live data reading only
+		ui.gbUpdateOptions->hide();
+		ui.lSourceType->hide();
+		ui.cbSourceType->hide();
+		ui.cbUpdateType->hide();
+		ui.lUpdateType->hide();
+		ui.chbLinkFile->hide();
+		ui.sbUpdateInterval->hide();
+		ui.lUpdateInterval->hide();
+	} else {
+		ui.cbFileType->addItem(i18n("ASCII data"), AbstractFileFilter::Ascii);
+		ui.cbFileType->addItem(i18n("Binary data"), AbstractFileFilter::Binary);
+		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), AbstractFileFilter::NgspiceRawAscii);
+		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), AbstractFileFilter::NgspiceRawBinary);
+
+		ui.lePort->setValidator( new QIntValidator(ui.lePort) );
+		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
+		ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
+
+		ui.tabWidget->removeTab(2);
+
+#ifdef HAVE_MQTT
+		m_searchTimer->setInterval(10000);
+		m_connectTimeoutTimer->setInterval(6000);
+#endif
+	}
 
 	QStringList filterItems {i18n("Automatic"), i18n("Custom")};
 	ui.cbFilter->addItems(filterItems);
 
-	// file type specific option widgets
-	QWidget* asciiw = new QWidget();
-	m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
-	ui.swOptions->insertWidget(AbstractFileFilter::Ascii, asciiw);
+	//hide options that will be activated on demand
+	ui.gbOptions->hide();
+	ui.gbUpdateOptions->hide();
+	setMQTTVisible(false);
 
-	QWidget* binaryw = new QWidget();
-	m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
-	ui.swOptions->insertWidget(AbstractFileFilter::Binary, binaryw);
+	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
 
-	QWidget* imagew = new QWidget();
-	m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
-	ui.swOptions->insertWidget(AbstractFileFilter::Image, imagew);
-
-	QWidget* hdf5w = new QWidget();
-	m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::HDF5, hdf5w);
-
-	QWidget* netcdfw = new QWidget();
-	m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::NETCDF, netcdfw);
-
-	QWidget* fitsw = new QWidget();
-	m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::FITS, fitsw);
-
-	QWidget* jsonw = new QWidget();
-	m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
-
-	QWidget* rootw = new QWidget();
-	m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
-	ui.swOptions->insertWidget(AbstractFileFilter::ROOT, rootw);
+	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
+	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
+	ui.bManageFilters->setIcon( QIcon::fromTheme(QLatin1String("configure")) );
+	ui.bSaveFilter->setIcon( QIcon::fromTheme(QLatin1String("document-save")) );
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme(QLatin1String("view-refresh")) );
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.tvJson->setAlternatingRowColors(true);
-	ui.tvJson->setModel(m_jsonOptionsWidget->model());
 	showJsonModel(false);
 
 	// the table widget for preview
@@ -174,103 +202,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.tePreview->setLayout(layout);
 	m_twPreview->hide();
 
-	// default filter
-	ui.swOptions->setCurrentIndex(AbstractFileFilter::Ascii);
-#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS) || !defined(HAVE_ZIP) || !defined(HAVE_MQTT)
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
-#endif
-#ifndef HAVE_HDF5
-	// disable HDF5 item
-	QStandardItem* item = model->item(AbstractFileFilter::HDF5);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-#ifndef HAVE_NETCDF
-	// disable NETCDF item
-	QStandardItem* item2 = model->item(AbstractFileFilter::NETCDF);
-	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-#ifndef HAVE_FITS
-	// disable FITS item
-	QStandardItem* item3 = model->item(AbstractFileFilter::FITS);
-	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-#ifndef HAVE_ZIP
-	// disable ROOT item
-	QStandardItem* item4 = model->item(AbstractFileFilter::ROOT);
-	item4->setFlags(item4->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-#ifndef HAVE_MQTT
-	// disable MQTT item
-	QStandardItem* item5 = model->item(LiveDataSource::MQTT);
-	item5->setFlags(item5->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-#endif
-
-	ui.cbReadingType->addItem(i18n("Whole file"), LiveDataSource::WholeFile);
-
-	ui.lePort->setValidator( new QIntValidator(ui.lePort) );
-	ui.gbOptions->hide();
-	ui.gbUpdateOptions->hide();
-
-	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
-	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
-	ui.bManageFilters->setIcon( QIcon::fromTheme(QLatin1String("configure")) );
-	ui.bSaveFilter->setIcon( QIcon::fromTheme(QLatin1String("document-save")) );
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme(QLatin1String("view-refresh")) );
-
-	if (!liveDataSource) {
-		ui.gbUpdateOptions->hide();
-
-		ui.chbLinkFile->hide();
-
-		ui.cbBaudRate->hide();
-		ui.lBaudRate->hide();
-
-		ui.lHost->hide();
-		ui.leHost->hide();
-
-		ui.lPort->hide();
-		ui.lePort->hide();
-
-		ui.cbSerialPort->hide();
-		ui.lSerialPort->hide();
-
-		ui.lSourceType->hide();
-		ui.cbSourceType->hide();
-
-		ui.cbUpdateType->hide();
-		ui.lUpdateType->hide();
-
-		ui.sbUpdateInterval->hide();
-		ui.lUpdateInterval->hide();
-
-		setMQTTVisible(false);
-	} else {
-		for (int i = 2; i < ui.swOptions->count(); ++i)
-			ui.swOptions->removeWidget(ui.swOptions->widget(i));
-
-		const int size = ui.cbFileType->count();
-		for (int i = 2; i < size; ++i)
-			ui.cbFileType->removeItem(2);
-
-		ui.cbBaudRate->hide();
-		ui.lBaudRate->hide();
-
-		ui.lHost->hide();
-		ui.leHost->hide();
-
-		ui.lPort->hide();
-		ui.lePort->hide();
-
-		ui.cbSerialPort->hide();
-		ui.lSerialPort->hide();
-
-		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
-		ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
-
-		ui.tabWidget->removeTab(2);
-	}
-
+	//SLOTs for the general part of the data source configuration
+	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
 	connect( ui.leFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
+	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
+	connect( ui.tvJson, SIGNAL(clicked(const QModelIndex&)), this, SLOT(refreshPreview()));
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
@@ -321,15 +258,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bWillMessage->setEnabled(false);
 	ui.bWillMessage->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bWillMessage->setIcon(ui.bWillMessage->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
-
 #endif
-
-	connect(ui.leHost, SIGNAL(textChanged(QString)), this, SIGNAL(hostChanged()));
-	connect(ui.lePort, SIGNAL(textChanged(QString)), this, SIGNAL(portChanged()));
-
-	connect( ui.cbSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(sourceTypeChanged(int)));
-
-	connect( ui.tvJson, SIGNAL(clicked(const QModelIndex&)), this, SLOT(refreshPreview()));
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -342,12 +271,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 void ImportFileWidget::loadSettings() {
 	m_suppressRefresh = true;
 
-#ifdef HAVE_MQTT
-	//read available connections
-	m_initialisingMQTT = true;
-	readMQTTConnections();
-#endif
-
 	//load last used settings
 	QString confName;
 	if (m_liveDataSource)
@@ -355,12 +278,6 @@ void ImportFileWidget::loadSettings() {
 	else
 		confName = QLatin1String("FileImport");
 	KConfigGroup conf(KSharedConfig::openConfig(), confName);
-
-	//settings for data type specific widgets
-	m_asciiOptionsWidget->loadSettings();
-	m_binaryOptionsWidget->loadSettings();
-	m_imageOptionsWidget->loadSettings();
-	m_jsonOptionsWidget->loadSettings();
 
 	//read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
@@ -386,7 +303,11 @@ void ImportFileWidget::loadSettings() {
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval").toInt());
 
 #ifdef HAVE_MQTT
-	//MQTT related settings	
+	//MQTT related settings
+	//read available connections
+	m_initialisingMQTT = true;
+	readMQTTConnections();
+
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
 
 	m_willSettings.willRetain = conf.readEntry("mqttWillRetain").toInt();
@@ -403,7 +324,6 @@ void ImportFileWidget::loadSettings() {
 	m_willSettings.MQTTUseWill = conf.readEntry("mqttWillUse").toInt();
 
 	m_initialisingMQTT = false;
-	mqttConnectionChanged();
 #endif
 
 	m_suppressRefresh = false;
@@ -457,14 +377,19 @@ ImportFileWidget::~ImportFileWidget() {
 #endif
 
 	// data type specific settings
-	m_asciiOptionsWidget->saveSettings();
-	m_binaryOptionsWidget->saveSettings();
-	m_imageOptionsWidget->saveSettings();
-	m_jsonOptionsWidget->saveSettings();
+	if (m_asciiOptionsWidget)
+		m_asciiOptionsWidget->saveSettings();
+	if (m_binaryOptionsWidget)
+		m_binaryOptionsWidget->saveSettings();
+	if (m_imageOptionsWidget)
+		m_imageOptionsWidget->saveSettings();
+	if (m_jsonOptionsWidget)
+		m_jsonOptionsWidget->saveSettings();
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
-	m_asciiOptionsWidget->showAsciiHeaderOptions(b);
+	if (m_asciiOptionsWidget)
+		m_asciiOptionsWidget->showAsciiHeaderOptions(b);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
@@ -600,6 +525,7 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	saves the settings to the MQTTClient \c client.
 */
 void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
+	DEBUG("ImportFileWidget::saveMQTTSettings");
 	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
 	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
@@ -649,7 +575,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	returns the currently used file type.
 */
 AbstractFileFilter::FileType ImportFileWidget::currentFileType() const {
-	return static_cast<AbstractFileFilter::FileType>(ui.cbFileType->currentIndex());
+	return static_cast<AbstractFileFilter::FileType>( ui.cbFileType->itemData(ui.cbFileType->currentIndex()).toInt() );
 }
 
 LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
@@ -661,7 +587,7 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	DEBUG("ImportFileWidget::currentFileFilter()");
-	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->currentIndex());
+	AbstractFileFilter::FileType fileType = currentFileType();
 
 	switch (fileType) {
 	case AbstractFileFilter::Ascii: {
@@ -673,7 +599,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setAutoModeEnabled(true);
 		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
-			m_asciiOptionsWidget->applyFilterSettings(filter);
+			if (m_asciiOptionsWidget)
+				m_asciiOptionsWidget->applyFilterSettings(filter);
 		} else
 			filter->loadFilterSettings( ui.cbFilter->currentText() );
 
@@ -691,7 +618,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setAutoModeEnabled(true);
 		else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
 			filter->setAutoModeEnabled(false);
-			m_binaryOptionsWidget->applyFilterSettings(filter);
+			if (m_binaryOptionsWidget)
+				m_binaryOptionsWidget->applyFilterSettings(filter);
 		} else {
 			//TODO: load filter settings
 			// 			filter->setFilterName( ui.cbFilter->currentText() );
@@ -1117,14 +1045,12 @@ void ImportFileWidget::addSubscriptionChildren(QTreeWidgetItem * topic, QTreeWid
  * \param children vector of TreeWidgetItem pointers
  * \param root pointer to a TreeWidgetItem of twSubscriptions
  */
-void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem *>& children, QTreeWidgetItem* root) {
-	if (root->childCount() == 0) {
+void ImportFileWidget::findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>& children, QTreeWidgetItem* root) {
+	if (root->childCount() == 0)
 		children.push_back(root);
-	} else {
-		for (int i = 0; i < root->childCount(); ++i) {
+	else
+		for (int i = 0; i < root->childCount(); ++i)
 			findSubscriptionLeafChildren(children, root->child(i));
-		}
-	}
 }
 
 /*!
@@ -1196,9 +1122,8 @@ int ImportFileWidget::checkCommonChildCount(int levelIdx, int level, QStringList
 				return -1;
 		}
 
-	} else if (level == 1 && levelIdx == 1) {
+	} else if (level == 1 && levelIdx == 1)
 		return currentItem->childCount();
-	}
 
 	return -1;
 }
@@ -1324,6 +1249,7 @@ void ImportFileWidget::manageCommonLevelSubscriptions() {
  *\brief Fills twSubscriptions with the subscriptions made by the client
  */
 void ImportFileWidget::updateSubscriptionTree() {
+	DEBUG("ImportFileWidget::updateSubscriptionTree()");
 	ui.twSubscriptions->clear();
 
 	for (int i = 0; i < m_mqttSubscriptions.size(); ++i) {
@@ -1372,6 +1298,7 @@ void ImportFileWidget::updateSubscriptionTree() {
  * \param level the level's number which is being investigated
  */
 void ImportFileWidget::restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level) {
+	DEBUG("ImportFileWidget::restoreSubscriptionChildren");
 	if (list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			//if the current level isn't + or # wildcard we recursively continue with the next level
@@ -1465,11 +1392,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		//available from the previously selected file
 		ui.tePreview->clear();
 		m_twPreview->clear();
-		m_hdf5OptionsWidget->clear();
-		m_netcdfOptionsWidget->clear();
-		m_fitsOptionsWidget->clear();
-		m_jsonOptionsWidget->clearModel();
-		m_rootOptionsWidget->clear();
+		//TODO:
+// 		m_hdf5OptionsWidget->clear();
+// 		m_netcdfOptionsWidget->clear();
+// 		m_fitsOptionsWidget->clear();
+// 		m_jsonOptionsWidget->clearModel();
+// 		m_rootOptionsWidget->clear();
 
 		emit fileNameChanged();
 		return;
@@ -1477,8 +1405,14 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	if (currentSourceType() == LiveDataSource::FileOrPipe) {
 		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
-		ui.cbFileType->setCurrentIndex(fileType);
-		updateContent(fileName, fileType);
+		for (int i = 0; i < ui.cbFileType->count(); ++i) {
+			AbstractFileFilter::FileType itemFileType = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
+			if (itemFileType == fileType) {
+				ui.cbFileType->setCurrentIndex(i);
+				break;
+			}
+		}
+		//TODO: updateContent(fileName, fileType);
 	}
 
 	refreshPreview();
@@ -1509,8 +1443,9 @@ void ImportFileWidget::manageFilters() {
 	Depending on the selected file type, activates the corresponding options in the data portion tab
 	and populates the combobox with the available pre-defined fllter settings for the selected type.
 */
-void ImportFileWidget::fileTypeChanged(int fileType) {
-	ui.swOptions->setCurrentIndex(fileType);
+void ImportFileWidget::fileTypeChanged(int index) {
+	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->itemData(index).toInt();
+	initOptionsWidget(fileType);
 
 	//default
 	ui.lFilter->show();
@@ -1583,10 +1518,6 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		DEBUG("unknown file type");
 	}
 
-	m_hdf5OptionsWidget->clear();
-	m_netcdfOptionsWidget->clear();
-	m_rootOptionsWidget->clear();
-
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
 	ui.cbFilter->addItem( i18n("Automatic") );
@@ -1606,6 +1537,95 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	refreshPreview();
 }
 
+// file type specific option widgets
+void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) {
+	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	switch(fileType) {
+	case AbstractFileFilter::Ascii: {
+		if (!m_asciiOptionsWidget) {
+			QWidget* asciiw = new QWidget();
+			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
+			m_asciiOptionsWidget->loadSettings();
+			ui.swOptions->addWidget(asciiw);
+		}
+		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::Binary: {
+		if (m_binaryOptionsWidget) {
+			QWidget* binaryw = new QWidget();
+			m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
+			ui.swOptions->addWidget(binaryw);
+			m_binaryOptionsWidget->loadSettings();
+		}
+		ui.swOptions->setCurrentWidget(m_binaryOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::Image: {
+		if (!m_imageOptionsWidget) {
+			QWidget* imagew = new QWidget();
+			m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
+			ui.swOptions->addWidget(imagew);
+			m_imageOptionsWidget->loadSettings();
+		}
+		ui.swOptions->setCurrentWidget(m_imageOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::HDF5: {
+		if (!m_hdf5OptionsWidget) {
+			QWidget* hdf5w = new QWidget();
+			m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
+			ui.swOptions->addWidget(hdf5w);
+		} else
+			m_hdf5OptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_hdf5OptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::NETCDF: {
+		if (!m_netcdfOptionsWidget) {
+			QWidget* netcdfw = new QWidget();
+			m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
+			ui.swOptions->insertWidget(AbstractFileFilter::NETCDF, netcdfw);
+		} else
+			m_netcdfOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_netcdfOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::FITS: {
+		if (!m_fitsOptionsWidget) {
+			QWidget* fitsw = new QWidget();
+			m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
+			ui.swOptions->addWidget(fitsw);
+		}
+		ui.swOptions->setCurrentWidget(m_fitsOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::Json: {
+		if (!m_jsonOptionsWidget) {
+			QWidget* jsonw = new QWidget();
+			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
+			ui.tvJson->setModel(m_jsonOptionsWidget->model());
+			ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+			m_jsonOptionsWidget->loadSettings();
+		}
+		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::ROOT: {
+		if (!m_rootOptionsWidget) {
+			QWidget* rootw = new QWidget();
+			m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
+			ui.swOptions->addWidget(rootw);
+		} else
+			m_rootOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_rootOptionsWidget->parentWidget());
+		break;
+	}
+	case AbstractFileFilter::NgspiceRawAscii:
+	case AbstractFileFilter::NgspiceRawBinary:
+		break;
+	}
+}
 
 const QStringList ImportFileWidget::selectedHDF5Names() const {
 	return m_hdf5OptionsWidget->selectedHDF5Names();
@@ -1671,7 +1691,8 @@ void ImportFileWidget::refreshPreview() {
 	DEBUG("refreshPreview(): file name = " << fileName.toStdString());
 
 	QVector<QStringList> importedStrings;
-	AbstractFileFilter::FileType fileType = (AbstractFileFilter::FileType)ui.cbFileType->currentIndex();
+	AbstractFileFilter::FileType fileType = currentFileType();
+	initOptionsWidget(fileType);
 
 	// generic table widget
 	if (fileType == AbstractFileFilter::Ascii || fileType == AbstractFileFilter::Binary
@@ -1954,6 +1975,7 @@ void ImportFileWidget::refreshPreview() {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter::FileType fileType) {
+	initOptionsWidget(fileType);
 	if (auto filter = currentFileFilter()) {
 		switch (fileType) {
 		case AbstractFileFilter::HDF5:
@@ -1980,7 +2002,6 @@ void ImportFileWidget::updateContent(const QString& fileName, AbstractFileFilter
 		}
 	}
 }
-
 
 void ImportFileWidget::updateTypeChanged(int idx) {
 	const LiveDataSource::UpdateType UpdateType = static_cast<LiveDataSource::UpdateType>(idx);
@@ -2172,6 +2193,9 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
+
+		//in case there are already connections defined, show the available topics for the currently selected connection
+		mqttConnectionChanged();
 #endif
 		break;
 	}
@@ -2371,7 +2395,7 @@ void ImportFileWidget::mqttSubscribe() {
 				if (temp_subscription) {
 					m_mqttSubscriptions.push_back(temp_subscription);
 					connect(temp_subscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-					emit subscriptionsChanged();					
+					emit subscriptionsChanged();
 				}
 
 				if (name.endsWith("#")) {

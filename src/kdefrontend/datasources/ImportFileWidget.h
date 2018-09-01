@@ -89,6 +89,8 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 	void setMQTTVisible(bool);
+	void updateContent(const QString&, AbstractFileFilter::FileType);
+	void initOptionsWidget(AbstractFileFilter::FileType);
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -120,9 +122,6 @@ private slots:
 	void selectFile();
 	void fileInfoDialog();
 	void refreshPreview();
-
-private:
-	void updateContent(const QString&, AbstractFileFilter::FileType);
 
 signals:
 	void fileNameChanged();
