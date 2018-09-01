@@ -26,7 +26,6 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	SerialPort
 )
 
-
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
@@ -265,6 +264,7 @@ ENDIF ()
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS	
+OPTIONAL_COMPONENTS
 	Mqtt
 )
 IF (Qt5Mqtt_FOUND)
@@ -276,7 +276,6 @@ ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "MQTT Library DISABLED.")
 ENDIF ()	
-
 
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
