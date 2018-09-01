@@ -198,6 +198,11 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
+
+		//skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
+		if (tokens.size() < 4)
+			continue;
+
 		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
 		if (hasComplexValues) {
 			vectorNames << name + QLatin1String(" REAL");
@@ -238,6 +243,11 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
 			QStringList tokens = line.split(QLatin1Char('\t'));
+
+			//skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
+			if (tokens.size() < 2)
+				continue;
+
 			QString valueString = tokens.at(1).simplified(); //string containing the value(s)
 			if (hasComplexValues) {
 				QStringList realImgTokens = valueString.split(QLatin1Char(','));
@@ -301,6 +311,11 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 	for (int i = 0; i<vars; ++i) {
 		line = file.readLine();
 		QStringList tokens = line.split('\t');
+
+		//skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
+		if (tokens.size() < 4)
+			continue;
+
 		QString name = tokens.at(2) + QLatin1String(", ") + tokens.at(3).simplified();
 		if (hasComplexValues) {
 			vectorNames << name + QLatin1String(" REAL");
@@ -322,6 +337,11 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 		for (int j = 0; j < vars; ++j) {
 			line = file.readLine();
 			QStringList tokens = line.split(QLatin1Char('\t'));
+
+			//skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
+			if (tokens.size() < 2)
+				continue;
+
 			QString value = tokens.at(1).simplified(); //string containing the value(s)
 			if (hasComplexValues) {
 				QStringList realImgTokens = value.split(QLatin1Char(','));
