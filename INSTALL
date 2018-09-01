@@ -17,6 +17,7 @@ optional
 	* libcerf version 1.0 or higher to support complex error and related functions (including the devel-package, libcerf-devel or similar)
 	* Cantor version 16.04 or higher (including the devel package, cantor-devel or similar)
 	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel package, zlib-devel and liblz4-devel or similar)
+	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 
 
 ===============================================================================
@@ -24,7 +25,7 @@ To build LabPlot execute
 # ./compile
 
 Edit the compile script if you want to use options different from default ones.
-E.g. specify a custom installation path via 
+E.g. specify a custom installation path via
 -DCMAKE_INSTALL_PREFIX=/usr/local
 
 or build a debug build via
@@ -39,6 +40,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_FITS=OFF
 -DENABLE_LIBCERF=OFF
 -DENABLE_CANTOR=OFF
+-DENABLE_MQTT=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
