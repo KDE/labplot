@@ -221,9 +221,11 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << startRow - 1 << " lines");
 	const int skip = hasComplexValues ? 2 * vars * (startRow - 1) : vars * (startRow - 1);
-	file.read(8 * skip);
+	if (skip > 0) {
+		DEBUG("	Skipping " << startRow - 1 << " lines");
+		file.read(8 * skip);
+	}
 
 	//read the data points
 	int currentRow = 0;	// indexes the position in the vector(column)
