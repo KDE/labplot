@@ -1176,9 +1176,8 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
 	writer->writeAttribute("willTimeInterval", QString::number(m_MQTTWill.willTimeInterval));
 
-	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
+	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i)
 		writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
-	}
 	writer->writeAttribute("useID", QString::number(m_MQTTUseID));
 	writer->writeAttribute("useAuthentication", QString::number(m_MQTTUseAuthentication));
 

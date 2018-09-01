@@ -108,7 +108,7 @@ void MQTTWillSettingsWidget::useWillMessage(int state) {
 		ui.lwWillStatistics->hide();
 	}
 
-	if(!m_initialising)
+	if (!m_initialising)
 		emit useChanged(state);
 }
 
@@ -136,7 +136,7 @@ void MQTTWillSettingsWidget::willMessageTypeChanged(int type) {
 		ui.lWillOwnMessage->hide();
 	}
 
-	if(!m_initialising)
+	if (!m_initialising)
 		emit messageTypeChanged(type);
 }
 
@@ -155,7 +155,7 @@ void MQTTWillSettingsWidget::willUpdateTypeChanged(int updateType) {
 		ui.lWillUpdateInterval->hide();
 	}
 
-	if(!m_initialising)
+	if (!m_initialising)
 		emit updateTypeChanged(updateType);
 }
 
@@ -163,18 +163,17 @@ void MQTTWillSettingsWidget::willUpdateTypeChanged(int updateType) {
  * \brief Updates the widget based on the will settings
  */
 void MQTTWillSettingsWidget::loadSettings() {
-	if(ui.chbWill->isChecked() != m_MQTTWill.MQTTUseWill)
+	if (ui.chbWill->isChecked() != m_MQTTWill.MQTTUseWill)
 		ui.chbWill->setChecked(m_MQTTWill.MQTTUseWill);
 	else {
-		if(m_MQTTWill.MQTTUseWill)
+		if (m_MQTTWill.MQTTUseWill)
 			useWillMessage(Qt::Checked);
 		else
 			useWillMessage(Qt::Unchecked);
 	}
 
-	for (int i = 0; i < m_topics.size(); ++i) {
+	for (int i = 0; i < m_topics.size(); ++i)
 		ui.cbWillTopic->addItem(m_topics[i]);
-	}
 
 	//Set back the initial value
 	if (!m_MQTTWill.willTopic.isEmpty())
@@ -194,8 +193,8 @@ void MQTTWillSettingsWidget::loadSettings() {
 	ui.leWillUpdateInterval->setText(QString::number(m_MQTTWill.willTimeInterval));
 	ui.chbWillRetain->setChecked(m_MQTTWill.willRetain);
 
-	for(int i = 0; i < m_MQTTWill.willStatistics.size(); ++i) {
-		if(m_MQTTWill.willStatistics[i])
+	for (int i = 0; i < m_MQTTWill.willStatistics.size(); ++i) {
+		if (m_MQTTWill.willStatistics[i])
 			ui.lwWillStatistics->item(i)->setCheckState(Qt::Checked);
 		else
 			ui.lwWillStatistics->item(i)->setCheckState(Qt::Unchecked);
