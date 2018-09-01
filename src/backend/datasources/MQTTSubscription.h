@@ -38,9 +38,8 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QString>
 #endif
 
-class MQTTSubscription : public Folder{
+class MQTTSubscription : public Folder {
 #ifdef HAVE_MQTT
-	Q_OBJECT
 
 public:
 	explicit MQTTSubscription(const QString& name);
@@ -67,6 +66,7 @@ private slots:
 
 signals:
 	void loaded(const QString &);
+
 #endif //HAVE_MQTT
 };
 

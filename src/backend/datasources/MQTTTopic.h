@@ -38,9 +38,8 @@ class MQTTSubscription;
 class MQTTClient;
 #endif
 
-class MQTTTopic : public Spreadsheet{
+class MQTTTopic : public Spreadsheet {
 #ifdef HAVE_MQTT
-	Q_OBJECT
 
 public:
 	MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading = false);
@@ -82,6 +81,7 @@ private slots:
 
 signals:
 	void readOccured();
+
 #endif // HAVE_MQTT
 };
 

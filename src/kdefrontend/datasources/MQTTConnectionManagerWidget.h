@@ -37,7 +37,6 @@ class QTimer;
 
 class MQTTConnectionManagerWidget : public QWidget {
 #ifdef HAVE_MQTT
-	Q_OBJECT
 
 public:
 	explicit MQTTConnectionManagerWidget(QWidget*, const QString&);
@@ -94,7 +93,8 @@ private slots:
 
 signals:
 	void changed();
-#endif
+
+#endif	//HAVE_MQTT
 };
 
-#endif
+#endif	// MQTTCONNECTIONMANAGERWIDGET_H

@@ -46,9 +46,8 @@ class MQTTSubscription;
 class QAction;
 #endif
 
-class MQTTClient : public Folder{
+class MQTTClient : public Folder {
 #ifdef HAVE_MQTT
-	Q_OBJECT
 
 public:	
 	enum UpdateType {
@@ -254,6 +253,7 @@ signals:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&);
+
 #endif //HAVE_MQTT
 };
 #endif // MQTTCLIENT_H
