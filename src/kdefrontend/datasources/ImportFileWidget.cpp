@@ -1605,7 +1605,7 @@ void ImportFileWidget::initOptionsWidget(AbstractFileFilter::FileType fileType) 
 			QWidget* jsonw = new QWidget();
 			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
-			ui.swOptions->insertWidget(AbstractFileFilter::Json, jsonw);
+			ui.swOptions->addWidget(jsonw);
 			m_jsonOptionsWidget->loadSettings();
 		}
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
