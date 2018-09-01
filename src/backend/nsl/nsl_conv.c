@@ -27,5 +27,65 @@
  ***************************************************************************/
 
 #include "nsl_conv.h"
+#include "nsl_common.h"
+#include <gsl/gsl_fft_halfcomplex.h>
 
-/* TODO */
+/* adapted from SciDAVis */
+int nsl_conv_convolution(double sig[], size_t n, double inres[], size_t m, int dir) {
+
+	double *res = (double *)malloc(n * sizeof(double));
+	if (res == NULL) {
+		printf("nsl_conv_convolution(): ERROR allocating memory!\n");
+		return -1;
+	}
+	memset(res, 0, n * sizeof(double));
+
+	size_t i, m2 = m/2;
+	for (i = 0; i < m2; i++) {	// store the response in wrap around order (see Numerical Recipes)
+		res[i] = inres[m2+i];
+		res[n-m2+i] = inres[i];
+	}
+
+	if (m2%2 == 1)
+		res[m2] = inres[m-1];
+
+	/* FFT both */
+	gsl_fft_real_radix2_transform(res, 1, n);
+	gsl_fft_real_radix2_transform(sig, 1, n);
+
+	/* TODO */
+	double re, im, size;
+	for (i = 0; i < n/2; i++) {	/* multiply/divide FFTs */
+		if (i == 0 || i == n/2 - 1) {
+			if (dir == 1)
+				sig[i] = res[i]*sig[i];
+			else {
+				if (res[i] > 0)
+					sig[i] = sig[i]/res[i];
+				else
+					sig[i] = 0.;
+			}
+		} else {
+			if (dir == 1) {
+				re = res[i]*sig[i] - res[n-i]*sig[n-i];
+				im = res[i]*sig[n-i] + res[n-i]*sig[i];
+			} else {
+				size = res[i]*res[i] + res[n-i]*res[n-i];
+				re = res[i]*sig[i] + res[n-i]*sig[n-i];
+				im = res[i]*sig[n-i] - res[n-i]*sig[i];
+				/*TODO: size can be zero? */
+				re /= size;
+				im /= size;
+			}
+
+			sig[i] = re;
+			sig[n-i] = im;
+		}
+	}
+	free(res);
+
+	/* inverse FFT */
+	gsl_fft_halfcomplex_radix2_inverse(sig, 1, n);
+
+	return 0 ;
+}

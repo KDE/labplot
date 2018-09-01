@@ -33,6 +33,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <float.h>
+#include <string.h>
 
 #define i18n(m) m
 

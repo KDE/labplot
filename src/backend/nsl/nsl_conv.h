@@ -29,8 +29,12 @@
 #ifndef NSL_CONV_H
 #define NSL_CONV_H
 
-/* convolution of signal with response
+#include <stdlib.h>
+
+/* calculate convolution/deconvolution
+ * of signal sig of size n with response res of size m
+ * direction: 1 (convolution), != 1 (deconvolution)
  */
-/* TODO */
+int nsl_conv_convolution(double sig[], size_t n, double res[], size_t m, int direction);
 
 #endif /* NSL_CONV_H */

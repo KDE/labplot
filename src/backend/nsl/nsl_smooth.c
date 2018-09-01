@@ -351,8 +351,8 @@ int nsl_smooth_percentile(double *data, size_t n, size_t points, double percenti
 		free(values);
 	}
 
-	for (i=0; i<n; i++)
-		data[i]=result[i];
+	for (i = 0; i < n; i++)
+		data[i] = result[i];
 	free(result);
 
 	return 0;
