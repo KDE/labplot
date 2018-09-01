@@ -272,6 +272,7 @@ set(BACKEND_SOURCES
 )
 
 set(NSL_SOURCES
+	${BACKEND_DIR}/nsl/nsl_conv.c
 	${BACKEND_DIR}/nsl/nsl_dft.c
 	${BACKEND_DIR}/nsl/nsl_diff.c
 	${BACKEND_DIR}/nsl/nsl_filter.c
