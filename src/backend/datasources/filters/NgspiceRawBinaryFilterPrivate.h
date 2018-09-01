@@ -48,6 +48,8 @@ public:
 	int endRow;
 
 private:
+	const static int BYTE_SIZE = 8;
+
 	QVector<void*> m_dataContainer; // pointers to the actual data containers
 };
 

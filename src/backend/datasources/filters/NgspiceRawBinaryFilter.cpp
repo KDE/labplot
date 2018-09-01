@@ -224,7 +224,7 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	const int skip = hasComplexValues ? 2 * vars * (startRow - 1) : vars * (startRow - 1);
 	if (skip > 0) {
 		DEBUG("	Skipping " << startRow - 1 << " lines");
-		file.read(8 * skip);
+		file.read(BYTE_SIZE * skip);
 	}
 
 	//read the data points
@@ -232,7 +232,7 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 	for (int i = 0; i < actualRows; ++i) {
 		for (int j = 0; j < vars; ++j) {
 			double value;
-			QDataStream s(file.read(8));
+			QDataStream s(file.read(BYTE_SIZE));
 			s.setByteOrder(QDataStream::LittleEndian);
 			s >> value;
 			if (hasComplexValues) {
@@ -240,7 +240,7 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 				static_cast<QVector<double>*>(m_dataContainer[2*j])->operator[](currentRow) = value;
 
 				//imaginary part
-				QDataStream sim(file.read(8));
+				QDataStream sim(file.read(BYTE_SIZE));
 				sim.setByteOrder(QDataStream::LittleEndian);
 				sim >> value;
 				static_cast<QVector<double>*>(m_dataContainer[2*j+1])->operator[](currentRow) = value;
@@ -315,12 +315,12 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 		lineString.clear();
 		for (int j = 0; j < vars; ++j) {
 			double v;
-			QDataStream s(file.read(8));
+			QDataStream s(file.read(BYTE_SIZE));
 			s.setByteOrder(QDataStream::LittleEndian);
 			s >> v;
 			lineString << QString::number(v, 'e', 15); //real part
 			if (hasComplexValues) {
-				QDataStream sim(file.read(8));
+				QDataStream sim(file.read(BYTE_SIZE));
 				sim.setByteOrder(QDataStream::LittleEndian);
 				sim >> v;
 				lineString << QString::number(v, 'e', 15); //imaginary part
