@@ -37,6 +37,7 @@
 
 class MQTTWillSettingsWidget: public QWidget {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	explicit MQTTWillSettingsWidget(QWidget*, MQTTClient::MQTTWill, QVector<QString>);

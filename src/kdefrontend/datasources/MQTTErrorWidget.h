@@ -43,6 +43,7 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 
 class MQTTErrorWidget : public QWidget {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	explicit MQTTErrorWidget(QMqttClient::ClientError error = QMqttClient::NoError, MQTTClient* client = nullptr, QWidget* parent = nullptr);

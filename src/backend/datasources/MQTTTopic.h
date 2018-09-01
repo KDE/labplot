@@ -40,6 +40,7 @@ class MQTTClient;
 
 class MQTTTopic : public Spreadsheet {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading = false);

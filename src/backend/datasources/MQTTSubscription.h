@@ -40,6 +40,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 class MQTTSubscription : public Folder {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	explicit MQTTSubscription(const QString& name);

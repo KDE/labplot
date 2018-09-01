@@ -35,6 +35,7 @@ class QDialogButtonBox;
 
 class MQTTConnectionManagerDialog : public QDialog {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	explicit MQTTConnectionManagerDialog(QWidget*, const QString&, bool*);

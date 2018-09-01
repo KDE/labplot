@@ -37,6 +37,7 @@ class QTimer;
 
 class MQTTConnectionManagerWidget : public QWidget {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:
 	explicit MQTTConnectionManagerWidget(QWidget*, const QString&);

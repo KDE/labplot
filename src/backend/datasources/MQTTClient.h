@@ -48,6 +48,7 @@ class QAction;
 
 class MQTTClient : public Folder {
 #ifdef HAVE_MQTT
+	Q_OBJECT
 
 public:	
 	enum UpdateType {
